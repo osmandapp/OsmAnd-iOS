@@ -20,7 +20,7 @@ enum AstroCatalogsCardViewHolder {
         headerLabel.text = localizedString("astro_designations")
         headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         headerLabel.adjustsFontForContentSizeCategory = true
-        headerLabel.textColor = AstroContextMenuTheme.secondaryText
+        headerLabel.textColor = .textColorSecondary
         
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ enum AstroCatalogsCardViewHolder {
         let card = UIView()
         card.layer.cornerRadius = 26
         card.clipsToBounds = true
-        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.backgroundColor = .groupBg
         card.translatesAutoresizingMaskIntoConstraints = false
 
         let chips = WrappingChipsView()
@@ -74,7 +74,7 @@ enum AstroCatalogsCardViewHolder {
 
 final class WrappingChipsView: UIView {
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width - 64))
+        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width))
     }
     
     private var chips: [UIButton] = []

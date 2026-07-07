@@ -14,7 +14,7 @@ enum AstroVisibilityCardViewHolder {
                          onCursorTimeChanged: @escaping (Int64) -> Void) -> UIView {
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
-        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.backgroundColor = .groupBg
         card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
@@ -42,14 +42,14 @@ enum AstroVisibilityCardViewHolder {
         title.text = item.titleText
         title.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         title.adjustsFontForContentSizeCategory = true
-        title.textColor = AstroContextMenuTheme.secondaryText
+        title.textColor = .textColorSecondary
         title.numberOfLines = 0
         header.addArrangedSubview(title)
         
         if item.showResetButton {
             let resetButton = UIButton(type: .system)
             resetButton.setImage(AstroIcon.template("ic_custom_date"), for: .normal)
-            resetButton.tintColor = AstroContextMenuTheme.activeIcon
+            resetButton.tintColor = .iconColorActive
             resetButton.accessibilityLabel = localizedString("astro_visibility_show_today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
             resetButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
@@ -74,7 +74,7 @@ enum AstroVisibilityCardViewHolder {
         let rise = makeEvent(time: item.riseTime,
                              symbol: "▲",
                              title: localizedString("astro_rise"),
-                             symbolColor: AstroContextMenuTheme.activeIcon)
+                             symbolColor: .iconColorActive)
         let culmination = makeEvent(time: item.culminationTime,
                                     symbol: "●",
                                     title: localizedString("astro_culmination"),
@@ -82,7 +82,7 @@ enum AstroVisibilityCardViewHolder {
         let set = makeEvent(time: item.setTime,
                             symbol: "▼",
                             title: localizedString("astro_set"),
-                            symbolColor: AstroContextMenuTheme.activeIcon)
+                            symbolColor: .iconColorActive)
         let eventViews = [rise, culmination, set].compactMap { $0 }
         if !eventViews.isEmpty {
             if let rise {
@@ -150,7 +150,7 @@ enum AstroVisibilityCardViewHolder {
         valueRow.spacing = 6
         let timeLabel = UILabel()
         timeLabel.text = time
-        timeLabel.textColor = AstroContextMenuTheme.activeText
+        timeLabel.textColor = .textColorActive
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.75
@@ -173,7 +173,7 @@ enum AstroVisibilityCardViewHolder {
 
     private static func makeDivider() -> UIView {
         let divider = UIView()
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false

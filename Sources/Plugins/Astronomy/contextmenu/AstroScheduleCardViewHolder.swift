@@ -27,7 +27,7 @@ enum AstroScheduleCardViewHolder {
         headerLabel.text = localizedString("astronomy_schedule")
         headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         headerLabel.adjustsFontForContentSizeCategory = true
-        headerLabel.textColor = AstroContextMenuTheme.secondaryText
+        headerLabel.textColor = .textColorSecondary
         
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ enum AstroScheduleCardViewHolder {
         
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
-        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.backgroundColor = .groupBg
         card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
@@ -52,7 +52,7 @@ enum AstroScheduleCardViewHolder {
         card.addSubview(contentStack)
         
         let divider = UIView()
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
 
         let headerCardView = header(item: item,
@@ -86,7 +86,7 @@ enum AstroScheduleCardViewHolder {
             let note = UILabel()
             note.translatesAutoresizingMaskIntoConstraints = false
             note.text = localizedString("astro_schedule_next_day_note")
-            note.textColor = AstroContextMenuTheme.secondaryText
+            note.textColor = .textColorSecondary
             note.font = .preferredFont(forTextStyle: .footnote)
             note.numberOfLines = 0
             noteContainer.addSubview(note)
@@ -121,7 +121,7 @@ enum AstroScheduleCardViewHolder {
 
         let range = UILabel()
         range.text = item.rangeLabel
-        range.textColor = AstroContextMenuTheme.primaryText
+        range.textColor = .textColorPrimary
         range.font = .preferredFont(forTextStyle: .headline)
         range.adjustsFontForContentSizeCategory = true
 
@@ -259,7 +259,7 @@ enum AstroScheduleCardViewHolder {
         row.addSubview(setBlock)
 
         let divider = UIView()
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.isHidden = !showDivider
         divider.translatesAutoresizingMaskIntoConstraints = false
         control.addSubview(divider)
@@ -321,11 +321,11 @@ enum AstroScheduleCardViewHolder {
 
         let arrowLabel = UILabel()
         arrowLabel.text = arrow
-        arrowLabel.textColor = AstroContextMenuTheme.secondaryText
+        arrowLabel.textColor = .textColorSecondary
         arrowLabel.font = .systemFont(ofSize: 15)
         let timeLabel = UILabel()
         timeLabel.attributedText = buildTimeText(time: time, suffix: suffix)
-        timeLabel.textColor = AstroContextMenuTheme.secondaryText
+        timeLabel.textColor = .textColorSecondary
         timeLabel.numberOfLines = 1
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.7
@@ -355,23 +355,23 @@ enum AstroScheduleCardViewHolder {
     private static func buildTimeText(time: String?, suffix: String?) -> NSAttributedString {
         let parts = splitTimeParts(time)
         guard parts.main != emptyTime else {
-            return NSAttributedString(string: emptyTime, attributes: [.foregroundColor: AstroContextMenuTheme.secondaryText])
+            return NSAttributedString(string: emptyTime, attributes: [.foregroundColor: .textColorSecondary])
         }
         let result = NSMutableAttributedString(string: parts.main, attributes: [
             .font: UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .regular),
-            .foregroundColor: AstroContextMenuTheme.secondaryText
+            .foregroundColor: .textColorSecondary
         ])
         if let meridiem = parts.meridiem, !meridiem.isEmpty {
             result.append(NSAttributedString(string: " "))
             result.append(NSAttributedString(string: meridiem, attributes: [
                 .font: UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular),
-                .foregroundColor: AstroContextMenuTheme.secondaryText
+                .foregroundColor: .textColorSecondary
             ]))
         }
         if let suffix, !suffix.isEmpty {
             result.append(NSAttributedString(string: suffix, attributes: [
                 .font: UIFont.systemFont(ofSize: 9),
-                .foregroundColor: AstroContextMenuTheme.secondaryText,
+                .foregroundColor: .textColorSecondary,
                 .baselineOffset: 5
             ]))
         }

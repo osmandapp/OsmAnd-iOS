@@ -246,10 +246,10 @@ private final class AstroGalleryCardView: UIView {
     }
 
     private func applyTheme() {
-        backgroundColor = AstroContextMenuTheme.cardBackground
-        iconView.tintColor = AstroContextMenuTheme.defaultIcon
-        arrowView.tintColor = AstroContextMenuTheme.activeIcon
-        titleLabel.textColor = AstroContextMenuTheme.primaryText
+        backgroundColor = .groupBg
+        iconView.tintColor = .iconColorDefault
+        arrowView.tintColor = .iconColorActive
+        titleLabel.textColor = .textColorPrimary
     }
 }
 
@@ -278,8 +278,8 @@ private final class AstroIndeterminateProgressLine: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalToConstant: 2).isActive = true
         progressView.translatesAutoresizingMaskIntoConstraints = false
-        progressView.trackTintColor = AstroContextMenuTheme.separator.withAlphaComponent(0.25)
-        progressView.progressTintColor = AstroContextMenuTheme.primaryButton
+        progressView.trackTintColor = .customSeparator.withAlphaComponent(0.25)
+        progressView.progressTintColor = .buttonBgColorPrimary
         addSubview(progressView)
         NSLayoutConstraint.activate([
             progressView.leadingAnchor.constraint(equalTo: leadingAnchor),

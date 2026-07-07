@@ -36,7 +36,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
     private static func makeButtonConfigurationDownload(title: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
         config.title = title
-        config.baseForegroundColor = AstroContextMenuTheme.activeText
+        config.baseForegroundColor = .textColorActive
         config.titleAlignment = .leading
         config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
@@ -52,7 +52,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         var config = UIButton.Configuration.filled()
         config.title = title
         config.baseBackgroundColor = .buttonBgColorTertiary
-        config.baseForegroundColor = AstroContextMenuTheme.activeText
+        config.baseForegroundColor = .textColorActive
         config.background.cornerRadius = 10
         config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
@@ -83,7 +83,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         let iconName = item.getIconName()
         let iconView = UIImageView(image: AstroIcon.original(iconName) ?? AstroIcon.template(iconName))
         if iconName != "ic_custom_telescope_colored" && iconName != "ic_custom_sky_map_download" {
-            iconView.tintColor = AstroContextMenuTheme.activeIcon
+            iconView.tintColor = .iconColorActive
         }
         iconView.contentMode = .scaleAspectFit
         iconView.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -95,14 +95,14 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         
         let title = UILabel()
         title.text = item.getTitle()
-        title.textColor = AstroContextMenuTheme.primaryText
+        title.textColor = .textColorPrimary
         title.font = .preferredFont(forTextStyle: .body)
         title.adjustsFontForContentSizeCategory = true
         title.numberOfLines = 0
         
         let description = UILabel()
         description.text = item.getDescription()
-        description.textColor = AstroContextMenuTheme.secondaryText
+        description.textColor = .textColorSecondary
         description.font = .preferredFont(forTextStyle: .subheadline)
         description.numberOfLines = 0
         
@@ -117,7 +117,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         
         if item.state == .download {
             let divider = UIView()
-            divider.backgroundColor = AstroContextMenuTheme.separator
+            divider.backgroundColor = .customSeparator
             divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
             stack.addArrangedSubview(divider)
             stack.setCustomSpacing(0, after: divider)

@@ -80,14 +80,14 @@ private final class MetricView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         valueLabel.font = .preferredFont(forTextStyle: .subheadline)
-        valueLabel.textColor = AstroContextMenuTheme.activeText
+        valueLabel.textColor = .textColorActive
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.8
 
         titleLabel.font = .preferredFont(forTextStyle: .footnote)
-        titleLabel.textColor = AstroContextMenuTheme.secondaryText
+        titleLabel.textColor = .textColorSecondary
 
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stack)

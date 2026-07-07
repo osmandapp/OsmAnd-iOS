@@ -8,29 +8,6 @@
 
 import UIKit
 
-enum AstroContextMenuTheme {
-    static var pageBackground: UIColor { .viewBg }
-    static var cardBackground: UIColor { .groupBg }
-    static var secondaryBackground: UIColor { .groupBgColorSecondary }
-    static var actionBackground: UIColor { .buttonBgColorTertiary }
-    static var actionTapBackground: UIColor { .buttonBgColorTap }
-    static var iconButtonBackground: UIColor { UIColor(named: "iconButtonBgColor") ?? secondaryBackground }
-    static var primaryText: UIColor { .textColorPrimary }
-    static var secondaryText: UIColor { .textColorSecondary }
-    static var tertiaryText: UIColor { UIColor(named: "textColorTertiary") ?? .textColorSecondary }
-    static var activeText: UIColor { .textColorActive }
-    static var activeIcon: UIColor { .iconColorActive }
-    static var defaultIcon: UIColor { .iconColorDefault }
-    static var secondaryIcon: UIColor { .iconColorSecondary }
-    static var separator: UIColor { .customSeparator }
-    static var primaryButton: UIColor { .buttonBgColorPrimary }
-    static var secondaryButton: UIColor { .buttonBgColorSecondary }
-
-    static var resolvedSeparator: UIColor {
-        separator.currentMapThemeColor
-    }
-}
-
 final class AstroContextMenuAdapter {
     private(set) var currentList: [AstroContextMenuItem] = []
     
@@ -139,7 +116,7 @@ class AstroCardContainerView: UIView {
 
     private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = AstroContextMenuTheme.cardBackground
+        backgroundColor = .groupBg
         layer.cornerRadius = 26
         layer.masksToBounds = true
 
@@ -155,7 +132,7 @@ class AstroCardContainerView: UIView {
             row.spacing = 8
             if let iconName {
                 let imageView = UIImageView(image: AstroIcon.template(iconName))
-                imageView.tintColor = AstroContextMenuTheme.activeIcon
+                imageView.tintColor = .iconColorActive
                 imageView.contentMode = .scaleAspectFit
                 imageView.widthAnchor.constraint(equalToConstant: 22).isActive = true
                 imageView.heightAnchor.constraint(equalToConstant: 22).isActive = true
@@ -164,7 +141,7 @@ class AstroCardContainerView: UIView {
             if let title {
                 let label = UILabel()
                 label.text = title
-                label.textColor = AstroContextMenuTheme.primaryText
+                label.textColor = .textColorPrimary
                 label.font = .systemFont(ofSize: 16, weight: .bold)
                 label.numberOfLines = 0
                 row.addArrangedSubview(label)
@@ -183,7 +160,7 @@ class AstroCardContainerView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
-            backgroundColor = AstroContextMenuTheme.cardBackground
+            backgroundColor = .groupBg
         }
     }
 }

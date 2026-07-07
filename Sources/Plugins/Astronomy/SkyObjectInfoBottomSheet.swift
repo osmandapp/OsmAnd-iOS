@@ -282,7 +282,7 @@ final class AstroContextMenuViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = AstroContextMenuTheme.pageBackground
+        view.backgroundColor = .viewBg
         
         sheetHeaderBlurView.translatesAutoresizingMaskIntoConstraints = false
         sheetHeaderBlurView.clipsToBounds = true
@@ -294,7 +294,7 @@ final class AstroContextMenuViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: .systemFont(ofSize: 34, weight: .bold))
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.textColor = AstroContextMenuTheme.primaryText
+        titleLabel.textColor = .textColorPrimary
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.numberOfLines = 1
         titleLabel.accessibilityTraits = .header
@@ -315,7 +315,7 @@ final class AstroContextMenuViewController: UIViewController {
         
         closeButton.configuration = closeButtonConfig
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.tintColor = AstroContextMenuTheme.primaryText
+        closeButton.tintColor = .textColorPrimary
         closeButton.accessibilityLabel = localizedString("shared_string_close")
         closeButton.addAction(UIAction { [weak self] _ in
             self?.dependencies.onClose()
@@ -431,17 +431,17 @@ final class AstroContextMenuViewController: UIViewController {
     }
 
     private func applyTheme() {
-        view.backgroundColor = AstroContextMenuTheme.pageBackground
-        titleLabel.textColor = AstroContextMenuTheme.primaryText
-        closeButton.tintColor = AstroContextMenuTheme.primaryText
-        headerType.textColor = AstroContextMenuTheme.secondaryText
+        view.backgroundColor = .viewBg
+        titleLabel.textColor = .textColorPrimary
+        closeButton.tintColor = .textColorPrimary
+        headerType.textColor = .textColorSecondary
         metricsContainer.backgroundColor = .clear
         configureTabBarAppearance()
         configureNavigationBar()
         [saveButton, locationButton, directionButton, pathButton].forEach { button in
             var config = button.configuration ?? UIButton.Configuration.filled()
-            config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
-            config.baseForegroundColor = AstroContextMenuTheme.activeIcon
+            config.baseBackgroundColor = .buttonBgColorTertiary
+            config.baseForegroundColor = .iconColorActive
             button.configuration = config
         }
     }
@@ -456,7 +456,7 @@ final class AstroContextMenuViewController: UIViewController {
     }
 
     private func configureTabBarAppearance() {
-        tabBar.tintColor = AstroContextMenuTheme.activeIcon
+        tabBar.tintColor = .iconColorActive
         tabBar.unselectedItemTintColor = .iconColorBlack
     }
 
@@ -498,13 +498,13 @@ final class AstroContextMenuViewController: UIViewController {
         var config = UIButton.Configuration.filled()
         config.imagePlacement = .top
         config.imagePadding = 8
-        config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
+        config.baseBackgroundColor = .buttonBgColorTertiary
         config.baseForegroundColor = .buttonTextColorSecondary
         config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 4, bottom: 10, trailing: 4)
         config.background.cornerRadius = 16
         config.titleLineBreakMode = .byTruncatingTail
         config.imageColorTransformer = UIConfigurationColorTransformer { _ in
-            AstroContextMenuTheme.activeIcon
+            .iconColorActive
         }
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -517,11 +517,11 @@ final class AstroContextMenuViewController: UIViewController {
             var configuration = button.configuration ?? config
             let isOn = button.isHighlighted
             
-            configuration.baseBackgroundColor = isOn ? AstroContextMenuTheme.actionTapBackground : AstroContextMenuTheme.actionBackground
+            configuration.baseBackgroundColor = isOn ? .buttonBgColorTap : .buttonBgColorTertiary
             configuration.baseForegroundColor = isOn ? .buttonTextColorPrimary : .buttonTextColorSecondary
             
             configuration.imageColorTransformer = UIConfigurationColorTransformer { _ in
-                isOn ? .buttonIconColorPrimary : AstroContextMenuTheme.activeIcon
+                isOn ? .buttonIconColorPrimary : .iconColorActive
             }
             
             button.configuration = configuration

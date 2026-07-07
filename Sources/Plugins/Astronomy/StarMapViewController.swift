@@ -860,7 +860,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func regularMapHeight() -> CGFloat {
-        view.bounds.width > view.bounds.height ? Layout.regularMapHeightLandscape : Layout.regularMapHeight
+        let isLandscape = OAUtilities.isLandscape()
+        
+        if OAUtilities.isIPad() {
+            let fraction: CGFloat = isLandscape ? 0.30 : 0.33
+            return view.bounds.height * fraction
+        }
+        return isLandscape ? Layout.regularMapHeightLandscape : Layout.regularMapHeight
     }
 
     private func updateRegularMapLayout() {
@@ -886,7 +892,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if mapViewController.parent !== self {
             mapPanel.doMapReuse(self, destinationView: regularMapContainer)
         }
-        layoutRegularMapRenderer()
+        layoutRegularMapRenderer(forceResize: true)
         mapPanel.refreshMap(true)
         
         if starView.showRedFilter {
@@ -905,14 +911,20 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
     }
 
-    private func layoutRegularMapRenderer() {
+    private func layoutRegularMapRenderer(forceResize: Bool = false) {
         guard regularMapVisible,
               let mapView = currentMapViewController()?.view,
               mapView.superview === regularMapContainer else {
             return
         }
-        mapView.frame = regularMapContainer.bounds
-        mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        let target = regularMapContainer.bounds
+        guard !target.isEmpty else { return }
+        
+        if forceResize || mapView.frame != target {
+            mapView.frame = target
+            mapView.autoresizingMask = []
+            mapView.layoutIfNeeded()
+        }
     }
 
     private func currentMapViewController() -> OAMapViewController? {
@@ -1364,7 +1376,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 sheetPresentationController.selectedDetentIdentifier = .medium
                 sheetPresentationController.prefersGrabberVisible = true
                 sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-                sheetPresentationController.preferredCornerRadius = 24
+                sheetPresentationController.preferredCornerRadius = 38
                 sheetPresentationController.largestUndimmedDetentIdentifier = .large
             }
             present(navigationController, animated: true)

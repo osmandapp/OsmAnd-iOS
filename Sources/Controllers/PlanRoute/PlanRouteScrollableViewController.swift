@@ -14,9 +14,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let segmentedControlHeight: CGFloat = 36
     private static let bottomToolbarAreaHeight: CGFloat = 60
     private static let horizontalInset: CGFloat = 20
-    private static let cornerRadius: CGFloat = 16
+    private static let cornerRadius: CGFloat = 28
     private static let fullScreenTopGap: CGFloat = 8
     private static let animationDuration: TimeInterval = 0.3
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        OAAppSettings.sharedManager().nightMode ? .lightContent : .default
+    }
 
     private let dataProvider: PlanRouteDataProvider
 
@@ -28,7 +32,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let segmentControl = UISegmentedControl()
     private let tabContainerView = UIView()
     private let crosshairView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "map_ruler_center_day"))
+        let imageView = UIImageView()
         imageView.contentMode = .center
         return imageView
     }()
@@ -36,12 +40,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let tabs = PlanRouteTab.allCases
     private var sheetState: EOADraggableMenuState = .expanded
     private var selectedTab: PlanRouteTab = .default
-    private var tabViewControllers: [PlanRouteTab: UIViewController] = [:]
     private var sheetHeightConstraint: NSLayoutConstraint?
     private var crosshairCenterYConstraint: NSLayoutConstraint?
+    private var routeTypeButtonBottomConstraint: NSLayoutConstraint?
     private var panStartHeight: CGFloat = 0
-    private weak var currentTabViewController: UIViewController?
     private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_straight_line"))
+    private weak var currentTabViewController: UIViewController?
 
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
@@ -52,13 +56,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc(showNewRoute)
-    static func showNewRoute() {
+    @objc(showNewRoute) static func showNewRoute() {
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute))
     }
 
-    @objc(openExistingTrackWithFilePath:)
-    static func openExistingTrack(filePath: String) {
+    @objc(openExistingTrackWithFilePath:) static func openExistingTrack(filePath: String) {
         let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath))
     }
@@ -75,6 +77,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         setupSheet()
         setupTopPart()
         setupBottomToolbar()
@@ -82,8 +85,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupTopToolbar()
         setupRouteTypeButton()
         setupCrosshair()
+        dataProvider.presenterViewController = self
         dataProvider.onDataChanged = { [weak self] in self?.reloadData() }
-        dataProvider.onPointSelected = { [weak self] index in self?.presentPointMenu(for: index) }
+        dataProvider.onRouteInfoChanged = { [weak self] in self?.reloadRouteInfo() }
         dataProvider.onChangeRouteTypeBefore = { [weak self] pointIndex in self?.presentChangeRouteType(before: pointIndex) }
         dataProvider.onChangeRouteTypeAfter = { [weak self] pointIndex in self?.presentChangeRouteType(after: pointIndex) }
         selectTab(.default)
@@ -91,13 +95,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateCrosshairImage()
         navigationController?.setNavigationBarHidden(true, animated: false)
         applyHeight(for: sheetState)
         tabContainerView.alpha = isContentVisible(in: sheetState) ? 1 : 0
         view.layoutIfNeeded()
-        updateCrosshairPosition(sheetHeight: height(for: sheetState))
+        let h = height(for: sheetState)
+        crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: h)
+        routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: sheetState)
+        updateCrosshairMapCenter(sheetHeight: h)
         if animated {
-            sheetView.transform = CGAffineTransform(translationX: 0, y: height(for: sheetState))
+            sheetView.transform = CGAffineTransform(translationX: 0, y: h)
             UIView.animate(withDuration: Self.animationDuration) { [weak self] in
                 self?.sheetView.transform = .identity
             }
@@ -109,13 +118,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         coordinator.animate { [weak self] _ in
             guard let self else { return }
             applyHeight(for: sheetState)
-            updateCrosshairPosition(sheetHeight: height(for: sheetState))
+            let h = height(for: sheetState)
+            crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: h)
+            routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: sheetState)
+            updateCrosshairMapCenter(sheetHeight: h)
             refreshMapControls()
         }
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        OAAppSettings.sharedManager().nightMode ? .lightContent : .default
     }
 
     override func getViewHeight() -> CGFloat {
@@ -146,7 +154,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         hide(false, duration: 0, onComplete: nil)
     }
 
-    override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)!) {
+    override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
         let dismiss: () -> Void = { [weak self] in
             self?.dataProvider.dismissLayer()
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
@@ -165,11 +173,21 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     func reloadData() {
-        topPartView.configure(with: dataProvider.routeInfo)
+        let routeInfo = dataProvider.routeInfo
+        topPartView.configure(with: routeInfo)
+        updateTopToolbar()
         bottomToolbar.isUndoEnabled = dataProvider.canUndo
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         updateRouteTypeButton()
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
+        updateCrosshairMapCenter(sheetHeight: height(for: sheetState))
+        refreshMapControls()
+    }
+
+    private func reloadRouteInfo() {
+        guard isViewLoaded else { return }
+        topPartView.configure(with: dataProvider.routeInfo)
+        updateTopToolbar()
     }
 
     private func setupSheet() {
@@ -247,7 +265,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
         segmentControl.backgroundColor = .groupBgColorSecondary
-        segmentControl.selectedSegmentTintColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        segmentControl.selectedSegmentTintColor = .white
         let segmentAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.textColorPrimary,
             .font: UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
@@ -255,8 +273,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         segmentControl.setTitleTextAttributes(segmentAttributes, for: .normal)
         segmentControl.setTitleTextAttributes(segmentAttributes, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onSegmentTapped))
-        segmentControl.addGestureRecognizer(tapGesture)
+        segmentControl.addTarget(self, action: #selector(onSegmentTapped), for: .touchUpInside)
     }
 
     private func setupBottomToolbar() {
@@ -279,8 +296,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setupTopToolbar() {
         topToolbar.titleText = dataProvider.mode.title
-        topToolbar.isSaveButtonVisible = true
-        topToolbar.optionsMenu = makeOptionsMenu()
+        updateTopToolbar()
         topToolbar.onClose = { [weak self] in self?.handleClose() }
         topToolbar.onSave = { [weak self] in self?.handleSave() }
         topToolbar.translatesAutoresizingMaskIntoConstraints = false
@@ -293,7 +309,20 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         ])
     }
 
+    private func updateTopToolbar() {
+        topToolbar.isSaveButtonVisible = true
+        topToolbar.isSaveButtonEnabled = true
+        topToolbar.optionsMenu = makeOptionsMenu()
+    }
+
+    private func updateCrosshairImage() {
+        let isNight = OAAppSettings.sharedManager().nightMode
+        let name = isNight ? "map_ruler_center_night" : "map_ruler_center_day"
+        crosshairView.image = UIImage(named: name)
+    }
+
     private func setupCrosshair() {
+        updateCrosshairImage()
         crosshairView.translatesAutoresizingMaskIntoConstraints = false
         crosshairView.isUserInteractionEnabled = false
         view.insertSubview(crosshairView, belowSubview: sheetView)
@@ -308,17 +337,23 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func setupRouteTypeButton() {
         routeTypeButton.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(routeTypeButton, belowSubview: sheetView)
+        let bottom = routeTypeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -routeTypeButtonBottomInset(for: sheetState))
+        routeTypeButtonBottomConstraint = bottom
         NSLayoutConstraint.activate([
             routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            routeTypeButton.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: -12)
+            bottom
         ])
         routeTypeButton.addTarget(self, action: #selector(onRouteTypeButtonTapped), for: .touchUpInside)
         updateRouteTypeButton()
     }
 
+    private func routeTypeButtonBottomInset(for state: EOADraggableMenuState) -> CGFloat {
+        mapControlsReservedHeight(for: state) + 12
+    }
+
     private func updateRouteTypeButton() {
         let segments = dataProvider.routeSegments
-        let mode = segments.last?.singleMode
+        let mode = segments.isEmpty ? dataProvider.defaultMode : segments.last?.singleMode
         let icon: UIImage?
         if let mode {
             icon = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
@@ -326,10 +361,22 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             icon = .templateImageNamed("ic_custom_straight_line")
         }
         routeTypeButton.setImage(icon, for: .normal)
+        var config = routeTypeButton.configuration
+        config?.baseForegroundColor = .mapButtonIconColorActive
+        routeTypeButton.configuration = config
     }
 
     private func presentRouteBetweenPoints() {
         let listVC = RouteBetweenPointsViewController(dataSource: dataProvider)
+        presentRouteBetweenPoints(listVC)
+    }
+
+    private func presentRouteBetweenPoints(for segment: PlanRouteSegment) {
+        let listVC = RouteBetweenPointsViewController(dataSource: dataProvider, scopedSegment: segment)
+        presentRouteBetweenPoints(listVC)
+    }
+
+    private func presentRouteBetweenPoints(_ listVC: RouteBetweenPointsViewController) {
         let navController = UINavigationController(rootViewController: listVC)
         navController.modalPresentationStyle = .pageSheet
         if let sheet = navController.sheetPresentationController {
@@ -339,8 +386,30 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(navController, animated: true)
     }
 
-    func presentPointMenu(for pointIndex: Int) {
-        dataProvider.showPointOptions(index: pointIndex, in: self)
+    private func presentSegmentReorder() {
+        let reorderVC = SegmentReorderViewController(dataSource: dataProvider)
+        let nav = UINavigationController(rootViewController: reorderVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    private func presentPointMenuVC(point: PlanRoutePoint, group: PlanRouteProfileGroup, segment: PlanRouteSegment) {
+        let menuVC = PlanRoutePointMenuViewController(point: point, segment: segment, group: group, dataSource: dataProvider)
+        menuVC.onChangeRouteType = { [weak self] context in
+            self?.presentSettingsForContext(context)
+        }
+        let nav = UINavigationController(rootViewController: menuVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
+        present(nav, animated: true)
     }
 
     private func presentChangeRouteType(before pointIndex: Int) {
@@ -354,8 +423,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func presentChangeRouteType(after pointIndex: Int) {
         let segments = dataProvider.routeSegments
-        guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
-        presentSettingsForContext(.profileGroup(group, segment: segment))
+        guard let (segment, _, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        let listVC = RouteBetweenPointsViewController(dataSource: dataProvider, fromPointIndex: pointIndex, scopedSegment: segment)
+        let nav = UINavigationController(rootViewController: listVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
     }
 
     private func presentSettingsForContext(_ context: SegmentRouteContext) {
@@ -365,6 +441,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
         present(nav, animated: true)
     }
@@ -381,7 +458,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc private func onRouteTypeButtonTapped() {
-        presentRouteBetweenPoints()
+        let segments = dataProvider.routeSegments
+        let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
+        if isComplex {
+            presentRouteBetweenPoints()
+        } else {
+            presentSettingsForContext(.wholeTrack)
+        }
     }
 
     private func crosshairCenterY(sheetHeight: CGFloat) -> CGFloat {
@@ -394,9 +477,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return visibleTop + (visibleBottom - visibleTop) / 2
     }
 
-    private func updateCrosshairPosition(sheetHeight: CGFloat) {
+    private func updateCrosshairMapCenter(sheetHeight: CGFloat) {
         let centerY = crosshairCenterY(sheetHeight: sheetHeight)
-        crosshairCenterYConstraint?.constant = centerY
         let x = view.bounds.midX
         guard x > 0 else { return }
         if sheetHeight > height(for: .initial) {
@@ -434,7 +516,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetState = state
         let h = height(for: state)
         sheetHeightConstraint?.constant = h
-        updateCrosshairPosition(sheetHeight: h)
+        crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: h)
+        routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: state)
+        updateCrosshairMapCenter(sheetHeight: h)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()
@@ -468,29 +552,31 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         OARootViewController.instance().mapPanel?.targetUpdateControlsLayout(true, customStatusBarStyle: style)
     }
 
-    private func tabViewController(for tab: PlanRouteTab) -> UIViewController {
-        if let existing = tabViewControllers[tab] {
-            return existing
-        }
-        let controller: UIViewController
+    private func makeTabViewController(for tab: PlanRouteTab) -> UIViewController {
         switch tab {
-        case .poi: controller = PlanRoutePoiViewController(dataSource: dataProvider)
-        case .analyze: controller = PlanRouteAnalyzeViewController(dataSource: dataProvider)
+        case .poi:
+            return PlanRoutePoiViewController(dataSource: dataProvider)
+        case .analyze:
+            return PlanRouteAnalyzeViewController(dataSource: dataProvider)
         case .route:
             let routeVC = PlanRouteRouteViewController(dataSource: dataProvider)
-            routeVC.onPointSelected = { [weak self] point, group, segment in
-                self?.presentPointMenu(for: point.index)
+            routeVC.onPointSelected = { [weak self] point, _, _ in
+                self?.dataProvider.showPointOptions(at: point.index)
             }
-            controller = routeVC
+            routeVC.onChangeRouteType = { [weak self] context in
+                self?.presentSettingsForContext(context)
+            }
+            routeVC.onOpenRouteBetweenPoints = { [weak self] segment in
+                self?.presentRouteBetweenPoints(for: segment)
+            }
+            return routeVC
         }
-        tabViewControllers[tab] = controller
-        return controller
     }
 
     private func selectTab(_ tab: PlanRouteTab) {
+        guard tab != selectedTab || currentTabViewController == nil else { return }
         selectedTab = tab
-        let newController = tabViewController(for: tab)
-        guard newController !== currentTabViewController else { return }
+        let newController = makeTabViewController(for: tab)
         currentTabViewController?.willMove(toParent: nil)
         currentTabViewController?.view.removeFromSuperview()
         currentTabViewController?.removeFromParent()
@@ -509,14 +595,30 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func makeOptionsMenu() -> UIMenu {
-        let actions = PlanRouteMenuAction.actions(for: dataProvider.mode).map { action in
-            UIAction(title: action.title,
-                     image: action.icon,
-                     attributes: action.isDestructive ? .destructive : []) { [weak self] _ in
-                self?.handleMenuAction(action)
-            }
+        let visibleActions = Set(PlanRouteMenuAction.actions(for: dataProvider.mode))
+        let sections: [[PlanRouteMenuAction]] = [
+            [.saveAs, .saveAsCopy, .appendToExistingTrack],
+            [.changeSegmentOrder],
+            [.viewDirections, .reverseRoute],
+            [.navigation],
+            [.clearAllPoints]
+        ]
+        let children = sections.compactMap { section -> UIMenu? in
+            let actions = section
+                .filter { visibleActions.contains($0) }
+                .map(makeMenuAction)
+            guard !actions.isEmpty else { return nil }
+            return UIMenu(options: .displayInline, children: actions)
         }
-        return UIMenu(children: actions)
+        return UIMenu(children: children)
+    }
+
+    private func makeMenuAction(_ action: PlanRouteMenuAction) -> UIAction {
+        UIAction(title: action.title,
+                 image: action.icon,
+                 attributes: action.isDestructive ? .destructive : []) { [weak self] _ in
+            self?.handleMenuAction(action)
+        }
     }
 
     private func handleClose() {
@@ -535,6 +637,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
+        guard ensurePointsForSaving() else { return }
         switch dataProvider.mode {
         case .newRoute:
             presentSaveDialog(duplicate: false)
@@ -542,7 +645,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: true) { [weak self] success, _ in
                 guard let self else { return }
                 if success {
-                    reloadData()
+                    let message = String(format: localizedString("gpx_saved_successfully"), fileName)
+                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+                    hide(true, duration: Self.animationDuration) {
+                        OARootViewController.instance().present(alert, animated: true)
+                    }
                 } else {
                     showSaveError()
                 }
@@ -556,40 +664,50 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func handleUndo() {
         dataProvider.undo()
-        reloadData()
     }
 
     private func handleRedo() {
         dataProvider.redo()
-        reloadData()
     }
 
     private func handleAddRoutePoint() {
         dataProvider.addRoutePoint()
-        reloadData()
     }
 
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
         switch action {
         case .saveAs:
+            guard ensurePointsForSaving() else { return }
             presentSaveDialog(duplicate: false)
         case .saveAsCopy:
+            guard ensurePointsForSaving() else { return }
             presentSaveDialog(duplicate: true)
         case .appendToExistingTrack:
             presentAppendToTrack()
         case .changeSegmentOrder:
-            break
+            presentSegmentReorder()
         case .viewDirections:
-            break
+            presentViewDirections()
         case .reverseRoute:
             dataProvider.reverseRoute()
-            reloadData()
         case .navigation:
             hide()
             dataProvider.enterNavigation()
         case .clearAllPoints:
             confirmClearAllPoints()
         }
+    }
+
+    private func ensurePointsForSaving() -> Bool {
+        guard dataProvider.hasPoints else {
+            let alert = UIAlertController(title: nil,
+                                          message: localizedString("none_point_error"),
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+            present(alert, animated: true)
+            return false
+        }
+        return true
     }
 
     private func presentSaveDialog(duplicate: Bool) {
@@ -609,13 +727,17 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(UINavigationController(rootViewController: vc), animated: true)
     }
 
+    private func presentViewDirections() {
+        guard let gpx = dataProvider.routeGpxFile else { return }
+        OARootViewController.instance()?.mapPanel?.openTargetView(withRouteDetails: gpx, analysis: nil)
+    }
+
     private func confirmClearAllPoints() {
         let alert = UIAlertController(title: localizedString("distance_measurement_clear_route"),
                                       message: nil,
                                       preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .destructive) { [weak self] _ in
             self?.dataProvider.clearAllPoints()
-            self?.reloadData()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
@@ -633,6 +755,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let index = segmentControl.selectedSegmentIndex
         guard tabs.indices.contains(index) else { return }
         selectTab(tabs[index])
+        if sheetState == .initial {
+            setState(.expanded, animated: true)
+        }
     }
 
     @objc private func onSegmentTapped() {
@@ -652,7 +777,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             let upper = height(for: .fullScreen)
             let newHeight = min(max(panStartHeight - translation, lower), upper)
             sheetHeightConstraint.constant = newHeight
-            updateCrosshairPosition(sheetHeight: newHeight)
         case .ended, .cancelled:
             let velocity = gesture.velocity(in: view).y
             setState(nearestState(for: sheetHeightConstraint.constant, velocity: velocity), animated: true)
@@ -673,11 +797,14 @@ extension PlanRouteScrollableViewController: UIGestureRecognizerDelegate {
 // MARK: - OASaveTrackViewControllerDelegate
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
-        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap) { [weak self] success, _ in
+        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap) { [weak self] success, filePath in
             guard let self else { return }
             if success {
-                topToolbar.titleText = fileName
-                reloadData()
+                let path = filePath ?? fileName
+                hide(true, duration: Self.animationDuration) {
+                    let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
+                    bottomSheet?.present(in: OARootViewController.instance())
+                }
             } else {
                 showSaveError()
             }
@@ -688,8 +815,7 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
 // MARK: - OAOpenAddTrackDelegate
 extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
-        let fileName = ((gpxFilePath as NSString).lastPathComponent as NSString).deletingPathExtension
-        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: false) { [weak self] success, _ in
+        dataProvider.appendToTrack(filePath: gpxFilePath) { [weak self] success in
             guard let self else { return }
             if !success { showSaveError() }
         }

@@ -11,6 +11,11 @@ import UIKit
 final class PlanRouteTopPartView: UIView {
     private static let statusIconSize: CGFloat = 30
     private static let horizontalInset: CGFloat = 20
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
 
     var onTap: (() -> Void)?
 
@@ -18,6 +23,7 @@ final class PlanRouteTopPartView: UIView {
     private let firstLineLabel = UILabel()
     private let secondLineLabel = UILabel()
     private let textStackView = UIStackView()
+    private var lastRenderSignature: String?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,8 +35,33 @@ final class PlanRouteTopPartView: UIView {
     }
 
     func configure(with info: PlanRouteInfo) {
-        firstLineLabel.attributedText = makeFirstLine(info)
-        secondLineLabel.attributedText = makeSecondLine(info)
+        let totalDistance = formattedDistance(info.totalDistance)
+        let uphill = formattedDistance(info.uphill)
+        let downhill = formattedDistance(info.downhill)
+        let mapCenterDistance = formattedDistance(info.mapCenterDistance)
+        let duration = info.showsTime ? formattedDuration(info.duration) : ""
+        let arrivalTime = info.arrivalTime.map { formattedTime($0) } ?? ""
+        let bearing = "\(Int(info.bearing))"
+        let signature = [
+            totalDistance,
+            duration,
+            arrivalTime,
+            uphill,
+            downhill,
+            mapCenterDistance,
+            bearing,
+            info.showsTime ? "1" : "0"
+        ].joined(separator: "|")
+        guard lastRenderSignature != signature else { return }
+        lastRenderSignature = signature
+        firstLineLabel.attributedText = makeFirstLine(info,
+                                                      totalDistance: totalDistance,
+                                                      duration: duration,
+                                                      arrivalTime: arrivalTime)
+        secondLineLabel.attributedText = makeSecondLine(uphill: uphill,
+                                                        downhill: downhill,
+                                                        mapCenterDistance: mapCenterDistance,
+                                                        bearing: bearing)
     }
 
     private func setupView() {
@@ -73,35 +104,45 @@ final class PlanRouteTopPartView: UIView {
         addGestureRecognizer(tapRecognizer)
     }
 
-    private func makeFirstLine(_ info: PlanRouteInfo) -> NSAttributedString {
+    private func makeFirstLine(_ info: PlanRouteInfo,
+                               totalDistance: String,
+                               duration: String,
+                               arrivalTime: String) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
         let primary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorPrimary]
         let secondary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
-        result.append(NSAttributedString(string: formattedDistance(info.totalDistance), attributes: primary))
+        let distanceParts = totalDistance.components(separatedBy: " ")
+        let distanceNumber = distanceParts.dropLast().joined(separator: " ")
+        let distanceUnit = " " + (distanceParts.last ?? "")
+        result.append(NSAttributedString(string: distanceNumber, attributes: primary))
+        result.append(NSAttributedString(string: distanceUnit, attributes: secondary))
 
         guard info.showsTime else { return result }
 
         result.append(NSAttributedString(string: "  •  ", attributes: secondary))
-        result.append(NSAttributedString(string: formattedDuration(info.duration), attributes: secondary))
-        if let arrival = info.arrivalTime {
-            result.append(NSAttributedString(string: " (\(formattedTime(arrival)))", attributes: secondary))
+        result.append(NSAttributedString(string: duration, attributes: secondary))
+        if !arrivalTime.isEmpty {
+            result.append(NSAttributedString(string: " (\(arrivalTime))", attributes: secondary))
         }
         return result
     }
 
-    private func makeSecondLine(_ info: PlanRouteInfo) -> NSAttributedString {
+    private func makeSecondLine(uphill: String,
+                                downhill: String,
+                                mapCenterDistance: String,
+                                bearing: String) -> NSAttributedString {
         let subheadFont = UIFont.preferredFont(forTextStyle: .subheadline)
         let attributes: [NSAttributedString.Key: Any] = [.font: subheadFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
         result.append(symbolAttachment("arrow.up.right", font: subheadFont))
-        result.append(NSAttributedString(string: " \(formattedDistance(info.uphill))   ", attributes: attributes))
+        result.append(NSAttributedString(string: " \(uphill)   ", attributes: attributes))
         result.append(symbolAttachment("arrow.down.right", font: subheadFont))
-        result.append(NSAttributedString(string: " \(formattedDistance(info.downhill))", attributes: attributes))
+        result.append(NSAttributedString(string: " \(downhill)", attributes: attributes))
         result.append(NSAttributedString(string: "   |   ", attributes: attributes))
-        result.append(NSAttributedString(string: "\(formattedDistance(info.mapCenterDistance)) • \(Int(info.bearing))°", attributes: attributes))
+        result.append(NSAttributedString(string: "\(mapCenterDistance) • \(bearing)°", attributes: attributes))
         return result
     }
 
@@ -113,7 +154,7 @@ final class PlanRouteTopPartView: UIView {
     }
 
     private func formattedDistance(_ meters: Double) -> String {
-        OAOsmAndFormatter.getFormattedDistance(Float(meters))
+        OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
     }
 
     private func formattedDuration(_ duration: TimeInterval) -> String {
@@ -121,9 +162,7 @@ final class PlanRouteTopPartView: UIView {
     }
 
     private func formattedTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter.string(from: date)
+        Self.timeFormatter.string(from: date)
     }
 
     @objc private func onViewTapped() {

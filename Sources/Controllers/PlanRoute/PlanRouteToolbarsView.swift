@@ -13,6 +13,17 @@ final class PlanRouteTopToolbarView: UIView {
 
     private static let edgeInset: CGFloat = 16
     private static let buttonSpacing: CGFloat = 8
+    private static let backgroundFadeStartLocation: NSNumber = 0.58
+    private static let backgroundFadeEndLocation: NSNumber = 1
+    private static let dimmingSecondLocation: NSNumber = 0.22
+    private static let dimmingThirdLocation: NSNumber = 0.6
+    private static let dimmingEndLocation: NSNumber = 1
+    private static let lightTopDimmingAlpha: CGFloat = 0.24
+    private static let lightSecondDimmingAlpha: CGFloat = 0.16
+    private static let lightThirdDimmingAlpha: CGFloat = 0.07
+    private static let darkTopDimmingAlpha: CGFloat = 0.3
+    private static let darkSecondDimmingAlpha: CGFloat = 0.22
+    private static let darkThirdDimmingAlpha: CGFloat = 0.1
 
     var onClose: (() -> Void)?
     var onSave: (() -> Void)?
@@ -32,9 +43,17 @@ final class PlanRouteTopToolbarView: UIView {
         didSet { saveButton.isHidden = !isSaveButtonVisible }
     }
 
+    var isSaveButtonEnabled = true {
+        didSet { saveButton.isEnabled = isSaveButtonEnabled }
+    }
+
+    private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
-    private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_navbar_close"))
+    private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_cancel"))
     private let optionsButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_overflow_menu_stroke"))
+    private let dimmingView = UIView()
+    private let backgroundMaskLayer = CAGradientLayer()
+    private let dimmingGradientLayer = CAGradientLayer()
 
     private lazy var saveButton = PlanRouteButtonFactory.primaryButton(title: localizedString("shared_string_save"))
 
@@ -47,6 +66,17 @@ final class PlanRouteTopToolbarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        applyBackgroundEffect()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard backgroundContainerView.bounds.size != .zero else { return }
+        updateBackgroundLayers()
+    }
+
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let hitView = super.hitTest(point, with: event) else { return nil }
         return hitView is UIControl ? hitView : nil
@@ -54,6 +84,7 @@ final class PlanRouteTopToolbarView: UIView {
 
     private func setupView() {
         backgroundColor = .clear
+        setupBackgroundView()
 
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
         titleLabel.textColor = .textColorPrimary
@@ -89,6 +120,102 @@ final class PlanRouteTopToolbarView: UIView {
         saveButton.addTarget(self, action: #selector(onSaveTapped), for: .touchUpInside)
     }
 
+    private func setupBackgroundView() {
+        backgroundContainerView.backgroundColor = .clear
+        backgroundContainerView.isUserInteractionEnabled = false
+        backgroundContainerView.translatesAutoresizingMaskIntoConstraints = false
+        insertSubview(backgroundContainerView, at: 0)
+
+        dimmingView.backgroundColor = .clear
+        dimmingView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundContainerView.addSubview(dimmingView)
+
+        NSLayoutConstraint.activate([
+            backgroundContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundContainerView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundContainerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            dimmingView.leadingAnchor.constraint(equalTo: backgroundContainerView.leadingAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: backgroundContainerView.trailingAnchor),
+            dimmingView.topAnchor.constraint(equalTo: backgroundContainerView.topAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: backgroundContainerView.bottomAnchor)
+        ])
+
+        backgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        backgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        backgroundContainerView.layer.mask = backgroundMaskLayer
+
+        dimmingGradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        dimmingGradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        dimmingView.layer.addSublayer(dimmingGradientLayer)
+    }
+
+    private func applyBackgroundEffect() {
+        let isNightMode = OAAppSettings.sharedManager().nightMode
+        backgroundContainerView.subviews
+            .filter { $0 !== dimmingView }
+            .forEach { $0.removeFromSuperview() }
+
+        if #available(iOS 26.0, *) {
+            let glass = UIGlassEffect(style: .regular)
+            glass.tintColor = isNightMode
+                ? UIColor.black.withAlphaComponent(0.14)
+                : UIColor.white.withAlphaComponent(0.1)
+
+            let effectView = UIVisualEffectView(effect: glass)
+            effectView.isUserInteractionEnabled = false
+            effectView.overrideUserInterfaceStyle = isNightMode ? .dark : .light
+            effectView.translatesAutoresizingMaskIntoConstraints = false
+            backgroundContainerView.insertSubview(effectView, at: 0)
+
+            NSLayoutConstraint.activate([
+                effectView.leadingAnchor.constraint(equalTo: backgroundContainerView.leadingAnchor),
+                effectView.trailingAnchor.constraint(equalTo: backgroundContainerView.trailingAnchor),
+                effectView.topAnchor.constraint(equalTo: backgroundContainerView.topAnchor),
+                effectView.bottomAnchor.constraint(equalTo: backgroundContainerView.bottomAnchor)
+            ])
+        } else {
+            backgroundContainerView.addBlurEffect(!isNightMode, cornerRadius: 0, padding: 0)
+        }
+
+        updateBackgroundLayers()
+    }
+
+    private func updateBackgroundLayers() {
+        let isCompactLayout = traitCollection.verticalSizeClass == .compact
+        let fadeStartLocation = Self.backgroundFadeStartLocation
+        let fadeEndLocation = Self.backgroundFadeEndLocation
+        let dimmingSecondLocation = Self.dimmingSecondLocation
+        let dimmingThirdLocation = Self.dimmingThirdLocation
+        let dimmingEndLocation = Self.dimmingEndLocation
+        let isNightMode = OAAppSettings.sharedManager().nightMode
+        let topDimmingAlpha = isNightMode ? Self.darkTopDimmingAlpha : Self.lightTopDimmingAlpha
+        let secondDimmingAlpha = isNightMode ? Self.darkSecondDimmingAlpha : Self.lightSecondDimmingAlpha
+        let thirdDimmingAlpha = isNightMode ? Self.darkThirdDimmingAlpha : Self.lightThirdDimmingAlpha
+
+        backgroundContainerView.isHidden = isCompactLayout
+        guard !isCompactLayout else { return }
+
+        backgroundMaskLayer.frame = backgroundContainerView.bounds
+        backgroundContainerView.layer.mask = backgroundMaskLayer
+        backgroundMaskLayer.colors = [
+            UIColor.black.cgColor,
+            UIColor.black.cgColor,
+            UIColor.clear.cgColor
+        ]
+        backgroundMaskLayer.locations = [NSNumber(value: 0), fadeStartLocation, fadeEndLocation]
+
+        dimmingGradientLayer.frame = dimmingView.bounds
+        dimmingGradientLayer.colors = [
+            UIColor.black.withAlphaComponent(topDimmingAlpha).cgColor,
+            UIColor.black.withAlphaComponent(secondDimmingAlpha).cgColor,
+            UIColor.black.withAlphaComponent(thirdDimmingAlpha).cgColor,
+            UIColor.clear.cgColor
+        ]
+        dimmingGradientLayer.locations = [NSNumber(value: 0), dimmingSecondLocation, dimmingThirdLocation, dimmingEndLocation]
+    }
+
     @objc private func onCloseTapped() {
         onClose?()
     }
@@ -115,11 +242,11 @@ final class PlanRouteBottomToolbarView: UIView {
         didSet { redoButton.isEnabled = isRedoEnabled }
     }
 
-    private let undoButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_undo"), size: PlanRouteButtonFactory.bottomButtonHeight)
-    private let redoButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_redo"), size: PlanRouteButtonFactory.bottomButtonHeight)
+    private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_undo"))
+    private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_redo"))
 
-    private lazy var addPoiButton = PlanRouteButtonFactory.labeledButton(title: localizedString("poi"), image: .templateImageNamed("ic_custom_add"))
-    private lazy var routeButton = PlanRouteButtonFactory.labeledButton(title: localizedString("layer_route"), image: .templateImageNamed("ic_custom_add"), imagePlacement: .trailing)
+    private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .templateImageNamed("ic_custom_add"))
+    private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .templateImageNamed("ic_custom_add"), imagePlacement: .trailing)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

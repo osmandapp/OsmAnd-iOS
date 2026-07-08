@@ -2197,7 +2197,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if let cell {
                 cell.leftIconView.contentMode = .center
                 cell.setCustomLeftSeparatorInset(true)
-                cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
                 
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
@@ -2231,7 +2231,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.leftButton.layer.cornerRadius = 9
                 cell.rightButton.layer.cornerRadius = 9
                 cell.setCustomLeftSeparatorInset(true)
-                cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
                 
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
@@ -2300,7 +2300,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 let tracksFoldersKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey]
                 if tracksFoldersKeys.contains(where: { $0 == item.key }) {
                     cell.setCustomLeftSeparatorInset(true)
-                    cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
                 } else {
                     cell.setCustomLeftSeparatorInset(false)
                 }

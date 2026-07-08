@@ -33,10 +33,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         var image: UIImage {
             switch self {
-            case .favorites: .icCustomFavorites
-            case .tracks: .icCustomTrip
-            case .osm: .icCustomOsmEdits
-            case .travel: .icCustomBackpack
+            case .favorites: .icCustom20Favorites
+            case .tracks: .icCustom20Trip
+            case .osm: .icCustom20Osm
+            case .travel: .icCustom20Backpack
             }
         }
         
@@ -238,6 +238,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             guard let image = tab.image.resizedTemplateImage(with: segmentedControlIconSize) else {
                 continue
             }
+            image.accessibilityLabel = tab.title
             segmentControl.insertSegment(with: image, at: index, animated: false)
         }
     }

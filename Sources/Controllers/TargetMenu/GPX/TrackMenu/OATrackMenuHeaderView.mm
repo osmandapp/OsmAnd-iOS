@@ -296,7 +296,7 @@
                             @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"shared_string_distance"),
-                    kCellRightIconName: @"ic_small_distance"
+                    kCellRightIconName: @"ic_custom_length"
             }]];
         }
 
@@ -308,7 +308,7 @@
                             @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_ascent"),
-                    kCellRightIconName: @"ic_small_ascent"
+                    kCellRightIconName: @"ic_custom_uphill"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
@@ -316,7 +316,7 @@
                             @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_descent"),
-                    kCellRightIconName: @"ic_small_descent"
+                    kCellRightIconName: @"ic_custom_downhill"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues:@{
@@ -338,7 +338,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"map_widget_average_speed"),
-                    kCellRightIconName: @"ic_small_speed"
+                    kCellRightIconName: @"ic_custom_speed_average"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
@@ -346,7 +346,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"gpx_max_speed"),
-                    kCellRightIconName: @"ic_small_max_speed"
+                    kCellRightIconName: @"ic_custom_speed_max"
             }]];
         }
 
@@ -359,7 +359,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
-                    kCellRightIconName: @"ic_small_time_interval"
+                    kCellRightIconName: @"ic_custom_time_span"
             }]];
         }
 
@@ -372,7 +372,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),
-                    kCellRightIconName: @"ic_small_time_moving"
+                    kCellRightIconName: @"ic_custom_time_in_motion"
             }]];
         }
     }

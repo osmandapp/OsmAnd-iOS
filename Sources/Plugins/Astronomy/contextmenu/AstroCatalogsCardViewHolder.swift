@@ -81,7 +81,7 @@ final class WrappingChipsView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > 0 else { return }
+
         let height = layoutHeight(for: bounds.width, apply: true)
         if abs(bounds.height - height) > 0.5 {
             invalidateIntrinsicContentSize()

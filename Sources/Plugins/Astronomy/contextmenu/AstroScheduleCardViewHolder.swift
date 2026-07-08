@@ -225,17 +225,7 @@ enum AstroScheduleCardViewHolder {
 
         let dayLabel = UILabel()
 
-        let attributedText = NSMutableAttributedString(string: day.dayLabel, attributes: [
-            .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.preferredFont(forTextStyle: .body)
-        ])
-        if let commaIndex = day.dayLabel.firstIndex(of: ",") {
-            let start = day.dayLabel.index(after: commaIndex)
-            let nsRange = NSRange(start..<day.dayLabel.endIndex, in: day.dayLabel)
-            attributedText.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: nsRange)
-        }
-        
-        dayLabel.attributedText = attributedText
+        dayLabel.attributedText = attributedDayLabel(for: day.date)
         dayLabel.numberOfLines = 1
         dayLabel.lineBreakMode = .byTruncatingTail
         dayLabel.adjustsFontSizeToFitWidth = true
@@ -298,6 +288,30 @@ enum AstroScheduleCardViewHolder {
         return control
     }
 
+    private static func attributedDayLabel(for date: Date) -> NSAttributedString {
+        var attributed = date.formatted(
+            .dateTime
+                .weekday(.abbreviated)
+                .day()
+                .attributed
+        )
+        let font = UIFont.preferredFont(forTextStyle: .body)
+        for run in attributed.runs {
+            attributed[run.range].font = font
+            attributed[run.range].foregroundColor = UIColor.textColorPrimary
+            
+            guard let field = run.dateField else { continue }
+
+            switch field {
+            case .day:
+                attributed[run.range].foregroundColor = UIColor.textColorSecondary
+            default:
+                break
+            }
+        }
+        return NSAttributedString(attributed)
+    }
+    
     private static func placeholderRow(showDivider _: Bool) -> UIView {
         let view = UIView()
         view.heightAnchor.constraint(greaterThanOrEqualToConstant: 52).isActive = true

@@ -290,15 +290,30 @@ extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
 
 // MARK: - UIPageViewControllerDelegate
 extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
         guard let viewController = pendingViewControllers.first,
               let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }) else {
             return
         }
+        
+        segmentControl.selectedSegmentIndex = index
+        setupNavbarTitle(with: availableTabs[index])
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        guard let viewController = pageViewController.viewControllers?.first,
+              let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }) else {
+            return
+        }
+        
         let tab = availableTabs[index]
         segmentControl.selectedSegmentIndex = index
-        setupNavbarTitle(with: tab)
         selectedTab = tab
+        setupNavbarTitle(with: tab)
     }
 }
 

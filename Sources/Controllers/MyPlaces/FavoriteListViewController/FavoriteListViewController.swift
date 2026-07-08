@@ -266,11 +266,17 @@ final class FavoriteListViewController: UIViewController {
             let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
             actionsButton.tintColor = .label
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
-            let searchButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: .label, action: #selector(searchButtonPressed(_:)), target: self, menu: nil)
-            searchButton?.accessibilityLabel = localizedString("shared_string_search")
+            let searchIcon = UIImage(systemName: "magnifyingglass",
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+            let searchButton = UIBarButtonItem(image: searchIcon,
+                                               style: .plain,
+                                               target: self,
+                                               action: #selector(searchButtonPressed(_:)))
+            searchButton.tintColor = .label
+            searchButton.accessibilityLabel = localizedString("shared_string_search")
             if #available(iOS 26.0, *) {
-                searchButton?.style = .prominent
-                searchButton?.tintColor = .clear
+                searchButton.style = .prominent
+                searchButton.tintColor = .clear
             }
 
             let rightBarButtonItems = [actionsButton, isSearchActive ? nil : searchButton].compactMap { $0 }

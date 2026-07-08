@@ -365,24 +365,20 @@ final class OsmEditsListViewController: UIViewController {
             return
         }
 
-        selectButton = OABaseNavbarViewController.createRightNavbarButton(
-            nil,
-            icon: UIImage(systemName: "checkmark.circle"),
-            color: .label,
-            action: #selector(selectButtonPressed(_:)),
-            target: self,
-            menu: nil
-        )
+        selectButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle"),
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(selectButtonPressed(_:)))
+        selectButton?.tintColor = .label
         selectButton?.accessibilityLabel = localizedString("shared_string_select")
 
-        searchButton = OABaseNavbarViewController.createRightNavbarButton(
-            nil,
-            icon: UIImage(systemName: "magnifyingglass"),
-            color: .label,
-            action: #selector(searchButtonPressed(_:)),
-            target: self,
-            menu: nil
-        )
+        let searchIcon = UIImage(systemName: "magnifyingglass",
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+        searchButton = UIBarButtonItem(image: searchIcon,
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(searchButtonPressed(_:)))
+        searchButton?.tintColor = .label
         searchButton?.accessibilityLabel = localizedString("shared_string_search")
 
         if #available(iOS 26.0, *) {

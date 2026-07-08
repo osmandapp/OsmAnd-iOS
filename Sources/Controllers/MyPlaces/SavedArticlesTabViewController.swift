@@ -283,25 +283,22 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             return
         }
 
-        let searchButton = OABaseNavbarViewController.createRightNavbarButton(
-            nil,
-            icon: UIImage(systemName: "magnifyingglass"),
-            color: .label,
-            action: #selector(searchButtonPressed(_:)),
-            target: self,
-            menu: nil
-        )
-        searchButton?.accessibilityLabel = localizedString("shared_string_search")
+        let searchIcon = UIImage(systemName: "magnifyingglass",
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+        let searchButton = UIBarButtonItem(image: searchIcon,
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(searchButtonPressed(_:)))
+        searchButton.tintColor = .label
+        searchButton.accessibilityLabel = localizedString("shared_string_search")
 
         if #available(iOS 26.0, *) {
-            searchButton?.style = .prominent
-            searchButton?.tintColor = .clear
+            searchButton.style = .prominent
+            searchButton.tintColor = .clear
         }
 
-        if let searchButton {
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
-            navigationItem.setRightBarButtonItems([searchButton], animated: false)
-        }
+        navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
+        navigationItem.setRightBarButtonItems([searchButton], animated: false)
     }
 
     private func updateData() {

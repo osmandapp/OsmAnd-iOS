@@ -428,7 +428,7 @@ final class OsmEditsListViewController: UIViewController {
 
     private func createAction(for sortType: MyPlacesSortMode) -> UIAction {
         let actionState: UIMenuElement.State = sortType == sortMode ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image?.resizedMenuImage(), state: actionState) { [weak self] _ in
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
             self.updateSortMode(sortType)
             self.sortMode = savedSortMode()
@@ -713,19 +713,19 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
         }
         let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
             guard let self else { return nil }
-            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { [weak self] _ in
+            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
                 guard let self else { return }
                 self.upload(osmPoint.item)
             }
             uploadToOsm.accessibilityLabel = localizedString("upload_to_osm_short")
 
-            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { [weak self] _ in
+            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit) { [weak self] _ in
                 guard let self else { return }
                 self.modify(osmPoint.item)
             }
             modify.accessibilityLabel = localizedString("shared_string_modify")
 
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { [weak self] _ in
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined) { [weak self] _ in
                 guard let self else { return }
                 self.delete(osmPoint.item)
             }

@@ -199,19 +199,19 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: .icCustomFileRead.resizedMenuImage()) { [weak self] _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: .icCustomFileRead) { [weak self] _ in
                         guard let self else { return }
                         lastSelectedIndexPath = indexPath
                         let vc = TravelArticleDialogViewController(articleId: article.generateIdentifier(), lang: article.lang ?? "")
                         vc.delegate = self
                         navigationController?.pushViewController(vc, animated: true)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: .icCustomBookmarkOutlined.resizedMenuImage()) { [weak self] _ in
+                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: .icCustomBookmarkOutlined) { [weak self] _ in
                         guard let self else { return }
                         TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         self.updateData()
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: .icCustomPointMarkersOutlined.resizedMenuImage()) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: .icCustomPointMarkersOutlined) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
                         _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
@@ -258,7 +258,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     private func createAction(for sortType: MyPlacesSortMode) -> UIAction {
         let actionState: UIMenuElement.State = sortType == sortMode ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image?.resizedMenuImage(), state: actionState) { [weak self] _ in
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
             self.updateSortMode(sortType)
             self.sortMode = savedSortMode()

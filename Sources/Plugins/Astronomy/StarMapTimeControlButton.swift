@@ -8,13 +8,33 @@
 
 import UIKit
 
-final class StarMapTimeControlButton: StarMapButton {
-    override func updateTheme() {
+final class StarMapTimeControlButton: UIButton {
+    var active = false {
+        didSet { applyColors() }
+    }
+    var nightMode = false {
+        didSet { applyColors() }
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    private func setup() {
         backgroundColor = .clear
-        layer.borderWidth = 0
-        layer.cornerRadius = 0
-        let foregroundColor: UIColor = active ? .white : StarMapControlTheme.activeForeground(nightMode: nightMode)
-        tintColor = foregroundColor
-        setTitleColor(foregroundColor, for: .normal)
+        adjustsImageWhenHighlighted = false
+        titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        setImage(AstroIcon.template("ic_action_time"), for: .normal)
+        imageView?.contentMode = .scaleAspectFit
+        applyColors()
+    }
+    private func applyColors() {
+        let color = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
+        tintColor = color
+        setTitleColor(color, for: .normal)
     }
 }

@@ -25,31 +25,20 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let maxMagnitude: Double = 7.0
         static let leftPanelWidth: CGFloat = 393
     }
-    private var settings: AstronomyPluginSettings
-    private let plugin: AstronomyPlugin
-    private let dataProvider: AstroDataProvider
-    private let viewModel: StarObjectsViewModel
 
     private let mainLayout = UIView()
     private let starView = StarView()
     private let regularMapContainer = UIView()
     private let mapControlsContainer = StarMapControlsContainer()
     private let timeSelectionView = DateTimeSelectionView()
-    private let timeControlCard = UIView()
-    private let timeControlButton = StarMapTimeControlButton()
-    private let resetTimeButton = StarMapResetButton()
+    private let timeControlCard = StarMapTimeControlCard()
     private let arModeButton = StarMapButton()
     private let cameraButton = StarMapButton()
     private let transparencySlider = UISlider()
     private let sliderContainer = UIView()
     private let resetFovButton = StarMapButton()
-    private let magnitudeFilterButton = UIControl()
-    private let magnitudeFilterIcon = UIImageView()
-    private let magnitudeFilterText = UILabel()
-    private let magnitudeSliderCard = UIView()
-    private let magnitudeSlider = UISlider()
-    private let magnitudeSliderTitle = UILabel()
-    private let magnitudeSliderValue = UILabel()
+    private let magnitudeFilterButton = StarMapMagnitudeFilterButton()
+    private let magnitudeSliderPanel = StarMapMagnitudeSliderPanel(maxMagnitude: Layout.maxMagnitude)
     private let closeButton = StarMapButton()
     private let settingsButton = StarMapButton()
     private let searchButton = StarMapButton()
@@ -57,6 +46,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private let arModeHelper = StarMapARModeHelper()
     private let cameraHelper = StarMapCameraHelper()
+    
+    private let plugin: AstronomyPlugin
+    private let dataProvider: AstroDataProvider
+    private let viewModel: StarObjectsViewModel
+    private var settings: AstronomyPluginSettings
 
     private var autoTimeUpdateTimer: Timer?
     private var isTimeAutoUpdateEnabled = true
@@ -288,36 +282,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupTimeControls() {
-        let nightMode = OADayNightHelper.instance().isNightMode()
-        timeControlCard.translatesAutoresizingMaskIntoConstraints = false
-        timeControlCard.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 1)
-        timeControlCard.layer.cornerRadius = Layout.buttonSize / 2
-        timeControlCard.layer.shadowColor = UIColor.black.cgColor
-        timeControlCard.layer.shadowOpacity = 0.16
-        timeControlCard.layer.shadowRadius = 6
-        timeControlCard.layer.shadowOffset = CGSize(width: 0, height: 2)
+        timeControlCard.onTimeButtonTapped = { [weak self] in self?.toggleTimeSelection() }
+        timeControlCard.onResetTapped = { [weak self] in self?.resetTimeButtonPressed() }
         mapControlsContainer.addSubview(timeControlCard)
-
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 4
-        stack.layoutMargins = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
-        stack.isLayoutMarginsRelativeArrangement = true
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        timeControlCard.addSubview(stack)
-
-        timeControlButton.setImage(AstroIcon.template("ic_action_time"), for: .normal)
-        timeControlButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        timeControlButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        timeControlButton.addTarget(self, action: #selector(toggleTimeSelection), for: .touchUpInside)
-        stack.addArrangedSubview(timeControlButton)
-
-        resetTimeButton.addTarget(self, action: #selector(resetTimeButtonPressed), for: .touchUpInside)
-        resetTimeButton.isHidden = true
-        resetTimeButton.widthAnchor.constraint(equalToConstant: Layout.smallButtonSize).isActive = true
-        resetTimeButton.heightAnchor.constraint(equalToConstant: Layout.smallButtonSize).isActive = true
-        stack.addArrangedSubview(resetTimeButton)
 
         timeSelectionView.translatesAutoresizingMaskIntoConstraints = false
         timeSelectionView.isHidden = true
@@ -326,106 +293,32 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         NSLayoutConstraint.activate([
             timeControlCard.centerXAnchor.constraint(equalTo: mapVisibleAreaGuide.centerXAnchor),
             timeControlCard.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
-            timeControlCard.heightAnchor.constraint(equalToConstant: Layout.buttonSize),
-
-            stack.leadingAnchor.constraint(equalTo: timeControlCard.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: timeControlCard.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: timeControlCard.topAnchor),
-            stack.bottomAnchor.constraint(equalTo: timeControlCard.bottomAnchor),
-
             timeSelectionView.centerXAnchor.constraint(equalTo: mapVisibleAreaGuide.centerXAnchor),
             timeSelectionView.bottomAnchor.constraint(equalTo: timeControlCard.topAnchor, constant: -Layout.contentPadding)
         ])
     }
 
     private func setupMagnitudeControls() {
-        let nightMode = OADayNightHelper.instance().isNightMode()
         magnitudeFilterButton.translatesAutoresizingMaskIntoConstraints = false
-        magnitudeFilterButton.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.92)
-        magnitudeFilterButton.layer.cornerRadius = Layout.buttonSize / 2
-        magnitudeFilterButton.layer.shadowColor = UIColor.black.cgColor
-        magnitudeFilterButton.layer.shadowOpacity = 0.16
-        magnitudeFilterButton.layer.shadowRadius = 6
-        magnitudeFilterButton.layer.shadowOffset = CGSize(width: 0, height: 2)
         magnitudeFilterButton.addAction(UIAction { [weak self] _ in
             self?.toggleMagnitudeSlider()
         }, for: .touchUpInside)
         mapControlsContainer.addSubview(magnitudeFilterButton)
-
-        let filterStack = UIStackView()
-        filterStack.axis = .vertical
-        filterStack.alignment = .center
-        filterStack.spacing = 4
-        filterStack.isUserInteractionEnabled = false
-        filterStack.translatesAutoresizingMaskIntoConstraints = false
-        magnitudeFilterButton.addSubview(filterStack)
-
-        magnitudeFilterIcon.image = .icCustomMagnitude
-        magnitudeFilterIcon.tintColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
-        magnitudeFilterIcon.contentMode = .scaleAspectFit
-        magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        magnitudeFilterIcon.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        filterStack.addArrangedSubview(magnitudeFilterIcon)
-
-        magnitudeFilterText.textColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
-        magnitudeFilterText.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        filterStack.addArrangedSubview(magnitudeFilterText)
-
-        magnitudeSliderCard.translatesAutoresizingMaskIntoConstraints = false
-        magnitudeSliderCard.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.94)
-        magnitudeSliderCard.layer.cornerRadius = Layout.contentPadding
-        magnitudeSliderCard.layer.shadowColor = UIColor.black.cgColor
-        magnitudeSliderCard.layer.shadowOpacity = 0.16
-        magnitudeSliderCard.layer.shadowRadius = 6
-        magnitudeSliderCard.layer.shadowOffset = CGSize(width: 0, height: 2)
-        magnitudeSliderCard.isHidden = true
-        mapControlsContainer.addSubview(magnitudeSliderCard)
-
-        let sliderStack = UIStackView()
-        sliderStack.axis = .vertical
-        sliderStack.spacing = 6
-        sliderStack.layoutMargins = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
-        sliderStack.isLayoutMarginsRelativeArrangement = true
-        sliderStack.translatesAutoresizingMaskIntoConstraints = false
-        magnitudeSliderCard.addSubview(sliderStack)
-
-        let sliderHeader = UIStackView()
-        sliderHeader.axis = .horizontal
-        sliderHeader.alignment = .center
-        sliderHeader.spacing = 8
-        magnitudeSliderTitle.text = localizedString("astro_min_magnitude")
-        magnitudeSliderTitle.textColor = StarMapControlTheme.textColor(nightMode: nightMode)
-        magnitudeSliderTitle.font = UIFont.systemFont(ofSize: 14)
-        sliderHeader.addArrangedSubview(magnitudeSliderTitle)
-        sliderHeader.addArrangedSubview(UIView())
-        magnitudeSliderValue.textColor = StarMapControlTheme.activeBackground()
-        magnitudeSliderValue.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        sliderHeader.addArrangedSubview(magnitudeSliderValue)
-        sliderStack.addArrangedSubview(sliderHeader)
-
-        magnitudeSlider.minimumValue = -1
-        magnitudeSlider.maximumValue = Float(Layout.maxMagnitude)
-        magnitudeSlider.addTarget(self, action: #selector(magnitudeChanged), for: .valueChanged)
-        sliderStack.addArrangedSubview(magnitudeSlider)
-
+        
+        magnitudeSliderPanel.onValueChanged = { [weak self] value in
+            self?.applyMagnitudeFilter(value)
+        }
+        mapControlsContainer.addSubview(magnitudeSliderPanel)
+        
         NSLayoutConstraint.activate([
             magnitudeFilterButton.widthAnchor.constraint(equalToConstant: Layout.buttonSize),
             magnitudeFilterButton.heightAnchor.constraint(equalToConstant: Layout.magnitudeButtonHeight),
             magnitudeFilterButton.centerXAnchor.constraint(equalTo: settingsButton.centerXAnchor),
             magnitudeFilterButton.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -Layout.contentPadding),
-
-            filterStack.centerXAnchor.constraint(equalTo: magnitudeFilterButton.centerXAnchor),
-            filterStack.centerYAnchor.constraint(equalTo: magnitudeFilterButton.centerYAnchor),
-
-            magnitudeSliderCard.widthAnchor.constraint(equalToConstant: Layout.magnitudeSliderWidth),
-            magnitudeSliderCard.heightAnchor.constraint(equalTo: magnitudeFilterButton.heightAnchor),
-            magnitudeSliderCard.trailingAnchor.constraint(equalTo: magnitudeFilterButton.leadingAnchor, constant: -Layout.contentPadding),
-            magnitudeSliderCard.topAnchor.constraint(equalTo: magnitudeFilterButton.topAnchor),
-
-            sliderStack.leadingAnchor.constraint(equalTo: magnitudeSliderCard.leadingAnchor),
-            sliderStack.trailingAnchor.constraint(equalTo: magnitudeSliderCard.trailingAnchor),
-            sliderStack.topAnchor.constraint(equalTo: magnitudeSliderCard.topAnchor),
-            sliderStack.bottomAnchor.constraint(equalTo: magnitudeSliderCard.bottomAnchor)
+            magnitudeSliderPanel.widthAnchor.constraint(equalToConstant: StarMapMagnitudeSliderPanel.preferredWidth),
+            magnitudeSliderPanel.heightAnchor.constraint(equalTo: magnitudeFilterButton.heightAnchor),
+            magnitudeSliderPanel.trailingAnchor.constraint(equalTo: magnitudeFilterButton.leadingAnchor, constant: -Layout.contentPadding),
+            magnitudeSliderPanel.topAnchor.constraint(equalTo: magnitudeFilterButton.topAnchor)
         ])
     }
 
@@ -716,7 +609,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func setTimeAutoUpdateEnabled(_ enabled: Bool) {
         isTimeAutoUpdateEnabled = enabled
-        resetTimeButton.isHidden = enabled
+        timeControlCard.setResetVisible(!enabled)
         if enabled {
             syncCurrentTimeForAutoUpdate(animate: true)
         } else {
@@ -757,7 +650,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             formatter.dateStyle = .short
             formatter.timeStyle = .short
         }
-        timeControlButton.setTitle(formatter.string(from: date), for: .normal)
+        timeControlCard.setTimeTitle(formatter.string(from: date))
 
         updateTimeControlTheme()
     }
@@ -765,13 +658,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func updateTimeControlTheme() {
         let nightMode = OADayNightHelper.instance().isNightMode()
         let active = !timeSelectionView.isHidden
-        timeControlCard.backgroundColor = active
-            ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 1)
-        timeControlButton.nightMode = nightMode
-        resetTimeButton.nightMode = nightMode
-        timeControlButton.active = active
-        resetTimeButton.active = active
+        timeControlCard.updateTheme(nightMode: nightMode, active: active)
     }
 
     private func updateMagnitudeControls() {
@@ -779,24 +666,19 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if starView.magnitudeFilter == nil || (starView.magnitudeFilter ?? 0) > Layout.maxMagnitude {
             starView.magnitudeFilter = Layout.maxMagnitude
         }
-        magnitudeSlider.value = Float(filterToUse)
         let text = String(format: "%.1f", filterToUse)
-        magnitudeFilterText.text = text
-        magnitudeSliderValue.text = text
+        magnitudeFilterButton.setValue(text)
+        magnitudeSliderPanel.setMagnitude(filterToUse)
         updateMagnitudeFilterTheme()
     }
 
     private func updateMagnitudeFilterTheme() {
         let nightMode = OADayNightHelper.instance().isNightMode()
-        let active = !magnitudeSliderCard.isHidden
-        magnitudeFilterButton.backgroundColor = active
-            ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.92)
-        magnitudeFilterIcon.tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
-        magnitudeFilterText.textColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
-        magnitudeSliderCard.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.94)
-        magnitudeSliderTitle.textColor = StarMapControlTheme.textColor(nightMode: nightMode)
-        magnitudeSliderValue.textColor = StarMapControlTheme.activeBackground()
+
+        magnitudeFilterButton.nightMode = nightMode
+        magnitudeFilterButton.active = magnitudeSliderPanel.isExpanded
+        
+        magnitudeSliderPanel.updateTheme(nightMode: nightMode)
     }
 
     private func updateArModeUI(_ enabled: Bool) {
@@ -837,8 +719,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         settingsButton.nightMode = nightMode
         searchButton.nightMode = nightMode
         compassButton.nightMode = nightMode
-        resetTimeButton.nightMode = nightMode
-        timeControlButton.nightMode = nightMode
+        magnitudeFilterButton.nightMode = nightMode
+        magnitudeSliderPanel.updateTheme(nightMode: nightMode)
     }
 
     private func updateRedMode(_ enabled: Bool) {
@@ -850,7 +732,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              cameraButton,
                              resetFovButton,
                              magnitudeFilterButton,
-                             magnitudeSliderCard,
+                             magnitudeSliderPanel,
                              compassButton,
                              searchButton,
                              closeButton,
@@ -1492,17 +1374,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc private func toggleMagnitudeSlider() {
-        magnitudeSliderCard.isHidden.toggle()
+        magnitudeSliderPanel.toggle()
         updateMagnitudeFilterTheme()
     }
 
-    @objc private func magnitudeChanged() {
-        starView.magnitudeFilter = Double(magnitudeSlider.value)
+    private func applyMagnitudeFilter(_ value: Double) {
+        starView.magnitudeFilter = value
         starView.showMagnitudeFilter = true
         settings.updateStarMapConfig { current in
             var config = current
             config.showMagnitudeFilter = true
-            config.magnitudeFilter = starView.magnitudeFilter
+            config.magnitudeFilter = value
             return config
         }
         updateMagnitudeControls()

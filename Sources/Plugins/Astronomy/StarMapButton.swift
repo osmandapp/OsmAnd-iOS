@@ -42,47 +42,101 @@ enum StarMapControlTheme {
     }
 }
 
-class StarMapButton: UIButton {
+@objcMembers
+class StarMapButton: OAHudButton {
+    var showsHudChrome = true
+
     var active = false {
         didSet { updateTheme() }
     }
+
     var nightMode = false {
         didSet { updateTheme() }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        imageView?.contentMode = .scaleAspectFit
-        updateTheme()
+        commonInit()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        imageView?.contentMode = .scaleAspectFit
-        updateTheme()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = min(bounds.width, bounds.height) / 2.0
-    }
-
-    func updateTheme() {
-        tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
-        backgroundColor = active
-            ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.86)
-        layer.cornerRadius = min(bounds.width, bounds.height) / 2.0
-        layer.borderWidth = StarMapControlTheme.borderWidth(active: active, nightMode: nightMode)
-        layer.borderColor = StarMapControlTheme.borderColor.cgColor
-    }
-
-    func setColorFilter(_ color: UIColor) {
-        tintColor = color
+        commonInit()
     }
 
     func setIcon(iconName: String, accessibilityLabel: String? = nil) {
         setImage(AstroIcon.template(iconName), for: .normal)
         self.accessibilityLabel = accessibilityLabel
+        updateTheme()
+    }
+
+    func updateTheme() {
+        guard showsHudChrome else {
+            applyPlainTheme()
+            return
+        }
+
+        if active {
+            unpressedColorDay = .mapButtonBgColorActive.light
+            unpressedColorNight = .mapButtonBgColorActive.dark
+            tintColorDay = .white
+            tintColorNight = .white
+            borderWidthDay = 0
+            borderWidthNight = 0
+        } else {
+            unpressedColorDay = .mapButtonBgColorDefault.light
+            unpressedColorNight = .mapButtonBgColorDefault.dark
+            tintColorDay = .mapButtonIconColorDefault.light
+            tintColorNight = .mapButtonIconColorDefault.dark
+            borderWidthDay = 0
+            borderWidthNight = 2
+        }
+
+        updateColors(forPressedState: isHighlighted)
+        if active {
+            backgroundColor = StarMapControlTheme.activeBackground(alpha: 0.5)
+        }
+    }
+
+    private func applyDefaultAppearanceParams() {
+        let helper = OAMapButtonsHelper.sharedInstance()
+        var size = helper.getDefaultSizePref().get()
+        if size <= 0 { size = MapButtonState.defaultSizeDp }
+
+        var cornerRadius = helper.getDefaultCornerRadiusPref().get()
+        if cornerRadius < 0 { cornerRadius = MapButtonState.roundRadiusDp }
+
+        var glassStyle: Int32
+        var opacity: Double
+        if #available(iOS 26.0, *) {
+            glassStyle = Int32(UIGlassEffect.Style.clear.rawValue)
+            opacity = 0.5
+        } else {
+            glassStyle = MapButtonState.defaultGlassStyle
+            opacity = helper.getDefaultOpacityPref().get()
+            if opacity < 0 {
+                opacity = MapButtonState.opaqueAlpha
+            }
+        }
+
+        setCustomAppearanceParams(ButtonAppearanceParams(
+            iconName: nil,
+            size: Int32(size),
+            opacity: opacity,
+            cornerRadius: Int32(cornerRadius),
+            glassStyle: glassStyle
+        ))
+    }
+
+    private func applyPlainTheme() {
+        backgroundColor = .clear
+        layer.borderWidth = 0
+        layer.shadowOpacity = 0
+    }
+    
+    private func commonInit() {
+        imageView?.contentMode = .scaleAspectFit
+        applyDefaultAppearanceParams()
+        updateTheme()
     }
 }

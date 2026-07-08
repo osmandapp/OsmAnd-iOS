@@ -266,7 +266,7 @@
     [self setGpxActivity:activity.label];
     if (!self.gpxActivityContainerView.hidden)
     {
-        self.gpxActivityIconView.image = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", activity.iconName]] ?: [UIImage templateImageNamed:@"ic_custom_info_outlined"];
+        self.gpxActivityIconView.image = [UIImage activityIcon:activity.iconName fallback:[UIImage templateImageNamed:@"ic_custom_info_outlined"]];
         self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
         self.gpxActivityTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }

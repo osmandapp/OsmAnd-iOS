@@ -24,6 +24,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let regularMapHeightFractionForPadLandscape: CGFloat = 0.3
         static let maxMagnitude: Double = 7.0
         static let leftPanelWidth: CGFloat = 393
+        static let zoomButtonsBottomPadding: CGFloat = 34
     }
 
     private let mainLayout = UIView()
@@ -43,6 +44,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let settingsButton = StarMapButton()
     private let searchButton = StarMapButton()
     private let compassButton = StarCompassButton()
+    private let zoomInButton = StarMapButton()
+    private let zoomOutButton = StarMapButton()
+    private let zoomButtonsVisible: Bool = OAUtilities.isiOSAppOnMac()
 
     private let arModeHelper = StarMapARModeHelper()
     private let cameraHelper = StarMapCameraHelper()
@@ -227,6 +231,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         setupTimeControls()
         setupMagnitudeControls()
         setupCameraControls()
+        setupMacZoomControls()
         updateMapControlThemes()
     }
 
@@ -358,6 +363,33 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             resetFovButton.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: 8),
             resetFovButton.bottomAnchor.constraint(lessThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
         ])
+    }
+    
+    private func setupMacZoomControls() {
+        guard zoomButtonsVisible else { return }
+
+        addRoundButton(zoomInButton,
+                       iconName: "ic_custom_map_zoom_in",
+                       accessibilityLabel: localizedString("key_hint_zoom_in"))
+        zoomInButton.addTarget(self, action: #selector(zoomInPressed), for: .touchUpInside)
+
+        addRoundButton(zoomOutButton,
+                       iconName: "ic_custom_map_zoom_out",
+                       accessibilityLabel: localizedString("key_hint_zoom_out"))
+        zoomOutButton.addTarget(self, action: #selector(zoomOutPressed), for: .touchUpInside)
+
+        NSLayoutConstraint.activate([
+            zoomOutButton.centerXAnchor.constraint(equalTo: settingsButton.centerXAnchor),
+            zoomOutButton.bottomAnchor.constraint(equalTo: magnitudeFilterButton.topAnchor, constant: -Layout.zoomButtonsBottomPadding),
+
+            zoomInButton.centerXAnchor.constraint(equalTo: settingsButton.centerXAnchor),
+            zoomInButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor, constant: -Layout.contentPadding)
+        ])
+
+        starView.onViewAngleChangeListener = { [weak self] _ in
+            self?.updateZoomButtonsEnabled()
+        }
+        updateZoomButtonsEnabled()
     }
 
     private func addRoundButton(_ button: StarMapButton, iconName: String? = nil, accessibilityLabel: String) {
@@ -721,6 +753,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         compassButton.nightMode = nightMode
         magnitudeFilterButton.nightMode = nightMode
         magnitudeSliderPanel.updateTheme(nightMode: nightMode)
+        zoomInButton.nightMode = nightMode
+        zoomOutButton.nightMode = nightMode
     }
 
     private func updateRedMode(_ enabled: Bool) {
@@ -738,6 +772,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              closeButton,
                              settingsButton,
                              sliderContainer,
+                             zoomInButton,
+                             zoomOutButton,
                              regularMapContainer)
         objectInfoController?.applyRedFilter(enabled: enabled)
         configureSheetController?.applyRedFilter(enabled: enabled)
@@ -1389,6 +1425,23 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         updateMagnitudeControls()
         starView.setNeedsDisplay()
+    }
+    
+    @objc private func zoomInPressed() {
+        starView.zoomIn()
+        updateZoomButtonsEnabled()
+    }
+
+    @objc private func zoomOutPressed() {
+        starView.zoomOut()
+        updateZoomButtonsEnabled()
+    }
+
+    private func updateZoomButtonsEnabled() {
+        guard zoomButtonsVisible else { return }
+
+        zoomInButton.isEnabled = starView.canZoomIn()
+        zoomOutButton.isEnabled = starView.canZoomOut()
     }
 }
 

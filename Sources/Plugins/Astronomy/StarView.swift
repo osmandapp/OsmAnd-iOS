@@ -274,6 +274,14 @@ final class StarView: UIView {
     private var lastEquGridTimeT = -1.0
     private var lastEquGridLat = -999.0
     private var lastEquGridLon = -999.0
+    
+    private var inertialDisplayLink: CADisplayLink?
+    private var inertialVelocity: CGPoint = .zero
+    private var lastInertialTimestamp: CFTimeInterval = 0
+    private let inertialDecelerationRate: CGFloat = 0.998
+    private let inertialStopSpeed: CGFloat = 5
+    private let inertialMinStartSpeed: CGFloat = 80
+    private var didPanThisGesture = false
 
     var currentTime: Time {
         get {
@@ -319,6 +327,7 @@ final class StarView: UIView {
     deinit {
         timeAnimationDisplayLink?.invalidate()
         focusAnimationDisplayLink?.invalidate()
+        inertialDisplayLink?.invalidate()
     }
 
     required init?(coder: NSCoder) {
@@ -461,6 +470,8 @@ final class StarView: UIView {
         focusAnimationDisplayLink?.invalidate()
         focusAnimationDisplayLink = nil
         focusAnimation = nil
+        
+        cancelInertialScroll()
     }
 
     @objc private func handleFocusAnimationFrame(_ displayLink: CADisplayLink) {
@@ -785,6 +796,14 @@ final class StarView: UIView {
 
     func zoomOut() {
         updateViewAngle(viewAngle * 1.5)
+    }
+    
+    func canZoomIn() -> Bool {
+        viewAngle > ViewAngleBounds.min + 0.5
+    }
+    
+    func canZoomOut() -> Bool {
+        viewAngle < maxViewAngle - 0.5
     }
 
     func project(object: SkyObject) -> CGPoint? {
@@ -1869,9 +1888,11 @@ final class StarView: UIView {
         let point = recognizer.location(in: self)
         switch recognizer.state {
         case .began:
+            cancelInertialScroll()
             cancelFocusAnimation()
             lastTouchPoint = point
             isPanning = false
+            didPanThisGesture = false
         case .changed:
             let dx = point.x - lastTouchPoint.x
             let dy = point.y - lastTouchPoint.y
@@ -1879,20 +1900,69 @@ final class StarView: UIView {
                 isPanning = true
             } else if hypot(dx, dy) > 0 || isPanning {
                 isPanning = true
-                if settings.starMap.is2DMode {
-                    panX += dx
-                    panY += dy
-                } else {
-                    let scale = viewAngle / Double(max(bounds.width, 1))
-                    centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
-                    centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
-                    onAzimuthManualChangeListener?(centerAzimuth)
-                }
+                didPanThisGesture = true
+                applyPanDelta(dx: dx, dy: dy)
                 lastTouchPoint = point
                 setNeedsDisplay()
             }
+        case .ended, .cancelled:
+            if didPanThisGesture && !isCameraMode {
+                startInertialScroll(velocity: recognizer.velocity(in: self))
+            }
+            isPanning = false
+            didPanThisGesture = false
         default:
             isPanning = false
+        }
+    }
+    
+    private func applyPanDelta(dx: CGFloat, dy: CGFloat) {
+        if settings.starMap.is2DMode {
+            panX += dx
+            panY += dy
+        } else {
+            let scale = viewAngle / Double(max(bounds.width, 1))
+            centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
+            centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
+            onAzimuthManualChangeListener?(centerAzimuth)
+        }
+        setNeedsDisplay()
+    }
+    
+    private func startInertialScroll(velocity: CGPoint) {
+        guard hypot(velocity.x, velocity.y) >= inertialMinStartSpeed else { return }
+
+        cancelInertialScroll()
+        cancelFocusAnimation()
+
+        inertialVelocity = velocity
+        lastInertialTimestamp = CACurrentMediaTime()
+
+        let link = CADisplayLink(target: self, selector: #selector(handleInertialFrame(_:)))
+        inertialDisplayLink = link
+        link.add(to: .main, forMode: .common)
+    }
+
+    private func cancelInertialScroll() {
+        inertialDisplayLink?.invalidate()
+        inertialDisplayLink = nil
+        inertialVelocity = .zero
+    }
+
+    @objc private func handleInertialFrame(_ link: CADisplayLink) {
+        let now = link.timestamp
+        let dt = CGFloat(max(0, min(0.05, now - lastInertialTimestamp)))
+        lastInertialTimestamp = now
+        guard dt > 0 else { return }
+
+        applyPanDelta(dx: inertialVelocity.x * dt, dy: inertialVelocity.y * dt)
+
+        let decay = pow(inertialDecelerationRate, dt * 1000)
+        inertialVelocity.x *= decay
+        inertialVelocity.y *= decay
+
+        if hypot(inertialVelocity.x, inertialVelocity.y) < inertialStopSpeed {
+            cancelInertialScroll()
         }
     }
 

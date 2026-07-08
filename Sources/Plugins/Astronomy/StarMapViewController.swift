@@ -34,7 +34,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let timeSelectionView = DateTimeSelectionView()
     private let timeControlCard = StarMapTimeControlCard()
     private let arModeButton = StarMapButton()
-    private let cameraButton = StarMapButton()
     private let transparencySlider = UISlider()
     private let sliderContainer = UIView()
     private let resetFovButton = StarMapButton()
@@ -248,10 +247,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         addRoundButton(arModeButton, iconName: "ic_custom_view_in_ar", accessibilityLabel: localizedString("astro_ar"))
         arModeButton.addTarget(self, action: #selector(toggleARMode), for: .touchUpInside)
 
-        addRoundButton(cameraButton, iconName: "ic_custom_device", accessibilityLabel: localizedString("astro_camera"))
-        cameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
-        cameraButton.isHidden = true
-
         addRoundButton(searchButton, iconName: "ic_custom_search", accessibilityLabel: localizedString("shared_string_search"))
         searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
 
@@ -261,9 +256,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
             arModeButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
             arModeButton.topAnchor.constraint(equalTo: compassButton.bottomAnchor, constant: Layout.contentPadding),
-
-            cameraButton.centerXAnchor.constraint(equalTo: arModeButton.centerXAnchor),
-            cameraButton.topAnchor.constraint(equalTo: arModeButton.bottomAnchor, constant: Layout.contentPadding),
 
             searchButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
             searchButton.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
@@ -344,13 +336,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         resetFovButton.addTarget(self, action: #selector(resetFov), for: .touchUpInside)
         resetFovButton.isHidden = true
 
-        let cameraSliderTopConstraint = sliderContainer.topAnchor.constraint(equalTo: cameraButton.bottomAnchor, constant: Layout.contentPadding)
+        let cameraSliderTopConstraint = sliderContainer.topAnchor.constraint(equalTo: arModeButton.bottomAnchor, constant: Layout.contentPadding)
         cameraSliderTopConstraint.priority = .defaultHigh
 
         NSLayoutConstraint.activate([
             sliderContainer.widthAnchor.constraint(equalToConstant: Layout.buttonSize),
             sliderContainer.heightAnchor.constraint(equalToConstant: Layout.transparencySliderHeight),
-            sliderContainer.centerXAnchor.constraint(equalTo: cameraButton.centerXAnchor),
+            sliderContainer.centerXAnchor.constraint(equalTo: arModeButton.centerXAnchor),
             cameraSliderTopConstraint,
             sliderContainer.topAnchor.constraint(greaterThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
 
@@ -385,10 +377,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             zoomInButton.centerXAnchor.constraint(equalTo: settingsButton.centerXAnchor),
             zoomInButton.bottomAnchor.constraint(equalTo: zoomOutButton.topAnchor, constant: -Layout.contentPadding)
         ])
-
-        starView.onViewAngleChangeListener = { [weak self] _ in
-            self?.updateZoomButtonsEnabled()
-        }
         updateZoomButtonsEnabled()
     }
 
@@ -470,6 +458,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             compassButton.update(mapRotation: CGFloat(-azimuth))
         }
         starView.onViewAngleChangeListener = { [weak self] fov in
+            self?.updateZoomButtonsEnabled()
             self?.cameraHelper.updateCameraZoom(fov: fov)
         }
 
@@ -607,7 +596,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             if cameraHelper.isCameraOverlayEnabled {
                 cameraHelper.toggleCameraOverlay()
             }
-            cameraButton.isHidden = true
             if arModeHelper.isArModeEnabled {
                 arModeHelper.toggleArMode(enable: false)
             }
@@ -618,7 +606,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             starView.setCenter(azimuth: previousAzimuth, altitude: previousAltitude)
             starView.setViewAngle(previousViewAngle)
             arModeButton.isHidden = false
-            cameraButton.isHidden = !arModeHelper.isArModeEnabled
         }
         starView.setNeedsDisplay()
     }
@@ -714,8 +701,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateArModeUI(_ enabled: Bool) {
+        compassButton.setArDirectionEnabled(enabled)
         arModeButton.active = enabled
-        cameraButton.isHidden = !enabled || starView.is2DMode
         if enabled {
             starView.isCameraMode = true
             starView.setNeedsDisplay()
@@ -730,7 +717,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateCameraUI(_ enabled: Bool) {
-        cameraButton.active = enabled
         sliderContainer.isHidden = !enabled
         resetFovButton.isHidden = !enabled
         starView.isCameraMode = enabled || arModeHelper.isRunning
@@ -745,7 +731,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func updateButtonsNightMode() {
         let nightMode = OADayNightHelper.instance().isNightMode()
         arModeButton.nightMode = nightMode
-        cameraButton.nightMode = nightMode
         resetFovButton.nightMode = nightMode
         closeButton.nightMode = nightMode
         settingsButton.nightMode = nightMode
@@ -763,7 +748,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              to: timeControlCard,
                              timeSelectionView,
                              arModeButton,
-                             cameraButton,
                              resetFovButton,
                              magnitudeFilterButton,
                              magnitudeSliderPanel,
@@ -1394,11 +1378,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc private func toggleARMode() {
-        arModeHelper.toggleArMode()
-    }
-
-    @objc private func toggleCamera() {
-        cameraHelper.toggleCameraOverlay(in: view, below: starView)
+        if arModeHelper.isArModeEnabled {
+            if cameraHelper.isCameraOverlayEnabled {
+                cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
+            }
+            arModeHelper.toggleArMode(enable: false)
+        } else {
+            arModeHelper.toggleArMode(enable: true)
+            if !cameraHelper.isCameraOverlayEnabled {
+                cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
+            }
+        }
     }
 
     @objc private func transparencyChanged() {

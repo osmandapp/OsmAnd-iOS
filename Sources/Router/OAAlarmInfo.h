@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
     AIT_TUNNEL,
     AIT_HAZARD,
     AIT_MAXIMUM,
+    AIT_RED_LIGHT_CAMERA,
 };
 
 @interface OAAlarmInfo : NSObject<OALocationPoint>
@@ -48,5 +49,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
 + (NSString* ) getVisualName:(EOAAlarmInfoType)type;
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance;
+
+- (BOOL) isTrafficCamera;
 
 @end

@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SpeedLimitWrapper : NSObject
 
-- (int)speedLimit;
 - (SpeedLimitData *)speedLimitData;
 
 @end

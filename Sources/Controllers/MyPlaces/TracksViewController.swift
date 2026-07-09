@@ -901,14 +901,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let folderAnalysis: TrackFolderAnalysis
         if isSmartFolder {
             if let organizedGroup {
-                folderAnalysis = TrackFolderAnalysis(folder: organizedGroup)
+                folderAnalysis = organizedGroup.getFolderAnalysis()
             } else {
                 guard let smartFolder = smartFolder else { return "" }
-                folderAnalysis = TrackFolderAnalysis(folder: smartFolder)
+                folderAnalysis = smartFolder.getFolderAnalysis()
             }
         } else {
-            guard let folder = getTrackFolderByPath(currentFolderPath) else { return "" }
-            folderAnalysis = TrackFolderAnalysis(folder: folder)
+            guard let analysis = getTrackFolderByPath(currentFolderPath)?.getFolderAnalysis() else { return "" }
+            folderAnalysis = analysis
         }
         
         let totalDistance = folderAnalysis.totalDistance

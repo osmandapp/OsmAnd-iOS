@@ -140,6 +140,9 @@ final class FavoriteListViewController: UIViewController {
         applySnapshot()
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
+        if isRootFolder {
+            myPlacesDelegate?.updateContentScrollView(collectionView)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -312,6 +315,9 @@ final class FavoriteListViewController: UIViewController {
     private func configureCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.topAnchor), collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        if !isRootFolder {
+            setContentScrollView(collectionView)
+        }
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -350,16 +356,12 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func configureSearchVisibility() {
-        guard !isRootFolder else {
-            navigationController?.navigationBar.topItem?.hidesSearchBarWhenScrolling = false
-            return
-        }
+        guard !isRootFolder else { return }
 
         if #available(iOS 26.0, *), !OAUtilities.isIPad() {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
-
-        navigationItem.hidesSearchBarWhenScrolling = false
+        
         navigationItem.searchController = collectionView.isEditing || !isSearchActive ? nil : subfolderSearchController
     }
     

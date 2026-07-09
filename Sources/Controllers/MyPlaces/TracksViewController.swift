@@ -190,6 +190,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             updateAllFoldersVCData(forceLoad: true)
             shouldReload = false
         }
+        if isRootFolder {
+            myPlacesDelegate?.updateContentScrollView(tableView)
+        }
     }
     
     override func viewDidLoad() {

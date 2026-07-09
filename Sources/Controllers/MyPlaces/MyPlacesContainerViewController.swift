@@ -15,6 +15,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateTitle(_ title: String, hideSubtitle: Bool)
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
     func updateToolbar(with items: [UIBarButtonItem]?)
+    func updateContentScrollView(_ scrollView: UIScrollView)
 }
 
 @objc
@@ -92,6 +93,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.searchController = nil
         setupSearchController()
         setupPageController()
         setupSegments()
@@ -349,11 +351,14 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateSearchEnabling(_ isEnabled: Bool) {
-        let searchController = isEnabled ? searchController : nil
-        navigationItem.searchController = searchController
-        navigationItem.searchController?.isActive = true
+        searchController?.isActive = isEnabled
+        navigationItem.searchController = isEnabled ? searchController : nil
         updateSegmentedControlVisibility(!isEnabled)
         setupNavbar(isClearNavBar: isEnabled)
+    }
+    
+    func updateContentScrollView(_ scrollView: UIScrollView) {
+        setContentScrollView(scrollView)
     }
 }
 

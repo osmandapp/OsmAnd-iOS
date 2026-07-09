@@ -140,6 +140,8 @@ final class OsmEditsListViewController: UIViewController {
         definesPresentationContext = true
         updateNavigationBarTitle()
 
+        myPlacesDelegate?.updateContentScrollView(collectionView)
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(_:)),

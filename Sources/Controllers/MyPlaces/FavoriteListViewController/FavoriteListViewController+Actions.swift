@@ -214,7 +214,6 @@ extension FavoriteListViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
 
-            navigationItem.hidesSearchBarWhenScrolling = false
             navigationItem.searchController = subfolderSearchController
             subfolderSearchController.isActive = true
         }

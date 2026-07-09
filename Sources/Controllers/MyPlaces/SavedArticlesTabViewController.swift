@@ -57,6 +57,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
         tableView.backgroundColor = .viewBg
+        myPlacesDelegate?.updateContentScrollView(tableView)
     }
     
     override func viewDidLoad() {

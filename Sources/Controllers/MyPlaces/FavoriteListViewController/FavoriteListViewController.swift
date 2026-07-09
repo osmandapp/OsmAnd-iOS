@@ -15,6 +15,7 @@ final class FavoriteListViewController: UIViewController {
     static let imageSize: CGFloat = 30.0
     static let favoriteIconSize: CGFloat = 36.0
     static let sortHeaderHeight: CGFloat = 44.0
+    static let emptyStateHeaderTopPadding: CGFloat = 22.0
     static let navigationTitleFontSize: CGFloat = 17.0
     static let navigationTitleMaximumSize: CGFloat = 22.0
     static let navigationSubtitleFontSize: CGFloat = 12.0
@@ -331,6 +332,10 @@ final class FavoriteListViewController: UIViewController {
 
             if section == .statsFooter {
                 return self.statsFooterLayoutSection()
+            }
+
+            if section == .emptyState {
+                configuration.headerTopPadding = Self.emptyStateHeaderTopPadding
             }
 
             if case .folderSection = section, self.isRootFolder {

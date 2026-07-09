@@ -206,12 +206,12 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
             NSString *stopName = [[stop name] lowercaseString];
             auto dist = OsmAnd::Utilities::distance(stop.longitude, stop.latitude, lon, lat);
             
-            if (([stopName containsString:amenityName] || [amenityName containsString:stopName])
+            if ((([stopName containsString:amenityName] || [amenityName containsString:stopName])
                 && dist < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS
                 && (!nearestStop
-                    || [OAUtilities isCoordEqual:[nearestStop getLocation].coordinate destLat:[stop getLocation].coordinate]
-                    || [OAUtilities isCoordEqual:[stop getLocation].coordinate destLat:CLLocationCoordinate2DMake(lat, lon)])
-                )
+                    || [OAUtilities isCoordEqual:[nearestStop getLocation].coordinate destLat:[stop getLocation].coordinate]))
+                || [OAUtilities isCoordEqual:[stop getLocation].coordinate destLat:CLLocationCoordinate2DMake(lat, lon)]
+                || [stop isConnectedToStop:amenity.obfId])
             {
                 [stopAggregated addLocalTransportStop:stop];
                 if (!nearestStop)

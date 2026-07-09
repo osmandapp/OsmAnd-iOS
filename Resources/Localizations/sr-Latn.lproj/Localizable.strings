@@ -4483,3 +4483,4 @@
 "add_to" = "Dodaj u";
 "favorite_confirm_delete_group" = "Obrišite grupu „%1$@“ i sve uključene tačke (%2$lu)?";
 "shared_string_folders" = "Folderi";
+"traffic_warning_red_light_camera" = "Kamera za crveno svetlo";

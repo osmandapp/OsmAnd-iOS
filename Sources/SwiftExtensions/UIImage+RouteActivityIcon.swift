@@ -5,13 +5,15 @@
 
 import UIKit
 
-extension UIImage {
+private enum RouteActivityIconStyle {
+    static let padding: CGFloat = 3
+}
 
-    private static let routeActivityIconPadding: CGFloat = 3
+extension UIImage {
 
     @objc static func routeActivityIcon(_ iconName: String?, fallback: UIImage?) -> UIImage? {
         guard let iconName, let mapIcon = mapSvgImageNamed("mx_\(iconName)") else { return fallback }
-        return mapIcon.withPadding(routeActivityIconPadding)
+        return mapIcon.withPadding(RouteActivityIconStyle.padding)
     }
 
     private func withPadding(_ padding: CGFloat) -> UIImage {

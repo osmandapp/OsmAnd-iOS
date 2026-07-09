@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1298,6 +1298,7 @@
 		84F3A9901B501C5800D16EBC /* ic_destination_arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A9871B501C5800D16EBC /* ic_destination_arrow@3x.png */; };
 		84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */; };
 		84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */; };
+		894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 675D59365E264CE6A5F93C66 /* Kingfisher */; };
 		8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A2DF236287EFD9E003642B7 /* OAMapCreatorDbHelper.mm */; };
 		8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */; };
 		8A3BE84F27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */; };
@@ -8474,6 +8475,7 @@
 				DA22D6CC28D8688C0074FA65 /* IOKit.framework in Frameworks */,
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
+				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
 				C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -15356,6 +15358,9 @@
 				FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
+			packageProductDependencies = (
+				675D59365E264CE6A5F93C66 /* Kingfisher */,
+			);
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
 			productType = "com.apple.product-type.application";
@@ -15496,6 +15501,10 @@
 				ars,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
+			packageReferences = (
+				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
+			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -17413,12 +17422,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
 				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Kingfisher.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -17499,7 +17506,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Check if SwiftLint is installed\nif ! command -v \"${PODS_ROOT}/SwiftLint/swiftlint\" &>/dev/null; then\n  echo \"SwiftLint is not installed. Skipping linting.\"\n  exit 0\nfi\n\ncount=0\n\n# Get modified or added .swift files using git status\nmodified_files=$(git status --porcelain | grep -E '^\\s*(M|A)\\s' | awk '{print $2}' | grep \".swift$\")\n\n# Process only modified or added files\nfor file_path in $modified_files; do\n  export SCRIPT_INPUT_FILE_$count=$file_path\n  count=$((count + 1))\ndone\n\n# Set the total number of files to lint\nexport SCRIPT_INPUT_FILE_COUNT=$count\n\n# If there are any files to lint, run SwiftLint and custom checks\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  # Run linting for modified and added files\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\n\n  access_order_script=\"${SRCROOT}/Scripts/check_access_order.swift\"\n  if [ -f \"$access_order_script\" ] && command -v xcrun &>/dev/null; then\n    module_cache_path=\"${DERIVED_FILE_DIR}/AccessOrderModuleCache\"\n    mkdir -p \"$module_cache_path\"\n    SDKROOT=\"$(xcrun --sdk macosx --show-sdk-path)\" xcrun --sdk macosx swift -module-cache-path \"$module_cache_path\" \"$access_order_script\"\n  fi\nelse\n  echo \"No modified files to lint.\"\nfi\n";
+			shellScript = "SWIFTLINT_PACKAGE_PATH=\"${SRCROOT}/Scripts/SwiftLint\"\nSWIFTLINT_SCRATCH_PATH=\"${DERIVED_FILE_DIR}/SwiftLintBuild\"\nSWIFTLINT_BIN=\"${SWIFTLINT_SCRATCH_PATH}/artifacts/swiftlint/SwiftLintBinary/SwiftLintBinary.artifactbundle/macos/swiftlint\"\n\nif [ ! -x \"$SWIFTLINT_BIN\" ]; then\n  if ! command -v swift >/dev/null 2>&1; then\n    echo \"Swift toolchain is not available. Skipping linting.\"\n    exit 0\n  fi\n  if ! SWIFTPM_SDKROOT=\"$(xcrun --sdk macosx --show-sdk-path 2>/dev/null)\"; then\n    echo \"macOS SDK is not available for SwiftPM. Skipping linting.\"\n    exit 0\n  fi\n  if ! SDKROOT=\"$SWIFTPM_SDKROOT\" swift package --package-path \"$SWIFTLINT_PACKAGE_PATH\" --scratch-path \"$SWIFTLINT_SCRATCH_PATH\" resolve >/dev/null 2>&1; then\n    echo \"SwiftLint could not be resolved via SwiftPM. Skipping linting.\"\n    exit 0\n  fi\nfi\n\nif [ ! -x \"$SWIFTLINT_BIN\" ]; then\n  echo \"SwiftLint binary is not available. Skipping linting.\"\n  exit 0\nfi\n\ncount=0\n\n# Get modified or added .swift files using git status\nmodified_files=$(git status --porcelain | grep -E '^\\s*(M|A)\\s' | awk '{print $2}' | grep \".swift$\")\n\n# Process only modified or added files\nfor file_path in $modified_files; do\n  export SCRIPT_INPUT_FILE_$count=$file_path\n  count=$((count + 1))\ndone\n\n# Set the total number of files to lint\nexport SCRIPT_INPUT_FILE_COUNT=$count\n\n# If there are any files to lint, run SwiftLint and custom checks\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  # Run linting for modified and added files\n  \"$SWIFTLINT_BIN\" lint --use-script-input-files\n\n  access_order_script=\"${SRCROOT}/Scripts/check_access_order.swift\"\n  if [ -f \"$access_order_script\" ] && command -v xcrun >/dev/null 2>&1; then\n    module_cache_path=\"${DERIVED_FILE_DIR}/AccessOrderModuleCache\"\n    mkdir -p \"$module_cache_path\"\n    SDKROOT=\"$(xcrun --sdk macosx --show-sdk-path)\" xcrun --sdk macosx swift -module-cache-path \"$module_cache_path\" \"$access_order_script\"\n  fi\nelse\n  echo \"No modified files to lint.\"\nfi\n";
 		};
 		FAFD24032D3684370023C91F /* Link Qt Script (arm_device || arm_simulator) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19862,6 +19869,32 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Scripts/SwiftLint;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = exactVersion;
+				version = 8.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		675D59365E264CE6A5F93C66 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB098CE91793F7FD00423944 /* Project object */;
 }

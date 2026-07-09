@@ -45,7 +45,7 @@ final class StarMapPlainIconButton: UIButton {
     private func applyColors() {
         let color: UIColor
         if isHighlighted || active {
-            color = StarMapControlTheme.activeForeground(nightMode: nightMode) // mapButtonIconColorActive
+            color = StarMapControlTheme.activeForeground(nightMode: nightMode)
         } else {
             color = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
         }

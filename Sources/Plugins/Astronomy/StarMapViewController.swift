@@ -42,6 +42,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let zoomInButton = StarMapButton()
     private let zoomOutButton = StarMapButton()
     private let zoomButtonsVisible: Bool = OAUtilities.isiOSAppOnMac()
+    private let mapVisibleAreaGuide = UILayoutGuide()
 
     private let arModeHelper = StarMapARModeHelper()
     private let cameraHelper = StarMapCameraHelper()
@@ -73,7 +74,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var dayNightModeObserver: OAAutoObserverProxy?
     private var screenOrientationObserver: NSObjectProtocol?
     private var leftPanelLeadingConstraint: NSLayoutConstraint?
-    private let mapVisibleAreaGuide = UILayoutGuide()
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
     private var isApplyingControlChange = false
     private var isGyroActive: Bool {
@@ -114,15 +114,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        mapLocationObserver?.detach()
-        dayNightModeObserver?.detach()
-        if let screenOrientationObserver {
-            NotificationCenter.default.removeObserver(screenOrientationObserver)
-        }
-        restoreRegularMapIfNeeded(refresh: false)
     }
 
     override func viewDidLoad() {
@@ -181,6 +172,82 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateRegularMapLayout()
         layoutRegularMapRenderer()
         cameraHelper.layoutPreview()
+    }
+    
+    func applyRedFilter(enabled: Bool) {
+        starView.showRedFilter = enabled
+        updateRedMode(enabled)
+        saveStarMapSettings()
+    }
+
+    func setRegularMapVisibility(enabled: Bool) {
+        updateRegularMapVisibility(enabled)
+        saveCommonSettings()
+    }
+    
+    func trackableObjects() -> [SkyObject] {
+        viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
+    }
+
+    func findTrackableObjectById(_ id: String) -> SkyObject? {
+        trackableObjects().first { $0.id == id }
+    }
+    
+    func starView(_ starView: StarView, didSelect object: SkyObject?) {
+        selectedObject = object
+        updateTimeControls()
+    }
+    
+    func showSearchDialog(initialCatalogWid: String? = nil) {
+        clearPreviousSearchDialog()
+        let controller = StarMapSearchViewController.newInstance(initialCatalogWid: initialCatalogWid,
+                                                                 parent: self,
+                                                                 plugin: plugin)
+        controller.onObjectSelected = { [weak self] obj in
+            self?.handleSearchObjectSelected(obj)
+        }
+        controller.onDismiss = { [weak self] in
+            self?.dismissSearchDialog(animated: true)
+        }
+        controller.applyRedFilter(enabled: starView.showRedFilter)
+        searchViewController = controller
+        
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        nav.navigationBar.prefersLargeTitles = true
+        searchNavigationController = nav
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            showLeftPanel(nav)
+            updateMapControlsVisibility()
+        } else {
+            nav.modalPresentationStyle = .fullScreen
+            (presentedViewController ?? self).present(nav, animated: true)
+        }
+    }
+    
+    func searchableObjects() -> [SkyObject] {
+        trackableObjects()
+    }
+
+    func searchConstellations() -> [Constellation] {
+        viewModel.constellations
+    }
+
+    func searchObserver() -> Observer {
+        starView.observer
+    }
+
+    func searchCurrentDate() -> Date {
+        currentDate
+    }
+
+    func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
+        settings.starMap
+    }
+
+    func isSearchRedFilterEnabled() -> Bool {
+        starView.showRedFilter
     }
 
     private func setupLayout() {
@@ -564,17 +631,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.setNeedsDisplay()
     }
 
-    func applyRedFilter(enabled: Bool) {
-        starView.showRedFilter = enabled
-        updateRedMode(enabled)
-        saveStarMapSettings()
-    }
-
-    func setRegularMapVisibility(enabled: Bool) {
-        updateRegularMapVisibility(enabled)
-        saveCommonSettings()
-    }
-
     private func apply2DMode(_ is2D: Bool) {
         if is2D {
             previousAltitude = starView.getAltitude()
@@ -915,14 +971,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.setNeedsDisplay()
     }
 
-    func trackableObjects() -> [SkyObject] {
-        viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
-    }
-
-    func findTrackableObjectById(_ id: String) -> SkyObject? {
-        trackableObjects().first { $0.id == id }
-    }
-
     private func hideBottomSheet() {
         hideBottomSheet(clearSelection: true)
     }
@@ -1146,50 +1194,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         present(alert, animated: true)
     }
 
-    func starView(_ starView: StarView, didSelect object: SkyObject?) {
-        selectedObject = object
-        updateTimeControls()
-    }
-
     private func handleSearchObjectSelected(_ obj: SkyObject) {
         selectedObject = obj
         starView.setSelectedObject(obj)
         showObjectInfo(obj, centerInVisibleMapOnPresentation: true)
     }
 
-    @objc func showSearchDialog() {
+    @objc private func showSearchDialog() {
         if UIDevice.current.userInterfaceIdiom == .pad, searchViewController != nil {
             dismissSearchDialog(animated: true)
         } else {
             showSearchDialog(initialCatalogWid: nil)
-        }
-    }
-
-    func showSearchDialog(initialCatalogWid: String? = nil) {
-        clearPreviousSearchDialog()
-        let controller = StarMapSearchViewController.newInstance(initialCatalogWid: initialCatalogWid,
-                                                                 parent: self,
-                                                                 plugin: plugin)
-        controller.onObjectSelected = { [weak self] obj in
-            self?.handleSearchObjectSelected(obj)
-        }
-        controller.onDismiss = { [weak self] in
-            self?.dismissSearchDialog(animated: true)
-        }
-        controller.applyRedFilter(enabled: starView.showRedFilter)
-        searchViewController = controller
-        
-        let nav = UINavigationController(rootViewController: controller)
-        nav.modalPresentationStyle = .fullScreen
-        nav.navigationBar.prefersLargeTitles = true
-        searchNavigationController = nav
-        
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            showLeftPanel(nav)
-            updateMapControlsVisibility()
-        } else {
-            nav.modalPresentationStyle = .fullScreen
-            (presentedViewController ?? self).present(nav, animated: true)
         }
     }
     
@@ -1220,30 +1235,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func clearPreviousSearchDialog() {
         dismissSearchDialog(animated: false)
-    }
-
-    func searchableObjects() -> [SkyObject] {
-        trackableObjects()
-    }
-
-    func searchConstellations() -> [Constellation] {
-        viewModel.constellations
-    }
-
-    func searchObserver() -> Observer {
-        starView.observer
-    }
-
-    func searchCurrentDate() -> Date {
-        currentDate
-    }
-
-    func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
-        settings.starMap
-    }
-
-    func isSearchRedFilterEnabled() -> Bool {
-        starView.showRedFilter
     }
 
     @objc private func close() {
@@ -1472,6 +1463,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
         zoomInButton.isEnabled = starView.canZoomIn()
         zoomOutButton.isEnabled = starView.canZoomOut()
+    }
+    
+    deinit {
+        mapLocationObserver?.detach()
+        dayNightModeObserver?.detach()
+        if let screenOrientationObserver {
+            NotificationCenter.default.removeObserver(screenOrientationObserver)
+        }
+        restoreRegularMapIfNeeded(refresh: false)
     }
 }
 

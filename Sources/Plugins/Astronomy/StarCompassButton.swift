@@ -73,8 +73,4 @@ final class StarCompassButton: StarMapButton {
         }, for: .touchUpInside)
         updateTheme()
     }
-
-    func shouldShow() -> Bool {
-        true
-    }
 }

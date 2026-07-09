@@ -13,10 +13,13 @@ import UIKit
 final class StarMapCameraHelper {
     static let defaultTransparency = 50
     
-    private let sessionQueue = DispatchQueue(label: "net.osmand.starMap.camera.session")
-    
     var onUnavailable: ((_ message: String) -> Void)?
     var onCameraStateChanged: ((_ enabled: Bool) -> Void)?
+    
+    private(set) var isCameraOverlayEnabled = false
+    private(set) var calculatedFov = 60.0
+    
+    private let sessionQueue = DispatchQueue(label: "net.osmand.starMap.camera.session")
     
     private var captureSession: AVCaptureSession?
     private var previewLayer: AVCaptureVideoPreviewLayer?
@@ -26,9 +29,6 @@ final class StarMapCameraHelper {
     private var cameraAspectRatio = 4.0 / 3.0
     private var lastPreviewBounds = CGRect.null
     private var lastVideoOrientation: AVCaptureVideoOrientation?
-
-    private(set) var isCameraOverlayEnabled = false
-    private(set) var calculatedFov = 60.0
     
     private weak var hostView: UIView?
     private weak var siblingView: UIView?
@@ -64,10 +64,6 @@ final class StarMapCameraHelper {
         } else {
             requestCameraOverlay()
         }
-    }
-
-    func stopPreview() {
-        disableCameraOverlay(notify: true)
     }
 
     func layoutPreview() {
@@ -115,13 +111,6 @@ final class StarMapCameraHelper {
         CATransaction.setDisableActions(true)
         previewLayer.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
         CATransaction.commit()
-    }
-
-    func calculateCameraFov() -> Double {
-        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
-            return 60.0
-        }
-        return cameraFovInfo(camera).width
     }
 
     private func requestCameraOverlay() {

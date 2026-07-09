@@ -16,10 +16,6 @@ enum StarMapGlassBackground {
             view.subviews.filter { $0.tag == tag }.forEach { $0.removeFromSuperview() }
             view.backgroundColor = .clear
             
-            let baseColor = active
-            ? UIColor.mapButtonBgColorActive
-            : StarMapControlTheme.resolved(.mapButtonBgColorDefault, nightMode: nightMode)
-            
             let glass = UIGlassEffect(style: .clear)
             let effectView = UIVisualEffectView(effect: glass)
             effectView.tag = tag

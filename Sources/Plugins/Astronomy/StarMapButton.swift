@@ -9,10 +9,6 @@
 import UIKit
 
 enum StarMapControlTheme {
-    static var borderColor: UIColor {
-        UIColor(rgb: color_on_map_icon_border_color)
-    }
-    
     static func resolved(_ color: UIColor, nightMode: Bool) -> UIColor {
         nightMode ? color.dark : color.light
     }
@@ -31,14 +27,6 @@ enum StarMapControlTheme {
 
     static func activeForeground(nightMode: Bool) -> UIColor {
         resolved(.mapButtonIconColorActive, nightMode: nightMode)
-    }
-
-    static func textColor(nightMode: Bool) -> UIColor {
-        resolved(.textColorPrimary, nightMode: nightMode)
-    }
-
-    static func borderWidth(active: Bool, nightMode: Bool) -> CGFloat {
-        active ? 0 : (nightMode ? 2 : 0)
     }
 }
 

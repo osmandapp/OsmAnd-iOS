@@ -1372,6 +1372,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
     } onViewOnPhoneHandler:^{
         [weakSelf showRequiredMapsResourceViewControllerIfNeeded];
+    } onCancelHandler:^{
+        [OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
     }];
 }
 

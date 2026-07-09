@@ -75,7 +75,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var trackChartHelper: TrackChartHelper?
     private var highlightDrawX: CGFloat = -1
     private var lastTranslation: CGPoint = .zero
-    private let tableView = AnalyzeTableView(frame: .zero, style: .plain)
+    private let tableView = CancelableTableView(frame: .zero, style: .plain)
     private weak var dataSource: PlanRouteAnalyzeDataSource?
     private weak var chartView: ElevationChart?
     private weak var yAxisButton: UIButton?
@@ -147,7 +147,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.backgroundColor = .viewBg
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
-        tableView.delaysContentTouches = false
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -169,21 +168,15 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         let presenter = parent ?? self
         let sheet = GetElevationDataViewController()
         sheet.onSelectMethod = { [weak self] useNearbyRoads in
-            self?.calculatingWithNearbyRoads = useNearbyRoads
-            self?.allowsTerrainFallbackSteepness = !useNearbyRoads
+            guard let self else { return }
+            calculatingWithNearbyRoads = useNearbyRoads
+            allowsTerrainFallbackSteepness = !useNearbyRoads
             if useNearbyRoads == false {
-                self?.reloadData()
+                reloadData()
             }
-            self?.dataSource?.startElevationCalculation(useNearbyRoads: useNearbyRoads)
+            dataSource?.startElevationCalculation(useNearbyRoads: useNearbyRoads)
         }
-        let nav = UINavigationController(rootViewController: sheet)
-        nav.setNavigationBarHidden(true, animated: false)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheetController = nav.sheetPresentationController {
-            sheetController.detents = [.medium()]
-            sheetController.prefersGrabberVisible = true
-        }
-        presenter.present(nav, animated: true)
+        presenter.showMediumSheetViewController(viewController: sheet, isLargeAvailable: false)
     }
 
     private func showAxisPicker(startingOnYAxis: Bool) {
@@ -195,13 +188,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
             isYAxisMode: startingOnYAxis
         )
         sheet.delegate = self
-        let nav = UINavigationController(rootViewController: sheet)
-        nav.modalPresentationStyle = .pageSheet
-        if let presenter = nav.sheetPresentationController {
-            presenter.detents = [.medium(), .large()]
-            presenter.prefersGrabberVisible = true
-        }
-        present(nav, animated: true)
+        showMediumSheetViewController(viewController: sheet, isLargeAvailable: true)
     }
 
     private func refreshChart() {

@@ -12,7 +12,7 @@ final class ElevationActionRow: UIControl {
 
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? UIColor.black.withAlphaComponent(0.06) : .clear
+            backgroundColor = isHighlighted ? .buttonBgColorTap : .clear
         }
     }
 

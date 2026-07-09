@@ -28,7 +28,7 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.background.image = UIImage(named: "blue_circle_fill")
+        configuration.background.image = .blueCircleFill
         configuration.contentInsets = .zero
         return configuration
     }

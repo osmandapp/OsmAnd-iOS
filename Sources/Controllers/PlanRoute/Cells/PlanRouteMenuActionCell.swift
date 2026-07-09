@@ -43,8 +43,15 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         subtitleLabel.isHidden = model.subtitle == nil
 
         iconView.image = model.icon?.withRenderingMode(.alwaysTemplate)
-        iconView.tintColor = model.isDestructive ? .iconColorDisruptive :
-                             (model.isEnabled ? .iconColorActive : .iconColorTertiary)
+        let iconColor: UIColor
+        if model.isDestructive {
+            iconColor = .iconColorDisruptive
+        } else if model.isEnabled {
+            iconColor = .iconColorActive
+        } else {
+            iconColor = .iconColorTertiary
+        }
+        iconView.tintColor = iconColor
         isUserInteractionEnabled = model.isEnabled || model.isDestructive
     }
 

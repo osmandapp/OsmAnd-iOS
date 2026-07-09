@@ -47,6 +47,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var panStartHeight: CGFloat = 0
     private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_straight_line"))
     private weak var currentTabViewController: UIViewController?
+    private var navControllerHistory: [UIViewController] = []
+    private var isForceHiding = false
 
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
@@ -62,12 +64,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc(openExistingTrackWithFilePath:) static func openExistingTrack(filePath: String) {
-        let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
-        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath))
+        openExistingTrack(filePath: filePath, navControllerHistory: [])
     }
 
-    private static func showPlanRoute(dataProvider: PlanRouteDataProvider) {
+    static func openExistingTrack(filePath: String, navControllerHistory: [UIViewController]) {
+        let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath),
+                      navControllerHistory: navControllerHistory)
+    }
+
+    private static func showPlanRoute(dataProvider: PlanRouteDataProvider, navControllerHistory: [UIViewController] = []) {
         let controller = PlanRouteScrollableViewController(dataProvider: dataProvider)
+        controller.navControllerHistory = navControllerHistory
         OARootViewController.instance().mapPanel?.showScrollableHudViewController(controller)
     }
 
@@ -152,6 +160,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func forceHide() {
+        isForceHiding = true
         hide(false, duration: 0, onComplete: nil)
     }
 
@@ -161,6 +170,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             self?.removeFromParent()
             self?.view.removeFromSuperview()
+            self?.restoreNavControllerHistoryIfNeeded()
             onComplete?()
         }
         guard animated else {
@@ -183,6 +193,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
         updateCrosshairMapCenter(sheetHeight: height(for: sheetState))
         refreshMapControls()
+    }
+
+    private func restoreNavControllerHistoryIfNeeded() {
+        guard !navControllerHistory.isEmpty,
+              let navigationController = OARootViewController.instance().navigationController else { return }
+        if isForceHiding {
+            navigationController.restoreForceHidingScrollableHud()
+        } else {
+            navigationController.setViewControllers(navControllerHistory, animated: true)
+        }
     }
 
     private func reloadRouteInfo() {

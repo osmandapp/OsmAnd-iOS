@@ -54,7 +54,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
             return updated
         }
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.background.image = UIImage(named: "blue_circle_fill")
+        configuration.background.image = .blueCircleFill
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true

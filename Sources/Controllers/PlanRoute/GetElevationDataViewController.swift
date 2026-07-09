@@ -21,6 +21,11 @@ final class GetElevationDataViewController: UIViewController {
         setupView()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
     private func setupView() {
         view.backgroundColor = .viewBg
 

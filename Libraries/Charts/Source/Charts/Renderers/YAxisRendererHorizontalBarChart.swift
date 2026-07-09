@@ -12,6 +12,10 @@
 import Foundation
 import CoreGraphics
 
+#if !os(OSX)
+    import UIKit
+#endif
+
 open class YAxisRendererHorizontalBarChart: YAxisRenderer
 {
     public override init(viewPortHandler: ViewPortHandler, axis: YAxis, transformer: Transformer?)
@@ -130,10 +134,17 @@ open class YAxisRendererHorizontalBarChart: YAxisRenderer
         
         let xOffset = axis.labelXOffset
         
+        let isRightToLeft: Bool
+        #if !os(OSX)
+        isRightToLeft = UIView.userInterfaceLayoutDirection(for: .unspecified) == .rightToLeft
+        #else
+        isRightToLeft = false
+        #endif
+
         for i in from..<to
         {
             let text = axis.getFormattedLabel(i)
-            let align: TextAlignment = i == from ? .left : .center
+            let align: TextAlignment = i == from ? (isRightToLeft ? .right : .left) : .center
             context.drawText(text,
                              at: CGPoint(x: positions[i].x, y: fixedPosition - offset + xOffset),
                              align: align,

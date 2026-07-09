@@ -2256,7 +2256,7 @@
     if (self.onChange)
         self.onChange();
 
-    [mapViewController getAltitudesForCoordinates:coordinates callback:^(NSArray<NSNumber *> *heights) {
+    [mapViewController fetchAltitudesForCoordinates:coordinates callback:^(NSArray<NSNumber *> *heights) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (requestId != self->_elevationCalculationRequestId)
                 return;

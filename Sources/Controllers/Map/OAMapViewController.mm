@@ -4430,7 +4430,7 @@ static char kMapSourceUpdateQueueKey;
     return heights;
 }
 
-- (void)getAltitudesForCoordinates:(NSArray<NSValue *> *)coordinates callback:(void (^ _Nonnull)(NSArray<NSNumber *> *heights))callback
+- (void)fetchAltitudesForCoordinates:(NSArray<NSValue *> *)coordinates callback:(void (^ _Nonnull)(NSArray<NSNumber *> *heights))callback
 {
     NSUInteger count = coordinates.count;
     NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:count];

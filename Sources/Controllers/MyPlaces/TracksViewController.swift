@@ -547,7 +547,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         row.title = organizedGroupTitle(organizedGroup)
         row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
         if organizedGroup.getType() == .activity {
-            row.icon = UIImage.activityIcon(organizedGroup.getIconName(), fallback: .templateImageNamed("ic_custom_activity"))
+            row.icon = UIImage.routeActivityIcon(organizedGroup.getIconName(), fallback: .templateImageNamed("ic_custom_activity"))
         } else {
             row.iconName = organizedGroup.getType().iconName
         }

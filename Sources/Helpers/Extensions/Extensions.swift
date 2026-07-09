@@ -11,8 +11,6 @@ import UIKit
 
 extension UIImage {
 
-    private static let activityIconPadding: CGFloat = 3
-
     func rotate(radians: CGFloat) -> UIImage {
         let rotatedSize = CGRect(origin: .zero, size: size)
             .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
@@ -71,21 +69,6 @@ extension UIImage {
     
     @objc func resizedTemplateImage(with size: CGFloat) -> UIImage? {
         OAUtilities.resize(self, newSize: CGSize(width: size, height: size))?.withRenderingMode(.alwaysTemplate)
-    }
-
-    func withPadding(_ padding: CGFloat) -> UIImage {
-        guard padding > 0 else { return self }
-        let paddedSize = CGSize(width: size.width + padding * 2, height: size.height + padding * 2)
-        let renderer = UIGraphicsImageRenderer(size: paddedSize)
-        let padded = renderer.image { _ in
-            draw(in: CGRect(x: padding, y: padding, width: size.width, height: size.height))
-        }
-        return padded.withRenderingMode(renderingMode)
-    }
-
-    @objc static func activityIcon(_ iconName: String?, fallback: UIImage?) -> UIImage? {
-        guard let iconName, let mapIcon = mapSvgImageNamed("mx_\(iconName)") else { return fallback }
-        return mapIcon.withPadding(activityIconPadding)
     }
 }
 

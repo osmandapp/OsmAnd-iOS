@@ -565,7 +565,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         case .activity:
             let activity = RouteActivityHelper.shared.findRouteActivity(id: itemName)
             row.title = activity?.label ?? localizedString("shared_string_none")
-            row.icon = activity.map { UIImage.activityIcon($0.iconName, fallback: .icCustomInfoOutlined) } ?? .icCustomActivityOutlined
+            row.icon = activity.map { UIImage.routeActivityIcon($0.iconName, fallback: .icCustomInfoOutlined) } ?? .icCustomActivityOutlined
             row.iconTintColor = selectedItems.contains(itemName) ? .iconColorActive : .iconColorDefault
             if let groupLabel = activity?.group.label {
                 row.setObj(groupLabel, forKey: Self.descriptionKey)

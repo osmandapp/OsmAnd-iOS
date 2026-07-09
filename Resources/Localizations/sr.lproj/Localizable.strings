@@ -4485,3 +4485,4 @@
 "add_to" = "Додај у";
 "favorite_confirm_delete_group" = "Обришите групу „%1$@“ и све укључене тачке (%2$lu)?";
 "shared_string_folders" = "Фолдери";
+"traffic_warning_red_light_camera" = "Камера за црвено светло";

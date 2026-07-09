@@ -23,7 +23,10 @@ final class MetricsAdapter {
     func makeMetricsView() -> UIView {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
+        scrollView.alwaysBounceVertical = false
+        scrollView.isDirectionalLockEnabled = true
 
         let stack = UIStackView()
         stack.axis = .horizontal

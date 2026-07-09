@@ -305,7 +305,7 @@
                 speed = roundf(mxspeed * 3.6f / 1.6f); // mph
             else
                 speed = roundf(mxspeed * 3.6f); // km/h
-            speedAlarm = [OAAlarmInfo createSpeedLimit:speed coordinate:loc.coordinate];
+            speedAlarm = [OAAlarmInfo createSpeedLimit:speed coordinate:loc.coordinate speedMetersPerSecond:mxspeed];
         }
     }
     return speedAlarm;

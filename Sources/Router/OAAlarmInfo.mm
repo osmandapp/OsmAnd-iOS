@@ -35,11 +35,12 @@
     return self;
 }
 
-+ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate
++ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond
 {
     OAAlarmInfo *info = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_LIMIT locationIndex:0];
     info.coordinate = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude);
     info.intValue = speed;
+    info.floatValue = speedMetersPerSecond;
     return info;
 }
 

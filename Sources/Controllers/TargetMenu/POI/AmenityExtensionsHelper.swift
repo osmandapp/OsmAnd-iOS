@@ -7,8 +7,8 @@
 
 @objcMembers
 final class AmenityExtensionsHelper: NSObject {
-    static let MIN_UPHILL_DOWNHILL_FIXED_TO_SHOW: Float = 10.0
-    static let MIN_UPHILL_DOWNHILL_PERCENT_TO_SHOW: Float = 0.0 // customizable (default 0)
+    static let minUphillDownhillFixedToShow: Float = 10.0
+    static let minUphillDownhillPercentToShow: Float = 0.0 // customizable (default 0)
     
     private static let wikidata = "wikidata"
     private static let wikipedia = "wikipedia"
@@ -35,8 +35,8 @@ final class AmenityExtensionsHelper: NSObject {
         }
     }
     
-    static func getAmenityMetricsFormatted(_ amenity: OAPOI) -> String? {
-        let distMeters = getAmenityDistanceMeters(amenity)
+    static func formattedAmenityMetrics(_ amenity: OAPOI) -> String? {
+        let distMeters = amenityDistanceMeters(amenity)
         let upMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_UP), def: 0)
         let downMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_DOWN), def: 0)
         
@@ -49,12 +49,12 @@ final class AmenityExtensionsHelper: NSObject {
         var metrics = [String]()
         if distMeters > 0 {
             metrics.append(TrkSegment.SegmentSlopeType.flat.symbol + dist)
-            if upMeters >= MIN_UPHILL_DOWNHILL_FIXED_TO_SHOW &&
-                upMeters / distMeters * 100 > MIN_UPHILL_DOWNHILL_PERCENT_TO_SHOW {
+            if upMeters >= minUphillDownhillFixedToShow &&
+                upMeters / distMeters * 100 > minUphillDownhillPercentToShow {
                 metrics.append(TrkSegment.SegmentSlopeType.uphill.symbol + uphill)
             }
-            if downMeters >= MIN_UPHILL_DOWNHILL_FIXED_TO_SHOW &&
-                downMeters / distMeters * 100 > MIN_UPHILL_DOWNHILL_PERCENT_TO_SHOW {
+            if downMeters >= minUphillDownhillFixedToShow &&
+                downMeters / distMeters * 100 > minUphillDownhillPercentToShow {
                 metrics.append(TrkSegment.SegmentSlopeType.downhill.symbol + downhill)
             }
         }
@@ -62,7 +62,7 @@ final class AmenityExtensionsHelper: NSObject {
         return metrics.isEmpty ? nil : metrics.joined(separator: " ")
     }
     
-    private static func getAmenityDistanceMeters(_ amenity: OAPOI) -> Float {
+    private static func amenityDistanceMeters(_ amenity: OAPOI) -> Float {
         let distanceTag = amenity.getAdditionalInfo(TravelGpx.DISTANCE) ?? ""
         var km = KAlgorithms.shared.parseFloatSilently(input: distanceTag, def: 0)
         if km > 0 && !distanceTag.contains(".") {

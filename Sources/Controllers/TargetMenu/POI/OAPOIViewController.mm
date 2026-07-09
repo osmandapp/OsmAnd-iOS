@@ -142,7 +142,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 + (NSString *)getTypeWithDistanceStr:(OAPOI *)amenity
 {
     NSString *type = [self getTypeStr:amenity];
-    NSString *metrics = [AmenityExtensionsHelper getAmenityMetricsFormatted:amenity];
+    NSString *metrics = [AmenityExtensionsHelper formattedAmenityMetrics:amenity];
     NSString *activityType = [amenity getRouteActivityType];
     if (!NSStringIsEmpty(activityType))
         type = activityType;

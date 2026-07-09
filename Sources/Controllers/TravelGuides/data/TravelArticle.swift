@@ -148,7 +148,7 @@ class TravelArticle: NSObject {
     }
     
     static func getHash(s: String) -> [String]? {
-        if let md5 = OAUtilities.toMD5(s) {
+        if let md5 = HashHelper.md5Hex(s) {
             let index1 = md5.index(md5.startIndex, offsetBy: 1)
             let index2 = md5.index(md5.startIndex, offsetBy: 2)
             let substring1 = md5[..<index1]

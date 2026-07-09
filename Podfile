@@ -13,7 +13,6 @@ def defaultPods
     pod 'FormatterKit', '~> 1.8.0'
     pod 'SWTableViewCell', '~> 0.3.7'
     pod 'MBProgressHUD', '~> 0.9.1'
-    pod 'CocoaSecurity', '~> 1.2.4'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'MaterialComponents/TextFields', '~> 120.0.0'

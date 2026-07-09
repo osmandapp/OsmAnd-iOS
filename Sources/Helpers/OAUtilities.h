@@ -450,8 +450,6 @@ static inline double normalizeDouble(double v)
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
 
-+ (nullable NSString *) toMD5:(NSString *)text;
-
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;

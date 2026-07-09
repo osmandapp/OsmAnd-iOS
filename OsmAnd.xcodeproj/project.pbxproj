@@ -15,6 +15,7 @@
 		05898FAF2B4DACD900E64B58 /* map-shaders-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAE2B4DACD900E64B58 /* map-shaders-svg */; };
 		05898FB22B511E0500E64B58 /* OASvgHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05898FB12B511E0500E64B58 /* OASvgHelper.mm */; };
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
+		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
 		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */; };
@@ -8242,6 +8243,7 @@
 		FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelDeviceSettings.swift; sourceTree = "<group>"; };
 		FA359EF02ADFD5310001C11D /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		FA39D2962E819B030095DF8E /* ErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHelper.swift; sourceTree = "<group>"; };
+		0E4DA44079A941CF8E86B30B /* HashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashHelper.swift; sourceTree = "<group>"; };
 		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
@@ -14187,6 +14189,7 @@
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
 				277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
+				0E4DA44079A941CF8E86B30B /* HashHelper.swift */,
 				C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
@@ -18282,6 +18285,7 @@
 				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,
+				062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */,
 				DA2EC7B329FBCD0300ECEB37 /* WidgetGroup.swift in Sources */,
 				DA5A82F926C563A800F274C7 /* OARouteStatisticsModeCell.m in Sources */,
 				DA5A850726C563A900F274C7 /* OATableViewCellWithButton.m in Sources */,

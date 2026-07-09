@@ -680,7 +680,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (OAAmenityInfoRow *)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows amenities:(NSArray<OAPOI *> *)amenities key:(NSString *)key title:(NSString *)title
 {
-    NSString *type = [NSString stringWithFormat:@"\"%@\"", [self getTypeStr]];
+    OAPOI *amenity = [self getTargetPoiIfExisted];
+    NSString *type = amenity ? [OAPOIViewController getTypeStrFor:amenity] : [self getTypeStr];
+    
+    type = [NSString stringWithFormat:@"\"%@\"", type];
     NSString *count = [NSString stringWithFormat:@"(%lu)", amenities.count];
     NSString *text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_triple_combine_via_space"), title, type, count];
     

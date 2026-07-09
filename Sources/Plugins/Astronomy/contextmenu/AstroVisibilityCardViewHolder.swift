@@ -14,21 +14,21 @@ enum AstroVisibilityCardViewHolder {
                          onCursorTimeChanged: @escaping (Int64) -> Void) -> UIView {
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
-        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.backgroundColor = .groupBg
         card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 0
+        stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(stack)
         
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 14),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -20)
         ])
 
         let header = UIStackView()
@@ -42,14 +42,14 @@ enum AstroVisibilityCardViewHolder {
         title.text = item.titleText
         title.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         title.adjustsFontForContentSizeCategory = true
-        title.textColor = AstroContextMenuTheme.secondaryText
+        title.textColor = .textColorSecondary
         title.numberOfLines = 0
         header.addArrangedSubview(title)
         
         if item.showResetButton {
             let resetButton = UIButton(type: .system)
             resetButton.setImage(AstroIcon.template("ic_custom_date"), for: .normal)
-            resetButton.tintColor = AstroContextMenuTheme.activeIcon
+            resetButton.tintColor = .iconColorActive
             resetButton.accessibilityLabel = localizedString("astro_visibility_show_today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
             resetButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
@@ -74,7 +74,7 @@ enum AstroVisibilityCardViewHolder {
         let rise = makeEvent(time: item.riseTime,
                              symbol: "▲",
                              title: localizedString("astro_rise"),
-                             symbolColor: AstroContextMenuTheme.activeIcon)
+                             symbolColor: .iconColorActive)
         let culmination = makeEvent(time: item.culminationTime,
                                     symbol: "●",
                                     title: localizedString("astro_culmination"),
@@ -82,7 +82,7 @@ enum AstroVisibilityCardViewHolder {
         let set = makeEvent(time: item.setTime,
                             symbol: "▼",
                             title: localizedString("astro_set"),
-                            symbolColor: AstroContextMenuTheme.activeIcon)
+                            symbolColor: .iconColorActive)
         let eventViews = [rise, culmination, set].compactMap { $0 }
         if !eventViews.isEmpty {
             if let rise {
@@ -115,7 +115,7 @@ enum AstroVisibilityCardViewHolder {
             location.textColor = .textColorSecondary
             location.font = .preferredFont(forTextStyle: .footnote)
             location.numberOfLines = 0
-            let iconView = UIImageView(image: .icCustomLocationMarker)
+            let iconView = UIImageView(image: UIImage(systemName: "location.fill"))
             iconView.tintColor = .textColorSecondary
             iconView.contentMode = .scaleAspectFit
             let row = UIStackView(arrangedSubviews: [iconView, location])
@@ -124,10 +124,10 @@ enum AstroVisibilityCardViewHolder {
             row.spacing = 2
             row.isLayoutMarginsRelativeArrangement = true
             row.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-            iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
-            iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            iconView.widthAnchor.constraint(equalToConstant: 16).isActive = true
+            iconView.heightAnchor.constraint(equalToConstant: 16).isActive = true
             mainStack.addArrangedSubview(row)
-            mainStack.setCustomSpacing(4, after: card)
+            mainStack.setCustomSpacing(6, after: card)
         }
 
         return mainStack
@@ -150,7 +150,7 @@ enum AstroVisibilityCardViewHolder {
         valueRow.spacing = 6
         let timeLabel = UILabel()
         timeLabel.text = time
-        timeLabel.textColor = AstroContextMenuTheme.activeText
+        timeLabel.textColor = .textColorActive
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.75
@@ -173,14 +173,14 @@ enum AstroVisibilityCardViewHolder {
 
     private static func makeDivider() -> UIView {
         let divider = UIView()
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false
         wrapper.addSubview(divider)
         divider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            wrapper.widthAnchor.constraint(equalToConstant: 17),
+            wrapper.widthAnchor.constraint(equalToConstant: 27),
             divider.centerXAnchor.constraint(equalTo: wrapper.centerXAnchor),
             divider.topAnchor.constraint(equalTo: wrapper.topAnchor),
             divider.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor)

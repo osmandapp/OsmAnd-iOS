@@ -414,6 +414,7 @@ final class StarMapSearchViewController: UIViewController {
 
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.layoutMargins.left = 16
         updateNavigationBar()
     }
 
@@ -616,8 +617,7 @@ final class StarMapSearchViewController: UIViewController {
         }
     }
 
-    @discardableResult
-    private func handleBackPressedInternal() -> Bool {
+    @discardableResult private func handleBackPressedInternal() -> Bool {
         if currentMode == .FULL_SEARCH {
             if currentFullSearchMode == .BROWSE {
                 if dismissOnBrowseBack {

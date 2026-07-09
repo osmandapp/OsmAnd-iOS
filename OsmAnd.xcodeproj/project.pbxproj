@@ -1415,8 +1415,6 @@
 		A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */; };
 		A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */; };
 		A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */; };
-		A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */; };
-		A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010F2F5100010000010F /* AstroArticleViewController.swift */; };
 		A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */; };
 		A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */; };
 		A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */; };
@@ -5269,8 +5267,6 @@
 		A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroKnowledgeBaseController.swift; sourceTree = "<group>"; };
 		A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAstroImagesTask.swift; sourceTree = "<group>"; };
 		A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroGalleryLoader.swift; sourceTree = "<group>"; };
-		A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleWebViewClient.swift; sourceTree = "<group>"; };
-		A5A5010F2F5100010000010F /* AstroArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleViewController.swift; sourceTree = "<group>"; };
 		A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuAdapter.swift; sourceTree = "<group>"; };
 		A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDescriptionCardViewHolder.swift; sourceTree = "<group>"; };
 		A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroCatalogsCardViewHolder.swift; sourceTree = "<group>"; };
@@ -10667,8 +10663,6 @@
 		A5A501002F51000100000100 /* contextmenu */ = {
 			isa = PBXGroup;
 			children = (
-				A5A5010F2F5100010000010F /* AstroArticleViewController.swift */,
-				A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */,
 				A5A501152F51000100000115 /* AstroBottomSheetBehavior.swift */,
 				A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */,
 				A5A501052F51000100000105 /* AstroChartUtils.swift */,
@@ -17575,8 +17569,6 @@
 				A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */,
 				A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */,
 				A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */,
-				A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */,
-				A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */,
 				A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */,
 				A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */,
 				A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */,

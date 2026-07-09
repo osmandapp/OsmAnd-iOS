@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void) addAppearanceToGpx:(OASGpxFile *)gpxFile gpxItem:(OASGpxDataItem *)gpxItem;
 
-+ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon;
++ (nullable OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon;
 
 - (void) openExportForTrack:(nullable OASGpxDataItem *)gpx
                      gpxDoc:(nullable id)gpxDoc

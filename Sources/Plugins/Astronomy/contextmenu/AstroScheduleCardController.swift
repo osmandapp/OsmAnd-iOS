@@ -33,13 +33,6 @@ final class AstroScheduleCardController {
     private var lastTimeZone: TimeZone?
     private var lastShowResetPeriodButton = false
 
-    private let dayLabelFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = .current
-        formatter.dateFormat = "EEE, d"
-        return formatter
-    }()
-
     private let rangeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = .current
@@ -57,7 +50,6 @@ final class AstroScheduleCardController {
         self.periodStart = normalizedDay(periodStart, timeZone: timeZone)
         self.timeZone = timeZone
         self.showResetPeriodButton = showResetPeriodButton
-        dayLabelFormatter.timeZone = timeZone
         rangeFormatter.timeZone = timeZone
 
         guard let skyObject, let observer else {
@@ -182,7 +174,6 @@ final class AstroScheduleCardController {
                                                        includeAzimuth: false)
         let timeFormatter = createTimeFormatter(timeZone: timeZone)
         return AstroScheduleDayItem(date: day,
-                                    dayLabel: dayLabelFormatter.string(from: day),
                                     riseTime: riseSet.rise.map { timeFormatter.string(from: $0) },
                                     setTime: setTime.map { timeFormatter.string(from: $0) },
                                     setDayOffset: max(0, setDayOffset),

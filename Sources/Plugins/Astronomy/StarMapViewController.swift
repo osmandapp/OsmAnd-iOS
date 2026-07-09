@@ -17,7 +17,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let smallButtonSize: CGFloat = 40
         static let magnitudeButtonHeight: CGFloat = 76
         static let magnitudeSliderWidth: CGFloat = 240
-        static let transparencySliderHeight: CGFloat = 150
         static let regularMapHeight: CGFloat = 300
         static let regularMapHeightLandscape: CGFloat = 110
         static let regularMapHeightFractionForPad: CGFloat = 0.33
@@ -33,10 +32,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let mapControlsContainer = StarMapControlsContainer()
     private let timeSelectionView = DateTimeSelectionView()
     private let timeControlCard = StarMapTimeControlCard()
-    private let arModeButton = StarMapButton()
-    private let transparencySlider = UISlider()
-    private let sliderContainer = UIView()
-    private let resetFovButton = StarMapButton()
+    private let arControlCard = StarMapArControlCard()
     private let magnitudeFilterButton = StarMapMagnitudeFilterButton()
     private let magnitudeSliderPanel = StarMapMagnitudeSliderPanel(maxMagnitude: Layout.maxMagnitude)
     private let closeButton = StarMapButton()
@@ -63,7 +59,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var previousAltitude = 45.0
     private var previousAzimuth = 0.0
     private var previousViewAngle = 150.0
-    private var manualAzimuth = true
     private var lastUpdatedAzimuth = -1.0
     private var objectInfoController: AstroContextMenuViewController?
     private var objectInfoNavigationController: UINavigationController?
@@ -80,6 +75,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var leftPanelLeadingConstraint: NSLayoutConstraint?
     private let mapVisibleAreaGuide = UILayoutGuide()
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
+    private var isApplyingControlChange = false
+    private var isGyroActive: Bool {
+        arModeHelper.isArModeEnabled
+    }
+    private var isArCameraActive: Bool {
+        cameraHelper.isCameraOverlayEnabled
+    }
 
     private var mapControlsLeadingInset: CGFloat {
         embeddedLeftPanelNavigationController != nil && OAUtilities.isIPad()
@@ -131,8 +133,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         setupHelpers()
         setupListeners()
         applySettings(settings.starMap)
+        if let pos = settings.starMap.savedMapPosition {
+            starView.restoreMapPosition(pos)
+            compassButton.update(mapRotation: CGFloat(-pos.azimuth))
+            lastUpdatedAzimuth = pos.azimuth
+            updateStarMap()
+        } else {
+            updateStarMap(updateAzimuth: true)
+        }
         updateRegularMapVisibility(settings.common.showRegularMap)
-        updateStarMap(updateAzimuth: true)
 
         viewModel.onDataChanged = { [weak self] in
             self?.syncObjectsToStarView()
@@ -150,9 +159,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         arModeHelper.onResume()
         cameraHelper.onResume()
-        if arModeHelper.isArModeEnabled {
-            updateArModeUI(true)
-        }
+        syncControlUI()
         if isTimeAutoUpdateEnabled {
             syncCurrentTimeForAutoUpdate(animate: true)
         }
@@ -165,6 +172,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         arModeHelper.onPause()
         cameraHelper.onPause()
         starView.isCameraMode = false
+        starView.isGyroTrackingEnabled = false
         restoreRegularMapIfNeeded(refresh: true)
     }
 
@@ -229,7 +237,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         setupRightControls()
         setupTimeControls()
         setupMagnitudeControls()
-        setupCameraControls()
         setupMacZoomControls()
         updateMapControlThemes()
     }
@@ -242,23 +249,36 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func setupCompassAndLeftControls() {
         addRoundButton(compassButton, accessibilityLabel: localizedString("map_widget_compass"))
-        compassButton.onSingleTap = { [weak self] in self?.setAzimuth(0, animate: true) }
-
-        addRoundButton(arModeButton, iconName: "ic_custom_view_in_ar", accessibilityLabel: localizedString("astro_ar"))
-        arModeButton.addTarget(self, action: #selector(toggleARMode), for: .touchUpInside)
+        compassButton.onSingleTap = { [weak self] in
+            self?.toggleGyroMode()
+        }
 
         addRoundButton(searchButton, iconName: "ic_custom_search", accessibilityLabel: localizedString("shared_string_search"))
         searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
+        
+        mapControlsContainer.addSubview(arControlCard)
+        arControlCard.onArTapped = { [weak self] in
+            self?.toggleARMode()
+        }
+        arControlCard.onResetTapped = { [weak self] in
+            self?.resetFov()
+        }
+        arControlCard.onTransparencyChanged = { [weak self] progress in
+            self?.cameraHelper.setTransparency(progress: progress)
+        }
+        searchButton.setContentCompressionResistancePriority(.required, for: .vertical)
+        compassButton.setContentCompressionResistancePriority(.required, for: .vertical)
 
         NSLayoutConstraint.activate([
             compassButton.leadingAnchor.constraint(equalTo: mapVisibleAreaGuide.leadingAnchor, constant: Layout.contentPadding),
             compassButton.topAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
 
-            arModeButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
-            arModeButton.topAnchor.constraint(equalTo: compassButton.bottomAnchor, constant: Layout.contentPadding),
-
             searchButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
-            searchButton.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
+            searchButton.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
+            
+            arControlCard.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
+            arControlCard.topAnchor.constraint(equalTo: compassButton.bottomAnchor, constant: Layout.contentPadding),
+            arControlCard.bottomAnchor.constraint(lessThanOrEqualTo: searchButton.topAnchor, constant: -Layout.contentPadding)
         ])
     }
 
@@ -279,8 +299,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupTimeControls() {
-        timeControlCard.onTimeButtonTapped = { [weak self] in self?.toggleTimeSelection() }
-        timeControlCard.onResetTapped = { [weak self] in self?.resetTimeButtonPressed() }
+        timeControlCard.onTimeButtonTapped = { [weak self] in
+            self?.toggleTimeSelection()
+        }
+        timeControlCard.onResetTapped = { [weak self] in
+            self?.resetTimeButtonPressed()
+        }
         mapControlsContainer.addSubview(timeControlCard)
 
         timeSelectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -316,44 +340,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             magnitudeSliderPanel.heightAnchor.constraint(equalTo: magnitudeFilterButton.heightAnchor),
             magnitudeSliderPanel.trailingAnchor.constraint(equalTo: magnitudeFilterButton.leadingAnchor, constant: -Layout.contentPadding),
             magnitudeSliderPanel.topAnchor.constraint(equalTo: magnitudeFilterButton.topAnchor)
-        ])
-    }
-
-    private func setupCameraControls() {
-        sliderContainer.translatesAutoresizingMaskIntoConstraints = false
-        sliderContainer.isHidden = true
-        mapControlsContainer.addSubview(sliderContainer)
-
-        transparencySlider.minimumValue = 0
-        transparencySlider.maximumValue = 100
-        transparencySlider.value = 50
-        transparencySlider.transform = CGAffineTransform(rotationAngle: -.pi / 2)
-        transparencySlider.translatesAutoresizingMaskIntoConstraints = false
-        transparencySlider.addTarget(self, action: #selector(transparencyChanged), for: .valueChanged)
-        sliderContainer.addSubview(transparencySlider)
-
-        addRoundButton(resetFovButton, iconName: "ic_custom_reset", accessibilityLabel: localizedString("shared_string_reset"))
-        resetFovButton.addTarget(self, action: #selector(resetFov), for: .touchUpInside)
-        resetFovButton.isHidden = true
-
-        let cameraSliderTopConstraint = sliderContainer.topAnchor.constraint(equalTo: arModeButton.bottomAnchor, constant: Layout.contentPadding)
-        cameraSliderTopConstraint.priority = .defaultHigh
-
-        NSLayoutConstraint.activate([
-            sliderContainer.widthAnchor.constraint(equalToConstant: Layout.buttonSize),
-            sliderContainer.heightAnchor.constraint(equalToConstant: Layout.transparencySliderHeight),
-            sliderContainer.centerXAnchor.constraint(equalTo: arModeButton.centerXAnchor),
-            cameraSliderTopConstraint,
-            sliderContainer.topAnchor.constraint(greaterThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
-
-            transparencySlider.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
-            transparencySlider.centerYAnchor.constraint(equalTo: sliderContainer.centerYAnchor),
-            transparencySlider.widthAnchor.constraint(equalToConstant: Layout.transparencySliderHeight),
-            transparencySlider.heightAnchor.constraint(equalToConstant: 40),
-
-            resetFovButton.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
-            resetFovButton.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: 8),
-            resetFovButton.bottomAnchor.constraint(lessThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
         ])
     }
     
@@ -403,26 +389,25 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             guard let self else {
                 return
             }
-            updateArModeUI(enabled)
             if !enabled {
-                manualAzimuth = true
+                starView.roll = 0
             }
+            guard !isApplyingControlChange else { return }
+            syncControlUI()
         }
         arModeHelper.onUnavailable = { [weak self] in
+            self?.disableArExperience(force: true)
             self?.showMessage(localizedString("astro_ar_unavailable"))
         }
         cameraHelper.onUnavailable = { [weak self] message in
-            self?.updateCameraUI(false)
+            self?.disableArExperience(force: true)
             self?.showMessage(message)
         }
-        cameraHelper.onCameraStateChanged = { [weak self] enabled in
-            guard let self else {
+        cameraHelper.onCameraStateChanged = { [weak self] _ in
+            guard let self, !isApplyingControlChange else {
                 return
             }
-            updateCameraUI(enabled)
-            if enabled && !arModeHelper.isArModeEnabled {
-                arModeHelper.toggleArMode(enable: true)
-            }
+            syncControlUI()
         }
     }
 
@@ -448,13 +433,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
         }
         starView.onAzimuthManualChangeListener = { [weak self] azimuth in
-            guard let self, !cameraHelper.isCameraOverlayEnabled else {
-                return
-            }
-            if arModeHelper.isArModeEnabled {
-                arModeHelper.toggleArMode(enable: false)
-            }
-            manualAzimuth = true
+            guard let self else { return }
+
             compassButton.update(mapRotation: CGFloat(-azimuth))
         }
         starView.onViewAngleChangeListener = { [weak self] fov in
@@ -546,6 +526,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             config.is2DMode = starView.is2DMode
             config.showMagnitudeFilter = starView.showMagnitudeFilter || starView.magnitudeFilter != nil
             config.magnitudeFilter = starView.magnitudeFilter
+            config.savedMapPosition = AstronomyPluginSettings.MapViewPosition(
+                azimuth: starView.getAzimuth(),
+                altitude: starView.getAltitude(),
+                viewAngle: starView.getViewAngle(),
+                roll: starView.roll,
+                panX: Double(starView.panX),
+                panY: Double(starView.panY)
+            )
             return config
         }
         viewModel.updateSettings(settings)
@@ -557,6 +545,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             updated.favorites = current.favorites
             updated.directions = current.directions
             updated.celestialPaths = current.celestialPaths
+            updated.savedMapPosition = config.savedMapPosition ?? current.savedMapPosition
             return updated
         }
         applySettings(updatedConfig)
@@ -593,19 +582,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             previousViewAngle = starView.getViewAngle()
             starView.is2DMode = true
             starView.setCenter(azimuth: 180, altitude: 90)
-            if cameraHelper.isCameraOverlayEnabled {
-                cameraHelper.toggleCameraOverlay()
-            }
-            if arModeHelper.isArModeEnabled {
-                arModeHelper.toggleArMode(enable: false)
-            }
-            arModeButton.isHidden = true
-            manualAzimuth = true
+            setArExperienceEnabled(false)
+            arControlCard.isHidden = true
         } else {
             starView.is2DMode = false
             starView.setCenter(azimuth: previousAzimuth, altitude: previousAltitude)
             starView.setViewAngle(previousViewAngle)
-            arModeButton.isHidden = false
+            arControlCard.isHidden = false
         }
         starView.setNeedsDisplay()
     }
@@ -700,26 +683,70 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         magnitudeSliderPanel.updateTheme(nightMode: nightMode)
     }
 
-    private func updateArModeUI(_ enabled: Bool) {
-        compassButton.setArDirectionEnabled(enabled)
-        arModeButton.active = enabled
+    private func setArExperienceEnabled(_ enabled: Bool) {
         if enabled {
-            starView.isCameraMode = true
-            starView.setNeedsDisplay()
+            enableArExperience()
         } else {
-            starView.roll = 0
-            starView.setNeedsDisplay()
-            if cameraHelper.isCameraOverlayEnabled {
-                cameraHelper.toggleCameraOverlay()
-            }
-            updateCameraUI(false)
+            disableArExperience()
         }
     }
 
-    private func updateCameraUI(_ enabled: Bool) {
-        sliderContainer.isHidden = !enabled
-        resetFovButton.isHidden = !enabled
-        starView.isCameraMode = enabled || arModeHelper.isRunning
+    private func enableArExperience() {
+        guard !starView.is2DMode else { return }
+        guard !isArCameraActive else {
+            syncControlUI()
+            return
+        }
+        guard !isApplyingControlChange else { return }
+        isApplyingControlChange = true
+        defer {
+            isApplyingControlChange = false
+            syncControlUI()
+        }
+        
+        guard arModeHelper.toggleArMode(enable: true) else { return }
+        
+        if !cameraHelper.isCameraOverlayEnabled {
+            cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
+        }
+    }
+
+    private func disableArExperience(force: Bool = false) {
+        guard force || isGyroActive || isArCameraActive else {
+            syncControlUI()
+            return
+        }
+        guard force || !isApplyingControlChange else { return }
+        isApplyingControlChange = true
+        defer {
+            isApplyingControlChange = false
+            syncControlUI()
+        }
+        if cameraHelper.isCameraOverlayEnabled {
+            cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
+        }
+        if arModeHelper.isArModeEnabled {
+            arModeHelper.toggleArMode(enable: false)
+        }
+        starView.roll = 0
+    }
+    
+    private func syncControlUI() {
+        let gyroEnabled = isGyroActive
+        let cameraEnabled = isArCameraActive
+        let nightMode = OADayNightHelper.instance().isNightMode()
+        
+        compassButton.setArDirectionEnabled(gyroEnabled)
+        
+        arControlCard.setArActive(cameraEnabled)
+        arControlCard.updateTheme(nightMode: nightMode, arActive: cameraEnabled)
+        arControlCard.setCameraControlsVisible(cameraEnabled)
+        starView.isCameraMode = cameraEnabled
+        starView.isGyroTrackingEnabled = gyroEnabled
+        if !gyroEnabled {
+            starView.roll = 0
+        }
+        starView.setNeedsDisplay()
     }
 
     private func updateMapControlThemes() {
@@ -730,8 +757,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateButtonsNightMode() {
         let nightMode = OADayNightHelper.instance().isNightMode()
-        arModeButton.nightMode = nightMode
-        resetFovButton.nightMode = nightMode
+        arControlCard.updateTheme(nightMode: nightMode, arActive: isArCameraActive)
         closeButton.nightMode = nightMode
         settingsButton.nightMode = nightMode
         searchButton.nightMode = nightMode
@@ -747,15 +773,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         AstroRedFilter.apply(enabled,
                              to: timeControlCard,
                              timeSelectionView,
-                             arModeButton,
-                             resetFovButton,
                              magnitudeFilterButton,
                              magnitudeSliderPanel,
                              compassButton,
                              searchButton,
                              closeButton,
                              settingsButton,
-                             sliderContainer,
+                             arControlCard,
                              zoomInButton,
                              zoomOutButton,
                              regularMapContainer)
@@ -1128,7 +1152,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func handleSearchObjectSelected(_ obj: SkyObject) {
-        manualAzimuth = true
         selectedObject = obj
         starView.setSelectedObject(obj)
         showObjectInfo(obj, centerInVisibleMapOnPresentation: true)
@@ -1371,6 +1394,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     @objc private func toggleTimeSelection() {
         timeSelectionView.isHidden.toggle()
         updateTimeControlTheme()
+        if !timeSelectionView.isHidden && !magnitudeSliderPanel.isHidden {
+            toggleMagnitudeSlider()
+        }
     }
 
     @objc private func resetTimeButtonPressed() {
@@ -1378,30 +1404,44 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc private func toggleARMode() {
-        if arModeHelper.isArModeEnabled {
-            if cameraHelper.isCameraOverlayEnabled {
-                cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
-            }
-            arModeHelper.toggleArMode(enable: false)
-        } else {
-            arModeHelper.toggleArMode(enable: true)
-            if !cameraHelper.isCameraOverlayEnabled {
-                cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
-            }
-        }
+        setArExperienceEnabled(!isArCameraActive)
     }
-
-    @objc private func transparencyChanged() {
-        cameraHelper.setTransparency(progress: Int(transparencySlider.value))
+    
+    @objc private func toggleGyroMode() {
+        setGyroEnabled(!isGyroActive)
+    }
+    
+    private func setGyroEnabled(_ enabled: Bool) {
+        guard !starView.is2DMode else { return }
+        guard isGyroActive != enabled else {
+            syncControlUI()
+            return
+        }
+        isApplyingControlChange = true
+        defer {
+            isApplyingControlChange = false
+            syncControlUI()
+        }
+        if enabled {
+            arModeHelper.toggleArMode(enable: true)
+        } else {
+            arModeHelper.toggleArMode(enable: false)
+            starView.roll = 0
+        }
     }
 
     @objc private func resetFov() {
         cameraHelper.resetFov()
+        arControlCard.setTransparencyValue(StarMapCameraHelper.defaultTransparency)
     }
 
     @objc private func toggleMagnitudeSlider() {
         magnitudeSliderPanel.toggle()
         updateMagnitudeFilterTheme()
+        
+        if !timeSelectionView.isHidden && !magnitudeSliderPanel.isHidden {
+            toggleTimeSelection()
+        }
     }
 
     private func applyMagnitudeFilter(_ value: Double) {

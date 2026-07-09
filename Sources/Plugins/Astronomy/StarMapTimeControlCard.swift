@@ -11,13 +11,13 @@ import UIKit
 final class StarMapTimeControlCard: UIView {
     static let height: CGFloat = 48
     private static let cornerRadius: CGFloat = 24
-    private static let smallButtonSize: CGFloat = 40
 
     var onTimeButtonTapped: (() -> Void)?
     var onResetTapped: (() -> Void)?
 
     private let timeButton = StarMapTimeControlButton()
     private let resetButton = StarMapResetButton()
+    private let mainStack = UIStackView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +35,7 @@ final class StarMapTimeControlCard: UIView {
 
     func setResetVisible(_ visible: Bool) {
         resetButton.isHidden = !visible
+        mainStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: resetButton.isHidden ? 16 : 0)
     }
 
     func updateTheme(nightMode: Bool, active: Bool) {
@@ -73,31 +74,31 @@ final class StarMapTimeControlCard: UIView {
         layer.shadowRadius = 6
         layer.shadowOffset = CGSize(width: 0, height: 2)
 
-        timeButton.setImage(AstroIcon.template("ic_action_time"), for: .normal)
         timeButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-        timeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         timeButton.addTarget(self, action: #selector(timeButtonTapped), for: .touchUpInside)
+        timeButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
 
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
         resetButton.isHidden = true
-        resetButton.widthAnchor.constraint(equalToConstant: Self.smallButtonSize).isActive = true
-        resetButton.heightAnchor.constraint(equalToConstant: Self.smallButtonSize).isActive = true
+        resetButton.widthAnchor.constraint(equalToConstant: Self.height).isActive = true
+        resetButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
 
-        let stack = UIStackView(arrangedSubviews: [timeButton, resetButton])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 4
-        stack.layoutMargins = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
-        stack.isLayoutMarginsRelativeArrangement = true
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        mainStack.addArrangedSubview(timeButton)
+        mainStack.addArrangedSubview(resetButton)
+        mainStack.axis = .horizontal
+        mainStack.alignment = .center
+        mainStack.spacing = 0
+        mainStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
+        mainStack.isLayoutMarginsRelativeArrangement = true
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(mainStack)
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: Self.height),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
+            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            mainStack.topAnchor.constraint(equalTo: topAnchor),
+            mainStack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 

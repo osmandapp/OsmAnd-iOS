@@ -25,9 +25,9 @@ final class StarMapTimeControlButton: UIButton {
     }
     private func setup() {
         backgroundColor = .clear
-        adjustsImageWhenHighlighted = false
         titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
         setImage(AstroIcon.template("ic_action_time"), for: .normal)
         imageView?.contentMode = .scaleAspectFit
         applyColors()

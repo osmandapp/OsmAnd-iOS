@@ -98,18 +98,20 @@ final class StarMapARModeHelper {
         toggleArMode(enable: !isArModeEnabled)
     }
 
-    func toggleArMode(enable: Bool) {
+    @discardableResult func toggleArMode(enable: Bool) -> Bool {
         guard isArModeEnabled != enable else {
-            return
+            return isArModeEnabled
         }
-
         if enable {
-            isArModeEnabled = true
-            if startMotionUpdates() {
-                onArModeChanged?(true)
+            guard startMotionUpdates() else {
+                return false
             }
+            isArModeEnabled = true
+            onArModeChanged?(true)
+            return true
         } else {
             disableArMode()
+            return false
         }
     }
 

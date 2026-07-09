@@ -55,6 +55,15 @@ struct AstronomyPluginSettings {
     struct CommonConfig: Equatable {
         var showRegularMap = false
     }
+    
+    struct MapViewPosition: Equatable {
+        var azimuth: Double
+        var altitude: Double
+        var viewAngle: Double
+        var roll: Double = 0
+        var panX: Double = 0
+        var panY: Double = 0
+    }
 
     struct StarMapConfig: Equatable {
         var showAzimuthalGrid = true
@@ -84,6 +93,7 @@ struct AstronomyPluginSettings {
         var favorites: [FavoriteConfig] = []
         var directions: [DirectionConfig] = []
         var celestialPaths: [CelestialPathConfig] = []
+        var savedMapPosition: MapViewPosition? = nil
     }
 
     static let storageKey = "astronomy_settings"
@@ -119,6 +129,15 @@ struct AstronomyPluginSettings {
     private static let keyCelestialPaths = "celestialPaths"
     private static let keyId = "id"
     private static let keyColorIndex = "colorIndex"
+    
+    private static let keySavedMapPosition = "savedMapPosition"
+    private static let keyLastAzimuth = "lastAzimuth"
+    private static let keyLastAltitude = "lastAltitude"
+    private static let keyLastViewAngle = "lastViewAngle"
+    private static let keyLastRoll = "lastRoll"
+    private static let keyLastPanX = "lastPanX"
+    private static let keyLastPanY = "lastPanY"
+    
     private static let storageQueue = DispatchQueue(label: "net.osmand.astronomy.settings")
 
     var common = CommonConfig()
@@ -309,7 +328,25 @@ struct AstronomyPluginSettings {
                                  return DirectionConfig(id: id,
                                                         colorIndex: int(item[keyColorIndex], fallback: nextColor % DirectionColor.allCases.count))
                              },
-                             celestialPaths: parseItems(json?[keyCelestialPaths]) { CelestialPathConfig(id: $0) })
+                             celestialPaths: parseItems(json?[keyCelestialPaths]) { CelestialPathConfig(id: $0) },
+                             savedMapPosition: parseMapViewPosition(json?[keySavedMapPosition] as? [String: Any]))
+    }
+    
+    private static func parseMapViewPosition(_ json: [String: Any]?) -> MapViewPosition? {
+        guard let json,
+              let azimuth = double(json[keyLastAzimuth]),
+              let altitude = double(json[keyLastAltitude]),
+              let viewAngle = double(json[keyLastViewAngle]) else {
+            return nil
+        }
+        return MapViewPosition(
+            azimuth: azimuth,
+            altitude: altitude,
+            viewAngle: viewAngle,
+            roll: double(json[keyLastRoll]) ?? 0,
+            panX: double(json[keyLastPanX]) ?? 0,
+            panY: double(json[keyLastPanY]) ?? 0
+        )
     }
 
     private static func serializeStarMapConfig(_ config: StarMapConfig) -> [String: Any] {
@@ -349,6 +386,16 @@ struct AstronomyPluginSettings {
         }
         if !config.celestialPaths.isEmpty {
             json[keyCelestialPaths] = config.celestialPaths.map { [keyId: $0.id] }
+        }
+        if let pos = config.savedMapPosition {
+            json[keySavedMapPosition] = [
+                keyLastAzimuth: pos.azimuth,
+                keyLastAltitude: pos.altitude,
+                keyLastViewAngle: pos.viewAngle,
+                keyLastRoll: pos.roll,
+                keyLastPanX: pos.panX,
+                keyLastPanY: pos.panY
+            ]
         }
         return json
     }

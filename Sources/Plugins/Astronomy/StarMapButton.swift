@@ -9,6 +9,10 @@
 import UIKit
 
 enum StarMapControlTheme {
+    static var borderColor: UIColor {
+        UIColor(rgb: color_on_map_icon_border_color)
+    }
+    
     static func resolved(_ color: UIColor, nightMode: Bool) -> UIColor {
         nightMode ? color.dark : color.light
     }
@@ -35,10 +39,6 @@ enum StarMapControlTheme {
 
     static func borderWidth(active: Bool, nightMode: Bool) -> CGFloat {
         active ? 0 : (nightMode ? 2 : 0)
-    }
-
-    static var borderColor: UIColor {
-        UIColor(rgb: color_on_map_icon_border_color)
     }
 }
 
@@ -132,6 +132,16 @@ class StarMapButton: OAHudButton {
         backgroundColor = .clear
         layer.borderWidth = 0
         layer.shadowOpacity = 0
+        
+        let color = active
+        ? StarMapControlTheme.activeForeground(nightMode: nightMode)
+        : StarMapControlTheme.foreground(active: false, nightMode: nightMode)
+        
+        tintColor = color
+        tintColorDay = color
+        tintColorNight = color
+        
+        updateColors(forPressedState: isHighlighted)
     }
     
     private func commonInit() {

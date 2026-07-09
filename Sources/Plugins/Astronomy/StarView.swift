@@ -39,6 +39,8 @@ final class StarView: UIView {
         let targetAzimuth: Double
         let startAltitude: Double
         let targetAltitude: Double
+        let startRoll: Double
+        let targetRoll: Double
         let startViewAngle: Double
         let targetViewAngle: Double
         let startPan: CGPoint
@@ -76,6 +78,7 @@ final class StarView: UIView {
     }
 
     var isCameraMode = false
+    var isGyroTrackingEnabled = false
     var onAnimationFinished: (() -> Void)?
     var onAzimuthManualChangeListener: ((Double) -> Void)?
     var onViewAngleChangeListener: ((Double) -> Void)?
@@ -205,8 +208,8 @@ final class StarView: UIView {
         set { settings.starMap.is2DMode = newValue; setNeedsDisplay() }
     }
 
-    private var panX: CGFloat = 0
-    private var panY: CGFloat = 0
+    private(set) var panX: CGFloat = 0
+    private(set) var panY: CGFloat = 0
     private var lastTouchPoint = CGPoint.zero
     private var isPanning = false
 
@@ -282,6 +285,13 @@ final class StarView: UIView {
     private let inertialStopSpeed: CGFloat = 5
     private let inertialMinStartSpeed: CGFloat = 80
     private var didPanThisGesture = false
+    
+    private var gyroTargetAzimuth = 0.0
+    private var gyroTargetAltitude = 45.0
+    private var gyroTargetRoll = 0.0
+    private var isGyroPanOverride = false
+    private var gyroSnapBackWorkItem: DispatchWorkItem?
+    private let gyroSnapBackDelay: TimeInterval = 0.5
 
     var currentTime: Time {
         get {
@@ -344,6 +354,16 @@ final class StarView: UIView {
         addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     }
+    
+    func restoreMapPosition(_ position: AstronomyPluginSettings.MapViewPosition) {
+        setCenter(azimuth: position.azimuth, altitude: position.altitude)
+        setViewAngle(position.viewAngle)
+        roll = position.roll
+        panX = CGFloat(position.panX)
+        panY = CGFloat(position.panY)
+        notifyAzimuthChanged()
+        setNeedsDisplay()
+    }
 
     func resetView() {
         cancelFocusAnimation()
@@ -369,9 +389,16 @@ final class StarView: UIView {
     }
 
     func setCameraOrientation(azimuth: Double, altitude: Double, roll: Double) {
+        gyroTargetAzimuth = azimuth
+        gyroTargetAltitude = altitude
+        gyroTargetRoll = roll
+        
+        guard !isGyroPanOverride else { return }
+        
         setCenter(azimuth: azimuth, altitude: altitude)
         self.roll = roll
         setNeedsDisplay()
+        notifyAzimuthChanged()
     }
 
     func setCenter(azimuth: Double, altitude: Double, animate: Bool = false) {
@@ -450,12 +477,15 @@ final class StarView: UIView {
     private func animateTo(azimuth: Double,
                            altitude: Double,
                            targetViewAngle: Double? = nil,
-                           targetPan: CGPoint? = nil) {
+                           targetPan: CGPoint? = nil,
+                           targetRoll: Double? = nil) {
         cancelFocusAnimation()
         focusAnimation = FocusAnimation(startAzimuth: centerAzimuth,
                                         targetAzimuth: normalizedDegrees(azimuth),
                                         startAltitude: centerAltitude,
                                         targetAltitude: max(-90, min(90, altitude)),
+                                        startRoll: roll,
+                                        targetRoll: targetRoll ?? roll,
                                         startViewAngle: viewAngle,
                                         targetViewAngle: targetViewAngle.map { boundedViewAngle($0) } ?? viewAngle,
                                         startPan: CGPoint(x: panX, y: panY),
@@ -473,6 +503,30 @@ final class StarView: UIView {
         
         cancelInertialScroll()
     }
+    
+    private func cancelGyroSnapBack() {
+        gyroSnapBackWorkItem?.cancel()
+        gyroSnapBackWorkItem = nil
+        cancelFocusAnimation()
+    }
+
+    private func scheduleGyroSnapBack() {
+        cancelGyroSnapBack()
+        isGyroPanOverride = true
+
+        let work = DispatchWorkItem { [weak self] in
+            self?.animateSnapBackToGyro()
+        }
+        gyroSnapBackWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + gyroSnapBackDelay, execute: work)
+    }
+
+    private func animateSnapBackToGyro() {
+        gyroSnapBackWorkItem = nil
+        animateTo(azimuth: gyroTargetAzimuth,
+                  altitude: gyroTargetAltitude,
+                  targetRoll: gyroTargetRoll)
+    }
 
     @objc private func handleFocusAnimationFrame(_ displayLink: CADisplayLink) {
         guard let animation = focusAnimation else {
@@ -485,6 +539,7 @@ final class StarView: UIView {
         applyFocusAnimation(animation, fraction: fraction)
         if rawFraction >= 1 {
             applyFocusAnimation(animation, fraction: 1)
+            isGyroPanOverride = false
             cancelFocusAnimation()
             onAnimationFinished?()
         }
@@ -493,6 +548,7 @@ final class StarView: UIView {
     private func applyFocusAnimation(_ animation: FocusAnimation, fraction: Double) {
         centerAzimuth = interpolateAngle(start: animation.startAzimuth, end: animation.targetAzimuth, fraction: fraction)
         centerAltitude = animation.startAltitude + (animation.targetAltitude - animation.startAltitude) * fraction
+        roll = animation.startRoll + (animation.targetRoll - animation.startRoll) * fraction
         viewAngle = animation.startViewAngle + (animation.targetViewAngle - animation.startViewAngle) * fraction
         if let targetPan = animation.targetPan {
             let cgFraction = CGFloat(fraction)
@@ -503,6 +559,7 @@ final class StarView: UIView {
             onViewAngleChangeListener?(viewAngle)
         }
         setNeedsDisplay()
+        notifyAzimuthChanged()
     }
 
     func getAltitude() -> Double {
@@ -528,7 +585,7 @@ final class StarView: UIView {
             centerAzimuth = normalizedDegrees(azimuth)
             setNeedsDisplay()
         }
-        onAzimuthManualChangeListener?(centerAzimuth)
+        notifyAzimuthChanged()
     }
 
     func setSkyObjects(_ objects: [SkyObject]) {
@@ -850,6 +907,10 @@ final class StarView: UIView {
 
         context.restoreGState()
     }
+    
+    private func notifyAzimuthChanged() {
+        onAzimuthManualChangeListener?(centerAzimuth)
+    }
 
     private func rebuildObjectMap() {
         skyObjectMap.removeAll(keepingCapacity: true)
@@ -922,7 +983,7 @@ final class StarView: UIView {
             .foregroundColor: labelColor(for: object)
         ]
         let size = text.size(withAttributes: attributes)
-        let origin = CGPoint(x: point.x + radius + pixelsToPoints(5), y: point.y - size.height * 0.75)
+        let origin = CGPoint(x: point.x + radius + 6, y: point.y - size.height * 0.5)
         let labelPadding = pixelsToPoints(5)
         let labelRect = CGRect(origin: origin, size: size).insetBy(dx: -labelPadding, dy: -labelPadding)
         let overlaps = occupiedRects.contains { $0.intersects(labelRect) }
@@ -1014,13 +1075,16 @@ final class StarView: UIView {
         }
 
         let path = CGMutablePath()
+        var altitudeLabels: [(String, Double, Double)] = []
+        var azimuthLabels: [(String, Double)] = []
+        
         for altitude in stride(from: -80, through: 80, by: density.altStep) {
             appendSkyLine(to: path, range: stride(from: 0.0, through: 360.0, by: Double(density.lineStep))) { azimuth in
                 (azimuth, Double(altitude))
             }
             if altitude != 0 {
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
+                altitudeLabels.append(("\(altitude)°", centerAzimuth, Double(altitude)))
+                altitudeLabels.append(("\(altitude)°", centerAzimuth + 180, Double(altitude)))
             }
         }
 
@@ -1029,10 +1093,19 @@ final class StarView: UIView {
                 (Double(azimuth), altitude)
             }
             if !azimuth.isMultiple(of: 90) {
-                drawOutsideLabel("\(azimuth)°", azimuth: Double(azimuth), altitude: 0, color: UIColor(white: 0.55, alpha: 1), offset: 25, in: context)
+                azimuthLabels.append(("\(azimuth)°", Double(azimuth)))
             }
         }
         stroke(path, color: UIColor(white: 0.27, alpha: 1), width: 2.0, in: context)
+        
+        let labelColor = UIColor(white: 0.55, alpha: 1)
+        
+        for (label, az, alt) in altitudeLabels {
+            drawGridLabel(label, azimuth: az, altitude: alt, align: .left, color: labelColor, in: context)
+        }
+        for (label, az) in azimuthLabels {
+            drawOutsideLabel(label, azimuth: az, altitude: 0, color: labelColor, offset: 25, in: context)
+        }
     }
 
     private func updateEquatorialGridCache() {
@@ -1111,6 +1184,9 @@ final class StarView: UIView {
         var bestRaIndex = -1
         var minCenterDistSq = CGFloat.greatestFiniteMagnitude
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        
+        var raLabels: [(String, CGPoint)] = []
+        var decLabels: [(String, Double, Double)] = []
 
         for i in 0..<equRaAzimuths.count {
             var first = true
@@ -1143,7 +1219,7 @@ final class StarView: UIView {
                 let hours = totalMinutes / 60
                 let minutes = totalMinutes % 60
                 let label = minutes == 0 ? "\(hours)h" : "\(hours)h\(minutes)"
-                drawText(label, at: CGPoint(x: point.x, y: point.y - 18), color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), font: .systemFont(ofSize: 11), align: .center)
+                raLabels.append((label, CGPoint(x: point.x, y: point.y - 18)))
             }
         }
 
@@ -1167,12 +1243,22 @@ final class StarView: UIView {
                 if dec != 0 {
                     let ra = Double(bestRaIndex * equRaStepMin) / 60.0
                     let hor = AstronomyKt.horizon(time: currentTime, observer: observer, ra: ra, dec: Double(dec), refraction: Refraction.normal)
-                    drawGridLabel("\(dec)°", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), in: context)
+                    decLabels.append(("\(dec)°", hor.azimuth, hor.altitude))
                 }
             }
         }
 
         stroke(path, color: UIColor(red: 0, green: 0.40, blue: 0.40, alpha: 1), width: 0.8, in: context)
+        
+        let labelColor = UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1)
+        let font = UIFont.systemFont(ofSize: 11)
+        
+        for (label, point) in raLabels {
+            drawText(label, at: point, color: labelColor, font: font, align: .center)
+        }
+        for (label, az, alt) in decLabels {
+            drawGridLabel(label, azimuth: az, altitude: alt, align: .left, color: labelColor, in: context)
+        }
     }
 
     private func updateEclipticCache() {
@@ -1888,17 +1974,20 @@ final class StarView: UIView {
         let point = recognizer.location(in: self)
         switch recognizer.state {
         case .began:
-            cancelInertialScroll()
-            cancelFocusAnimation()
+            if isGyroTrackingEnabled {
+                cancelGyroSnapBack()
+                isGyroPanOverride = true
+            } else {
+                cancelFocusAnimation()
+            }
             lastTouchPoint = point
             isPanning = false
             didPanThisGesture = false
         case .changed:
             let dx = point.x - lastTouchPoint.x
             let dy = point.y - lastTouchPoint.y
-            if isCameraMode && hypot(dx, dy) > 10 {
-                isPanning = true
-            } else if hypot(dx, dy) > 0 || isPanning {
+
+            if hypot(dx, dy) > 0 {
                 isPanning = true
                 didPanThisGesture = true
                 applyPanDelta(dx: dx, dy: dy)
@@ -1906,8 +1995,13 @@ final class StarView: UIView {
                 setNeedsDisplay()
             }
         case .ended, .cancelled:
-            if didPanThisGesture && !isCameraMode {
+            if didPanThisGesture && isGyroTrackingEnabled {
+                isPanning = false
+                scheduleGyroSnapBack()
+            } else if didPanThisGesture && !isGyroTrackingEnabled {
                 startInertialScroll(velocity: recognizer.velocity(in: self))
+            } else if isGyroTrackingEnabled {
+                isGyroPanOverride = false
             }
             isPanning = false
             didPanThisGesture = false
@@ -1924,7 +2018,7 @@ final class StarView: UIView {
             let scale = viewAngle / Double(max(bounds.width, 1))
             centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
             centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
-            onAzimuthManualChangeListener?(centerAzimuth)
+            notifyAzimuthChanged()
         }
         setNeedsDisplay()
     }

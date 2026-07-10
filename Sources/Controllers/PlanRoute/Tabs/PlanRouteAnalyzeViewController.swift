@@ -1012,7 +1012,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     private func makeNoElevationStatusCardCell() -> UITableViewCell {
         makeStatusCardCell(
-            icon: UIImage(named: "ic_custom_desert"),
+            icon: .icCustomDesert,
             iconTint: .iconColorDefault,
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
@@ -1155,13 +1155,13 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func fmtSpeed(_ value: Double?) -> String {
-        guard let v = value, v > 0 else { return "–" }
-        return OAOsmAndFormatter.getFormattedSpeed(Float(v)) ?? "–"
+        guard let value, value > 0 else { return "–" }
+        return OAOsmAndFormatter.getFormattedSpeed(Float(value)) ?? "–"
     }
 
     private func fmtTime(_ interval: TimeInterval?) -> String {
-        guard let t = interval, t > 0 else { return "–" }
-        return OAOsmAndFormatter.getFormattedDuration(t) ?? "–"
+        guard let interval, interval > 0 else { return "–" }
+        return OAOsmAndFormatter.getFormattedDuration(interval) ?? "–"
     }
 }
 
@@ -1233,10 +1233,6 @@ extension PlanRouteAnalyzeViewController: StatisticsSelectionDelegate {
 // MARK: - ChartHelperDelegate
 
 extension PlanRouteAnalyzeViewController: ChartHelperDelegate {
-
-    func centerMapOnBBox(_ rect: KQuadRect) {}
-
-    func adjustViewPort(_ landscape: Bool) {}
 
     func showCurrentHighlitedLocation(_ trackChartPoints: TrackChartPoints) {
         dataSource?.showChartHighlightedLocation(trackChartPoints)
@@ -1644,7 +1640,9 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     func slopeTitle(_ from: Int, _ to: Int) -> String {
-        "\(from)% → \(to)%"
+        let fromText = NumberFormatter.percentFormatter.string(from: (Double(from) / 100.0) as NSNumber) ?? "\(from)%"
+        let toText = NumberFormatter.percentFormatter.string(from: (Double(to) / 100.0) as NSNumber) ?? "\(to)%"
+        return "\(fromText) → \(toText)"
     }
 
     func steepnessRendering(for boundaryClass: String) -> (propertyName: String, color: Int)? {

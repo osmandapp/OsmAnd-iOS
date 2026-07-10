@@ -11,8 +11,8 @@ import CoreLocation
 import DGCharts
 
 @objc protocol ChartHelperDelegate: AnyObject {
-    func centerMapOnBBox(_ rect: KQuadRect)
-    func adjustViewPort(_ landscape: Bool)
+    @objc optional func centerMapOnBBox(_ rect: KQuadRect)
+    @objc optional func adjustViewPort(_ landscape: Bool)
     func showCurrentHighlitedLocation(_ trackChartPoints: TrackChartPoints)
     func showCurrentStatisticsLocation(_ trackChartPoints: TrackChartPoints)
 }

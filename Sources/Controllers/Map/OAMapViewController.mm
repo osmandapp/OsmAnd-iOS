@@ -4494,14 +4494,14 @@ static char kMapSourceUpdateQueueKey;
         CGPoint mapPoint;
         [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
 
-        if (forceFit && trackChartHelper.delegate)
+        if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
         {
             [trackChartHelper.delegate centerMapOnBBox:rect];
         }
         else if (CLLocationCoordinate2DIsValid(location)
                  && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
         {
-            if (!trackChartHelper.isLandscape && trackChartHelper.delegate)
+            if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
                 [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
             [self goToPosition:[OANativeUtilities convertFromPointI:point]
                       animated:YES];

@@ -337,7 +337,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        crosshairView.image = UIImage(named: "map_ruler_center_day")
+        crosshairView.image = .mapRulerCenterDay
     }
 
     private func setupCrosshair() {

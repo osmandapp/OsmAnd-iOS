@@ -12,7 +12,7 @@
 import Foundation
 import CoreGraphics
 
-#if !os(OSX)
+#if canImport(UIKit)
     import UIKit
 #endif
 
@@ -135,7 +135,7 @@ open class YAxisRendererHorizontalBarChart: YAxisRenderer
         let xOffset = axis.labelXOffset
         
         let isRightToLeft: Bool
-        #if !os(OSX)
+        #if canImport(UIKit)
         isRightToLeft = UIView.userInterfaceLayoutDirection(for: .unspecified) == .rightToLeft
         #else
         isRightToLeft = false

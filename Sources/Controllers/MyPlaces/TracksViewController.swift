@@ -78,6 +78,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var isEditFilterActive = false
     private var shouldReloadTableView = false
     private var isContextMenuVisible = false
+    private var shouldUpdateAllFoldersAfterContextMenu = false
+    private var shouldForceUpdateAllFoldersAfterContextMenu = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -313,6 +315,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if let hostVCDelegate {
             hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
         }
+    }
+
+    private func updateAllFoldersVCDataAfterContextMenu(forceLoad: Bool = false) {
+        guard isContextMenuVisible else {
+            updateAllFoldersVCData(forceLoad: forceLoad)
+            return
+        }
+
+        shouldUpdateAllFoldersAfterContextMenu = true
+        shouldForceUpdateAllFoldersAfterContextMenu = shouldForceUpdateAllFoldersAfterContextMenu || forceLoad
     }
     
     private func updateSearchResultsWithFilteredTracks() {
@@ -1588,7 +1600,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 settings.showGpx([trackPath], update: true)
             }
         }
-        updateAllFoldersVCData(forceLoad: true)
+        updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
     }
     
     private func onTrackAppearenceClicked(track: TrackItem?, isCurrentTrack: Bool) {
@@ -1709,7 +1721,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                           openTrack: false,
                           trackItem: track)
         selectedTrack = nil
-        updateAllFoldersVCData(forceLoad: true)
+        updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
     }
     
     private func onTrackRenameClicked(_ track: TrackItem?) {
@@ -1735,7 +1747,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 ? String(newName.dropLast(fileExtension.count))
                 : newName
                 gpxHelper.renameTrack(trackItem.dataItem, newName: newNameToChange, hostVC: self)
-                self.updateAllFoldersVCData(forceLoad: true)
+                self.updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
             } else {
                 gpxHelper.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
             }
@@ -1779,7 +1791,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     handleDeletedGpxFile(gpxFile: file)
                 }
 
-                updateAllFoldersVCData(forceLoad: true)
+                updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -2463,11 +2475,20 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
         animator?.addCompletion { [weak self] in
             guard let self else { return }
-            if self.shouldReloadTableView {
-                self.updateData()
-                self.shouldReloadTableView = false
-            }
+            let shouldUpdateAllFolders = self.shouldUpdateAllFoldersAfterContextMenu
+            let forceUpdateAllFolders = self.shouldForceUpdateAllFoldersAfterContextMenu
+            let shouldReloadTableView = self.shouldReloadTableView
+            
             self.isContextMenuVisible = false
+            self.shouldUpdateAllFoldersAfterContextMenu = false
+            self.shouldForceUpdateAllFoldersAfterContextMenu = false
+            self.shouldReloadTableView = false
+            
+            if shouldUpdateAllFolders {
+                self.updateAllFoldersVCData(forceLoad: forceUpdateAllFolders)
+            } else if shouldReloadTableView {
+                self.updateData()
+            }
         }
     }
     

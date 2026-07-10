@@ -371,16 +371,15 @@ final class OsmEditsListViewController: UIViewController {
                                        style: .plain,
                                        target: self,
                                        action: #selector(selectButtonPressed(_:)))
-        selectButton?.tintColor = .label
+        selectButton?.tintColor = .textColorPrimary
         selectButton?.accessibilityLabel = localizedString("shared_string_select")
 
         let searchIcon = UIImage(systemName: "magnifyingglass",
-                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
         searchButton = UIBarButtonItem(image: searchIcon,
                                        style: .plain,
                                        target: self,
                                        action: #selector(searchButtonPressed(_:)))
-        searchButton?.tintColor = .label
         searchButton?.accessibilityLabel = localizedString("shared_string_search")
 
         if #available(iOS 26.0, *) {

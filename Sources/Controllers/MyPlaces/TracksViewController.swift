@@ -327,7 +327,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
 
         shouldUpdateAllFoldersAfterContextMenu = true
-        shouldForceUpdateAllFoldersAfterContextMenu = shouldForceUpdateAllFoldersAfterContextMenu || forceLoad
+        shouldForceUpdateAllFoldersAfterContextMenu = forceLoad
     }
     
     private func updateSearchResultsWithFilteredTracks() {
@@ -778,31 +778,24 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        var color: UIColor?
-        if #available(iOS 26.0, *) {
-            color = .label
-        } else {
-            color = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
-        }
         if !isSearchActive, !tableView.isEditing {
             let searchIcon = UIImage(systemName: "magnifyingglass",
-                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
             let searchBarButton = UIBarButtonItem(image: searchIcon,
                                                   style: .plain,
                                                   target: self,
                                                   action: #selector(onSearchButtonClicked))
-            searchBarButton.tintColor = color
             if #available(iOS 26.0, *) {
                 searchBarButton.style = .prominent
                 searchBarButton.tintColor = .clear
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .label
+            actionsBarButton.tintColor = .textColorPrimary
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
         } else {
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .label
+            actionsBarButton.tintColor = .textColorPrimary
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton], animated: false)
         }
@@ -2480,16 +2473,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let forceUpdateAllFolders = self.shouldForceUpdateAllFoldersAfterContextMenu
             let shouldReloadTableView = self.shouldReloadTableView
             
-            self.isContextMenuVisible = false
-            self.shouldUpdateAllFoldersAfterContextMenu = false
-            self.shouldForceUpdateAllFoldersAfterContextMenu = false
-            self.shouldReloadTableView = false
-            
             if shouldUpdateAllFolders {
                 self.updateAllFoldersVCData(forceLoad: forceUpdateAllFolders)
             } else if shouldReloadTableView {
                 self.updateData()
             }
+            
+            self.isContextMenuVisible = false
+            self.shouldUpdateAllFoldersAfterContextMenu = false
+            self.shouldForceUpdateAllFoldersAfterContextMenu = false
+            self.shouldReloadTableView = false
         }
     }
     

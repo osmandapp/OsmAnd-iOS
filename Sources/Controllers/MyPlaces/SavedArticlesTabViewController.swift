@@ -285,12 +285,11 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
 
         let searchIcon = UIImage(systemName: "magnifyingglass",
-                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
         let searchButton = UIBarButtonItem(image: searchIcon,
                                            style: .plain,
                                            target: self,
                                            action: #selector(searchButtonPressed(_:)))
-        searchButton.tintColor = .label
         searchButton.accessibilityLabel = localizedString("shared_string_search")
 
         if #available(iOS 26.0, *) {

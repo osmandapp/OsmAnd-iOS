@@ -264,19 +264,18 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(false)
             } else {
-                self.navigationItem.hidesBackButton = true
+                navigationItem.hidesBackButton = true
             }
         } else {
             let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
-            actionsButton.tintColor = .label
+            actionsButton.tintColor = .textColorPrimary
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
             let searchIcon = UIImage(systemName: "magnifyingglass",
-                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
             let searchButton = UIBarButtonItem(image: searchIcon,
                                                style: .plain,
                                                target: self,
                                                action: #selector(searchButtonPressed(_:)))
-            searchButton.tintColor = .label
             searchButton.accessibilityLabel = localizedString("shared_string_search")
             if #available(iOS 26.0, *) {
                 searchButton.style = .prominent
@@ -289,7 +288,7 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(true)
             } else {
-                self.navigationItem.hidesBackButton = false
+                navigationItem.hidesBackButton = false
             }
         }
     }

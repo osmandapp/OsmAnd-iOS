@@ -2866,7 +2866,6 @@
 		DA5A84F626C563A900F274C7 /* OAMapLayersConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803B26C563A500F274C7 /* OAMapLayersConfiguration.m */; };
 		DA5A84F726C563A900F274C7 /* OAAppData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803E26C563A500F274C7 /* OAAppData.m */; };
 		DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A804026C563A500F274C7 /* OAMapStyleSettings.mm */; };
-		DA5A84F926C563A900F274C7 /* OAAutocompleteManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A804126C563A500F274C7 /* OAAutocompleteManager.mm */; };
 		DA5A84FA26C563A900F274C7 /* OARouteInfoLegendItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A804426C563A500F274C7 /* OARouteInfoLegendItemView.xib */; };
 		DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A804726C563A500F274C7 /* OADownloadProgressView.m */; };
 		DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A805126C563A500F274C7 /* OATableViewCell.m */; };
@@ -7584,14 +7583,12 @@
 		DA5A803726C563A500F274C7 /* OAAppData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppData.h; sourceTree = "<group>"; };
 		DA5A803826C563A500F274C7 /* OADistanceDirection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADistanceDirection.mm; sourceTree = "<group>"; };
 		DA5A803926C563A500F274C7 /* OAMapStyleSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapStyleSettings.h; sourceTree = "<group>"; };
-		DA5A803A26C563A500F274C7 /* OAAutocompleteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAutocompleteManager.h; sourceTree = "<group>"; };
 		DA5A803B26C563A500F274C7 /* OAMapLayersConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapLayersConfiguration.m; sourceTree = "<group>"; };
 		DA5A803C26C563A500F274C7 /* OAMapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSource.h; sourceTree = "<group>"; };
 		DA5A803D26C563A500F274C7 /* OAMapViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapViewState.h; sourceTree = "<group>"; };
 		DA5A803E26C563A500F274C7 /* OAAppData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppData.m; sourceTree = "<group>"; };
 		DA5A803F26C563A500F274C7 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetPoint.h; sourceTree = "<group>"; };
 		DA5A804026C563A500F274C7 /* OAMapStyleSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapStyleSettings.mm; sourceTree = "<group>"; };
-		DA5A804126C563A500F274C7 /* OAAutocompleteManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAutocompleteManager.mm; sourceTree = "<group>"; };
 		DA5A804226C563A500F274C7 /* OADistanceDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADistanceDirection.h; sourceTree = "<group>"; };
 		DA5A804426C563A500F274C7 /* OARouteInfoLegendItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoLegendItemView.xib; sourceTree = "<group>"; };
 		DA5A804526C563A500F274C7 /* OAButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAButton.h; sourceTree = "<group>"; };
@@ -14037,8 +14034,6 @@
 				DA5A803226C563A500F274C7 /* Coordinates */,
 				DA5A803726C563A500F274C7 /* OAAppData.h */,
 				DA5A803E26C563A500F274C7 /* OAAppData.m */,
-				DA5A803A26C563A500F274C7 /* OAAutocompleteManager.h */,
-				DA5A804126C563A500F274C7 /* OAAutocompleteManager.mm */,
 				DA5A804226C563A500F274C7 /* OADistanceDirection.h */,
 				DA5A803826C563A500F274C7 /* OADistanceDirection.mm */,
 				DA5A803126C563A500F274C7 /* OAMapLayersConfiguration.h */,
@@ -18529,7 +18524,6 @@
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
 				DA5A847426C563A900F274C7 /* OAMapWidgetRegistry.mm in Sources */,
 				DA5A814926C563A700F274C7 /* OADirectionsGridController.m in Sources */,
-				DA5A84F926C563A900F274C7 /* OAAutocompleteManager.mm in Sources */,
 				DA5A825326C563A700F274C7 /* OARouteParameterValuesViewController.mm in Sources */,
 				DA5A814826C563A700F274C7 /* OAOsmBugsRemoteUtil.m in Sources */,
 				DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */,

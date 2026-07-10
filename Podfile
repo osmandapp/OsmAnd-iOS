@@ -10,7 +10,6 @@ def defaultPods
     pod 'JASidePanels', '~> 1.3.2'
     pod 'FFCircularProgressView', '~> 0.4'
     pod 'MBProgressHUD', '~> 0.9.1'
-    pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'MaterialComponents/TextFields', '~> 120.0.0'
     pod 'BRCybertron', '~> 1.1.1'
     pod 'MCBinaryHeap', '~> 0.1'

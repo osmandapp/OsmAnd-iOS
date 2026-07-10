@@ -17,6 +17,13 @@
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
 		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
 		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
+		FA7000012F90000000000001 /* FFCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000013 /* FFCircularProgressView.m */; };
+		FA7000012F90000000000002 /* UIColor+iOS7.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000015 /* UIColor+iOS7.m */; };
+		FA7000012F90000000000003 /* TTRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000018 /* TTRangeSlider.m */; };
+		FA7000012F90000000000004 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F9000000000001C /* MBProgressHUD.m */; };
+		FA7000012F90000000000005 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F9000000000001F /* JASidePanelController.m */; };
+		FA7000012F90000000000006 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000021 /* UIViewController+JASidePanel.m */; };
+		FA7000012F90000000000007 /* MCBinaryHeap.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000024 /* MCBinaryHeap.m */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
@@ -6431,6 +6438,21 @@
 		DA5A79D126C563A000F274C7 /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
 		DA5A79D226C563A000F274C7 /* MGSwipeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeTableCell.h; sourceTree = "<group>"; };
 		DA5A79D326C563A000F274C7 /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSwipeButton.m; sourceTree = "<group>"; };
+		FA7000012F90000000000012 /* FFCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFCircularProgressView.h; sourceTree = "<group>"; };
+		FA7000012F90000000000013 /* FFCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCircularProgressView.m; sourceTree = "<group>"; };
+		FA7000012F90000000000014 /* UIColor+iOS7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+iOS7.h"; sourceTree = "<group>"; };
+		FA7000012F90000000000015 /* UIColor+iOS7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+iOS7.m"; sourceTree = "<group>"; };
+		FA7000012F90000000000017 /* TTRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTRangeSlider.h; sourceTree = "<group>"; };
+		FA7000012F90000000000018 /* TTRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTRangeSlider.m; sourceTree = "<group>"; };
+		FA7000012F90000000000019 /* TTRangeSliderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTRangeSliderDelegate.h; sourceTree = "<group>"; };
+		FA7000012F9000000000001B /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		FA7000012F9000000000001C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		FA7000012F9000000000001E /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
+		FA7000012F9000000000001F /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
+		FA7000012F90000000000020 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
+		FA7000012F90000000000021 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
+		FA7000012F90000000000023 /* MCBinaryHeap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCBinaryHeap.h; sourceTree = "<group>"; };
+		FA7000012F90000000000024 /* MCBinaryHeap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCBinaryHeap.m; sourceTree = "<group>"; };
 		DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapButtonsHelper.m; sourceTree = "<group>"; };
 		DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteAction.mm; sourceTree = "<group>"; };
 		DA5A79DA26C563A000F274C7 /* OANavReplaceDestinationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavReplaceDestinationAction.h; sourceTree = "<group>"; };
@@ -11791,10 +11813,65 @@
 		DA5A79CE26C563A000F274C7 /* ThirdPart */ = {
 			isa = PBXGroup;
 			children = (
+				FA7000012F90000000000011 /* FFCircularProgressView */,
 				32CA48BE2A5D50C800DE76FD /* Geomagnetism-Swift */,
+				FA7000012F9000000000001D /* JASidePanels */,
+				FA7000012F9000000000001A /* MBProgressHUD */,
+				FA7000012F90000000000022 /* MCBinaryHeap */,
 				DA5A79CF26C563A000F274C7 /* MGSwipeTableCell */,
+				FA7000012F90000000000016 /* TTRangeSlider */,
 			);
 			path = ThirdPart;
+			sourceTree = "<group>";
+		};
+		FA7000012F90000000000011 /* FFCircularProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F90000000000012 /* FFCircularProgressView.h */,
+				FA7000012F90000000000013 /* FFCircularProgressView.m */,
+				FA7000012F90000000000014 /* UIColor+iOS7.h */,
+				FA7000012F90000000000015 /* UIColor+iOS7.m */,
+			);
+			path = FFCircularProgressView;
+			sourceTree = "<group>";
+		};
+		FA7000012F90000000000016 /* TTRangeSlider */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F90000000000017 /* TTRangeSlider.h */,
+				FA7000012F90000000000018 /* TTRangeSlider.m */,
+				FA7000012F90000000000019 /* TTRangeSliderDelegate.h */,
+			);
+			path = TTRangeSlider;
+			sourceTree = "<group>";
+		};
+		FA7000012F9000000000001A /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F9000000000001B /* MBProgressHUD.h */,
+				FA7000012F9000000000001C /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		FA7000012F9000000000001D /* JASidePanels */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F9000000000001E /* JASidePanelController.h */,
+				FA7000012F9000000000001F /* JASidePanelController.m */,
+				FA7000012F90000000000020 /* UIViewController+JASidePanel.h */,
+				FA7000012F90000000000021 /* UIViewController+JASidePanel.m */,
+			);
+			path = JASidePanels;
+			sourceTree = "<group>";
+		};
+		FA7000012F90000000000022 /* MCBinaryHeap */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F90000000000023 /* MCBinaryHeap.h */,
+				FA7000012F90000000000024 /* MCBinaryHeap.m */,
+			);
+			path = MCBinaryHeap;
 			sourceTree = "<group>";
 		};
 		DA5A79CF26C563A000F274C7 /* MGSwipeTableCell */ = {
@@ -18495,6 +18572,13 @@
 				3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
 				FA6408732D3E7FD1005FD12D /* UrlImageCard.swift in Sources */,
+				FA7000012F90000000000001 /* FFCircularProgressView.m in Sources */,
+				FA7000012F90000000000002 /* UIColor+iOS7.m in Sources */,
+				FA7000012F90000000000003 /* TTRangeSlider.m in Sources */,
+				FA7000012F90000000000004 /* MBProgressHUD.m in Sources */,
+				FA7000012F90000000000005 /* JASidePanelController.m in Sources */,
+				FA7000012F90000000000006 /* UIViewController+JASidePanel.m in Sources */,
+				FA7000012F90000000000007 /* MCBinaryHeap.m in Sources */,
 				FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
@@ -19592,6 +19676,7 @@
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",
@@ -19661,6 +19746,7 @@
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",

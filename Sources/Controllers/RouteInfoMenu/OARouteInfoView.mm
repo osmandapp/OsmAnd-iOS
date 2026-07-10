@@ -1373,7 +1373,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     } onViewOnPhoneHandler:^{
         [weakSelf showRequiredMapsResourceViewControllerIfNeeded];
     } onCancelHandler:^{
-        [OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
+        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+        if ([mapPanel isRouteInfoVisible])
+        {
+            [mapPanel closeRouteInfo:YES onComplete:^{
+                [mapPanel.mapActions stopNavigationWithoutConfirm];
+            }];
+        }
+        else
+        {
+            [mapPanel.mapActions stopNavigationWithoutConfirm];
+        }
     }];
 }
 

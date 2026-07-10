@@ -277,11 +277,9 @@ static OASubscriptionState *EXPIRED;
     return [self isOsmAndProAvailable];
 }
 
-+ (long) getInstallTime
++ (NSTimeInterval)installTime
 {
-    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"install_date"];
-    long firstInstalledTime = (long) installDate.timeIntervalSince1970;
-    return firstInstalledTime;
+    return [[NSUserDefaults standardUserDefaults] doubleForKey:kAppInstalledDate];
 }
 
 + (BOOL) isFullVersionPurchased
@@ -419,10 +417,10 @@ static OASubscriptionState *EXPIRED;
     return sharedInstance;
 }
 
-- (BOOL) isCarPlayAvailable
+- (BOOL)isCarPlayAvailable
 {
-    long time = (long) NSDate.date.timeIntervalSince1970;
-    long installTime = [self.class getInstallTime];
+    NSTimeInterval time = NSDate.date.timeIntervalSince1970;
+    NSTimeInterval installTime = [[self class] installTime];
     if (time >= installTime + CARPLAY_START_DATE_SEC)
         return [self hasCarPlayPurchase];
 

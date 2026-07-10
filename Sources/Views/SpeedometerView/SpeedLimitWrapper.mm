@@ -14,8 +14,24 @@
 #import "OACurrentPositionHelper.h"
 #import "OARoutingHelper.h"
 #import "OARoutingHelper+cpp.h"
+#import "OAOsmAndFormatter.h"
 
 #include "routeSegmentResult.h"
+
+@implementation SpeedLimitData
+
+- (instancetype)initWithValue:(int)value text:(nullable NSString *)text
+{
+    self = [super init];
+    if (self)
+    {
+        _value = value;
+        _text = [text copy];
+    }
+    return self;
+}
+
+@end
 
 @implementation SpeedLimitWrapper
 {
@@ -42,7 +58,25 @@
     _routingHelper = [OARoutingHelper sharedInstance];
 }
 
-- (int)speedLimit
+- (SpeedLimitData *)speedLimitData
+{
+    OAAlarmInfo *alarm = [self speedLimitAlarm];
+    if (!alarm)
+        return [[SpeedLimitData alloc] initWithValue:-1 text:nil];
+
+    NSString *text = nil;
+    if (alarm.floatValue > 0)
+    {
+        NSMutableArray<NSString *> *valueUnitArray = [NSMutableArray array];
+        [OAOsmAndFormatter getFormattedSpeed:alarm.floatValue valueUnitArray:valueUnitArray];
+        if (valueUnitArray.count > 0)
+            text = valueUnitArray.firstObject;
+    }
+
+    return [[SpeedLimitData alloc] initWithValue:alarm.intValue text:text ?: [NSString stringWithFormat:@"%d", alarm.intValue]];
+}
+
+- (nullable OAAlarmInfo *)speedLimitAlarm
 {
     EOASpeedConstant speedFormat = [_settings.speedSystem get];
     BOOL whenExceeded = [_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateWhenExceeded;
@@ -66,9 +100,9 @@
     }
     if (alarm)
     {
-        return alarm.intValue;
+        return alarm;
     }
-    return -1;
+    return nil;
 }
 
 @end

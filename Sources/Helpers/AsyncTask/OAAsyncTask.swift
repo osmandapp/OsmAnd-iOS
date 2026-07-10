@@ -12,10 +12,11 @@ import Foundation
 class OAAsyncTask: NSObject, OACancellable {
     
     var cancelled: Bool = false
+    var qos: DispatchQoS = .default
     
     func execute() {
         onPreExecute()
-        DispatchQueue.global(qos: .default).async {
+        DispatchQueue.global(qos: qos.qosClass).async {
             let result = self.doInBackground()
             DispatchQueue.main.async {
                 self.onPostExecute(result: result)

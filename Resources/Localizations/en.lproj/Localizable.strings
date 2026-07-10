@@ -643,6 +643,7 @@
 "no_tracks_on_map" = "No tracks on map";
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
+"show_all_tracks_on_the_map" = "Show all tracks on the map";
 "recently_visible" = "Recently visible %@";
 "sort_subfolders_tracks" = "Sort subfolders";
 "shared_string_subfolders_in" = "Subfolders in";
@@ -716,6 +717,7 @@
 "traffic_warning_stop" = "Stop sign";
 "traffic_warning_calming" = "Traffic calming";
 "traffic_warning_speed_camera" = "Speed camera";
+"traffic_warning_red_light_camera" = "Red light camera";
 "traffic_warning" = "Traffic warning";
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";

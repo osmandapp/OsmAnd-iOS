@@ -13,6 +13,11 @@ final class CarPlayConfig: NSObject {
 
 @objcMembers
 final class SpeedometerView: OATextInfoWidget {
+
+    static var initView: SpeedometerView? {
+        UINib(nibName: String(describing: self), bundle: nil)
+            .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
+    }
     
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
@@ -45,15 +50,17 @@ final class SpeedometerView: OATextInfoWidget {
     var carPlayConfig: CarPlayConfig?
     var isPreview = false
     
-    static var initView: SpeedometerView? {
-        UINib(nibName: String(describing: self), bundle: nil)
-            .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
-    }
-    
     var isDrivingRegionNAM: Bool {
         let drivingRegion = settings.drivingRegion.get()
         return drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA
     }
+
+    override var intrinsicContentSize: CGSize {
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
+    }
+
+    private lazy var speedViewWrapper = SpeedLimitWrapper()
     
     private var shouldShowSpeedometer: Bool {
         guard settings.showSpeedometer.get() else { return false }
@@ -64,25 +71,19 @@ final class SpeedometerView: OATextInfoWidget {
         return !OARootViewController.instance().mapPanel.isContextMenuVisible()
     }
     
-    private lazy var speedViewWrapper = SpeedLimitWrapper()
-    
-    override var intrinsicContentSize: CGSize {
-        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
-    }
-    
     override func isTextInfo() -> Bool {
         false
     }
     
-    @discardableResult
-    override func updateInfo() -> Bool {
+    @discardableResult override func updateInfo() -> Bool {
         guard shouldShowSpeedometer else {
             isHidden = true
             return false
         }
         updateComponents()
-        let speedLimit = Float(speedViewWrapper.speedLimit())
+        let speedLimitData = speedViewWrapper.speedLimitData()
+        let speedLimit = Float(speedLimitData.value)
+        let speedLimitText = speedLimitData.text
         let oldLimit = speedometerSpeedView.cachedSpeedLimit
 
         let shouldShowSpeedLimitSign = oldLimit == -1 && speedLimit != -1
@@ -90,6 +91,7 @@ final class SpeedometerView: OATextInfoWidget {
         
         updateSpeedometerSpeedView(speedLimit: speedLimit)
         updateSpeedLimitView(speedLimit: Int(speedLimit),
+                             speedLimitText: speedLimitText,
                              shouldShowSpeedLimitSign: shouldShowSpeedLimitSign,
                              shouldHideSpeedLimitSign: shouldHideSpeedLimitSign)
         var isChangedVisible = false
@@ -186,7 +188,7 @@ final class SpeedometerView: OATextInfoWidget {
         speedometerSpeedView.updateInfo(speedLimit: speedLimit)
     }
     
-    private func updateSpeedLimitView(speedLimit: Int, shouldShowSpeedLimitSign: Bool, shouldHideSpeedLimitSign: Bool) {
+    private func updateSpeedLimitView(speedLimit: Int, speedLimitText: String?, shouldShowSpeedLimitSign: Bool, shouldHideSpeedLimitSign: Bool) {
         let speedLimitSignView: SpeedLimitView = isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView
         if speedLimit <= 0 {
             if shouldHideSpeedLimitSign {
@@ -197,19 +199,21 @@ final class SpeedometerView: OATextInfoWidget {
         } else {
             setupSpeedLimitWith(view: speedLimitSignView,
                                 speedLimit: speedLimit,
+                                speedLimitText: speedLimitText,
                                 shouldShowSpeedLimitSign: shouldShowSpeedLimitSign)
         }
     }
     
     private func setupSpeedLimitWith(view: SpeedLimitView,
                                      speedLimit: Int,
+                                     speedLimitText: String?,
                                      shouldShowSpeedLimitSign: Bool) {
         if shouldShowSpeedLimitSign {
             view.fadeIn()
         }
         
         if speedLimit != -1 {
-            view.updateWith(value: "\(speedLimit)")
+            view.updateWith(value: speedLimitText ?? "\(speedLimit)")
         }
     }
 }

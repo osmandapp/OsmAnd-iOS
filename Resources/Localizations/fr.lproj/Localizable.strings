@@ -4219,7 +4219,7 @@
 "ais_object_lost_timeout" = "Délai de visibilité en cas de perte du navire";
 "ais_object_lost_timeout_description" = "Définir un délai d'expiration pour la visibilité des objets AIS : si aucun signal n'est reçu dans le délai spécifié, l'objet sera automatiquement supprimé de l'affichage.";
 "ais_ship_lost_timeout" = "Délai d'expiration obsolète pour l'expédition";
-"ais_ship_lost_timeout_description" = "Définir le délai d'expiration de la visibilité d'un navire obsolète : passé ce délai sans réception de signal, le symbole du navire sera barré.";
+"ais_ship_lost_timeout_description" = "Définir le délai d'obsolescence pour la visibilité d'un navire : passé ce délai et sans réception du signal, le symbole du navire sera barré.";
 "ais_cpa_settings" = "Paramètres liés au CPA";
 "ais_cpa_settings_description" = "Ces valeurs déterminent la manière dont les objets AIS s'affichent lorsqu'ils s'approchent de la position du navire.";
 "ais_cpa_warning_time" = "Délai d'alerte avant le point d'approche le plus proche (CPA)";
@@ -4246,3 +4246,4 @@
 "ais_aid_type" = "Type d'aide";
 "ais_dimension" = "Dimension";
 "ais_antenna" = "Antenne AIS";
+"traffic_warning_red_light_camera" = "Radar de feu rouge";

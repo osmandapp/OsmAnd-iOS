@@ -59,7 +59,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private let isVisibleKey = "isVisibleKey"
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     private let trackSortDescrKey = "trackSortDescrKey"
-    
+
     private var tableData = OATableDataModel()
     private var asyncLoader: TrackFolderLoaderTask?
     
@@ -173,8 +173,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func onLoadFinished(folder: TrackFolder) {
         rootFolder = folder
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
-        organizedGroup = nil
+        if let groupId = organizedGroup?.getId() {
+            organizedGroup = smartFolder?.getSubgroupById(subgroupId: groupId) as? OrganizedTracksGroup
+        }
         onRefreshEnd()
+        updateNavigationBarTitle()
         updateSearchResultsWithFilteredTracks()
         updateData()
     }
@@ -559,7 +562,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         row.title = organizedGroupTitle(organizedGroup)
         row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
         if organizedGroup.getType() == .activity {
-            row.icon = UIImage.mapSvgImageNamed("mx_\(organizedGroup.getIconName())") ?? .templateImageNamed("ic_custom_activity")
+            row.icon = UIImage.routeActivityIcon(organizedGroup.getIconName(), fallback: .templateImageNamed("ic_custom_activity"))
         } else {
             row.iconName = organizedGroup.getType().iconName
         }
@@ -681,7 +684,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             title = localizedString("tracks_on_map")
         } else if isSmartFolder {
             if let organizedGroup {
-                title = organizedGroup.getName()
+                title = organizedGroupTitle(organizedGroup)
             } else {
                 title = isEditFilterActive ? localizedString("edit_filter") : smartFolder.getDirName(includingSubdirs: false)
             }
@@ -1099,8 +1102,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateNavigationBarTitle()
         setupNavbar()
         updateSortButtonAndMenu()
-        generateData()
-        tableView.reloadData()
+        updateData()
     }
 
     private func leaveOrganizedGroup() {
@@ -1108,8 +1110,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateNavigationBarTitle()
         setupNavbar()
         updateSortButtonAndMenu()
-        generateData()
-        tableView.reloadData()
+        updateData()
     }
 
     private func onNavbarRefreshSmartFolderButtonClicked() {
@@ -2311,8 +2312,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
                 }
-                
-                let tracksFoldersKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey]
+
+                let tracksFoldersKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey, organizedGroupKey]
                 if tracksFoldersKeys.contains(where: { $0 == item.key }) {
                     cell.setCustomLeftSeparatorInset(true)
                     cell.separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
@@ -2540,7 +2541,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             guard let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup else { return nil }
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 guard let self else { return nil }
-                let showOnMapAction = UIAction(title: localizedString("show_all_tracks"), image: .icCustomMapPinOutlined) { [weak self] _ in
+                let showOnMapAction = UIAction(title: localizedString("show_all_tracks_on_the_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
                     guard let self else { return }
                     let tracksToShow = group.getTrackItems().compactMap { $0.gpxFilePath }.filter { !self.settings.mapSettingVisibleGpx.contains($0) }
                     if !tracksToShow.isEmpty {

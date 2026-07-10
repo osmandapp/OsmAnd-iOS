@@ -12,8 +12,6 @@ import OsmAndShared
 import UIKit
 
 final class AstroVisibilityCardController {
-    private static let citySearchRadiusMeters = 50 * 1000
-
     private(set) var skyObject: SkyObject?
     private(set) var observer: Observer?
     private(set) var date: Date = Date()
@@ -38,7 +36,7 @@ final class AstroVisibilityCardController {
     private var graphObserverHeight = Double.nan
     private var computeWorkItem: DispatchWorkItem?
     private var locationWorkItem: DispatchWorkItem?
-    private let titleDateFormatter: DateFormatter = {
+    private lazy var titleDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("EEEEMMMMd")
         return formatter
@@ -97,10 +95,12 @@ final class AstroVisibilityCardController {
 
         let location = resolveLocationTarget(observer: observer)
         let locationKey = String(format: "%.6f,%.6f", location.coordinate.latitude, location.coordinate.longitude)
-        if lastLocationKey != locationKey || locationText.isEmpty {
+        if lastLocationKey != locationKey {
             lastLocationKey = locationKey
             locationText = formatCoordinates(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             onDataChanged?()
+            requestLocationText(location: location, key: locationKey)
+        } else if locationText.isEmpty, locationWorkItem == nil {
             requestLocationText(location: location, key: locationKey)
         }
     }
@@ -227,15 +227,12 @@ final class AstroVisibilityCardController {
 
     private func requestLocationText(location: CLLocation, key: String) {
         locationWorkItem?.cancel()
-        let coordinate = location.coordinate
-        let coords = formatCoordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let mapPanel = OARootViewController.instance()?.mapPanel
         let workItem = DispatchWorkItem { [weak self] in
             guard let self else {
                 return
             }
-            let address = mapPanel?.findRoadName(byLat: coordinate.latitude, lon: coordinate.longitude)
-            let resolved = [self.extractCity(address), "(\(coords))"].compactMap { $0 }.joined(separator: " ")
+            let resolved = self.resolveLocationText(for: location, mapPanel: mapPanel)
             DispatchQueue.main.async { [weak self] in
                 guard let self,
                       !(self.locationWorkItem?.isCancelled ?? true),
@@ -252,6 +249,37 @@ final class AstroVisibilityCardController {
         }
         locationWorkItem = workItem
         DispatchQueue.global(qos: .userInitiated).async(execute: workItem)
+    }
+    
+    private func resolveLocationText(for location: CLLocation, mapPanel: OAMapPanelViewController?) -> String {
+        let coordinate = location.coordinate
+        let coords = formatCoordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
+
+        let address = mapPanel?.findRoadName(byLat: coordinate.latitude, lon: coordinate.longitude)
+        if let city = extractCity(address) {
+            return city
+        }
+        
+        if let city = OAGPXUIHelper.searchNearestCity(coordinate),
+           let name = city.name?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !name.isEmpty {
+            return formatNearbyCity(city, from: location)
+        }
+
+        return coords
+    }
+    
+    private func formatNearbyCity(_ city: OAPOI, from location: CLLocation) -> String {
+        guard let name = city.name?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty else {
+            return formatCoordinates(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        }
+        let cityLocation = CLLocation(latitude: city.latitude, longitude: city.longitude)
+        let distance = location.distance(from: cityLocation)
+        guard let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)),
+              !formattedDistance.isEmpty else {
+            return name
+        }
+        return "\(name) (\(formattedDistance))"
     }
 
     private func extractCity(_ address: String?) -> String? {

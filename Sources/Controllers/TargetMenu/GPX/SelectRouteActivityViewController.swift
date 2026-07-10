@@ -111,7 +111,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
                 row.cellType = OASimpleTableViewCell.reuseIdentifier
                 row.key = activity.id
                 row.title = activity.label
-                row.icon = UIImage.mapSvgImageNamed("mx_\(activity.iconName)") ?? .icCustomInfoOutlined
+                row.icon = UIImage.routeActivityIcon(activity.iconName, fallback: .icCustomInfoOutlined)
                 row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
                 row.setObj(activity.id == selectedActivity?.id, forKey: "isSelected")
                 row.setObj(activity, forKey: "routeActivity")
@@ -125,7 +125,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
                     row.cellType = OASimpleTableViewCell.reuseIdentifier
                     row.key = activity.id
                     row.title = activity.label
-                    row.icon = UIImage.mapSvgImageNamed("mx_\(activity.iconName)") ?? .icCustomInfoOutlined
+                    row.icon = UIImage.routeActivityIcon(activity.iconName, fallback: .icCustomInfoOutlined)
                     row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
                     row.setObj(activity, forKey: "routeActivity")
                     if isCheckmarkAllowed {

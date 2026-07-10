@@ -20,7 +20,7 @@ enum AstroCatalogsCardViewHolder {
         headerLabel.text = localizedString("astro_designations")
         headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         headerLabel.adjustsFontForContentSizeCategory = true
-        headerLabel.textColor = AstroContextMenuTheme.secondaryText
+        headerLabel.textColor = .textColorSecondary
         
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ enum AstroCatalogsCardViewHolder {
         let card = UIView()
         card.layer.cornerRadius = 26
         card.clipsToBounds = true
-        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.backgroundColor = .groupBg
         card.translatesAutoresizingMaskIntoConstraints = false
 
         let chips = WrappingChipsView()
@@ -73,15 +73,27 @@ enum AstroCatalogsCardViewHolder {
 }
 
 final class WrappingChipsView: UIView {
-    private var chips: [UIButton] = []
-
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width - 64))
+        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width))
     }
+    
+    private var chips: [UIButton] = []
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        _ = layoutHeight(for: bounds.width, apply: true)
+
+        let height = layoutHeight(for: bounds.width, apply: true)
+        if abs(bounds.height - height) > 0.5 {
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            invalidateIntrinsicContentSize()
+            setNeedsLayout()
+        }
     }
 
     func addChip(title: String, action: @escaping () -> Void) {
@@ -89,7 +101,7 @@ final class WrappingChipsView: UIView {
         config.title = title
         config.baseBackgroundColor = .buttonBgColorSecondary
         config.baseForegroundColor = .buttonTextColorSecondary
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
         config.background.cornerRadius = 10
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -112,10 +124,10 @@ final class WrappingChipsView: UIView {
         var x: CGFloat = 0
         var y: CGFloat = 0
         var rowHeight: CGFloat = 0
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 12
         for chip in chips {
-            let size = chip.sizeThatFits(CGSize(width: width, height: 38))
-            let chipSize = CGSize(width: min(width, ceil(size.width)), height: 38)
+            let size = chip.sizeThatFits(CGSize(width: width, height: 36))
+            let chipSize = CGSize(width: min(width, ceil(size.width)), height: 36)
             if x > 0 && x + chipSize.width > width {
                 x = 0
                 y += rowHeight + spacing

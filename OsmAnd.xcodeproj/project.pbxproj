@@ -668,6 +668,7 @@
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
 		4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */; };
+		228EDAF170A7A81DF3A85783 /* UIImage+RouteActivityIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */; };
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
@@ -1415,8 +1416,6 @@
 		A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */; };
 		A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */; };
 		A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */; };
-		A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */; };
-		A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010F2F5100010000010F /* AstroArticleViewController.swift */; };
 		A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */; };
 		A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */; };
 		A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */; };
@@ -1706,6 +1705,7 @@
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
 		CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */; };
+		CE7339672FF6D01900A9B191 /* TrackPointsKDIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */; };
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		CE7AC1A82FE02A2600495411 /* OATrackPreviewMapRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19A2FE02A2600495411 /* OATrackPreviewMapRenderer.mm */; };
 		CE7AC1A92FE02A2600495411 /* TrackBitmapDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19B2FE02A2600495411 /* TrackBitmapDrawer.swift */; };
@@ -4426,6 +4426,7 @@
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
 		4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+RouteActivityIcon.swift"; sourceTree = "<group>"; };
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
@@ -5268,8 +5269,6 @@
 		A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroKnowledgeBaseController.swift; sourceTree = "<group>"; };
 		A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAstroImagesTask.swift; sourceTree = "<group>"; };
 		A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroGalleryLoader.swift; sourceTree = "<group>"; };
-		A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleWebViewClient.swift; sourceTree = "<group>"; };
-		A5A5010F2F5100010000010F /* AstroArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleViewController.swift; sourceTree = "<group>"; };
 		A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuAdapter.swift; sourceTree = "<group>"; };
 		A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDescriptionCardViewHolder.swift; sourceTree = "<group>"; };
 		A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroCatalogsCardViewHolder.swift; sourceTree = "<group>"; };
@@ -5749,6 +5748,7 @@
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchEmptyView.swift; sourceTree = "<group>"; };
+		CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPointsKDIndex.swift; sourceTree = "<group>"; };
 		CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuCell.swift; sourceTree = "<group>"; };
 		CE7AC1992FE02A2600495411 /* OATrackPreviewMapRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackPreviewMapRenderer.h; sourceTree = "<group>"; };
 		CE7AC19A2FE02A2600495411 /* OATrackPreviewMapRenderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackPreviewMapRenderer.mm; sourceTree = "<group>"; };
@@ -10665,8 +10665,6 @@
 		A5A501002F51000100000100 /* contextmenu */ = {
 			isa = PBXGroup;
 			children = (
-				A5A5010F2F5100010000010F /* AstroArticleViewController.swift */,
-				A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */,
 				A5A501152F51000100000115 /* AstroBottomSheetBehavior.swift */,
 				A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */,
 				A5A501052F51000100000105 /* AstroChartUtils.swift */,
@@ -10952,6 +10950,7 @@
 				CE7AC1A12FE02A2600495411 /* SaveGpxAsyncTask.swift */,
 				CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */,
 				CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */,
+				CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -14605,6 +14604,7 @@
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
+				8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */,
 				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 				CEAF081A2FD9226C0048A74A /* Array+Extension.swift */,
 			);
@@ -17572,8 +17572,6 @@
 				A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */,
 				A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */,
 				A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */,
-				A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */,
-				A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */,
 				A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */,
 				A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */,
 				A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */,
@@ -17972,6 +17970,7 @@
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
 				4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */,
+				228EDAF170A7A81DF3A85783 /* UIImage+RouteActivityIcon.swift in Sources */,
 				274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
@@ -18726,6 +18725,7 @@
 				DA5A845D26C563A900F274C7 /* OAMapillaryLayer.mm in Sources */,
 				DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */,
 				DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */,
+				CE7339672FF6D01900A9B191 /* TrackPointsKDIndex.swift in Sources */,
 				DA5A82FB26C563A800F274C7 /* OAImageDescTableViewCell.m in Sources */,
 				05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */,
 				DAA61CC62A039BC700AFF65D /* SideWidgetInfo.swift in Sources */,

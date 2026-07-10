@@ -24,6 +24,7 @@ final class CollectTracksTask: OAAsyncTask {
         self.fileName = fileName
         self.listener = listener
         super.init()
+        self.qos = .userInitiated
     }
 
     override func onPreExecute() {
@@ -101,9 +102,18 @@ final class CollectTracksTask: OAAsyncTask {
     }
 
     private func assignWaypoints(from sourceFile: GpxFile, to items: inout [ImportTrackItem]) {
-        for point in sourceFile.getPointsList() {
+        let pointsList = sourceFile.getPointsList()
+        guard !pointsList.isEmpty, !items.isEmpty else { return }
+
+        let itemsWaypoints = items.map { $0.selectedGpxFile.getAllSegmentsPoints() }
+        let index = TrackPointsKDIndex(itemsWaypoints: itemsWaypoints)
+
+        for point in pointsList {
             guard !isCancelled() else { return }
-            guard let nearestItem = findNearestTrack(for: point, in: items) else { continue }
+            guard let trackIndex = index.nearestTrackIndex(lat: point.lat, lon: point.lon, isCancelled: { [weak self] in
+                self?.isCancelled() ?? false }) else { continue }
+
+            let nearestItem = items[trackIndex]
             nearestItem.selectedPoints.append(point)
             nearestItem.suggestedPoints.append(point)
         }
@@ -145,30 +155,5 @@ final class CollectTracksTask: OAAsyncTask {
         }
         target.setAdditionalExaggeration(additionalExaggeration: source.getAdditionalExaggeration())
         target.setElevationMeters(elevation: source.getElevationMeters())
-    }
-
-    private func findNearestTrack(for point: WptPt, in items: [ImportTrackItem]) -> ImportTrackItem? {
-        var nearestItem: ImportTrackItem?
-        var minDistance = Double.greatestFiniteMagnitude
-
-        for item in items {
-            guard !isCancelled() else { return nil }
-
-            for waypoint in item.selectedGpxFile.getAllSegmentsPoints() {
-                guard !isCancelled() else { return nil }
-
-                let distance = KMapUtils.shared.getDistance(
-                    lat1: point.getLatitude(),
-                    lon1: point.getLongitude(),
-                    lat2: waypoint.getLatitude(),
-                    lon2: waypoint.getLongitude()
-                )
-                if distance < minDistance {
-                    minDistance = distance
-                    nearestItem = item
-                }
-            }
-        }
-        return nearestItem
     }
 }

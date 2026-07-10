@@ -19,6 +19,7 @@ static NSString * OTHER_MAP_CATEGORY = @"Other";
 - (void)setObject:(id)object;
 - (void) setup:(OAPOI *)poi;
 - (NSString *) getOsmUrl;
++ (NSString *) getTypeStrFor:(OAPOI *)amenity;
 
 - (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 

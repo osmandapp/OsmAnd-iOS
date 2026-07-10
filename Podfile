@@ -9,7 +9,6 @@ def defaultPods
     pod 'AFNetworking', '~> 2.7.0', :subspecs => ['Reachability', 'Serialization', 'Security', 'NSURLSession']
     pod 'JASidePanels', '~> 1.3.2'
     pod 'FFCircularProgressView', '~> 0.4'
-    pod 'FormatterKit', '~> 1.8.0'
     pod 'MBProgressHUD', '~> 0.9.1'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'MaterialComponents/TextFields', '~> 120.0.0'

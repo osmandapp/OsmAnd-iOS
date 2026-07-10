@@ -46,7 +46,6 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 
 + (void) showDeniedAlert;
 
-- (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation;
 - (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation;
 - (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation;
 - (CGFloat) radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude;

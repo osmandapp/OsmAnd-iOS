@@ -15,9 +15,11 @@ final class StarMapTimeControlCard: UIView {
     var onTimeButtonTapped: (() -> Void)?
     var onResetTapped: (() -> Void)?
 
-    private let timeButton = StarMapTimeControlButton()
-    private let resetButton = StarMapResetButton()
+    private let timeButton = StarMapPlainButton()
+    private let resetButton = StarMapPlainButton()
     private let mainStack = UIStackView()
+    
+    private var active: Bool = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,21 +40,29 @@ final class StarMapTimeControlCard: UIView {
         mainStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: resetButton.isHidden ? 16 : 0)
     }
 
-    func updateTheme(nightMode: Bool, active: Bool) {
+    func updateTheme(nightMode: Bool, active: Bool, pressed: Bool = false) {
+        self.active = active
+        
         StarMapGlassBackground.apply(
             to: self,
             active: active,
             nightMode: nightMode,
             cornerRadius: Self.cornerRadius
         )
-        timeButton.nightMode = nightMode
-        timeButton.active = active
-        resetButton.nightMode = nightMode
-        resetButton.active = active
+        timeButton.updateTheme(nightmod: nightMode, active: active)
+        resetButton.updateTheme(nightmod: nightMode, active: active)
         
-        backgroundColor = active
-        ? StarMapControlTheme.activeBackground(alpha: 0.5)
-        : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.5)
+        if pressed {
+            let pressedColorDay = UIColor(rgb: color_on_map_icon_background_color_tap_light).withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
+            let pressedColorNight = UIColor(rgb: color_on_map_icon_background_color_tap_dark).withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
+            backgroundColor = nightMode ? pressedColorNight : pressedColorDay
+        } else {
+            backgroundColor = active
+            ? StarMapControlTheme.activeBackground(alpha: StarMapControlTheme.defaultBackgroundAlpha)
+            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
+        }
+        
+        layer.borderWidth = nightMode ? 2 : 0
     }
 
     override func layoutSubviews() {
@@ -70,14 +80,24 @@ final class StarMapTimeControlCard: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = Self.cornerRadius
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.16
-        layer.shadowRadius = 6
+        layer.shadowOpacity = 0.35
+        layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
 
+        timeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        timeButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
+        timeButton.setImage(AstroIcon.template("ic_action_time"), for: .normal)
         timeButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         timeButton.addTarget(self, action: #selector(timeButtonTapped), for: .touchUpInside)
         timeButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
+        timeButton.onHighlightChange = { [weak self] isHighlighted in
+            guard let self else { return }
+            updateTheme(nightMode: OADayNightHelper.instance().isNightMode(), active: active, pressed: isHighlighted)
+        }
 
+        resetButton.setImage(.icCustomReset, for: .normal)
+        resetButton.accessibilityLabel = localizedString("shared_string_reset")
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
         resetButton.isHidden = true
         resetButton.widthAnchor.constraint(equalToConstant: Self.height).isActive = true

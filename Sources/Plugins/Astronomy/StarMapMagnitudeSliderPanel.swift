@@ -52,11 +52,13 @@ final class StarMapMagnitudeSliderPanel: UIView {
             nightMode: nightMode,
             cornerRadius: Self.cornerRadius
         )
-        let color = StarMapControlTheme.foreground(active: true, nightMode: nightMode)
+        let color: UIColor = OADayNightHelper.instance().isNightMode() ? .textColorPrimary.dark : .textColorPrimary.light
         titleLabel.textColor = color
         valueLabel.textColor = color
         
-        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: OADayNightHelper.instance().isNightMode(), alpha: 0.5)
+        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: OADayNightHelper.instance().isNightMode(), alpha: StarMapControlTheme.defaultBackgroundAlpha)
+        
+        layer.borderWidth = nightMode ? 2 : 0
     }
 
     override func layoutSubviews() {
@@ -72,11 +74,12 @@ final class StarMapMagnitudeSliderPanel: UIView {
 
     private func setupContent(maxMagnitude: Double) {
         translatesAutoresizingMaskIntoConstraints = false
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.16
-        layer.shadowRadius = 6
-        layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.cornerRadius = Self.cornerRadius
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowRadius = 5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
 
         titleLabel.text = localizedString("astro_min_magnitude")
         titleLabel.font = .preferredFont(forTextStyle: .subheadline)

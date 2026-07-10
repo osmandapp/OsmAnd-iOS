@@ -22,6 +22,7 @@ final class DateTimeSelectionView: UIView {
     private var currentDate = Date()
     private var onDateTimeChangeListener: ((Date) -> Void)?
     private var labels: [Field: UILabel] = [:]
+    private var buttons: [UIButton] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +32,13 @@ final class DateTimeSelectionView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initViews()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            applyColors()
+        }
     }
     
     func setOnDateTimeChangeListener(_ listener: @escaping (Date) -> Void) {
@@ -45,10 +53,27 @@ final class DateTimeSelectionView: UIView {
     func getDateTime() -> Date {
         currentDate
     }
+    
+    private func applyColors() {
+        let isNightMode = OADayNightHelper.instance().isNightMode()
+        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: isNightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
+        layer.borderWidth = isNightMode ? 2 : 0
+        let color: UIColor = isNightMode ? .textColorPrimary.dark : .textColorPrimary.light
+        labels.forEach {
+            $1.textColor = color
+        }
+        buttons.forEach {
+            $0.tintColor = color
+        }
+    }
 
     private func initViews() {
         layer.cornerRadius = 24
-        layer.shadowOpacity = 0
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowRadius = 5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
         clipsToBounds = true
 
         let stack = UIStackView()
@@ -73,8 +98,6 @@ final class DateTimeSelectionView: UIView {
             nightMode: OADayNightHelper.instance().isNightMode(),
             cornerRadius: 24
         )
-        
-        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: OADayNightHelper.instance().isNightMode(), alpha: 0.5)
 
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -83,6 +106,7 @@ final class DateTimeSelectionView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         updateDisplay()
+        applyColors()
     }
 
     private func addColumn(_ field: Field, to parent: UIStackView) {
@@ -98,7 +122,7 @@ final class DateTimeSelectionView: UIView {
         column.addArrangedSubview(up)
 
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = OADayNightHelper.instance().isNightMode() ? .textColorPrimary.dark : .textColorPrimary.light
         label.font = UIFont.monospacedDigitSystemFont(ofSize: 18, weight: .bold)
         label.textAlignment = .center
         label.widthAnchor.constraint(greaterThanOrEqualToConstant: field == .year ? 52 : 32).isActive = true
@@ -116,10 +140,11 @@ final class DateTimeSelectionView: UIView {
 
     private func makeStepButton(iconName: String) -> UIButton {
         let button = UIButton(type: .system)
-        button.tintColor = .white
+        button.tintColor = OADayNightHelper.instance().isNightMode() ? .textColorPrimary.dark : .textColorPrimary.light
         button.setImage(AstroIcon.template(iconName), for: .normal)
         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        buttons.append(button)
         return button
     }
 

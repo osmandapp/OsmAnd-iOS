@@ -29,7 +29,7 @@ enum StarMapGlassBackground {
         } else {
             view.backgroundColor = active
             ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.5)
+            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
             view.layer.cornerRadius = cornerRadius
         }
     }

@@ -9,6 +9,8 @@
 import UIKit
 
 enum StarMapControlTheme {
+    static let defaultBackgroundAlpha: CGFloat = 0.7
+    
     static func resolved(_ color: UIColor, nightMode: Bool) -> UIColor {
         nightMode ? color.dark : color.light
     }
@@ -18,7 +20,7 @@ enum StarMapControlTheme {
     }
 
     static func activeBackground(alpha: CGFloat = 1) -> UIColor {
-        UIColor.mapButtonBgColorActive.withAlphaComponent(alpha)
+        .mapButtonBgColorActive.withAlphaComponent(alpha)
     }
 
     static func foreground(active: Bool, nightMode: Bool) -> UIColor {
@@ -59,18 +61,13 @@ class StarMapButton: OAHudButton {
     }
 
     func updateTheme() {
-        guard showsHudChrome else {
-            applyPlainTheme()
-            return
-        }
-
         if active {
             unpressedColorDay = .mapButtonBgColorActive.light
             unpressedColorNight = .mapButtonBgColorActive.dark
             tintColorDay = .white
             tintColorNight = .white
             borderWidthDay = 0
-            borderWidthNight = 0
+            borderWidthNight = 2
         } else {
             unpressedColorDay = .mapButtonBgColorDefault.light
             unpressedColorNight = .mapButtonBgColorDefault.dark
@@ -79,10 +76,17 @@ class StarMapButton: OAHudButton {
             borderWidthDay = 0
             borderWidthNight = 2
         }
+        
+        guard showsHudChrome else {
+            applyPlainTheme()
+            return
+        }
 
         updateColors(forPressedState: isHighlighted)
         if active {
-            backgroundColor = StarMapControlTheme.activeBackground(alpha: 0.5)
+            backgroundColor = StarMapControlTheme.activeBackground(alpha: StarMapControlTheme.defaultBackgroundAlpha)
+        } else {
+            backgroundColor = backgroundColor?.withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
         }
     }
 
@@ -118,7 +122,7 @@ class StarMapButton: OAHudButton {
 
     private func applyPlainTheme() {
         backgroundColor = .clear
-        layer.borderWidth = 0
+        layer.borderWidth = nightMode ? 2 : 0
         layer.shadowOpacity = 0
         
         let color = active

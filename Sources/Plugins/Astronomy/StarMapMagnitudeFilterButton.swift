@@ -10,6 +10,12 @@ import UIKit
 
 final class StarMapMagnitudeFilterButton: StarMapButton {
     private static let pillCornerRadius: Int32 = 24
+    
+    override var isHighlighted: Bool {
+        didSet {
+            updateTheme()
+        }
+    }
 
     private let iconView = UIImageView(image: .icCustomMagnitude)
     private let valueLabel = UILabel()
@@ -35,14 +41,21 @@ final class StarMapMagnitudeFilterButton: StarMapButton {
         setImage(nil, for: .normal)
         imageView?.isHidden = true
         
-        let color = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
-        iconView.tintColor = color
-        valueLabel.textColor = color
+        if isHighlighted {
+            let color = StarMapControlTheme.foreground(active: false, nightMode: nightMode).withAlphaComponent(0.4)
+            iconView.tintColor = color
+            valueLabel.textColor = color
+        } else {
+            let color = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
+            iconView.tintColor = color
+            valueLabel.textColor = color
+        }
+        
+        layer.borderWidth = nightMode ? 2 : 0
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard showsHudChrome, bounds.width > 0, bounds.height > 0 else { return }
         if #available(iOS 26.0, *) {
             subviews.compactMap { $0 as? UIVisualEffectView }.forEach {
                 $0.frame = bounds

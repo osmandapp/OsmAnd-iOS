@@ -1400,8 +1400,6 @@
 		A5A500282F50000100000028 /* ConstellationInfoBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */; };
 		A5A5002A2F5000010000002A /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500292F50000100000029 /* DateTimeSelectionView.swift */; };
 		A5A5002C2F5000010000002C /* StarMapButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002B2F5000010000002B /* StarMapButton.swift */; };
-		A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002D2F5000010000002D /* StarMapResetButton.swift */; };
-		A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */; };
 		A5A500322F50000100000032 /* StarCompassButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500312F50000100000031 /* StarCompassButton.swift */; };
 		A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501022F51000100000102 /* AstroContextMenuItem.swift */; };
 		A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501032F51000100000103 /* AstroContextUiState.swift */; };
@@ -1725,7 +1723,7 @@
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
 		CE8215E52FFF6376002A8617 /* StarMapArControlCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */; };
-		CE8215E72FFF6AF9002A8617 /* StarMapPlainIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E62FFF6AF9002A8617 /* StarMapPlainIconButton.swift */; };
+		CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */; };
 		CE83DB4A2FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */; };
 		CE83DB4C2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
@@ -5259,8 +5257,6 @@
 		A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstellationInfoBottomSheet.swift; sourceTree = "<group>"; };
 		A5A500292F50000100000029 /* DateTimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeSelectionView.swift; sourceTree = "<group>"; };
 		A5A5002B2F5000010000002B /* StarMapButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapButton.swift; sourceTree = "<group>"; };
-		A5A5002D2F5000010000002D /* StarMapResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapResetButton.swift; sourceTree = "<group>"; };
-		A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapTimeControlButton.swift; sourceTree = "<group>"; };
 		A5A500312F50000100000031 /* StarCompassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarCompassButton.swift; sourceTree = "<group>"; };
 		A5A501022F51000100000102 /* AstroContextMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuItem.swift; sourceTree = "<group>"; };
 		A5A501032F51000100000103 /* AstroContextUiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextUiState.swift; sourceTree = "<group>"; };
@@ -5775,7 +5771,7 @@
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
 		CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapArControlCard.swift; sourceTree = "<group>"; };
-		CE8215E62FFF6AF9002A8617 /* StarMapPlainIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapPlainIconButton.swift; sourceTree = "<group>"; };
+		CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapPlainButton.swift; sourceTree = "<group>"; };
 		CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsView.swift; sourceTree = "<group>"; };
 		CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsProvider.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
@@ -10662,10 +10658,8 @@
 				A5A501002F51000100000100 /* contextmenu */,
 				A5A503202F51000200000320 /* search */,
 				A5A500292F50000100000029 /* DateTimeSelectionView.swift */,
-				CE8215E62FFF6AF9002A8617 /* StarMapPlainIconButton.swift */,
+				CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */,
 				A5A5002B2F5000010000002B /* StarMapButton.swift */,
-				A5A5002D2F5000010000002D /* StarMapResetButton.swift */,
-				A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */,
 				CE762AF32FFE251B001BF551 /* StarMapTimeControlCard.swift */,
 				A5A500312F50000100000031 /* StarCompassButton.swift */,
 				CE762AED2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift */,
@@ -17575,8 +17569,6 @@
 				A5A500282F50000100000028 /* ConstellationInfoBottomSheet.swift in Sources */,
 				A5A5002A2F5000010000002A /* DateTimeSelectionView.swift in Sources */,
 				A5A5002C2F5000010000002C /* StarMapButton.swift in Sources */,
-				A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */,
-				A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */,
 				A5A500322F50000100000032 /* StarCompassButton.swift in Sources */,
 				A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */,
 				A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */,
@@ -18708,7 +18700,7 @@
 				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
-				CE8215E72FFF6AF9002A8617 /* StarMapPlainIconButton.swift in Sources */,
+				CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */,
 				D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */,
 				FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */,
 				DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */,

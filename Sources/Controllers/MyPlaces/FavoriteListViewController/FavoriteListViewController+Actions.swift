@@ -423,7 +423,7 @@ extension FavoriteListViewController {
         appendFavoritePointShareLine(point.itemDescription, to: sharingText)
         appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
         if let url = URL(string: OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)) {
-            items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon))
+            items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon()))
         }
         if sharingText.length > 0 {
             items.append(sharingText)

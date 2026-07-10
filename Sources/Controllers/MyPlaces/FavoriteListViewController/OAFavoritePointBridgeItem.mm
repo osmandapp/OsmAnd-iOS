@@ -35,12 +35,16 @@
         _latitude = [favorite getLatitude];
         _longitude = [favorite getLongitude];
         _timestampDate = [favorite getTimestamp];
-        _icon = [favorite getCompositeIcon];
         _isVisible = [favorite isVisible];
         _favorite = favorite;
     }
 
     return self;
+}
+
+- (UIImage *)icon
+{
+    return [_favorite getCompositeIcon];
 }
 
 - (void)updateDistanceAndDirection

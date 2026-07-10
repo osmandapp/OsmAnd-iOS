@@ -134,7 +134,7 @@ extension FavoriteListViewController {
     }
     
     func hasSearchResults() -> Bool {
-        !searchFavoritePointRows(allFolders: favoriteFolders(), parentGroupName: searchParentGroupName).isEmpty
+        layoutSections.contains(.content)
     }
 
     func shouldHideSearchToolbar() -> Bool {

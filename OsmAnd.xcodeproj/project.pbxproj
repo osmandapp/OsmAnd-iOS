@@ -24,6 +24,7 @@
 		FA7000012F90000000000005 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F9000000000001F /* JASidePanelController.m */; };
 		FA7000012F90000000000006 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000021 /* UIViewController+JASidePanel.m */; };
 		FA7000012F90000000000007 /* MCBinaryHeap.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000024 /* MCBinaryHeap.m */; };
+		FA7000012F90000000000008 /* MaterialTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000027 /* MaterialTextFields.m */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
@@ -6453,6 +6454,8 @@
 		FA7000012F90000000000021 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		FA7000012F90000000000023 /* MCBinaryHeap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCBinaryHeap.h; sourceTree = "<group>"; };
 		FA7000012F90000000000024 /* MCBinaryHeap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCBinaryHeap.m; sourceTree = "<group>"; };
+		FA7000012F90000000000026 /* MaterialTextFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialTextFields.h; sourceTree = "<group>"; };
+		FA7000012F90000000000027 /* MaterialTextFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaterialTextFields.m; sourceTree = "<group>"; };
 		DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapButtonsHelper.m; sourceTree = "<group>"; };
 		DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteAction.mm; sourceTree = "<group>"; };
 		DA5A79DA26C563A000F274C7 /* OANavReplaceDestinationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavReplaceDestinationAction.h; sourceTree = "<group>"; };
@@ -11818,6 +11821,7 @@
 				FA7000012F9000000000001D /* JASidePanels */,
 				FA7000012F9000000000001A /* MBProgressHUD */,
 				FA7000012F90000000000022 /* MCBinaryHeap */,
+				FA7000012F90000000000025 /* MaterialTextFields */,
 				DA5A79CF26C563A000F274C7 /* MGSwipeTableCell */,
 				FA7000012F90000000000016 /* TTRangeSlider */,
 			);
@@ -11872,6 +11876,15 @@
 				FA7000012F90000000000024 /* MCBinaryHeap.m */,
 			);
 			path = MCBinaryHeap;
+			sourceTree = "<group>";
+		};
+		FA7000012F90000000000025 /* MaterialTextFields */ = {
+			isa = PBXGroup;
+			children = (
+				FA7000012F90000000000026 /* MaterialTextFields.h */,
+				FA7000012F90000000000027 /* MaterialTextFields.m */,
+			);
+			path = MaterialTextFields;
 			sourceTree = "<group>";
 		};
 		DA5A79CF26C563A000F274C7 /* MGSwipeTableCell */ = {
@@ -18605,6 +18618,7 @@
 				27D33B512E7454EA00AD4F70 /* BaseMapScrollAction.swift in Sources */,
 				FAB744112FB4672B0001FFF8 /* AlertPresenter.swift in Sources */,
 				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
+				FA7000012F90000000000008 /* MaterialTextFields.m in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
 				DA5A847426C563A900F274C7 /* OAMapWidgetRegistry.mm in Sources */,
 				DA5A814926C563A700F274C7 /* OADirectionsGridController.m in Sources */,

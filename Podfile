@@ -7,7 +7,6 @@ workspace 'OsmAnd'
 
 def defaultPods
     pod 'AFNetworking', '~> 2.7.0', :subspecs => ['Reachability', 'Serialization', 'Security', 'NSURLSession']
-    pod 'MaterialComponents/TextFields', '~> 120.0.0'
     pod 'BRCybertron', '~> 1.1.1'
 end
 

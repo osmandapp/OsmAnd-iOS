@@ -4391,3 +4391,17 @@
 "ais_ship_type" = "Typ lodi";
 "ais_antenna_offsets_format" = "bow %ld, stern %ld, port %ld, starboard %ld m";
 "ais_last_update" = "Poslední aktualizace";
+"distance_nearest" = "Nejbližší jako první";
+"distance_farthest" = "Nejvzdálenější jako první";
+"shared_string_pinned" = "Připnuto";
+"delete_groups_confirmation" = "Smazat skupiny?";
+"add_to_track" = "Přidat ke stopě";
+"unpin_folder" = "Odepnout složku";
+"pin_folder" = "Připnout složku";
+"no_search_results" = "Žádné výsledky";
+"favorite_search_empty_state_description" = "Upravte hledání nebo filtry, abyste zjistili, zda to pomáhá";
+"favorites_empty_folder_description" = "Tato složka ještě nemá žádné body.";
+"favorites_delete_confirmation_title" = "Odstranit %ld oblíbené?";
+"items_delete_confirmation_title" = "Odstranit %ld položky?";
+"folders_delete_confirmation_title" = "Odstranit %ld složky?";
+"favorites_delete_confirmation_message" = "Tuto akci nelze vrátit zpět.";

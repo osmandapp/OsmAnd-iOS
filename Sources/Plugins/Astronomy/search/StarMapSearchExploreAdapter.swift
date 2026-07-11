@@ -215,7 +215,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             cell.configure(icon: nil,
                            title: localizedString("shared_string_view_all"),
                            subtitle: nil,
-                           trailingText: String(count),
+                           trailingText: nil,
                            config: .button)
             return cell
         }

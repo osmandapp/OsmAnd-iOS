@@ -19,6 +19,7 @@ struct StarMapSearchSortFilterChipOption {
     let id: String
     let title: String
     let image: UIImage?
+    let originalSizeImage: UIImage?
     let isSelected: Bool
 }
 
@@ -307,7 +308,7 @@ final class StarMapSearchSortFilterChipsView: UIView {
     private func makeMenuAction(option: StarMapSearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {
         UIAction(
             title: option.title,
-            image: option.image,
+            image: option.originalSizeImage,
             state: option.isSelected ? .on : .off
         ) { [weak self] _ in
             guard let self else {

@@ -66,6 +66,7 @@ enum StarMapSearchEmptyConfig {
 final class StarMapSearchEmptyView: UIView {
 
     private enum Layout {
+        static let myDataContentPadding: CGFloat = 16
         static let contentPadding: CGFloat = 30
         static let textSpacing: CGFloat = 8
         static let iconSize: CGFloat = 60
@@ -78,6 +79,7 @@ final class StarMapSearchEmptyView: UIView {
     var onAction: (() -> Void)?
 
     private let containerStack = UIStackView()
+    private let contentStack = UIStackView()
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -97,6 +99,20 @@ final class StarMapSearchEmptyView: UIView {
         titleLabel.text = config.title
         descriptionLabel.text = config.description
         actionButton.setTitle(config.actionTitle, for: .normal)
+        
+        containerStack.layoutMargins = UIEdgeInsets(
+            top: Layout.contentPadding,
+            left: config == .searchNoResults ? Layout.contentPadding : Layout.myDataContentPadding,
+            bottom: config == .searchNoResults ? Layout.buttonPadding : Layout.myDataContentPadding,
+            right: config == .searchNoResults ? Layout.contentPadding : Layout.myDataContentPadding
+        )
+        
+        contentStack.layoutMargins = UIEdgeInsets(
+            top: 0,
+            left: config == .searchNoResults ? 0 : Layout.myDataContentPadding,
+            bottom: 0,
+            right: config == .searchNoResults ? 0 : Layout.myDataContentPadding
+        )
     }
 
     private func setupView() {
@@ -104,8 +120,8 @@ final class StarMapSearchEmptyView: UIView {
         cornerRadius = Layout.cornerRadius
         
         containerStack.axis = .vertical
-        containerStack.alignment = .center
-        containerStack.spacing = Layout.textSpacing
+        containerStack.alignment = .fill
+        containerStack.spacing = Layout.buttonPadding
         containerStack.backgroundColor = .clear
         containerStack.layoutMargins = UIEdgeInsets(
             top: Layout.contentPadding,
@@ -116,25 +132,40 @@ final class StarMapSearchEmptyView: UIView {
         containerStack.isLayoutMarginsRelativeArrangement = true
         containerStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(containerStack)
+        
+        contentStack.axis = .vertical
+        contentStack.alignment = .center
+        contentStack.spacing = Layout.textSpacing
+        contentStack.backgroundColor = .clear
+        contentStack.layoutMargins = UIEdgeInsets(
+            top: 0,
+            left: Layout.myDataContentPadding,
+            bottom: 0,
+            right: Layout.myDataContentPadding
+        )
+        contentStack.isLayoutMarginsRelativeArrangement = true
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
 
         iconView.contentMode = .scaleAspectFit
         iconView.tintColor = .iconColorDefault
+        iconView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .textColorPrimary
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         descriptionLabel.adjustsFontForContentSizeCategory = true
         descriptionLabel.textColor = .textColorSecondary
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
 
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         actionButton.addTarget(self, action: #selector(actionPressed), for: .touchUpInside)
 
         var configuration = UIButton.Configuration.filled()
-        configuration.cornerStyle = .small
         configuration.baseBackgroundColor = .buttonBgColorTertiary
         configuration.baseForegroundColor = .buttonTextColorSecondary
         configuration.background.cornerRadius = Layout.buttonCornerRadius
@@ -145,13 +176,13 @@ final class StarMapSearchEmptyView: UIView {
         }
         actionButton.configuration = configuration
 
-        containerStack.addArrangedSubview(iconView)
-        containerStack.addArrangedSubview(titleLabel)
-        containerStack.addArrangedSubview(descriptionLabel)
+        contentStack.addArrangedSubview(iconView)
+        contentStack.addArrangedSubview(titleLabel)
+        contentStack.addArrangedSubview(descriptionLabel)
+        containerStack.addArrangedSubview(contentStack)
         containerStack.addArrangedSubview(actionButton)
         
-        containerStack.setCustomSpacing(Layout.contentPadding, after: iconView)
-        containerStack.setCustomSpacing(Layout.buttonPadding, after: descriptionLabel)
+        contentStack.setCustomSpacing(Layout.contentPadding, after: iconView)
 
         NSLayoutConstraint.activate([
             containerStack.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -162,11 +193,7 @@ final class StarMapSearchEmptyView: UIView {
             iconView.heightAnchor.constraint(equalToConstant: Layout.iconSize),
             iconView.widthAnchor.constraint(equalToConstant: Layout.iconSize),
 
-            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.buttonHeight),
-            actionButton.widthAnchor.constraint(
-                equalTo: containerStack.widthAnchor,
-                constant: -2 * Layout.contentPadding
-            )
+            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.buttonHeight)
         ])
     }
 

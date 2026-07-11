@@ -1319,6 +1319,36 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     func isSearchRedFilterEnabled() -> Bool {
         starView.showRedFilter
     }
+    
+    func makeSearchObjectActionHandler() -> StarMapObjectActionHandler {
+        StarMapObjectActionHandler(
+            onFavoriteChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled { settings.addFavorite(id: object.id) }
+                else { settings.removeFavorite(id: object.id) }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+            },
+            onDirectionChanged: { [weak self] object, enabled in
+                guard let self else { return object.colorIndex }
+                let colorIndex = enabled ? settings.addDirection(id: object.id) : object.colorIndex
+                if !enabled { settings.removeDirection(id: object.id) }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+                return colorIndex
+            },
+            onCelestialPathChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled { settings.addCelestialPath(id: object.id) }
+                else { settings.removeCelestialPath(id: object.id) }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+            },
+            onSetObjectPinned: { [weak self] object, pinned, forceUpdate in
+                self?.starView.setObjectPinned(object, pinned: pinned, forceUpdate: forceUpdate)
+            }
+        )
+    }
 
     @objc private func close() {
         dismiss(animated: true)

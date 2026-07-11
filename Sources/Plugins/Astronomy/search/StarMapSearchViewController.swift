@@ -150,17 +150,28 @@ final class StarMapSearchViewController: UIViewController {
     private lazy var searchAdapter = StarMapSearchResultsAdapter(
         tableView: searchRecycler,
         snapshot: .empty,
-        widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
+        widToDisplayName: { [weak self] in
+            self?.widToDisplayName ?? [:]
+        },
         starConstellationNameForObject: { [weak self] object in
             guard let self else { return nil }
             return starConstellationNameByObjectId[object.id]
         },
-        eventTextProvider: { [weak self] entry in self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "") },
+        eventTextProvider: { [weak self] entry in
+            self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "")
+        },
         visibilityAttributedTextProvider: { [weak self] entry in
             self?.searchHelper.resolveConstellationVisibilityAttributedText(entry) ?? NSAttributedString(string: "")
         },
-        onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
-        onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
+        onScroll: { [weak self] scrollView in
+            self?.updateSortFilterBarTopConstraint(scrollView)
+        },
+        onEntrySelected: { [weak self] entry in
+            self?.onSearchEntrySelected(entry)
+        },
+        contextMenuProvider: { [weak self] entry in
+            self?.contextMenuProvider(for: entry)
+        }
     )
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
         tableView: searchRecycler,
@@ -280,6 +291,8 @@ final class StarMapSearchViewController: UIViewController {
             updateTableAdapter()
         }
         navigationController?.setNavigationBarHidden(!searchCancelButton.isHidden, animated: false)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -413,8 +426,11 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Navigation
 
     private func setupNavigationBar() {
+        navigationController?.viewRespectsSystemMinimumLayoutMargins = false
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.layoutMargins.left = 16
+        view.directionalLayoutMargins.leading = 16
+        view.directionalLayoutMargins.trailing = 16
         updateNavigationBar()
     }
 
@@ -491,6 +507,11 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Table
 
     private func setupSearchRecycler() {
+        viewRespectsSystemMinimumLayoutMargins = false
+        searchRecycler.cellLayoutMarginsFollowReadableWidth = false
+        searchRecycler.directionalLayoutMargins.leading = Layout.contentPadding
+        searchRecycler.directionalLayoutMargins.trailing = Layout.contentPadding
+        searchRecycler.backgroundColor = .viewBg
         updateTableAdapter()
     }
 
@@ -518,6 +539,19 @@ final class StarMapSearchViewController: UIViewController {
 
     private func updateResultsAdapter() {
         updateTableAdapter()
+    }
+    
+    private func contextMenuProvider(for entry: StarMapSearchEntry) -> UIContextMenuConfiguration? {
+        guard let parent = parentStarMapController else { return nil }
+        
+        let handler = parent.makeSearchObjectActionHandler()
+        
+        return StarMapObjectContextMenuBuilder.makeConfiguration(
+            for: entry.objectRef,
+            handler: handler
+        ) { [weak self] in
+            self?.applyFiltersAndSort(scrollToTop: false)
+        }
     }
 
     // MARK: - Mode
@@ -981,9 +1015,10 @@ final class StarMapSearchViewController: UIViewController {
     }
 
     private func resetAllSearchParams() {
-        if shouldShowCatalogEntries() {
-            searchState.query = ""
-            searchState.sortMode = .NAME_ASC
+        if searchState.hasBrowseContext() {
+            let preset = searchState.quickPresetType
+            let catalogWid = searchState.quickPresetCatalogWid
+            searchState.prepareForExploreEntry(preset, catalogWid: catalogWid)
             currentFullSearchMode = currentMode == .FULL_SEARCH && currentFullSearchMode == .BROWSE ? .BROWSE : .INPUT
             syncSearchQuery()
             if currentMode == .FULL_SEARCH && currentFullSearchMode == .INPUT {
@@ -1149,5 +1184,14 @@ extension StarMapSearchViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+extension StarMapSearchViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === navigationController?.interactivePopGestureRecognizer else {
+            return true
+        }
+        return (navigationController?.viewControllers.count ?? 0) > 1
     }
 }

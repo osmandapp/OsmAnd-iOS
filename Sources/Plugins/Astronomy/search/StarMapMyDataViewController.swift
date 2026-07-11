@@ -104,7 +104,9 @@ final class StarMapMyDataViewController: UIViewController {
     private lazy var searchAdapter = StarMapSearchResultsAdapter(
         tableView: searchRecycler,
         snapshot: .empty,
-        widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
+        widToDisplayName: { [weak self] in
+            self?.widToDisplayName ?? [:]
+        },
         starConstellationNameForObject: { [weak self] object in
             guard let self else { return nil }
             return starConstellationNameByObjectId[object.id]
@@ -116,7 +118,12 @@ final class StarMapMyDataViewController: UIViewController {
             self?.searchHelper.resolveConstellationVisibilityAttributedText(entry) ?? NSAttributedString(string: "")
         },
         onScroll: { _ in },
-        onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
+        onEntrySelected: { [weak self] entry in
+            self?.onSearchEntrySelected(entry)
+        },
+        contextMenuProvider: { [weak self] entry in
+            self?.contextMenuProvider(for: entry)
+        }
     )
 
     private lazy var searchPreparedDataFactory = StarMapSearchPreparedDataFactory(
@@ -162,6 +169,12 @@ final class StarMapMyDataViewController: UIViewController {
         updateEmptyStateContent()
         applyRedFilter(enabled: redFilterEnabled)
         applyFiltersAndSort(scrollToTop: false)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     func applyRedFilter(enabled: Bool) {
@@ -289,6 +302,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func setupSearchRecycler() {
+        searchRecycler.backgroundColor = .viewBg
         searchRecycler.dataSource = searchAdapter
         searchRecycler.delegate = searchAdapter
     }
@@ -468,6 +482,19 @@ final class StarMapMyDataViewController: UIViewController {
     private func isSearching() -> Bool {
         !searchState.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+    
+    private func contextMenuProvider(for entry: StarMapSearchEntry) -> UIContextMenuConfiguration? {
+        guard let parent = parentStarMapController else { return nil }
+        
+        let handler = parent.makeSearchObjectActionHandler()
+        
+        return StarMapObjectContextMenuBuilder.makeConfiguration(
+            for: entry.objectRef,
+            handler: handler
+        ) { [weak self] in
+            self?.applyFiltersAndSort(scrollToTop: false)
+        }
+    }
 
     // MARK: - UI updates
 
@@ -553,8 +580,7 @@ final class StarMapMyDataViewController: UIViewController {
     @objc private func myDataSegmentChanged(_ sender: UISegmentedControl) {
         guard let tab = Tab(rawValue: sender.selectedSegmentIndex), tab != currentTab else { return }
         currentTab = tab
-        searchState.prepareForExploreEntry(tab.quickPresetType, catalogWid: nil)
-        syncSearchQuery()
+        searchState.quickPresetType = tab.quickPresetType
         updateSortFilterBar()
         updateEmptyStateContent()
         applyFiltersAndSort(scrollToTop: true)
@@ -597,5 +623,14 @@ extension StarMapMyDataViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+extension StarMapMyDataViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === navigationController?.interactivePopGestureRecognizer else {
+            return true
+        }
+        return (navigationController?.viewControllers.count ?? 0) > 1
     }
 }

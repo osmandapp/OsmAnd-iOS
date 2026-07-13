@@ -630,9 +630,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadGpxTracks() {
-        var loadedPaths = Set<String>()
         allGpxList = OAGPXDatabase.sharedDb().getDataItems()
-            .filter { loadedPaths.insert(normalizedGpxPath($0.gpxFilePath)).inserted }
             .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
         isTracksAvailable = !allGpxList.isEmpty
     }

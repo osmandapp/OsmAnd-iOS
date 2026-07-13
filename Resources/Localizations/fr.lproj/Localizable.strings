@@ -4148,7 +4148,7 @@
 "astro_search_info_nebulas" = "Une nébuleuse est un gigantesque nuage de poussière et de gaz dans l'espace, qui constitue souvent un lieu de naissance des étoiles.";
 "astro_search_info_star_clusters" = "Un amas stellaire est un groupe d'étoiles liées entre elles par la gravité et issues du même nuage moléculaire.";
 "astro_search_info_deep_sky" = "Les objets du ciel profond comprennent les galaxies, les nébuleuses, les amas d'étoiles et d'autres cibles astronomiques lointaines.";
-"astro_search_empty_description" = "Essayez de modifier les filtres ou la durée d'observation.";
+"astro_search_empty_description" = "Affinez votre recherche ou modifiez les filtres.";
 "star_map" = "Carte du ciel";
 "astro_configure_view" = "Configurer l'affichage";
 "ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
@@ -4268,3 +4268,18 @@
 "tracks_empty_folder_description" = "Ce dossier ne comporte encore aucun point.";
 "delete_favorite_confirmation_title" = "Supprimer « %@ » ?";
 "add_new_folder" = "Ajouter un nouveau dossier";
+"add_to_track" = "Ajouter à l'itinéraire";
+"ais_mmsi" = "MMSI";
+"ais_imo" = "IMO";
+"ais_ship_name" = "Nom du navire";
+"ais_cpa" = "CPA";
+"ais_tcpa" = "TCPA";
+"ais_cog" = "COG";
+"ais_sog" = "SOG";
+"ais_rate_of_turn" = "Vitesse de virage";
+"ais_eta" = "ETA";
+"ais_object_type" = "Type d'AIS";
+"ais_ship_type" = "Type de navire";
+"ais_position" = "Poste";
+"ais_destination" = "Destination";
+"ais_message_types" = "Types de messages AIS";

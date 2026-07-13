@@ -83,11 +83,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.cellReuseId)
-        tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.cellReuseId)
-        tableView.register(PlanRouteEmptyCell.self, forCellReuseIdentifier: PlanRouteEmptyCell.cellReuseId)
-        tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.cellReuseId)
-        tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseId)
+        tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.reuseIdentifier)
+        tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.reuseIdentifier)
+        tableView.register(PlanRouteEmptyCell.self, forCellReuseIdentifier: PlanRouteEmptyCell.reuseIdentifier)
+        tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.reuseIdentifier)
+        tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -314,19 +314,19 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = sections[indexPath.section]
         if section.isStartNewSegment {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteStartSegmentCell.cellReuseId, for: indexPath) as? PlanRouteStartSegmentCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteStartSegmentCell.reuseIdentifier, for: indexPath) as? PlanRouteStartSegmentCell else {
                 return UITableViewCell()
             }
             return cell
         }
         switch section.rows[indexPath.row] {
         case .empty:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteEmptyCell.cellReuseId, for: indexPath) as? PlanRouteEmptyCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteEmptyCell.reuseIdentifier, for: indexPath) as? PlanRouteEmptyCell else {
                 return UITableViewCell()
             }
             return cell
         case let .profileGroup(group, segment):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteProfileGroupCell.cellReuseId, for: indexPath) as? PlanRouteProfileGroupCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteProfileGroupCell.reuseIdentifier, for: indexPath) as? PlanRouteProfileGroupCell else {
                 return UITableViewCell()
             }
             let mode = group.appMode
@@ -337,7 +337,7 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
                            menu: makeGroupMenu(for: group, in: segment))
             return cell
         case let .point(point, color):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRoutePointCell.cellReuseId, for: indexPath) as? PlanRoutePointCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRoutePointCell.reuseIdentifier, for: indexPath) as? PlanRoutePointCell else {
                 return UITableViewCell()
             }
             cell.configure(with: point, tintColor: color)
@@ -358,7 +358,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let title = sections[section].headerTitle else { return nil }
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRouteSegmentHeaderView.reuseId) as? PlanRouteSegmentHeaderView else {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier) as? PlanRouteSegmentHeaderView else {
             return nil
         }
         header.configure(title: title, subtitle: sections[section].headerSubtitle, menu: sections[section].headerMenu)

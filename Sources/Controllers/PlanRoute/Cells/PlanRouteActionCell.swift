@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRouteActionCell: UITableViewCell {
-    static let reuseId = "PlanRouteActionCell"
+    static let reuseIdentifier = "PlanRouteActionCell"
 
     private static let leadingInset: CGFloat = 20
     private static let trailingInset: CGFloat = 16

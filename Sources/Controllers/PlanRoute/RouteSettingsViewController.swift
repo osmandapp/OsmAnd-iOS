@@ -60,8 +60,8 @@ final class RouteSettingsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(RouteSettingToggleCell.self, forCellReuseIdentifier: RouteSettingToggleCell.reuseId)
-        tableView.register(RouteSettingNavigationCell.self, forCellReuseIdentifier: RouteSettingNavigationCell.reuseId)
+        tableView.register(RouteSettingToggleCell.self, forCellReuseIdentifier: RouteSettingToggleCell.reuseIdentifier)
+        tableView.register(RouteSettingNavigationCell.self, forCellReuseIdentifier: RouteSettingNavigationCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -84,7 +84,7 @@ extension RouteSettingsViewController: UITableViewDataSource {
         let row = sections[indexPath.section].rows[indexPath.row]
         switch row {
         case .useElevationData:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingToggleCell.reuseId, for: indexPath) as? RouteSettingToggleCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingToggleCell.reuseIdentifier, for: indexPath) as? RouteSettingToggleCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_use_elevation_data"),
@@ -95,13 +95,13 @@ extension RouteSettingsViewController: UITableViewDataSource {
             }
             return cell
         case .avoidRoads:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingNavigationCell.reuseId, for: indexPath) as? RouteSettingNavigationCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingNavigationCell.reuseIdentifier, for: indexPath) as? RouteSettingNavigationCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_avoid_roads"))
             return cell
         case .considerTempLimitations:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingToggleCell.reuseId, for: indexPath) as? RouteSettingToggleCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingToggleCell.reuseIdentifier, for: indexPath) as? RouteSettingToggleCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_consider_temp_limitations"),
@@ -112,7 +112,7 @@ extension RouteSettingsViewController: UITableViewDataSource {
             }
             return cell
         case .navigationSettings:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingNavigationCell.reuseId, for: indexPath) as? RouteSettingNavigationCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteSettingNavigationCell.reuseIdentifier, for: indexPath) as? RouteSettingNavigationCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_navigation_settings"))

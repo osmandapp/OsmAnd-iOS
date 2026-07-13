@@ -82,8 +82,8 @@ final class RouteBetweenPointsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(RouteGroupCell.self, forCellReuseIdentifier: RouteGroupCell.reuseId)
-        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseId)
+        tableView.register(RouteGroupCell.self, forCellReuseIdentifier: RouteGroupCell.reuseIdentifier)
+        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseIdentifier)
         tableView.tableHeaderView = makeHintHeaderView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -186,25 +186,25 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
         let row = sections[indexPath.section].rows[indexPath.row]
         switch row {
         case let .profileGroup(group, _):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteGroupCell.reuseId, for: indexPath) as? RouteGroupCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteGroupCell.reuseIdentifier, for: indexPath) as? RouteGroupCell else {
                 return UITableViewCell()
             }
             cell.configure(group: group)
             return cell
         case let .changeWholeSegment(segment):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteGroupCell.reuseId, for: indexPath) as? RouteGroupCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteGroupCell.reuseIdentifier, for: indexPath) as? RouteGroupCell else {
                 return UITableViewCell()
             }
             cell.configureWholeSegment(segment: segment)
             return cell
         case .startNewSegment:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseId, for: indexPath) as? PlanRouteActionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false)
             return cell
         case .changeWholeTrack:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseId, for: indexPath) as? PlanRouteActionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_change_for_whole_track"), isDestructive: false)

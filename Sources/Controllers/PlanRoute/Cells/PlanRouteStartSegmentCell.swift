@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRouteStartSegmentCell: UITableViewCell {
-    static let cellReuseId = "PlanRouteStartSegmentCell"
+    static let reuseIdentifier = "PlanRouteStartSegmentCell"
 
     private let titleLabel = UILabel()
 

@@ -80,7 +80,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(PlanRouteMenuActionCell.self, forCellReuseIdentifier: PlanRouteMenuActionCell.reuseId)
+        tableView.register(PlanRouteMenuActionCell.self, forCellReuseIdentifier: PlanRouteMenuActionCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -239,7 +239,7 @@ extension PlanRoutePointMenuViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = sections[indexPath.section][indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteMenuActionCell.reuseId, for: indexPath) as? PlanRouteMenuActionCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteMenuActionCell.reuseIdentifier, for: indexPath) as? PlanRouteMenuActionCell else {
             return UITableViewCell()
         }
         cell.configure(model: model)

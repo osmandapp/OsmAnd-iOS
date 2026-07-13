@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
-    static let reuseId = "PlanRouteSegmentHeaderView"
+    static let reuseIdentifier = "PlanRouteSegmentHeaderView"
 
     private static let optionsButtonSize: CGFloat = 44
 

@@ -153,7 +153,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseId)
+        tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -1193,7 +1193,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard case .hasData = currentState,
               section >= roadAttributesSectionStart,
-              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: AnalyzeRouteAttributeHeaderView.reuseId) as? AnalyzeRouteAttributeHeaderView,
+              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier) as? AnalyzeRouteAttributeHeaderView,
               let stat = roadAttributeStatistic(for: section) else { return nil }
 
         let statIndex = section - roadAttributesSectionStart

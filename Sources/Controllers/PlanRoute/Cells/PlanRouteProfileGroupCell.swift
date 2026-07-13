@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRouteProfileGroupCell: UITableViewCell {
-    static let cellReuseId = "PlanRouteProfileGroupCell"
+    static let reuseIdentifier = "PlanRouteProfileGroupCell"
 
     private static let iconSize: CGFloat = 24
     private static let optionsButtonSize: CGFloat = 30

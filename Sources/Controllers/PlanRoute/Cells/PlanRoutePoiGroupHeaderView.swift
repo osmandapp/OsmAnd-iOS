@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
-    static let reuseId = "PlanRoutePoiGroupHeaderView"
+    static let reuseIdentifier = "PlanRoutePoiGroupHeaderView"
     private static let buttonSize: CGFloat = 44
 
     private let titleLabel = UILabel()

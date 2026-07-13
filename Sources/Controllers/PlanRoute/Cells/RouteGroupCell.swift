@@ -8,7 +8,7 @@
 import UIKit
 
 final class RouteGroupCell: UITableViewCell {
-    static let reuseId = "RouteGroupCell"
+    static let reuseIdentifier = "RouteGroupCell"
 
     private static let leadingInset: CGFloat = 20
     private static let iconSize: CGFloat = 24

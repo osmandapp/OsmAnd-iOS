@@ -61,8 +61,8 @@ final class RouteTypeViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(RouteTypeModeCell.self, forCellReuseIdentifier: RouteTypeModeCell.reuseId)
-        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseId)
+        tableView.register(RouteTypeModeCell.self, forCellReuseIdentifier: RouteTypeModeCell.reuseIdentifier)
+        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -106,7 +106,7 @@ extension RouteTypeViewController: UITableViewDataSource {
         let row = sections[indexPath.section].rows[indexPath.row]
         switch row {
         case .straightLine:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteTypeModeCell.reuseId, for: indexPath) as? RouteTypeModeCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteTypeModeCell.reuseIdentifier, for: indexPath) as? RouteTypeModeCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_straight_line"),
@@ -115,7 +115,7 @@ extension RouteTypeViewController: UITableViewDataSource {
                            isSelected: selectedMode == nil)
             return cell
         case let .mode(mode):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteTypeModeCell.reuseId, for: indexPath) as? RouteTypeModeCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteTypeModeCell.reuseIdentifier, for: indexPath) as? RouteTypeModeCell else {
                 return UITableViewCell()
             }
             cell.configure(title: mode.toHumanString() ?? "",
@@ -124,7 +124,7 @@ extension RouteTypeViewController: UITableViewDataSource {
                            isSelected: isSelected(mode))
             return cell
         case .startNewSegment:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseId, for: indexPath) as? PlanRouteActionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false)

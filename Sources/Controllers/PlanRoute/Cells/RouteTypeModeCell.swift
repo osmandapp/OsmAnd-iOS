@@ -8,7 +8,7 @@
 import UIKit
 
 final class RouteTypeModeCell: UITableViewCell {
-    static let reuseId = "RouteTypeModeCell"
+    static let reuseIdentifier = "RouteTypeModeCell"
 
     private static let checkmarkSize: CGFloat = 20
     private static let iconSize: CGFloat = 24

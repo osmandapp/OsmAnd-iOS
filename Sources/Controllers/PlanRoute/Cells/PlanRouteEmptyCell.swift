@@ -8,7 +8,7 @@
 import UIKit
 
 final class PlanRouteEmptyCell: UITableViewCell {
-    static let cellReuseId = "PlanRouteEmptyCell"
+    static let reuseIdentifier = "PlanRouteEmptyCell"
 
     private static let iconSize: CGFloat = 30
 

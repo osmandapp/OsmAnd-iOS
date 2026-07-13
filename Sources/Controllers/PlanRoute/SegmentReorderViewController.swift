@@ -52,7 +52,7 @@ final class SegmentReorderViewController: UIViewController {
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = false
         tableView.sectionHeaderTopPadding = 0
-        tableView.register(SegmentReorderCell.self, forCellReuseIdentifier: SegmentReorderCell.reuseId)
+        tableView.register(SegmentReorderCell.self, forCellReuseIdentifier: SegmentReorderCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -79,7 +79,7 @@ extension SegmentReorderViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { rows.count }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentReorderCell.reuseId, for: indexPath) as? SegmentReorderCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentReorderCell.reuseIdentifier, for: indexPath) as? SegmentReorderCell else {
             return UITableViewCell()
         }
         if case let .segment(segment) = rows[indexPath.row] {

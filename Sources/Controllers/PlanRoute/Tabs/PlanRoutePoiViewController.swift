@@ -132,7 +132,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         tableView.sectionHeaderTopPadding = 0
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OARightIconTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OARightIconTableViewCell.reuseIdentifier)
-        tableView.register(PlanRoutePoiGroupHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRoutePoiGroupHeaderView.reuseId)
+        tableView.register(PlanRoutePoiGroupHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -303,7 +303,7 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
 extension PlanRoutePoiViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard !isEmptyState else { return nil }
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRoutePoiGroupHeaderView.reuseId) as? PlanRoutePoiGroupHeaderView else { return nil }
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier) as? PlanRoutePoiGroupHeaderView else { return nil }
         let group = groups[section]
         header.configure(title: group.name, subtitle: poiCountText(group.points.count), menu: makePoiGroupMenu(for: group))
 
@@ -328,12 +328,12 @@ extension PlanRoutePoiViewController: UITableViewDelegate {
         let point = groups[indexPath.section].points[indexPath.row]
         let menuProvider: UIContextMenuActionProvider = { _ in
             let edit = UIAction(title: localizedString("shared_string_edit"), image: .icCustomEdit) { [weak self] _ in
-                self?.performContextMenuAction { [weak self] in
+                self?.performContextMenuAction {
                     self?.onEditPoiPoint(point)
                 }
             }
             let delete = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-                self?.performContextMenuAction { [weak self] in
+                self?.performContextMenuAction {
                     self?.onDeletePoiPoint(point)
                 }
             }

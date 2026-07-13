@@ -8,7 +8,7 @@
 import UIKit
 
 final class RouteSettingNavigationCell: UITableViewCell {
-    static let reuseId = "RouteSettingNavigationCell"
+    static let reuseIdentifier = "RouteSettingNavigationCell"
 
     private static let iconSize: CGFloat = 24
 

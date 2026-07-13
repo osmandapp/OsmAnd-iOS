@@ -223,18 +223,36 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 + (void)renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx.get];
-    for (NSString *gpx in settings.mapSettingVisibleGpx.get)
+    NSArray<NSString *> *currentVisibleGpx = [settings.mapSettingVisibleGpx get];
+    NSString *normalizedOldPath = [self normalizedGpxPath:oldPath];
+    NSString *normalizedNewPath = [self normalizedGpxPath:newPath];
+    BOOL foundOldPath = NO;
+    for (NSString *gpx in currentVisibleGpx)
     {
-        if ([gpx isEqualToString:oldPath])
+        if ([[self normalizedGpxPath:gpx] isEqualToString:normalizedOldPath])
         {
-            [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newPath];
+            foundOldPath = YES;
             break;
         }
     }
-    
+
+    if (!foundOldPath)
+        return;
+
+    NSMutableArray *visibleGpx = [NSMutableArray array];
+    for (NSString *gpx in currentVisibleGpx)
+    {
+        NSString *normalizedPath = [self normalizedGpxPath:gpx];
+        if (![normalizedPath isEqualToString:normalizedOldPath] && ![normalizedPath isEqualToString:normalizedNewPath])
+            [visibleGpx addObject:gpx];
+    }
+    [visibleGpx addObject:newPath];
     [settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:visibleGpx]];
+}
+
++ (NSString *)normalizedGpxPath:(NSString *)path
+{
+    return path.precomposedStringWithCanonicalMapping;
 }
 
 - (NSString *)getSelectedGPXFilePath:(NSString *)fileName

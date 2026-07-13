@@ -663,7 +663,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     {
         NSString *oldFilePath = gpx.gpxFilePath;
         NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
-        NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
+        NSString *newFileName = [[newName stringByAppendingPathExtension:@"gpx"] decomposedStringWithCanonicalMapping];
         NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName]; // 2023-10-22_11-34_Sun 2.gpx
         NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])

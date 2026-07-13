@@ -208,6 +208,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 noVisibleTracksRow.setObj(localizedString("show_all_tracks"), forKey: "buttonTitle")
             } else {
                 let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() ?? []
+                let visibleGpxPathSet = normalizedGpxPathSet(visibleGpxFilePaths)
                 let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
                 for gpx in gpxListToShow {
                     let gpxRow = tracksSection.createNewRow()
@@ -215,7 +216,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                     gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
-                    gpxRow.iconTintColor = visibleGpxFilePaths.contains(gpx.gpxFilePath) ? .iconColorActive : .iconColorDisabled
+                    gpxRow.iconTintColor = visibleGpxPathSet.contains(normalizedGpxPath(gpx.gpxFilePath)) ? .iconColorActive : .iconColorDisabled
                 }
             }
             if isShowingVisibleTracks && !recentlyVisibleGpxList.isEmpty && !isSearchActive {
@@ -581,9 +582,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
             guard let self else { return }
             guard let dataItem = track.dataItem else { return }
-            let isVisible = settings?.mapSettingVisibleGpx.contains(track.gpxFilePath) ?? false
-            if isVisible {
-                settings?.hideGpx([track.gpxFilePath])
+            let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() ?? []
+            let trackPath = normalizedGpxPath(track.gpxFilePath)
+            let visibleTrackPaths = visibleGpxFilePaths.filter { self.normalizedGpxPath($0) == trackPath }
+            if !visibleTrackPaths.isEmpty {
+                settings?.hideGpx(visibleTrackPaths)
             }
 
             self.gpxDB?.removeGpxItem(dataItem, withLocalRemove: true)
@@ -617,16 +620,27 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         
         present(actionSheet, animated: true, completion: nil)
     }
+
+    private func normalizedGpxPath(_ path: String) -> String {
+        (path as NSString).precomposedStringWithCanonicalMapping
+    }
+
+    private func normalizedGpxPathSet(_ paths: [String]) -> Set<String> {
+        Set(paths.map { normalizedGpxPath($0) })
+    }
     
     private func loadGpxTracks() {
+        var loadedPaths = Set<String>()
         allGpxList = OAGPXDatabase.sharedDb().getDataItems()
+            .filter { loadedPaths.insert(normalizedGpxPath($0.gpxFilePath)).inserted }
             .sorted { $0.fileLastUploadedTime > $1.fileLastUploadedTime }
         isTracksAvailable = !allGpxList.isEmpty
     }
     
     private func loadVisibleTracks() {
         guard let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() else { return }
-        visibleGpxList = allGpxList.filter { visibleGpxFilePaths.contains($0.gpxFilePath) }
+        let visibleGpxPathSet = normalizedGpxPathSet(visibleGpxFilePaths)
+        visibleGpxList = allGpxList.filter { visibleGpxPathSet.contains(normalizedGpxPath($0.gpxFilePath)) }
         isVisibleTracksAvailable = !visibleGpxList.isEmpty
         selectedGpxTracks = visibleGpxList
     }
@@ -640,8 +654,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         
         guard let visibleGpxFilePaths = settings?.mapSettingVisibleGpx.get() else { return }
         let previouslyHiddenTrackPaths = UserDefaults.standard.stringArray(forKey: previouslyVisibleTracksKey) ?? []
+        let visibleGpxPathSet = normalizedGpxPathSet(visibleGpxFilePaths)
+        let previouslyHiddenTrackPathSet = normalizedGpxPathSet(previouslyHiddenTrackPaths)
         let recentlyVisibleTracks = allGpxList.filter {
-            previouslyHiddenTrackPaths.contains($0.gpxFilePath) && !visibleGpxFilePaths.contains($0.gpxFilePath)
+            let gpxPath = normalizedGpxPath($0.gpxFilePath)
+            return previouslyHiddenTrackPathSet.contains(gpxPath) && !visibleGpxPathSet.contains(gpxPath)
         }
         
         recentlyVisibleGpxList = recentlyVisibleTracks

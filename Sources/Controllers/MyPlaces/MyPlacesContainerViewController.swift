@@ -351,14 +351,20 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateSearchEnabling(_ isEnabled: Bool) {
-        searchController?.isActive = isEnabled
-        navigationItem.searchController = isEnabled ? searchController : nil
+        if isEnabled {
+            navigationItem.searchController = searchController
+            searchController?.isActive = true
+        } else {
+            searchController?.isActive = false
+            navigationItem.searchController = nil
+        }
+        
         updateSegmentedControlVisibility(!isEnabled)
         setupNavbar(isClearNavBar: isEnabled)
     }
     
     func updateContentScrollView(_ scrollView: UIScrollView) {
-        setContentScrollView(scrollView)
+        setContentScrollView(scrollView, for: .top)
     }
 }
 

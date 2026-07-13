@@ -78,8 +78,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var isEditFilterActive = false
     private var shouldReloadTableView = false
     private var isContextMenuVisible = false
-    private var shouldUpdateAllFoldersAfterContextMenu = false
-    private var shouldForceUpdateAllFoldersAfterContextMenu = false
+    private var shouldUpdateAllFolders = false
     
     private var selectedTrack: GpxDataItem?
     private var selectedFolderPath: String?
@@ -318,16 +317,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if let hostVCDelegate {
             hostVCDelegate.updateHostVCWith(rootFolder: rootFolder, visibleTracksFolder: visibleTracksFolder)
         }
-    }
-
-    private func updateAllFoldersVCDataAfterContextMenu(forceLoad: Bool = false) {
-        guard isContextMenuVisible else {
-            updateAllFoldersVCData(forceLoad: forceLoad)
-            return
-        }
-
-        shouldUpdateAllFoldersAfterContextMenu = true
-        shouldForceUpdateAllFoldersAfterContextMenu = forceLoad
     }
     
     private func updateSearchResultsWithFilteredTracks() {
@@ -1594,7 +1583,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 settings.showGpx([trackPath], update: true)
             }
         }
-        updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
+        shouldUpdateAllFolders = true
     }
     
     private func onTrackAppearenceClicked(track: TrackItem?, isCurrentTrack: Bool) {
@@ -1715,7 +1704,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                           openTrack: false,
                           trackItem: track)
         selectedTrack = nil
-        updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
+        shouldUpdateAllFolders = true
     }
     
     private func onTrackRenameClicked(_ track: TrackItem?) {
@@ -1741,7 +1730,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 ? String(newName.dropLast(fileExtension.count))
                 : newName
                 gpxHelper.renameTrack(trackItem.dataItem, newName: newNameToChange, hostVC: self)
-                self.updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
+                self.updateAllFoldersVCData(forceLoad: true)
             } else {
                 gpxHelper.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
             }
@@ -1785,7 +1774,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     handleDeletedGpxFile(gpxFile: file)
                 }
 
-                updateAllFoldersVCDataAfterContextMenu(forceLoad: true)
+                updateAllFoldersVCData(forceLoad: true)
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -2469,19 +2458,17 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
         animator?.addCompletion { [weak self] in
             guard let self else { return }
-            let shouldUpdateAllFolders = self.shouldUpdateAllFoldersAfterContextMenu
-            let forceUpdateAllFolders = self.shouldForceUpdateAllFoldersAfterContextMenu
+            let shouldUpdateAllFolders = self.shouldUpdateAllFolders
             let shouldReloadTableView = self.shouldReloadTableView
             
             if shouldUpdateAllFolders {
-                self.updateAllFoldersVCData(forceLoad: forceUpdateAllFolders)
+                self.updateAllFoldersVCData(forceLoad: true)
             } else if shouldReloadTableView {
                 self.updateData()
             }
             
             self.isContextMenuVisible = false
-            self.shouldUpdateAllFoldersAfterContextMenu = false
-            self.shouldForceUpdateAllFoldersAfterContextMenu = false
+            self.shouldUpdateAllFolders = false
             self.shouldReloadTableView = false
         }
     }

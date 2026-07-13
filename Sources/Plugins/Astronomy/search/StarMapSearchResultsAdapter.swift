@@ -182,8 +182,10 @@ private final class StarMapSearchObjectCell: UITableViewCell {
         switch style {
         case .myData:
             orderedViews = [objectIconView, textStack]
+            separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
         case .explore:
             orderedViews = [textStack, objectIconView]
+            separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         }
         for (index, view) in orderedViews.enumerated() {
             rowStack.insertArrangedSubview(view, at: index)

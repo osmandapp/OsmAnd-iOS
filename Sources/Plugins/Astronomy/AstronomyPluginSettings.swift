@@ -55,6 +55,11 @@ struct AstronomyPluginSettings {
     struct CommonConfig: Equatable {
         var showRegularMap = false
     }
+    
+    struct RecentlyViewedItem: Equatable {
+        let id: String
+        let label: String
+    }
 
     struct StarMapConfig: Equatable {
         var showAzimuthalGrid = true
@@ -84,6 +89,7 @@ struct AstronomyPluginSettings {
         var favorites: [FavoriteConfig] = []
         var directions: [DirectionConfig] = []
         var celestialPaths: [CelestialPathConfig] = []
+        var recentlyViewed: [RecentlyViewedItem] = []
     }
 
     static let storageKey = "astronomy_settings"
@@ -119,6 +125,8 @@ struct AstronomyPluginSettings {
     private static let keyCelestialPaths = "celestialPaths"
     private static let keyId = "id"
     private static let keyColorIndex = "colorIndex"
+    private static let keyLabel = "label"
+    private static let keyRecentlyViewed = "recentlyViewed"
     private static let storageQueue = DispatchQueue(label: "net.osmand.astronomy.settings")
 
     var common = CommonConfig()
@@ -133,6 +141,16 @@ struct AstronomyPluginSettings {
     func save() {
         Self.storageQueue.sync {
             Self.saveUnlocked(self)
+        }
+    }
+    
+    mutating func addRecentlyViewed(id: String, label: String) {
+        updateStarMapConfig { config in
+            var updated = config
+            updated.recentlyViewed.removeAll { $0.id == id }
+            updated.recentlyViewed.insert(RecentlyViewedItem(id: id, label: label), at: 0)
+            updated.recentlyViewed = Array(updated.recentlyViewed.prefix(8))
+            return updated
         }
     }
 
@@ -309,7 +327,8 @@ struct AstronomyPluginSettings {
                                  return DirectionConfig(id: id,
                                                         colorIndex: int(item[keyColorIndex], fallback: nextColor % DirectionColor.allCases.count))
                              },
-                             celestialPaths: parseItems(json?[keyCelestialPaths]) { CelestialPathConfig(id: $0) })
+                             celestialPaths: parseItems(json?[keyCelestialPaths]) { CelestialPathConfig(id: $0) },
+                             recentlyViewed: parseRecentlyItems(json?[keyRecentlyViewed]))
     }
 
     private static func serializeStarMapConfig(_ config: StarMapConfig) -> [String: Any] {
@@ -350,7 +369,25 @@ struct AstronomyPluginSettings {
         if !config.celestialPaths.isEmpty {
             json[keyCelestialPaths] = config.celestialPaths.map { [keyId: $0.id] }
         }
+        if !config.recentlyViewed.isEmpty {
+            json[keyRecentlyViewed] = config.recentlyViewed.map { [keyId: $0.id, keyLabel: $0.label] }
+        }
         return json
+    }
+    
+    private static func parseRecentlyItems(_ value: Any?) -> [RecentlyViewedItem] {
+        guard let array = value as? [[String: Any]] else {
+            return []
+        }
+        return array.compactMap { item in
+            guard let id = item[keyId] as? String,
+                    !id.isEmpty,
+                    let label = item[keyLabel] as? String,
+                    !label.isEmpty else {
+                return nil
+            }
+            return RecentlyViewedItem(id: id, label: label)
+        }
     }
 
     private static func parseItems<T>(_ value: Any?, factory: (String) -> T) -> [T] {

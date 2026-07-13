@@ -11,13 +11,15 @@ import Foundation
 enum StarMapObjectContextMenuBuilder {
     static func makeConfiguration(for object: SkyObject,
                                   handler: StarMapObjectActionHandler,
+                                  onLocate: @escaping () -> Void,
                                   onStateChanged: @escaping () -> Void) -> UIContextMenuConfiguration {
         UIContextMenuConfiguration(identifier: object.id as NSString) { _ in
-            makeMenu(for: object, handler: handler, onStateChanged: onStateChanged)
+            makeMenu(for: object, onLocate: onLocate, handler: handler, onStateChanged: onStateChanged)
         }
     }
 
     private static func makeMenu(for object: SkyObject,
+                                 onLocate: @escaping () -> Void,
                                  handler: StarMapObjectActionHandler,
                                  onStateChanged: @escaping () -> Void) -> UIMenu {
         let save = UIAction(
@@ -27,6 +29,13 @@ enum StarMapObjectContextMenuBuilder {
             object.isFavorite.toggle()
             handler.onFavoriteChanged(object, object.isFavorite)
             onStateChanged()
+        }
+        
+        let locate = UIAction(
+            title: localizedString("astro_locate"),
+            image: AstroIcon.template("ic_custom_location_marker_outlined")
+        ) { _ in
+            onLocate()
         }
 
         let direction = UIAction(
@@ -52,7 +61,7 @@ enum StarMapObjectContextMenuBuilder {
             onStateChanged()
         }
 
-        return UIMenu(title: "", children: [save, direction, path])
+        return UIMenu(title: "", children: [save, locate, direction, path])
     }
 }
 

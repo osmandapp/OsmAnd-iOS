@@ -208,6 +208,7 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
+		228EDAF170A7A81DF3A85783 /* UIImage+RouteActivityIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */; };
 		2702BC612EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */; };
 		2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */; };
 		2709E3B22EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */; };
@@ -259,6 +260,7 @@
 		279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */; };
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
+		27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A3E02330051E10004969BE /* ScreenElementsViewController.swift */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27B0967E2F8FCB0A00EDC462 /* GeoNavigationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */; };
 		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
@@ -668,7 +670,6 @@
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
 		4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */; };
-		228EDAF170A7A81DF3A85783 /* UIImage+RouteActivityIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */; };
 		460C1E702BFC9B490090D67B /* QuickActionIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
@@ -3873,6 +3874,7 @@
 		279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedMapsViewController.swift; sourceTree = "<group>"; };
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
+		27A3E02330051E10004969BE /* ScreenElementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenElementsViewController.swift; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoNavigationParser.swift; sourceTree = "<group>"; };
 		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
@@ -4426,7 +4428,6 @@
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
 		4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
-		8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+RouteActivityIcon.swift"; sourceTree = "<group>"; };
 		460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionIds.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
@@ -5203,6 +5204,7 @@
 		8AE943B127A28BE900961319 /* OAWeatherRasterLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherRasterLayer.h; sourceTree = "<group>"; };
 		8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherRasterLayer.mm; sourceTree = "<group>"; };
 		8AF348762779D88100A64824 /* libproj_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libproj_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+RouteActivityIcon.swift"; sourceTree = "<group>"; };
 		8EBE587627297A310075B834 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../resources/test-resources"; sourceTree = "<group>"; };
 		972189E629DC343600AB0D92 /* map_action_train@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_train@3x.png"; sourceTree = "<group>"; };
 		972189E829DC343600AB0D92 /* map_action_train@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_train@2x.png"; sourceTree = "<group>"; };
@@ -14565,6 +14567,7 @@
 				2745FEF52F3A11F2004F6AB4 /* Views */,
 				DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */,
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
+				27A3E02330051E10004969BE /* ScreenElementsViewController.swift */,
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
 				27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */,
@@ -18436,6 +18439,7 @@
 				9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */,
 				9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */,
 				9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */,
+				27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */,
 				9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */,
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
 				9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */,

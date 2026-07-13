@@ -47,12 +47,48 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        var buttons = [UIBarButtonItem]()
-        if let button = createRightNavbarButton(nil, iconName: appMode.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil) {
-            button.customView?.tintColor = appMode.getProfileColor()
-            button.accessibilityLabel = localizedString("selected_profile")
-            button.accessibilityValue = appMode.toHumanString()
-            buttons.append(button)
+        // TODO
+        let screenElementsAction = UIAction(title: localizedString("screen_elements"),
+                                            image: .icCustomMapScreenLayoutPortrait) { _ in
+            let screenElementsViewController = ScreenElementsViewController()
+            let navigationController = UINavigationController()
+            navigationController.setViewControllers([screenElementsViewController], animated: true)
+            
+            navigationController.modalPresentationStyle = .pageSheet
+            let sheet = navigationController.sheetPresentationController
+            if let sheet {
+                sheet.detents = [.medium(), .large()]
+                sheet.preferredCornerRadius = 20
+            }
+            self.navigationController?.present(navigationController, animated: true)
+        }
+        let copyAction = UIAction(title: localizedString("copy_from_other_profile"),
+                                  image: .icCustomCopy) { [weak self] _ in
+            guard let self, let bottomSheet = OACopyProfileBottomSheetViewControler(mode: self.appMode) else { return }
+            bottomSheet.delegate = self
+            bottomSheet.present(in: self)
+        }
+        let resetAction = UIAction(title: localizedString("reset_to_default"),
+                                   image: .icCustomReset) { [weak self] _ in
+            self?.showResetToDefaultAlert()
+        }
+        let screenElementsSection = UIMenu(title: "", options: .displayInline, children: [screenElementsAction])
+        let profileActionsSection = UIMenu(title: "", options: .displayInline, children: [copyAction, resetAction])
+        let menu = UIMenu(title: "", children: [screenElementsSection, profileActionsSection])
+        let menuButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
+        menuButton.tintColor = .iconColorBlack
+        menuButton.accessibilityLabel = localizedString("shared_string_options")
+
+        var buttons = [menuButton]
+        if let profileButton = createRightNavbarButton(nil, iconName: appMode.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil) {
+            profileButton.customView?.tintColor = appMode.getProfileColor()
+            profileButton.accessibilityLabel = localizedString("selected_profile")
+            profileButton.accessibilityValue = appMode.toHumanString()
+            if #available(iOS 26.0, *) {
+                profileButton.style = .prominent
+                profileButton.tintColor = .clear
+            }
+            buttons.append(profileButton)
         }
         return buttons
     }
@@ -219,6 +255,26 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             return ""
         }
     }
+    
+    private func showResetToDefaultAlert() {
+        // TODO
+        let actionSheet = UIAlertController(title: title,
+                                            message: localizedString("reset_all_settings_desc"),
+                                            preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            WidgetsSettingsHelper(appMode: appMode).resetConfigureScreenSettings()
+            applyConfigureScreenSettings()
+        })
+        actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        actionSheet.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
+        present(actionSheet, animated: true)
+    }
+
+    private func applyConfigureScreenSettings() {
+        OARootViewController.instance().mapPanel.recreateAllControls()
+        reloadDataWith(animated: true, completion: nil)
+    }
 }
 
 // TableView
@@ -353,5 +409,18 @@ extension ConfigureScreenViewController: OASettingsDataDelegate {
     }
     
     func openNavigationSettings() {
+    }
+}
+
+// MARK: OACopyProfileBottomSheetDelegate
+extension ConfigureScreenViewController: OACopyProfileBottomSheetDelegate {
+    func onCopyProfileCompleted() {
+    }
+
+    func onCopyProfile(_ fromAppMode: OAApplicationMode) {
+        guard let appMode else { return }
+        WidgetsSettingsHelper(appMode: appMode).copyConfigureScreenSettings(fromAppMode: fromAppMode,
+                                                                            widgetParams: ["selectedAppMode": appMode])
+        applyConfigureScreenSettings()
     }
 }

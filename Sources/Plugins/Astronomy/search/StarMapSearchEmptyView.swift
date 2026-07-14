@@ -101,7 +101,7 @@ final class StarMapSearchEmptyView: UIView {
         actionButton.setTitle(config.actionTitle, for: .normal)
         
         containerStack.layoutMargins = UIEdgeInsets(
-            top: Layout.myDataContentPadding,
+            top: Layout.contentPadding,
             left: Layout.myDataContentPadding,
             bottom: Layout.myDataContentPadding,
             right: Layout.myDataContentPadding

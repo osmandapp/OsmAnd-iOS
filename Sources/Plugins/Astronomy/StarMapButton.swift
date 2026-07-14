@@ -53,6 +53,13 @@ class StarMapButton: OAHudButton {
         super.init(coder: coder)
         commonInit()
     }
+    
+    override func updateColors(forPressedState isPressed: Bool) {
+        super.updateColors(forPressedState: isPressed)
+        if showsHudChrome {
+            backgroundColor = backgroundColor?.withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
+        }
+    }
 
     func setIcon(iconName: String, accessibilityLabel: String? = nil) {
         setImage(AstroIcon.template(iconName), for: .normal)
@@ -102,14 +109,10 @@ class StarMapButton: OAHudButton {
         var opacity: Double
         if #available(iOS 26.0, *) {
             glassStyle = Int32(UIGlassEffect.Style.clear.rawValue)
-            opacity = 0.5
         } else {
             glassStyle = MapButtonState.defaultGlassStyle
-            opacity = helper.getDefaultOpacityPref().get()
-            if opacity < 0 {
-                opacity = MapButtonState.opaqueAlpha
-            }
         }
+        opacity = Double(StarMapControlTheme.defaultBackgroundAlpha)
 
         setCustomAppearanceParams(ButtonAppearanceParams(
             iconName: nil,

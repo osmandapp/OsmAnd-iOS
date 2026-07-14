@@ -268,9 +268,9 @@ extension FavoriteListViewController {
     
     private func applyEmptyStateSnapshot(animatingDifferences: Bool) {
         var snapshot = Snapshot()
-        layoutSections = []
+        layoutSections = [.emptyState]
         collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections([.emptyState])
+        snapshot.appendSections(layoutSections)
         snapshot.appendItems([.emptyState])
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }

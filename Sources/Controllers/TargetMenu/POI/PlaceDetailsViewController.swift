@@ -26,14 +26,26 @@ final class PlaceDetailsViewController: OAPOIViewController {
         self.provider = RenderedObjectAmenityProvider(detailsObject: detailsObject, renderedObject: renderedObject)
         setObject(detailsObject)
     }
-    
+
+    init(renderedObject: OARenderedObject) {
+        let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
+        super.init(poi: poi)
+        self.renderedObject = renderedObject
+        self.provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
+    }
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: "OAPOIViewController", bundle: nibBundleOrNil)
     }
-    
+
     override func viewDidLoad() {
-        updateMenuWithDetailedObject()
+        if detailsObject != nil {
+            updateMenuWithDetailedObject()
+        }
         super.viewDidLoad()
+        if detailsObject == nil {
+            resolveDetailedObjectInBackground()
+        }
     }
     
     override func setObject(_ object: Any) {
@@ -55,10 +67,20 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func getTypeStr() -> String? {
-        let typeString = provider.typeString() { super.getTypeStr() }
+        let typeString = provider.typeString { super.getTypeStr() }
         return typeString ?? super.getTypeStr()
     }
-    
+
+    override func getIcon() -> UIImage? {
+        guard detailsObject == nil, let renderedObject else { return super.getIcon() }
+        return RenderedObjectHelper.getIcon(renderedObject: renderedObject)
+    }
+
+    override func getOsmUrl() -> String {
+        guard detailsObject == nil, let renderedObject else { return super.getOsmUrl() }
+        return ObfConstants.getOsmUrlForId(renderedObject)
+    }
+
     override func buildPhotosRow(_ rows: NSMutableArray) {
         super.buildPhotosRow(rows)
         buildGuidesRow()
@@ -204,7 +226,24 @@ final class PlaceDetailsViewController: OAPOIViewController {
         setup(amenity)
         updateTargetPoint(with: amenity)
     }
-    
+
+    private func resolveDetailedObjectInBackground() {
+        guard let renderedObject else { return }
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
+            DispatchQueue.main.async {
+                guard let self, let details else { return }
+                self.detailsObject = details
+                self.provider.detailsObject = details
+                let amenity = details.syntheticAmenity
+                self.setup(amenity)
+                self.updateTargetPoint(with: amenity)
+                self.rebuildRows()
+                self.tableView.reloadData()
+            }
+        }
+    }
+
     private func updateTargetPoint(with amenity: OAPOI) {
         guard let mapPanel = OARootViewController.instance()?.mapPanel,
               let targetPoint = mapPanel.getCurrentTargetPoint() else { return }

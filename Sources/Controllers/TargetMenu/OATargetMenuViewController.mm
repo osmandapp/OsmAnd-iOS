@@ -195,15 +195,7 @@
 
         case OATargetRenderedObject:
         {
-            BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
-            if (detailsObject)
-            {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
-            }
-            else
-            {
-                controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
-            }
+            controller = [[PlaceDetailsViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
 

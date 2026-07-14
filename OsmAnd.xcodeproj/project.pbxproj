@@ -25,6 +25,7 @@
 		FA7000012F90000000000006 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000021 /* UIViewController+JASidePanel.m */; };
 		FA7000012F90000000000007 /* MCBinaryHeap.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000024 /* MCBinaryHeap.m */; };
 		FA7000012F90000000000008 /* MaterialTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000027 /* MaterialTextFields.m */; };
+		FA7000012F90000000000009 /* AFNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = FA7000012F9000000000002B /* AFNetworking */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
 		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
@@ -8498,6 +8499,7 @@
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
 				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
+				FA7000012F90000000000009 /* AFNetworking in Frameworks */,
 				C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -15444,6 +15446,7 @@
 			name = "OsmAnd Maps";
 			packageProductDependencies = (
 				675D59365E264CE6A5F93C66 /* Kingfisher */,
+				FA7000012F9000000000002B /* AFNetworking */,
 			);
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
@@ -15589,6 +15592,7 @@
 			packageReferences = (
 				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
+				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */,
 			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
@@ -19979,6 +19983,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Scripts/SwiftLint;
 		};
+		FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AFNetworking;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -19997,6 +20005,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		FA7000012F9000000000002B /* AFNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */;
+			productName = AFNetworking;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

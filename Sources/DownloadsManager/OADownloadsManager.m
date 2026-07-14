@@ -7,7 +7,7 @@
 //
 
 #import "OADownloadsManager.h"
-#import <AFURLSessionManager.h>
+#import <AFNetworking/AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
 #import "OADownloadTask.h"
 #import "OAUtilities.h"

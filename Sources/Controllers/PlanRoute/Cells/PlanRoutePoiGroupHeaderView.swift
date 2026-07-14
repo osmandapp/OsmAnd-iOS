@@ -36,6 +36,9 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         optionsButton.menu = menu
+        subtitleLabel.isAccessibilityElement = false
+        titleLabel.accessibilityLabel = [title, subtitle].filter { !$0.isEmpty }.joined(separator: ", ")
+        titleLabel.accessibilityTraits = .header
     }
 
     private func setupView() {

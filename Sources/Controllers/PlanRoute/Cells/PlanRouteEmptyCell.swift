@@ -41,6 +41,10 @@ final class PlanRouteEmptyCell: UITableViewCell {
         iconView.image = .templateImageNamed("ic_custom_plan_route")
         iconView.tintColor = .iconColorActive
         iconView.contentMode = .scaleAspectFit
+        iconView.isAccessibilityElement = false
+        descriptionLabel.isAccessibilityElement = false
+        titleLabel.accessibilityLabel = [titleLabel.text, descriptionLabel.text]
+            .compactMap { $0 }.joined(separator: ". ")
 
         let textStack = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         textStack.axis = .vertical

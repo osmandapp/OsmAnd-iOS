@@ -54,6 +54,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     let planRouteTab: PlanRouteTab = .analyze
 
+    private let tableView = CancelableTableView(frame: .zero, style: .plain)
+
     private var selectedYAxisTypes: [NSNumber] = [
         NSNumber(value: GPXDataSetType.altitude.rawValue),
         NSNumber(value: GPXDataSetType.slope.rawValue)
@@ -75,7 +77,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var trackChartHelper: TrackChartHelper?
     private var highlightDrawX: CGFloat = -1
     private var lastTranslation: CGPoint = .zero
-    private let tableView = CancelableTableView(frame: .zero, style: .plain)
     private weak var dataSource: PlanRouteAnalyzeDataSource?
     private weak var chartView: ElevationChart?
     private weak var yAxisButton: UIButton?
@@ -189,12 +190,16 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         showMediumSheetViewController(viewController: sheet, isLargeAvailable: true)
     }
 
+    private func dataItem(for gpxFile: GpxFile) -> GpxDataItem? {
+        OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxFile.path))
+    }
+
     private func refreshChart() {
         guard let data = dataSource?.analysisData,
               let analysis = data.gpxAnalysis,
               let gpxFile = data.gpxFile,
               let chart = chartView else { return }
-        let gpxItem = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxFile.path))
+        let gpxItem = dataItem(for: gpxFile)
         let (firstType, secondType) = resolvedYAxisTypes()
         GpxUIHelper.refreshLineChart(chartView: chart,
                                      analysis: analysis,
@@ -483,8 +488,9 @@ private extension PlanRouteAnalyzeViewController {
     static let cardCornerRadius: CGFloat = 24
     static let statusCardCornerRadius: CGFloat = 24
     static let steepnessAttributeName = "routeInfo_steepness"
+    static let roadClassAttributeName = "routeInfo_roadClass"
     static let routeAttributeNames = [
-        "routeInfo_roadClass",
+        roadClassAttributeName,
         steepnessAttributeName,
         "routeInfo_surface",
         "routeInfo_smoothness"
@@ -507,15 +513,19 @@ private extension PlanRouteAnalyzeViewController {
         return values
     }()
     static let steepnessBoundaryClasses: [String] = {
-        var classes = ["steepness=-100_-20"]
+        var classes = [steepnessBoundaryClass(from: -100, to: -20)]
         for index in 1..<(steepnessBoundaryValues.count - 1) {
             let lowerBound = steepnessBoundaryValues[index - 1] + 1
             let upperBound = steepnessBoundaryValues[index]
-            classes.append("steepness=\(lowerBound)_\(upperBound)")
+            classes.append(steepnessBoundaryClass(from: lowerBound, to: upperBound))
         }
-        classes.append("steepness=\(maxDividedIncline)_\(maxIncline)")
+        classes.append(steepnessBoundaryClass(from: maxDividedIncline, to: maxIncline))
         return classes
     }()
+
+    static func steepnessBoundaryClass(from lower: Int, to upper: Int) -> String {
+        "steepness=\(lower)_\(upper)"
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -647,7 +657,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         chartView = chart
         bindChartGestures(chart)
 
-        let gpxItem = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxFile.path))
+        let gpxItem = dataItem(for: gpxFile)
         let useHours = (analysis.timeSpan / 3_600_000) > 0
         GpxUIHelper.setupElevationChart(chartView: chart,
                                         topOffset: 20,
@@ -1323,7 +1333,7 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     func roadAttributeTitle(for stat: OARouteStatistics) -> String {
-        if stat.name == "routeInfo_roadClass" {
+        if stat.name == Self.roadClassAttributeName {
             return localizedString("routeInfo_road_types_name")
         }
         return OAUtilities.getLocalizedRouteInfoProperty(stat.name)
@@ -1343,7 +1353,7 @@ private extension PlanRouteAnalyzeViewController {
 
     func localizedLegendTitle(for segment: OARouteSegmentAttribute, statName: String) -> String {
         let propertyName = segment.getUserPropertyName() ?? segment.propertyName ?? ""
-        if statName == "routeInfo_steepness", propertyName != "undefined" {
+        if statName == Self.steepnessAttributeName, propertyName != "undefined" {
             return propertyName
         }
         let localizedKey = "rendering_attr_\(propertyName)_name"

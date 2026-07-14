@@ -32,6 +32,8 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         titleLabel.text = title
         distanceLabel.text = distanceText
         optionsButton.menu = menu
+        distanceLabel.isAccessibilityElement = false
+        titleLabel.accessibilityLabel = [title, distanceText].joined(separator: ", ")
     }
 
     private func setupCell() {
@@ -54,6 +56,8 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
+        optionsButton.accessibilityLabel = localizedString("shared_string_options")
+        iconView.isAccessibilityElement = false
 
         [iconView, titleLabel, distanceLabel, optionsButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false

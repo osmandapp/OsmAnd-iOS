@@ -34,6 +34,10 @@ final class PlanRoutePointCell: UITableViewCell {
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
         subtitleLabel.text = subtitle(for: point)
+        numberLabel.isAccessibilityElement = false
+        subtitleLabel.isAccessibilityElement = false
+        titleLabel.accessibilityLabel = [numberLabel.text, titleLabel.text, subtitleLabel.text]
+            .compactMap { $0 }.joined(separator: ", ")
     }
 
     private func setupCell() {
@@ -44,6 +48,7 @@ final class PlanRoutePointCell: UITableViewCell {
         deleteButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
         deleteButton.tintColor = .systemRed
         deleteButton.addTarget(self, action: #selector(onDeleteTapped), for: .touchUpInside)
+        deleteButton.accessibilityLabel = localizedString("shared_string_delete")
 
         numberContainer.layer.cornerRadius = Self.circleSize / 2
         numberContainer.layer.borderWidth = 2

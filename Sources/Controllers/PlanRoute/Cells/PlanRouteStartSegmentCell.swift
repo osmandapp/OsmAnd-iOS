@@ -25,6 +25,9 @@ final class PlanRouteStartSegmentCell: UITableViewCell {
         selectionStyle = .default
 
         titleLabel.text = localizedString("gpx_start_new_segment")
+        isAccessibilityElement = true
+        accessibilityLabel = titleLabel.text
+        accessibilityTraits = .button
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .iconColorActive
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

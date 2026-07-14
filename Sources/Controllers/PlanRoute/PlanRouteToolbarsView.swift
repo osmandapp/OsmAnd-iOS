@@ -116,6 +116,8 @@ final class PlanRouteTopToolbarView: UIView {
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingStack.leadingAnchor, constant: -Self.buttonSpacing)
         ])
 
+        closeButton.accessibilityLabel = localizedString("shared_string_close")
+        optionsButton.accessibilityLabel = localizedString("shared_string_options")
         closeButton.addTarget(self, action: #selector(onCloseTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(onSaveTapped), for: .touchUpInside)
     }
@@ -282,6 +284,8 @@ final class PlanRouteBottomToolbarView: UIView {
         ])
 
         addPoiButton.addTarget(self, action: #selector(onAddPoiTapped), for: .touchUpInside)
+        undoButton.accessibilityLabel = localizedString("shared_string_undo")
+        redoButton.accessibilityLabel = localizedString("shared_string_redo")
         undoButton.addTarget(self, action: #selector(onUndoTapped), for: .touchUpInside)
         redoButton.addTarget(self, action: #selector(onRedoTapped), for: .touchUpInside)
         routeButton.addTarget(self, action: #selector(onRouteTapped), for: .touchUpInside)

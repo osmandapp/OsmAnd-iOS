@@ -29,6 +29,9 @@ final class RouteSettingToggleCell: UITableViewCell {
         titleLabel.text = title
         toggle.isOn = isOn
         self.onToggle = onToggle
+        titleLabel.isAccessibilityElement = false
+        iconContainer.isAccessibilityElement = false
+        toggle.accessibilityLabel = title
     }
 
     private func setupCell() {

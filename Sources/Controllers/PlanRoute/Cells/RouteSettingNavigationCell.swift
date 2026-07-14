@@ -25,6 +25,9 @@ final class RouteSettingNavigationCell: UITableViewCell {
 
     func configure(title: String) {
         titleLabel.text = title
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        accessibilityTraits = .button
     }
 
     private func setupCell() {

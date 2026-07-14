@@ -24,6 +24,8 @@ final class SegmentReorderCell: UITableViewCell {
     func configure(title: String, subtitle: String) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
+        subtitleLabel.isAccessibilityElement = false
+        titleLabel.accessibilityLabel = [title, subtitle].filter { !$0.isEmpty }.joined(separator: ", ")
     }
 
     private func setupView() {

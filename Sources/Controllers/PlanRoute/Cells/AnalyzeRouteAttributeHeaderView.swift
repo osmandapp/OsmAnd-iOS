@@ -30,6 +30,7 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
 
     func configure(title: String, isExpanded: Bool, onTap: @escaping () -> Void) {
         titleLabel.text = title
+        accessibilityLabel = title
         chevronImageView.image = UIImage(
             systemName: isExpanded ? "chevron.down" : "chevron.right",
             withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
@@ -49,6 +50,9 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
         chevronImageView.contentMode = .scaleAspectFit
         chevronImageView.tintColor = .iconColorActive
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        chevronImageView.isAccessibilityElement = false
+        isAccessibilityElement = true
+        accessibilityTraits = [.header, .button]
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         contentView.addGestureRecognizer(tap)

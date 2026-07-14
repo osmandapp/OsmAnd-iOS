@@ -46,6 +46,9 @@ final class RouteGroupCell: UITableViewCell {
         titleLeadingWithIcon.isActive = true
         titleLeadingWithoutIcon.isActive = false
         separatorInset = UIEdgeInsets(top: 0, left: Self.titleLeadingInset, bottom: 0, right: 0)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityLabel = [titleLabel.text, distanceLabel.text].compactMap { $0 }.joined(separator: ", ")
     }
 
     func configureWholeSegment(segment: PlanRouteSegment) {
@@ -55,6 +58,9 @@ final class RouteGroupCell: UITableViewCell {
         titleLeadingWithIcon.isActive = false
         titleLeadingWithoutIcon.isActive = true
         separatorInset = UIEdgeInsets(top: 0, left: Self.leadingInset, bottom: 0, right: 0)
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityLabel = [titleLabel.text, distanceLabel.text].compactMap { $0 }.joined(separator: ", ")
     }
 
     private func setupCell() {

@@ -30,6 +30,9 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
         subtitleLabel.isHidden = subtitle?.isEmpty ?? true
         optionsButton.menu = menu
         optionsButton.isHidden = menu == nil
+        subtitleLabel.isAccessibilityElement = false
+        titleLabel.accessibilityTraits = .header
+        titleLabel.accessibilityLabel = [title, subtitle].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: ", ")
     }
 
     private func setupView() {
@@ -57,6 +60,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
+        optionsButton.accessibilityLabel = localizedString("shared_string_options")
 
         [textStack, optionsButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false

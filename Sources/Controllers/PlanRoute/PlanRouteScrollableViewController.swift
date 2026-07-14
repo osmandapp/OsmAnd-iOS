@@ -338,6 +338,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func updateCrosshairImage() {
         crosshairView.image = .mapRulerCenterDay
+        crosshairView.isAccessibilityElement = false
     }
 
     private func setupCrosshair() {
@@ -362,6 +363,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             bottom
         ])
+        routeTypeButton.accessibilityLabel = localizedString("route_between_points")
         routeTypeButton.addTarget(self, action: #selector(onRouteTypeButtonTapped), for: .touchUpInside)
         updateRouteTypeButton()
     }

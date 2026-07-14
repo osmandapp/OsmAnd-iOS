@@ -27,6 +27,9 @@ final class PlanRouteActionCell: UITableViewCell {
     func configure(title: String, isDestructive: Bool) {
         titleLabel.text = title
         titleLabel.textColor = isDestructive ? .textColorDisruptive : .iconColorActive
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        accessibilityTraits = .button
     }
 
     private func setupCell() {

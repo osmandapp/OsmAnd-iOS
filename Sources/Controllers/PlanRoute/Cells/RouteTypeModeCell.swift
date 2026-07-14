@@ -36,6 +36,10 @@ final class RouteTypeModeCell: UITableViewCell {
         accessoryType = .none
         let inset = Self.leadingInset + Self.checkmarkSize + Self.gap + Self.iconSize + Self.gap
         separatorInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: Self.leadingInset)
+        iconView.isAccessibilityElement = false
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        accessibilityTraits = isSelected ? [.button, .selected] : .button
     }
 
     private func setupCell() {

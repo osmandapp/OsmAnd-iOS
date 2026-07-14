@@ -52,6 +52,10 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         }
         iconView.tintColor = iconColor
         isUserInteractionEnabled = model.isEnabled || model.isDestructive
+        iconView.isAccessibilityElement = false
+        isAccessibilityElement = true
+        accessibilityLabel = [model.title, model.subtitle].compactMap { $0 }.joined(separator: ", ")
+        accessibilityTraits = isUserInteractionEnabled ? .button : [.button, .notEnabled]
     }
 
     private func setupCell() {

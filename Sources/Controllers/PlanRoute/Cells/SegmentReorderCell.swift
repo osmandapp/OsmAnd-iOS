@@ -8,7 +8,6 @@
 import UIKit
 
 final class SegmentReorderCell: UITableViewCell {
-    static let reuseIdentifier = "SegmentReorderCell"
 
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()

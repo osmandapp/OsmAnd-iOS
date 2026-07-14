@@ -8,7 +8,6 @@
 import UIKit
 
 final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
-    static let reuseIdentifier = "AnalyzeRouteAttributeHeaderView"
 
     private let titleLabel = UILabel()
     private let chevronImageView = UIImageView()

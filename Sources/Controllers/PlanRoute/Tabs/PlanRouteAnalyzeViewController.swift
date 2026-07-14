@@ -147,9 +147,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.backgroundColor = .viewBg
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self

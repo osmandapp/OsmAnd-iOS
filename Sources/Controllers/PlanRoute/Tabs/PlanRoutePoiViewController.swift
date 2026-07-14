@@ -12,12 +12,6 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     private static let separatorLeftInset: CGFloat = 72
     private static let bottomContentInset: CGFloat = 72
     private static let emptySectionsCount = 2
-    private static let poiDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeZone = .current
-        formatter.dateFormat = "dd.MM.yyyy"
-        return formatter
-    }()
     
     let planRouteTab: PlanRouteTab = .poi
     
@@ -222,7 +216,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         guard let wpt = point.item.point else { return nil }
         let time = TimeInterval(wpt.time)
         guard time > 0 else { return nil }
-        return Self.poiDateFormatter.string(from: Date(timeIntervalSince1970: time / 1000))
+        return DateFormatter.detailsDateFormatter.string(from: Date(timeIntervalSince1970: time / 1000))
     }
 
     private func configureEmptyAddPointsCell(_ cell: OARightIconTableViewCell) {

@@ -8,7 +8,6 @@
 import UIKit
 
 final class RouteSettingToggleCell: UITableViewCell {
-    static let reuseIdentifier = "RouteSettingToggleCell"
 
     private static let iconSize: CGFloat = 24
 

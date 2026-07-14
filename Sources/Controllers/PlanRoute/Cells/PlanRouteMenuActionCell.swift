@@ -10,7 +10,6 @@ import UIKit
 // MARK: - PlanRouteMenuActionCell
 
 final class PlanRouteMenuActionCell: UITableViewCell {
-    static let reuseIdentifier = "PlanRouteMenuActionCell"
 
     private static let iconSize: CGFloat = 24
 

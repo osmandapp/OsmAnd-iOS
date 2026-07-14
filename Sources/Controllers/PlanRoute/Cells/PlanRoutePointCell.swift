@@ -8,7 +8,6 @@
 import UIKit
 
 final class PlanRoutePointCell: UITableViewCell {
-    static let reuseIdentifier = "PlanRoutePointCell"
 
     private static let circleSize: CGFloat = 28
     private static let deleteSize: CGFloat = 24

@@ -578,7 +578,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             BOOL result = [trackItem.dataItem.file renameToToFile:newFile];
             if (result)
             {
-                BOOL renameCurrentFileResult = [[OASGpxDbHelper shared] renameCurrentFile:trackItem.dataItem.file newFile:newFile];
+                BOOL renameCurrentFileResult = [gpxDatabase renameCurrentFile:trackItem.dataItem.file newFile:newFile];
                 if (renameCurrentFileResult)
                 {
                     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newStoringFullPath];
@@ -677,7 +677,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                 NSLog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
                 return;
             }
-            BOOL renameCurrentFileResult = [[OASGpxDbHelper shared] renameCurrentFile:gpx.file newFile:newFile];
+            BOOL renameCurrentFileResult = [[OAGPXDatabase sharedDb] renameCurrentFile:gpx.file newFile:newFile];
             if (!renameCurrentFileResult)
             {
                 NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");

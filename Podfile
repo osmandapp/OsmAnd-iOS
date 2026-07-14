@@ -6,7 +6,6 @@ project 'OsmAnd'
 workspace 'OsmAnd'
 
 def defaultPods
-    pod 'BRCybertron', '~> 1.1.1'
 end
 
 

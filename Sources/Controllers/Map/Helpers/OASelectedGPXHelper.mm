@@ -233,7 +233,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
             break;
         }
     }
-
+    
     [settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:visibleGpx]];
 }
 

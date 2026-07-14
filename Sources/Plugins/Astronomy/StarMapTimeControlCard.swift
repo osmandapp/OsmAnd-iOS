@@ -20,11 +20,11 @@ final class StarMapTimeControlCard: UIView {
     private let mainStack = UIStackView()
     
     private var active: Bool = false
-
+    private var nightMode: Bool = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContent()
-        updateTheme(nightMode: OADayNightHelper.instance().isNightMode(), active: false)
     }
 
     required init?(coder: NSCoder) {
@@ -41,6 +41,7 @@ final class StarMapTimeControlCard: UIView {
     }
 
     func updateTheme(nightMode: Bool, active: Bool, pressed: Bool = false) {
+        self.nightMode = nightMode
         self.active = active
         
         StarMapGlassBackground.apply(
@@ -93,7 +94,7 @@ final class StarMapTimeControlCard: UIView {
         timeButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
         timeButton.onHighlightChange = { [weak self] isHighlighted in
             guard let self else { return }
-            updateTheme(nightMode: OADayNightHelper.instance().isNightMode(), active: active, pressed: isHighlighted)
+            updateTheme(nightMode: nightMode, active: active, pressed: isHighlighted)
         }
 
         resetButton.setImage(.icCustomReset, for: .normal)

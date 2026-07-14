@@ -75,6 +75,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var screenOrientationObserver: NSObjectProtocol?
     private var leftPanelLeadingConstraint: NSLayoutConstraint?
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
+    private var nightMode: Bool = false
     private var isApplyingControlChange = false
     private var isGyroActive: Bool {
         arModeHelper.isArModeEnabled
@@ -109,6 +110,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         settings = loadedSettings
         dataProvider = provider
         viewModel = StarObjectsViewModel(provider: provider, settings: loadedSettings)
+        nightMode = OADayNightHelper.instance().isNightMode()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -172,6 +174,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateRegularMapLayout()
         layoutRegularMapRenderer()
         cameraHelper.layoutPreview()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else {
+            return
+        }
+        updateMapControlThemes()
     }
     
     func applyRedFilter(enabled: Bool) {
@@ -714,9 +724,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateTimeControlTheme() {
-        let nightMode = OADayNightHelper.instance().isNightMode()
         let active = !timeSelectionView.isHidden
         timeControlCard.updateTheme(nightMode: nightMode, active: active)
+        timeSelectionView.updateTheme(nightMod: nightMode, active: active)
     }
 
     private func updateMagnitudeControls() {
@@ -731,8 +741,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateMagnitudeFilterTheme() {
-        let nightMode = OADayNightHelper.instance().isNightMode()
-
         magnitudeFilterButton.nightMode = nightMode
         magnitudeFilterButton.active = magnitudeSliderPanel.isExpanded
         
@@ -790,7 +798,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func syncControlUI() {
         let gyroEnabled = isGyroActive
         let cameraEnabled = isArCameraActive
-        let nightMode = OADayNightHelper.instance().isNightMode()
         
         compassButton.setArDirectionEnabled(gyroEnabled)
         
@@ -812,7 +819,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateButtonsNightMode() {
-        let nightMode = OADayNightHelper.instance().isNightMode()
         arControlCard.updateTheme(nightMode: nightMode, arActive: isArCameraActive)
         closeButton.nightMode = nightMode
         settingsButton.nightMode = nightMode
@@ -927,7 +933,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     @objc private func onDayNightModeChanged() {
         DispatchQueue.main.async { [weak self] in
-            self?.updateMapControlThemes()
+            guard let self else { return }
+            let newValue = OADayNightHelper.instance().isNightMode()
+            guard newValue != nightMode else { return }
+            nightMode = newValue
+            updateMapControlThemes()
         }
     }
 

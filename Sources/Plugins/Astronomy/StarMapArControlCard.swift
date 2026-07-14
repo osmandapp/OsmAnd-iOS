@@ -26,7 +26,7 @@ final class StarMapArControlCard: UIView {
     private let cameraControlsStack = UIStackView()
     private let rootStack = UIStackView()
 
-    private var nightMode = OADayNightHelper.instance().isNightMode()
+    private var nightMode = false
     private var arActive = false
 
     override init(frame: CGRect) {

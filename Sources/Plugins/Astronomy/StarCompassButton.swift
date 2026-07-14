@@ -37,6 +37,7 @@ final class StarCompassButton: StarMapButton {
     }
     
     func setArDirectionEnabled(_ enabled: Bool) {
+        guard enabled != arDirectionEnabled else { return }
         arDirectionEnabled = enabled
         updateArrowIcon()
     }

@@ -27,7 +27,6 @@ final class StarMapMagnitudeSliderPanel: UIView {
         super.init(frame: .zero)
         setupContent(maxMagnitude: maxMagnitude)
         isHidden = true
-        updateTheme(nightMode: OADayNightHelper.instance().isNightMode())
     }
 
     required init?(coder: NSCoder) {
@@ -52,11 +51,11 @@ final class StarMapMagnitudeSliderPanel: UIView {
             nightMode: nightMode,
             cornerRadius: Self.cornerRadius
         )
-        let color: UIColor = OADayNightHelper.instance().isNightMode() ? .textColorPrimary.dark : .textColorPrimary.light
+        let color: UIColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
         titleLabel.textColor = color
         valueLabel.textColor = color
         
-        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: OADayNightHelper.instance().isNightMode(), alpha: StarMapControlTheme.defaultBackgroundAlpha)
+        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
         
         layer.borderWidth = nightMode ? 2 : 0
     }

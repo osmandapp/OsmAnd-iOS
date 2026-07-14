@@ -34,11 +34,10 @@ download() {
 
     while [ $attempt -lt 3 ]; do
         echo "Downloading $from to $to"
-        curl -L --fail "$from" -o "$to"
-        exit_code=$?
-        if [ $exit_code -eq 0 ]; then
+        if curl -L --fail "$from" -o "$to"; then
             return 0
         fi
+        exit_code=$?
         attempt=$((attempt + 1))
         echo "Download failed, attempt $attempt"
         sleep 30

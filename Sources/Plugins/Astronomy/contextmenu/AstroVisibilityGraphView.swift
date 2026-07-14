@@ -13,22 +13,7 @@ final class AstroVisibilityGraphView: UIView {
         case sunrise
         case sunset
     }
-
-    private struct PlotArea {
-        let left: CGFloat
-        let top: CGFloat
-        let right: CGFloat
-        let bottom: CGFloat
-
-        var width: CGFloat { right - left }
-        var height: CGFloat { bottom - top }
-    }
-
-    private struct ZeroCrossing {
-        let x: CGFloat
-        let type: ZeroCrossingType
-    }
-
+    
     private enum Constants {
         static let minAltitudeRender = -40.0
         static let maxAltitudeRender = 95.0
@@ -68,7 +53,7 @@ final class AstroVisibilityGraphView: UIView {
         static let markerSeparatorInset: CGFloat = 2
         static let markerToGraphGap: CGFloat = 3
     }
-
+    
     private enum GraphColors {
         static let xTick = UIColor(rgbValue: 0xBEBCC2)
         static let xLabel = UIColor(rgbValue: 0x7D738C)
@@ -83,15 +68,28 @@ final class AstroVisibilityGraphView: UIView {
         static let cursorDotStroke = UIColor.white
     }
 
-    private var model: AstroVisibilityGraphSnapshot?
+    private struct PlotArea {
+        let left: CGFloat
+        let top: CGFloat
+        let right: CGFloat
+        let bottom: CGFloat
+
+        var width: CGFloat { right - left }
+        var height: CGFloat { bottom - top }
+    }
+
+    private struct ZeroCrossing {
+        let x: CGFloat
+        let type: ZeroCrossingType
+    }
+    
+    var onCursorTimeChanged: ((Int64) -> Void)?
+
     private let palette = AstroChartColorPalette()
-    private var isTouchTracking = false
+    private var model: AstroVisibilityGraphSnapshot?
     private var cursorVisible = false
     private var cursorX: CGFloat = 0
     private var cursorReferenceTimeMillis: Int64?
-    private weak var disabledParentScrollView: UIScrollView?
-
-    var onCursorTimeChanged: ((Int64) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,6 +97,11 @@ final class AstroVisibilityGraphView: UIView {
         backgroundColor = .clear
         contentMode = .redraw
         isUserInteractionEnabled = true
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        panGesture.delaysTouchesBegan = false
+        panGesture.delegate = self
+        addGestureRecognizer(panGesture)
     }
 
     required init?(coder: NSCoder) {
@@ -145,54 +148,6 @@ final class AstroVisibilityGraphView: UIView {
         if cursorVisible {
             drawCursor(context: context, area: area, model: model)
         }
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first,
-              let area = getPlotArea(),
-              areaContains(touch.location(in: self), area: area) else {
-            super.touchesBegan(touches, with: event)
-            return
-        }
-        setParentScrollEnabled(false)
-        isTouchTracking = true
-        updateCursor(touch.location(in: self).x, area: area, notifyCallback: true)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard isTouchTracking,
-              let touch = touches.first,
-              let area = getPlotArea() else {
-            super.touchesMoved(touches, with: event)
-            return
-        }
-        setParentScrollEnabled(false)
-        updateCursor(touch.location(in: self).x, area: area, notifyCallback: true)
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        defer {
-            isTouchTracking = false
-            setParentScrollEnabled(true)
-        }
-        guard isTouchTracking,
-              let touch = touches.first,
-              let area = getPlotArea() else {
-            super.touchesEnded(touches, with: event)
-            return
-        }
-        updateCursor(touch.location(in: self).x, area: area, notifyCallback: true)
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouchTracking = false
-        setParentScrollEnabled(true)
-        if let model {
-            syncCursorToReference(model)
-        } else {
-            cursorVisible = false
-        }
-        setNeedsDisplay()
     }
 
     private func drawDynamicBackground(context: CGContext, area: PlotArea, model: AstroVisibilityGraphSnapshot) {
@@ -317,8 +272,8 @@ final class AstroVisibilityGraphView: UIView {
         }
         let y = yForAltitude(0.0, area: area) - Constants.sunIconRaise
         for crossing in crossings {
-            let imageName = crossing.type == .sunrise ? "ic_action_sunrise_12" : "ic_action_sunset_12"
-            guard let image = AstroIcon.original(imageName) ?? AstroIcon.template(imageName) else {
+            let imageName = crossing.type == .sunrise ? "sunrise.fill" : "sunset.fill"
+            guard let image = UIImage(systemName: imageName)?.withTintColor(.white) else {
                 continue
             }
             image.draw(in: CGRect(x: crossing.x - Constants.sunIconSize / 2,
@@ -384,7 +339,7 @@ final class AstroVisibilityGraphView: UIView {
         let font = UIFont.systemFont(ofSize: Constants.markerTextSize)
         let timeAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: AstroContextMenuTheme.primaryText.currentMapThemeColor
+            .foregroundColor: UIColor.textColorPrimary
         ]
         let altitudeAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
@@ -447,7 +402,11 @@ final class AstroVisibilityGraphView: UIView {
             let fraction = Double(index) / Double(renderSampleCount - 1)
             let x = area.left + CGFloat(fraction) * area.width
             let y = yForAltitude(interpolate(model.objectAltitudes, fraction: fraction), area: area)
-            index == 0 ? path.move(to: CGPoint(x: x, y: y)) : path.addLine(to: CGPoint(x: x, y: y))
+            if index == 0 {
+                path.move(to: CGPoint(x: x, y: y))
+            } else {
+                path.addLine(to: CGPoint(x: x, y: y))
+            }
         }
         return path
     }
@@ -630,24 +589,50 @@ final class AstroVisibilityGraphView: UIView {
     private func millis(from date: Date) -> Int64 {
         Int64((date.timeIntervalSince1970 * 1000.0).rounded())
     }
+}
 
-    private func setParentScrollEnabled(_ enabled: Bool) {
-        if enabled {
-            disabledParentScrollView?.isScrollEnabled = true
-            disabledParentScrollView = nil
-            return
-        }
-        if disabledParentScrollView == nil {
-            var parent = superview
-            while let current = parent {
-                if let scrollView = current as? UIScrollView {
-                    disabledParentScrollView = scrollView
-                    break
-                }
-                parent = current.superview
+extension AstroVisibilityGraphView: UIGestureRecognizerDelegate {
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        false
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
+        true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        true
+    }
+    
+    @objc private func handlePan(_ gesture: UIGestureRecognizer) {
+        let point = gesture.location(in: self)
+
+        switch gesture.state {
+        case .began, .changed, .ended:
+            guard let area = getPlotArea() else {
+                return
             }
+            updateCursor(point.x, area: area, notifyCallback: true)
+        case .cancelled, .failed:
+            guard let model else {
+                cursorVisible = false
+                return
+            }
+            syncCursorToReference(model)
+            setNeedsDisplay()
+        default:
+            break
         }
-        disabledParentScrollView?.isScrollEnabled = false
     }
 }
 

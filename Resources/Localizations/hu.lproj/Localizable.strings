@@ -4446,3 +4446,5 @@
 "add_to" = "Hozzáadás ehhez";
 "favorite_confirm_delete_group" = "Biztosan törli a(z) „%1$@” nevű csoportot és az összes hozzá tartozó pontot (%2$lu)?";
 "shared_string_folders" = "Mappák";
+"traffic_warning_red_light_camera" = "Piroson áthaladást figyelő kamera";
+"show_all_tracks_on_the_map" = "Az összes nyomvonal megjelenítése a térképen";

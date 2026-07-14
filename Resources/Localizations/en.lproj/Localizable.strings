@@ -643,6 +643,7 @@
 "no_tracks_on_map" = "No tracks on map";
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
+"show_all_tracks_on_the_map" = "Show all tracks on the map";
 "recently_visible" = "Recently visible %@";
 "sort_subfolders_tracks" = "Sort subfolders";
 "shared_string_subfolders_in" = "Subfolders in";

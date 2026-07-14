@@ -36,12 +36,12 @@
 #define kTagsTextFieldsTag 1
 #define kUploadingValueCell @"kUploadingValueCell"
 
-typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
-    EOAOsmUploadGPXViewConrollerModeInitial = 0,
-    EOAOsmUploadGPXViewConrollerModeUploading,
-    EOAOsmUploadGPXViewConrollerModeSuccess,
-    EOAOsmUploadGPXViewConrollerModeFailed,
-    EOAOsmUploadGPXViewConrollerModeNoInternet
+typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewControllerMode) {
+    EOAOsmUploadGPXViewControllerModeInitial = 0,
+    EOAOsmUploadGPXViewControllerModeUploading,
+    EOAOsmUploadGPXViewControllerModeSuccess,
+    EOAOsmUploadGPXViewControllerModeFailed,
+    EOAOsmUploadGPXViewControllerModeNoInternet
 };
 
 @interface OAOsmUploadGPXViewConroller () <UITextFieldDelegate, OAOsmUploadGPXVisibilityDelegate, OAAccountSettingDelegate, OAOnUploadFileListener>
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     OAUploadGPXFilesTask *_uploadTask;
     NSMutableDictionary<NSString *, NSNumber *> *_filesUploadingProgress;
     NSMutableArray<NSString *> *_failedFileNames;
-    EOAOsmUploadGPXViewConrollerMode _mode;
+    EOAOsmUploadGPXViewControllerMode _mode;
     OAAutoObserverProxy *_oauthAccountUpdatedObserver;
 }
 
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _mode = EOAOsmUploadGPXViewConrollerModeInitial;
+    _mode = EOAOsmUploadGPXViewControllerModeInitial;
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = [self tagsTextWithDefaultActivity];
@@ -129,13 +129,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     switch (_mode)
     {
-        case EOAOsmUploadGPXViewConrollerModeInitial:
+        case EOAOsmUploadGPXViewControllerModeInitial:
             return OALocalizedString(@"shared_string_upload");
-        case EOAOsmUploadGPXViewConrollerModeUploading:
-        case EOAOsmUploadGPXViewConrollerModeSuccess:
+        case EOAOsmUploadGPXViewControllerModeUploading:
+        case EOAOsmUploadGPXViewControllerModeSuccess:
             return OALocalizedString(@"shared_string_done");
-        case EOAOsmUploadGPXViewConrollerModeFailed:
-        case EOAOsmUploadGPXViewConrollerModeNoInternet:
+        case EOAOsmUploadGPXViewControllerModeFailed:
+        case EOAOsmUploadGPXViewControllerModeNoInternet:
             return OALocalizedString(@"retry");
         default:
             return @"";
@@ -149,18 +149,18 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     
     switch (_mode)
     {
-        case EOAOsmUploadGPXViewConrollerModeUploading:
+        case EOAOsmUploadGPXViewControllerModeUploading:
             return EOABaseButtonColorSchemeInactive;
-        case EOAOsmUploadGPXViewConrollerModeInitial:
-        case EOAOsmUploadGPXViewConrollerModeFailed:
-        case EOAOsmUploadGPXViewConrollerModeNoInternet:
+        case EOAOsmUploadGPXViewControllerModeInitial:
+        case EOAOsmUploadGPXViewControllerModeFailed:
+        case EOAOsmUploadGPXViewControllerModeNoInternet:
             return EOABaseButtonColorSchemePurple;
         default:
             return EOABaseButtonColorSchemeGraySimple;
     }
 }
 
-- (void)updateScreenMode:(EOAOsmUploadGPXViewConrollerMode)mode
+- (void)updateScreenMode:(EOAOsmUploadGPXViewControllerMode)mode
 {
     _mode = mode;
     [self setupBottomButtons];
@@ -170,10 +170,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)generateData
 {
+    if (_mode == EOAOsmUploadGPXViewControllerModeSuccess)
+        return;
+
     _data = [[OATableDataModel alloc] init];
     __weak OAOsmUploadGPXViewConroller *weakSelf = self;
     
-    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+    if (_mode == EOAOsmUploadGPXViewControllerModeInitial)
     {
         OATableSectionData *descriptionSection = [_data createNewSection];
         descriptionSection.headerText = OALocalizedString(@"shared_string_description");
@@ -223,7 +226,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             [accountCell setObj:@(UITableViewCellAccessoryNone) forKey:@"accessory_type"];
         }
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeUploading)
     {
         _progressBarCell = [self getProgressBarCell];
         _progressValueCell = [self getProgressValueCell];
@@ -236,7 +239,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableRowData *progressBarCell = [uploadingSection createNewRow];
         [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeFailed)
     {
         OATableSectionData *section = [_data createNewSection];
         section.headerText = @" ";
@@ -252,7 +255,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [descrRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
              forKey:@"font"];
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeNoInternet)
     {
         OATableSectionData *section = [_data createNewSection];
         section.headerText = @" ";
@@ -287,11 +290,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         if (_failedFileNames.count == 0)
         {
-            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeSuccess];
+            [self updateScreenMode:EOAOsmUploadGPXViewControllerModeSuccess];
         }
         else
         {
-            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeFailed];
+            [self updateScreenMode:EOAOsmUploadGPXViewControllerModeFailed];
             [self generateData];
             [self.tableView reloadData];
         }
@@ -505,7 +508,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+    if (_mode == EOAOsmUploadGPXViewControllerModeInitial)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
@@ -515,7 +518,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         
         [self presentViewController:alert animated:YES completion:nil];
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeUploading)
     {
         if (_uploadTask)
             [_uploadTask setInterrupted:YES];
@@ -529,11 +532,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)onBottomButtonPressed
 {
-    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+    if (_mode == EOAOsmUploadGPXViewControllerModeInitial)
     {
         if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         {
-            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeNoInternet];
+            [self updateScreenMode:EOAOsmUploadGPXViewControllerModeNoInternet];
             [self generateData];
             [self.tableView reloadData];
             return;
@@ -541,7 +544,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         
         if (_isAuthorised && _isOAuthAllowed)
         {
-            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeUploading];
+            [self updateScreenMode:EOAOsmUploadGPXViewControllerModeUploading];
             [self generateData];
             [self.tableView reloadData];
             
@@ -559,25 +562,25 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             [_uploadTask uploadTracks];
         }
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeUploading)
     {
         //button is blocked
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeSuccess)
     {
         [super onLeftNavbarButtonPressed];
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeFailed)
     {
         _gpxItemsToUpload = [self getFailedFiles];
-        [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
+        [self updateScreenMode:EOAOsmUploadGPXViewControllerModeInitial];
         [self generateData];
         [self.tableView reloadData];
         [self onBottomButtonPressed];
     }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
+    else if (_mode == EOAOsmUploadGPXViewControllerModeNoInternet)
     {
-        [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
+        [self updateScreenMode:EOAOsmUploadGPXViewControllerModeInitial];
         [self generateData];
         [self.tableView reloadData];
         [self onBottomButtonPressed];
@@ -587,6 +590,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)onRotation
 {
     [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void)onVisibilityButtonClicked
@@ -702,10 +706,10 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 }
 
 - (void)onFileUploadDone:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error {
-    if (error || error.length > 0)
-        [_failedFileNames addObject:fileName];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (error.length > 0)
+            [_failedFileNames addObject:fileName];
+
         [self setProgress:100 fileName:fileName];
     });
 }

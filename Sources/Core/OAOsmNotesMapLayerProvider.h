@@ -75,13 +75,19 @@ private:
     OsmAnd::AreaI _requestedBBox31;
     OsmAnd::AreaI _requestingBBox31;
     OsmAnd::ZoomLevel _requestingZoom;
+    uint64_t _requestingGeneration;
 
     bool queryOsmNotes(const OsmAnd::AreaI &bbox31,
-                       const OsmAnd::ZoomLevel &zoom);
+                       const OsmAnd::ZoomLevel &zoom,
+                       const uint64_t requestingGeneration,
+                       const std::shared_ptr<const OsmAnd::IQueryController>& queryController);
     bool parseResponse(const QByteArray &buffer,
                        const OsmAnd::AreaI &bbox31,
-                       const OsmAnd::ZoomLevel &zoom);
-    QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> buildMapSymbolsGroups(const OsmAnd::AreaI &bbox31);
+                       const OsmAnd::ZoomLevel &zoom,
+                       const uint64_t requestingGeneration);
+    QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> buildMapSymbolsGroups(
+        const OsmAnd::AreaI &bbox31,
+        const QList<std::shared_ptr<const OAOnlineOsmNote>>& notesCache);
 protected:
 public:
     OAOsmNotesMapLayerProvider(const float symbolsScaleFactor);
@@ -109,4 +115,3 @@ public:
     
     QList<std::shared_ptr<const OAOnlineOsmNote>> getNotesCache() const;
 };
-

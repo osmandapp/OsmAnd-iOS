@@ -125,6 +125,51 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [self applyTopToolbarTargetTitle];
 }
 
++ (NSString *) getTypeStrFor:(OAPOI *)amenity
+{
+    OAClickableWayHelper *clickableWayHelper = [[OAClickableWayHelper alloc] init];
+    if ([amenity isRouteTrack] || [clickableWayHelper isClickableWayAmenity:amenity])
+    {
+        return [self getTypeWithDistanceStr:amenity];
+    }
+    else if (amenity.type && amenity.type.isWiki)
+    {
+        return [self getCommonWikiTypeStr:amenity];
+    }
+    return [self getTypeStr:amenity];
+}
+
++ (NSString *)getTypeWithDistanceStr:(OAPOI *)amenity
+{
+    NSString *type = [self getTypeStr:amenity];
+    NSString *metrics = [AmenityExtensionsHelper formattedAmenityMetrics:amenity];
+    NSString *activityType = [amenity getRouteActivityType];
+    if (!NSStringIsEmpty(activityType))
+        type = activityType;
+    
+    if (metrics)
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), type, metrics];
+    else
+        return type;
+}
+
++ (NSString *)getCommonWikiTypeStr:(OAPOI *)amenity
+{
+    OAPOIHelper *poiTypes = [OAPOIHelper sharedInstance];
+    for (NSString *additionalInfoKey : [amenity getAdditionalInfoKeys])
+    {
+        OAPOIType *poiType = [poiTypes getPoiTypeByKey:additionalInfoKey];
+        if (poiType)
+            return poiType.nameLocalized;
+    }
+    return [self getTypeStr:amenity];
+}
+
++ (NSString *) getTypeStr:(OAPOI *)amenity
+{
+    return [amenity getMainSubtypeStr];
+}
+
 - (NSString *) getTypeStr
 {
     return [self.poi getMainSubtypeStr];

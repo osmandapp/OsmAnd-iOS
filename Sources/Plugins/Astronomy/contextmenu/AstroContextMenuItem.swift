@@ -138,7 +138,6 @@ struct AstroScheduleDayGraphSnapshot {
 
 struct AstroScheduleDayItem {
     let date: Date
-    let dayLabel: String
     let riseTime: String?
     let setTime: String?
     let setDayOffset: Int

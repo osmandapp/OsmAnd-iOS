@@ -3947,3 +3947,6 @@
 "trip_recording_moving_time" = "Tempo di percorrenza";
 "gradient_range_type_relative_summary" = "Scala di colori basata automaticamente sul range min/max della traccia.";
 "remove_step" = "Elimina passaggio";
+"astro_deep_sky" = "Cielo profondo";
+"astro_min_magnitude" = "Magnitudine min.";
+"shared_string_azimuth" = "Azimut";

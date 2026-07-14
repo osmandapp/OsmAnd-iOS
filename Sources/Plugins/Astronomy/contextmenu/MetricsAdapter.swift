@@ -23,7 +23,10 @@ final class MetricsAdapter {
     func makeMetricsView() -> UIView {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
+        scrollView.alwaysBounceVertical = false
+        scrollView.isDirectionalLockEnabled = true
 
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -71,22 +74,23 @@ private final class MetricView: UIView {
 
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthAnchor.constraint(greaterThanOrEqualToConstant: 84).isActive = true
+        widthAnchor.constraint(greaterThanOrEqualToConstant: 85).isActive = true
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, titleLabel])
         stack.axis = .vertical
         stack.alignment = .leading
+        stack.spacing = 3
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         valueLabel.font = .preferredFont(forTextStyle: .subheadline)
-        valueLabel.textColor = AstroContextMenuTheme.activeText
+        valueLabel.textColor = .textColorActive
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.8
 
         titleLabel.font = .preferredFont(forTextStyle: .footnote)
-        titleLabel.textColor = AstroContextMenuTheme.secondaryText
+        titleLabel.textColor = .textColorSecondary
 
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparator
         divider.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stack)
@@ -100,7 +104,7 @@ private final class MetricView: UIView {
             divider.trailingAnchor.constraint(equalTo: trailingAnchor),
             divider.centerYAnchor.constraint(equalTo: centerYAnchor),
             divider.widthAnchor.constraint(equalToConstant: 1),
-            divider.heightAnchor.constraint(equalToConstant: 34)
+            divider.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
 }

@@ -15,6 +15,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateTitle(_ title: String, hideSubtitle: Bool)
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
     func updateToolbar(with items: [UIBarButtonItem]?)
+    func updateContentScrollView(_ scrollView: UIScrollView)
 }
 
 @objc
@@ -33,10 +34,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         var image: UIImage {
             switch self {
-            case .favorites: .icCustomFavorites
-            case .tracks: .icCustomTrip
-            case .osm: .icCustomOsmEdits
-            case .travel: .icCustomBackpack
+            case .favorites: .icCustom20Favorites
+            case .tracks: .icCustom20Trip
+            case .osm: .icCustom20Osm
+            case .travel: .icCustom20Backpack
             }
         }
         
@@ -92,6 +93,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.searchController = nil
         setupSearchController()
         setupPageController()
         setupSegments()
@@ -238,6 +240,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             guard let image = tab.image.resizedTemplateImage(with: segmentedControlIconSize) else {
                 continue
             }
+            image.accessibilityLabel = tab.title
             segmentControl.insertSegment(with: image, at: index, animated: false)
         }
     }
@@ -290,15 +293,30 @@ extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
 
 // MARK: - UIPageViewControllerDelegate
 extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
         guard let viewController = pendingViewControllers.first,
               let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }) else {
             return
         }
+        
+        segmentControl.selectedSegmentIndex = index
+        setupNavbarTitle(with: availableTabs[index])
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        guard let viewController = pageViewController.viewControllers?.first,
+              let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }) else {
+            return
+        }
+        
         let tab = availableTabs[index]
         segmentControl.selectedSegmentIndex = index
-        setupNavbarTitle(with: tab)
         selectedTab = tab
+        setupNavbarTitle(with: tab)
     }
 }
 
@@ -333,11 +351,20 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateSearchEnabling(_ isEnabled: Bool) {
-        let searchController = isEnabled ? searchController : nil
-        navigationItem.searchController = searchController
-        navigationItem.searchController?.isActive = true
+        if isEnabled {
+            navigationItem.searchController = searchController
+            searchController?.isActive = true
+        } else {
+            searchController?.isActive = false
+            navigationItem.searchController = nil
+        }
+        
         updateSegmentedControlVisibility(!isEnabled)
         setupNavbar(isClearNavBar: isEnabled)
+    }
+    
+    func updateContentScrollView(_ scrollView: UIScrollView) {
+        setContentScrollView(scrollView, for: .top)
     }
 }
 

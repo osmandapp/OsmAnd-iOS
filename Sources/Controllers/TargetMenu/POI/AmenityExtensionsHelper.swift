@@ -7,6 +7,9 @@
 
 @objcMembers
 final class AmenityExtensionsHelper: NSObject {
+    static let minUphillDownhillFixedToShow: Float = 10.0
+    static let minUphillDownhillPercentToShow: Float = 0.0 // customizable (default 0)
+    
     private static let wikidata = "wikidata"
     private static let wikipedia = "wikipedia"
     private static let wikimediaCommons = "wikimedia_commons"
@@ -30,5 +33,43 @@ final class AmenityExtensionsHelper: NSObject {
             let key = tag == image ? osmImageKey : tag
             result[key] = value.removingPercentEncoding ?? value
         }
+    }
+    
+    static func formattedAmenityMetrics(_ amenity: OAPOI) -> String? {
+        let distMeters = amenityDistanceMeters(amenity)
+        let upMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_UP), def: 0)
+        let downMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_DOWN), def: 0)
+        
+        guard let dist = OAOsmAndFormatter.getFormattedDistance(distMeters, with: OsmAndFormatterParams.noTrailingZeros),
+              let uphill = OAOsmAndFormatter.getFormattedDistance(upMeters, with: OsmAndFormatterParams.noTrailingZeros),
+              let downhill = OAOsmAndFormatter.getFormattedDistance(downMeters, with: OsmAndFormatterParams.noTrailingZeros) else {
+            return nil
+        }
+        
+        var metrics = [String]()
+        if distMeters > 0 {
+            metrics.append(TrkSegment.SegmentSlopeType.flat.symbol + dist)
+            if upMeters >= minUphillDownhillFixedToShow &&
+                upMeters / distMeters * 100 > minUphillDownhillPercentToShow {
+                metrics.append(TrkSegment.SegmentSlopeType.uphill.symbol + uphill)
+            }
+            if downMeters >= minUphillDownhillFixedToShow &&
+                downMeters / distMeters * 100 > minUphillDownhillPercentToShow {
+                metrics.append(TrkSegment.SegmentSlopeType.downhill.symbol + downhill)
+            }
+        }
+        
+        return metrics.isEmpty ? nil : metrics.joined(separator: " ")
+    }
+    
+    private static func amenityDistanceMeters(_ amenity: OAPOI) -> Float {
+        let distanceTag = amenity.getAdditionalInfo(TravelGpx.DISTANCE) ?? ""
+        var km = KAlgorithms.shared.parseFloatSilently(input: distanceTag, def: 0)
+        if km > 0 && !distanceTag.contains(".") {
+            // Before 1 Apr 2025 distance format was MMMMM (meters, no fractional part).
+            // Since 1 Apr 2025 format has been fixed to KM.D (km, 1 fractional digit).
+            km /= 1000
+        }
+        return km * 1000
     }
 }

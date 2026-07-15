@@ -637,6 +637,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         return;
 
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL addedMarker = NO;
     for (OAFavoriteItem *favorite in itemsToAdd)
     {
         CLLocation *location = [self locationForFavorite:favorite];
@@ -644,7 +645,11 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
             continue;
 
         [mapPanel addMapMarker:location.coordinate.latitude lon:location.coordinate.longitude description:[favorite getDisplayName]];
+        addedMarker = YES;
     }
+
+    if (addedMarker)
+        [mapPanel showDestinations];
 }
 
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName

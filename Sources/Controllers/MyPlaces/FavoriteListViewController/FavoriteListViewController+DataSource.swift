@@ -108,9 +108,18 @@ extension FavoriteListViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
-        dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] _ in
-            guard let self, self.collectionView.isEditing else { return }
+        dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
+            guard let self else { return }
+            if case .header(let section) = item {
+                self.collapsedRootSections.remove(section)
+            }
+
+            guard self.collectionView.isEditing else { return }
             self.collectionView.indexPathsForVisibleItems.forEach { self.updateVisibleSelectionState(at: $0) }
+        }
+        dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
+            guard let self, case .header(let section) = item else { return }
+            self.collapsedRootSections.insert(section)
         }
         return dataSource
     }
@@ -222,7 +231,9 @@ extension FavoriteListViewController {
             var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<FavoriteListItem>()
             sectionSnapshot.append([headerItem])
             sectionSnapshot.append(folderItems, to: headerItem)
-            sectionSnapshot.expand([headerItem])
+            if !collapsedRootSections.contains(section) {
+                sectionSnapshot.expand([headerItem])
+            }
             dataSource.apply(sectionSnapshot, to: .folderSection(section), animatingDifferences: animatingDifferences)
         }
     }

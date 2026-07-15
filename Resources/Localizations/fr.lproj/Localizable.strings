@@ -694,7 +694,7 @@
 "auto_split_gap_descr" = "Débute un nouveau segment après 6 minutes de pause, une nouvelle trace après 2 heures de pause ou un nouveau fichier après une pause plus longue";
 "confirm_every_run" = "Toujours demander";
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
-"tunnel_warning" = "En approche d\'un tunnel";
+"tunnel_warning" = "Tunnel à venir";
 "save_current_track_descr" = "Enregistrer la trace en cours comme fichier GPX.";
 "save_track_to_gpx" = "Enregistrer automatiquement la trace pendant la navigation";
 "save_track_to_gpx_descrp" = "Démarrer automatiquement l’enregistrement de la trace pendant la navigation et l’enregistrer automatiquement ensuite.";
@@ -3087,7 +3087,7 @@
 "cloud_item_restored" = "%@ a été restauré dans le Cloud.";
 "action_cannot_be_undone" = "Cette action ne peut être annulée.";
 "shared_string_row_number" = "Ligne %d";
-"shared_string_nearest" = "Le plus proche";
+"shared_string_nearest" = "Plus proche";
 "my_places_no_tracks_title_root" = "Vous n’avez pas de traces";
 "my_places_no_tracks_title" = "Dossier vide";
 "subscribe_email_error" = "Erreur";

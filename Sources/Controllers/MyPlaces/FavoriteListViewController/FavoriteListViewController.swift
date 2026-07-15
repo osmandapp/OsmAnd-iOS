@@ -127,6 +127,7 @@ final class FavoriteListViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
         configureCollectionView()
+        applySnapshot()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
@@ -138,7 +139,6 @@ final class FavoriteListViewController: UIViewController {
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
         configureToolbar()
-        applySnapshot()
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
         if isRootFolder {

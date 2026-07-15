@@ -22,6 +22,8 @@ final class StarMapTimeControlCard: UIView {
     private var active: Bool = false
     private var nightMode: Bool = false
     
+    private weak var glassBackgroundView: UIVisualEffectView?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupContent()
@@ -44,19 +46,13 @@ final class StarMapTimeControlCard: UIView {
         self.nightMode = nightMode
         self.active = active
         
-        StarMapGlassBackground.apply(
-            to: self,
-            active: active,
-            nightMode: nightMode,
-            cornerRadius: Self.cornerRadius
-        )
         timeButton.updateTheme(nightmod: nightMode, active: active)
         resetButton.updateTheme(nightmod: nightMode, active: active)
         
+        glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        
         if pressed {
-            let pressedColorDay = UIColor(rgb: color_on_map_icon_background_color_tap_light).withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
-            let pressedColorNight = UIColor(rgb: color_on_map_icon_background_color_tap_dark).withAlphaComponent(StarMapControlTheme.defaultBackgroundAlpha)
-            backgroundColor = nightMode ? pressedColorNight : pressedColorDay
+            backgroundColor = StarMapControlTheme.pressedBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
         } else {
             backgroundColor = active
             ? StarMapControlTheme.activeBackground(alpha: StarMapControlTheme.defaultBackgroundAlpha)
@@ -68,13 +64,7 @@ final class StarMapTimeControlCard: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > 0, bounds.height > 0 else { return }
-        if #available(iOS 26.0, *) {
-            subviews.compactMap { $0 as? UIVisualEffectView }.forEach {
-                $0.frame = bounds
-                $0.layer.cornerRadius = Self.cornerRadius
-            }
-        }
+        glassBackgroundView?.frame = bounds
     }
 
     private func setupContent() {
@@ -84,7 +74,13 @@ final class StarMapTimeControlCard: UIView {
         layer.shadowOpacity = 0.35
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
+        layer.borderColor = StarMapControlTheme.border(nightMode: nightMode).cgColor
+        
+        glassBackgroundView = StarMapGlassBackground.apply(
+            to: self,
+            nightMode: nightMode,
+            cornerRadius: Self.cornerRadius
+        )
 
         timeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         timeButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)

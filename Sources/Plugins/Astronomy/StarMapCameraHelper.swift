@@ -163,7 +163,6 @@ final class StarMapCameraHelper {
     }
     
     private func startPreview(in hostView: UIView, below siblingView: UIView) -> Bool {
-        assert(Thread.isMainThread)
         self.hostView = hostView
         self.siblingView = siblingView
         

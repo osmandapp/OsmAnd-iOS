@@ -50,11 +50,13 @@ final class StarCompassButton: StarMapButton {
     }
     
     private func updateArrowIcon() {
-        let base = arDirectionEnabled
-            ? "ic_custom_direction_compass"
-            : "ic_custom_direction_manual"
-        let suffix = nightMode ? "_night" : "_day"
-        arrowView.image = AstroIcon.original(base + suffix)
+        if arDirectionEnabled {
+            let icon: UIImage? = .icCustomDirectionCompass.imageAsset?.image(with: UITraitCollection(userInterfaceStyle: nightMode ? .dark : .light))
+            arrowView.image = icon?.withRenderingMode(.alwaysOriginal)
+        } else {
+            let icon: UIImage? = .icCustomDirectionManual.imageAsset?.image(with: UITraitCollection(userInterfaceStyle: nightMode ? .dark : .light))
+            arrowView.image = icon?.withRenderingMode(.alwaysOriginal)
+        }
     }
 
     private func commonInit() {

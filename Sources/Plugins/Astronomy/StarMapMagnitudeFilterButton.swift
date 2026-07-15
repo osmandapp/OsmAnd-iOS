@@ -102,12 +102,10 @@ final class StarMapMagnitudeFilterButton: StarMapButton {
         var opacity = helper.getDefaultOpacityPref().get()
         if opacity < 0 { opacity = MapButtonState.opaqueAlpha }
 
-        var glassStyle: Int32
+        var glassStyle = MapButtonState.defaultGlassStyle
         if #available(iOS 26.0, *) {
             glassStyle = Int32(UIGlassEffect.Style.clear.rawValue)
             opacity = Double(StarMapControlTheme.defaultBackgroundAlpha)
-        } else {
-            glassStyle = MapButtonState.defaultGlassStyle
         }
 
         setCustomAppearanceParams(ButtonAppearanceParams(

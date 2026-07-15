@@ -489,7 +489,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupListeners() {
-        timeSelectionView.setOnDateTimeChangeListener { [weak self] date in
+        timeSelectionView.onDateTimeChange = { [weak self] date in
             self?.setTimeAutoUpdateEnabled(false)
             self?.updateTime(date, animate: true)
         }
@@ -661,7 +661,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateTime(_ date: Date, animate: Bool) {
         currentDate = date
-        timeSelectionView.setDateTime(date)
+        timeSelectionView.date = date
         starView.setDateTime(AstroUtils.astronomyTime(from: date), animate: animate)
         updateTimeControls()
         objectInfoController?.onTimeChanged()
@@ -708,7 +708,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateTimeControls() {
         let date = currentDate
-        timeSelectionView.setDateTime(date)
+        timeSelectionView.date = date
         let calendar = Calendar.current
         let now = Date()
         let formatter = DateFormatter()

@@ -22,6 +22,8 @@ final class StarMapMagnitudeSliderPanel: UIView {
     private let valueLabel = UILabel()
     private let slider = UISlider()
     private var nightMode = false
+    
+    private weak var glassBackgroundView: UIVisualEffectView?
 
     init(maxMagnitude: Double) {
         super.init(frame: .zero)
@@ -45,12 +47,9 @@ final class StarMapMagnitudeSliderPanel: UIView {
 
     func updateTheme(nightMode: Bool) {
         self.nightMode = nightMode
-        StarMapGlassBackground.apply(
-            to: self,
-            active: false,
-            nightMode: nightMode,
-            cornerRadius: Self.cornerRadius
-        )
+        
+        glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        
         let color: UIColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
         titleLabel.textColor = color
         valueLabel.textColor = color
@@ -62,13 +61,7 @@ final class StarMapMagnitudeSliderPanel: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > 0, bounds.height > 0 else { return }
-        if #available(iOS 26.0, *) {
-            subviews.compactMap { $0 as? UIVisualEffectView }.forEach {
-                $0.frame = bounds
-                $0.layer.cornerRadius = Self.cornerRadius
-            }
-        }
+        glassBackgroundView?.frame = bounds
     }
 
     private func setupContent(maxMagnitude: Double) {
@@ -78,7 +71,13 @@ final class StarMapMagnitudeSliderPanel: UIView {
         layer.shadowOpacity = 0.35
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
+        layer.borderColor = StarMapControlTheme.border(nightMode: nightMode).cgColor
+        
+        glassBackgroundView = StarMapGlassBackground.apply(
+            to: self,
+            nightMode: nightMode,
+            cornerRadius: Self.cornerRadius
+        )
 
         titleLabel.text = localizedString("astro_min_magnitude")
         titleLabel.font = .preferredFont(forTextStyle: .subheadline)

@@ -28,6 +28,8 @@ final class StarMapArControlCard: UIView {
 
     private var nightMode = false
     private var arActive = false
+    
+    private weak var glassBackgroundView: UIVisualEffectView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,12 +60,8 @@ final class StarMapArControlCard: UIView {
         self.nightMode = nightMode
         self.arActive = arActive
 
-        StarMapGlassBackground.apply(
-            to: self,
-            active: arActive,
-            nightMode: nightMode,
-            cornerRadius: Self.cornerRadius
-        )
+        glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        
         backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
 
         resetButton.updateTheme(nightmod: nightMode, active: false)
@@ -75,13 +73,7 @@ final class StarMapArControlCard: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > 0, bounds.height > 0 else { return }
-        if #available(iOS 26.0, *) {
-            subviews.compactMap { $0 as? UIVisualEffectView }.forEach {
-                $0.frame = bounds
-                $0.layer.cornerRadius = Self.cornerRadius
-            }
-        }
+        glassBackgroundView?.frame = bounds
     }
 
     private func setupContent() {
@@ -91,25 +83,31 @@ final class StarMapArControlCard: UIView {
         layer.shadowOpacity = 0.35
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
+        layer.borderColor = StarMapControlTheme.border(nightMode: nightMode).cgColor
+        
+        glassBackgroundView = StarMapGlassBackground.apply(
+            to: self,
+            nightMode: nightMode,
+            cornerRadius: Self.cornerRadius
+        )
 
         configurePlainButton(
             arButton,
-            iconName: "ic_custom_view_in_ar",
+            icon: .icCustomViewInAr,
             accessibilityLabel: localizedString("astro_ar"),
             action: #selector(arButtonTapped)
         )
         configurePlainButton(
             resetButton,
-            iconName: "ic_custom_reset",
+            icon: .icCustomReset,
             accessibilityLabel: localizedString("shared_string_reset"),
             action: #selector(resetButtonTapped)
         )
         
         arButton.customColorTintActive = StarMapControlTheme.activeForeground(nightMode: nightMode)
-        arButton.onHighlightChange = { [weak self] isHighlighted in
+        arButton.onHighlightChange = { [weak self] _ in
             guard let self else { return }
-            arButton.updateTheme(nightmod: nightMode, active: arActive)
+            self.arButton.updateTheme(nightmod: nightMode, active: arActive)
         }
 
         transparencySlider.minimumValue = 0
@@ -167,17 +165,17 @@ final class StarMapArControlCard: UIView {
 
     private func configurePlainButton(
         _ button: StarMapPlainButton,
-        iconName: String,
+        icon: UIImage?,
         accessibilityLabel: String,
         action: Selector
     ) {
-        button.setIcon(iconName, accessibilityLabel: accessibilityLabel)
+        button.setIcon(icon, accessibilityLabel: accessibilityLabel)
         button.addTarget(self, action: action, for: .touchUpInside)
     }
     
     private func updateArButtonAppearance() {
-        let iconName = arActive ? "ic_custom_view_in_ar_filled" : "ic_custom_view_in_ar"
-        arButton.setIcon(iconName, accessibilityLabel: localizedString("astro_ar"))
+        let icon: UIImage = arActive ? .icCustomViewInArFilled : .icCustomViewInAr
+        arButton.setIcon(icon, accessibilityLabel: localizedString("astro_ar"))
         arButton.updateTheme(nightmod: nightMode, active: arActive)
     }
 

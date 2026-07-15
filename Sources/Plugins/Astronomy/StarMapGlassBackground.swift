@@ -11,7 +11,7 @@ import Foundation
 enum StarMapGlassBackground {
     private static let tag = 9_001
     
-    static func apply(to view: UIView, active: Bool, nightMode: Bool, cornerRadius: CGFloat) {
+    static func apply(to view: UIView, nightMode: Bool, cornerRadius: CGFloat) -> UIVisualEffectView? {
         if #available(iOS 26.0, *) {
             view.subviews.filter { $0.tag == tag }.forEach { $0.removeFromSuperview() }
             view.backgroundColor = .clear
@@ -26,11 +26,8 @@ enum StarMapGlassBackground {
             effectView.clipsToBounds = true
             effectView.overrideUserInterfaceStyle = nightMode ? .dark : .light
             view.insertSubview(effectView, at: 0)
-        } else {
-            view.backgroundColor = active
-            ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
-            view.layer.cornerRadius = cornerRadius
+            return effectView
         }
+        return nil
     }
 }

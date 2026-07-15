@@ -10,10 +10,6 @@ import UIKit
 
 final class StarMapPlainButton: UIButton {
     var onHighlightChange: ((Bool) -> Void)?
-    
-    private var active = false
-    private var nightMode = false
-    
     var customColorTintActive: UIColor?
     
     override var isHighlighted: Bool {
@@ -21,6 +17,9 @@ final class StarMapPlainButton: UIButton {
             onHighlightChange?(isHighlighted)
         }
     }
+    
+    private var active = false
+    private var nightMode = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,8 +37,8 @@ final class StarMapPlainButton: UIButton {
         applyColors()
     }
     
-    func setIcon(_ iconName: String, accessibilityLabel: String) {
-        setImage(AstroIcon.template(iconName), for: .normal)
+    func setIcon(_ icon: UIImage?, accessibilityLabel: String) {
+        setImage(icon, for: .normal)
         self.accessibilityLabel = accessibilityLabel
         applyColors()
     }
@@ -60,7 +59,6 @@ final class StarMapPlainButton: UIButton {
         } else {
             color = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
         }
-        print(color, active, isHighlighted)
         
         tintColor = color
         setTitleColor(color, for: .normal)

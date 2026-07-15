@@ -17,13 +17,18 @@ final class DateTimeSelectionView: UIView {
         case minute
     }
     
-    private let calendar = Calendar.current
+    var onDateTimeChange: ((Date) -> Void)?
 
-    private var currentDate = Date()
-    private var onDateTimeChangeListener: ((Date) -> Void)?
+    var date = Date() {
+        didSet {
+            updateDisplay()
+        }
+    }
+    private let calendar = Calendar.current
     private var labels: [Field: UILabel] = [:]
     private var buttons: [UIButton] = []
     private var nightMode: Bool = false
+    private weak var glassBackgroundView: UIVisualEffectView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,19 +38,6 @@ final class DateTimeSelectionView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initViews()
-    }
-    
-    func setOnDateTimeChangeListener(_ listener: @escaping (Date) -> Void) {
-        onDateTimeChangeListener = listener
-    }
-
-    func setDateTime(_ date: Date) {
-        currentDate = date
-        updateDisplay()
-    }
-
-    func getDateTime() -> Date {
-        currentDate
     }
     
     func updateTheme(nightMod: Bool, active: Bool) {
@@ -71,7 +63,7 @@ final class DateTimeSelectionView: UIView {
         layer.shadowOpacity = 0.35
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.borderColor = UIColor(rgb: color_on_map_icon_border_color).cgColor
+        layer.borderColor = StarMapControlTheme.border(nightMode: nightMode).cgColor
         clipsToBounds = true
 
         let stack = UIStackView()
@@ -90,9 +82,8 @@ final class DateTimeSelectionView: UIView {
         addColumn(.hour, to: stack)
         addColumn(.minute, to: stack)
         
-        StarMapGlassBackground.apply(
+        glassBackgroundView = StarMapGlassBackground.apply(
             to: self,
-            active: false,
             nightMode: nightMode,
             cornerRadius: 24
         )
@@ -113,7 +104,7 @@ final class DateTimeSelectionView: UIView {
         column.alignment = .center
         column.spacing = 2
 
-        let up = makeStepButton(iconName: "ic_custom_arrow_up")
+        let up = makeStepButton(icon: .icCustomArrowUp)
         up.addAction(UIAction { [weak self] _ in
             self?.step(field, amount: field == .minute ? 5 : 1)
         }, for: .touchUpInside)
@@ -127,7 +118,7 @@ final class DateTimeSelectionView: UIView {
         labels[field] = label
         column.addArrangedSubview(label)
 
-        let down = makeStepButton(iconName: "ic_custom_arrow_down")
+        let down = makeStepButton(icon: .icCustomArrowDown)
         down.addAction(UIAction { [weak self] _ in
             self?.step(field, amount: field == .minute ? -5 : -1)
         }, for: .touchUpInside)
@@ -136,10 +127,10 @@ final class DateTimeSelectionView: UIView {
         parent.addArrangedSubview(column)
     }
 
-    private func makeStepButton(iconName: String) -> UIButton {
+    private func makeStepButton(icon: UIImage) -> UIButton {
         let button = UIButton(type: .system)
         button.tintColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
-        button.setImage(AstroIcon.template(iconName), for: .normal)
+        button.setImage(icon, for: .normal)
         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         buttons.append(button)
@@ -160,15 +151,14 @@ final class DateTimeSelectionView: UIView {
         case .minute:
             component = .minute
         }
-        if let date = calendar.date(byAdding: component, value: amount, to: currentDate) {
-            currentDate = date
-            updateDisplay()
-            onDateTimeChangeListener?(currentDate)
+        if let newDate = calendar.date(byAdding: component, value: amount, to: date) {
+            date = newDate
+            onDateTimeChange?(newDate)
         }
     }
 
     private func updateDisplay() {
-        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: currentDate)
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         labels[.year]?.text = String(format: "%04d", components.year ?? 0)
         labels[.month]?.text = String(format: "%02d", components.month ?? 0)
         labels[.day]?.text = String(format: "%02d", components.day ?? 0)

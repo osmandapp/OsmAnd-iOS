@@ -18,6 +18,10 @@ enum StarMapControlTheme {
     static func defaultBackground(nightMode: Bool, alpha: CGFloat) -> UIColor {
         resolved(.mapButtonBgColorDefault, nightMode: nightMode).withAlphaComponent(alpha)
     }
+    
+    static func pressedBackground(nightMode: Bool, alpha: CGFloat) -> UIColor {
+        resolved(.mapButtonBgColorTap, nightMode: nightMode).withAlphaComponent(alpha)
+    }
 
     static func activeBackground(alpha: CGFloat = 1) -> UIColor {
         .mapButtonBgColorActive.withAlphaComponent(alpha)
@@ -29,6 +33,10 @@ enum StarMapControlTheme {
 
     static func activeForeground(nightMode: Bool) -> UIColor {
         resolved(.mapButtonIconColorActive, nightMode: nightMode)
+    }
+    
+    static func border(nightMode: Bool) -> UIColor {
+        resolved(.mapButtonBorder, nightMode: nightMode)
     }
 }
 
@@ -105,15 +113,12 @@ class StarMapButton: OAHudButton {
         var cornerRadius = helper.getDefaultCornerRadiusPref().get()
         if cornerRadius < 0 { cornerRadius = MapButtonState.roundRadiusDp }
 
-        var glassStyle: Int32
-        var opacity: Double
+        var glassStyle = MapButtonState.defaultGlassStyle
         if #available(iOS 26.0, *) {
             glassStyle = Int32(UIGlassEffect.Style.clear.rawValue)
-        } else {
-            glassStyle = MapButtonState.defaultGlassStyle
         }
-        opacity = Double(StarMapControlTheme.defaultBackgroundAlpha)
-
+        let opacity = Double(StarMapControlTheme.defaultBackgroundAlpha)
+        
         setCustomAppearanceParams(ButtonAppearanceParams(
             iconName: nil,
             size: Int32(size),

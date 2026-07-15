@@ -135,6 +135,9 @@ final class StarMapArControlCard: UIView {
         rootStack.addArrangedSubview(cameraControlsStack)
         rootStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(rootStack)
+        
+        let sliderContainerHeightConstraint = sliderContainer.heightAnchor.constraint(equalToConstant: Self.sliderHeight)
+        sliderContainerHeightConstraint.priority = .defaultLow
 
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalToConstant: Self.width),
@@ -148,11 +151,11 @@ final class StarMapArControlCard: UIView {
             arButton.heightAnchor.constraint(equalToConstant: Self.innerButtonSize),
 
             sliderContainer.widthAnchor.constraint(equalToConstant: Self.width),
-            sliderContainer.heightAnchor.constraint(equalToConstant: Self.sliderHeight),
+            sliderContainerHeightConstraint,
 
             transparencySlider.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
             transparencySlider.centerYAnchor.constraint(equalTo: sliderContainer.centerYAnchor),
-            transparencySlider.widthAnchor.constraint(equalToConstant: Self.sliderHeight),
+            transparencySlider.widthAnchor.constraint(equalTo: sliderContainer.heightAnchor),
             transparencySlider.heightAnchor.constraint(equalToConstant: 40),
 
             resetButton.widthAnchor.constraint(equalToConstant: Self.innerButtonSize),

@@ -15,8 +15,8 @@ final class StarMapTimeControlCard: UIView {
     var onTimeButtonTapped: (() -> Void)?
     var onResetTapped: (() -> Void)?
 
-    private let timeButton = StarMapPlainButton()
-    private let resetButton = StarMapPlainButton()
+    private let timeButton = UIButton()
+    private let resetButton = UIButton()
     private let mainStack = UIStackView()
     
     private var active: Bool = false
@@ -45,9 +45,9 @@ final class StarMapTimeControlCard: UIView {
     func updateTheme(nightMode: Bool, active: Bool, pressed: Bool = false) {
         self.nightMode = nightMode
         self.active = active
-        
-        timeButton.updateTheme(nightmod: nightMode, active: active)
-        resetButton.updateTheme(nightmod: nightMode, active: active)
+
+        updateButtonTheme(timeButton)
+        updateButtonTheme(resetButton)
         
         glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
         
@@ -67,6 +67,37 @@ final class StarMapTimeControlCard: UIView {
         glassBackgroundView?.frame = bounds
     }
 
+    private func updateButtonTheme(_ button: UIButton) {
+        let color: UIColor
+        if button.isHighlighted {
+            color = StarMapControlTheme.foreground(active: false, nightMode: nightMode).withAlphaComponent(0.4)
+        } else {
+            color = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
+        }
+        var config = button.configuration
+        config?.baseBackgroundColor = .clear
+        config?.baseForegroundColor = color
+        button.configuration = config
+    }
+    
+    private func makeButtonConfiguration(for button: UIButton, icon: UIImage) {
+        var config = UIButton.Configuration.plain()
+        config.image = icon
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 16)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .systemFont(ofSize: 17, weight: .medium)
+            return outgoing
+        }
+        button.configuration = config
+        button.configurationUpdateHandler = { [weak self] button in
+            guard let self else { return }
+            self.updateTheme(nightMode: self.nightMode, active: self.active, pressed: button.isHighlighted)
+        }
+    }
+    
     private func setupContent() {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = Self.cornerRadius
@@ -82,31 +113,21 @@ final class StarMapTimeControlCard: UIView {
             cornerRadius: Self.cornerRadius
         )
 
-        timeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        timeButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
-        timeButton.setImage(AstroIcon.template("ic_action_time"), for: .normal)
-        timeButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         timeButton.addTarget(self, action: #selector(timeButtonTapped), for: .touchUpInside)
         timeButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
-        timeButton.onHighlightChange = { [weak self] isHighlighted in
-            guard let self else { return }
-            updateTheme(nightMode: nightMode, active: active, pressed: isHighlighted)
-        }
+        makeButtonConfiguration(for: timeButton, icon: .icActionTime)
 
-        resetButton.setImage(.icCustomReset, for: .normal)
         resetButton.accessibilityLabel = localizedString("shared_string_reset")
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
         resetButton.isHidden = true
         resetButton.widthAnchor.constraint(equalToConstant: Self.height).isActive = true
         resetButton.heightAnchor.constraint(equalToConstant: Self.height).isActive = true
+        makeButtonConfiguration(for: resetButton, icon: .icCustomReset)
 
         mainStack.addArrangedSubview(timeButton)
         mainStack.addArrangedSubview(resetButton)
         mainStack.axis = .horizontal
         mainStack.alignment = .center
-        mainStack.spacing = 0
-        mainStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
-        mainStack.isLayoutMarginsRelativeArrangement = true
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(mainStack)
 

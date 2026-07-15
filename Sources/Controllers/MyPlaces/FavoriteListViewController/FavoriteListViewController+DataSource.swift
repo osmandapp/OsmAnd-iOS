@@ -90,7 +90,7 @@ extension FavoriteListViewController {
         let headerCellRegistration = headerCellRegistration
         let statsFooterCellRegistration = statsFooterCellRegistration
         let emptyStateCellRegistration = emptyStateCellRegistration
-        return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .sortHeader(let sortHeader):
                 return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortHeader)
@@ -108,6 +108,11 @@ extension FavoriteListViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
+        dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] _ in
+            guard let self, self.collectionView.isEditing else { return }
+            self.collectionView.indexPathsForVisibleItems.forEach { self.updateVisibleSelectionState(at: $0) }
+        }
+        return dataSource
     }
 
     func applySnapshot(animatingDifferences: Bool = false) {

@@ -185,6 +185,29 @@ extension FavoriteListViewController {
         }
     }
 
+    func bridgeItems(for selectionItems: Set<FavoriteSelectionItem>) -> [Any] {
+        guard !selectionItems.isEmpty else { return [] }
+        var bridgeItems: [Any] = []
+        for section in dataSource.snapshot().sectionIdentifiers {
+            for item in dataSource.snapshot(for: section).items {
+                guard let selectionItem = item.selectionItem, selectionItems.contains(selectionItem) else {
+                    continue
+                }
+
+                switch item {
+                case .folder(let folder):
+                    bridgeItems.append(folder.bridgeItem)
+                case .favorite(let favorite):
+                    bridgeItems.append(favorite.bridgeItem)
+                default:
+                    break
+                }
+            }
+        }
+
+        return bridgeItems
+    }
+
     func openFavoriteItemsAppearance() {
         guard collectionView.indexPathsForSelectedItems?.isEmpty == false else {
             let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
@@ -204,6 +227,20 @@ extension FavoriteListViewController {
     func updateSelection(at indexPath: IndexPath) {
         guard let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem else { return }
         selectionManager.toggle(selectionItem)
+    }
+
+    func updateVisibleSelectionState(at indexPath: IndexPath) {
+        guard collectionView.isEditing,
+              let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem else {
+            return
+        }
+
+        let isSelected = selectionManager.selectedItems.contains(selectionItem)
+        if isSelected {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        } else {
+            collectionView.deselectItem(at: indexPath, animated: false)
+        }
     }
 
     func showSearchController() {

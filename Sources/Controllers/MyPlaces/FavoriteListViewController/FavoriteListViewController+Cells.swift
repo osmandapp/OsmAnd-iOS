@@ -34,7 +34,7 @@ extension FavoriteListViewController {
     }
 
     var folderCellRegistration: RowCellRegistration<FavoriteFolderRow> {
-        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
+        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, indexPath, folder in
             var content = cell.defaultContentConfiguration()
             content.image = (folder.isPinned ? .icCustomFolderPin : UIImage.templateImageNamed(folder.iconName))?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
             content.imageProperties.tintColor = folder.iconColor
@@ -47,6 +47,10 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+
+            if let self, self.isRootFolder {
+                self.updateVisibleSelectionState(at: indexPath)
+            }
         }
     }
 

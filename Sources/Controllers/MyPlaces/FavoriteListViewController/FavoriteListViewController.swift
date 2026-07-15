@@ -382,7 +382,7 @@ final class FavoriteListViewController: UIViewController {
     
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
-            let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
+            let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             guard !selectedItems.isEmpty else {
                 setNavigationTitle("", subtitle: "", hideSubtitle: true)
                 return

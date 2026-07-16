@@ -238,6 +238,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             DispatchQueue.main.async {
                 guard let self,
                       let details,
+                      let tableView = self.tableView,
                       let currentTarget = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint(),
                       (currentTarget.targetObj as AnyObject) === renderedObject
                 else { return }
@@ -247,7 +248,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.setup(amenity)
                 self.updateTargetPoint(with: amenity)
                 self.rebuildRows()
-                self.tableView.reloadData()
+                tableView.reloadData()
             }
         }
     }

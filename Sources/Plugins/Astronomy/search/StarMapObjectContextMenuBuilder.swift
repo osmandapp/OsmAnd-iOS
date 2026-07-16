@@ -13,9 +13,9 @@ enum StarMapObjectContextMenuBuilder {
                                   handler: StarMapObjectActionHandler,
                                   onLocate: @escaping () -> Void,
                                   onStateChanged: @escaping () -> Void) -> UIContextMenuConfiguration {
-        UIContextMenuConfiguration(identifier: object.id as NSString) { _ in
+        UIContextMenuConfiguration(identifier: object.id as NSString, actionProvider: { _ in
             makeMenu(for: object, onLocate: onLocate, handler: handler, onStateChanged: onStateChanged)
-        }
+        })
     }
 
     private static func makeMenu(for object: SkyObject,
@@ -24,7 +24,7 @@ enum StarMapObjectContextMenuBuilder {
                                  onStateChanged: @escaping () -> Void) -> UIMenu {
         let save = UIAction(
             title: localizedString("shared_string_save"),
-            image: AstroIcon.template(object.isFavorite ? "ic_custom_bookmark" : "ic_custom_bookmark_outlined")
+            image: object.isFavorite ? .icCustomBookmark : .icCustomBookmarkOutlined
         ) { _ in
             object.isFavorite.toggle()
             handler.onFavoriteChanged(object, object.isFavorite)
@@ -33,27 +33,27 @@ enum StarMapObjectContextMenuBuilder {
         
         let locate = UIAction(
             title: localizedString("astro_locate"),
-            image: AstroIcon.template("ic_custom_location_marker_outlined")
+            image: .icCustomLocationMarkerOutlined
         ) { _ in
             onLocate()
         }
 
         let direction = UIAction(
             title: localizedString("astro_direction"),
-            image: AstroIcon.template(object.showDirection ? "ic_custom_target_direction_on" : "ic_custom_target_direction_off")
+            image: object.showDirection ? .icCustomTargetDirectionOn : .icCustomTargetDirectionOff
         ) { _ in
             object.showDirection.toggle()
             if object.showDirection {
                 object.colorIndex = handler.onDirectionChanged(object, true)
             } else {
-                _ = handler.onDirectionChanged(object, false)
+                handler.directionChanged(object, enabled: false)
             }
             onStateChanged()
         }
 
         let path = UIAction(
             title: localizedString("astro_path"),
-            image: AstroIcon.template(object.showCelestialPath ? "ic_custom_target_path_on" : "ic_custom_target_path_off")
+            image: object.showCelestialPath ? .icCustomTargetPathOn : .icCustomTargetPathOff
         ) { _ in
             object.showCelestialPath.toggle()
             handler.onCelestialPathChanged(object, object.showCelestialPath)
@@ -70,4 +70,8 @@ struct StarMapObjectActionHandler {
     let onDirectionChanged: (SkyObject, Bool) -> Int
     let onCelestialPathChanged: (SkyObject, Bool) -> Void
     let onSetObjectPinned: (SkyObject, Bool, Bool) -> Void
+    
+    @discardableResult func directionChanged(_ object: SkyObject, enabled: Bool) -> Int {
+        onDirectionChanged(object, enabled)
+    }
 }

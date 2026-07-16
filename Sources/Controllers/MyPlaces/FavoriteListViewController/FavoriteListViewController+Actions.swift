@@ -342,8 +342,8 @@ extension FavoriteListViewController {
     }
 
     @objc func deleteButtonClicked(_ sender: Any) {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        if selectedIndexPaths.isEmpty {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        if selectedBridgeItems.isEmpty {
             let alert = UIAlertController(title: nil, message: localizedString("fav_select_remove"), preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: localizedString("ok"), style: .default)
             alert.addAction(defaultAction)
@@ -351,7 +351,6 @@ extension FavoriteListViewController {
             return
         }
 
-        let selectedBridgeItems = bridgeItems(for: selectedIndexPaths)
         let title = deleteConfirmationTitle(for: selectedBridgeItems)
         let message = deleteConfirmationMessage(for: selectedBridgeItems)
 
@@ -365,7 +364,7 @@ extension FavoriteListViewController {
             title: localizedString("shared_string_delete"),
             style: .destructive
         ) { [weak self] _ in
-            self?.removeSelectedFavoriteItems()
+            self?.removeSelectedFavoriteItems(selectedBridgeItems)
         }
 
         let cancelButton = UIAlertAction(
@@ -524,9 +523,7 @@ extension FavoriteListViewController {
         )
     }
 
-    private func removeSelectedFavoriteItems() {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        let items = bridgeItems(for: selectedIndexPaths)
+    private func removeSelectedFavoriteItems(_ items: [Any]) {
         let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
         if OAFavoritesBridgeHelper.deleteFavoriteItems(items) {
             clearFavoriteSortModes(forGroupNames: groupNames)

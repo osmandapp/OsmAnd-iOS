@@ -299,15 +299,13 @@ extension FavoriteListViewController {
     }
 
     @objc func selectAllButtonPressed() {
-        let selectableIndexPaths = selectableIndexPaths()
         if selectionManager.areAllSelected {
-            selectableIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: false) }
             selectionManager.deselectAll()
         } else {
-            selectableIndexPaths.forEach { collectionView.selectItem(at: $0, animated: false, scrollPosition: []) }
             selectionManager.selectAll()
         }
 
+        collectionView.reloadData()
         updateSelectionUI()
     }
 

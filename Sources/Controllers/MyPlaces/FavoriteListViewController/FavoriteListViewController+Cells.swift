@@ -47,15 +47,12 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
-
-            if let self, self.isRootFolder {
-                self.updateVisibleSelectionState(at: indexPath)
-            }
+            self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 
     var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
-        RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+        RowCellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
             if let self, !self.currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
@@ -71,6 +68,7 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = [.multiselect()]
+            self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 

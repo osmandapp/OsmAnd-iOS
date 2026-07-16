@@ -1664,7 +1664,6 @@
 		C5EB56FB2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */; };
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
 		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */; };
-		C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
 		CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */; };
 		CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */; };
@@ -3830,7 +3829,6 @@
 		15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time_start@2x.png"; path = "Resources/Icons/ic_small_time_start@2x.png"; sourceTree = "<group>"; };
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
-		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomValuesSliderTableViewCell.swift; sourceTree = "<group>"; };
 		2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopBottomValuesSliderTableViewCell.xib; sourceTree = "<group>"; };
 		2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
@@ -5296,7 +5294,6 @@
 		A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchResultsAdapter.swift; sourceTree = "<group>"; };
 		A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapCatalogsAdapter.swift; sourceTree = "<group>"; };
 		A5A503062F51000200000306 /* StarMapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchViewController.swift; sourceTree = "<group>"; };
-		ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
 		B0D6104FF6489E0A62C61D9A /* OAQuadItemsWithTitleDescIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuadItemsWithTitleDescIconCell.mm; sourceTree = "<group>"; };
@@ -5755,7 +5752,6 @@
 		CA4EDEE8F5FFEC6F5045BDD4 /* OACardButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACardButtonCell.h; sourceTree = "<group>"; };
 		CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCardView.mm; sourceTree = "<group>"; };
 		CA4EDFFD2EBD6CFA86AF69F1 /* OADeleteOldFilesCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteOldFilesCommand.h; sourceTree = "<group>"; };
-		CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
@@ -8502,7 +8498,6 @@
 				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
 				FA7000012F90000000000009 /* AFNetworking in Frameworks */,
 				FA7000012F9000000000000A /* BRCybertron in Frameworks */,
-				C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10488,15 +10483,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		4FAE0F065467B968DD80B1BF /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */,
-				ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		7600F13F2F8010AC00DC552B /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -10800,7 +10786,6 @@
 				BB098CF21793F7FD00423944 /* Products */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
 				DA7F2587231A68CD00E54F77 /* Libraries */,
-				4FAE0F065467B968DD80B1BF /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -10879,7 +10864,6 @@
 				BB098CF61793F7FD00423944 /* Foundation.framework */,
 				BBB34ED6179BC516004C5567 /* CoreText.framework */,
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
-				CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -15429,7 +15413,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
-				AF14F5BAF310756CC774D687 /* [CP] Check Pods Manifest.lock */,
 				FAFD24032D3684370023C91F /* Link Qt Script (arm_device || arm_simulator) */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				8401FCFC1EE4723B00238915 /* Copy phrases */,
@@ -15594,9 +15577,9 @@
 			mainGroup = BB098CE81793F7FD00423944;
 			packageReferences = (
 				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
-				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */,
-				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */,
+				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "SwiftLint" */,
+				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */,
+				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */,
 			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
@@ -17522,28 +17505,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd ${SRCROOT}/../resources/poi\n\"./copy_phrases.sh\"\n";
-		};
-		AF14F5BAF310756CC774D687 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-OsmAnd Maps-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
 		};
 		DA8713222994F6760087BC7F /* Download regions.ocbf */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19671,7 +19632,6 @@
 		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
@@ -19695,7 +19655,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
-					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
@@ -19709,7 +19668,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.7.4;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -19740,7 +19699,6 @@
 		};
 		BBA3AFED197FC4BB0039D991 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
@@ -19763,7 +19721,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
-					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
@@ -19777,7 +19734,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.7.4;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -19979,15 +19936,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */ = {
+		ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "SwiftLint" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Scripts/SwiftLint;
 		};
-		FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */ = {
+		FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/AFNetworking;
 		};
-		FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */ = {
+		FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/BRCybertron;
 		};
@@ -20012,12 +19969,12 @@
 		};
 		FA7000012F9000000000002B /* AFNetworking */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */;
+			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */;
 			productName = AFNetworking;
 		};
 		FA7000012F9000000000002D /* BRCybertron */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */;
+			package = FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */;
 			productName = BRCybertron;
 		};
 /* End XCSwiftPackageProductDependency section */

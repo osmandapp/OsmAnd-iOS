@@ -230,6 +230,7 @@ final class StarMapSearchViewController: UIViewController {
             navigationController?.view.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
             navigationController?.navigationBar.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
             view.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
+            searchRecycler.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
         } else if let parentStarMapController {
             searchRecycler.directionalLayoutMargins = parentStarMapController.systemMinimumLayoutMargins
         }
@@ -330,6 +331,7 @@ final class StarMapSearchViewController: UIViewController {
         fullSearchStack.translatesAutoresizingMaskIntoConstraints = false
         fullSearchContainer.addSubview(fullSearchStack)
         resultsContainer.translatesAutoresizingMaskIntoConstraints = false
+        resultsContainer.directionalLayoutMargins = searchRecycler.directionalLayoutMargins
 
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -398,8 +400,8 @@ final class StarMapSearchViewController: UIViewController {
             filtersHeaderStack.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             filtersHeaderStack.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
 
-            emptyView.leadingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.leadingAnchor, constant: Layout.contentPadding),
-            emptyView.trailingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.trailingAnchor, constant: -Layout.contentPadding),
+            emptyView.leadingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.trailingAnchor),
             emptyView.topAnchor.constraint(equalTo: filtersHeaderStack.bottomAnchor, constant: Layout.contentPadding)
         ])
     }
@@ -1176,6 +1178,12 @@ extension StarMapSearchViewController: UISearchBarDelegate {
         guard !suppressQueryDispatch, currentMode == .FULL_SEARCH else { return }
         searchState.query = searchText
         applyFiltersAndSort(scrollToTop: true)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        guard OAUtilities.isIPad() else { return }
+        guard searchBar.text?.isEmpty == true, searchController.isActive else { return }
+        searchController.isActive = false
     }
 }
 

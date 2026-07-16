@@ -157,6 +157,7 @@ final class StarMapMyDataViewController: UIViewController {
             navigationController?.view.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
             navigationController?.navigationBar.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
             view.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
+            searchRecycler.directionalLayoutMargins = .init(top: 0, leading: Layout.contentPadding, bottom: 0, trailing: Layout.contentPadding)
         } else if let parentStarMapController {
             searchRecycler.directionalLayoutMargins = parentStarMapController.systemMinimumLayoutMargins
         }

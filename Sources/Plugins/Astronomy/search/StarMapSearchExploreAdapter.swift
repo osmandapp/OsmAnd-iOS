@@ -232,7 +232,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreMenuCell.reuseIdentifier) as? StarMapExploreMenuCell else {
             return StarMapExploreMenuCell(reuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
         }
-        cell.directionalLayoutMargins = tableView.directionalLayoutMargins
         return cell
     }
 
@@ -347,16 +346,14 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         } else {
             accessoryType = .none
         }
-        let differenceValue = layoutMargins.left - 16
-        separatorInset = UIEdgeInsets(top: 0, left: config.separatorInset.left + differenceValue,
-                                      bottom: 0, right: config.separatorInset.right + differenceValue)
+        separatorInset = UIEdgeInsets(top: 0, left: config.separatorInset.left,
+                                      bottom: 0, right: config.separatorInset.right)
     }
     
     private func setup() {
         selectionStyle = .default
         accessoryType = .disclosureIndicator
         contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 51).isActive = true
-        contentView.preservesSuperviewLayoutMargins = true
 
         rowIconView.contentMode = .scaleAspectFit
         rowIconView.translatesAutoresizingMaskIntoConstraints = false

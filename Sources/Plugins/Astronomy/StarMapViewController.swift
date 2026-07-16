@@ -1337,23 +1337,31 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         StarMapObjectActionHandler(
             onFavoriteChanged: { [weak self] object, enabled in
                 guard let self else { return }
-                if enabled { settings.addFavorite(id: object.id) }
-                else { settings.removeFavorite(id: object.id) }
+                if enabled {
+                    settings.addFavorite(id: object.id)
+                } else {
+                    settings.removeFavorite(id: object.id)
+                }
                 viewModel.updateSettings(settings)
                 starView.refreshObjects()
             },
             onDirectionChanged: { [weak self] object, enabled in
                 guard let self else { return object.colorIndex }
                 let colorIndex = enabled ? settings.addDirection(id: object.id) : object.colorIndex
-                if !enabled { settings.removeDirection(id: object.id) }
+                if !enabled {
+                    settings.removeDirection(id: object.id)
+                }
                 viewModel.updateSettings(settings)
                 starView.refreshObjects()
                 return colorIndex
             },
             onCelestialPathChanged: { [weak self] object, enabled in
                 guard let self else { return }
-                if enabled { settings.addCelestialPath(id: object.id) }
-                else { settings.removeCelestialPath(id: object.id) }
+                if enabled {
+                    settings.addCelestialPath(id: object.id)
+                } else {
+                    settings.removeCelestialPath(id: object.id)
+                }
                 viewModel.updateSettings(settings)
                 starView.refreshObjects()
             },

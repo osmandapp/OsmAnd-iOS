@@ -107,12 +107,8 @@ final class StarMapSearchEmptyView: UIView {
             right: Layout.myDataContentPadding
         )
         
-        contentStack.layoutMargins = UIEdgeInsets(
-            top: 0,
-            left: config == .searchNoResults ? 0 : Layout.myDataContentPadding,
-            bottom: 0,
-            right: config == .searchNoResults ? 0 : Layout.myDataContentPadding
-        )
+        let leftRightPadding = config == .searchNoResults ? 0 : Layout.myDataContentPadding
+        contentStack.layoutMargins = UIEdgeInsets(top: 0, left: leftRightPadding, bottom: 0, right: leftRightPadding)
     }
 
     private func setupView() {

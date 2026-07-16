@@ -11,7 +11,6 @@ import UIKit
 @objc(AstronomyPlugin)
 final class AstronomyPlugin: OAPlugin {
     let dataProvider: AstroDataDbProvider
-    var recentSearchChips: [StarMapRecentChip] = []
 
     override init() {
         dataProvider = AstroDataDbProvider()

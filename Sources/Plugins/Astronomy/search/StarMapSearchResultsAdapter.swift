@@ -27,6 +27,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     private let visibilityAttributedTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
+    private let contextMenuProvider: ((StarMapSearchEntry) -> UIContextMenuConfiguration?)?
     
     private var snapshot: Snapshot
     
@@ -44,7 +45,8 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          visibilityAttributedTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          onScroll: @escaping (UIScrollView) -> Void,
-         onEntrySelected: @escaping (StarMapSearchEntry) -> Void) {
+         onEntrySelected: @escaping (StarMapSearchEntry) -> Void,
+         contextMenuProvider: ((StarMapSearchEntry) -> UIContextMenuConfiguration?)?) {
 
         self.snapshot = snapshot
         self.widToDisplayName = widToDisplayName
@@ -53,6 +55,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         self.visibilityAttributedTextProvider = visibilityAttributedTextProvider
         self.onScroll = onScroll
         self.onEntrySelected = onEntrySelected
+        self.contextMenuProvider = contextMenuProvider
         super.init()
         self.registerCells(for: tableView)
     }
@@ -97,6 +100,11 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         onEntrySelected(entry)
     }
 
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard snapshot.entries.indices.contains(indexPath.row) else { return nil }
+        return contextMenuProvider?(snapshot.entries[indexPath.row])
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         onScroll(scrollView)
     }
@@ -174,8 +182,10 @@ private final class StarMapSearchObjectCell: UITableViewCell {
         switch style {
         case .myData:
             orderedViews = [objectIconView, textStack]
+            separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
         case .explore:
             orderedViews = [textStack, objectIconView]
+            separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         }
         for (index, view) in orderedViews.enumerated() {
             rowStack.insertArrangedSubview(view, at: index)

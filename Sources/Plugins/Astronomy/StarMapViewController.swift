@@ -81,8 +81,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var dayNightModeObserver: OAAutoObserverProxy?
     private var screenOrientationObserver: NSObjectProtocol?
     private var leftPanelLeadingConstraint: NSLayoutConstraint?
+    private var leftPanelTopConstraint: NSLayoutConstraint?
     private let mapVisibleAreaGuide = UILayoutGuide()
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
+    private var mapControlsContainerTopConstraint: NSLayoutConstraint?
 
     private var mapControlsLeadingInset: CGFloat {
         embeddedLeftPanelNavigationController != nil && OAUtilities.isIPad()
@@ -176,6 +178,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateRegularMapLayout()
         layoutRegularMapRenderer()
         cameraHelper.layoutPreview()
+        
+        if OAUtilities.isWindowed() {
+            mapControlsContainerTopConstraint?.constant = view.safeAreaInsets.top + Layout.contentPadding * 2
+            leftPanelTopConstraint?.constant = Layout.contentPadding * 2
+        } else {
+            mapControlsContainerTopConstraint?.constant = 0
+            leftPanelTopConstraint?.constant = Layout.contentPadding
+        }
     }
 
     private func setupLayout() {
@@ -189,6 +199,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         mainLayout.addSubview(starView)
         mainLayout.addSubview(regularMapContainer)
         mainLayout.addSubview(mapControlsContainer)
+        
+        mapControlsContainerTopConstraint = mapControlsContainer.topAnchor.constraint(equalTo: mainLayout.topAnchor)
+        mapControlsContainerTopConstraint?.isActive = true
 
         let regularMapHeightConstraint = regularMapContainer.heightAnchor.constraint(equalToConstant: 0)
         self.regularMapHeightConstraint = regularMapHeightConstraint
@@ -211,7 +224,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
             mapControlsContainer.leadingAnchor.constraint(equalTo: mainLayout.leadingAnchor),
             mapControlsContainer.trailingAnchor.constraint(equalTo: mainLayout.trailingAnchor),
-            mapControlsContainer.topAnchor.constraint(equalTo: mainLayout.topAnchor),
             mapControlsContainer.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor)
         ])
 
@@ -643,6 +655,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             updated.favorites = current.favorites
             updated.directions = current.directions
             updated.celestialPaths = current.celestialPaths
+            updated.recentlyViewed = current.recentlyViewed
             return updated
         }
         applySettings(updatedConfig)
@@ -1319,6 +1332,44 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     func isSearchRedFilterEnabled() -> Bool {
         starView.showRedFilter
     }
+    
+    func makeSearchObjectActionHandler() -> StarMapObjectActionHandler {
+        StarMapObjectActionHandler(
+            onFavoriteChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled {
+                    settings.addFavorite(id: object.id)
+                } else {
+                    settings.removeFavorite(id: object.id)
+                }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+            },
+            onDirectionChanged: { [weak self] object, enabled in
+                guard let self else { return object.colorIndex }
+                let colorIndex = enabled ? settings.addDirection(id: object.id) : object.colorIndex
+                if !enabled {
+                    settings.removeDirection(id: object.id)
+                }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+                return colorIndex
+            },
+            onCelestialPathChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled {
+                    settings.addCelestialPath(id: object.id)
+                } else {
+                    settings.removeCelestialPath(id: object.id)
+                }
+                viewModel.updateSettings(settings)
+                starView.refreshObjects()
+            },
+            onSetObjectPinned: { [weak self] object, pinned, forceUpdate in
+                self?.starView.setObjectPinned(object, pinned: pinned, forceUpdate: forceUpdate)
+            }
+        )
+    }
 
     @objc private func close() {
         dismiss(animated: true)
@@ -1407,8 +1458,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let leading = navigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: offscreenLeading)
         leftPanelLeadingConstraint = leading
 
+        let additionalPadding: CGFloat = OAUtilities.isWindowed() ? 0 : Layout.contentPadding * 2
+        let top = navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding + additionalPadding)
+        leftPanelTopConstraint = top
+        
         NSLayoutConstraint.activate([
-            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
+            top,
             leading,
             navigationController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
             navigationController.view.widthAnchor.constraint(equalToConstant: Layout.leftPanelWidth)

@@ -865,6 +865,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 + (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
 {
     NSDate *lastModifiedDate = nil;
+    QString lastTimestamp;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in groups)
     {
@@ -878,13 +879,34 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
         for (OAFavoriteItem *point in favoriteGroup.points)
         {
-            NSDate *timestamp = [point getTimestamp];
-            if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
-                lastModifiedDate = timestamp;
+            const auto timestamp = point.favorite->getTime();
+            if (timestamp.isNull())
+                continue;
+
+            if (lastTimestamp.isNull() || timestamp.compare(lastTimestamp) > 0)
+                lastTimestamp = timestamp;
         }
     }
 
+    if (!lastTimestamp.isNull())
+    {
+        NSDate *timestamp = [[self favoriteTimestampFormatter] dateFromString:lastTimestamp.toNSString()];
+        if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
+            lastModifiedDate = timestamp;
+    }
+
     return lastModifiedDate;
+}
+
++ (NSISO8601DateFormatter *)favoriteTimestampFormatter
+{
+    static NSISO8601DateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [NSISO8601DateFormatter new];
+        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    });
+    return formatter;
 }
 
 + (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups

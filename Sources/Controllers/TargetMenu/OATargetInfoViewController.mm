@@ -526,15 +526,36 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         if (!strongSelf)
             return;
 
-        strongSelf->_nearestWiki = [results copy];
+        NSArray<OAPOI *> *filtered = [strongSelf filterNearestWikiByLanguage:results];
+        strongSelf->_nearestWiki = [filtered copy];
 
-        if (results.count > 0)
+        if (filtered.count > 0)
         {
             [strongSelf addNearestWikiRowIfNeeded:rows poi:poi filter:wikiFilter];
             [strongSelf updateInfoRows];
         }
         strongSelf->_isFetchingNearestWiki = NO;
     }];
+}
+
+- (NSArray<OAPOI *> *)filterNearestWikiByLanguage:(NSArray<OAPOI *> *)items
+{
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
+    if (!wikiPlugin || [wikiPlugin isShowAllLanguages] || ![wikiPlugin hasLanguagesFilter])
+        return items;
+
+    NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
+    NSUInteger enIndex = [languagesToShow indexOfObject:@"en"];
+    if (enIndex != NSNotFound)
+        [languagesToShow replaceObjectAtIndex:enIndex withObject:@""];
+
+    NSMutableArray<OAPOI *> *filtered = [NSMutableArray new];
+    for (OAPOI *w in items)
+    {
+        if ([w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
+            [filtered addObject:w];
+    }
+    return filtered;
 }
 
 - (void)buildGetWikipediaBanner:(NSMutableArray<OAAmenityInfoRow *> *)rows

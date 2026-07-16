@@ -87,6 +87,10 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     override func buildDescription(_ rows: NSMutableArray) {
+        if detailsObject == nil {
+            super.buildDescription(rows)
+            return
+        }
         let wikiAmenities = getWikiAmenities()
         var hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false, rows: rows)
         
@@ -232,7 +236,11 @@ final class PlaceDetailsViewController: OAPOIViewController {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
             DispatchQueue.main.async {
-                guard let self, let details else { return }
+                guard let self,
+                      let details,
+                      let currentTarget = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint(),
+                      (currentTarget.targetObj as AnyObject) === renderedObject
+                else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
                 let amenity = details.syntheticAmenity
@@ -248,6 +256,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         guard let mapPanel = OARootViewController.instance()?.mapPanel,
               let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
 
+        targetPoint.title = amenity.nameLocalized ?? amenity.name
         targetPoint.icon = amenity.type?.icon()
 
         mapPanel.update(targetPoint)

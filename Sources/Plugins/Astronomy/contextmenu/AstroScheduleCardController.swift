@@ -23,6 +23,13 @@ final class AstroScheduleCardController {
     private(set) var showResetPeriodButton = false
 
     var onDataChanged: (() -> Void)?
+    
+    private let rangeFormatter: DateIntervalFormatter = {
+        let formatter = DateIntervalFormatter()
+        formatter.locale = .current
+        formatter.dateTemplate = "d MMM"
+        return formatter
+    }()
 
     private var computeWorkItem: DispatchWorkItem?
     private var lastObjectId: String?
@@ -32,13 +39,6 @@ final class AstroScheduleCardController {
     private var lastPeriodStart: Date?
     private var lastTimeZone: TimeZone?
     private var lastShowResetPeriodButton = false
-
-    private let rangeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = .current
-        formatter.dateFormat = "d MMM"
-        return formatter
-    }()
 
     func update(skyObject: SkyObject?,
                 observer: Observer?,
@@ -71,7 +71,7 @@ final class AstroScheduleCardController {
         let periodEnd = calendar.date(byAdding: .day,
                                       value: Self.periodDays - 1,
                                       to: self.periodStart) ?? self.periodStart
-        rangeLabel = "\(rangeFormatter.string(from: self.periodStart)) - \(rangeFormatter.string(from: periodEnd))"
+        rangeLabel = rangeFormatter.string(from: self.periodStart, to: periodEnd).replacingOccurrences(of: "—", with: " - ")
         let computationMatchesState =
             lastObjectId == skyObject.id &&
             lastObserverLat == observer.latitude &&

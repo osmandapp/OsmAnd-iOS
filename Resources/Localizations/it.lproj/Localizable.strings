@@ -3657,8 +3657,8 @@
 "default_appearance" = "Aspetto predefinito";
 "apply_to_all_points" = "Applica a tutti i punti";
 "save_favorite_default_appearance" = "Applicare le modifiche a tutti i punti esistenti nella cartella, o solo a quelli aggiunti di recente?";
-"original_icon_description" = "Ogni punto mantiene la sua icona individuale.";
-"original_color_description" = "Ogni punto mantiene il suo colore individuale.";
+"original_icon_description" = "Ogni punto mantiene la propria icona individuale.";
+"original_color_description" = "Ogni punto mantiene il proprio colore individuale.";
 "original_shape_description" = "Ogni punto mantiene la sua forma individuale.";
 "type_of_activity" = "Tipo di attività";
 "dd_ddddd_format" = "DD.DDDDD°";
@@ -3947,3 +3947,6 @@
 "trip_recording_moving_time" = "Tempo di percorrenza";
 "gradient_range_type_relative_summary" = "Scala di colori basata automaticamente sul range min/max della traccia.";
 "remove_step" = "Elimina passaggio";
+"astro_deep_sky" = "Cielo profondo";
+"astro_min_magnitude" = "Magnitudine min.";
+"shared_string_azimuth" = "Azimut";

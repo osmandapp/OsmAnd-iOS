@@ -4484,3 +4484,4 @@
 "add_to" = "Føj til";
 "favorite_confirm_delete_group" = "Slet gruppen \"%1$@\" og alle indholdte punkter (%2$lu)?";
 "shared_string_folders" = "Mapper";
+"show_all_tracks_on_the_map" = "Vis alle spor på kortet";

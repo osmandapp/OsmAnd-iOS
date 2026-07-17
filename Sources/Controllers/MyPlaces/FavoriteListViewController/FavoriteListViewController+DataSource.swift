@@ -144,7 +144,7 @@ extension FavoriteListViewController {
     
     func isNestedFolder(_ groupName: String, in parentGroupName: String) -> Bool {
         guard !parentGroupName.isEmpty else { return false }
-        return groupName.hasPrefix(parentGroupName + "/")
+        return groupName.hasPrefix(parentGroupName + "/") || groupName.hasPrefix(parentGroupName + " /")
     }
     
     func hasSearchResults() -> Bool {
@@ -176,7 +176,7 @@ extension FavoriteListViewController {
     }
     
     private func isFavoriteSortModeKey(_ key: String, insideOrEqualTo groupName: String) -> Bool {
-        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
+        key == groupName || (!groupName.isEmpty && (key.hasPrefix(groupName + "/") || key.hasPrefix(groupName + " /")))
     }
     
     private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {
@@ -336,8 +336,8 @@ extension FavoriteListViewController {
     
     private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
         guard let parentGroupName else { return groupName.isEmpty || !groupName.contains("/") }
-        guard !parentGroupName.isEmpty && groupName.hasPrefix(parentGroupName + "/") else { return false }
-        let childPath = groupName.dropFirst(parentGroupName.count + 1)
+        guard !parentGroupName.isEmpty && (groupName.hasPrefix(parentGroupName + "/") || groupName.hasPrefix(parentGroupName + " /")) else { return false }
+        let childPath = groupName.dropFirst(parentGroupName.count + (groupName.hasPrefix(parentGroupName + "/") ? 1 : 2))
         return !childPath.isEmpty && !childPath.contains("/")
     }
     

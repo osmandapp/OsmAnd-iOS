@@ -1010,7 +1010,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (parent.length == 0)
         return NO;
 
-    return [name hasPrefix:[parent stringByAppendingString:@"/"]];
+    return [name hasPrefix:[parent stringByAppendingString:@"/"]] || [name hasPrefix:[parent stringByAppendingString:@" /"]];
 }
 
 + (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName

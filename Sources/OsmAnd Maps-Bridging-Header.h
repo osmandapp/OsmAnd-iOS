@@ -67,6 +67,7 @@
 #import "OAEditGroupViewController.h"
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesBridgeHelper.h"
+#import "OADefaultFavorite.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OAEditColorViewController.h"
 #import "OAResourcesInstaller.h"

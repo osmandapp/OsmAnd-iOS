@@ -93,7 +93,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     }
 
     var iconColor: UIColor {
-        isVisible ? (bridgeItem.color ?? .iconColorSelected) : .iconColorSecondary
+        isVisible ? (bridgeItem.color ?? OADefaultFavorite.getDefaultColor()) : .iconColorSecondary
     }
 
     var titleColor: UIColor {

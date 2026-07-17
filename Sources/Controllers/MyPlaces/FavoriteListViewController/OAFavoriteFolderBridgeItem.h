@@ -19,11 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger subtreePointsCount;
 @property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isPinned;
+@property (nonatomic, readonly) BOOL isVirtual;
 @property (nonatomic, readonly, nullable) UIColor *color;
 @property (nonatomic, readonly, nullable) NSDate *lastModifiedDate;
 @property (nonatomic, readonly) long long fileSize;
 
 - (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount;
+- (instancetype)initWithVirtualGroupName:(NSString *)groupName lastModifiedDate:(nullable NSDate *)lastModifiedDate subtreePointsCount:(NSUInteger)subtreePointsCount;
 
 @end
 

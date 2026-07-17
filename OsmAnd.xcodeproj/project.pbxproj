@@ -15464,7 +15464,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = OA;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2660;
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
 					BBA3AF30197FC4BB0039D991 = {
@@ -15577,9 +15577,9 @@
 			mainGroup = BB098CE81793F7FD00423944;
 			packageReferences = (
 				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "SwiftLint" */,
-				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */,
-				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */,
+				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
+				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */,
+				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */,
 			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
@@ -19426,6 +19426,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -19441,7 +19442,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -19532,6 +19533,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -19547,7 +19549,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -19668,7 +19670,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.7.4;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -19734,7 +19736,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.7.4;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -19778,7 +19780,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -19853,7 +19855,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -19936,15 +19938,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "SwiftLint" */ = {
+		ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Scripts/SwiftLint;
 		};
-		FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */ = {
+		FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/AFNetworking;
 		};
-		FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */ = {
+		FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/BRCybertron;
 		};
@@ -19956,7 +19958,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.3.1;
+				version = 8.10.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -19969,12 +19971,12 @@
 		};
 		FA7000012F9000000000002B /* AFNetworking */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "AFNetworking" */;
+			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */;
 			productName = AFNetworking;
 		};
 		FA7000012F9000000000002D /* BRCybertron */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FA7000012F9000000000002C /* XCLocalSwiftPackageReference "BRCybertron" */;
+			package = FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */;
 			productName = BRCybertron;
 		};
 /* End XCSwiftPackageProductDependency section */

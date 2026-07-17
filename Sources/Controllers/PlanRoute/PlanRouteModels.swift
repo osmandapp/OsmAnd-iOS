@@ -326,6 +326,7 @@ protocol PlanRouteSaveDataSource: AnyObject {
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {
 
     var mode: PlanRouteMode { get }
+    var editTrackFolder: String? { get }
     var hasChanges: Bool { get }
     var hasPoints: Bool { get }
     var canUndo: Bool { get }

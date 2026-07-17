@@ -659,7 +659,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .newRoute:
             presentSaveDialog(duplicate: false)
         case .editTrack(let fileName):
-            dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: true) { [weak self] success, _ in
+            dataProvider.saveAs(fileName: fileName, folder: dataProvider.editTrackFolder, showOnMap: true) { [weak self] success, _ in
                 guard let self else { return }
                 if success {
                     let message = String(format: localizedString("gpx_saved_successfully"), fileName)

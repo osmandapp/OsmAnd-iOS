@@ -137,6 +137,8 @@ static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 static const CGFloat kDistanceBetweenFingers = 50.0;
 static const NSInteger kDetailedMapZoom = 9;
 static const NSTimeInterval kRenderSyncSlowBlockThreshold = 0.05;
+static const NSTimeInterval kSingleTapContextMenuDelay = 0.15;
+static const NSTimeInterval kSingleTapContextMenuDoubleTapGuard = 0.4;
 static char kMapSourceUpdateQueueKey;
 
 @interface OATouchLocation : NSObject
@@ -230,6 +232,9 @@ static char kMapSourceUpdateQueueKey;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
     UIPanGestureRecognizer* _grMouseWheelScroll;
+
+    dispatch_block_t _pendingContextMenuBlock;
+    NSTimeInterval _singleTapContextMenuShownTime;
 
     BOOL _startRotating;
     BOOL _startZooming;
@@ -456,10 +461,6 @@ static char kMapSourceUpdateQueueKey;
     _grPointContextMenu = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                         action:@selector(pointContextMenuGestureDetected:)];
     _grPointContextMenu.delegate = self;
-
-    // prevents single tap to fire together with double tap
-    [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
-    [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomDoubleTap];
 
     [self createGeoTiffCollection];
 
@@ -927,6 +928,8 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if (gestureRecognizer == _grSymbolContextMenu && touch.tapCount >= 2)
+        [self cancelPendingContextMenu];
     if (gestureRecognizer == _grZoomOut && [[OAAppSettings sharedManager].showDistanceRuler get])
         return NO;
     if (gestureRecognizer == _grZoomDoubleTap)
@@ -1582,6 +1585,9 @@ static char kMapSourceUpdateQueueKey;
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    [self cancelPendingContextMenu];
+    [self dismissSingleTapContextMenuIfRecognizedAsDoubleTap];
+
     if (_mapView.zoomLevel >= _mapView.maxZoom)
         return;
 
@@ -1755,16 +1761,63 @@ static char kMapSourceUpdateQueueKey;
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted && ![self isMapGestureInProgress])
     {
-        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
-        [quickAction hideActionsSheetAnimated:nil];
-        [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
-        
-        // Handle route planning touch events
-        [_mapLayers.routePlanningLayer onMapPointSelected:CLLocationCoordinate2DMake(lat, lon) longPress:longPress];
+        BOOL forceHide = [recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1;
+        if (recognizer == _grSymbolContextMenu)
+        {
+            [self scheduleSingleTapContextMenu:touchPoint lat:lat lon:lon forceHide:forceHide];
+            return YES;
+        }
+        [self showContextMenuAtPoint:touchPoint lat:lat lon:lon longPress:longPress forceHide:forceHide];
         return YES;
     }
     return NO;
+}
+
+- (void)showContextMenuAtPoint:(CGPoint)touchPoint lat:(double)lat lon:(double)lon longPress:(BOOL)longPress forceHide:(BOOL)forceHide
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
+    [quickAction hideActionsSheetAnimated:nil];
+    [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:forceHide];
+    [_mapLayers.routePlanningLayer onMapPointSelected:CLLocationCoordinate2DMake(lat, lon) longPress:longPress];
+}
+
+- (void)scheduleSingleTapContextMenu:(CGPoint)touchPoint lat:(double)lat lon:(double)lon forceHide:(BOOL)forceHide
+{
+    [self cancelPendingContextMenu];
+    __weak __typeof(self) weakSelf = self;
+    dispatch_block_t block = dispatch_block_create((dispatch_block_flags_t)0, ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        strongSelf->_pendingContextMenuBlock = nil;
+        strongSelf->_singleTapContextMenuShownTime = CACurrentMediaTime();
+        [strongSelf showContextMenuAtPoint:touchPoint lat:lat lon:lon longPress:NO forceHide:forceHide];
+    });
+    _pendingContextMenuBlock = block;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSingleTapContextMenuDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
+}
+
+- (void)cancelPendingContextMenu
+{
+    if (_pendingContextMenuBlock)
+    {
+        dispatch_block_cancel(_pendingContextMenuBlock);
+        _pendingContextMenuBlock = nil;
+    }
+}
+
+- (void)dismissSingleTapContextMenuIfRecognizedAsDoubleTap
+{
+    if (_singleTapContextMenuShownTime <= 0)
+        return;
+
+    NSTimeInterval elapsed = CACurrentMediaTime() - _singleTapContextMenuShownTime;
+    _singleTapContextMenuShownTime = 0;
+    if (elapsed > kSingleTapContextMenuDoubleTapGuard)
+        return;
+
+    [[OARootViewController instance].mapPanel hideContextMenu];
 }
 
 - (id<OAMapRendererViewProtocol>) mapRendererView

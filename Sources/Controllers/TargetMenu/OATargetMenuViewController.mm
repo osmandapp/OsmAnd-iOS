@@ -568,6 +568,18 @@
     return nil;
 }
 
+- (void)setRowUpdatesDeferred:(BOOL)deferred
+{
+}
+
+- (void)setDetailRowsDeferred:(BOOL)deferred
+{
+}
+
+- (void)buildDeferredDetailRows
+{
+}
+
 - (UIImage *)getAdditionalInfoImage
 {
     return nil;

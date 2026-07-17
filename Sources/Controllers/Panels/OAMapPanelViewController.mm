@@ -1549,15 +1549,21 @@ typedef enum
 
     [self setSelectedObject:targetPoint];
 
-    [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-        
-        [_mapViewController contextMenuDidShow:selectedObject.object];
-        if (targetPoint.centerMap)
-            [self goToTargetPointWithZoom:preferredZoom];
-        
-        if (_targetMenuView.needsManualContextMode)
-            [self enterContextMenuMode];
-    }];
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        [strongSelf showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
+
+            [strongSelf.mapViewController contextMenuDidShow:selectedObject.object];
+            if (targetPoint.centerMap)
+                [strongSelf goToTargetPointWithZoom:preferredZoom];
+
+            if (strongSelf.targetMenuView.needsManualContextMode)
+                [strongSelf enterContextMenuMode];
+        }];
+    });
 }
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
@@ -2526,6 +2532,8 @@ typedef enum
     _mapStateSaved = saveMapState;
     
     OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
+    if (!showFullMenu)
+        [controller setDetailRowsDeferred:YES];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {
@@ -2643,7 +2651,8 @@ typedef enum
     }
     
     [self.view addSubview:self.targetMenuView];
-    
+    [self.targetMenuView layoutIfNeeded];
+
     if (onComplete)
         onComplete();
     

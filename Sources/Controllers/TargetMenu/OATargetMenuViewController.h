@@ -132,6 +132,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (UIColor *)getAdditionalInfoColor;
 - (NSAttributedString *)getAdditionalInfoStr;
+
+- (void)setRowUpdatesDeferred:(BOOL)deferred;
+- (void)setDetailRowsDeferred:(BOOL)deferred;
+- (void)buildDeferredDetailRows;
 - (UIImage *)getAdditionalInfoImage;
 
 - (BOOL)supportFullMenu;

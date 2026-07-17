@@ -11,6 +11,7 @@ import UIKit
 @objc final class AstronomyPlugin: OAPlugin {
     private enum PreferenceId {
         static let settings = "astronomy_settings"
+        static let legacySettings = "star_watcher_settings"
         static let recent = "astronomy_recently_viewed"
     }
 
@@ -24,6 +25,11 @@ import UIKit
         .makeProfile()
         .makeShared()
 
+    private let legacySettingsPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.legacySettings, defValue: "")
+        .makeProfile()
+        .makeShared()
+
     private let recentPref: OACommonString = OAAppSettings.sharedManager()
         .registerStringPreference(PreferenceId.recent, defValue: "")
         .makeGlobal()
@@ -33,11 +39,22 @@ import UIKit
 
     override init() {
         super.init()
+        migrateLegacyStarWatcherSettingsIfNeeded()
         recentSearchChips = astronomySettingsStorage.recentChips()
     }
 
     func saveRecentSearchChips() {
         astronomySettingsStorage.setRecentChips(recentSearchChips)
+    }
+
+    func migrateLegacyStarWatcherSettingsIfNeeded() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            guard legacySettingsPref.isSet(for: appMode), !settingsPref.isSet(for: appMode) else {
+                continue
+            }
+            settingsPref.set(legacySettingsPref.get(appMode), mode: appMode)
+        }
+        astronomySettingsStorage.reloadFromPreference()
     }
 
     override func getId() -> String? {

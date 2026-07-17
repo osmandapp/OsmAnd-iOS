@@ -22,6 +22,7 @@ final class MigrationManager: NSObject {
         case migrationHudButtonPositionsKey
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
+        case migrateAstronomyPreferences
     }
     
     private struct HudMigrationScenario {
@@ -103,6 +104,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue) {
                 migrateLocationIconSizeAndCourseIconSize()
                 defaults.set(true, forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateAstronomyPreferences.rawValue) {
+                migrateAstronomyPreferences()
+                defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
             }
         }
     }
@@ -597,6 +602,12 @@ final class MigrationManager: NSObject {
             } else if settings.routeRecalculationDistance.get(appMode) != routeRecalculationDisableMode && settings.disableOffrouteRecalc.get(appMode) {
                 settings.routeRecalculationDistance.set(routeRecalculationDisableMode, mode: appMode)
             }
+        }
+    }
+
+    private func migrateAstronomyPreferences() {
+        if let plugin = OAPluginsHelper.getPlugin(AstronomyPlugin.self) as? AstronomyPlugin {
+            plugin.migrateLegacyStarWatcherSettingsIfNeeded()
         }
     }
 

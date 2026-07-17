@@ -348,7 +348,7 @@ final class AstronomyPluginSettings {
         starMap = storage.starMap ?? StarMapConfig()
     }
 
-    func getCommonConfig() -> CommonConfig {
+    func commonConfig() -> CommonConfig {
         lock.lock()
         defer { lock.unlock() }
         let config = readStorageUnlocked().common ?? CommonConfig()
@@ -365,7 +365,7 @@ final class AstronomyPluginSettings {
         common = config
     }
 
-    func getStarMapConfig() -> StarMapConfig {
+    func starMapConfig() -> StarMapConfig {
         lock.lock()
         defer { lock.unlock() }
         let config = readStorageUnlocked().starMap ?? StarMapConfig()
@@ -461,7 +461,7 @@ final class AstronomyPluginSettings {
 
     // MARK: - Recently viewed (global, all profiles)
 
-    func getRecentChips() -> [StarMapRecentChip] {
+    func recentChips() -> [StarMapRecentChip] {
         lock.lock()
         defer { lock.unlock() }
         return readRecentChipsUnlocked()

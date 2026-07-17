@@ -38,7 +38,7 @@ final class StarObjectsViewModel {
             let constellations = provider.getConstellations(preferredLocale: preferredLocale)
             DispatchQueue.main.async {
                 self.applyObjectSettings(to: objects + constellations.map { $0 as SkyObject })
-                let starMap = self.settings.getStarMapConfig()
+                let starMap = self.settings.starMapConfig()
                 let favoriteOrder = Dictionary(uniqueKeysWithValues: starMap.favorites.enumerated().map { ($0.element.id, $0.offset) })
                 self.skyObjects = objects.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
                 self.constellations = constellations.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
@@ -55,7 +55,7 @@ final class StarObjectsViewModel {
             targetObjects = skyObjects + constellations.map { $0 as SkyObject }
         }
 
-        let starMap = settings.getStarMapConfig()
+        let starMap = settings.starMapConfig()
         let favoritesMap = Dictionary(uniqueKeysWithValues: starMap.favorites.map { ($0.id, $0) })
         let directionsMap = Dictionary(uniqueKeysWithValues: starMap.directions.map { ($0.id, $0) })
         let celestialPathsMap = Dictionary(uniqueKeysWithValues: starMap.celestialPaths.map { ($0.id, $0) })

@@ -33,7 +33,7 @@ import UIKit
 
     override init() {
         super.init()
-        recentSearchChips = astronomySettingsStorage.getRecentChips()
+        recentSearchChips = astronomySettingsStorage.recentChips()
     }
 
     func saveRecentSearchChips() {

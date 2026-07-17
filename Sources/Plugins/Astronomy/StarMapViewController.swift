@@ -256,7 +256,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
-        settings.getStarMapConfig()
+        settings.starMapConfig()
     }
 
     func isSearchRedFilterEnabled() -> Bool {
@@ -560,8 +560,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func applyProfileSettingsToUI(restoreMapPosition: Bool) {
-        let starMap = settings.getStarMapConfig()
-        let common = settings.getCommonConfig()
+        let starMap = settings.starMapConfig()
+        let common = settings.commonConfig()
         applySettings(starMap)
         starView.settings = settings.copyForUI()
         updateRegularMapVisibility(common.showRegularMap)
@@ -1359,8 +1359,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         hideBottomSheet(clearSelection: false)
 
         let sheet = AstroConfigureViewBottomSheet()
-        sheet.config = settings.getStarMapConfig()
-        sheet.commonConfig = settings.getCommonConfig()
+        sheet.config = settings.starMapConfig()
+        sheet.commonConfig = settings.commonConfig()
         sheet.onConfigChanged = { [weak self] config in
             self?.setStarMapSettings(config)
         }

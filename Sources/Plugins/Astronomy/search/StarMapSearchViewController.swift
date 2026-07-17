@@ -797,7 +797,7 @@ final class StarMapSearchViewController: UIViewController {
             StarMapExploreRowConfig(quickPresetType: .CATEGORY_STAR_CLUSTERS, iconRes: "ic_custom_star_clusters", titleRes: "astro_star_clusters", subtitleRes: nil),
             StarMapExploreRowConfig(quickPresetType: .CATEGORY_DEEP_SKY, iconRes: "ic_custom_galaxy", titleRes: "astro_deep_sky", subtitleRes: "astro_explore_deep_sky_subtitle")
         ]
-        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.getStarMapConfig()
+        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.starMapConfig()
         let myDataItems: [(StarMapExploreRowConfig, Int)] = [
             (StarMapExploreRowConfig(quickPresetType: .MY_DATA_FAVORITES, iconRes: "ic_custom_bookmark", titleRes: "favorites_item", subtitleRes: nil), config.favorites.count),
             (StarMapExploreRowConfig(quickPresetType: .MY_DATA_DAILY_PATH, iconRes: "ic_custom_target_path_on", titleRes: "astro_daily_path", subtitleRes: nil), config.celestialPaths.count),
@@ -1058,7 +1058,7 @@ final class StarMapSearchViewController: UIViewController {
 
     private func syncRecentChipsWithSession() {
         if plugin.recentSearchChips.isEmpty {
-            plugin.recentSearchChips = plugin.astroSettings.getRecentChips()
+            plugin.recentSearchChips = plugin.astroSettings.recentChips()
         }
         if plugin.recentSearchChips.isEmpty {
             plugin.recentSearchChips.append(contentsOf: searchState.recentChips)

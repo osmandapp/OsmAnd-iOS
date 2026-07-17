@@ -150,9 +150,10 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
             self.colorController = nil
         }
 
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else { return }
+        let selectedItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedItems.isEmpty else { return }
         if colorController.saveChanges {
-            OAFavoritesBridgeHelper.changeFavoriteItems(bridgeItems(for: selectedItems), colorIndex: colorController.colorIndex)
+            OAFavoritesBridgeHelper.changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
         }
 
         setEditing(false)

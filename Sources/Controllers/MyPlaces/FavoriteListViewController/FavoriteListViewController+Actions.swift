@@ -209,7 +209,7 @@ extension FavoriteListViewController {
     }
 
     func openFavoriteItemsAppearance() {
-        guard collectionView.indexPathsForSelectedItems?.isEmpty == false else {
+        guard !selectionManager.selectedItems.isEmpty else {
             let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
             present(alert, animated: true)
@@ -330,7 +330,8 @@ extension FavoriteListViewController {
     }
 
     @objc func moveButtonClicked(_ sender: Any) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: localizedString("shared_string_ok"), style: .default)
             alert.addAction(defaultAction)
@@ -338,7 +339,7 @@ extension FavoriteListViewController {
             return
         }
 
-        openFavoriteItemsMove(bridgeItems(for: selectedItems))
+        openFavoriteItemsMove(selectedBridgeItems)
     }
 
     @objc func deleteButtonClicked(_ sender: Any) {
@@ -494,7 +495,8 @@ extension FavoriteListViewController {
     }
     
     private func shareItems(for sourceView: UIView) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(
                 title: "",
                 message: localizedString("fav_export_select"),
@@ -512,7 +514,7 @@ extension FavoriteListViewController {
             return
         }
 
-        guard let favoritesUrl = OAFavoritesBridgeHelper.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
+        guard let favoritesUrl = OAFavoritesBridgeHelper.shareFavoriteItems(selectedBridgeItems) else { return }
         showActivity(
             [favoritesUrl],
             sourceView: sourceView,

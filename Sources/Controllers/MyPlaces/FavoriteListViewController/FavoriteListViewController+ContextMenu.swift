@@ -118,12 +118,8 @@ extension FavoriteListViewController {
 
     func makeAdditionalContextMenu() -> UIMenu {
         var menuElements: [UIMenuElement] = []
-        let indexPathItems = collectionView.indexPathsForSelectedItems ?? []
-        let selectedBridgeItems = bridgeItems(for: indexPathItems)
-        let hasPoints = indexPathItems.contains {
-            guard case .favorite = dataSource.itemIdentifier(for: $0) else { return false }
-            return true
-        }
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        let hasPoints = selectedBridgeItems.contains { $0 is OAFavoritePointBridgeItem }
 
         let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { [weak self] _ in
             OAFavoritesBridgeHelper.addFavoriteItems(toMapMarkers: selectedBridgeItems)
@@ -150,16 +146,13 @@ extension FavoriteListViewController {
         menuElements.append(secondButtonsSection)
 
         if !hasPoints {
-            let folders: [FavoriteFolderRow] = indexPathItems.compactMap {
-                guard case .folder(let folder) = dataSource.itemIdentifier(for: $0) else { return nil }
-                return folder
-            }
+            let folders = selectedBridgeItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
 
             if !folders.isEmpty {
                 var folderMenuElements: [UIMenuElement] = []
 
                 if folders.contains(where: { !$0.isPinned }) {
-                    let unpinnedGroupNames = folders.filter({ !$0.isPinned }).map { $0.bridgeItem.groupName }
+                    let unpinnedGroupNames = folders.filter({ !$0.isPinned }).map { $0.groupName }
                     let pinAction = UIAction(title: localizedString("pin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsPinned(unpinnedGroupNames, pinned: true)
                         self?.applySnapshot(animatingDifferences: true)
@@ -168,7 +161,7 @@ extension FavoriteListViewController {
                 }
 
                 if folders.contains(where: { $0.isPinned }) {
-                    let pinnedGroupNames = folders.filter({ $0.isPinned }).map { $0.bridgeItem.groupName }
+                    let pinnedGroupNames = folders.filter({ $0.isPinned }).map { $0.groupName }
                     let unpinAction = UIAction(title: localizedString("unpin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsPinned(pinnedGroupNames, pinned: false)
                         self?.applySnapshot(animatingDifferences: true)
@@ -177,7 +170,7 @@ extension FavoriteListViewController {
                 }
 
                 if folders.contains(where: { $0.isVisible }) {
-                    let visibleGroupNames = folders.filter({ $0.isVisible }).map { $0.bridgeItem.groupName }
+                    let visibleGroupNames = folders.filter({ $0.isVisible }).map { $0.groupName }
                     let hideAction = UIAction(title: localizedString("shared_string_hide_from_map"), image: .icCustomHideOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsVisible(visibleGroupNames, visible: false)
                         self?.applySnapshot(animatingDifferences: true)
@@ -186,7 +179,7 @@ extension FavoriteListViewController {
                 }
 
                 if folders.contains(where: { !$0.isVisible }) {
-                    let hiddenGroupNames = folders.filter({ !$0.isVisible }).map { $0.bridgeItem.groupName }
+                    let hiddenGroupNames = folders.filter({ !$0.isVisible }).map { $0.groupName }
                     let showAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomShowOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsVisible(hiddenGroupNames, visible: true)
                         self?.applySnapshot(animatingDifferences: true)

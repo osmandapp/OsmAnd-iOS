@@ -223,7 +223,7 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
+        let isSelected = !selectionManager.selectedItems.isEmpty
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

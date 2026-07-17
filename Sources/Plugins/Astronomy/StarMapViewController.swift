@@ -72,6 +72,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
+    private var applicationModeObserver: OAAutoObserverProxy?
     private var screenOrientationObserver: NSObjectProtocol?
     private var leftPanelLeadingConstraint: NSLayoutConstraint?
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
@@ -104,7 +105,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     init(plugin: AstronomyPlugin) {
-        let loadedSettings = AstronomyPluginSettings.load()
+        let loadedSettings = plugin.astroSettings
         let provider = plugin.dataProvider
         self.plugin = plugin
         settings = loadedSettings
@@ -121,20 +122,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
+        reloadProfileSettings()
         setupLayout()
         setupControls()
         setupHelpers()
         setupListeners()
-        applySettings(settings.starMap)
-        if let pos = settings.starMap.savedMapPosition {
-            starView.restoreMapPosition(pos)
-            compassButton.update(mapRotation: CGFloat(-pos.azimuth))
-            lastUpdatedAzimuth = pos.azimuth
-            updateStarMap()
-        } else {
-            updateStarMap(updateAzimuth: true)
-        }
-        updateRegularMapVisibility(settings.common.showRegularMap)
+        applyProfileSettingsToUI(restoreMapPosition: true)
 
         viewModel.onDataChanged = { [weak self] in
             self?.syncObjectsToStarView()
@@ -253,7 +246,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
-        settings.starMap
+        settings.getStarMapConfig()
     }
 
     func isSearchRedFilterEnabled() -> Bool {
@@ -321,7 +314,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func setupStarView() {
         starView.delegate = self
         starView.viewModel = viewModel
-        starView.settings = settings
+        starView.settings = settings.copyForUI()
     }
 
     private func setupCompassAndLeftControls() {
@@ -527,11 +520,60 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         dayNightModeObserver = OAAutoObserverProxy(self,
                                                    withHandler: #selector(onDayNightModeChanged),
                                                    andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
+        if let appModeObservable = OsmAndApp.swiftInstance()?.applicationModeChangedObservable {
+            applicationModeObserver = OAAutoObserverProxy(self,
+                                                          withHandler: #selector(onApplicationModeChanged),
+                                                          andObserve: appModeObservable)
+        }
         screenOrientationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name(ScreenOrientationHelper.screenOrientationChangedKey),
                                                                            object: nil,
                                                                            queue: .main) { [weak self] _ in
             self?.cameraHelper.layoutPreview()
         }
+    }
+
+    @objc private func onApplicationModeChanged() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else {
+                return
+            }
+            reloadAndApplyProfileSettings(restoreMapPosition: true)
+            viewModel.updateSettings(settings)
+            viewModel.load(preferredLocale: OsmAndApp.swiftInstance()?.getLanguageCode())
+        }
+    }
+
+    private func reloadProfileSettings() {
+        settings.reloadFromPreference()
+    }
+
+    private func applyProfileSettingsToUI(restoreMapPosition: Bool) {
+        let starMap = settings.getStarMapConfig()
+        let common = settings.getCommonConfig()
+        applySettings(starMap)
+        starView.settings = settings.copyForUI()
+        updateRegularMapVisibility(common.showRegularMap)
+        if restoreMapPosition, let pos = starMap.savedMapPosition {
+            starView.restoreMapPosition(pos)
+            compassButton.update(mapRotation: CGFloat(-pos.azimuth))
+            lastUpdatedAzimuth = pos.azimuth
+            updateStarMap()
+        } else if restoreMapPosition {
+            updateStarMap(updateAzimuth: true)
+        } else {
+            starView.setNeedsDisplay()
+        }
+        updateMagnitudeControls()
+        configureSheetController?.config = starMap
+        configureSheetController?.commonConfig = common
+        if let configureSheetController {
+            configureSheetController.applyRedFilter(enabled: starMap.showRedFilter)
+        }
+    }
+
+    private func reloadAndApplyProfileSettings(restoreMapPosition: Bool) {
+        reloadProfileSettings()
+        applyProfileSettingsToUI(restoreMapPosition: restoreMapPosition)
     }
 
     private func syncObjectsToStarView() {
@@ -613,6 +655,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             )
             return config
         }
+        starView.settings = settings.copyForUI()
         viewModel.updateSettings(settings)
     }
 
@@ -626,6 +669,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             return updated
         }
         applySettings(updatedConfig)
+        starView.settings = settings.copyForUI()
         viewModel.updateSettings(settings)
     }
 
@@ -1265,13 +1309,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         hideBottomSheet(clearSelection: false)
 
         let sheet = AstroConfigureViewBottomSheet()
-        sheet.config = settings.starMap
-        sheet.commonConfig = settings.common
+        sheet.config = settings.getStarMapConfig()
+        sheet.commonConfig = settings.getCommonConfig()
         sheet.onConfigChanged = { [weak self] config in
             self?.setStarMapSettings(config)
         }
         sheet.onCommonConfigChanged = { [weak self] config in
-            self?.settings.common = config
             self?.updateRegularMapVisibility(config.showRegularMap)
             self?.saveCommonSettings()
         }
@@ -1477,6 +1520,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     deinit {
         mapLocationObserver?.detach()
         dayNightModeObserver?.detach()
+        applicationModeObserver?.detach()
         if let screenOrientationObserver {
             NotificationCenter.default.removeObserver(screenOrientationObserver)
         }

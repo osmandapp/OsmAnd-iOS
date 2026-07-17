@@ -8,14 +8,36 @@
 
 import UIKit
 
-@objc(AstronomyPlugin)
-final class AstronomyPlugin: OAPlugin {
-    let dataProvider: AstroDataDbProvider
+@objc final class AstronomyPlugin: OAPlugin {
+    private enum PreferenceId {
+        static let settings = "astronomy_settings"
+        static let recent = "astronomy_recently_viewed"
+    }
+
+    let dataProvider = AstroDataDbProvider()
+    
+    var astroSettings: AstronomyPluginSettings { astronomySettingsStorage }
     var recentSearchChips: [StarMapRecentChip] = []
 
+    private let settingsPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.settings, defValue: "")
+        .makeProfile()
+        .makeShared()
+
+    private let recentPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.recent, defValue: "")
+        .makeGlobal()
+        .makeShared()
+
+    private lazy var astronomySettingsStorage = AstronomyPluginSettings(settingsPref: settingsPref, recentPref: recentPref)
+
     override init() {
-        dataProvider = AstroDataDbProvider()
         super.init()
+        recentSearchChips = astronomySettingsStorage.getRecentChips()
+    }
+
+    func saveRecentSearchChips() {
+        astronomySettingsStorage.setRecentChips(recentSearchChips)
     }
 
     override func getId() -> String? {

@@ -434,7 +434,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func getMyDataInsertionOrderMap(_ quickPresetType: StarMapSearchQuickPresetType) -> [String: Int] {
-        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.getStarMapConfig()
         let ids: [String]
         switch quickPresetType {
         case .MY_DATA_FAVORITES:
@@ -454,7 +454,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
     
     private func currentTabHasData() -> Bool {
-        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.getStarMapConfig()
         switch currentTab {
         case .favorites:
             return !config.favorites.isEmpty

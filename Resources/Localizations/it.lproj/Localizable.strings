@@ -2111,7 +2111,7 @@
 "pressure_hide" = "Nascondi pressione";
 "routing_attr_avoid_tunnels_name" = "Evita i tunnel";
 "routing_attr_avoid_tunnels_description" = "Evita i tunnel";
-"animate_my_location" = "Simula la mia posizione";
+"animate_my_location" = "Spostamento fluido della mia posizione";
 "animate_my_location_descr" = "Transizione fluida della posizione sulla mappa durante la navigazione";
 "carplay_active_message" = "La mappa è mostrata tramite CarPlay";
 "carplay_profile_descr" = "Profilo che verrà utilizzato quando connesso a CarPlay.";
@@ -3647,7 +3647,7 @@
 "equator" = "Equatore";
 "prime_meridian" = "Primo meridiano";
 "meridian_180" = "180º meridiano";
-"quick_action_showhide_coordinates_grid_descr" = "Attiva la visibilità della griglia di coordinate sulla mappa.";
+"quick_action_showhide_coordinates_grid_descr" = "Inverti la visibilità della griglia di coordinate sulla mappa.";
 "shared_string_original" = "Originale";
 "layer_coordinates_grid" = "Griglia delle coordinate";
 "shared_string_edges" = "Bordi";

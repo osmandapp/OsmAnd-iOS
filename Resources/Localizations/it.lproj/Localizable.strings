@@ -2762,7 +2762,7 @@
 "compass_on_circles" = "Bussola nei cerchi";
 "map_widget_true_bearing" = "Angolo reale";
 "developer_widgets" = "Widget per sviluppatori";
-"shared_string_bearing" = "Direzione";
+"shared_string_bearing" = "Rilevamento";
 "av_notes_photo_widget_desc" = "Toccare il widget permette di scattare una foto.";
 
 // Widget descriptions
@@ -3953,7 +3953,7 @@
 "key_assignments" = "Tasti associati";
 "astro_open_clusters" = "Ammassi aperti";
 "astro_rise" = "Levata";
-"astro_set" = "Tramonto";
+"astro_set" = "Occaso";
 "unpin_folder" = "Rimuovi cartella dai fissati";
 "free_custom_color_description" = "Personalizza gli edifici 3D con qualsiasi colore. Ideale per abbinare un tema mappa o migliorare il contrasto.";
 "galactic_line" = "Linea galattica";
@@ -4314,3 +4314,21 @@
 "selected_waypoints_exit_descr" = "Le tappe selezionate non verranno salvate se chiudi ora";
 "background_opacity_description" = "Vetro è più trasparente e rivela il contenuto sottostante. Con tinta aumenta l'opacità e aggiunge più contrasto.";
 "ios_release_5_4" = "• Aggiunto il tipo di visualizzazione \\\"Ombre del terreno\\\"\\n\n• Interfaccia \\\"I miei luoghi\\\" completamente ridisegnata, con sottocartelle per i Preferiti e azioni più comode\\n\n• Aggiunto il supporto per le mappe solo strade\\n\n• Personalizzazione del profilo ampliata con supporto per tutte le icone dei PDI (Punti Di Interesse)\\n\n• Aggiunta l'impostazione della larghezza bicicletta per evitare piste ciclabili strette\\n\n• Aggiunto il widget per il voltaggio dell'adattatore OBD-II\\n\n• Migliorate le prestazioni nella gestione di numerosi preferiti\\n\n• Aggiunta l'opzione \\\"Sospendi l'audio parlato\\\" per mettere in pausa podcast o audiolibri durante le istruzioni di navigazione\\n\n";
+"astro_magnitude_filter" = "Filtro magnitudine";
+"map_variant_replace_with_road_only" = "Sostituisci con solo strade";
+"map_variant_replace_with_standard" = "Sostituisci con Standard";
+"shared_string_kts" = "nd";
+"import_tracks_cancel_title" = "Annullare l'importazione?";
+"import_tracks_descr_one" = "Il file %@ contiene 1 traccia separata. Seleziona quella da importare.";
+"import_tracks_descr_other" = "Il file %@ contiene %d tracce separate. Seleziona quelle da importare.";
+"import_tracks_folders_footer" = "Seleziona una cartella di destinazione per le tracce importate.";
+"auto_select_nearest_points" = "Selezione automatica punti più vicini";
+"auto_select_nearest_footer" = "Trova e seleziona automaticamente le tappe più vicine a questa traccia.";
+"background_liquid_glass_clear_ios" = "Vetro";
+"shared_string_tinted" = "Con tinta";
+"image_cache_online_photo_high_res" = "Cache foto online alta risoluzione";
+"image_cache_online_photo_mapillary_default_cache" = "Cache predefinita foto online/Mapillary";
+"map_variant_has_standard_download_road_message" = "Hai già la mappa standard per %@.\\\\n\\\\nScaricare la mappa solo strade duplicherà i dati e potrebbe degradare le prestazioni.";
+"map_variant_has_road_download_standard_message" = "Hai già la mappa solo strade per %@.\\\\n\\\\nScaricare la mappa standard duplicherà i dati e potrebbe degradare le prestazioni.";
+"ios_release_5_3" = "• Supporto edifici 3D\\n\n• Vista mappa sferica\\n\n• Tachimetro: nuove modalità colore per tolleranza e superamento velocità\\n\n• Pulsanti mappa personalizzabili: dimensione, forma e stile\\n\n• Icona posizione ridimensionabile\\n\n• Nuovi widget: Velocità massima, Pendenza media; migliorati Salita/Discesa\\n\n• Analizzatore tracce: selezione asse migliorata e metriche veicolo\\n\n• Unisci tappe in una cartella Preferiti\\n\n• Condividi link a qualsiasi PDI\\n\n• CarPlay: mappa Dashboard corretta; aggiunta \\\"Mostra sempre mappa scura\\\"\\n\n• CarPlay: icona posizione più fluida e dialogo post-navigazione\\n\n• Migliorate le connessioni per gli adattatori OBD-II abbinati\\n\n• Corretto: l'ETA si aggiorna anche da fermo\\n\n";
+"ios_release_5_2" = "• Introdotta la mappatura personalizzabile dei pulsanti per controller esterni, con possibilità di assegnare qualsiasi Azione rapida a un tasto della tastiera o del controller\\n\n• Aggiunte nuove Azioni rapide per controllare l'app con un controller esterno\\n\n• Migliorata la visibilità dei widget in modalità trasparenza con contorni del testo\\n\n• Aggiunta una griglia di precisione per allineare i pulsanti mappa\\n\n• Introdotto un nuovo stile mappa nautica \\\"Marine\\\" con ampie opzioni di personalizzazione\\n\n• Aggiunti dettagli di via e città nei risultati di ricerca\\n\n• Aggiunta un'opzione per aumentare la dimensione del testo nello strumento di misurazione distanza\\n\n• Spostata la selezione dell'unità di temperatura nelle Impostazioni generali\\n\n• Le unità di altitudine possono ora essere impostate separatamente dalle unità di distanza\\n\n• Aggiunta un'Azione rapida per l'orientamento mappa con modalità bussola selezionabili\\n\n• Risolto un problema che impediva lo spostamento di alcuni widget\\n\n• Corretta la visualizzazione errata della distanza nel widget Prossima svolta\\n\n• Migliorata la ricerca per marchio includendo più marchi locali\\n\n• Miglioramenti generali di stabilità e prestazioni\\n\n";

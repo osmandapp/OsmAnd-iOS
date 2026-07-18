@@ -1330,7 +1330,7 @@
 "quick_action_auto_zoom" = "Zoom della mappa automatico";
 "toggle_day_night" = "Inverti modo Giorno/Notte";
 "show_hide_gpx" = "Mostra/nascondi viaggi";
-"search_results" = "Cerca risultati";
+"search_results" = "Risultati di ricerca";
 "quick_action_name_alert" = "Il nome dell'azione veloce è stato cambiato in %@ per evitare duplicati.";
 "quick_action_screen_header" = "Schermo %ld";
 "group_properties" = "Proprietà del gruppo";

@@ -4431,3 +4431,4 @@
 "tracks_empty_folder_description" = "Esta pasta ainda não tem nenhum ponto.";
 "delete_favorite_confirmation_title" = "Excluir \"%@\"?";
 "add_new_folder" = "Adicionar nova pasta";
+"items_delete_confirmation_title" = "Excluir %ld itens?";

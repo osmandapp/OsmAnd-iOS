@@ -610,7 +610,7 @@
 "rendering_attr_moreDetailed_name" = "Περισσότερες λεπτομέρειες";
 "routing_attr_allow_motorway_description" = "Να επιτρέπονται οι αυτοκινητόδρομοι.";
 "routing_attr_height_name" = "Ύψος";
-"routing_attr_avoid_share_taxi_description" = "Αποφεύγει αγοραίο";
+"routing_attr_avoid_share_taxi_description" = "Αποφεύγει αγοραίο (κοινόχρηστο ταξί)";
 "routing_attr_freeride_policy_name" = "Εκτός πίστας";
 "rendering_attr_hideOverground_name" = "Υπέργεια αντικείμενα";
 "routing_attr_width_description" = "Καθορίστε το επιτρεπόμενο όριο πλάτους οχήματος στους δρόμους.";
@@ -648,7 +648,7 @@
 "rendering_attr_showRoadMaps_name" = "Οδικοί-μόνο χάρτες";
 "rendering_attr_piste_type_downhill_name" = "Κατηφόρα";
 "rendering_attr_whiteWaterSports_name" = "Αθλήματα ορμητικών νερών";
-"routing_attr_avoid_borders_description" = "Να αποφεύγει πέρασμα συνόρων";
+"routing_attr_avoid_borders_description" = "Αποφεύγει πέρασμα συνόρων χώρας";
 "rendering_attr_highway_class_state_road_name" = "Εθνικός δρόμος";
 "rendering_value_medium_w_name" = "Μέση";
 "routing_attr_avoid_tram_name" = "Χωρίς τραμ";
@@ -658,7 +658,7 @@
 "routing_attr_allow_motorway_name" = "Χρήση αυτοκινητοδρόμων";
 "routing_attr_avoid_motorway_name" = "Χωρίς αυτοκινητόδρομους";
 "rendering_attr_surface_compacted_name" = "Συμπιεσμένο";
-"routing_attr_avoid_unpaved_name" = "Χωρίς μη στρωμένους δρόμους";
+"routing_attr_avoid_unpaved_name" = "Χωρίς ανεπίστρωτους δρόμους";
 "routing_attr_difficulty_preference_description" = "Να προτιμώνται διαδρομές αυτής της δυσκολίας, αν και η διαδρομή σε πιο δύσκολες ή εύκολες πίστες είναι ακόμα εφικτές, εάν είναι πιο σύντομες.";
 "rendering_attr_highway_class_motorway_name" = "Αυτοκινητόδρομος";
 "routeInfo_piste_difficulty_name" = "Δυσκολία πίστας";
@@ -670,7 +670,7 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Αποφεύγει δρόμους με πάγο και υδάτινα περάσματα.";
 "rendering_attr_surface_unpaved_name" = "Χωρίς επίστρωση";
 "rendering_attr_showAccess_name" = "Εμφάνιση περιορισμών πρόσβασης";
-"rendering_attr_tracktype_grade2_name" = "Στερεός (μη πλακοστρωμένος)";
+"rendering_attr_tracktype_grade2_name" = "Συμπαγής (ανεπίστρωτος)";
 "routing_attr_piste_type_skitour_name" = "Χιονοδρομικές βόλτες";
 "rendering_value_bicycle_name" = "Ποδήλατο";
 "routing_attr_allow_skating_only_description" = "Μόνο καθαρισμένες διαδρομές για ελεύθερη τεχνοτροπία ή πατίνια, χωρίς κλασικά μονοπάτια.";
@@ -686,7 +686,7 @@
 "routing_attr_prefer_unpaved_name" = "Προτίμηση μη στρωμένων δρόμων";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Δίκτυα κόμβων";
 "rendering_value_fine_name" = "Πολύ λεπτή";
-"rendering_attr_tracktype_grade3_name" = "Κυρίως στερεός";
+"rendering_attr_tracktype_grade3_name" = "Κυρίως συμπαγής";
 "rendering_attr_piste_difficulty_aerialway_name" = "Εναέριος";
 "rendering_attr_piste_difficulty_extreme_name" = "Ακραία";
 "rendering_attr_surfaceIntegrity_name" = "Αρτιότητα επιφάνειας δρόμου";
@@ -696,8 +696,8 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Απόδοση δρόμων σύμφωνα με τα ίχνη OSMC.";
 "rendering_attr_lessDetailed_name" = "Λιγότερες λεπτομέρειες";
 "routing_attr_no_new_routing_name" = "Κανόνες δρομολόγησης v1.9";
-"routing_attr_avoid_sett_description" = "Απέφυγε λιθόστρωτο";
-"rendering_attr_showLez_name" = "Εμφάνιση ζωνών χαμηλής εκπομπής καυσαερίων";
+"routing_attr_avoid_sett_description" = "Αποφεύγει κυβόλιθους";
+"rendering_attr_showLez_name" = "Εμφάνιση ζωνών χαμηλών εκπομπών καυσαερίων";
 "rendering_attr_piste_difficulty_novice_name" = "Αρχάριος";
 "rendering_attr_smoothness_horrible_name" = "Απαίσιο";
 "rendering_attr_surface_fine_gravel_name" = "Λεπτό χαλίκι";
@@ -710,7 +710,7 @@
 "rendering_attr_highway_class_steps_name" = "Σκάλες";
 "rendering_value_purple_name" = "Μοβ";
 "routing_attr_avoid_subway_name" = "Χωρίς μετρό";
-"rendering_attr_tracktype_grade1_name" = "Στερεός (πλακοστρωμένος)";
+"rendering_attr_tracktype_grade1_name" = "Συμπαγής (επιστρωμένος)";
 "rendering_attr_hideIcons_name" = "Εικονίδια ΣΕ";
 "rendering_attr_publicTransportMode_name" = "Λεωφορεία, τρόλεϊ, κλειστά δρομολόγια";
 "routing_attr_avoid_bus_name" = "Χωρίς λεωφορεία";
@@ -724,7 +724,7 @@
 "routing_attr_height_obstacles_name" = "Χρήση υψομετρικών δεδομένων";
 "rendering_attr_pisteGrooming_name" = "Συντήρηση πίστας";
 "routing_attr_avoid_shuttle_train_name" = "Αποφυγή τρένου κλειστής διαδρομής";
-"routing_attr_avoid_sett_name" = "Χωρίς λιθόστρωτο";
+"routing_attr_avoid_sett_name" = "Χωρίς κυβόλιθους";
 "rendering_attr_hideWoodScrubs_name" = "Δάση και θάμνοι";
 "rendering_attr_currentTrackColor_description" = "Χρώμα GPX";
 "rendering_attr_smoothness_impassable_name" = "Αδιάβατο";
@@ -732,7 +732,7 @@
 "routing_attr_allow_expert_description" = "Πολύ δύσκολες διαδρομές, με επικίνδυνα εμπόδια και περιβάλλον.";
 "rendering_attr_piste_type_connection_name" = "Σύνδεση";
 "rendering_attr_contourWidth_description" = "Πλάτος ισοϋψών καμπυλών";
-"routing_attr_avoid_motorway_description" = "Απέφυγε αυτοκινητόδρομους";
+"routing_attr_avoid_motorway_description" = "Αποφεύγει αυτοκινητόδρομους";
 "rendering_attr_trainLightrailRoutes_name" = "Διαδρομές τρένου";
 "routing_attr_piste_type_nordic_description" = "Πίστες για σκανδιναβική ή εκτός δρόμου χιονοδρομία.";
 "rendering_attr_surface_gravel_name" = "Χαλίκι";
@@ -766,7 +766,7 @@
 "rendering_attr_noAdminboundaries_description" = "Περιορισμός εμφάνισης διοικητικών ορίων (επίπεδα διαχειριστή 5-9).";
 "rendering_attr_hideAccess_name" = "Περιορισμοί πρόσβασης";
 "routing_attr_driving_style_speed_name" = "Πιο σύντομες διαδρομές";
-"routing_attr_avoid_ferry_description" = "Απέφυγε πορθμεία";
+"routing_attr_avoid_ferry_description" = "Αποφεύγει πορθμεία";
 "rendering_value_orange_name" = "Πορτοκαλί";
 "rendering_value_default_name" = "Προεπιλογή";
 "routing_attr_height_description" = "Καθορισμός ύψους οχήματος που επιτρέπεται σε διαδρομές.";
@@ -811,7 +811,7 @@
 "rendering_value_translucent_yellow_name" = "Ημιδιαφανές κίτρινο";
 "routeInfo_piste_type_name" = "Τύπος πίστας";
 "rendering_attr_surface_wood_name" = "Ξύλο";
-"routing_attr_avoid_ferries_description" = "Απέφυγε πορθμεία";
+"routing_attr_avoid_ferries_description" = "Αποφεύγει πορθμεία";
 "rendering_attr_smoothness_intermediate_name" = "Μέτριο";
 "rendering_attr_highway_class_track_grade1_name" = "Βαθμίδα 1";
 "rendering_value_translucent_lightblue_name" = "Ημιδιαφανές γαλάζιο";
@@ -822,7 +822,7 @@
 "routing_attr_allow_intermediate_name" = "Να επιτρέπονται ενδιάμεσες διαδρομές";
 "rendering_attr_piste_difficulty_connection_name" = "Σύνδεση";
 "rendering_value_green_name" = "Πράσινο";
-"rendering_attr_showLez_description" = "Εμφάνιση στον χάρτη ζωνών για χαμηλή εκπομπή καυσαερίων. Δεν επηρεάζει τη δρομολόγηση.";
+"rendering_attr_showLez_description" = "Εμφανίζει στον χάρτη τις ζώνες χαμηλών εκπομπών καυσαερίων. Δεν επηρεάζει τη δρομολόγηση.";
 "routing_attr_allow_advanced_name" = "Να επιτρέπονται προχωρημένες διαδρομές";
 "rendering_value_red_name" = "Κόκκινο";
 "routing_attr_max_num_changes_name" = "Αριθμός αλλαγών μετεπιβίβασης";
@@ -831,7 +831,7 @@
 "rendering_attr_surface_dirt_name" = "Σκονη";
 "rendering_attr_roadColors_name" = "Χρωματικός συνδυασμός οδών";
 "rendering_value_translucent_lightgreen_name" = "Ημιδιαφανές ανοιχτό πράσινο";
-"routing_attr_avoid_share_taxi_name" = "Αγοραίο";
+"routing_attr_avoid_share_taxi_name" = "Χωρίς αγοραίο";
 "rendering_attr_showRoadMaps_description" = "Επιλέξτε πότε θα εμφανίζονται μόνο-οδικοί χάρτες:";
 "rendering_value_thin_name" = "Λεπτή";
 "switch_start_finish" = "Αντιστροφή αρχικού σημείου & προορισμού";
@@ -887,11 +887,11 @@
 "unit_of_length_descr" = "Αλλαγή απόστασης που μετριέται.";
 "default_profile_descr" = "Επιλέξτε ένα προφίλ που θα χρησιμοποιηθεί η εκκίνηση της εφαρμογής.";
 "route_simulation" = "Προσομοίωση διαδρομής";
-"day_night_info_description" = "Ανατολή : %@ \nΔύση : %@";
+"day_night_info_description" = "Ανατολή ηλίου: %@ \nΔύση ηλίου: %@";
 "no_active_route" = "Δεν υπάρχει ενεργή διαδρομή";
 "select_avoid_descr" = "Επιλέξτε δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση. Μπορείτε είτε να επιλέξετε έναν δρόμο στον χάρτη είτε να επιλέξετε ένα είδος από την παρακάτω λίστα.";
 "simulate_routing_descr" = "Προσομοιώστε την θέση σας χρησιμοποιώντας μια υπολογισμένη διαδρομή";
-"avoid_roads_msg" = "Προκαλέσετε μια εναλλακτική διαδρομή επιλέγοντας δρόμους προς αποφυγή";
+"avoid_roads_msg" = "Προκαλέστε μια εναλλακτική διαδρομή επιλέγοντας δρόμους προς αποφυγή";
 "shared_string_select_avoid_road_on_map" = "Επιλέξτε έναν δρόμο προς αποφυγή κατά τη διάρκεια της δρομολόγησης";
 "will_open_tomorrow_at" = "Ανοίγει αύριο στις";
 "will_open_on" = "Ανοίγει στις";
@@ -941,7 +941,7 @@
 "utm_description" = "Προσοχή, το OsmAnd χρησιμοποιεί το UTM Standard πρότυπο το οποίο είναι παρόμοιο αλλά όχι ίδιο με το UTM NATO.";
 "week_short" = "Εβδ";
 "day_short" = "Μ";
-"temporary_conditional_routing" = "Λάβετε υπόψη τους προσωρινούς περιορισμούς";
+"temporary_conditional_routing" = "Να λάβει υπόψη προσωρινούς περιορισμούς";
 "base_profile_descr_bicycle" = "Ποδήλατο βουνού, μοτοποδήλατο, άλογο";
 "shared_string_profiles" = "Προφίλ";
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
@@ -959,7 +959,7 @@
 "search_activity" = "Αναζήτηση";
 "gpx_parse_error" = "Βρέθηκαν προβλήματα με ένα αρχείο GPX. \n \nΕπικοινωνήστε με την ομάδα υποστήριξης του OsmAnd για διερεύνηση.";
 "sqlite_db_file" = "Αρχείο SQLiteDB";
-"shared_string_poi_types" = "Είδη Σημείων Ενδιαφέροντος";
+"shared_string_poi_types" = "Τύποι Σημείων Ενδιαφέροντος";
 "importing_from" = "Εισαγωγή δεδομένων από το %@";
 "import_duplicates_title" = "Μερικά αντικείμενα υπάρχουν ήδη";
 "pseudo_mercator_projection" = "Ψευδομερκατορική προβολή";
@@ -1155,9 +1155,9 @@
 "gpx_route_time" = "Χρόνος διαδρομής";
 "turn_on_plugin" = "Ενεργοποιήση πρόσθετου";
 "routing_attr_avoid_low_emission_zone_name" = "Αποφυγή ζωνών χαμηλής εκπομπής ρύπων";
-"routing_attr_avoid_low_emission_zone_description" = "Αποφεύγει τις ζώνες χαμηλής εκπομπής ρύπων";
+"routing_attr_avoid_low_emission_zone_description" = "Αποφεύγει ζώνες χαμηλής εκπομπής ρύπων";
 "routing_attr_avoid_tunnels_name" = "Αποφυγή σηράγγων";
-"routing_attr_avoid_tunnels_description" = "Αποφεύγει τις σήραγγες";
+"routing_attr_avoid_tunnels_description" = "Αποφεύγει σήραγγες";
 "sqlitedb_import_already_exists" = "Το καθορισμένο sqlitedb αρχείο υπάρχει ήδη. Παρακαλώ επιλέξτε ενέργεια.";
 "sett_lang_trans" = "Μεταγραμματισμός";
 "nothing_found" = "Δεν βρέθηκε τίποτα";
@@ -1481,7 +1481,7 @@
 "select_folder" = "Επιλογή φακέλου";
 "shared_string_do_not_use" = "Να μην χρησιμοποιηθεί";
 "osm_live_payment_discount_descr" = "Εξοικονομήστε %@";
-"shared_string_rendering_style" = "Τεχνοτροπία απόδοσης";
+"shared_string_rendering_style" = "Στυλ απόδοσης";
 "impassable_road" = "Αποφυγή δρόμων…";
 "show_warnings_descr" = "Ρύθμιση κυκλοφοριακών προειδοποιήσεων (όρια ταχύτητας, αναγκαστικές στάσεις, σαμαράκια, σήραγγες) προειδοποιήσεις καμερών ταχύτητας και πληροφορίες λωρίδων.";
 "get_osmand_live" = "Εγγραφείτε στο OsmAnd Live για να ξεκλειδώσετε όλα τα χαρακτηριστικά: Ημερήσιες ενημερώσεις χαρτών με απεριόριστες λήψεις, όλα πληρωμένα και χωρίς πρόσθετα, Βικιπαίδεια, Βικιταξίδια και πολλά άλλα.";
@@ -1531,7 +1531,7 @@
 "rendering_attr_showBusRoutes_name" = "Δρομολόγια λεωφορείου";
 "routing_attr_avoid_footways_name" = "Αποφυγή μονοπατιών πεζών";
 "rendering_attr_showTrolleybusRoutes_name" = "Δρομολόγια τρόλεϊ";
-"routing_attr_avoid_footways_description" = "Αποφυγή μονοπατιών πεζών";
+"routing_attr_avoid_footways_description" = "Αποφεύγει μονοπάτια για πεζούς";
 "quick_action_navigation_voice_off" = "Κατάργηση σίγασης φωνής";
 "quick_action_auto_zoom" = "Αυτόματη εστίαση χάρτη";
 "osm_edit_reopened_note" = "Ξανανοιγμένη σημείωση OSM";
@@ -1830,7 +1830,7 @@
 "press_again_to_change_the_map_orientation" = "Πατήστε ξανά για να αλλάξετε τον προσανατολισμό του χάρτη";
 "no_travel_guides_data_descr" = "Κατεβάστε τους οδηγούς ταξιδιών των βικιταξιδιών για να προβάλετε τα άρθρα για μέρη σε όλον τον κόσμο χωρίς σύνδεση διαδικτύου.";
 "bluetooth_found_title" = "Βρέθηκε: %d";
-"shared_string_open_track" = "Άνοιγμα ίχνος";
+"shared_string_open_track" = "Άνοιγμα ίχνους";
 "trash_is_empty" = "Ο κάδος είναι άδειος";
 "shared_string_ear_lobe" = "Λοβός αυτιού";
 "poi_categories" = "Κατηγορίες ΣΕ";
@@ -1942,10 +1942,10 @@
 "edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
 "edit_tilesource_maxzoom" = "Μέγιστο ζουμ";
 "shared_string_item" = "Αντικείμενο";
-"avoid_pt_types" = "Αποφυγή ειδών συγκοινωνίας…";
+"avoid_pt_types" = "Αποφυγή τύπων συγκοινωνίας…";
 "speed_limit_warning" = "Προειδοποίηση ορίου ταχύτητας";
 "shared_string_bottom" = "Κάτω μέρος";
-"avoid_pt_types_descr" = "Επιλέξτε είδη δημόσιας συγκοινωνίας προς αποφυγή στην πλοήγηση:";
+"avoid_pt_types_descr" = "Επιλέξτε τύπους δημόσιας συγκοινωνίας προς αποφυγή στην πλοήγηση:";
 "shared_string_always" = "Πάντοτε";
 "auto_zoom" = "Αυτόματο ζουμ";
 "dangerous_goods" = "Επικίνδυνα εμπορεύματα";
@@ -2608,7 +2608,7 @@
 "local_changes_will_be_dismissed" = "Οι τοπικές αλλαγές θα παραβλεφθούν";
 "backup_delete_from_cloud" = "Διαγραφή από το cloud";
 "with_offline_maps" = "Με χάρτες εκτός σύνδεσης";
-"routing_attr_avoid_highway_description" = "Αποφυγή αυτοκινητόδρομων";
+"routing_attr_avoid_highway_description" = "Αποφεύγει αυτοκινητόδρομους";
 "routing_attr_avoid_highway_name" = "Αποφυγή αυτοκινητόδρομων";
 "help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_guidance_name" = "Καθοδήγηση πλοήγησης";
@@ -2666,7 +2666,7 @@
 "shared_string_external" = "Εξωτερικά";
 "routing_attr_allow_gate_name" = "Να επιτρέπεται η χρήση πυλών";
 "rendering_value_all_name" = "Όλα";
-"routing_attr_avoid_4wd_only_description" = "Να αποφεύγει δρόμους κατάλληλους για οχήματα 4χ4";
+"routing_attr_avoid_4wd_only_description" = "Αποφεύγει δρόμους κατάλληλους μόνο για οχήματα 4χ4";
 "routing_attr_motor_type_gas_name" = "Συμπιεσμένο Φυσικό Αέριο";
 "unchanged_parameter_summary" = "Κάθε ίχνος θα διατηρήσει τις δικές του παραμέτρους.";
 "routing_attr_prefer_horse_routes_description" = "Να προτιμώνται ιππικές διαδρομές";
@@ -2698,7 +2698,7 @@
 "rendering_value_defaultMedium_name" = "Προεπιλογή (μέτρια)";
 "rendering_value_dark_orange_name" = "Σκούρο πορτοκαλί";
 "routing_attr_avoid_cobblestone_name" = "Αποφυγή λιθόστρωτου";
-"routing_attr_avoid_cobblestone_description" = "Αποφεύγει το λιθόστρωτο";
+"routing_attr_avoid_cobblestone_description" = "Αποφεύγει λιθόστρωτο";
 "map_widget_route_information_desc" = "Εμφανίζει τον εκτιμέμενο χρόνο άφιξης, τον εναπομείναντα χρόνο ταξιδιού και την απόσταση για την ενεργή διαδρομή πλοήγησης.";
 "routing_attr_difficulty_preference_expert_name" = "Εξειδικευμένη";
 "routing_attr_carriage_restrictions_description" = "Να ληφθούν υπόψιν περιορισμοί πρόσβασης για ιππήλατα οχήματα";
@@ -2863,7 +2863,7 @@
 "repeat_after" = "Επανάληψη μετά από";
 "recording_preferences_descr" = "Προτιμήσεις καταγραφής ίχνους";
 "road_speeds" = "Ταχύτητες δρόμου";
-"avoid_transport_type" = "Αποφυγή ειδών μεταφοράς";
+"avoid_transport_type" = "Αποφυγή τύπων μεταφοράς";
 "select_route_intermediate" = "Επιλέξτε ένα ενδιάμεσο σημείο";
 "select_home" = "Επιλέξτε σημείο σπιτιού";
 "select_work_point" = "Επιλέξτε σημείο δουλειάς";

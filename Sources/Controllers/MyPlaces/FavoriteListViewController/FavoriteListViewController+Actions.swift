@@ -443,9 +443,10 @@ extension FavoriteListViewController {
     }
 
     private func hasFolderInList(named groupName: String, excluding excludedGroupName: String) -> Bool {
-        favoriteFolders().contains { folder in
+        let normalizedGroupName = groupName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return favoriteFolders().contains { folder in
             let existingGroupName = folder.bridgeItem.groupName
-            return existingGroupName != excludedGroupName && existingGroupName == groupName
+            return existingGroupName != excludedGroupName && existingGroupName.trimmingCharacters(in: .whitespacesAndNewlines) == normalizedGroupName
         }
     }
     

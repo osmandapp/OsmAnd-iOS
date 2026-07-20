@@ -491,9 +491,26 @@ static NSOperationQueue *_favQueue;
     return _flatGroups;
 }
 
-+ (OAFavoriteGroup *) getGroupByName:(NSString *)nameId
++ (OAFavoriteGroup *)groupByName:(NSString *)nameId
 {
     return _flatGroups[nameId];
+}
+
++ (OAFavoriteGroup *)groupByTrimmedName:(NSString *)nameId
+{
+    OAFavoriteGroup *group = [self groupByName:nameId];
+    if (group)
+        return group;
+    
+    NSString *trimmedName = [nameId trim];
+    for (OAFavoriteGroup *favoriteGroup in _favoriteGroups)
+    {
+        NSString *favoriteGroupName = [favoriteGroup.name trim];
+        if ([favoriteGroupName isEqualToString:trimmedName])
+            return favoriteGroup;
+    }
+
+    return nil;
 }
 
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem

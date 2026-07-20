@@ -354,7 +354,7 @@
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     UIColor *selectedColor;
     if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
-        selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
+        selectedColor = [OAFavoritesHelper groupByTrimmedName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
     else
         selectedColor = [_pointHandler getColor];
     if (!selectedColor)
@@ -418,7 +418,7 @@
     _selectedIconName = preselectedIconName;
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
@@ -1001,6 +1001,12 @@
     {
         OAPointEditingData *data = [[OAPointEditingData alloc] init];
         NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
+        if (_editPointType == EOAEditPointTypeFavorite)
+        {
+            OAFavoriteGroup *existingFavoriteGroup = [OAFavoritesHelper groupByTrimmedName:savingGroup];
+            if (existingFavoriteGroup)
+                savingGroup = existingFavoriteGroup.name;
+        }
         
         data.descr = self.desc ? self.desc : @"";
         data.address = self.address ? self.address : @"";
@@ -1239,10 +1245,18 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        [OAFavoritesHelper addFavoriteGroup:editedGroupName
-                                      color:color
-                                   iconName:iconName
-                         backgroundIconName:backgroundIconName];
+        OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
+        if (existingGroup)
+        {
+            editedGroupName = existingGroup.name;
+        }
+        else
+        {
+            [OAFavoritesHelper addFavoriteGroup:editedGroupName
+                                          color:color
+                                       iconName:iconName
+                             backgroundIconName:backgroundIconName];
+        }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1490,7 +1504,7 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-        OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
         if (group)
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];

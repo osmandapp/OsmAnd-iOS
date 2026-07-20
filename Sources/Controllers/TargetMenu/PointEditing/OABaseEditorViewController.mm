@@ -581,7 +581,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
 {
-    return [OAFavoritesHelper getGroupByName:name];
+    return [OAFavoritesHelper groupByName:name];
 }
 
 - (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group

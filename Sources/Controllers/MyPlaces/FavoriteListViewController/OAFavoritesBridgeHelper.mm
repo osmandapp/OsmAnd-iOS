@@ -203,7 +203,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
     NSString *parent = parentGroupName ?: @"";
     NSString *groupName = parent.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", parent, trimmedName] : trimmedName;
-    if (groupName.length == 0 || [self favoriteGroupWithName:groupName])
+    if (groupName.length == 0 || [OAFavoritesHelper groupByTrimmedName:groupName])
         return NO;
 
     [OAFavoritesHelper addFavoriteGroup:groupName
@@ -224,6 +224,10 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     NSString *sourceGroupName = group.name;
     if ([sourceGroupName isEqualToString:trimmedName])
+        return;
+
+    OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:trimmedName];
+    if (existingGroup && ![existingGroup.name isEqualToString:sourceGroupName])
         return;
 
     [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:trimmedName];
@@ -975,7 +979,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
 + (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName
 {
-    return [OAFavoritesHelper getGroupByName:groupName ?: @""];
+    return [OAFavoritesHelper groupByName:groupName ?: @""];
 }
 
 + (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName

@@ -35,7 +35,8 @@
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon;
 + (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups;
-+ (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
++ (OAFavoriteGroup *)groupByName:(NSString *)nameId;
++ (OAFavoriteGroup *)groupByTrimmedName:(NSString *)nameId;
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
 + (void) lookupAddress:(OAFavoriteItem *)point;
 

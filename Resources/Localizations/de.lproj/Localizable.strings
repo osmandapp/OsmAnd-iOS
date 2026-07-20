@@ -225,7 +225,7 @@
 "product_desc_russia" = "Unbegrenzte Kartendownloads für Russland";
 "product_desc_southamerica" = "Unbegrenzte Kartendownloads für Südamerika";
 "product_desc_asia" = "Unbegrenzte Kartendownloads für Asien";
-"my_location" = "Mein Standort";
+"my_location" = "Meine Position";
 "shared_string_buy_for" = "für";
 "all_categories" = "Alle Kategorien";
 "shared_string_or" = "oder";
@@ -4119,3 +4119,6 @@
 "set_step_size_summary" = "Wählen Sie eine Schrittweite, um Ihre Tracks zu gruppieren.";
 "routing_attr_motor_type_ethanol_name" = "Ethanol";
 "plugin_ais_tracker_name" = "AIS-Schiffstracker";
+"traffic_warning_red_light_camera" = "Rotlichtblitzer";
+"shared_string_disabled" = "Deaktiveret";
+"gpx_logging_no_data" = "Keine Daten";

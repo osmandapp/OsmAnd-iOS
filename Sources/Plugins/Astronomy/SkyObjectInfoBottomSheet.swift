@@ -262,10 +262,13 @@ final class AstroContextMenuViewController: UIViewController {
             let bottomInset = visible ? tabBarHeight + self.view.safeAreaInsets.bottom + 16 : 16
             self.scrollView.contentInset.bottom = bottomInset
             self.scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
-            self.tabBar.invalidateIntrinsicContentSize()
         }
         if animated {
-            UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction], animations: updates)
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction], animations: updates) { _ in
+                self.tabBar.invalidateIntrinsicContentSize()
+                self.tabBar.setNeedsLayout()
+                self.tabBar.layoutIfNeeded()
+            }
         } else {
             updates()
         }
@@ -366,8 +369,10 @@ final class AstroContextMenuViewController: UIViewController {
 
         setupTabBar()
         view.addSubview(tabBar)
-        tabBar.invalidateIntrinsicContentSize()
-        tabBar.layoutIfNeeded()
+        if OAUtilities.isIPad() {
+            tabBar.invalidateIntrinsicContentSize()
+            tabBar.layoutIfNeeded()
+        }
         tabBar.alpha = 0
 
         NSLayoutConstraint.activate([
@@ -866,7 +871,8 @@ final class AstroContextMenuViewController: UIViewController {
             astroWikiHtml: body,
             title: article.title,
             locale: locale,
-            onlineURL: onlineURL
+            onlineURL: onlineURL,
+            wikidataId: article.wikidata
         )
         let navController = UINavigationController(rootViewController: vc)
         navController.modalPresentationStyle = .fullScreen

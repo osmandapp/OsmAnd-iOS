@@ -117,7 +117,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         
         if item.state == .download {
             let divider = UIView()
-            divider.backgroundColor = .customSeparator
+            divider.backgroundColor = .customSeparatorSolid
             divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
             stack.addArrangedSubview(divider)
             stack.setCustomSpacing(0, after: divider)

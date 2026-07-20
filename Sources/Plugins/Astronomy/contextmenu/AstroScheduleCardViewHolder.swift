@@ -52,7 +52,7 @@ enum AstroScheduleCardViewHolder {
         card.addSubview(contentStack)
         
         let divider = UIView()
-        divider.backgroundColor = .customSeparator
+        divider.backgroundColor = .customSeparatorSolid
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
 
         let headerCardView = header(item: item,
@@ -80,25 +80,23 @@ enum AstroScheduleCardViewHolder {
         mainStack.axis = .vertical
         mainStack.spacing = 11
         mainStack.translatesAutoresizingMaskIntoConstraints = false
-
-        if item.days.contains(where: { $0.setDayOffset > 0 }) {
-            let noteContainer = UIView()
-            let note = UILabel()
-            note.translatesAutoresizingMaskIntoConstraints = false
-            note.text = localizedString("astro_schedule_next_day_note")
-            note.textColor = .textColorSecondary
-            note.font = .preferredFont(forTextStyle: .footnote)
-            note.numberOfLines = 0
-            noteContainer.addSubview(note)
-            NSLayoutConstraint.activate([
-                note.leadingAnchor.constraint(equalTo: noteContainer.leadingAnchor, constant: 16),
-                note.trailingAnchor.constraint(equalTo: noteContainer.trailingAnchor, constant: -16),
-                note.topAnchor.constraint(equalTo: noteContainer.topAnchor),
-                note.bottomAnchor.constraint(equalTo: noteContainer.bottomAnchor)
-            ])
-            mainStack.setCustomSpacing(6, after: card)
-            mainStack.addArrangedSubview(noteContainer)
-        }
+        
+        let noteContainer = UIView()
+        let note = UILabel()
+        note.translatesAutoresizingMaskIntoConstraints = false
+        note.text = localizedString("astro_schedule_next_day_note")
+        note.textColor = .textColorSecondary
+        note.font = .preferredFont(forTextStyle: .footnote)
+        note.numberOfLines = 0
+        noteContainer.addSubview(note)
+        NSLayoutConstraint.activate([
+            note.leadingAnchor.constraint(equalTo: noteContainer.leadingAnchor, constant: 16),
+            note.trailingAnchor.constraint(equalTo: noteContainer.trailingAnchor, constant: -16),
+            note.topAnchor.constraint(equalTo: noteContainer.topAnchor),
+            note.bottomAnchor.constraint(equalTo: noteContainer.bottomAnchor)
+        ])
+        mainStack.setCustomSpacing(6, after: card)
+        mainStack.addArrangedSubview(noteContainer)
 
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
@@ -249,7 +247,7 @@ enum AstroScheduleCardViewHolder {
         row.addSubview(setBlock)
 
         let divider = UIView()
-        divider.backgroundColor = .customSeparator
+        divider.backgroundColor = .customSeparatorSolid
         divider.isHidden = !showDivider
         divider.translatesAutoresizingMaskIntoConstraints = false
         control.addSubview(divider)

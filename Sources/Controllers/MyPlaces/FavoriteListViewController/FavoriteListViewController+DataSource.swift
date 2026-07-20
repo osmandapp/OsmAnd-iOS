@@ -112,6 +112,7 @@ extension FavoriteListViewController {
             guard let self else { return }
             if case .header(let section) = item {
                 self.collapsedRootSections.remove(section)
+                self.saveCollapsedSections()
             }
 
             guard self.collectionView.isEditing else { return }
@@ -120,6 +121,7 @@ extension FavoriteListViewController {
         dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
             guard let self, case .header(let section) = item else { return }
             self.collapsedRootSections.insert(section)
+            self.saveCollapsedSections()
         }
         return dataSource
     }
@@ -348,5 +350,9 @@ extension FavoriteListViewController {
 
     private func searchFavoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
         favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }
+    }
+
+    private func saveCollapsedSections() {
+        OAFavoritesBridgeHelper.updateCollapsedSections(collapsedRootSections.map(\.rawValue))
     }
 }

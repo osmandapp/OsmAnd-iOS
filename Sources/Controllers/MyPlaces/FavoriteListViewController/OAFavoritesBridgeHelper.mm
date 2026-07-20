@@ -40,6 +40,7 @@
 #include <OsmAndCore/Utilities.h>
 
 static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
+static NSArray<NSString *> *collapsedSections = nil;
 
 @implementation OAFavoritesBridgeHelper
 
@@ -52,6 +53,16 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 {
     if ([OAFavoritesHelper createMissingParentFolderIfNeeded])
         [self invalidateFavoriteFoldersCache];
+}
+
++ (NSArray<NSString *> *)collapsedSections
+{
+    return collapsedSections ?: @[];
+}
+
++ (void)updateCollapsedSections:(NSArray<NSString *> *)sections
+{
+    collapsedSections = [sections copy];
 }
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders

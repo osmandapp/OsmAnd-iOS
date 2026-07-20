@@ -42,7 +42,7 @@ final class FavoriteListViewController: UIViewController {
     var shouldReloadCollectionView = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
-    var collapsedRootSections = Set<FavoriteFolderSection>()
+    var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
@@ -124,9 +124,14 @@ final class FavoriteListViewController: UIViewController {
         super.init(coder: coder)
     }
     
+    private static func loadCollapsedSections() -> Set<FavoriteFolderSection> {
+        let sections = OAFavoritesBridgeHelper.collapsedSections()
+        return Set(sections.compactMap(FavoriteFolderSection.init(rawValue:)))
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        createMissingParentFolderOnFirstOpenIfNeeded()
+        createMissingParentFolderIfNeeded()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
@@ -408,7 +413,7 @@ final class FavoriteListViewController: UIViewController {
         }
     }
 
-    private func createMissingParentFolderOnFirstOpenIfNeeded() {
+    private func createMissingParentFolderIfNeeded() {
         guard isRootFolder else { return }
         OAFavoritesBridgeHelper.createMissingParentFolderIfNeeded()
     }

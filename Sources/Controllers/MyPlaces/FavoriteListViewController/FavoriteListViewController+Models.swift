@@ -11,7 +11,7 @@ enum ScreenMode {
     case folder(FavoriteFolderRow, previousTitle: String)
 }
 
-enum FavoriteFolderSection: Hashable {
+enum FavoriteFolderSection: String, Hashable {
     case pinned
     case visible
     case hidden

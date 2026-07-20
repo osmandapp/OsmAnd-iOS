@@ -10,9 +10,11 @@
 
 @class OASTrackItem;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol OASelectTrackFolderDelegate <NSObject>
 
-- (void) onFolderSelected:(NSString *)selectedFolderName;
+- (void) onFolderSelected:(nullable NSString *)selectedFolderName;
 - (void) onFolderAdded:(NSString *)addedFolderName;
 
 @optional
@@ -22,13 +24,15 @@
 
 @interface OASelectTrackFolderViewController : OABaseNavbarViewController
 
-@property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
+@property (nonatomic, weak, nullable) id<OASelectTrackFolderDelegate> delegate;
 
 @property (nonatomic, copy, nullable) NSString *suggestedFolderName;
 
-- (instancetype) initWithGPX:(OASTrackItem *)gpx;
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths;
+- (nullable instancetype) initWithGPX:(OASTrackItem *)gpx;
+- (nullable instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
+- (nullable instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;
+- (nullable instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths;
 
 @end
+
+NS_ASSUME_NONNULL_END

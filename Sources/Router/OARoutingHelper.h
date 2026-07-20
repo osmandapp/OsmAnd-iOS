@@ -48,7 +48,7 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) OARouteProvider *provider;
 @property (nonatomic, readonly) OAVoiceRouter *voiceRouter;
 
-+ (OARoutingHelper *_Null_unspecified)sharedInstance;
++ (OARoutingHelper *)sharedInstance;
 
 @property (readonly) OAObservable *routingModeChangedObservable;
 

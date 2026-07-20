@@ -114,7 +114,7 @@ static BOOL _isDeviatedFromRoute = false;
     return self;
 }
 
-+ (OARoutingHelper *_Null_unspecified) sharedInstance
++ (OARoutingHelper *) sharedInstance
 {
     static OARoutingHelper *_sharedInstance = nil;
     static dispatch_once_t onceToken;

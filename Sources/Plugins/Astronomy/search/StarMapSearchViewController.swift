@@ -51,7 +51,8 @@ final class StarMapSearchViewController: UIViewController {
         static let smallPadding: CGFloat = 8
         static let resultRowMinHeight: CGFloat = 68
         static let iconSize: CGFloat = 24
-        static let recentChipsHeaderMinHeight: CGFloat = 56
+        static let recentChipsHeaderMinHeight: CGFloat = 50
+        static let filtersHeaderMinHeight: CGFloat = 48
         static var contentPadding: CGFloat = 16
     }
     
@@ -84,7 +85,7 @@ final class StarMapSearchViewController: UIViewController {
     private let emptyView = StarMapSearchEmptyView()
     private let recentChipsScroll = UIScrollView()
     private let recentChipsContainer = UIStackView()
-    private let filtersHeaderStack = UIStackView()
+    private let filtersHeaderView = UIView()
     private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
     private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
     
@@ -107,8 +108,7 @@ final class StarMapSearchViewController: UIViewController {
     private var redFilterEnabled = false
     private var pendingBrowseScrollOffsetRestore: CGPoint?
     private var isFilteringResults = false
-    
-    private var searchFiltersHeaderStackTopConstraint: NSLayoutConstraint?
+    private var emptyTopConstraint: NSLayoutConstraint?
     
     private weak var parentStarMapController: StarMapViewController?
     
@@ -138,9 +138,6 @@ final class StarMapSearchViewController: UIViewController {
         visibilityAttributedTextProvider: { [weak self] entry in
             self?.searchHelper.resolveConstellationVisibilityAttributedText(entry) ?? NSAttributedString(string: "")
         },
-        onScroll: { [weak self] scrollView in
-            self?.updateSortFilterBarTopConstraint(scrollView)
-        },
         onEntrySelected: { [weak self] entry in
             self?.onSearchEntrySelected(entry)
         },
@@ -151,9 +148,6 @@ final class StarMapSearchViewController: UIViewController {
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
         tableView: searchRecycler,
         snapshot: .empty,
-        onScroll: { [weak self] scrollView in
-            self?.updateSortFilterBarTopConstraint(scrollView)
-        },
         onCatalogSelected: { [weak self] entry in
             self?.onCatalogSelected(entry)
         }
@@ -161,9 +155,6 @@ final class StarMapSearchViewController: UIViewController {
     private lazy var exploreAdapter = StarMapSearchExploreAdapter(
         tableView: searchRecycler,
         snapshot: .empty,
-        onScroll: { [weak self] scrollView in
-            self?.updateSortFilterBarTopConstraint(scrollView)
-        },
         onWatchNow: { [weak self] in
             self?.pushFullSearchFromExplore(.WATCH_NOW, catalogWid: nil)
         },
@@ -271,20 +262,8 @@ final class StarMapSearchViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let headerStackHeight = filtersHeaderStack.frame.height + (sortFilterChipsView.isHidden ? .leastNormalMagnitude : Layout.contentPadding)
-        
-        if exploreAdapter.topInsetHeight != headerStackHeight || searchAdapter.topInsetHeight != headerStackHeight || catalogsAdapter.topInsetHeight != headerStackHeight {
-            
-            exploreAdapter.topInsetHeight = headerStackHeight
-            searchAdapter.topInsetHeight = headerStackHeight
-            catalogsAdapter.topInsetHeight = headerStackHeight
-            
-            searchRecycler.reloadData()
-        }
-        
-        if currentMode == .EXPLORE {
-            updateTableHeader()
-        }
+
+        updateTableHeader()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -356,7 +335,8 @@ final class StarMapSearchViewController: UIViewController {
         searchRecycler.rowHeight = UITableView.automaticDimension
         searchRecycler.estimatedRowHeight = Layout.resultRowMinHeight
         searchRecycler.separatorStyle = .singleLine
-
+        searchRecycler.translatesAutoresizingMaskIntoConstraints = false
+        
         sortFilterChipsView.dataSource = sortFilterChipsProvider
         sortFilterChipsView.delegate = sortFilterChipsProvider
         sortFilterChipsProvider.onChange = { [weak self] in
@@ -364,12 +344,6 @@ final class StarMapSearchViewController: UIViewController {
         }
         let sortFilterSize = sortFilterChipsView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         sortFilterChipsView.frame.size = sortFilterSize
-
-        searchRecycler.translatesAutoresizingMaskIntoConstraints = false
-        filtersHeaderStack.axis = .vertical
-        filtersHeaderStack.spacing = Layout.contentPadding
-        filtersHeaderStack.translatesAutoresizingMaskIntoConstraints = false
-
         sortFilterChipsView.translatesAutoresizingMaskIntoConstraints = false
         
         emptyView.translatesAutoresizingMaskIntoConstraints = false
@@ -378,18 +352,15 @@ final class StarMapSearchViewController: UIViewController {
             self?.handleEmptyStateAction()
         }
 
-        filtersHeaderStack.addArrangedSubview(sortFilterChipsView)
-
-        searchRecycler.addSubview(filtersHeaderStack)
-        searchRecycler.bringSubviewToFront(filtersHeaderStack)
-        searchFiltersHeaderStackTopConstraint = filtersHeaderStack.topAnchor.constraint(
-            equalTo: searchRecycler.safeAreaLayoutGuide.topAnchor
-        )
-        searchFiltersHeaderStackTopConstraint?.isActive = true
+        filtersHeaderView.addSubview(sortFilterChipsView)
+        filtersHeaderView.preservesSuperviewLayoutMargins = true
         
         resultsContainer.addSubview(searchRecycler)
         resultsContainer.addSubview(emptyView)
         fullSearchStack.addArrangedSubview(resultsContainer)
+        
+        let topConstraint = emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding)
+        emptyTopConstraint = topConstraint
         
         NSLayoutConstraint.activate([
             searchRecycler.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor),
@@ -397,12 +368,14 @@ final class StarMapSearchViewController: UIViewController {
             searchRecycler.topAnchor.constraint(equalTo: resultsContainer.topAnchor),
             searchRecycler.bottomAnchor.constraint(equalTo: resultsContainer.bottomAnchor),
             
-            filtersHeaderStack.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            filtersHeaderStack.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            sortFilterChipsView.leadingAnchor.constraint(equalTo: filtersHeaderView.layoutMarginsGuide.leadingAnchor),
+            sortFilterChipsView.trailingAnchor.constraint(equalTo: filtersHeaderView.layoutMarginsGuide.trailingAnchor),
+            sortFilterChipsView.topAnchor.constraint(equalTo: filtersHeaderView.topAnchor),
+            sortFilterChipsView.bottomAnchor.constraint(equalTo: filtersHeaderView.bottomAnchor),
 
             emptyView.leadingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.trailingAnchor),
-            emptyView.topAnchor.constraint(equalTo: filtersHeaderStack.bottomAnchor, constant: Layout.contentPadding)
+            topConstraint
         ])
     }
 
@@ -411,7 +384,7 @@ final class StarMapSearchViewController: UIViewController {
         recentChipsContainer.distribution = .fillProportionally
         recentChipsContainer.spacing = Layout.smallPadding
         recentChipsContainer.translatesAutoresizingMaskIntoConstraints = false
-        recentChipsContainer.layoutMargins = UIEdgeInsets(top: 0, left: searchRecycler.layoutMargins.left, bottom: Layout.contentPadding + 6, right: searchRecycler.layoutMargins.right)
+        recentChipsContainer.layoutMargins = UIEdgeInsets(top: 0, left: searchRecycler.layoutMargins.left, bottom: 12, right: searchRecycler.layoutMargins.right)
         recentChipsContainer.isLayoutMarginsRelativeArrangement = true
         
         recentChipsScroll.showsVerticalScrollIndicator = false
@@ -443,8 +416,8 @@ final class StarMapSearchViewController: UIViewController {
         let isExplore = currentMode == .EXPLORE
         sortFilterChipsView.isHidden = isExplore
         
-        filtersHeaderStack.setNeedsLayout()
-        filtersHeaderStack.layoutIfNeeded()
+        filtersHeaderView.setNeedsLayout()
+        filtersHeaderView.layoutIfNeeded()
     }
 
     private func updateNavigationBar() {
@@ -546,23 +519,35 @@ final class StarMapSearchViewController: UIViewController {
     }
     
     private func updateTableHeader() {
-        guard currentMode == .EXPLORE, !searchState.recentChips.isEmpty else {
+        if currentMode == .EXPLORE, !searchState.recentChips.isEmpty {
+            let width = searchRecycler.bounds.width
+            
+            var height = recentChipsScroll.systemLayoutSizeFitting(
+                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            ).height
+            
+            height = max(Layout.recentChipsHeaderMinHeight, ceil(height))
+            
+            recentChipsScroll.frame = CGRect(x: 0, y: 0, width: width, height: height)
+            searchRecycler.tableHeaderView = recentChipsScroll
+        } else if currentMode != .EXPLORE {
+            let width = searchRecycler.bounds.width
+            
+            var height = filtersHeaderView.systemLayoutSizeFitting(
+                CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            ).height
+            
+            height = max(Layout.filtersHeaderMinHeight, ceil(height))
+            
+            filtersHeaderView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+            searchRecycler.tableHeaderView = filtersHeaderView
+        } else {
             searchRecycler.tableHeaderView = nil
-            return
         }
-        
-        let width = searchRecycler.bounds.width
-
-        var height = recentChipsScroll.systemLayoutSizeFitting(
-            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-        
-        height = max(Layout.recentChipsHeaderMinHeight, ceil(height))
-        
-        recentChipsScroll.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        searchRecycler.tableHeaderView = recentChipsScroll
     }
 
     // MARK: - Mode
@@ -980,12 +965,6 @@ final class StarMapSearchViewController: UIViewController {
         )
         sortFilterChipsView.reloadData()
     }
-    
-    private func updateSortFilterBarTopConstraint(_ scrollView: UIScrollView) {
-        let inset = scrollView.safeAreaInsets.top + scrollView.contentOffset.y
-        let min = min(inset, 0)
-        searchFiltersHeaderStackTopConstraint?.constant = abs(min)
-    }
 
     // MARK: - Empty State
 
@@ -1001,6 +980,13 @@ final class StarMapSearchViewController: UIViewController {
         }
         let shouldShowEmptyState = currentMode == .FULL_SEARCH && getCurrentResultsCount() == 0
         emptyView.isHidden = !shouldShowEmptyState
+        searchRecycler.bounces = !shouldShowEmptyState
+        
+        if !emptyView.isHidden {
+            let height = filtersHeaderView.frame.height + Layout.contentPadding
+            emptyTopConstraint?.constant = height
+            emptyView.layoutIfNeeded()
+        }
     }
 
     private func handleEmptyStateAction() {
@@ -1184,6 +1170,12 @@ extension StarMapSearchViewController: UISearchBarDelegate {
         guard OAUtilities.isIPad() else { return }
         guard searchBar.text?.isEmpty == true, searchController.isActive else { return }
         searchController.isActive = false
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        guard OAUtilities.isIPhone() else { return }
+        searchState.query = ""
+        applyFiltersAndSort(scrollToTop: true)
     }
 }
 

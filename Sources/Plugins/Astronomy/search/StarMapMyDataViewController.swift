@@ -45,6 +45,7 @@ final class StarMapMyDataViewController: UIViewController {
         static let smallPadding: CGFloat = 8
         static let myDataSegmentedControlHeight: CGFloat = 36
         static let resultRowMinHeight: CGFloat = 72
+        static let filtersHeaderMinHeight: CGFloat = 48
     }
 
     private static let RISE_SET_PRELOAD_COUNT = 32
@@ -107,7 +108,6 @@ final class StarMapMyDataViewController: UIViewController {
         visibilityAttributedTextProvider: { [weak self] entry in
             self?.searchHelper.resolveConstellationVisibilityAttributedText(entry) ?? NSAttributedString(string: "")
         },
-        onScroll: { _ in },
         onEntrySelected: { [weak self] entry in
             self?.onSearchEntrySelected(entry)
         },
@@ -178,6 +178,11 @@ final class StarMapMyDataViewController: UIViewController {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTableHeader()
+    }
 
     func applyRedFilter(enabled: Bool) {
         redFilterEnabled = enabled
@@ -200,15 +205,12 @@ final class StarMapMyDataViewController: UIViewController {
         setupResultsContainer()
         
         sortFilterChipsView.translatesAutoresizingMaskIntoConstraints = false
-        sortFilterContainer.translatesAutoresizingMaskIntoConstraints = false
         
+        sortFilterContainer.preservesSuperviewLayoutMargins = true
         sortFilterContainer.addSubview(sortFilterChipsView)
 
         mainStack.addArrangedSubview(myDataSegmentedControlContainer)
-        mainStack.addArrangedSubview(sortFilterContainer)
         mainStack.addArrangedSubview(resultsContainer)
-        
-        mainStack.setCustomSpacing(16, after: sortFilterContainer)
 
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -216,8 +218,8 @@ final class StarMapMyDataViewController: UIViewController {
             mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mainStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            sortFilterChipsView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            sortFilterChipsView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            sortFilterChipsView.leadingAnchor.constraint(equalTo: sortFilterContainer.layoutMarginsGuide.leadingAnchor),
+            sortFilterChipsView.trailingAnchor.constraint(equalTo: sortFilterContainer.layoutMarginsGuide.trailingAnchor),
             sortFilterChipsView.topAnchor.constraint(equalTo: sortFilterContainer.topAnchor),
             sortFilterChipsView.bottomAnchor.constraint(equalTo: sortFilterContainer.bottomAnchor)
         ])
@@ -317,6 +319,25 @@ final class StarMapMyDataViewController: UIViewController {
         searchRecycler.backgroundColor = .viewBg
         searchRecycler.dataSource = searchAdapter
         searchRecycler.delegate = searchAdapter
+    }
+    
+    private func updateTableHeader() {
+        guard currentTabHasData() else {
+            searchRecycler.tableHeaderView = nil
+            return
+        }
+        let width = searchRecycler.bounds.width
+        
+        var height = sortFilterContainer.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        
+        height = max(Layout.filtersHeaderMinHeight, ceil(height))
+        
+        sortFilterContainer.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        searchRecycler.tableHeaderView = sortFilterContainer
     }
 
     // MARK: - Navigation

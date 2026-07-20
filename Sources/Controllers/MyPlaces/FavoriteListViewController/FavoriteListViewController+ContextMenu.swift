@@ -11,7 +11,6 @@ extension FavoriteListViewController {
         let folderFavoriteItem: [Any] = [folder.bridgeItem]
         let subtreeFavoriteItems: [Any] = favoritePointRows(allFolders: favoriteFolders(), parentGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem }
         let hasFavoritePoints = !subtreeFavoriteItems.isEmpty
-        let hasExactGroup = !folder.bridgeItem.isVirtual
         let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: folder.isVisible ? .icCustomHideOutlined : .icCustomShowOutlined) { [weak self] _ in
             guard let self else { return }
             OAFavoritesBridgeHelper.setFavoriteGroupVisible(folder.bridgeItem.groupName, visible: !folder.isVisible)
@@ -22,7 +21,7 @@ extension FavoriteListViewController {
             OAFavoritesBridgeHelper.setFavoriteGroupPinned(folder.bridgeItem.groupName, pinned: !folder.isPinned)
             self.applySnapshot(animatingDifferences: true)
         }
-        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: hasExactGroup ? [showHideAction, pinAction] : [])
+        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showHideAction, pinAction])
 
         let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
             guard let self else { return }
@@ -32,7 +31,7 @@ extension FavoriteListViewController {
             guard let self else { return }
             self.openFavoriteGroupAppearance(folder.bridgeItem.groupName)
         }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction] + (hasExactGroup ? [defaultAppearanceAction] : []))
+        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, defaultAppearanceAction])
 
         let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
             guard let self else { return }
@@ -46,7 +45,7 @@ extension FavoriteListViewController {
             guard let self else { return }
             self.openFavoriteItemsMove([folder.bridgeItem])
         }
-        let thirdButtons: [UIMenuElement] = (hasFavoritePoints && hasExactGroup ? [shareAction] : []) + (folder.bridgeItem.groupName.isEmpty || !hasExactGroup ? [] : [moveAction])
+        let thirdButtons: [UIMenuElement] = (hasFavoritePoints ? [shareAction] : []) + (folder.bridgeItem.groupName.isEmpty ? [] : [moveAction])
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: thirdButtons)
 
         let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
@@ -59,7 +58,7 @@ extension FavoriteListViewController {
         let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
             OAFavoritesBridgeHelper.addFavoriteItems(toNavigation: folderFavoriteItem)
         }
-        let addToActions: [UIMenuElement] = hasFavoritePoints && hasExactGroup ? [mapMarkersAction, trackAction, navigationAction] : []
+        let addToActions: [UIMenuElement] = hasFavoritePoints ? [mapMarkersAction, trackAction, navigationAction] : []
         let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: addToActions)]
         let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: fourthButtons)
 
@@ -147,7 +146,7 @@ extension FavoriteListViewController {
         menuElements.append(secondButtonsSection)
 
         if !hasPoints {
-            let folders = selectedBridgeItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.filter { !$0.isVirtual }
+            let folders = selectedBridgeItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
 
             if !folders.isEmpty {
                 var folderMenuElements: [UIMenuElement] = []

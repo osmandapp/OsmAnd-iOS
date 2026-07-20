@@ -24,31 +24,9 @@
         _subtreePointsCount = subtreePointsCount;
         _isVisible = group.isVisible;
         _isPinned = group.isPinned;
-        _isVirtual = NO;
         _color = group.color;
         _lastModifiedDate = lastModifiedDate;
         _fileSize = fileSize;
-    }
-
-    return self;
-}
-
-- (instancetype)initWithVirtualGroupName:(NSString *)groupName lastModifiedDate:(nullable NSDate *)lastModifiedDate subtreePointsCount:(NSUInteger)subtreePointsCount
-{
-    self = [super init];
-    if (self)
-    {
-        _identifier = [NSString stringWithFormat:@"virtual-%@", groupName];
-        _groupName = groupName;
-        _title = [self.class titleForGroupName:groupName];
-        _pointsCount = 0;
-        _subtreePointsCount = subtreePointsCount;
-        _isVisible = YES;
-        _isPinned = NO;
-        _isVirtual = YES;
-        _color = nil;
-        _lastModifiedDate = lastModifiedDate;
-        _fileSize = 0;
     }
 
     return self;

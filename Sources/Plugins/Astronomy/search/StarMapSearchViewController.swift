@@ -448,10 +448,13 @@ final class StarMapSearchViewController: UIViewController {
     }
 
     private func updateNavigationBar() {
+        let isIPadOrMac = OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac()
+        let backButtonImage = (!searchState.hasBrowseContext() && isIPadOrMac) ? UIImage(systemName: "xmark") : UIImage(systemName: "chevron.left")
+        
         switch currentMode {
         case .EXPLORE:
             navigationItem.leftBarButtonItem = makeBarButton(
-                image: UIImage(systemName: "chevron.left"),
+                image: backButtonImage,
                 accessibilityLabel: localizedString("shared_string_close"),
                 action: #selector(close)
             )
@@ -460,23 +463,18 @@ final class StarMapSearchViewController: UIViewController {
             syncSearchQuery()
 
         case .FULL_SEARCH:
+            navigationItem.leftBarButtonItem = makeBarButton(
+                image: backButtonImage,
+                accessibilityLabel: localizedString("shared_string_back"),
+                action: #selector(backPressed)
+            )
             switch currentFullSearchMode {
             case .BROWSE:
-                navigationItem.leftBarButtonItem = makeBarButton(
-                    image: UIImage(systemName: "chevron.left"),
-                    accessibilityLabel: localizedString("shared_string_back"),
-                    action: #selector(backPressed)
-                )
                 navigationItem.title = getBrowseTitle()
                 navigationItem.largeTitleDisplayMode = searchState.quickPresetType == .WATCH_NOW ? .never : .always
                 syncSearchQuery()
 
             case .INPUT:
-                navigationItem.leftBarButtonItem = makeBarButton(
-                    image: UIImage(systemName: "chevron.left"),
-                    accessibilityLabel: localizedString("shared_string_back"),
-                    action: #selector(backPressed)
-                )
                 navigationItem.title = searchState.hasBrowseContext() ? getBrowseTitle() : localizedString("shared_string_explore")
                 syncSearchQuery()
             }

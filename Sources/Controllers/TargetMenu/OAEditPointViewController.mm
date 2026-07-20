@@ -19,6 +19,7 @@
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
+#import "OAFavoritesBridgeHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -1042,7 +1043,10 @@
             [_pointHandler savePoint:data newPoint:NO];
         }
         if (_editPointType == EOAEditPointTypeFavorite)
+        {
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
+            [OAFavoritesBridgeHelper invalidateFavoriteFoldersCache];
+        }
     }
     [self.delegate saveTapped];
     [self dismissViewController];

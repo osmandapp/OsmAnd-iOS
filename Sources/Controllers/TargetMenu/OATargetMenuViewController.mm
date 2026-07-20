@@ -99,7 +99,7 @@
     return [self.class createMenuController:targetPoint selectedObject:nil activeTargetType:activeTargetType activeViewControllerState:activeViewControllerState headerOnly:headerOnly];
 }
 
-+ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(nullable id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
@@ -537,7 +537,7 @@
     return [self getAttributedTypeStr:group color:nil];
 }
 
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(UIColor *)color
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(nullable UIColor *)color
 {
     UIColor *iconColor = color ?: [UIColor colorNamed:ACColorNameIconColorDefault];
     

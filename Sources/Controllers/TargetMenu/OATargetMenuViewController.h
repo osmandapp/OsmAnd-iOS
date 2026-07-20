@@ -101,19 +101,19 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, assign) CLLocationCoordinate2D location;
 @property (nonatomic, readonly) NSString *formattedCoords;
 
-@property (nonatomic) OATargetMenuControlButton *leftControlButton;
-@property (nonatomic) OATargetMenuControlButton *rightControlButton;
-@property (nonatomic) OATargetMenuControlButton *downloadControlButton;
+@property (nonatomic, nullable) OATargetMenuControlButton *leftControlButton;
+@property (nonatomic, nullable) OATargetMenuControlButton *rightControlButton;
+@property (nonatomic, nullable) OATargetMenuControlButton *downloadControlButton;
 
 @property (nonatomic) NSArray<OATransportStopRoute *> *nearbyRoutes;
 @property (nonatomic) NSArray<OATransportStopRoute *> *localRoutes;
-@property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
+@property (nonatomic, nullable) OARepositoryResourceItem *localMapIndexItem;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
 + (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
-+ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(nullable id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
 - (id)getTargetObj;
 
@@ -128,7 +128,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSAttributedString *)getAttributedCommonTypeStr;
 
 - (NSAttributedString *)getAttributedTypeStr:(NSString *)group;
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(UIColor *)color;
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(nullable UIColor *)color;
 
 - (UIColor *)getAdditionalInfoColor;
 - (NSAttributedString *)getAdditionalInfoStr;

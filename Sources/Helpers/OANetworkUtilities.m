@@ -137,7 +137,7 @@ static NSString *prettyJSONStringFromData(NSData *data)
            headers:(NSDictionary<NSString *, NSString *> *)headers
              data:(NSData *)data
              gzip:(BOOL)gzip
-authorizationHeader:(NSString *)authorizationHeader
+authorizationHeader:(nullable NSString *)authorizationHeader
          progress:(OAURLSessionProgress *)progress
        onComplete:(void (^)(NSData * _Nullable data,
                             NSURLResponse * _Nullable response,
@@ -246,7 +246,7 @@ authorizationHeader:(NSString *)authorizationHeader
 
 + (BOOL)downloadFile:(NSString *)fileName
                  url:(NSString *)url
-            progress:(OAURLSessionProgress *)progress
+            progress:(nullable OAURLSessionProgress *)progress
 {
     BOOL success = NO;
 

@@ -11,6 +11,8 @@
 
 @class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol OARouteInformationListener <NSObject>
 
 @required
@@ -46,7 +48,7 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) OARouteProvider *provider;
 @property (nonatomic, readonly) OAVoiceRouter *voiceRouter;
 
-+ (OARoutingHelper *)sharedInstance;
++ (OARoutingHelper *_Null_unspecified)sharedInstance;
 
 @property (readonly) OAObservable *routingModeChangedObservable;
 
@@ -56,8 +58,8 @@ struct RouteSegmentResult;
 - (OARouteProvider *) getRouteProvider;
 
 - (BOOL) isFollowingMode;
-- (NSString *) getLastRouteCalcError;
-- (NSString *) getLastRouteCalcErrorShort;
+- (nullable NSString *) getLastRouteCalcError;
+- (nullable NSString *) getLastRouteCalcErrorShort;
 - (void) setPauseNavigation:(BOOL) b;
 - (BOOL) isPauseNavigation;
 - (void) setFollowingMode:(BOOL)follow;
@@ -88,11 +90,11 @@ struct RouteSegmentResult;
 - (long)getLeftTimeNextIntermediateWith:(int)intermediateIndexOffset;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
-- (CLLocation *) getLastProjection;
-- (CLLocation *) getLastFixedLocation;
-- (OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
-- (void) setGpxParams:(OAGPXRouteParamsBuilder *)params;
-- (CLLocation *) getFinalLocation;
+- (nullable CLLocation *) getLastProjection;
+- (nullable CLLocation *) getLastFixedLocation;
+- (nullable OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
+- (void) setGpxParams:(nullable OAGPXRouteParamsBuilder *)params;
+- (nullable CLLocation *) getFinalLocation;
 - (int) calculateCurrentRoute:(CLLocation *)currentLocation posTolerance:(float)posTolerance routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute updateAndNotify:(BOOL)updateAndNotify;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
@@ -103,7 +105,7 @@ struct RouteSegmentResult;
 - (void)updateLocation:(CLLocation *)currentLocation;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;
 - (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation;
-- (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints;
+- (void) clearCurrentRoute:(nullable CLLocation *)newFinalLocation newIntermediatePoints:(nullable NSArray<CLLocation *> *)newIntermediatePoints;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (BOOL) isPublicTransportMode;
@@ -136,3 +138,5 @@ struct RouteSegmentResult;
 - (BOOL) isTunnelLocationSimulated:(CLLocation *)location;
 
 @end
+
+NS_ASSUME_NONNULL_END

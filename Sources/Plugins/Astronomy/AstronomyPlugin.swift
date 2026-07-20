@@ -33,13 +33,11 @@ import UIKit
     private let recentPref: OACommonString = OAAppSettings.sharedManager()
         .registerStringPreference(PreferenceId.recent, defValue: "")
         .makeGlobal()
-        .makeShared()
 
     private lazy var astronomySettingsStorage = AstronomyPluginSettings(settingsPref: settingsPref, recentPref: recentPref)
 
     override init() {
         super.init()
-        migrateLegacyStarWatcherSettingsIfNeeded()
         recentSearchChips = astronomySettingsStorage.recentChips()
     }
 

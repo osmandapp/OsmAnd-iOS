@@ -621,7 +621,8 @@ final class MigrationManager: NSObject {
             "top_widget_panel_order": "widget_top_panel_order",
             "bottom_widget_panel_order": "widget_bottom_panel_order",
             "shared_string_automatic": "driving_region_automatic",
-            "external_input_device": "selected_external_input_device"
+            "external_input_device": "selected_external_input_device",
+            "star_watcher_settings": "astronomy_settings"
         ]
 
         let changeWidgetIds = [

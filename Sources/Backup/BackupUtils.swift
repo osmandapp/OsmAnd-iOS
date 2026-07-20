@@ -264,11 +264,5 @@ final class BackupUtils: NSObject {
         if updatePoiFilters {
             OAPOIFiltersHelper.sharedInstance().loadSelectedPoiFilters()
         }
-
-        let hasProfileItems = items.contains { $0 is OAProfileSettingsItem }
-        if hasProfileItems,
-           let plugin = OAPluginsHelper.getPlugin(AstronomyPlugin.self) as? AstronomyPlugin {
-            plugin.migrateLegacyStarWatcherSettingsIfNeeded()
-        }
     }
 }

@@ -939,7 +939,7 @@ final class StarMapSearchViewController: UIViewController {
 
     private func filterAndSortCatalogs(stateSnapshot: StarMapSearchStateSnapshot,
                                        preparedCatalogEntries: [StarMapCatalogEntry]) -> [StarMapCatalogEntry] {
-        let queryLower = stateSnapshot.query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(with: Locale.current)
+        let queryLower = stateSnapshot.query.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
         let filteredEntries = preparedCatalogEntries.filter { entry in
             if entry.objectCount <= 0 {
                 return false
@@ -947,8 +947,10 @@ final class StarMapSearchViewController: UIViewController {
             if queryLower.isEmpty {
                 return true
             }
-            return entry.displayName.lowercased(with: Locale.current).contains(queryLower) ||
-                (entry.description ?? "").lowercased(with: Locale.current).contains(queryLower)
+            let displayNameNormilized = entry.displayName.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            let descriptionNormilized = (entry.description ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            
+            return displayNameNormilized.contains(queryLower) || descriptionNormilized.contains(queryLower)
         }
         switch stateSnapshot.sortMode {
         case .NAME_DESC:

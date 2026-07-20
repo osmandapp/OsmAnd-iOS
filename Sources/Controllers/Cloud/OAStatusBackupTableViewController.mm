@@ -42,6 +42,7 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
+#import "OAFavoritesBridgeHelper.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -83,6 +84,7 @@
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
     DownloadingCellCloudHelper *_downloadingCellCloudHelper;
+    BOOL _shouldInvalidateFavoritesCache;
 }
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
@@ -634,6 +636,11 @@
     };
 }
 
+- (void)onDownloadFavoritesCloudVersion
+{
+    _shouldInvalidateFavoritesCache = YES;
+}
+
 // MARK: UITableViewDataSoure
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -846,6 +853,12 @@
 
 - (void)onBackupFinished:(NSNotification *)notification
 {
+    if (_shouldInvalidateFavoritesCache)
+    {
+        _shouldInvalidateFavoritesCache = NO;
+        if (!notification.userInfo[@"error"])
+            [OAFavoritesBridgeHelper invalidateFavoriteFoldersCache];
+    }
 }
 
 - (void)onBackupStarted

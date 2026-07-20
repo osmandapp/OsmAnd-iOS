@@ -208,6 +208,48 @@ static NSOperationQueue *_favQueue;
     }
 }
 
++ (BOOL)createMissingParentFolderIfNeeded
+{
+    NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
+    for (OAFavoriteGroup *group in _favoriteGroups)
+        [self addParentGroupNamesForGroupName:group.name toSet:parentGroupNames];
+
+    if (parentGroupNames.count == 0)
+        return NO;
+
+    BOOL createdGroup = NO;
+    BOOL changed = NO;
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSMutableArray<OAFavoriteGroup *> *groupsToSave = [NSMutableArray array];
+    for (NSString *groupName in parentGroupNames)
+    {
+        OAFavoriteGroup *group = _flatGroups[groupName];
+        if (!group)
+        {
+            group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:YES color:nil];
+            _flatGroups[group.name] = group;
+            _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
+            createdGroup = YES;
+            changed = YES;
+        }
+
+        NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:group.name];
+        if (![manager fileExistsAtPath:filePath])
+        {
+            [groupsToSave addObject:group];
+            changed = YES;
+        }
+    }
+
+    if (createdGroup)
+        [self sortAll];
+
+    for (OAFavoriteGroup *group in groupsToSave)
+        [self saveFile:@[group] file:[OsmAndApp.instance favoritesStorageFilename:group.name]];
+
+    return changed;
+}
+
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile
 {
     NSString *defCategory = @"";

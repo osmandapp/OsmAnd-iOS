@@ -126,6 +126,7 @@ final class FavoriteListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        createMissingParentFolderOnFirstOpenIfNeeded()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
@@ -405,6 +406,11 @@ final class FavoriteListViewController: UIViewController {
         } else {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
+    }
+
+    private func createMissingParentFolderOnFirstOpenIfNeeded() {
+        guard isRootFolder else { return }
+        OAFavoritesBridgeHelper.createMissingParentFolderIfNeeded()
     }
     
     deinit {

@@ -48,6 +48,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     favoriteFoldersCache = nil;
 }
 
++ (void)createMissingParentFolderIfNeeded
+{
+    if ([OAFavoritesHelper createMissingParentFolderIfNeeded])
+        [self invalidateFavoriteFoldersCache];
+}
+
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
 {
     if (favoriteFoldersCache)

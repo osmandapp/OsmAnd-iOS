@@ -93,7 +93,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     }
 
     private func configureNavigationBar() {
-        let imageClose = OAUtilities.resize(UIImage.templateImageNamed("ic_navbar_close"),
+        let imageClose = OAUtilities.resize(.icNavbarClose,
                                             newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
         let closeButton = UIBarButtonItem(image: imageClose, style: .plain, target: self, action: #selector(closeAction))
         closeButton.tintColor = .label

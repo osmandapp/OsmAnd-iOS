@@ -437,15 +437,15 @@ final class StarView: UIView {
         setNeedsDisplay()
     }
     
-    func getAltitude() -> Double {
+    func altitude() -> Double {
         centerAltitude
     }
 
-    func getAzimuth() -> Double {
+    func azimuth() -> Double {
         centerAzimuth
     }
 
-    func getViewAngle() -> Double {
+    func viewAngleValue() -> Double {
         viewAngle
     }
 
@@ -511,7 +511,7 @@ final class StarView: UIView {
         onConstellationClickListener = listener
     }
 
-    func getSelectedConstellationItem() -> Constellation? {
+    func selectedConstellationItem() -> Constellation? {
         guard let selectedConstellationId else {
             return nil
         }
@@ -688,6 +688,16 @@ final class StarView: UIView {
     
     func calculatePosition(_ object: SkyObject) {
         calculatePosition(object, time: currentTime, updateTargets: false)
+    }
+    
+    private func commonInit() {
+        backgroundColor = .clear
+        isOpaque = false
+        contentMode = .redraw
+
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
+        addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     }
 
     private func setCenter(azimuth: Double,
@@ -2178,16 +2188,6 @@ final class StarView: UIView {
             value += 360
         }
         return value
-    }
-    
-    private func commonInit() {
-        backgroundColor = .clear
-        isOpaque = false
-        contentMode = .redraw
-
-        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
-        addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     }
     
     deinit {

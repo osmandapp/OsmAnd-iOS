@@ -335,7 +335,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             self?.toggleGyroMode()
         }
 
-        addRoundButton(searchButton, iconName: "ic_custom_search", accessibilityLabel: localizedString("shared_string_search"))
+        addRoundButton(searchButton, icon: .icCustomSearch, accessibilityLabel: localizedString("shared_string_search"))
         searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
         
         mapControlsContainer.addSubview(arControlCard)
@@ -365,10 +365,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupRightControls() {
-        addRoundButton(closeButton, iconName: "ic_navbar_close", accessibilityLabel: localizedString("shared_string_close"))
+        addRoundButton(closeButton, icon: .icNavbarClose, accessibilityLabel: localizedString("shared_string_close"))
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
-        addRoundButton(settingsButton, iconName: "ic_custom_overlay_map", accessibilityLabel: localizedString("shared_string_settings"))
+        addRoundButton(settingsButton, icon: .icCustomOverlayMap, accessibilityLabel: localizedString("shared_string_settings"))
         settingsButton.addTarget(self, action: #selector(showConfigureSheet), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -429,12 +429,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         guard zoomButtonsVisible else { return }
 
         addRoundButton(zoomInButton,
-                       iconName: "ic_custom_map_zoom_in",
+                       icon: .icCustomMapZoomIn,
                        accessibilityLabel: localizedString("key_hint_zoom_in"))
         zoomInButton.addTarget(self, action: #selector(zoomInPressed), for: .touchUpInside)
 
         addRoundButton(zoomOutButton,
-                       iconName: "ic_custom_map_zoom_out",
+                       icon: .icCustomMapZoomOut,
                        accessibilityLabel: localizedString("key_hint_zoom_out"))
         zoomOutButton.addTarget(self, action: #selector(zoomOutPressed), for: .touchUpInside)
 
@@ -448,10 +448,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateZoomButtonsEnabled()
     }
 
-    private func addRoundButton(_ button: StarMapButton, iconName: String? = nil, accessibilityLabel: String) {
+    private func addRoundButton(_ button: StarMapButton, icon: UIImage? = nil, accessibilityLabel: String) {
         button.translatesAutoresizingMaskIntoConstraints = false
-        if let iconName {
-            button.setIcon(iconName: iconName, accessibilityLabel: accessibilityLabel)
+        if let icon {
+            button.setIcon(icon: icon, accessibilityLabel: accessibilityLabel)
         } else {
             button.accessibilityLabel = accessibilityLabel
         }
@@ -502,7 +502,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             self?.selectedObject = object
             if let object {
                 self?.showObjectInfo(object)
-            } else if self?.starView.getSelectedConstellationItem() == nil {
+            } else if self?.starView.selectedConstellationItem() == nil {
                 self?.hideBottomSheet()
             }
         }
@@ -658,9 +658,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             config.showMagnitudeFilter = starView.showMagnitudeFilter || starView.magnitudeFilter != nil
             config.magnitudeFilter = starView.magnitudeFilter
             config.savedMapPosition = AstronomyPluginSettings.MapViewPosition(
-                azimuth: starView.getAzimuth(),
-                altitude: starView.getAltitude(),
-                viewAngle: starView.getViewAngle(),
+                azimuth: starView.azimuth(),
+                altitude: starView.altitude(),
+                viewAngle: starView.viewAngleValue(),
                 roll: starView.roll,
                 panX: Double(starView.panX),
                 panY: Double(starView.panY)
@@ -699,9 +699,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func apply2DMode(_ is2D: Bool) {
         if is2D {
-            previousAltitude = starView.getAltitude()
-            previousAzimuth = starView.getAzimuth()
-            previousViewAngle = starView.getViewAngle()
+            previousAltitude = starView.altitude()
+            previousAzimuth = starView.azimuth()
+            previousViewAngle = starView.viewAngleValue()
             starView.is2DMode = true
             starView.setCenter(azimuth: 180, altitude: 90)
             setArExperienceEnabled(false)
@@ -1266,7 +1266,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc private func showSearchDialog() {
-        if UIDevice.current.userInterfaceIdiom == .pad, searchViewController != nil {
+        if OAUtilities.isIPad(), searchViewController != nil {
             dismissSearchDialog(animated: true)
         } else {
             showSearchDialog(initialCatalogWid: nil)

@@ -77,7 +77,7 @@ final class StarMapCameraHelper {
             lastVideoOrientation = orientation
             return
         }
-        let currentViewAngle = starView?.getViewAngle()
+        let currentViewAngle = starView?.viewAngleValue()
         updateEffectiveFov()
         if geometryChanged {
             starView?.setViewAngle(calculatedFov)

@@ -69,8 +69,8 @@ class StarMapButton: OAHudButton {
         }
     }
 
-    func setIcon(iconName: String, accessibilityLabel: String? = nil) {
-        setImage(AstroIcon.template(iconName), for: .normal)
+    func setIcon(icon: UIImage?, accessibilityLabel: String? = nil) {
+        setImage(icon, for: .normal)
         self.accessibilityLabel = accessibilityLabel
         updateTheme()
     }

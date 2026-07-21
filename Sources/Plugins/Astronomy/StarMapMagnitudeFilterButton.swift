@@ -32,10 +32,6 @@ final class StarMapMagnitudeFilterButton: StarMapButton {
         applyPillAppearance()
     }
 
-    func setValue(_ text: String) {
-        valueLabel.text = text
-    }
-
     override func updateTheme() {
         super.updateTheme()
         setImage(nil, for: .normal)
@@ -62,6 +58,10 @@ final class StarMapMagnitudeFilterButton: StarMapButton {
                 $0.layer.cornerRadius = bounds.width / 2
             }
         }
+    }
+    
+    func setValue(_ text: String) {
+        valueLabel.text = text
     }
 
     private func setupContent() {

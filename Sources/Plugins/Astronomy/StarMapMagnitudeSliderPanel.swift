@@ -34,6 +34,11 @@ final class StarMapMagnitudeSliderPanel: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        glassBackgroundView?.frame = bounds
+    }
 
     func toggle() {
         isHidden.toggle()
@@ -57,11 +62,6 @@ final class StarMapMagnitudeSliderPanel: UIView {
         backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
         
         layer.borderWidth = nightMode ? 2 : 0
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        glassBackgroundView?.frame = bounds
     }
 
     private func setupContent(maxMagnitude: Double) {

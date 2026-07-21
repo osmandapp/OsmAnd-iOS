@@ -28,7 +28,6 @@ import UIKit
     private let legacySettingsPref: OACommonString = OAAppSettings.sharedManager()
         .registerStringPreference(PreferenceId.legacySettings, defValue: "")
         .makeProfile()
-        .makeShared()
 
     private let recentPref: OACommonString = OAAppSettings.sharedManager()
         .registerStringPreference(PreferenceId.recent, defValue: "")

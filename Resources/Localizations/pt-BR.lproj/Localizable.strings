@@ -468,8 +468,8 @@
 "route_from" = "De:";
 "starting_point_too_far" = "Ponto de partida muito longe da estrada mais próxima.";
 "ending_point_too_far" = "Destino muito longe da via mais próxima.";
-"route_kl" = "Mantenha à esquerda e siga";
-"route_kr" = "Mantenha à direita e siga";
+"route_kl" = "Mantenha-se à esquerda e siga";
+"route_kr" = "Mantenha-se à direita e siga";
 "route_tr" = "Vire à direita e siga";
 "route_tshr" = "Vire acentuadamente à direita e siga";
 "route_tslr" = "Vire levemente à direita e siga";

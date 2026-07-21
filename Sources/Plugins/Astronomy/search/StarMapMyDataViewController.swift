@@ -82,6 +82,8 @@ final class StarMapMyDataViewController: UIViewController {
     private var suppressQueryDispatch = false
     private var redFilterEnabled = false
     private var isSearchActive = false
+    private var mainTopConstraint: NSLayoutConstraint?
+    private var emptyTopConstraint: NSLayoutConstraint?
 
     private weak var parentStarMapController: StarMapViewController?
 
@@ -182,6 +184,16 @@ final class StarMapMyDataViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTableHeader()
+        mainTopConstraint?.constant = view.safeAreaInsets.top
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        
+        mainTopConstraint?.constant = view.safeAreaInsets.top
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
+            self.view.layoutIfNeeded()
+        }
     }
 
     func applyRedFilter(enabled: Bool) {
@@ -211,11 +223,14 @@ final class StarMapMyDataViewController: UIViewController {
 
         mainStack.addArrangedSubview(myDataSegmentedControlContainer)
         mainStack.addArrangedSubview(resultsContainer)
+        
+        let mainTop = mainStack.topAnchor.constraint(equalTo: view.topAnchor, constant: view.safeAreaInsets.top)
+        mainTopConstraint = mainTop
 
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainTop,
             mainStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             sortFilterChipsView.leadingAnchor.constraint(equalTo: sortFilterContainer.layoutMarginsGuide.leadingAnchor),
@@ -302,6 +317,9 @@ final class StarMapMyDataViewController: UIViewController {
         }
         resultsContainer.addSubview(searchRecycler)
         resultsContainer.addSubview(emptyView)
+        
+        let topConstraint = emptyView.topAnchor.constraint(equalTo: resultsContainer.topAnchor, constant: Layout.contentPadding)
+        emptyTopConstraint = topConstraint
 
         NSLayoutConstraint.activate([
             searchRecycler.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor),
@@ -311,7 +329,7 @@ final class StarMapMyDataViewController: UIViewController {
 
             emptyView.leadingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: resultsContainer.layoutMarginsGuide.trailingAnchor),
-            emptyView.topAnchor.constraint(equalTo: resultsContainer.topAnchor)
+            topConstraint
         ])
     }
 
@@ -319,6 +337,7 @@ final class StarMapMyDataViewController: UIViewController {
         searchRecycler.backgroundColor = .viewBg
         searchRecycler.dataSource = searchAdapter
         searchRecycler.delegate = searchAdapter
+        searchRecycler.contentInsetAdjustmentBehavior = .never
     }
     
     private func updateTableHeader() {
@@ -336,8 +355,10 @@ final class StarMapMyDataViewController: UIViewController {
         
         height = max(Layout.filtersHeaderMinHeight, ceil(height))
         
-        sortFilterContainer.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        searchRecycler.tableHeaderView = sortFilterContainer
+        if searchRecycler.tableHeaderView == nil || sortFilterContainer.frame.width != width || sortFilterContainer.frame.height != height {
+            sortFilterContainer.frame = CGRect(x: 0, y: 0, width: width, height: height)
+            searchRecycler.tableHeaderView = sortFilterContainer
+        }
     }
 
     // MARK: - Navigation
@@ -377,7 +398,7 @@ final class StarMapMyDataViewController: UIViewController {
     
     private func showSearchController() {
         navigationItem.searchController = makeSearchController()
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.navigationItem.searchController?.isActive = true
         }
     }
@@ -388,9 +409,6 @@ final class StarMapMyDataViewController: UIViewController {
             return
         }
         navigationItem.searchController?.isActive = false
-        DispatchQueue.main.async {
-            self.navigationItem.searchController = nil
-        }
     }
     
     private func makeSearchController() -> UISearchController {
@@ -413,7 +431,6 @@ final class StarMapMyDataViewController: UIViewController {
         syncSearchQuery()
         if isSearchActive {
             hideSearchController()
-            return
         }
         applyFiltersAndSort(scrollToTop: true)
     }
@@ -447,7 +464,6 @@ final class StarMapMyDataViewController: UIViewController {
         updateSortFilterBar()
         updateEmptyStateContent()
         StarMapSearchProgressHUD.show(on: view)
-        searchRecycler.isHidden = false
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
@@ -582,12 +598,16 @@ final class StarMapMyDataViewController: UIViewController {
     private func updateEmptyStateVisibility() {
         if isFilteringResults {
             emptyView.isHidden = true
-            searchRecycler.isHidden = false
             return
         }
         let shouldShowEmptyState = visibleEntries.isEmpty
         emptyView.isHidden = !shouldShowEmptyState
-        searchRecycler.isHidden = shouldShowEmptyState
+        
+        if !emptyView.isHidden {
+            let height = searchRecycler.tableHeaderView == nil ? Layout.smallPadding : sortFilterChipsView.frame.height + Layout.contentPadding
+            emptyTopConstraint?.constant = height
+            emptyView.layoutIfNeeded()
+        }
     }
 
     // MARK: - Actions
@@ -651,9 +671,23 @@ extension StarMapMyDataViewController: UIGestureRecognizerDelegate {
 }
 
 extension StarMapMyDataViewController: UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        guard OAUtilities.isIPhone() else { return }
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.beginFromCurrentState]) {
+            self.myDataSegmentedControlContainer.isHidden = true
+        }
+    }
+    
     func didPresentSearchController(_ searchController: UISearchController) {
         hideSearchButton()
         isSearchActive = true
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        guard OAUtilities.isIPhone() else { return }
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.beginFromCurrentState]) {
+            self.myDataSegmentedControlContainer.isHidden = false
+        }
     }
 
     func didDismissSearchController(_ searchController: UISearchController) {
@@ -664,8 +698,10 @@ extension StarMapMyDataViewController: UISearchControllerDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.isSearchActive = false
-            self?.searchState.query = ""
-            self?.applyFiltersAndSort(scrollToTop: true)
+            if self?.searchState.query.isEmpty == false {
+                self?.searchState.query = ""
+                self?.applyFiltersAndSort(scrollToTop: true)
+            }
         }
     }
 

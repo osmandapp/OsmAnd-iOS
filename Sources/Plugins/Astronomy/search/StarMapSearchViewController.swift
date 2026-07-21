@@ -9,22 +9,32 @@
 import UIKit
 
 enum StarMapSearchProgressHUD {
-    private static let tag = 0xA57001
-    
+    private static var pendingShow: DispatchWorkItem?
+
     static func show(on view: UIView) {
-        if Thread.isMainThread {
+        pendingShow?.cancel()
+
+        let workItem = DispatchWorkItem { [weak view] in
+            guard let view else { return }
+
             MBProgressHUD.hide(for: view, animated: false)
             let hud = MBProgressHUD.showAdded(to: view, animated: true)
             hud?.removeFromSuperViewOnHide = true
-        } else {
-            DispatchQueue.main.async { show(on: view) }
         }
+
+        pendingShow = workItem
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + 0.3,
+            execute: workItem
+        )
     }
+
     static func hide(from view: UIView, animated: Bool) {
-        if Thread.isMainThread {
+        pendingShow?.cancel()
+        pendingShow = nil
+
+        DispatchQueue.main.async {
             MBProgressHUD.hide(for: view, animated: animated)
-        } else {
-            DispatchQueue.main.async { MBProgressHUD.hide(for: view, animated: animated) }
         }
     }
 }

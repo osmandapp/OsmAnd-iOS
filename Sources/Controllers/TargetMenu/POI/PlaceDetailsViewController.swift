@@ -239,8 +239,9 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 guard let self,
                       let details,
                       let tableView = self.tableView,
-                      let currentTarget = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint(),
-                      (currentTarget.targetObj as AnyObject) === renderedObject
+                      let mapPanel = OARootViewController.instance()?.mapPanel,
+                      let targetPoint = mapPanel.getCurrentTargetPoint(),
+                      (targetPoint.targetObj as AnyObject) === renderedObject
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
@@ -249,6 +250,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.updateTargetPoint(with: amenity)
                 self.rebuildRows()
                 tableView.reloadData()
+                self.delegate?.refreshTargetPointHeader?()
             }
         }
     }

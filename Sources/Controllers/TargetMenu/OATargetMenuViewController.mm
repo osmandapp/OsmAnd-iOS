@@ -179,17 +179,9 @@
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
-                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
-                if (detailsObject)
-                {
-                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
-                }
-                else
-                {
-                    controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
-                }
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:targetPoint.targetObj];
             }
-  
+
             break;
         }
 

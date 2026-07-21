@@ -529,9 +529,10 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         NSArray<OAPOI *> *filtered = [strongSelf filterNearestWikiByLanguage:results];
         strongSelf->_nearestWiki = [filtered copy];
 
-        if (filtered.count > 0)
+        NSMutableArray<OAAmenityInfoRow *> *currentRows = strongSelf->_rows;
+        if (filtered.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_wiki"))
         {
-            [strongSelf addNearestWikiRowIfNeeded:rows poi:poi filter:wikiFilter];
+            [strongSelf addNearestWikiRowIfNeeded:currentRows poi:poi filter:wikiFilter];
             [strongSelf updateInfoRows];
         }
         strongSelf->_isFetchingNearestWiki = NO;
@@ -602,9 +603,10 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
         strongSelf->_nearestPoi = [results copy];
 
-        if (results.count > 0)
+        NSMutableArray<OAAmenityInfoRow *> *currentRows = strongSelf->_rows;
+        if (results.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_poi"))
         {
-            [strongSelf addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
+            [strongSelf addNearestPoiRowIfNeeded:currentRows poi:poi filter:filter];
             [strongSelf updateInfoRows];
         }
         strongSelf->_isFetchingNearestPoi = NO;

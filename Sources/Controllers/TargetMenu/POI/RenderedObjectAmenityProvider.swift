@@ -9,7 +9,12 @@
 @objcMembers
 final class RenderedObjectAmenityProvider: NSObject {
     
-    var detailsObject: BaseDetailsObject?
+    var detailsObject: BaseDetailsObject? {
+        didSet {
+            cachedNameStr = nil
+            cachedTypeStr = nil
+        }
+    }
     private var renderedObject: OARenderedObject?
     private var cachedNameStr: String?
     private var cachedTypeStr: String?
@@ -102,6 +107,28 @@ final class RenderedObjectAmenityProvider: NSObject {
         return cachedNameStr ?? ""
     }
     
+    func actualContentFromIconRes() -> String? {
+        guard let content = renderedObject?.iconRes, !content.isEmpty else { return nil }
+        if content == "osmand_steps" {
+            return "highway_steps"
+        }
+        return content
+    }
+
+    func searchObjectNameByIconRes() -> String? {
+        guard let content = actualContentFromIconRes() else { return nil }
+        let poiTranslator = OAPOIHelper.sharedInstance()
+        let parts = content.split(separator: "_").map(String.init)
+        for i in parts.indices {
+            let key = parts[i...].joined(separator: "_")
+            let translation = poiTranslator.translation(key, withDefault: false)
+            if let translation, !translation.isEmpty {
+                return translation
+            }
+        }
+        return nil
+    }
+
     func typeString(superTypeProvider: (() -> String?)? = nil) -> String? {
         if let cachedTypeStr, !cachedTypeStr.isEmpty {
             return cachedTypeStr
@@ -120,19 +147,26 @@ final class RenderedObjectAmenityProvider: NSObject {
             }
         }()
         
-        if let amenity {
-            cachedTypeStr = searchObjectTypeByAmenityTags(amenity)
-        }
-        
-        if cachedTypeStr?.isEmpty ?? true {
-            let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
-            
-            cachedTypeStr = searchObjectNameByRawTags(
-                tags: renderedObject.tags as? [String: String],
-                additionalInfoKeys: additionalInfoKeys
-            )
-        }
+        let byType = resolvedTypeName(amenity)
+        let byTags = amenity.flatMap { searchObjectTypeByAmenityTags($0) }
+        let byIcon = searchObjectNameByIconRes()
+        let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
+        let byRaw = searchObjectNameByRawTags(
+            tags: renderedObject.tags as? [String: String],
+            additionalInfoKeys: additionalInfoKeys
+        )
+        cachedTypeStr = [byType, byIcon, byTags, byRaw].compactMap { $0 }.first { !$0.isEmpty }
         
         return cachedTypeStr
+    }
+
+    private func resolvedTypeName(_ amenity: OAPOI?) -> String? {
+        guard let type = amenity?.type else { return nil }
+        let otherName = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType().name
+        if let otherName, type.name == otherName {
+            return nil
+        }
+        let name = type.nameLocalized ?? ""
+        return name.isEmpty ? nil : name
     }
 }

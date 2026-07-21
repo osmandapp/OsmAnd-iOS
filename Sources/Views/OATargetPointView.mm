@@ -2368,6 +2368,11 @@ static const NSInteger _buttonsCount = 4;
     [self updateAddressLabel];
 }
 
+- (void)refreshTargetPointHeader
+{
+    [self applyTargetObjectChanges];
+}
+
 - (CGPoint) applyMode:(BOOL)applyOffset
 {
     CGPoint newOffset = self.contentOffset;

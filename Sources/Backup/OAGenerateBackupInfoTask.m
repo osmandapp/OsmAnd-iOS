@@ -71,6 +71,13 @@
 - (OABackupInfo *) doInBackground
 {
     OABackupInfo *info = [[OABackupInfo alloc] init];
+    NSDictionary<NSString *, OAUploadedFileInfo *> *uploadedFileInfos = [OABackupDbHelper.sharedDatabase getUploadedFileInfoMap];
+    NSMutableDictionary<NSString *, OAUploadedFileInfo *> *uploadedFileInfosWithDecomposedNames = [NSMutableDictionary dictionaryWithCapacity:uploadedFileInfos.count];
+    for (NSString *originalKey in uploadedFileInfos)
+    {
+        NSString *decomposedKey = originalKey.decomposedStringWithCanonicalMapping;
+        uploadedFileInfosWithDecomposedNames[decomposedKey] = uploadedFileInfos[originalKey];
+    }
     /*
      operationLog.log("=== localFiles ===");
      for (LocalFile localFile : localFiles.values()) {
@@ -119,7 +126,8 @@
         }
         else if (!remoteFile.isDeleted)
         {
-            OAUploadedFileInfo *fileInfo = [OABackupDbHelper.sharedDatabase getUploadedFileInfo:remoteFile.type name:remoteFile.name];
+            NSString *uploadedFileInfoKey = [NSString stringWithFormat:@"%@___%@", remoteFile.type, remoteFile.name];
+            OAUploadedFileInfo *fileInfo = uploadedFileInfosWithDecomposedNames[uploadedFileInfoKey.decomposedStringWithCanonicalMapping];
             // suggest to remove only if file exists in db
             if (fileInfo != nil && fileInfo.uploadTime >= remoteFile.updatetimems)
             {

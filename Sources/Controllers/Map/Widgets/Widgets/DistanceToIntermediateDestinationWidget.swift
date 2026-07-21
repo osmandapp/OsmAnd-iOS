@@ -41,7 +41,7 @@ class DistanceToIntermediateDestinationWidget: OADistanceToPointWidget {
     }
     
     override func getDistance() -> CLLocationDistance {
-        let routingHelper = OARoutingHelper.sharedInstance()!
+        let routingHelper = OARoutingHelper.sharedInstance()
         if let pointToNavigate = getPointToNavigate(), routingHelper.isRouteCalculated() {
             return CLLocationDistance(routingHelper.getLeftDistanceNextIntermediate())
         }

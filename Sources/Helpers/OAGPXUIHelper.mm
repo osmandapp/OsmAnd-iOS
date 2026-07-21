@@ -781,12 +781,12 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
     [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey
++ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(nullable OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey
 {
     [self.class saveAndOpenGpx:name filepath:filepath gpxFile:gpxFile selectedPoint:selectedPoint analysis:analysis routeKey:routeKey forceAdjustCentering:YES];
 }
 
-+ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering
++ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(nullable OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering
 {
     // Force hiding opened context menu. (With deleting Temp gpx folder)
     [OARootViewController.instance.mapPanel hideScrollableHudViewController];

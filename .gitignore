@@ -12,6 +12,8 @@ xcuserdata
 /Podfile.lock
 /Pods
 /Libraries/Charts/build
+/Packages/BRCybertron/Sources/BRCybertron/libxslt/libxslt
+/Packages/BRCybertron/Sources/BRCybertron/libxslt/libexslt
 
 *.xcscmblueprint
 /build

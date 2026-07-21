@@ -34,7 +34,7 @@
                             ref:(NSString *)originalRef
                     destination:(NSString *)destination
                         towards:(NSString *)towards
-                        shields:(NSArray<RoadShield *> *)shields
+                        shields:(nullable NSArray<RoadShield *> *)shields
 {
     NSMutableString *formattedStreetName = [NSMutableString string];
     if (originalRef && originalRef.length > 0)

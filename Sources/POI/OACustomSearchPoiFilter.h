@@ -12,16 +12,20 @@
 
 @class OAPOI;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OACustomSearchPoiFilter : OASearchPoiTypeFilter
 
-- (NSString *) getFilterId;
-- (NSString *) getName;
+- (nullable NSString *) getFilterId;
+- (nullable NSString *) getName;
 
-- (NSObject *) getIconResource;
+- (nullable NSObject *) getIconResource;
 
-- (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (nullable OAResultMatcher<OAPOI *> *) wrapResultMatcher:(nullable OAResultMatcher<OAPOI *> *)matcher;
 
-- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
+- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(nullable OASearchPoiTypeFilterGetTypes)tFunction;
 - (OASearchSortType) getDefaultSearchType;
 
 @end
+
+NS_ASSUME_NONNULL_END

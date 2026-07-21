@@ -37,7 +37,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGPX:(OASTrackItem *)gpx
+- (nullable instancetype)initWithGPX:(OASTrackItem *)gpx
 {
     self = [super init];
     if (self)
@@ -50,7 +50,7 @@
 }
 
 
-- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName;
+- (nullable instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName;
 {
     self = [super init];
     if (self)
@@ -60,7 +60,7 @@
     return self;
 }
 
-- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath
+- (nullable instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath
 {
     self = [super init];
     if (self)
@@ -71,7 +71,7 @@
     return self;
 }
 
-- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths
+- (nullable instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPaths:(NSArray<NSString *> *)excludedSubfolderPaths
 {
     self = [super init];
     if (self)

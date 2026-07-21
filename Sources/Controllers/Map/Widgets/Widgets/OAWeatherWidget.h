@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
                          band:(EOAWeatherBand)band
                      customId:(NSString *_Nullable)customId
                       appMode:(OAApplicationMode * _Nonnull)appMode
-                 widgetParams:(NSDictionary *)widgetParams;
+                 widgetParams:(nullable NSDictionary *)widgetParams;
 
 @end
 

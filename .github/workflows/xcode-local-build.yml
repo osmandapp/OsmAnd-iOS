@@ -175,7 +175,7 @@ jobs:
           -scheme "OsmAnd Maps Release" \
           -sdk iphoneos \
           -destination "generic/platform=iOS" \
-          -configuration AppStoreDistribution \
+          -configuration Release \
           -archivePath OsmAndMaps.xcarchive \
           CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}" \
           MARKETING_VERSION="${RELEASE_IOS_VERSION}" \

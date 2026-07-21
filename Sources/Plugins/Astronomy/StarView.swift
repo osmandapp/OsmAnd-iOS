@@ -392,6 +392,7 @@ final class StarView: UIView {
     
     func restoreMapPosition(_ position: AstronomyPluginSettings.MapViewPosition) {
         setCenter(azimuth: position.azimuth, altitude: position.altitude)
+        viewAngle = position.viewAngle
         setViewAngle(position.viewAngle)
         roll = position.roll
         if settings.starMap.is2DMode {

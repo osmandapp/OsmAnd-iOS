@@ -179,7 +179,6 @@ jobs:
           -archivePath OsmAndMaps.xcarchive \
           CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}" \
           MARKETING_VERSION="${RELEASE_IOS_VERSION}" \
-          SKIP_INSTALL=NO \
           archive | xcpretty
     - name: Zip iOS archive
       env:

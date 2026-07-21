@@ -82,6 +82,7 @@ final class StarMapMyDataViewController: UIViewController {
     private var suppressQueryDispatch = false
     private var redFilterEnabled = false
     private var isSearchActive = false
+    private var isSearchBarAnimating: Bool = false
     private var mainTopConstraint: NSLayoutConstraint?
     private var emptyTopConstraint: NSLayoutConstraint?
 
@@ -184,12 +185,15 @@ final class StarMapMyDataViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTableHeader()
+        
+        guard !isSearchBarAnimating else { return }
         mainTopConstraint?.constant = view.safeAreaInsets.top
     }
     
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         
+        guard !isSearchBarAnimating else { return }
         mainTopConstraint?.constant = view.safeAreaInsets.top
         UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
             self.view.layoutIfNeeded()
@@ -418,6 +422,7 @@ final class StarMapMyDataViewController: UIViewController {
         controller.hidesNavigationBarDuringPresentation = OAUtilities.isIPhone()
         controller.searchBar.placeholder = localizedString("shared_string_search")
         controller.searchBar.delegate = self
+        controller.searchBar.alpha = 0.0
         return controller
     }
 
@@ -643,7 +648,19 @@ final class StarMapMyDataViewController: UIViewController {
     }
     
     @objc private func searchButtonPressed() {
+        guard !isSearchActive, OAUtilities.isIPhone() else {
+            showSearchController()
+            return
+        }
+        isSearchActive = true
+        isSearchBarAnimating = true
         showSearchController()
+        
+        UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+            self.myDataSegmentedControlContainer.isHidden = true
+            self.myDataSegmentedControlContainer.alpha = 0
+            self.view.layoutIfNeeded()
+        }
     }
     
     deinit {
@@ -671,26 +688,32 @@ extension StarMapMyDataViewController: UIGestureRecognizerDelegate {
 }
 
 extension StarMapMyDataViewController: UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-        guard OAUtilities.isIPhone() else { return }
-        UIView.animate(withDuration: 0.25, delay: 0, options: [.beginFromCurrentState]) {
-            self.myDataSegmentedControlContainer.isHidden = true
-        }
-    }
-    
     func didPresentSearchController(_ searchController: UISearchController) {
         hideSearchButton()
         isSearchActive = true
+        isSearchBarAnimating = false
+        
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.beginFromCurrentState]) {
+            searchController.searchBar.alpha = 1
+        }
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
+        isSearchBarAnimating = true
+        
         guard OAUtilities.isIPhone() else { return }
-        UIView.animate(withDuration: 0.25, delay: 0, options: [.beginFromCurrentState]) {
-            self.myDataSegmentedControlContainer.isHidden = false
+        
+        myDataSegmentedControlContainer.isHidden = false
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
+            searchController.searchBar.alpha = 0
+            self.myDataSegmentedControlContainer.alpha = 1
+            self.view.layoutIfNeeded()
         }
     }
 
     func didDismissSearchController(_ searchController: UISearchController) {
+        isSearchBarAnimating = false
+        
         if searchController.searchBar.text?.isEmpty == true {
             hideSearchController()
         }

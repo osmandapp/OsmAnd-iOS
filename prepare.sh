@@ -2,6 +2,9 @@
 
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Remove legacy CocoaPods artifacts before rebuilding dependencies.
+rm -rf "$SRCLOC/Pods" "$SRCLOC/Podfile.lock"
+
 # it only works if absolute path of prebuilt / makefiles is the same
 if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}

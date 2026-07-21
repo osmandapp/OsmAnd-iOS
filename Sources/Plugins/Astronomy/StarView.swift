@@ -207,7 +207,17 @@ final class StarView: UIView {
 
     var is2DMode: Bool {
         get { settings.starMap.is2DMode }
-        set { settings.starMap.is2DMode = newValue; setNeedsDisplay() }
+        set {
+            cancelFocusAnimation()
+            settings.starMap.is2DMode = newValue
+            if newValue {
+                roll = 0
+            } else {
+                panX = 0
+                panY = 0
+            }
+            setNeedsDisplay()
+        }
     }
     
     var currentTime: Time {
@@ -384,8 +394,13 @@ final class StarView: UIView {
         setCenter(azimuth: position.azimuth, altitude: position.altitude)
         setViewAngle(position.viewAngle)
         roll = position.roll
-        panX = CGFloat(position.panX)
-        panY = CGFloat(position.panY)
+        if settings.starMap.is2DMode {
+            panX = CGFloat(position.panX)
+            panY = CGFloat(position.panY)
+        } else {
+            panX = 0
+            panY = 0
+        }
         notifyAzimuthChanged()
         setNeedsDisplay()
     }

@@ -662,8 +662,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 altitude: starView.altitude(),
                 viewAngle: starView.viewAngleValue(),
                 roll: starView.roll,
-                panX: Double(starView.panX),
-                panY: Double(starView.panY)
+                panX: starView.is2DMode ? Double(starView.panX) : 0,
+                panY: starView.is2DMode ? Double(starView.panY) : 0
             )
             return config
         }

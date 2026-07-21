@@ -585,6 +585,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     if (!poi || ![self showNearestPoi])
         return;
 
+    if (poi.type.category.isWiki)
+        return;
+
     OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
     if (!filter)
         return;
@@ -937,49 +940,46 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         NSMutableArray<OAPOI *> *amenities = [NSMutableArray new];
         
-        if (!poi.type.category.isWiki)
+        int radius = kNearbyPoiMinRadius;
+        OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+        
+        while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
         {
-            int radius = kNearbyPoiMinRadius;
-            OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+            const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
             
-            while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+            NSArray<OAPOI *> *found = [filter searchAmenities:OsmAnd::Utilities::get31LatitudeY(rect.top())
+                                                        left:OsmAnd::Utilities::get31LongitudeX(rect.left())
+                                                      bottom:OsmAnd::Utilities::get31LatitudeY(rect.bottom())
+                                                       right:OsmAnd::Utilities::get31LongitudeX(rect.right())
+                                                        zoom:-1 matcher:nil filterUnique:YES];
+            
+            if (found.count > 0)
             {
-                const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
-                
-                NSArray<OAPOI *> *found = [filter searchAmenities:OsmAnd::Utilities::get31LatitudeY(rect.top())
-                                                            left:OsmAnd::Utilities::get31LongitudeX(rect.left())
-                                                          bottom:OsmAnd::Utilities::get31LatitudeY(rect.bottom())
-                                                           right:OsmAnd::Utilities::get31LongitudeX(rect.right())
-                                                            zoom:-1 matcher:nil filterUnique:YES];
-                
-                if (found.count > 0)
+                for (OAPOI *a in found)
                 {
-                    for (OAPOI *a in found)
-                    {
-                        if (![amenities containsObject:a]) {
-                            [amenities addObject:a];
-                        }
+                    if (![amenities containsObject:a]) {
+                        [amenities addObject:a];
                     }
                 }
-                
-                if (amenities.count >= kNearbyPoiMaxCount)
-                    break;
-                radius *= kNearbyPoiSearchFactory;
             }
             
-            NSMutableArray<OAPOI *> *filteredAmenities = [NSMutableArray new];
-            NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
-            for (OAPOI *amenity in amenities)
-            {
-                if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
-                    [filteredAmenities addObject:amenity];
-            }
-            
-            NSArray *sorted = [OAMapUtils sortPOI:filteredAmenities lat:self.location.latitude lon:self.location.longitude];
-            
-            NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
-            amenities = [[sorted subarrayWithRange:NSMakeRange(0, finalCount)] mutableCopy];
+            if (amenities.count >= kNearbyPoiMaxCount)
+                break;
+            radius *= kNearbyPoiSearchFactory;
         }
+        
+        NSMutableArray<OAPOI *> *filteredAmenities = [NSMutableArray new];
+        NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
+        for (OAPOI *amenity in amenities)
+        {
+            if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
+                [filteredAmenities addObject:amenity];
+        }
+        
+        NSArray *sorted = [OAMapUtils sortPOI:filteredAmenities lat:self.location.latitude lon:self.location.longitude];
+        
+        NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
+        amenities = [[sorted subarrayWithRange:NSMakeRange(0, finalCount)] mutableCopy];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {

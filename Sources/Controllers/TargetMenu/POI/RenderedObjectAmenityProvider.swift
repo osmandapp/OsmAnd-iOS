@@ -147,7 +147,6 @@ final class RenderedObjectAmenityProvider: NSObject {
             }
         }()
         
-        let byType = resolvedTypeName(amenity)
         let byTags = amenity.flatMap { searchObjectTypeByAmenityTags($0) }
         let byIcon = searchObjectNameByIconRes()
         let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
@@ -155,18 +154,8 @@ final class RenderedObjectAmenityProvider: NSObject {
             tags: renderedObject.tags as? [String: String],
             additionalInfoKeys: additionalInfoKeys
         )
-        cachedTypeStr = [byType, byIcon, byTags, byRaw].compactMap { $0 }.first { !$0.isEmpty }
+        cachedTypeStr = [byTags, byIcon, byRaw].compactMap { $0 }.first { !$0.isEmpty }
         
         return cachedTypeStr
-    }
-
-    private func resolvedTypeName(_ amenity: OAPOI?) -> String? {
-        guard let type = amenity?.type else { return nil }
-        let otherName = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType().name
-        if let otherName, type.name == otherName {
-            return nil
-        }
-        let name = type.nameLocalized ?? ""
-        return name.isEmpty ? nil : name
     }
 }

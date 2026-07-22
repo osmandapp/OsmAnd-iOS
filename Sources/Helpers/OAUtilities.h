@@ -415,8 +415,8 @@ static inline double normalizeDouble(double v)
 + (BOOL) isColorBright:(UIColor *)color;
 + (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(nullable UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle parentViewWidth:(CGFloat)parentViewWidth;
-+ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
-+ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle rightIconName:(nullable NSString *)iconName tintColor:(nullable UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(nullable NSString *)iconName tintColor:(nullable UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(nullable UIColor *)tintColor icon:(nullable UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(nullable UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
 
@@ -426,10 +426,10 @@ static inline double normalizeDouble(double v)
 
 + (NSDictionary *) getSortedVoiceProviders;
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing;
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor;
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(nullable UIColor *)highlightColor;
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize;
 + (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered;
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(UIColor *)boldColor mainColor:(UIColor *)mainColor;
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(nullable UIColor *)boldColor mainColor:(nullable UIColor *)mainColor;
 
 + (NSDate *) getFileLastModificationDate:(NSString *)fileName;
 
@@ -449,8 +449,6 @@ static inline double normalizeDouble(double v)
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
-
-+ (nullable NSString *) toMD5:(NSString *)text;
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 

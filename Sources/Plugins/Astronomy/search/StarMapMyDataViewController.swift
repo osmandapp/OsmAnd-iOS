@@ -430,7 +430,7 @@ final class StarMapMyDataViewController: UIViewController {
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            let insertionOrderById = self.getMyDataInsertionOrderMap(stateSnapshot.quickPresetType)
+            let insertionOrderById = self.myDataInsertionOrderMap(stateSnapshot.quickPresetType)
             let filteredEntries = stateSnapshot.filterAndSort(
                 preparedEntries: preparedEntriesSnapshot.map { $0.copy() },
                 visibleTonightProvider: self.searchHelper.getVisibleTonight,
@@ -467,8 +467,8 @@ final class StarMapMyDataViewController: UIViewController {
         }
     }
 
-    private func getMyDataInsertionOrderMap(_ quickPresetType: StarMapSearchQuickPresetType) -> [String: Int] {
-        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+    private func myDataInsertionOrderMap(_ quickPresetType: StarMapSearchQuickPresetType) -> [String: Int] {
+        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.starMapConfig()
         let ids: [String]
         switch quickPresetType {
         case .MY_DATA_FAVORITES:
@@ -488,7 +488,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
     
     private func currentTabHasData() -> Bool {
-        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        let config = parentStarMapController?.searchStarMapConfig() ?? plugin.astroSettings.starMapConfig()
         switch currentTab {
         case .favorites:
             return !config.favorites.isEmpty

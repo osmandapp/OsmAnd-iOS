@@ -36,7 +36,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group
+- (nullable instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group
 {
     self = [super init];
     if (self)

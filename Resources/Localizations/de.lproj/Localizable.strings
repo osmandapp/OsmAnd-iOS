@@ -225,7 +225,7 @@
 "product_desc_russia" = "Unbegrenzte Kartendownloads für Russland";
 "product_desc_southamerica" = "Unbegrenzte Kartendownloads für Südamerika";
 "product_desc_asia" = "Unbegrenzte Kartendownloads für Asien";
-"my_location" = "Mein Standort";
+"my_location" = "Meine Position";
 "shared_string_buy_for" = "für";
 "all_categories" = "Alle Kategorien";
 "shared_string_or" = "oder";
@@ -3371,7 +3371,7 @@
 "offline_wikivoyage" = "Wikivoyage offline";
 "of" = "%d von %d";
 "downloaded_bytes" = "%@ von %@";
-"daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem Gesamtthema der App an - Tagmodus für eine helle Darstellung und Nachtmodus für eine dunkle Darstellung";
+"daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem Gesamtthema der App an – Tagmodus für eine helle Darstellung und Nachtmodus für eine dunkle Darstellung";
 "daynight_mode_day_summary" = "Zeigt die Karte immer in einer hellen Darstellung an, ideal für die Sichtbarkeit bei Tag.";
 "daynight_mode_night_summary" = "Zeigt die Karte immer in einer dunklen Darstellung an, die für nächtliche oder lichtarme Bedingungen geeignet ist.";
 "daynight_mode_sunrise_sunset_summary" = "Schaltet automatisch zwischen Tag- und Nachtmodus um, je nach Sonnenauf- und -untergangszeit vor Ort.";
@@ -4119,3 +4119,6 @@
 "set_step_size_summary" = "Wählen Sie eine Schrittweite, um Ihre Tracks zu gruppieren.";
 "routing_attr_motor_type_ethanol_name" = "Ethanol";
 "plugin_ais_tracker_name" = "AIS-Schiffstracker";
+"traffic_warning_red_light_camera" = "Rotlichtblitzer";
+"shared_string_disabled" = "Deaktiveret";
+"gpx_logging_no_data" = "Keine Daten";

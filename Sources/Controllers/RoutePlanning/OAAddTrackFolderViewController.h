@@ -8,6 +8,8 @@
 
 #import "OABaseNavbarViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol OAAddTrackFolderDelegate <NSObject>
 
 - (void) onTrackFolderAdded:(NSString *)folderName;
@@ -16,9 +18,10 @@
 
 @interface OAAddTrackFolderViewController : OABaseNavbarViewController
 
-@property (nonatomic, weak) id<OAAddTrackFolderDelegate> delegate;
+@property (nonatomic, weak, nullable) id<OAAddTrackFolderDelegate> delegate;
 
 @property (nonatomic, copy, nullable) NSString *suggestedFolderName;
 
 @end
 
+NS_ASSUME_NONNULL_END

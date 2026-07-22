@@ -15,13 +15,19 @@
 #define kWikiDomainCom @".wikipedia.com/wiki/"
 #define kWikivoyageDomain @".wikivoyage.org/wiki/"
 
-typedef void(^OAWikiArticleSearchTaskBlockType)(void);
+typedef void (^OAWikiArticleSearchTaskBlockType)(void);
 
 @class OAWorldRegion, OAPOI;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAWikiArticleSearchTask : NSObject
 
-- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations
+                               url:(NSString *)url
+                           onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+                        sourceView:(nullable UIView *)sourceView
+                        onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete;
 - (void) execute;
 - (void) cancel;
 
@@ -29,24 +35,30 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 @protocol OAWikiLanguagesWebDelegate
 
-- (void)onLocaleSelected:(NSString *)locale;
-- (void)showLocalesVC:(UIViewController *)vc;
+- (void)onLocaleSelected:(NSString *_Null_unspecified)locale;
+- (void)showLocalesVC:(UIViewController *_Null_unspecified)vc;
 
 @end
 
 
 @interface OAWikiArticleHelper : NSObject
 
-+ (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView;
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
-+ (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
-+ (NSString *) getPartialContent:(NSString *)source;
-+ (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView;
++ (nullable OAWorldRegion *) findWikiRegion:(nullable OAWorldRegion *)mapRegion;
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(nullable UIView *)sourceView;
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations
+                     url:(NSString *)url
+                 onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+              sourceView:(nullable UIView *)sourceView
+              onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete;
++ (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml;
++ (nullable NSString *) getPartialContent:(nullable NSString *)source;
++ (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView;
 + (NSString *) normalizeFileUrl:(NSString *)url;
-+ (NSString *) getLang:(NSString *)url;
-+ (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
-+ (nullable NSString *) readArchiveString:(NSData *)archiveData;
-+ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
++ (nullable NSString *) getLang:(NSString *)url;
++ (nullable NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
++ (nullable NSString *) readArchiveString:(nullable NSData *)archiveData;
++ (nullable UIMenu *)createLanguagesMenu:(nullable NSArray<NSString *> *)availableLocales selectedLocale:(nullable NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
 
 @end
+
+NS_ASSUME_NONNULL_END

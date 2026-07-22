@@ -4405,3 +4405,12 @@
 "items_delete_confirmation_title" = "Odstranit %ld položky?";
 "folders_delete_confirmation_title" = "Odstranit %ld složky?";
 "favorites_delete_confirmation_message" = "Tuto akci nelze vrátit zpět.";
+"show_all_tracks_on_the_map" = "Zobrazit všechny stopy na mapě";
+"mixed_delete_confirmation_message" = "To odstraní %ld složky a %ld body. Tato akce nelze zrušit.";
+"empty_state_favourites" = "Přidejte Oblíbené";
+"empty_state_favourites_desc" = "Importujte Oblíbené nebo je přidejte označením bodů na mapě.";
+"tracks_empty_folder" = "Prázdná složka";
+"tracks_empty_folder_description" = "Tato složka ještě nemá žádné body.";
+"delete_favorite_confirmation_title" = "Odstranit \"%@\"?";
+"add_new_folder" = "Přidat novou složku";
+"ais_cpa_warning_distance" = "Výstražná vzdálenost pro nejbližší bod přiblížení (CPA)";

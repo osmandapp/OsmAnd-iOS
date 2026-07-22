@@ -611,11 +611,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let doneBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_done"), icon: nil, color: .label, action: #selector(onNavbarDoneButtonClicked), target: self, menu: nil)
             navigationController?.navigationBar.topItem?.rightBarButtonItem = doneBarButton
             navigationItem.rightBarButtonItem = doneBarButton
-        } else if organizedGroup != nil {
-            hideBackButton(true)
-            let backButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "chevron.left"), color: .label, action: #selector(onNavbarOrganizedGroupBackButtonClicked), target: self, menu: nil)
-            navigationController?.navigationBar.topItem?.leftBarButtonItem = backButton
-            navigationItem.leftBarButtonItem = backButton
         } else {
             hideBackButton(false)
             navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
@@ -1079,20 +1074,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     // MARK: - Navbar Toolbar Actions
 
-    private func enterOrganizedGroup(_ group: OrganizedTracksGroup) {
-        organizedGroup = group
-        updateNavigationBarTitle()
-        setupNavbar()
-        updateSortButtonAndMenu()
-        updateData()
-    }
-
-    private func leaveOrganizedGroup() {
-        organizedGroup = nil
-        updateNavigationBarTitle()
-        setupNavbar()
-        updateSortButtonAndMenu()
-        updateData()
+    private func showTracksViewControllerForOrganizedGroup(_ group: OrganizedTracksGroup) {
+        let vc = TracksViewController(isRootFolder: false, isSmartFolder: true)
+        vc.smartFolder = smartFolder
+        vc.organizedGroup = group
+        vc.rootFolder = rootFolder
+        vc.currentFolder = currentFolder
+        vc.visibleTracksFolder = visibleTracksFolder
+        vc.hostVCDelegate = self
+        show(vc)
     }
 
     private func onNavbarRefreshSmartFolderButtonClicked() {
@@ -1368,10 +1358,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
-    @objc private func onNavbarOrganizedGroupBackButtonClicked() {
-        leaveOrganizedGroup()
-    }
-
     @objc private func onNavbarCancelButtonClicked() {
         selectedTracks.removeAll()
         selectedFolders.removeAll()
@@ -2399,7 +2385,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 showTracksViewControllerForSmartFolder(withName: title)
             } else if item.key == organizedGroupKey {
                 if let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup {
-                    enterOrganizedGroup(group)
+                    showTracksViewControllerForOrganizedGroup(group)
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,

@@ -2,6 +2,9 @@
 
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Remove legacy CocoaPods artifacts before rebuilding dependencies.
+rm -rf "$SRCLOC/Pods" "$SRCLOC/Podfile.lock"
+
 # it only works if absolute path of prebuilt / makefiles is the same
 if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	# FILE_TO_DOWNLOAD=${BUILT_QT_FILES_ZIPFILE:-qt-ios-prebuilt.zip}
@@ -24,23 +27,8 @@ if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "t
 	mv $SRCLOC/../core/externals/qtbase-ios/$BNAME $BUILT_QT_FILES_ZIPFILE
 fi
 
-# Prepare iOS dependencies via CocoaPods
-"$SRCLOC/Scripts/install_pods.sh"
-
-# Getting the Xcode version
-xcode_version=$(xcodebuild -version | grep "Xcode")
-
-# Using awk to extract only the Xcode version number
-xcode_version_number=$(echo "$xcode_version" | awk '{print $2}' | cut -d. -f1,2)
-
-# Comparing the version with 15.3
-if (( $(echo "$xcode_version_number >= 15.3" | bc -l) )); then
-    echo "Xcode version $xcode_version_number greater than or equal to 15.3"
-	# The script will replace the source code of libxslt with the compatible one from the 'BRCybertron' pod
-	"$SRCLOC/Scripts/change_libxslt_resources_for_BRCybertron_pod.sh"
-else
-    echo "Xcode version $xcode_version_number less than 15.3"
-fi
+# Download BRCybertron libxslt sources used by the local Swift package.
+"$SRCLOC/Scripts/download_libxslt_for_BRCybertron_spm.sh"
 
 # Download all shipped resources
 "$SRCLOC/Scripts/download-shipped-resources.sh"

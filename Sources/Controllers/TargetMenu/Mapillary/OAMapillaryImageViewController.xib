@@ -88,7 +88,7 @@
                             <rect key="frame" x="0.0" y="16" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="ic_navbar_close.png"/>
+                            <state key="normal" image="ic_navbar_close"/>
                             <connections>
                                 <action selector="closePressed:" destination="-1" eventType="touchUpInside" id="gZd-S4-022"/>
                             </connections>
@@ -102,6 +102,6 @@
     </objects>
     <resources>
         <image name="ic_action_wifi_off.png" width="30" height="30"/>
-        <image name="ic_navbar_close.png" width="28" height="28"/>
+        <image name="ic_navbar_close" width="28" height="28"/>
     </resources>
 </document>

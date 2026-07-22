@@ -45,7 +45,11 @@
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations
+                               url:(NSString *)url
+                           onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+                        sourceView:(nullable UIView *)sourceView
+                        onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete
 {
     self = [super init];
     if (self)
@@ -207,7 +211,7 @@
 
 @implementation OAWikiArticleHelper
 
-+ (nullable NSString *) readArchiveString:(NSData *)archiveData
++ (nullable NSString *) readArchiveString:(nullable NSData *)archiveData
 {
     if (!archiveData || archiveData.length == 0)
         return nil;
@@ -230,7 +234,7 @@
     return nil;
 }
 
-+ (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
++ (nullable OAWorldRegion *) findWikiRegion:(nullable OAWorldRegion *)mapRegion
 {
     if (mapRegion)
     {
@@ -276,12 +280,16 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(nullable UIView *)sourceView
 {
     [self showWikiArticle:@[location] url:url onStart:nil sourceView:sourceView onComplete:nil];
 }
 
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations
+                     url:(NSString *)url
+                 onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+              sourceView:(nullable UIView *)sourceView
+              onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete
 {
     OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart sourceView:sourceView onComplete:onComplete];
     [task execute];
@@ -333,7 +341,7 @@
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView
++ (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -351,7 +359,7 @@
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (NSString *) getFirstParagraph:(NSString *)descriptionHtml
++ (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml
 {
    if (descriptionHtml)
    {
@@ -362,7 +370,7 @@
    return descriptionHtml;
 }
 
-+ (NSString *) getPartialContent:(NSString *)source
++ (nullable NSString *) getPartialContent:(nullable NSString *)source
 {
     if (!source || source.length == 0)
         return nil;
@@ -427,7 +435,7 @@
         return url;
 }
 
-+ (NSString *) getLang:(NSString *)url
++ (nullable NSString *) getLang:(NSString *)url
 {
     if ([url hasPrefix:kPagePrefixHttp])
     {
@@ -442,7 +450,7 @@
     return @"";
 }
 
-+ (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang
++ (nullable NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang
 {
     NSString *domain = [url containsString:kWikivoyageDomain] ? kWikivoyageDomain : [url containsString:kWikiDomain] ? kWikiDomain : kWikiDomainCom;
     NSString *articleName = @"";
@@ -456,7 +464,7 @@
     return articleName;
 }
 
-+ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate
++ (nullable UIMenu *)createLanguagesMenu:(nullable NSArray<NSString *> *)availableLocales selectedLocale:(nullable NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate
 {
     UIMenu *languageMenu;
     NSMutableArray<UIMenuElement *> *languageOptions = [NSMutableArray array];

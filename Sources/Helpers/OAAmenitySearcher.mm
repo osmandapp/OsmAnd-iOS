@@ -1176,13 +1176,13 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return res;
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName radius:(int)radius
 {
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
     return [self findPOIsByTagName:tagName name:name location:location categoryName:categoryName poiTypeName:typeName bbox31:bbox31];
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName bboxTopLeft:(CLLocationCoordinate2D)bboxTopLeft bboxBottomRight:(CLLocationCoordinate2D)bboxBottomRight;
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName bboxTopLeft:(CLLocationCoordinate2D)bboxTopLeft bboxBottomRight:(CLLocationCoordinate2D)bboxBottomRight;
 {
     OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bboxTopLeft.latitude, bboxTopLeft.longitude));
     OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bboxBottomRight.latitude, bboxBottomRight.longitude));
@@ -1190,7 +1190,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return [self findPOIsByTagName:tagName name:name location:location categoryName:categoryName poiTypeName:typeName bbox31:bbox31];
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName bbox31:(OsmAnd::AreaI)bbox31
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName bbox31:(OsmAnd::AreaI)bbox31
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;

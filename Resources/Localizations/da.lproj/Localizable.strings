@@ -45,7 +45,7 @@
 "track_interval_remember" = "Husk valg";
 "show_info" = "Vis Infoformation";
 // Map settings
-"rendering_value_browse_map_name" = "Vis kort";
+"rendering_value_browse_map_name" = "Udforsk kort";
 "routing_engine_vehicle_type_driving" = "Kørsel";
 "shared_string_map" = "Kort";
 "shared_string_show_on_map" = "Vis på kort";
@@ -1504,7 +1504,7 @@
 "app_mode_pedestrian" = "Fodgænger";
 "app_mode_bicycle" = "Cykling";
 "app_mode_car" = "Kørsel";
-"app_mode_default" = "Vis kort";
+"app_mode_default" = "Udforsk kort";
 "online_webpage_warning" = "Siden er kun tilgængelig online. Åben den i en webbrowser?";
 "open_in_browser_wiki" = "Åbn artiklen online";
 "download_wiki_data" = "Hent Wikipedia-data for %@";

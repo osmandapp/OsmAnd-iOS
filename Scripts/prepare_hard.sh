@@ -27,11 +27,6 @@ echo "    XCode Clean build folder:"
 cd $IOS_DIR
 xcodebuild clean -workspace OsmAnd.xcworkspace -scheme "OsmAnd Maps"
 
-echo "    Cleaning all pods"
-cd $IOS_DIR
-rm -rf Pods/ || true
-rm -rf Podfile.lock || true
-
 echo "    Deletiing build folders:"
 cd $REPOSITORIES_DIR
 sudo rm -R baked/fat-ios-clang.xcode

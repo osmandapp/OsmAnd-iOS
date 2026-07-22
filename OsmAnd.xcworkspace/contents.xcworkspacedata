@@ -1318,7 +1318,4 @@
    <FileRef
       location = "group:../baked/fat-ios-clang.xcode/OsmAnd_projects.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
 </Workspace>

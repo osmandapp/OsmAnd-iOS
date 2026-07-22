@@ -76,7 +76,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 #pragma mark - Initialization
 
-- (instancetype)initWithNew
+- (nullable instancetype)initWithNew
 {
     self = [super init];
     if (self)
@@ -579,12 +579,12 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return !_isNewItem || _isTextViewNameValid;
 }
 
-- (OAFavoriteGroup *)existingGroupFor:(NSString *)name
+- (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name
 {
     return [OAFavoritesHelper getGroupByName:name];
 }
 
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
+- (BOOL)allowsExistingGroupFor:(NSString *)name group:(nullable OAFavoriteGroup *)group
 {
     return NO;
 }

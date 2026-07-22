@@ -10,9 +10,11 @@
 
 @class OAFavoriteGroup, OAGPXAppearanceCollection, OATextInputFloatingCell, OASPaletteItemSolid, PoiIconCollectionHandler;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol OAEditorDelegate <NSObject>
 
-- (void)addNewItemWithName:(NSString *)name
+- (void)addNewItemWithName:(nullable NSString *)name
                   iconName:(NSString *)iconName
                      color:(UIColor *)color
         backgroundIconName:(NSString *)backgroundIconName;
@@ -37,18 +39,20 @@
 @property(nonatomic, readonly) BOOL isNewItem;
 @property(nonatomic, readonly) BOOL wasChanged;
 @property(nonatomic, readonly) OAGPXAppearanceCollection *appearanceCollection;
-@property(nonatomic, weak) id<OAEditorDelegate> delegate;
+@property(nonatomic, weak, nullable) id<OAEditorDelegate> delegate;
 
-- (instancetype)initWithNew;
+- (nullable instancetype)initWithNew;
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
-- (nullable OAFavoriteGroup *)existingGroupFor:(NSString *_Nullable)name;
-- (BOOL)allowsExistingGroupFor:(NSString *_Nonnull)name group:(nullable OAFavoriteGroup *)group;
+- (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
+- (BOOL)allowsExistingGroupFor:(NSString *)name group:(nullable OAFavoriteGroup *)group;
 - (BOOL)allowsValidationForGroupName;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 
 @end
+
+NS_ASSUME_NONNULL_END

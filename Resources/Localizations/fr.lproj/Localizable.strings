@@ -4283,3 +4283,4 @@
 "ais_position" = "Poste";
 "ais_destination" = "Destination";
 "ais_message_types" = "Types de messages AIS";
+"ais_clear_simulation" = "Effacer la simulation AIS";

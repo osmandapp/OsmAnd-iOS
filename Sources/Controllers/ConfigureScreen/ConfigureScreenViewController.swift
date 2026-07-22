@@ -75,6 +75,10 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     override func isNavbarSeparatorVisible() -> Bool {
         false
     }
+    
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
 
     // MARK: Table data
 

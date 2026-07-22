@@ -44,6 +44,10 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func generateData() {
         let showSpeedometer = settings.showSpeedometer.get(appMode)
         tableData.clearAllData()

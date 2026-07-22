@@ -87,7 +87,7 @@
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];
+    self = [super initWithStyle:UITableViewStyleInsetGrouped];
     if (self)
     {
         _tableType = type;

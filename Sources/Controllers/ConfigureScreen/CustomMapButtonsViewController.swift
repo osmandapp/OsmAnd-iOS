@@ -40,6 +40,10 @@ final class CustomMapButtonsViewController: OABaseNavbarViewController {
                                         menu: nil)]
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     // MARK: Table data
     
     override func generateData() {

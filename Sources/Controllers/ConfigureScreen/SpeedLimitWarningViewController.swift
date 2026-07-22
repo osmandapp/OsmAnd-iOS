@@ -34,6 +34,10 @@ final class SpeedLimitWarningViewController: OABaseNavbarViewController {
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell

@@ -36,6 +36,10 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         var resetAlert: UIAlertController?
         resetAlert = UIAlertController(title: title,

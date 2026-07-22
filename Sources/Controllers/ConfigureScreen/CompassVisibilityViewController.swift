@@ -34,6 +34,10 @@ class CompassVisibilityViewController: OABaseNavbarViewController {
     override func getLeftNavbarButtonTitle() -> String {
         localizedString("shared_string_close")
     }
+    
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
 
     // MARK: Table data
 

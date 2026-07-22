@@ -115,6 +115,11 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
+- (UITableViewStyle)tableStyle
+{
+    return UITableViewStyleInsetGrouped;
+}
+
 #pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated

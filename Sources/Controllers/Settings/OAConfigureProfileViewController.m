@@ -160,6 +160,11 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     return EOABaseNavbarStyleLargeTitle;
 }
 
+- (UITableViewStyle)tableStyle
+{
+    return UITableViewStyleInsetGrouped;
+}
+
 #pragma mark - Table data
 
 - (void)generateData

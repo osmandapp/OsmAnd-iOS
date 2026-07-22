@@ -67,6 +67,11 @@
     return OALocalizedString(@"general_settings_2");
 }
 
+- (UITableViewStyle)tableStyle
+{
+    return UITableViewStyleInsetGrouped;
+}
+
 #pragma mark - Table data
 
 - (void)generateData

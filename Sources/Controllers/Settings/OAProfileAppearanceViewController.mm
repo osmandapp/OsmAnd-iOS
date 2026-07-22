@@ -669,6 +669,11 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 #pragma mark - Table View
 
+- (UITableViewStyle)tableStyle
+{
+    return UITableViewStyleInsetGrouped;
+}
+
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [_data sectionCount];

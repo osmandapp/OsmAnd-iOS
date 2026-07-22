@@ -29,6 +29,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) contentHeightChanged;
 - (void) contentChanged;
 - (void) addressLabelUpdated;
+- (void)refreshTargetPointHeader;
 
 - (void) btnOkPressed;
 - (void) btnCancelPressed;

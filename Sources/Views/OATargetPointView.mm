@@ -887,7 +887,7 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         }
         
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             
             self.frame = frame;
             
@@ -2366,6 +2366,11 @@ static const NSInteger _buttonsCount = 4;
 - (void) addressLabelUpdated
 {
     [self updateAddressLabel];
+}
+
+- (void)refreshTargetPointHeader
+{
+    [self applyTargetObjectChanges];
 }
 
 - (CGPoint) applyMode:(BOOL)applyOffset

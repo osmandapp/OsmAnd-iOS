@@ -10,6 +10,8 @@
 
 @class MapButtonState, OASButtonPositionSize, ButtonAppearanceParams;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAHudButton : UIButton
 
 @property (nonatomic) UIColor *unpressedColorDay;
@@ -34,7 +36,9 @@
 - (void)setUseCustomPosition:(BOOL)useCustomPosition;
 - (void)setUseDefaultAppearance:(BOOL)useDefaultAppearance;
 - (void)savePosition;
-- (void)setCustomAppearanceParams:(ButtonAppearanceParams *_Nullable)appearanceParams;
+- (void)setCustomAppearanceParams:(nullable ButtonAppearanceParams *)appearanceParams;
 - (nullable OASButtonPositionSize *)getDefaultPositionSize;
 
 @end
+
+NS_ASSUME_NONNULL_END

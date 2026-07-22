@@ -146,7 +146,7 @@ static int DEFAULT_ELO = 900;
 - (void) copyAdditionalInfo:(OAPOI *)amenity overwrite:(BOOL)overwrite;
 - (void) copyAdditionalInfoWithMap:(MutableOrderedDictionary<NSString *,NSString *> *)map overwrite:(BOOL)overwrite;
 
-- (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
+- (NSString *)getContentLanguage:(NSString *)tag lang:(nullable NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (nullable NSString *)getTagContent:(NSString *)tag;
 - (nullable NSString *)getTagContent:(NSString *)tag lang:(nullable NSString *)lang;

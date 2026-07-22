@@ -1807,7 +1807,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 {
 }
 
-- (NSString *)toStringValue:(OAApplicationMode *)mode
+- (NSString *)toStringValue:(nullable OAApplicationMode *)mode
 {
     return @"";
 }
@@ -2144,7 +2144,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @implementation OACommonString
 
-+ (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
++ (instancetype) withKey:(NSString *)key defValue:(nullable NSString *)defValue
 {
     OACommonString *obj = [[OACommonString alloc] init];
     if (obj)
@@ -2169,12 +2169,12 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return self.defValue;
 }
 
-- (void) set:(NSString *)string
+- (void) set:(nullable NSString *)string
 {
     [self set:string mode:self.appMode];
 }
 
-- (void) set:(NSString *)string mode:(OAApplicationMode *)mode
+- (void) set:(nullable NSString *)string mode:(OAApplicationMode *)mode
 {
     [self setValue:string mode:mode];
 }
@@ -2493,13 +2493,13 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OACommonMapSource ()
 
-@property (nonatomic) OAMapSource *defValue;
+@property (nonatomic, nullable) OAMapSource *defValue;
 
 @end
 
 @implementation OACommonMapSource
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
++ (instancetype) withKey:(NSString *)key defValue:(nullable OAMapSource *)defValue
 {
     OACommonMapSource *obj = [[OACommonMapSource alloc] init];
     if (obj)
@@ -2510,23 +2510,23 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
-- (OAMapSource *) get
+- (nullable OAMapSource *) get
 {
     return [self get:self.appMode];
 }
 
-- (OAMapSource *) get:(OAApplicationMode *)mode
+- (nullable OAMapSource *) get:(OAApplicationMode *)mode
 {
     NSObject *val = [self getValue:mode];
     return val ? [OAMapSource fromDictionary:(NSDictionary *)val] : self.defValue;
 }
 
-- (void) set:(OAMapSource *)mapSource
+- (void) set:(nullable OAMapSource *)mapSource
 {
     [self set:mapSource mode:self.appMode];
 }
 
-- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+- (void) set:(nullable OAMapSource *)mapSource mode:(OAApplicationMode *)mode
 {
     [self setValue:[mapSource toDictionary] mode:mode];
 }

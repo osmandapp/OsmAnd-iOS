@@ -36,8 +36,7 @@ final class AstroVisibilityGraphView: UIView {
         static let xLabelToGraphGap: CGFloat = 2
         static let labelEdgeMin: CGFloat = 0
 
-        static let sunIconSize: CGFloat = 12
-        static let sunIconRaise: CGFloat = 2
+        static let sunIconSize: CGFloat = 10
 
         static let cursorLineStroke: CGFloat = 2
         static let cursorSideOffset: CGFloat = 2
@@ -270,9 +269,9 @@ final class AstroVisibilityGraphView: UIView {
         guard !crossings.isEmpty else {
             return
         }
-        let y = yForAltitude(0.0, area: area) - Constants.sunIconRaise
+        let y = yForAltitude(0.0, area: area)
         for crossing in crossings {
-            let imageName = crossing.type == .sunrise ? "sunrise.fill" : "sunset.fill"
+            let imageName = crossing.type == .sunrise ? "arrowtriangle.up.fill" : "arrowtriangle.down.fill"
             guard let image = UIImage(systemName: imageName)?.withTintColor(.white) else {
                 continue
             }

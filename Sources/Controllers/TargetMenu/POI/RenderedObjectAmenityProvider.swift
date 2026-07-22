@@ -107,7 +107,7 @@ final class RenderedObjectAmenityProvider: NSObject {
         return cachedNameStr ?? ""
     }
     
-    func actualContentFromIconRes() -> String? {
+    private func actualContentFromIconRes() -> String? {
         guard let content = renderedObject?.iconRes, !content.isEmpty else { return nil }
         if content == "osmand_steps" {
             return "highway_steps"
@@ -115,7 +115,7 @@ final class RenderedObjectAmenityProvider: NSObject {
         return content
     }
 
-    func searchObjectNameByIconRes() -> String? {
+    private func searchObjectNameByIconRes() -> String? {
         guard let content = actualContentFromIconRes() else { return nil }
         let poiTranslator = OAPOIHelper.sharedInstance()
         let parts = content.split(separator: "_").map(String.init)

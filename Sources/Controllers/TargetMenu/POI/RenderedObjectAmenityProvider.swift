@@ -147,14 +147,21 @@ final class RenderedObjectAmenityProvider: NSObject {
             }
         }()
         
-        let byTags = amenity.flatMap { searchObjectTypeByAmenityTags($0) }
-        let byIcon = searchObjectNameByIconRes()
-        let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
-        let byRaw = searchObjectNameByRawTags(
-            tags: renderedObject.tags as? [String: String],
-            additionalInfoKeys: additionalInfoKeys
-        )
-        cachedTypeStr = [byTags, byIcon, byRaw].compactMap { $0 }.first { !$0.isEmpty }
+        if let amenity {
+            cachedTypeStr = searchObjectTypeByAmenityTags(amenity)
+        }
+        
+        if cachedTypeStr?.isEmpty ?? true {
+            cachedTypeStr = searchObjectNameByIconRes()
+        }
+        
+        if cachedTypeStr?.isEmpty ?? true {
+            let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
+            cachedTypeStr = searchObjectNameByRawTags(
+                tags: renderedObject.tags as? [String: String],
+                additionalInfoKeys: additionalInfoKeys
+            )
+        }
         
         return cachedTypeStr
     }

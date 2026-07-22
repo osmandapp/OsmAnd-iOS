@@ -940,10 +940,10 @@ final class StarMapSearchViewController: UIViewController {
             if queryLower.isEmpty {
                 return true
             }
-            let displayNameNormilized = entry.displayName.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
-            let descriptionNormilized = (entry.description ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            let normalizedDisplayName = entry.displayName.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            let normalizedDescription = (entry.description ?? "").folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
             
-            return displayNameNormilized.contains(queryLower) || descriptionNormilized.contains(queryLower)
+            return normalizedDisplayName.contains(queryLower) || normalizedDescription.contains(queryLower)
         }
         switch stateSnapshot.sortMode {
         case .NAME_DESC:

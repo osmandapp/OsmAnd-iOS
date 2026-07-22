@@ -609,8 +609,8 @@ final class StarMapMyDataViewController: UIViewController {
         emptyView.isHidden = !shouldShowEmptyState
         
         if !emptyView.isHidden {
-            let height = searchRecycler.tableHeaderView == nil ? Layout.smallPadding : sortFilterChipsView.frame.height + Layout.contentPadding
-            emptyTopConstraint?.constant = height
+            let headerHeight = searchRecycler.tableHeaderView?.frame.height ?? 0
+            emptyTopConstraint?.constant = headerHeight == 0 ? Layout.smallPadding : headerHeight + Layout.contentPadding
             emptyView.layoutIfNeeded()
         }
     }

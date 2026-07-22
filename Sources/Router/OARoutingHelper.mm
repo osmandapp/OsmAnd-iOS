@@ -153,12 +153,12 @@ static BOOL _isDeviatedFromRoute = false;
     return _voiceRouter;
 }
 
-- (NSString *) getLastRouteCalcError
+- (nullable NSString *) getLastRouteCalcError
 {
     return _recalcHelper.lastRouteCalcError;
 }
 
-- (NSString *) getLastRouteCalcErrorShort
+- (nullable NSString *) getLastRouteCalcErrorShort
 {
     return _recalcHelper.lastRouteCalcErrorShort;
 }
@@ -966,7 +966,7 @@ static BOOL _isDeviatedFromRoute = false;
     return _isDeviatedFromRoute;
 }
 
-- (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints
+- (void) clearCurrentRoute:(nullable CLLocation *)newFinalLocation newIntermediatePoints:(nullable NSArray<CLLocation *> *)newIntermediatePoints
 {
     @synchronized (self)
     {
@@ -1053,27 +1053,27 @@ static BOOL _isDeviatedFromRoute = false;
 	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
 }
 
-- (CLLocation *) getLastProjection
+- (nullable CLLocation *) getLastProjection
 {
     return _lastProjection;
 }
 
-- (CLLocation *) getLastFixedLocation
+- (nullable CLLocation *) getLastFixedLocation
 {
     return _lastFixedLocation;
 }
 
-- (OAGPXRouteParamsBuilder *) getCurrentGPXRoute
+- (nullable OAGPXRouteParamsBuilder *) getCurrentGPXRoute
 {
     return _currentGPXRoute;
 }
 
-- (void) setGpxParams:(OAGPXRouteParamsBuilder *)params
+- (void) setGpxParams:(nullable OAGPXRouteParamsBuilder *)params
 {
     _currentGPXRoute = params;
 }
 
-- (CLLocation *) getFinalLocation
+- (nullable CLLocation *) getFinalLocation
 {
     return _finalLocation;
 }

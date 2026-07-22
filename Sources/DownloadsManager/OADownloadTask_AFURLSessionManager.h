@@ -10,7 +10,7 @@
 
 #import "OADownloadTask.h"
 
-#import <AFURLSessionManager.h>
+#import <AFNetworking/AFURLSessionManager.h>
 
 @class OADownloadsManager;
 

@@ -127,7 +127,7 @@
 }
 
 // constructor for user defined filters
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
+- (instancetype)initWithName:(NSString *)nm filterId:(nullable NSString *)fId acceptedTypes:(nullable NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
 {
     self = [self init];
     if (self)
@@ -916,7 +916,7 @@
     return [self getIconId];
 }
 
-- (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher
+- (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(nullable OAResultMatcher<OAPOI *> *)matcher
 {
     OAAmenityNameFilter *nm = [self getNameFilter:self.filterByName];
     return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {

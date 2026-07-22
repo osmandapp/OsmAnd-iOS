@@ -24,13 +24,10 @@
 #import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
-#import <CocoaSecurity.h>
 #import <sys/utsname.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAEmissionHelper.h"
-
-#include <CommonCrypto/CommonDigest.h>
 
 static NSInteger const kBlurViewTag = -999;
 static NSInteger const kSpinnerViewTag = -998;
@@ -2505,8 +2502,8 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText
                                isBigTitle:(BOOL)isBigTitle
-                            rightIconName:(NSString *)iconName
-                                tintColor:(UIColor *)tintColor
+                            rightIconName:(nullable NSString *)iconName
+                                tintColor:(nullable UIColor *)tintColor
                           parentViewWidth:(CGFloat)parentViewWidth
 {
     CGFloat topOffset = isBigTitle ? 5. : kPaddingOnSideOfContent;
@@ -2518,8 +2515,8 @@ static const double d180PI = 180.0 / M_PI_2;
                                isBigTitle:(BOOL)isBigTitle
                                 topOffset:(CGFloat)topOffset
                              bottomOffset:(CGFloat)bottomOffset
-                            rightIconName:(NSString *)iconName
-                                tintColor:(UIColor *)tintColor
+                            rightIconName:(nullable NSString *)iconName
+                                tintColor:(nullable UIColor *)tintColor
                           parentViewWidth:(CGFloat)parentViewWidth
 {
     CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
@@ -2672,12 +2669,12 @@ static const double d180PI = 180.0 / M_PI_2;
     return [self.class getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing fontSize:fontSize highlightColor:nil];
 }
 
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(nullable UIColor *)highlightColor
 {
     return [self getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing fontSize:fontSize boldFontSize:0 boldColor:highlightColor mainColor:nil];
 }
 
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(UIColor *)boldColor mainColor:(UIColor *)mainColor
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize boldFontSize:(CGFloat)boldFontSize boldColor:(nullable UIColor *)boldColor mainColor:(nullable UIColor *)mainColor
 {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:lineSpacing];
@@ -2936,39 +2933,7 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSString*) fileMD5:(NSString*)path
 {
-    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:path];
-    if( handle== nil )
-        return @""; // file didnt exist
-
-    CC_MD5_CTX md5;
-
-    CC_MD5_Init(&md5);
-
-    BOOL done = NO;
-    while(!done)
-    {
-        NSData* fileData = [handle readDataOfLength:1000000]; // 1 mb chunk
-        CC_MD5_Update(&md5, [fileData bytes], [fileData length]);
-        if( [fileData length] == 0 )
-            done = YES;
-    }
-    unsigned char digest[CC_MD5_DIGEST_LENGTH];
-    CC_MD5_Final(digest, &md5);
-    NSString* s = [NSString stringWithFormat: @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-                   digest[0], digest[1],
-                   digest[2], digest[3],
-                   digest[4], digest[5],
-                   digest[6], digest[7],
-                   digest[8], digest[9],
-                   digest[10], digest[11],
-                   digest[12], digest[13],
-                   digest[14], digest[15]];
-    return s;
-}
-
-+ (NSString *) toMD5:(NSString *)text
-{
-    return [CocoaSecurity md5:text].hexLower;
+    return [HashHelper fileMD5Hex:path];
 }
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView

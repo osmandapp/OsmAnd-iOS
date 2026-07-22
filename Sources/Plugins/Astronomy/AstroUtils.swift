@@ -60,17 +60,17 @@ private final class AstroRedFilterOverlayView: UIView {
         super.init(coder: coder)
         commonInit()
     }
-
-    private func commonInit() {
-        isUserInteractionEnabled = false
-        backgroundColor = .red
-        layer.compositingFilter = "multiplyBlendMode"
-    }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = superview?.layer.cornerRadius ?? 0
         layer.masksToBounds = layer.cornerRadius > 0
+    }
+
+    private func commonInit() {
+        isUserInteractionEnabled = false
+        backgroundColor = .mapNightFilter
+        layer.compositingFilter = "multiplyBlendMode"
     }
 }
 
@@ -111,6 +111,17 @@ enum AstroRedFilter {
 }
 
 enum AstroUtils {
+    struct Twilight {
+        let sunrise: Date?
+        let sunset: Date?
+        let civilDawn: Date?
+        let civilDusk: Date?
+        let nauticalDawn: Date?
+        let nauticalDusk: Date?
+        let astroDawn: Date?
+        let astroDusk: Date?
+    }
+    
     private static let customStarLock = NSLock()
 
     static let solarSystemWikidataIds: [String: Body] = [
@@ -125,17 +136,6 @@ enum AstroUtils {
         "Q332": Body.neptune,
         "Q339": Body.pluto
     ]
-
-    struct Twilight {
-        let sunrise: Date?
-        let sunset: Date?
-        let civilDawn: Date?
-        let civilDusk: Date?
-        let nauticalDawn: Date?
-        let nauticalDusk: Date?
-        let astroDawn: Date?
-        let astroDusk: Date?
-    }
 
     static func astronomyTime(from date: Date) -> Time {
         Time.companion.fromMillisecondsSince1970(millis: Int64(date.timeIntervalSince1970 * 1000.0))
@@ -303,19 +303,6 @@ enum AstroUtils {
         return formatter.string(from: date)
     }
 
-    private static func filterRiseSetDate(_ date: Date?, windowStart: Date?, windowEnd: Date?) -> Date? {
-        guard let date else {
-            return nil
-        }
-        if let windowStart, date < windowStart {
-            return nil
-        }
-        if let windowEnd, date > windowEnd {
-            return nil
-        }
-        return date
-    }
-
     static func bodyName(_ body: Body) -> String {
         bodyDisplayName(body)
     }
@@ -352,17 +339,17 @@ enum AstroUtils {
 
     static func color(for body: Body) -> UIColor {
         if body === Body.sun {
-            return UIColor(red: 1.0, green: 0.69, blue: 0.20, alpha: 1.0)
+            return .solarSun
         } else if body === Body.moon {
-            return UIColor(white: 0.88, alpha: 1.0)
+            return .solarMoon
         } else if body === Body.mars {
-            return UIColor(red: 0.95, green: 0.36, blue: 0.22, alpha: 1.0)
+            return .solarMars
         } else if body === Body.jupiter {
-            return UIColor(red: 0.95, green: 0.73, blue: 0.48, alpha: 1.0)
+            return .solarJupiter
         } else if body === Body.saturn {
-            return UIColor(red: 0.95, green: 0.82, blue: 0.52, alpha: 1.0)
+            return .solarSaturn
         } else if body === Body.neptune || body === Body.uranus {
-            return UIColor(red: 0.42, green: 0.73, blue: 1.0, alpha: 1.0)
+            return .solarUranusNeptune
         } else {
             return UIColor(red: 0.87, green: 0.90, blue: 1.0, alpha: 1.0)
         }
@@ -371,16 +358,15 @@ enum AstroUtils {
     static func color(for type: SkyObjectType, magnitude: Double?) -> UIColor {
         switch type {
         case .STAR:
-            let brightness = max(0.45, min(1.0, 1.0 - ((magnitude ?? 2.0) / 8.0)))
-            return UIColor(red: brightness, green: brightness, blue: 1.0, alpha: 1.0)
+            return .starDot
         case .GALAXY, .GALAXY_CLUSTER:
-            return UIColor(red: 0.52, green: 0.74, blue: 1.0, alpha: 1.0)
+            return .deepSkyGalaxyDot
         case .NEBULA:
-            return UIColor(red: 0.85, green: 0.45, blue: 0.95, alpha: 1.0)
+            return .deepSkyNebulaDot
         case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
-            return UIColor(red: 0.50, green: 0.95, blue: 0.78, alpha: 1.0)
+            return .deepSkyClusterDot
         case .BLACK_HOLE:
-            return UIColor(red: 0.95, green: 0.45, blue: 0.35, alpha: 1.0)
+            return .deepSkyBlackHoleDot
         case .CONSTELLATION:
             return UIColor(red: 0.80, green: 0.86, blue: 1.0, alpha: 1.0)
         case .SUN, .MOON, .PLANET:
@@ -477,5 +463,18 @@ enum AstroUtils {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)
+    }
+    
+    private static func filterRiseSetDate(_ date: Date?, windowStart: Date?, windowEnd: Date?) -> Date? {
+        guard let date else {
+            return nil
+        }
+        if let windowStart, date < windowStart {
+            return nil
+        }
+        if let windowEnd, date > windowEnd {
+            return nil
+        }
+        return date
     }
 }

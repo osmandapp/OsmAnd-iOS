@@ -35,21 +35,25 @@ final class StarMapARModeHelper {
             self == .magneticNorth
         }
     }
+    
+    private enum CoreMotionErrorCode {
+        static let deviceRequiresMovement = 101
+        static let trueNorthNotAvailable = 102
+    }
 
     private struct Vector3 {
         let x: Double
         let y: Double
         let z: Double
     }
+    
+    private(set) var isArModeEnabled = false
+    private(set) var isRunning = false
+    
+    var onOrientationChanged: ((_ azimuth: Double, _ altitude: Double, _ roll: Double) -> Void)?
+    var onUnavailable: (() -> Void)?
+    var onArModeChanged: ((_ enabled: Bool) -> Void)?
 
-    private enum CoreMotionErrorCode {
-        // CMErrorDeviceRequiresMovement in CoreMotion/CMError.h.
-        static let deviceRequiresMovement = 101
-        // CMErrorTrueNorthNotAvailable in CoreMotion/CMError.h.
-        static let trueNorthNotAvailable = 102
-    }
-
-    private var motionManager: CMMotionManager?
     private let queue = OperationQueue()
     private let minAlpha = 0.03
     private let maxAlpha = 0.3
@@ -59,22 +63,10 @@ final class StarMapARModeHelper {
     private var smoothedAltitude = 45.0
     private var activeReferenceFrame: ReferenceFrame?
     private var geomagneticDeclination: Double?
-
-    var onOrientationChanged: ((_ azimuth: Double, _ altitude: Double, _ roll: Double) -> Void)?
-    var onUnavailable: (() -> Void)?
-    var onArModeChanged: ((_ enabled: Bool) -> Void)?
-    private(set) var isArModeEnabled = false
-    private(set) var isRunning = false
-
+    private var motionManager: CMMotionManager?
+    
     init() {
         queue.maxConcurrentOperationCount = 1
-    }
-
-    deinit {
-        onOrientationChanged = nil
-        onUnavailable = nil
-        onArModeChanged = nil
-        stopMotionUpdates(waitUntilFinished: true)
     }
 
     func onResume() {
@@ -98,18 +90,20 @@ final class StarMapARModeHelper {
         toggleArMode(enable: !isArModeEnabled)
     }
 
-    func toggleArMode(enable: Bool) {
+    @discardableResult func toggleArMode(enable: Bool) -> Bool {
         guard isArModeEnabled != enable else {
-            return
+            return isArModeEnabled
         }
-
         if enable {
-            isArModeEnabled = true
-            if startMotionUpdates() {
-                onArModeChanged?(true)
+            guard startMotionUpdates() else {
+                return false
             }
+            isArModeEnabled = true
+            onArModeChanged?(true)
+            return true
         } else {
             disableArMode()
+            return false
         }
     }
 
@@ -297,5 +291,12 @@ final class StarMapARModeHelper {
             return maxAlpha
         }
         return minAlpha + (absDelta - jitterThresh) * (maxAlpha - minAlpha) / (moveThresh - jitterThresh)
+    }
+    
+    deinit {
+        onOrientationChanged = nil
+        onUnavailable = nil
+        onArModeChanged = nil
+        stopMotionUpdates(waitUntilFinished: true)
     }
 }

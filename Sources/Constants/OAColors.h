@@ -43,11 +43,6 @@
 #define color_dialog_buttons_dark 0xff8800
 #define color_on_map_icon_color 0x505050
 
-#define color_on_map_icon_background_color_tap_light 0xE6E6E6
-#define color_on_map_icon_background_color_tap_dark 0x595959
-
-#define color_on_map_icon_border_color 0x4D4D4D
-
 #define color_sky_day 0x8cbed6
 #define color_sky_night 0x05142e
 

@@ -76,7 +76,10 @@
     for (NSString *originalKey in uploadedFileInfos)
     {
         NSString *decomposedKey = originalKey.decomposedStringWithCanonicalMapping;
-        uploadedFileInfosWithDecomposedNames[decomposedKey] = uploadedFileInfos[originalKey];
+        OAUploadedFileInfo *info = uploadedFileInfos[originalKey];
+        OAUploadedFileInfo *existing = uploadedFileInfosWithDecomposedNames[decomposedKey];
+        if (existing == nil || info.uploadTime > existing.uploadTime)
+            uploadedFileInfosWithDecomposedNames[decomposedKey] = info;
     }
     /*
      operationLog.log("=== localFiles ===");

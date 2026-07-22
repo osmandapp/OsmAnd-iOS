@@ -50,7 +50,10 @@
         _infos = [_dbHelper getUploadedFileInfoMap];
         NSMutableDictionary<NSString *, OAUploadedFileInfo *> *normalized = [NSMutableDictionary dictionaryWithCapacity:_infos.count];
         [_infos enumerateKeysAndObjectsUsingBlock:^(NSString *key, OAUploadedFileInfo *info, BOOL *stop) {
-            normalized[key.decomposedStringWithCanonicalMapping] = info;
+            NSString *decomposedKey = key.decomposedStringWithCanonicalMapping;
+            OAUploadedFileInfo *existing = normalized[decomposedKey];
+            if (existing == nil || info.uploadTime > existing.uploadTime)
+                normalized[decomposedKey] = info;
         }];
         _infos = normalized;
         NSArray<OASettingsItem *> *localItems = [self getLocalItems];

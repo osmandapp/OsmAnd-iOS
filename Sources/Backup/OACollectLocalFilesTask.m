@@ -54,12 +54,23 @@
         CFAbsoluteTime phaseStartTime = CFAbsoluteTimeGetCurrent();
         [_operationLog log:@"COLLECT_LOCAL_DIAG getUploadedFileInfoMap BEGIN"];
         _infos = [_dbHelper getUploadedFileInfoMap];
+
         [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getUploadedFileInfoMap END duration=%.3f ms count=%ld",
                             (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
                             _infos.count]];
 
         phaseStartTime = CFAbsoluteTimeGetCurrent();
         [_operationLog log:@"COLLECT_LOCAL_DIAG getLocalItems BEGIN"];
+
+        NSMutableDictionary<NSString *, OAUploadedFileInfo *> *normalized = [NSMutableDictionary dictionaryWithCapacity:_infos.count];
+        [_infos enumerateKeysAndObjectsUsingBlock:^(NSString *key, OAUploadedFileInfo *info, BOOL *stop) {
+            NSString *decomposedKey = key.decomposedStringWithCanonicalMapping;
+            OAUploadedFileInfo *existing = normalized[decomposedKey];
+            if (existing == nil || info.uploadTime > existing.uploadTime)
+                normalized[decomposedKey] = info;
+        }];
+        _infos = normalized;
+
         NSArray<OASettingsItem *> *localItems = [self getLocalItems];
         [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getLocalItems END duration=%.3f ms count=%ld",
                             (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
@@ -192,9 +203,9 @@
     
     if (_infos != nil)
     {
-        OAUploadedFileInfo *fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName]];
-        if (!fileInfo)
-            fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName.precomposedStringWithCanonicalMapping]];
+        NSString *typeName = [OASettingsItemType typeName:item.type];
+        NSString *key = [NSString stringWithFormat:@"%@___%@", typeName, fileName.decomposedStringWithCanonicalMapping];
+        OAUploadedFileInfo *fileInfo = _infos[key];
         if (fileInfo)
         {
             localFile.uploadTime = fileInfo.uploadTime;

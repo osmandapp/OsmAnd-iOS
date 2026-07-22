@@ -230,7 +230,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         nav.navigationBar.prefersLargeTitles = true
         searchNavigationController = nav
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if OAUtilities.isIPad() {
             showLeftPanel(nav)
             updateMapControlsVisibility()
         } else {

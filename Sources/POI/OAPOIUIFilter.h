@@ -55,7 +55,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
 - (instancetype) initWithBasePoiType:(nullable OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
-- (instancetype) initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
+- (instancetype) initWithName:(NSString *)nm filterId:(nullable NSString *)fId acceptedTypes:(nullable NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype) initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 - (instancetype) initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId;
 - (instancetype) initWithTopIndexFilter:(OATopIndexFilter *)filter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
@@ -92,7 +92,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSString *) getNameToken24H;
 - (NSString *) getNameTokenOpen;
 - (NSObject *) getIconResource;
-- (OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (OAResultMatcher<OAPOI *> *)wrapResultMatcher:(nullable OAResultMatcher<OAPOI *> *)matcher;
 - (OASearchSortType) getDefaultSearchType;
 - (NSString *) getName;
 - (NSString *) getGeneratedName:(int)chars;

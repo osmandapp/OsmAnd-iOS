@@ -287,7 +287,7 @@
 #import <SafariServices/SafariServices.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-// Pods
+// Third-party
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "FFCircularProgressView.h"
 #import "FFCircularProgressView+isSpinning.h"

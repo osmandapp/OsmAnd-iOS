@@ -8,6 +8,8 @@
 
 #import "OABaseNavbarViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol OAEditGroupViewControllerDelegate <NSObject>
 
 @optional
@@ -17,11 +19,13 @@
 
 @interface OAEditGroupViewController : OABaseNavbarViewController<UITextFieldDelegate>
 
-@property (strong, nonatomic) NSString* groupName;
+@property (strong, nonatomic) NSString *groupName;
 @property (nonatomic, readonly) BOOL saveChanges;
 
-@property (nonatomic, weak) id<OAEditGroupViewControllerDelegate> delegate;
+@property (nonatomic, weak, nullable) id<OAEditGroupViewControllerDelegate> delegate;
 
--(instancetype)initWithGroupName:(nullable NSString *)groupName groups:(NSArray *)groups;
+- (nullable instancetype)initWithGroupName:(nullable NSString *)groupName groups:(NSArray *)groups;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -7,11 +7,11 @@
 //
 
 #import "OADownloadsManager.h"
-#import <CocoaSecurity.h>
-#import <AFURLSessionManager.h>
+#import <AFNetworking/AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
 #import "OADownloadTask.h"
 #import "OAUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OALog.h"
 #import "OAObservable.h"
 #import "OAAnalyticsHelper.h"
@@ -570,7 +570,7 @@
 
 + (NSString*)resumeDataFileNameForRequest:(NSURLRequest*)request
 {
-    return [@"resumeData_" stringByAppendingString:[CocoaSecurity md5:request.URL.absoluteString].hexLower];
+    return [@"resumeData_" stringByAppendingString:[HashHelper md5Hex:request.URL.absoluteString]];
 }
 
 - (NSData*)findResumeDataForRequest:(NSURLRequest*)request

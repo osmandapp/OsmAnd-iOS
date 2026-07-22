@@ -69,7 +69,7 @@ final class PreviewImageView: UIView {
             previewImageButton.tintColorNight = mode.getProfileColor()
             previewImageButton.updateColors(forPressedState: false)
         } else if buttonState is DriveModeButtonState {
-            guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+            let routingHelper = OARoutingHelper.sharedInstance()
             let routePlanningMode = routingHelper.isRoutePlanningMode() || ((routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) && !routingHelper.isFollowingMode())
             
             if routingHelper.isFollowingMode() || routePlanningMode {

@@ -940,12 +940,12 @@ typedef enum
     }
 }
 
-- (void) mapSettingsButtonClick:(id)sender
+- (void) mapSettingsButtonClick:(nullable id)sender
 {
     [self mapSettingsButtonClick:sender mode:nil];
 }
 
-- (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode
+- (void) mapSettingsButtonClick:(nullable id)sender mode:(nullable OAApplicationMode *)targetMode
 {
     [OAAnalyticsHelper logEvent:@"configure_map_open"];
     
@@ -1415,7 +1415,7 @@ typedef enum
     [self showContextMenuWithPoints:targetPoints selectedObjects:nil touchPointLatLon:nil];
 }
 
-- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(CLLocation *)touchPointLatLon
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
     if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
         [_scrollableHudViewController forceHide];
@@ -3118,11 +3118,11 @@ typedef enum
 }
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item
-                        items:(NSArray<OASGpxDataItem *> *)items
-                     routeKey:(OARouteKey *)routeKey
+                        items:(nullable NSArray<OASGpxDataItem *> *)items
+                     routeKey:(nullable OARouteKey *)routeKey
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state
-                     analysis:(OASGpxTrackAnalysis *)analysis;
+                     analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
     if (_scrollableHudViewController)
     {
@@ -3138,11 +3138,11 @@ typedef enum
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
-                items:(NSArray<OASGpxDataItem *> *)items
-             routeKey:(OARouteKey *)routeKey
+                items:(nullable NSArray<OASGpxDataItem *> *)items
+             routeKey:(nullable OARouteKey *)routeKey
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
-             analysis:(OASGpxTrackAnalysis *)analysis
+             analysis:(nullable OASGpxTrackAnalysis *)analysis
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 

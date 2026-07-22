@@ -85,8 +85,8 @@ NS_ASSUME_NONNULL_BEGIN
                               timeSpan:(NSInteger)timeSpan
                              wptPoints:(int)wptPoints;
 
-+ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey;
-+ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering;
++ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(nullable OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey;
++ (void)saveAndOpenGpx:(NSString *)name filepath:(NSString *)filepath gpxFile:(OASGpxFile *)gpxFile selectedPoint:(nullable OASWptPt *)selectedPoint analysis:(nullable OASGpxTrackAnalysis *)analysis routeKey:(nullable OARouteKey *)routeKey forceAdjustCentering:(BOOL)forceAdjustCentering;
 
 
 @end

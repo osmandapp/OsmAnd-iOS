@@ -227,7 +227,7 @@
     }];
 }
 
-- (void) removePluginItems:(void(^)(void))onComplete
+- (void) removePluginItems:(nullable void(^)(void))onComplete
 {
     NSString *pluginItemsFile = [self getPluginItemsFile];
     NSFileManager *fileManager = NSFileManager.defaultManager;
@@ -235,7 +235,7 @@
         [self removePluginItemsFromFile:pluginItemsFile onComplete:onComplete];
 }
 
-- (void) removePluginItemsFromFile:(NSString *)file onComplete:(void(^)(void))onComplete
+- (void) removePluginItemsFromFile:(NSString *)file onComplete:(nullable void(^)(void))onComplete
 {
     [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:kVersion onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
             if (succeed && items.count > 0)

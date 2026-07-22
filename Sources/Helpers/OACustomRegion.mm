@@ -16,7 +16,6 @@
 #import "OsmAndApp.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
-#import <TTTColorFormatter.h>
 #import "OAIndexConstants.h"
 
 @interface OADynamicDownloadItems ()
@@ -163,8 +162,7 @@
     
     if (self.headerColor != UIColorFromRGB(color_osmand_orange))
     {
-        TTTColorFormatter *colorFormatter = [[TTTColorFormatter alloc] init];
-        json[@"header-color"] = [colorFormatter hexadecimalStringFromColor:self.headerColor];
+        json[@"header-color"] = self.headerColor.toHexString;
     }
     
     if (self.descriptionInfo)

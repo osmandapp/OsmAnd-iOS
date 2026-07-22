@@ -14,57 +14,57 @@
 {
 }
 
-- (NSString *)getTranslatedItemName:(NSString *)item
+- (nullable NSString *)getTranslatedItemName:(NSString *)item
 {
     return nil;
 }
 
-- (NSString *)getItemName:(id)item
+- (nullable NSString *)getItemName:(id)item
 {
     return nil;
 }
 
-- (NSString *)getAddBtnText
+- (nullable NSString *)getAddBtnText
 {
     return nil;
 }
 
-- (NSString *)getDescrHint
+- (nullable NSString *)getDescrHint
 {
     return nil;
 }
 
-- (NSString *) getDescrTitle
+- (nullable NSString *) getDescrTitle
 {
     return nil;
 }
 
-- (NSString *)getListKey
+- (nullable NSString *)getListKey
 {
     return nil;
 }
 
-- (NSString *)disabledItem
+- (nullable NSString *)disabledItem
 {
     return nil;
 }
 
-- (NSString *)selectedItem
+- (nullable NSString *)selectedItem
 {
     return nil;
 }
 
-- (NSString *)nextSelectedItem
+- (nullable NSString *)nextSelectedItem
 {
     return nil;
 }
 
-- (NSArray *)loadListFromParams
+- (nullable NSArray *)loadListFromParams
 {
     return nil;
 }
 
-- (NSString *)getTitle:(NSArray *)filters
+- (nullable NSString *)getTitle:(NSArray *)filters
 {
     if (filters.count == 0)
         return @"";

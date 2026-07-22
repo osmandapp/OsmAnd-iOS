@@ -534,7 +534,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
     _isFetchingNearestWiki = YES;
     __weak __typeof(self) weakSelf = self;
-    [self fetchNearestPoi:poi filter:wikiFilter accept:acceptByLanguage completion:^(NSArray<OAPOI *> *results) {
+    [self fetchNearestWiki:poi accept:acceptByLanguage completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
@@ -979,6 +979,52 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
                 completion([amenities copy]);
+            }
+        });
+    });
+}
+
+- (void)fetchNearestWiki:(OAPOI *)poi
+                  accept:(BOOL (^)(OAPOI *poi))accept
+              completion:(void(^)(NSArray<OAPOI *> *results))completion
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+
+        NSMutableArray<OAPOI *> *osmwiki = [NSMutableArray new];
+        int radius = kNearbyPoiMinRadius;
+        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+
+        while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+        {
+            osmwiki = [[OAAmenitySearcher findPOIsByTagName:nil
+                                                       name:nil
+                                                   location:locI
+                                               categoryName:OSM_WIKI_CATEGORY
+                                                poiTypeName:nil
+                                                     radius:radius] mutableCopy];
+            [osmwiki removeObject:poi];
+
+            if (accept)
+            {
+                NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
+                for (OAPOI *w in osmwiki)
+                {
+                    if (!accept(w))
+                        [itemsToRemove addObject:w];
+                }
+                [osmwiki removeObjectsInArray:itemsToRemove];
+            }
+
+            radius *= kNearbyPoiSearchFactory;
+        }
+
+        NSArray *sorted = [OAMapUtils sortPOI:osmwiki lat:self.location.latitude lon:self.location.longitude];
+        NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
+        NSArray<OAPOI *> *result = [sorted subarrayWithRange:NSMakeRange(0, finalCount)];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(result);
             }
         });
     });

@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
     EOAEditPointTypeWaypoint
 };
 
-@class OAFavoriteItem, OAGpxWptItem, OAPOI;
+@class OAFavoriteItem, OAGpxWptItem, OAPOI, OASGpxFile;
 @class OATargetMenuViewControllerState;
 
 @protocol OAGpxWptEditingHandlerDelegate <NSObject>
@@ -55,5 +55,13 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi;
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                         address:(NSString *)address
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi
+                     gpxDocument:(OASGpxFile *)gpxDocument;
 
 @end

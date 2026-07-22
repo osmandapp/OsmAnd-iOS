@@ -48,10 +48,16 @@
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
 {
+    return [self initWithLocation:location title:formattedLocation address:address gpxFileName:gpxFileName poi:poi gpxDocument:nil];
+}
+
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi gpxDocument:(OASGpxFile *)gpxDocument
+{
     self = [super init];
     if (self)
     {
         _gpxFileName = gpxFileName;
+        _gpxDocument = gpxDocument;
         UIColor *color = [OADefaultFavorite getDefaultColor];
 
         OAGpxWptItem *wpt = [[OAGpxWptItem alloc] init];
@@ -93,6 +99,9 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    if (_gpxDocument != nil)
+        return;
+
     if (_gpxFileName.length > 0)
     {
         OASKFile *file = [[OASKFile alloc] initWithFilePath:_gpxFileName];
@@ -156,6 +165,17 @@
             [map setObject:categories forKey:title];
         }
     }
+    [_gpxDocument.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString *key, OASGpxUtilitiesPointsGroup *group, BOOL *stop) {
+        NSString *title = key ?: @"";
+        if ((title.length > 0 || withDefaultCategory) && ![map objectForKey:title])
+        {
+            NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
+            categories[@"title"] = title;
+            categories[@"color"] = UIColorFromARGB(group.color).toHexARGBString;
+            categories[@"count"] = @"0";
+            [map setObject:categories forKey:title];
+        }
+    }];
     return map.objectEnumerator.allObjects;
 }
 
@@ -223,6 +243,10 @@
             categories[title] = color;
         }
     }
+    [_gpxDocument.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString *key, OASGpxUtilitiesPointsGroup *group, BOOL *stop) {
+        if (key.length > 0 && categories[key] == nil)
+            categories[key] = UIColorFromARGB(group.color).toHexARGBString;
+    }];
     return categories;
 }
 

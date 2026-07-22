@@ -9,7 +9,6 @@
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "OAGPXRouteRoundCell.h"
@@ -19,9 +18,9 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
-#import "OAMeasurementEditingContext.h"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -151,11 +150,6 @@
     [super onRightButtonPressed];
 }
 
-- (BOOL)isTransportMode:(OAApplicationMode *)mode
-{
-    return [mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -260,11 +254,9 @@
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"create_new_route"])
     {
-        [self hide:YES];
-        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
-        OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
-        editingContext.appMode = [self isTransportMode:mode] ? OAApplicationMode.DEFAULT : mode;
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext]];
+        [self hide:YES completion:^{
+            [PlanRouteScrollableViewController showNewRoute];
+        }];
         return;
     }
     else if ([key isEqualToString:@"open_track"])
@@ -278,9 +270,9 @@
     else if ([key isEqualToString:@"gpx_route"])
     {
         OASGpxDataItem *track = item[@"track"];
-        [self hide:YES];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:
-                [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
+        [self hide:YES completion:^{
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:track.gpxFilePath];
+        }];
         return;
     }
 }
@@ -304,7 +296,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpxFilePath]];
+    [PlanRouteScrollableViewController openExistingTrackWithFilePath:gpxFilePath];
 }
 
 @end

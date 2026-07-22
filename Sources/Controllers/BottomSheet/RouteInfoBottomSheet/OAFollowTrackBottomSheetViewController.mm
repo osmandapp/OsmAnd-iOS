@@ -8,7 +8,6 @@
 
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -25,8 +24,6 @@
 #import "OARouteProvider.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMeasurementEditingContext.h"
-#import "OAGpxData.h"
 #import "OAGPXUIHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
@@ -266,18 +263,10 @@
 {
     if (_gpx)
     {
-        OASGpxFile *mutableGpx = _gpx;
-        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:mutableGpx];
-        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
-        editingContext.gpxData = gpxData;
-        editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
-        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
+        NSString *filePath = _gpx.path;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
-            [[OARootViewController instance].mapPanel showScrollableHudViewController:
-                    [[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext
-                                                                     followTrackMode:YES
-                                                                     showSnapWarning:showSnapWarning]];
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:filePath];
         }];
     }
 }

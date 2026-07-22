@@ -70,8 +70,6 @@
 #import "OAResourcesUIHelper.h"
 #import "OsmAndSharedWrapper.h"
 #import "OASnapTrackWarningViewController.h"
-#import "OAGpxData.h"
-#import "OAMeasurementEditingContext.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -1071,13 +1069,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (_gpx)
     {
-        OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:_gpx];
-        OAMeasurementEditingContext *editingContext = [[OAMeasurementEditingContext alloc] init];
-        editingContext.gpxData = gpxData;
-        editingContext.appMode = OARoutingHelper.sharedInstance.getAppMode;
-        editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
         [[OARootViewController instance].mapPanel closeRouteInfo];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext followTrackMode:YES showSnapWarning:YES]];
+        [PlanRouteScrollableViewController openExistingTrackWithFilePath:_gpx.path];
     }
 }
 

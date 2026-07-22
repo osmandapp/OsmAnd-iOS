@@ -24,6 +24,7 @@
 @property (nonatomic, weak) id<OAMeasurementLayerDelegate> delegate;
 
 @property (nonatomic) CLLocation *pressPointLocation;
+@property (nonatomic) CGPoint cursorScreenPoint;
 
 - (OASWptPt *) addCenterPoint:(BOOL)addPointBefore;
 - (OASWptPt *) addPoint:(BOOL)addPointBefore;

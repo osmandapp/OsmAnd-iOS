@@ -178,6 +178,18 @@
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
 {
+    return [self initWithLocation:location title:formattedTitle address:address customParam:customParam pointType:pointType targetMenuState:targetMenuState poi:poi gpxDocument:nil];
+}
+
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                         address:(NSString *)address
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi
+                     gpxDocument:(OASGpxFile *)gpxDocument
+{
     self = [super init];
     if (self)
     {
@@ -194,7 +206,7 @@
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi gpxDocument:gpxDocument];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }

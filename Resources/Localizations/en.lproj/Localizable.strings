@@ -1098,6 +1098,10 @@
 "poi_search_near_center" = "Search is performed near the center of the map";
 "shared_string_hide" = "Hide";
 "shared_string_show" = "Show";
+"shared_string_copy_from" = "Copy from";
+"add_points" = "Add Points";
+"add_points_description" = "Select places on the map or copy them from your Favorites to see them along your route.";
+"shared_string_new_name" = "New name";
 
 // My Places
 "favorites_item" = "Favorites";
@@ -1641,6 +1645,23 @@
 
 // Route planning
 "plan_route" = "Plan a route";
+"shared_string_undo" = "Undo";
+"shared_string_redo" = "Redo";
+"save_as_copy" = "Save as copy";
+"distance_measurement_clear_route" = "Clear all points";
+"plan_route_save_as" = "Save as…";
+"plan_route_append_to_existing_track" = "Append to existing track";
+"plan_route_change_segment_order" = "Change segment order";
+"plan_route_view_directions" = "View directions";
+"plan_route_no_points_title" = "No points added yet";
+"plan_route_no_points_descr" = "Tap anywhere on the map or use search to add the first points of your route.";
+"shared_string_sort" = "Sort";
+"shared_string_manual" = "Manual";
+"shared_string_point" = "Point";
+"change_mode" = "Change route type";
+"set_single_mode" = "Set single route type";
+"delete_segment" = "Delete segment";
+"delete_section" = "Delete section";
 "coord_input_add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -1703,6 +1724,17 @@
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
 "add_new_folder" = "Add new folder";
+"plan_route_select_segment_hint" = "Select segment or section to change Route type and Settings.";
+"plan_route_change_for_whole_segment" = "Change for whole segment";
+"plan_route_change_for_whole_track" = "Change for whole track";
+"plan_route_section_recalculate_format" = "%1$@ section of %2$@ will be recalculated using the selected profile.";
+"plan_route_segment_recalculate_format" = "%@ will be recalculated using the selected profile.";
+"plan_route_start_new_segment_hint" = "New segment continues with the same route type.";
+"plan_route_straight_line" = "Straight line";
+"plan_route_use_elevation_data" = "Use elevation data";
+"plan_route_avoid_roads" = "Avoid roads";
+"plan_route_consider_temp_limitations" = "Consider temporary limitations";
+"plan_route_navigation_settings" = "Navigation settings";
 "add_folder" = "Add folder";
 "add_smart_folder" = "Add smart folder";
 "save_as_smart_folder" = "Save as smart folder";
@@ -4970,3 +5002,19 @@
 "selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";
 "auto_select_nearest_points" = "Auto-select nearest points";
 "auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";
+
+"no_elevation_data" = "No elevation data";
+"no_elevation_data_description" = "OsmAnd can retrieve elevation data from nearby roads or terrain maps.";
+"get_elevation_data" = "Get elevation data";
+"get_elevation_data_description" = "Select a method to retrieve altitude data from offline maps or terrain maps.";
+"message_graph_will_be_available_after_recalculation" = "Please wait.\nGraph will be available after route recalculation.";
+"plan_route_graph_available_after_recalculation" = "Graph will be available after route recalculation.";
+"use_nearby_roads" = "Use nearby roads";
+"may_adjust_track_geometry" = "May adjust track geometry";
+"use_terrain_maps" = "Use Terrain maps";
+"track_geometry_stays_unchanged" = "Track geometry stays unchanged";
+"route_is_being_calculated" = "Calculating elevation...";
+"calculating_elevation_nearby_roads_description" = "Adjusting track to nearby roads to retrieve altitude data.";
+"calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
+"recalculate_elevation" = "Recalculate elevation";
+"average_speed" = "Avg. speed";

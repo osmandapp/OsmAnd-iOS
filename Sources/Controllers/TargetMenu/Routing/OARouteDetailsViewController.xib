@@ -63,9 +63,6 @@
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" title="Export"/>
-                            <connections>
-                                <action selector="buttonDonePressed:" destination="-1" eventType="touchUpInside" id="pC8-DO-7eF"/>
-                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="groupBg"/>

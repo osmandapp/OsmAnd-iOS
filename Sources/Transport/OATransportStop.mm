@@ -15,9 +15,12 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
+
+static NSString *CONNECTED_STOP_IDS = @"osmand:connected_stop_ids";
 
 
 @interface OATransportStop()
@@ -35,6 +38,7 @@
 
 - (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
 {
+    self = [super init];
     if (self)
     {
         _stop = stop;
@@ -46,6 +50,10 @@
             self.latitude = stop->location.latitude;
             self.longitude = stop->location.longitude;
             self.stopId = stop->id.id;
+            for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(stop->localizedNames)))
+            {
+                self.localizedNames[entry.key().toNSString()] = entry.value().toNSString();
+            }
             
             NSMutableArray<CLLocation *> *extiLocations = [NSMutableArray new];
             const auto stopExits = stop->exits;
@@ -112,6 +120,21 @@
     const auto qLang = QString::fromNSString(lang);
     const auto qName = _stop->getName(qLang, transliterate);
     return qName.toNSString();
+}
+
+- (BOOL)isConnectedToStop:(uint64_t)stopId
+{
+    NSString *connectedStopIds = self.localizedNames[CONNECTED_STOP_IDS];
+    if (connectedStopIds)
+    {
+        NSString *idString = [@(stopId) stringValue];
+        for (NSString *connectedStopId in [connectedStopIds componentsSeparatedByString:@","])
+        {
+            if ([idString isEqualToString:connectedStopId])
+                return YES;
+        }
+    }
+    return NO;
 }
 
 - (BOOL)isEqual:(OATransportStop *)object

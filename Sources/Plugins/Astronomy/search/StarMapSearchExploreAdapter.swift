@@ -42,9 +42,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         static let smallPadding: CGFloat = 8
     }
 
-    var topInsetHeight: CGFloat = .leastNormalMagnitude
-
-    private let onScroll: (UIScrollView) -> Void
     private let onWatchNow: () -> Void
     private let onCategory: (StarMapSearchQuickPresetType) -> Void
     private let onMyData: (StarMapSearchQuickPresetType) -> Void
@@ -55,14 +52,12 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     
     init(tableView: UITableView,
          snapshot: Snapshot,
-         onScroll: @escaping (UIScrollView) -> Void,
          onWatchNow: @escaping () -> Void,
          onCategory: @escaping (StarMapSearchQuickPresetType) -> Void,
          onMyData: @escaping (StarMapSearchQuickPresetType) -> Void,
          onCatalog: @escaping (StarMapCatalogEntry) -> Void,
          onViewAllCatalogs: @escaping () -> Void) {
         self.snapshot = snapshot
-        self.onScroll = onScroll
         self.onWatchNow = onWatchNow
         self.onCategory = onCategory
         self.onMyData = onMyData
@@ -92,7 +87,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return .leastNormalMagnitude
         }
         if section == 0 {
-            return topInsetHeight
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
@@ -107,7 +102,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return .leastNormalMagnitude
         }
         if section == 0 {
-            return topInsetHeight
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
@@ -125,10 +120,8 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         guard snapshot.sections.indices.contains(section) else {
             return nil
         }
-        if section == 0 && topInsetHeight > 1 {
-            let spacer = UIView()
-            spacer.isUserInteractionEnabled = false
-            return spacer
+        if section == 0 {
+            return UIView()
         }
         let sectionKind = snapshot.sections[section].0
         switch sectionKind {
@@ -222,10 +215,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         case .viewAllCatalogs:
             onViewAllCatalogs()
         }
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        onScroll(scrollView)
     }
 
     private func dequeueMenuCell(_ tableView: UITableView) -> StarMapExploreMenuCell {

@@ -8,13 +8,50 @@
 
 import UIKit
 
-@objc(AstronomyPlugin)
-final class AstronomyPlugin: OAPlugin {
-    let dataProvider: AstroDataDbProvider
+@objc final class AstronomyPlugin: OAPlugin {
+    private enum PreferenceId {
+        static let settings = "astronomy_settings"
+        static let legacySettings = "star_watcher_settings"
+        static let recent = "astronomy_recently_viewed"
+    }
+
+    let dataProvider = AstroDataDbProvider()
+    
+    var astroSettings: AstronomyPluginSettings { astronomySettingsStorage }
+    var recentSearchChips: [StarMapRecentChip] = []
+
+    private let settingsPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.settings, defValue: "")
+        .makeProfile()
+        .makeShared()
+
+    private let legacySettingsPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.legacySettings, defValue: "")
+        .makeProfile()
+
+    private let recentPref: OACommonString = OAAppSettings.sharedManager()
+        .registerStringPreference(PreferenceId.recent, defValue: "")
+        .makeGlobal()
+
+    private lazy var astronomySettingsStorage = AstronomyPluginSettings(settingsPref: settingsPref, recentPref: recentPref)
 
     override init() {
-        dataProvider = AstroDataDbProvider()
         super.init()
+        recentSearchChips = astronomySettingsStorage.recentChips()
+    }
+
+    func saveRecentSearchChips() {
+        astronomySettingsStorage.setRecentChips(recentSearchChips)
+    }
+
+    func migrateLegacyStarWatcherSettingsIfNeeded() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            guard legacySettingsPref.isSet(for: appMode), !settingsPref.isSet(for: appMode) else {
+                continue
+            }
+            settingsPref.set(legacySettingsPref.get(appMode), mode: appMode)
+        }
+        astronomySettingsStorage.reloadFromPreference()
     }
 
     override func getId() -> String? {

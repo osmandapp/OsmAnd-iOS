@@ -513,7 +513,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="onx-Gz-iEg">
                             <rect key="frame" x="0.0" y="0.0" width="64" height="42"/>
                             <color key="backgroundColor" white="0.0" alpha="0.80377358490566042" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="ic_navbar_close.png"/>
+                            <state key="normal" image="ic_navbar_close"/>
                             <connections>
                                 <action selector="closePressed:" destination="-1" eventType="touchUpInside" id="qhF-wP-sgx"/>
                             </connections>
@@ -556,7 +556,7 @@
         <image name="ic_custom_routes" width="30" height="30"/>
         <image name="ic_custom_straight_line.png" width="30" height="30"/>
         <image name="ic_custom_undo.png" width="30" height="30"/>
-        <image name="ic_navbar_close.png" width="28" height="28"/>
+        <image name="ic_navbar_close" width="28" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

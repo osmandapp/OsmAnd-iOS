@@ -3371,9 +3371,9 @@
 "offline_wikivoyage" = "Wikivoyage offline";
 "of" = "%d von %d";
 "downloaded_bytes" = "%@ von %@";
-"daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem Gesamtthema der App an – Tagmodus für eine helle Darstellung und Nachtmodus für eine dunkle Darstellung";
-"daynight_mode_day_summary" = "Zeigt die Karte immer in einer hellen Darstellung an, ideal für die Sichtbarkeit bei Tag.";
-"daynight_mode_night_summary" = "Zeigt die Karte immer in einer dunklen Darstellung an, die für nächtliche oder lichtarme Bedingungen geeignet ist.";
+"daynight_mode_app_theme_summary" = "Die Kartendarstellung passt sich dem allgemeinen Design der App an – der Tagmodus für ein helles Design und Nachtmodus für ein dunkles Design";
+"daynight_mode_day_summary" = "Zeigt die Karte stets in einem hellen Design an, ideal für die Sichtbarkeit bei Tageslicht.";
+"daynight_mode_night_summary" = "Zeigt die Karte stets in einem dunklen Design an, das sich für die Nacht oder bei schlechten Lichtverhältnissen eignet.";
 "daynight_mode_sunrise_sunset_summary" = "Schaltet automatisch zwischen Tag- und Nachtmodus um, je nach Sonnenauf- und -untergangszeit vor Ort.";
 "import_export" = "Importieren/exportieren";
 "tracker_item" = "OsmAnd Tracker";

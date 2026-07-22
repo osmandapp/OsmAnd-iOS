@@ -186,14 +186,9 @@
         }
 
         case OATargetRenderedObject:
-        {
-            controller = [[PlaceDetailsViewController alloc] initWithRenderedObject:targetPoint.targetObj];
-            break;
-        }
-
         case OATargetLocation:
         {
-            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            controller = [[PlaceDetailsViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
 

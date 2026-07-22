@@ -519,44 +519,36 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         return;
     }
 
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
+    BOOL (^acceptByLanguage)(OAPOI *) = nil;
+    if (wikiPlugin && ![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
+    {
+        NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
+        NSUInteger enIndex = [languagesToShow indexOfObject:@"en"];
+        if (enIndex != NSNotFound)
+            [languagesToShow replaceObjectAtIndex:enIndex withObject:@""];
+        acceptByLanguage = ^BOOL(OAPOI *w) {
+            return [w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow] != nil;
+        };
+    }
+
     _isFetchingNearestWiki = YES;
     __weak __typeof(self) weakSelf = self;
-    [self fetchNearestPoi:poi filter:wikiFilter completion:^(NSArray<OAPOI *> *results) {
+    [self fetchNearestPoi:poi filter:wikiFilter accept:acceptByLanguage completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
 
-        NSArray<OAPOI *> *filtered = [strongSelf filterNearestWikiByLanguage:results];
-        strongSelf->_nearestWiki = [filtered copy];
+        strongSelf->_nearestWiki = [results copy];
 
         NSMutableArray<OAAmenityInfoRow *> *currentRows = strongSelf->_rows;
-        if (filtered.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_wiki"))
+        if (results.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_wiki"))
         {
             [strongSelf addNearestWikiRowIfNeeded:currentRows poi:poi filter:wikiFilter];
             [strongSelf updateInfoRows];
         }
         strongSelf->_isFetchingNearestWiki = NO;
     }];
-}
-
-- (NSArray<OAPOI *> *)filterNearestWikiByLanguage:(NSArray<OAPOI *> *)items
-{
-    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
-    if (!wikiPlugin || [wikiPlugin isShowAllLanguages] || ![wikiPlugin hasLanguagesFilter])
-        return items;
-
-    NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
-    NSUInteger enIndex = [languagesToShow indexOfObject:@"en"];
-    if (enIndex != NSNotFound)
-        [languagesToShow replaceObjectAtIndex:enIndex withObject:@""];
-
-    NSMutableArray<OAPOI *> *filtered = [NSMutableArray new];
-    for (OAPOI *w in items)
-    {
-        if ([w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
-            [filtered addObject:w];
-    }
-    return filtered;
 }
 
 - (void)buildGetWikipediaBanner:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -599,7 +591,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     }
     _isFetchingNearestPoi = YES;
     __weak __typeof(self) weakSelf = self;
-    [self fetchNearestPoi:poi filter:filter completion:^(NSArray<OAPOI *> *results) {
+    [self fetchNearestPoi:poi filter:filter accept:nil completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
@@ -934,6 +926,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)fetchNearestPoi:(OAPOI *)poi
                  filter:(OAPOIUIFilter *)filter
+                 accept:(BOOL (^)(OAPOI *poi))accept
              completion:(void(^)(NSArray<OAPOI *> *results))completion
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -957,6 +950,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 for (OAPOI *a in found)
                 {
+                    if (accept && !accept(a))
+                        continue;
                     if (![amenities containsObject:a]) {
                         [amenities addObject:a];
                     }

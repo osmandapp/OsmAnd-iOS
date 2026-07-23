@@ -12,10 +12,21 @@ final class EmptyStateCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var descriptionLabel: UILabel!
     
+    private let descriptionLineHeightOffset: CGFloat = 2.0
+    
     func configure(image: UIImage, title: String, description: String) {
         cellImageView.image = image
         cellImageView.tintColor = .iconColorDefault
         titleLabel.text = title
-        descriptionLabel.text = description
+        descriptionLabel.attributedText = attributedDescription(description)
+    }
+
+    private func attributedDescription(_ description: String) -> NSAttributedString {
+        let lineHeight = descriptionLabel.font.lineHeight + descriptionLineHeightOffset
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = descriptionLabel.textAlignment
+        paragraphStyle.minimumLineHeight = lineHeight
+        paragraphStyle.maximumLineHeight = lineHeight
+        return NSAttributedString(string: description, attributes: [.paragraphStyle: paragraphStyle])
     }
 }

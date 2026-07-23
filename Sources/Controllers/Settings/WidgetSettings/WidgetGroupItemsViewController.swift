@@ -112,8 +112,4 @@ extension WidgetGroupItemsViewController {
         attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
 }

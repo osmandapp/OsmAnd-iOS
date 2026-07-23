@@ -48,11 +48,6 @@
     return EOABaseNavbarStyleLargeTitle;
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)generateData

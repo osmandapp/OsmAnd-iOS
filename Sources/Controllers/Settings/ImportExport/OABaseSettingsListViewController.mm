@@ -93,11 +93,6 @@
     return [self hasSelection] ? EOABaseButtonColorSchemePurple : EOABaseButtonColorSchemeInactive;
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)generateData

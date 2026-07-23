@@ -50,10 +50,6 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
     override func isNavbarSeparatorVisible() -> Bool {
         false
     }
-    
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
 
     // MARK: - Table Data
 

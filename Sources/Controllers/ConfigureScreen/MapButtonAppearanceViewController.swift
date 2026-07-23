@@ -113,10 +113,6 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
         addCell(OAIconsPaletteCell.reuseIdentifier)
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func generateData() {
         guard let appearanceParams else { return }
         tableData.clearAllData()

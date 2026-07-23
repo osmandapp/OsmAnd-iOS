@@ -265,10 +265,6 @@ extension WidgetGroupListViewController {
     override func getLeftNavbarButtonTitle() -> String! {
         localizedString("shared_string_cancel")
     }
-    
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
 }
 
 // MARK: TableView

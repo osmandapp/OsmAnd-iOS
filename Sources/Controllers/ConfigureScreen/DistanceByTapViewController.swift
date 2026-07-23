@@ -36,10 +36,6 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         addCell(OAButtonTableViewCell.reuseIdentifier)
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func generateData() {
         tableData.clearAllData()
         

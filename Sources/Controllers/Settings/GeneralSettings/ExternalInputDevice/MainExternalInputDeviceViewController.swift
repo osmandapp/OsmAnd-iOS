@@ -38,10 +38,6 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
         addCell(KeyAssignmentTableViewCell.reuseIdentifier)
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func getTitle() -> String? {
         localizedString(isEditMode ? "shared_string_edit" : "external_input_device")
     }

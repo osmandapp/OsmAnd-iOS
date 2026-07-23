@@ -86,10 +86,6 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         return segmentedControl
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     @objc private func segmentedControlValueChanged(_ control: UISegmentedControl) {
         widgetPanel = panels[control.selectedSegmentIndex]
     }

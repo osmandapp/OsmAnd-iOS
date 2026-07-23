@@ -184,11 +184,6 @@
     return [self sectionsCount] == 0 || self.tableView.indexPathsForSelectedRows.count == 0 ? EOABaseButtonColorSchemeInactive : EOABaseButtonColorSchemeGrayAttn;
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)generateData

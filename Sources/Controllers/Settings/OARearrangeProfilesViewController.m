@@ -93,11 +93,6 @@
     return OALocalizedString(@"rearrange_profile_descr");
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - UIViewController
 
 - (void) viewDidLoad

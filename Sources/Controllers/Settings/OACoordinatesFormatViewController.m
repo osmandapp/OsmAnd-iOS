@@ -55,11 +55,6 @@
     return OALocalizedString(@"shared_string_cancel");
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)generateData

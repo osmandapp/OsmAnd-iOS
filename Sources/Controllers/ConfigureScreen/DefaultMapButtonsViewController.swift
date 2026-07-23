@@ -75,10 +75,6 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
         return buttons
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     // MARK: Table data
     
     override func generateData() {

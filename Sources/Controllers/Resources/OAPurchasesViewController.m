@@ -97,11 +97,6 @@ static BOOL _purchasesUpdated;
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)createStartFreeSubscription

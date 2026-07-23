@@ -109,11 +109,6 @@
     return OALocalizedString(@"shared_string_close");
 }
 
-- (UITableViewStyle)tableStyle
-{
-    return UITableViewStyleInsetGrouped;
-}
-
 #pragma mark - Table data
 
 - (void)registerCells

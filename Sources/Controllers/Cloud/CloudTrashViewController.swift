@@ -85,10 +85,6 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     override func getNavbarColorScheme() -> EOABaseNavbarColorScheme {
         .orange
     }
-    
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
 
     // MARK: - Table data
 

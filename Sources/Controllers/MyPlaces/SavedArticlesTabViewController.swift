@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable {
+final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable, MyPlacesScrollResettable {
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
@@ -75,6 +75,11 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     override func isNavbarVisible() -> Bool {
         true
+    }
+
+    func resetScrollPosition() {
+        tableView.layoutIfNeeded()
+        tableView.setContentOffset(CGPoint(x: tableView.contentOffset.x, y: -tableView.adjustedContentInset.top), animated: false)
     }
     
     func startAsyncInit() {

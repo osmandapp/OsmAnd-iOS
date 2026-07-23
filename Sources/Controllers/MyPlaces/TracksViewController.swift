@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OrganizeTracksByDelegate, OrganizeByStepSizeDelegate {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, MyPlacesScrollResettable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OrganizeTracksByDelegate, OrganizeByStepSizeDelegate {
     
     fileprivate var shouldReload = false
     
@@ -247,6 +247,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     func setFolderToOpenAfterLoad(_ selectedFolderPath: String) {
         folderPathToOpenAfterLoad = selectedFolderPath
+    }
+
+    func resetScrollPosition() {
+        tableView.layoutIfNeeded()
+        tableView.setContentOffset(CGPoint(x: tableView.contentOffset.x, y: -tableView.adjustedContentInset.top), animated: false)
     }
     
     func navigateToSubfolder(_ absolutePath: String?) {

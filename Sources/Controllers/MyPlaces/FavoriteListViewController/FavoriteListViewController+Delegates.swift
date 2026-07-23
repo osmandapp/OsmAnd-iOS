@@ -177,7 +177,6 @@ extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
         OAFavoritesBridgeHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
         updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
         setEditing(false)
-        applySnapshot(animatingDifferences: true)
     }
 }
 
@@ -211,7 +210,6 @@ extension FavoriteListViewController: OAEditorDelegate {
         favoriteGroupAppearanceGroupName = nil
         favoriteGroupAppearanceEditor = nil
         OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
-        applySnapshot(animatingDifferences: true)
     }
 
     func selectColorItem(_ colorItem: PaletteItemSolid) {}

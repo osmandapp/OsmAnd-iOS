@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-final class FavoriteListViewController: UIViewController {
+final class FavoriteListViewController: UIViewController, MyPlacesScrollResettable {
     typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
     typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
@@ -44,6 +44,7 @@ final class FavoriteListViewController: UIViewController {
     var headingUpdateObserver: OAAutoObserverProxy?
     var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
+    var savedScrollPosition: (linearIndex: Int, offsetY: CGFloat)?
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -145,7 +146,7 @@ final class FavoriteListViewController: UIViewController {
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
         configureToolbar()
-        applySnapshot()
+        applySnapshot(shouldSaveScrollPosition: false)
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
         if isRootFolder {
@@ -155,6 +156,7 @@ final class FavoriteListViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         unregisterDistanceAndDirectionObservers()
+        saveScrollPosition()
         if !isRootFolder {
             navigationItem.searchController = nil
             navigationController?.setNavigationBarHidden(true, animated: false)
@@ -300,6 +302,50 @@ final class FavoriteListViewController: UIViewController {
         }
     }
     
+    func resetScrollPosition() {
+        savedScrollPosition = nil
+        collectionView.layoutIfNeeded()
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: -collectionView.adjustedContentInset.top), animated: false)
+    }
+
+    func saveScrollPosition() {
+        guard !isSearchResultsMode else { return }
+        savedScrollPosition = currentScrollPosition()
+    }
+
+    private func currentScrollPosition() -> (linearIndex: Int, offsetY: CGFloat)? {
+        let topY = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        let visibleItems = collectionView.indexPathsForVisibleItems.compactMap { indexPath -> (indexPath: IndexPath, minY: CGFloat, maxY: CGFloat)? in
+            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return nil }
+            return (indexPath: indexPath, minY: attributes.frame.minY, maxY: attributes.frame.maxY)
+        }
+
+        let topEdgeItems = visibleItems.filter { $0.minY <= topY && $0.maxY > topY }
+        let candidates = topEdgeItems.isEmpty ? visibleItems.filter { $0.maxY > topY } : topEdgeItems
+        guard let anchor = (candidates.isEmpty ? visibleItems : candidates).min(by: { lhs, rhs in
+            let lhsDistance = abs(lhs.minY - topY)
+            let rhsDistance = abs(rhs.minY - topY)
+            if lhsDistance == rhsDistance {
+                return lhs.minY < rhs.minY
+            }
+
+            return lhsDistance < rhsDistance
+        }) else {
+            return nil
+        }
+
+        return (linearIndex: linearIndex(for: anchor.indexPath),
+                offsetY: max(0.0, topY - anchor.minY))
+    }
+
+    private func linearIndex(for indexPath: IndexPath) -> Int {
+        guard indexPath.section < collectionView.numberOfSections else { return 0 }
+        let previousItemsCount = (0..<indexPath.section).reduce(0) { result, section in
+            result + collectionView.numberOfItems(inSection: section)
+        }
+        return previousItemsCount + indexPath.item
+    }
+
     private func registerDistanceAndDirectionObservers() {
         unregisterDistanceAndDirectionObservers()
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()

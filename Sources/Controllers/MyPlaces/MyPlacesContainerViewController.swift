@@ -6,7 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@objc
 protocol MyPlacesDelegate: AnyObject {
     func showBackButton(_ show: Bool)
     func updateSegmentedControlVisibility(_ isVisible: Bool)
@@ -22,6 +21,10 @@ protocol MyPlacesDelegate: AnyObject {
 protocol MyPlacesSearchable: AnyObject {
     func searchResults(for searchController: UISearchController)
     @objc optional func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+}
+
+protocol MyPlacesScrollResettable: AnyObject {
+    func resetScrollPosition()
 }
 
 @objcMembers
@@ -252,8 +255,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func switchTo(tab: Tab) {
+        let previousTab = selectedTab
         selectedTab = availableTabs.first(where: { $0 == tab }) ?? .default
         if let viewController = viewController(for: selectedTab) {
+            if previousTab != selectedTab {
+                (viewController as? MyPlacesScrollResettable)?.resetScrollPosition()
+            }
             pageViewController?.setViewControllers([viewController], direction: .forward, animated: true)
         }
         DispatchQueue.main.async {
@@ -300,6 +307,7 @@ extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
             return
         }
         
+        (viewController as? MyPlacesScrollResettable)?.resetScrollPosition()
         segmentControl.selectedSegmentIndex = index
         setupNavbarTitle(with: availableTabs[index])
     }

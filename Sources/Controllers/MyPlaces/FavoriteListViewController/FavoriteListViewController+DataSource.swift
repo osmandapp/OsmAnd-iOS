@@ -126,12 +126,21 @@ extension FavoriteListViewController {
         return dataSource
     }
 
-    func applySnapshot(animatingDifferences: Bool = false) {
+    func applySnapshot(animatingDifferences: Bool = false, shouldSaveScrollPosition: Bool = true) {
+        if shouldSaveScrollPosition && savedScrollPosition == nil {
+            saveScrollPosition()
+        }
+
+        let shouldAnimateDifferences = shouldSaveScrollPosition ? false : animatingDifferences
         switch screenMode {
         case .root:
-            applyRootSnapshot(animatingDifferences: animatingDifferences)
+            applyRootSnapshot(animatingDifferences: shouldAnimateDifferences)
         case .folder(let folder, _):
-            applyFolderSnapshot(folder: folder, animatingDifferences: animatingDifferences)
+            applyFolderSnapshot(folder: folder, animatingDifferences: shouldAnimateDifferences)
+        }
+
+        if savedScrollPosition != nil {
+            restoreScrollPositionIfNeeded()
         }
     }
     
@@ -164,7 +173,49 @@ extension FavoriteListViewController {
             subfolderSearchController.searchBar.text = ""
         }
     }
-    
+
+    private func restoreScrollPositionIfNeeded() {
+        guard !isSearchResultsMode, let savedScrollPosition else { return }
+        self.savedScrollPosition = nil
+
+        collectionView.layoutIfNeeded()
+
+        guard let indexPath = indexPath(for: savedScrollPosition.linearIndex) else { return }
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+
+        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { return }
+        let minY = -collectionView.adjustedContentInset.top
+        let offsetY = max(minY, attributes.frame.minY + savedScrollPosition.offsetY - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: offsetY), animated: false)
+    }
+
+    private func indexPath(for linearIndex: Int) -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        var remainingIndex = max(0, linearIndex)
+        for section in 0..<collectionView.numberOfSections {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if remainingIndex < itemCount {
+                return IndexPath(item: remainingIndex, section: section)
+            }
+
+            remainingIndex -= itemCount
+        }
+
+        return lastIndexPath()
+    }
+
+    private func lastIndexPath() -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        for section in stride(from: collectionView.numberOfSections - 1, through: 0, by: -1) {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if itemCount > 0 {
+                return IndexPath(item: itemCount - 1, section: section)
+            }
+        }
+
+        return nil
+    }
+
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
         if isSearchResultsMode {
             settings.searchFavoriteSortMode.set(sortMode.title)
@@ -187,6 +238,12 @@ extension FavoriteListViewController {
         }
     }
     
+    private func updateLayoutSections(_ sections: [FavoriteListSection]) {
+        guard layoutSections != sections else { return }
+        layoutSections = sections
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
         if isSearchResultsMode {
@@ -214,8 +271,7 @@ extension FavoriteListViewController {
             sections.append(.statsFooter)
         }
 
-        layoutSections = sections
-        collectionView.collectionViewLayout.invalidateLayout()
+        updateLayoutSections(sections)
         snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         if isPaymentBannerVisible {
@@ -255,9 +311,9 @@ extension FavoriteListViewController {
         }
         var snapshot = Snapshot()
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
-        layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
@@ -276,19 +332,20 @@ extension FavoriteListViewController {
         }
 
         var snapshot = Snapshot()
-        layoutSections = [.sortHeader, .content]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = [.sortHeader, .content]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
-        snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
+        let favoriteItems = favorites.map(FavoriteListItem.favorite)
+        snapshot.appendItems(favoriteItems, toSection: .content)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
     
     private func applyEmptyStateSnapshot(animatingDifferences: Bool) {
         var snapshot = Snapshot()
-        layoutSections = [.emptyState]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = [.emptyState]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.emptyState])
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }

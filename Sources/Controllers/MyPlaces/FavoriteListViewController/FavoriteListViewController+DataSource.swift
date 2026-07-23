@@ -139,8 +139,9 @@ extension FavoriteListViewController {
             applyFolderSnapshot(folder: folder, animatingDifferences: shouldAnimateDifferences)
         }
 
-        if savedScrollPosition != nil {
-            restoreScrollPositionIfNeeded()
+        if !isSearchResultsMode, savedScrollPosition != nil {
+            shouldRestoreScrollPosition = true
+            view.setNeedsLayout()
         }
     }
     
@@ -172,48 +173,6 @@ extension FavoriteListViewController {
         } else {
             subfolderSearchController.searchBar.text = ""
         }
-    }
-
-    private func restoreScrollPositionIfNeeded() {
-        guard !isSearchResultsMode, let savedScrollPosition else { return }
-        self.savedScrollPosition = nil
-
-        collectionView.layoutIfNeeded()
-
-        guard let indexPath = indexPath(for: savedScrollPosition.linearIndex) else { return }
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
-
-        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { return }
-        let minY = -collectionView.adjustedContentInset.top
-        let offsetY = max(minY, attributes.frame.minY + savedScrollPosition.offsetY - collectionView.adjustedContentInset.top)
-        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: offsetY), animated: false)
-    }
-
-    private func indexPath(for linearIndex: Int) -> IndexPath? {
-        guard collectionView.numberOfSections > 0 else { return nil }
-        var remainingIndex = max(0, linearIndex)
-        for section in 0..<collectionView.numberOfSections {
-            let itemCount = collectionView.numberOfItems(inSection: section)
-            if remainingIndex < itemCount {
-                return IndexPath(item: remainingIndex, section: section)
-            }
-
-            remainingIndex -= itemCount
-        }
-
-        return lastIndexPath()
-    }
-
-    private func lastIndexPath() -> IndexPath? {
-        guard collectionView.numberOfSections > 0 else { return nil }
-        for section in stride(from: collectionView.numberOfSections - 1, through: 0, by: -1) {
-            let itemCount = collectionView.numberOfItems(inSection: section)
-            if itemCount > 0 {
-                return IndexPath(item: itemCount - 1, section: section)
-            }
-        }
-
-        return nil
     }
 
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {

@@ -45,6 +45,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
     var savedScrollPosition: (linearIndex: Int, offsetY: CGFloat)?
+    var shouldRestoreScrollPosition = false
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -164,6 +165,12 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
         definesPresentationContext = false
         super.viewWillDisappear(animated)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard shouldRestoreScrollPosition else { return }
+        restoreScrollPositionIfNeeded()
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
@@ -304,6 +311,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     
     func resetScrollPosition() {
         savedScrollPosition = nil
+        shouldRestoreScrollPosition = false
         collectionView.layoutIfNeeded()
         collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: -collectionView.adjustedContentInset.top), animated: false)
     }
@@ -344,6 +352,48 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
             result + collectionView.numberOfItems(inSection: section)
         }
         return previousItemsCount + indexPath.item
+    }
+
+    private func restoreScrollPositionIfNeeded() {
+        guard !isSearchResultsMode, let savedScrollPosition else { return }
+        collectionView.layoutIfNeeded()
+
+        guard let indexPath = indexPath(for: savedScrollPosition.linearIndex) else { return }
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+
+        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { return }
+        self.savedScrollPosition = nil
+        shouldRestoreScrollPosition = false
+        let minY = -collectionView.adjustedContentInset.top
+        let offsetY = max(minY, attributes.frame.minY + savedScrollPosition.offsetY - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: offsetY), animated: false)
+    }
+
+    private func indexPath(for linearIndex: Int) -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        var remainingIndex = max(0, linearIndex)
+        for section in 0..<collectionView.numberOfSections {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if remainingIndex < itemCount {
+                return IndexPath(item: remainingIndex, section: section)
+            }
+
+            remainingIndex -= itemCount
+        }
+
+        return lastIndexPath()
+    }
+
+    private func lastIndexPath() -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        for section in stride(from: collectionView.numberOfSections - 1, through: 0, by: -1) {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if itemCount > 0 {
+                return IndexPath(item: itemCount - 1, section: section)
+            }
+        }
+
+        return nil
     }
 
     private func registerDistanceAndDirectionObservers() {

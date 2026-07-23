@@ -84,8 +84,8 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
 
     var subtitle: String {
         let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-        guard let lastModified else { return pointsText + "." }
-        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText) + "."
+        guard let lastModified else { return pointsText }
+        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText)
     }
 
     var iconName: String {

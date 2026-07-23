@@ -222,12 +222,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func setupNavbar(isClearNavBar: Bool = false) {
-        var appearance = navigationController?.navigationBar.scrollEdgeAppearance
-        if appearance == nil {
-            appearance = UINavigationBarAppearance()
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        }
-        navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = isClearNavBar ? .clear : .viewBg
+        let backgroundColor: UIColor = isClearNavBar ? .clear : .viewBg
+        let standardAppearance = navigationController?.navigationBar.standardAppearance as? UINavigationBarAppearance ?? UINavigationBarAppearance()
+        standardAppearance.backgroundColor = backgroundColor
+        navigationController?.navigationBar.standardAppearance = standardAppearance
         safeAreaTopConstraint.isActive = !isClearNavBar
         superviewTopConstraint.isActive = isClearNavBar
     }

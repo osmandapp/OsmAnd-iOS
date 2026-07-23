@@ -486,11 +486,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
             let selectedItems = bridgeItems(for: selectionManager.selectedItems)
-            guard !selectedItems.isEmpty else {
-                setNavigationTitle("", subtitle: "", hideSubtitle: true)
-                return
-            }
-            
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
             let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
             setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)

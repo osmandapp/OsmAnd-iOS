@@ -155,6 +155,7 @@ extension FavoriteListViewController {
                     let unpinnedGroupNames = folders.filter({ !$0.isPinned }).map { $0.groupName }
                     let pinAction = UIAction(title: localizedString("pin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsPinned(unpinnedGroupNames, pinned: true)
+                        self?.setEditing(false)
                         self?.applySnapshot(animatingDifferences: true)
                     }
                     folderMenuElements.append(pinAction)
@@ -164,6 +165,7 @@ extension FavoriteListViewController {
                     let pinnedGroupNames = folders.filter({ $0.isPinned }).map { $0.groupName }
                     let unpinAction = UIAction(title: localizedString("unpin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsPinned(pinnedGroupNames, pinned: false)
+                        self?.setEditing(false)
                         self?.applySnapshot(animatingDifferences: true)
                     }
                     folderMenuElements.append(unpinAction)
@@ -173,6 +175,7 @@ extension FavoriteListViewController {
                     let visibleGroupNames = folders.filter({ $0.isVisible }).map { $0.groupName }
                     let hideAction = UIAction(title: localizedString("shared_string_hide_from_map"), image: .icCustomHideOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsVisible(visibleGroupNames, visible: false)
+                        self?.setEditing(false)
                         self?.applySnapshot(animatingDifferences: true)
                     }
                     folderMenuElements.append(hideAction)
@@ -182,6 +185,7 @@ extension FavoriteListViewController {
                     let hiddenGroupNames = folders.filter({ !$0.isVisible }).map { $0.groupName }
                     let showAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomShowOutlined) { [weak self] _ in
                         OAFavoritesBridgeHelper.setFavoriteGroupsVisible(hiddenGroupNames, visible: true)
+                        self?.setEditing(false)
                         self?.applySnapshot(animatingDifferences: true)
                     }
                     folderMenuElements.append(showAction)

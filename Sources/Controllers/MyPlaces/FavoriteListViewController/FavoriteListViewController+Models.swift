@@ -164,7 +164,7 @@ final class FavoriteListCell: UICollectionViewListCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        attributes.frame.size.height = max(Self.rowHeight, attributes.frame.height)
+        attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
         return attributes
     }
 }

@@ -558,6 +558,19 @@
     [layer updateLayer];
 }
 
+- (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (layer == nil || ctx == nil)
+        return;
+    CLLocation *latLon = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+    [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer coordinate:latLon]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
 - (void)openTrackWithFilePath:(NSString *)filePath
 {
     OAMeasurementToolLayer *layer = [self layer];

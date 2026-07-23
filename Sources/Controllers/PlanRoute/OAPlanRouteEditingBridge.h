@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -79,6 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)dismiss;
 - (void)prepareNewRoute;
+- (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)openTrackWithFilePath:(NSString *)filePath;
 - (void)addCenterPoint;
 - (void)setCrosshairScreenPoint:(CGPoint)point;

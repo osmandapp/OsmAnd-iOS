@@ -217,7 +217,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         navigationController?.setNavigationBarHidden(false, animated: false)
         if !isRootFolder {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
+            appearance.configureWithDefaultBackground()
             navigationController?.navigationBar.standardAppearance = appearance
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
             navigationController?.navigationBar.tintColor = .iconColorActive

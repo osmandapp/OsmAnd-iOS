@@ -4311,10 +4311,10 @@ typedef enum
     
     BOOL hasIntermediatePoints = points.count > 0;
     
+    [[OsmAndApp instance].data clearIntermediatePoints];
+    
     if (hasIntermediatePoints)
     {
-        [[OsmAndApp instance].data clearIntermediatePoints];
-        
         for (CLLocation *point in points)
         {
             [[OsmAndApp instance].data insertIntermediatePoint:[OARTargetPoint create:point name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""]] index:(int)[[OsmAndApp instance].data intermediatePoints].count];

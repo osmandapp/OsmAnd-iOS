@@ -523,6 +523,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
+    [self setupShareMenu];
+    
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 }
@@ -572,6 +574,25 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     button.layer.cornerRadius = 9.;
     [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
     [button setTintColor:color];
+}
+
+- (void)setupShareMenu
+{
+    __weak __typeof(self) weakSelf = self;
+    UIAction *shareFileAction = [UIAction actionWithTitle:OALocalizedString(@"share_as_file")
+                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomFileRouting]
+                                               identifier:nil
+                                                  handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf onShareAsFilePressed];
+    }];
+    UIAction *shareLinkAction = [UIAction actionWithTitle:OALocalizedString(@"share_link")
+                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomLink]
+                                               identifier:nil
+                                                  handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf onShareAsLinkPressed];
+    }];
+    self.doneButton.menu = [UIMenu menuWithTitle:@"" children:@[shareFileAction, shareLinkAction]];
+    self.doneButton.showsMenuAsPrimaryAction = YES;
 }
 
 - (void)refreshContent
@@ -673,7 +694,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"layer_route");
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
+    [self.doneButton setTitle:nil forState:UIControlStateNormal];
+    [self.doneButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomExportOutlined] forState:UIControlStateNormal];
+    self.doneButton.accessibilityLabel = OALocalizedString(@"shared_string_share");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
 }
@@ -843,19 +866,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [OARootViewController.instance.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
-- (IBAction)buttonCancelPressed:(id)sender
-{
-    [[OARootViewController instance].mapPanel showRouteInfo];
-}
-
-- (IBAction)buttonGoPressed:(id)sender
-{
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel hideContextMenu];
-    [mapPanel startNavigation];
-}
-
-- (IBAction)buttonDonePressed:(id)sender
+- (void)onShareAsFilePressed
 {
     OARootViewController *rootVC = [OARootViewController instance];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -874,17 +885,36 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     // save to disk
     [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpxFile];
     NSURL* url = [NSURL fileURLWithPath:path];
-    
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[url]
-                                      applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]]];
-    
-    activityViewController.popoverPresentationController.sourceView = rootVC.view;
-    activityViewController.popoverPresentationController.sourceRect = _doneButton.frame;
-    
-    [rootVC presentViewController:activityViewController
-                                     animated:YES
-                                   completion:nil];
+
+    if (OAUtilities.isIPhone)
+        [rootVC showActivity:@[url] applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]] excludedActivityTypes:nil sourceView:nil sourceRect:CGRectZero barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
+    else
+        [rootVC showActivity:@[url] applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]] excludedActivityTypes:nil sourceView:_doneButton sourceRect:_doneButton.bounds barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
+}
+
+- (void)onShareAsLinkPressed
+{
+    NSString *routeUrl = [RouteDeepLinkBuilder generateRouteUrl];
+    if (routeUrl.length == 0)
+        return;
+
+    OARootViewController *rootVC = [OARootViewController instance];
+    if (OAUtilities.isIPhone)
+        [rootVC showActivity:@[routeUrl] sourceView:nil barButtonItem:nil completionWithItemsHandler:nil];
+    else
+        [rootVC showActivity:@[routeUrl] sourceView:_doneButton barButtonItem:nil completionWithItemsHandler:nil];
+}
+
+- (IBAction)buttonCancelPressed:(id)sender
+{
+    [[OARootViewController instance].mapPanel showRouteInfo];
+}
+
+- (IBAction)buttonGoPressed:(id)sender
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel hideContextMenu];
+    [mapPanel startNavigation];
 }
 
 - (IBAction)cancelPressed:(id)sender

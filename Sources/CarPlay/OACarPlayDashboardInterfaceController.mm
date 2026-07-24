@@ -61,7 +61,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDirections,
     EOACarPlayButtonTypeRouteCalculation,
     EOACarPlayButtonTypeCancelRoute,
-    EOACarPlayButtonType3D
+    EOACarPlayButtonType3D,
+    EOACarPlayButtonTypeSettings
 };
 
 @interface OACarPlayDashboardInterfaceController() <CPMapTemplateDelegate, OARouteInformationListener, OARouteCalculationProgressCallback>
@@ -94,6 +95,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     UIColor *_lightGuidanceBackgroundColor;
     UIColor *_darkGuidanceBackgroundColor;
+    
+    CarPlaySettingsListController *_settingsController;
 }
 
 - (void) commonInit
@@ -149,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPBarButton *panningButton = [self createBarButton:EOACarPlayButtonTypePanMap];
     _mapTemplate.trailingNavigationBarButtons = @[panningButton];
-    _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDirections]];
+    _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings], [self createBarButton:EOACarPlayButtonTypeDirections]];
 
     _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D];
     _mapTemplate.mapButtons = @[_3DModeMapButton, [self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
@@ -457,6 +460,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 [self returnTo3dMode];
                 break;
             }
+            case EOACarPlayButtonTypeSettings:
+            {
+                _settingsController = [[CarPlaySettingsListController alloc] initWithInterfaceController:self.interfaceController];
+                [_settingsController present];
+                break;
+            }
             default:
             {
                 break;
@@ -477,6 +486,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         title = [NSString stringWithFormat:OALocalizedString(@"route_calc_progress"), 0];
     else if (type == EOACarPlayButtonTypeCancelRoute)
         title = OALocalizedString(@"shared_string_cancel");
+    else if (type == EOACarPlayButtonTypeSettings)
+        icon = [UIImage templateImageNamed:ACImageNameIcCustomSettingsOutlined];
 
     return icon ? [[CPBarButton alloc] initWithImage:icon handler:handler] : [[CPBarButton alloc] initWithTitle:title handler:handler];
 }

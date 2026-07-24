@@ -4970,3 +4970,5 @@
 "selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";
 "auto_select_nearest_points" = "Auto-select nearest points";
 "auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";
+
+"carplay_map_mode_vehicle_appearance" = "Vehicle appearance";

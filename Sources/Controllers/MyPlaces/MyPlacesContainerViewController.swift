@@ -81,6 +81,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private var availableViewControllers: [Tab: UIViewController] = [:]
     private var pageViewController: UIPageViewController?
     private var searchController: UISearchController?
+    private var isSelectionMode = false
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .default
@@ -213,6 +214,13 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
 
     private func setupNavbarTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
+        guard isSelectionMode else {
+            navigationItem.titleView = nil
+            navigationItem.title = title
+            return
+        }
+
+        navigationItem.title = nil
         navigationItem.setStackViewWithTitle(title,
                                              titleColor: .textColorPrimary,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
@@ -340,6 +348,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateEditMode(_ edit: Bool) {
+        isSelectionMode = edit
         updateSegmentedControlVisibility(!edit)
         setupNavbar(isClearNavBar: edit)
     }
@@ -358,15 +367,23 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateSearchEnabling(_ isEnabled: Bool) {
         if isEnabled {
+            searchController?.searchBar.alpha = 0
             navigationItem.searchController = searchController
-            searchController?.isActive = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.searchController?.isActive = true
+            }
+            UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+                self.updateSegmentedControlVisibility(false)
+                self.segmentContainerView.alpha = 0
+                self.view.layoutIfNeeded()
+            }
         } else {
             searchController?.isActive = false
             navigationItem.searchController = nil
+            segmentContainerView.alpha = 1
+            updateSegmentedControlVisibility(!isEnabled)
+            setupNavbar(isClearNavBar: isEnabled)
         }
-        
-        updateSegmentedControlVisibility(!isEnabled)
-        setupNavbar(isClearNavBar: isEnabled)
     }
     
     func updateContentScrollView(_ scrollView: UIScrollView) {
@@ -400,9 +417,15 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
         // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
         // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
         let searchBarActivationDelay = 0.1
-        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+        DispatchQueue.main.async {
+            searchController.searchBar.alpha = 1
             if !searchController.searchBar.isFirstResponder {
                 searchController.searchBar.becomeFirstResponder()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+                if searchController.isActive, !searchController.searchBar.isFirstResponder {
+                    searchController.searchBar.becomeFirstResponder()
+                }
             }
         }
     }

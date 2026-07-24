@@ -217,7 +217,7 @@
         if (time.length > 0)
             [time appendAttributedString:space];
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"m") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_minute_lowercase") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];

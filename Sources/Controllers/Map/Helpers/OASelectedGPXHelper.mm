@@ -224,12 +224,12 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx.get];
-    for (NSString *gpx in settings.mapSettingVisibleGpx.get)
+    for (NSString *gpx in [settings.mapSettingVisibleGpx get])
     {
-        if ([gpx isEqualToString:oldPath])
+        if ([gpx compare:oldPath] == NSOrderedSame)
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newPath];
+            [visibleGpx addObject:newPath.decomposedStringWithCanonicalMapping];
             break;
         }
     }

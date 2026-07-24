@@ -47,8 +47,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
     EOAGPX3DLineVisualizationPositionTypeTopBottom,
 };
 
-@class OASGpxTrackAnalysis;
-@class OASWptPt, OASGpxDataItem;
+@class OASWptPt, OASGpxDataItem, OASKFile, OASGpxTrackAnalysis;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
 
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
+- (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile;
 - (NSArray<OASGpxDataItem *> *)getDataItems;
 - (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;
 - (NSString *)getFileDir:(NSString *)filePath;

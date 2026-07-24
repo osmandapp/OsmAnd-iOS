@@ -7493,9 +7493,18 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
     for (NSString *filePath in filePaths)
     {
-        if (![arr containsObject:filePath])
+        BOOL containsPath = NO;
+        for (NSString *visiblePath in arr)
         {
-            [arr addObject:filePath];
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                containsPath = YES;
+                break;
+            }
+        }
+        if (!containsPath)
+        {
+            [arr addObject:filePath.decomposedStringWithCanonicalMapping];
             added = YES;
         }
     }
@@ -7515,35 +7524,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     [self showGpx:filePaths update:YES];
 }
 
-- (void) updateGpx:(NSArray<NSString *> *)filePaths
-{
-    BOOL added = NO;
-    BOOL removed = NO;
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
-    for (NSString *filePath in filePaths)
-    {
-        if (![arr containsObject:filePath])
-        {
-            added = YES;
-            break;
-        }
-    }
-    for (NSString *visible in arr)
-    {
-        if (![filePaths containsObject:visible])
-        {
-            removed = YES;
-            break;
-        }
-    }
-
-    if (added || removed)
-    {
-        [self.mapSettingVisibleGpx set:[NSMutableArray arrayWithArray:filePaths]];
-        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
 - (void) hideGpx:(NSArray<NSString *> *)filePaths
 {
     [self hideGpx:filePaths update:YES];
@@ -7556,10 +7536,13 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filePath in filePaths)
     {
-        if ([arr containsObject:filePath])
+        for (NSString *visiblePath in arr)
         {
-            [arrToDelete addObject:filePath];
-            removed = YES;
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                [arrToDelete addObject:visiblePath];
+                removed = YES;
+            }
         }
     }
     [arr removeObjectsInArray:arrToDelete];
@@ -7572,7 +7555,12 @@ static NSString *kOfflineKey = @"OFFLINE";
 - (void) hideRemovedGpx
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
+    NSMutableOrderedSet<NSString *> *visiblePaths = [NSMutableOrderedSet orderedSet];
+    for (NSString *path in _mapSettingVisibleGpx.get)
+    {
+        [visiblePaths addObject:path.decomposedStringWithCanonicalMapping];
+    }
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:visiblePaths.array];
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filepath in arr)
     {

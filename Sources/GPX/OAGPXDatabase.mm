@@ -225,6 +225,33 @@
     return [[OASGpxDbHelper shared] updateDataItemItem:item];
 }
 
+- (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile
+{
+    BOOL success = [[OASGpxDbHelper shared] renameCurrentFile:currentFile newFile:newFile];
+    if (!success)
+        return NO;
+
+    NSString *currentPath = currentFile.absolutePath;
+    NSString *newPath = newFile.absolutePath;
+    NSString *currentPathKey = currentPath.precomposedStringWithCanonicalMapping;
+    NSString *newPathKey = newPath.precomposedStringWithCanonicalMapping;
+    NSMutableArray<OASGpxDataItem *> *itemsToRemove = [NSMutableArray array];
+    for (OASGpxDataItem *item in [[OASGpxDbHelper shared] getItems])
+    {
+        NSString *itemPath = item.file.absolutePath;
+        NSString *itemPathKey = itemPath.precomposedStringWithCanonicalMapping;
+        BOOL isOldRenamedItem = [itemPathKey isEqualToString:currentPathKey] && ![item.file exists];
+        BOOL isDuplicateNewItem = [itemPathKey isEqualToString:newPathKey] && ![itemPath isEqualToString:newPath];
+        if (isOldRenamedItem || isDuplicateNewItem)
+            [itemsToRemove addObject:item];
+    }
+    
+    for (OASGpxDataItem *item in itemsToRemove)
+        [[OASGpxDbHelper shared] removeItem:item];
+    
+    return YES;
+}
+
 - (NSArray<OASGpxDataItem *> *)getDataItems
 {
     return [[OASGpxDbHelper shared] getItems];

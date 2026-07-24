@@ -1920,7 +1920,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func updateRenamedGpx(src: KFile, dest: KFile) {
-        GpxDbHelper.shared.rename(currentFile: src, newFile: dest)
+        guard gpxDB.renameCurrentFile(src, newFile: dest) else {
+            NSLog("updateRenamedGpx -> renameCurrentFile failed")
+            return
+        }
+
         handleDeletedGpxFile(gpxFile: src)
         let trackItem = TrackItem(file: dest)
         trackItem.dataItem = OAGPXDatabase.sharedDb().getGPXItem(dest.path())
@@ -1928,21 +1932,22 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func renameFolder(newName: String, oldName: String) {
+        let normalizedNewName = newName.decomposedStringWithCanonicalMapping
         if let smartFolder = smartFolderHelper.getSmartFolder(name: oldName) {
             let oldSmartFolderId = smartFolder.getId()
-            smartFolderHelper.renameSmartFolder(smartFolder: smartFolder, newName: newName)
+            smartFolderHelper.renameSmartFolder(smartFolder: smartFolder, newName: normalizedNewName)
             renameSortModeKey(from: oldSmartFolderId, to: smartFolder.getId())
             updateData()
         }
         
         guard let trackFolder = getTrackFolderByPath(oldName) else { return }
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
-        let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
+        let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(normalizedNewName)
         
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             let oldDir = KFile(filePath: oldFolderPath)
             if let parentFile = oldDir.getParentFile() {
-                let newDir = KFile(file: parentFile, fileName: newName)
+                let newDir = KFile(file: parentFile, fileName: normalizedNewName)
                 if oldDir.renameTo(toFile: newDir) {
                     trackFolder.setDirFile(dirFile: newDir)
                     trackFolder.resetCachedData()

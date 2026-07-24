@@ -111,6 +111,8 @@ static NSOperationQueue *_favQueue;
                 (const OsmAnd::IFavoriteLocationsCollection* const collection,
                  const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)
                 {
+            if (!favoriteLocation || !_favoriteChangedObservable)
+                return;
             [_favoriteChangedObservable notifyEventWithKey:self
                                                   andValue:favoriteLocation->getTitle().toNSString()];
         });
@@ -414,6 +416,77 @@ static NSOperationQueue *_favQueue;
     {
         _cachedFavoritePoints = [mutablePoints copy];
         _favoritesCollection->addFavoriteLocations(favoriteLocations, true);
+        [[OAAppSettings sharedManager] setShowFavorites:YES];
+        if (sortAndSave)
+        {
+            [self sortAll];
+            [self saveCurrentPointsIntoFile];
+        }
+    }
+    return res;
+}
+
++ (BOOL)addFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groups
+            lookupAddress:(BOOL)lookupAddress
+              sortAndSave:(BOOL)sortAndSave
+{
+    BOOL res = NO;
+    NSMutableArray<OAFavoriteItem *> *mutablePoints = [NSMutableArray arrayWithArray:_cachedFavoritePoints];
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+
+    for (OAFavoriteGroup *importGroup in groups)
+    {
+        @autoreleasepool
+        {
+            QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> favoriteLocations;
+            OAFavoriteGroup *group = _flatGroups[importGroup.name];
+            if (!group && importGroup.points.count > 0)
+                group = [self getOrCreateGroup:importGroup.points.firstObject];
+            if (group)
+            {
+                group.color = importGroup.color;
+                group.iconName = importGroup.iconName;
+                group.backgroundType = importGroup.backgroundType;
+                group.isVisible = importGroup.isVisible;
+                group.isPinned = importGroup.isPinned;
+            }
+            for (OAFavoriteItem *point in importGroup.points)
+            {
+                if ([point getAltitude] == 0)
+                    [point initAltitude];
+
+                if ([point getName].length == 0 && _flatGroups[[point getCategory]])
+                    continue;
+                res = YES;
+
+                if (lookupAddress && ![point isAddressSpecified])
+                    [self lookupAddress:point];
+
+                if (!group)
+                    group = [self getOrCreateGroup:point];
+                if ([point getName].length > 0)
+                {
+                    [point setVisible:group.isVisible];
+                    if (point.specialPointType == [OASpecialPointType PARKING])
+                        [point setColor:[point.specialPointType getIconColor]];
+                    else if (![point getColor])
+                        [point setColor:group.color];
+
+                    [group addPoint:point];
+                    [mutablePoints addObject:point];
+                    favoriteLocations.append(point.favorite);
+                }
+
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
+            }
+            if (!favoriteLocations.isEmpty())
+                _favoritesCollection->addFavoriteLocations(favoriteLocations, importGroup == groups.lastObject);
+        }
+    }
+
+    if (res)
+    {
+        _cachedFavoritePoints = [mutablePoints copy];
         [[OAAppSettings sharedManager] setShowFavorites:YES];
         if (sortAndSave)
         {

@@ -18,6 +18,8 @@
 - (void) forceUpdate;
 - (BOOL) setTempMode:(NSInteger)dayNightMode;
 - (BOOL) resetTempMode;
+- (void) setCarPlayMode:(NSInteger)dayNightMode;
+- (void) resetCarPlayMode;
 - (SunriseSunset *) getSunriseSunset;
 
 @end

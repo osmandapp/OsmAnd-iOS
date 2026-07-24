@@ -21,6 +21,7 @@
     BOOL _firstCall;
     NSTimeInterval _recalcInterval;
     NSNumber *_tempMode;
+    NSNumber *_carPlayMode;
 }
 
 - (instancetype) init
@@ -57,7 +58,9 @@
 - (BOOL)isNightMode
 {
     NSInteger dayNightMode;
-    if (_tempMode)
+    if (_carPlayMode)
+        dayNightMode = _carPlayMode.integerValue;
+    else if (_tempMode)
         dayNightMode = _tempMode.integerValue;
     else
         dayNightMode = [[OAAppSettings sharedManager].appearanceMode get];
@@ -122,6 +125,16 @@
     _tempMode = nil;
     [self forceUpdate];
     return _lastNightMode;
+}
+
+- (void)setCarPlayMode:(NSInteger)dayNightMode {
+    _carPlayMode = @(dayNightMode);
+    [self forceUpdate];
+}
+
+- (void)resetCarPlayMode {
+    _carPlayMode = nil;
+    [self forceUpdate];
 }
 
 - (SunriseSunset *) getSunriseSunset

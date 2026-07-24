@@ -23,6 +23,7 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
+        case migrateCarPlayMapAppearanceMode
     }
     
     private struct HudMigrationScenario {
@@ -108,6 +109,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateAstronomyPreferences.rawValue) {
                 migrateAstronomyPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
+                migrateCarPlayMapAppearanceMode()
+                defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
             }
         }
     }
@@ -609,6 +614,12 @@ final class MigrationManager: NSObject {
         if let plugin = OAPluginsHelper.getPlugin(AstronomyPlugin.self) as? AstronomyPlugin {
             plugin.migrateLegacyStarWatcherSettingsIfNeeded()
         }
+    }
+    
+    private func migrateCarPlayMapAppearanceMode() {
+        let carPlayMode = settings.carPlayMode.get()
+        let profileMapMode = settings.appearanceMode.get(carPlayMode)
+        settings.carPlayMapAppearanceMode.set(profileMapMode)
     }
 
     // MARK: - Import old versions

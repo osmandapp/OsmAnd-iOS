@@ -9,7 +9,7 @@
 final class TimeToNavigationPointWidget: OASimpleWidget {
     static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
-    private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
+    private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()
     private var widgetState: TimeToNavigationPointWidgetState?
     private var arrivalTimeOtherwiseTimeToGoPref: OACommonBoolean
     
@@ -168,4 +168,3 @@ final class TimeToNavigationPointWidget: OASimpleWidget {
         TimeToNavigationPointState.getState(intermediate: widgetState!.isIntermediate(), arrivalOtherwiseTimeToGo: arrivalTimeOtherwiseTimeToGoPref.get())
     }
 }
-

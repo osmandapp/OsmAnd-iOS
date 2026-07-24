@@ -9,7 +9,12 @@
 @objcMembers
 final class RenderedObjectAmenityProvider: NSObject {
     
-    var detailsObject: BaseDetailsObject?
+    var detailsObject: BaseDetailsObject? {
+        didSet {
+            cachedNameStr = nil
+            cachedTypeStr = nil
+        }
+    }
     private var renderedObject: OARenderedObject?
     private var cachedNameStr: String?
     private var cachedTypeStr: String?
@@ -102,6 +107,28 @@ final class RenderedObjectAmenityProvider: NSObject {
         return cachedNameStr ?? ""
     }
     
+    private func actualContentFromIconRes() -> String? {
+        guard let content = renderedObject?.iconRes, !content.isEmpty else { return nil }
+        if content == "osmand_steps" {
+            return "highway_steps"
+        }
+        return content
+    }
+
+    private func searchObjectNameByIconRes() -> String? {
+        guard let content = actualContentFromIconRes() else { return nil }
+        let poiTranslator = OAPOIHelper.sharedInstance()
+        let parts = content.split(separator: "_").map(String.init)
+        for i in parts.indices {
+            let key = parts[i...].joined(separator: "_")
+            let translation = poiTranslator.translation(key, withDefault: false)
+            if let translation, !translation.isEmpty {
+                return translation
+            }
+        }
+        return nil
+    }
+
     func typeString(superTypeProvider: (() -> String?)? = nil) -> String? {
         if let cachedTypeStr, !cachedTypeStr.isEmpty {
             return cachedTypeStr
@@ -125,8 +152,11 @@ final class RenderedObjectAmenityProvider: NSObject {
         }
         
         if cachedTypeStr?.isEmpty ?? true {
+            cachedTypeStr = searchObjectNameByIconRes()
+        }
+        
+        if cachedTypeStr?.isEmpty ?? true {
             let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
-            
             cachedTypeStr = searchObjectNameByRawTags(
                 tags: renderedObject.tags as? [String: String],
                 additionalInfoKeys: additionalInfoKeys

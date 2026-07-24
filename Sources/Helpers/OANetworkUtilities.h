@@ -52,13 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
            headers:(NSDictionary<NSString *, NSString *> *)headers
              data:(NSData *)data
              gzip:(BOOL)gzip
-authorizationHeader:(NSString *)authorizationHeader
+authorizationHeader:(nullable NSString *)authorizationHeader
          progress:(OAURLSessionProgress *)progress
        onComplete:(void (^)(NSData * _Nullable data,
                             NSURLResponse * _Nullable response,
                             NSError * _Nullable error))onComplete;
 
-+ (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(OAURLSessionProgress *)progress;
++ (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(nullable OAURLSessionProgress *)progress;
 
 @end
 

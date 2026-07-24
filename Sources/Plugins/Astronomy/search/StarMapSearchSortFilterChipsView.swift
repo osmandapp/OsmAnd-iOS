@@ -19,6 +19,7 @@ struct StarMapSearchSortFilterChipOption {
     let id: String
     let title: String
     let image: UIImage?
+    let originalSizeImage: UIImage?
     let isSelected: Bool
 }
 
@@ -220,8 +221,8 @@ final class StarMapSearchSortFilterChipsView: UIView {
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: Layout.horizontalPadding),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -Layout.horizontalPadding),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
@@ -307,7 +308,7 @@ final class StarMapSearchSortFilterChipsView: UIView {
     private func makeMenuAction(option: StarMapSearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {
         UIAction(
             title: option.title,
-            image: option.image,
+            image: option.originalSizeImage,
             state: option.isSelected ? .on : .off
         ) { [weak self] _ in
             guard let self else {

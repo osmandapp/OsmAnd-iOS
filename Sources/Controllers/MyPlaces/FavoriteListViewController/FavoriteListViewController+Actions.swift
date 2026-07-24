@@ -57,7 +57,7 @@ extension FavoriteListViewController {
     }
 
     func makeActionsMenu() -> UIMenu {
-        let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage(systemName: "checkmark.circle")?.resizedMenuImage()) { [weak self] _ in
+        let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
             self?.selectButtonPressed()
         }
         let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
@@ -214,7 +214,6 @@ extension FavoriteListViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
 
-            navigationItem.hidesSearchBarWhenScrolling = false
             navigationItem.searchController = subfolderSearchController
             subfolderSearchController.isActive = true
         }

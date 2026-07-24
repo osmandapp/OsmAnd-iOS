@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithAstroWikiHtml:(NSString *)html
                                 title:(NSString *)title
                                locale:(NSString *)locale
-                            onlineURL:(nullable NSURL *)onlineURL;
+                            onlineURL:(nullable NSURL *)onlineURL
+                           wikidataId:(NSString *)wikidataId;
 
 @end
 

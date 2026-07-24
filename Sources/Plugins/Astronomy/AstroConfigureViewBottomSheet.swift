@@ -93,7 +93,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     }
 
     private func configureNavigationBar() {
-        let imageClose = OAUtilities.resize(UIImage.templateImageNamed("ic_navbar_close"),
+        let imageClose = OAUtilities.resize(.icNavbarClose,
                                             newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
         let closeButton = UIBarButtonItem(image: imageClose, style: .plain, target: self, action: #selector(closeAction))
         closeButton.tintColor = .label
@@ -697,9 +697,22 @@ private final class AstroActionCard: UIControl {
     func render(checked: Bool, icon: UIImage?, title: String) {
         self.checked = checked
         iconView.image = icon
-        titleLabel.text = title
+        titleLabel.attributedText = attributedTitle(for: title)
         applyStyle()
         updateAccessibility(title: title)
+    }
+    
+    private func attributedTitle(for title: String) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.8
+        paragraphStyle.alignment = .center
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.preferredFont(forTextStyle: .subheadline),
+            .foregroundColor: UIColor.buttonTextColorSecondary,
+            .paragraphStyle: paragraphStyle
+        ]
+        return NSAttributedString(string: title, attributes: attributes)
     }
 
     private func setupView() {
@@ -730,11 +743,11 @@ private final class AstroActionCard: UIControl {
             iconView.widthAnchor.constraint(equalToConstant: 30),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: iconView.bottomAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 4),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -4),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11)
+            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 5),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 3),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -9),
+            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
         ])
     }
 

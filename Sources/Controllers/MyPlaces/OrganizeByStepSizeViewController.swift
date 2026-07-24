@@ -100,10 +100,6 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(onClosePressed))
     }
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         let isFeatureAccessible = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
         if isFeatureAccessible {

@@ -7,7 +7,7 @@
 //
 
 #import "OAKml2Gpx.h"
-#import <BRCybertron.h>
+#import <BRCybertron/BRCybertron.h>
 
 @implementation OAKml2Gpx
 

@@ -101,7 +101,7 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func addListeners() {
         guard let carPlayDashboardController else { return }
-        guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        let routingHelper = OARoutingHelper.sharedInstance()
         
         // Register as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {
@@ -116,7 +116,7 @@ final class CarPlaySceneDelegate: UIResponder {
     
     private func removeListeners() {
         guard let carPlayDashboardController else { return }
-        guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+        let routingHelper = OARoutingHelper.sharedInstance()
         
         // Unregister as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {

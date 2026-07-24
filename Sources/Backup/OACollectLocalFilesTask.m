@@ -44,13 +44,41 @@
 
 - (void) execute
 {
+    CFAbsoluteTime executeStartTime = CFAbsoluteTimeGetCurrent();
+    [_operationLog log:@"COLLECT_LOCAL_DIAG execute BEGIN"];
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        
+        [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG worker BEGIN queueWait=%.3f ms",
+                            (CFAbsoluteTimeGetCurrent() - executeStartTime) * 1000]];
+
         NSMutableArray<OALocalFile *> *result = [NSMutableArray array];
+        CFAbsoluteTime phaseStartTime = CFAbsoluteTimeGetCurrent();
+        [_operationLog log:@"COLLECT_LOCAL_DIAG getUploadedFileInfoMap BEGIN"];
         _infos = [_dbHelper getUploadedFileInfoMap];
+
+        [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getUploadedFileInfoMap END duration=%.3f ms count=%ld",
+                            (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                            _infos.count]];
+
+        phaseStartTime = CFAbsoluteTimeGetCurrent();
+        [_operationLog log:@"COLLECT_LOCAL_DIAG getLocalItems BEGIN"];
+
+        NSMutableDictionary<NSString *, OAUploadedFileInfo *> *normalized = [NSMutableDictionary dictionaryWithCapacity:_infos.count];
+        [_infos enumerateKeysAndObjectsUsingBlock:^(NSString *key, OAUploadedFileInfo *info, BOOL *stop) {
+            NSString *decomposedKey = key.decomposedStringWithCanonicalMapping;
+            OAUploadedFileInfo *existing = normalized[decomposedKey];
+            if (existing == nil || info.uploadTime > existing.uploadTime)
+                normalized[decomposedKey] = info;
+        }];
+        _infos = normalized;
+
         NSArray<OASettingsItem *> *localItems = [self getLocalItems];
+        [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getLocalItems END duration=%.3f ms count=%ld",
+                            (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                            localItems.count]];
         NSFileManager *fileManager = NSFileManager.defaultManager;
         [_operationLog log:@"getLocalItems"];
+        phaseStartTime = CFAbsoluteTimeGetCurrent();
+        [_operationLog log:@"COLLECT_LOCAL_DIAG createLocalFiles loop BEGIN"];
         for (OASettingsItem *item in localItems)
         {
             NSString *fileName = [BackupUtils getItemFileName:item];
@@ -150,6 +178,9 @@
                          lastModified:item.lastModifiedTime];
             }
         }
+        [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG createLocalFiles loop END duration=%.3f ms files=%ld",
+                            (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                            result.count]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_operationLog finishOperation:[NSString stringWithFormat:@"Files=%ld", result.count]];
             if (_listener)
@@ -172,9 +203,9 @@
     
     if (_infos != nil)
     {
-        OAUploadedFileInfo *fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName]];
-        if (!fileInfo)
-            fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName.precomposedStringWithCanonicalMapping]];
+        NSString *typeName = [OASettingsItemType typeName:item.type];
+        NSString *key = [NSString stringWithFormat:@"%@___%@", typeName, fileName.decomposedStringWithCanonicalMapping];
+        OAUploadedFileInfo *fileInfo = _infos[key];
         if (fileInfo)
         {
             localFile.uploadTime = fileInfo.uploadTime;
@@ -185,7 +216,15 @@
                 && lastMd5.length > 0;
             if (needM5Digest && filePath && [NSFileManager.defaultManager fileExistsAtPath:filePath])
             {
+                CFAbsoluteTime md5StartTime = CFAbsoluteTimeGetCurrent();
                 NSString *md5 = [OAUtilities fileMD5:filePath];
+                CFAbsoluteTime md5DurationMs = (CFAbsoluteTimeGetCurrent() - md5StartTime) * 1000;
+                if (md5DurationMs >= 50)
+                {
+                    [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG slow fileMD5 duration=%.3f ms file=%@",
+                                        md5DurationMs,
+                                        fileName]];
+                }
                 if ([md5 isEqualToString:lastMd5])
                 {
                     item.localModifiedTime = localFile.uploadTime;
@@ -200,8 +239,18 @@
 
 - (NSArray<OASettingsItem *> *) getLocalItems
 {
+    CFAbsoluteTime phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSArray<OAExportSettingsType *> *types = [self getEnabledExportTypes];
-    return [OASettingsHelper.sharedInstance getFilteredSettingsItems:types addProfiles:YES doExport:YES];
+    [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getEnabledExportTypes END duration=%.3f ms count=%ld",
+                        (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                        types.count]];
+
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
+    NSArray<OASettingsItem *> *items = [OASettingsHelper.sharedInstance getFilteredSettingsItems:types addProfiles:YES doExport:YES];
+    [_operationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getFilteredSettingsItems END duration=%.3f ms count=%ld",
+                        (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                        items.count]];
+    return items;
 }
 
 - (NSArray<OAExportSettingsType *> *)getEnabledExportTypes

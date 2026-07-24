@@ -9,6 +9,8 @@
 #import "OABottomSheetScreen.h"
 #import "OATableView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OABottomSheetViewController : UIViewController
 
 @property (nonatomic) IBOutlet UIView *backgroundView;
@@ -21,17 +23,17 @@
 @property (nonatomic) CGFloat keyboardHeight;
 
 @property (nonatomic) id<OABottomSheetScreen> screenObj;
-@property (nonatomic) id customParam;
+@property (nonatomic, nullable) id customParam;
 
 @property (nonatomic, getter = isVisible) BOOL visible;
 
-- (instancetype) initWithParam:(id)param;
+- (instancetype) initWithParam:(nullable id)param;
 
 - (CGRect) contentViewFrame;
 
 - (void) show;
 - (void) dismiss;
-- (void) dismiss:(id)sender;
+- (void) dismiss:(nullable id)sender;
 
 - (void) commonInit;
 - (void) setupView;
@@ -56,3 +58,5 @@
 - (nullable OABottomSheetViewController *)lastObject;
 
 @end
+
+NS_ASSUME_NONNULL_END

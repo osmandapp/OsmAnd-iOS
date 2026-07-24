@@ -9,12 +9,14 @@
 import Foundation
 
 final class StarObjectsViewModel {
-    private let provider: AstroDataProvider
+    var onDataChanged: (() -> Void)?
+    
     private(set) var settings: AstronomyPluginSettings
 
-    var onDataChanged: (() -> Void)?
     private(set) var skyObjects: [SkyObject] = []
     private(set) var constellations: [Constellation] = []
+    
+    private let provider: AstroDataProvider
 
     init(provider: AstroDataProvider, settings: AstronomyPluginSettings) {
         self.provider = provider
@@ -36,7 +38,8 @@ final class StarObjectsViewModel {
             let constellations = provider.getConstellations(preferredLocale: preferredLocale)
             DispatchQueue.main.async {
                 self.applyObjectSettings(to: objects + constellations.map { $0 as SkyObject })
-                let favoriteOrder = Dictionary(uniqueKeysWithValues: self.settings.starMap.favorites.enumerated().map { ($0.element.id, $0.offset) })
+                let starMap = self.settings.starMapConfig()
+                let favoriteOrder = Dictionary(uniqueKeysWithValues: starMap.favorites.enumerated().map { ($0.element.id, $0.offset) })
                 self.skyObjects = objects.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
                 self.constellations = constellations.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
                 self.onDataChanged?()
@@ -52,9 +55,10 @@ final class StarObjectsViewModel {
             targetObjects = skyObjects + constellations.map { $0 as SkyObject }
         }
 
-        let favoritesMap = Dictionary(uniqueKeysWithValues: settings.starMap.favorites.map { ($0.id, $0) })
-        let directionsMap = Dictionary(uniqueKeysWithValues: settings.starMap.directions.map { ($0.id, $0) })
-        let celestialPathsMap = Dictionary(uniqueKeysWithValues: settings.starMap.celestialPaths.map { ($0.id, $0) })
+        let starMap = settings.starMapConfig()
+        let favoritesMap = Dictionary(uniqueKeysWithValues: starMap.favorites.map { ($0.id, $0) })
+        let directionsMap = Dictionary(uniqueKeysWithValues: starMap.directions.map { ($0.id, $0) })
+        let celestialPathsMap = Dictionary(uniqueKeysWithValues: starMap.celestialPaths.map { ($0.id, $0) })
         for object in targetObjects {
             object.isFavorite = favoritesMap[object.id] != nil
             object.showDirection = directionsMap[object.id] != nil

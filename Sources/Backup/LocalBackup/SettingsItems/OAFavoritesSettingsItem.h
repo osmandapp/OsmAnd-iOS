@@ -12,6 +12,10 @@
 
 @interface OAFavoritesSettingsItem : OACollectionSettingsItem<OAFavoriteGroup *>
 
+- (BOOL)applyWithFavoritesSave:(BOOL)saveFavorites;
++ (BOOL)applyItems:(NSArray<OAFavoritesSettingsItem *> *)items saveFavorites:(BOOL)saveFavorites;
++ (void)finishBatchApply;
+
 @end
 
 @interface OAFavoritesSettingsItemReader : OASettingsItemReader<OAFavoritesSettingsItem *>

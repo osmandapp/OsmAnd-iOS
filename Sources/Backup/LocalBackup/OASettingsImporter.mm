@@ -452,6 +452,7 @@
 @implementation OAImportAsyncTask
 {
     BOOL _importDone;
+    BOOL _favoritesBatchApplied;
     OASettingsHelper *_settingsHelper;
     OASettingsImporter *_importer;
 }
@@ -510,7 +511,7 @@
 - (void) executeWithCompletionBlock:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
     [self onPreExecute];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSArray<OASettingsItem *> *items = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onPostExecute:items];
@@ -552,9 +553,37 @@
             _duplicates = [self getDuplicatesData:_selectedItems];
             return _selectedItems;
         case EOAImportTypeImport:
+            _favoritesBatchApplied = [self applyFavoritesItems:_items];
             return _items;
+        case EOAImportTypeUndefined:
+        case EOAImportTypeCollectAndRead:
+        case EOAImportTypeImportForceRead:
+            break;
     }
     return nil;
+}
+
+- (BOOL)applyFavoritesItems:(NSArray<OASettingsItem *> *)items
+{
+    BOOL shouldSaveFavorites = NO;
+    NSMutableArray<OAFavoritesSettingsItem *> *favoritesItems = [NSMutableArray array];
+    for (OASettingsItem *item in items)
+    {
+        @autoreleasepool
+        {
+            if ([item isKindOfClass:OAFavoritesSettingsItem.class])
+            {
+                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *)item;
+                [favoritesItems addObject:favoritesItem];
+            }
+        }
+    }
+    if (favoritesItems.count > 0)
+        shouldSaveFavorites = [OAFavoritesSettingsItem applyItems:[favoritesItems copy] saveFavorites:NO];
+    if (shouldSaveFavorites)
+        [OAFavoritesSettingsItem finishBatchApply];
+
+    return favoritesItems.count > 0;
 }
 
 - (void) onPostExecute:(NSArray<OASettingsItem *> *)items
@@ -583,7 +612,11 @@
             if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
-                    [item apply];
+                {
+                    if (![item isKindOfClass:OAFavoritesSettingsItem.class] || !_favoritesBatchApplied)
+                        [item apply];
+                }
+
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 task.onImportComplete = self.onImportComplete;

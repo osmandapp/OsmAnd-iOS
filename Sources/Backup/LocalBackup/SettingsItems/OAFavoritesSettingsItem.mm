@@ -143,6 +143,51 @@
 
 - (void) apply
 {
+    [self applyWithFavoritesSave:YES];
+}
+
+- (BOOL)applyWithFavoritesSave:(BOOL)saveFavorites
+{
+    if ([self prepareItemsToApply])
+    {
+        @synchronized ([self class])
+        {
+            [OAFavoritesHelper addFavoriteGroups:self.appliedItems
+                                  lookupAddress:NO
+                                    sortAndSave:NO];
+            if (saveFavorites)
+                [self.class finishBatchApply];
+        }
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)applyItems:(NSArray<OAFavoritesSettingsItem *> *)items saveFavorites:(BOOL)saveFavorites
+{
+    NSMutableArray<OAFavoriteGroup *> *groupsToApply = [NSMutableArray array];
+    for (OAFavoritesSettingsItem *item in items)
+    {
+        if ([item prepareItemsToApply])
+            [groupsToApply addObjectsFromArray:item.appliedItems];
+    }
+
+    if (groupsToApply.count == 0)
+        return NO;
+
+    @synchronized ([self class])
+    {
+        [OAFavoritesHelper addFavoriteGroups:groupsToApply
+                              lookupAddress:NO
+                                sortAndSave:NO];
+        if (saveFavorites)
+            [self finishBatchApply];
+    }
+    return YES;
+}
+
+- (BOOL)prepareItemsToApply
+{
     NSArray<OAFavoriteGroup *> *newItems = [self getNewItems];
     if (_personalGroup)
         [self.duplicateItems addObject:_personalGroup];
@@ -176,19 +221,18 @@
                 }
             }
         }
-        @synchronized (self.class)
-        {
-            for (OAFavoriteGroup *group in self.appliedItems)
-            {
-                [OAFavoritesHelper addFavorites:group.points
-                                  lookupAddress:NO
-                                    sortAndSave:NO
-                                    pointsGroup:[group toPointsGroup]];
-            }
-            [OAFavoritesHelper sortAll];
-            [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
-            [OAFavoritesHelper loadFavorites];
-        }
+        return YES;
+    }
+    return NO;
+}
+
++ (void)finishBatchApply
+{
+    @synchronized ([self class])
+    {
+        [OAFavoritesHelper sortAll];
+        [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+        [OAFavoritesHelper loadFavorites];
     }
 }
 

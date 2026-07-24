@@ -890,8 +890,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [[UIActivityViewController alloc] initWithActivityItems:@[url]
                                       applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]]];
     
-    activityViewController.popoverPresentationController.sourceView = rootVC.view;
-    activityViewController.popoverPresentationController.sourceRect = _doneButton.frame;
+    if (OAUtilities.isIPad)
+    {
+        activityViewController.popoverPresentationController.sourceView = _doneButton;
+        activityViewController.popoverPresentationController.sourceRect = _doneButton.bounds;
+    }
     
     [rootVC presentViewController:activityViewController
                                      animated:YES
@@ -900,15 +903,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)onShareAsLinkPressed
 {
-    NSString *routeUrl = [DeepLinkParser generateRouteUrl];
+    NSString *routeUrl = [RouteDeepLinkBuilder generateRouteUrl];
     if (routeUrl.length == 0)
         return;
     OARootViewController *rootVC = [OARootViewController instance];
     UIActivityViewController *activityViewController =
         [[UIActivityViewController alloc] initWithActivityItems:@[routeUrl]
                                           applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = rootVC.view;
-    activityViewController.popoverPresentationController.sourceRect = _doneButton.frame;
+    if (OAUtilities.isIPad)
+    {
+        activityViewController.popoverPresentationController.sourceView = _doneButton;
+        activityViewController.popoverPresentationController.sourceRect = _doneButton.bounds;
+    }
     [rootVC presentViewController:activityViewController animated:YES completion:nil];
 }
 

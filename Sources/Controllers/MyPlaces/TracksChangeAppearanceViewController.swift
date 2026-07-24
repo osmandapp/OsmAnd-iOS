@@ -157,10 +157,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         false
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func getTableHeaderDescription() -> String? {
         folder != nil ? localizedString("default_appearance_description") : nil
     }

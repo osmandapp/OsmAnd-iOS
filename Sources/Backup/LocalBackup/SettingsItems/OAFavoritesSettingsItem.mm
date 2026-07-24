@@ -155,7 +155,7 @@
             BOOL shouldReplace = [self shouldReplace] || isPersonal;
             if (shouldReplace)
             {
-                OAFavoriteGroup *existingGroup = [OAFavoritesHelper getGroupByName:duplicate.name];
+                OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByName:duplicate.name];
                 if (existingGroup)
                     [OAFavoritesHelper deleteFavorites:existingGroup.points.copy saveImmediately:NO];
             }

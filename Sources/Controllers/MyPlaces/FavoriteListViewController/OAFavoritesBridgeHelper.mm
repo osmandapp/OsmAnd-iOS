@@ -8,7 +8,6 @@
 
 #import "OAFavoritesBridgeHelper.h"
 #import "OAAppSettings.h"
-#import "OAEditGroupViewController.h"
 #import "OAEditPointViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoriteGroupEditorViewController.h"
@@ -40,12 +39,29 @@
 #include <OsmAndCore/Utilities.h>
 
 static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
+static NSArray<NSString *> *collapsedSections = nil;
 
 @implementation OAFavoritesBridgeHelper
 
 + (void)invalidateFavoriteFoldersCache
 {
     favoriteFoldersCache = nil;
+}
+
++ (void)createMissingParentFolderIfNeeded
+{
+    if ([OAFavoritesHelper createMissingParentFolderIfNeeded])
+        [self invalidateFavoriteFoldersCache];
+}
+
++ (NSArray<NSString *> *)collapsedSections
+{
+    return collapsedSections ?: @[];
+}
+
++ (void)updateCollapsedSections:(NSArray<NSString *> *)sections
+{
+    collapsedSections = [sections copy];
 }
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
@@ -197,7 +213,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
     NSString *parent = parentGroupName ?: @"";
     NSString *groupName = parent.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", parent, trimmedName] : trimmedName;
-    if (groupName.length == 0 || [self favoriteGroupWithName:groupName])
+    if (groupName.length == 0 || [OAFavoritesHelper groupByTrimmedName:groupName])
         return NO;
 
     [OAFavoritesHelper addFavoriteGroup:groupName
@@ -218,6 +234,10 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     NSString *sourceGroupName = group.name;
     if ([sourceGroupName isEqualToString:trimmedName])
+        return;
+
+    OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:trimmedName];
+    if (existingGroup && ![existingGroup.name isEqualToString:sourceGroupName])
         return;
 
     [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:trimmedName];
@@ -637,6 +657,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         return;
 
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL addedMarker = NO;
     for (OAFavoriteItem *favorite in itemsToAdd)
     {
         CLLocation *location = [self locationForFavorite:favorite];
@@ -644,7 +665,11 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
             continue;
 
         [mapPanel addMapMarker:location.coordinate.latitude lon:location.coordinate.longitude description:[favorite getDisplayName]];
+        addedMarker = YES;
     }
+
+    if (addedMarker)
+        [mapPanel showDestinations];
 }
 
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
@@ -860,6 +885,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 + (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
 {
     NSDate *lastModifiedDate = nil;
+    QString lastTimestamp;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in groups)
     {
@@ -873,13 +899,34 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
         for (OAFavoriteItem *point in favoriteGroup.points)
         {
-            NSDate *timestamp = [point getTimestamp];
-            if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
-                lastModifiedDate = timestamp;
+            const auto timestamp = point.favorite->getTime();
+            if (timestamp.isNull())
+                continue;
+
+            if (lastTimestamp.isNull() || timestamp.compare(lastTimestamp) > 0)
+                lastTimestamp = timestamp;
         }
     }
 
+    if (!lastTimestamp.isNull())
+    {
+        NSDate *timestamp = [[self favoriteTimestampFormatter] dateFromString:lastTimestamp.toNSString()];
+        if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
+            lastModifiedDate = timestamp;
+    }
+
     return lastModifiedDate;
+}
+
++ (NSISO8601DateFormatter *)favoriteTimestampFormatter
+{
+    static NSISO8601DateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [NSISO8601DateFormatter new];
+        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    });
+    return formatter;
 }
 
 + (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups
@@ -942,7 +989,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
 + (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName
 {
-    return [OAFavoritesHelper getGroupByName:groupName ?: @""];
+    return [OAFavoritesHelper groupByName:groupName ?: @""];
 }
 
 + (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName
@@ -983,7 +1030,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (parent.length == 0)
         return NO;
 
-    return [name hasPrefix:[parent stringByAppendingString:@"/"]];
+    return [name hasPrefix:[parent stringByAppendingString:@"/"]] || [name hasPrefix:[parent stringByAppendingString:@" /"]];
 }
 
 + (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName

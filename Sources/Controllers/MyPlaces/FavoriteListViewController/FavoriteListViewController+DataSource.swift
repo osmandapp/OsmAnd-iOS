@@ -73,7 +73,7 @@ extension FavoriteListViewController {
     
     func makeSortMenu(includesDistanceSortModes: Bool) -> UIMenu {
         let modes: [FavoriteSortMode] = includesDistanceSortModes ? FavoriteSortMode.allCases : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
-        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
+        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nearestToCurrentLocation, .nearestToMapCenter], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst]]
         let sections = groups.compactMap { group -> UIMenu? in
             let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }
             return actions.isEmpty ? nil : UIMenu(options: .displayInline, children: actions)
@@ -90,7 +90,7 @@ extension FavoriteListViewController {
         let headerCellRegistration = headerCellRegistration
         let statsFooterCellRegistration = statsFooterCellRegistration
         let emptyStateCellRegistration = emptyStateCellRegistration
-        return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .sortHeader(let sortHeader):
                 return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortHeader)
@@ -108,14 +108,40 @@ extension FavoriteListViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
+        dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
+            guard let self else { return }
+            if case .header(let section) = item {
+                self.collapsedRootSections.remove(section)
+                self.saveCollapsedSections()
+            }
+
+            guard self.collectionView.isEditing else { return }
+            self.collectionView.indexPathsForVisibleItems.forEach { self.updateVisibleSelectionState(at: $0) }
+        }
+        dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
+            guard let self, case .header(let section) = item else { return }
+            self.collapsedRootSections.insert(section)
+            self.saveCollapsedSections()
+        }
+        return dataSource
     }
 
-    func applySnapshot(animatingDifferences: Bool = false) {
+    func applySnapshot(animatingDifferences: Bool = false, shouldSaveScrollPosition: Bool = true) {
+        if shouldSaveScrollPosition && savedScrollPosition == nil {
+            saveScrollPosition()
+        }
+
+        let shouldAnimateDifferences = shouldSaveScrollPosition ? false : animatingDifferences
         switch screenMode {
         case .root:
-            applyRootSnapshot(animatingDifferences: animatingDifferences)
+            applyRootSnapshot(animatingDifferences: shouldAnimateDifferences)
         case .folder(let folder, _):
-            applyFolderSnapshot(folder: folder, animatingDifferences: animatingDifferences)
+            applyFolderSnapshot(folder: folder, animatingDifferences: shouldAnimateDifferences)
+        }
+
+        if !isSearchResultsMode, savedScrollPosition != nil {
+            shouldRestoreScrollPosition = true
+            view.setNeedsLayout()
         }
     }
     
@@ -130,7 +156,7 @@ extension FavoriteListViewController {
     
     func isNestedFolder(_ groupName: String, in parentGroupName: String) -> Bool {
         guard !parentGroupName.isEmpty else { return false }
-        return groupName.hasPrefix(parentGroupName + "/")
+        return groupName.hasPrefix(parentGroupName + "/") || groupName.hasPrefix(parentGroupName + " /")
     }
     
     func hasSearchResults() -> Bool {
@@ -148,7 +174,7 @@ extension FavoriteListViewController {
             subfolderSearchController.searchBar.text = ""
         }
     }
-    
+
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
         if isSearchResultsMode {
             settings.searchFavoriteSortMode.set(sortMode.title)
@@ -162,7 +188,7 @@ extension FavoriteListViewController {
     }
     
     private func isFavoriteSortModeKey(_ key: String, insideOrEqualTo groupName: String) -> Bool {
-        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
+        key == groupName || (!groupName.isEmpty && (key.hasPrefix(groupName + "/") || key.hasPrefix(groupName + " /")))
     }
     
     private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {
@@ -171,6 +197,12 @@ extension FavoriteListViewController {
         }
     }
     
+    private func updateLayoutSections(_ sections: [FavoriteListSection]) {
+        guard layoutSections != sections else { return }
+        layoutSections = sections
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
         if isSearchResultsMode {
@@ -198,8 +230,7 @@ extension FavoriteListViewController {
             sections.append(.statsFooter)
         }
 
-        layoutSections = sections
-        collectionView.collectionViewLayout.invalidateLayout()
+        updateLayoutSections(sections)
         snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         if isPaymentBannerVisible {
@@ -217,7 +248,9 @@ extension FavoriteListViewController {
             var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<FavoriteListItem>()
             sectionSnapshot.append([headerItem])
             sectionSnapshot.append(folderItems, to: headerItem)
-            sectionSnapshot.expand([headerItem])
+            if !collapsedRootSections.contains(section) {
+                sectionSnapshot.expand([headerItem])
+            }
             dataSource.apply(sectionSnapshot, to: .folderSection(section), animatingDifferences: animatingDifferences)
         }
     }
@@ -230,16 +263,16 @@ extension FavoriteListViewController {
         }
 
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(favoritePointRows(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName), sortMode: currentSortMode).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         if favorites.isEmpty && folders.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
         var snapshot = Snapshot()
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
-        layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
@@ -258,19 +291,20 @@ extension FavoriteListViewController {
         }
 
         var snapshot = Snapshot()
-        layoutSections = [.sortHeader, .content]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = [.sortHeader, .content]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
-        snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
+        let favoriteItems = favorites.map(FavoriteListItem.favorite)
+        snapshot.appendItems(favoriteItems, toSection: .content)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
     
     private func applyEmptyStateSnapshot(animatingDifferences: Bool) {
         var snapshot = Snapshot()
-        layoutSections = [.emptyState]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
+        let sections: [FavoriteListSection] = [.emptyState]
+        updateLayoutSections(sections)
+        snapshot.appendSections(sections)
         snapshot.appendItems([.emptyState])
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
@@ -296,7 +330,20 @@ extension FavoriteListViewController {
 
         return sections
     }
-    
+
+    func favoritePointRows(_ items: [OAFavoritePointBridgeItem], sortMode: FavoriteSortMode? = nil) -> [FavoritePointRow] {
+        let sortMode = sortMode ?? currentSortMode
+        if sortMode.isMapCenterDistanceOriented {
+            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+            let mapAzimuth = Double(mapViewController.azimuth())
+            items.forEach { $0.updateDistanceAndDirection(fromMapCenter: mapViewController.getMapLocation().coordinate, mapAzimuth: mapAzimuth) }
+        } else if sortMode.isCurrentLocationDistanceOriented {
+            items.forEach { $0.updateDistanceAndDirection() }
+        }
+
+        return items.map { FavoritePointRow(item: $0) }
+    }
+
     private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {
         guard !isSearchResultsMode else { return nil }
         guard let currentGroupName else {
@@ -320,8 +367,8 @@ extension FavoriteListViewController {
     
     private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
         guard let parentGroupName else { return groupName.isEmpty || !groupName.contains("/") }
-        guard !parentGroupName.isEmpty && groupName.hasPrefix(parentGroupName + "/") else { return false }
-        let childPath = groupName.dropFirst(parentGroupName.count + 1)
+        guard !parentGroupName.isEmpty && (groupName.hasPrefix(parentGroupName + "/") || groupName.hasPrefix(parentGroupName + " /")) else { return false }
+        let childPath = groupName.dropFirst(parentGroupName.count + (groupName.hasPrefix(parentGroupName + "/") ? 1 : 2))
         return !childPath.isEmpty && !childPath.contains("/")
     }
     
@@ -332,5 +379,9 @@ extension FavoriteListViewController {
 
     private func searchFavoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
         favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }
+    }
+
+    private func saveCollapsedSections() {
+        OAFavoritesBridgeHelper.updateCollapsedSections(collapsedRootSections.map(\.rawValue))
     }
 }

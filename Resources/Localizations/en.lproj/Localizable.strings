@@ -649,8 +649,8 @@
 "shared_string_subfolders_in" = "Subfolders in";
 "shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
-"distance_nearest" = "Nearest first";
-"distance_farthest" = "Farthest first";
+"sort_by_nearest_to_current_location" = "Nearest to current location";
+"sort_by_nearest_to_map_center" = "Nearest to map center";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
 "newest_date_first" = "Newest date first";
@@ -1073,10 +1073,15 @@
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorites_delete_confirmation_title" = "Delete %ld favorites?";
+"favorite_delete_confirmation_title" = "Delete %ld favorite?";
 "items_delete_confirmation_title" = "Delete %ld items?";
 "folders_delete_confirmation_title" = "Delete %ld folders?";
+"folder_delete_confirmation_title" = "Delete %ld folder?";
 "favorites_delete_confirmation_message" = "This action cannot be undone.";
-"mixed_delete_confirmation_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
+"folders_favorites_delete_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
+"folder_favorites_delete_message" = "This will delete %ld folder and %ld points. This action cannot be undone.";
+"folders_favorite_delete_message" = "This will delete %ld folders and %ld point. This action cannot be undone.";
+"folder_favorite_delete_message" = "This will delete %ld folder and %ld point. This action cannot be undone.";
 "empty_state_favourites" = "Add Favorites";
 "empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
 "tracks_empty_folder" = "Empty folder";

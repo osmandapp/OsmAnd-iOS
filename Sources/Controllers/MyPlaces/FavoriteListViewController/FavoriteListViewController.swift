@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-final class FavoriteListViewController: UIViewController {
+final class FavoriteListViewController: UIViewController, MyPlacesScrollResettable {
     typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
     typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
@@ -26,7 +26,6 @@ final class FavoriteListViewController: UIViewController {
     let settings = OAAppSettings.sharedManager()
     var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var groupController: OAEditGroupViewController?
     var colorController: OAEditColorViewController?
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
@@ -42,7 +41,10 @@ final class FavoriteListViewController: UIViewController {
     var shouldReloadCollectionView = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
+    var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
+    var savedScrollPosition: (linearIndex: Int, offsetY: CGFloat)?
+    var shouldRestoreScrollPosition = false
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -123,8 +125,14 @@ final class FavoriteListViewController: UIViewController {
         super.init(coder: coder)
     }
     
+    private static func loadCollapsedSections() -> Set<FavoriteFolderSection> {
+        let sections = OAFavoritesBridgeHelper.collapsedSections()
+        return Set(sections.compactMap(FavoriteFolderSection.init(rawValue:)))
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        createMissingParentFolderIfNeeded()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
@@ -138,7 +146,7 @@ final class FavoriteListViewController: UIViewController {
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
         configureToolbar()
-        applySnapshot()
+        applySnapshot(shouldSaveScrollPosition: false)
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
         if isRootFolder {
@@ -148,6 +156,7 @@ final class FavoriteListViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         unregisterDistanceAndDirectionObservers()
+        saveScrollPosition()
         if !isRootFolder {
             navigationItem.searchController = nil
             navigationController?.setNavigationBarHidden(true, animated: false)
@@ -156,14 +165,23 @@ final class FavoriteListViewController: UIViewController {
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard shouldRestoreScrollPosition else { return }
+        restoreScrollPositionIfNeeded()
+    }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in
-                self?.updateDistanceAndDirection(forceUpdate)
+                guard let self, !self.currentSortMode.isMapCenterDistanceOriented else { return }
+                self.updateDistanceAndDirection(forceUpdate)
             }
             return
         }
+
+        guard !currentSortMode.isMapCenterDistanceOriented else { return }
 
         if isContextMenuVisible {
             shouldReloadCollectionView = true
@@ -201,7 +219,7 @@ final class FavoriteListViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         if !isRootFolder {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
+            appearance.configureWithDefaultBackground()
             navigationController?.navigationBar.standardAppearance = appearance
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
             navigationController?.navigationBar.tintColor = .iconColorActive
@@ -222,7 +240,7 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
+        let isSelected = !selectionManager.selectedItems.isEmpty
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -293,6 +311,93 @@ final class FavoriteListViewController: UIViewController {
         }
     }
     
+    func resetScrollPosition() {
+        savedScrollPosition = nil
+        shouldRestoreScrollPosition = false
+        collectionView.layoutIfNeeded()
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: -collectionView.adjustedContentInset.top), animated: false)
+    }
+
+    func saveScrollPosition() {
+        guard !isSearchResultsMode else { return }
+        savedScrollPosition = currentScrollPosition()
+    }
+
+    private func currentScrollPosition() -> (linearIndex: Int, offsetY: CGFloat)? {
+        let topY = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        let visibleItems = collectionView.indexPathsForVisibleItems.compactMap { indexPath -> (indexPath: IndexPath, minY: CGFloat, maxY: CGFloat)? in
+            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return nil }
+            return (indexPath: indexPath, minY: attributes.frame.minY, maxY: attributes.frame.maxY)
+        }
+
+        let topEdgeItems = visibleItems.filter { $0.minY <= topY && $0.maxY > topY }
+        let candidates = topEdgeItems.isEmpty ? visibleItems.filter { $0.maxY > topY } : topEdgeItems
+        guard let anchor = (candidates.isEmpty ? visibleItems : candidates).min(by: { lhs, rhs in
+            let lhsDistance = abs(lhs.minY - topY)
+            let rhsDistance = abs(rhs.minY - topY)
+            if lhsDistance == rhsDistance {
+                return lhs.minY < rhs.minY
+            }
+
+            return lhsDistance < rhsDistance
+        }) else {
+            return nil
+        }
+
+        return (linearIndex: linearIndex(for: anchor.indexPath),
+                offsetY: max(0.0, topY - anchor.minY))
+    }
+
+    private func linearIndex(for indexPath: IndexPath) -> Int {
+        guard indexPath.section < collectionView.numberOfSections else { return 0 }
+        let previousItemsCount = (0..<indexPath.section).reduce(0) { result, section in
+            result + collectionView.numberOfItems(inSection: section)
+        }
+        return previousItemsCount + indexPath.item
+    }
+
+    private func restoreScrollPositionIfNeeded() {
+        guard !isSearchResultsMode, let savedScrollPosition else { return }
+        collectionView.layoutIfNeeded()
+
+        guard let indexPath = indexPath(for: savedScrollPosition.linearIndex) else { return }
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+
+        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { return }
+        self.savedScrollPosition = nil
+        shouldRestoreScrollPosition = false
+        let minY = -collectionView.adjustedContentInset.top
+        let offsetY = max(minY, attributes.frame.minY + savedScrollPosition.offsetY - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: offsetY), animated: false)
+    }
+
+    private func indexPath(for linearIndex: Int) -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        var remainingIndex = max(0, linearIndex)
+        for section in 0..<collectionView.numberOfSections {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if remainingIndex < itemCount {
+                return IndexPath(item: remainingIndex, section: section)
+            }
+
+            remainingIndex -= itemCount
+        }
+
+        return lastIndexPath()
+    }
+
+    private func lastIndexPath() -> IndexPath? {
+        guard collectionView.numberOfSections > 0 else { return nil }
+        for section in stride(from: collectionView.numberOfSections - 1, through: 0, by: -1) {
+            let itemCount = collectionView.numberOfItems(inSection: section)
+            if itemCount > 0 {
+                return IndexPath(item: itemCount - 1, section: section)
+            }
+        }
+
+        return nil
+    }
+
     private func registerDistanceAndDirectionObservers() {
         unregisterDistanceAndDirectionObservers()
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
@@ -382,12 +487,7 @@ final class FavoriteListViewController: UIViewController {
     
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
-            let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
-            guard !selectedItems.isEmpty else {
-                setNavigationTitle("", subtitle: "", hideSubtitle: true)
-                return
-            }
-            
+            let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
             let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
             setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
@@ -404,6 +504,11 @@ final class FavoriteListViewController: UIViewController {
         } else {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
+    }
+
+    private func createMissingParentFolderIfNeeded() {
+        guard isRootFolder else { return }
+        OAFavoritesBridgeHelper.createMissingParentFolderIfNeeded()
     }
     
     deinit {

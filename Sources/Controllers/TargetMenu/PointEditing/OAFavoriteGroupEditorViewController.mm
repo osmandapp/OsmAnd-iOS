@@ -35,7 +35,7 @@
     }
     else
     {
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:self.editName];
+        _favoriteGroup = [OAFavoritesHelper groupByName:self.editName];
     }
 }
 
@@ -46,7 +46,7 @@
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
 {
-    return [OAFavoritesHelper getGroupByName:[self targetGroupNameForName:name]];
+    return [OAFavoritesHelper groupByTrimmedName:[self targetGroupNameForName:name]];
 }
 
 - (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group

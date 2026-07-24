@@ -11,7 +11,7 @@ enum ScreenMode {
     case folder(FavoriteFolderRow, previousTitle: String)
 }
 
-enum FavoriteFolderSection: Hashable {
+enum FavoriteFolderSection: String, Hashable {
     case pinned
     case visible
     case hidden
@@ -84,8 +84,8 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
 
     var subtitle: String {
         let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-        guard let lastModified else { return pointsText + "." }
-        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText) + "."
+        guard let lastModified else { return pointsText }
+        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText)
     }
 
     var iconName: String {
@@ -144,10 +144,18 @@ struct FavoriteFolderStats: Hashable {
             parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
         }
 
-        parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(pointsCount)")
-        parts.append("\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))")
-        let text = parts.joined(separator: ", ") + "."
-        return text.prefix(1).uppercased() + String(text.dropFirst())
+        parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
+        let firstLine = parts.joined(separator: ", ")
+        let secondLine = "\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))"
+        return [firstLine, secondLine].map { capitalizedLine($0) + "." }.joined(separator: "\n")
+    }
+
+    private var formattedPointsCount: String {
+        NumberFormatter.localizedString(from: NSNumber(value: pointsCount), number: .decimal)
+    }
+
+    private func capitalizedLine(_ text: String) -> String {
+        text.prefix(1).uppercased() + String(text.dropFirst())
     }
 }
 
@@ -156,7 +164,7 @@ final class FavoriteListCell: UICollectionViewListCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        attributes.frame.size.height = max(Self.rowHeight, attributes.frame.height)
+        attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
         return attributes
     }
 }

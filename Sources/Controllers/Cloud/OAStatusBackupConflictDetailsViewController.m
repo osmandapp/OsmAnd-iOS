@@ -288,6 +288,8 @@
                 operation = EOABackupSyncOperationDelete;
             if (operation != EOABackupSyncOperationNone)
             {
+                if ([item.key isEqualToString:@"downloadCloud"] && _settingsItem.type == EOASettingsItemTypeFavorites)
+                    [self.delegate onDownloadFavoritesCloudVersion];
                 [_settingsHelper syncSettingsItems:fileName
                                          localFile:_localFile
                                         remoteFile:_remoteFile

@@ -32,6 +32,7 @@
 @property (nonatomic, weak) id<OASelectFavoriteGroupDelegate> delegate;
 
 - (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName;
+- (instancetype) initWithSelectedGroupName:(nullable NSString *)selectedGroupName favoriteGroupNames:(NSArray<NSString *> *)favoriteGroupNames;
 - (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName gpxWptGroups:(NSArray *)gpxWptGroups;
 
 @end

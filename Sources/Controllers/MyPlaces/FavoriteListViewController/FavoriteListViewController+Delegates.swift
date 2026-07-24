@@ -150,9 +150,10 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
             self.colorController = nil
         }
 
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else { return }
+        let selectedItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedItems.isEmpty else { return }
         if colorController.saveChanges {
-            OAFavoritesBridgeHelper.changeFavoriteItems(bridgeItems(for: selectedItems), colorIndex: colorController.colorIndex)
+            OAFavoritesBridgeHelper.changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
         }
 
         setEditing(false)
@@ -160,23 +161,38 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
     }
 }
 
-extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
-    func groupChanged() {
-        guard let groupController else { return }
-        defer {
-            self.groupController = nil
-            favoriteItemsToMove = nil
+extension FavoriteListViewController: OASelectFavoriteGroupDelegate {
+    func onGroupSelected(_ selectedGroupName: String) {
+        moveFavoriteItems(toGroupName: selectedGroupName)
+    }
+
+    func addNewGroup(withName name: String, iconName: String, color: UIColor, backgroundIconName: String) {
+        guard let favoriteItemsToMove else { return }
+
+        let targetGroupName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let availableGroupNames = OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItemsToMove)
+        if let existingGroupName = availableGroupNames.first(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == targetGroupName }) {
+            moveFavoriteItems(toGroupName: existingGroupName)
+            return
         }
 
-        guard groupController.saveChanges else { return }
+        guard OAFavoritesBridgeHelper.addFavoriteGroup(targetGroupName, parentGroupName: nil, iconName: iconName, color: color, backgroundIconName: backgroundIconName) else {
+            self.favoriteItemsToMove = nil
+            return
+        }
 
-        let targetGroupName = groupController.groupName ?? ""
+        moveFavoriteItems(toGroupName: targetGroupName)
+    }
+
+    private func moveFavoriteItems(toGroupName targetGroupName: String) {
         guard let favoriteItemsToMove else { return }
+
         createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
         OAFavoritesBridgeHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
         updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
         setEditing(false)
         applySnapshot(animatingDifferences: true)
+        self.favoriteItemsToMove = nil
     }
 }
 
@@ -210,7 +226,6 @@ extension FavoriteListViewController: OAEditorDelegate {
         favoriteGroupAppearanceGroupName = nil
         favoriteGroupAppearanceEditor = nil
         OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
-        applySnapshot(animatingDifferences: true)
     }
 
     func selectColorItem(_ colorItem: PaletteItemSolid) {}

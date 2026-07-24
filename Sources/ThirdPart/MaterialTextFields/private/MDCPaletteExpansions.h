@@ -12,15 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
-#import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+#import <UIKit/UIKit.h>
+
+UIColor* _Nonnull MDCPaletteTintFromTargetColor(UIColor* _Nonnull targetColor,
+                                                NSString* _Nonnull tintName);
+
+UIColor* _Nonnull MDCPaletteAccentFromTargetColor(UIColor* _Nonnull targetColor,
+                                                  NSString* _Nonnull accentName);

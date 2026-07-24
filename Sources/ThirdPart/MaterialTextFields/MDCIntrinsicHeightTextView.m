@@ -1,4 +1,4 @@
-// Copyright 2016-present the Material Components for iOS authors. All Rights Reserved.
+// Copyright 2017-present the Material Components for iOS authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
 // limitations under the License.
 
 #import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
-#import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+
+@implementation MDCIntrinsicHeightTextView
+
+/**
+ When a value in the CGSize of intrinsicContentSize is -1, it's considered undefined. For the
+ MDCMultilineTextField, we want this to always be defined so our layouts are not ambiguous.
+ */
+- (CGSize)intrinsicContentSize {
+  CGSize size = [super intrinsicContentSize];
+  if (size.height == UIViewNoIntrinsicMetric) {
+    size.height = [self contentSize].height;
+  }
+  return size;
+}
+@end

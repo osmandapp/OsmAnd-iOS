@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
-#import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+#import <UIKit/UIKit.h>
+
+/**
+ A view that draws the underline effect for an instance of MDCTextInput. The underline has 2
+ possible states enabled and disabled. Disabled shows a dotted line instead of solid.
+ */
+@interface MDCTextInputUnderlineView : UIView <NSCopying>
+
+@property(nonatomic, strong) UIColor *color;
+@property(nonatomic, strong) UIColor *disabledColor;
+@property(nonatomic, assign) BOOL enabled;
+@property(nonatomic, assign) CGFloat lineHeight;
+
+@end

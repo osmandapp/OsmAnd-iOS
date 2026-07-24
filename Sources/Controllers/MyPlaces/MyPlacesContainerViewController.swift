@@ -378,11 +378,14 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
                 self.view.layoutIfNeeded()
             }
         } else {
-            searchController?.isActive = false
-            navigationItem.searchController = nil
-            segmentContainerView.alpha = 1
-            updateSegmentedControlVisibility(!isEnabled)
-            setupNavbar(isClearNavBar: isEnabled)
+            UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+                self.setupNavbar(isClearNavBar: isEnabled)
+                self.updateSegmentedControlVisibility(!isEnabled)
+                self.segmentContainerView.alpha = 1
+                self.searchController?.isActive = false
+                self.navigationItem.searchController = nil
+                self.view.layoutIfNeeded()
+            }
         }
     }
     

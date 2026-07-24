@@ -33,8 +33,7 @@ static const CGFloat kAisBaseIconSize = 48.0;
 static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
 static const float kAisRenderZoomEpsilon = 0.02f;
 static const NSTimeInterval kAisViewportRenderUpdateInterval = 0.2;
-static int kAisIconKeyStorage;
-static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
+static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
 static std::unordered_map<std::string, sk_sp<SkImage>> kAisImagesCache;
 
 static BOOL OAAisTypeEquals(OASAisObjType *type, OASAisObjType *expected)
@@ -606,6 +605,14 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         _lastRenderSurfaceZoom = -1.0f;
         _lastViewportRenderUpdateTime = 0;
     }
+    return self;
+}
+
+- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder pointsOrder:(int)pointsOrder
+{
+    self = [self initWithMapViewController:mapViewController baseOrder:baseOrder];
+    if (self)
+        self.pointsOrder = pointsOrder;
     return self;
 }
 

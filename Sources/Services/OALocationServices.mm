@@ -48,6 +48,7 @@
     CLLocationManager* _manager;
     BOOL _locationActive;
     BOOL _compassActive;
+    BOOL _externalProviderActive;
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _followTheRouteObserver;
@@ -92,6 +93,7 @@
 
     _locationActive = NO;
     _compassActive = NO;
+    _externalProviderActive = NO;
     _statusObservable = [[OAObservable alloc] init];
 
     _stateObservable = [[OAObservable alloc] init];
@@ -209,7 +211,7 @@
             return OALocationServicesStatusAuthorizing;
         if (_isSuspended)
             return OALocationServicesStatusSuspended;
-        return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
+        return (_locationActive || _compassActive || _externalProviderActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
     }
 }
 
@@ -221,6 +223,8 @@
 
     // Do nothing if manager is not initialized or waiting for authorization
     if (!manager || self.status == OALocationServicesStatusAuthorizing)
+        return NO;
+    if (_externalProviderActive)
         return NO;
     
     BOOL didChange = NO;
@@ -253,7 +257,7 @@
         _compassActive = YES;
         didChange = YES;
     }
-    
+
     return didChange;
 }
 
@@ -272,6 +276,19 @@
 
 - (BOOL) doStop
 {
+    BOOL didChange = [self doStopSystemLocation];
+
+    if (_externalProviderActive)
+    {
+        _externalProviderActive = NO;
+        didChange = YES;
+    }
+
+    return didChange;
+}
+
+- (BOOL) doStopSystemLocation
+{
     CLLocationManager *manager = self.getLocationManager;
     BOOL didChange = NO;
 
@@ -280,7 +297,7 @@
         _waitingForAuthorization = NO;
         didChange = YES;
     }
-    
+
     if (manager && _locationActive)
     {
         [manager stopUpdatingLocation];
@@ -459,6 +476,8 @@
     CLLocationManager *manager = self.getLocationManager;
     if (!manager)
         return;
+    if (_externalProviderActive)
+        return;
 
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
     if (manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
@@ -577,6 +596,9 @@
 
 - (void) onLocationLost
 {
+    if (_externalProviderActive)
+        return;
+
     _gpsSignalLost = YES;
     if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0)
         [[_routingHelper getVoiceRouter] gpsLocationLost];
@@ -638,6 +660,49 @@
     _lastHeading = location.course;
     _lastMagneticHeading = location.course;
     [self setLocation:location];
+}
+
+- (void) setLocationFromExternalProvider:(CLLocation *)location
+{
+    BOOL wasLocationUnknown = (_lastLocation == nil);
+    BOOL didChangeStatus = NO;
+    @synchronized(_lock)
+    {
+        if (!_externalProviderActive)
+        {
+            _externalProviderActive = YES;
+            didChangeStatus = YES;
+        }
+    }
+    didChangeStatus = [self doStopSystemLocation] || didChangeStatus;
+    _lastHeading = location.course;
+    _lastMagneticHeading = location.course;
+    [self setLocation:location];
+    if (didChangeStatus)
+        [_statusObservable notifyEvent];
+    if (wasLocationUnknown)
+        [_updateFirstTimeObserver notifyEvent];
+}
+
+- (void) resetLocationFromExternalProvider
+{
+    BOOL didChangeStatus = NO;
+    @synchronized(_lock)
+    {
+        if (_externalProviderActive)
+        {
+            _externalProviderActive = NO;
+            didChangeStatus = YES;
+        }
+    }
+
+    if (!didChangeStatus)
+        return;
+
+    _lastHeading = NAN;
+    _lastMagneticHeading = NAN;
+    [self setLocation:nil];
+    [_statusObservable notifyEvent];
 }
 
 - (BOOL) isInLocationSimulation
@@ -714,7 +779,17 @@
 
     // If services were running, but now authorization was revoked, stop them
     if (status != kCLAuthorizationStatusAuthorizedAlways && status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
-        [self stop];
+    {
+        if (_externalProviderActive)
+        {
+            if ([self doStopSystemLocation])
+                [_statusObservable notifyEvent];
+        }
+        else
+        {
+            [self stop];
+        }
+    }
     else if (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse)
         [self start];
 
@@ -730,7 +805,17 @@
             // User have denied services or revoked authorization, stop the services
             // If services were running, but now authorization was revoked, stop them
             if (_locationActive || _compassActive)
-                [self stop];
+            {
+                if (_externalProviderActive)
+                {
+                    if ([self doStopSystemLocation])
+                        [_statusObservable notifyEvent];
+                }
+                else
+                {
+                    [self stop];
+                }
+            }
             return;
         }
         else if (error.code == kCLErrorLocationUnknown)
@@ -751,11 +836,14 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
+
+    if (_externalProviderActive)
+        return;
     
     if (!locations || ![locations lastObject] || [_locationSimulation isRouteAnimating])
         return;
 
-    BOOL wasLocationUnknown = (_lastLocation == nil);
+    BOOL wasLocationUnknown = _lastLocation == nil;
     
     [self setLocation:[locations lastObject]];
 
@@ -771,6 +859,10 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
+
+    if (_externalProviderActive)
+        return;
+
     @synchronized(_lock)
     {
         _lastHeading = newHeading.trueHeading;

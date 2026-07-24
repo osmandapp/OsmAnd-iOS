@@ -47,6 +47,7 @@ final class AisTrackerPlugin: OAPlugin {
     static let hostPrefId = "ais_address_nmea_server"
     static let tcpPortPrefId = "ais_port_nmea_server"
     static let udpPortPrefId = "ais_port_nmea_local"
+    static let useNmeaLocationPrefId = "ais_use_nmea_location"
     static let objectLostTimeoutPrefId = "ais_object_lost_timeout"
     static let shipLostTimeoutPrefId = "ais_ship_lost_timeout"
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
@@ -56,6 +57,7 @@ final class AisTrackerPlugin: OAPlugin {
     let hostPref: OACommonString
     let tcpPortPref: OACommonInteger
     let udpPortPref: OACommonInteger
+    let useNmeaLocationPref: OACommonBoolean
     let objectLostTimeoutPref: OACommonInteger
     let shipLostTimeoutPref: OACommonInteger
     let cpaWarningTimePref: OACommonInteger
@@ -72,19 +74,20 @@ final class AisTrackerPlugin: OAPlugin {
     private var networkListener: AisMessageListener?
     private var applicationModeObserver: OAAutoObserverProxy?
 
+    private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
     private lazy var simulationProvider = AisSimulationProvider(plugin: self)
     private lazy var aisDataManager = AisDataManager(plugin: self)
-    private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
 
     override init() {
-        protocolPref = OAAppSettings.sharedManager().registerIntPreference(Self.protocolPrefId, defValue: Int32(AisNmeaProtocol.udp.rawValue))
-        hostPref = OAAppSettings.sharedManager().registerStringPreference(Self.hostPrefId, defValue: "192.168.200.16")
-        tcpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.tcpPortPrefId, defValue: 4001)
-        udpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.udpPortPrefId, defValue: 10110)
-        objectLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.objectLostTimeoutPrefId, defValue: 7)
-        shipLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.shipLostTimeoutPrefId, defValue: 4)
-        cpaWarningTimePref = OAAppSettings.sharedManager().registerIntPreference(Self.cpaWarningTimePrefId, defValue: 0)
-        cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0)
+        protocolPref = OAAppSettings.sharedManager().registerIntPreference(Self.protocolPrefId, defValue: Int32(AisNmeaProtocol.udp.rawValue)).makeProfile()
+        hostPref = OAAppSettings.sharedManager().registerStringPreference(Self.hostPrefId, defValue: "192.168.200.16").makeProfile()
+        tcpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.tcpPortPrefId, defValue: 4001).makeProfile()
+        udpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.udpPortPrefId, defValue: 10110).makeProfile()
+        useNmeaLocationPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.useNmeaLocationPrefId, defValue: false).makeProfile()
+        objectLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.objectLostTimeoutPrefId, defValue: 7).makeProfile()
+        shipLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.shipLostTimeoutPrefId, defValue: 4).makeProfile()
+        cpaWarningTimePref = OAAppSettings.sharedManager().registerIntPreference(Self.cpaWarningTimePrefId, defValue: 0).makeProfile()
+        cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0).makeProfile()
         super.init()
 
         applicationModeObserver = OAAutoObserverProxy(self,
@@ -127,14 +130,14 @@ final class AisTrackerPlugin: OAPlugin {
 
     override func initPlugin() -> Bool {
         let result = super.initPlugin()
-        updateConnectionForCurrentProfile()
+        updateConnectionForCurrentProfileSettings()
         return result
     }
 
     override func setEnabled(_ enabled: Bool) {
         super.setEnabled(enabled)
         if enabled {
-            updateConnectionForCurrentProfile()
+            updateConnectionForCurrentProfileSettings()
         } else {
             clearSimulationObjects()
             stopAisNetworkListener()
@@ -163,7 +166,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func isActiveForCurrentProfile() -> Bool {
-        isEnabled() && OAAppSettings.sharedManager().applicationMode.get().isDerivedRouting(from: .boat())
+        isEnabled()
     }
 
     func startAisSimulation(_ fileURL: URL) {
@@ -205,30 +208,38 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func restartConnection() {
-        guard isActiveForCurrentProfile() else {
+        guard isEnabled() else {
             stopAisNetworkListener()
             return
         }
         aisDataManager.startUpdates()
+        injectOrderOfIconsTestShip()
         let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get())) ?? .udp
         stopSharedNetworkListener(updateState: false)
         updateConnectionState(.connecting)
         switch proto {
         case .udp:
             let port = max(1, Int(udpPortPref.get()))
-            AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS UDP port=\(port)")
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA UDP port=\(port)")
             networkListener = AisMessageListener(dataListener: networkDataListener, udpPort: Int32(port))
         case .tcp:
             let host = hostPref.get()
             let port = max(1, Int(tcpPortPref.get()))
-            AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS TCP host=\(host) port=\(port)")
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA TCP host=\(host) port=\(port)")
             networkListener = AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
         }
     }
 
     func stopAisNetworkListener() {
         stopSharedNetworkListener(updateState: true)
+        resetNmeaLocationProvider()
         aisDataManager.stopUpdates()
+    }
+
+    func resetNmeaLocationProvider() {
+        DispatchQueue.main.async {
+            OsmAndApp.swiftInstance().locationServices?.resetLocationFromExternalProvider()
+        }
     }
 
     func fakeOwnPosition(_ location: CLLocation?) {
@@ -362,11 +373,44 @@ final class AisTrackerPlugin: OAPlugin {
         }
     }
 
-    private func updateConnectionForCurrentProfile() {
-        if isActiveForCurrentProfile() {
-            if networkListener == nil {
-                restartConnection()
-            }
+    func injectOrderOfIconsTestShip() {
+        // Temporary test fixture for https://github.com/osmandapp/OsmAnd-iOS/issues/4844.
+        let mmsi: Int32 = 244123456
+        let position = AisObject(mmsi: mmsi,
+                                 msgType: 1,
+                                 timeStamp: 30,
+                                 navStatus: 0,
+                                 manInd: 0,
+                                 heading: 112,
+                                 cog: 112,
+                                 sog: 0.1,
+                                 lat: 51.96695,
+                                 lon: 5.32140,
+                                 rot: 0)
+        handleSimulatedAisObject(position)
+
+        let data = AisObject(mmsi: mmsi,
+                             msgType: 5,
+                             imo: 0,
+                             callSign: "ORDER",
+                             shipName: "ORDER-OF-ICONS",
+                             shipType: 60,
+                             dimensionToBow: 56,
+                             dimensionToStern: 65,
+                             dimensionToPort: 8,
+                             dimensionToStarboard: 12,
+                             draught: 2,
+                             destination: "Wijk bij Duurstede",
+                             etaMon: AisObjectConstants.shared.INVALID_ETA,
+                             etaDay: AisObjectConstants.shared.INVALID_ETA,
+                             etaHour: AisObjectConstants.shared.INVALID_ETA_HOUR,
+                             etaMin: AisObjectConstants.shared.INVALID_ETA_MIN)
+        handleSimulatedAisObject(data)
+    }
+
+    private func updateConnectionForCurrentProfileSettings() {
+        if isEnabled() {
+            restartConnection()
         } else {
             stopAisNetworkListener()
         }
@@ -386,7 +430,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     private func stopSharedNetworkListener(updateState: Bool) {
         if networkListener != nil {
-            AisObjectHelper.debugLog("[AisTrackerPlugin] stop shared AIS listener")
+            AisObjectHelper.debugLog("[AisTrackerPlugin] stop AIS/NMEA listener")
         }
         networkListener?.stopListener()
         networkListener = nil
@@ -407,17 +451,44 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     fileprivate func onNetworkAisObjectReceived(_ object: AisObject) {
+        if connectionState != .connected {
+            updateConnectionState(.connected)
+        }
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            if self.connectionState != .connected {
-                self.updateConnectionState(.connected)
-            }
-            self.aisDataManager.onAisObjectReceived(object)
+            self?.aisDataManager.onAisObjectReceived(object)
         }
     }
 
+    fileprivate func onNetworkNmeaLocationReceived(_ location: AisLocation) {
+        guard useNmeaLocationPref.get() else {
+            resetNmeaLocationProvider()
+            return
+        }
+        if connectionState != .connected {
+            updateConnectionState(.connected)
+        }
+        let clLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: location.latitude,
+                                                                       longitude: location.longitude),
+                                    altitude: 0,
+                                    horizontalAccuracy: kCLLocationAccuracyNearestTenMeters,
+                                    verticalAccuracy: -1,
+                                    course: location.hasBearing ? CLLocationDirection(location.bearing) : -1,
+                                    speed: location.hasSpeed ? CLLocationSpeed(location.speed) : -1,
+                                    timestamp: Date())
+        DispatchQueue.main.async {
+            OsmAndApp.swiftInstance().locationServices?.setLocationFromExternalProvider(clLocation)
+            if AisLogger.shared.isEnabled {
+                AisObjectHelper.debugLog("[AisTrackerPlugin] location from NMEA lat=\(clLocation.coordinate.latitude) lon=\(clLocation.coordinate.longitude)")
+            }
+        }
+    }
+
+    fileprivate func onNetworkListenerFailed() {
+        updateConnectionState(.failed)
+    }
+
     @objc private func onApplicationModeChanged() {
-        updateConnectionForCurrentProfile()
+        updateConnectionForCurrentProfileSettings()
     }
 
     deinit {
@@ -430,10 +501,13 @@ private final class AisNetworkDataListener: NSObject, AisDataListener {
 
     init(plugin: AisTrackerPlugin) {
         self.plugin = plugin
-        super.init()
     }
 
     func onAisObjectReceived(ais: AisObject) {
         plugin?.onNetworkAisObjectReceived(ais)
+    }
+
+    func onNmeaLocationReceived(location: AisLocation) {
+        plugin?.onNetworkNmeaLocationReceived(location)
     }
 }

@@ -29,6 +29,7 @@
 @implementation OASelectFavoriteGroupViewController
 {
     NSString *_selectedGroupName;
+    NSArray<NSString *> *_favoriteGroupNames;
     NSArray<OAFavoriteGroup *> *_groupedFavorites;
     NSArray<NSDictionary<NSString *, NSString *> *> *_groupedGpxWpts;
     NSArray<NSArray<NSDictionary *> *> *_data;
@@ -43,6 +44,19 @@
     {
         _selectedGroupName = selectedGroupName;
         [self reloadData:[OAFavoritesHelper getFavoriteGroups] isFavorite:YES];
+    }
+    return self;
+}
+
+- (instancetype)initWithSelectedGroupName:(nullable NSString *)selectedGroupName favoriteGroupNames:(NSArray<NSString *> *)favoriteGroupNames;
+{
+    self = [super init];
+    if (self)
+    {
+        _selectedGroupName = selectedGroupName;
+        _favoriteGroupNames = [favoriteGroupNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 localizedCaseInsensitiveCompare:obj2];
+        }];
     }
     return self;
 }
@@ -106,7 +120,24 @@
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
 
-    if (_groupedFavorites)
+    if (_favoriteGroupNames)
+    {
+        for (NSString *groupName in _favoriteGroupNames)
+        {
+            OAFavoriteGroup *group = [OAFavoritesHelper groupByName:groupName];
+            [cellFoldersData addObject:@{
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"header" : OALocalizedString(@"available_groups"),
+                @"title" : [OAFavoriteGroup getDisplayName:groupName],
+                @"value" : groupName,
+                @"description" : [NSString stringWithFormat:@"%ld", (unsigned long) group.points.count],
+                @"isSelected" : @([groupName isEqualToString:_selectedGroupName]),
+                @"color" : group.color ?: [OADefaultFavorite getDefaultColor],
+                @"img" : @"ic_custom_folder"
+            }];
+        }
+    }
+    else if (_groupedFavorites)
     {
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
@@ -246,8 +277,9 @@
     else if (indexPath.section == kGroupsListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *selectedGroupName = item[@"value"] ?: item[@"title"];
         if (![item[@"isSelected"] boolValue] && _delegate)
-            [_delegate onGroupSelected:item[@"title"]];
+            [_delegate onGroupSelected:selectedGroupName];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }

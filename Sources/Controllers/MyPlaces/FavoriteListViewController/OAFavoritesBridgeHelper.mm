@@ -8,7 +8,6 @@
 
 #import "OAFavoritesBridgeHelper.h"
 #import "OAAppSettings.h"
-#import "OAEditGroupViewController.h"
 #import "OAEditPointViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoriteGroupEditorViewController.h"

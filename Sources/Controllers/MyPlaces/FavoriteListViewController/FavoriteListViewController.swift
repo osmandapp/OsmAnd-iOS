@@ -26,7 +26,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     let settings = OAAppSettings.sharedManager()
     var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var groupController: OAEditGroupViewController?
     var colorController: OAEditColorViewController?
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?

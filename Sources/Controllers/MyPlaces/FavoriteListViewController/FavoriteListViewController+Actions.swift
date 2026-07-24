@@ -21,13 +21,13 @@ extension FavoriteListViewController {
     func openFavoriteItemsMove(_ favoriteItems: [Any]) {
         guard !favoriteItems.isEmpty,
               let navigationController,
-              let groupController = OAEditGroupViewController(groupName: nil, groups: OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
+              let viewController = OASelectFavoriteGroupViewController(selectedGroupName: nil,
+                                                                       favoriteGroupNames: OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
             return
         }
-        self.groupController = groupController
         favoriteItemsToMove = favoriteItems
-        groupController.delegate = self
-        navigationController.present(UINavigationController(rootViewController: groupController), animated: true)
+        viewController.delegate = self
+        navigationController.present(UINavigationController(rootViewController: viewController), animated: true)
     }
 
     func openFavoriteGroupAddToTrack(_ groupName: String) {

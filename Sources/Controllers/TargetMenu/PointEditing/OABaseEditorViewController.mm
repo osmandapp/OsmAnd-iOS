@@ -717,12 +717,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
     if ([item.key isEqualToString:kInputNameKey])
     {
+        BOOL hasText = [textView.text trim].length > 0;
         OAFavoriteGroup *groupExist = [self existingGroupFor:textView.text];
         BOOL isGroupNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text];
-        _isTextViewNameValid = isGroupNameValid && (!groupExist || [self allowsExistingGroupFor:textView.text group:groupExist]);
+        _isTextViewNameValid = hasText && isGroupNameValid && (!groupExist || [self allowsExistingGroupFor:textView.text group:groupExist]);
         if (!_isTextViewNameValid && groupExist && [self allowsValidationForGroupName])
         {
-            _isTextViewNameValid = textView.text.length > 0
+            _isTextViewNameValid = hasText
                 && (![groupExist.iconName isEqualToString:self.editIconName]
                 || ![groupExist.backgroundType isEqualToString:self.editBackgroundIconName]
                 || ![groupExist.color isEqual:self.editColor]);

@@ -50,13 +50,12 @@ final class CarPlayMapModeListController: NSObject {
             rawValue: OAAppSettings.sharedManager().carPlayMapAppearanceMode.get()
         )
         let items: [CPListItem] = Self.modes.map { mode in
-            let checkmark: UIImage? = mode == current
-                ? UIImage.templateImageNamed("ic_checkmark_default")
-                : nil
+            let checkmark: UIImage? = mode == current ? .icCheckmarkDefault : nil
+            
             let item = CPListItem(
                 text: Self.title(for: mode),
                 detailText: nil,
-                image: .templateImageNamed(mode.iconName),
+                image: mapModeIcon(for: mode),
                 accessoryImage: checkmark,
                 accessoryType: .none
             )
@@ -67,6 +66,14 @@ final class CarPlayMapModeListController: NSObject {
             return item
         }
         return CPListSection(items: items)
+    }
+    
+    private func mapModeIcon(for mode: DayNightMode) -> UIImage? {
+        if mode == .appTheme {
+            return .icCustomMapModeVehicle
+        } else {
+            return .templateImageNamed(mode.iconName)
+        }
     }
 
     private func select(_ mode: DayNightMode) {

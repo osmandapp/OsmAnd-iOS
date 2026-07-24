@@ -142,6 +142,11 @@
     return EOABaseButtonColorSchemeGraySimple;
 }
 
+- (UITableViewStyle)tableStyle
+{
+    return UITableViewStyleGrouped;
+}
+
 #pragma mark - Table data
 
 - (OAResourceItem *)getItem:(NSIndexPath * _Nonnull)indexPath

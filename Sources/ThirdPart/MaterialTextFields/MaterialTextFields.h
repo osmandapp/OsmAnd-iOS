@@ -1,50 +1,26 @@
-#import <UIKit/UIKit.h>
+// Copyright 2016-present the Material Components for iOS authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger, MDCTextInputTextInsetsMode) {
-    MDCTextInputTextInsetsModeNever = 0,
-    MDCTextInputTextInsetsModeIfContent,
-    MDCTextInputTextInsetsModeAlways,
-};
-
-@protocol MDCMultilineTextInput <NSObject>
-@property(nonatomic, assign) MDCTextInputTextInsetsMode textInsetsMode;
-@property(nonatomic, assign) BOOL hidesPlaceholderOnInput;
-@end
-
-@protocol MDCMultilineTextInputLayoutDelegate <NSObject>
-- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
-      didChangeContentSize:(CGSize)size;
-@end
-
-@interface MDCMultilineTextField : UIView <MDCMultilineTextInput>
-
-@property(nonatomic, strong, readonly) UITextView *textView;
-@property(nonatomic, strong, readonly) UIButton *clearButton;
-@property(nonatomic, strong, readonly) UIView *underline;
-@property(nonatomic, weak, nullable) IBOutlet id<MDCMultilineTextInputLayoutDelegate> layoutDelegate;
-@property(nonatomic, copy, nullable) NSString *text;
-@property(nonatomic, copy, nullable) NSString *placeholder;
-@property(nonatomic, strong, nullable) UIColor *textColor;
-@property(nonatomic, strong, nullable) UIFont *font;
-@property(nonatomic, assign) BOOL adjustsFontForContentSizeCategory;
-@property(nonatomic, assign) MDCTextInputTextInsetsMode textInsetsMode;
-@property(nonatomic, assign) BOOL hidesPlaceholderOnInput;
-
-@end
-
-@interface MDCTextInputControllerUnderline : NSObject
-
-@property(nonatomic, weak, readonly, nullable) MDCMultilineTextField *textInput;
-@property(nonatomic, strong, nullable) UIFont *inlinePlaceholderFont;
-@property(nonatomic, strong, nullable) UIColor *inlinePlaceholderColor;
-@property(nonatomic, strong, nullable) UIColor *floatingPlaceholderActiveColor;
-@property(nonatomic, strong, nullable) UIColor *floatingPlaceholderNormalColor;
-
-- (instancetype)initWithTextInput:(MDCMultilineTextField *)textInput;
-- (void)setFloatingPlaceholderNormalColor:(nullable UIColor *)floatingPlaceholderNormalColor;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#import "MDCIntrinsicHeightTextView.h"
+#import "MDCMultilineTextField.h"
+#import "MDCMultilineTextInputDelegate.h"
+#import "MDCMultilineTextInputLayoutDelegate.h"
+#import "MDCTextField.h"
+#import "MDCTextFieldPositioningDelegate.h"
+#import "MDCTextInput.h"
+#import "MDCTextInputBorderView.h"
+#import "MDCTextInputCharacterCounter.h"
+#import "MDCTextInputController.h"
+#import "MDCTextInputControllerUnderline.h"
+#import "MDCTextInputUnderlineView.h"

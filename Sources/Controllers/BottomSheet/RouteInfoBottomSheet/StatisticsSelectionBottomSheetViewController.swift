@@ -94,10 +94,6 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         isYAxisMode ? localizedString("y_axis_description") : nil
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OATwoIconsButtonTableViewCell.reuseIdentifier)

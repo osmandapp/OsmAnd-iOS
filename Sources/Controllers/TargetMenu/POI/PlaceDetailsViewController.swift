@@ -13,6 +13,8 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private var detailsObject: BaseDetailsObject?
     private var renderedObject: OARenderedObject?
+    // Raw source (rendered object or amenity/wiki POI) used to resolve the detailed object in the background.
+    private var sourceObject: AnyObject?
     private var provider: RenderedObjectAmenityProvider!
     
     required init?(coder: NSCoder) {
@@ -31,7 +33,16 @@ final class PlaceDetailsViewController: OAPOIViewController {
         let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject
+        self.sourceObject = renderedObject
         self.provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
+    }
+
+    // Amenity/wiki POI opened directly (e.g. Popular Places): show header instantly,
+    // resolve the detailed object asynchronously and fill in the rich rows in place.
+    init(amenityPoi poi: OAPOI) {
+        super.init(poi: poi)
+        self.sourceObject = poi
+        self.provider = RenderedObjectAmenityProvider()
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -232,16 +243,16 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     private func resolveDetailedObjectInBackground() {
-        guard let renderedObject else { return }
+        guard let sourceObject else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
+            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
             DispatchQueue.main.async {
                 guard let self,
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
                       let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === renderedObject
+                      (targetPoint.targetObj as AnyObject) === sourceObject
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details

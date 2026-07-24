@@ -234,44 +234,11 @@
         }
         case OATargetWiki:
         {
-            if (targetPoint.localizedContent.count == 1)
-            {
-                controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:targetPoint.localizedContent.allValues.firstObject];
-            }
-            else
-            {
-                NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
-                if (!preferredMapLanguage || preferredMapLanguage.length == 0)
-                    preferredMapLanguage = NSLocale.currentLocale.languageCode;
-
-                NSString *locale = [OAPluginsHelper onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
-                if ([locale isEqualToString:@"en"])
-                    locale = @"";
-
-                NSString *content = targetPoint.localizedContent[locale];
-                if (content)
-                {
-                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
-                }
-                else
-                {
-                    NSArray *locales = targetPoint.localizedContent.allKeys;
-                    for (NSString *langCode in [NSLocale preferredLanguages])
-                    {
-                        if ([langCode containsString:@"-"])
-                            locale = [langCode substringToIndex:[langCode indexOf:@"-"]];
-                        if ([locales containsObject:locale])
-                        {
-                            content = targetPoint.localizedContent[locale];
-                            break;
-                        }
-                    }
-                    if (!content)
-                        content = targetPoint.localizedContent.allValues.firstObject;
-
-                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
-                }
-            }
+            // Unified async path (see PlaceDetailsViewController): open the menu instantly from the
+            // wiki POI, then resolve the detailed object in the background and fill in the rich rows
+            // in place. Previously this built OAWikiMenuViewController; the detailed upgrade used to
+            // happen via a ~2s synchronous searchDetailedObject on the main thread (froze the UI).
+            controller = [[PlaceDetailsViewController alloc] initWithAmenityPoi:targetPoint.targetObj];
             break;
         }
             

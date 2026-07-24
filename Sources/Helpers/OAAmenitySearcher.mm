@@ -275,12 +275,17 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         }
     }
     BaseDetailsObject *detailsObject;
+    CFAbsoluteTime __wpAll = CFAbsoluteTimeGetCurrent();
     if (request)
     {
+        CFAbsoluteTime __wpReq = CFAbsoluteTimeGetCurrent();
         detailsObject = [self searchDetailedObjectWithRequest:request];
+        NSLog(@"[WIKI_PERF]   searchDetailedObjectWithRequest dt=%.3fs", CFAbsoluteTimeGetCurrent() - __wpReq);
     }
     
+    CFAbsoluteTime __wpGeo = CFAbsoluteTimeGetCurrent();
     [self completeGeometry:detailsObject object:object];
+    NSLog(@"[WIKI_PERF]   completeGeometry dt=%.3fs | searchDetailedObject TOTAL=%.3fs", CFAbsoluteTimeGetCurrent() - __wpGeo, CFAbsoluteTimeGetCurrent() - __wpAll);
     return detailsObject;
 }
 
@@ -331,10 +336,12 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         ? AMENITY_SEARCH_RADIUS_FOR_RELATION
         : AMENITY_SEARCH_RADIUS;
 
+    CFAbsoluteTime __wpAm = CFAbsoluteTimeGetCurrent();
     NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
                                                      searchLatLon:latLon
                                                            radius:radius
                                                     includeTravel:YES];
+    NSLog(@"[WIKI_PERF]     searchAmenitiesWithFilter(acceptAll,includeTravel) dt=%.3fs radius=%ld count=%lu", CFAbsoluteTimeGetCurrent() - __wpAm, (long)radius, (unsigned long)amenities.count);
 
     NSMutableArray<OAPOI *> *filtered = [self filterAmenities:amenities request:request];
 
@@ -394,7 +401,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     }
     else
     {
+        CFAbsoluteTime __wpBin = CFAbsoluteTimeGetCurrent();
         const auto dataObjects = [self searchBinaryMapDataForAmenity:detailsObject.syntheticAmenity limit:1];
+        NSLog(@"[WIKI_PERF]     completeGeometry->searchBinaryMapDataForAmenity (no geometry, extra OBF scan) dt=%.3fs objects=%d", CFAbsoluteTimeGetCurrent() - __wpBin, (int)dataObjects.size());
         for (const auto& dataObject : dataObjects)
         {
             if ([self copyCoordinates:detailsObject binaryObject:dataObject])

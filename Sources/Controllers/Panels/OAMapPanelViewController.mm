@@ -1499,6 +1499,8 @@ typedef enum
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
 {
+    CFAbsoluteTime __wpStart = CFAbsoluteTimeGetCurrent();
+    NSLog(@"[WIKI_PERF] showContextMenu ENTER type=%ld title=%@ obj=%@", (long)targetPoint.type, targetPoint.title, [targetPoint.targetObj class]);
     if (_activeTargetType == OATargetGPX)
         [self hideScrollableHudViewController];
 
@@ -1537,9 +1539,16 @@ typedef enum
     
     [_targetMenuView setSelectedObject:selectedObject.object];
 
-    if (targetPoint.type != OATargetRenderedObject)
+    // Wiki (Popular Places) points build OAWikiMenuViewController directly from targetObj + localizedContent
+    // and do NOT need the detailed object; running the sync searchDetailedObject here only froze the UI
+    // for ~2s (see [WIKI_PERF] logs). RenderedObject resolves asynchronously in its controller.
+    if (targetPoint.type != OATargetRenderedObject
+        && targetPoint.type != OATargetWiki)
     {
+        CFAbsoluteTime __wpSdo = CFAbsoluteTimeGetCurrent();
+        NSLog(@"[WIKI_PERF] searchDetailedObject BEGIN (main thread) type=%ld", (long)targetPoint.type);
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
+        NSLog(@"[WIKI_PERF] searchDetailedObject END dt=%.3fs found=%d", CFAbsoluteTimeGetCurrent() - __wpSdo, detailsObject != nil);
         if (detailsObject)
         {
             targetPoint.type = OATargetBaseDetailsObject;
@@ -1549,8 +1558,9 @@ typedef enum
 
     [self setSelectedObject:targetPoint];
 
+    NSLog(@"[WIKI_PERF] pre-showTargetPointMenu elapsed=%.3fs", CFAbsoluteTimeGetCurrent() - __wpStart);
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-        
+        NSLog(@"[WIKI_PERF] menu onComplete elapsed=%.3fs", CFAbsoluteTimeGetCurrent() - __wpStart);
         [_mapViewController contextMenuDidShow:selectedObject.object];
         if (targetPoint.centerMap)
             [self goToTargetPointWithZoom:preferredZoom];
@@ -2563,11 +2573,9 @@ typedef enum
         }
         case OATargetWiki:
         {
+            // Wiki now uses PlaceDetailsViewController (unified async path); no OAWikiMenuDelegate cast.
             if (controller)
-            {
                 [self.targetMenuView doInit:showFullMenu];
-                ((OAWikiMenuViewController *)controller).menuDelegate = self;
-            }
             break;
         }
         case OATargetWpt:

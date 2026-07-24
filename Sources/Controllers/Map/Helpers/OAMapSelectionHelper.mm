@@ -166,25 +166,41 @@ static int TILE_SIZE = 256;
             
             if (cppAmenity != nullptr)
             {
-                NSMutableArray<NSString *> *names = [NSMutableArray new];
-                for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
+                // Wiki (Popular Places): build the POI cheaply from the tapped symbol (with content),
+                // exactly like OAPOILayer's Top Places collection, and open the menu instantly.
+                // PlaceDetailsViewController resolves the full detailed object in the background.
+                // This avoids the ~2s synchronous searchDetailedObjectWithRequest that used to run
+                // here on the main thread at tap time, before the menu opened.
+                OAPOI *parsedPoi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+                if (parsedPoi && [parsedPoi.type.name isEqualToString:WIKI_PLACE])
                 {
-                    NSString *name = entry.value().toNSString();
-                    if (name)
-                        [names addObject:name];
+                    NSLog(@"[WIKI_PERF] selection: wiki amenity -> parsePOIByAmenity (skip sync search)");
+                    [result collect:parsedPoi provider:_provider];
                 }
-                
-                NSString *nativeName = cppAmenity->nativeName.toNSString();
-                if (nativeName)
-                    [names addObject:nativeName];
-                
-                OAPOI *requestAmenity = [[OAPOI alloc] init];
-                requestAmenity.obfId = cppAmenity->id.id;
-                [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
-                [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
-                
-                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
-                detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
+                else
+                {
+                    NSMutableArray<NSString *> *names = [NSMutableArray new];
+                    for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
+                    {
+                        NSString *name = entry.value().toNSString();
+                        if (name)
+                            [names addObject:name];
+                    }
+                    
+                    NSString *nativeName = cppAmenity->nativeName.toNSString();
+                    if (nativeName)
+                        [names addObject:nativeName];
+                    
+                    OAPOI *requestAmenity = [[OAPOI alloc] init];
+                    requestAmenity.obfId = cppAmenity->id.id;
+                    [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
+                    [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
+                    
+                    OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
+                    CFAbsoluteTime __wpSrch = CFAbsoluteTimeGetCurrent();
+                    detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
+                    NSLog(@"[WIKI_PERF] selection: searchDetailedObjectWithRequest (main thread) dt=%.3fs", CFAbsoluteTimeGetCurrent() - __wpSrch);
+                }
             }
             else
             {

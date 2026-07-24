@@ -1,4 +1,4 @@
-// Copyright 2016-present the Material Components for iOS authors. All Rights Reserved.
+// Copyright 2018-present the Material Components for iOS authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
-#import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+#import "UIFont+MaterialSimpleEquality.h"
+
+#import "MaterialMath.h"
+
+@implementation UIFont (MaterialSimpleEquality)
+
+- (BOOL)mdc_isSimplyEqual:(UIFont *)font {
+  return [self.fontName isEqualToString:font.fontName] &&
+         MDCCGFloatEqual(self.pointSize, font.pointSize) &&
+         [[self.fontDescriptor objectForKey:UIFontDescriptorFaceAttribute]
+             isEqual:[font.fontDescriptor objectForKey:UIFontDescriptorFaceAttribute]];
+}
+
+@end

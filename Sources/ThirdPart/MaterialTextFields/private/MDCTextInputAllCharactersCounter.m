@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
 #import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+
+#import "MDCTextInput.h"
+
+@implementation MDCTextInputAllCharactersCounter
+
+- (NSUInteger)characterCountForTextInput:(UIView<MDCTextInput> *)textInput {
+  return textInput.text.length;
+}
+
+@end

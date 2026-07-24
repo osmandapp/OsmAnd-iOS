@@ -1,4 +1,4 @@
-// Copyright 2016-present the Material Components for iOS authors. All Rights Reserved.
+// Copyright 2017-present the Material Components for iOS authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextField.h"
-#import "MDCMultilineTextInputDelegate.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
-#import "MDCTextField.h"
-#import "MDCTextFieldPositioningDelegate.h"
-#import "MDCTextInput.h"
-#import "MDCTextInputBorderView.h"
-#import "MDCTextInputCharacterCounter.h"
-#import "MDCTextInputController.h"
-#import "MDCTextInputControllerUnderline.h"
-#import "MDCTextInputUnderlineView.h"
+#import <UIKit/UIKit.h>
+
+/**
+ This differs from UITextView in only one way: the intrinsicContentSize's height will never be
+ UIViewNoIntrinsicMetric (-1). If [super intrinsicContentSize].height == -1, return the
+ contentSize's height.
+
+ NOTE: UITextView is a subclass of UIScrollView. That's why it has a contentSize.
+ */
+
+@interface MDCIntrinsicHeightTextView : UITextView
+
+@end

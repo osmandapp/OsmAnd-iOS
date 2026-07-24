@@ -1323,7 +1323,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 - (void) showGpx:(NSArray<NSString *> *)filePaths;
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
-- (void) updateGpx:(NSArray<NSString *> *)filePaths;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideRemovedGpx;

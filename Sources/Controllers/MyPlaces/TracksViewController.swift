@@ -1920,7 +1920,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func updateRenamedGpx(src: KFile, dest: KFile) {
-        gpxDB.renameCurrentFile(src, newFile: dest)
+        guard gpxDB.renameCurrentFile(src, newFile: dest) else {
+            NSLog("updateRenamedGpx -> renameCurrentFile failed")
+            return
+        }
+
         handleDeletedGpxFile(gpxFile: src)
         let trackItem = TrackItem(file: dest)
         trackItem.dataItem = OAGPXDatabase.sharedDb().getGPXItem(dest.path())

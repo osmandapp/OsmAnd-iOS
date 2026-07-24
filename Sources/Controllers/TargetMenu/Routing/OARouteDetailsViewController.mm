@@ -885,20 +885,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     // save to disk
     [[OASGpxUtilities shared] writeGpxFileFile:filePathToSaveGPX gpxFile:gpxFile];
     NSURL* url = [NSURL fileURLWithPath:path];
-    
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[url]
-                                      applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]]];
-    
-    if (OAUtilities.isIPad)
-    {
-        activityViewController.popoverPresentationController.sourceView = _doneButton;
-        activityViewController.popoverPresentationController.sourceRect = _doneButton.bounds;
-    }
-    
-    [rootVC presentViewController:activityViewController
-                                     animated:YES
-                                   completion:nil];
+
+    if (OAUtilities.isIPhone)
+        [rootVC showActivity:@[url] applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]] excludedActivityTypes:nil sourceView:nil sourceRect:CGRectZero barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
+    else
+        [rootVC showActivity:@[url] applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]] excludedActivityTypes:nil sourceView:_doneButton sourceRect:_doneButton.bounds barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
 }
 
 - (void)onShareAsLinkPressed
@@ -906,16 +897,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSString *routeUrl = [RouteDeepLinkBuilder generateRouteUrl];
     if (routeUrl.length == 0)
         return;
+
     OARootViewController *rootVC = [OARootViewController instance];
-    UIActivityViewController *activityViewController =
-        [[UIActivityViewController alloc] initWithActivityItems:@[routeUrl]
-                                          applicationActivities:nil];
-    if (OAUtilities.isIPad)
-    {
-        activityViewController.popoverPresentationController.sourceView = _doneButton;
-        activityViewController.popoverPresentationController.sourceRect = _doneButton.bounds;
-    }
-    [rootVC presentViewController:activityViewController animated:YES completion:nil];
+    if (OAUtilities.isIPhone)
+        [rootVC showActivity:@[routeUrl] sourceView:nil barButtonItem:nil completionWithItemsHandler:nil];
+    else
+        [rootVC showActivity:@[routeUrl] sourceView:_doneButton barButtonItem:nil completionWithItemsHandler:nil];
 }
 
 - (IBAction)buttonCancelPressed:(id)sender

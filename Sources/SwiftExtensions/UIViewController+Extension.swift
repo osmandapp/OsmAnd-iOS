@@ -60,7 +60,7 @@ extension UIViewController {
 
 extension UIViewController {
     @objc func showActivity(_ items: [Any],
-                            sourceView: UIView,
+                            sourceView: UIView?,
                             barButtonItem: UIBarButtonItem?,
                             completionWithItemsHandler: (() -> Void)? = nil) {
         showActivity(items, applicationActivities: nil, excludedActivityTypes: nil, sourceView: sourceView, sourceRect: CGRect(), barButtonItem: barButtonItem, permittedArrowDirections: .any, completionWithItemsHandler: completionWithItemsHandler)
@@ -69,7 +69,7 @@ extension UIViewController {
     @objc func showActivity(_ items: [Any],
                             applicationActivities: [UIActivity]? = nil,
                             excludedActivityTypes: [UIActivity.ActivityType]? = nil,
-                            sourceView: UIView,
+                            sourceView: UIView?,
                             sourceRect: CGRect = CGRect(),
                             barButtonItem: UIBarButtonItem?,
                             permittedArrowDirections: UIPopoverArrowDirection = .any,

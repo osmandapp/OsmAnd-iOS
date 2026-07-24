@@ -53,6 +53,12 @@
     _direction = [self.class directionForFavorite:_favorite];
 }
 
+- (void)updateDistanceAndDirectionFromMapCenter:(CLLocationCoordinate2D)mapCenterCoordinate mapAzimuth:(CLLocationDirection)mapAzimuth
+{
+    _distance = [self.class distanceForFavorite:_favorite fromCoordinate:mapCenterCoordinate];
+    _direction = [self.class directionForFavorite:_favorite fromCoordinate:mapCenterCoordinate sourceDirection:mapAzimuth];
+}
+
 + (NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite
 {
     CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
@@ -64,6 +70,32 @@
     const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
     const auto distance = OsmAnd::Utilities::distance(location.coordinate.longitude, location.coordinate.latitude, favoriteLon, favoriteLat);
     return @(distance);
+}
+
++ (NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite fromCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    if (!favorite.favorite || !CLLocationCoordinate2DIsValid(coordinate))
+        return nil;
+
+    const auto &favoritePosition31 = favorite.favorite->getPosition31();
+    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+    const auto distance = OsmAnd::Utilities::distance(coordinate.longitude, coordinate.latitude, favoriteLon, favoriteLat);
+    return @(distance);
+}
+
++ (CGFloat)directionForFavorite:(OAFavoriteItem *)favorite fromCoordinate:(CLLocationCoordinate2D)coordinate sourceDirection:(CLLocationDirection)sourceDirection
+{
+    if (!favorite.favorite || !CLLocationCoordinate2DIsValid(coordinate))
+        return favorite.direction;
+
+    const auto &favoritePosition31 = favorite.favorite->getPosition31();
+    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+    double bearing;
+    [OALocationServices computeDistanceAndBearing:coordinate.latitude lon1:coordinate.longitude lat2:favoriteLat lon2:favoriteLon distance:nil initialBearing:&bearing];
+    CLLocationDirection direction = isnan(sourceDirection) ? 0.0 : sourceDirection;
+    return OsmAnd::Utilities::normalizedAngleDegrees(bearing - direction) * (M_PI / 180);
 }
 
 + (CGFloat)directionForFavorite:(OAFavoriteItem *)favorite

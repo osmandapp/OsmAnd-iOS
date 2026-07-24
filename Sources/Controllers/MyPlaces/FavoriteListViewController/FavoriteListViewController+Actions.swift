@@ -48,12 +48,12 @@ extension FavoriteListViewController {
 
     func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
         let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
-        let favorites = OAFavoritesBridgeHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
+        let favorites = favoritePointRows(OAFavoritesBridgeHelper.favoritePoints(forGroupName: groupName), sortMode: sortMode)
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
     }
 
     func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesBridgeHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
+        favoritePointRows(allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesBridgeHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName) })
     }
 
     func makeActionsMenu() -> UIMenu {

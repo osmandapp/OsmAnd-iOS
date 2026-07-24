@@ -176,10 +176,13 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in
-                self?.updateDistanceAndDirection(forceUpdate)
+                guard let self, !self.currentSortMode.isMapCenterDistanceOriented else { return }
+                self.updateDistanceAndDirection(forceUpdate)
             }
             return
         }
+
+        guard !currentSortMode.isMapCenterDistanceOriented else { return }
 
         if isContextMenuVisible {
             shouldReloadCollectionView = true

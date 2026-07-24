@@ -73,7 +73,7 @@ extension FavoriteListViewController {
     
     func makeSortMenu(includesDistanceSortModes: Bool) -> UIMenu {
         let modes: [FavoriteSortMode] = includesDistanceSortModes ? FavoriteSortMode.allCases : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
-        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
+        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nearestToCurrentLocation, .nearestToMapCenter], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst]]
         let sections = groups.compactMap { group -> UIMenu? in
             let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }
             return actions.isEmpty ? nil : UIMenu(options: .displayInline, children: actions)
@@ -263,7 +263,7 @@ extension FavoriteListViewController {
         }
 
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(favoritePointRows(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName), sortMode: currentSortMode).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         if favorites.isEmpty && folders.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
@@ -330,7 +330,20 @@ extension FavoriteListViewController {
 
         return sections
     }
-    
+
+    func favoritePointRows(_ items: [OAFavoritePointBridgeItem], sortMode: FavoriteSortMode? = nil) -> [FavoritePointRow] {
+        let sortMode = sortMode ?? currentSortMode
+        if sortMode.isMapCenterDistanceOriented {
+            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+            let mapAzimuth = Double(mapViewController.azimuth())
+            items.forEach { $0.updateDistanceAndDirection(fromMapCenter: mapViewController.getMapLocation().coordinate, mapAzimuth: mapAzimuth) }
+        } else if sortMode.isCurrentLocationDistanceOriented {
+            items.forEach { $0.updateDistanceAndDirection() }
+        }
+
+        return items.map { FavoritePointRow(item: $0) }
+    }
+
     private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {
         guard !isSearchResultsMode else { return nil }
         guard let currentGroupName else {

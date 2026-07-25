@@ -120,6 +120,7 @@
 #import "OAFavoriteFolderBridgeItem.h"
 #import "OAFavoritePointBridgeItem.h"
 #import "OATrackPreviewMapRenderer.h"
+#import "OACrashDiagnosticsKSCrashBridge.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

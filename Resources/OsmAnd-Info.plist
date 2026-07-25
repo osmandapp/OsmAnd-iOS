@@ -196,6 +196,8 @@
 	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>A developer can use local network access in a debug build to send an approved diagnostic report to a local test receiver.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>OsmAnd needs motion access to orient the astronomy sky map with device movement.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

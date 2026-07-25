@@ -1300,6 +1300,19 @@
 		84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */; };
 		84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */; };
 		894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 675D59365E264CE6A5F93C66 /* Kingfisher */; };
+		CD1000000000000000000001 /* CrashDiagnosticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000001 /* CrashDiagnosticsModels.swift */; };
+		CD1000000000000000000002 /* CrashDiagnosticsSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000002 /* CrashDiagnosticsSanitizer.swift */; };
+		CD1000000000000000000003 /* CrashDiagnosticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000003 /* CrashDiagnosticsStore.swift */; };
+		CD1000000000000000000004 /* CrashDiagnosticsUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000004 /* CrashDiagnosticsUploader.swift */; };
+		CD1000000000000000000005 /* CrashDiagnosticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000005 /* CrashDiagnosticsService.swift */; };
+		CD1000000000000000000006 /* CrashDiagnosticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000006 /* CrashDiagnosticsViewController.swift */; };
+		CD1000000000000000000007 /* CrashDiagnosticsBannerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000007 /* CrashDiagnosticsBannerPresenter.swift */; };
+		CD1000000000000000000008 /* OACrashDiagnosticsKSCrashBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000009 /* OACrashDiagnosticsKSCrashBridge.mm */; };
+		CD1000000000000000000009 /* Recording in Frameworks */ = {isa = PBXBuildFile; productRef = CD5000000000000000000001 /* Recording */; };
+		CD6000000000000000000001 /* CrashDiagnosticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6000000000000000000005 /* CrashDiagnosticsTests.swift */; };
+		CD6000000000000000000002 /* CrashDiagnosticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000001 /* CrashDiagnosticsModels.swift */; };
+		CD6000000000000000000003 /* CrashDiagnosticsSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000002 /* CrashDiagnosticsSanitizer.swift */; };
+		CD6000000000000000000004 /* CrashDiagnosticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2000000000000000000003 /* CrashDiagnosticsStore.swift */; };
 		8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A2DF236287EFD9E003642B7 /* OAMapCreatorDbHelper.mm */; };
 		8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */; };
 		8A3BE84F27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */; };
@@ -8453,6 +8466,17 @@
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		CD2000000000000000000001 /* CrashDiagnosticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsModels.swift; sourceTree = "<group>"; };
+		CD2000000000000000000002 /* CrashDiagnosticsSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsSanitizer.swift; sourceTree = "<group>"; };
+		CD2000000000000000000003 /* CrashDiagnosticsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsStore.swift; sourceTree = "<group>"; };
+		CD2000000000000000000004 /* CrashDiagnosticsUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsUploader.swift; sourceTree = "<group>"; };
+		CD2000000000000000000005 /* CrashDiagnosticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsService.swift; sourceTree = "<group>"; };
+		CD2000000000000000000006 /* CrashDiagnosticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsViewController.swift; sourceTree = "<group>"; };
+		CD2000000000000000000007 /* CrashDiagnosticsBannerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsBannerPresenter.swift; sourceTree = "<group>"; };
+		CD2000000000000000000008 /* OACrashDiagnosticsKSCrashBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACrashDiagnosticsKSCrashBridge.h; sourceTree = "<group>"; };
+		CD2000000000000000000009 /* OACrashDiagnosticsKSCrashBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACrashDiagnosticsKSCrashBridge.mm; sourceTree = "<group>"; };
+		CD6000000000000000000005 /* CrashDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashDiagnosticsTests.swift; sourceTree = "<group>"; };
+		CD6000000000000000000007 /* metrickit_call_stack.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = metrickit_call_stack.json; sourceTree = "<group>"; };
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -8502,6 +8526,7 @@
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
 				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
+				CD1000000000000000000009 /* Recording in Frameworks */,
 				FA7000012F90000000000009 /* AFNetworking in Frameworks */,
 				FA7000012F9000000000000A /* BRCybertron in Frameworks */,
 			);
@@ -14373,6 +14398,7 @@
 		DA5A80E526C563A600F274C7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CD3000000000000000000001 /* CrashDiagnostics */,
 				FAF6C89C2AD014C800A3ED94 /* ThemeManager */,
 				DA5A80E726C563A600F274C7 /* OALocationServices.h */,
 				DA5A80E826C563A600F274C7 /* OALocationServices.mm */,
@@ -14476,6 +14502,7 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				CD6000000000000000000006 /* Services */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
@@ -14486,6 +14513,23 @@
 				7600F13F2F8010AC00DC552B /* Util */,
 			);
 			path = "OsmAnd MapsTests";
+			sourceTree = "<group>";
+		};
+		CD6000000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CD6000000000000000000008 /* Fixtures */,
+				CD6000000000000000000005 /* CrashDiagnosticsTests.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CD6000000000000000000008 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				CD6000000000000000000007 /* metrickit_call_stack.json */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		DA72AB932508F44900851313 /* Search */ = {
@@ -15415,6 +15459,22 @@
 			path = ThemeManager;
 			sourceTree = "<group>";
 		};
+		CD3000000000000000000001 /* CrashDiagnostics */ = {
+			isa = PBXGroup;
+			children = (
+				CD2000000000000000000001 /* CrashDiagnosticsModels.swift */,
+				CD2000000000000000000002 /* CrashDiagnosticsSanitizer.swift */,
+				CD2000000000000000000003 /* CrashDiagnosticsStore.swift */,
+				CD2000000000000000000004 /* CrashDiagnosticsUploader.swift */,
+				CD2000000000000000000005 /* CrashDiagnosticsService.swift */,
+				CD2000000000000000000006 /* CrashDiagnosticsViewController.swift */,
+				CD2000000000000000000007 /* CrashDiagnosticsBannerPresenter.swift */,
+				CD2000000000000000000008 /* OACrashDiagnosticsKSCrashBridge.h */,
+				CD2000000000000000000009 /* OACrashDiagnosticsKSCrashBridge.mm */,
+			);
+			path = CrashDiagnostics;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -15440,6 +15500,7 @@
 			name = "OsmAnd Maps";
 			packageProductDependencies = (
 				675D59365E264CE6A5F93C66 /* Kingfisher */,
+				CD5000000000000000000001 /* Recording */,
 				FA7000012F9000000000002B /* AFNetworking */,
 				FA7000012F9000000000002D /* BRCybertron */,
 			);
@@ -15586,6 +15647,7 @@
 			mainGroup = BB098CE81793F7FD00423944;
 			packageReferences = (
 				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				CD4000000000000000000001 /* XCRemoteSwiftPackageReference "KSCrash" */,
 				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
 				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */,
 				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */,
@@ -17576,6 +17638,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD1000000000000000000001 /* CrashDiagnosticsModels.swift in Sources */,
+				CD1000000000000000000002 /* CrashDiagnosticsSanitizer.swift in Sources */,
+				CD1000000000000000000003 /* CrashDiagnosticsStore.swift in Sources */,
+				CD1000000000000000000004 /* CrashDiagnosticsUploader.swift in Sources */,
+				CD1000000000000000000005 /* CrashDiagnosticsService.swift in Sources */,
+				CD1000000000000000000006 /* CrashDiagnosticsViewController.swift in Sources */,
+				CD1000000000000000000007 /* CrashDiagnosticsBannerPresenter.swift in Sources */,
+				CD1000000000000000000008 /* OACrashDiagnosticsKSCrashBridge.mm in Sources */,
 				321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */,
 				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
@@ -19225,6 +19295,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD6000000000000000000001 /* CrashDiagnosticsTests.swift in Sources */,
+				CD6000000000000000000002 /* CrashDiagnosticsModels.swift in Sources */,
+				CD6000000000000000000003 /* CrashDiagnosticsSanitizer.swift in Sources */,
+				CD6000000000000000000004 /* CrashDiagnosticsStore.swift in Sources */,
 				D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */,
 				D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */,
 				D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */,
@@ -19703,6 +19777,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -19973,6 +20048,14 @@
 				version = 8.10.0;
 			};
 		};
+		CD4000000000000000000001 /* XCRemoteSwiftPackageReference "KSCrash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kstenerud/KSCrash.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -19980,6 +20063,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		CD5000000000000000000001 /* Recording */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD4000000000000000000001 /* XCRemoteSwiftPackageReference "KSCrash" */;
+			productName = Recording;
 		};
 		FA7000012F9000000000002B /* AFNetworking */ = {
 			isa = XCSwiftPackageProductDependency;

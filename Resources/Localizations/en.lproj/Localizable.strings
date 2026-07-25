@@ -4970,3 +4970,34 @@
 "selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";
 "auto_select_nearest_points" = "Auto-select nearest points";
 "auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";
+
+// Crash diagnostics
+"crash_diagnostics" = "Crash diagnostics";
+"crash_diagnostics_description" = "Review privacy-filtered reports stored on this device.";
+"crash_diagnostics_pending_count" = "%ld pending reports";
+"crash_diagnostics_pending_reports" = "Pending reports";
+"crash_diagnostics_privacy_title" = "Private by design";
+"crash_diagnostics_privacy_description" = "Reports stay on this device until you review a report and choose Send once. Coordinates, routes, searches, favorites, names, URLs, file paths, logs, account data, and persistent identifiers are excluded.";
+"crash_diagnostics_no_reports" = "No pending reports";
+"crash_diagnostics_crash" = "Crash report";
+"crash_diagnostics_hang" = "App hang report";
+"crash_diagnostics_cpu" = "CPU exception report";
+"crash_diagnostics_disk" = "Disk-write exception report";
+"crash_diagnostics_non_fatal" = "Recoverable error report";
+"crash_diagnostics_not_sent" = "Not sent";
+"crash_diagnostics_approved" = "Approved; waiting to retry";
+"crash_diagnostics_rejected" = "Receiver rejected this report";
+"crash_diagnostics_review" = "Review crash report";
+"crash_diagnostics_payload" = "Sanitized crash report JSON";
+"crash_diagnostics_send_once" = "Send once";
+"crash_diagnostics_later" = "Later";
+"crash_diagnostics_report_unavailable" = "This report is no longer available.";
+"crash_diagnostics_delete_title" = "Delete this report?";
+"crash_diagnostics_delete_description" = "The report will be permanently removed from this device.";
+"crash_diagnostics_banner" = "Crash report available — review before sending";
+"crash_diagnostics_test" = "Test crash";
+"crash_diagnostics_test_warning" = "The app will terminate";
+"crash_diagnostics_test_confirmation" = "This intentionally terminates the app. Relaunch without the debugger to recover and review the report.";
+"crash_diagnostics_copy_json" = "Copy JSON";
+"crash_diagnostics_save_json" = "Save JSON File";
+"crash_diagnostics_copied" = "Crash report copied";

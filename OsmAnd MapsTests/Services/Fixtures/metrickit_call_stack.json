@@ -1,0 +1,28 @@
+{
+  "callStackPerThread": true,
+  "callStacks": [
+    {
+      "threadAttributed": true,
+      "callStackRootFrames": [
+        {
+          "address": 4096,
+          "binaryName": "OsmAnd",
+          "binaryUUID": "00112233-4455-6677-8899-AABBCCDDEEFF",
+          "offsetIntoBinaryTextSegment": 2048,
+          "sampleCount": 1,
+          "sourceURL": "https://private.example/tiles",
+          "subFrames": [
+            {
+              "address": 8192,
+              "binaryName": "/private/var/containers/Bundle/Application/OsmAnd",
+              "binaryUUID": "00112233-4455-6677-8899-AABBCCDDEEFF",
+              "offsetIntoBinaryTextSegment": 6144,
+              "sampleCount": 1,
+              "searchQuery": "private cafe"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

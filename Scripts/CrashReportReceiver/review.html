@@ -1,0 +1,1077 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>OsmAnd crash report reviewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f6f4;
+      --surface: #ffffff;
+      --surface-soft: #f6f8f7;
+      --ink: #18201c;
+      --muted: #66716b;
+      --line: #dce3df;
+      --accent: #1b704a;
+      --accent-soft: #e5f4eb;
+      --danger: #b83a32;
+      --danger-soft: #fcecea;
+      --warning: #8f5b00;
+      --warning-soft: #fff3d6;
+      --code: #111a16;
+      --shadow: 0 18px 48px rgba(32, 53, 42, .09);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #111613;
+        --surface: #1a211d;
+        --surface-soft: #222a25;
+        --ink: #edf3ef;
+        --muted: #a2afa8;
+        --line: #344039;
+        --accent: #72d39e;
+        --accent-soft: #173b2a;
+        --danger: #ff8b83;
+        --danger-soft: #472421;
+        --warning: #f1c56b;
+        --warning-soft: #3c321c;
+        --code: #eef6f1;
+        --shadow: 0 18px 48px rgba(0, 0, 0, .22);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(27, 112, 74, .09), transparent 30rem),
+        var(--bg);
+      color: var(--ink);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      padding: 12px max(22px, calc((100vw - 1180px) / 2));
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 750;
+      letter-spacing: -.01em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--accent);
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 6px 16px rgba(27, 112, 74, .24);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface);
+      cursor: pointer;
+      font-weight: 650;
+      transition: border-color .15s, transform .15s, background .15s;
+    }
+
+    .button:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+    }
+
+    .button:focus-visible,
+    .tab:focus-visible,
+    .drop-zone:focus-visible,
+    input:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      outline-offset: 2px;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 72px;
+    }
+
+    .empty {
+      max-width: 760px;
+      margin: 7vh auto 0;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 13px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.06;
+      letter-spacing: -.045em;
+    }
+
+    h2 {
+      margin-bottom: 5px;
+      font-size: 20px;
+      letter-spacing: -.02em;
+    }
+
+    h3 {
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .lead {
+      max-width: 620px;
+      margin: 0 auto 27px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .drop-zone {
+      display: grid;
+      min-height: 230px;
+      padding: 30px;
+      place-items: center;
+      border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+      border-radius: 24px;
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: background .15s, border-color .15s, transform .15s;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragging {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    .drop-icon {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 15px;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 27px;
+      font-weight: 400;
+    }
+
+    .drop-title { margin-bottom: 4px; font-size: 18px; font-weight: 750; }
+    .drop-note { margin: 0; color: var(--muted); }
+
+    .privacy-note {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      max-width: 600px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .privacy-note strong { color: var(--ink); }
+    .error { margin-top: 14px; color: var(--danger); font-weight: 650; }
+
+    .hidden { display: none !important; }
+
+    .report-heading {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .report-heading h1 { margin-bottom: 5px; font-size: clamp(30px, 4vw, 44px); }
+    .report-heading p { margin-bottom: 0; color: var(--muted); }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .pill.bad { background: var(--danger-soft); color: var(--danger); }
+    .pill.good { background: var(--accent-soft); color: var(--accent); }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 8px 25px rgba(32, 53, 42, .04);
+    }
+
+    .metric .value {
+      display: block;
+      overflow: hidden;
+      margin-bottom: 3px;
+      font-size: 20px;
+      font-weight: 780;
+      letter-spacing: -.025em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric .label { color: var(--muted); font-size: 12px; }
+
+    .tabs {
+      display: inline-flex;
+      gap: 5px;
+      margin-bottom: 18px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface);
+    }
+
+    .tab {
+      padding: 8px 13px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .tab.active { background: var(--accent-soft); color: var(--accent); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .column { display: grid; gap: 18px; }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: 0 8px 28px rgba(32, 53, 42, .045);
+    }
+
+    .card-header {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 18px 20px 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-header p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    .card-body { padding: 18px 20px; }
+
+    .notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 15px 17px;
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+      border-radius: 15px;
+      background: var(--accent-soft);
+      color: color-mix(in srgb, var(--accent) 75%, var(--ink));
+    }
+
+    .notice p { margin: 2px 0 0; color: inherit; font-size: 13px; }
+    .notice-icon { font-size: 18px; }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 20px;
+      margin: 0;
+    }
+
+    .fact {
+      min-width: 0;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact:nth-last-child(-n+2) { border-bottom: 0; }
+    .fact dt { margin-bottom: 3px; color: var(--muted); font-size: 12px; }
+    .fact dd { overflow-wrap: anywhere; margin: 0; font-weight: 650; }
+
+    .stack {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: frame -1;
+    }
+
+    .frame {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+      counter-increment: frame;
+    }
+
+    .frame:last-child { border-bottom: 0; }
+    .frame-number::before { content: counter(frame); }
+    .frame-number { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .frame-main { min-width: 0; }
+
+    .symbol {
+      display: block;
+      overflow: hidden;
+      color: var(--code);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .binary { display: block; color: var(--muted); font-size: 12px; }
+    .address { color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .breadcrumbs { margin: 0; padding: 0; list-style: none; }
+
+    .breadcrumb {
+      position: relative;
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 14px;
+      padding: 0 0 18px 18px;
+      border-left: 1px solid var(--line);
+    }
+
+    .breadcrumb:last-child { padding-bottom: 0; border-color: transparent; }
+    .breadcrumb::before {
+      position: absolute;
+      top: 5px;
+      left: -5px;
+      width: 9px;
+      height: 9px;
+      border: 2px solid var(--surface);
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .breadcrumb-time { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .breadcrumb-event { font-weight: 700; }
+    .breadcrumb-meta { color: var(--muted); font-size: 12px; }
+
+    details.thread {
+      border-bottom: 1px solid var(--line);
+    }
+
+    details.thread:last-child { border-bottom: 0; }
+    details.thread summary {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    details.thread summary::-webkit-details-marker { display: none; }
+    details.thread summary::after { color: var(--muted); content: "＋"; }
+    details.thread[open] summary::after { content: "−"; }
+    details.thread .stack { padding: 0 20px 12px; }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { padding: 4px 8px; border-radius: 7px; background: var(--surface-soft); font-size: 12px; }
+
+    .binary-search {
+      width: min(220px, 100%);
+      height: 36px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface-soft);
+      color: var(--ink);
+    }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 13px; border-bottom: 1px solid var(--line); text-align: left; }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--muted); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+    td.mono { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .raw-toolbar {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    pre {
+      overflow: auto;
+      max-height: 72vh;
+      margin: 0;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--code);
+      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+      tab-size: 2;
+      white-space: pre;
+    }
+
+    .empty-value { color: var(--muted); font-style: italic; }
+
+    .footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .report-heading { display: block; }
+      .report-heading .button { margin-top: 16px; }
+    }
+
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 20px, 1180px); padding-top: 26px; }
+      .topbar { min-height: 60px; padding: 10px; }
+      .brand span:last-child { display: none; }
+      .facts { grid-template-columns: 1fr; }
+      .fact:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+      .frame { grid-template-columns: 28px minmax(0, 1fr); }
+      .address { display: none; }
+      .breadcrumb { grid-template-columns: 62px minmax(0, 1fr); }
+      .card-header { display: block; }
+      .binary-search { width: 100%; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">O</span>
+      <span>OsmAnd crash reviewer</span>
+    </div>
+    <div class="header-actions">
+      <button id="openButton" class="button hidden" type="button">Open another</button>
+      <input id="fileInput" class="hidden" type="file" accept=".json,application/json">
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="emptyState" class="empty">
+      <p class="eyebrow">Local diagnostics tool</p>
+      <h1>Review a crash without reading raw JSON</h1>
+      <p class="lead">Open an exported OsmAnd crash report to see the failure, app state, breadcrumbs, threads, and binary images in a readable layout.</p>
+      <div id="dropZone" class="drop-zone" role="button" tabindex="0" aria-label="Open a crash report JSON file">
+        <div>
+          <span class="drop-icon" aria-hidden="true">↥</span>
+          <p class="drop-title">Drop a crash report here</p>
+          <p class="drop-note">or click to choose a .json file · maximum 2 MiB</p>
+        </div>
+      </div>
+      <p class="privacy-note">
+        <span aria-hidden="true">🔒</span>
+        <span><strong>Your report stays on this device.</strong> The browser reads the selected file locally. This page makes no network requests, stores nothing, and does not modify the report.</span>
+      </p>
+      <p id="errorMessage" class="error hidden" role="alert"></p>
+    </section>
+
+    <section id="reportView" class="hidden">
+      <div class="report-heading">
+        <div>
+          <div class="pills">
+            <span id="sourcePill" class="pill"></span>
+            <span id="kindPill" class="pill bad"></span>
+            <span id="consentPill" class="pill"></span>
+          </div>
+          <h1 id="reportTitle">Crash report</h1>
+          <p id="reportSubtitle"></p>
+        </div>
+        <button id="headingOpenButton" class="button" type="button">Open another report</button>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><span id="metricApp" class="value">—</span><span class="label">App version</span></div>
+        <div class="metric"><span id="metricDevice" class="value">—</span><span class="label">Device and iOS</span></div>
+        <div class="metric"><span id="metricThreads" class="value">—</span><span class="label">Threads captured</span></div>
+        <div class="metric"><span id="metricBreadcrumbs" class="value">—</span><span class="label">Breadcrumbs</span></div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Report view">
+        <button id="readableTab" class="tab active" type="button" role="tab" aria-selected="true">Readable review</button>
+        <button id="jsonTab" class="tab" type="button" role="tab" aria-selected="false">Exact JSON</button>
+      </div>
+
+      <div id="readablePanel" role="tabpanel">
+        <div class="layout">
+          <div class="column">
+            <div class="notice">
+              <span class="notice-icon" aria-hidden="true">✓</span>
+              <div>
+                <strong>Privacy-filtered report</strong>
+                <p>This viewer shows the transmitted payload. It does not look up symbols, attach logs, or add any data.</p>
+              </div>
+            </div>
+
+            <article class="card">
+              <header class="card-header">
+                <div><h2>Failure</h2><p>What the operating system or crash recorder observed.</p></div>
+              </header>
+              <div class="card-body"><dl id="diagnosticFacts" class="facts"></dl></div>
+            </article>
+
+            <article class="card">
+              <header class="card-header">
+                <div><h2>Crashed thread</h2><p id="crashedThreadDescription"></p></div>
+              </header>
+              <div class="card-body"><ol id="crashedStack" class="stack"></ol></div>
+            </article>
+
+            <article class="card">
+              <header class="card-header">
+                <div><h2>Breadcrumbs</h2><p>Sanitized app events leading up to the diagnostic.</p></div>
+              </header>
+              <div class="card-body"><ol id="breadcrumbList" class="breadcrumbs"></ol></div>
+            </article>
+
+            <article id="otherThreadsCard" class="card">
+              <header class="card-header">
+                <div><h2>Other threads</h2><p>Supporting stacks preserved in the report.</p></div>
+              </header>
+              <div id="otherThreads"></div>
+            </article>
+
+            <article class="card">
+              <header class="card-header">
+                <div><h2>Binary images</h2><p>UUID and load address identify the exact binaries needed for symbolication.</p></div>
+                <input id="binarySearch" class="binary-search" type="search" placeholder="Filter binaries" aria-label="Filter binary images">
+              </header>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>UUID</th><th>Load address</th></tr></thead>
+                  <tbody id="binaryRows"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+
+          <aside class="column">
+            <article class="card">
+              <header class="card-header"><div><h2>App state</h2><p>Coarsened context at the time.</p></div></header>
+              <div class="card-body"><dl id="contextFacts" class="facts"></dl></div>
+            </article>
+
+            <article class="card">
+              <header class="card-header"><div><h2>Plugins</h2><p>Built-in IDs and custom count only.</p></div></header>
+              <div class="card-body">
+                <div id="pluginTags" class="tag-list"></div>
+                <p id="customPluginCount" class="drop-note" style="margin-top: 12px"></p>
+              </div>
+            </article>
+
+            <article class="card">
+              <header class="card-header"><div><h2>Report identity</h2><p>Random per-report identifiers.</p></div></header>
+              <div class="card-body"><dl id="identityFacts" class="facts"></dl></div>
+            </article>
+
+            <article class="card">
+              <header class="card-header"><div><h2>Consent</h2><p id="consentDescription"></p></div></header>
+              <div class="card-body"><dl id="consentFacts" class="facts"></dl></div>
+            </article>
+          </aside>
+        </div>
+      </div>
+
+      <div id="jsonPanel" class="hidden" role="tabpanel">
+        <div class="raw-toolbar">
+          <button id="copyButton" class="button" type="button">Copy JSON</button>
+          <button id="downloadButton" class="button primary" type="button">Download a copy</button>
+        </div>
+        <pre id="rawJson" tabindex="0"></pre>
+      </div>
+      <p id="fileFooter" class="footer"></p>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const MAX_FILE_BYTES = 2 * 1024 * 1024;
+    const elements = Object.fromEntries(
+      Array.from(document.querySelectorAll("[id]")).map(element => [element.id, element])
+    );
+    let exactJson = "";
+    let currentFileName = "OsmAnd-Crash-Report.json";
+
+    const kindTitles = {
+      mach_exception: "Mach exception",
+      signal: "POSIX signal",
+      cpp_exception: "C++ exception",
+      objective_c_exception: "Objective-C exception",
+      memory_termination: "Memory termination",
+      crash: "Crash",
+      hang: "App hang",
+      cpu_exception: "CPU exception",
+      disk_write_exception: "Disk-write exception",
+      non_fatal: "Non-fatal error",
+      unknown: "Unknown diagnostic"
+    };
+
+    const labels = {
+      exception_name: "Exception name",
+      exception_type: "Exception type",
+      exception_code: "Exception code",
+      signal: "Signal number",
+      signal_name: "Signal name",
+      termination_reason: "Termination reason",
+      component: "Component",
+      error_code: "Error code",
+      severity: "Severity",
+      hang_duration_ms: "Hang duration",
+      cpu_time_ms: "CPU time",
+      sampled_time_ms: "Sampled time",
+      disk_writes_bytes: "Disk writes"
+    };
+
+    function humanize(value) {
+      return String(value ?? "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    function displayValue(value) {
+      if (value === true) return "Yes";
+      if (value === false) return "No";
+      if (value === null || value === undefined || value === "") return "Not recorded";
+      return String(value);
+    }
+
+    function address(value) {
+      if (!Number.isSafeInteger(value)) return "—";
+      return "0x" + value.toString(16).toUpperCase();
+    }
+
+    function duration(value) {
+      if (!Number.isFinite(value)) return displayValue(value);
+      if (value < 1000) return value + " ms";
+      return (value / 1000).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " s";
+    }
+
+    function bytes(value) {
+      if (!Number.isFinite(value)) return displayValue(value);
+      const units = ["B", "KiB", "MiB", "GiB"];
+      let size = value;
+      let unit = 0;
+      while (size >= 1024 && unit < units.length - 1) {
+        size /= 1024;
+        unit += 1;
+      }
+      return size.toLocaleString(undefined, { maximumFractionDigits: unit ? 1 : 0 }) + " " + units[unit];
+    }
+
+    function dateTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return displayValue(value);
+      return date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "medium" });
+    }
+
+    function addText(parent, tag, text, className) {
+      const child = document.createElement(tag);
+      if (className) child.className = className;
+      child.textContent = text;
+      parent.appendChild(child);
+      return child;
+    }
+
+    function renderFacts(container, facts) {
+      container.replaceChildren();
+      facts.forEach(([label, value]) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "fact";
+        addText(wrapper, "dt", label);
+        const item = addText(wrapper, "dd", displayValue(value));
+        if (value === null || value === undefined || value === "") item.className = "empty-value";
+        container.appendChild(wrapper);
+      });
+    }
+
+    function renderStack(container, frames) {
+      container.replaceChildren();
+      if (!frames.length) {
+        addText(container, "li", "No frames were recorded.", "empty-value");
+        return;
+      }
+      frames.forEach(frame => {
+        const item = document.createElement("li");
+        item.className = "frame";
+        addText(item, "span", "", "frame-number");
+        const main = document.createElement("span");
+        main.className = "frame-main";
+        addText(main, "span", frame.symbol_name || "Unsymbolicated frame", "symbol");
+        const offset = Number.isSafeInteger(frame.binary_offset) ? " + " + address(frame.binary_offset) : "";
+        addText(main, "span", (frame.binary_name || "Unknown binary") + offset, "binary");
+        item.appendChild(main);
+        addText(item, "span", address(frame.instruction_address), "address");
+        container.appendChild(item);
+      });
+    }
+
+    function renderDiagnostic(diagnostic) {
+      const facts = [];
+      Object.entries(labels).forEach(([key, label]) => {
+        if (!(key in diagnostic)) return;
+        let value = diagnostic[key];
+        if (key.endsWith("_ms")) value = duration(value);
+        if (key === "disk_writes_bytes") value = bytes(value);
+        if (key === "termination_reason" || key === "component" || key === "severity") value = humanize(value);
+        facts.push([label, value]);
+      });
+      facts.push(["Crashed thread", diagnostic.crashed_thread ?? findCrashedThread(diagnostic.threads)?.index]);
+      renderFacts(elements.diagnosticFacts, facts);
+    }
+
+    function findCrashedThread(threads) {
+      return threads.find(thread => thread.crashed) ||
+        threads.find(thread => thread.index === Number(threads.crashed_thread)) ||
+        threads[0];
+    }
+
+    function renderThreads(diagnostic) {
+      const threads = Array.isArray(diagnostic.threads) ? diagnostic.threads : [];
+      const crashed = findCrashedThread(threads);
+      elements.crashedThreadDescription.textContent = crashed
+        ? "Thread " + crashed.index + " · " + crashed.frames.length + " frame" + (crashed.frames.length === 1 ? "" : "s")
+        : "No crashed thread was identified.";
+      renderStack(elements.crashedStack, crashed?.frames || []);
+
+      const others = threads.filter(thread => thread !== crashed);
+      elements.otherThreadsCard.classList.toggle("hidden", others.length === 0);
+      elements.otherThreads.replaceChildren();
+      others.forEach(thread => {
+        const details = document.createElement("details");
+        details.className = "thread";
+        const summary = document.createElement("summary");
+        addText(summary, "span", "Thread " + thread.index);
+        addText(summary, "span", thread.frames.length + " frames", "drop-note");
+        details.appendChild(summary);
+        const stack = document.createElement("ol");
+        stack.className = "stack";
+        renderStack(stack, thread.frames);
+        details.appendChild(stack);
+        elements.otherThreads.appendChild(details);
+      });
+    }
+
+    function renderBreadcrumbs(breadcrumbs) {
+      elements.breadcrumbList.replaceChildren();
+      if (!breadcrumbs.length) {
+        addText(elements.breadcrumbList, "li", "No breadcrumbs were recorded.", "empty-value");
+        return;
+      }
+      breadcrumbs.forEach(item => {
+        const row = document.createElement("li");
+        row.className = "breadcrumb";
+        addText(row, "span", "−" + duration(item.elapsed_ms), "breadcrumb-time");
+        const content = document.createElement("div");
+        addText(content, "div", humanize(item.event), "breadcrumb-event");
+        const details = [];
+        if (item.screen_identifier) details.push("Screen: " + item.screen_identifier);
+        if (item.numeric_metadata) {
+          Object.entries(item.numeric_metadata).forEach(([key, value]) => details.push(humanize(key) + ": " + value));
+        }
+        if (details.length) addText(content, "div", details.join(" · "), "breadcrumb-meta");
+        row.appendChild(content);
+        elements.breadcrumbList.appendChild(row);
+      });
+    }
+
+    function renderContext(context) {
+      renderFacts(elements.contextFacts, [
+        ["Application state", humanize(context.application_state)],
+        ["Screen", context.screen_identifier],
+        ["Navigation active", context.navigation_active],
+        ["Route calculation", humanize(context.route_calculation_state)],
+        ["Profile family", humanize(context.profile_family)],
+        ["Zoom bucket", context.zoom_bucket],
+        ["Map source", humanize(context.map_source_category)],
+        ["Loaded maps", context.loaded_map_count],
+        ["Memory available", context.memory_available_bucket_mb === undefined ? null : context.memory_available_bucket_mb + " MiB bucket"],
+        ["Disk available", context.disk_available_bucket_mb === undefined ? null : context.disk_available_bucket_mb + " MiB bucket"]
+      ]);
+      elements.pluginTags.replaceChildren();
+      const plugins = Array.isArray(context.built_in_plugin_ids) ? context.built_in_plugin_ids : [];
+      if (!plugins.length) addText(elements.pluginTags, "span", "No built-in plugins recorded", "empty-value");
+      plugins.forEach(plugin => addText(elements.pluginTags, "span", plugin, "tag"));
+      elements.customPluginCount.textContent = context.custom_plugin_count + " custom plugin" +
+        (context.custom_plugin_count === 1 ? "" : "s") + " active; names are excluded.";
+    }
+
+    function renderImages(images) {
+      elements.binaryRows.replaceChildren();
+      if (!images.length) {
+        const row = document.createElement("tr");
+        const cell = addText(row, "td", "No binary images were recorded.", "empty-value");
+        cell.colSpan = 3;
+        elements.binaryRows.appendChild(row);
+        return;
+      }
+      images.forEach(image => {
+        const row = document.createElement("tr");
+        row.dataset.search = ((image.name || "") + " " + (image.uuid || "")).toLowerCase();
+        addText(row, "td", image.name || "—");
+        addText(row, "td", image.uuid || "—", "mono");
+        addText(row, "td", address(image.image_address), "mono");
+        elements.binaryRows.appendChild(row);
+      });
+    }
+
+    function renderConsent(consent) {
+      const approved = consent && consent.approved_at;
+      elements.consentPill.textContent = approved ? "Approved payload" : "Not yet approved";
+      elements.consentPill.className = "pill " + (approved ? "good" : "");
+      elements.consentDescription.textContent = approved
+        ? "This receiver file includes the approval attached to the exact payload."
+        : "The exported app envelope has not been wrapped in an upload consent record.";
+      renderFacts(elements.consentFacts, [
+        ["Mode", consent?.mode ? humanize(consent.mode) : null],
+        ["Approved", approved ? dateTime(consent.approved_at) : null],
+        ["Reviewed SHA-256", consent?.reviewed_payload_sha256 || null]
+      ]);
+    }
+
+    function renderReport(parsed, fileName, fileSize) {
+      const wrapped = parsed && typeof parsed === "object" && !Array.isArray(parsed) && parsed.report;
+      const report = wrapped ? parsed.report : parsed;
+      if (!report || typeof report !== "object" || Array.isArray(report)) {
+        throw new Error("The selected file does not contain a crash report object.");
+      }
+      if (report.schema_version !== 1 || typeof report.report_id !== "string" ||
+          !report.diagnostic || !report.context || !Array.isArray(report.breadcrumbs)) {
+        throw new Error("This is not a supported OsmAnd crash report (schema version 1).");
+      }
+
+      const diagnostic = report.diagnostic;
+      const threads = Array.isArray(diagnostic.threads) ? diagnostic.threads : [];
+      const images = Array.isArray(diagnostic.binary_images) ? diagnostic.binary_images : [];
+      const title = kindTitles[diagnostic.kind] || humanize(diagnostic.kind);
+      const detail = diagnostic.signal_name || diagnostic.exception_name ||
+        diagnostic.termination_reason || diagnostic.component;
+
+      currentFileName = fileName || "OsmAnd-Crash-Report-" + report.report_id + ".json";
+      exactJson = JSON.stringify(parsed, null, 2);
+      elements.rawJson.textContent = exactJson;
+      elements.reportTitle.textContent = title;
+      elements.reportSubtitle.textContent = (detail ? humanize(detail) + " · " : "") + dateTime(report.occurred_at);
+      elements.sourcePill.textContent = humanize(report.source);
+      elements.kindPill.textContent = humanize(diagnostic.kind);
+      elements.metricApp.textContent = report.app?.version + " (" + report.app?.build + ")";
+      elements.metricDevice.textContent = report.device?.model + " · iOS " + report.device?.os_version;
+      elements.metricThreads.textContent = threads.length.toLocaleString();
+      elements.metricBreadcrumbs.textContent = report.breadcrumbs.length.toLocaleString();
+      elements.fileFooter.textContent = currentFileName + " · " + bytes(fileSize) + " · schema v" + report.schema_version;
+
+      renderDiagnostic(diagnostic);
+      renderThreads(diagnostic);
+      renderBreadcrumbs(report.breadcrumbs);
+      renderContext(report.context);
+      renderImages(images);
+      renderConsent(wrapped ? parsed.consent : null);
+      renderFacts(elements.identityFacts, [
+        ["Report ID", report.report_id],
+        ["Occurred", dateTime(report.occurred_at)],
+        ["Source", humanize(report.source)],
+        ["Schema", report.schema_version]
+      ]);
+
+      elements.emptyState.classList.add("hidden");
+      elements.reportView.classList.remove("hidden");
+      elements.openButton.classList.remove("hidden");
+      showTab("readable");
+      window.scrollTo({ top: 0, behavior: "instant" });
+      document.title = title + " · OsmAnd crash reviewer";
+    }
+
+    async function openFile(file) {
+      elements.errorMessage.classList.add("hidden");
+      if (!file) return;
+      if (file.size > MAX_FILE_BYTES) {
+        showError("That file is larger than the 2 MiB review limit.");
+        return;
+      }
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        renderReport(parsed, file.name, file.size);
+      } catch (error) {
+        showError(error instanceof SyntaxError ? "The selected file is not valid JSON." : error.message);
+      } finally {
+        elements.fileInput.value = "";
+      }
+    }
+
+    function showError(message) {
+      elements.errorMessage.textContent = message;
+      elements.errorMessage.classList.remove("hidden");
+      elements.emptyState.classList.remove("hidden");
+    }
+
+    function showTab(name) {
+      const readable = name === "readable";
+      elements.readablePanel.classList.toggle("hidden", !readable);
+      elements.jsonPanel.classList.toggle("hidden", readable);
+      elements.readableTab.classList.toggle("active", readable);
+      elements.jsonTab.classList.toggle("active", !readable);
+      elements.readableTab.setAttribute("aria-selected", String(readable));
+      elements.jsonTab.setAttribute("aria-selected", String(!readable));
+    }
+
+    function chooseFile() {
+      elements.fileInput.click();
+    }
+
+    elements.dropZone.addEventListener("click", chooseFile);
+    elements.dropZone.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        chooseFile();
+      }
+    });
+    elements.fileInput.addEventListener("change", event => openFile(event.target.files[0]));
+    elements.openButton.addEventListener("click", chooseFile);
+    elements.headingOpenButton.addEventListener("click", chooseFile);
+    elements.readableTab.addEventListener("click", () => showTab("readable"));
+    elements.jsonTab.addEventListener("click", () => showTab("json"));
+
+    ["dragenter", "dragover"].forEach(type => {
+      elements.dropZone.addEventListener(type, event => {
+        event.preventDefault();
+        elements.dropZone.classList.add("dragging");
+      });
+    });
+    ["dragleave", "drop"].forEach(type => {
+      elements.dropZone.addEventListener(type, event => {
+        event.preventDefault();
+        elements.dropZone.classList.remove("dragging");
+      });
+    });
+    elements.dropZone.addEventListener("drop", event => openFile(event.dataTransfer.files[0]));
+
+    elements.binarySearch.addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      elements.binaryRows.querySelectorAll("tr[data-search]").forEach(row => {
+        row.classList.toggle("hidden", query && !row.dataset.search.includes(query));
+      });
+    });
+
+    elements.copyButton.addEventListener("click", async () => {
+      const original = elements.copyButton.textContent;
+      try {
+        await navigator.clipboard.writeText(exactJson);
+      } catch (_) {
+        const area = document.createElement("textarea");
+        area.value = exactJson;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      elements.copyButton.textContent = "Copied";
+      setTimeout(() => { elements.copyButton.textContent = original; }, 1400);
+    });
+
+    elements.downloadButton.addEventListener("click", () => {
+      const blob = new Blob([exactJson + "\n"], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = currentFileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>

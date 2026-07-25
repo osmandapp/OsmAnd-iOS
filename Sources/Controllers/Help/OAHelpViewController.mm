@@ -56,6 +56,16 @@ static NSString * const kLinkExternalType = @"ext_link";
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_data)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -215,6 +225,17 @@ static NSString * const kLinkExternalType = @"ext_link";
     [openIssueOnGitHubRow setIconName:@"ic_custom_logo_github"];
     [openIssueOnGitHubRow setObj:kLinkExternalType forKey:@"linkType"];
     [openIssueOnGitHubRow setObj:kOpenIssueOnGitHub forKey:@"url"];
+
+    OATableRowData *crashDiagnosticsRow = [reportAnIssuesSection createNewRow];
+    [crashDiagnosticsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
+    [crashDiagnosticsRow setKey:@"crashDiagnostics"];
+    [crashDiagnosticsRow setTitle:OALocalizedString(@"crash_diagnostics")];
+    NSInteger pendingReportCount = [CrashDiagnosticsService shared].pendingReportCount;
+    NSString *crashDiagnosticsDescription = pendingReportCount > 0
+        ? [NSString stringWithFormat:OALocalizedString(@"crash_diagnostics_pending_count"), pendingReportCount]
+        : OALocalizedString(@"crash_diagnostics_description");
+    [crashDiagnosticsRow setDescr:crashDiagnosticsDescription];
+    [crashDiagnosticsRow setIconName:@"ic_custom_file_crashlog_send_outlined"];
     
     OATableRowData *sendLogRow = [reportAnIssuesSection createNewRow];
     [sendLogRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
@@ -385,6 +406,11 @@ static NSString * const kLinkExternalType = @"ext_link";
     else if ([key isEqualToString:@"sendLog"])
     {
         [self sendLogFile];
+    }
+    else if ([key isEqualToString:@"crashDiagnostics"])
+    {
+        CrashDiagnosticsViewController *viewController = [[CrashDiagnosticsViewController alloc] initWithReportIDToOpen:nil];
+        [self.navigationController pushViewController:viewController animated:YES];
     }
 }
 

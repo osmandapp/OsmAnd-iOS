@@ -39,6 +39,7 @@
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "StartupLogging.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
@@ -210,6 +211,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
             _appInitDone = YES;
             _appInitializing = NO;
+            [[CrashDiagnosticsService shared] applicationStartupDidComplete];
 
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
@@ -292,6 +294,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [[CrashDiagnosticsService shared] startWithLaunchOptions:launchOptions];
     LogStartupContext(launchOptions);
     LogStartup(@"willFinishLaunchingWithOptions");
     return YES;
@@ -365,6 +368,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationWillResignActive
 {
     NSLog(@"OAAppDelegate applicationWillResignActive %d", _appInitDone);
+    [[CrashDiagnosticsService shared] applicationStateDidChange:@"inactive"];
     if (_appInitDone)
         [_app onApplicationWillResignActive];
 }
@@ -372,6 +376,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationDidEnterBackground
 {
     NSLog(@"OAAppDelegate applicationDidEnterBackground %d", _appInitDone);
+    [[CrashDiagnosticsService shared] applicationStateDidChange:@"background"];
     [self invalidateIfNeededCheckUpdatesTimer];
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
@@ -403,6 +408,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationDidBecomeActive
 {
     NSLog(@"OAAppDelegate applicationDidBecomeActive %d", _appInitDone);
+    [[CrashDiagnosticsService shared] applicationStateDidChange:@"active"];
     if (_appInitDone)
     {
         [self initCheckUpdatesTimer];

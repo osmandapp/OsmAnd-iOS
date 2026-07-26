@@ -847,8 +847,6 @@
 		46AEDB9F27F4AC28006D90E8 /* ic_custom_umbrella@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB9D27F4AC28006D90E8 /* ic_custom_umbrella@3x.png */; };
 		46AEDBA227F4AC32006D90E8 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */; };
 		46AEDBA327F4AC32006D90E8 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */; };
-		46AF98FA28D077E900626C9C /* ic_custom_file_routing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */; };
-		46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */; };
 		46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
 		46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */; };
@@ -1723,6 +1721,7 @@
 		CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */; };
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
+		CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */; };
 		CE7F960C30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */; };
 		CE8215E52FFF6376002A8617 /* StarMapArControlCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */; };
 		CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */; };
@@ -4644,8 +4643,6 @@
 		46AEDB9D27F4AC28006D90E8 /* ic_custom_umbrella@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_umbrella@3x.png"; path = "Resources/Icons/ic_custom_umbrella@3x.png"; sourceTree = "<group>"; };
 		46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@2x.png"; path = "Resources/Icons/ic_custom_wind@2x.png"; sourceTree = "<group>"; };
 		46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
-		46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_file_routing@3x.png"; path = "Resources/Icons/ic_custom_file_routing@3x.png"; sourceTree = "<group>"; };
-		46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_file_routing@2x.png"; path = "Resources/Icons/ic_custom_file_routing@2x.png"; sourceTree = "<group>"; };
 		46B0CC58299CEB45003D9F40 /* OABaseButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseButtonsViewController.h; sourceTree = "<group>"; };
 		46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseButtonsViewController.m; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
@@ -5777,6 +5774,7 @@
 		CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroWikiBridge.swift; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
+		CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDeepLinkBuilder.swift; sourceTree = "<group>"; };
 		CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapObjectContextMenuBuilder.swift; sourceTree = "<group>"; };
 		CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapArControlCard.swift; sourceTree = "<group>"; };
 		CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapPlainButton.swift; sourceTree = "<group>"; };
@@ -9312,8 +9310,6 @@
 				462545A528D3688700637964 /* ic_custom_cross_buy_colored_day_big@3x.png */,
 				462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */,
 				462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */,
-				46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */,
-				46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */,
 				468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */,
 				468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */,
 				468AADDF28C77A6100BEC402 /* img_openstreetmap_logo@2x.png */,
@@ -14824,6 +14820,7 @@
 				27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */,
 				C56319452EF189EC008854B3 /* DeepLinkManager.swift */,
 				C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */,
+				CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */,
 			);
 			path = DeepLinkManager;
 			sourceTree = "<group>";
@@ -15803,7 +15800,6 @@
 				DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */,
 				DAF3456322F4482B009E2EB6 /* ic_custom_text_field_name@3x.png in Resources */,
 				DA6471A922CF5433008F937F /* ic_custom_contour_lines@2x.png in Resources */,
-				46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */,
 				DA5A82C426C563A800F274C7 /* OASegmentedControlCell.xib in Resources */,
 				DA5A83D126C563A800F274C7 /* OATransportRouteToolbarViewController.xib in Resources */,
 				C54260202AA0D2A000E76C00 /* ic_custom_visibility@3x.png in Resources */,
@@ -16383,7 +16379,6 @@
 				DA2EC79B29FBBE0400ECEB37 /* ic_action_start_navigation@3x.png in Resources */,
 				15C428C024A72B6B00B21005 /* img_settings_sreen_route_alerts@3x.png in Resources */,
 				DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */,
-				46AF98FA28D077E900626C9C /* ic_custom_file_routing@3x.png in Resources */,
 				844E07DF1E4231C200EFC525 /* ic_action_street_name@2x.png in Resources */,
 				DA1340CA243DC5A70039D214 /* map_action_skiing@3x.png in Resources */,
 				DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */,
@@ -18263,6 +18258,7 @@
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
 				C5EB56EE2FD18B8A00D01657 /* FavoriteListViewController.swift in Sources */,
+				CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */,
 				C5EB56F12FD18B8A00D01657 /* FavoriteListViewController+Models.swift in Sources */,
 				C5EB56F32FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift in Sources */,
 				C5EB56F52FD18B8A00D01657 /* FavoriteListViewController+Cells.swift in Sources */,

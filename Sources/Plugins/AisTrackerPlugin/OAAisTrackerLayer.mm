@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 static NSString * const kAisTrackerLayerId = @"ais_tracker_layer";
@@ -195,6 +196,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
                        markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection;
 - (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
                             cpaWarning:(BOOL)cpaWarning
+                               selected:(BOOL)selected
                   vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
 - (void)clearAisRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
                           vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
@@ -319,13 +321,14 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
                             cpaWarning:(BOOL)cpaWarning
+                               selected:(BOOL)selected
                   vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
 {
     if (![self hasAisRenderData])
         return;
 
     const OsmAnd::ZoomLevel zoom = mapView ? mapView.zoomLevel : OsmAnd::ZoomLevel::MinZoomLevel;
-    if (!mapView || (int)zoom < kAisTrackerStartZoom || !_object.position)
+    if (!mapView || ((int)zoom < kAisTrackerStartZoom && !selected) || !_object.position)
     {
         [self setAisRenderDataHidden:YES];
         return;
@@ -595,6 +598,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> *_spatialBuckets;
     NSMutableDictionary<NSNumber *, AisObjectDrawable *> *_objectDrawables;
     NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *_renderedRecords;
+    NSNumber *_selectedMmsi;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
     BOOL _collectionsAdded;
@@ -720,6 +724,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (void)hide
 {
+    _selectedMmsi = nil;
     [self cleanupResources];
 }
 
@@ -746,6 +751,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     }
     else
     {
+        _selectedMmsi = nil;
         [self cleanupResources];
     }
     return YES;
@@ -755,6 +761,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 {
     if (![self isVisible])
     {
+        _selectedMmsi = nil;
         if (_collectionsAdded || _objectDrawables.count > 0 || _objectRecords.count > 0)
         {
             kAisImagesCache.clear();
@@ -938,6 +945,8 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         return;
 
     NSNumber *key = @(object.mmsi);
+    if ([_selectedMmsi isEqualToNumber:key])
+        _selectedMmsi = nil;
     if ([AisLogger shared].isEnabled)
         [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
                                  _objectDrawables[key] ? @"yes" : @"no",
@@ -1034,12 +1043,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     return records;
 }
 
-- (NSComparisonResult)compareRecord:(AisObjectRenderRecord *)first
-                           toRecord:(AisObjectRenderRecord *)second
-                           useCpa:(BOOL)useCpa
+- (NSComparisonResult)compareCoarseRecord:(AisObjectRenderRecord *)first
+                                 toRecord:(AisObjectRenderRecord *)second
 {
-    if (useCpa && first.cpaWarning != second.cpaWarning)
-        return first.cpaWarning ? NSOrderedAscending : NSOrderedDescending;
     if (first.emergency != second.emergency)
         return first.emergency ? NSOrderedAscending : NSOrderedDescending;
     BOOL firstMoving = first.visualState == 0 && first.movable;
@@ -1048,10 +1054,54 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         return firstMoving ? NSOrderedAscending : NSOrderedDescending;
     if (first.lastUpdate != second.lastUpdate)
         return first.lastUpdate > second.lastUpdate ? NSOrderedAscending : NSOrderedDescending;
+    if (first.object.mmsi == second.object.mmsi)
+        return NSOrderedSame;
+    return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
+}
+
+- (NSComparisonResult)compareSafetyRecord:(AisObjectRenderRecord *)first
+                                 toRecord:(AisObjectRenderRecord *)second
+{
+    if (first.cpaWarning != second.cpaWarning)
+        return first.cpaWarning ? NSOrderedAscending : NSOrderedDescending;
+    if (first.emergency != second.emergency)
+        return first.emergency ? NSOrderedAscending : NSOrderedDescending;
     BOOL firstRendered = _objectDrawables[@(first.object.mmsi)] != nil;
     BOOL secondRendered = _objectDrawables[@(second.object.mmsi)] != nil;
     if (firstRendered != secondRendered)
         return firstRendered ? NSOrderedAscending : NSOrderedDescending;
+    BOOL firstMoving = first.visualState == 0 && first.movable;
+    BOOL secondMoving = second.visualState == 0 && second.movable;
+    if (firstMoving != secondMoving)
+        return firstMoving ? NSOrderedAscending : NSOrderedDescending;
+    if (first.lastUpdate != second.lastUpdate)
+        return first.lastUpdate > second.lastUpdate ? NSOrderedAscending : NSOrderedDescending;
+    if (first.object.mmsi == second.object.mmsi)
+        return NSOrderedSame;
+    return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
+}
+
+- (NSComparisonResult)compareIncumbentRecord:(AisObjectRenderRecord *)first
+                                    toRecord:(AisObjectRenderRecord *)second
+{
+    BOOL firstMoving = first.visualState == 0 && first.movable;
+    BOOL secondMoving = second.visualState == 0 && second.movable;
+    if (firstMoving != secondMoving)
+        return firstMoving ? NSOrderedAscending : NSOrderedDescending;
+    if (first.object.mmsi == second.object.mmsi)
+        return NSOrderedSame;
+    return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
+}
+
+- (NSComparisonResult)compareNewRecord:(AisObjectRenderRecord *)first
+                              toRecord:(AisObjectRenderRecord *)second
+{
+    BOOL firstMoving = first.visualState == 0 && first.movable;
+    BOOL secondMoving = second.visualState == 0 && second.movable;
+    if (firstMoving != secondMoving)
+        return firstMoving ? NSOrderedAscending : NSOrderedDescending;
+    if (first.lastUpdate != second.lastUpdate)
+        return first.lastUpdate > second.lastUpdate ? NSOrderedAscending : NSOrderedDescending;
     if (first.object.mmsi == second.object.mmsi)
         return NSOrderedSame;
     return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
@@ -1060,14 +1110,21 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 - (NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *)selectRecordsForVisibleArea:(const OsmAnd::AreaI&)visibleArea
                                                                                      zoom:(int)zoom
                                                                            candidateCount:(NSUInteger *)candidateCount
-                                                                           projectionCount:(NSUInteger *)projectionCount
+                                                                          projectionCount:(NSUInteger *)projectionCount
+                                                                   collisionRejectedCount:(NSUInteger *)collisionRejectedCount
+                                                          safetyDisplacersByIncumbent:(NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> **)safetyDisplacersByIncumbent
 {
     NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *selected = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> *safetyDisplacers = [NSMutableDictionary dictionary];
+    if (safetyDisplacersByIncumbent)
+        *safetyDisplacersByIncumbent = safetyDisplacers;
     const int64_t visibleWidth = (int64_t)visibleArea.right() - visibleArea.left();
     const int64_t visibleHeight = (int64_t)visibleArea.bottom() - visibleArea.top();
-    if (zoom < kAisTrackerStartZoom || visibleWidth <= 0 || visibleHeight <= 0)
+    if (visibleWidth <= 0 || visibleHeight <= 0)
         return selected;
 
+    AisObjectRenderRecord *selectedRecord = _selectedMmsi ? _objectRecords[_selectedMmsi] : nil;
+    const BOOL detailZoom = zoom >= kAisTrackerStartZoom;
     const int64_t marginX = (int64_t)std::round(visibleWidth * kAisViewportMarginFactor);
     const int64_t marginY = (int64_t)std::round(visibleHeight * kAisViewportMarginFactor);
     const int32_t expandedLeft = (int32_t)MAX((int64_t)0, (int64_t)visibleArea.left() - marginX);
@@ -1076,9 +1133,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     const int32_t expandedBottom = (int32_t)MIN((int64_t)INT32_MAX, (int64_t)visibleArea.bottom() + marginY);
     const OsmAnd::AreaI expandedArea(expandedTop, expandedLeft, expandedBottom, expandedRight);
     const BOOL wrappedViewport = visibleWidth > INT32_MAX / 2;
-    NSArray<AisObjectRenderRecord *> *candidates = wrappedViewport
-        ? [self recordsInVisibleTilesAtZoom:zoom]
-        : [self recordsInArea:expandedArea];
+    NSArray<AisObjectRenderRecord *> *candidates = detailZoom
+        ? (wrappedViewport ? [self recordsInVisibleTilesAtZoom:zoom] : [self recordsInArea:expandedArea])
+        : @[];
     if (candidateCount)
         *candidateCount = candidates.count;
 
@@ -1089,6 +1146,12 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         record.cpaWarning = NO;
         record.hasScreenPoint = NO;
     }
+    if (selectedRecord)
+    {
+        selectedRecord.visualState = OAAisVisualState(selectedRecord.object, plugin);
+        selectedRecord.cpaWarning = NO;
+        selectedRecord.hasScreenPoint = NO;
+    }
 
     const CGFloat footprint = [self currentIconSizeInPoints] + kAisCollisionPadding;
     CGRect viewportBounds = self.mapView.bounds;
@@ -1097,15 +1160,41 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
                                       -viewportBounds.size.height * kAisViewportMarginFactor);
     const NSUInteger columns = MAX(1, (NSUInteger)ceil(renderBounds.size.width / footprint));
     const NSUInteger rows = MAX(1, (NSUInteger)ceil(renderBounds.size.height / footprint));
-    const NSUInteger renderBudget = MIN((NSUInteger)kAisMaxRenderedObjects, columns * rows);
+    const NSUInteger renderBudget = detailZoom
+        ? MIN((NSUInteger)kAisMaxRenderedObjects, columns * rows)
+        : (selectedRecord ? 1 : 0);
     const double referenceTileSize = MAX(1u, self.mapViewController.referenceTileSizeRasterOrigInPixels);
     const double tileSize31 = std::pow(2.0, OsmAnd::ZoomLevel::MaxZoomLevel - self.mapView.zoom);
     const double coarseCellSize31 = MAX(1.0,
         footprint * _displayDensityFactor * tileSize31 / referenceTileSize);
+    // Incumbents bypass coarse reduction so ordinary freshness updates cannot evict them
+    // before exact screen-space collision checks.
+    NSMutableArray<AisObjectRenderRecord *> *incumbents = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *incumbentKeys = [NSMutableSet set];
+    for (AisObjectRenderRecord *record in candidates)
+    {
+        NSNumber *key = @(record.object.mmsi);
+        if ([_selectedMmsi isEqualToNumber:key])
+            continue;
+        if (_objectDrawables[key])
+        {
+            [incumbents addObject:record];
+            [incumbentKeys addObject:key];
+        }
+    }
+    [incumbents sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
+        if (first.object.mmsi == second.object.mmsi)
+            return NSOrderedSame;
+        return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
+    }];
+
     NSMutableDictionary<NSNumber *, NSMutableArray<AisObjectRenderRecord *> *> *coarseCells = [NSMutableDictionary dictionary];
 
     for (AisObjectRenderRecord *record in candidates)
     {
+        NSNumber *key = @(record.object.mmsi);
+        if ([_selectedMmsi isEqualToNumber:key] || [incumbentKeys containsObject:key])
+            continue;
         const int64_t cellX = (int64_t)floor(record.position31.x / coarseCellSize31);
         const int64_t cellY = (int64_t)floor(record.position31.y / coarseCellSize31);
         NSNumber *cellKey = @(((uint64_t)(uint32_t)cellX << 32) | (uint32_t)cellY);
@@ -1118,7 +1207,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         NSUInteger insertionIndex = cell.count;
         for (NSUInteger index = 0; index < cell.count; index++)
         {
-            if ([self compareRecord:record toRecord:cell[index] useCpa:NO] == NSOrderedAscending)
+            if ([self compareCoarseRecord:record toRecord:cell[index]] == NSOrderedAscending)
             {
                 insertionIndex = index;
                 break;
@@ -1132,9 +1221,14 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             [cell removeLastObject];
     }
 
+    const NSUInteger reservedCount = incumbents.count + (selectedRecord ? 1 : 0);
     const NSUInteger projectionBudget = MIN((NSUInteger)kAisMaxProjectionCandidates,
-                                            MAX(renderBudget, renderBudget * kAisCoarseCandidatesPerCell));
+                                            MAX(reservedCount,
+                                                MAX(renderBudget, renderBudget * kAisCoarseCandidatesPerCell)));
     NSMutableArray<AisObjectRenderRecord *> *shortlist = [NSMutableArray arrayWithCapacity:projectionBudget];
+    if (selectedRecord)
+        [shortlist addObject:selectedRecord];
+    [shortlist addObjectsFromArray:incumbents];
     NSArray<NSNumber *> *orderedCellKeys = [coarseCells.allKeys sortedArrayUsingSelector:@selector(compare:)];
     for (NSUInteger rank = 0; rank < kAisCoarseCandidatesPerCell && shortlist.count < projectionBudget; rank++)
     {
@@ -1150,37 +1244,70 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
     for (AisObjectRenderRecord *record in shortlist)
         record.cpaWarning = [plugin hasCpaWarningFor:record.object];
-    [shortlist sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
-        return [self compareRecord:first toRecord:second useCpa:YES];
+
+    NSMutableArray<AisObjectRenderRecord *> *safetyRecords = [NSMutableArray array];
+    NSMutableArray<AisObjectRenderRecord *> *incumbentRecords = [NSMutableArray array];
+    NSMutableArray<AisObjectRenderRecord *> *newRecords = [NSMutableArray array];
+    for (AisObjectRenderRecord *record in shortlist)
+    {
+        if (record == selectedRecord)
+            continue;
+        if (record.cpaWarning || record.emergency)
+            [safetyRecords addObject:record];
+        else if ([incumbentKeys containsObject:@(record.object.mmsi)])
+            [incumbentRecords addObject:record];
+        else
+            [newRecords addObject:record];
+    }
+    [safetyRecords sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
+        return [self compareSafetyRecord:first toRecord:second];
+    }];
+    [incumbentRecords sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
+        return [self compareIncumbentRecord:first toRecord:second];
+    }];
+    [newRecords sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
+        return [self compareNewRecord:first toRecord:second];
     }];
 
     std::unordered_map<int64_t, std::vector<size_t>> occupiedCells;
     std::vector<CGRect> acceptedRects;
+    std::vector<bool> acceptedSafety;
+    NSMutableArray<NSNumber *> *acceptedKeys = [NSMutableArray array];
     NSUInteger projected = 0;
-    for (AisObjectRenderRecord *record in shortlist)
-    {
+    NSUInteger collisionRejected = 0;
+    auto trySelectRecord = [&](AisObjectRenderRecord *record, BOOL forceAdmission) {
         if (selected.count >= renderBudget)
-            break;
+            return;
 
+        NSNumber *recordKey = @(record.object.mmsi);
         CGPoint screenPoint;
         OsmAnd::PointI position31 = record.position31;
         projected++;
         if (![self.mapView obtainScreenPointFromPosition:&position31 toScreen:&screenPoint checkOffScreen:YES]
             || !CGRectContainsPoint(renderBounds, screenPoint))
-            continue;
+        {
+            if (forceAdmission)
+                selected[recordKey] = record;
+            return;
+        }
 
         CGRect iconRect = CGRectMake(screenPoint.x - footprint * 0.5,
                                      screenPoint.y - footprint * 0.5,
                                      footprint,
                                      footprint);
+        record.screenPoint = screenPoint;
+        record.hasScreenPoint = YES;
         const int minCellX = (int)floor((CGRectGetMinX(iconRect) - CGRectGetMinX(renderBounds)) / footprint);
         const int maxCellX = (int)floor((CGRectGetMaxX(iconRect) - CGRectGetMinX(renderBounds)) / footprint);
         const int minCellY = (int)floor((CGRectGetMinY(iconRect) - CGRectGetMinY(renderBounds)) / footprint);
         const int maxCellY = (int)floor((CGRectGetMaxY(iconRect) - CGRectGetMinY(renderBounds)) / footprint);
         BOOL overlaps = NO;
-        for (int cellX = minCellX; cellX <= maxCellX && !overlaps; cellX++)
+        std::unordered_set<size_t> inspectedRects;
+        const BOOL incumbent = [incumbentKeys containsObject:recordKey];
+        NSMutableSet<NSNumber *> *overlappingSafetyKeys = incumbent ? [NSMutableSet set] : nil;
+        for (int cellX = minCellX; cellX <= maxCellX; cellX++)
         {
-            for (int cellY = minCellY; cellY <= maxCellY && !overlaps; cellY++)
+            for (int cellY = minCellY; cellY <= maxCellY; cellY++)
             {
                 const int64_t cellKey = (int64_t)(((uint64_t)(uint32_t)cellX << 32) | (uint32_t)cellY);
                 const auto found = occupiedCells.find(cellKey);
@@ -1188,19 +1315,34 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
                     continue;
                 for (size_t rectIndex : found->second)
                 {
+                    if (!inspectedRects.insert(rectIndex).second)
+                        continue;
                     if (CGRectIntersectsRect(iconRect, acceptedRects[rectIndex]))
                     {
                         overlaps = YES;
-                        break;
+                        if (incumbent && acceptedSafety[rectIndex])
+                            [overlappingSafetyKeys addObject:acceptedKeys[rectIndex]];
                     }
                 }
             }
         }
         if (overlaps)
-            continue;
+        {
+            collisionRejected++;
+            if (forceAdmission)
+            {
+                selected[recordKey] = record;
+                return;
+            }
+            if (overlappingSafetyKeys.count > 0)
+                safetyDisplacers[recordKey] = overlappingSafetyKeys;
+            return;
+        }
 
         const size_t rectIndex = acceptedRects.size();
         acceptedRects.push_back(iconRect);
+        acceptedSafety.push_back(record.cpaWarning || record.emergency);
+        [acceptedKeys addObject:recordKey];
         for (int cellX = minCellX; cellX <= maxCellX; cellX++)
         {
             for (int cellY = minCellY; cellY <= maxCellY; cellY++)
@@ -1209,12 +1351,38 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
                 occupiedCells[cellKey].push_back(rectIndex);
             }
         }
-        record.screenPoint = screenPoint;
-        record.hasScreenPoint = YES;
-        selected[@(record.object.mmsi)] = record;
+        selected[recordKey] = record;
+    };
+
+    // A selected vessel is pinned before decluttering and remains admitted even
+    // when its center is outside the retained viewport or the detail zoom range.
+    if (selectedRecord)
+        trySelectRecord(selectedRecord, YES);
+
+    // Safety targets can displace ordinary incumbents. Ordinary newcomers only
+    // fill space left after every still-valid incumbent has been considered.
+    for (AisObjectRenderRecord *record in safetyRecords)
+    {
+        if (selected.count >= renderBudget)
+            break;
+        trySelectRecord(record, NO);
+    }
+    for (AisObjectRenderRecord *record in incumbentRecords)
+    {
+        if (selected.count >= renderBudget)
+            break;
+        trySelectRecord(record, NO);
+    }
+    for (AisObjectRenderRecord *record in newRecords)
+    {
+        if (selected.count >= renderBudget)
+            break;
+        trySelectRecord(record, NO);
     }
     if (projectionCount)
         *projectionCount = projected;
+    if (collisionRejectedCount)
+        *collisionRejectedCount = collisionRejected;
     return selected;
 }
 
@@ -1229,25 +1397,21 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     const float surfaceZoom = self.mapView.zoom;
     NSUInteger candidateCount = 0;
     NSUInteger projectionCount = 0;
+    NSUInteger collisionRejectedCount = 0;
+    NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> *safetyDisplacers = nil;
     NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *desiredRecords =
         [self selectRecordsForVisibleArea:visibleArea
                                     zoom:zoom
                           candidateCount:&candidateCount
-                         projectionCount:&projectionCount];
-    NSMutableSet<NSNumber *> *desiredKeys = [NSMutableSet setWithArray:desiredRecords.allKeys];
-    NSMutableArray<NSNumber *> *failedKeys = [NSMutableArray array];
+                         projectionCount:&projectionCount
+                  collisionRejectedCount:&collisionRejectedCount
+            safetyDisplacersByIncumbent:&safetyDisplacers];
+    NSSet<NSNumber *> *previousKeys = [NSSet setWithArray:_objectDrawables.allKeys];
+    NSMutableSet<NSNumber *> *failedKeys = [NSMutableSet set];
     [self.mapViewController runWithRenderSync:^{
-        for (NSNumber *key in [_objectDrawables.allKeys copy])
-        {
-            if (![desiredKeys containsObject:key])
-            {
-                [_objectDrawables[key] clearAisRenderDataFromMarkersCollection:_markersCollection
-                                                         vectorLinesCollection:_vectorLinesCollection];
-                [_objectDrawables removeObjectForKey:key];
-            }
-        }
-
-        for (NSNumber *key in desiredRecords)
+        // Stage desired drawables first so the renderer never observes an empty
+        // replacement interval between removing an incumbent and adding its successor.
+        for (NSNumber *key in [desiredRecords.allKeys copy])
         {
             AisObjectRenderRecord *record = desiredRecords[key];
             AisObjectDrawable *drawable = _objectDrawables[key];
@@ -1288,12 +1452,47 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             {
                 [drawable updateAisRenderDataWithMapView:self.mapView
                                               cpaWarning:record.cpaWarning
+                                                 selected:[_selectedMmsi isEqualToNumber:key]
                                     vectorLinesCollection:_vectorLinesCollection];
                 drawable.renderedVersion = record.version;
             }
         }
+
+        [desiredRecords removeObjectsForKeys:failedKeys.allObjects];
+        NSMutableSet<NSNumber *> *actualDesiredKeys = [NSMutableSet setWithArray:desiredRecords.allKeys];
+        for (NSNumber *incumbentKey in safetyDisplacers)
+        {
+            if ([actualDesiredKeys containsObject:incumbentKey] || ![previousKeys containsObject:incumbentKey])
+                continue;
+
+            BOOL everyReplacementFailed = YES;
+            for (NSNumber *safetyKey in safetyDisplacers[incumbentKey])
+            {
+                if (![failedKeys containsObject:safetyKey])
+                {
+                    everyReplacementFailed = NO;
+                    break;
+                }
+            }
+            AisObjectDrawable *drawable = _objectDrawables[incumbentKey];
+            AisObjectRenderRecord *record = _objectRecords[incumbentKey];
+            if (everyReplacementFailed && drawable && [drawable hasAisRenderData] && record && record.hasScreenPoint)
+            {
+                desiredRecords[incumbentKey] = record;
+                [actualDesiredKeys addObject:incumbentKey];
+            }
+        }
+
+        for (NSNumber *key in previousKeys)
+        {
+            if (![actualDesiredKeys containsObject:key])
+            {
+                [_objectDrawables[key] clearAisRenderDataFromMarkersCollection:_markersCollection
+                                                         vectorLinesCollection:_vectorLinesCollection];
+                [_objectDrawables removeObjectForKey:key];
+            }
+        }
     }];
-    [desiredRecords removeObjectsForKeys:failedKeys];
 
     _renderedRecords = desiredRecords;
     _peakDrawableCount = MAX(_peakDrawableCount, _objectDrawables.count);
@@ -1306,14 +1505,32 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
     if ([AisLogger shared].isEnabled)
     {
+        NSSet<NSNumber *> *actualKeys = [NSSet setWithArray:desiredRecords.allKeys];
+        NSMutableSet<NSNumber *> *retainedKeys = [previousKeys mutableCopy];
+        [retainedKeys intersectSet:actualKeys];
+        NSMutableSet<NSNumber *> *admittedKeys = [actualKeys mutableCopy];
+        [admittedKeys minusSet:previousKeys];
+        NSMutableSet<NSNumber *> *removedKeys = [previousKeys mutableCopy];
+        [removedKeys minusSet:actualKeys];
+        NSUInteger safetyDisplacedCount = 0;
+        for (NSNumber *incumbentKey in safetyDisplacers)
+        {
+            if (![actualKeys containsObject:incumbentKey])
+                safetyDisplacedCount++;
+        }
         const NSUInteger markerCount = _markersCollection ? (NSUInteger)_markersCollection->getMarkers().size() : 0;
         const int lineCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
         const double elapsedMs = (CFAbsoluteTimeGetCurrent() - started) * 1000.0;
         [[AisLogger shared] log:[NSString stringWithFormat:
-            @"render candidates=%lu projected=%lu admitted=%lu markers=%lu lines=%d peak=%lu time=%.1fms",
+            @"render candidates=%lu projected=%lu visible=%lu retained=%lu admitted=%lu removed=%lu collisionRejected=%lu safetyDisplaced=%lu markers=%lu lines=%d peak=%lu time=%.1fms",
             (unsigned long)candidateCount,
             (unsigned long)projectionCount,
             (unsigned long)desiredRecords.count,
+            (unsigned long)retainedKeys.count,
+            (unsigned long)admittedKeys.count,
+            (unsigned long)removedKeys.count,
+            (unsigned long)collisionRejectedCount,
+            (unsigned long)safetyDisplacedCount,
             (unsigned long)markerCount,
             lineCount,
             (unsigned long)_peakDrawableCount,
@@ -1368,6 +1585,30 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 }
 
 #pragma mark - OAContextMenuProvider
+
+- (void)updateSelectedMmsi:(NSNumber * _Nullable)selectedMmsi
+{
+    if (_selectedMmsi == selectedMmsi
+        || (selectedMmsi != nil && [_selectedMmsi isEqualToNumber:selectedMmsi]))
+        return;
+
+    _selectedMmsi = selectedMmsi;
+    _dataDirty = YES;
+    [self scheduleFrameRefresh];
+}
+
+- (void)contextMenuDidShow:(id)targetObj
+{
+    NSNumber *selectedMmsi = [targetObj isKindOfClass:OASAisObject.class]
+        ? @(((OASAisObject *)targetObj).mmsi)
+        : nil;
+    [self updateSelectedMmsi:selectedMmsi];
+}
+
+- (void)contextMenuDidHide
+{
+    [self updateSelectedMmsi:nil];
+}
 
 - (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
@@ -1439,7 +1680,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (void)collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if (excludeUntouchableObjects || ![self isVisible] || (int)self.mapView.zoomLevel < kAisTrackerStartZoom)
+    if (excludeUntouchableObjects
+        || ![self isVisible]
+        || ((int)self.mapView.zoomLevel < kAisTrackerStartZoom && !_selectedMmsi))
         return;
 
     CGFloat contentScale = MAX(1.0, self.mapView.contentScaleFactor);

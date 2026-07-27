@@ -1111,7 +1111,7 @@ static const NSInteger _buttonsCount = 4;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
     _sliderView.frame = sliderFrame;
 
-    CGFloat textX = (_imageView.image ? 50.0 : itemsX) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image ? 50.0 : (_targetPoint.type == OATargetRouteDetails ? 16.0 : itemsX)) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLandscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];

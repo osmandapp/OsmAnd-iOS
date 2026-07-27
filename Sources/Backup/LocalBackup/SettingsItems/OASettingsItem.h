@@ -45,6 +45,8 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
 - (void) apply;
+// The importer invokes this hook from its worker queue. The default implementation
+// preserves the existing main-thread contract of -apply.
 + (void)applyItems:(NSArray<__kindof OASettingsItem *> *)items;
 - (void) remove;
 - (void) applyAdditionalParams:(NSString *)filePath;

@@ -446,6 +446,8 @@
 @property (nonatomic) NSArray<OASettingsItem *> *selectedItems;
 @property (nonatomic) NSArray<OASettingsItem *> *duplicates;
 
+- (void)applySettingsItems:(NSArray<OASettingsItem *> *)items;
+
 @end
 
 @implementation OAImportAsyncTask
@@ -551,6 +553,7 @@
             _duplicates = [self getDuplicatesData:_selectedItems];
             return _selectedItems;
         case EOAImportTypeImport:
+            [self applySettingsItems:_items];
             return _items;
         case EOAImportTypeUndefined:
         case EOAImportTypeCollectAndRead:
@@ -562,8 +565,6 @@
 
 - (void)applySettingsItems:(NSArray<OASettingsItem *> *)items
 {
-    NSAssert([NSThread isMainThread], @"Settings items must be applied on the main thread");
-
     NSMutableArray<Class> *itemClasses = [NSMutableArray array];
     NSMapTable<Class, NSMutableArray<OASettingsItem *> *> *itemsByClass = [NSMapTable strongToStrongObjectsMapTable];
     for (OASettingsItem *item in items)
@@ -608,7 +609,6 @@
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
             {
-                [self applySettingsItems:items];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 task.onImportComplete = self.onImportComplete;

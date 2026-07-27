@@ -139,8 +139,14 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 + (void)applyItems:(NSArray<__kindof OASettingsItem *> *)items
 {
-    for (OASettingsItem *item in items)
-        [item apply];
+    void (^applyBlock)(void) = ^{
+        for (OASettingsItem *item in items)
+            [item apply];
+    };
+    if ([NSThread isMainThread])
+        applyBlock();
+    else
+        dispatch_sync(dispatch_get_main_queue(), applyBlock);
 }
 
 - (void) remove

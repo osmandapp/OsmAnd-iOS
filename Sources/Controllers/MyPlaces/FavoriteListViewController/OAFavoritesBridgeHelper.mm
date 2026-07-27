@@ -56,12 +56,20 @@ static NSArray<NSString *> *collapsedSections = nil;
 
 + (NSArray<NSString *> *)collapsedSections
 {
-    return collapsedSections ?: @[];
+    @synchronized (self.class)
+    {
+        NSArray<NSString *> *sections = collapsedSections;
+        return sections ?: @[];
+    }
 }
 
 + (void)updateCollapsedSections:(NSArray<NSString *> *)sections
 {
-    collapsedSections = [sections copy];
+    NSArray<NSString *> *sectionsCopy = [sections copy];
+    @synchronized (self.class)
+    {
+        collapsedSections = sectionsCopy;
+    }
 }
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders

@@ -78,6 +78,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     var tracksFolderPathToOpenOnLoad: String?
     
     private let segmentedControlIconSize: CGFloat = 24
+    private let searchAnimationDuration: CGFloat = 0.4
     private var availableViewControllers: [Tab: UIViewController] = [:]
     private var pageViewController: UIPageViewController?
     private var searchController: UISearchController?
@@ -372,13 +373,13 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.searchController?.isActive = true
             }
-            UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+            UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: .showHideTransitionViews) {
                 self.updateSegmentedControlVisibility(false)
                 self.segmentContainerView.alpha = 0
                 self.view.layoutIfNeeded()
             }
         } else {
-            UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+            UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: .showHideTransitionViews) {
                 self.setupNavbar(isClearNavBar: isEnabled)
                 self.updateSegmentedControlVisibility(!isEnabled)
                 self.segmentContainerView.alpha = 1

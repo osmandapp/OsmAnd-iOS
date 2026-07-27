@@ -3787,3 +3787,4 @@
 "open_till_short" = "Tot";
 "open_from_short" = "Vanaf";
 "routing_attr_motor_type_ethanol_name" = "Ethanol";
+"traffic_warning_red_light_camera" = "Roodlichtcamera";

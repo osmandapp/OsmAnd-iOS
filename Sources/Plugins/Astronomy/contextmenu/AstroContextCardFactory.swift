@@ -28,12 +28,12 @@ final class AstroContextCardFactory {
         if let descriptionItem {
             items.append(descriptionItem)
         }
-        if !skyObject.catalogs.isEmpty {
-            items.append(AstroCatalogsCardItem(catalogs: skyObject.catalogs, expanded: uiState.catalogsExpanded))
-        }
         items.append(AstroGalleryCardItem(wid: skyObject.wid,
                                           showAllTitle: skyObject.niceName(),
                                           state: uiState.galleryState))
+        if !skyObject.catalogs.isEmpty {
+            items.append(AstroCatalogsCardItem(catalogs: skyObject.catalogs, expanded: uiState.catalogsExpanded))
+        }
         if let visibilityItem {
             items.append(visibilityItem)
         }

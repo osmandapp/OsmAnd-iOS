@@ -2099,7 +2099,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return saveDialog;
 }
 
-- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSaved
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(nullable NSString *)newName willSaved:(BOOL)willSaved
 {
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
     sr.localeName = [filter getName];

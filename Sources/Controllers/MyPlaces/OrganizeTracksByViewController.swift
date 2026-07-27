@@ -88,10 +88,6 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         .templateImageNamed("ic_navbar_close")
     }
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         return [UIBarButtonItem(title: localizedString("shared_string_apply"), style: .done, target: self, action: #selector(onApplyButtonPressed))]
     }

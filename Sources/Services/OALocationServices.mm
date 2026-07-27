@@ -26,8 +26,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAverageSpeedComputer.h"
 
-#import <FormatterKit/TTTLocationFormatter.h>
-
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -789,20 +787,6 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"loc_access_denied") message:OALocalizedString(@"loc_access_denied_desc") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
     [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation
-{
-    CLLocation *location = self.lastKnownLocation;
-    if (location && destinationLocation)
-    {
-        TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
-        return [formatter stringFromBearingFromLocation:location toLocation:destinationLocation];
-    }
-    else
-    {
-        return nil;
-    }
 }
 
 // Relative to north

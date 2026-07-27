@@ -15,6 +15,7 @@ final class FavoriteListViewController: UIViewController {
     static let imageSize: CGFloat = 30.0
     static let favoriteIconSize: CGFloat = 36.0
     static let sortHeaderHeight: CGFloat = 44.0
+    static let emptyStateHeaderTopPadding: CGFloat = 22.0
     static let navigationTitleFontSize: CGFloat = 17.0
     static let navigationTitleMaximumSize: CGFloat = 22.0
     static let navigationSubtitleFontSize: CGFloat = 12.0
@@ -140,6 +141,9 @@ final class FavoriteListViewController: UIViewController {
         applySnapshot()
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
+        if isRootFolder {
+            myPlacesDelegate?.updateContentScrollView(collectionView)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -260,17 +264,22 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(false)
             } else {
-                self.navigationItem.hidesBackButton = true
+                navigationItem.hidesBackButton = true
             }
         } else {
             let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
-            actionsButton.tintColor = .label
+            actionsButton.tintColor = .textColorPrimary
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
-            let searchButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: .label, action: #selector(searchButtonPressed(_:)), target: self, menu: nil)
-            searchButton?.accessibilityLabel = localizedString("shared_string_search")
+            let searchIcon = UIImage(systemName: "magnifyingglass",
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+            let searchButton = UIBarButtonItem(image: searchIcon,
+                                               style: .plain,
+                                               target: self,
+                                               action: #selector(searchButtonPressed(_:)))
+            searchButton.accessibilityLabel = localizedString("shared_string_search")
             if #available(iOS 26.0, *) {
-                searchButton?.style = .prominent
-                searchButton?.tintColor = .clear
+                searchButton.style = .prominent
+                searchButton.tintColor = .clear
             }
 
             let rightBarButtonItems = [actionsButton, isSearchActive ? nil : searchButton].compactMap { $0 }
@@ -279,7 +288,7 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(true)
             } else {
-                self.navigationItem.hidesBackButton = false
+                navigationItem.hidesBackButton = false
             }
         }
     }
@@ -306,6 +315,9 @@ final class FavoriteListViewController: UIViewController {
     private func configureCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.topAnchor), collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        if !isRootFolder {
+            setContentScrollView(collectionView, for: .top)
+        }
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -319,6 +331,10 @@ final class FavoriteListViewController: UIViewController {
 
             if section == .statsFooter {
                 return self.statsFooterLayoutSection()
+            }
+
+            if section == .emptyState {
+                configuration.headerTopPadding = Self.emptyStateHeaderTopPadding
             }
 
             if case .folderSection = section, self.isRootFolder {
@@ -344,16 +360,12 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func configureSearchVisibility() {
-        guard !isRootFolder else {
-            navigationController?.navigationBar.topItem?.hidesSearchBarWhenScrolling = false
-            return
-        }
+        guard !isRootFolder else { return }
 
         if #available(iOS 26.0, *), !OAUtilities.isIPad() {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
-
-        navigationItem.hidesSearchBarWhenScrolling = false
+        
         navigationItem.searchController = collectionView.isEditing || !isSearchActive ? nil : subfolderSearchController
     }
     

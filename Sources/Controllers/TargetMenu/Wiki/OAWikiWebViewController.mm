@@ -49,6 +49,12 @@
     BOOL _isDownloadImagesOnlyNow;
     BOOL _isFirstLaunch;
     OAWikiImageCacheHelper *_imageCacheHelper;
+    BOOL _isAstroArticle;
+    NSString *_astroTitle;
+    NSString *_astroRawHtml;
+    NSURL *_astroOnlineURL;
+    NSString *_astroWikidataId;
+    NSArray<NSString *> *_astroAvailableLocales;
 }
 
 #pragma mark - Initialization
@@ -89,6 +95,27 @@
         _currentLocale = nil;
         _contentLocale = nil;
         [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithAstroWikiHtml:(NSString *)html
+                                title:(NSString *)title
+                               locale:(NSString *)locale
+                            onlineURL:(nullable NSURL *)onlineURL
+                           wikidataId:(NSString *)wikidataId
+{
+    self = [super init];
+    if (self) {
+        _isAstroArticle = YES;
+        _astroRawHtml = html;
+        _astroTitle = title;
+        _astroOnlineURL = onlineURL;
+        _isFirstLaunch = YES;
+        _contentLocale = [locale isEqualToString:@"en"] ? @"" : locale;
+        _astroWikidataId = wikidataId;
+        [self commonInit];
+        [self updateAstroContent];
     }
     return self;
 }
@@ -183,10 +210,20 @@
         _content = [self appendHeadToContent:_content];
 }
 
+- (void)updateAstroContent
+{
+    NSString *body = _astroRawHtml;
+    if (body.length == 0) return;
+    _content = [self appendHeadToContent:body];
+}
+
 - (void)updateAppearance
 {
     [super updateAppearance];
-    [self updateContent];
+    if (_isAstroArticle)
+        [self updateAstroContent];
+    else
+        [self updateContent];
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
@@ -282,6 +319,8 @@
 
 - (NSString *)getTitle
 {
+    if (_isAstroArticle)
+        return _astroTitle;
     if (_externalURLTitle)
         return _externalURLTitle;
     
@@ -300,8 +339,19 @@
 
 -(void)createLanguagesNavbarButton
 {
+    NSArray<NSString *> *locales;
+    if (_isAstroArticle)
+    {
+        locales = [AstroWikiBridge availableLanguagesWithWikidataId:_astroWikidataId];
+        _astroAvailableLocales = locales;
+    }
+    else
+    {
+        locales = _poi.localizedContent.allKeys;
+    }
+    
     __weak OAWikiWebViewController *weakSelf = self;
-    UIMenu *languageMenu = [OAWikiArticleHelper createLanguagesMenu:_poi.localizedContent.allKeys selectedLocale:[weakSelf getContentLocale] delegate:weakSelf];
+    UIMenu *languageMenu = [OAWikiArticleHelper createLanguagesMenu:locales selectedLocale:[weakSelf getContentLocale] delegate:weakSelf];
     _languageBarButtonItem = [self createRightNavbarButton:nil iconName:@"ic_navbar_languge" action:@selector(onLanguageNavbarButtonPressed) menu:languageMenu];
 }  
 
@@ -377,6 +427,13 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
+    if (_isAstroArticle)
+    {
+        if (_astroAvailableLocales.count > 1)
+            return @[_imagesBarButtonItem, _languageBarButtonItem];
+        return @[_imagesBarButtonItem];
+    }
+    
     return _externalURL ? @[] : @[_imagesBarButtonItem, _languageBarButtonItem];
 }
 
@@ -418,6 +475,8 @@
 
 - (NSURL *)getUrl
 {
+    if (_isAstroArticle && _astroOnlineURL)
+        return _astroOnlineURL;
     if (_externalURL) {
         return _externalURL;
     } else {
@@ -593,7 +652,8 @@
 
 - (void)onLanguageNavbarButtonPressed
 {
-    if (_poi.localizedContent.allKeys.count <= 1)
+    NSUInteger count = _isAstroArticle ? _astroAvailableLocales.count : _poi.localizedContent.allKeys.count;
+    if (count <= 1)
     {
         [OARootViewController showInfoAlertWithTitle:nil
                                              message:OALocalizedString(@"no_other_translations")
@@ -645,7 +705,10 @@
 
 - (void)updateWikiData
 {
-    [self updateWikiData:_contentLocale];
+    if (_isAstroArticle)
+        [self updateAstroWikiData:_contentLocale];
+    else
+        [self updateWikiData:_contentLocale];
 }
 
 - (void)loadWebView
@@ -691,6 +754,33 @@
     return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];
 }
 
+- (void)updateAstroWikiData:(NSString *)locale
+{
+    NSDictionary *data = [AstroWikiBridge loadArticleWithWikidataId:_astroWikidataId lang:locale ?: @""];
+    if (!data)
+        return;
+
+    _astroRawHtml = data[@"html"];
+    _astroTitle = data[@"title"];
+    _contentLocale = data[@"locale"];
+
+    NSString *urlString = data[@"onlineURL"];
+    _astroOnlineURL = urlString.length > 0 ? [NSURL URLWithString:urlString] : nil;
+
+    [self updateAstroContent];
+    [self createLanguagesNavbarButton];
+    [self createImagesNavbarButton];
+
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+        [self updateNavbar];
+        [self applyLocalization];
+        [self loadWebView];
+    } completion:nil];
+}
+
 #pragma mark - WebView
 
 - (void)webViewDidCommitted:(void(^)(void))onViewCommitted
@@ -699,7 +789,15 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    NSString *javascriptWithCSSString = [NSString stringWithFormat:kLargeTitleJS, cssContents, [[self getTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    NSString *javascriptWithCSSString;
+    if (_isAstroArticle)
+    {
+        javascriptWithCSSString = [NSString stringWithFormat:@"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style);", cssContents];
+    }
+    else
+    {
+        javascriptWithCSSString = [NSString stringWithFormat:kLargeTitleJS, cssContents, [[self getTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    }
     [self.webView evaluateJavaScript:kCollapseJS completionHandler:nil];
     [self.webView evaluateJavaScript:javascriptWithCSSString completionHandler:^(id _Nullable object, NSError * _Nullable error) {
         if (!containsRTL && onViewCommitted)
@@ -723,6 +821,11 @@
 
 - (void)onLocaleSelected:(NSString *)locale
 {
+    if (_isAstroArticle)
+    {
+        [self updateAstroWikiData:locale];
+        return;
+    }
     [self updateWikiData:locale];
 }
 

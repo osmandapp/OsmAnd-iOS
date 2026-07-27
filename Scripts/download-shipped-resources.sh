@@ -29,10 +29,31 @@ function downloadShippedResource()
 {
 	local name=$1
 	local url=$2
-	
-	(cd "$DEST" && \
-		curl --remote-time --time-cond $name --location --output $name --fail $url && \
-		$GET_FILE_MODIFICATION "$name" > "$name.stamp")
+
+	(
+		cd "$DEST" || exit
+		local outputName="$name.download"
+		local curlArgs=(--location --output "$outputName" --fail)
+		if [ -f "$name" ]; then
+			curlArgs+=(--time-cond "$name")
+		else
+			curlArgs+=(--remote-time)
+		fi
+
+		curl "${curlArgs[@]}" "$url"
+		retcode=$?
+		if [ $retcode -ne 0 ]; then
+			rm -f "$outputName"
+			exit $retcode
+		fi
+
+		if [ -s "$outputName" ]; then
+			mv "$outputName" "$name"
+			$GET_FILE_MODIFICATION "$name" > "$name.stamp"
+		else
+			rm -f "$outputName"
+		fi
+	)
 	retcode=$?
 	if [ $retcode -ne 0 ]; then
 		echo "Failed to download '$name' from $url, aborting..."
@@ -48,11 +69,29 @@ function downloadShippedGzipResource()
 	local url=$2
 	local compressedName="$name.gz"
 
-	(cd "$DEST" && \
-		curl --remote-time --time-cond "$compressedName" --location --output "$compressedName" --fail "$url" && \
-		gzip -dc "$compressedName" > "$name" && \
-		$GET_FILE_MODIFICATION "$compressedName" > "$name.stamp" && \
-		rm "$compressedName")
+	(
+		cd "$DEST" || exit
+		local curlArgs=(--location --output "$compressedName" --fail)
+		if [ -f "$name" ]; then
+			curlArgs+=(--time-cond "$name")
+		else
+			curlArgs+=(--remote-time)
+		fi
+
+		curl "${curlArgs[@]}" "$url"
+		retcode=$?
+		if [ $retcode -ne 0 ]; then
+			rm -f "$compressedName"
+			exit $retcode
+		fi
+
+		if [ -s "$compressedName" ]; then
+			gzip -dc "$compressedName" > "$name"
+			touch -r "$compressedName" "$name"
+			$GET_FILE_MODIFICATION "$name" > "$name.stamp"
+		fi
+		rm -f "$compressedName"
+	)
 	retcode=$?
 	if [ $retcode -ne 0 ]; then
 		echo "Failed to download and unzip '$name' from $url, aborting..."

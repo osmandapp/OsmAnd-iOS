@@ -18,15 +18,13 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
                                     categoryPreset: nil,
                                     useExploreRowLayout: false)
     }
-    
-    var topInsetHeight: CGFloat = .leastNormalMagnitude
 
     private let widToDisplayName: () -> [String: String]
     private let starConstellationNameForObject: (SkyObject) -> String?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let visibilityAttributedTextProvider: (StarMapSearchEntry) -> NSAttributedString
-    private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
+    private let contextMenuProvider: ((StarMapSearchEntry) -> UIContextMenuConfiguration?)?
     
     private var snapshot: Snapshot
     
@@ -43,16 +41,16 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
          starConstellationNameForObject: @escaping (SkyObject) -> String?,
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          visibilityAttributedTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
-         onScroll: @escaping (UIScrollView) -> Void,
-         onEntrySelected: @escaping (StarMapSearchEntry) -> Void) {
+         onEntrySelected: @escaping (StarMapSearchEntry) -> Void,
+         contextMenuProvider: ((StarMapSearchEntry) -> UIContextMenuConfiguration?)?) {
 
         self.snapshot = snapshot
         self.widToDisplayName = widToDisplayName
         self.starConstellationNameForObject = starConstellationNameForObject
         self.eventTextProvider = eventTextProvider
         self.visibilityAttributedTextProvider = visibilityAttributedTextProvider
-        self.onScroll = onScroll
         self.onEntrySelected = onEntrySelected
+        self.contextMenuProvider = contextMenuProvider
         super.init()
         self.registerCells(for: tableView)
     }
@@ -62,17 +60,15 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let insetView = UIView()
-        insetView.isUserInteractionEnabled = false
-        return insetView
+        UIView()
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        topInsetHeight
+        16
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        topInsetHeight
+        16
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,8 +93,9 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         onEntrySelected(entry)
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        onScroll(scrollView)
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard snapshot.entries.indices.contains(indexPath.row) else { return nil }
+        return contextMenuProvider?(snapshot.entries[indexPath.row])
     }
 
     private func getEntryForPosition(_ position: Int) -> StarMapSearchEntry {
@@ -174,8 +171,10 @@ private final class StarMapSearchObjectCell: UITableViewCell {
         switch style {
         case .myData:
             orderedViews = [objectIconView, textStack]
+            separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
         case .explore:
             orderedViews = [textStack, objectIconView]
+            separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         }
         for (index, view) in orderedViews.enumerated() {
             rowStack.insertArrangedSubview(view, at: index)

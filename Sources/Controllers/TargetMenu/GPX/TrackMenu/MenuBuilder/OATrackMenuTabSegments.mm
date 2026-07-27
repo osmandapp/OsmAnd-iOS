@@ -265,8 +265,8 @@
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
             
-            icons[@"top_left_icon_name_string_value"] = @"ic_small_distance";
-            icons[@"top_right_icon_name_string_value"] = @"ic_small_time_interval";
+            icons[@"top_left_icon_name_string_value"] = @"ic_custom_length";
+            icons[@"top_right_icon_name_string_value"] = @"ic_custom_time_span";
             icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
             
@@ -301,8 +301,8 @@
             
             icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
-            icons[@"bottom_left_icon_name_string_value"] = @"ic_small_ascent";
-            icons[@"bottom_right_icon_name_string_value"] = @"ic_small_descent";
+            icons[@"bottom_left_icon_name_string_value"] = @"ic_custom_uphill";
+            icons[@"bottom_right_icon_name_string_value"] = @"ic_custom_downhill";
             
             descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.avgElevation];
             descriptions[@"top_right_description_string_value"] = [NSString stringWithFormat:@"%@ - %@",
@@ -321,8 +321,8 @@
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_time_moving");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"distance_moving");
 
-            icons[@"top_left_icon_name_string_value"] = @"ic_small_speed";
-            icons[@"top_right_icon_name_string_value"] = @"ic_small_max_speed";
+            icons[@"top_left_icon_name_string_value"] = @"ic_custom_speed_average";
+            icons[@"top_right_icon_name_string_value"] = @"ic_custom_speed_max";
             icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
 

@@ -35,11 +35,12 @@
     return self;
 }
 
-+ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate
++ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond
 {
     OAAlarmInfo *info = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_LIMIT locationIndex:0];
     info.coordinate = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude);
     info.intValue = speed;
+    info.floatValue = speedMetersPerSecond;
     return info;
 }
 
@@ -55,6 +56,13 @@
         else if ("stop" == ruleType.getValue())
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_STOP locationIndex:locInd];
+        }
+    }
+    else if ("enforcement" == ruleType.getTag())
+    {
+        if ("traffic_signals" == ruleType.getValue())
+        {
+            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RED_LIGHT_CAMERA locationIndex:locInd];
         }
     }
     else if ("barrier" == ruleType.getTag())
@@ -105,7 +113,7 @@
     if (time < 6 || distance < 75 || self.type == AIT_SPEED_LIMIT)
         return [self.class getPriority:self.type];
 
-    if (self.type == AIT_SPEED_CAMERA && (time < 15 || distance < 150))
+    if ((self.type == AIT_SPEED_CAMERA || self.type == AIT_RED_LIGHT_CAMERA) && (time < 15 || distance < 150))
         return [self.class getPriority:self.type];
 
     // 2nd level
@@ -140,6 +148,8 @@
             return 10;
         case AIT_TUNNEL:
             return 11;
+        case AIT_RED_LIGHT_CAMERA:
+            return 12;
 
         default:
             return 0;
@@ -171,6 +181,8 @@
             return @"TUNNEL";
         case AIT_MAXIMUM:
             return @"MAXIMUM";
+        case AIT_RED_LIGHT_CAMERA:
+            return @"RED_LIGHT_CAMERA";
 
         default:
             return @"";
@@ -202,10 +214,17 @@
             return OALocalizedString(@"tunnel_warning");
         case AIT_MAXIMUM:
             return OALocalizedString(@"traffic_warning");
+        case AIT_RED_LIGHT_CAMERA:
+            return OALocalizedString(@"traffic_warning_red_light_camera");
             
         default:
             return @"";
     }
+}
+
+- (BOOL) isTrafficCamera
+{
+    return self.type == AIT_SPEED_CAMERA || self.type == AIT_RED_LIGHT_CAMERA;
 }
 
 - (NSUInteger) hash

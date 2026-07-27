@@ -23,13 +23,17 @@ extension AlertPresenter {
              actions: [noAction, yesAction],
              config: .carPlayOrApp)
     }
-    
+
     static func showMissingMapsAlert(onDownloadMapsHandler: @escaping () -> Void,
-                                     onViewOnPhoneHandler: @escaping () -> Void) {
+                                     onViewOnPhoneHandler: @escaping () -> Void,
+                                     onCancelHandler: (() -> Void)?) {
+        let cancelAction = AlertActionConfig(title: localizedString("shared_string_cancel"),
+                                             style: .cancel,
+                                             handler: onCancelHandler)
         let downloadAction = AlertActionConfig(title: localizedString("missing_maps_ignore"),
                                                style: .default,
                                                handler: onDownloadMapsHandler)
-        var actions = [downloadAction]
+        var actions = [cancelAction, downloadAction]
         
         if UIApplication.shared.mainScene != nil {
             let viewOnPhoneAction = AlertActionConfig(title: localizedString("view_on_phone"),

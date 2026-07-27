@@ -104,10 +104,6 @@ final class GradientEditorViewController: OABaseNavbarViewController {
          UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: #selector(onUndoPressed))]
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func registerCells() {
         addCell(GradientChartCell.reuseIdentifier)
         addCell(OAFoldersCell.reuseIdentifier)

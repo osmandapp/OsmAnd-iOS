@@ -24,10 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) double latitude;
 @property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly, nullable) NSDate *timestampDate;
-@property (nonatomic, readonly, nullable) UIImage *icon;
 @property (nonatomic, readonly) BOOL isVisible;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
+- (UIImage *)icon;
 - (void)updateDistanceAndDirection;
 
 @end

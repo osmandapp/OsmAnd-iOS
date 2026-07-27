@@ -22,7 +22,7 @@
     [super awakeFromNib];
     
     _rightIconImageVIew.image = [UIImage templateImageNamed:@"ic_custom_trip"];
-    _distanceImageView.image = [UIImage templateImageNamed:@"ic_small_distance"];
+    _distanceImageView.image = [UIImage templateImageNamed:@"ic_custom_length"];
     _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
     _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
     

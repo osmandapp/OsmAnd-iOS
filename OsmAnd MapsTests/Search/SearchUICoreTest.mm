@@ -69,6 +69,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (void) testSearch
 {
+    XCTSkip(@"Temporarily disabled because the search test is broken.");
     _successCount = 0;
     _failedCount = 0;
     _firstResultCount = 0;

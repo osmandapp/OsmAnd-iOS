@@ -272,4 +272,9 @@
     return NO;
 }
 
+- (BOOL)isClickableWayAmenity:(OAPOI *)amenity
+{
+    return [self isClickableWayTags:amenity.name tags:[amenity getOsmTags]];
+}
+
 @end

@@ -6,7 +6,6 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import <CocoaSecurity.h>
 #import "OAWikiImageHelper.h"
 #import "OATargetInfoViewController.h"
 #import "OAPOI.h"

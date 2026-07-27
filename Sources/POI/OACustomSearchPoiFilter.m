@@ -12,22 +12,22 @@
 
 @implementation OACustomSearchPoiFilter
 
-- (NSString *)getFilterId
+- (nullable NSString *)getFilterId
 {
     return nil; //override
 }
 
--(NSString *)getName
+-(nullable NSString *)getName
 {
     return nil; //override
 }
 
--(NSObject *)getIconResource
+-(nullable NSObject *)getIconResource
 {
     return nil; // override
 }
 
--(OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher
+-(nullable OAResultMatcher<OAPOI *> *)wrapResultMatcher:(nullable OAResultMatcher<OAPOI *> *)matcher
 {
     return nil; // override
 }
@@ -37,7 +37,7 @@
     return OASearchSortTypeUnknown; // override
 }
 
--(instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction
+-(instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(nullable OASearchPoiTypeFilterGetTypes)tFunction
 {
     return [super initWithAcceptFunc:aFunction emptyFunction:eFunction getTypesFunction:tFunction];
 }

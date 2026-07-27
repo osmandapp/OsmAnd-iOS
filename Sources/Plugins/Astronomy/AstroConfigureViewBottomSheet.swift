@@ -12,10 +12,10 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     private enum Layout {
         static let contentPadding: CGFloat = 16
         static let contentPaddingSmall: CGFloat = 15
-        static let contentPaddingMedium: CGFloat = 9
         static let contentPaddingMinimal: CGFloat = 2
-        static let headerTitleRowHeight: CGFloat = 56
+        static let headerTitleRowHeight: CGFloat = 42
         static let headerTitlePadding: CGFloat = 32
+        static let headerTitlePaddingSmall: CGFloat = 8
         static let sectionCornerRadius: CGFloat = 26
         static let closeButtonSize: CGFloat = 48
         static let closeCircleSize: CGFloat = 44
@@ -93,7 +93,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     }
 
     private func configureNavigationBar() {
-        let imageClose = OAUtilities.resize(UIImage.templateImageNamed("ic_navbar_close"),
+        let imageClose = OAUtilities.resize(.icNavbarClose,
                                             newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
         let closeButton = UIBarButtonItem(image: imageClose, style: .plain, target: self, action: #selector(closeAction))
         closeButton.tintColor = .label
@@ -164,7 +164,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         topButtonsRow.axis = .horizontal
         topButtonsRow.distribution = .fillEqually
         topButtonsRow.spacing = Layout.contentPaddingSmall
-        topButtonsRow.layoutMargins = UIEdgeInsets(top: Layout.contentPaddingMedium,
+        topButtonsRow.layoutMargins = UIEdgeInsets(top: Layout.contentPadding,
                                                    left: Layout.contentPadding,
                                                    bottom: Layout.contentPadding,
                                                    right: Layout.contentPadding)
@@ -173,7 +173,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func setupVisibleObjectsGrid() {
         visibleObjectsGridContent.axis = .vertical
-        visibleObjectsGridContent.spacing = Layout.contentPaddingSmall
+        visibleObjectsGridContent.spacing = Layout.contentPadding
         visibleObjectsGridContent.layoutMargins = UIEdgeInsets(top: 0,
                                                                left: Layout.contentPadding,
                                                                bottom: 0,
@@ -224,8 +224,10 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         NSLayoutConstraint.activate([
             title.leadingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.leadingAnchor, constant: Layout.headerTitlePadding),
             title.trailingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.trailingAnchor, constant: -Layout.headerTitlePadding),
-            title.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.contentPaddingSmall),
-            title.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -Layout.contentPaddingSmall)
+            title.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor, constant: Layout.headerTitlePaddingSmall),
+            title.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -Layout.headerTitlePaddingSmall),
+            title.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.headerTitleRowHeight)
         ])
 
         return container
@@ -695,9 +697,22 @@ private final class AstroActionCard: UIControl {
     func render(checked: Bool, icon: UIImage?, title: String) {
         self.checked = checked
         iconView.image = icon
-        titleLabel.text = title
+        titleLabel.attributedText = attributedTitle(for: title)
         applyStyle()
         updateAccessibility(title: title)
+    }
+    
+    private func attributedTitle(for title: String) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.8
+        paragraphStyle.alignment = .center
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.preferredFont(forTextStyle: .subheadline),
+            .foregroundColor: UIColor.buttonTextColorSecondary,
+            .paragraphStyle: paragraphStyle
+        ]
+        return NSAttributedString(string: title, attributes: attributes)
     }
 
     private func setupView() {
@@ -723,16 +738,16 @@ private final class AstroActionCard: UIControl {
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(greaterThanOrEqualToConstant: 75),
-            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 9),
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: iconView.bottomAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 4),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -4),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 5),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 3),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -9),
+            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 30)
         ])
     }
 
@@ -755,13 +770,6 @@ private final class AstroActionCard: UIControl {
 }
 
 private final class AstroSwitchRow: UIControl {
-    
-    override var isHighlighted: Bool {
-        didSet {
-            alpha = isHighlighted ? 0.65 : 1
-        }
-    }
-    
     private let iconNameEnabled: String
     private let iconNameDisabled: String
     private let iconView = UIImageView()
@@ -800,9 +808,6 @@ private final class AstroSwitchRow: UIControl {
     private func setupView(title: String, checked: Bool, showDivider: Bool) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
-        addAction(UIAction { [weak self] _ in
-            self?.toggleFromRow()
-        }, for: .touchUpInside)
 
         let contentView = UIView()
         contentView.backgroundColor = .groupBg
@@ -851,7 +856,7 @@ private final class AstroSwitchRow: UIControl {
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
             iconView.heightAnchor.constraint(equalToConstant: 30),
-            switcher.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            switcher.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),
             switcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -16),
@@ -859,10 +864,6 @@ private final class AstroSwitchRow: UIControl {
         ])
         
         updateAccessibility()
-    }
-
-    private func toggleFromRow() {
-        setChecked(!checked, sendAction: true)
     }
 
     private func switchChanged() {

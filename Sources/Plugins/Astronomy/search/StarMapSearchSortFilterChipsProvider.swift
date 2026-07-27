@@ -200,6 +200,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
             id: id,
             title: title,
             image: chipImage(iconName),
+            originalSizeImage: .templateImageNamed(iconName),
             isSelected: isSelected
         )
     }

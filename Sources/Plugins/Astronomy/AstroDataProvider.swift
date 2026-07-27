@@ -30,6 +30,10 @@ class AstroDataProvider {
     func getAstroArticleImpl(wikidataId: String, lang: String? = nil) -> AstroArticle? {
         nil
     }
+    
+    func getAstroArticleLanguages(wikidataId: String) -> [String] {
+        []
+    }
 
     func getCatalogs() -> [Catalog] {
         if let cachedCatalogs {

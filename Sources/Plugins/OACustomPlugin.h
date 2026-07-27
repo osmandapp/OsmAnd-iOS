@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) addRouter:(NSString *)fileName;
 - (void) addRenderer:(NSString *)fileName;
 
-- (void) removePluginItems:(void(^)(void))onComplete;
+- (void) removePluginItems:(nullable void(^)(void))onComplete;
 - (NSString *) getPluginDir;
 
 + (NSArray<OACustomRegion *> *)collectRegionsFromJson:(NSArray *)jsonArray;

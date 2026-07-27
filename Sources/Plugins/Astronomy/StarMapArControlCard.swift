@@ -1,0 +1,196 @@
+//
+//  StarMapArControlCard.swift
+//  OsmAnd Maps
+//
+//  Created by Vitaliy Sova on 09.07.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
+import UIKit
+
+final class StarMapArControlCard: UIView {
+    static let width: CGFloat = 48
+    private static let cornerRadius: CGFloat = 24
+    private static let innerButtonSize: CGFloat = 40
+    private static let sliderHeight: CGFloat = 150
+    private static let stackSpacing: CGFloat = 4
+
+    var onArTapped: (() -> Void)?
+    var onResetTapped: (() -> Void)?
+    var onTransparencyChanged: ((Int) -> Void)?
+
+    private let arButton = StarMapPlainButton()
+    private let resetButton = StarMapPlainButton()
+    private let transparencySlider = UISlider()
+    private let sliderContainer = UIView()
+    private let cameraControlsStack = UIStackView()
+    private let rootStack = UIStackView()
+
+    private var nightMode = false
+    private var arActive = false
+    
+    private weak var glassBackgroundView: UIVisualEffectView?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupContent()
+        updateTheme(nightMode: nightMode, arActive: false)
+        setCameraControlsVisible(false)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setArActive(_ active: Bool) {
+        arActive = active
+        arButton.updateTheme(nightmod: nightMode, active: active)
+        updateTheme(nightMode: nightMode, arActive: active)
+    }
+
+    func setCameraControlsVisible(_ visible: Bool) {
+        cameraControlsStack.isHidden = !visible
+    }
+
+    func setTransparencyValue(_ value: Int) {
+        transparencySlider.value = Float(max(0, min(100, value)))
+    }
+
+    func updateTheme(nightMode: Bool, arActive: Bool) {
+        self.nightMode = nightMode
+        self.arActive = arActive
+
+        glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        
+        backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
+
+        resetButton.updateTheme(nightmod: nightMode, active: false)
+        
+        updateArButtonAppearance()
+        
+        layer.borderWidth = nightMode ? 2 : 0
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        glassBackgroundView?.frame = bounds
+    }
+
+    private func setupContent() {
+        translatesAutoresizingMaskIntoConstraints = false
+        layer.cornerRadius = Self.cornerRadius
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowRadius = 5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.borderColor = StarMapControlTheme.border(nightMode: nightMode).cgColor
+        
+        glassBackgroundView = StarMapGlassBackground.apply(
+            to: self,
+            nightMode: nightMode,
+            cornerRadius: Self.cornerRadius
+        )
+
+        configurePlainButton(
+            arButton,
+            icon: .icCustomViewInAr,
+            accessibilityLabel: localizedString("astro_ar"),
+            action: #selector(arButtonTapped)
+        )
+        configurePlainButton(
+            resetButton,
+            icon: .icCustomReset,
+            accessibilityLabel: localizedString("shared_string_reset"),
+            action: #selector(resetButtonTapped)
+        )
+        
+        arButton.customColorTintActive = StarMapControlTheme.activeForeground(nightMode: nightMode)
+        arButton.onHighlightChange = { [weak self] _ in
+            guard let self else { return }
+            self.arButton.updateTheme(nightmod: nightMode, active: arActive)
+        }
+
+        transparencySlider.minimumValue = 0
+        transparencySlider.maximumValue = 100
+        transparencySlider.value = Float(StarMapCameraHelper.defaultTransparency)
+        transparencySlider.transform = CGAffineTransform(rotationAngle: -.pi / 2)
+        transparencySlider.translatesAutoresizingMaskIntoConstraints = false
+        transparencySlider.addTarget(self, action: #selector(transparencyChanged), for: .valueChanged)
+
+        sliderContainer.translatesAutoresizingMaskIntoConstraints = false
+        sliderContainer.addSubview(transparencySlider)
+
+        cameraControlsStack.axis = .vertical
+        cameraControlsStack.alignment = .center
+        cameraControlsStack.spacing = 9
+        cameraControlsStack.addArrangedSubview(sliderContainer)
+        cameraControlsStack.addArrangedSubview(resetButton)
+
+        rootStack.axis = .vertical
+        rootStack.alignment = .center
+        rootStack.spacing = Self.stackSpacing
+        rootStack.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        rootStack.isLayoutMarginsRelativeArrangement = true
+        rootStack.addArrangedSubview(arButton)
+        rootStack.addArrangedSubview(cameraControlsStack)
+        rootStack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(rootStack)
+        
+        let sliderContainerHeightConstraint = sliderContainer.heightAnchor.constraint(equalToConstant: Self.sliderHeight)
+        sliderContainerHeightConstraint.priority = .defaultLow
+
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(equalToConstant: Self.width),
+
+            rootStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rootStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rootStack.topAnchor.constraint(equalTo: topAnchor),
+            rootStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            arButton.widthAnchor.constraint(equalToConstant: Self.innerButtonSize),
+            arButton.heightAnchor.constraint(equalToConstant: Self.innerButtonSize),
+
+            sliderContainer.widthAnchor.constraint(equalToConstant: Self.width),
+            sliderContainerHeightConstraint,
+
+            transparencySlider.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
+            transparencySlider.centerYAnchor.constraint(equalTo: sliderContainer.centerYAnchor),
+            transparencySlider.widthAnchor.constraint(equalTo: sliderContainer.heightAnchor),
+            transparencySlider.heightAnchor.constraint(equalToConstant: 40),
+
+            resetButton.widthAnchor.constraint(equalToConstant: Self.innerButtonSize),
+            resetButton.heightAnchor.constraint(equalToConstant: Self.innerButtonSize)
+        ])
+
+        setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        setContentHuggingPriority(.defaultLow, for: .vertical)
+    }
+
+    private func configurePlainButton(
+        _ button: StarMapPlainButton,
+        icon: UIImage?,
+        accessibilityLabel: String,
+        action: Selector
+    ) {
+        button.setIcon(icon, accessibilityLabel: accessibilityLabel)
+        button.addTarget(self, action: action, for: .touchUpInside)
+    }
+    
+    private func updateArButtonAppearance() {
+        let icon: UIImage = arActive ? .icCustomViewInArFilled : .icCustomViewInAr
+        arButton.setIcon(icon, accessibilityLabel: localizedString("astro_ar"))
+        arButton.updateTheme(nightmod: nightMode, active: arActive)
+    }
+
+    @objc private func arButtonTapped() {
+        onArTapped?()
+    }
+
+    @objc private func resetButtonTapped() {
+        onResetTapped?()
+    }
+
+    @objc private func transparencyChanged() {
+        onTransparencyChanged?(Int(transparencySlider.value))
+    }
+}

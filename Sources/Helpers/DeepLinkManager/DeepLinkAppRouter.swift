@@ -302,7 +302,7 @@ final class DeepLinkAppRouter: NSObject {
                 OAApplicationMode.changeProfileAvailability(appMode, isSelected: true)
             }
             
-            guard !(mapPanel.isRouteInfoVisible() && OARoutingHelper.sharedInstance()?.getAppMode().stringKey == appMode.stringKey) else { return }
+            guard !(mapPanel.isRouteInfoVisible() && OARoutingHelper.sharedInstance().getAppMode().stringKey == appMode.stringKey) else { return }
             dismissAndPopToRoot()
             mapPanel.showRouteInfo(true, appMode: appMode)
         }

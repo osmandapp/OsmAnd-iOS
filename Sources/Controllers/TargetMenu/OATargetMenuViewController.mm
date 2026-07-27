@@ -99,7 +99,7 @@
     return [self.class createMenuController:targetPoint selectedObject:nil activeTargetType:activeTargetType activeViewControllerState:activeViewControllerState headerOnly:headerOnly];
 }
 
-+ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(nullable id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
@@ -179,37 +179,16 @@
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
-                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
-                if (detailsObject)
-                {
-                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
-                }
-                else
-                {
-                    controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
-                }
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:targetPoint.targetObj];
             }
-  
+
             break;
         }
 
         case OATargetRenderedObject:
-        {
-            BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
-            if (detailsObject)
-            {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
-            }
-            else
-            {
-                controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
-            }
-            break;
-        }
-
         case OATargetLocation:
         {
-            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            controller = [[PlaceDetailsViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
 
@@ -537,7 +516,7 @@
     return [self getAttributedTypeStr:group color:nil];
 }
 
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(UIColor *)color
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(nullable UIColor *)color
 {
     UIColor *iconColor = color ?: [UIColor colorNamed:ACColorNameIconColorDefault];
     

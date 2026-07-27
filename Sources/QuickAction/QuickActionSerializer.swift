@@ -95,9 +95,10 @@ final class QuickActionSerializer: NSObject {
     static func adjustParamsForExport(_ params: [AnyHashable: Any], action: OAQuickAction) -> [String: String] {
         var listKey: String?
         var paramsCopy = params
-        if action is OASwitchableAction, let switchableAction = action as? OASwitchableAction {
+        if action is OASwitchableAction,
+           let switchableAction = action as? OASwitchableAction,
+           let key = switchableAction.getListKey() {
             let className = String(describing: type(of: action))
-            let key: String = switchableAction.getListKey()
             listKey = key
             if className == String(describing: OAMapStyleAction.self) {
                 if let values = params[key] as? [String], !values.isEmpty {

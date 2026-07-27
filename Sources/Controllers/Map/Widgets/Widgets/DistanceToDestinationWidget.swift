@@ -33,7 +33,7 @@ class DistanceToDestinationWidget: OADistanceToPointWidget {
     }
     
     override func getDistance() -> CLLocationDistance {
-        let routingHelper = OARoutingHelper.sharedInstance()!
+        let routingHelper = OARoutingHelper.sharedInstance()
         if routingHelper.isRouteCalculated() {
             return CLLocationDistance(routingHelper.getLeftDistance())
         }

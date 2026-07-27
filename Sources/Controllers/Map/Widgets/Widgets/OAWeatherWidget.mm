@@ -47,9 +47,9 @@
 
 - (instancetype)initWithType:(OAWidgetType *)type
                          band:(EOAWeatherBand)band
-                     customId:(NSString *)customId
+                     customId:(nullable NSString *)customId
                       appMode:(OAApplicationMode *)appMode
-                widgetParams:(NSDictionary *)widgetParams;
+	                widgetParams:(nullable NSDictionary *)widgetParams;
 {
     self = [super initWithType:type];
     if (self) {

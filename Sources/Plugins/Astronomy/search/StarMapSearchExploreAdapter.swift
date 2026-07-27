@@ -9,7 +9,6 @@
 import UIKit
 
 enum StarMapExploreSection: Int, CaseIterable {
-    case recent
     case watchNow
     case categories
     case myData
@@ -17,7 +16,6 @@ enum StarMapExploreSection: Int, CaseIterable {
 }
 
 enum StarMapExploreRow {
-    case recentChips
     case watchNow
     case category(StarMapExploreRowConfig)
     case myData(config: StarMapExploreRowConfig, count: Int)
@@ -44,35 +42,27 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         static let smallPadding: CGFloat = 8
     }
 
-    var topInsetHeight: CGFloat = 10
-
-    private let onScroll: (UIScrollView) -> Void
     private let onWatchNow: () -> Void
     private let onCategory: (StarMapSearchQuickPresetType) -> Void
     private let onMyData: (StarMapSearchQuickPresetType) -> Void
     private let onCatalog: (StarMapCatalogEntry) -> Void
     private let onViewAllCatalogs: () -> Void
-    private let recentChipsScrollView: () -> UIScrollView
     
     private var snapshot: Snapshot
     
     init(tableView: UITableView,
          snapshot: Snapshot,
-         onScroll: @escaping (UIScrollView) -> Void,
          onWatchNow: @escaping () -> Void,
          onCategory: @escaping (StarMapSearchQuickPresetType) -> Void,
          onMyData: @escaping (StarMapSearchQuickPresetType) -> Void,
          onCatalog: @escaping (StarMapCatalogEntry) -> Void,
-         onViewAllCatalogs: @escaping () -> Void,
-         recentChipsScrollView: @escaping () -> UIScrollView) {
+         onViewAllCatalogs: @escaping () -> Void) {
         self.snapshot = snapshot
-        self.onScroll = onScroll
         self.onWatchNow = onWatchNow
         self.onCategory = onCategory
         self.onMyData = onMyData
         self.onCatalog = onCatalog
         self.onViewAllCatalogs = onViewAllCatalogs
-        self.recentChipsScrollView = recentChipsScrollView
         super.init()
         self.registerCells(for: tableView)
     }
@@ -97,12 +87,12 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return .leastNormalMagnitude
         }
         if section == 0 {
-            return topInsetHeight
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
             return UITableView.automaticDimension
-        case .recent, .watchNow, .categories:
+        case .watchNow, .categories:
             return .leastNormalMagnitude
         }
     }
@@ -112,25 +102,18 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return .leastNormalMagnitude
         }
         if section == 0 {
-            return topInsetHeight
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
             return 44
-        case .recent, .watchNow, .categories:
+        case .watchNow, .categories:
             return .leastNormalMagnitude
         }
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard snapshot.sections.indices.contains(indexPath.section),
-              snapshot.sections[indexPath.section].1.indices.contains(indexPath.row) else {
-            return UITableView.automaticDimension
-        }
-        if case .recentChips = snapshot.sections[indexPath.section].1[indexPath.row] {
-            return 52
-        }
-        return 68
+        UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -138,9 +121,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return nil
         }
         if section == 0 {
-            let spacer = UIView()
-            spacer.isUserInteractionEnabled = false
-            return spacer
+            return UIView()
         }
         let sectionKind = snapshot.sections[section].0
         switch sectionKind {
@@ -148,7 +129,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return sectionHeaderView(localizedString("astro_explore_my_data"))
         case .catalogs:
             return sectionHeaderView(localizedString("astro_catalogs"))
-        case .recent, .watchNow, .categories:
+        case .watchNow, .categories:
             return nil
         }
     }
@@ -169,11 +150,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         let row = snapshot.sections[indexPath.section].1[indexPath.row]
 
         switch row {
-        case .recentChips:
-            let cell = dequeueRecentChipsCell(tableView)
-            cell.attach(scrollView: recentChipsScrollView())
-            return cell
-
         case .watchNow:
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: AstroIcon.template("ic_custom_telescope"),
@@ -210,12 +186,12 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
                            config: isBeforeViewAll(at: indexPath) ? .catalogLast : .catalog)
             return cell
 
-        case .viewAllCatalogs(let count):
+        case .viewAllCatalogs:
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: nil,
                            title: localizedString("shared_string_view_all"),
                            subtitle: nil,
-                           trailingText: String(count),
+                           trailingText: nil,
                            config: .button)
             return cell
         }
@@ -228,8 +204,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return
         }
         switch snapshot.sections[indexPath.section].1[indexPath.row] {
-        case .recentChips:
-            break
         case .watchNow:
             onWatchNow()
         case .category(let config):
@@ -241,17 +215,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         case .viewAllCatalogs:
             onViewAllCatalogs()
         }
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        onScroll(scrollView)
-    }
-
-    private func dequeueRecentChipsCell(_ tableView: UITableView) -> StarMapExploreRecentChipsCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier) as? StarMapExploreRecentChipsCell else {
-            return StarMapExploreRecentChipsCell(reuseIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier)
-        }
-        return cell
     }
 
     private func dequeueMenuCell(_ tableView: UITableView) -> StarMapExploreMenuCell {
@@ -272,6 +235,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         label.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(label)
         NSLayoutConstraint.activate([
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 42),
             label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: Layout.contentPadding),
             label.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -Layout.contentPadding),
             label.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.smallPadding),
@@ -294,57 +258,15 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     }
     
     private func registerCells(for tableView: UITableView) {
-        tableView.register(StarMapExploreRecentChipsCell.self, forCellReuseIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier)
         tableView.register(StarMapExploreMenuCell.self, forCellReuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
-    }
-}
-
-private final class StarMapExploreRecentChipsCell: UITableViewCell {
-
-    private enum Layout {
-        static let minHeight: CGFloat = 44
-    }
-
-    private weak var attachedScrollView: UIScrollView?
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-    }
-    
-    init(reuseIdentifier: String) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        selectionStyle = .none
-    }
-
-    func attach(scrollView: UIScrollView) {
-        if attachedScrollView === scrollView, scrollView.superview === contentView {
-            return
-        }
-        attachedScrollView?.removeFromSuperview()
-        attachedScrollView = scrollView
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(scrollView)
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            scrollView.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.minHeight)
-        ])
     }
 }
 
 private final class StarMapExploreMenuCell: UITableViewCell {
     private enum Layout {
         static let contentPadding: CGFloat = 16
-        static let smallPadding: CGFloat = 11
-        static let bigPadding: CGFloat = 24
+        static let smallPadding: CGFloat = 10
+        static let bigPadding: CGFloat = 23
         static let iconSize: CGFloat = 30
     }
     
@@ -413,13 +335,14 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         } else {
             accessoryType = .none
         }
-        separatorInset = config.separatorInset
+        separatorInset = UIEdgeInsets(top: 0, left: config.separatorInset.left,
+                                      bottom: 0, right: config.separatorInset.right)
     }
     
     private func setup() {
         selectionStyle = .default
         accessoryType = .disclosureIndicator
-        contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 56).isActive = true
+        contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 51).isActive = true
 
         rowIconView.contentMode = .scaleAspectFit
         rowIconView.translatesAutoresizingMaskIntoConstraints = false
@@ -455,10 +378,10 @@ private final class StarMapExploreMenuCell: UITableViewCell {
 
         textStackLeadingToIcon = textStack.leadingAnchor.constraint(equalTo: rowIconView.trailingAnchor, constant: Layout.contentPadding)
         textStackLeadingToIcon?.isActive = true
-        textStackLeadingToContent = textStack.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor)
+        textStackLeadingToContent = textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Layout.contentPadding)
 
         NSLayoutConstraint.activate([
-            rowIconView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            rowIconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Layout.contentPadding),
             rowIconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             rowIconView.widthAnchor.constraint(equalToConstant: Layout.iconSize),
             rowIconView.heightAnchor.constraint(equalToConstant: Layout.iconSize),

@@ -216,13 +216,15 @@ final class StarMapSearchHelper {
         } else {
             return NSAttributedString(string: text)
         }
+        
+        let font = UIFont.preferredFont(forTextStyle: .subheadline)
+        let configuration = UIImage.SymbolConfiguration(font: font)
 
-        guard let image = UIImage(systemName: iconName)?.withTintColor(.iconColorSecondary, renderingMode: .alwaysOriginal) else {
+        guard let image = UIImage(systemName: iconName, withConfiguration: configuration)?.withRenderingMode(.alwaysTemplate) else {
             return NSAttributedString(string: text)
         }
         let attachment = NSTextAttachment()
         attachment.image = image
-        attachment.bounds = CGRect(x: 0, y: -3, width: 16, height: 16)
         let result = NSMutableAttributedString(string: text)
         let nsText = text as NSString
         let range = nsText.range(of: arrow)

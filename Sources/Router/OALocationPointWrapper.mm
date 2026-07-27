@@ -100,7 +100,7 @@
         OAAlarmInfo *alarm = (OAAlarmInfo *) _point;
         EOAAlarmInfoType type = alarm.type;
         //assign alarm list icons manually for now
-        if (type == AIT_SPEED_CAMERA)
+        if (type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA)
         {
             return [OAUtilities getMxIcon:@"highway_speed_camera"];
         }

@@ -21,21 +21,16 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
 
         static let empty = Snapshot(entries: [])
     }
-    
-    var topInsetHeight: CGFloat = 0
-    
-    private let onScroll: (UIScrollView) -> Void
+
     private let onCatalogSelected: (StarMapCatalogEntry) -> Void
 
     private var snapshot: Snapshot
     
     init(tableView: UITableView,
          snapshot: Snapshot,
-         onScroll: @escaping (UIScrollView) -> Void,
          onCatalogSelected: @escaping (StarMapCatalogEntry) -> Void) {
         
         self.snapshot = snapshot
-        self.onScroll = onScroll
         self.onCatalogSelected = onCatalogSelected
         super.init()
         self.registerCells(for: tableView)
@@ -46,17 +41,15 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let insetView = UIView()
-        insetView.isUserInteractionEnabled = false
-        return insetView
+        UIView()
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        topInsetHeight
+        16
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        topInsetHeight
+        16
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,10 +70,6 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
             return
         }
         onCatalogSelected(snapshot.entries[indexPath.row])
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        onScroll(scrollView)
     }
     
     private func registerCells(for tableView: UITableView) {

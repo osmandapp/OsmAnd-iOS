@@ -64,6 +64,8 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @class OAObjectType, OAPOIBaseType, OASearchResult;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OASearchBaseAPI : OASearchCoreAPI
 
 - (instancetype) initWithSearchTypes:(NSArray<OAObjectType *> *)searchTypes;
@@ -110,8 +112,8 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 - (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI;
 
-- (OAPOIBaseType *) getUnselectedPoiType;
-- (NSString *) getNameFilter;
+- (nullable OAPOIBaseType *) getUnselectedPoiType;
+- (nullable NSString *) getNameFilter;
 
 @end
 
@@ -143,8 +145,10 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @property (nonatomic, copy) NSString *key;
 @property (nonatomic, copy) NSString *value;
-@property (nonatomic, copy) NSString *translatedValue;
+@property (nonatomic, copy, nullable) NSString *translatedValue;
 
-- (instancetype) initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue key:(NSString *)key;
+- (instancetype) initWithSubType:(NSString *)value translatedValue:(nullable NSString *)translatedValue key:(NSString *)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

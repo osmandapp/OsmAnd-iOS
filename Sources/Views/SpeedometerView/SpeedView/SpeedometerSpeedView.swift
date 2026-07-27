@@ -37,6 +37,7 @@ final class SpeedometerSpeedView: UIView {
     /// km/h or mph
     private var cachedFormattedSpeed: Float = -1.0
     private var cachedMetricSystem = -1
+    private var cachedSpeedSystem = -1
     
     private var circleLayer: CAShapeLayer?
     private var isCircleRevealAnimationActive = false
@@ -94,7 +95,7 @@ final class SpeedometerSpeedView: UIView {
                 && cachedFormattedSpeed > 0
                 && currentSpeedometerState == .exceedingLimit
                 
-                if (speedExceed || currentSpeedometerState == .tolerance), !isCircleRevealAnimationActive, cachedSpeedometerState != currentSpeedometerState {
+                if speedExceed || currentSpeedometerState == .tolerance, !isCircleRevealAnimationActive, cachedSpeedometerState != currentSpeedometerState {
                     startSpeedometerSpeedAnimation()
                 } else if !speedExceed || cachedFormattedSpeed < speedLimit {
                     stopSpeedometerSpeedAnimation(animated: cachedSpeedometerState != currentSpeedometerState)
@@ -198,13 +199,17 @@ final class SpeedometerSpeedView: UIView {
     }
     
     private func isUpdateNeeded() -> Bool {
-        var res = false
         let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        res = cachedMetricSystem != metricSystem.rawValue
-        if res {
+        let speedSystem: EOASpeedConstant = OAAppSettings.sharedManager().speedSystem.get()
+        let isMetricSystemChanged = cachedMetricSystem != metricSystem.rawValue
+        let isSpeedSystemChanged = cachedSpeedSystem != speedSystem.rawValue
+        if isMetricSystemChanged {
             cachedMetricSystem = metricSystem.rawValue
         }
-        return res
+        if isSpeedSystemChanged {
+            cachedSpeedSystem = speedSystem.rawValue
+        }
+        return isMetricSystemChanged || isSpeedSystemChanged
     }
     
     private func getValueAndUnit(with valueUnitArray: NSMutableArray) -> (value: String, unit: String)? {
@@ -279,12 +284,6 @@ extension SpeedometerSpeedView {
         case left  // Animation starts from the left edge
     }
     
-    /// Animates the appearance of the red/yellow circle and the change of the text color.
-    private func startSpeedometerSpeedAnimation(duration: TimeInterval = 1.0) {
-        startCircleRevealAnimation(duration: duration)
-        animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: duration)
-    }
-    
     func stopSpeedometerSpeedAnimation(animated: Bool) {
         guard animated else {
             circleLayer?.removeFromSuperlayer()
@@ -328,6 +327,12 @@ extension SpeedometerSpeedView {
         animateText(valueColor: SpeedometerState.normal.valueColor,
                     unitColor: SpeedometerState.normal.unitsColor,
                     duration: 1.0)
+    }
+    
+    /// Animates the appearance of the red/yellow circle and the change of the text color.
+    private func startSpeedometerSpeedAnimation(duration: TimeInterval = 1.0) {
+        startCircleRevealAnimation(duration: duration)
+        animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: duration)
     }
     
     private func updateSpeedometerSpeedView(animated: Bool = true) {

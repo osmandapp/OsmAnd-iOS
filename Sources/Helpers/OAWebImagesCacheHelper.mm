@@ -139,8 +139,17 @@
         currentIndex = nextImgTagRange.location + nextImgTagRange.length;
         NSRange srcStartTagRange = [html rangeOfString:@"src=\"" options:0 range:NSMakeRange(currentIndex, [html length] - currentIndex)];
         
+        if (srcStartTagRange.location == NSNotFound)
+        {
+            nextImgTagRange = [html rangeOfString:@"<img" options:0 range:NSMakeRange(currentIndex, [html length] - currentIndex)];
+            continue;
+        }
+        
         currentIndex = srcStartTagRange.location + srcStartTagRange.length;
         NSRange srcEndTagRange = [html rangeOfString:@"\"" options:0 range:NSMakeRange(currentIndex, [html length] - currentIndex)];
+        
+        if (srcEndTagRange.location == NSNotFound)
+            break;
         
         NSString *imageLink = [html substringWithRange:NSMakeRange(currentIndex, srcEndTagRange.location - srcStartTagRange.location - srcStartTagRange.length)];
         [allImageLinks addObject:imageLink];

@@ -56,7 +56,7 @@ extension FavoriteListViewController {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
             var content = cell.defaultContentConfiguration()
-            content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
+            content.image = OAUtilities.resize(favorite.bridgeItem.icon(), newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
             content.text = favorite.title
             content.textProperties.numberOfLines = 2
             content.textProperties.color = favorite.titleColor

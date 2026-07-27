@@ -39,6 +39,8 @@ final class StarView: UIView {
         let targetAzimuth: Double
         let startAltitude: Double
         let targetAltitude: Double
+        let startRoll: Double
+        let targetRoll: Double
         let startViewAngle: Double
         let targetViewAngle: Double
         let startPan: CGPoint
@@ -51,8 +53,21 @@ final class StarView: UIView {
         static let max2D = 220.0
     }
 
-    weak var delegate: StarViewDelegate?
+    var isCameraMode = false
+    var isGyroTrackingEnabled = false
+    var onAnimationFinished: (() -> Void)?
+    var onAzimuthManualChangeListener: ((Double) -> Void)?
+    var onViewAngleChangeListener: ((Double) -> Void)?
 
+    private(set) var panX: CGFloat = 0
+    private(set) var panY: CGFloat = 0
+    private(set) var centerAzimuth = 180.0
+    private(set) var centerAltitude = 45.0
+    private(set) var viewAngle = 60.0
+    var roll = 0.0
+    
+    weak var delegate: StarViewDelegate?
+    
     var viewModel: StarObjectsViewModel? {
         didSet {
             rebuildObjectMap()
@@ -74,16 +89,6 @@ final class StarView: UIView {
             setNeedsDisplay()
         }
     }
-
-    var isCameraMode = false
-    var onAnimationFinished: (() -> Void)?
-    var onAzimuthManualChangeListener: ((Double) -> Void)?
-    var onViewAngleChangeListener: ((Double) -> Void)?
-
-    private(set) var centerAzimuth = 180.0
-    private(set) var centerAltitude = 45.0
-    private(set) var viewAngle = 60.0
-    var roll = 0.0
 
     var showAzimuthalGrid: Bool {
         get { settings.starMap.showAzimuthalGrid }
@@ -202,79 +207,19 @@ final class StarView: UIView {
 
     var is2DMode: Bool {
         get { settings.starMap.is2DMode }
-        set { settings.starMap.is2DMode = newValue; setNeedsDisplay() }
+        set {
+            cancelFocusAnimation()
+            settings.starMap.is2DMode = newValue
+            if newValue {
+                roll = 0
+            } else {
+                panX = 0
+                panY = 0
+            }
+            setNeedsDisplay()
+        }
     }
-
-    private var panX: CGFloat = 0
-    private var panY: CGFloat = 0
-    private var lastTouchPoint = CGPoint.zero
-    private var isPanning = false
-
-    private var projectionSinAltCenter = 0.0
-    private var projectionCosAltCenter = 1.0
-    private var projectionScale = 1.0
-    private var projectionHalfWidth = 0.0
-    private var projectionHalfHeight = 0.0
-    private var minCosCVisible = -1.0
-
-    private var skyObjectMap: [String: SkyObject] = [:]
-    private var occupiedRects: [CGRect] = []
-    private var pathCache: [String: CelestialPathData] = [:]
-    private var selectedConstellationId: String?
-    private var selectedObject: SkyObject?
-    private var selectedConstellationStarIds = Set<Int>()
-    private var pinnedObjects = Set<SkyObject>()
-    private var manualSkyObjects: [SkyObject]?
-    private var manualConstellations: [Constellation]?
-    private var constellationCenterCache: [String: ConstellationCenter] = [:]
-    private var maxViewAngle: Double {
-        settings.starMap.is2DMode ? ViewAngleBounds.max2D : ViewAngleBounds.max
-    }
-    private var explicitCurrentTime: Time?
-    private var explicitObserver: Observer?
-    private var timeAnimationDisplayLink: CADisplayLink?
-    private var timeAnimationStartTime: CFTimeInterval = 0
-    private let timeAnimationDuration: CFTimeInterval = 0.4
-    private var focusAnimationDisplayLink: CADisplayLink?
-    private var focusAnimationStartTime: CFTimeInterval = 0
-    private let focusAnimationDuration: CFTimeInterval = 0.5
-    private var focusAnimation: FocusAnimation?
-    private var onObjectClickListener: ((SkyObject?) -> Void)?
-    private var onConstellationClickListener: ((Constellation?) -> Void)?
-
-    private let eclipticStep = 10
-    private var eclipticAzimuths: [Double] = []
-    private var eclipticAltitudes: [Double] = []
-    private var lastEclipticTimeT = -1.0
-    private var lastEclipticLat = -999.0
-    private var lastEclipticLon = -999.0
-
-    private let equatorStep = 2
-    private var equatorAzimuths: [Double] = []
-    private var equatorAltitudes: [Double] = []
-    private var lastEquatorTimeT = -1.0
-    private var lastEquatorLat = -999.0
-    private var lastEquatorLon = -999.0
-
-    private let galacticStep = 5
-    private var galacticAzimuths: [Double] = []
-    private var galacticAltitudes: [Double] = []
-    private var lastGalacticTimeT = -1.0
-    private var lastGalacticLat = -999.0
-    private var lastGalacticLon = -999.0
-
-    private var gridDensityLevel = -1
-    private var equRaStepMin = 120
-    private var equDecStep = 20
-    private var equLineResStep = 5
-    private var equRaAzimuths: [[Double]] = []
-    private var equRaAltitudes: [[Double]] = []
-    private var equDecAzimuths: [[Double]] = []
-    private var equDecAltitudes: [[Double]] = []
-    private var lastEquGridTimeT = -1.0
-    private var lastEquGridLat = -999.0
-    private var lastEquGridLon = -999.0
-
+    
     var currentTime: Time {
         get {
             explicitCurrentTime ?? AstroUtils.astronomyTime(from: Date())
@@ -310,30 +255,155 @@ final class StarView: UIView {
     private var screenScale: CGFloat {
         window?.screen.scale ?? UIScreen.main.scale
     }
+    
+    private let timeAnimationDuration: CFTimeInterval = 0.4
+    private let focusAnimationDuration: CFTimeInterval = 0.5
+    private let eclipticStep = 10
+    private let equatorStep = 2
+    private let galacticStep = 5
+    private let inertialDecelerationRate: CGFloat = 0.998
+    private let inertialStopSpeed: CGFloat = 5
+    private let inertialMinStartSpeed: CGFloat = 80
+    private let gyroSnapBackDelay: TimeInterval = 0.5
+
+    private var lastTouchPoint = CGPoint.zero
+    private var isPanning = false
+
+    private var projectionSinAltCenter = 0.0
+    private var projectionCosAltCenter = 1.0
+    private var projectionScale = 1.0
+    private var projectionHalfWidth = 0.0
+    private var projectionHalfHeight = 0.0
+    private var minCosCVisible = -1.0
+
+    private var skyObjectMap: [String: SkyObject] = [:]
+    private var occupiedRects: [CGRect] = []
+    private var pathCache: [String: CelestialPathData] = [:]
+    private var selectedConstellationId: String?
+    private var selectedObject: SkyObject?
+    private var selectedConstellationStarIds = Set<Int>()
+    private var pinnedObjects = Set<SkyObject>()
+    private var manualSkyObjects: [SkyObject]?
+    private var manualConstellations: [Constellation]?
+    private var constellationCenterCache: [String: ConstellationCenter] = [:]
+    private var maxViewAngle: Double {
+        settings.starMap.is2DMode ? ViewAngleBounds.max2D : ViewAngleBounds.max
+    }
+    private var explicitCurrentTime: Time?
+    private var explicitObserver: Observer?
+    private var timeAnimationDisplayLink: CADisplayLink?
+    private var timeAnimationStartTime: CFTimeInterval = 0
+    private var focusAnimationDisplayLink: CADisplayLink?
+    private var focusAnimationStartTime: CFTimeInterval = 0
+    private var focusAnimation: FocusAnimation?
+    private var onObjectClickListener: ((SkyObject?) -> Void)?
+    private var onConstellationClickListener: ((Constellation?) -> Void)?
+
+    private var eclipticAzimuths: [Double] = []
+    private var eclipticAltitudes: [Double] = []
+    private var lastEclipticTimeT = -1.0
+    private var lastEclipticLat = -999.0
+    private var lastEclipticLon = -999.0
+    
+    private var equatorAzimuths: [Double] = []
+    private var equatorAltitudes: [Double] = []
+    private var lastEquatorTimeT = -1.0
+    private var lastEquatorLat = -999.0
+    private var lastEquatorLon = -999.0
+
+    private var galacticAzimuths: [Double] = []
+    private var galacticAltitudes: [Double] = []
+    private var lastGalacticTimeT = -1.0
+    private var lastGalacticLat = -999.0
+    private var lastGalacticLon = -999.0
+
+    private var gridDensityLevel = -1
+    private var equRaStepMin = 120
+    private var equDecStep = 20
+    private var equLineResStep = 5
+    private var equRaAzimuths: [[Double]] = []
+    private var equRaAltitudes: [[Double]] = []
+    private var equDecAzimuths: [[Double]] = []
+    private var equDecAltitudes: [[Double]] = []
+    private var lastEquGridTimeT = -1.0
+    private var lastEquGridLat = -999.0
+    private var lastEquGridLon = -999.0
+    
+    private var inertialDisplayLink: CADisplayLink?
+    private var inertialVelocity: CGPoint = .zero
+    private var lastInertialTimestamp: CFTimeInterval = 0
+    private var didPanThisGesture = false
+    
+    private var gyroTargetAzimuth = 0.0
+    private var gyroTargetAltitude = 45.0
+    private var gyroTargetRoll = 0.0
+    private var isGyroPanOverride = false
+    private var gyroSnapBackWorkItem: DispatchWorkItem?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
 
-    deinit {
-        timeAnimationDisplayLink?.invalidate()
-        focusAnimationDisplayLink?.invalidate()
-    }
-
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
+    
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
 
-    private func commonInit() {
-        backgroundColor = .clear
-        isOpaque = false
-        contentMode = .redraw
+        updateProjectionCache()
+        rebuildObjectMap()
+        occupiedRects.removeAll(keepingCapacity: true)
 
-        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
-        addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        context.saveGState()
+        drawBackground(in: context)
+        if settings.starMap.showEquatorialGrid {
+            drawEquatorialGrid(in: context)
+        }
+        if settings.starMap.showAzimuthalGrid {
+            drawAzimuthalGrid(in: context)
+        }
+        if settings.starMap.showEclipticLine {
+            drawEclipticLine(in: context)
+        }
+        if settings.starMap.showMeridianLine {
+            drawMeridianLine(in: context)
+        }
+        if settings.starMap.showEquatorLine {
+            drawEquatorLine(in: context)
+        }
+        if settings.starMap.showGalacticLine {
+            drawGalacticLine(in: context)
+        }
+        drawConstellationLines(in: context)
+        drawHorizon(in: context)
+        drawCelestialPaths(in: context)
+        drawConstellationLabels(in: context)
+        drawSkyObjects(in: context)
+        drawHighlights(in: context)
+        drawDirectionArrows(in: context)
+
+        context.restoreGState()
+    }
+    
+    func restoreMapPosition(_ position: AstronomyPluginSettings.MapViewPosition) {
+        setCenter(azimuth: position.azimuth, altitude: position.altitude)
+        viewAngle = position.viewAngle
+        setViewAngle(position.viewAngle)
+        roll = position.roll
+        if settings.starMap.is2DMode {
+            panX = CGFloat(position.panX)
+            panY = CGFloat(position.panY)
+        } else {
+            panX = 0
+            panY = 0
+        }
+        notifyAzimuthChanged()
+        setNeedsDisplay()
     }
 
     func resetView() {
@@ -360,9 +430,16 @@ final class StarView: UIView {
     }
 
     func setCameraOrientation(azimuth: Double, altitude: Double, roll: Double) {
+        gyroTargetAzimuth = azimuth
+        gyroTargetAltitude = altitude
+        gyroTargetRoll = roll
+        
+        guard !isGyroPanOverride else { return }
+        
         setCenter(azimuth: azimuth, altitude: altitude)
         self.roll = roll
         setNeedsDisplay()
+        notifyAzimuthChanged()
     }
 
     func setCenter(azimuth: Double, altitude: Double, animate: Bool = false) {
@@ -375,134 +452,16 @@ final class StarView: UIView {
         centerAltitude = max(-90, min(90, altitude))
         setNeedsDisplay()
     }
-
-    private func setCenter(azimuth: Double,
-                           altitude: Double,
-                           at targetPoint: CGPoint,
-                           animate: Bool = false,
-                           targetViewAngle: Double? = nil) {
-        guard bounds.width > 0, bounds.height > 0 else {
-            if animate {
-                animateTo(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
-            } else {
-                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
-            }
-            return
-        }
-
-        let finalViewAngle = boundedViewAngle(targetViewAngle ?? viewAngle)
-        if settings.starMap.is2DMode {
-            let targetPan = CGPoint(x: targetPoint.x - bounds.midX,
-                                    y: targetPoint.y - bounds.midY)
-            if animate {
-                animateTo(azimuth: azimuth,
-                          altitude: altitude,
-                          targetViewAngle: targetViewAngle,
-                          targetPan: targetPan)
-            } else {
-                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
-                panX = targetPan.x
-                panY = targetPan.y
-                setNeedsDisplay()
-            }
-            return
-        }
-
-        let screenOffsetX = Double(targetPoint.x - bounds.midX)
-        let screenOffsetY = Double(targetPoint.y - bounds.midY)
-        let rollRad = roll * .pi / 180.0
-        let unrotatedX = screenOffsetX * cos(rollRad) + screenOffsetY * sin(rollRad)
-        let unrotatedY = -screenOffsetX * sin(rollRad) + screenOffsetY * cos(rollRad)
-        let scale = finalViewAngle / Double(max(bounds.width, 1))
-        let targetAzimuth = normalizedDegrees(azimuth - unrotatedX * scale)
-        let targetAltitude = max(-90, min(90, altitude + unrotatedY * scale))
-        if animate {
-            animateTo(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
-        } else {
-            setCenterState(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
-        }
-    }
-
-    private func setCenterState(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
-        cancelFocusAnimation()
-        centerAzimuth = normalizedDegrees(azimuth)
-        centerAltitude = max(-90, min(90, altitude))
-        if let targetViewAngle {
-            viewAngle = boundedViewAngle(targetViewAngle)
-            onViewAngleChangeListener?(viewAngle)
-        }
-        setNeedsDisplay()
-    }
-
-    private func boundedViewAngle(_ angle: Double) -> Double {
-        max(ViewAngleBounds.min, min(maxViewAngle, angle))
-    }
-
-    private func animateTo(azimuth: Double,
-                           altitude: Double,
-                           targetViewAngle: Double? = nil,
-                           targetPan: CGPoint? = nil) {
-        cancelFocusAnimation()
-        focusAnimation = FocusAnimation(startAzimuth: centerAzimuth,
-                                        targetAzimuth: normalizedDegrees(azimuth),
-                                        startAltitude: centerAltitude,
-                                        targetAltitude: max(-90, min(90, altitude)),
-                                        startViewAngle: viewAngle,
-                                        targetViewAngle: targetViewAngle.map { boundedViewAngle($0) } ?? viewAngle,
-                                        startPan: CGPoint(x: panX, y: panY),
-                                        targetPan: targetPan)
-        focusAnimationStartTime = CACurrentMediaTime()
-        let displayLink = CADisplayLink(target: self, selector: #selector(handleFocusAnimationFrame(_:)))
-        focusAnimationDisplayLink = displayLink
-        displayLink.add(to: .main, forMode: .common)
-    }
-
-    private func cancelFocusAnimation() {
-        focusAnimationDisplayLink?.invalidate()
-        focusAnimationDisplayLink = nil
-        focusAnimation = nil
-    }
-
-    @objc private func handleFocusAnimationFrame(_ displayLink: CADisplayLink) {
-        guard let animation = focusAnimation else {
-            cancelFocusAnimation()
-            return
-        }
-
-        let rawFraction = min(1.0, max(0.0, (displayLink.timestamp - focusAnimationStartTime) / focusAnimationDuration))
-        let fraction = 1.0 - pow(1.0 - rawFraction, 2.0)
-        applyFocusAnimation(animation, fraction: fraction)
-        if rawFraction >= 1 {
-            applyFocusAnimation(animation, fraction: 1)
-            cancelFocusAnimation()
-            onAnimationFinished?()
-        }
-    }
-
-    private func applyFocusAnimation(_ animation: FocusAnimation, fraction: Double) {
-        centerAzimuth = interpolateAngle(start: animation.startAzimuth, end: animation.targetAzimuth, fraction: fraction)
-        centerAltitude = animation.startAltitude + (animation.targetAltitude - animation.startAltitude) * fraction
-        viewAngle = animation.startViewAngle + (animation.targetViewAngle - animation.startViewAngle) * fraction
-        if let targetPan = animation.targetPan {
-            let cgFraction = CGFloat(fraction)
-            panX = animation.startPan.x + (targetPan.x - animation.startPan.x) * cgFraction
-            panY = animation.startPan.y + (targetPan.y - animation.startPan.y) * cgFraction
-        }
-        if abs(animation.targetViewAngle - animation.startViewAngle) > 0.001 {
-            onViewAngleChangeListener?(viewAngle)
-        }
-        setNeedsDisplay()
-    }
-
-    func getAltitude() -> Double {
+    
+    func altitude() -> Double {
         centerAltitude
     }
 
-    func getAzimuth() -> Double {
+    func azimuth() -> Double {
         centerAzimuth
     }
 
-    func getViewAngle() -> Double {
+    func viewAngleValue() -> Double {
         viewAngle
     }
 
@@ -517,7 +476,7 @@ final class StarView: UIView {
             centerAzimuth = normalizedDegrees(azimuth)
             setNeedsDisplay()
         }
-        onAzimuthManualChangeListener?(centerAzimuth)
+        notifyAzimuthChanged()
     }
 
     func setSkyObjects(_ objects: [SkyObject]) {
@@ -550,11 +509,6 @@ final class StarView: UIView {
         setNeedsDisplay()
     }
 
-    func updateVisibility() {
-        recalculatePositions(time: currentTime, updateTargets: false)
-        setNeedsDisplay()
-    }
-
     func refreshObjects() {
         recalculatePositions(time: currentTime, updateTargets: false)
         setNeedsDisplay()
@@ -573,7 +527,7 @@ final class StarView: UIView {
         onConstellationClickListener = listener
     }
 
-    func getSelectedConstellationItem() -> Constellation? {
+    func selectedConstellationItem() -> Constellation? {
         guard let selectedConstellationId else {
             return nil
         }
@@ -669,23 +623,7 @@ final class StarView: UIView {
         }
         setNeedsDisplay()
     }
-
-    private func targetViewAngle(for constellation: Constellation, center: ConstellationCenter) -> Double {
-        var maxDistance = 0.0
-        var uniqueStars = Set<Int>()
-        for (first, second) in constellation.lines {
-            uniqueStars.insert(first)
-            uniqueStars.insert(second)
-        }
-        for id in uniqueStars {
-            guard let star = skyObjectMap[String(id)] else {
-                continue
-            }
-            maxDistance = max(maxDistance, angularDistance(ra1: center.ra, dec1: center.dec, ra2: star.ra, dec2: star.dec))
-        }
-        return maxDistance > 0 ? max(20, min(120, maxDistance * 3.5)) : viewAngle
-    }
-
+    
     func isObjectPinned(_ object: SkyObject) -> Bool {
         pinnedObjects.contains(object)
     }
@@ -738,6 +676,211 @@ final class StarView: UIView {
             onAnimationFinished?()
         }
     }
+    
+    func setViewAngle(_ angle: Double) {
+        updateViewAngle(angle)
+    }
+
+    func zoomIn() {
+        updateViewAngle(viewAngle / 1.5)
+    }
+
+    func zoomOut() {
+        updateViewAngle(viewAngle * 1.5)
+    }
+    
+    func canZoomIn() -> Bool {
+        viewAngle > ViewAngleBounds.min + 0.5
+    }
+    
+    func canZoomOut() -> Bool {
+        viewAngle < maxViewAngle - 0.5
+    }
+
+    func project(object: SkyObject) -> CGPoint? {
+        updateProjectionCache()
+        return skyToScreen(azimuth: object.azimuth, altitude: object.altitude)
+    }
+    
+    func calculatePosition(_ object: SkyObject) {
+        calculatePosition(object, time: currentTime, updateTargets: false)
+    }
+    
+    private func commonInit() {
+        backgroundColor = .clear
+        isOpaque = false
+        contentMode = .redraw
+
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
+        addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:))))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+    }
+
+    private func setCenter(azimuth: Double,
+                           altitude: Double,
+                           at targetPoint: CGPoint,
+                           animate: Bool = false,
+                           targetViewAngle: Double? = nil) {
+        guard bounds.width > 0, bounds.height > 0 else {
+            if animate {
+                animateTo(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+            } else {
+                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+            }
+            return
+        }
+
+        let finalViewAngle = boundedViewAngle(targetViewAngle ?? viewAngle)
+        if settings.starMap.is2DMode {
+            let targetPan = CGPoint(x: targetPoint.x - bounds.midX,
+                                    y: targetPoint.y - bounds.midY)
+            if animate {
+                animateTo(azimuth: azimuth,
+                          altitude: altitude,
+                          targetViewAngle: targetViewAngle,
+                          targetPan: targetPan)
+            } else {
+                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+                panX = targetPan.x
+                panY = targetPan.y
+                setNeedsDisplay()
+            }
+            return
+        }
+
+        let screenOffsetX = Double(targetPoint.x - bounds.midX)
+        let screenOffsetY = Double(targetPoint.y - bounds.midY)
+        let rollRad = roll * .pi / 180.0
+        let unrotatedX = screenOffsetX * cos(rollRad) + screenOffsetY * sin(rollRad)
+        let unrotatedY = -screenOffsetX * sin(rollRad) + screenOffsetY * cos(rollRad)
+        let scale = finalViewAngle / Double(max(bounds.width, 1))
+        let targetAzimuth = normalizedDegrees(azimuth - unrotatedX * scale)
+        let targetAltitude = max(-90, min(90, altitude + unrotatedY * scale))
+        if animate {
+            animateTo(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
+        } else {
+            setCenterState(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
+        }
+    }
+
+    private func setCenterState(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
+        cancelFocusAnimation()
+        centerAzimuth = normalizedDegrees(azimuth)
+        centerAltitude = max(-90, min(90, altitude))
+        if let targetViewAngle {
+            viewAngle = boundedViewAngle(targetViewAngle)
+            onViewAngleChangeListener?(viewAngle)
+        }
+        setNeedsDisplay()
+    }
+
+    private func boundedViewAngle(_ angle: Double) -> Double {
+        max(ViewAngleBounds.min, min(maxViewAngle, angle))
+    }
+
+    private func animateTo(azimuth: Double,
+                           altitude: Double,
+                           targetViewAngle: Double? = nil,
+                           targetPan: CGPoint? = nil,
+                           targetRoll: Double? = nil) {
+        cancelFocusAnimation()
+        focusAnimation = FocusAnimation(startAzimuth: centerAzimuth,
+                                        targetAzimuth: normalizedDegrees(azimuth),
+                                        startAltitude: centerAltitude,
+                                        targetAltitude: max(-90, min(90, altitude)),
+                                        startRoll: roll,
+                                        targetRoll: targetRoll ?? roll,
+                                        startViewAngle: viewAngle,
+                                        targetViewAngle: targetViewAngle.map { boundedViewAngle($0) } ?? viewAngle,
+                                        startPan: CGPoint(x: panX, y: panY),
+                                        targetPan: targetPan)
+        focusAnimationStartTime = CACurrentMediaTime()
+        let displayLink = CADisplayLink(target: self, selector: #selector(handleFocusAnimationFrame(_:)))
+        focusAnimationDisplayLink = displayLink
+        displayLink.add(to: .main, forMode: .common)
+    }
+
+    private func cancelFocusAnimation() {
+        focusAnimationDisplayLink?.invalidate()
+        focusAnimationDisplayLink = nil
+        focusAnimation = nil
+        
+        cancelInertialScroll()
+    }
+    
+    private func cancelGyroSnapBack() {
+        gyroSnapBackWorkItem?.cancel()
+        gyroSnapBackWorkItem = nil
+        cancelFocusAnimation()
+    }
+
+    private func scheduleGyroSnapBack() {
+        cancelGyroSnapBack()
+        isGyroPanOverride = true
+
+        let work = DispatchWorkItem { [weak self] in
+            self?.animateSnapBackToGyro()
+        }
+        gyroSnapBackWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + gyroSnapBackDelay, execute: work)
+    }
+
+    private func animateSnapBackToGyro() {
+        gyroSnapBackWorkItem = nil
+        animateTo(azimuth: gyroTargetAzimuth,
+                  altitude: gyroTargetAltitude,
+                  targetRoll: gyroTargetRoll)
+    }
+
+    @objc private func handleFocusAnimationFrame(_ displayLink: CADisplayLink) {
+        guard let animation = focusAnimation else {
+            cancelFocusAnimation()
+            return
+        }
+
+        let rawFraction = min(1.0, max(0.0, (displayLink.timestamp - focusAnimationStartTime) / focusAnimationDuration))
+        let fraction = 1.0 - pow(1.0 - rawFraction, 2.0)
+        applyFocusAnimation(animation, fraction: fraction)
+        if rawFraction >= 1 {
+            applyFocusAnimation(animation, fraction: 1)
+            isGyroPanOverride = false
+            cancelFocusAnimation()
+            onAnimationFinished?()
+        }
+    }
+
+    private func applyFocusAnimation(_ animation: FocusAnimation, fraction: Double) {
+        centerAzimuth = interpolateAngle(start: animation.startAzimuth, end: animation.targetAzimuth, fraction: fraction)
+        centerAltitude = animation.startAltitude + (animation.targetAltitude - animation.startAltitude) * fraction
+        roll = animation.startRoll + (animation.targetRoll - animation.startRoll) * fraction
+        viewAngle = animation.startViewAngle + (animation.targetViewAngle - animation.startViewAngle) * fraction
+        if let targetPan = animation.targetPan {
+            let cgFraction = CGFloat(fraction)
+            panX = animation.startPan.x + (targetPan.x - animation.startPan.x) * cgFraction
+            panY = animation.startPan.y + (targetPan.y - animation.startPan.y) * cgFraction
+        }
+        if abs(animation.targetViewAngle - animation.startViewAngle) > 0.001 {
+            onViewAngleChangeListener?(viewAngle)
+        }
+        setNeedsDisplay()
+        notifyAzimuthChanged()
+    }
+
+    private func targetViewAngle(for constellation: Constellation, center: ConstellationCenter) -> Double {
+        var maxDistance = 0.0
+        var uniqueStars = Set<Int>()
+        for (first, second) in constellation.lines {
+            uniqueStars.insert(first)
+            uniqueStars.insert(second)
+        }
+        for id in uniqueStars {
+            guard let star = skyObjectMap[String(id)] else {
+                continue
+            }
+            maxDistance = max(maxDistance, angularDistance(ra1: center.ra, dec1: center.dec, ra2: star.ra, dec2: star.dec))
+        }
+        return maxDistance > 0 ? max(20, min(120, maxDistance * 3.5)) : viewAngle
+    }
 
     private func captureConstellationAnimationStarts() {
         var updatedCenters = constellationCenterCache
@@ -774,62 +917,9 @@ final class StarView: UIView {
             onAnimationFinished?()
         }
     }
-
-    func setViewAngle(_ angle: Double) {
-        updateViewAngle(angle)
-    }
-
-    func zoomIn() {
-        updateViewAngle(viewAngle / 1.5)
-    }
-
-    func zoomOut() {
-        updateViewAngle(viewAngle * 1.5)
-    }
-
-    func project(object: SkyObject) -> CGPoint? {
-        updateProjectionCache()
-        return skyToScreen(azimuth: object.azimuth, altitude: object.altitude)
-    }
-
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-
-        updateProjectionCache()
-        rebuildObjectMap()
-        occupiedRects.removeAll(keepingCapacity: true)
-
-        context.saveGState()
-        drawBackground(in: context)
-        if settings.starMap.showEquatorialGrid {
-            drawEquatorialGrid(in: context)
-        }
-        if settings.starMap.showAzimuthalGrid {
-            drawAzimuthalGrid(in: context)
-        }
-        if settings.starMap.showEclipticLine {
-            drawEclipticLine(in: context)
-        }
-        if settings.starMap.showMeridianLine {
-            drawMeridianLine(in: context)
-        }
-        if settings.starMap.showEquatorLine {
-            drawEquatorLine(in: context)
-        }
-        if settings.starMap.showGalacticLine {
-            drawGalacticLine(in: context)
-        }
-        drawConstellationLines(in: context)
-        drawHorizon(in: context)
-        drawCelestialPaths(in: context)
-        drawConstellationLabels(in: context)
-        drawSkyObjects(in: context)
-        drawHighlights(in: context)
-        drawDirectionArrows(in: context)
-
-        context.restoreGState()
+    
+    private func notifyAzimuthChanged() {
+        onAzimuthManualChangeListener?(centerAzimuth)
     }
 
     private func rebuildObjectMap() {
@@ -849,9 +939,9 @@ final class StarView: UIView {
     private func drawBackground(in context: CGContext) {
         if isCameraMode {
             context.clear(bounds)
-            UIColor.black.withAlphaComponent(0.20).setFill()
+            UIColor.mapBgZenith.withAlphaComponent(0.20).setFill()
         } else {
-            UIColor.black.setFill()
+            UIColor.mapBgZenith.setFill()
         }
         context.fill(bounds)
     }
@@ -875,7 +965,7 @@ final class StarView: UIView {
         var baseSize: CGFloat = 15
         if object.type == .STAR && zoomFactor > 0.3 && object.magnitude > 2.5 {
             baseSize = 8
-            color = .gray
+            color = .starDotDimmed
         }
 
         var radius = max(2, baseSize - CGFloat(object.magnitude) * 2)
@@ -903,7 +993,7 @@ final class StarView: UIView {
             .foregroundColor: labelColor(for: object)
         ]
         let size = text.size(withAttributes: attributes)
-        let origin = CGPoint(x: point.x + radius + pixelsToPoints(5), y: point.y - size.height * 0.75)
+        let origin = CGPoint(x: point.x + radius + 6, y: point.y - size.height * 0.5)
         let labelPadding = pixelsToPoints(5)
         let labelRect = CGRect(origin: origin, size: size).insetBy(dx: -labelPadding, dy: -labelPadding)
         let overlaps = occupiedRects.contains { $0.intersects(labelRect) }
@@ -930,12 +1020,12 @@ final class StarView: UIView {
 
     private func labelColor(for object: SkyObject) -> UIColor {
         if object === selectedObject {
-            return .red
+            return .mapTextSelected
         }
         if settings.starMap.showCelestialPaths && object.showCelestialPath {
-            return .yellow
+            return .mapObjectPath
         }
-        return .lightGray
+        return .mapTextPrimary
     }
 
     private func drawHighlights(in context: CGContext) {
@@ -949,7 +1039,7 @@ final class StarView: UIView {
 
         if let object = selectedObject,
            let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
-            strokeCircle(at: point, radius: pixelsToPoints(25), color: .red, width: pixelsToPoints(3), in: context)
+            strokeCircle(at: point, radius: pixelsToPoints(25), color: .mapTextSelected, width: pixelsToPoints(3), in: context)
         }
 
         if settings.starMap.showDirections {
@@ -976,12 +1066,12 @@ final class StarView: UIView {
         appendSkyLine(to: path, range: stride(from: 0.0, through: 360.0, by: 2.0)) { azimuth in
             (azimuth, 0.0)
         }
-        stroke(path, color: .green, width: 1.2, in: context)
+        stroke(path, color: .mapLineHorizon, width: 1.2, in: context)
 
-        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: .green, offset: 30, in: context)
+        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
     }
 
     private func drawAzimuthalGrid(in context: CGContext) {
@@ -995,13 +1085,16 @@ final class StarView: UIView {
         }
 
         let path = CGMutablePath()
+        var altitudeLabels: [(String, Double, Double)] = []
+        var azimuthLabels: [(String, Double)] = []
+        
         for altitude in stride(from: -80, through: 80, by: density.altStep) {
             appendSkyLine(to: path, range: stride(from: 0.0, through: 360.0, by: Double(density.lineStep))) { azimuth in
                 (azimuth, Double(altitude))
             }
             if altitude != 0 {
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
+                altitudeLabels.append(("\(altitude)°", centerAzimuth, Double(altitude)))
+                altitudeLabels.append(("\(altitude)°", centerAzimuth + 180, Double(altitude)))
             }
         }
 
@@ -1010,10 +1103,19 @@ final class StarView: UIView {
                 (Double(azimuth), altitude)
             }
             if !azimuth.isMultiple(of: 90) {
-                drawOutsideLabel("\(azimuth)°", azimuth: Double(azimuth), altitude: 0, color: UIColor(white: 0.55, alpha: 1), offset: 25, in: context)
+                azimuthLabels.append(("\(azimuth)°", Double(azimuth)))
             }
         }
-        stroke(path, color: UIColor(white: 0.27, alpha: 1), width: 2.0, in: context)
+        stroke(path, color: .mapGridSecondary, width: 2.0, in: context)
+        
+        let labelColor = UIColor.mapGridSecondaryText
+        
+        for (label, az, alt) in altitudeLabels {
+            drawGridLabel(label, azimuth: az, altitude: alt, align: .left, color: labelColor, in: context)
+        }
+        for (label, az) in azimuthLabels {
+            drawOutsideLabel(label, azimuth: az, altitude: 0, color: labelColor, offset: 25, in: context)
+        }
     }
 
     private func updateEquatorialGridCache() {
@@ -1092,6 +1194,9 @@ final class StarView: UIView {
         var bestRaIndex = -1
         var minCenterDistSq = CGFloat.greatestFiniteMagnitude
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        
+        var raLabels: [(String, CGPoint)] = []
+        var decLabels: [(String, Double, Double)] = []
 
         for i in 0..<equRaAzimuths.count {
             var first = true
@@ -1124,7 +1229,7 @@ final class StarView: UIView {
                 let hours = totalMinutes / 60
                 let minutes = totalMinutes % 60
                 let label = minutes == 0 ? "\(hours)h" : "\(hours)h\(minutes)"
-                drawText(label, at: CGPoint(x: point.x, y: point.y - 18), color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), font: .systemFont(ofSize: 11), align: .center)
+                raLabels.append((label, CGPoint(x: point.x, y: point.y - 18)))
             }
         }
 
@@ -1148,12 +1253,22 @@ final class StarView: UIView {
                 if dec != 0 {
                     let ra = Double(bestRaIndex * equRaStepMin) / 60.0
                     let hor = AstronomyKt.horizon(time: currentTime, observer: observer, ra: ra, dec: Double(dec), refraction: Refraction.normal)
-                    drawGridLabel("\(dec)°", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), in: context)
+                    decLabels.append(("\(dec)°", hor.azimuth, hor.altitude))
                 }
             }
         }
 
-        stroke(path, color: UIColor(red: 0, green: 0.40, blue: 0.40, alpha: 1), width: 0.8, in: context)
+        stroke(path, color: .mapGridMain, width: 0.8, in: context)
+        
+        let labelColor = UIColor.mapGridMainText
+        let font = UIFont.systemFont(ofSize: 11)
+        
+        for (label, point) in raLabels {
+            drawText(label, at: point, color: labelColor, font: font, align: .center)
+        }
+        for (label, az, alt) in decLabels {
+            drawGridLabel(label, azimuth: az, altitude: alt, align: .left, color: labelColor, in: context)
+        }
     }
 
     private func updateEclipticCache() {
@@ -1185,7 +1300,7 @@ final class StarView: UIView {
     private func drawEclipticLine(in context: CGContext) {
         updateEclipticCache()
         stroke(cachedLinePath(azimuths: eclipticAzimuths, altitudes: eclipticAltitudes),
-               color: .yellow,
+               color: .mapLineEcliptic,
                width: 1.2,
                dash: [8, 8],
                in: context)
@@ -1199,7 +1314,7 @@ final class StarView: UIView {
         appendSkyLine(to: path, range: stride(from: -90.0, through: 90.0, by: 2.0)) { altitude in
             (180.0, altitude)
         }
-        stroke(path, color: .green, width: 1.2, dash: [12, 8], in: context)
+        stroke(path, color: .mapLineMeridian, width: 1.2, dash: [12, 8], in: context)
     }
 
     private func updateEquatorCache() {
@@ -1226,7 +1341,7 @@ final class StarView: UIView {
     private func drawEquatorLine(in context: CGContext) {
         updateEquatorCache()
         stroke(cachedLinePath(azimuths: equatorAzimuths, altitudes: equatorAltitudes),
-               color: UIColor(red: 0, green: 0.67, blue: 0.67, alpha: 1),
+               color: .mapLineEquator,
                width: 1.2,
                dash: [12, 8],
                in: context)
@@ -1261,7 +1376,7 @@ final class StarView: UIView {
     private func drawGalacticLine(in context: CGContext) {
         updateGalacticCache()
         stroke(cachedLinePath(azimuths: galacticAzimuths, altitudes: galacticAltitudes),
-               color: .magenta,
+               color: .mapLineGalactic,
                width: 1.2,
                dash: [8, 8],
                in: context)
@@ -1286,7 +1401,7 @@ final class StarView: UIView {
                 path.addLine(to: p2)
             }
             stroke(path,
-                   color: isSelected ? UIColor(red: 1, green: 0.84, blue: 0, alpha: 1) : UIColor(red: 0.33, green: 0.60, blue: 1.0, alpha: 0.58),
+                   color: isSelected ? .constellationSelected : .constellationLine,
                    width: isSelected ? 1.8 : 0.9,
                    in: context)
         }
@@ -1304,7 +1419,7 @@ final class StarView: UIView {
                 continue
             }
 
-            let color = isSelected ? UIColor(red: 1, green: 0.84, blue: 0, alpha: 1) : UIColor(red: 0.67, green: 0.73, blue: 1.0, alpha: 1)
+            let color = isSelected ? UIColor.constellationSelected : UIColor.constellationText
             let font = UIFont.italicSystemFont(ofSize: 16)
             let text = constellation.getDisplayName()
             let size = text.size(withAttributes: [.font: font])
@@ -1400,7 +1515,7 @@ final class StarView: UIView {
             }
             previousPoint = point
         }
-        stroke(path, color: .cyan, width: 1.1, dash: [5, 8], in: context)
+        stroke(path, color: .mapTrajectoryLine, width: 1.1, dash: [5, 8], in: context)
 
         var drawnLabels: Set<String> = []
         for index in 0..<drawCount {
@@ -1427,7 +1542,7 @@ final class StarView: UIView {
             let labelAngle = Double(angle - .pi / 2)
             let labelPoint = CGPoint(x: point.x + 30 * CGFloat(cos(labelAngle)),
                                      y: point.y + 30 * CGFloat(sin(labelAngle)) + 8)
-            drawText(label, at: labelPoint, color: .cyan, font: .systemFont(ofSize: 12), align: .center)
+            drawText(label, at: labelPoint, color: .mapTrajectoryLine, font: .systemFont(ofSize: 12), align: .center)
             drawArrow(at: point, angle: angle, in: context)
         }
     }
@@ -1539,10 +1654,6 @@ final class StarView: UIView {
         }
     }
 
-    func calculatePosition(_ object: SkyObject) {
-        calculatePosition(object, time: currentTime, updateTargets: false)
-    }
-
     private func calculatePosition(_ object: SkyObject, time: Time, updateTargets: Bool, force: Bool = false) {
         if !force && object.lastUpdateTime == time.tt && !updateTargets {
             return
@@ -1607,7 +1718,7 @@ final class StarView: UIView {
         path.addLine(to: CGPoint(x: -10, y: -6))
         path.addLine(to: CGPoint(x: -10, y: 6))
         path.closeSubpath()
-        UIColor.cyan.setFill()
+        UIColor.mapTrajectoryLine.setFill()
         context.addPath(path)
         context.fillPath()
         context.restoreGState()
@@ -1869,30 +1980,89 @@ final class StarView: UIView {
         let point = recognizer.location(in: self)
         switch recognizer.state {
         case .began:
-            cancelFocusAnimation()
+            if isGyroTrackingEnabled {
+                cancelGyroSnapBack()
+                isGyroPanOverride = true
+            } else {
+                cancelFocusAnimation()
+            }
             lastTouchPoint = point
             isPanning = false
+            didPanThisGesture = false
         case .changed:
             let dx = point.x - lastTouchPoint.x
             let dy = point.y - lastTouchPoint.y
-            if isCameraMode && hypot(dx, dy) > 10 {
+
+            if hypot(dx, dy) > 0 {
                 isPanning = true
-            } else if hypot(dx, dy) > 0 || isPanning {
-                isPanning = true
-                if settings.starMap.is2DMode {
-                    panX += dx
-                    panY += dy
-                } else {
-                    let scale = viewAngle / Double(max(bounds.width, 1))
-                    centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
-                    centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
-                    onAzimuthManualChangeListener?(centerAzimuth)
-                }
+                didPanThisGesture = true
+                applyPanDelta(dx: dx, dy: dy)
                 lastTouchPoint = point
                 setNeedsDisplay()
             }
+        case .ended, .cancelled:
+            if didPanThisGesture && isGyroTrackingEnabled {
+                isPanning = false
+                scheduleGyroSnapBack()
+            } else if didPanThisGesture && !isGyroTrackingEnabled {
+                startInertialScroll(velocity: recognizer.velocity(in: self))
+            } else if isGyroTrackingEnabled {
+                isGyroPanOverride = false
+            }
+            isPanning = false
+            didPanThisGesture = false
         default:
             isPanning = false
+        }
+    }
+    
+    private func applyPanDelta(dx: CGFloat, dy: CGFloat) {
+        if settings.starMap.is2DMode {
+            panX += dx
+            panY += dy
+        } else {
+            let scale = viewAngle / Double(max(bounds.width, 1))
+            centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
+            centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
+            notifyAzimuthChanged()
+        }
+        setNeedsDisplay()
+    }
+    
+    private func startInertialScroll(velocity: CGPoint) {
+        guard hypot(velocity.x, velocity.y) >= inertialMinStartSpeed else { return }
+
+        cancelInertialScroll()
+        cancelFocusAnimation()
+
+        inertialVelocity = velocity
+        lastInertialTimestamp = CACurrentMediaTime()
+
+        let link = CADisplayLink(target: self, selector: #selector(handleInertialFrame(_:)))
+        inertialDisplayLink = link
+        link.add(to: .main, forMode: .common)
+    }
+
+    private func cancelInertialScroll() {
+        inertialDisplayLink?.invalidate()
+        inertialDisplayLink = nil
+        inertialVelocity = .zero
+    }
+
+    @objc private func handleInertialFrame(_ link: CADisplayLink) {
+        let now = link.timestamp
+        let dt = CGFloat(max(0, min(0.05, now - lastInertialTimestamp)))
+        lastInertialTimestamp = now
+        guard dt > 0 else { return }
+
+        applyPanDelta(dx: inertialVelocity.x * dt, dy: inertialVelocity.y * dt)
+
+        let decay = pow(inertialDecelerationRate, dt * 1000)
+        inertialVelocity.x *= decay
+        inertialVelocity.y *= decay
+
+        if hypot(inertialVelocity.x, inertialVelocity.y) < inertialStopSpeed {
+            cancelInertialScroll()
         }
     }
 
@@ -2034,5 +2204,11 @@ final class StarView: UIView {
             value += 360
         }
         return value
+    }
+    
+    deinit {
+        timeAnimationDisplayLink?.invalidate()
+        focusAnimationDisplayLink?.invalidate()
+        inertialDisplayLink?.invalidate()
     }
 }

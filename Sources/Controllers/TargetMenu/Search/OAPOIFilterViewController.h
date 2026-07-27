@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter;
 - (BOOL)removeFilter:(OAPOIUIFilter *)filter;
 - (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction;
-- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(NSString *)newName willSaved:(BOOL)willSave;
+- (void)searchByUIFilter:(OAPOIUIFilter *)filter newName:(nullable NSString *)newName willSaved:(BOOL)willSave;
 
 @end
 

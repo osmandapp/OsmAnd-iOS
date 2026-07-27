@@ -23,13 +23,21 @@ final class MetricsAdapter {
     func makeMetricsView() -> UIView {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
+        scrollView.alwaysBounceVertical = false
+        scrollView.isDirectionalLockEnabled = true
 
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .fill
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        let isRTL = scrollView.isDirectionRTL()
+        let direction: UISemanticContentAttribute = isRTL ? .forceRightToLeft : .forceLeftToRight
+        scrollView.semanticContentAttribute = direction
+        stack.semanticContentAttribute = direction
 
         scrollView.addSubview(stack)
         NSLayoutConstraint.activate([
@@ -45,6 +53,15 @@ final class MetricsAdapter {
             view.bind(item, showDivider: index != currentList.indices.last)
             stack.addArrangedSubview(view)
         }
+        
+        if isRTL {
+            scrollView.layoutIfNeeded()
+            DispatchQueue.main.async {
+                let maxOffsetX = max(0, scrollView.contentSize.width - scrollView.bounds.width)
+                scrollView.contentOffset = CGPoint(x: maxOffsetX, y: 0)
+            }
+        }
+        
         return scrollView
     }
 }
@@ -71,22 +88,25 @@ private final class MetricView: UIView {
 
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthAnchor.constraint(greaterThanOrEqualToConstant: 84).isActive = true
+        widthAnchor.constraint(greaterThanOrEqualToConstant: 85).isActive = true
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, titleLabel])
         stack.axis = .vertical
         stack.alignment = .leading
+        stack.spacing = 3
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         valueLabel.font = .preferredFont(forTextStyle: .subheadline)
-        valueLabel.textColor = AstroContextMenuTheme.activeText
+        valueLabel.textColor = .textColorActive
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.8
-
+        valueLabel.textAlignment = .natural
+        
+        titleLabel.textAlignment = .natural
         titleLabel.font = .preferredFont(forTextStyle: .footnote)
-        titleLabel.textColor = AstroContextMenuTheme.secondaryText
+        titleLabel.textColor = .textColorSecondary
 
-        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.backgroundColor = .customSeparatorSolid
         divider.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stack)
@@ -100,7 +120,7 @@ private final class MetricView: UIView {
             divider.trailingAnchor.constraint(equalTo: trailingAnchor),
             divider.centerYAnchor.constraint(equalTo: centerYAnchor),
             divider.widthAnchor.constraint(equalToConstant: 1),
-            divider.heightAnchor.constraint(equalToConstant: 34)
+            divider.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
 }

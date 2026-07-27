@@ -233,10 +233,15 @@ struct StarMapSearchStateSnapshot {
     }
 
     private func matchesQuery(_ entry: StarMapSearchEntry, queryLower: String) -> Bool {
-        let display = entry.displayName.lowercased(with: Locale.current)
-        let localized = (entry.objectRef.localizedName ?? "").lowercased(with: Locale.current)
-        let original = entry.objectRef.name.lowercased(with: Locale.current)
-        return display.contains(queryLower) || localized.contains(queryLower) || original.contains(queryLower)
+        let normalizedQuery = normalize(queryLower)
+        let display = normalize(entry.displayName)
+        let localized = normalize(entry.objectRef.localizedName ?? "")
+        let original = normalize(entry.objectRef.name)
+        return display.contains(normalizedQuery) || localized.contains(normalizedQuery) || original.contains(normalizedQuery)
+    }
+    
+    private func normalize(_ string: String) -> String {
+        string.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
     }
 
     private func matchesTypeFilter(_ entry: StarMapSearchEntry,

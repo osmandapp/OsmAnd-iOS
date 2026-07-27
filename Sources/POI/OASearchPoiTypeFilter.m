@@ -38,7 +38,7 @@
     }];
 }
 
-- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
+- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(nullable OASearchPoiTypeFilterGetTypes)tFunction;
 {
     self = [super init];
     if (self) {
@@ -49,7 +49,7 @@
     return self;
 }
 
-- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes
+- (nullable NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes
 {
     if (_getAcceptedTypesFunction)
         return _getAcceptedTypesFunction();
@@ -57,7 +57,7 @@
     return nil;
 }
 
-- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin
+- (nullable NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin
 {
     if (_getAcceptedTypesFunction)
         return _getAcceptedTypesFunction();

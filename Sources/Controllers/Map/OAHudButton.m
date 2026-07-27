@@ -54,11 +54,11 @@ static CGFloat const kShadowRadius = 6;
 {
     self.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
     self.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
-    self.pressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_tap_light);
-    self.pressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_tap_dark);
+    self.pressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorTap].light;
+    self.pressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorTap].dark;
     self.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
     self.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
-    self.borderColor = UIColorFromRGB(color_on_map_icon_border_color);
+    self.borderColor = [UIColor colorNamed:ACColorNameMapButtonBorderColor];
     self.borderWidthDay = 0;
     self.borderWidthNight = 2;
     

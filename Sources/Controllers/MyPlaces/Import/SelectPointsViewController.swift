@@ -52,10 +52,10 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     private let allPoints: [WptPt]
     private let suggestedPoints: [WptPt]
     private let selection: SelectionManager<WptPt>
-    private var groups: [WaypointGroup] = []
-
-    private var lastUpdate: TimeInterval?
     private let updateLock = NSLock()
+    
+    private var groups: [WaypointGroup] = []
+    private var lastUpdate: TimeInterval?
 
     // MARK: - Init
 
@@ -100,10 +100,6 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     }
 
     // MARK: - Table
-
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
 
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
@@ -359,7 +355,7 @@ private extension SelectPointsViewController {
         cell.titleView.text = wptItem.point.name ?? ""
         cell.iconView.image = wptItem.compositeIconWithDefaultColor()
         cell.setShowWaypointButtonVisiblity(false)
-        updatePointDistanceAndDirectionCell(cell, wptItem: wptItem)
+        updatePointDistanceAndDirectionCell(cell, wptItem: wptItem, animated: false)
 
         cell.contentView.backgroundColor = .groupBg
         if cell.selectedBackgroundView?.backgroundColor != .groupBg {
@@ -514,7 +510,9 @@ private extension SelectPointsViewController {
             selection.selectAll()
         }
         updateSelectAllButtonTitle()
-        tableView.reloadData()
+        UIView.transition(with: tableView, duration: 0.35, options: [.transitionCrossDissolve, .allowUserInteraction, .beginFromCurrentState]) {
+            self.tableView.reloadData()
+        }
     }
 
     func applyAction() {
@@ -526,7 +524,9 @@ private extension SelectPointsViewController {
         selection.deselectAll()
         Set(suggestedPoints).forEach { selection.toggle($0) }
         updateSelectAllButtonTitle()
-        tableView.reloadData()
+        UIView.transition(with: tableView, duration: 0.35, options: [.transitionCrossDissolve, .allowUserInteraction, .beginFromCurrentState]) {
+            self.tableView.reloadData()
+        }
     }
 
     @objc func showExitConfirmationAction() {
@@ -621,12 +621,12 @@ private extension SelectPointsViewController {
         }
     }
 
-    func updatePointDistanceAndDirectionCell(_ cell: OAPointWithRegionTableViewCell, wptItem: OAGpxWptItem) {
+    func updatePointDistanceAndDirectionCell(_ cell: OAPointWithRegionTableViewCell, wptItem: OAGpxWptItem, animated: Bool = true) {
         if let distance = wptItem.distance, !distance.isEmpty {
             cell.setDirection(distance)
             cell.directionIconView.image = .icSmallDirection
             cell.directionIconView.tintColor = .iconColorActive
-            UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
+            UIView.animate(withDuration: animated ? 0.2 : 0, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
                 cell.directionIconView.transform = CGAffineTransform(rotationAngle: wptItem.direction)
             }
         } else {

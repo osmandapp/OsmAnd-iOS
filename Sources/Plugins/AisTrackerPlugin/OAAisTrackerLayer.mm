@@ -32,7 +32,7 @@
 
 static NSString * const kAisTrackerLayerId = @"ais_tracker_layer";
 static const int kAisTrackerStartZoom = 6;
-static const int kAisDirectionLineStartZoom = 12;
+static const int kAisDirectionLineStartZoom = 10;
 static const int kAisSpatialIndexZoom = 8;
 static const int kAisMaxRenderedObjects = 1000;
 static const int kAisMaxProjectionCandidates = 4000;

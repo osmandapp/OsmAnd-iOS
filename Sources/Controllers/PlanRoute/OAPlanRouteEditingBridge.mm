@@ -132,7 +132,7 @@
 - (NSString *)absoluteGpxPathFromPath:(NSString *)filePath;
 - (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath;
 - (BOOL)isDraftGpxPath:(NSString *)filePath;
-- (OASGpxFile *)gpxFileForWaypoints;
+- (nullable OASGpxFile *)gpxFileForWaypoints;
 - (NSString *)poiGroupKeyForName:(NSString *)groupName;
 - (void)addPoiGroupNamesFromGpx:(nullable OASGpxFile *)gpxFile toSet:(NSMutableOrderedSet<NSString *> *)groupNames;
 - (BOOL)addPoiGroupToGpx:(nullable OASGpxFile *)gpxFile groupName:(NSString *)groupName;
@@ -496,7 +496,7 @@
 - (NSArray<OAApplicationMode *> *)availableModes
 {
     return [[OAApplicationMode values] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAApplicationMode *mode, NSDictionary *bindings) {
-        return mode != [OAApplicationMode DEFAULT] && ![@"public_transport" isEqualToString:[mode getRoutingProfile]];
+        return mode != [OAApplicationMode DEFAULT] && ![mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
     }]];
 }
 
@@ -679,7 +679,7 @@
         [items addObject:item];
     }
     
-    return items;
+    return [items copy];
 }
 
 - (NSArray<NSString *> *)buildPoiGroupNames
@@ -959,11 +959,13 @@
     }
 
     BOOL changed = points.count != gpxFile.getPointsList.count;
-    for (NSString *key in [gpxFile.pointsGroups.allKeys copy])
+    for (NSString *key in gpxFile.pointsGroups.allKeys)
     {
         OASGpxUtilitiesPointsGroup *group = gpxFile.pointsGroups[key];
         NSString *name = key.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : group.name.length > 0 ? group.name : key;
-        if ([[self poiGroupKeyForName:key] isEqualToString:groupKey] || [[self poiGroupKeyForName:name] isEqualToString:groupKey])
+        NSString *keyGroupKey = [self poiGroupKeyForName:key];
+        NSString *nameGroupKey = [self poiGroupKeyForName:name];
+        if ([keyGroupKey isEqualToString:groupKey] || [nameGroupKey isEqualToString:groupKey])
         {
             [gpxFile.pointsGroups removeObjectForKey:key];
             changed = YES;
@@ -1470,7 +1472,7 @@
     [presentingViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (OASGpxFile *)gpxFileForWaypoints
+- (nullable OASGpxFile *)gpxFileForWaypoints
 {
     if ([self editingContext] == nil)
         return nil;
@@ -2231,7 +2233,7 @@
             continue;
 
         double segDist = [self distanceFrom:current to:next];
-        NSInteger steps = (NSInteger)floor(segDist / interval);
+        NSInteger steps = (NSInteger)ceil(segDist / interval);
         for (NSInteger s = 1; s < steps; s++)
         {
             double frac = (double)s / (double)steps;
@@ -2348,10 +2350,6 @@
     _isCalculatingRoute = YES;
     if (self.onChange)
         self.onChange();
-}
-
-- (void)updateProgress:(int)progress
-{
 }
 
 - (void)hideProgressBar

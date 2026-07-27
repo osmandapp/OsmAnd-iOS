@@ -29,12 +29,14 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 @class OASWptPt, OASTrkSegment, OASGpxFile;
 
-@protocol OASnapToRoadProgressDelegate
+@protocol OASnapToRoadProgressDelegate <NSObject>
 
 - (void) showProgressBar;
-- (void) updateProgress:(int)progress;
 - (void) hideProgressBar;
 - (void) refresh;
+
+@optional
+- (void) updateProgress:(int)progress;
 
 @end
 

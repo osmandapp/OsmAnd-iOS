@@ -1537,7 +1537,9 @@ typedef enum
     
     [_targetMenuView setSelectedObject:selectedObject.object];
 
-    if (targetPoint.type != OATargetRenderedObject)
+    if (targetPoint.type != OATargetRenderedObject
+        && targetPoint.type != OATargetWiki
+        && targetPoint.type != OATargetPOI)
     {
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
@@ -1562,16 +1564,19 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
+    [self highlightContextPinPolygon:targetPoint.targetObj];
+}
 
+- (void) highlightContextPinPolygon:(id)targetObj
+{
     OAMapObject *obj = nil;
-    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
+    if ([targetObj isKindOfClass:OAMapObject.class])
     {
-        obj = targetPoint.targetObj;
-
+        obj = targetObj;
     }
-    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    else if([targetObj isKindOfClass:BaseDetailsObject.class])
     {
-        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
+        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetObj;
         obj = (OAMapObject *) [baseDetails syntheticAmenity];
     }
     if (obj != nil)
@@ -2564,10 +2569,7 @@ typedef enum
         case OATargetWiki:
         {
             if (controller)
-            {
                 [self.targetMenuView doInit:showFullMenu];
-                ((OAWikiMenuViewController *)controller).menuDelegate = self;
-            }
             break;
         }
         case OATargetWpt:

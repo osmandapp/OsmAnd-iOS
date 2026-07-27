@@ -166,25 +166,33 @@ static int TILE_SIZE = 256;
             
             if (cppAmenity != nullptr)
             {
-                NSMutableArray<NSString *> *names = [NSMutableArray new];
-                for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
+                OAPOI *parsedPoi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+                if (parsedPoi)
                 {
-                    NSString *name = entry.value().toNSString();
-                    if (name)
-                        [names addObject:name];
+                    [result collect:parsedPoi provider:_provider];
                 }
-                
-                NSString *nativeName = cppAmenity->nativeName.toNSString();
-                if (nativeName)
-                    [names addObject:nativeName];
-                
-                OAPOI *requestAmenity = [[OAPOI alloc] init];
-                requestAmenity.obfId = cppAmenity->id.id;
-                [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
-                [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
-                
-                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
-                detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
+                else
+                {
+                    NSMutableArray<NSString *> *names = [NSMutableArray new];
+                    for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
+                    {
+                        NSString *name = entry.value().toNSString();
+                        if (name)
+                            [names addObject:name];
+                    }
+                    
+                    NSString *nativeName = cppAmenity->nativeName.toNSString();
+                    if (nativeName)
+                        [names addObject:nativeName];
+                    
+                    OAPOI *requestAmenity = [[OAPOI alloc] init];
+                    requestAmenity.obfId = cppAmenity->id.id;
+                    [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
+                    [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
+                    
+                    OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
+                    detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
+                }
             }
             else
             {

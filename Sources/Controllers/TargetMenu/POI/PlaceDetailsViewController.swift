@@ -13,6 +13,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private var detailsObject: BaseDetailsObject?
     private var renderedObject: OARenderedObject?
+    private var sourceObject: AnyObject?
     private var provider: RenderedObjectAmenityProvider!
     
     required init?(coder: NSCoder) {
@@ -23,6 +24,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         super.init(poi: detailsObject.syntheticAmenity)
         self.detailsObject = detailsObject
         self.renderedObject = renderedObject
+        self.sourceObject = renderedObject ?? detailsObject.syntheticAmenity
         self.provider = RenderedObjectAmenityProvider(detailsObject: detailsObject, renderedObject: renderedObject)
         setObject(detailsObject)
     }
@@ -31,7 +33,14 @@ final class PlaceDetailsViewController: OAPOIViewController {
         let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject
+        self.sourceObject = renderedObject
         self.provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
+    }
+
+    init(amenityPoi poi: OAPOI) {
+        super.init(poi: poi)
+        self.sourceObject = poi
+        self.provider = RenderedObjectAmenityProvider()
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -45,9 +54,11 @@ final class PlaceDetailsViewController: OAPOIViewController {
         super.viewDidLoad()
         if detailsObject == nil {
             resolveDetailedObjectInBackground()
+        } else {
+            highlightPolygonInBackground()
         }
     }
-    
+
     override func setObject(_ object: Any) {
         if let detailsObj = object as? BaseDetailsObject {
             poi = detailsObj.syntheticAmenity
@@ -231,17 +242,44 @@ final class PlaceDetailsViewController: OAPOIViewController {
         updateTargetPoint(with: amenity)
     }
 
-    private func resolveDetailedObjectInBackground() {
-        guard let renderedObject else { return }
+    private func highlightPolygonInBackground() {
+        let seed: OAPOI? = (sourceObject as? OAPOI) ?? detailsObject?.syntheticAmenity
+        guard let seed else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
+            guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(seed) else { return }
+            DispatchQueue.main.async {
+                guard let self,
+                      let mapPanel = OARootViewController.instance()?.mapPanel,
+                      mapPanel.getCurrentTargetPoint() != nil
+                else { return }
+                mapPanel.highlightContextPinPolygon(geoObject)
+            }
+        }
+    }
+
+    private func resolveDetailedObjectInBackground() {
+        guard let sourceObject else { return }
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let poi = sourceObject as? OAPOI,
+               let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(poi) {
+                DispatchQueue.main.async {
+                    guard let self,
+                          self.detailsObject == nil,
+                          let mapPanel = OARootViewController.instance()?.mapPanel,
+                          let targetPoint = mapPanel.getCurrentTargetPoint(),
+                          (targetPoint.targetObj as AnyObject) === sourceObject
+                    else { return }
+                    mapPanel.highlightContextPinPolygon(geoObject)
+                }
+            }
+            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
             DispatchQueue.main.async {
                 guard let self,
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
                       let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === renderedObject
+                      (targetPoint.targetObj as AnyObject) === sourceObject
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
@@ -251,6 +289,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.rebuildRows()
                 tableView.reloadData()
                 self.delegate?.refreshTargetPointHeader?()
+                mapPanel.highlightContextPinPolygon(details)
             }
         }
     }

@@ -284,6 +284,15 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return detailsObject;
 }
 
+- (nullable BaseDetailsObject *)resolveGeometryOnly:(OAPOI *)poi
+{
+    if (!poi)
+        return nil;
+    BaseDetailsObject *detailsObject = [[BaseDetailsObject alloc] initWithMapObjects:@[poi] lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
+    [self completeGeometry:detailsObject object:poi];
+    return detailsObject;
+}
+
 - (NSMutableArray<OAPOI *> *)filterAmenities:(NSArray<OAPOI *> *)amenities request:(OAAmenitySearcherRequest*) request
 {
     int64_t osmId = request.osmId;

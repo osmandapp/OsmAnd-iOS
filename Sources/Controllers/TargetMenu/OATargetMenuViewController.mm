@@ -176,10 +176,13 @@
 
         case OATargetPOI:
         {
-            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
                 controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:targetPoint.targetObj];
+            }
+            else
+            {
+                controller = [[PlaceDetailsViewController alloc] initWithAmenityPoi:targetPoint.targetObj];
             }
 
             break;
@@ -234,44 +237,7 @@
         }
         case OATargetWiki:
         {
-            if (targetPoint.localizedContent.count == 1)
-            {
-                controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:targetPoint.localizedContent.allValues.firstObject];
-            }
-            else
-            {
-                NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
-                if (!preferredMapLanguage || preferredMapLanguage.length == 0)
-                    preferredMapLanguage = NSLocale.currentLocale.languageCode;
-
-                NSString *locale = [OAPluginsHelper onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
-                if ([locale isEqualToString:@"en"])
-                    locale = @"";
-
-                NSString *content = targetPoint.localizedContent[locale];
-                if (content)
-                {
-                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
-                }
-                else
-                {
-                    NSArray *locales = targetPoint.localizedContent.allKeys;
-                    for (NSString *langCode in [NSLocale preferredLanguages])
-                    {
-                        if ([langCode containsString:@"-"])
-                            locale = [langCode substringToIndex:[langCode indexOf:@"-"]];
-                        if ([locales containsObject:locale])
-                        {
-                            content = targetPoint.localizedContent[locale];
-                            break;
-                        }
-                    }
-                    if (!content)
-                        content = targetPoint.localizedContent.allValues.firstObject;
-
-                    controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
-                }
-            }
+            controller = [[PlaceDetailsViewController alloc] initWithAmenityPoi:targetPoint.targetObj];
             break;
         }
             

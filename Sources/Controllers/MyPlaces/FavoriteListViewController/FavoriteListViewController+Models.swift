@@ -147,15 +147,11 @@ struct FavoriteFolderStats: Hashable {
         parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
         let firstLine = parts.joined(separator: ", ")
         let secondLine = "\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))"
-        return [firstLine, secondLine].map { capitalizedLine($0) + "." }.joined(separator: "\n")
+        return [firstLine, secondLine].map { (OAUtilities.capitalizeFirstLetter($0) ?? "") + "." }.joined(separator: "\n")
     }
 
     private var formattedPointsCount: String {
         NumberFormatter.localizedString(from: NSNumber(value: pointsCount), number: .decimal)
-    }
-
-    private func capitalizedLine(_ text: String) -> String {
-        text.prefix(1).uppercased() + String(text.dropFirst())
     }
 }
 

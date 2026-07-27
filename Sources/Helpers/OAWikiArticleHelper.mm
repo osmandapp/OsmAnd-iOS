@@ -23,6 +23,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -101,9 +102,13 @@
                 {
                     if (app.resourcesManager->isResourceInstalled(repository.resourceId))
                     {
-                        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-                        NSArray<OAPOI *> *wikiPoints = [OAAmenitySearcher findPOIsByTagName:nil name:_name location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
-                        
+                        NSMutableArray<OAPOI *> *wikiPoints = [NSMutableArray array];
+                        OAResultMatcher<OAPOI *> *matcher = [self createResultMatcher:wikiPoints];
+
+                        [OAAmenitySearcher searchAmenitiesByName:_name
+                                                      resourceId:repository.resourceId.toNSString()
+                                                         matcher:matcher];
+
                         [results addObjectsFromArray:wikiPoints];
                         if (results.count > 0)
                             break;
@@ -148,6 +153,30 @@
     _isCanceled = YES;
     if (_onComplete)
         _onComplete();
+}
+
+- (OAResultMatcher<OAPOI *> *)createResultMatcher:(NSMutableArray<OAPOI *> *)results
+{
+    NSString *articleName = _name;
+    return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
+        NSString *localeName = (*poi).name;
+        if ([articleName isEqualToString:localeName])
+        {
+            [results addObject:*poi];
+            return YES;
+        }
+        for (NSString *amenityName in (*poi).localizedNames.allValues)
+        {
+            if ([articleName isEqualToString:amenityName])
+            {
+                [results addObject:*poi];
+                return YES;
+            }
+        }
+        return NO;
+    } cancelledFunc:^BOOL {
+        return NO;
+    }];
 }
 
 - (BOOL)isRegionAdded:(OAWorldRegion *)region
@@ -537,6 +566,22 @@
     }
     
     return languageMenu;
+}
+
++ (BOOL)isWikipediaDownloadedAt:(CLLocation *)location
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSArray<OAWorldRegion *> *regions =
+        [app.worldRegion getWorldRegionsAt:location.coordinate.latitude
+                                longitude:location.coordinate.longitude];
+    for (OAWorldRegion *region in regions)
+    {
+        OAWorldRegion *wikiRegion = [OAWikiArticleHelper findWikiRegion:region];
+        OARepositoryResourceItem *item = [OAWikiArticleHelper findResourceItem:wikiRegion];
+        if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
+            return YES;
+    }
+    return NO;
 }
 
 @end

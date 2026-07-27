@@ -713,14 +713,16 @@
 
 - (void)loadWebView
 {
-  if (_externalURL)
-  {
-    [self.webView loadRequest:[NSURLRequest requestWithURL:_externalURL]];
-    self.webView.hidden = NO;
-  } else
-  {
-    [super loadWebView];
-  }
+    if (_externalURL)
+    {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:_externalURL]];
+        self.webView.hidden = NO;
+    } else
+    {
+        self.webView.hidden = NO;
+        [self.webView loadHTMLString:_content baseURL:[self getUrl]];
+        [super loadWebView];
+    }
 }
 
 - (void)updateWikiData:(NSString *)locale

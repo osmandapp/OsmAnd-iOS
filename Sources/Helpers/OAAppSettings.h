@@ -1321,6 +1321,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (BOOL) removeImpassableRoad:(CLLocation *)location;
 - (void) clearImpassableRoads;
 
+- (BOOL)isGpxVisible:(NSString *)filePath;
 - (void) showGpx:(NSArray<NSString *> *)filePaths;
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths;

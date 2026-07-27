@@ -98,7 +98,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     
     if (_loadingGPXPaths.count > 0)
     {
-        [self removeInactiveGpxFiles:mapSettingVisibleGpx];
+        [self removeInactiveGpxFiles];
         return YES;
     }
     
@@ -131,12 +131,12 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     if (gpxLoadOperations.count > 0)
         [_operationQueue addOperations:gpxLoadOperations waitUntilFinished:NO];
     
-    [self removeInactiveGpxFiles:mapSettingVisibleGpx];
+    [self removeInactiveGpxFiles];
     
     return _loadingGPXPaths.count > 0;
 }
 
-- (void)removeInactiveGpxFiles:(NSSet<NSString *> *)mapSettingVisibleGpx
+- (void)removeInactiveGpxFiles
 {
     NSMutableArray<NSString *> *keysToRemove = [NSMutableArray array];
     
@@ -144,7 +144,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     {
         NSString *gpxFilePath = [OAUtilities getGpxShortPath:key];
         
-        if (![mapSettingVisibleGpx containsObject:gpxFilePath])
+        if (![_settings isGpxVisible:gpxFilePath])
             [keysToRemove addObject:key];
     }
     

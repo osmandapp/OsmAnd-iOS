@@ -627,7 +627,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             }
         }
 
-        if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
+        if ([OAAppSettings.sharedManager isGpxVisible:oldPath])
             [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
     }
     if (openTrack)

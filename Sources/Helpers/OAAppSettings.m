@@ -7487,6 +7487,17 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
+- (BOOL)isGpxVisible:(NSString *)filePath
+{
+    for (NSString *visiblePath in _mapSettingVisibleGpx.get)
+    {
+        if ([visiblePath compare:filePath] == NSOrderedSame)
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
 {
     BOOL added = NO;

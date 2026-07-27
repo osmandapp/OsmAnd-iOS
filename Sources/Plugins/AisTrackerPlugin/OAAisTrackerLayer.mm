@@ -24,12 +24,22 @@
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <cmath>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 static NSString * const kAisTrackerLayerId = @"ais_tracker_layer";
 static const int kAisTrackerStartZoom = 6;
+static const int kAisDirectionLineStartZoom = 12;
+static const int kAisSpatialIndexZoom = 8;
+static const int kAisMaxRenderedObjects = 1000;
+static const int kAisMaxProjectionCandidates = 4000;
+static const int kAisCoarseCandidatesPerCell = 4;
 static const CGFloat kAisBaseIconSize = 48.0;
+static const CGFloat kAisRestIconScale = 0.7;
+static const CGFloat kAisCollisionPadding = 4.0;
+static const CGFloat kAisViewportMarginFactor = 0.2;
 static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
 static const float kAisRenderZoomEpsilon = 0.02f;
 static const NSTimeInterval kAisViewportRenderUpdateInterval = 0.2;
@@ -37,9 +47,31 @@ static int kAisIconKeyStorage;
 static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
 static std::unordered_map<std::string, sk_sp<SkImage>> kAisImagesCache;
 
+static NSInteger OAAisVisualState(OASAisObject *object, AisTrackerPlugin *plugin)
+{
+    if ([object isVesselAtRest])
+        return 1;
+    NSInteger lostTimeout = plugin ? [plugin vesselLostTimeoutInMinutes] : 0;
+    return lostTimeout > 0 && [object isLostMaxAgeInMin:(int32_t)lostTimeout] ? 2 : 0;
+}
+
+static uint64_t OAAisSpatialBucketKey(const OsmAnd::PointI& position31)
+{
+    const uint32_t shift = OsmAnd::ZoomLevel::MaxZoomLevel - kAisSpatialIndexZoom;
+    const uint64_t x = ((uint32_t)position31.x) >> shift;
+    const uint64_t y = ((uint32_t)position31.y) >> shift;
+    return (x << 32) | y;
+}
+
 static BOOL OAAisTypeEquals(OASAisObjType *type, OASAisObjType *expected)
 {
     return type == expected || [type isEqual:expected];
+}
+
+static BOOL OAAisIsEmergencyObject(OASAisObject *object)
+{
+    return OAAisTypeEquals(object.objectClass, OASAisObjType.aisSart)
+        || OAAisTypeEquals(object.objectClass, OASAisObjType.aisVesselSar);
 }
 
 static std::string OAAisImageCacheKey(NSString *prefix, NSString *name, CGFloat iconSize)
@@ -117,16 +149,39 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             age];
 }
 
+@interface AisObjectRenderRecord : NSObject
+
+@property (nonatomic, strong) OASAisObject *object;
+@property (nonatomic) OsmAnd::PointI position31;
+@property (nonatomic) uint64_t bucketKey;
+@property (nonatomic) uint64_t version;
+@property (nonatomic) CGPoint screenPoint;
+@property (nonatomic) BOOL hasScreenPoint;
+@property (nonatomic) BOOL cpaWarning;
+@property (nonatomic) NSInteger visualState;
+@property (nonatomic) BOOL emergency;
+@property (nonatomic) BOOL movable;
+@property (nonatomic) int64_t lastUpdate;
+
+@end
+
+@implementation AisObjectRenderRecord
+@end
+
 @interface AisObjectDrawable : NSObject
 
-@property (nonatomic) OASAisObject *object;
+@property (nonatomic, strong) OASAisObject *object;
 @property (nonatomic, copy) NSString *renderKey;
+@property (nonatomic) uint64_t renderedVersion;
+@property (nonatomic) BOOL cpaWarning;
+@property (nonatomic) NSInteger visualState;
+@property (nonatomic) float renderedSurfaceZoom;
 
 - (instancetype)initWithObject:(OASAisObject *)object;
 - (instancetype)initWithObject:(OASAisObject *)object
                       textScale:(CGFloat)textScale
            displayDensityFactor:(CGFloat)displayDensityFactor;
-- (void)set:(OASAisObject *)object;
+- (void)setObject:(OASAisObject *)object visualState:(NSInteger)visualState;
 - (void)setTextScale:(CGFloat)textScale
  displayDensityFactor:(CGFloat)displayDensityFactor;
 - (BOOL)hasAisRenderData;
@@ -137,10 +192,10 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 - (void)setAisRenderDataHidden:(BOOL)hidden;
 - (void)setAisMarkersUpdateAfterCreated;
 - (void)createAisRenderDataWithBaseOrder:(int)baseOrder
-                       markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                    vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
+                       markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection;
 - (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
-                                plugin:(AisTrackerPlugin *)plugin;
+                            cpaWarning:(BOOL)cpaWarning
+                  vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
 - (void)clearAisRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
                           vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
 
@@ -148,9 +203,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 @implementation AisObjectDrawable
 {
-    std::shared_ptr<OsmAnd::MapMarker> _activeMarker;
-    std::shared_ptr<OsmAnd::MapMarker> _restMarker;
-    std::shared_ptr<OsmAnd::MapMarker> _lostMarker;
+    std::shared_ptr<OsmAnd::MapMarker> _marker;
     std::shared_ptr<OsmAnd::VectorLine> _directionLine;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
@@ -170,14 +223,17 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if (self)
     {
         _object = object;
+        _visualState = 0;
+        _renderedSurfaceZoom = -1.0f;
         [self setTextScale:textScale displayDensityFactor:displayDensityFactor];
     }
     return self;
 }
 
-- (void)set:(OASAisObject *)object
+- (void)setObject:(OASAisObject *)object visualState:(NSInteger)visualState
 {
     _object = object;
+    _visualState = visualState;
 }
 
 - (void)setTextScale:(CGFloat)textScale displayDensityFactor:(CGFloat)displayDensityFactor
@@ -188,12 +244,12 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (BOOL)hasAisRenderData
 {
-    return _activeMarker && _restMarker && _lostMarker && _directionLine;
+    return _marker != nullptr;
 }
 
 - (BOOL)hasAnyAisRenderData
 {
-    return _activeMarker || _restMarker || _lostMarker || _directionLine;
+    return _marker || _directionLine;
 }
 
 - (int)renderGroupId
@@ -203,26 +259,25 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (NSString *)currentRenderKey
 {
-    return [NSString stringWithFormat:@"surface-v3-%@-%d", [self iconResourceNameForType:_object.objectClass], (int)std::round([self iconSize] * 100.0)];
+    NSString *iconName = _visualState == 0 ? [self iconResourceNameForType:_object.objectClass] : @"generated";
+    return [NSString stringWithFormat:@"surface-v4-%ld-%@-%d",
+            (long)_visualState,
+            iconName,
+            (int)std::round([self iconSize] * 100.0)];
 }
 
 - (OsmAnd::PointI)markerLocation
 {
-    CLLocation *location = OAAisObjectLocation(_object);
-    if (!location)
+    if (!_object.position)
         return OsmAnd::PointI(0, 0);
-    return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
-                          OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude));
+    return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(_object.position.longitude),
+                          OsmAnd::Utilities::get31TileNumberY(_object.position.latitude));
 }
 
 - (void)setAisRenderDataHidden:(BOOL)hidden
 {
-    if (_activeMarker)
-        _activeMarker->setIsHidden(hidden);
-    if (_restMarker)
-        _restMarker->setIsHidden(hidden);
-    if (_lostMarker)
-        _lostMarker->setIsHidden(hidden);
+    if (_marker)
+        _marker->setIsHidden(hidden);
     if (_directionLine)
         _directionLine->setIsHidden(hidden);
     [self setAisMarkersUpdateAfterCreated];
@@ -230,28 +285,20 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 
 - (void)setAisMarkersUpdateAfterCreated
 {
-    if (_activeMarker)
-        _activeMarker->setUpdateAfterCreated(true);
-    if (_restMarker)
-        _restMarker->setUpdateAfterCreated(true);
-    if (_lostMarker)
-        _lostMarker->setUpdateAfterCreated(true);
+    if (_marker)
+        _marker->setUpdateAfterCreated(true);
 }
 
 - (void)createAisRenderDataWithBaseOrder:(int)baseOrder
                        markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                    vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
 {
-    if (!markersCollection || !vectorLinesCollection)
+    if (!markersCollection)
         return;
 
-    [self clearAisRenderDataFromMarkersCollection:markersCollection vectorLinesCollection:vectorLinesCollection];
     _baseOrder = baseOrder;
 
-    sk_sp<SkImage> activeIcon = [self iconImageForState:0];
-    sk_sp<SkImage> restIcon = [self iconImageForState:1];
-    sk_sp<SkImage> lostIcon = [self iconImageForState:2];
-    if (!activeIcon || !restIcon || !lostIcon)
+    sk_sp<SkImage> icon = [self iconImageForState:_visualState];
+    if (!icon)
         return;
 
     OsmAnd::MapMarkerBuilder markerBuilder;
@@ -260,51 +307,19 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         .setGroupId([self renderGroupId])
         .setMarkerId(0)
         .setBaseOrder(baseOrder)
-        .setIsHidden(true)
+        .setIsHidden(false)
         .setUpdateAfterCreated(true)
         .setPosition(markerLocation)
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(activeIcon));
-    _activeMarker = markerBuilder.buildAndAddToCollection(markersCollection);
-
-    markerBuilder
-        .setMarkerId(1)
-        .clearOnMapSurfaceIcons()
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(restIcon));
-    _restMarker = markerBuilder.buildAndAddToCollection(markersCollection);
-
-    markerBuilder
-        .setMarkerId(2)
-        .clearOnMapSurfaceIcons()
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(lostIcon));
-    _lostMarker = markerBuilder.buildAndAddToCollection(markersCollection);
+        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(icon));
+    _marker = markerBuilder.buildAndAddToCollection(markersCollection);
     [self setAisMarkersUpdateAfterCreated];
 
-    QVector<OsmAnd::PointI> points;
-    points.push_back(markerLocation);
-    points.push_back(OsmAnd::PointI(markerLocation.x + 1, markerLocation.y + 1));
-
-    OsmAnd::VectorLineBuilder lineBuilder;
-    lineBuilder
-        .setLineId([self renderGroupId])
-        .setBaseOrder(baseOrder + 10)
-        .setIsHidden(true)
-        .setLineWidth(6.0)
-        .setApproximationEnabled(false)
-        .setFillColor(OsmAnd::FColorARGB(1.0f, 0.0f, 0.0f, 0.0f))
-        .setPoints(points);
-    _directionLine = lineBuilder.buildAndAddToCollection(vectorLinesCollection);
-
     _renderKey = [self currentRenderKey];
-    if (![self hasAisRenderData])
-    {
-        [self clearAisRenderDataFromMarkersCollection:markersCollection vectorLinesCollection:vectorLinesCollection];
-        return;
-    }
-    [self updateAisRenderDataWithMapView:nil plugin:nil];
 }
 
 - (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
-                                plugin:(AisTrackerPlugin *)plugin
+                            cpaWarning:(BOOL)cpaWarning
+                  vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
 {
     if (![self hasAisRenderData])
         return;
@@ -316,46 +331,50 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         return;
     }
 
-    CLLocation *location = OAAisObjectLocation(_object);
-    if (!location)
-    {
-        [self setAisRenderDataHidden:YES];
-        return;
-    }
-
     OsmAnd::PointI markerLocation = [self markerLocation];
-    if (![mapView isPositionVisible:markerLocation])
-    {
-        [self setAisRenderDataHidden:YES];
-        return;
-    }
-
-    NSInteger vesselLostTimeout = plugin ? [plugin vesselLostTimeoutInMinutes] : 0;
-    BOOL vesselAtRest = [_object isVesselAtRest];
-    BOOL lostTimeout = vesselLostTimeout > 0 && [_object isLostMaxAgeInMin:(int32_t)vesselLostTimeout] && !vesselAtRest;
+    BOOL vesselAtRest = _visualState == 1;
+    BOOL lostTimeout = _visualState == 2;
     CGFloat speedFactor = [self movementFactor];
-    BOOL drawDirectionLine = speedFactor > 0 && !lostTimeout && !vesselAtRest;
+    BOOL drawDirectionLine = (int)zoom >= kAisDirectionLineStartZoom
+        && speedFactor > 0
+        && !lostTimeout
+        && !vesselAtRest;
 
-    BOOL cpaWarning = plugin ? [plugin hasCpaWarningFor:_object] : NO;
     UIColor *uiColor = cpaWarning ? UIColor.redColor : [self colorForType:_object.objectClass];
     OsmAnd::ColorARGB iconColor = [uiColor toColorARGB];
-    _activeMarker->setOnSurfaceIconModulationColor(iconColor);
-    _restMarker->setOnSurfaceIconModulationColor(iconColor);
+    if (_visualState != 2)
+        _marker->setOnSurfaceIconModulationColor(iconColor);
+    _marker->setIsHidden(false);
 
-    _activeMarker->setIsHidden(vesselAtRest || lostTimeout);
-    _restMarker->setIsHidden(!vesselAtRest);
-    _lostMarker->setIsHidden(!lostTimeout);
-
-    float rotation = fmod([_object getVesselRotation] + 180.0, 360.0);
-    if (!vesselAtRest && [self needRotation])
-    {
-        _activeMarker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
-        _lostMarker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
-    }
-    _activeMarker->setPosition(markerLocation);
-    _restMarker->setPosition(markerLocation);
-    _lostMarker->setPosition(markerLocation);
+    BOOL rotateMarker = !vesselAtRest && [self needRotation];
+    float rotation = rotateMarker ? fmod([_object getVesselRotation] + 180.0, 360.0) : 0.0f;
+    _marker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
+    _marker->setPosition(markerLocation);
     [self setAisMarkersUpdateAfterCreated];
+
+    if (drawDirectionLine && !_directionLine && vectorLinesCollection)
+    {
+        QVector<OsmAnd::PointI> points;
+        points.push_back(markerLocation);
+        points.push_back(OsmAnd::PointI(markerLocation.x + 1, markerLocation.y + 1));
+
+        OsmAnd::VectorLineBuilder lineBuilder;
+        lineBuilder
+            .setLineId([self renderGroupId])
+            .setBaseOrder(_baseOrder + 10)
+            .setIsHidden(false)
+            .setLineWidth(6.0)
+            .setApproximationEnabled(false)
+            .setFillColor(OsmAnd::FColorARGB(1.0f, 0.0f, 0.0f, 0.0f))
+            .setPoints(points);
+        _directionLine = lineBuilder.buildAndAddToCollection(vectorLinesCollection);
+    }
+    else if (!drawDirectionLine && _directionLine && vectorLinesCollection)
+    {
+        _directionLine->setIsHidden(true);
+        vectorLinesCollection->removeLine(_directionLine);
+        _directionLine.reset();
+    }
 
     if (drawDirectionLine && _directionLine)
     {
@@ -374,9 +393,10 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         points.push_back(OsmAnd::PointI(markerLocation.x + startDx, markerLocation.y + startDy));
         points.push_back(OsmAnd::PointI(markerLocation.x + dx, markerLocation.y + dy));
         _directionLine->setPoints(points);
+        _directionLine->setIsHidden(false);
     }
-    if (_directionLine)
-        _directionLine->setIsHidden(!drawDirectionLine);
+    _cpaWarning = cpaWarning;
+    _renderedSurfaceZoom = mapView.zoom;
 }
 
 - (void)clearAisRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
@@ -384,25 +404,11 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 {
     if (markersCollection)
     {
-        markersCollection->removeMarkersByGroupId([self renderGroupId]);
-        if (_activeMarker)
-            markersCollection->removeMarker(_activeMarker);
-        if (_restMarker)
-            markersCollection->removeMarker(_restMarker);
-        if (_lostMarker)
-            markersCollection->removeMarker(_lostMarker);
+        if (_marker)
+            markersCollection->removeMarker(_marker);
     }
     if (vectorLinesCollection)
     {
-        const int lineId = [self renderGroupId];
-        for (const auto& line : vectorLinesCollection->getLines())
-        {
-            if (line && line->lineId == lineId)
-            {
-                line->setIsHidden(true);
-                vectorLinesCollection->removeLine(line);
-            }
-        }
         if (_directionLine)
         {
             _directionLine->setIsHidden(true);
@@ -410,11 +416,11 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         }
     }
 
-    _activeMarker.reset();
-    _restMarker.reset();
-    _lostMarker.reset();
+    _marker.reset();
     _directionLine.reset();
     _renderKey = nil;
+    _renderedVersion = 0;
+    _renderedSurfaceZoom = -1.0f;
 }
 
 - (sk_sp<SkImage>)iconImageForState:(NSInteger)state
@@ -438,6 +444,11 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     UIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
     CGFloat sizeFactor = iconSize / 72.0;
     CGRect bounds = CGRectInset(CGRectMake(0, 0, size.width, size.height), 6 * sizeFactor, 6 * sizeFactor);
+    if (state == 1)
+    {
+        CGFloat restInset = CGRectGetWidth(bounds) * (1.0 - kAisRestIconScale) * 0.5;
+        bounds = CGRectInset(bounds, restInset, restInset);
+    }
 
     UIColor *baseColor = state == 2
         ? [UIColor colorWithWhite:0.75 alpha:1.0]
@@ -573,16 +584,25 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 @interface OAAisTrackerLayer ()
 
 - (BOOL)shouldUpdateRenderDataForViewport;
+- (void)scheduleFrameRefresh;
 
 @end
 
 @implementation OAAisTrackerLayer
 {
     AisTrackerPlugin *_plugin;
+    NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *_objectRecords;
+    NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> *_spatialBuckets;
     NSMutableDictionary<NSNumber *, AisObjectDrawable *> *_objectDrawables;
+    NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *_renderedRecords;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
     BOOL _collectionsAdded;
+    BOOL _indexLoaded;
+    BOOL _dataDirty;
+    BOOL _refreshScheduled;
+    uint64_t _nextObjectVersion;
+    NSUInteger _peakDrawableCount;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
     BOOL _hasLastRenderViewport;
@@ -598,9 +618,13 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if (self)
     {
         _plugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
+        _objectRecords = [NSMutableDictionary dictionary];
+        _spatialBuckets = [NSMutableDictionary dictionary];
         _objectDrawables = [NSMutableDictionary dictionary];
+        _renderedRecords = [NSMutableDictionary dictionary];
         _textScale = [OAAisTrackerLayer currentTextScale];
         _displayDensityFactor = MAX(1.0, mapViewController.displayDensityFactor);
+        _nextObjectVersion = 1;
         _hasLastRenderViewport = NO;
         _lastRenderZoom = -1;
         _lastRenderSurfaceZoom = -1.0f;
@@ -621,10 +645,16 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     return _plugin;
 }
 
-- (void)ensureObjectDrawables
+- (void)ensureStorage
 {
+    if (!_objectRecords)
+        _objectRecords = [NSMutableDictionary dictionary];
+    if (!_spatialBuckets)
+        _spatialBuckets = [NSMutableDictionary dictionary];
     if (!_objectDrawables)
         _objectDrawables = [NSMutableDictionary dictionary];
+    if (!_renderedRecords)
+        _renderedRecords = [NSMutableDictionary dictionary];
 }
 
 + (CGFloat)currentTextScale
@@ -641,9 +671,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     return MAX(1.0, displayDensityFactor);
 }
 
-- (CGFloat)currentIconSize
+- (CGFloat)currentIconSizeInPoints
 {
-    return kAisBaseIconSize * _textScale * _displayDensityFactor;
+    return kAisBaseIconSize * _textScale;
 }
 
 - (BOOL)updateScaleCache
@@ -662,11 +692,10 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 - (void)initLayer
 {
     [super initLayer];
-    [self ensureObjectDrawables];
+    [self ensureStorage];
     [self resetCollections];
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
-
 }
 
 - (void)deinitLayer
@@ -683,12 +712,15 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 - (void)show
 {
     [self addCollectionsToRenderer];
-    [self reloadObjects];
+    if (!_indexLoaded)
+        [self rebuildObjectIndex];
+    _dataDirty = YES;
+    [self scheduleFrameRefresh];
 }
 
 - (void)hide
 {
-    [self removeCollectionsFromRenderer];
+    [self cleanupResources];
 }
 
 - (BOOL)updateLayer
@@ -707,11 +739,14 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if ([self isVisible])
     {
         [self addCollectionsToRenderer];
-        [self reloadObjects];
+        if (!_indexLoaded)
+            [self rebuildObjectIndex];
+        _dataDirty = YES;
+        [self scheduleFrameRefresh];
     }
     else
     {
-        [self removeCollectionsFromRenderer];
+        [self cleanupResources];
     }
     return YES;
 }
@@ -720,7 +755,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 {
     if (![self isVisible])
     {
-        if (_collectionsAdded || _objectDrawables.count > 0)
+        if (_collectionsAdded || _objectDrawables.count > 0 || _objectRecords.count > 0)
         {
             kAisImagesCache.clear();
             [self cleanupResources];
@@ -732,6 +767,18 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     [self updateRenderData];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    kAisImagesCache.clear();
+    [self cleanupResources];
+    if ([self isVisible])
+    {
+        [self addCollectionsToRenderer];
+        [self rebuildObjectIndex];
+        [self scheduleFrameRefresh];
+    }
+    [super didReceiveMemoryWarning];
+}
 
 - (void)resetCollections
 {
@@ -753,22 +800,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     }];
 }
 
-- (void)removeCollectionsFromRenderer
-{
-    if (!_collectionsAdded)
-        return;
-
-    [self.mapViewController runWithRenderSync:^{
-        if (_markersCollection)
-            [self.mapView removeKeyedSymbolsProvider:_markersCollection];
-        if (_vectorLinesCollection)
-            [self.mapView removeKeyedSymbolsProvider:_vectorLinesCollection];
-        _collectionsAdded = NO;
-    }];
-}
-
 - (void)cleanupResources
 {
+    kAisImagesCache.clear();
     [self.mapViewController runWithRenderSync:^{
         if (_markersCollection)
             _markersCollection->removeAllMarkers();
@@ -783,7 +817,13 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             _collectionsAdded = NO;
         }
     }];
+    [_objectRecords removeAllObjects];
+    [_spatialBuckets removeAllObjects];
     [_objectDrawables removeAllObjects];
+    [_renderedRecords removeAllObjects];
+    _indexLoaded = NO;
+    _dataDirty = NO;
+    _peakDrawableCount = 0;
     _hasLastRenderViewport = NO;
     _lastViewportRenderUpdateTime = 0;
     [self resetCollections];
@@ -795,70 +835,101 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if ([self isVisible])
     {
         [self addCollectionsToRenderer];
-        [self reloadObjects];
+        [self rebuildObjectIndex];
+        [self scheduleFrameRefresh];
     }
 }
 
-- (void)reloadObjects
+- (void)addRecordToSpatialIndex:(AisObjectRenderRecord *)record
 {
-    if (![self isVisible])
+    NSNumber *bucketKey = @(record.bucketKey);
+    NSMutableSet<NSNumber *> *bucket = _spatialBuckets[bucketKey];
+    if (!bucket)
+    {
+        bucket = [NSMutableSet set];
+        _spatialBuckets[bucketKey] = bucket;
+    }
+    [bucket addObject:@(record.object.mmsi)];
+}
+
+- (void)removeRecordFromSpatialIndex:(AisObjectRenderRecord *)record
+{
+    NSNumber *bucketKey = @(record.bucketKey);
+    NSMutableSet<NSNumber *> *bucket = _spatialBuckets[bucketKey];
+    [bucket removeObject:@(record.object.mmsi)];
+    if (bucket.count == 0)
+        [_spatialBuckets removeObjectForKey:bucketKey];
+}
+
+- (void)upsertObjectInIndex:(OASAisObject *)object
+{
+    if (!object.position)
         return;
 
-    [self.mapViewController runWithRenderSync:^{
-        [self reloadObjectsSync];
-    }];
+    [self ensureStorage];
+    NSNumber *key = @(object.mmsi);
+    AisObjectRenderRecord *record = _objectRecords[key];
+    if (!record)
+    {
+        record = [AisObjectRenderRecord new];
+        _objectRecords[key] = record;
+    }
+    else
+    {
+        [self removeRecordFromSpatialIndex:record];
+    }
+
+    record.object = object;
+    record.position31 = OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(object.position.longitude),
+                                       OsmAnd::Utilities::get31TileNumberY(object.position.latitude));
+    record.bucketKey = OAAisSpatialBucketKey(record.position31);
+    record.version = _nextObjectVersion++;
+    record.hasScreenPoint = NO;
+    record.emergency = OAAisIsEmergencyObject(object);
+    record.movable = [object isMovable];
+    record.lastUpdate = object.lastUpdate;
+    [self addRecordToSpatialIndex:record];
 }
 
-- (void)reloadObjectsSync
+- (void)removeObjectFromIndex:(OASAisObject *)object
 {
-    [self ensureObjectDrawables];
-    AisTrackerPlugin *plugin = [self plugin];
-    NSArray<OASAisObject *> *objects = [plugin getAisObjects];
-    NSMutableSet<NSNumber *> *visibleMmsi = [NSMutableSet set];
-    for (OASAisObject *object in objects)
+    NSNumber *key = @(object.mmsi);
+    AisObjectRenderRecord *record = _objectRecords[key];
+    if (record)
     {
-        if (!object.position)
-            continue;
-
-        NSNumber *key = @(object.mmsi);
-        [visibleMmsi addObject:key];
-        AisObjectDrawable *drawable = _objectDrawables[key];
-        if (!drawable)
-        {
-            drawable = [[AisObjectDrawable alloc] initWithObject:object textScale:_textScale displayDensityFactor:_displayDensityFactor];
-            _objectDrawables[key] = drawable;
-        }
-        [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
-        [drawable set:object];
-        BOOL renderKeyChanged = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
-        BOOL partialRenderData = [drawable hasAnyAisRenderData] && ![drawable hasAisRenderData];
-        if (renderKeyChanged || partialRenderData)
-            [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-        if (![drawable hasAisRenderData])
-            [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-        [drawable updateAisRenderDataWithMapView:self.mapView plugin:plugin];
+        [self removeRecordFromSpatialIndex:record];
+        [_objectRecords removeObjectForKey:key];
     }
+}
 
-    for (NSNumber *key in [_objectDrawables.allKeys copy])
+- (void)rebuildObjectIndex
+{
+    [self ensureStorage];
+    [_objectRecords removeAllObjects];
+    [_spatialBuckets removeAllObjects];
+    for (OASAisObject *object in [[self plugin] getAisObjects])
     {
-        if (![visibleMmsi containsObject:key])
-        {
-            [_objectDrawables[key] clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-            [_objectDrawables removeObjectForKey:key];
-        }
+        if (object.position)
+            [self upsertObjectInIndex:object];
     }
+    _indexLoaded = YES;
+    _dataDirty = YES;
 }
 
 - (void)onAisObjectReceived:(OASAisObject *)object
 {
-    if (![self isVisible] || !object.position)
+    if (![self isVisible] || !object)
         return;
     if ([AisLogger shared].isEnabled)
         [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", OAAisDebugSummary(object)]];
     [self addCollectionsToRenderer];
-    [self.mapViewController runWithRenderSync:^{
-        [self updateAisObjectSync:object];
-    }];
+    if (object.position)
+        [self upsertObjectInIndex:object];
+    else
+        [self removeObjectFromIndex:object];
+    _indexLoaded = YES;
+    _dataDirty = YES;
+    [self scheduleFrameRefresh];
 }
 
 - (void)onAisObjectRemoved:(OASAisObject *)object
@@ -866,44 +937,285 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if (!object)
         return;
 
-    [self.mapViewController runWithRenderSync:^{
-        NSNumber *key = @(object.mmsi);
-        AisObjectDrawable *drawable = _objectDrawables[key];
-        if ([AisLogger shared].isEnabled)
-            [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
-                                     drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, OAAisDebugSummary(object)]];
-        if (drawable)
-        {
-            [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-            [_objectDrawables removeObjectForKey:key];
-        }
-    }];
+    NSNumber *key = @(object.mmsi);
+    if ([AisLogger shared].isEnabled)
+        [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
+                                 _objectDrawables[key] ? @"yes" : @"no",
+                                 (unsigned long)_objectDrawables.count,
+                                 OAAisDebugSummary(object)]];
+    [self removeObjectFromIndex:object];
+    _dataDirty = YES;
+    [self scheduleFrameRefresh];
 }
 
-- (void)updateAisObjectSync:(OASAisObject *)object
+- (NSArray<AisObjectRenderRecord *> *)recordsInArea:(const OsmAnd::AreaI&)area
 {
-    [self ensureObjectDrawables];
-    NSNumber *key = @(object.mmsi);
-    AisObjectDrawable *drawable = _objectDrawables[key];
-    if (!drawable)
-    {
-        drawable = [[AisObjectDrawable alloc] initWithObject:object textScale:_textScale displayDensityFactor:_displayDensityFactor];
-        _objectDrawables[key] = drawable;
-    }
-    [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
-    [drawable set:object];
-    BOOL renderKeyChanged = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
-    BOOL partialRenderData = [drawable hasAnyAisRenderData] && ![drawable hasAisRenderData];
-    BOOL recreated = renderKeyChanged || partialRenderData;
-    if (recreated)
-        [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-    if (![drawable hasAisRenderData])
-        [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-    [drawable updateAisRenderDataWithMapView:self.mapView plugin:[self plugin]];
-    int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
+    if (area.width() <= 0 || area.height() <= 0)
+        return @[];
 
-    if ([AisLogger shared].isEnabled)
-        [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, OAAisDebugSummary(object)]];
+    const uint32_t shift = OsmAnd::ZoomLevel::MaxZoomLevel - kAisSpatialIndexZoom;
+    const uint32_t minX = ((uint32_t)area.left()) >> shift;
+    const uint32_t maxX = ((uint32_t)area.right()) >> shift;
+    const uint32_t minY = ((uint32_t)area.top()) >> shift;
+    const uint32_t maxY = ((uint32_t)area.bottom()) >> shift;
+    NSMutableArray<AisObjectRenderRecord *> *records = [NSMutableArray array];
+
+    for (uint32_t x = minX; x <= maxX; x++)
+    {
+        for (uint32_t y = minY; y <= maxY; y++)
+        {
+            NSNumber *bucketKey = @(((uint64_t)x << 32) | y);
+            for (NSNumber *mmsi in _spatialBuckets[bucketKey])
+            {
+                AisObjectRenderRecord *record = _objectRecords[mmsi];
+                if (record && area.contains(record.position31))
+                    [records addObject:record];
+            }
+        }
+    }
+    return records;
+}
+
+- (NSArray<AisObjectRenderRecord *> *)recordsInVisibleTilesAtZoom:(int)zoom
+{
+    const QVector<OsmAnd::TileId> visibleTiles = self.mapView.visibleTiles;
+    if (visibleTiles.isEmpty())
+        return @[];
+
+    const int sourceZoom = MAX(0, MIN(30, zoom));
+    const int64_t sourceTileCount = (int64_t)1 << sourceZoom;
+    NSMutableSet<NSNumber *> *bucketKeys = [NSMutableSet set];
+    for (const OsmAnd::TileId& tile : visibleTiles)
+    {
+        for (int offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            int64_t sourceX = ((int64_t)tile.x + offsetX) % sourceTileCount;
+            if (sourceX < 0)
+                sourceX += sourceTileCount;
+            for (int offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                const int64_t sourceY = (int64_t)tile.y + offsetY;
+                if (sourceY < 0 || sourceY >= sourceTileCount)
+                    continue;
+
+                if (sourceZoom >= kAisSpatialIndexZoom)
+                {
+                    const int shift = sourceZoom - kAisSpatialIndexZoom;
+                    const uint64_t bucketX = (uint64_t)sourceX >> shift;
+                    const uint64_t bucketY = (uint64_t)sourceY >> shift;
+                    [bucketKeys addObject:@((bucketX << 32) | bucketY)];
+                }
+                else
+                {
+                    const int shift = kAisSpatialIndexZoom - sourceZoom;
+                    const uint32_t firstX = (uint32_t)sourceX << shift;
+                    const uint32_t firstY = (uint32_t)sourceY << shift;
+                    const uint32_t childCount = 1u << shift;
+                    for (uint32_t childX = 0; childX < childCount; childX++)
+                    {
+                        for (uint32_t childY = 0; childY < childCount; childY++)
+                            [bucketKeys addObject:@(((uint64_t)(firstX + childX) << 32) | (firstY + childY))];
+                    }
+                }
+            }
+        }
+    }
+
+    NSMutableArray<AisObjectRenderRecord *> *records = [NSMutableArray array];
+    for (NSNumber *bucketKey in bucketKeys)
+    {
+        for (NSNumber *mmsi in _spatialBuckets[bucketKey])
+        {
+            AisObjectRenderRecord *record = _objectRecords[mmsi];
+            if (record)
+                [records addObject:record];
+        }
+    }
+    return records;
+}
+
+- (NSComparisonResult)compareRecord:(AisObjectRenderRecord *)first
+                           toRecord:(AisObjectRenderRecord *)second
+                           useCpa:(BOOL)useCpa
+{
+    if (useCpa && first.cpaWarning != second.cpaWarning)
+        return first.cpaWarning ? NSOrderedAscending : NSOrderedDescending;
+    if (first.emergency != second.emergency)
+        return first.emergency ? NSOrderedAscending : NSOrderedDescending;
+    BOOL firstMoving = first.visualState == 0 && first.movable;
+    BOOL secondMoving = second.visualState == 0 && second.movable;
+    if (firstMoving != secondMoving)
+        return firstMoving ? NSOrderedAscending : NSOrderedDescending;
+    if (first.lastUpdate != second.lastUpdate)
+        return first.lastUpdate > second.lastUpdate ? NSOrderedAscending : NSOrderedDescending;
+    BOOL firstRendered = _objectDrawables[@(first.object.mmsi)] != nil;
+    BOOL secondRendered = _objectDrawables[@(second.object.mmsi)] != nil;
+    if (firstRendered != secondRendered)
+        return firstRendered ? NSOrderedAscending : NSOrderedDescending;
+    if (first.object.mmsi == second.object.mmsi)
+        return NSOrderedSame;
+    return first.object.mmsi < second.object.mmsi ? NSOrderedAscending : NSOrderedDescending;
+}
+
+- (NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *)selectRecordsForVisibleArea:(const OsmAnd::AreaI&)visibleArea
+                                                                                     zoom:(int)zoom
+                                                                           candidateCount:(NSUInteger *)candidateCount
+                                                                           projectionCount:(NSUInteger *)projectionCount
+{
+    NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *selected = [NSMutableDictionary dictionary];
+    const int64_t visibleWidth = (int64_t)visibleArea.right() - visibleArea.left();
+    const int64_t visibleHeight = (int64_t)visibleArea.bottom() - visibleArea.top();
+    if (zoom < kAisTrackerStartZoom || visibleWidth <= 0 || visibleHeight <= 0)
+        return selected;
+
+    const int64_t marginX = (int64_t)std::round(visibleWidth * kAisViewportMarginFactor);
+    const int64_t marginY = (int64_t)std::round(visibleHeight * kAisViewportMarginFactor);
+    const int32_t expandedLeft = (int32_t)MAX((int64_t)0, (int64_t)visibleArea.left() - marginX);
+    const int32_t expandedTop = (int32_t)MAX((int64_t)0, (int64_t)visibleArea.top() - marginY);
+    const int32_t expandedRight = (int32_t)MIN((int64_t)INT32_MAX, (int64_t)visibleArea.right() + marginX);
+    const int32_t expandedBottom = (int32_t)MIN((int64_t)INT32_MAX, (int64_t)visibleArea.bottom() + marginY);
+    const OsmAnd::AreaI expandedArea(expandedTop, expandedLeft, expandedBottom, expandedRight);
+    const BOOL wrappedViewport = visibleWidth > INT32_MAX / 2;
+    NSArray<AisObjectRenderRecord *> *candidates = wrappedViewport
+        ? [self recordsInVisibleTilesAtZoom:zoom]
+        : [self recordsInArea:expandedArea];
+    if (candidateCount)
+        *candidateCount = candidates.count;
+
+    AisTrackerPlugin *plugin = [self plugin];
+    for (AisObjectRenderRecord *record in candidates)
+    {
+        record.visualState = OAAisVisualState(record.object, plugin);
+        record.cpaWarning = NO;
+        record.hasScreenPoint = NO;
+    }
+
+    const CGFloat footprint = [self currentIconSizeInPoints] + kAisCollisionPadding;
+    CGRect viewportBounds = self.mapView.bounds;
+    CGRect renderBounds = CGRectInset(viewportBounds,
+                                      -viewportBounds.size.width * kAisViewportMarginFactor,
+                                      -viewportBounds.size.height * kAisViewportMarginFactor);
+    const NSUInteger columns = MAX(1, (NSUInteger)ceil(renderBounds.size.width / footprint));
+    const NSUInteger rows = MAX(1, (NSUInteger)ceil(renderBounds.size.height / footprint));
+    const NSUInteger renderBudget = MIN((NSUInteger)kAisMaxRenderedObjects, columns * rows);
+    const double referenceTileSize = MAX(1u, self.mapViewController.referenceTileSizeRasterOrigInPixels);
+    const double tileSize31 = std::pow(2.0, OsmAnd::ZoomLevel::MaxZoomLevel - self.mapView.zoom);
+    const double coarseCellSize31 = MAX(1.0,
+        footprint * _displayDensityFactor * tileSize31 / referenceTileSize);
+    NSMutableDictionary<NSNumber *, NSMutableArray<AisObjectRenderRecord *> *> *coarseCells = [NSMutableDictionary dictionary];
+
+    for (AisObjectRenderRecord *record in candidates)
+    {
+        const int64_t cellX = (int64_t)floor(record.position31.x / coarseCellSize31);
+        const int64_t cellY = (int64_t)floor(record.position31.y / coarseCellSize31);
+        NSNumber *cellKey = @(((uint64_t)(uint32_t)cellX << 32) | (uint32_t)cellY);
+        NSMutableArray<AisObjectRenderRecord *> *cell = coarseCells[cellKey];
+        if (!cell)
+        {
+            cell = [NSMutableArray arrayWithCapacity:kAisCoarseCandidatesPerCell];
+            coarseCells[cellKey] = cell;
+        }
+        NSUInteger insertionIndex = cell.count;
+        for (NSUInteger index = 0; index < cell.count; index++)
+        {
+            if ([self compareRecord:record toRecord:cell[index] useCpa:NO] == NSOrderedAscending)
+            {
+                insertionIndex = index;
+                break;
+            }
+        }
+        if (insertionIndex < kAisCoarseCandidatesPerCell)
+            [cell insertObject:record atIndex:insertionIndex];
+        else if (cell.count < kAisCoarseCandidatesPerCell)
+            [cell addObject:record];
+        if (cell.count > kAisCoarseCandidatesPerCell)
+            [cell removeLastObject];
+    }
+
+    const NSUInteger projectionBudget = MIN((NSUInteger)kAisMaxProjectionCandidates,
+                                            MAX(renderBudget, renderBudget * kAisCoarseCandidatesPerCell));
+    NSMutableArray<AisObjectRenderRecord *> *shortlist = [NSMutableArray arrayWithCapacity:projectionBudget];
+    NSArray<NSNumber *> *orderedCellKeys = [coarseCells.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    for (NSUInteger rank = 0; rank < kAisCoarseCandidatesPerCell && shortlist.count < projectionBudget; rank++)
+    {
+        for (NSNumber *cellKey in orderedCellKeys)
+        {
+            NSArray<AisObjectRenderRecord *> *cell = coarseCells[cellKey];
+            if (rank < cell.count)
+                [shortlist addObject:cell[rank]];
+            if (shortlist.count >= projectionBudget)
+                break;
+        }
+    }
+
+    for (AisObjectRenderRecord *record in shortlist)
+        record.cpaWarning = [plugin hasCpaWarningFor:record.object];
+    [shortlist sortUsingComparator:^NSComparisonResult(AisObjectRenderRecord *first, AisObjectRenderRecord *second) {
+        return [self compareRecord:first toRecord:second useCpa:YES];
+    }];
+
+    std::unordered_map<int64_t, std::vector<size_t>> occupiedCells;
+    std::vector<CGRect> acceptedRects;
+    NSUInteger projected = 0;
+    for (AisObjectRenderRecord *record in shortlist)
+    {
+        if (selected.count >= renderBudget)
+            break;
+
+        CGPoint screenPoint;
+        OsmAnd::PointI position31 = record.position31;
+        projected++;
+        if (![self.mapView obtainScreenPointFromPosition:&position31 toScreen:&screenPoint checkOffScreen:YES]
+            || !CGRectContainsPoint(renderBounds, screenPoint))
+            continue;
+
+        CGRect iconRect = CGRectMake(screenPoint.x - footprint * 0.5,
+                                     screenPoint.y - footprint * 0.5,
+                                     footprint,
+                                     footprint);
+        const int minCellX = (int)floor((CGRectGetMinX(iconRect) - CGRectGetMinX(renderBounds)) / footprint);
+        const int maxCellX = (int)floor((CGRectGetMaxX(iconRect) - CGRectGetMinX(renderBounds)) / footprint);
+        const int minCellY = (int)floor((CGRectGetMinY(iconRect) - CGRectGetMinY(renderBounds)) / footprint);
+        const int maxCellY = (int)floor((CGRectGetMaxY(iconRect) - CGRectGetMinY(renderBounds)) / footprint);
+        BOOL overlaps = NO;
+        for (int cellX = minCellX; cellX <= maxCellX && !overlaps; cellX++)
+        {
+            for (int cellY = minCellY; cellY <= maxCellY && !overlaps; cellY++)
+            {
+                const int64_t cellKey = (int64_t)(((uint64_t)(uint32_t)cellX << 32) | (uint32_t)cellY);
+                const auto found = occupiedCells.find(cellKey);
+                if (found == occupiedCells.end())
+                    continue;
+                for (size_t rectIndex : found->second)
+                {
+                    if (CGRectIntersectsRect(iconRect, acceptedRects[rectIndex]))
+                    {
+                        overlaps = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if (overlaps)
+            continue;
+
+        const size_t rectIndex = acceptedRects.size();
+        acceptedRects.push_back(iconRect);
+        for (int cellX = minCellX; cellX <= maxCellX; cellX++)
+        {
+            for (int cellY = minCellY; cellY <= maxCellY; cellY++)
+            {
+                const int64_t cellKey = (int64_t)(((uint64_t)(uint32_t)cellX << 32) | (uint32_t)cellY);
+                occupiedCells[cellKey].push_back(rectIndex);
+            }
+        }
+        record.screenPoint = screenPoint;
+        record.hasScreenPoint = YES;
+        selected[@(record.object.mmsi)] = record;
+    }
+    if (projectionCount)
+        *projectionCount = projected;
+    return selected;
 }
 
 - (void)updateRenderData
@@ -911,9 +1223,120 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if (![self isVisible])
         return;
 
-    AisTrackerPlugin *plugin = [self plugin];
-    for (NSNumber *key in [_objectDrawables.allKeys copy])
-        [_objectDrawables[key] updateAisRenderDataWithMapView:self.mapView plugin:plugin];
+    const CFAbsoluteTime started = CFAbsoluteTimeGetCurrent();
+    const OsmAnd::AreaI visibleArea = [self.mapView getVisibleBBox31];
+    const int zoom = (int)self.mapView.zoomLevel;
+    const float surfaceZoom = self.mapView.zoom;
+    NSUInteger candidateCount = 0;
+    NSUInteger projectionCount = 0;
+    NSMutableDictionary<NSNumber *, AisObjectRenderRecord *> *desiredRecords =
+        [self selectRecordsForVisibleArea:visibleArea
+                                    zoom:zoom
+                          candidateCount:&candidateCount
+                         projectionCount:&projectionCount];
+    NSMutableSet<NSNumber *> *desiredKeys = [NSMutableSet setWithArray:desiredRecords.allKeys];
+    NSMutableArray<NSNumber *> *failedKeys = [NSMutableArray array];
+    [self.mapViewController runWithRenderSync:^{
+        for (NSNumber *key in [_objectDrawables.allKeys copy])
+        {
+            if (![desiredKeys containsObject:key])
+            {
+                [_objectDrawables[key] clearAisRenderDataFromMarkersCollection:_markersCollection
+                                                         vectorLinesCollection:_vectorLinesCollection];
+                [_objectDrawables removeObjectForKey:key];
+            }
+        }
+
+        for (NSNumber *key in desiredRecords)
+        {
+            AisObjectRenderRecord *record = desiredRecords[key];
+            AisObjectDrawable *drawable = _objectDrawables[key];
+            if (!drawable)
+            {
+                drawable = [[AisObjectDrawable alloc] initWithObject:record.object
+                                                           textScale:_textScale
+                                                displayDensityFactor:_displayDensityFactor];
+                _objectDrawables[key] = drawable;
+            }
+            [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
+            [drawable setObject:record.object visualState:record.visualState];
+            BOOL renderKeyChanged = [drawable hasAisRenderData]
+                && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
+            BOOL partialRenderData = [drawable hasAnyAisRenderData] && ![drawable hasAisRenderData];
+            BOOL recreated = renderKeyChanged || partialRenderData;
+            if (recreated)
+                [drawable clearAisRenderDataFromMarkersCollection:_markersCollection
+                                            vectorLinesCollection:_vectorLinesCollection];
+            if (![drawable hasAisRenderData])
+            {
+                [drawable createAisRenderDataWithBaseOrder:self.baseOrder
+                                         markersCollection:_markersCollection];
+                recreated = YES;
+            }
+            if (![drawable hasAisRenderData])
+            {
+                [_objectDrawables removeObjectForKey:key];
+                [failedKeys addObject:key];
+                continue;
+            }
+
+            BOOL needsUpdate = recreated
+                || drawable.renderedVersion != record.version
+                || drawable.cpaWarning != record.cpaWarning
+                || std::fabs(drawable.renderedSurfaceZoom - surfaceZoom) > kAisRenderZoomEpsilon;
+            if (needsUpdate)
+            {
+                [drawable updateAisRenderDataWithMapView:self.mapView
+                                              cpaWarning:record.cpaWarning
+                                    vectorLinesCollection:_vectorLinesCollection];
+                drawable.renderedVersion = record.version;
+            }
+        }
+    }];
+    [desiredRecords removeObjectsForKeys:failedKeys];
+
+    _renderedRecords = desiredRecords;
+    _peakDrawableCount = MAX(_peakDrawableCount, _objectDrawables.count);
+    _lastRenderBBox31 = visibleArea;
+    _lastRenderZoom = zoom;
+    _lastRenderSurfaceZoom = surfaceZoom;
+    _hasLastRenderViewport = YES;
+    _lastViewportRenderUpdateTime = [[NSDate date] timeIntervalSince1970];
+    _dataDirty = NO;
+
+    if ([AisLogger shared].isEnabled)
+    {
+        const NSUInteger markerCount = _markersCollection ? (NSUInteger)_markersCollection->getMarkers().size() : 0;
+        const int lineCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
+        const double elapsedMs = (CFAbsoluteTimeGetCurrent() - started) * 1000.0;
+        [[AisLogger shared] log:[NSString stringWithFormat:
+            @"render candidates=%lu projected=%lu admitted=%lu markers=%lu lines=%d peak=%lu time=%.1fms",
+            (unsigned long)candidateCount,
+            (unsigned long)projectionCount,
+            (unsigned long)desiredRecords.count,
+            (unsigned long)markerCount,
+            lineCount,
+            (unsigned long)_peakDrawableCount,
+            elapsedMs]];
+    }
+}
+
+- (void)scheduleFrameRefresh
+{
+    if (_refreshScheduled)
+        return;
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval delay = MAX(0, kAisViewportRenderUpdateInterval - (now - _lastViewportRenderUpdateTime));
+    _refreshScheduled = YES;
+    __weak OAAisTrackerLayer *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        OAAisTrackerLayer *strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        strongSelf->_refreshScheduled = NO;
+        if ([strongSelf isVisible])
+            [strongSelf.mapView invalidateFrame];
+    });
 }
 
 - (BOOL)shouldUpdateRenderDataForViewport
@@ -925,27 +1348,23 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     const OsmAnd::AreaI visibleBBox31 = [mapView getVisibleBBox31];
     const int zoom = (int)mapView.zoomLevel;
     const float surfaceZoom = mapView.zoom;
-    const BOOL surfaceZoomChanged = std::fabs(_lastRenderSurfaceZoom - surfaceZoom) > kAisRenderZoomEpsilon;
-    if (!_hasLastRenderViewport
+    const BOOL viewportChanged = !_hasLastRenderViewport
         || _lastRenderZoom != zoom
-        || surfaceZoomChanged
+        || std::fabs(_lastRenderSurfaceZoom - surfaceZoom) > kAisRenderZoomEpsilon
         || _lastRenderBBox31.left() != visibleBBox31.left()
         || _lastRenderBBox31.top() != visibleBBox31.top()
         || _lastRenderBBox31.right() != visibleBBox31.right()
-        || _lastRenderBBox31.bottom() != visibleBBox31.bottom())
-    {
-        NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-        if (!surfaceZoomChanged && _hasLastRenderViewport && now - _lastViewportRenderUpdateTime < kAisViewportRenderUpdateInterval)
-            return NO;
+        || _lastRenderBBox31.bottom() != visibleBBox31.bottom();
+    if (!_dataDirty && !viewportChanged)
+        return NO;
 
-        _lastRenderBBox31 = visibleBBox31;
-        _lastRenderZoom = zoom;
-        _lastRenderSurfaceZoom = surfaceZoom;
-        _hasLastRenderViewport = YES;
-        _lastViewportRenderUpdateTime = now;
-        return YES;
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    if (_hasLastRenderViewport && now - _lastViewportRenderUpdateTime < kAisViewportRenderUpdateInterval)
+    {
+        [self scheduleFrameRefresh];
+        return NO;
     }
-    return NO;
+    return YES;
 }
 
 #pragma mark - OAContextMenuProvider
@@ -1023,30 +1442,18 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     if (excludeUntouchableObjects || ![self isVisible] || (int)self.mapView.zoomLevel < kAisTrackerStartZoom)
         return;
 
-    CGPoint point = result.point;
-    int iconRadius = (int)ceil([self currentIconSize] * 0.55);
-    int radius = MAX(iconRadius, (int)([self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER));
-    QList<OsmAnd::PointI> touchPolygon31 =
-        [OANativeUtilities getPolygon31FromScreenAreaLeft:point.x - radius
-                                                      top:point.y - radius
-                                                    right:point.x + radius
-                                                   bottom:point.y + radius];
-    if (touchPolygon31.isEmpty())
-        return;
-
-    NSArray<OASAisObject *> *objects = [[self plugin] getAisObjects];
-    for (OASAisObject *object in objects)
+    CGFloat contentScale = MAX(1.0, self.mapView.contentScaleFactor);
+    CGPoint point = CGPointMake(result.point.x / contentScale, result.point.y / contentScale);
+    int iconRadius = (int)ceil([self currentIconSizeInPoints] * 0.55);
+    CGFloat density = MAX(1.0, _displayDensityFactor);
+    int touchRadius = (int)ceil([self getScaledTouchRadius:[self getDefaultRadiusPoi]]
+                                * TOUCH_RADIUS_MULTIPLIER / density);
+    int radius = MAX(iconRadius, touchRadius);
+    CGRect touchRect = CGRectMake(point.x - radius, point.y - radius, radius * 2.0, radius * 2.0);
+    for (AisObjectRenderRecord *record in _renderedRecords.allValues)
     {
-        CLLocation *location = OAAisObjectLocation(object);
-        if (!location)
-            continue;
-
-        if ([OANativeUtilities isPointInsidePolygonLat:location.coordinate.latitude
-                                                   lon:location.coordinate.longitude
-                                             polygon31:touchPolygon31])
-        {
-            [result collect:object provider:self];
-        }
+        if (record.hasScreenPoint && CGRectContainsPoint(touchRect, record.screenPoint))
+            [result collect:record.object provider:self];
     }
 }
 

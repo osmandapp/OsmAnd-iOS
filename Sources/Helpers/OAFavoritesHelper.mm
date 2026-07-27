@@ -433,12 +433,12 @@ static NSOperationQueue *_favQueue;
     BOOL res = NO;
     NSMutableArray<OAFavoriteItem *> *mutablePoints = [NSMutableArray arrayWithArray:_cachedFavoritePoints];
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> favoriteLocations;
 
     for (OAFavoriteGroup *importGroup in groups)
     {
         @autoreleasepool
         {
-            QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> favoriteLocations;
             OAFavoriteGroup *group = _flatGroups[importGroup.name];
             if (!group && importGroup.points.count > 0)
                 group = [self getOrCreateGroup:importGroup.points.firstObject];
@@ -479,14 +479,14 @@ static NSOperationQueue *_favQueue;
 
                 [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
             }
-            if (!favoriteLocations.isEmpty())
-                _favoritesCollection->addFavoriteLocations(favoriteLocations, importGroup == groups.lastObject);
         }
     }
 
     if (res)
     {
         _cachedFavoritePoints = [mutablePoints copy];
+        if (!favoriteLocations.isEmpty())
+            _favoritesCollection->addFavoriteLocations(favoriteLocations, true);
         [[OAAppSettings sharedManager] setShowFavorites:YES];
         if (sortAndSave)
         {

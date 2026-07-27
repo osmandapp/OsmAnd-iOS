@@ -137,6 +137,12 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     // not implemented
 }
 
++ (void)applyItems:(NSArray<__kindof OASettingsItem *> *)items
+{
+    for (OASettingsItem *item in items)
+        [item apply];
+}
+
 - (void) remove
 {
     // not implemented

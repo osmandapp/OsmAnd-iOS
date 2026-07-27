@@ -45,6 +45,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
 - (void) apply;
++ (void)applyItems:(NSArray<__kindof OASettingsItem *> *)items;
 - (void) remove;
 - (void) applyAdditionalParams:(NSString *)filePath;
 - (BOOL) applyFileName:(NSString *)fileName;

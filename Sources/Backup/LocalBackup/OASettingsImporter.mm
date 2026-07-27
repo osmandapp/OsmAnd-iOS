@@ -33,7 +33,6 @@
 #import "OAGlobalSettingsItem.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
-#import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
 #import "OAHistoryMarkersSettingsItem.h"
 #import "OADestination.h"
@@ -452,7 +451,6 @@
 @implementation OAImportAsyncTask
 {
     BOOL _importDone;
-    BOOL _favoritesBatchApplied;
     OASettingsHelper *_settingsHelper;
     OASettingsImporter *_importer;
 }
@@ -553,7 +551,6 @@
             _duplicates = [self getDuplicatesData:_selectedItems];
             return _selectedItems;
         case EOAImportTypeImport:
-            _favoritesBatchApplied = [self applyFavoritesItems:_items];
             return _items;
         case EOAImportTypeUndefined:
         case EOAImportTypeCollectAndRead:
@@ -563,27 +560,27 @@
     return nil;
 }
 
-- (BOOL)applyFavoritesItems:(NSArray<OASettingsItem *> *)items
+- (void)applySettingsItems:(NSArray<OASettingsItem *> *)items
 {
-    BOOL shouldSaveFavorites = NO;
-    NSMutableArray<OAFavoritesSettingsItem *> *favoritesItems = [NSMutableArray array];
+    NSAssert([NSThread isMainThread], @"Settings items must be applied on the main thread");
+
+    NSMutableArray<Class> *itemClasses = [NSMutableArray array];
+    NSMapTable<Class, NSMutableArray<OASettingsItem *> *> *itemsByClass = [NSMapTable strongToStrongObjectsMapTable];
     for (OASettingsItem *item in items)
     {
-        @autoreleasepool
+        Class itemClass = item.class;
+        NSMutableArray<OASettingsItem *> *classItems = [itemsByClass objectForKey:itemClass];
+        if (!classItems)
         {
-            if ([item isKindOfClass:OAFavoritesSettingsItem.class])
-            {
-                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *)item;
-                [favoritesItems addObject:favoritesItem];
-            }
+            classItems = [NSMutableArray array];
+            [itemsByClass setObject:classItems forKey:itemClass];
+            [itemClasses addObject:itemClass];
         }
+        [classItems addObject:item];
     }
-    if (favoritesItems.count > 0)
-        shouldSaveFavorites = [OAFavoritesSettingsItem applyItems:[favoritesItems copy] saveFavorites:NO];
-    if (shouldSaveFavorites)
-        [OAFavoritesSettingsItem finishBatchApply];
 
-    return favoritesItems.count > 0;
+    for (Class itemClass in itemClasses)
+        [itemClass applyItems:[[itemsByClass objectForKey:itemClass] copy]];
 }
 
 - (void) onPostExecute:(NSArray<OASettingsItem *> *)items
@@ -611,12 +608,7 @@
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
             {
-                for (OASettingsItem *item in items)
-                {
-                    if (![item isKindOfClass:OAFavoritesSettingsItem.class] || !_favoritesBatchApplied)
-                        [item apply];
-                }
-
+                [self applySettingsItems:items];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 task.onImportComplete = self.onImportComplete;

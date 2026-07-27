@@ -17,16 +17,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
+
+    weak var presenterViewController: UIViewController? {
+        get { bridge.presenterViewController }
+        set { bridge.presenterViewController = newValue }
+    }
+
     var onChangeRouteTypeBefore: ((Int) -> Void)? {
         didSet { bridge.onChangeRouteTypeBefore = onChangeRouteTypeBefore }
     }
     var onChangeRouteTypeAfter: ((Int) -> Void)? {
         didSet { bridge.onChangeRouteTypeAfter = onChangeRouteTypeAfter }
-    }
-
-    weak var presenterViewController: UIViewController? {
-        get { bridge.presenterViewController }
-        set { bridge.presenterViewController = newValue }
     }
 
     var hasChanges: Bool {
@@ -151,6 +152,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.exportedGpxFile
     }
 
+    var editTrackFolder: String? {
+        guard mode.isEditTrack, let filePath, !filePath.isEmpty else { return nil }
+        var path = filePath
+        if (path as NSString).isAbsolutePath, let gpxRoot = OsmAndApp.swiftInstance().gpxPath, path.hasPrefix(gpxRoot) {
+            path = String(path.dropFirst(gpxRoot.count))
+        }
+        let folder = (path as NSString).deletingLastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        return folder.isEmpty ? nil : folder
+    }
+
     private let bridge = OAPlanRouteEditingBridge()
     private let filePath: String?
     private var cachedBridgeSegments: [OAPlanRouteSegmentData]?
@@ -247,16 +258,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func clearAllPoints() {
         bridge.clearAllPoints()
-    }
-
-    var editTrackFolder: String? {
-        guard mode.isEditTrack, let filePath, !filePath.isEmpty else { return nil }
-        var path = filePath
-        if (path as NSString).isAbsolutePath, let gpxRoot = OsmAndApp.swiftInstance().gpxPath, path.hasPrefix(gpxRoot) {
-            path = String(path.dropFirst(gpxRoot.count))
-        }
-        let folder = (path as NSString).deletingLastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        return folder.isEmpty ? nil : folder
     }
 
     func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {

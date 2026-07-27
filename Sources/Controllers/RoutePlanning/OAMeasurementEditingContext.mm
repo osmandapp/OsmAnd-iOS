@@ -1298,8 +1298,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         progress = (int) (_calculatedPairs * pairProgress + (double) progress / pairs);
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.progressDelegate)
-           [self.progressDelegate updateProgress:progress];
+        if ([self.progressDelegate respondsToSelector:@selector(updateProgress:)])
+            [self.progressDelegate updateProgress:progress];
     });
 }
 

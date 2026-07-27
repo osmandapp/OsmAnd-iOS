@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
@@ -158,7 +159,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var cachedAnalysisData: PlanRouteAnalysisData?
     private var hasCachedAnalysisData = false
 
-    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil) {
+    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil) {
         self.mode = mode
         self.filePath = filePath
         bridge.onChange = { [weak self] in
@@ -173,6 +174,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
             bridge.openTrack(withFilePath: filePath)
         } else {
             bridge.prepareNewRoute()
+            if let initialPoint {
+                bridge.addPoint(at: initialPoint)
+            }
         }
     }
 

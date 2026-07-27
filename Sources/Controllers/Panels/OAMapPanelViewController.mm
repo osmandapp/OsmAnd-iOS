@@ -2406,9 +2406,10 @@ typedef enum
 
 - (void) targetOpenPlanRoute
 {
+    CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude);
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [PlanRouteScrollableViewController showNewRoute];
+    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
 }
 
 - (void) targetGoToPoint

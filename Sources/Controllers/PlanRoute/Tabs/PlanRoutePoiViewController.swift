@@ -355,7 +355,7 @@ extension PlanRoutePoiViewController: UITableViewDelegate {
 }
 
 extension PlanRoutePoiViewController {
-    func makePoiGroupMenu(for group: PlanRoutePoiGroup) -> UIMenu {
+    private func makePoiGroupMenu(for group: PlanRoutePoiGroup) -> UIMenu {
         let rename = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
             self?.onRenamePoiGroup(group)
         }
@@ -373,20 +373,20 @@ extension PlanRoutePoiViewController {
         ])
     }
 
-    func makePoiGroupSortMenu(_ group: PlanRoutePoiGroup) -> UIMenu {
+    private func makePoiGroupSortMenu(_ group: PlanRoutePoiGroup) -> UIMenu {
         let sortingOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.lastModified, group: group)])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.nameAZ, group: group), makePoiGroupSortAction(.nameZA, group: group)])
         let dateOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.newestDateFirst, group: group), makePoiGroupSortAction(.oldestDateFirst, group: group)])
         return UIMenu(title: localizedString("shared_string_sort"), image: .templateImageNamed("ic_custom_swap"), children: [sortingOptions, alphabeticalOptions, dateOptions])
     }
 
-    func makePoiGroupSortAction(_ sortMode: TrackFavoriteSortMode, group: PlanRoutePoiGroup) -> UIAction {
+    private func makePoiGroupSortAction(_ sortMode: TrackFavoriteSortMode, group: PlanRoutePoiGroup) -> UIAction {
         UIAction(title: sortMode.title, image: sortMode.image, state: sortMode == self.sortMode(for: group.name) ? .on : .off) { [weak self] _ in
             self?.onSortPoiGroup(group, sortMode: sortMode)
         }
     }
 
-    func onRenamePoiGroup(_ group: PlanRoutePoiGroup) {
+    private func onRenamePoiGroup(_ group: PlanRoutePoiGroup) {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = group.name
@@ -407,26 +407,26 @@ extension PlanRoutePoiViewController {
         present(alert, animated: true)
     }
 
-    func onChangePoiGroupAppearance(_ group: PlanRoutePoiGroup) {
+    private func onChangePoiGroupAppearance(_ group: PlanRoutePoiGroup) {
         (dataSource as? PlanRouteEditingContextDataProvider)?.openPoiGroupAppearance(group.name, from: self)
     }
 
-    func onSortPoiGroup(_ group: PlanRoutePoiGroup, sortMode: TrackFavoriteSortMode) {
+    private func onSortPoiGroup(_ group: PlanRoutePoiGroup, sortMode: TrackFavoriteSortMode) {
         sortModeByGroupName[group.name] = sortMode
         groups = sortedPoiGroups(dataSource?.poiGroups ?? groups)
         tableView.reloadData()
     }
 
-    func onDeletePoiGroup(_ group: PlanRoutePoiGroup) {
+    private func onDeletePoiGroup(_ group: PlanRoutePoiGroup) {
         sortModeByGroupName.removeValue(forKey: group.name)
         (dataSource as? PlanRouteEditingContextDataProvider)?.deletePoiGroup(group.name)
     }
 
-    func onEditPoiPoint(_ point: PlanRoutePoiPoint) {
+    private func onEditPoiPoint(_ point: PlanRoutePoiPoint) {
         (dataSource as? PlanRouteEditingContextDataProvider)?.openEditPoiPoint(point, from: self)
     }
     
-    func onDeletePoiPoint(_ point: PlanRoutePoiPoint) {
+    private func onDeletePoiPoint(_ point: PlanRoutePoiPoint) {
         (dataSource as? PlanRouteEditingContextDataProvider)?.deletePoiPoint(point)
     }
 }

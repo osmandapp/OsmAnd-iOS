@@ -489,6 +489,7 @@ private extension PlanRouteAnalyzeViewController {
     static let statusCardCornerRadius: CGFloat = 24
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
+    static let millisecondsPerHour: Int64 = 3_600_000
     static let routeAttributeNames = [
         roadClassAttributeName,
         steepnessAttributeName,
@@ -658,7 +659,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         bindChartGestures(chart)
 
         let gpxItem = dataItem(for: gpxFile)
-        let useHours = (analysis.timeSpan / 3_600_000) > 0
+        let useHours = (analysis.timeSpan / Self.millisecondsPerHour) > 0
         GpxUIHelper.setupElevationChart(chartView: chart,
                                         topOffset: 20,
                                         bottomOffset: 4,
@@ -775,32 +776,32 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             (fmtTime(data.timeInMotion), localizedString("moving_time"))
         ]
 
-        let row0 = makeGridRow(items: Array(items[0...2]))
-        row0.translatesAutoresizingMaskIntoConstraints = false
+        let topRow = makeGridRow(items: Array(items[0...2]))
+        topRow.translatesAutoresizingMaskIntoConstraints = false
 
         let hDivider = UIView()
         hDivider.backgroundColor = .customSeparator
         hDivider.translatesAutoresizingMaskIntoConstraints = false
 
-        let row1 = makeGridRow(items: Array(items[3...5]))
-        row1.translatesAutoresizingMaskIntoConstraints = false
+        let bottomRow = makeGridRow(items: Array(items[3...5]))
+        bottomRow.translatesAutoresizingMaskIntoConstraints = false
 
-        [row0, hDivider, row1].forEach { card.addSubview($0) }
+        [topRow, hDivider, bottomRow].forEach { card.addSubview($0) }
 
         NSLayoutConstraint.activate([
-            row0.topAnchor.constraint(equalTo: card.topAnchor),
-            row0.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            row0.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+            topRow.topAnchor.constraint(equalTo: card.topAnchor),
+            topRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            topRow.trailingAnchor.constraint(equalTo: card.trailingAnchor),
 
-            hDivider.topAnchor.constraint(equalTo: row0.bottomAnchor),
+            hDivider.topAnchor.constraint(equalTo: topRow.bottomAnchor),
             hDivider.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             hDivider.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
             hDivider.heightAnchor.constraint(equalToConstant: 0.5),
 
-            row1.topAnchor.constraint(equalTo: hDivider.bottomAnchor),
-            row1.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            row1.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            row1.bottomAnchor.constraint(equalTo: card.bottomAnchor)
+            bottomRow.topAnchor.constraint(equalTo: hDivider.bottomAnchor),
+            bottomRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            bottomRow.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+            bottomRow.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
         return cell
     }
@@ -1266,7 +1267,7 @@ private extension PlanRouteAnalyzeViewController {
         cachedRoadAttributeStatistics
     }
 
-    func scheduleSteepnessComputationIfNeeded(analysisData: PlanRouteAnalysisData?) {
+    private func scheduleSteepnessComputationIfNeeded(analysisData: PlanRouteAnalysisData?) {
         guard let analysisData,
               let gpxAnalysis = analysisData.gpxAnalysis,
               !analysisData.routeStatistics.contains(where: { $0.name == Self.steepnessAttributeName }) else {
@@ -1294,7 +1295,7 @@ private extension PlanRouteAnalyzeViewController {
         }
     }
 
-    func buildRoadAttributeStatistics(from analysisData: PlanRouteAnalysisData?) -> [OARouteStatistics] {
+    private func buildRoadAttributeStatistics(from analysisData: PlanRouteAnalysisData?) -> [OARouteStatistics] {
         guard let analysisData else {
             guard let fallback = buildImmediateTerrainFallbackSteepnessStatistics() else { return [] }
             return Self.routeAttributeNames.compactMap { $0 == Self.steepnessAttributeName ? fallback : nil }
@@ -1320,26 +1321,26 @@ private extension PlanRouteAnalyzeViewController {
         }
     }
 
-    func buildImmediateTerrainFallbackSteepnessStatistics() -> OARouteStatistics? {
+    private func buildImmediateTerrainFallbackSteepnessStatistics() -> OARouteStatistics? {
         guard allowsTerrainFallbackSteepness, !hasOverviewData else { return nil }
         let totalDistance = dataSource?.routeInfo.totalDistance ?? 0
         return buildFlatSteepnessStatistics(totalDistance: totalDistance)
     }
 
-    func roadAttributeStatistic(for section: Int) -> OARouteStatistics? {
+    private func roadAttributeStatistic(for section: Int) -> OARouteStatistics? {
         let statIndex = section - roadAttributesSectionStart
         guard statIndex >= 0, statIndex < roadAttributeStatistics.count else { return nil }
         return roadAttributeStatistics[statIndex]
     }
 
-    func roadAttributeTitle(for stat: OARouteStatistics) -> String {
+    private func roadAttributeTitle(for stat: OARouteStatistics) -> String {
         if stat.name == Self.roadClassAttributeName {
             return localizedString("routeInfo_road_types_name")
         }
         return OAUtilities.getLocalizedRouteInfoProperty(stat.name)
     }
 
-    func routeAttributeLegendItems(for stat: OARouteStatistics) -> [RoadAttributeLegendItem] {
+    private func routeAttributeLegendItems(for stat: OARouteStatistics) -> [RoadAttributeLegendItem] {
         var seen = Set<String>()
         return stat.elements.compactMap { element in
             let key = element.getUserPropertyName() ?? element.propertyName ?? ""
@@ -1351,7 +1352,7 @@ private extension PlanRouteAnalyzeViewController {
         }
     }
 
-    func localizedLegendTitle(for segment: OARouteSegmentAttribute, statName: String) -> String {
+    private func localizedLegendTitle(for segment: OARouteSegmentAttribute, statName: String) -> String {
         let propertyName = segment.getUserPropertyName() ?? segment.propertyName ?? ""
         if statName == Self.steepnessAttributeName, propertyName != "undefined" {
             return propertyName
@@ -1361,7 +1362,7 @@ private extension PlanRouteAnalyzeViewController {
         return localizedTitle == localizedKey ? propertyName : localizedTitle
     }
 
-    func compactLegendRows(items: [RoadAttributeLegendItem], maxWidth: CGFloat) -> [[RoadAttributeLegendItem]] {
+    private func compactLegendRows(items: [RoadAttributeLegendItem], maxWidth: CGFloat) -> [[RoadAttributeLegendItem]] {
         let font = UIFont.preferredFont(forTextStyle: .caption1)
         let itemSpacing: CGFloat = 16
         return items.reduce(into: [[RoadAttributeLegendItem]]()) { rows, item in
@@ -1379,21 +1380,21 @@ private extension PlanRouteAnalyzeViewController {
         }
     }
 
-    func compactLegendItemWidth(title: String, font: UIFont) -> CGFloat {
+    private func compactLegendItemWidth(title: String, font: UIFont) -> CGFloat {
         let dotWidth: CGFloat = 12
         let innerSpacing: CGFloat = 6
         let titleWidth = ceil((title as NSString).size(withAttributes: [.font: font]).width)
         return dotWidth + innerSpacing + titleWidth
     }
 
-    func rowWidth(for items: [RoadAttributeLegendItem], font: UIFont, itemSpacing: CGFloat) -> CGFloat {
+    private func rowWidth(for items: [RoadAttributeLegendItem], font: UIFont, itemSpacing: CGFloat) -> CGFloat {
         let widths = items.map { compactLegendItemWidth(title: $0.title, font: font) }
         let totalWidths = widths.reduce(0, +)
         let totalSpacing = CGFloat(max(items.count - 1, 0)) * itemSpacing
         return totalWidths + totalSpacing
     }
 
-    func toggleRoadAttribute(at index: Int) {
+    private func toggleRoadAttribute(at index: Int) {
         if expandedStatIndexes.contains(index) {
             expandedStatIndexes.remove(index)
         } else {
@@ -1404,7 +1405,7 @@ private extension PlanRouteAnalyzeViewController {
         tableView.reloadSections(section, with: .automatic)
     }
 
-    func buildSyntheticSteepnessStatistics(
+    private func buildSyntheticSteepnessStatistics(
         from analysis: GpxTrackAnalysis?,
         renderingCache: [String: (propertyName: String, color: Int)]? = nil
     ) -> OARouteStatistics? {
@@ -1507,14 +1508,14 @@ private extension PlanRouteAnalyzeViewController {
         )
     }
 
-    func buildFallbackSteepnessStatistics(from analysisData: PlanRouteAnalysisData) -> OARouteStatistics? {
+    private func buildFallbackSteepnessStatistics(from analysisData: PlanRouteAnalysisData) -> OARouteStatistics? {
         guard hasCompletedElevationCalculation || allowsTerrainFallbackSteepness, !hasOverviewData else { return nil }
 
         let totalDistance = max(Double(analysisData.gpxAnalysis?.totalDistance ?? 0), dataSource?.routeInfo.totalDistance ?? 0)
         return buildFlatSteepnessStatistics(totalDistance: totalDistance)
     }
 
-    func buildFlatSteepnessStatistics(totalDistance: Double) -> OARouteStatistics? {
+    private func buildFlatSteepnessStatistics(totalDistance: Double) -> OARouteStatistics? {
         guard totalDistance > 0 else { return nil }
 
         let classIndex = steepnessClassIndex(for: 0)
@@ -1549,7 +1550,7 @@ private extension PlanRouteAnalyzeViewController {
         )
     }
 
-    func elevationSamples(for analysis: GpxTrackAnalysis) -> [(x: Double, elevation: Double)] {
+    private func elevationSamples(for analysis: GpxTrackAnalysis) -> [(x: Double, elevation: Double)] {
         var samples: [(x: Double, elevation: Double)] = []
         var nextX = 0.0
         var previousElevation = -80000.0
@@ -1600,7 +1601,7 @@ private extension PlanRouteAnalyzeViewController {
         return samples
     }
 
-    func syntheticSteepnessSegments(totalDistance: Double, slopeClasses: [Int]) -> [SyntheticSteepnessSegment] {
+    private func syntheticSteepnessSegments(totalDistance: Double, slopeClasses: [Int]) -> [SyntheticSteepnessSegment] {
         guard !slopeClasses.isEmpty else { return [] }
 
         var segments = [SyntheticSteepnessSegment]()
@@ -1623,17 +1624,18 @@ private extension PlanRouteAnalyzeViewController {
         return segments
     }
 
-    func steepnessClassIndex(for slope: Int) -> Int {
+    private func steepnessClassIndex(for slope: Int) -> Int {
         for (index, boundaryValue) in Self.steepnessBoundaryValues.enumerated() where slope <= boundaryValue {
             return index
         }
         return Self.steepnessBoundaryValues.count - 1
     }
 
-    func steepnessClassTitles(minSlope: Int, maxSlope: Int) -> [String] {
+    private func steepnessClassTitles(minSlope: Int, maxSlope: Int) -> [String] {
         var titles = Array(repeating: "", count: Self.steepnessBoundaryValues.count)
-        titles[0] = slopeTitle(minSlope, Self.minDividedIncline)
-        titles[1] = slopeTitle(minSlope, Self.minDividedIncline)
+        let title = slopeTitle(minSlope, Self.minDividedIncline)
+        titles[0] = title
+        titles[1] = title
 
         guard Self.steepnessBoundaryValues.count > 3 else {
             titles[Self.steepnessBoundaryValues.count - 1] = slopeTitle(Self.maxDividedIncline, maxSlope)
@@ -1647,13 +1649,13 @@ private extension PlanRouteAnalyzeViewController {
         return titles
     }
 
-    func slopeTitle(_ from: Int, _ to: Int) -> String {
+    private func slopeTitle(_ from: Int, _ to: Int) -> String {
         let fromText = NumberFormatter.percentFormatter.string(from: (Double(from) / 100.0) as NSNumber) ?? "\(from)%"
         let toText = NumberFormatter.percentFormatter.string(from: (Double(to) / 100.0) as NSNumber) ?? "\(to)%"
         return "\(fromText) → \(toText)"
     }
 
-    func steepnessRendering(for boundaryClass: String) -> (propertyName: String, color: Int)? {
+    private func steepnessRendering(for boundaryClass: String) -> (propertyName: String, color: Int)? {
         guard let mapViewController = OARootViewController.instance()?.mapPanel?.mapViewController else {
             return nil
         }
@@ -1671,7 +1673,7 @@ private extension PlanRouteAnalyzeViewController {
 
 private extension PlanRouteAnalyzeViewController {
 
-    @objc func onRecalculateTapped() {
+    @objc private func onRecalculateTapped() {
         showGetElevationSheet()
     }
 }

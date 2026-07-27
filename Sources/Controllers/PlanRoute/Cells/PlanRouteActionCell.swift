@@ -9,9 +9,7 @@ import UIKit
 
 final class PlanRouteActionCell: UITableViewCell {
 
-    private static let leadingInset: CGFloat = 20
-    private static let trailingInset: CGFloat = 16
-    private static let verticalInset: CGFloat = 14
+    private static let contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 16)
 
     private let titleLabel = UILabel()
 
@@ -41,10 +39,10 @@ final class PlanRouteActionCell: UITableViewCell {
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.leadingInset),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.trailingInset),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.verticalInset),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.verticalInset)
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.contentInsets.leading),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.contentInsets.trailing),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.contentInsets.top),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.contentInsets.bottom)
         ])
     }
 }

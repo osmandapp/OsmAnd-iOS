@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
     private static let topPartHeight: CGFloat = 50
@@ -61,6 +62,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     @objc(showNewRoute) static func showNewRoute() {
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute))
+    }
+
+    @objc(showNewRouteWithInitialPoint:) static func showNewRoute(withInitialPoint initialPoint: CLLocationCoordinate2D) {
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute, initialPoint: initialPoint))
     }
 
     @objc(openExistingTrackWithFilePath:) static func openExistingTrack(filePath: String) {

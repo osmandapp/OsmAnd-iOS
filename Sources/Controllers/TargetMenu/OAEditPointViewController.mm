@@ -16,7 +16,6 @@
 #import "OATextInputFloatingCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAShapesTableViewCell.h"
-#import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesBridgeHelper.h"
@@ -64,7 +63,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, SelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -849,11 +848,11 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        OASelectFavoriteGroupViewController *selectGroupController;
+        SelectFavoriteGroupViewController *selectGroupController;
         if (_editPointType == EOAEditPointTypeFavorite)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
         else if (_editPointType == EOAEditPointTypeWaypoint)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
 
         selectGroupController.delegate = self;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectGroupController];
@@ -1157,7 +1156,7 @@
     [self showModalViewController:groupEditor];
 }
 
-#pragma mark - OASelectFavoriteGroupDelegate
+#pragma mark - SelectFavoriteGroupDelegate
 
 - (void)onGroupSelected:(NSString *)selectedGroupName
 {

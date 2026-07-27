@@ -161,7 +161,7 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
     }
 }
 
-extension FavoriteListViewController: OASelectFavoriteGroupDelegate {
+extension FavoriteListViewController: SelectFavoriteGroupDelegate {
     func onGroupSelected(_ selectedGroupName: String) {
         moveFavoriteItems(toGroupName: selectedGroupName)
     }

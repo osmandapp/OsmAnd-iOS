@@ -22,9 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onEditorUpdated;
 
 - (void)selectColorItem:(OASPaletteItemSolid *)colorItem;
-- (OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color;
+- (nullable OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color;
 - (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color;
-- (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem;
+- (nullable OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem;
 - (void)deleteColorItem:(OASPaletteItemSolid *)colorItem;
 
 @end

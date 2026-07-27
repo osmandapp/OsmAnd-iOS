@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *> *)collapsedSections;
 + (void)updateCollapsedSections:(NSArray<NSString *> *)sections;
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
++ (NSArray<NSString *> *)favoriteGroupNames;
++ (BOOL)hasFavoriteGroup:(NSString *)groupName;
++ (NSString *)displayNameForFavoriteGroup:(NSString *)groupName;
++ (NSInteger)pointsCountForFavoriteGroup:(NSString *)groupName;
++ (UIColor *)colorForFavoriteGroup:(NSString *)groupName;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
 + (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
 + (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;

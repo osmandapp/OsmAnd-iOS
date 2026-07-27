@@ -957,6 +957,7 @@
 		46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */; };
 		46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */; };
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
+		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
@@ -2635,7 +2636,6 @@
 		DA5A83D526C563A800F274C7 /* OATargetDestinationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DFD26C563A300F274C7 /* OATargetDestinationViewController.xib */; };
 		DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */; };
 		DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */; };
-		DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */; };
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
 		DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */; };
@@ -4775,6 +4775,7 @@
 		46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesBaseWidget.swift; sourceTree = "<group>"; };
 		46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesMapCenterWidget.swift; sourceTree = "<group>"; };
 		46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
+		4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavoriteGroupViewController.swift; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
 		780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_contour_lines@3x.png"; path = "Resources/Icons/img_empty_state_contour_lines@3x.png"; sourceTree = "<group>"; };
@@ -7165,8 +7166,6 @@
 		DA5A7DFD26C563A300F274C7 /* OATargetDestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetDestinationViewController.xib; sourceTree = "<group>"; };
 		DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReplaceFavoriteViewController.mm; sourceTree = "<group>"; };
 		DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
-		DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectFavoriteGroupViewController.mm; sourceTree = "<group>"; };
-		DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectFavoriteGroupViewController.h; sourceTree = "<group>"; };
 		DA5A7E0926C563A300F274C7 /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReplaceFavoriteViewController.h; sourceTree = "<group>"; };
 		DA5A7E0D26C563A300F274C7 /* OARouteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteBaseViewController.h; sourceTree = "<group>"; };
@@ -13201,8 +13200,7 @@
 				DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */,
 				DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */,
 				DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */,
-				DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */,
-				DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */,
+				4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";
@@ -18680,7 +18678,7 @@
 				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
 				C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */,
-				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
+				4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
 				FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */,

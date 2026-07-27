@@ -64,7 +64,6 @@
 #import "OACommonTypes.h"
 #import "OABaseCollectionHandler.h"
 #import "OAResourcesUISwiftHelper.h"
-#import "OASelectFavoriteGroupViewController.h"
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesBridgeHelper.h"
 #import "OADefaultFavorite.h"

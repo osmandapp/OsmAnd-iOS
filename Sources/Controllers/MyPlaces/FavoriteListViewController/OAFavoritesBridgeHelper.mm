@@ -93,6 +93,37 @@ static NSArray<NSString *> *collapsedSections = nil;
     return favoriteFoldersCache;
 }
 
++ (NSArray<NSString *> *)favoriteGroupNames
+{
+    NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+        [groupNames addObject:group.name];
+
+    return [groupNames copy];
+}
+
++ (BOOL)hasFavoriteGroup:(NSString *)groupName
+{
+    return [[OAFavoritesHelper getGroups].allKeys containsObject:groupName];
+}
+
++ (NSString *)displayNameForFavoriteGroup:(NSString *)groupName
+{
+    return [OAFavoriteGroup getDisplayName:groupName];
+}
+
++ (NSInteger)pointsCountForFavoriteGroup:(NSString *)groupName
+{
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByName:groupName];
+    return group.points.count;
+}
+
++ (UIColor *)colorForFavoriteGroup:(NSString *)groupName
+{
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByName:groupName];
+    return group.color ?: [OADefaultFavorite getDefaultColor];
+}
+
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName
 {
     NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:[self favoriteGroupWithName:groupName]];

@@ -51,6 +51,7 @@
 #import "OAGpxApproximationParams.h"
 #import "OALocationsHolder.h"
 #import "OAApplyGpxApproximationCommand.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @class OAMeasurementToolLayer, OAMeasurementEditingContext;
 
@@ -72,37 +73,6 @@
 + (NSArray<OASWptPt *> *)copyPointsFromGpxFile:(nullable OASGpxFile *)gpxFile;
 + (NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *)copyGroupsFromGpxFile:(nullable OASGpxFile *)gpxFile;
 + (OASGpxUtilitiesPointsGroup *)copyGroup:(OASGpxUtilitiesPointsGroup *)group;
-
-@end
-
-@interface OAPlanRoutePointData ()
-
-- (instancetype)initWithGlobalIndex:(NSInteger)globalIndex
-                               name:(NSString *)name
-               distanceFromPrevious:(double)distanceFromPrevious
-                            bearing:(double)bearing
-                            isStart:(BOOL)isStart
-                      isDestination:(BOOL)isDestination;
-
-@end
-
-@interface OAPlanRouteGroupData ()
-
-- (instancetype)initWithAppMode:(nullable OAApplicationMode *)appMode
-                       distance:(double)distance
-                lastGlobalIndex:(NSInteger)lastGlobalIndex
-                         points:(NSArray<OAPlanRoutePointData *> *)points;
-
-@end
-
-@interface OAPlanRouteSegmentData ()
-
-- (instancetype)initWithIndex:(NSInteger)index
-                       routed:(BOOL)routed
-                    multiMode:(BOOL)multiMode
-                   singleMode:(nullable OAApplicationMode *)singleMode
-                     distance:(double)distance
-                       groups:(NSArray<OAPlanRouteGroupData *> *)groups;
 
 @end
 
@@ -165,10 +135,10 @@
 - (void)refreshDraftGpx;
 - (void)clearDraftGpx;
 - (void)addDraftWaypointsToGpx:(OASGpxFile *)gpx;
-- (OAPlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
+- (PlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
                                      pointIndexes:(NSArray<NSNumber *> *)pointIndexes
                                         allPoints:(NSArray<OASWptPt *> *)allPoints;
-- (OAPlanRouteGroupData *)buildGroupWithKey:(NSString *)key
+- (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key
                                     indexes:(NSArray<NSNumber *> *)indexes
                                   allPoints:(NSArray<OASWptPt *> *)allPoints;
 - (BOOL)shouldShowRouteCalculationStateForContext:(nullable OAMeasurementEditingContext *)ctx;
@@ -285,74 +255,6 @@
 - (void)redo
 {
     [_bridge restorePoiStateSnapshot:_afterState];
-}
-
-@end
-
-@implementation OAPlanRoutePointData
-
-- (instancetype)initWithGlobalIndex:(NSInteger)globalIndex
-                               name:(NSString *)name
-               distanceFromPrevious:(double)distanceFromPrevious
-                            bearing:(double)bearing
-                            isStart:(BOOL)isStart
-                      isDestination:(BOOL)isDestination
-{
-    self = [super init];
-    if (self)
-    {
-        _globalIndex = globalIndex;
-        _name = [name copy];
-        _distanceFromPrevious = distanceFromPrevious;
-        _bearing = bearing;
-        _isStart = isStart;
-        _isDestination = isDestination;
-    }
-    return self;
-}
-
-@end
-
-@implementation OAPlanRouteGroupData
-
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
-                       distance:(double)distance
-                lastGlobalIndex:(NSInteger)lastGlobalIndex
-                         points:(NSArray<OAPlanRoutePointData *> *)points
-{
-    self = [super init];
-    if (self)
-    {
-        _appMode = appMode;
-        _distance = distance;
-        _lastGlobalIndex = lastGlobalIndex;
-        _points = points;
-    }
-    return self;
-}
-
-@end
-
-@implementation OAPlanRouteSegmentData
-
-- (instancetype)initWithIndex:(NSInteger)index
-                       routed:(BOOL)routed
-                    multiMode:(BOOL)multiMode
-                   singleMode:(OAApplicationMode *)singleMode
-                     distance:(double)distance
-                       groups:(NSArray<OAPlanRouteGroupData *> *)groups
-{
-    self = [super init];
-    if (self)
-    {
-        _index = index;
-        _routed = routed;
-        _multiMode = multiMode;
-        _singleMode = singleMode;
-        _distance = distance;
-        _groups = groups;
-    }
-    return self;
 }
 
 @end
@@ -633,7 +535,7 @@
     return fmod(degrees + 360.0, 360.0);
 }
 
-- (NSArray<OAPlanRouteSegmentData *> *)buildSegments
+- (NSArray<PlanRouteSegmentData *> *)buildSegments
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
@@ -642,7 +544,7 @@
     if (points.count == 0)
         return @[];
 
-    NSMutableArray<OAPlanRouteSegmentData *> *result = [NSMutableArray array];
+    NSMutableArray<PlanRouteSegmentData *> *result = [NSMutableArray array];
     NSMutableArray<NSNumber *> *segmentIndexes = [NSMutableArray array];
     NSInteger segmentNumber = 0;
     for (NSInteger i = 0; i < (NSInteger) points.count; i++)
@@ -1034,11 +936,11 @@
     return YES;
 }
 
-- (OAPlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
+- (PlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
                                      pointIndexes:(NSArray<NSNumber *> *)pointIndexes
                                         allPoints:(NSArray<OASWptPt *> *)allPoints
 {
-    NSMutableArray<OAPlanRouteGroupData *> *groups = [NSMutableArray array];
+    NSMutableArray<PlanRouteGroupData *> *groups = [NSMutableArray array];
     NSMutableArray<NSNumber *> *currentIndexes = [NSMutableArray array];
     NSString *currentKey = nil;
     BOOL hasCurrent = NO;
@@ -1064,19 +966,19 @@
     if (currentIndexes.count > 0)
         [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
 
-    NSMutableArray<OAPlanRouteGroupData *> *mergedGroups = [NSMutableArray array];
-    for (OAPlanRouteGroupData *group in groups)
+    NSMutableArray<PlanRouteGroupData *> *mergedGroups = [NSMutableArray array];
+    for (PlanRouteGroupData *group in groups)
     {
-        OAPlanRouteGroupData *last = mergedGroups.lastObject;
+        PlanRouteGroupData *last = mergedGroups.lastObject;
         BOOL sameMode = last != nil &&
             ((last.appMode == nil && group.appMode == nil) ||
              (last.appMode != nil && group.appMode != nil &&
               [last.appMode.stringKey isEqualToString:group.appMode.stringKey]));
         if (sameMode)
         {
-            NSMutableArray<OAPlanRoutePointData *> *combinedPoints = [NSMutableArray arrayWithArray:last.points];
+            NSMutableArray<PlanRoutePointData *> *combinedPoints = [NSMutableArray arrayWithArray:last.points];
             [combinedPoints addObjectsFromArray:group.points];
-            OAPlanRouteGroupData *merged = [[OAPlanRouteGroupData alloc] initWithAppMode:last.appMode
+            PlanRouteGroupData *merged = [[PlanRouteGroupData alloc] initWithAppMode:last.appMode
                                                                                 distance:last.distance + group.distance
                                                                          lastGlobalIndex:group.lastGlobalIndex
                                                                                   points:combinedPoints];
@@ -1092,7 +994,7 @@
     NSInteger routedCount = 0;
     OAApplicationMode *singleMode = nil;
     double distance = 0;
-    for (OAPlanRouteGroupData *group in groups)
+    for (PlanRouteGroupData *group in groups)
     {
         distance += group.distance;
         if (group.appMode != nil)
@@ -1104,7 +1006,7 @@
     }
     BOOL routed = routedCount > 0;
     BOOL multiMode = groups.count > 1;
-    return [[OAPlanRouteSegmentData alloc] initWithIndex:segmentIndex
+    return [[PlanRouteSegmentData alloc] initWithIndex:segmentIndex
                                                   routed:routed
                                                multiMode:multiMode
                                               singleMode:multiMode ? nil : singleMode
@@ -1112,7 +1014,7 @@
                                                   groups:groups];
 }
 
-- (OAPlanRouteGroupData *)buildGroupWithKey:(NSString *)key
+- (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key
                                     indexes:(NSArray<NSNumber *> *)indexes
                                   allPoints:(NSArray<OASWptPt *> *)allPoints
 {
@@ -1124,7 +1026,7 @@
             appMode = mode;
     }
 
-    NSMutableArray<OAPlanRoutePointData *> *points = [NSMutableArray array];
+    NSMutableArray<PlanRoutePointData *> *points = [NSMutableArray array];
     double groupDistance = 0;
     for (NSNumber *indexNumber in indexes)
     {
@@ -1145,7 +1047,7 @@
             }
         }
         NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (index + 1)];
-        [points addObject:[[OAPlanRoutePointData alloc] initWithGlobalIndex:index
+        [points addObject:[[PlanRoutePointData alloc] initWithGlobalIndex:index
                                                                        name:name
                                                        distanceFromPrevious:legDistance
                                                                     bearing:bearing
@@ -1153,7 +1055,7 @@
                                                               isDestination:isDestination]];
     }
     NSInteger lastIndex = indexes.lastObject.integerValue;
-    return [[OAPlanRouteGroupData alloc] initWithAppMode:appMode distance:groupDistance lastGlobalIndex:lastIndex points:points];
+    return [[PlanRouteGroupData alloc] initWithAppMode:appMode distance:groupDistance lastGlobalIndex:lastIndex points:points];
 }
 
 - (void)deletePointAtIndex:(NSInteger)index

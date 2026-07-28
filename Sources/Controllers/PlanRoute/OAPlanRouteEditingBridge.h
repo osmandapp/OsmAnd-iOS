@@ -12,38 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
-
-@interface OAPlanRoutePointData : NSObject
-
-@property (nonatomic, readonly) NSInteger globalIndex;
-@property (nonatomic, readonly, copy) NSString *name;
-@property (nonatomic, readonly) double distanceFromPrevious;
-@property (nonatomic, readonly) double bearing;
-@property (nonatomic, readonly) BOOL isStart;
-@property (nonatomic, readonly) BOOL isDestination;
-
-@end
-
-@interface OAPlanRouteGroupData : NSObject
-
-@property (nonatomic, readonly, nullable) OAApplicationMode *appMode;
-@property (nonatomic, readonly) double distance;
-@property (nonatomic, readonly) NSInteger lastGlobalIndex;
-@property (nonatomic, readonly) NSArray<OAPlanRoutePointData *> *points;
-
-@end
-
-@interface OAPlanRouteSegmentData : NSObject
-
-@property (nonatomic, readonly) NSInteger index;
-@property (nonatomic, readonly) BOOL routed;
-@property (nonatomic, readonly) BOOL multiMode;
-@property (nonatomic, readonly, nullable) OAApplicationMode *singleMode;
-@property (nonatomic, readonly) double distance;
-@property (nonatomic, readonly) NSArray<OAPlanRouteGroupData *> *groups;
-
-@end
+@class OAApplicationMode, PlanRoutePointData, PlanRouteGroupData, PlanRouteSegmentData, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
 
 @interface OAPlanRouteEditingBridge : NSObject
 
@@ -90,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)clearAllPoints;
 - (void)openAddPoiWithFilePath:(nullable NSString *)filePath presentingViewController:(UIViewController *)presentingViewController;
 
-- (NSArray<OAPlanRouteSegmentData *> *)buildSegments;
+- (NSArray<PlanRouteSegmentData *> *)buildSegments;
 - (NSArray<OAGpxWptItem *> *)buildPoiItems;
 - (NSArray<NSString *> *)buildPoiGroupNames;
 - (NSArray<OAApplicationMode *> *)availableModes;

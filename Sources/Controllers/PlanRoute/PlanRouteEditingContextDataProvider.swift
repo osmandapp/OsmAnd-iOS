@@ -164,7 +164,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     private let bridge = OAPlanRouteEditingBridge()
     private let filePath: String?
-    private var cachedBridgeSegments: [OAPlanRouteSegmentData]?
+    private var cachedBridgeSegments: [PlanRouteSegmentData]?
     private var cachedRouteInfo: PlanRouteInfo?
     private var cachedRouteSegments: [PlanRouteSegment]?
     private var cachedAnalysisData: PlanRouteAnalysisData?
@@ -385,7 +385,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.refreshRoute(for: mode)
     }
 
-    private func bridgeSegments() -> [OAPlanRouteSegmentData] {
+    private func bridgeSegments() -> [PlanRouteSegmentData] {
         if let cachedBridgeSegments {
             return cachedBridgeSegments
         }
@@ -406,7 +406,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         cachedRouteInfo = nil
     }
 
-    private func mapSegment(_ segment: OAPlanRouteSegmentData) -> PlanRouteSegment {
+    private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {
         PlanRouteSegment(index: segment.index,
                          groups: segment.groups.map { mapGroup($0) },
                          routed: segment.routed,
@@ -428,14 +428,14 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                                  item: item)
     }
 
-    private func mapGroup(_ group: OAPlanRouteGroupData) -> PlanRouteProfileGroup {
+    private func mapGroup(_ group: PlanRouteGroupData) -> PlanRouteProfileGroup {
         PlanRouteProfileGroup(appMode: group.appMode,
                               distance: group.distance,
                               lastPointIndex: group.lastGlobalIndex,
                               points: group.points.map { mapPoint($0) })
     }
 
-    private func mapPoint(_ point: OAPlanRoutePointData) -> PlanRoutePoint {
+    private func mapPoint(_ point: PlanRoutePointData) -> PlanRoutePoint {
         PlanRoutePoint(index: point.globalIndex,
                        name: point.name,
                        distanceFromPrevious: point.distanceFromPrevious,

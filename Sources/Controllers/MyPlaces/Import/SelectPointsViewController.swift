@@ -101,10 +101,6 @@ final class SelectPointsViewController: OABaseButtonsViewController {
 
     // MARK: - Table
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OASelectionCollapsableCell.reuseIdentifier)

@@ -63,10 +63,6 @@ final class MultipleValuesViewController: OABaseNavbarViewController {
         UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closePressed))
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
     override func registerCells() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.reuseIdentifier)
     }

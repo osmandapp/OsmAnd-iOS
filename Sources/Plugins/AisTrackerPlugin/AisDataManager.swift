@@ -10,6 +10,8 @@ import OsmAndShared
 
 @objcMembers
 final class AisDataManager: NSObject {
+    private static let objectLimit = 20000
+
     var objects: [AisObject] {
         Array(objectsByMmsi.values)
     }
@@ -62,6 +64,9 @@ final class AisDataManager: NSObject {
             objectsByMmsi[mmsi] = object
             event = "new"
         }
+        if objectsByMmsi.count > Self.objectLimit {
+            removeOldestObject()
+        }
         guard let storedObject = objectsByMmsi[Int(object.mmsi)], storedObject === object else { return }
         if AisLogger.shared.isEnabled {
             AisObjectHelper.debugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
@@ -80,6 +85,15 @@ final class AisDataManager: NSObject {
             }
             plugin.onAisObjectRemoved(object)
         }
+    }
+
+    private func removeOldestObject() {
+        guard let oldest = objectsByMmsi.values.min(by: { $0.lastUpdate < $1.lastUpdate }) else { return }
+        objectsByMmsi.removeValue(forKey: Int(oldest.mmsi))
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(oldest))")
+        }
+        plugin?.onAisObjectRemoved(oldest)
     }
 
     private func removeAllObjectsOnMemoryWarning() {

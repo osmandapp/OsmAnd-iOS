@@ -72,8 +72,6 @@ final class CarPlayService: NSObject {
         case .appTheme:
             if let lastContentStyle {
                 applyVehicleAppearance(with: lastContentStyle)
-            } else if let style = sessionConfiguration?.contentStyle {
-                applyVehicleAppearance(with: style)
             }
         }
     }

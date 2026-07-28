@@ -9,39 +9,31 @@
 import CarPlay
 
 @objcMembers
-final class CarPlayMapModeListController: NSObject {
+final class CarPlayMapModeListController: OABaseCarPlayInterfaceController {
     private static let modes: [DayNightMode] = [.appTheme, .day, .night, .auto]
-    
-    private let interfaceController: CPInterfaceController
     private let onModeChanged: (() -> Void)?
 
     init(interfaceController: CPInterfaceController, onModeChanged: (() -> Void)? = nil) {
-        self.interfaceController = interfaceController
         self.onModeChanged = onModeChanged
-        super.init()
+        super.init(interfaceController: interfaceController)
+    }
+
+    override func present() {
+        let template = CPListTemplate(title: localizedString("map_mode"), sections: [makeSection()])
+        safePush(template, animated: true)
     }
     
-    static func currentTitle() -> String {
+    func currentTitle() -> String {
         let mode = DayNightMode(rawValue: OAAppSettings.sharedManager().carPlayMapAppearanceMode.get()) ?? .appTheme
         return title(for: mode)
     }
     
-    static func title(for mode: DayNightMode) -> String {
+    private func title(for mode: DayNightMode) -> String {
         switch mode {
         case .appTheme:
             return localizedString("carplay_map_mode_vehicle_appearance")
         case .day, .night, .auto:
             return mode.title
-        }
-    }
-
-    func present() {
-        let template = CPListTemplate(title: localizedString("map_mode"), sections: [makeSection()])
-        
-        interfaceController.pushTemplate(template, animated: true) { completed, error in
-            if !completed || error != nil {
-                NSLog("[CarPlay] push Map mode failed: %@", String(describing: error))
-            }
         }
     }
 
@@ -53,7 +45,7 @@ final class CarPlayMapModeListController: NSObject {
             let checkmark: UIImage? = mode == current ? .icCheckmarkDefault : nil
             
             let item = CPListItem(
-                text: Self.title(for: mode),
+                text: title(for: mode),
                 detailText: nil,
                 image: mapModeIcon(for: mode),
                 accessoryImage: checkmark,
@@ -80,6 +72,6 @@ final class CarPlayMapModeListController: NSObject {
         OAAppSettings.sharedManager().carPlayMapAppearanceMode.set(mode.rawValue)
         CarPlayService.shared.applyCarPlayMapAppearance()
         onModeChanged?()
-        interfaceController.popTemplate(animated: true) { _, _ in }
+        safePopTemplate(animated: true, completion: nil)
     }
 }

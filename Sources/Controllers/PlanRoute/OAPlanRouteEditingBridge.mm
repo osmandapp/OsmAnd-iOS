@@ -61,28 +61,13 @@
 
 @end
 
-@interface OAPlanRoutePoiStateSnapshot : NSObject
-
-@property (nonatomic, readonly) NSArray<OASWptPt *> *gpxPoints;
-@property (nonatomic, readonly) NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *gpxGroups;
-@property (nonatomic, readonly) BOOL hasDraftGpx;
-@property (nonatomic, readonly) NSArray<OASWptPt *> *draftPoints;
-@property (nonatomic, readonly) NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *draftGroups;
-
-- (instancetype)initWithGpxFile:(nullable OASGpxFile *)gpxFile draftGpxFile:(nullable OASGpxFile *)draftGpxFile;
-+ (NSArray<OASWptPt *> *)copyPointsFromGpxFile:(nullable OASGpxFile *)gpxFile;
-+ (NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *)copyGroupsFromGpxFile:(nullable OASGpxFile *)gpxFile;
-+ (OASGpxUtilitiesPointsGroup *)copyGroup:(OASGpxUtilitiesPointsGroup *)group;
-
-@end
-
-@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAGpxWptEditingHandlerDelegate, OAEditWaypointsGroupOptionsDelegate, OAGpxApproximationHelperDelegate, OASnapToRoadProgressDelegate>
+@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAGpxWptEditingHandlerDelegate, OAEditWaypointsGroupOptionsDelegate, OAGpxApproximationHelperDelegate, OASnapToRoadProgressDelegate, PlanRoutePoiStateRestoring>
 {
     OASGpxFile *_draftGpxFile;
     NSString *_draftGpxPath;
     NSString *_editingPoiGroupName;
-    OAPlanRoutePoiStateSnapshot *_initialPoiStateSnapshot;
-    OAPlanRoutePoiStateSnapshot *_editingPoiStateSnapshot;
+    PlanRoutePoiStateSnapshot *_initialPoiStateSnapshot;
+    PlanRoutePoiStateSnapshot *_editingPoiStateSnapshot;
     double _distanceToMapCenter;
     double _bearingToMapCenter;
     OAGpxApproximationHelper *_elevationHelper;
@@ -117,11 +102,11 @@
 - (BOOL)performChangePoiGroupAppearanceForName:(NSString *)groupName color:(UIColor *)color;
 - (BOOL)performSaveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName;
 - (BOOL)performDeleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath;
-- (void)executePoiStateCommandWithBeforeState:(nullable OAPlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation;
-- (void)commitPoiStateCommandFromState:(nullable OAPlanRoutePoiStateSnapshot *)beforeState toState:(nullable OAPlanRoutePoiStateSnapshot *)afterState;
-- (OAPlanRoutePoiStateSnapshot *)makePoiStateSnapshot;
-- (void)restorePoiStateSnapshot:(OAPlanRoutePoiStateSnapshot *)state;
-- (void)applyPoiStateSnapshot:(OAPlanRoutePoiStateSnapshot *)state toGpxFile:(OASGpxFile *)gpxFile draft:(BOOL)draft;
+- (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation;
+- (void)commitPoiStateCommandFromState:(nullable PlanRoutePoiStateSnapshot *)beforeState toState:(nullable PlanRoutePoiStateSnapshot *)afterState;
+- (PlanRoutePoiStateSnapshot *)makePoiStateSnapshot;
+- (void)restorePoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state;
+- (void)applyPoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state toGpxFile:(OASGpxFile *)gpxFile draft:(BOOL)draft;
 - (void)syncActiveGpxPoiStateFromGpxFile:(OASGpxFile *)gpxFile;
 - (void)addPoiGroupsFromGpx:(nullable OASGpxFile *)sourceGpx toGpx:(OASGpxFile *)targetGpx;
 - (void)ensurePoiGroupForPoint:(OASWptPt *)point inGpx:(OASGpxFile *)gpxFile;
@@ -148,114 +133,6 @@
                       showOnMap:(BOOL)showOnMap
                      asCopy:(BOOL)asCopy
                      onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
-
-@end
-
-@interface OAPlanRoutePoiStateCommand : OAMeasurementModeCommand
-
-- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
-                       bridge:(OAPlanRouteEditingBridge *)bridge
-                  beforeState:(OAPlanRoutePoiStateSnapshot *)beforeState
-                   afterState:(OAPlanRoutePoiStateSnapshot *)afterState;
-
-@end
-
-@implementation OAPlanRoutePoiStateSnapshot
-
-- (instancetype)initWithGpxFile:(nullable OASGpxFile *)gpxFile draftGpxFile:(nullable OASGpxFile *)draftGpxFile
-{
-    self = [super init];
-    if (self)
-    {
-        _gpxPoints = [self.class copyPointsFromGpxFile:gpxFile];
-        _gpxGroups = [self.class copyGroupsFromGpxFile:gpxFile];
-        _hasDraftGpx = draftGpxFile != nil;
-        _draftPoints = [self.class copyPointsFromGpxFile:draftGpxFile];
-        _draftGroups = [self.class copyGroupsFromGpxFile:draftGpxFile];
-    }
-    
-    return self;
-}
-
-+ (NSArray<OASWptPt *> *)copyPointsFromGpxFile:(nullable OASGpxFile *)gpxFile
-{
-    if (gpxFile == nil)
-        return @[];
-    
-    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-    for (OASWptPt *point in gpxFile.getPointsList)
-    {
-        [points addObject:[[OASWptPt alloc] initWithWptPt:point]];
-    }
-    
-    return points;
-}
-
-+ (NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *)copyGroupsFromGpxFile:(nullable OASGpxFile *)gpxFile
-{
-    if (gpxFile == nil)
-        return @{};
-    
-    NSMutableDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *groups = [NSMutableDictionary dictionary];
-    [gpxFile.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString *key, OASGpxUtilitiesPointsGroup *group, BOOL *stop) {
-        groups[key] = [self copyGroup:group];
-    }];
-
-    return groups;
-}
-
-+ (OASGpxUtilitiesPointsGroup *)copyGroup:(OASGpxUtilitiesPointsGroup *)group
-{
-    OASGpxUtilitiesPointsGroup *copy = [[OASGpxUtilitiesPointsGroup alloc] initWithName:group.name iconName:group.iconName backgroundType:group.backgroundType color:group.color hidden:group.hidden];
-    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-    for (OASWptPt *point in group.points)
-    {
-        [points addObject:[[OASWptPt alloc] initWithWptPt:point]];
-    }
-    
-    copy.points = points;
-    return copy;
-}
-
-@end
-
-@implementation OAPlanRoutePoiStateCommand
-{
-    __weak OAPlanRouteEditingBridge *_bridge;
-    OAPlanRoutePoiStateSnapshot *_beforeState;
-    OAPlanRoutePoiStateSnapshot *_afterState;
-}
-
-- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
-                       bridge:(OAPlanRouteEditingBridge *)bridge
-                  beforeState:(OAPlanRoutePoiStateSnapshot *)beforeState
-                   afterState:(OAPlanRoutePoiStateSnapshot *)afterState
-{
-    self = [super initWithLayer:measurementLayer];
-    if (self)
-    {
-        _bridge = bridge;
-        _beforeState = beforeState;
-        _afterState = afterState;
-    }
-
-    return self;
-}
-
-- (BOOL)execute
-{
-    return _bridge != nil && _beforeState != nil && _afterState != nil;
-}
-
-- (void)undo
-{
-    [_bridge restorePoiStateSnapshot:_beforeState];
-}
-
-- (void)redo
-{
-    [_bridge restorePoiStateSnapshot:_afterState];
-}
 
 @end
 
@@ -508,7 +385,7 @@
     OAGpxData *gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
     ctx.gpxData = gpxData;
     ctx.progressDelegate = self;
-    _initialPoiStateSnapshot = gpxFile != nil ? [[OAPlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
+    _initialPoiStateSnapshot = gpxFile != nil ? [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
     _editingPoiStateSnapshot = nil;
     _isCalculatingRoute = NO;
 
@@ -1421,37 +1298,37 @@
     return activeGpxFile;
 }
 
-- (void)executePoiStateCommandWithBeforeState:(nullable OAPlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
+- (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || operation == nil)
         return;
     
-    OAPlanRoutePoiStateSnapshot *stateBefore = beforeState ?: [self makePoiStateSnapshot];
+    PlanRoutePoiStateSnapshot *stateBefore = beforeState ?: [self makePoiStateSnapshot];
     if (!operation())
         return;
     
     [self commitPoiStateCommandFromState:stateBefore toState:[self makePoiStateSnapshot]];
 }
 
-- (void)commitPoiStateCommandFromState:(nullable OAPlanRoutePoiStateSnapshot *)beforeState toState:(nullable OAPlanRoutePoiStateSnapshot *)afterState
+- (void)commitPoiStateCommandFromState:(nullable PlanRoutePoiStateSnapshot *)beforeState toState:(nullable PlanRoutePoiStateSnapshot *)afterState
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     OAMeasurementToolLayer *layer = [self layer];
     if (ctx == nil || layer == nil || beforeState == nil || afterState == nil)
         return;
     
-    [ctx.commandManager execute:[[OAPlanRoutePoiStateCommand alloc] initWithLayer:layer bridge:self beforeState:beforeState afterState:afterState]];
+    [ctx.commandManager execute:[[PlanRoutePoiStateCommand alloc] initWithLayer:layer restorer:self beforeState:beforeState afterState:afterState]];
     if (self.onChange)
         self.onChange();
 }
 
-- (OAPlanRoutePoiStateSnapshot *)makePoiStateSnapshot
+- (PlanRoutePoiStateSnapshot *)makePoiStateSnapshot
 {
-    return [[OAPlanRoutePoiStateSnapshot alloc] initWithGpxFile:[self editingContext].gpxData.gpxFile draftGpxFile:_draftGpxFile];
+    return [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:[self editingContext].gpxData.gpxFile draftGpxFile:_draftGpxFile];
 }
 
-- (void)restorePoiStateSnapshot:(OAPlanRoutePoiStateSnapshot *)state
+- (void)restorePoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state
 {
     if (state == nil)
         return;
@@ -1476,7 +1353,7 @@
     }
 }
 
-- (void)applyPoiStateSnapshot:(OAPlanRoutePoiStateSnapshot *)state toGpxFile:(OASGpxFile *)gpxFile draft:(BOOL)draft
+- (void)applyPoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state toGpxFile:(OASGpxFile *)gpxFile draft:(BOOL)draft
 {
     if (state == nil || gpxFile == nil)
         return;
@@ -1490,7 +1367,7 @@
     [gpxFile.pointsGroups removeAllObjects];
     NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *groups = draft ? state.draftGroups : state.gpxGroups;
     [groups enumerateKeysAndObjectsUsingBlock:^(NSString *key, OASGpxUtilitiesPointsGroup *group, BOOL *stop) {
-        gpxFile.pointsGroups[key] = [OAPlanRoutePoiStateSnapshot copyGroup:group];
+        gpxFile.pointsGroups[key] = [PlanRoutePoiStateSnapshot copyGroup:group];
     }];
     
     NSArray<OASWptPt *> *points = draft ? state.draftPoints : state.gpxPoints;
@@ -1508,7 +1385,7 @@
     NSString *path = [self absoluteGpxPathFromPath:gpxFile.path];
     OASGpxFile *activeGpxFile = [self activeGpxFileForPath:path fallbackPath:gpxFile.path];
     if (activeGpxFile != nil && activeGpxFile != gpxFile)
-        [self applyPoiStateSnapshot:[[OAPlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] toGpxFile:activeGpxFile draft:NO];
+        [self applyPoiStateSnapshot:[[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] toGpxFile:activeGpxFile draft:NO];
     
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1602,8 +1479,8 @@
 
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
-    OAPlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot ?: [self makePoiStateSnapshot];
-    OAPlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
+    PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot ?: [self makePoiStateSnapshot];
+    PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = nil;
@@ -1621,8 +1498,8 @@
     if (_editingPoiStateSnapshot == nil)
         return;
 
-    OAPlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot;
-    OAPlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
+    PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot;
+    PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = afterState;
@@ -1682,7 +1559,7 @@
     }
 
     NSString *originalGpxPath = [self absoluteGpxPathFromPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
-    OAPlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
+    PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
     NSString *trackName = fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route");
     OASGpxFile *gpx = [ctx exportGpx:trackName];
     if (gpx == nil)
@@ -1714,7 +1591,7 @@
                 OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:gpx];
                 ctx.gpxData = gpxData;
                 [ctx setChangesSaved];
-                _initialPoiStateSnapshot = [[OAPlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpx draftGpxFile:nil];
+                _initialPoiStateSnapshot = [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpx draftGpxFile:nil];
                 _editingPoiStateSnapshot = nil;
             }
             if (showOnMap)

@@ -232,6 +232,8 @@
 #import "OATripRecordingSettingsViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
+#import "OAMeasurementToolLayer.h"
+#import "OAMeasurementModeCommand.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingViewController.h"

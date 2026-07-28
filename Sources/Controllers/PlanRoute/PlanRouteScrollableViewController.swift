@@ -85,13 +85,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func loadView() {
-        let root = OAUserInteractionPassThroughView()
-        root.isScreenClickable = true
-        view = root
+        view = OAUserInteractionPassThroughView()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        (view as? OAUserInteractionPassThroughView)?.isScreenClickable = true
         setupSheet()
         setupTopPart()
         setupBottomToolbar()

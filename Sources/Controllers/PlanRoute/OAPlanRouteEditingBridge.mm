@@ -2180,23 +2180,7 @@
 
     if (useNearbyRoads)
     {
-        NSArray<NSArray<OASWptPt *> *> *segments = [ctx getPointsSegments:YES route:YES];
-        if (segments.count == 0)
-            return;
-
-        OAGpxApproximationParams *params = [[OAGpxApproximationParams alloc] init];
-        params.appMode = ctx.appMode ?: [OAApplicationMode DEFAULT];
-        params.distanceThreshold = 50;
-        [params setTrackPoints:segments];
-
-        _elevationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:params.locationsHolders
-                                                               initialAppMode:params.appMode
-                                                             initialThreshold:params.distanceThreshold];
-        _elevationHelper.delegate = self;
-        _isCalculatingElevation = YES;
-        if (self.onChange)
-            self.onChange();
-        [_elevationHelper calculateGpxApproximationAsync];
+        [self startNearbyRoadsApproximationForContext:ctx];
         return;
     }
 
@@ -2204,6 +2188,32 @@
     if (points.count == 0)
         return;
 
+    NSMutableArray<NSNumber *> *originalIndexMap = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *densifiedPoints = [self densifiedPointsFromPoints:points originalIndexMap:originalIndexMap];
+    [self fetchAndApplyAltitudesForDensifiedPoints:densifiedPoints points:points originalIndexMap:originalIndexMap context:ctx];
+}
+
+- (void)startNearbyRoadsApproximationForContext:(OAMeasurementEditingContext *)ctx
+{
+    NSArray<NSArray<OASWptPt *> *> *segments = [ctx getPointsSegments:YES route:YES];
+    if (segments.count == 0)
+        return;
+
+    OAGpxApproximationParams *params = [[OAGpxApproximationParams alloc] init];
+    params.appMode = ctx.appMode ?: [OAApplicationMode DEFAULT];
+    params.distanceThreshold = 50;
+    [params setTrackPoints:segments];
+    _elevationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:params.locationsHolders initialAppMode:params.appMode initialThreshold:params.distanceThreshold];
+    _elevationHelper.delegate = self;
+    _isCalculatingElevation = YES;
+    if (self.onChange)
+        self.onChange();
+
+    [_elevationHelper calculateGpxApproximationAsync];
+}
+
+- (NSMutableArray<OASWptPt *> *)densifiedPointsFromPoints:(NSArray<OASWptPt *> *)points originalIndexMap:(NSMutableArray<NSNumber *> *)originalIndexMap
+{
     double totalDistance = 0;
     OASWptPt *prevNonGap = nil;
     for (OASWptPt *pt in points)
@@ -2215,16 +2225,12 @@
     }
 
     double interval = MAX(100.0, totalDistance / 500.0);
-
     NSMutableArray<OASWptPt *> *densifiedPoints = [NSMutableArray array];
-    NSMutableArray<NSNumber *> *originalIndexMap = [NSMutableArray array];
-
     for (NSInteger i = 0; i < (NSInteger)points.count; i++)
     {
         OASWptPt *current = points[i];
         [originalIndexMap addObject:@(densifiedPoints.count)];
         [densifiedPoints addObject:[[OASWptPt alloc] initWithWptPt:current]];
-
         if (current.isGap || i + 1 >= (NSInteger)points.count)
             continue;
 
@@ -2244,9 +2250,19 @@
         }
     }
 
+    return densifiedPoints;
+}
+
+- (void)fetchAndApplyAltitudesForDensifiedPoints:(NSMutableArray<OASWptPt *> *)densifiedPoints
+                                          points:(NSArray<OASWptPt *> *)points
+                                originalIndexMap:(NSMutableArray<NSNumber *> *)originalIndexMap
+                                         context:(OAMeasurementEditingContext *)ctx
+{
     NSMutableArray<OASWptPt *> *updatedPoints = [NSMutableArray arrayWithCapacity:points.count];
     for (OASWptPt *point in points)
+    {
         [updatedPoints addObject:[[OASWptPt alloc] initWithWptPt:point]];
+    }
 
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     if (mapViewController == nil)
@@ -2254,7 +2270,6 @@
 
     NSUInteger requestId = _elevationCalculationRequestId;
     NSUInteger snapshotVersion = _pointsVersion;
-
     NSMutableArray<NSValue *> *coordinates = [NSMutableArray arrayWithCapacity:densifiedPoints.count];
     NSMutableArray<NSNumber *> *nonGapIndices = [NSMutableArray array];
     for (NSUInteger i = 0; i < densifiedPoints.count; i++)
@@ -2262,6 +2277,7 @@
         OASWptPt *point = densifiedPoints[i];
         if (point.isGap)
             continue;
+
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
         [coordinates addObject:[NSValue value:&coord withObjCType:@encode(CLLocationCoordinate2D)]];
         [nonGapIndices addObject:@(i)];
@@ -2273,42 +2289,62 @@
 
     [mapViewController fetchAltitudesForCoordinates:coordinates callback:^(NSArray<NSNumber *> *heights) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (requestId != self->_elevationCalculationRequestId)
-                return;
-
-            BOOL hasUpdatedElevations = NO;
-            for (NSUInteger j = 0; j < nonGapIndices.count && j < heights.count; j++)
-            {
-                float height = heights[j].floatValue;
-                if (height > kMinAltitudeValue)
-                {
-                    densifiedPoints[nonGapIndices[j].unsignedIntegerValue].ele = height;
-                    hasUpdatedElevations = YES;
-                }
-            }
-
-            if (hasUpdatedElevations)
-            {
-                for (NSInteger i = 0; i < (NSInteger)originalIndexMap.count; i++)
-                {
-                    NSInteger dIdx = originalIndexMap[i].integerValue;
-                    if (dIdx < (NSInteger)densifiedPoints.count)
-                        updatedPoints[i].ele = densifiedPoints[dIdx].ele;
-                }
-                [ctx setPoints:updatedPoints];
-                [[self layer] updateLayer];
-
-                if (snapshotVersion == self->_pointsVersion)
-                {
-                    self->_terrainElevationGpxFile = [self buildTerrainElevationGpx:densifiedPoints];
-                    self->_terrainElevationVersion = self->_pointsVersion;
-                }
-            }
-            self->_isCalculatingElevation = NO;
-            if (self.onChange)
-                self.onChange();
+            [self handleFetchedAltitudes:heights
+                               requestId:requestId
+                         snapshotVersion:snapshotVersion
+                        densifiedPoints:densifiedPoints
+                           updatedPoints:updatedPoints
+                        originalIndexMap:originalIndexMap
+                           nonGapIndices:nonGapIndices
+                                 context:ctx];
         });
     }];
+}
+
+- (void)handleFetchedAltitudes:(NSArray<NSNumber *> *)heights
+                     requestId:(NSUInteger)requestId
+               snapshotVersion:(NSUInteger)snapshotVersion
+               densifiedPoints:(NSMutableArray<OASWptPt *> *)densifiedPoints
+                 updatedPoints:(NSMutableArray<OASWptPt *> *)updatedPoints
+              originalIndexMap:(NSMutableArray<NSNumber *> *)originalIndexMap
+                 nonGapIndices:(NSMutableArray<NSNumber *> *)nonGapIndices
+                       context:(OAMeasurementEditingContext *)ctx
+{
+    if (requestId != self->_elevationCalculationRequestId)
+        return;
+    
+    BOOL hasUpdatedElevations = NO;
+    for (NSUInteger j = 0; j < nonGapIndices.count && j < heights.count; j++)
+    {
+        float height = heights[j].floatValue;
+        if (height > kMinAltitudeValue)
+        {
+            densifiedPoints[nonGapIndices[j].unsignedIntegerValue].ele = height;
+            hasUpdatedElevations = YES;
+        }
+    }
+    
+    if (hasUpdatedElevations)
+    {
+        for (NSInteger i = 0; i < (NSInteger)originalIndexMap.count; i++)
+        {
+            NSInteger dIdx = originalIndexMap[i].integerValue;
+            if (dIdx < (NSInteger)densifiedPoints.count)
+                updatedPoints[i].ele = densifiedPoints[dIdx].ele;
+        }
+        
+        [ctx setPoints:updatedPoints];
+        [[self layer] updateLayer];
+        if (snapshotVersion == self->_pointsVersion)
+        {
+            self->_terrainElevationGpxFile = [self buildTerrainElevationGpx:densifiedPoints];
+            self->_terrainElevationVersion = self->_pointsVersion;
+        }
+    }
+    
+    self->_isCalculatingElevation = NO;
+    if (self.onChange)
+        self.onChange();
 }
 
 - (void)cancelElevationCalculation

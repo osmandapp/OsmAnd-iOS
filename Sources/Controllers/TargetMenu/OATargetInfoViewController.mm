@@ -1513,12 +1513,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         if (index != NSNotFound)
         {
-            UIView *hostView = OARootViewController.instance.view;
-            MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:hostView];
-            progressHUD.removeFromSuperViewOnHide = YES;
-            progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
-            [hostView addSubview:progressHUD];
-            [hostView bringSubviewToFront:progressHUD];
+            MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
             
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
             [OAWikiArticleHelper showWikiArticle:@[location]
@@ -1534,6 +1529,17 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     {
         [OAUtilities callUrl:url];
     }
+}
+
+- (MBProgressHUD *)createWikiArticleSearchHUD
+{
+    UIView *hostView = OARootViewController.instance.view;
+    MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:hostView];
+    progressHUD.removeFromSuperViewOnHide = YES;
+    progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
+    [hostView addSubview:progressHUD];
+    [hostView bringSubviewToFront:progressHUD];
+    return progressHUD;
 }
 
 #pragma mark - UITableViewDataSource
@@ -1885,12 +1891,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                UIView *hostView = OARootViewController.instance.view;
-                MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:hostView];
-                progressHUD.removeFromSuperViewOnHide = YES;
-                progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
-                [hostView addSubview:progressHUD];
-                [hostView bringSubviewToFront:progressHUD];
+                MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
                 
                 CLLocation *location = [[CLLocation alloc] initWithLatitude:self.location.latitude
                                                                   longitude:self.location.longitude];

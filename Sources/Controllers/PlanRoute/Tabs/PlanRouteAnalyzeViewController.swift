@@ -153,6 +153,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
+        tableView.register(StatusCardCell.self, forCellReuseIdentifier: StatusCardCell.reuseIdentifier)
+        tableView.register(AnalyzeCardCell.self, forCellReuseIdentifier: AnalyzeCardCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -485,8 +487,6 @@ private extension PlanRouteAnalyzeViewController {
     static let statsSection = 1
     static let roadAttributesBase = 2
     static let cardHorizontalInset: CGFloat = 16
-    static let cardCornerRadius: CGFloat = 24
-    static let statusCardCornerRadius: CGFloat = 24
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
@@ -544,100 +544,37 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch currentState {
         case .noData:
-            return makeNoElevationStatusCardCell()
+            return makeNoElevationStatusCardCell(tableView, indexPath)
         case .elevationCalculating:
-            return makeElevationCalculatingStatusCardCell()
+            return makeElevationCalculatingStatusCardCell(tableView, indexPath)
         case .routeCalculating:
-            let routeCalculatingTexts = routeCalculatingTexts()
-            return makeStatusCardCell(
-                icon: nil,
-                iconTint: .clear,
-                title: routeCalculatingTexts.title,
-                description: routeCalculatingTexts.description,
-                actionTitle: nil,
-                isSpinner: true,
-                action: nil
-            )
+            return makeRouteCalculatingStatusCardCell(tableView, indexPath)
         case .hasData:
             if hasOverviewData {
                 switch indexPath.section {
-                case Self.graphSection:  return makeChartSectionCell()
-                case Self.statsSection:  return makeStatsSectionCell()
+                case Self.graphSection:  return makeChartSectionCell(tableView, indexPath)
+                case Self.statsSection:  return makeStatsSectionCell(tableView, indexPath)
                 default:
                     let statIndex = indexPath.section - roadAttributesSectionStart
-                    return makeRoadAttrCard(statIndex: statIndex)
+                    return makeRoadAttrCard(tableView, indexPath, statIndex: statIndex)
                 }
             } else if indexPath.section == 0 {
-                return makeNoElevationStatusCardCell()
+                return makeNoElevationStatusCardCell(tableView, indexPath)
             } else {
                 let statIndex = indexPath.section - roadAttributesSectionStart
-                return makeRoadAttrCard(statIndex: statIndex)
+                return makeRoadAttrCard(tableView, indexPath, statIndex: statIndex)
             }
         }
     }
 
-    // MARK: - Card helper
-
-    private func makeCardView() -> UIView {
-        makeCardView(cornerRadius: Self.cardCornerRadius)
-    }
-
-    private func makeCardView(cornerRadius: CGFloat) -> UIView {
-        let card = UIView()
-        card.backgroundColor = .groupBg
-        card.layer.cornerRadius = cornerRadius
-        card.clipsToBounds = true
-        return card
-    }
-
-    private func wrapInCard(_ content: UIView, insets: UIEdgeInsets = .zero) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-
-        let card = makeCardView()
-        card.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(card)
-        NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-            card.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.cardHorizontalInset),
-            card.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.cardHorizontalInset),
-            card.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-        ])
-
-        content.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(content)
-        NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: card.topAnchor, constant: insets.top),
-            content.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: insets.left),
-            content.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -insets.right),
-            content.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -insets.bottom)
-        ])
-        return cell
-    }
-
     // MARK: - Chart section card
 
-    private func makeChartSectionCell() -> UITableViewCell {
+    private func makeChartSectionCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         guard let data = dataSource?.analysisData,
               let analysis = data.gpxAnalysis,
-              let gpxFile = data.gpxFile else { return UITableViewCell() }
-
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-
-        let card = makeCardView()
-        card.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(card)
-        NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-            card.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.cardHorizontalInset),
-            card.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.cardHorizontalInset),
-            card.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-        ])
+              let gpxFile = data.gpxFile,
+              let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
+        let card = cell.cardView
 
         let yBtn = axisPickerButton(title: yAxisButtonTitle()) { [weak self] in
             self?.showAxisPicker(startingOnYAxis: true)
@@ -741,23 +678,10 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     // MARK: - Stats section card
 
-    private func makeStatsSectionCell() -> UITableViewCell {
-        guard let data = dataSource?.analysisData else { return UITableViewCell() }
-
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-
-        let card = makeCardView(cornerRadius: Self.statusCardCornerRadius)
-        card.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(card)
-        NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-            card.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.cardHorizontalInset),
-            card.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.cardHorizontalInset),
-            card.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-        ])
+    private func makeStatsSectionCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
+        guard let data = dataSource?.analysisData,
+              let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
+        let card = cell.cardView
 
         let altRange: String
         if let min = data.altMin, let max = data.altMax {
@@ -867,24 +791,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     // MARK: - Road attribute card
 
-    private func makeRoadAttrCard(statIndex: Int) -> UITableViewCell {
+    private func makeRoadAttrCard(_ tableView: UITableView, _ indexPath: IndexPath, statIndex: Int) -> UITableViewCell {
         guard statIndex < roadAttributeStatistics.count,
-              let analysis = dataSource?.analysisData?.gpxAnalysis else { return UITableViewCell() }
-
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-
-        let card = makeCardView()
-        card.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(card)
-        NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-            card.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.cardHorizontalInset),
-            card.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.cardHorizontalInset),
-            card.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-        ])
+              let analysis = dataSource?.analysisData?.gpxAnalysis,
+              let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
+        let card = cell.cardView
 
         let stat = roadAttributeStatistics[statIndex]
         let isExpanded = expandedStatIndexes.contains(statIndex)
@@ -1020,35 +931,35 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     // MARK: - Status card cell (no data / calculating)
 
-    private func makeNoElevationStatusCardCell() -> UITableViewCell {
-        makeStatusCardCell(
+    private func makeNoElevationStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
+        cell.configure(
             icon: .icCustomDesert,
             iconTint: .iconColorDefault,
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
-            action: {
-                [weak self] in self?.showGetElevationSheet()
-            }
+            action: { [weak self] in self?.showGetElevationSheet() }
         )
+        return cell
     }
 
-    private func makeElevationCalculatingStatusCardCell() -> UITableViewCell {
+    private func makeElevationCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
         let calcDescKey = calculatingWithNearbyRoads
             ? "calculating_elevation_nearby_roads_description"
             : "calculating_elevation_terrain_maps_description"
-        return makeStatusCardCell(
+        cell.configure(
             icon: nil,
             iconTint: .clear,
             title: localizedString("route_is_being_calculated"),
             description: localizedString(calcDescKey),
             actionTitle: localizedString("shared_string_cancel"),
             isSpinner: true,
-            action: { [weak self] in
-                self?.dataSource?.cancelElevationCalculation()
-            }
+            action: { [weak self] in self?.dataSource?.cancelElevationCalculation() }
         )
+        return cell
     }
 
     private func routeCalculatingTexts() -> (title: String, description: String) {
@@ -1060,103 +971,26 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return (localizedString("route_is_being_calculated"), description)
     }
 
-    private func makeStatusCardCell(icon: UIImage?,
-                                    iconTint: UIColor,
-                                    title: String,
-                                    description: String,
-                                    actionTitle: String?,
-                                    isSpinner: Bool,
-                                    action: (() -> Void)?) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
+    private func dequeueStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> StatusCardCell? {
+        tableView.dequeueReusableCell(withIdentifier: StatusCardCell.reuseIdentifier, for: indexPath) as? StatusCardCell
+    }
 
-        let card = makeCardView(cornerRadius: Self.statusCardCornerRadius)
-        card.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(card)
-        NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-            card.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.cardHorizontalInset),
-            card.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.cardHorizontalInset),
-            card.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-        ])
+    private func dequeueCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> AnalyzeCardCell? {
+        tableView.dequeueReusableCell(withIdentifier: AnalyzeCardCell.reuseIdentifier, for: indexPath) as? AnalyzeCardCell
+    }
 
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = .preferredFont(forTextStyle: .body)
-        titleLabel.textColor = .textColorPrimary
-
-        let descLabel = UILabel()
-        descLabel.text = description
-        descLabel.font = .preferredFont(forTextStyle: .subheadline)
-        descLabel.textColor = .textColorSecondary
-        descLabel.numberOfLines = 0
-
-        var trailingView: UIView
-        if isSpinner {
-            let spinner = UIActivityIndicatorView(style: .medium)
-            spinner.startAnimating()
-            trailingView = spinner
-        } else {
-            let iconView = UIImageView(image: icon?.withRenderingMode(.alwaysTemplate))
-            iconView.tintColor = iconTint
-            iconView.contentMode = .scaleAspectFit
-            trailingView = iconView
-        }
-
-        [titleLabel, descLabel, trailingView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            card.addSubview($0)
-        }
-
-        var constraints = [
-            trailingView.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            trailingView.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            trailingView.widthAnchor.constraint(equalToConstant: 30),
-            trailingView.heightAnchor.constraint(equalToConstant: 30),
-
-            titleLabel.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingView.leadingAnchor, constant: -8),
-
-            descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            descLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            descLabel.trailingAnchor.constraint(equalTo: trailingView.leadingAnchor, constant: -8)
-        ]
-
-        if let actionTitle, let action {
-            let separator = UIView()
-            separator.backgroundColor = .customSeparator
-
-            let actionBtn = ElevationActionRow()
-            actionBtn.configure(title: actionTitle)
-            actionBtn.action = {
-                action()
-            }
-
-            [separator, actionBtn].forEach {
-                $0.translatesAutoresizingMaskIntoConstraints = false
-                card.addSubview($0)
-            }
-
-            constraints.append(contentsOf: [
-                separator.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 12),
-                separator.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-                separator.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-                separator.heightAnchor.constraint(equalToConstant: 0.5),
-
-                actionBtn.topAnchor.constraint(equalTo: separator.bottomAnchor),
-                actionBtn.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-                actionBtn.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-                actionBtn.bottomAnchor.constraint(equalTo: card.bottomAnchor),
-                actionBtn.heightAnchor.constraint(equalToConstant: 50)
-            ])
-        } else {
-            constraints.append(descLabel.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16))
-        }
-
-        NSLayoutConstraint.activate(constraints)
+    private func makeRouteCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
+        let texts = routeCalculatingTexts()
+        cell.configure(
+            icon: nil,
+            iconTint: .clear,
+            title: texts.title,
+            description: texts.description,
+            actionTitle: nil,
+            isSpinner: true,
+            action: nil
+        )
         return cell
     }
 

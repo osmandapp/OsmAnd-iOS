@@ -296,13 +296,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
         segmentControl.backgroundColor = .groupBgColorSecondary
-        segmentControl.selectedSegmentTintColor = .white
-        let segmentAttributes: [NSAttributedString.Key: Any] = [
+        segmentControl.selectedSegmentTintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: 0x636366) : .white }
+        let segmentFont = UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
+        let segmentTextAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
+            .font: segmentFont
         ]
-        segmentControl.setTitleTextAttributes(segmentAttributes, for: .normal)
-        segmentControl.setTitleTextAttributes(segmentAttributes, for: .selected)
+        segmentControl.setTitleTextAttributes(segmentTextAttributes, for: .normal)
+        segmentControl.setTitleTextAttributes(segmentTextAttributes, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
         segmentControl.addTarget(self, action: #selector(onSegmentTapped), for: .touchUpInside)
     }

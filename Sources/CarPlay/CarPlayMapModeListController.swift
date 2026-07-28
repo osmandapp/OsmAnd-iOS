@@ -42,7 +42,12 @@ final class CarPlayMapModeListController: OABaseCarPlayInterfaceController {
             rawValue: OAAppSettings.sharedManager().carPlayMapAppearanceMode.get()
         )
         let items: [CPListItem] = Self.modes.map { mode in
-            let checkmark: UIImage? = mode == current ? .icCheckmarkDefault : nil
+            let checkmark: UIImage?
+            if #available(iOS 26.0, *) {
+                checkmark = mode == current ? .icCheckmarkDefault : nil
+            } else {
+                checkmark = mode == current ? .icCheckmarkDefault.resizedTemplateImage(with: 20) : nil
+            }
             
             let item = CPListItem(
                 text: title(for: mode),

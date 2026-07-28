@@ -2774,7 +2774,7 @@
 "map_marker_2nd" = "Seconde marque";
 "map_widget_true_bearing" = "Relèvement vrai";
 "developer_widgets" = "Widgets de développeur";
-"shared_string_bearing" = "Direction";
+"shared_string_bearing" = "Roulement";
 "map_widget_current_speed" = "Vitesse actuelle";
 "map_widget_gps_info" = "Informations GPS";
 "map_markers_desc" = "Le widget affiche la Distance ou l\'Heure d\'arrivée estimée (ETA) pour les deux premières marques de la liste des marques de la carte.";

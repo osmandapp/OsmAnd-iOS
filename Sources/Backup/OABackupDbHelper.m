@@ -7,6 +7,8 @@
 //
 
 #import "OABackupDbHelper.h"
+#import "OABackupHelper.h"
+#import "OAOperationLog.h"
 
 #import <sqlite3.h>
 
@@ -105,6 +107,9 @@ static const NSInteger kDBVersion = 1;
     
     sqlite3 *backupFilesDB;
     dispatch_queue_t dbQueue;
+
+    // COLLECT_LOCAL_DIAG: remove after cloud sync performance investigation.
+    OAOperationLog *_cloudSyncOperationLog;
 }
 
 + (OABackupDbHelper *)sharedDatabase
@@ -130,6 +135,7 @@ static const NSInteger kDBVersion = 1;
             [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
         
         dbQueue = dispatch_queue_create("backup_dbQueue", DISPATCH_QUEUE_SERIAL);
+        _cloudSyncOperationLog = [[OAOperationLog alloc] initWithOperationName:@"cloudSyncDatabase" debug:BACKUP_DEBUG_LOGS];
         
         [self load];
     }
@@ -300,15 +306,22 @@ static const NSInteger kDBVersion = 1;
 
 - (NSDictionary<NSString *, OAUploadedFileInfo *> *) getUploadedFileInfoMap
 {
+    [_cloudSyncOperationLog startOperation:@"COLLECT_LOCAL_DIAG getUploadedFileInfoMap"];
+    CFAbsoluteTime methodStartTime = CFAbsoluteTimeGetCurrent();
     NSMutableDictionary<NSString *, OAUploadedFileInfo *> *res = [NSMutableDictionary dictionary];
     
     dispatch_sync(dbQueue, ^{
-        
+        CFAbsoluteTime queueStartTime = CFAbsoluteTimeGetCurrent();
+        [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG dbQueue entered wait=%.3f ms",
+                                     (queueStartTime - methodStartTime) * 1000]];
+
         const char *dbpath = [_dbFilePath UTF8String];
         sqlite3_stmt *statement;
-        
+        CFAbsoluteTime phaseStartTime = CFAbsoluteTimeGetCurrent();
         if (sqlite3_open(dbpath, &backupFilesDB) == SQLITE_OK)
         {
+            [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_open END duration=%.3f ms success=1",
+                                         (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
             NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@ FROM %@",
                                   UPLOADED_FILE_COL_TYPE,
                                   UPLOADED_FILE_COL_NAME,
@@ -316,8 +329,13 @@ static const NSInteger kDBVersion = 1;
                                   UPLOADED_FILE_COL_MD5_DIGEST,
                                   UPLOADED_FILES_TABLE_NAME];
             const char *query_stmt = [querySQL UTF8String];
+            phaseStartTime = CFAbsoluteTimeGetCurrent();
             if (sqlite3_prepare_v2(backupFilesDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
+                [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_prepare END duration=%.3f ms success=1",
+                                             (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+                phaseStartTime = CFAbsoluteTimeGetCurrent();
+                NSInteger rowCount = 0;
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     NSString *type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
@@ -326,12 +344,32 @@ static const NSInteger kDBVersion = 1;
                     NSString *md5Digest = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     OAUploadedFileInfo *info = [[OAUploadedFileInfo alloc] initWithType:type name:name uploadTime:uploadTime md5Digest:md5Digest];
                     res[[NSString stringWithFormat:@"%@___%@", info.type, info.name]] = info;
+                    rowCount++;
                 }
+                [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_rows END duration=%.3f ms rows=%ld",
+                                             (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                             rowCount]];
                 sqlite3_finalize(statement);
             }
+            else
+            {
+                [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_prepare END duration=%.3f ms success=0 code=%d",
+                                             (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                             sqlite3_errcode(backupFilesDB)]];
+            }
+            phaseStartTime = CFAbsoluteTimeGetCurrent();
             sqlite3_close(backupFilesDB);
+            [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_close END duration=%.3f ms",
+                                         (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+        }
+        else
+        {
+            [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG sqlite_open END duration=%.3f ms success=0 code=%d",
+                                         (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                         sqlite3_errcode(backupFilesDB)]];
         }
     });
+    [_cloudSyncOperationLog finishOperation:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG count=%ld", res.count]];
     return res;
 }
 

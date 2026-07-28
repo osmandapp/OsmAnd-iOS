@@ -152,13 +152,12 @@
 
     BOOL isLeftSideDriving = [self isLeftSideDriving];
     
-    BOOL isRoutePlanning = [OARoutingHelper sharedInstance].isRoutePlanningMode;
     EOAPositionPlacement placement = (EOAPositionPlacement) [[OAAppSettings sharedManager].positionPlacementOnMap get];
     double y;
     if (placement == EOAPositionPlacementAuto)
-        y = ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_BEARING && !isRoutePlanning ? [self mapCenterBottomYWithInsets:insets] : 1.0 + heightOffset);
+        y = ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_BEARING ? [self mapCenterBottomYWithInsets:insets] : 1.0 + heightOffset);
     else
-        y = (placement == EOAPositionPlacementCenter || isRoutePlanning ? 1.0 + heightOffset : [self mapCenterBottomYWithInsets:insets]);
+        y = (placement == EOAPositionPlacementCenter ? 1.0 + heightOffset : [self mapCenterBottomYWithInsets:insets]);
     
     if (_isInNavigationMode)
     {

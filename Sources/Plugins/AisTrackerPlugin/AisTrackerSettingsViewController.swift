@@ -71,10 +71,6 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         localizedString("plugin_ais_tracker_name")
     }
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func sectionsCount() -> Int {
         Section.allCases.count
     }

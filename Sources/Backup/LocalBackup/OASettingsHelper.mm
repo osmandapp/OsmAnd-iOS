@@ -70,6 +70,8 @@
 #import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
 #import "OAPluginsHelper.h"
+#import "OABackupHelper.h"
+#import "OAOperationLog.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -90,6 +92,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     __weak OAImportSettingsViewController *_importDataVC;
     NSInteger _currentBackupVersion;
+
+    // COLLECT_LOCAL_DIAG: remove after cloud sync performance investigation.
+    OAOperationLog *_cloudSyncOperationLog;
 }
 
 + (OASettingsHelper *) sharedInstance
@@ -108,6 +113,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (self)
     {
         _currentBackupVersion = kVersion;
+        _cloudSyncOperationLog = [[OAOperationLog alloc] initWithOperationName:@"cloudSyncSettings" debug:BACKUP_DEBUG_LOGS];
     }
     return self;
 }
@@ -224,12 +230,30 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (NSArray<OASettingsItem *> *) getFilteredSettingsItems:(NSArray<OAExportSettingsType *> *)settingsTypes addProfiles:(BOOL)addProfiles doExport:(BOOL)doExport
 {
+    [_cloudSyncOperationLog startOperation:@"COLLECT_LOCAL_DIAG getFilteredSettingsItems"];
+    CFAbsoluteTime phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *typesMap = [NSMutableDictionary new];
     [typesMap addEntriesFromDictionary:[self getSettingsItems:addProfiles]];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getSettingsItems END duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     [typesMap addEntriesFromDictionary:[self getMyPlacesItems:NO]];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getMyPlacesItems END duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     [typesMap addEntriesFromDictionary:[self getResourcesItems]];
-    
-    return [self getFilteredSettingsItems:typesMap settingsTypes:settingsTypes settingsItems:@[] doExport:doExport];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG getResourcesItems END duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
+    NSArray<OASettingsItem *> *result = [self getFilteredSettingsItems:typesMap settingsTypes:settingsTypes settingsItems:@[] doExport:doExport];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG prepareFilteredItems END duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 result.count]];
+    [_cloudSyncOperationLog finishOperation:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG items=%ld", result.count]];
+    return result;
 }
 
 - (NSArray<OASettingsItem *> *) getFilteredSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)allSettingsMap
@@ -243,7 +267,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSArray *settingsDataObjects = allSettingsMap[settingsType];
         if (settingsDataObjects != nil)
         {
-            [filteredSettingsItems addObjectsFromArray:[self prepareSettingsItems:settingsDataObjects settingsItems:settingsItems doExport:doExport]];
+            CFAbsoluteTime typeStartTime = CFAbsoluteTimeGetCurrent();
+            NSArray<OASettingsItem *> *preparedItems = [self prepareSettingsItems:settingsDataObjects settingsItems:settingsItems doExport:doExport];
+            [filteredSettingsItems addObjectsFromArray:preparedItems];
+            [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG prepareSettingsItems type=%@ duration=%.3f ms input=%ld output=%ld",
+                                         settingsType.name,
+                                         (CFAbsoluteTimeGetCurrent() - typeStartTime) * 1000,
+                                         settingsDataObjects.count,
+                                         preparedItems.count]];
         }
     }
     return filteredSettingsItems;
@@ -269,6 +300,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (NSDictionary<OAExportSettingsType *, NSArray *> *) getSettingsItems:(BOOL)addProfiles
 {
+    CFAbsoluteTime methodStartTime = CFAbsoluteTimeGetCurrent();
+    CFAbsoluteTime phaseStartTime = methodStartTime;
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *settingsItems = [MutableOrderedDictionary new];
     
     if (addProfiles)
@@ -281,7 +314,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsItems[OAExportSettingsType.PROFILE] = appModeBeans;
     }
     settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG settings profiles/global duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
 
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     OAMapButtonsHelper *buttonsHelper = [OAMapButtonsHelper sharedInstance];
     NSArray<QuickActionButtonState *> *buttonStates = [buttonsHelper getButtonsStates];
     if (buttonStates.count == 1)
@@ -297,7 +333,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<QuickActionButtonState *> *actionsList = [registry getButtonsStates];
     if (actionsList.count > 0)
         settingsItems[OAExportSettingsType.QUICK_ACTIONS] = actionsList;
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG settings quickActions duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 actionsList.count]];
     
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSArray<OAPOIUIFilter *> *poiList = [OAPOIFiltersHelper.sharedInstance getUserDefinedPoiFilters:NO];
     if (poiList.count > 0)
         settingsItems[OAExportSettingsType.POI_TYPES] = poiList;
@@ -305,7 +345,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OAAvoidRoadInfo *> *impassableRoads = OAAvoidSpecificRoads.instance.getImpassableRoads;
     if (impassableRoads.count > 0)
         settingsItems[OAExportSettingsType.AVOID_ROADS] = impassableRoads;
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG settings poi/avoidRoads duration=%.3f ms poi=%ld roads=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 poiList.count,
+                                 impassableRoads.count]];
 
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSFileManager *fileManager = NSFileManager.defaultManager;
     BOOL isDir = NO;
     NSString *colorPaletteFolder = [OsmAndApp instance].colorsPalettePath;
@@ -345,17 +390,27 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
     }
 
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG settings colorPalette duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG settings TOTAL duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - methodStartTime) * 1000]];
     return settingsItems;
 }
 
 - (NSDictionary<OAExportSettingsType *, NSArray *> *)getMyPlacesItems:(BOOL)sorted
 {
+    CFAbsoluteTime methodStartTime = CFAbsoluteTimeGetCurrent();
+    CFAbsoluteTime phaseStartTime = methodStartTime;
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     
     NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
     if (favoriteGroups.count > 0)
         myPlacesItems[OAExportSettingsType.FAVORITES] = favoriteGroups;
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces favorites duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 favoriteGroups.count]];
     
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSFileManager *fileManager = NSFileManager.defaultManager;
     NSArray<OASGpxDataItem *> *gpsDataItems;
     if (sorted)
@@ -384,7 +439,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (files.count > 0)
             myPlacesItems[OAExportSettingsType.TRACKS] = files;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces tracks duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 gpsDataItems.count]];
     
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     if (osmEditingPlugin)
     {
@@ -395,6 +454,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (editsPointList.count > 0)
             myPlacesItems[OAExportSettingsType.OSM_EDITS] = editsPointList;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces osm duration=%.3f ms enabled=%d",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 osmEditingPlugin != nil]];
     // TODO: implement after adding Audio/video notes
 //    AudioVideoNotesPlugin plugin = OsmandPlugin.getPlugin(AudioVideoNotesPlugin.class);
 //    if (plugin != null) {
@@ -409,6 +471,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //            myPlacesItems.put(ExportSettingsType.MULTIMEDIA_NOTES, files);
 //        }
 //    }
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSArray<OADestination *> *mapMarkers = [OADestinationsHelper.instance sortedDestinationsWithoutParking];
     if (mapMarkers.count > 0)
     {
@@ -437,12 +500,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OAHistoryItem *> *navigationHistoryEntries = [historyHelper getPointsFromNavigation:0];
     if (navigationHistoryEntries.count > 0)
         myPlacesItems[OAExportSettingsType.NAVIGATION_HISTORY] = navigationHistoryEntries;
-    
+
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces markers/history duration=%.3f ms markers=%ld history=%ld/%ld/%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 mapMarkers.count,
+                                 markersHistory.count,
+                                 searchHistoryEntries.count,
+                                 navigationHistoryEntries.count]];
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces TOTAL duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - methodStartTime) * 1000]];
     return myPlacesItems;
 }
 
 - (NSDictionary<OAExportSettingsType *, NSArray *> *)getResourcesItems
 {
+    CFAbsoluteTime methodStartTime = CFAbsoluteTimeGetCurrent();
+    CFAbsoluteTime phaseStartTime = methodStartTime;
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
     
     NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getPathExternalRenderers];
@@ -465,11 +538,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (items.count > 0)
             resourcesItems[OAExportSettingsType.CUSTOM_ROUTING] = items;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources renderers/routing duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000]];
 //    List<OnlineRoutingEngine> onlineRoutingEngines = app.getOnlineRoutingHelper().getEngines();
 //    if (!Algorithms.isEmpty(onlineRoutingEngines)) {
 //        resourcesItems.put(ExportSettingsType.ONLINE_ROUTING_ENGINES, onlineRoutingEngines);
 //    }
     // TODO: implement export!
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     NSMutableArray<OATileSource *> *tileSources = [NSMutableArray new];
     NSArray<OAResourceItem *> *tileResources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     for (OAResourceItem *res in tileResources)
@@ -492,7 +568,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (tileSources.count > 0)
         resourcesItems[OAExportSettingsType.MAP_SOURCES] = tileSources;
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources rasterSources duration=%.3f ms resources=%ld sources=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 tileResources.count,
+                                 tileSources.count]];
     
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     QSet<OsmAnd::ResourcesManager::ResourceType> types;
     types << OsmAnd::ResourcesManager::ResourceType::MapRegion;
     NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types includeHidden:NO];
@@ -503,7 +584,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }];
         resourcesItems[OAExportSettingsType.STANDARD_MAPS] = sortedFiles;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources standardMaps duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 localIndexFiles.count]];
     
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     QSet<OsmAnd::ResourcesManager::ResourceType> wikiTypes;
     wikiTypes << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
     wikiTypes << OsmAnd::ResourcesManager::ResourceType::Travel;
@@ -515,7 +600,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }];
         resourcesItems[OAExportSettingsType.WIKI_AND_TRAVEL] = sortedFiles;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources wikiTravel duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 wikiFiles.count]];
 
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     QSet<OsmAnd::ResourcesManager::ResourceType> nauticalTypes;
     nauticalTypes << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
     NSArray<NSString *> *nauticalFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:nauticalTypes includeHidden:NO];
@@ -526,7 +615,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }];
         resourcesItems[OAExportSettingsType.DEPTH_DATA] = sortedFiles;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources nautical duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 nauticalFiles.count]];
 
+    phaseStartTime = CFAbsoluteTimeGetCurrent();
     QSet<OsmAnd::ResourcesManager::ResourceType> terrainTypes;
     terrainTypes << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion;
     terrainTypes << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
@@ -540,6 +633,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }];
         resourcesItems[OAExportSettingsType.TERRAIN_DATA] = sortedFiles;
     }
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources terrain duration=%.3f ms count=%ld",
+                                 (CFAbsoluteTimeGetCurrent() - phaseStartTime) * 1000,
+                                 terrainFiles.count]];
     
 //    files = getFilesByType(localIndexInfoList, LocalIndexType.TTS_VOICE_DATA);
 //    if (!files.isEmpty()) {
@@ -550,6 +646,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        resourcesItems.put(ExportSettingsType.VOICE, files);
 //    }
     
+    [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG resources TOTAL duration=%.3f ms",
+                                 (CFAbsoluteTimeGetCurrent() - methodStartTime) * 1000]];
     return resourcesItems;
 }
 

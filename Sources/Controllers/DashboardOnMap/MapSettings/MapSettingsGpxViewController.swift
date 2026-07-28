@@ -710,7 +710,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
-        headerView.backgroundColor = .groupBg
         headerView.addSubview(sortButton)
         sortButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

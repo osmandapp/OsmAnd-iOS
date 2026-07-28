@@ -115,12 +115,15 @@
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
-#pragma mark - Table data
-
-- (BOOL)hideFirstHeader
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    return YES;
+    if(section == 0)
+        return 16;
+    
+    return [super getCustomHeightForHeader:section];
 }
+
+#pragma mark - Table data
 
 - (NSInteger)sectionsCount
 {

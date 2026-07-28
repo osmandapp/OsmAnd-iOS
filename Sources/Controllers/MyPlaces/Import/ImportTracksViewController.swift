@@ -130,10 +130,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     // MARK: - Table
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)

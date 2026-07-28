@@ -2855,7 +2855,7 @@
 "route_info" = "Информация про маршрут";
 "map_screen_orientation" = "Ориентация экрана";
 "map_widget_ant_bicycle_dist" = "Расстояние на велосипеде";
-"external_device_characteristic_total_distance" = "Общее расстояние";
+"external_device_characteristic_total_distance" = "Общая длина";
 "ble_search_again" = "Повторный поиск";
 "bottom_widgets_panel" = "Нижняя панель";
 "map_widget_group_glide_ratio" = "Коэффициент планирования";
@@ -2871,7 +2871,7 @@
 "average_glide_time_interval_desc" = "Укажите интервал для усреднения планирования.";
 "shared_string_relief_3d" = "3D-рельеф";
 "apply_to_existing_favorites_descr" = "Применить изменения к существующим избранным точкам группы или только к новым\?";
-"external_device_characteristic_distance" = "Расстояние";
+"external_device_characteristic_distance" = "Длина";
 "help_article_navigation_guidance_name" = "Руководство по навигации";
 "osmand_cloud_deletion_account_warning" = "Ваш аккаунт и все данные аккаунта будут %@";
 "map_widget_true_bearing" = "Истинный пеленг";
@@ -4095,3 +4095,6 @@
 "missing_maps_header" = "Карты отсутствуют или устарели";
 "missing_maps_description" = "Некоторые офлайн-карты, необходимые для этого маршрута, отсутствуют или устарели. Пожалуйста, скачайте или обновите эти карты.";
 "shared_string_allow" = "Разрешить";
+"astro_search_info_nebulas" = "Туманность — это гигантское облако пыли и газа в космосе, часто в той области, где рождаются звёзды.";
+"plugin_ais_tracker_name" = "AIS-трекер судов";
+"shared_string_length" = "Длина";

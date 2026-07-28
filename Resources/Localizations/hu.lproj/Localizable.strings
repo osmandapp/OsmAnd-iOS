@@ -4448,3 +4448,5 @@
 "shared_string_folders" = "Mappák";
 "traffic_warning_red_light_camera" = "Piroson áthaladást figyelő kamera";
 "show_all_tracks_on_the_map" = "Az összes nyomvonal megjelenítése a térképen";
+"share_as_file" = "Megosztás fájlként";
+"share_link" = "Hivatkozás megosztása";

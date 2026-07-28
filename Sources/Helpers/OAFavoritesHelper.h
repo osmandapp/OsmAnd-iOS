@@ -44,6 +44,9 @@
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave
          pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
++ (BOOL)addFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groups
+            lookupAddress:(BOOL)lookupAddress
+              sortAndSave:(BOOL)sortAndSave;
 
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;

@@ -33,7 +33,6 @@
 #import "OAGlobalSettingsItem.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
-#import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
 #import "OAHistoryMarkersSettingsItem.h"
 #import "OADestination.h"
@@ -447,6 +446,8 @@
 @property (nonatomic) NSArray<OASettingsItem *> *selectedItems;
 @property (nonatomic) NSArray<OASettingsItem *> *duplicates;
 
+- (void)applySettingsItems:(NSArray<OASettingsItem *> *)items;
+
 @end
 
 @implementation OAImportAsyncTask
@@ -510,7 +511,7 @@
 - (void) executeWithCompletionBlock:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
     [self onPreExecute];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSArray<OASettingsItem *> *items = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onPostExecute:items];
@@ -552,9 +553,35 @@
             _duplicates = [self getDuplicatesData:_selectedItems];
             return _selectedItems;
         case EOAImportTypeImport:
+            [self applySettingsItems:_items];
             return _items;
+        case EOAImportTypeUndefined:
+        case EOAImportTypeCollectAndRead:
+        case EOAImportTypeImportForceRead:
+            break;
     }
     return nil;
+}
+
+- (void)applySettingsItems:(NSArray<OASettingsItem *> *)items
+{
+    NSMutableArray<Class> *itemClasses = [NSMutableArray array];
+    NSMapTable<Class, NSMutableArray<OASettingsItem *> *> *itemsByClass = [NSMapTable strongToStrongObjectsMapTable];
+    for (OASettingsItem *item in items)
+    {
+        Class itemClass = item.class;
+        NSMutableArray<OASettingsItem *> *classItems = [itemsByClass objectForKey:itemClass];
+        if (!classItems)
+        {
+            classItems = [NSMutableArray array];
+            [itemsByClass setObject:classItems forKey:itemClass];
+            [itemClasses addObject:itemClass];
+        }
+        [classItems addObject:item];
+    }
+
+    for (Class itemClass in itemClasses)
+        [itemClass applyItems:[[itemsByClass objectForKey:itemClass] copy]];
 }
 
 - (void) onPostExecute:(NSArray<OASettingsItem *> *)items
@@ -582,8 +609,6 @@
         case EOAImportTypeImport:
             if (items != nil && items.count > 0)
             {
-                for (OASettingsItem *item in items)
-                    [item apply];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 task.onImportComplete = self.onImportComplete;

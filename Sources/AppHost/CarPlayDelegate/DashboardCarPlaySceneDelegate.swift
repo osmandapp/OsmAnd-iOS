@@ -42,13 +42,12 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
-                let isRoutePlanning = OARoutingHelper.sharedInstance().isRoutePlanningMode()
                 let placement = settings.positionPlacementOnMap.get()
                 var y: Double
                 if placement == EOAPositionPlacement.auto.rawValue {
-                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING && !isRoutePlanning ? mapCenterBottomY() : 1.0
+                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING ? mapCenterBottomY() : 1.0
                 } else {
-                    y = placement == EOAPositionPlacement.center.rawValue || isRoutePlanning ? 1.0 : mapCenterBottomY()
+                    y = placement == EOAPositionPlacement.center.rawValue ? 1.0 : mapCenterBottomY()
                 }
                 mapVC.setViewportForCarPlayScaleX(1.0, y: y)
             }

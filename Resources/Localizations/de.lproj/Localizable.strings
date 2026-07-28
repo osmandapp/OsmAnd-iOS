@@ -4122,3 +4122,5 @@
 "traffic_warning_red_light_camera" = "Rotlichtblitzer";
 "shared_string_disabled" = "Deaktiveret";
 "gpx_logging_no_data" = "Keine Daten";
+"share_link" = "Link teilen";
+"share_as_file" = "Als Datei teilen";

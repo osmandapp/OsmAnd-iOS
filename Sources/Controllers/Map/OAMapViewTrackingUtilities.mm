@@ -1054,13 +1054,9 @@ static double const TILT_ANIMATION_TIME = 0.4;
         
         EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
         if (placement == EOAPositionPlacementAuto)
-        {
-            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode ? BOTTOM_CONSTANT : CENTER_CONSTANT);
-        }
+            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING ? BOTTOM_CONSTANT : CENTER_CONSTANT);
         else
-        {
-            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
-        }
+            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter ? CENTER_CONSTANT : BOTTOM_CONSTANT);
     }
 }
 

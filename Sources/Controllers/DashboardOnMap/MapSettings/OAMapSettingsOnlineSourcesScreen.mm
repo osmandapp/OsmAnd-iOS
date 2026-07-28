@@ -108,7 +108,7 @@ typedef enum
         const auto& onlineSourcesCollection = _app.resourcesManager->downloadOnlineTileSources();
         if (onlineSourcesCollection != nullptr)
         {
-            _onlineMapSources = _app.resourcesManager->downloadOnlineTileSources()->getCollection().values();
+            _onlineMapSources = onlineSourcesCollection->getCollection().values();
             std::sort(_onlineMapSources, [](
                                             const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s1,
                                             const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s2)

@@ -225,6 +225,51 @@
     return [[OASGpxDbHelper shared] updateDataItemItem:item];
 }
 
+// Renames the GPX database item and removes stale entries whose paths use
+// different canonically equivalent Unicode representations.
+- (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile
+{
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    OASKFile *sourceFile = [gpxDbHelper getItemFile:currentFile readIfNeeded:NO].file;
+    if (!sourceFile)
+    {
+        for (OASGpxDataItem *item in gpxDbHelper.getItems)
+        {
+            if ([item.file.absolutePath compare:currentFile.absolutePath] == NSOrderedSame)
+            {
+                sourceFile = item.file;
+                break;
+            }
+        }
+    }
+    if (!sourceFile)
+        return NO;
+
+    BOOL success = [gpxDbHelper renameCurrentFile:sourceFile newFile:newFile];
+    if (!success)
+        return NO;
+
+    NSString *currentPath = currentFile.absolutePath;
+    NSString *newPath = newFile.absolutePath;
+    NSString *currentPathKey = currentPath.precomposedStringWithCanonicalMapping;
+    NSString *newPathKey = newPath.precomposedStringWithCanonicalMapping;
+    NSMutableArray<OASGpxDataItem *> *itemsToRemove = [NSMutableArray array];
+    for (OASGpxDataItem *item in gpxDbHelper.getItems)
+    {
+        NSString *itemPath = item.file.absolutePath;
+        NSString *itemPathKey = itemPath.precomposedStringWithCanonicalMapping;
+        BOOL isOldRenamedItem = [itemPathKey isEqualToString:currentPathKey] && ![item.file exists];
+        BOOL isDuplicateNewItem = [itemPathKey isEqualToString:newPathKey] && ![itemPath isEqualToString:newPath];
+        if (isOldRenamedItem || isDuplicateNewItem)
+            [itemsToRemove addObject:item];
+    }
+
+    for (OASGpxDataItem *item in itemsToRemove)
+        [gpxDbHelper removeItem:item];
+
+    return YES;
+}
+
 - (NSArray<OASGpxDataItem *> *)getDataItems
 {
     return [[OASGpxDbHelper shared] getItems];

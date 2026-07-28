@@ -3241,7 +3241,7 @@ static char kMapSourceUpdateQueueKey;
         [self hideRecGpxTrack];
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if ([settings.mapSettingVisibleGpx.get containsObject:filePath])
+    if ([settings isGpxVisible:filePath])
     {
         [self runWithRenderSync:^{
             [_gpxFilesTemp removeAllObjects];
@@ -3291,7 +3291,7 @@ static char kMapSourceUpdateQueueKey;
     NSString *filePath = doc.path;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if ([settings.mapSettingVisibleGpx.get containsObject:filePath])
+    if ([settings isGpxVisible:filePath])
     {
         [self runWithRenderSync:^{
             [_gpxFilesTemp removeAllObjects];
@@ -3410,7 +3410,7 @@ static char kMapSourceUpdateQueueKey;
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:tempGpxFilePath];
     NSString *path = gpx.file.absolutePath;
-    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:tempGpxFilePath])
+    if (![[OAAppSettings sharedManager] isGpxVisible:tempGpxFilePath])
     {
         [_selectedGpxHelper addGpxFile:tempGpxFile for:path];
 

@@ -118,7 +118,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         navigationController?.setNavigationBarHidden(true, animated: false)
         applyHeight(for: sheetState)
         tabContainerView.alpha = isContentVisible(in: sheetState) ? 1 : 0
-        view.layoutIfNeeded()
+        if view.window != nil {
+            view.layoutIfNeeded()
+        }
         let height = height(for: sheetState)
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)
         routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: sheetState)

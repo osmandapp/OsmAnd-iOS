@@ -63,7 +63,7 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
             contentView.addSubview($0)
         }
 
-        NSLayoutConstraint.activate([
+        let constraints = [
             textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
@@ -72,6 +72,8 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
             optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.buttonSize),
             optionsButton.heightAnchor.constraint(equalToConstant: Self.buttonSize)
-        ])
+        ]
+        constraints.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(constraints)
     }
 }

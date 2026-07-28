@@ -59,7 +59,7 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
 
         [titleLabel, chevronImageView].forEach { contentView.addSubview($0) }
 
-        NSLayoutConstraint.activate([
+        let constraints = [
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
@@ -68,7 +68,9 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
             chevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
             chevronImageView.widthAnchor.constraint(equalToConstant: 18),
             chevronImageView.heightAnchor.constraint(equalToConstant: 18)
-        ])
+        ]
+        constraints.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(constraints)
     }
 
     @objc private func handleTap() {

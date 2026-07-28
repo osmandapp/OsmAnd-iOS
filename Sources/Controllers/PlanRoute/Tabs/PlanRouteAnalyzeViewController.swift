@@ -896,6 +896,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                     statistics: stat,
                                     analysis: analysis,
                                     nightMode: OAAppSettings.sharedManager().nightMode)
+        barChart.extraBottomOffset = 12
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
         legendView.isUserInteractionEnabled = false

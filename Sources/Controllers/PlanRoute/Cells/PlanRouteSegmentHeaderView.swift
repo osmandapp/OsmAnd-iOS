@@ -67,7 +67,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
             contentView.addSubview($0)
         }
 
-        NSLayoutConstraint.activate([
+        let constraints = [
             textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
@@ -77,6 +77,8 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
             optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.optionsButtonSize),
             optionsButton.heightAnchor.constraint(equalToConstant: Self.optionsButtonSize)
-        ])
+        ]
+        constraints.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(constraints)
     }
 }

@@ -225,7 +225,7 @@
     return [[OASGpxDbHelper shared] updateDataItemItem:item];
 }
 
-// We need this method to fix the problem with duplication only new tracks with apostrophe after renaming
+// We need this method to fix the problem with duplication only new tracks with apostrophe after renaming the way renaming it and then remove the duplicated files
 - (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile
 {
     BOOL success = [[OASGpxDbHelper shared] renameCurrentFile:currentFile newFile:newFile];

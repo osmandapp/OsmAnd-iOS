@@ -62,6 +62,7 @@
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
     
     std::shared_ptr<OsmAnd::VectorLinesCollection> _outlineCollection;
+    QVector<OsmAnd::PointI> _highlightedPolygonPoints;
     
     UIImageView *_animatedPin;
     BOOL _animationDone;
@@ -637,9 +638,13 @@
 
 - (void) highlightPolygon:(QVector<OsmAnd::PointI>)points;
 {
+    if (_outlineCollection != nullptr && points == _highlightedPolygonPoints)
+        return;
+
     if (_outlineCollection != nullptr)
         [self hideRegionHighlight];
 
+    _highlightedPolygonPoints = points;
     [self.mapViewController runWithRenderSync:^{
         _outlineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
         OsmAnd::VectorLineBuilder builder;
@@ -657,6 +662,7 @@
 
 - (void) hideRegionHighlight
 {
+    _highlightedPolygonPoints.clear();
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
         _outlineCollection = nullptr;

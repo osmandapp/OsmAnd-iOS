@@ -541,11 +541,11 @@ final class BaseDetailsObject: NSObject {
     }
 
     func setX(_ x: [Int]) {
-        syntheticAmenity.x = x as? NSMutableArray ?? []
+        syntheticAmenity.x = NSMutableArray(array: x)
     }
 
     func setY(_ y: [Int]) {
-        syntheticAmenity.y = y as? NSMutableArray ?? []
+        syntheticAmenity.y = NSMutableArray(array: y)
     }
 
     func addX(_ x: NSNumber) {

@@ -15,6 +15,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     private var renderedObject: OARenderedObject?
     private var sourceObject: AnyObject?
     private var provider: RenderedObjectAmenityProvider!
+    private var cityFetchStarted = false
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -48,6 +49,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func viewDidLoad() {
+        applyPolygonAddressIfNeeded()
         if detailsObject != nil {
             updateMenuWithDetailedObject()
         }
@@ -248,8 +250,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(seed) else { return }
             DispatchQueue.main.async {
-                guard let self,
-                      let mapPanel = OARootViewController.instance()?.mapPanel,
+                guard let mapPanel = OARootViewController.instance()?.mapPanel,
                       mapPanel.getCurrentTargetPoint() != nil
                 else { return }
                 mapPanel.highlightContextPinPolygon(geoObject)
@@ -301,6 +302,75 @@ final class PlaceDetailsViewController: OAPOIViewController {
         targetPoint.title = amenity.nameLocalized ?? amenity.name
         targetPoint.icon = amenity.type?.icon()
 
+        applyPolygonAddressIfNeeded()
         mapPanel.update(targetPoint)
+    }
+
+    private func applyPolygonAddressIfNeeded() {
+        guard let mapPanel = OARootViewController.instance()?.mapPanel,
+              let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
+
+        let amenity: OAPOI? = detailsObject?.syntheticAmenity ?? (sourceObject as? OAPOI) ?? poi
+        let polygonPoints = max(Int(renderedObject?.x.count ?? 0), Int(amenity?.x.count ?? 0))
+        guard polygonPoints > 2 else { return }
+
+        targetPoint.shouldFetchAddress = false
+        if let address = polygonAddressString(amenity), !address.isEmpty {
+            targetPoint.titleAddress = address
+            targetPoint.addressFound = true
+        }
+        fetchCityInBackground(for: targetPoint)
+    }
+
+    private func fetchCityInBackground(for targetPoint: OATargetPoint) {
+        guard !cityFetchStarted else { return }
+        cityFetchStarted = true
+
+        let lat = targetPoint.location.latitude
+        let lon = targetPoint.location.longitude
+        let objectId = targetPoint.obfId
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let fullAddress = OAReverseGeocoder.instance().lookupAddress(atLat: lat, lon: lon, objectId: objectId)
+            let trimmed = fullAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+            DispatchQueue.main.async {
+                guard let self, !trimmed.isEmpty,
+                      let mapPanel = OARootViewController.instance()?.mapPanel,
+                      let currentTarget = mapPanel.getCurrentTargetPoint(),
+                      currentTarget === targetPoint else { return }
+                currentTarget.titleAddress = trimmed
+                currentTarget.addressFound = true
+                self.delegate?.refreshTargetPointHeader?()
+            }
+        }
+    }
+
+    private func polygonAddressString(_ amenity: OAPOI?) -> String? {
+        guard let amenity else { return nil }
+        let street = amenity.getAdditionalInfo("addr:street") ?? amenity.getAdditionalInfo("addr_street")
+        let house = amenity.getAdditionalInfo("addr:housenumber") ?? amenity.getAdditionalInfo("addr_housenumber")
+        let cityCandidates: [String?] = [
+            amenity.cityName,
+            amenity.getAdditionalInfo("addr:city"),
+            amenity.getAdditionalInfo("addr_city"),
+            amenity.getAdditionalInfo("addr:place"),
+            amenity.getAdditionalInfo("addr_place"),
+            amenity.getAdditionalInfo("is_in:city"),
+            amenity.getAdditionalInfo("is_in")
+        ]
+        let city = cityCandidates.compactMap { $0 }.first { !$0.isEmpty }
+        var line = ""
+        if let street, !street.isEmpty {
+            if let house, !house.isEmpty {
+                line = "\(street) \(house)"
+            } else {
+                line = street
+            }
+        }
+        var parts: [String] = []
+        if !line.isEmpty { parts.append(line) }
+        if let city, !city.isEmpty { parts.append(city) }
+        let result = parts.joined(separator: ", ")
+        return result.isEmpty ? nil : result
     }
 }

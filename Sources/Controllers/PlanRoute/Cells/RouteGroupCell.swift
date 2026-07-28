@@ -37,7 +37,7 @@ final class RouteGroupCell: UITableViewCell {
             iconView.image = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
             titleLabel.text = mode.toHumanString()
         } else {
-            iconView.image = .templateImageNamed("ic_custom_straight_line")
+            iconView.image = .icCustomStraightLine
             titleLabel.text = localizedString("plan_route_straight_line")
         }
         iconView.isHidden = false

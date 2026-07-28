@@ -116,8 +116,8 @@ final class PlanRoutePointMenuViewController: UIViewController {
         let trimBeforeSubtitle: String? = point.isStart ? localizedString("start_point") : nil
         let trimAfterSubtitle: String? = point.isDestination ? localizedString("route_descr_destination") : formattedDistance(point.distanceFromPrevious)
 
-        let changeTypeBeforeIcon = (prevGroup ?? group).appMode?.getIcon() ?? .templateImageNamed("ic_custom_straight_line")
-        let changeTypeAfterIcon = group.appMode?.getIcon() ?? .templateImageNamed("ic_custom_straight_line")
+        let changeTypeBeforeIcon = (prevGroup ?? group).appMode?.getIcon() ?? .icCustomStraightLine
+        let changeTypeAfterIcon = group.appMode?.getIcon() ?? .icCustomStraightLine
 
         sections = [
             [RowModel(row: .movePoint,

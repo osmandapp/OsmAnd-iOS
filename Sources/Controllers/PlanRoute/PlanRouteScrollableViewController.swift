@@ -40,7 +40,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }()
 
     private let tabs = PlanRouteTab.allCases
-    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_straight_line"))
+    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .icCustomStraightLine)
     private var sheetState: EOADraggableMenuState = .expanded
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
@@ -402,7 +402,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         if let mode {
             icon = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
         } else {
-            icon = .templateImageNamed("ic_custom_straight_line")
+            icon = .icCustomStraightLine
         }
         routeTypeButton.setImage(icon, for: .normal)
         var config = routeTypeButton.configuration

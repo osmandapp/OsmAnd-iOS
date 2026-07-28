@@ -110,7 +110,7 @@ extension RouteTypeViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_straight_line"),
-                           icon: .templateImageNamed("ic_custom_straight_line"),
+                           icon: .icCustomStraightLine,
                            tintColor: .iconColorActive,
                            isSelected: selectedMode == nil)
             return cell

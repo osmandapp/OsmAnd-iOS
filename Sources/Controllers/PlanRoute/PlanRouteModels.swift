@@ -71,16 +71,16 @@ enum PlanRouteMenuAction: CaseIterable {
         }
     }
 
-    var icon: UIImage? {
+    var icon: UIImage {
         switch self {
-        case .saveAs: .templateImageNamed("ic_custom_save_to_file")
-        case .saveAsCopy: .templateImageNamed("ic_custom_save_as_new_file")
-        case .appendToExistingTrack: .templateImageNamed("ic_custom_add_to_track")
-        case .changeSegmentOrder: .templateImageNamed("ic_custom_list")
-        case .viewDirections: .templateImageNamed("ic_custom_swap")
-        case .reverseRoute: .templateImageNamed("ic_custom_swap")
-        case .navigation: .templateImageNamed("ic_custom_navigation_outlined")
-        case .clearAllPoints: .templateImageNamed("ic_custom_trash_outlined")
+        case .saveAs: .icCustomSaveToFile
+        case .saveAsCopy: .icCustomSaveAsNewFile
+        case .appendToExistingTrack: .icCustomAddToTrack
+        case .changeSegmentOrder: .icCustomList
+        case .viewDirections: .icCustomSwap
+        case .reverseRoute: .icCustomSwap
+        case .navigation: .icCustomNavigationOutlined
+        case .clearAllPoints: .icCustomTrashOutlined
         }
     }
 

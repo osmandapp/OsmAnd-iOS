@@ -204,11 +204,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         }
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
         children.append(UIAction(title: localizedString("plan_route_save_as"),
-                                 image: .templateImageNamed("ic_custom_save_to_file")) { [weak self] _ in
+                                 image: .icCustomSaveToFile) { [weak self] _ in
             self?.dataSource?.saveSegment(pointIndexes: segment.pointIndexes)
         })
         children.append(UIAction(title: localizedString("delete_segment"),
-                                 image: .templateImageNamed("ic_custom_trash_outlined"),
+                                 image: .icCustomTrashOutlined,
                                  attributes: .destructive) { [weak self] _ in
             self?.deleteSegment(pointIndexes: segment.pointIndexes)
         })
@@ -218,14 +218,14 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func makeGroupMenu(for group: PlanRouteProfileGroup, in segment: PlanRouteSegment) -> UIMenu {
         let groupIndexes = group.points.map { $0.index }
         let modeSubtitle = group.appMode?.toHumanString() ?? localizedString("plan_route_straight_line")
-        let modeIcon = group.appMode?.getIcon() ?? .templateImageNamed("ic_custom_straight_line")
+        let modeIcon = group.appMode?.getIcon() ?? .icCustomStraightLine
         let changeRouteType = UIAction(title: localizedString("change_mode"),
                                        subtitle: modeSubtitle,
                                        image: modeIcon) { [weak self] _ in
             self?.onChangeRouteType?(.profileGroup(group, segment: segment))
         }
         let deleteSection = UIAction(title: localizedString("delete_section"),
-                                     image: .templateImageNamed("ic_custom_trash_outlined"),
+                                     image: .icCustomTrashOutlined,
                                      attributes: .destructive) { [weak self] _ in
             self?.deleteSegment(pointIndexes: groupIndexes)
         }
@@ -245,7 +245,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func makeSortMenu(pointIndexes: [Int]) -> UIMenu {
-        let sortImage = UIImage.templateImageNamed("ic_custom_swap")
+        let sortImage = UIImage.icCustomSwap
         let key = sortKey(for: pointIndexes)
         let isSortedDoorToDoor = doorToDoorSortedKeys.contains(key)
 
@@ -332,7 +332,7 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
             let mode = group.appMode
             cell.configure(title: mode?.toHumanString() ?? localizedString("plan_route_straight_line"),
                            distanceText: formattedDistance(group.distance),
-                           icon: mode?.getIcon() ?? .templateImageNamed("ic_custom_straight_line"),
+                           icon: mode?.getIcon() ?? .icCustomStraightLine,
                            tintColor: mode?.getProfileColor() ?? .buttonAccentsBlue,
                            menu: makeGroupMenu(for: group, in: segment))
             return cell

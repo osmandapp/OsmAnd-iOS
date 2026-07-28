@@ -225,10 +225,27 @@
     return [[OASGpxDbHelper shared] updateDataItemItem:item];
 }
 
-// We need this method to fix the problem with duplication only new tracks with apostrophe after renaming the way renaming it and then remove the duplicated files
+// Renames the GPX database item and removes stale entries whose paths use
+// different canonically equivalent Unicode representations.
 - (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile
 {
-    BOOL success = [[OASGpxDbHelper shared] renameCurrentFile:currentFile newFile:newFile];
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    OASKFile *sourceFile = [gpxDbHelper getItemFile:currentFile readIfNeeded:NO].file;
+    if (!sourceFile)
+    {
+        for (OASGpxDataItem *item in gpxDbHelper.getItems)
+        {
+            if ([item.file.absolutePath compare:currentFile.absolutePath] == NSOrderedSame)
+            {
+                sourceFile = item.file;
+                break;
+            }
+        }
+    }
+    if (!sourceFile)
+        return NO;
+
+    BOOL success = [gpxDbHelper renameCurrentFile:sourceFile newFile:newFile];
     if (!success)
         return NO;
 
@@ -237,7 +254,7 @@
     NSString *currentPathKey = currentPath.precomposedStringWithCanonicalMapping;
     NSString *newPathKey = newPath.precomposedStringWithCanonicalMapping;
     NSMutableArray<OASGpxDataItem *> *itemsToRemove = [NSMutableArray array];
-    for (OASGpxDataItem *item in [[OASGpxDbHelper shared] getItems])
+    for (OASGpxDataItem *item in gpxDbHelper.getItems)
     {
         NSString *itemPath = item.file.absolutePath;
         NSString *itemPathKey = itemPath.precomposedStringWithCanonicalMapping;
@@ -246,10 +263,10 @@
         if (isOldRenamedItem || isDuplicateNewItem)
             [itemsToRemove addObject:item];
     }
-    
+
     for (OASGpxDataItem *item in itemsToRemove)
-        [[OASGpxDbHelper shared] removeItem:item];
-    
+        [gpxDbHelper removeItem:item];
+
     return YES;
 }
 

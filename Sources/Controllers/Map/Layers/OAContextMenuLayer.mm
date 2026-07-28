@@ -422,52 +422,47 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
-    NSString *addressString = nil;
-    BOOL isAddressFound = NO;
-    NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
-    if (!roadTitle || roadTitle.length == 0)
-    {
-        addressString = OALocalizedString(@"map_no_address");
-    }
-    else
-    {
-        addressString = roadTitle;
-        isAddressFound = YES;
-    }
-    
-    if (isAddressFound || addressString)
-    {
-        formattedTargetName = addressString;
-    }
-    else
-    {
-        formattedTargetName = [OAPointDescription getLocationName:latitude lon:longitude sh:NO];
-    }
-    
+    NSString *formattedTargetName = OALocalizedString(@"shared_string_location");
+
     OAPOIType *poiType = [[OAPOILocationType alloc] init];
-    
+
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latitude;
     poi.longitude = longitude;
     poi.type = poiType;
-    
+
     if (poi.name.length == 0)
         poi.name = poiType.name;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = poiType.nameLocalized;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = formattedTargetName;
-    
+
     formattedTargetName = poi.nameLocalized;
-    
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
     targetPoint.title = formattedTargetName;
     targetPoint.icon = [poiType icon];
-    targetPoint.titleAddress = roadTitle;
+    targetPoint.titleAddress = nil;
     targetPoint.type = OATargetPOI;
     targetPoint.targetObj = poi;
+
+    OATargetPoint *tp = targetPoint;
+    OAPOI *tpPoi = poi;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
+        if (roadTitle.length == 0)
+            return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            if ([mapPanel getCurrentTargetPoint] != tp)
+                return;
+            tp.title = roadTitle;
+            tpPoi.nameLocalized = roadTitle;
+            [mapPanel updateContextMenu:tp];
+        });
+    });
 
     return targetPoint;
 }

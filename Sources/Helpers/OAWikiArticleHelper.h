@@ -58,7 +58,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
 + (nullable NSString *) readArchiveString:(nullable NSData *)archiveData;
 + (nullable UIMenu *)createLanguagesMenu:(nullable NSArray<NSString *> *)availableLocales selectedLocale:(nullable NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
-+ (BOOL)isWikipediaDownloadedAt:(CLLocation *)location;
 
 @end
 

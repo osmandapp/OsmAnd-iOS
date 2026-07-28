@@ -107,11 +107,26 @@
 
                         [OAAmenitySearcher searchAmenitiesByName:_name
                                                       resourceId:repository.resourceId.toNSString()
+                                                        location:location
                                                          matcher:matcher];
 
-                        [results addObjectsFromArray:wikiPoints];
-                        if (results.count > 0)
+                        if (wikiPoints.count > 1)
+                        {
+                            [wikiPoints sortUsingComparator:^NSComparisonResult(OAPOI *a, OAPOI *b) {
+                                CLLocation *la = [[CLLocation alloc] initWithLatitude:a.latitude longitude:a.longitude];
+                                CLLocation *lb = [[CLLocation alloc] initWithLatitude:b.latitude longitude:b.longitude];
+                                CLLocationDistance da = [location distanceFromLocation:la];
+                                CLLocationDistance db = [location distanceFromLocation:lb];
+                                if (da < db) return NSOrderedAscending;
+                                if (da > db) return NSOrderedDescending;
+                                return NSOrderedSame;
+                            }];
+                        }
+                        if (wikiPoints.count > 0)
+                        {
+                            [results addObject:wikiPoints.firstObject];
                             break;
+                        }
                     }
                     else
                     {
@@ -566,22 +581,6 @@
     }
     
     return languageMenu;
-}
-
-+ (BOOL)isWikipediaDownloadedAt:(CLLocation *)location
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    NSArray<OAWorldRegion *> *regions =
-        [app.worldRegion getWorldRegionsAt:location.coordinate.latitude
-                                longitude:location.coordinate.longitude];
-    for (OAWorldRegion *region in regions)
-    {
-        OAWorldRegion *wikiRegion = [OAWikiArticleHelper findWikiRegion:region];
-        OARepositoryResourceItem *item = [OAWikiArticleHelper findResourceItem:wikiRegion];
-        if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
-            return YES;
-    }
-    return NO;
 }
 
 @end

@@ -60,6 +60,7 @@
 #import "OrderedDictionary.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -1518,7 +1519,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
             [OAWikiArticleHelper showWikiArticle:@[location]
                                              url:url onStart:^{
-                if ([OAWikiArticleHelper isWikipediaDownloadedAt:location])
+                if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
                     [progressHUD show:YES];
             } sourceView:[_tableView cellForRowAtIndexPath:indexPath] onComplete:^{
                 [progressHUD hide:YES];
@@ -1899,7 +1900,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                 [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:self.location.latitude
                                                                                 longitude:self.location.longitude]]
                                                  url:info.text onStart:^{
-                    if ([OAWikiArticleHelper isWikipediaDownloadedAt:location])
+                    if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
                         [progressHUD show:YES];
                 } sourceView:[tableView cellForRowAtIndexPath:indexPath] onComplete:^{
                     [progressHUD hide:YES];

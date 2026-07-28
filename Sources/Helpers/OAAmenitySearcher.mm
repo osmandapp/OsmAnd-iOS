@@ -1100,6 +1100,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)name
                                  resourceId:(NSString *)resourceId
+                                   location:(nullable CLLocation *)location
                                     matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1125,6 +1126,12 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     searchCriteria->matcherMode = OsmAnd::StringMatcherMode::CHECK_EQUALS;
     searchCriteria->obfInfoAreaFilter = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
     searchCriteria->localResources = { localResource };
+    
+    if (location)
+    {
+        OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
+        searchCriteria->xy31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    }
 
     const auto search =
         std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(

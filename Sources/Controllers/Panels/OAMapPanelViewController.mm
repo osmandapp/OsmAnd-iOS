@@ -2966,9 +2966,6 @@ typedef enum
     UIImage *icon = [item icon];
     
     targetPoint.type = OATargetHistoryItem;
-
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = [self findRoadNameByLat:lat lon:lon];
     _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
@@ -2976,10 +2973,10 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
-    targetPoint.titleAddress = _formattedTargetName;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
+    targetPoint.shouldFetchAddress = YES;
     
     [_targetMenuView setTargetPoint:targetPoint];
     
@@ -3722,7 +3719,7 @@ typedef enum
 
     _targetDestination = destination;
 
-    _targetMenuView.isAddressFound = YES;
+    _targetMenuView.isAddressFound = NO;
     _formattedTargetName = caption;
     _targetMode = EOATargetPoint;
     _targetLatitude = destination.latitude;
@@ -3732,7 +3729,7 @@ typedef enum
     targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
     targetPoint.title = _formattedTargetName;
     targetPoint.icon = icon;
-    targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
+    targetPoint.shouldFetchAddress = YES;
 
     [_targetMenuView setTargetPoint:targetPoint];
     [self enterContextMenuMode];

@@ -9,13 +9,13 @@
 extension FavoriteListViewController {
     func favoriteSortMode(entryId: String? = nil) -> FavoriteSortMode {
         let sortModes = settings.getFavoriteSortModes()
-        guard let sortModeTitle = sortModes[entryId ?? currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
-        return FavoriteSortMode.byTitle(sortModeTitle)
+        guard let sortModeValue = sortModes[entryId ?? currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
+        return FavoriteSortMode(rawValue: sortModeValue) ?? FavoriteSortModeHelper.defaultSortMode()
     }
 
     func searchFavoriteSortMode() -> FavoriteSortMode {
-        let sortModeTitle = settings.searchFavoriteSortMode.get()
-        return FavoriteSortMode.byTitle(sortModeTitle)
+        let sortModeValue = settings.searchFavoriteSortMode.get()
+        return FavoriteSortMode(rawValue: sortModeValue) ?? FavoriteSortModeHelper.defaultSortMode()
     }
     
     func clearFavoriteSortModes(forGroupNames groupNames: [String]) {
@@ -177,10 +177,10 @@ extension FavoriteListViewController {
 
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
         if isSearchResultsMode {
-            settings.searchFavoriteSortMode.set(sortMode.title)
+            settings.searchFavoriteSortMode.set(sortMode.rawValue)
         } else {
             var sortModes = settings.getFavoriteSortModes()
-            sortModes[currentSortEntryId] = sortMode.title
+            sortModes[currentSortEntryId] = sortMode.rawValue
             settings.saveFavoriteSortModes(sortModes)
         }
 

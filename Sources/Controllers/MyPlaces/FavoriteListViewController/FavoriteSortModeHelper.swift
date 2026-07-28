@@ -22,14 +22,14 @@ protocol FavoriteSortablePoint {
     var lastModified: Date? { get }
 }
 
-@objc enum FavoriteSortMode: Int, CaseIterable {
-    case lastModified
-    case nameAZ
-    case nameZA
-    case nearestToCurrentLocation
-    case nearestToMapCenter
-    case newestDateFirst
-    case oldestDateFirst
+enum FavoriteSortMode: String, CaseIterable {
+    case lastModified = "LAST_MODIFIED"
+    case nameAZ = "NAME_ASCENDING"
+    case nameZA = "NAME_DESCENDING"
+    case nearestToCurrentLocation = "NEAREST"
+    case nearestToMapCenter = "NEAREST_TO_MAP_CENTER"
+    case newestDateFirst = "DATE_ASCENDING"
+    case oldestDateFirst = "DATE_DESCENDING"
 
     var title: String {
         switch self {
@@ -70,10 +70,6 @@ protocol FavoriteSortablePoint {
     var isMapCenterDistanceOriented: Bool {
         self == .nearestToMapCenter
     }
-
-    static func byTitle(_ title: String) -> FavoriteSortMode {
-        allCases.first { $0.title == title } ?? .nameAZ
-    }
 }
 
 @objc final class FavoriteSortModeHelper: NSObject {
@@ -89,8 +85,8 @@ protocol FavoriteSortablePoint {
         .nameAZ
     }
 
-    @objc static func defaultSortModeTitle() -> String {
-        defaultSortMode().title
+    @objc static func defaultSortModeValue() -> String {
+        defaultSortMode().rawValue
     }
 
     private static func compareFolders<Folder: FavoriteSortableFolder>(_ lhs: Folder, _ rhs: Folder, mode: FavoriteSortMode) -> ComparisonResult {

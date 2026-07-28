@@ -524,7 +524,7 @@ private extension PlanRouteAnalyzeViewController {
         return classes
     }()
 
-    static func steepnessBoundaryClass(from lower: Int, to upper: Int) -> String {
+    private static func steepnessBoundaryClass(from lower: Int, to upper: Int) -> String {
         "steepness=\(lower)_\(upper)"
     }
 }
@@ -1027,7 +1027,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             description: localizedString("no_elevation_data_description"),
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
-            action: { [weak self] in self?.showGetElevationSheet() }
+            action: {
+                [weak self] in self?.showGetElevationSheet()
+            }
         )
     }
 

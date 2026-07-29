@@ -540,11 +540,9 @@ extension FavoriteListViewController {
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
 
         if foldersCount > 0 && pointsCount == 0 {
-            let localizedKey = foldersCount == 1 ? "folder_delete_confirmation_title" : "folders_delete_confirmation_title"
-            return String(format: localizedString(localizedKey), foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: "The title with numbers of folders to delete"), foldersCount)
         } else if pointsCount > 0 && foldersCount == 0 {
-            let localizedKey = pointsCount == 1 ? "favorite_delete_confirmation_title" : "favorites_delete_confirmation_title"
-            return String(format: localizedString(localizedKey), pointsCount)
+            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: "The title with numbers of points to delete"), pointsCount)
         } else {
             return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
         }
@@ -559,14 +557,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
-        let localizedKey: String
-        if folders.count == 1 {
-            localizedKey = pointsCount == 1 ? "folder_favorite_delete_message" : "folder_favorites_delete_message"
-        } else {
-            localizedKey = pointsCount == 1 ? "folders_favorite_delete_message" : "folders_favorites_delete_message"
-        }
-
-        return String(format: localizedString(localizedKey), folders.count, pointsCount)
+        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: "The message with numbers of folders and points to delete"), folders.count, pointsCount)
     }
     
     private func openPickerToImport() {

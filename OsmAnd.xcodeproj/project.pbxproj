@@ -1498,6 +1498,7 @@
 		BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
+		CEFA10002D29000100ABCDEF /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = CEFA10012D29000100ABCDEF /* Localizable.stringsdict */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
@@ -5772,6 +5773,7 @@
 		CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTracksTask.swift; sourceTree = "<group>"; };
 		CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTracksViewController.swift; sourceTree = "<group>"; };
 		CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPointsViewController.swift; sourceTree = "<group>"; };
+		CEFA10022D29000100ABCDEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroWikiBridge.swift; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
@@ -10944,6 +10946,7 @@
 				C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */,
 				C5735AF42AFE9CB500638715 /* InfoPlist.strings */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
+				CEFA10012D29000100ABCDEF /* Localizable.stringsdict */,
 				81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */,
 			);
 			name = Resources;
@@ -15879,6 +15882,7 @@
 				DA86607F2268A2870041F57D /* ic_custom_show_on_map@3x.png in Resources */,
 				DA5A828026C563A700F274C7 /* OATargetInfoViewCell.xib in Resources */,
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
+				CEFA10002D29000100ABCDEF /* Localizable.stringsdict in Resources */,
 				FA44BF3F2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@2x.png in Resources */,
 				8A7672232281A5150098DE84 /* ic_action_location_color@3x.png in Resources */,
 				323BD8F92628850400D255ED /* ic_bg_point_comment_center@3x.png in Resources */,
@@ -19246,6 +19250,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		CEFA10012D29000100ABCDEF /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CEFA10022D29000100ABCDEF /* en */,
+			);
+			name = Localizable.stringsdict;
+			path = Resources/Localizations;
+			sourceTree = "<group>";
+		};
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

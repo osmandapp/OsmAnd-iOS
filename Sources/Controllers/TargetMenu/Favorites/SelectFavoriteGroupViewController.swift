@@ -163,10 +163,10 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
     private func addFavoriteGroupRows(to section: OATableSectionData) {
         let usesAllFavoriteGroups = favoriteGroupNames == nil
         let selectedName = selectedGroupName ?? ""
-        let selectedDisplayName = OAFavoritesBridgeHelper.displayName(forFavoriteGroup: selectedName)
+        let selectedDisplayName = OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: selectedName)
         let defaultGroupDisplayName = localizedString("favorites_item")
 
-        if usesAllFavoriteGroups && !OAFavoritesBridgeHelper.hasFavoriteGroup("") {
+        if usesAllFavoriteGroups && !OAFavoritesHelperBridge.shared().hasFavoriteGroup("") {
             addGroupRow(
                 to: section,
                 title: defaultGroupDisplayName,
@@ -176,15 +176,15 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
             )
         }
 
-        for groupName in favoriteGroupNames ?? OAFavoritesBridgeHelper.favoriteGroupNames() {
-            let displayName = OAFavoritesBridgeHelper.displayName(forFavoriteGroup: groupName)
+        for groupName in favoriteGroupNames ?? OAFavoritesHelperBridge.shared().favoriteGroupNames() {
+            let displayName = OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: groupName)
             addGroupRow(
                 to: section,
                 title: displayName,
                 value: usesAllFavoriteGroups ? nil : groupName,
-                description: String(OAFavoritesBridgeHelper.pointsCount(forFavoriteGroup: groupName)),
+                description: String(OAFavoritesHelperBridge.shared().pointsCount(forFavoriteGroup: groupName)),
                 isSelected: usesAllFavoriteGroups ? displayName == selectedDisplayName : groupName == selectedName,
-                color: OAFavoritesBridgeHelper.color(forFavoriteGroup: groupName)
+                color: OAFavoritesHelperBridge.shared().color(forFavoriteGroup: groupName)
             )
         }
     }

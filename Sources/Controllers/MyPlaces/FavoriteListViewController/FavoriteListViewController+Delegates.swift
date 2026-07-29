@@ -25,7 +25,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 updateSelectionUI()
                 return
             }
-            OAFavoritesBridgeHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
+            OAFavoritesHelperBridge.shared().openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
         default:
             break
         }
@@ -78,7 +78,7 @@ extension FavoriteListViewController: OAShareMenuDelegate {
         guard let pointToShare else { return }
         switch type {
         case .clipboard:
-            copyFavoritePointShareText(OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesHelperBridge.shared().sharePoiURLString(forFavoritePoint: pointToShare))
         case .copyAddress:
             if let address = pointToShare.address, !address.isEmpty {
                 copyFavoritePointShareText(address)
@@ -92,9 +92,9 @@ extension FavoriteListViewController: OAShareMenuDelegate {
                 OAUtilities.showToast(localizedString("toast_empty_name_error"), details: nil, duration: 4, in: view)
             }
         case .copyCoordinates:
-            copyFavoritePointShareText(OAFavoritesBridgeHelper.formattedCoordinates(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesHelperBridge.shared().formattedCoordinates(forFavoritePoint: pointToShare))
         case .geo:
-            copyFavoritePointShareText(OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesHelperBridge.shared().geoURLString(forFavoritePoint: pointToShare))
         default:
             break
         }
@@ -153,7 +153,7 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
         let selectedItems = bridgeItems(for: selectionManager.selectedItems)
         guard !selectedItems.isEmpty else { return }
         if colorController.saveChanges {
-            OAFavoritesBridgeHelper.changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
+            OAFavoritesHelperBridge.shared().changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
         }
 
         setEditing(false)
@@ -170,13 +170,13 @@ extension FavoriteListViewController: SelectFavoriteGroupDelegate {
         guard let favoriteItemsToMove else { return }
 
         let targetGroupName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let availableGroupNames = OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItemsToMove)
+        let availableGroupNames = OAFavoritesHelperBridge.shared().favoriteGroupNames(forMovingFavoriteItems: favoriteItemsToMove)
         if let existingGroupName = availableGroupNames.first(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == targetGroupName }) {
             moveFavoriteItems(toGroupName: existingGroupName)
             return
         }
 
-        guard OAFavoritesBridgeHelper.addFavoriteGroup(targetGroupName, parentGroupName: nil, iconName: iconName, color: color, backgroundIconName: backgroundIconName) else {
+        guard OAFavoritesHelperBridge.shared().addFavoriteGroup(targetGroupName, parentGroupName: nil, iconName: iconName, color: color, backgroundIconName: backgroundIconName) else {
             self.favoriteItemsToMove = nil
             return
         }
@@ -188,7 +188,7 @@ extension FavoriteListViewController: SelectFavoriteGroupDelegate {
         guard let favoriteItemsToMove else { return }
 
         createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
-        OAFavoritesBridgeHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
+        OAFavoritesHelperBridge.shared().moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
         updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
         setEditing(false)
         applySnapshot(animatingDifferences: true)
@@ -199,10 +199,10 @@ extension FavoriteListViewController: SelectFavoriteGroupDelegate {
 extension FavoriteListViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
         if let addToTrackFavoriteItems {
-            OAFavoritesBridgeHelper.addFavoriteItems(toTrack: addToTrackFavoriteItems, gpxFileName: gpxFilePath)
+            OAFavoritesHelperBridge.shared().addFavoriteItems(toTrack: addToTrackFavoriteItems, gpxFileName: gpxFilePath)
             self.addToTrackFavoriteItems = nil
         } else if let addToTrackGroupName {
-            OAFavoritesBridgeHelper.addFavoriteGroup(toTrack: addToTrackGroupName, gpxFileName: gpxFilePath)
+            OAFavoritesHelperBridge.shared().addFavoriteGroup(toTrack: addToTrackGroupName, gpxFileName: gpxFilePath)
             self.addToTrackGroupName = nil
         }
     }
@@ -210,7 +210,7 @@ extension FavoriteListViewController: OAOpenAddTrackDelegate {
 
 extension FavoriteListViewController: OAEditorDelegate {
     func addNewItem(withName name: String?, iconName: String, color: UIColor, backgroundIconName: String) {
-        guard OAFavoritesBridgeHelper.addFavoriteGroup(name ?? "",
+        guard OAFavoritesHelperBridge.shared().addFavoriteGroup(name ?? "",
                                                       parentGroupName: parentGroupName,
                                                       iconName: iconName,
                                                       color: color,
@@ -223,9 +223,9 @@ extension FavoriteListViewController: OAEditorDelegate {
             renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
         }
 
+        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         favoriteGroupAppearanceGroupName = nil
         favoriteGroupAppearanceEditor = nil
-        OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
     }
 
     func selectColorItem(_ colorItem: PaletteItemSolid) {}
@@ -259,7 +259,7 @@ extension FavoriteListViewController: OAEditorDelegate {
 
 extension FavoriteListViewController: OAEditPointViewControllerDelegate {
     func saveTapped() {
-        OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
+        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         applySnapshot()
     }
 }

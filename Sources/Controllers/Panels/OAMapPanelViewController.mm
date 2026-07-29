@@ -50,7 +50,7 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
-#import "OAFavoritesBridgeHelper.h"
+#import "OAFavoritesHelperBridge.h"
 #import "OADownloadMapWidget.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
@@ -2185,7 +2185,7 @@ typedef enum
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
     OAPOI *poi = [self getTargetPointPoi];
-    [OAFavoritesBridgeHelper createMissingParentFolderIfNeeded];
+    [[OAFavoritesHelperBridge shared] createMissingParentFolderIfNeeded];
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
@@ -2202,7 +2202,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [OAFavoritesBridgeHelper createMissingParentFolderIfNeeded];
+    [[OAFavoritesHelperBridge shared] createMissingParentFolderIfNeeded];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithFavorite:item];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];

@@ -24,7 +24,7 @@
 #import "OAColors.h"
 #import "OABackupHelper.h"
 #import "OABackupError.h"
-#import "OAFavoritesBridgeHelper.h"
+#import "OAFavoritesHelperBridge.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -297,7 +297,7 @@
     {
         _shouldInvalidateFavoritesCache = NO;
         if (error == nil)
-            [OAFavoritesBridgeHelper invalidateFavoriteFoldersCache];
+            [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
     }
 
     if (error != nil)

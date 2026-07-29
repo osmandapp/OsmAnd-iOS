@@ -42,7 +42,7 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
-#import "OAFavoritesBridgeHelper.h"
+#import "OAFavoritesHelperBridge.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -857,7 +857,7 @@
     {
         _shouldInvalidateFavoritesCache = NO;
         if (!notification.userInfo[@"error"])
-            [OAFavoritesBridgeHelper invalidateFavoriteFoldersCache];
+            [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
     }
 }
 

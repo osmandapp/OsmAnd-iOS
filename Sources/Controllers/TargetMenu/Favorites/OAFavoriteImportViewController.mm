@@ -9,8 +9,8 @@
 #import "OAFavoriteImportViewController.h"
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
-#import "OAFavoritesBridgeHelper.h"
 #import "OAFavoritesHelper.h"
+#import "OAFavoritesHelperBridge.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -164,7 +164,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             return;
 
         [OAFavoritesHelper importFavoritesFromGpx:_gpxFile];
-        [OAFavoritesBridgeHelper invalidateFavoriteFoldersCache];
+        [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
 
         [_ignoredNames removeAllObjects];
         _conflictedItem = nil;

@@ -126,7 +126,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     }
     
     private static func loadCollapsedSections() -> Set<FavoriteFolderSection> {
-        let sections = OAFavoritesBridgeHelper.collapsedSections()
+        let sections = OAFavoritesHelperBridge.shared().collapsedSections()
         return Set(sections.compactMap(FavoriteFolderSection.init(rawValue:)))
     }
 
@@ -508,7 +508,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     private func createMissingParentFolderIfNeeded() {
         guard isRootFolder else { return }
-        OAFavoritesBridgeHelper.createMissingParentFolderIfNeeded()
+        OAFavoritesHelperBridge.shared().createMissingParentFolderIfNeeded()
     }
     
     deinit {

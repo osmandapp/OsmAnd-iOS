@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 extension FavoriteListViewController {
     func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesBridgeHelper.pointsGroup(forGroupName: groupName)) else { return }
+        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
         favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
@@ -23,14 +23,14 @@ extension FavoriteListViewController {
             return
         }
         let viewController = SelectFavoriteGroupViewController(selectedGroupName: parentGroupName,
-                                                               favoriteGroupNames: OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems))
+                                                               favoriteGroupNames: OAFavoritesHelperBridge.shared().favoriteGroupNames(forMovingFavoriteItems: favoriteItems))
         favoriteItemsToMove = favoriteItems
         viewController.delegate = self
         navigationController.present(UINavigationController(rootViewController: viewController), animated: true)
     }
 
     func openFavoriteGroupAddToTrack(_ groupName: String) {
-        guard OAFavoritesBridgeHelper.canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
+        guard OAFavoritesHelperBridge.shared().canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
         addToTrackGroupName = groupName
         addToTrackFavoriteItems = nil
         viewController.delegate = self
@@ -47,12 +47,12 @@ extension FavoriteListViewController {
 
     func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
         let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
-        let favorites = favoritePointRows(OAFavoritesBridgeHelper.favoritePoints(forGroupName: groupName), sortMode: sortMode)
+        let favorites = favoritePointRows(OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: groupName), sortMode: sortMode)
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
     }
 
     func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        favoritePointRows(allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesBridgeHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName) })
+        favoritePointRows(allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.bridgeItem.groupName) })
     }
 
     func makeActionsMenu() -> UIMenu {
@@ -107,7 +107,7 @@ extension FavoriteListViewController {
                 return
             }
 
-            OAFavoritesBridgeHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
+            OAFavoritesHelperBridge.shared().renameFavoriteGroup(oldGroupName, newName: newGroupName)
             self.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
             self.applySnapshot(animatingDifferences: true)
         }
@@ -127,7 +127,7 @@ extension FavoriteListViewController {
         let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
         let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesBridgeHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
+            guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
             self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
             self?.applySnapshot(animatingDifferences: true)
         })
@@ -140,7 +140,7 @@ extension FavoriteListViewController {
         let title = String(format: localizedString("delete_favorite_confirmation_title"), favorite.title)
         let alert = UIAlertController(title: title, message: localizedString("favorites_delete_confirmation_message"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesBridgeHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
+            guard OAFavoritesHelperBridge.shared().deleteFavoritePoint(favorite.bridgeItem) else { return }
             self?.applySnapshot(animatingDifferences: true)
         })
 
@@ -309,8 +309,8 @@ extension FavoriteListViewController {
     }
 
     @objc func favoriteDataDidChange() {
+        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         DispatchQueue.main.async { [weak self] in
-            OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
             self?.applySnapshot(animatingDifferences: true)
         }
     }
@@ -456,7 +456,7 @@ extension FavoriteListViewController {
         appendFavoritePointShareLine(point.displayGroupName, to: sharingText)
         appendFavoritePointShareLine(point.itemDescription, to: sharingText)
         appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
-        if let url = URL(string: OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)) {
+        if let url = URL(string: OAFavoritesHelperBridge.shared().sharePoiURLString(forFavoritePoint: point)) {
             items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon()))
         }
         if sharingText.length > 0 {
@@ -474,12 +474,12 @@ extension FavoriteListViewController {
     }
     
     private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
-        let geoURLString = OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: point)
+        let geoURLString = OAFavoritesHelperBridge.shared().geoURLString(forFavoritePoint: point)
         if !geoURLString.isEmpty {
             sharingText.append("\n\(localizedString("shared_string_location")): \(geoURLString)")
         }
 
-        let shareURLString = OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)
+        let shareURLString = OAFavoritesHelperBridge.shared().sharePoiURLString(forFavoritePoint: point)
         if !shareURLString.isEmpty {
             sharingText.append("\n\(shareURLString)")
         }
@@ -514,7 +514,7 @@ extension FavoriteListViewController {
             return
         }
 
-        guard let favoritesUrl = OAFavoritesBridgeHelper.shareFavoriteItems(selectedBridgeItems) else { return }
+        guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
         showActivity(
             [favoritesUrl],
             sourceView: sourceView,
@@ -527,7 +527,7 @@ extension FavoriteListViewController {
 
     private func removeSelectedFavoriteItems(_ items: [Any]) {
         let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
-        if OAFavoritesBridgeHelper.deleteFavoriteItems(items) {
+        if OAFavoritesHelperBridge.shared().deleteFavoriteItems(items) {
             clearFavoriteSortModes(forGroupNames: groupNames)
         }
 

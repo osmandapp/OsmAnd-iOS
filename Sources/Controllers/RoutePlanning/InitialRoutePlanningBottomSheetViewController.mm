@@ -18,7 +18,6 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
 

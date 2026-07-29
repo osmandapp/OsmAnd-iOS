@@ -252,10 +252,4 @@ extension SegmentRouteSettingsViewController: OASettingsDataDelegate {
         guard let settingsMode else { return }
         dataSource?.refreshRoute(for: settingsMode)
     }
-
-    func closeSettingsScreenWithRouteInfo() {
-    }
-
-    func openNavigationSettings() {
-    }
 }

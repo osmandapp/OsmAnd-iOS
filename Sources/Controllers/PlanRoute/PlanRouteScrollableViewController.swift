@@ -474,16 +474,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return nil
     }
 
-    @objc private func onRouteTypeButtonTapped() {
-        let segments = dataProvider.routeSegments
-        let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
-        if isComplex {
-            presentRouteBetweenPoints()
-        } else {
-            presentSettingsForContext(.wholeTrack)
-        }
-    }
-
     private func crosshairCenterY(sheetHeight: CGFloat) -> CGFloat {
         let screenHeight = OAUtilities.calculateScreenHeight()
         if sheetHeight <= height(for: .initial) {
@@ -766,6 +756,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
         present(alert, animated: true)
+    }
+
+    @objc private func onRouteTypeButtonTapped() {
+        let segments = dataProvider.routeSegments
+        let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
+        if isComplex {
+            presentRouteBetweenPoints()
+        } else {
+            presentSettingsForContext(.wholeTrack)
+        }
     }
 
     @objc private func onSegmentChanged() {

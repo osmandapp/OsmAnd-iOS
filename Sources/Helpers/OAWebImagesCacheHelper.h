@@ -19,6 +19,8 @@
 
 - (void) fetchSingleImageByURL:(NSString *)url customKey:(NSString *)customKey downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *imageData))onComplete;
 
+- (NSArray<NSString *> *) extractImagesLinksFromHtml:(NSString *)html;
+
 - (NSString *) getDbKeyByLink:(NSString *)url;
 - (NSString *) readImageByDbKey:(NSString *)key;
 - (void) cleanAllData;

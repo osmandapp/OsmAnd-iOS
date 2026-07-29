@@ -56,6 +56,9 @@
     NSString *_astroWikidataId;
     NSArray<NSString *> *_astroAvailableLocales;
     NSInteger _headerImageRequestId;
+    NSInteger _bodyImagesRequestId;
+    BOOL _pendingBodyImagesInject;
+    BOOL _bodyImagesOnlyNow;
 }
 
 #pragma mark - Initialization
@@ -527,10 +530,13 @@
 {
     if (!loadWebView)
         return;
+
+    BOOL onlyNow = [self isDownloadImagesOnlyNow];
     
     if ([self isImageTagAppended])
     {
         loadWebView(_content);
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
         return;
     }
 
@@ -546,15 +552,15 @@
         _content = html;
         loadWebView(html);
         [self printHtmlToDebugFileIfEnabled:html];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
         return;
     }
-    
-    BOOL onlyNow = [self isDownloadImagesOnlyNow];
 
     if (![self isImagesDownloadingAllowed])
     {
         loadWebView(_content);
         [self printHtmlToDebugFileIfEnabled:_content];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
         return;
     }
     else
@@ -562,6 +568,7 @@
         _content = [self appendHeaderImageTag];
         loadWebView(_content);
         [self printHtmlToDebugFileIfEnabled:_content];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
     }
     
     NSInteger requestId = ++_headerImageRequestId;
@@ -683,6 +690,74 @@
     [self.webView evaluateJavaScript:js completionHandler:nil];
 }
 
+- (void)markBodyImagesInjectWithOnlyNow:(BOOL)onlyNow
+{
+    _bodyImagesOnlyNow = onlyNow;
+    _pendingBodyImagesInject = YES;
+    _bodyImagesRequestId++;
+}
+
+- (void)startInjectingBodyImagesIfNeeded
+{
+    if (!_pendingBodyImagesInject)
+        return;
+    
+    _pendingBodyImagesInject = NO;
+    
+    if (_content.length == 0)
+        return;
+
+    NSInteger requestId = _bodyImagesRequestId;
+    BOOL onlyNow = _bodyImagesOnlyNow;
+    OADownloadMode *downloadMode = [self getImagesDownloadMode];
+    NSArray<NSString *> *links = [_imageCacheHelper extractImagesLinksFromHtml:_content];
+
+    for (NSString *url in links)
+    {
+        if (![url hasPrefix:@"http"])
+            continue;
+
+        [_imageCacheHelper fetchSingleImageByURL:url
+                                       customKey:nil
+                                    downloadMode:downloadMode
+                                         onlyNow:onlyNow
+                                      onComplete:^(NSString *imageData) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (requestId != self->_bodyImagesRequestId)
+                    return;
+                [self injectBodyImageBase64:imageData forOriginalSrc:url];
+            });
+        }];
+    }
+}
+
+- (void)injectBodyImageBase64:(NSString *)base64 forOriginalSrc:(NSString *)originalSrc
+{
+    if (base64.length == 0 || originalSrc.length == 0 || !self.view.window)
+        return;
+
+    NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
+    NSString *escapedSrc = [self jsEscapedString:originalSrc];
+    NSString *js = [NSString stringWithFormat:
+        @"document.querySelectorAll('img').forEach(function(img) {"
+        @"  if (img.id === 'wiki-header-image') return;"
+        @"  if (img.getAttribute('src') === '%@') {"
+        @"    img.src = '%@';"
+        @"  }"
+        @"});",
+        escapedSrc, src];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+- (NSString *)jsEscapedString:(NSString *)string
+{
+    NSString *result = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    result = [result stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    result = [result stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    result = [result stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+    return result;
+}
+
 - (BOOL) isImagesDownloadingAllowed
 {
     OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
@@ -791,6 +866,7 @@
     if (content)
     {
         _headerImageRequestId++;
+        _bodyImagesRequestId++;
         _contentLocale = locale;
         _content = content;
         [self createLanguagesNavbarButton];
@@ -824,6 +900,7 @@
         return;
     
     _headerImageRequestId++;
+    _bodyImagesRequestId++;
     _astroRawHtml = data[@"html"];
     _astroTitle = data[@"title"];
     _contentLocale = data[@"locale"];
@@ -849,6 +926,8 @@
 
 - (void)webViewDidCommitted:(void(^)(void))onViewCommitted
 {
+    [self startInjectingBodyImagesIfNeeded];
+
     BOOL containsRTL = [[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];

@@ -152,7 +152,8 @@
             break;
         
         NSString *imageLink = [html substringWithRange:NSMakeRange(currentIndex, srcEndTagRange.location - srcStartTagRange.location - srcStartTagRange.length)];
-        [allImageLinks addObject:imageLink];
+        if ([imageLink hasPrefix:@"http"])
+            [allImageLinks addObject:imageLink];
         
         currentIndex = srcEndTagRange.location + srcEndTagRange.length;
         nextImgTagRange = [html rangeOfString:@"<img" options:0 range:NSMakeRange(currentIndex, [html length] - currentIndex)];

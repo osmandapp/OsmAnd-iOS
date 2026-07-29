@@ -540,7 +540,8 @@
     {
         NSString *html = [self appendHeaderImageTag];
         NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:cached];
-        html = [html stringByReplacingOccurrencesOfString:@"id=\"wiki-header-image\" src=\"\""
+        html = [html stringByReplacingOccurrencesOfString:
+                    @"id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"\""
                                                withString:[NSString stringWithFormat:@"id=\"wiki-header-image\" src=\"%@\"", src]];
         _content = html;
         loadWebView(html);
@@ -633,16 +634,34 @@
     }
     else
     {
+        NSString *shimmerCSS =
+        @"<style>"
+        @"#wiki-header-image.wiki-header-shimmer {"
+        @"  width:100%;"
+        @"  background:linear-gradient(90deg,#E8E8E8 25%,#F4F4F4 50%,#E8E8E8 75%);"
+        @"  background-size:200% 100%;"
+        @"  animation:wikiHeaderShimmer 1.2s infinite linear;"
+        @"}"
+        @"@keyframes wikiHeaderShimmer {"
+        @"  0%{background-position:200% 0;}"
+        @"  100%{background-position:-200% 0;}"
+        @"}"
+        @"</style>";
+        
+        NSString *imgTag = [NSString stringWithFormat:
+                            @"%@<img id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"\" "
+                            @"style=\"object-fit:cover; object-position:center; width:100%%; height:%dpx; display:block;\" />",
+                            shimmerCSS,
+                            kHeaderImageHeight];
+        
         return [_content stringByReplacingOccurrencesOfString:@"</head>"
-                                                   withString:[NSString stringWithFormat:@"<img id=\"wiki-header-image\" src=\"\" "
-                                                               "style=\"object-fit:cover; object-position:center; height:%dpx;\"></head>",
-                                                               kHeaderImageHeight]];
+                                                   withString:[imgTag stringByAppendingString:@"</head>"]];
     }
 }
 
 - (BOOL)isImageTagAppended
 {
-    return [_content containsString:@"px;\"></head>"];
+    return [_content containsString:@"id=\"wiki-header-image\""];
 }
 
 - (void)injectHeaderImageBase64:(NSString *)base64 requestId:(NSInteger)requestId
@@ -654,10 +673,13 @@
         return;
     
     NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
-    
-    NSString *js = [NSString stringWithFormat:@"var img = document.getElementById('wiki-header-image');"
-                    "if (img) { img.src = '%@'; }",
-                    src];
+        NSString *js = [NSString stringWithFormat:
+            @"var img = document.getElementById('wiki-header-image');"
+            @"if (img) {"
+            @"  img.classList.remove('wiki-header-shimmer');"
+            @"  img.src = '%@';"
+            @"}",
+            src];
     [self.webView evaluateJavaScript:js completionHandler:nil];
 }
 

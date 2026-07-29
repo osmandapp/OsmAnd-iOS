@@ -677,7 +677,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         else if ([targetScreenKey isEqualToString:kVehicleMetrics])
             settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
         else if ([targetScreenKey isEqualToString:kAisTrackerSettings])
-            settingsScreen = [[OAPluginsHelper getPlugin:AisTrackerPlugin.class] getSettingsController];
+            settingsScreen = [[AisTrackerSettingsViewController alloc] initWithPlugin:(AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class] appMode:_appMode];
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }

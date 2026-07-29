@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef __cplusplus
 #include <routingConfiguration.h>
 #import "OACurrentStreetName.h"
+#endif
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OARoutingHelper;
@@ -22,7 +24,7 @@ struct RoutingParameter;
                             ref:(NSString *)ref
                     destination:(NSString *)destination
                         towards:(NSString *)towards;
-
+#ifdef __cplusplus
 + (NSString *) formatStreetName:(NSString *)name
                             ref:(NSString *)ref
                     destination:(NSString *)destination
@@ -30,6 +32,7 @@ struct RoutingParameter;
                         shields:(nullable NSArray<RoadShield *> *)shields;
 
 + (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router;
+#endif
 
 + (int) lookAheadFindMinOrthogonalDistance:(CLLocation *)currentLocation routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute iterations:(int)iterations;
 
@@ -39,6 +42,9 @@ struct RoutingParameter;
     previewNextTurn:(BOOL)previewNextTurn;
 
 + (void) updateDrivingRegionIfNeeded:(CLLocation *)newStartLocation force:(BOOL)force;
+
++ (nullable NSString *)routingParamsQueryValueForAppMode:(OAApplicationMode *)mode;
++ (void)applyRoutingParamsQueryValue:(nullable NSString *)params forAppMode:(OAApplicationMode *)mode;
 
 @end
 

@@ -393,6 +393,7 @@ final class DeepLinkParser: NSObject {
         var intermediatePointsParam: String?
         var endLatLonParam: String?
         var appModeKeyParam: String?
+        var routingParamsParam: String?
         for item in queryItems {
             switch item.name.lowercased() {
             case "end":
@@ -404,6 +405,8 @@ final class DeepLinkParser: NSObject {
                 appModeKeyParam = item.value
             case "via":
                 intermediatePointsParam = item.value
+            case "params":
+                routingParamsParam = item.value
             default:
                 break
             }
@@ -435,6 +438,11 @@ final class DeepLinkParser: NSObject {
         let appMode = OAApplicationMode.value(ofStringKey: appModeKeyParam, def: nil)
         if let appModeKeyParam, !appModeKeyParam.isEmpty, appMode == nil {
             NSLog("App mode with specified key not available, using default navigation app mode")
+        }
+        
+        let mode = appMode ?? OARoutingHelper.sharedInstance().getAppMode()
+        if let routingParamsParam, !routingParamsParam.isEmpty {
+            OARoutingHelperUtils.applyRoutingParamsQueryValue(routingParamsParam, forAppMode: mode)
         }
         
         let points = parseIntermediatePoints(intermediatePointsParam)

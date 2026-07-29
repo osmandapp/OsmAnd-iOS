@@ -9,7 +9,6 @@
 #import "OAPlanRouteEditingBridge.h"
 #import "OAPointOptionsBottomSheetViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import "OAMapRendererView.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
@@ -62,7 +61,6 @@
 - (OAMeasurementEditingContext *)editingContext;
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to;
 - (double)bearingFrom:(OASWptPt *)from to:(OASWptPt *)to;
-- (CLLocationCoordinate2D)crosshairLocation;
 - (NSString *)absoluteGpxPathFromPath:(NSString *)filePath;
 - (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath;
 - (BOOL)isDraftGpxPath:(NSString *)filePath;
@@ -1039,40 +1037,6 @@
         [sheet presentInViewController:presenter];
 }
 
-- (NSInteger)findNearestPointToCoordinate:(CLLocationCoordinate2D)coordinate
-{
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || ctx.getPointsCount == 0 || mapView == nil)
-        return -1;
-
-    CGPoint p0 = CGPointZero;
-    CGPoint p1 = CGPointMake(0., 44.);
-    OsmAnd::PointI ip0, ip1;
-    [mapView convert:p0 toLocation:&ip0];
-    [mapView convert:p1 toLocation:&ip1];
-    OsmAnd::LatLon ll0 = OsmAnd::Utilities::convert31ToLatLon(ip0);
-    OsmAnd::LatLon ll1 = OsmAnd::Utilities::convert31ToLatLon(ip1);
-    double hitRadius = [OAMapUtils getDistance:ll0.latitude lon1:ll0.longitude lat2:ll1.latitude lon2:ll1.longitude];
-
-    NSInteger nearest = -1;
-    double lowestDist = hitRadius;
-    for (NSInteger i = 0; i < ctx.getPointsCount; i++)
-    {
-        OASWptPt *pt = ctx.getPoints[i];
-        double dist = [OAMapUtils getDistance:coordinate.latitude
-                                         lon1:coordinate.longitude
-                                         lat2:pt.getLatitude
-                                         lon2:pt.getLongitude];
-        if (dist < lowestDist)
-        {
-            lowestDist = dist;
-            nearest = i;
-        }
-    }
-    return nearest;
-}
-
 - (void)addPointBeforeIndex:(NSInteger)index
 {
     OAMeasurementToolLayer *layer = [self layer];
@@ -1172,7 +1136,8 @@
         return;
 
     _editingPoiStateSnapshot = nil;
-    CLLocationCoordinate2D location = [self crosshairLocation];
+    OAMeasurementToolLayer *layer = [self layer];
+    CLLocationCoordinate2D location = layer != nil ? [layer crosshairLocation] : kCLLocationCoordinate2DInvalid;
     if (!CLLocationCoordinate2DIsValid(location))
         return;
     
@@ -1439,30 +1404,6 @@
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = afterState;
-}
-
-- (CLLocationCoordinate2D)crosshairLocation
-{
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView == nil)
-        return kCLLocationCoordinate2DInvalid;
-    
-    OAMeasurementToolLayer *layer = [self layer];
-    OsmAnd::PointI location31;
-    if (layer != nil && !CGPointEqualToPoint(layer.cursorScreenPoint, CGPointZero))
-    {
-        CGFloat scale = mapView.contentScaleFactor;
-        CGPoint scaledPoint = CGPointMake(layer.cursorScreenPoint.x * scale, layer.cursorScreenPoint.y * scale);
-        [mapView convert:scaledPoint toLocation:&location31];
-    }
-    else
-    {
-        const auto center = [mapView getCenterPixel];
-        location31 = [OANativeUtilities get31FromElevatedPixel:center];
-    }
-    
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(location31);
-    return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
 }
 
 - (void)saveAs:(NSString *)fileName
@@ -1756,7 +1697,7 @@
     if (ctx == nil)
         return;
 
-    NSInteger hitIndex = [self findNearestPointToCoordinate:coordinate];
+    NSInteger hitIndex = [layer findNearestPointToCoordinate:coordinate];
     if (hitIndex != -1)
     {
         [self showPointOptionsAtIndex:hitIndex];

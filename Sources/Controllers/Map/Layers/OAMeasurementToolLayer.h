@@ -29,6 +29,9 @@
 - (OASWptPt *) addCenterPoint:(BOOL)addPointBefore;
 - (OASWptPt *) addPoint:(BOOL)addPointBefore;
 
+- (CLLocationCoordinate2D)crosshairLocation;
+- (NSInteger)findNearestPointToCoordinate:(CLLocationCoordinate2D)coordinate;
+
 - (void) enterMovingPointMode;
 - (void) exitMovingMode;
 
@@ -39,4 +42,3 @@
 - (void) moveMapToPoint:(NSInteger)pos;
 
 @end
-

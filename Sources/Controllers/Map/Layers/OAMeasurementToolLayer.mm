@@ -300,6 +300,59 @@
     return nil;
 }
 
+- (CLLocationCoordinate2D)crosshairLocation
+{
+    OAMapRendererView *mapView = self.mapViewController.mapView;
+    if (mapView == nil)
+        return kCLLocationCoordinate2DInvalid;
+    
+    OsmAnd::PointI location31;
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        [mapView convert:scaledPoint toLocation:&location31];
+    }
+    else
+    {
+        const auto center = [mapView getCenterPixel];
+        location31 = [OANativeUtilities get31FromElevatedPixel:center];
+    }
+    
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(location31);
+    return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+}
+
+- (NSInteger)findNearestPointToCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    OAMapRendererView *mapView = self.mapViewController.mapView;
+    if (_editingCtx == nil || _editingCtx.getPointsCount == 0 || mapView == nil)
+        return -1;
+    
+    CGPoint p0 = CGPointZero;
+    CGPoint p1 = CGPointMake(0., 44.);
+    OsmAnd::PointI ip0, ip1;
+    [mapView convert:p0 toLocation:&ip0];
+    [mapView convert:p1 toLocation:&ip1];
+    OsmAnd::LatLon ll0 = OsmAnd::Utilities::convert31ToLatLon(ip0);
+    OsmAnd::LatLon ll1 = OsmAnd::Utilities::convert31ToLatLon(ip1);
+    double hitRadius = [OAMapUtils getDistance:ll0.latitude lon1:ll0.longitude lat2:ll1.latitude lon2:ll1.longitude];
+    NSInteger nearest = -1;
+    double lowestDist = hitRadius;
+    for (NSInteger i = 0; i < _editingCtx.getPointsCount; i++)
+    {
+        OASWptPt *pt = _editingCtx.getPoints[i];
+        double dist = [OAMapUtils getDistance:coordinate.latitude lon1:coordinate.longitude lat2:pt.getLatitude lon2:pt.getLongitude];
+        if (dist < lowestDist)
+        {
+            lowestDist = dist;
+            nearest = i;
+        }
+    }
+    
+    return nearest;
+}
+
 - (double) getPointsDensity
 {
     if (_editingCtx.getPointsCount < 2)

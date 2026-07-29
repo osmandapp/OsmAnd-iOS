@@ -9,6 +9,7 @@
 #import "OAPlanRouteEditingBridge.h"
 #import "OAPointOptionsBottomSheetViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "CLLocation+Extension.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
@@ -60,7 +61,6 @@
 - (OAMeasurementToolLayer *)layer;
 - (OAMeasurementEditingContext *)editingContext;
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to;
-- (double)bearingFrom:(OASWptPt *)from to:(OASWptPt *)to;
 - (NSString *)absoluteGpxPathFromPath:(NSString *)filePath;
 - (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath;
 - (BOOL)isDraftGpxPath:(NSString *)filePath;
@@ -349,17 +349,6 @@
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
     return [OAMapUtils getDistance:from.lat lon1:from.lon lat2:to.lat lon2:to.lon];
-}
-
-- (double)bearingFrom:(OASWptPt *)from to:(OASWptPt *)to
-{
-    double lat1 = from.lat * M_PI / 180.0;
-    double lat2 = to.lat * M_PI / 180.0;
-    double deltaLon = (to.lon - from.lon) * M_PI / 180.0;
-    double y = sin(deltaLon) * cos(lat2);
-    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon);
-    double degrees = atan2(y, x) * 180.0 / M_PI;
-    return fmod(degrees + 360.0, 360.0);
 }
 
 - (NSArray<PlanRouteSegmentData *> *)buildSegments
@@ -869,7 +858,9 @@
             if (!previous.isGap)
             {
                 legDistance = [self distanceFrom:previous to:point];
-                bearing = [self bearingFrom:previous to:point];
+                CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
+                CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
+                bearing = [OAMapUtils normalizeDegrees360:[previousLocation bearingTo:pointLocation]];
                 groupDistance += legDistance;
             }
         }

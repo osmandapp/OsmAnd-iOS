@@ -23,6 +23,8 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     private var shouldReloadTableView = false
     private var pendingContextMenuAction: (() -> Void)?
     private var sortModeByGroupName: [String: TrackFavoriteSortMode] = [:]
+    private var distanceAndDirectionObservers: [OAAutoObserverProxy] = []
+    private var lastDistanceAndDirectionUpdate: TimeInterval = 0
     private weak var dataSource: PlanRoutePoiDataSource?
     private var isEmptyState: Bool {
         groups.isEmpty
@@ -40,6 +42,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        registerDistanceAndDirectionObservers()
         reloadData()
     }
     
@@ -85,6 +88,15 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
             guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath) as? OASimpleTableViewCell else { return }
             configurePoiCell(cell, with: groups[indexPath.section].points[indexPath.row])
         }
+    }
+
+    private func registerDistanceAndDirectionObservers() {
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        let selector = #selector(updateDistanceAndDirection as () -> Void)
+        distanceAndDirectionObservers = [
+            OAAutoObserverProxy(self, withHandler: selector, andObserve: app.locationServices.updateLocationObserver),
+            OAAutoObserverProxy(self, withHandler: selector, andObserve: app.locationServices.updateHeadingObserver)
+        ]
     }
 
     private func finishContextMenuInteraction() {
@@ -265,6 +277,21 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         alert.preferredAction = addAction
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+
+    @objc private func updateDistanceAndDirection() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard !isContextMenuVisible else {
+                shouldReloadTableView = true
+                return
+            }
+            
+            let currentTime = Date.now.timeIntervalSince1970
+            guard currentTime - lastDistanceAndDirectionUpdate >= 0.3 else { return }
+            lastDistanceAndDirectionUpdate = currentTime
+            updateVisiblePoiCells()
+        }
     }
 }
 

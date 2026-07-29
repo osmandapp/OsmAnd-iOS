@@ -231,7 +231,7 @@
     if (filePath.length > 0)
     {
         NSString *absolutePath = filePath.isAbsolutePath ? filePath : [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
-        OASGpxFile *selectedFile = [OASelectedGPXHelper.instance activeGpx][absolutePath.lastPathComponent];
+        OASGpxFile *selectedFile = [OASelectedGPXHelper.instance activeGpxFileForPath:absolutePath fallbackPath:filePath];
         if (selectedFile)
     {
             gpxFile = selectedFile;

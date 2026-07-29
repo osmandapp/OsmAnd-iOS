@@ -1897,8 +1897,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                 CLLocation *location = [[CLLocation alloc] initWithLatitude:self.location.latitude
                                                                   longitude:self.location.longitude];
                 
-                [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:self.location.latitude
-                                                                                longitude:self.location.longitude]]
+                [OAWikiArticleHelper showWikiArticle:@[location]
                                                  url:info.text onStart:^{
                     if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
                         [progressHUD show:YES];

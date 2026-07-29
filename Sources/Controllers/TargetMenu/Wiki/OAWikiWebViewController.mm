@@ -491,7 +491,7 @@
         return _externalURL;
     } else {
         NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-        NSString *wikipediaTitle = [self getWikipediaTitleURL];
+        NSString *wikipediaTitle = [self wikipediaTitleURL];
         NSString *wikiUrl = [OAWikiAlgorithms getWikiUrlWithText:[NSString stringWithFormat:@"%@:%@", locale, wikipediaTitle]];
         return [NSURL URLWithString:wikiUrl];
     }
@@ -534,7 +534,7 @@
         return;
     }
 
-    NSString *dbKey = [self getHeaderImageCacheDbKey];
+    NSString *dbKey = [self headerImageCacheDbKey];
     NSString *cached = [_imageCacheHelper readImageByDbKey:dbKey];
     if (cached.length > 0)
     {
@@ -547,6 +547,8 @@
         [self printHtmlToDebugFileIfEnabled:html];
         return;
     }
+    
+    BOOL onlyNow = [self isDownloadImagesOnlyNow];
 
     if (![self isImagesDownloadingAllowed])
     {
@@ -569,7 +571,7 @@
         [self->_imageCacheHelper fetchSingleImageByURL:headerImageUrl
                                              customKey:dbKey
                                           downloadMode:[self getImagesDownloadMode]
-                                               onlyNow:[self isDownloadImagesOnlyNow]
+                                               onlyNow:onlyNow
                                             onComplete:^(NSString *imageData) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self injectHeaderImageBase64:imageData requestId:requestId];
@@ -581,7 +583,7 @@
 - (void)fetchHeaderImageUrl:(void (^)(NSString *headerImageUrl))onComplete
 {
     NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-    NSString *wikipediaTitle = [self getWikipediaTitleURL];
+    NSString *wikipediaTitle = [self wikipediaTitleURL];
     NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
                                 locale,
                                 wikipediaTitle,
@@ -667,7 +669,7 @@
         ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi]);
 }
 
-- (NSString *)getHeaderImageCacheDbKey
+- (NSString *)headerImageCacheDbKey
 {
     return [_imageCacheHelper getDbKeyByLink:[self getUrl].absoluteString];
 }
@@ -732,7 +734,7 @@
 
 #pragma mark - Additions
 
-- (NSString *)getWikipediaTitleURL
+- (NSString *)wikipediaTitleURL
 {
     NSString *title = [self getTitle];
     BOOL hasLocalizedName = ![title isEqualToString:OALocalizedString(@"download_wikipedia_maps")];

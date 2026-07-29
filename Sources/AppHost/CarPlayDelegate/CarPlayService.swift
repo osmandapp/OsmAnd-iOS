@@ -47,7 +47,13 @@ final class CarPlayService: NSObject {
         restoreOriginalMapAppearanceModeIfNeeded()
         appMapAppearanceMode = nil
         carPlayMapAppearanceMode = nil
-        OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
+        // Evaluate on the next runloop turn so connectedScenes reflects the
+        // just-disconnected scene's removal (resolves the connect/disconnect race
+        // and the dual app + dashboard scene case).
+        DispatchQueue.main.async {
+            let hasRemainingCarPlayScene = UIApplication.shared.isCarPlayConnected
+            OARoutingHelper.sharedInstance().onCarPlayDisconnected(withRemainingScene: hasRemainingCarPlayScene)
+        }
         navigationModeProvider.restoreOnDisconnect()
         if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
             OAQuickSearchHelper.instance().setResourcesForSearchUICore()

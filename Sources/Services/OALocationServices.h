@@ -60,5 +60,6 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 
 - (void)resume;
 - (void)suspend;
+- (void)updateBackgroundState;
 
 @end

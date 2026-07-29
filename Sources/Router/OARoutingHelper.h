@@ -120,7 +120,7 @@ struct RouteSegmentResult;
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 - (void)stopRouteCalculation;
 - (void)resumeNavigationAfterCarPlayReconnect;
-- (void)onCarPlayConnectionStateChanged;
+- (void)onCarPlayDisconnectedWithRemainingScene:(BOOL)hasRemainingCarPlayScene;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
 

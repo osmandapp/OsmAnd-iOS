@@ -341,6 +341,48 @@
     }
 }
 
+// Re-evaluates whether location services should be running, suspended, or
+// resumed. Unlike onApplicationDidEnterBackground (which fires on the system
+// background notification), this is meant to be called when the effective
+// background state may have changed without an app-level background transition
+// — e.g. when CarPlay disconnects/reconnects while the device screen is locked.
+- (void)updateBackgroundState
+{
+    OALocationServicesStatus status = self.status;
+    BOOL shouldRun = [self shouldBeRunningInBackground];
+
+    if (status == OALocationServicesStatusSuspended)
+    {
+        // Resume if back in foreground on device, or something needs background
+        // running again (CarPlay reconnected / nav resumed / track recording).
+        if (!_app.isInBackgroundOnDevice || shouldRun)
+            [self resume];
+        return;
+    }
+
+    BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
+    if (!isRunning)
+        return;
+
+    if (_app.isInBackgroundOnDevice)
+    {
+        if (!shouldRun)
+        {
+            OALog(@"Suspending location services (background state re-evaluated)");
+            [self suspend];
+        }
+        else
+        {
+            [self setupDistanceFilter:YES];
+        }
+    }
+    else
+    {
+        [self setupDistanceFilter:NO];
+        [self updateRequestedAccuracy];
+    }
+}
+
 - (CLLocation*) lastKnownLocation
 {
     //return [[CLLocation alloc] initWithLatitude:44.953197568579 longitude:34.097549412400];

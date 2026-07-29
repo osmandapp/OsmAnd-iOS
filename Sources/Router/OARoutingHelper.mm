@@ -186,29 +186,40 @@ static BOOL _isDeviatedFromRoute = false;
         _isPausedDueToCarPlayDisconnect = NO;
         [self resumeNavigation];
     }
+    // Resume GPS if it was suspended after a prior CarPlay disconnect, otherwise
+    // navigation would run with a frozen (last-known) position.
+    [_app.locationServices updateBackgroundState];
 }
 
-- (void)onCarPlayConnectionStateChanged
+- (void)onCarPlayDisconnectedWithRemainingScene:(BOOL)hasRemainingCarPlayScene
 {
-    if (UIApplication.sharedApplication.isCarPlayConnected)
+    // Act only when the LAST CarPlay scene disconnects. If another CarPlay
+    // scene (app or dashboard) is still connected, keep navigating.
+    if (hasRemainingCarPlayScene)
+        return;
+
+    if ([self isFollowingMode])
     {
-        if ([self isFollowingMode])
+        if ([self getLeftDistance] < kCarDisconnectStopNavigationDistanceMeters)
         {
-            if ([self getLeftDistance] < kCarDisconnectStopNavigationDistanceMeters)
+            [_app stopNavigation];
+        }
+        else
+        {
+            CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+            if (currentLocation && currentLocation.speed >= 0 && currentLocation.speed < kCarDisconnectPauseSpeedMetersPerSecond)
             {
-                [_app stopNavigation];
-            }
-            else
-            {
-                CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
-                if (currentLocation && currentLocation.speed >= 0 && currentLocation.speed < kCarDisconnectPauseSpeedMetersPerSecond)
-                {
-                    [self pauseNavigation];
-                    _isPausedDueToCarPlayDisconnect = YES;
-                }
+                [self pauseNavigation];
+                _isPausedDueToCarPlayDisconnect = YES;
             }
         }
     }
+
+    // CarPlay kept GPS alive (shouldBeRunningInBackground / isInBackground both
+    // depend on isCarPlayConnected). Now the last CarPlay scene is gone, so
+    // re-evaluate: suspend GPS if the device is backgrounded and no longer needs
+    // it. Nothing else re-triggers this when the screen is already locked.
+    [_app.locationServices updateBackgroundState];
 }
 
 - (void) resumeNavigation

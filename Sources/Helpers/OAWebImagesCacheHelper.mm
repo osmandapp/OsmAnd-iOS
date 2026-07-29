@@ -171,7 +171,7 @@
         if (!imageAsBase64String && imageAsBase64String.length == 0 )
             imageAsBase64String = @"";
         
-        NSString *srcTagContent = [OAImageToStringConverter getHtmlImgSrcTagContent:imageAsBase64String];
+        NSString *srcTagContent = [OAImageToStringConverter htmlImgSrcTagContent:imageAsBase64String];
         resultHtml = [resultHtml stringByReplacingOccurrencesOfString:link withString:srcTagContent];
     }
     return resultHtml;

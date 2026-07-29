@@ -539,7 +539,7 @@
     if (cached.length > 0)
     {
         NSString *html = [self appendHeaderImageTag];
-        NSString *src = [OAImageToStringConverter getHtmlImgSrcTagContent:cached];
+        NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:cached];
         html = [html stringByReplacingOccurrencesOfString:@"id=\"wiki-header-image\" src=\"\""
                                                withString:[NSString stringWithFormat:@"id=\"wiki-header-image\" src=\"%@\"", src]];
         _content = html;
@@ -653,7 +653,7 @@
     if (requestId != _headerImageRequestId)
         return;
     
-    NSString *src = [OAImageToStringConverter getHtmlImgSrcTagContent:base64];
+    NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
     
     NSString *js = [NSString stringWithFormat:@"var img = document.getElementById('wiki-header-image');"
                     "if (img) { img.src = '%@'; }",

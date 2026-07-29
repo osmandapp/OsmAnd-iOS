@@ -58,44 +58,6 @@
     NSUInteger _terrainElevationVersion;
 }
 
-- (OAMeasurementToolLayer *)layer;
-- (OAMeasurementEditingContext *)editingContext;
-- (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to;
-- (NSString *)absoluteGpxPathFromPath:(NSString *)filePath;
-- (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath;
-- (BOOL)isDraftGpxPath:(NSString *)filePath;
-- (nullable OASGpxFile *)gpxFileForWaypoints;
-- (NSString *)poiGroupKeyForName:(NSString *)groupName;
-- (void)addPoiGroupNamesFromGpx:(nullable OASGpxFile *)gpxFile toSet:(NSMutableOrderedSet<NSString *> *)groupNames;
-- (BOOL)addPoiGroupToGpx:(nullable OASGpxFile *)gpxFile groupName:(NSString *)groupName;
-- (BOOL)renamePoiGroupInGpx:(nullable OASGpxFile *)gpxFile fromKey:(NSString *)oldKey toKey:(NSString *)newKey displayName:(NSString *)displayName;
-- (BOOL)deletePoiGroupInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey;
-- (BOOL)performAddPoiGroup:(NSString *)groupName;
-- (BOOL)performRenamePoiGroupFromName:(NSString *)oldName toName:(NSString *)newName;
-- (BOOL)performDeletePoiGroupWithName:(NSString *)groupName;
-- (BOOL)performChangePoiGroupAppearanceForName:(NSString *)groupName color:(UIColor *)color;
-- (BOOL)performSaveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName;
-- (BOOL)performDeleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath;
-- (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation;
-- (void)commitPoiStateCommandFromState:(nullable PlanRoutePoiStateSnapshot *)beforeState toState:(nullable PlanRoutePoiStateSnapshot *)afterState;
-- (PlanRoutePoiStateSnapshot *)makePoiStateSnapshot;
-- (void)restorePoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state;
-- (void)applyPoiStateSnapshot:(PlanRoutePoiStateSnapshot *)state toGpxFile:(OASGpxFile *)gpxFile draft:(BOOL)draft;
-- (void)syncActiveGpxPoiStateFromGpxFile:(OASGpxFile *)gpxFile;
-- (void)addPoiGroupsFromGpx:(nullable OASGpxFile *)sourceGpx toGpx:(OASGpxFile *)targetGpx;
-- (void)ensurePoiGroupForPoint:(OASWptPt *)point inGpx:(OASGpxFile *)gpxFile;
-- (NSInteger)getPoiGroupColor:(NSString *)groupName;
-- (NSArray<OAGpxWptItem *> *)changePoiGroupAppearanceInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey color:(UIColor *)color;
-- (BOOL)changePoiGroupMetadataAppearanceInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey color:(UIColor *)color;
-- (void)refreshDraftGpx;
-- (void)clearDraftGpx;
-- (void)addDraftWaypointsToGpx:(OASGpxFile *)gpx;
-- (PlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex pointIndexes:(NSArray<NSNumber *> *)pointIndexes allPoints:(NSArray<OASWptPt *> *)allPoints;
-- (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key indexes:(NSArray<NSNumber *> *)indexes allPoints:(NSArray<OASWptPt *> *)allPoints;
-- (BOOL)shouldShowRouteCalculationStateForContext:(nullable OAMeasurementEditingContext *)ctx;
-- (void)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx;
-- (void)performSaveWithFileName:(NSString *)fileName folder:(nullable NSString *)folder showOnMap:(BOOL)showOnMap asCopy:(BOOL)asCopy onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
-
 @end
 
 @implementation OAPlanRouteEditingBridge
@@ -1177,19 +1139,6 @@
     return [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
 }
 
-- (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath
-{
-    NSDictionary<NSString *, OASGpxFile *> *activeGpx = OASelectedGPXHelper.instance.activeGpx;
-    OASGpxFile *activeGpxFile = activeGpx[path];
-    if (activeGpxFile == nil && fallbackPath.length > 0)
-        activeGpxFile = activeGpx[fallbackPath];
-    if (activeGpxFile == nil && path.lastPathComponent.length > 0)
-        activeGpxFile = activeGpx[path.lastPathComponent];
-    if (activeGpxFile == nil && fallbackPath.lastPathComponent.length > 0)
-        activeGpxFile = activeGpx[fallbackPath.lastPathComponent];
-    return activeGpxFile;
-}
-
 - (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -1275,7 +1224,7 @@
         return;
     
     NSString *path = [self absoluteGpxPathFromPath:gpxFile.path];
-    OASGpxFile *activeGpxFile = [self activeGpxFileForPath:path fallbackPath:gpxFile.path];
+    OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:path fallbackPath:gpxFile.path];
     if (activeGpxFile != nil && activeGpxFile != gpxFile)
         [self applyPoiStateSnapshot:[[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] toGpxFile:activeGpxFile draft:NO];
     
@@ -1472,7 +1421,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (success && restoreOriginalActiveGpx)
             {
-                OASGpxFile *activeGpxFile = [self activeGpxFileForPath:originalGpxPath fallbackPath:nil];
+                OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:originalGpxPath fallbackPath:nil];
                 if (activeGpxFile != nil)
                 {
                     [self applyPoiStateSnapshot:originalPoiStateSnapshot toGpxFile:activeGpxFile draft:NO];

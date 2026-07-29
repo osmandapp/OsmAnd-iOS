@@ -217,6 +217,14 @@
 
 @synthesize statusObservable = _statusObservable;
 
+- (BOOL) externalProviderActive
+{
+    @synchronized(_lock)
+    {
+        return _externalProviderActive;
+    }
+}
+
 - (BOOL) doStart
 {
     CLLocationManager *manager = self.getLocationManager;

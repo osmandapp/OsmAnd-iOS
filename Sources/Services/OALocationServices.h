@@ -43,6 +43,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property (readonly) OAObservable *updateHeadingObserver;
 @property (readonly) OAObservable *updateFirstTimeObserver;
 @property (readonly) OALocationSimulation *locationSimulation;
+@property (readonly) BOOL externalProviderActive;
 
 + (void) showDeniedAlert;
 

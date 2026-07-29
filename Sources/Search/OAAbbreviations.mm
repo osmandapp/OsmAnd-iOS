@@ -1,5 +1,5 @@
 //
-//  OAAbbreviations.m
+//  OAAbbreviations.mm
 //  OsmAnd Maps
 //
 //  Created by plotva on 30.04.2021.
@@ -8,59 +8,75 @@
 
 #import <Foundation/Foundation.h>
 #import "OAAbbreviations.h"
-#import "OASearchPhrase.h"
+
+#include <OsmAndCore/Search/Abbreviations.h>
+
+static QSet<QString> OAAbbreviationsToQSet(NSSet<NSString *> *values)
+{
+    QSet<QString> result;
+    for (NSString *value in values)
+    {
+        result.insert(QString::fromNSString(value));
+    }
+    return result;
+}
+
+static NSDictionary<NSString *, NSString *> *OAAbbreviationsToNSDictionary(
+    const QHash<QString, QString>& values)
+{
+    NSMutableDictionary<NSString *, NSString *> *result =
+        [NSMutableDictionary dictionaryWithCapacity:values.size()];
+    for (auto it = values.constBegin(); it != values.constEnd(); ++it)
+    {
+        result[it.key().toNSString()] = it.value().toNSString();
+    }
+    return [result copy];
+}
 
 @implementation OAAbbreviations
 
-static NSDictionary *ABBREVIATIONS = @{ @"e" : @"East",
-                                 @"w" : @"West",
-                                 @"s" : @"South",
-                                 @"n" : @"North",
-                                 @"sw" : @"Southwest",
-                                 @"se" : @"Southeast",
-                                 @"nw" : @"Northwest",
-                                 @"ne" : @"Northeast",
-                                 @"ln" : @"Lane",
-                                 @"dr" : @"Drive",
-                                 @"rd" : @"Road",
-                                 @"ave" : @"Avenue",
-                                 @"st"  : @"Street",
-                                 @"blvd" : @"Boulevard"
-};
++ (BOOL) likelyPartOfRef:(NSString *)word wordSplit:(NSSet<NSString *> *)wordSplit
+{
+    const QSet<QString> qWordSplit = OAAbbreviationsToQSet(wordSplit);
+    return OsmAnd::Abbreviations::likelyPartOfRef(QString::fromNSString(word), qWordSplit);
+}
+
++ (BOOL) likelyPartOfBuilding:(NSString *)word wordSplit:(NSSet<NSString *> *)wordSplit
+{
+    const QSet<QString> qWordSplit = OAAbbreviationsToQSet(wordSplit);
+    return OsmAnd::Abbreviations::likelyPartOfBuilding(
+        QString::fromNSString(word),
+        wordSplit == nil ? nullptr : &qWordSplit);
+}
+
++ (NSDictionary<NSString *, NSString *> *) getSearchAbbreviations
+{
+    return OAAbbreviationsToNSDictionary(OsmAnd::Abbreviations::getSearchabbreviations());
+}
+
++ (BOOL) isCommonSkipOtherCnt:(NSString *)lowerCase
+{
+    return OsmAnd::Abbreviations::isCommonSkipOtherCnt(QString::fromNSString(lowerCase));
+}
 
 + (NSString *) replace:(NSString *)word
 {
-    NSString *value = ABBREVIATIONS[[word lowercaseString]];
-    return value ? value : word;
+    return OsmAnd::Abbreviations::replace(QString::fromNSString(word)).toNSString();
 }
 
 + (NSString *) replaceAll:(NSString *)phrase
 {
-    NSArray<NSString *> *words = [phrase componentsSeparatedByString:[OASearchPhrase getDelimiter]];
-    NSMutableString *r = [NSMutableString new];
-    BOOL changed = NO;
-    for (NSString *word in words)
-    {
-        if ([r length] > 0)
-            [r appendString:[OASearchPhrase getDelimiter]];
-        
-        NSString *abbrRes = [ABBREVIATIONS objectForKey:[word lowercaseString]];
-        if (abbrRes == nil)
-        {
-            [r appendString:word];
-        }
-        else
-        {
-            changed = YES;
-            [r appendString:abbrRes];
-        }
-    }
-    return changed ? [NSString stringWithString:r] : phrase;
+    return OsmAnd::Abbreviations::replaceAll(QString::fromNSString(phrase)).toNSString();
 }
 
-+ (NSDictionary *) getAbbreviations
++ (NSDictionary<NSString *, NSString *> *) getAbbreviations
 {
-    return ABBREVIATIONS;
+    return OAAbbreviationsToNSDictionary(OsmAnd::Abbreviations::getAbbreviations());
+}
+
++ (BOOL) isConjunction:(NSString *)lowerCase
+{
+    return OsmAnd::Abbreviations::isConjunction(QString::fromNSString(lowerCase));
 }
 
 @end

@@ -35,7 +35,6 @@ static NSString *ALLDELIMITERS = @"\\s|,";
 static NSString *ALLDELIMITERS_WITH_HYPHEN = @"\\s|,|-";
 static NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:ALLDELIMITERS options:0 error:nil];
 
-static NSSet<NSString *> *conjunctions;
 static NSCharacterSet *allDelimitersSet;
 
 static const int ZOOM_TO_SEARCH_POI = 16;
@@ -93,26 +92,6 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
     if (self == [OASearchPhrase class])
     {
         allDelimitersSet = [NSCharacterSet characterSetWithCharactersInString:ALLDELIMITERS];
-        conjunctions = [NSSet setWithObjects:
-                        // the
-                        @"the",
-                        @"der",
-                        @"den",
-                        @"die",
-                        @"das",
-                        @"la",
-                        @"le",
-                        @"el",
-                        @"il",
-                        // and
-                        @"and",
-                        @"und",
-                        @"en",
-                        @"et",
-                        @"y",
-                        @"и",
-                        // Don't add short names !  issues for perfect matching "Drive A", ...
-                        nil];
         sCommonWordWeightCache = [NSCache new];
         sCommonWordWeightCache.countLimit = 100;
     }
@@ -141,7 +120,7 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
             }
             else
             {
-                int value = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString(key));
+                int value = OsmAnd::CommonWords::getInstance().getCommonSearch(QString::fromNSString(key));
                 NSNumber *num = @(value);
                 weights[w] = num;
                 [sCommonWordWeightCache setObject:num forKey:key];
@@ -205,7 +184,7 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
         for (NSInteger i = 0; i < ws.count; i++)
         {
             NSString *wd = [ws[i] trim];
-            BOOL conjunction = [conjunctions containsObject:wd.lowerCase];
+            BOOL conjunction = [OAAbbreviations isConjunction:wd.lowerCase];
             BOOL lastAndComplete = i == (ws.count - 1) && !sp.lastUnknownSearchWordComplete;
             BOOL decryptAbbreviations = [self needDecryptAbbreviations];
             if (wd.length > 0 && (!conjunction || lastAndComplete))

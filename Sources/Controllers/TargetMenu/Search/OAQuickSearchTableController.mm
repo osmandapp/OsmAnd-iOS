@@ -680,7 +680,7 @@
                     }
                     cell.descriptionLabel.text = nil;
                     cell.descriptionLabel.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:dataItem sortMode:TracksSortModeLastModified includeFolderInfo:YES];
-                    BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
+                    BOOL isVisible = [[OAAppSettings sharedManager] isGpxVisible:dataItem.gpxFilePath];
                     cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
                     return cell;
                 }

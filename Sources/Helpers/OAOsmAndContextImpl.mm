@@ -333,7 +333,7 @@ static NSString * const kGpxImportDir = @"import";
 - (BOOL)isGpxFileVisiblePath:(NSString *)path __attribute__((swift_name("isGpxFileVisible(path:)")))
 {
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
-    return [OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:gpxFilePath];
+    return [OAAppSettings.sharedManager isGpxVisible:gpxFilePath];
 }
 
 - (OASGpxFile *)getSelectedFileByPathPath:(NSString *)path

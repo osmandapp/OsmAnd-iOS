@@ -66,6 +66,7 @@ static NSString * const kWeatherSettings              = @"weather";
 static NSString * const kWikipediaSettings            = @"wikipedia";
 static NSString * const kExternalSensors              = @"externalSensors";
 static NSString * const kVehicleMetrics               = @"vehicleMetrics";
+static NSString * const kAisTrackerSettings           = @"aisTracker";
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -318,6 +319,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : OALocalizedString(@"obd_plugin_name"),
             @"img" : @"ic_custom_car_info",
             @"key" : kVehicleMetrics
+        }];
+    }
+
+    OAPlugin *aisTracker = [OAPluginsHelper getEnabledPlugin:AisTrackerPlugin.class];
+    if (aisTracker)
+    {
+        [plugins addObject:@{
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : aisTracker.getName,
+            @"img" : @"ic_plugin_nautical",
+            @"key" : kAisTrackerSettings
         }];
     }
     
@@ -664,6 +676,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
         else if ([targetScreenKey isEqualToString:kVehicleMetrics])
             settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
+        else if ([targetScreenKey isEqualToString:kAisTrackerSettings])
+            settingsScreen = [[OAPluginsHelper getPlugin:AisTrackerPlugin.class] getSettingsController];
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }

@@ -30,6 +30,7 @@
 #import "OAGpxApproximationHelper.h"
 #import "OAGpxApproximationParams.h"
 #import "OAApplyGpxApproximationCommand.h"
+#import "OARouteExporter.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @class OAMeasurementToolLayer, OAMeasurementEditingContext;
@@ -76,50 +77,6 @@
 {
     _pointsVersion++;
     _terrainElevationGpxFile = nil;
-}
-
-- (OASGpxFile *)buildTerrainElevationGpx:(NSArray<OASWptPt *> *)densifiedPoints
-{
-    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-    OASTrack *track = [[OASTrack alloc] init];
-    track.segments = [NSMutableArray array];
-
-    NSMutableArray<OASWptPt *> *trkPoints = [NSMutableArray array];
-    OASTrkSegment *segment = [[OASTrkSegment alloc] init];
-    OASWptPt *previousPoint = nil;
-    double cumulativeDistance = 0;
-
-    for (OASWptPt *point in densifiedPoints)
-    {
-        if (point.isGap)
-        {
-            if (trkPoints.count > 0)
-            {
-                segment.points = trkPoints;
-                [track.segments addObject:segment];
-            }
-            trkPoints = [NSMutableArray array];
-            segment = [[OASTrkSegment alloc] init];
-            previousPoint = nil;
-            cumulativeDistance = 0;
-            continue;
-        }
-        OASWptPt *trkPoint = [[OASWptPt alloc] initWithWptPt:point];
-        if (previousPoint != nil)
-            cumulativeDistance += [self distanceFrom:previousPoint to:point];
-        else
-            cumulativeDistance = 0;
-        trkPoint.distance = cumulativeDistance;
-        [trkPoints addObject:trkPoint];
-        previousPoint = point;
-    }
-    if (trkPoints.count > 0)
-    {
-        segment.points = trkPoints;
-        [track.segments addObject:segment];
-    }
-    gpx.tracks = [@[track] mutableCopy];
-    return gpx;
 }
 
 - (BOOL)hasPoints
@@ -344,7 +301,7 @@
 {
     NSMutableArray<OAGpxWptItem *> *items = [NSMutableArray array];
     OASGpxFile *gpxFile = [self editingContext].gpxData.gpxFile;
-    NSString *gpxPath = [self absoluteGpxPathFromPath:gpxFile.path];
+    NSString *gpxPath = [OAUtilities getGpxFullPath:gpxFile.path];
     for (OASWptPt *point in gpxFile.getPointsList)
     {
         OAGpxWptItem *item = [OAGpxWptItem withGpxWpt:point];
@@ -1094,7 +1051,7 @@
     if (!CLLocationCoordinate2DIsValid(location))
         return;
     
-    NSString *gpxFilePath = filePath.length == 0 ? [self gpxFileForWaypoints].path : [self absoluteGpxPathFromPath:filePath];
+    NSString *gpxFilePath = filePath.length == 0 ? [self gpxFileForWaypoints].path : [OAUtilities getGpxFullPath:filePath];
     if (gpxFilePath.length == 0)
         return;
 
@@ -1129,14 +1086,6 @@
 - (BOOL)isDraftGpxPath:(NSString *)filePath
 {
     return _draftGpxFile != nil && (filePath.length == 0 || [_draftGpxPath isEqualToString:filePath]);
-}
-
-- (NSString *)absoluteGpxPathFromPath:(NSString *)filePath
-{
-    if (filePath.length == 0 || filePath.isAbsolutePath)
-        return filePath;
-
-    return [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
 }
 
 - (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
@@ -1223,7 +1172,7 @@
     if (gpxFile.path.length == 0)
         return;
     
-    NSString *path = [self absoluteGpxPathFromPath:gpxFile.path];
+    NSString *path = [OAUtilities getGpxFullPath:gpxFile.path];
     OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:path fallbackPath:gpxFile.path];
     if (activeGpxFile != nil && activeGpxFile != gpxFile)
         [self applyPoiStateSnapshot:[[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] toGpxFile:activeGpxFile draft:NO];
@@ -1375,7 +1324,7 @@
         return;
     }
 
-    NSString *originalGpxPath = [self absoluteGpxPathFromPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
+    NSString *originalGpxPath = [OAUtilities getGpxFullPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
     PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
     NSString *trackName = fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route");
     OASGpxFile *gpx = [ctx exportGpx:trackName];
@@ -1933,7 +1882,7 @@
         [[self layer] updateLayer];
         if (snapshotVersion == self->_pointsVersion)
         {
-            self->_terrainElevationGpxFile = [self buildTerrainElevationGpx:densifiedPoints];
+            self->_terrainElevationGpxFile = [OARouteExporter exportTrackWithPoints:densifiedPoints];
             self->_terrainElevationVersion = self->_pointsVersion;
         }
     }

@@ -63,7 +63,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 appDelegate.rootViewController = OARootViewController()
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
-            CarPlayService.shared.configure()
+            CarPlayService.shared.configure(scene: .app)
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)

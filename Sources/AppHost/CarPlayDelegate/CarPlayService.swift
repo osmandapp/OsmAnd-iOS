@@ -21,6 +21,7 @@ final class CarPlayService: NSObject {
     
     private var sessionConfiguration: CPSessionConfiguration?
     private var lastContentStyle: CPContentStyle?
+    private var activeScenes: Set<CarPlaySceneType> = []
     /// Indicates whether Search Core resources have been prepared for CarPlay.
     private var isSearchUICorePrepared = false
     
@@ -28,7 +29,8 @@ final class CarPlayService: NSObject {
         super.init()
     }
         
-    func configure() {
+    func configure(scene: CarPlaySceneType) {
+        activeScenes.insert(scene)
         reconnectOBDIfNeeded()
         navigationModeProvider.configureForCarPlay()
         initSessionConfiguration()
@@ -40,15 +42,18 @@ final class CarPlayService: NSObject {
         guard OsmAndApp.swiftInstance().initialized else {
             return
         }
-        sessionConfiguration = nil
-        lastContentStyle = nil
-        OADayNightHelper.instance().resetCarPlayMode()
-        OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
-        navigationModeProvider.restoreOnDisconnect()
+        activeScenes.remove(sceneType)
         if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
             OAQuickSearchHelper.instance().setResourcesForSearchUICore()
             isSearchUICorePrepared = false
         }
+        guard activeScenes.isEmpty else { return }
+
+        sessionConfiguration = nil
+        lastContentStyle = nil
+        OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
+        navigationModeProvider.restoreOnDisconnect()
+        OADayNightHelper.instance().resetCarPlayMode()
     }
     
     /// Prepares Search Core resources for CarPlay if needed.

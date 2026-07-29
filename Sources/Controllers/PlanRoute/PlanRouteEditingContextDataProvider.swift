@@ -320,10 +320,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         }
     }
 
-    func applyModeAllNext(fromPointIndex index: Int, mode: OAApplicationMode?) {
-        bridge.applyModeAllNext(fromIndex: index, appMode: mode ?? OAApplicationMode.default())
-    }
-
     func sortDoorToDoor(pointIndexes: [Int]) {
         bridge.sortSegmentDoorToDoor(withPointIndexes: pointIndexes.map { NSNumber(value: $0) })
     }

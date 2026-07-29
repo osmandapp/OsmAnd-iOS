@@ -9,20 +9,10 @@
 #import "OAPlanRouteEditingBridge.h"
 #import "OAPointOptionsBottomSheetViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import "Localization.h"
-#import "OARootViewController.h"
-#import "OAMapRendererView.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapLayers.h"
-#import "OAMeasurementToolLayer.h"
-#import "OAMeasurementEditingContext.h"
 #import "OAMeasurementCommandManager.h"
-#import "OAApplicationMode.h"
-#import "OAMapUtils.h"
 #import "OAGpxData.h"
-#import "OsmAndSharedWrapper.h"
 #import "OAAddPointCommand.h"
 #import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
@@ -31,25 +21,14 @@
 #import "OAChangeRouteModeCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAClearPointsCommand.h"
-#import "OAGPXDatabase.h"
-#import "OAUtilities.h"
-#import "OAAppVersion.h"
-#import "OsmAndApp.h"
-#import "OAMapActions.h"
-#import "OAAppSettings.h"
-#import "OAEditPointViewController.h"
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OANativeUtilities.h"
-#import "OAGpxWptItem.h"
 #import "OASelectedGPXHelper.h"
 #import "OADefaultFavorite.h"
-#import "OAGPXAppearanceCollection.h"
-#import "OARouteStatistics.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARoadSegmentData.h"
 #import "OAGpxApproximationHelper.h"
 #import "OAGpxApproximationParams.h"
-#import "OALocationsHolder.h"
 #import "OAApplyGpxApproximationCommand.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -91,10 +70,7 @@
 - (NSString *)poiGroupKeyForName:(NSString *)groupName;
 - (void)addPoiGroupNamesFromGpx:(nullable OASGpxFile *)gpxFile toSet:(NSMutableOrderedSet<NSString *> *)groupNames;
 - (BOOL)addPoiGroupToGpx:(nullable OASGpxFile *)gpxFile groupName:(NSString *)groupName;
-- (BOOL)renamePoiGroupInGpx:(nullable OASGpxFile *)gpxFile
-                    fromKey:(NSString *)oldKey
-                      toKey:(NSString *)newKey
-                displayName:(NSString *)displayName;
+- (BOOL)renamePoiGroupInGpx:(nullable OASGpxFile *)gpxFile fromKey:(NSString *)oldKey toKey:(NSString *)newKey displayName:(NSString *)displayName;
 - (BOOL)deletePoiGroupInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey;
 - (BOOL)performAddPoiGroup:(NSString *)groupName;
 - (BOOL)performRenamePoiGroupFromName:(NSString *)oldName toName:(NSString *)newName;
@@ -111,28 +87,16 @@
 - (void)addPoiGroupsFromGpx:(nullable OASGpxFile *)sourceGpx toGpx:(OASGpxFile *)targetGpx;
 - (void)ensurePoiGroupForPoint:(OASWptPt *)point inGpx:(OASGpxFile *)gpxFile;
 - (NSInteger)getPoiGroupColor:(NSString *)groupName;
-- (NSArray<OAGpxWptItem *> *)changePoiGroupAppearanceInGpx:(nullable OASGpxFile *)gpxFile
-                                                  groupKey:(NSString *)groupKey
-                                                     color:(UIColor *)color;
-- (BOOL)changePoiGroupMetadataAppearanceInGpx:(nullable OASGpxFile *)gpxFile
-                                     groupKey:(NSString *)groupKey
-                                        color:(UIColor *)color;
+- (NSArray<OAGpxWptItem *> *)changePoiGroupAppearanceInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey color:(UIColor *)color;
+- (BOOL)changePoiGroupMetadataAppearanceInGpx:(nullable OASGpxFile *)gpxFile groupKey:(NSString *)groupKey color:(UIColor *)color;
 - (void)refreshDraftGpx;
 - (void)clearDraftGpx;
 - (void)addDraftWaypointsToGpx:(OASGpxFile *)gpx;
-- (PlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
-                                     pointIndexes:(NSArray<NSNumber *> *)pointIndexes
-                                        allPoints:(NSArray<OASWptPt *> *)allPoints;
-- (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key
-                                    indexes:(NSArray<NSNumber *> *)indexes
-                                  allPoints:(NSArray<OASWptPt *> *)allPoints;
+- (PlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex pointIndexes:(NSArray<NSNumber *> *)pointIndexes allPoints:(NSArray<OASWptPt *> *)allPoints;
+- (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key indexes:(NSArray<NSNumber *> *)indexes allPoints:(NSArray<OASWptPt *> *)allPoints;
 - (BOOL)shouldShowRouteCalculationStateForContext:(nullable OAMeasurementEditingContext *)ctx;
 - (void)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx;
-- (void)performSaveWithFileName:(NSString *)fileName
-                         folder:(nullable NSString *)folder
-                      showOnMap:(BOOL)showOnMap
-                     asCopy:(BOOL)asCopy
-                     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
+- (void)performSaveWithFileName:(NSString *)fileName folder:(nullable NSString *)folder showOnMap:(BOOL)showOnMap asCopy:(BOOL)asCopy onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 @end
 
@@ -198,11 +162,6 @@
     return gpx;
 }
 
-- (BOOL)hasContext
-{
-    return [self editingContext] != nil;
-}
-
 - (BOOL)hasPoints
 {
     return [self editingContext].getPoints.count > 0;
@@ -233,13 +192,6 @@
 {
     OAApplicationMode *mode = [self editingContext].appMode;
     return (mode == OAApplicationMode.DEFAULT) ? nil : mode;
-}
-
-- (void)clearAppMode
-{
-    OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx != nil)
-        ctx.appMode = OAApplicationMode.DEFAULT;
 }
 
 - (BOOL)hasChanges
@@ -1044,22 +996,6 @@
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
-    [layer updateLayer];
-}
-
-- (void)applyModeAllNextFromIndex:(NSInteger)pointIndex appMode:(nullable OAApplicationMode *)appMode
-{
-    OAApplicationMode *mode = appMode ?: OAApplicationMode.DEFAULT;
-    OAMeasurementToolLayer *layer = [self layer];
-    OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
-        return;
-    [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = YES;
-    if (self.onChange)
-        self.onChange();
-    ctx.appMode = mode;
-    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:EOAChangeRouteAllNextSegments pointIndex:pointIndex]];
     [layer updateLayer];
 }
 

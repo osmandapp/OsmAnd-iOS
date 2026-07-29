@@ -302,7 +302,6 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func startNewSegment()
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)
-    func applyModeAllNext(fromPointIndex index: Int, mode: OAApplicationMode?)
     func sortDoorToDoor(pointIndexes: [Int])
     func saveSegment(pointIndexes: [Int])
     func selectRoutePoint(at index: Int)

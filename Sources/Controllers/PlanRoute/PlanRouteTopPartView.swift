@@ -67,7 +67,7 @@ final class PlanRouteTopPartView: UIView {
     private func setupView() {
         backgroundColor = .clear
 
-        statusIconView.image = .templateImageNamed("ic_custom_plan_route")
+        statusIconView.image = .icCustomPlanRoute
         statusIconView.tintColor = .iconColorActive
         statusIconView.contentMode = .scaleAspectFit
         statusIconView.translatesAutoresizingMaskIntoConstraints = false

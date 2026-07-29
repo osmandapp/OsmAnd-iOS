@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PlanRouteTopToolbarView: UIView {
+final class PlanRouteTopToolbarView: TouchesPassView {
     static let contentHeight: CGFloat = 56
 
     private static let edgeInset: CGFloat = 16
@@ -50,7 +50,7 @@ final class PlanRouteTopToolbarView: UIView {
     private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_cancel"))
-    private let optionsButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_overflow_menu_stroke"))
+    private let optionsButton = PlanRouteButtonFactory.iconButton(image: .icCustomOverflowMenuStroke)
     private let dimmingView = UIView()
     private let backgroundMaskLayer = CAGradientLayer()
     private let dimmingGradientLayer = CAGradientLayer()
@@ -75,11 +75,6 @@ final class PlanRouteTopToolbarView: UIView {
         super.layoutSubviews()
         guard backgroundContainerView.bounds.size != .zero else { return }
         updateBackgroundLayers()
-    }
-
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let hitView = super.hitTest(point, with: event) else { return nil }
-        return hitView is UIControl ? hitView : nil
     }
 
     private func setupView() {
@@ -247,8 +242,8 @@ final class PlanRouteBottomToolbarView: UIView {
     private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_undo"))
     private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_redo"))
 
-    private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .templateImageNamed("ic_custom_add"))
-    private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .templateImageNamed("ic_custom_add"), imagePlacement: .trailing)
+    private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
+    private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .icCustomAdd, imagePlacement: .trailing)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

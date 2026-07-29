@@ -980,7 +980,8 @@
     _pushedNewScreen = YES;
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:weakSelf.gpx.gpxFilePath];
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:strongSelf.gpx.gpxFilePath];
         [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath];
     }];
 }
@@ -1145,10 +1146,17 @@
     {
         NSString *groupKey = [self isDefaultGroup:groupName] ? @"" : groupName;
         BOOL groupMetadataDeleted = NO;
-        for (NSString *key in [self.doc.pointsGroups.allKeys copy])
+        NSArray<NSString *> *groupKeys = [self.doc.pointsGroups.allKeys copy];
+        for (NSString *key in groupKeys)
         {
             OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[key];
-            NSString *name = key.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : group.name.length > 0 ? group.name : key;
+            NSString *name;
+            if (key.length == 0)
+                name = OALocalizedString(@"shared_string_gpx_points");
+            else if (group.name.length > 0)
+                name = group.name;
+            else
+                name = key;
             if ([key isEqualToString:groupKey] || [name isEqualToString:groupName])
             {
                 [self.doc.pointsGroups removeObjectForKey:key];

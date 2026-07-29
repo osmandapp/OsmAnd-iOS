@@ -62,6 +62,6 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
-                     gpxDocument:(OASGpxFile *)gpxDocument;
+                     gpxFile:(OASGpxFile *)gpxFile;
 
 @end

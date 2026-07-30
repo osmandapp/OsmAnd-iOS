@@ -1662,11 +1662,6 @@
         _onChangeRouteTypeAfter(ctx.selectedPointPosition);
 }
 
-- (void)onSplitPointsBefore {}
-- (void)onSplitPointsAfter {}
-- (void)onJoinPoints {}
-- (void)onCloseMenu {}
-
 - (void)onClearSelection
 {
     OAMeasurementEditingContext *ctx = [self editingContext];

@@ -225,15 +225,15 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func renamePoiGroup(from oldName: String, to newName: String) {
-        bridge.renamePoiGroup(from: oldName, to: newName)
+        bridge.renamePoiGroup(fromName: oldName, toName: newName)
     }
 
     func openPoiGroupAppearance(_ groupName: String, from presentingViewController: UIViewController) {
-        bridge.openPoiGroupAppearance(groupName, presenting: presentingViewController)
+        bridge.openPoiGroupAppearance(forName: groupName, presenting: presentingViewController)
     }
 
     func deletePoiGroup(_ groupName: String) {
-        bridge.deletePoiGroup(groupName)
+        bridge.deletePoiGroup(withName: groupName)
     }
 
     func openEditPoiPoint(_ point: PlanRoutePoiPoint, from presentingViewController: UIViewController) {
@@ -345,19 +345,19 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func addPointBefore(index: Int) {
-        bridge.addPointBefore(index: index)
+        bridge.addPoint(before: index)
     }
 
     func addPointAfter(index: Int) {
-        bridge.addPointAfter(index: index)
+        bridge.addPoint(after: index)
     }
 
     func trimBefore(index: Int) {
-        bridge.trimBefore(index: index)
+        bridge.trim(before: index)
     }
 
     func trimAfter(index: Int) {
-        bridge.trimAfter(index: index)
+        bridge.trim(after: index)
     }
 
     func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams {

@@ -513,7 +513,7 @@ private extension PlanRouteAnalyzeViewController {
         values.append(maxIncline)
         return values
     }()
-    static let steepnessBoundaryClasses: [String] = {
+    static var steepnessBoundaryClasses: [String] {
         var classes = [steepnessBoundaryClass(from: -100, to: -20)]
         for index in 1..<(steepnessBoundaryValues.count - 1) {
             let lowerBound = steepnessBoundaryValues[index - 1] + 1
@@ -522,7 +522,7 @@ private extension PlanRouteAnalyzeViewController {
         }
         classes.append(steepnessBoundaryClass(from: maxDividedIncline, to: maxIncline))
         return classes
-    }()
+    }
 
     private static func steepnessBoundaryClass(from lower: Int, to upper: Int) -> String {
         "steepness=\(lower)_\(upper)"
@@ -949,7 +949,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             description: localizedString("no_elevation_data_description"),
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
-            action: { [weak self] in self?.showGetElevationSheet() }
+            action: {
+                [weak self] in self?.showGetElevationSheet()
+            }
         )
         return cell
     }
@@ -1479,6 +1481,7 @@ private extension PlanRouteAnalyzeViewController {
 
     private func steepnessClassTitles(minSlope: Int, maxSlope: Int) -> [String] {
         var titles = Array(repeating: "", count: Self.steepnessBoundaryValues.count)
+        guard titles.count > 1 else { return titles }
         let title = slopeTitle(minSlope, Self.minDividedIncline)
         titles[0] = title
         titles[1] = title

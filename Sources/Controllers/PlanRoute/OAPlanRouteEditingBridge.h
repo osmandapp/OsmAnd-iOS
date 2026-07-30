@@ -62,27 +62,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<OAGpxWptItem *> *)buildPoiItems;
 - (NSArray<NSString *> *)buildPoiGroupNames;
 - (NSArray<OAApplicationMode *> *)availableModes;
-- (void)addPoiGroup:(NSString *)groupName NS_SWIFT_NAME(addPoiGroup(_:));
-- (void)renamePoiGroupFromName:(NSString *)oldName toName:(NSString *)newName NS_SWIFT_NAME(renamePoiGroup(from:to:));
-- (void)openPoiGroupAppearanceForName:(NSString *)groupName presentingViewController:(UIViewController *)presentingViewController NS_SWIFT_NAME(openPoiGroupAppearance(_:presenting:));
-- (void)deletePoiGroupWithName:(NSString *)groupName NS_SWIFT_NAME(deletePoiGroup(_:));
-- (void)openEditPoiPoint:(OAGpxWptItem *)point presentingViewController:(UIViewController *)presentingViewController NS_SWIFT_NAME(openEditPoiPoint(_:presenting:));
-- (void)deletePoiPoint:(OAGpxWptItem *)point NS_SWIFT_NAME(deletePoiPoint(_:));
+- (void)addPoiGroup:(NSString *)groupName;
+- (void)renamePoiGroupFromName:(NSString *)oldName toName:(NSString *)newName;
+- (void)openPoiGroupAppearanceForName:(NSString *)groupName presentingViewController:(UIViewController *)presentingViewController;
+- (void)deletePoiGroupWithName:(NSString *)groupName;
+- (void)openEditPoiPoint:(OAGpxWptItem *)point presentingViewController:(UIViewController *)presentingViewController;
+- (void)deletePoiPoint:(OAGpxWptItem *)point;
 
 - (void)deletePointAtIndex:(NSInteger)index;
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to;
-- (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to NS_SWIFT_NAME(reorderSegment(from:to:));
+- (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to;
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
-- (void)refreshRouteForMode:(OAApplicationMode *)mode NS_SWIFT_NAME(refreshRoute(for:));
+- (void)refreshRouteForMode:(OAApplicationMode *)mode;
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)selectPointAtIndex:(NSInteger)index;
-- (void)showPointOptionsAtIndex:(NSInteger)index NS_SWIFT_NAME(showPointOptions(at:));
-- (void)addPointBeforeIndex:(NSInteger)index NS_SWIFT_NAME(addPointBefore(index:));
-- (void)addPointAfterIndex:(NSInteger)index NS_SWIFT_NAME(addPointAfter(index:));
-- (void)trimBeforeIndex:(NSInteger)index NS_SWIFT_NAME(trimBefore(index:));
-- (void)trimAfterIndex:(NSInteger)index NS_SWIFT_NAME(trimAfter(index:));
+- (void)showPointOptionsAtIndex:(NSInteger)index;
+- (void)addPointBeforeIndex:(NSInteger)index;
+- (void)addPointAfterIndex:(NSInteger)index;
+- (void)trimBeforeIndex:(NSInteger)index;
+- (void)trimAfterIndex:(NSInteger)index;
 
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder

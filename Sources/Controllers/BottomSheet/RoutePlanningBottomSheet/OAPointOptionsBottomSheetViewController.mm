@@ -452,28 +452,28 @@
     else if ([key isEqualToString:@"new_segment"])
     {
         [self hide:YES];
-        if (self.delegate)
+        if ([self.delegate respondsToSelector:@selector(onSplitPointsAfter)])
             [self.delegate onSplitPointsAfter];
         return;
     }
     else if ([key isEqualToString:@"join_segments"])
     {
         [self hide:YES];
-        if (self.delegate)
+        if ([self.delegate respondsToSelector:@selector(onJoinPoints)])
             [self.delegate onJoinPoints];
         return;
     }
     else if ([key isEqualToString:@"split_before"])
     {
         [self hide:YES];
-        if (self.delegate)
+        if ([self.delegate respondsToSelector:@selector(onSplitPointsBefore)])
             [self.delegate onSplitPointsBefore];
         return;
     }
     else if ([key isEqualToString:@"split_after"])
     {
         [self hide:YES];
-        if (self.delegate)
+        if ([self.delegate respondsToSelector:@selector(onSplitPointsAfter)])
             [self.delegate onSplitPointsAfter];
         return;
     }

@@ -815,7 +815,7 @@
     if (ctx == nil || from == to)
         return;
     [self invalidateTerrainElevationGpx];
-    [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to]];
+    [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to move:YES]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1555,12 +1555,20 @@
     }
 
     NSInteger base = indexes.firstObject.integerValue;
+    NSMutableArray<NSNumber *> *currentOrder = [NSMutableArray arrayWithCapacity:points.count];
+    for (NSInteger i = 0; i < (NSInteger) points.count; i++)
+        [currentOrder addObject:@(i)];
     for (NSInteger target = 0; target < (NSInteger) ordered.count; target++)
     {
-        NSInteger from = ordered[target].integerValue;
         NSInteger to = base + target;
-        if (from != to)
-            [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to]];
+        NSInteger from = [currentOrder indexOfObject:ordered[target]];
+        if (from != NSNotFound && from != to)
+        {
+            [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to move:YES]];
+            NSNumber *moved = currentOrder[from];
+            [currentOrder removeObjectAtIndex:from];
+            [currentOrder insertObject:moved atIndex:to];
+        }
     }
     [layer updateLayer];
     if (self.onChange)

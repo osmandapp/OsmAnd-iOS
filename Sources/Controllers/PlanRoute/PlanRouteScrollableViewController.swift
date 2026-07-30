@@ -50,6 +50,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var navControllerHistory: [UIViewController] = []
     private var isForceHiding = false
     private var isPendingSaveAsCopy = false
+    private var pendingSegmentPointIndexes: [Int]?
     private weak var currentTabViewController: UIViewController?
 
     init(dataProvider: PlanRouteDataProvider) {
@@ -577,6 +578,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             routeVC.onOpenRouteBetweenPoints = { [weak self] segment in
                 self?.presentRouteBetweenPoints(for: segment)
             }
+            routeVC.onSaveSegment = { [weak self] pointIndexes in
+                self?.presentSegmentSaveDialog(pointIndexes: pointIndexes)
+            }
             return routeVC
         }
     }
@@ -720,12 +724,26 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func presentSaveDialog(duplicate: Bool) {
         isPendingSaveAsCopy = duplicate
+        pendingSegmentPointIndexes = nil
         let fileName: String
         switch dataProvider.mode {
         case .newRoute: fileName = localizedString("quick_action_new_route")
         case .editTrack(let name): fileName = name
         }
         guard let vc = OASaveTrackViewController(fileName: fileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        vc.delegate = self
+        present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func presentSegmentSaveDialog(pointIndexes: [Int]) {
+        pendingSegmentPointIndexes = pointIndexes
+        isPendingSaveAsCopy = false
+        let fileName: String
+        switch dataProvider.mode {
+        case .newRoute: fileName = localizedString("quick_action_new_route")
+        case .editTrack(let name): fileName = name
+        }
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
     }
@@ -828,7 +846,10 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
                 showSaveError()
             }
         }
-        if isPendingSaveAsCopy {
+        if let pointIndexes = pendingSegmentPointIndexes {
+            pendingSegmentPointIndexes = nil
+            dataProvider.saveSegment(pointIndexes: pointIndexes, fileName: fileName, showOnMap: showOnMap, onComplete: onComplete)
+        } else if isPendingSaveAsCopy {
             dataProvider.saveAsCopy(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)
         } else {
             dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)

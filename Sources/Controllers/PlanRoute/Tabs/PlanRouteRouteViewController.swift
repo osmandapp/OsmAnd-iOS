@@ -30,6 +30,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
     var onChangeRouteType: ((SegmentRouteContext) -> Void)?
     var onOpenRouteBetweenPoints: ((PlanRouteSegment) -> Void)?
+    var onSaveSegment: (([Int]) -> Void)?
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
@@ -205,7 +206,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
         children.append(UIAction(title: localizedString("plan_route_save_as"),
                                  image: .icCustomSaveToFile) { [weak self] _ in
-            self?.dataSource?.saveSegment(pointIndexes: segment.pointIndexes)
+            self?.onSaveSegment?(segment.pointIndexes)
         })
         children.append(UIAction(title: localizedString("delete_segment"),
                                  image: .icCustomTrashOutlined,

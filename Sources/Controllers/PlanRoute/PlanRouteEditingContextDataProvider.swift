@@ -329,11 +329,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.reorderSegment(from: srcIdx, to: dstIdx)
     }
 
-    func saveSegment(pointIndexes: [Int]) {
-        let fileName = mode.title
+    func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {
         bridge.saveSegment(withPointIndexes: pointIndexes.map { NSNumber(value: $0) },
                            fileName: fileName,
-                           showOnMap: true) { _, _ in }
+                           showOnMap: showOnMap,
+                           onComplete: onComplete)
     }
 
     func selectRoutePoint(at index: Int) {

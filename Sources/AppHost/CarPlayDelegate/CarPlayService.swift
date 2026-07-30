@@ -21,7 +21,7 @@ final class CarPlayService: NSObject {
     
     private var sessionConfiguration: CPSessionConfiguration?
     private var lastContentStyle: CPContentStyle?
-    private var activeScenes: Set<CarPlaySceneType> = []
+    private var isMapAppearanceConfigured = false
     /// Indicates whether Search Core resources have been prepared for CarPlay.
     private var isSearchUICorePrepared = false
     
@@ -29,12 +29,14 @@ final class CarPlayService: NSObject {
         super.init()
     }
         
-    func configure(scene: CarPlaySceneType) {
-        activeScenes.insert(scene)
+    func configure() {
         reconnectOBDIfNeeded()
         navigationModeProvider.configureForCarPlay()
         initSessionConfiguration()
-        applyCarPlayMapAppearance()
+        if !isMapAppearanceConfigured {
+            isMapAppearanceConfigured = true
+            applyCarPlayMapAppearance()
+        }
         OARoutingHelper.sharedInstance().resumeNavigationAfterCarPlayReconnect()
     }
     
@@ -42,18 +44,19 @@ final class CarPlayService: NSObject {
         guard OsmAndApp.swiftInstance().initialized else {
             return
         }
-        activeScenes.remove(sceneType)
-        if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
-            OAQuickSearchHelper.instance().setResourcesForSearchUICore()
-            isSearchUICorePrepared = false
-        }
-        guard activeScenes.isEmpty else { return }
 
         sessionConfiguration = nil
         lastContentStyle = nil
         OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
         navigationModeProvider.restoreOnDisconnect()
-        OADayNightHelper.instance().resetCarPlayMode()
+        if !UIApplication.shared.isAnyCarPlaySceneActive, isMapAppearanceConfigured {
+            isMapAppearanceConfigured = false
+            OADayNightHelper.instance().resetCarPlayMode()
+        }
+        if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
+            OAQuickSearchHelper.instance().setResourcesForSearchUICore()
+            isSearchUICorePrepared = false
+        }
     }
     
     /// Prepares Search Core resources for CarPlay if needed.

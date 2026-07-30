@@ -12,12 +12,14 @@
 
 @interface OADayNightHelper : NSObject
 
-+ (OADayNightHelper *) instance;
++ (OADayNightHelper *)instance;
 
-- (BOOL) isNightMode;
-- (void) forceUpdate;
-- (BOOL) setTempMode:(NSInteger)dayNightMode;
-- (BOOL) resetTempMode;
-- (SunriseSunset *) getSunriseSunset;
+- (BOOL)isNightMode;
+- (void)forceUpdate;
+- (BOOL)setTempMode:(NSInteger)dayNightMode;
+- (BOOL)resetTempMode;
+- (void)setCarPlayMode:(NSInteger)dayNightMode;
+- (void)resetCarPlayMode;
+- (SunriseSunset *)getSunriseSunset;
 
 @end

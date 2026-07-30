@@ -1100,6 +1100,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *availableApplicationModes;
 @property (nonatomic) OACommonAppMode *defaultApplicationMode;
 @property (nonatomic) OACommonAppMode *carPlayMode;
+@property (nonatomic) OACommonDayNightMode *carPlayMapAppearanceMode;
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;

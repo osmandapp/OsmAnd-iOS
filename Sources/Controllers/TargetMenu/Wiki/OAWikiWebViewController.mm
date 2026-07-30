@@ -650,23 +650,30 @@
     }
     else
     {
-        NSString *shimmerCSS =
-        @"<style>"
-        @"#wiki-header-image.wiki-header-shimmer {"
-        @"  width:100%;"
-        @"  background:linear-gradient(90deg,#E8E8E8 25%,#F4F4F4 50%,#E8E8E8 75%);"
-        @"  background-size:200% 100%;"
-        @"  animation:wikiHeaderShimmer 1.2s infinite linear;"
-        @"}"
-        @"@keyframes wikiHeaderShimmer {"
-        @"  0%{background-position:200% 0;}"
-        @"  100%{background-position:-200% 0;}"
-        @"}"
-        @"</style>";
+        BOOL isLight = [ThemeManager shared].isLightTheme;
+        NSString *color1 = isLight ? @"#E8E8E8" : @"#222526";
+        NSString *color2 = isLight ? @"#F4F4F4" : @"#2d3133";
+        
+        NSString *shimmerCSS = [NSString stringWithFormat:
+                                @"<style>"
+                                @"#wiki-header-image.wiki-header-shimmer {"
+                                @"  width:100%%;"
+                                @"  border:0;"
+                                @"  outline:0;"
+                                @"  background:linear-gradient(90deg,%@ 25%%,%@ 50%%,%@ 75%%);"
+                                @"  background-size:200%% 100%%;"
+                                @"  animation:wikiHeaderShimmer 1.2s infinite linear;"
+                                @"}"
+                                @"@keyframes wikiHeaderShimmer {"
+                                @"  0%%{background-position:200%% 0;}"
+                                @"  100%%{background-position:-200%% 0;}"
+                                @"}"
+                                @"</style>",
+                                color1, color2, color1];
         
         NSString *imgTag = [NSString stringWithFormat:
                             @"%@<img id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"\" "
-                            @"style=\"object-fit:cover; object-position:center; width:100%%; height:%dpx; display:block;\" />",
+                            @"style=\"object-fit:cover; object-position:center; width:100%%; height:%dpx; display:block; border:0;\" />",
                             shimmerCSS,
                             kHeaderImageHeight];
         

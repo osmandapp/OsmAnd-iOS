@@ -49,7 +49,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 
     private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
-    private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_cancel"))
+    private let closeButton = PlanRouteButtonFactory.iconButton(image: .icCustomCancel)
     private let optionsButton = PlanRouteButtonFactory.iconButton(image: .icCustomOverflowMenuStroke)
     private let dimmingView = UIView()
     private let backgroundMaskLayer = CAGradientLayer()
@@ -239,8 +239,8 @@ final class PlanRouteBottomToolbarView: UIView {
         didSet { redoButton.isEnabled = isRedoEnabled }
     }
 
-    private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_undo"))
-    private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .templateImageNamed("ic_custom_redo"))
+    private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomUndo)
+    private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomRedo)
 
     private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
     private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .icCustomAdd, imagePlacement: .trailing)

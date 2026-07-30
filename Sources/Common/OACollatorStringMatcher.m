@@ -12,24 +12,21 @@
 #import "OASearchAlgorithms.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
-static NSCharacterSet * _APOSTROPHES;
+
+@interface OACollatorStringMatcher ()
+
++ (BOOL) cstartsWithNormalized:(NSString *)searchIn
+                      theStart:(NSString *)theStart
+                checkBeginning:(BOOL)checkBeginning
+                   checkSpaces:(BOOL)checkSpaces
+                        equals:(BOOL)equals;
+
+@end
 
 @implementation OACollatorStringMatcher
 {
     StringMatcherMode _mode;
     NSString *_part;
-}
-
-+ (void) initialize
-{
-    if (self == [OACollatorStringMatcher class])
-    {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            NSString *charString = @"'’ʼ´`ʹ‵′«»";
-            _APOSTROPHES = [NSCharacterSet characterSetWithCharactersInString:charString];
-        });
-    }
 }
 
 - (instancetype)initWithPart:(NSString *)part mode:(StringMatcherMode)mode
@@ -85,19 +82,19 @@ static NSCharacterSet * _APOSTROPHES;
         case CHECK_CONTAINS:
             return [self.class ccontains:fullName part:part];
         case CHECK_EQUALS_FROM_SPACE:
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:YES];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:YES];
         case CHECK_STARTS_FROM_SPACE:
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:NO];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:NO];
         case CHECK_STARTS_FROM_SPACE_NOT_BEGINNING:
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:NO checkSpaces:YES equals:NO];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:NO checkSpaces:YES equals:NO];
         case CHECK_ONLY_STARTS_WITH:
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
         case TRIM_AND_CHECK_ONLY_STARTS_WITH:
             if (part.length > fullName.length)
                 part = [part substringWithRange:NSMakeRange(0, fullName.length)];
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
         case CHECK_EQUALS:
-            return [self.class cstartsWith:fullName theStart:part checkBeginning:NO checkSpaces:NO equals:YES];
+            return [self.class cstartsWithNormalized:fullName theStart:part checkBeginning:NO checkSpaces:NO equals:YES];
     }
     return false;
 }
@@ -156,11 +153,22 @@ static NSCharacterSet * _APOSTROPHES;
  */
 + (BOOL) cstartsWith:(NSString *)fullTextP theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
-    // FUTURE: This is not effective code, it runs on each comparision
-    // It would be more efficient to normalize all strings in file and normalize search string before collator
     theStart = [self alignChars:theStart];
-    theStart = [self replaceHyphen:theStart replacement:@(" ")];
     NSString *searchIn = [self lowercaseAndAlignChars:fullTextP];
+    return [self cstartsWithNormalized:searchIn
+                             theStart:theStart
+                       checkBeginning:checkBeginning
+                          checkSpaces:checkSpaces
+                               equals:equals];
+}
+
++ (BOOL) cstartsWithNormalized:(NSString *)searchIn
+                      theStart:(NSString *)theStart
+                checkBeginning:(BOOL)checkBeginning
+                   checkSpaces:(BOOL)checkSpaces
+                        equals:(BOOL)equals
+{
+    theStart = [self replaceHyphen:theStart replacement:@(" ")];
     searchIn = [self replaceHyphen:searchIn replacement:@(" ")];
     NSInteger searchInLength = searchIn.length;
     
@@ -260,6 +268,10 @@ static NSCharacterSet * _APOSTROPHES;
 
 + (NSString *) replaceHyphen:(NSString *)text replacement:(NSString *)replacement
 {
+    if ([text rangeOfString:@"-"].location == NSNotFound)
+    {
+        return text;
+    }
     return [text stringByReplacingOccurrencesOfString:@"-" withString:replacement];
 }
 

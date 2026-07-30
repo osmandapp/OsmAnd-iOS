@@ -945,8 +945,6 @@
 
 - (void)webViewDidCommitted:(void(^)(void))onViewCommitted
 {
-    [self startInjectingBodyImagesIfNeeded];
-
     BOOL containsRTL = [[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
@@ -970,6 +968,11 @@
             if (onViewCommitted)
                 onViewCommitted();
         }];
+}
+
+- (void)webViewDidFinishNavigation
+{
+    [self startInjectingBodyImagesIfNeeded];
 }
 
 #pragma mark - SFSafariViewControllerDelegate

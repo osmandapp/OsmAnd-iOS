@@ -442,7 +442,7 @@ final class DeepLinkParser: NSObject {
         
         let mode = appMode ?? OARoutingHelper.sharedInstance().getAppMode()
         if let routeParamsQueryValue, !routeParamsQueryValue.isEmpty {
-            OARoutingHelperUtils.applyRoutingParamsQueryValue(routeParamsQueryValue, forAppMode: mode)
+            OARoutingParamsDeepLinkBridge.applyRoutingParamsQueryValue(routeParamsQueryValue, forAppMode: mode)
         }
         
         let points = parseIntermediatePoints(intermediatePointsParam)

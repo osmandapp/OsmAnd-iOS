@@ -50,7 +50,7 @@ final class RouteDeepLinkBuilder: NSObject {
         let appMode = OARoutingHelper.sharedInstance().getAppMode()
         items.append(URLQueryItem(name: "profile", value: appMode.stringKey))
         
-        if let params = OARoutingHelperUtils.routingParamsQueryValue(forAppMode: appMode), !params.isEmpty {
+        if let params = OARoutingParamsDeepLinkBridge.routingParamsQueryValue(forAppMode: appMode), !params.isEmpty {
             items.append(URLQueryItem(name: "params", value: params))
         }
         

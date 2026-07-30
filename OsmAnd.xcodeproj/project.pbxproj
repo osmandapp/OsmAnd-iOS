@@ -1726,6 +1726,7 @@
 		CE7F960C30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */; };
 		CE8215E52FFF6376002A8617 /* StarMapArControlCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */; };
 		CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */; };
+		CE826BA1301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */; };
 		CE83DB4A2FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */; };
 		CE83DB4C2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
@@ -5781,6 +5782,8 @@
 		CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapObjectContextMenuBuilder.swift; sourceTree = "<group>"; };
 		CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapArControlCard.swift; sourceTree = "<group>"; };
 		CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapPlainButton.swift; sourceTree = "<group>"; };
+		CE826B9F301B5B4500BD0DCE /* OARoutingParamsDeepLinkBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingParamsDeepLinkBridge.h; sourceTree = "<group>"; };
+		CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingParamsDeepLinkBridge.mm; sourceTree = "<group>"; };
 		CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsView.swift; sourceTree = "<group>"; };
 		CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsProvider.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
@@ -14448,6 +14451,8 @@
 				DA5A810126C563A600F274C7 /* OAWaypointHelper.mm */,
 				DABC7F2027B65FD6005C76E2 /* OARoutingHelperUtils.h */,
 				DABC7F2127B65FD6005C76E2 /* OARoutingHelperUtils.mm */,
+				CE826B9F301B5B4500BD0DCE /* OARoutingParamsDeepLinkBridge.h */,
+				CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */,
 				46BB3677294BE72100155EC8 /* OAEmissionHelper.h */,
 				46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */,
 				461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */,
@@ -17988,6 +17993,7 @@
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,
+				CE826BA1301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
 				32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,

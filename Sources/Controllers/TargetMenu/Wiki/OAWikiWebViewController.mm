@@ -574,15 +574,24 @@
     NSInteger requestId = ++_headerImageRequestId;
 
     [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
-        if (!headerImageUrl.length)
+        if (!headerImageUrl.length) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self removeHeaderImagePlaceholderWithRequestId:requestId];
+            });
             return;
+        }
         [self->_imageCacheHelper fetchSingleImageByURL:headerImageUrl
                                              customKey:dbKey
                                           downloadMode:[self getImagesDownloadMode]
                                                onlyNow:onlyNow
                                             onComplete:^(NSString *imageData) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self injectHeaderImageBase64:imageData requestId:requestId];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (imageData.length == 0)
+                        [self removeHeaderImagePlaceholderWithRequestId:requestId];
+                    else
+                        [self injectHeaderImageBase64:imageData requestId:requestId];
+                });
             });
         }];
     }];
@@ -687,6 +696,16 @@
             @"  img.src = '%@';"
             @"}",
             src];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+- (void)removeHeaderImagePlaceholderWithRequestId:(NSInteger)requestId
+{
+    if (requestId != _headerImageRequestId || !self.view.window)
+        return;
+    NSString *js =
+        @"var img = document.getElementById('wiki-header-image');"
+        @"if (img) img.remove();";
     [self.webView evaluateJavaScript:js completionHandler:nil];
 }
 

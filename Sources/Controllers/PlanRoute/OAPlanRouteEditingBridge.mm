@@ -1326,7 +1326,7 @@
 
     NSString *originalGpxPath = [OAUtilities getGpxFullPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
     PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
-    NSString *trackName = fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route");
+    NSString *trackName = (fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route")).decomposedStringWithCanonicalMapping;
     OASGpxFile *gpx = [ctx exportGpx:trackName];
     if (gpx == nil)
     {

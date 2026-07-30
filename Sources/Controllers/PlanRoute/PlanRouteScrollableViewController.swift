@@ -49,6 +49,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
     private var isForceHiding = false
+    private var isPendingSaveAsCopy = false
     private weak var currentTabViewController: UIViewController?
 
     init(dataProvider: PlanRouteDataProvider) {
@@ -718,6 +719,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func presentSaveDialog(duplicate: Bool) {
+        isPendingSaveAsCopy = duplicate
         let fileName: String
         switch dataProvider.mode {
         case .newRoute: fileName = localizedString("quick_action_new_route")
@@ -814,7 +816,7 @@ extension PlanRouteScrollableViewController: UIGestureRecognizerDelegate {
 // MARK: - OASaveTrackViewControllerDelegate
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
-        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap) { [weak self] success, filePath in
+        let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
             guard let self else { return }
             if success {
                 let path = filePath ?? fileName
@@ -825,6 +827,11 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
             } else {
                 showSaveError()
             }
+        }
+        if isPendingSaveAsCopy {
+            dataProvider.saveAsCopy(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)
+        } else {
+            dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)
         }
     }
 }

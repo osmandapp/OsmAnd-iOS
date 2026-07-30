@@ -807,7 +807,16 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                     statistics: stat,
                                     analysis: analysis,
                                     nightMode: OAAppSettings.sharedManager().nightMode)
+        barChart.extraTopOffset = 0
         barChart.extraBottomOffset = 12
+        barChart.minOffset = 0
+        barChart.drawBordersEnabled = false
+        let rightAxis = barChart.rightAxis
+        rightAxis.drawAxisLineEnabled = true
+        rightAxis.axisLineColor = .chartAxisGridLine
+        rightAxis.drawGridLinesEnabled = true
+        rightAxis.gridColor = .chartAxisGridLine
+        rightAxis.labelTextColor = .textColorSecondary
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
         legendView.isUserInteractionEnabled = false

@@ -258,13 +258,18 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
         _otherUnknownWords = [NSMutableArray new];
         _mainUnknownWordToSearch = nil;
         _unknownWordsMatcher = [NSMutableArray new];
-        if (settings != nil)
-        {
-            _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
-        }
         _acceptPrivate = NO;
     }
     return self;
+}
+
+- (OARegionPriorityProvider *) regionPriorityProviderIfNeeded
+{
+    if (_regionPriorityProvider == nil && self.settings != nil)
+    {
+        _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
+    }
+    return _regionPriorityProvider;
 }
 
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings
@@ -600,9 +605,10 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)minMeters maxMeters:(int)maxMeters dataType:(EOASearchPhraseDataType)dataType
 {
     NSArray<NSString *> *list;
-    if (_regionPriorityProvider)
+    OARegionPriorityProvider *regionPriorityProvider = [self regionPriorityProviderIfNeeded];
+    if (regionPriorityProvider)
     {
-        list = [_regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters];
+        list = [regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters];
     }
     else
     {
@@ -616,9 +622,10 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
 - (NSArray<NSString *> *)getOfflineIndexesWithRect:(QuadRect *)rect dataType:(EOASearchPhraseDataType)dataType
 {
     NSArray<NSString *> *list;
-    if (_regionPriorityProvider)
+    OARegionPriorityProvider *regionPriorityProvider = [self regionPriorityProviderIfNeeded];
+    if (regionPriorityProvider)
     {
-        list = [_regionPriorityProvider getOfflineIndexes];
+        list = [regionPriorityProvider getOfflineIndexes];
     }
     else
     {
@@ -1184,9 +1191,10 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
 
 - (NSNumber *) getRegionPriority:(NSString *) resId
 {
-    if (_regionPriorityProvider != nil)
+    OARegionPriorityProvider *regionPriorityProvider = [self regionPriorityProviderIfNeeded];
+    if (regionPriorityProvider != nil)
     {
-        return @([_regionPriorityProvider getRegionWeight:resId]);
+        return @([regionPriorityProvider getRegionWeight:resId]);
     }
     return 0;
 }

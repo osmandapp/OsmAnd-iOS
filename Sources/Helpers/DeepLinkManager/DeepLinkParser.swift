@@ -393,7 +393,11 @@ final class DeepLinkParser: NSObject {
         var intermediatePointsParam: String?
         var endLatLonParam: String?
         var appModeKeyParam: String?
-        var routeParamsQueryValue: String?
+        
+        // TODO: Next release — apply deep-link routing `params`
+        // https://github.com/osmandapp/OsmAnd-Issues/issues/1860
+        // var routeParamsQueryValue: String?
+        
         for item in queryItems {
             switch item.name.lowercased() {
             case "end":
@@ -405,8 +409,13 @@ final class DeepLinkParser: NSObject {
                 appModeKeyParam = item.value
             case "via":
                 intermediatePointsParam = item.value
+                
+            // TODO: Next release — apply deep-link routing `params`
+            // https://github.com/osmandapp/OsmAnd-Issues/issues/1860
+            /*
             case "params":
                 routeParamsQueryValue = item.value
+            */
             default:
                 break
             }
@@ -440,10 +449,14 @@ final class DeepLinkParser: NSObject {
             NSLog("App mode with specified key not available, using default navigation app mode")
         }
         
+        // TODO: Next release — apply deep-link routing `params`
+        // https://github.com/osmandapp/OsmAnd-Issues/issues/1860
+        /*
         let mode = appMode ?? OARoutingHelper.sharedInstance().getAppMode()
         if let routeParamsQueryValue, !routeParamsQueryValue.isEmpty {
             OARoutingParamsDeepLinkBridge.applyRoutingParamsQueryValue(routeParamsQueryValue, forAppMode: mode)
         }
+         */
         
         let points = parseIntermediatePoints(intermediatePointsParam)
         rootViewController.mapPanel.buildRoute(startLatLon, end: endLatLon, appMode: appMode, points: points)

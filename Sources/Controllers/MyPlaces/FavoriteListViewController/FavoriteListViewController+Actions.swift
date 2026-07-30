@@ -309,7 +309,6 @@ extension FavoriteListViewController {
     }
 
     @objc func favoriteDataDidChange() {
-        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         DispatchQueue.main.async { [weak self] in
             self?.applySnapshot(animatingDifferences: true)
         }

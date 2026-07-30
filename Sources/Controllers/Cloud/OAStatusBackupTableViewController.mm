@@ -42,7 +42,6 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
-#import "OAFavoritesHelperBridge.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -84,7 +83,6 @@
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
     DownloadingCellCloudHelper *_downloadingCellCloudHelper;
-    BOOL _shouldInvalidateFavoritesCache;
 }
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
@@ -104,7 +102,6 @@
 
 - (void)setupNotificationListeners
 {
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
@@ -636,11 +633,6 @@
     };
 }
 
-- (void)onDownloadFavoritesCloudVersion
-{
-    _shouldInvalidateFavoritesCache = YES;
-}
-
 // MARK: UITableViewDataSoure
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -850,16 +842,6 @@
 }
 
 // MARK: Sync callbacks
-
-- (void)onBackupFinished:(NSNotification *)notification
-{
-    if (_shouldInvalidateFavoritesCache)
-    {
-        _shouldInvalidateFavoritesCache = NO;
-        if (!notification.userInfo[@"error"])
-            [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
-    }
-}
 
 - (void)onBackupStarted
 {

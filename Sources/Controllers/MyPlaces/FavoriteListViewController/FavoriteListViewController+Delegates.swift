@@ -223,7 +223,6 @@ extension FavoriteListViewController: OAEditorDelegate {
             renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
         }
 
-        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         favoriteGroupAppearanceGroupName = nil
         favoriteGroupAppearanceEditor = nil
     }
@@ -259,7 +258,6 @@ extension FavoriteListViewController: OAEditorDelegate {
 
 extension FavoriteListViewController: OAEditPointViewControllerDelegate {
     func saveTapped() {
-        OAFavoritesHelperBridge.shared().invalidateFavoriteFoldersCache()
         applySnapshot()
     }
 }

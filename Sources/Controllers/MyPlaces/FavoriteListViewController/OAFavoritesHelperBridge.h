@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAFavoritesHelperBridge *)shared;
 
-- (void)invalidateFavoriteFoldersCache;
 - (void)createMissingParentFolderIfNeeded;
 - (NSArray<NSString *> *)collapsedSections;
 - (void)updateCollapsedSections:(NSArray<NSString *> *)sections;

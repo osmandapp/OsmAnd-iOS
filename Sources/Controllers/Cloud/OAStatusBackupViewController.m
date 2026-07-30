@@ -24,7 +24,6 @@
 #import "OAColors.h"
 #import "OABackupHelper.h"
 #import "OABackupError.h"
-#import "OAFavoritesHelperBridge.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -51,7 +50,6 @@
 
     EOARecentChangesType _startType;
     NSInteger _prevTab;
-    BOOL _shouldInvalidateFavoritesCache;
 }
 
 - (instancetype) initWithType:(EOARecentChangesType)type syncProgress:(float)syncProgress
@@ -191,25 +189,12 @@
     [self setupBottomButtons];
 }
 
-- (BOOL)hasFavoritesToDownload
-{
-    NSArray<OASettingsItem *> *itemsToRestore = [BackupUtils getItemsForRestore:_backupHelper.backup.backupInfo
-                                                                  settingsItems:_backupHelper.backup.settingsItems];
-    for (OASettingsItem *item in itemsToRestore)
-    {
-        if (item.type == EOASettingsItemTypeFavorites)
-            return YES;
-    }
-    return NO;
-}
-
 - (IBAction)rightButtonPressed:(UIButton *)sender
 {
     switch (_segmentControl.selectedSegmentIndex)
     {
         case EOARecentChangesRemote:
         {
-            _shouldInvalidateFavoritesCache = [self hasFavoritesToDownload];
             [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationDownload];
             break;
         }
@@ -293,12 +278,6 @@
 - (void)onBackupFinished:(NSNotification *)notification
 {
     NSString *error = notification.userInfo[@"error"];
-    if (_shouldInvalidateFavoritesCache)
-    {
-        _shouldInvalidateFavoritesCache = NO;
-        if (error == nil)
-            [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
-    }
 
     if (error != nil)
     {

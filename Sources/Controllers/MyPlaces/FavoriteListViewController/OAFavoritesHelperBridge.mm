@@ -19,6 +19,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAAutoObserverProxy.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OAObservable.h"
 #import "OADefaultFavorite.h"
@@ -38,10 +39,13 @@
 
 #include <OsmAndCore/Utilities.h>
 
+static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorageChangedNotification";
+
 @implementation OAFavoritesHelperBridge
 {
     NSArray<OAFavoriteFolderBridgeItem *> *_favoriteFoldersCache;
     NSArray<NSString *> *_collapsedSections;
+    OAAutoObserverProxy *_favoritesStorageChangedObserver;
 }
 
 + (OAFavoritesHelperBridge *)shared
@@ -60,9 +64,15 @@
     if (self)
     {
         _collapsedSections = @[];
+        [self registerFavoritesStorageObserver];
     }
 
     return self;
+}
+
+- (void)dealloc
+{
+    [_favoritesStorageChangedObserver detach];
 }
 
 - (void)invalidateFavoriteFoldersCache
@@ -73,10 +83,30 @@
     }
 }
 
+- (void)registerFavoritesStorageObserver
+{
+    _favoritesStorageChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onFavoritesStorageChanged)
+                                                                  andObserve:OAFavoritesHelper.favoritesStorageChangedObservable];
+}
+
+- (void)onFavoritesStorageChanged
+{
+    [self invalidateFavoriteFoldersCache];
+    [self notifyFavoriteFoldersDidChange];
+}
+
+- (void)notifyFavoriteFoldersDidChange
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:
+         kFavoritesStorageChangedNotification object:nil userInfo:nil];
+    });
+}
+
 - (void)createMissingParentFolderIfNeeded
 {
-    if ([OAFavoritesHelper createMissingParentFolderIfNeeded])
-        [self invalidateFavoriteFoldersCache];
+    [OAFavoritesHelper createMissingParentFolderIfNeeded];
 }
 
 - (NSArray<NSString *> *)collapsedSections
@@ -197,7 +227,6 @@
     }
 
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    [self invalidateFavoriteFoldersCache];
 }
 
 - (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned
@@ -207,7 +236,6 @@
         return;
 
     [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:YES];
-    [self invalidateFavoriteFoldersCache];
 }
 
 - (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
@@ -234,7 +262,6 @@
     if (changed)
     {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
@@ -259,7 +286,6 @@
     if (changed)
     {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
@@ -280,7 +306,6 @@
                                iconName:iconName
                      backgroundIconName:backgroundIconName];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    [self invalidateFavoriteFoldersCache];
     return YES;
 }
 
@@ -379,8 +404,6 @@
             [movedItemKeys addObject:itemKey];
     }
 
-    if (movedItemKeys.count > 0)
-        [self invalidateFavoriteFoldersCache];
 }
 
 - (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
@@ -475,7 +498,6 @@
     if (changed)
     {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
@@ -583,8 +605,6 @@
         return NO;
 
     BOOL didDelete = [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil];
-    if (didDelete)
-        [self invalidateFavoriteFoldersCache];
     return didDelete;
 }
 
@@ -595,7 +615,6 @@
         return NO;
 
     [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:YES];
-    [self invalidateFavoriteFoldersCache];
     return YES;
 }
 
@@ -674,8 +693,6 @@
         didDelete = YES;
     }
 
-    if (didDelete)
-        [self invalidateFavoriteFoldersCache];
     return didDelete;
 }
 
@@ -1073,7 +1090,6 @@
     if (changed)
     {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 
     return changed;

@@ -13,19 +13,20 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
+@class OAObservable, OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
 + (void) initFavorites;
 
 + (const std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> &)getFavoritesCollection;
++ (OAObservable *)favoritesStorageChangedObservable;
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
 + (OASGpxFile *)loadGpxFile:(NSString *)file;
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile;
-+ (BOOL)createMissingParentFolderIfNeeded;
++ (void)createMissingParentFolderIfNeeded;
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType;
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address;

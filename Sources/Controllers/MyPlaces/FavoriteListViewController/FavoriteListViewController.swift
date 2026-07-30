@@ -137,6 +137,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         configureCollectionView()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
@@ -514,10 +515,12 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     deinit {
         unregisterDistanceAndDirectionObservers()
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 }
 
 extension Notification.Name {
     static let favoriteImportViewControllerDidDismiss = Notification.Name("OAFavoriteImportViewControllerDidDismissNotification")
+    static let favoritesStorageDidChange = Notification.Name("FavoritesStorageChangedNotification")
 }

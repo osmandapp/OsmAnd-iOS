@@ -7,6 +7,7 @@
 //
 
 #import "OAFavoritesHelper.h"
+#import "OAObservable.h"
 #import "OsmAndApp.h"
 #import "OALocationPoint.h"
 #import "OAFavoriteItem.h"
@@ -43,6 +44,7 @@ static NSCharacterSet * const kIllegalFileNameCharacters = [NSCharacterSet chara
 
 static OAObservable *_favoritesCollectionChangedObservable;
 static OAObservable *_favoriteChangedObservable;
+static OAObservable *_favoritesStorageChangedObservable;
 static std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
 static NSArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSArray<OAFavoriteGroup *> *_favoriteGroups;
@@ -98,6 +100,8 @@ static NSOperationQueue *_favQueue;
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
     _favoriteChangedObservable = [[OAObservable alloc] init];
+    if (!_favoritesStorageChangedObservable)
+        _favoritesStorageChangedObservable = [[OAObservable alloc] init];
     _favoritesCollection->collectionChangeObservable
         .attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                 [self]
@@ -116,6 +120,18 @@ static NSOperationQueue *_favQueue;
             [_favoriteChangedObservable notifyEventWithKey:self
                                                   andValue:favoriteLocation->getTitle().toNSString()];
         });
+}
+
++ (OAObservable *)favoritesStorageChangedObservable
+{
+    if (!_favoritesStorageChangedObservable)
+        _favoritesStorageChangedObservable = [[OAObservable alloc] init];
+    return _favoritesStorageChangedObservable;
+}
+
++ (void)notifyFavoritesStorageChanged
+{
+    [[self favoritesStorageChangedObservable] notifyEventWithKey:self];
 }
 
 + (void)loadFavorites
@@ -210,14 +226,14 @@ static NSOperationQueue *_favQueue;
     }
 }
 
-+ (BOOL)createMissingParentFolderIfNeeded
++ (void)createMissingParentFolderIfNeeded
 {
     NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
     for (OAFavoriteGroup *group in _favoriteGroups)
         [self addParentGroupNamesForGroupName:group.name toSet:parentGroupNames];
 
     if (parentGroupNames.count == 0)
-        return NO;
+        return;
 
     BOOL createdGroup = NO;
     BOOL changed = NO;
@@ -249,7 +265,8 @@ static NSOperationQueue *_favQueue;
     for (OAFavoriteGroup *group in groupsToSave)
         [self saveFile:@[group] file:[OsmAndApp.instance favoritesStorageFilename:group.name]];
 
-    return changed;
+    if (changed)
+        [self notifyFavoritesStorageChanged];
 }
 
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile
@@ -782,6 +799,7 @@ static NSOperationQueue *_favQueue;
     [_favQueue cancelAllOperations];
 
     __block NSArray<OAFavoriteGroup *> *favoriteGroups = [[NSArray alloc] initWithArray:_favoriteGroups copyItems:YES];
+    [self notifyFavoritesStorageChanged];
     __block NSBlockOperation *operation;
     operation = [NSBlockOperation blockOperationWithBlock:^{
 

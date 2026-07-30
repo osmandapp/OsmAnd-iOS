@@ -18,7 +18,6 @@
 #import "OAShapesTableViewCell.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
-#import "OAFavoritesHelperBridge.h"
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -1050,7 +1049,6 @@
         if (_editPointType == EOAEditPointTypeFavorite)
         {
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
-            [[OAFavoritesHelperBridge shared] invalidateFavoriteFoldersCache];
         }
     }
     [self.delegate saveTapped];

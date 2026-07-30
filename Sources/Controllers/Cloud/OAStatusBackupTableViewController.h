@@ -27,7 +27,6 @@ typedef NS_ENUM(NSInteger, EOARecentChangesType)
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary;
 - (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary;
 - (void (^_Nonnull)(NSString * _Nonnull message, NSString * _Nonnull details))showErrorToast;
-- (void)onDownloadFavoritesCloudVersion;
 
 @end
 

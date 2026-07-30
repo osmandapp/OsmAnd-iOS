@@ -393,7 +393,7 @@ final class DeepLinkParser: NSObject {
         var intermediatePointsParam: String?
         var endLatLonParam: String?
         var appModeKeyParam: String?
-        var routingParamsParam: String?
+        var routeParamsQueryValue: String?
         for item in queryItems {
             switch item.name.lowercased() {
             case "end":
@@ -406,7 +406,7 @@ final class DeepLinkParser: NSObject {
             case "via":
                 intermediatePointsParam = item.value
             case "params":
-                routingParamsParam = item.value
+                routeParamsQueryValue = item.value
             default:
                 break
             }
@@ -441,8 +441,8 @@ final class DeepLinkParser: NSObject {
         }
         
         let mode = appMode ?? OARoutingHelper.sharedInstance().getAppMode()
-        if let routingParamsParam, !routingParamsParam.isEmpty {
-            OARoutingHelperUtils.applyRoutingParamsQueryValue(routingParamsParam, forAppMode: mode)
+        if let routeParamsQueryValue, !routeParamsQueryValue.isEmpty {
+            OARoutingHelperUtils.applyRoutingParamsQueryValue(routeParamsQueryValue, forAppMode: mode)
         }
         
         let points = parseIntermediatePoints(intermediatePointsParam)

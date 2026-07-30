@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1739,6 +1739,46 @@
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
+		D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */; };
+		D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */; };
+		D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013F301B768C003CECB8 /* ElevationActionRow.swift */; };
+		D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */; };
+		D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */; };
+		D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */; };
+		D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */; };
+		D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */; };
+		D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */; };
+		D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */; };
+		D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */; };
+		D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */; };
+		D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210149301B768C003CECB8 /* RouteGroupCell.swift */; };
+		D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */; };
+		D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */; };
+		D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */; };
+		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
+		D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014E301B768C003CECB8 /* StatusCardCell.swift */; };
+		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
+		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
+		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
+		D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */; };
+		D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */; };
+		D7210180301B768C003CECB8 /* OAPlanRouteEditingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */; };
+		D7210181301B768C003CECB8 /* PlanRouteButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */; };
+		D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */; };
+		D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */; };
+		D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015B301B768C003CECB8 /* PlanRouteModels.swift */; };
+		D7210185301B768C003CECB8 /* PlanRoutePointMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */; };
+		D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */; };
+		D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */; };
+		D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */; };
+		D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */; };
+		D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */; };
+		D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */; };
+		D721018C301B768C003CECB8 /* RouteTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210163301B768C003CECB8 /* RouteTypeViewController.swift */; };
+		D721018D301B768C003CECB8 /* SegmentReorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */; };
+		D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */; };
+		D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */; };
+		D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210167301B768C003CECB8 /* TwoLineTitleView.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
@@ -5785,6 +5825,47 @@
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
+		D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeCardCell.swift; sourceTree = "<group>"; };
+		D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeRouteAttributeHeaderView.swift; sourceTree = "<group>"; };
+		D721013F301B768C003CECB8 /* ElevationActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationActionRow.swift; sourceTree = "<group>"; };
+		D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteActionCell.swift; sourceTree = "<group>"; };
+		D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEmptyCell.swift; sourceTree = "<group>"; };
+		D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteMenuActionCell.swift; sourceTree = "<group>"; };
+		D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiGroupHeaderView.swift; sourceTree = "<group>"; };
+		D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePointCell.swift; sourceTree = "<group>"; };
+		D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileGroupCell.swift; sourceTree = "<group>"; };
+		D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentHeaderView.swift; sourceTree = "<group>"; };
+		D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteStartSegmentCell.swift; sourceTree = "<group>"; };
+		D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadAttributeLegendItem.swift; sourceTree = "<group>"; };
+		D7210149301B768C003CECB8 /* RouteGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGroupCell.swift; sourceTree = "<group>"; };
+		D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingNavigationCell.swift; sourceTree = "<group>"; };
+		D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingToggleCell.swift; sourceTree = "<group>"; };
+		D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeModeCell.swift; sourceTree = "<group>"; };
+		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
+		D721014E301B768C003CECB8 /* StatusCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCardCell.swift; sourceTree = "<group>"; };
+		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
+		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
+		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
+		D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteRouteViewController.swift; sourceTree = "<group>"; };
+		D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetElevationDataViewController.swift; sourceTree = "<group>"; };
+		D7210156301B768C003CECB8 /* OAPlanRouteEditingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPlanRouteEditingBridge.h; sourceTree = "<group>"; };
+		D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridge.mm; sourceTree = "<group>"; };
+		D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteButtonFactory.swift; sourceTree = "<group>"; };
+		D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEditingContextDataProvider.swift; sourceTree = "<group>"; };
+		D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEditingModels.swift; sourceTree = "<group>"; };
+		D721015B301B768C003CECB8 /* PlanRouteModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteModels.swift; sourceTree = "<group>"; };
+		D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePointMenuViewController.swift; sourceTree = "<group>"; };
+		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
+		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
+		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
+		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
+		D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBetweenPointsViewController.swift; sourceTree = "<group>"; };
+		D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingsViewController.swift; sourceTree = "<group>"; };
+		D7210163301B768C003CECB8 /* RouteTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeViewController.swift; sourceTree = "<group>"; };
+		D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderViewController.swift; sourceTree = "<group>"; };
+		D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentRouteSettingsViewController.swift; sourceTree = "<group>"; };
+		D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackFavoriteSortModeHelper.swift; sourceTree = "<group>"; };
+		D7210167301B768C003CECB8 /* TwoLineTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineTitleView.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
 		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
@@ -8438,10 +8519,6 @@
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		D7EE66F4301780F70047F171 /* PlanRoute */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PlanRoute; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		BBA3AF66197FC4BB0039D991 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -10968,6 +11045,70 @@
 			path = Import;
 			sourceTree = "<group>";
 		};
+		D7210150301B768C003CECB8 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */,
+				D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */,
+				D721013F301B768C003CECB8 /* ElevationActionRow.swift */,
+				D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */,
+				D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */,
+				D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */,
+				D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */,
+				D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */,
+				D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */,
+				D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */,
+				D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */,
+				D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */,
+				D7210149301B768C003CECB8 /* RouteGroupCell.swift */,
+				D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */,
+				D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */,
+				D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */,
+				D721014D301B768C003CECB8 /* SegmentReorderCell.swift */,
+				D721014E301B768C003CECB8 /* StatusCardCell.swift */,
+				D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		D7210154301B768C003CECB8 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */,
+				D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */,
+				D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		D7210168301B768C003CECB8 /* PlanRoute */ = {
+			isa = PBXGroup;
+			children = (
+				D7210150301B768C003CECB8 /* Cells */,
+				D7210154301B768C003CECB8 /* Tabs */,
+				D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */,
+				D7210156301B768C003CECB8 /* OAPlanRouteEditingBridge.h */,
+				D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */,
+				D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */,
+				D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */,
+				D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */,
+				D721015B301B768C003CECB8 /* PlanRouteModels.swift */,
+				D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */,
+				D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */,
+				D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */,
+				D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */,
+				D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */,
+				D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */,
+				D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */,
+				D7210163301B768C003CECB8 /* RouteTypeViewController.swift */,
+				D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */,
+				D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */,
+				D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */,
+				D7210167301B768C003CECB8 /* TwoLineTitleView.swift */,
+			);
+			path = PlanRoute;
+			sourceTree = "<group>";
+		};
 		DA0133122A20E1E900920C14 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -12241,7 +12382,7 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D7EE66F4301780F70047F171 /* PlanRoute */,
+				D7210168301B768C003CECB8 /* PlanRoute */,
 				46624E6F2993B20100F425AE /* Base */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,
@@ -15415,9 +15556,6 @@
 			dependencies = (
 				FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				D7EE66F4301780F70047F171 /* PlanRoute */,
-			);
 			name = "OsmAnd Maps";
 			packageProductDependencies = (
 				675D59365E264CE6A5F93C66 /* Kingfisher */,
@@ -17891,6 +18029,46 @@
 				DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */,
 				DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */,
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
+				D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */,
+				D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */,
+				D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */,
+				D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */,
+				D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */,
+				D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */,
+				D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */,
+				D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */,
+				D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */,
+				D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */,
+				D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */,
+				D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */,
+				D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */,
+				D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */,
+				D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */,
+				D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */,
+				D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */,
+				D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */,
+				D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */,
+				D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */,
+				D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */,
+				D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */,
+				D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */,
+				D7210180301B768C003CECB8 /* OAPlanRouteEditingBridge.mm in Sources */,
+				D7210181301B768C003CECB8 /* PlanRouteButtonFactory.swift in Sources */,
+				D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */,
+				D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */,
+				D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */,
+				D7210185301B768C003CECB8 /* PlanRoutePointMenuViewController.swift in Sources */,
+				D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */,
+				D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */,
+				D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */,
+				D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */,
+				D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */,
+				D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */,
+				D721018C301B768C003CECB8 /* RouteTypeViewController.swift in Sources */,
+				D721018D301B768C003CECB8 /* SegmentReorderViewController.swift in Sources */,
+				D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */,
+				D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */,
+				D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */,
 				DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */,
 				DA5A81B326C563A700F274C7 /* OAPOIUIFilter.mm in Sources */,
 				46B8F5C22936C0D9001AA71A /* OAAngleStraightLineViewController.mm in Sources */,

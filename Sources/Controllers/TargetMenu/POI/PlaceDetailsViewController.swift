@@ -245,10 +245,10 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     private func highlightPolygonInBackground() {
-        let seed: OAPOI? = (sourceObject as? OAPOI) ?? detailsObject?.syntheticAmenity
-        guard let seed else { return }
+        let poi: OAPOI? = (sourceObject as? OAPOI) ?? detailsObject?.syntheticAmenity
+        guard let poi else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(seed) else { return }
+            guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(poi) else { return }
             DispatchQueue.main.async {
                 guard let mapPanel = OARootViewController.instance()?.mapPanel,
                       mapPanel.getCurrentTargetPoint() != nil

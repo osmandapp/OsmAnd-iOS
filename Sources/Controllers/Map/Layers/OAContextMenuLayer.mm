@@ -18,7 +18,6 @@
 #import "OAContextMenuProvider.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"
 #import "OAMapObject+cpp.h"
@@ -447,22 +446,7 @@
     targetPoint.titleAddress = nil;
     targetPoint.type = OATargetPOI;
     targetPoint.targetObj = poi;
-
-    OATargetPoint *tp = targetPoint;
-    OAPOI *tpPoi = poi;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
-        if (roadTitle.length == 0)
-            return;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            if ([mapPanel getCurrentTargetPoint] != tp)
-                return;
-            tp.title = roadTitle;
-            tpPoi.nameLocalized = roadTitle;
-            [mapPanel updateContextMenu:tp];
-        });
-    });
+    targetPoint.shouldFetchAddress = YES;
 
     return targetPoint;
 }

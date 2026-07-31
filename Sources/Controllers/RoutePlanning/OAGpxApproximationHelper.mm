@@ -82,6 +82,14 @@
     }
 }
 
+
+- (void)cancelApproximation
+{
+    _currentApproximator.progressDelegate = nil;
+    [_currentApproximator cancelApproximation];
+    _currentApproximator = nil;
+}
+
 - (OAGpxApproximator *)getNewGpxApproximator:(OALocationsHolder *)locationsHolder
 {
     OAGpxApproximator *gpxApproximator = [[OAGpxApproximator alloc] initWithApplicationMode:_appMode pointApproximation:_distanceThreshold locationsHolder:locationsHolder];

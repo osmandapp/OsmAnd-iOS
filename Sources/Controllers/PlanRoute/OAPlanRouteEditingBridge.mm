@@ -54,6 +54,8 @@
     BOOL _isCalculatingElevation;
     BOOL _isCalculatingRoute;
     NSUInteger _elevationCalculationRequestId;
+    NSUInteger _elevationHelperRequestId;
+    __weak OAMeasurementEditingContext *_elevationCalculationContext;
     OASGpxFile *_terrainElevationGpxFile;
     NSUInteger _pointsVersion;
     NSUInteger _terrainElevationVersion;
@@ -173,6 +175,7 @@
 
 - (void)dismiss
 {
+    [self invalidateElevationCalculationShouldNotify:NO];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx != nil && [ctx hasChanges] && _initialPoiStateSnapshot != nil)
         [self restorePoiStateSnapshot:_initialPoiStateSnapshot];
@@ -1720,9 +1723,8 @@
     if (ctx == nil || ctx.getPointsCount == 0)
         return;
 
-    _elevationCalculationRequestId++;
+    [self invalidateElevationCalculationShouldNotify:NO];
     [self invalidateTerrainElevationGpx];
-    _elevationHelper = nil;
 
     if (useNearbyRoads)
     {
@@ -1751,6 +1753,8 @@
     [params setTrackPoints:segments];
     _elevationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:params.locationsHolders initialAppMode:params.appMode initialThreshold:params.distanceThreshold];
     _elevationHelper.delegate = self;
+    _elevationHelperRequestId = _elevationCalculationRequestId;
+    _elevationCalculationContext = ctx;
     _isCalculatingElevation = YES;
     if (self.onChange)
         self.onChange();
@@ -1833,16 +1837,22 @@
     if (self.onChange)
         self.onChange();
 
+    __weak __typeof(self) weakSelf = self;
+    __weak OAMeasurementEditingContext *weakCtx = ctx;
     [mapViewController fetchAltitudesForCoordinates:coordinates callback:^(NSArray<NSNumber *> *heights) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self handleFetchedAltitudes:heights
-                               requestId:requestId
-                         snapshotVersion:snapshotVersion
-                        densifiedPoints:densifiedPoints
-                           updatedPoints:updatedPoints
-                        originalIndexMap:originalIndexMap
-                           nonGapIndices:nonGapIndices
-                                 context:ctx];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            OAMeasurementEditingContext *strongCtx = weakCtx;
+            if (strongSelf == nil || strongCtx == nil)
+                return;
+            [strongSelf handleFetchedAltitudes:heights
+                                     requestId:requestId
+                               snapshotVersion:snapshotVersion
+                               densifiedPoints:densifiedPoints
+                                 updatedPoints:updatedPoints
+                              originalIndexMap:originalIndexMap
+                                 nonGapIndices:nonGapIndices
+                                       context:strongCtx];
         });
     }];
 }
@@ -1858,6 +1868,17 @@
 {
     if (requestId != self->_elevationCalculationRequestId)
         return;
+
+    if (ctx != [self editingContext])
+        return;
+
+    if (snapshotVersion != self->_pointsVersion)
+    {
+        self->_isCalculatingElevation = NO;
+        if (self.onChange)
+            self.onChange();
+        return;
+    }
     
     BOOL hasUpdatedElevations = NO;
     for (NSUInteger j = 0; j < nonGapIndices.count && j < heights.count; j++)
@@ -1881,11 +1902,8 @@
         
         [ctx setPoints:updatedPoints];
         [[self layer] updateLayer];
-        if (snapshotVersion == self->_pointsVersion)
-        {
-            self->_terrainElevationGpxFile = [OARouteExporter exportTrackWithPoints:densifiedPoints];
-            self->_terrainElevationVersion = self->_pointsVersion;
-        }
+        self->_terrainElevationGpxFile = [OARouteExporter exportTrackWithPoints:densifiedPoints];
+        self->_terrainElevationVersion = self->_pointsVersion;
     }
     
     self->_isCalculatingElevation = NO;
@@ -1893,14 +1911,21 @@
         self.onChange();
 }
 
-- (void)cancelElevationCalculation
+- (void)invalidateElevationCalculationShouldNotify:(BOOL)shouldNotify
 {
     _elevationCalculationRequestId++;
-    [_elevationHelper updateAppMode:nil];
+    _elevationHelper.delegate = nil;
+    [_elevationHelper cancelApproximation];
     _elevationHelper = nil;
+    _elevationCalculationContext = nil;
     _isCalculatingElevation = NO;
-    if (self.onChange)
+    if (shouldNotify && self.onChange)
         self.onChange();
+}
+
+- (void)cancelElevationCalculation
+{
+    [self invalidateElevationCalculationShouldNotify:YES];
 }
 
 // MARK: - Chart highlight on map
@@ -1956,8 +1981,17 @@
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations
                                        points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
-    OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx != nil && approximations.count > 0 && points.count == approximations.count)
+    if (_elevationHelperRequestId != _elevationCalculationRequestId)
+        return;
+
+    OAMeasurementEditingContext *ctx = _elevationCalculationContext;
+    if (ctx == nil || ctx != [self editingContext])
+    {
+        _elevationHelper = nil;
+        return;
+    }
+
+    if (approximations.count > 0 && points.count == approximations.count)
     {
         OAApplicationMode *appMode = ctx.appMode ?: [OAApplicationMode DEFAULT];
         OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc]
@@ -1972,6 +2006,7 @@
     }
     _elevationHelper = nil;
     _isCalculatingElevation = NO;
+    _elevationCalculationContext = nil;
     if (self.onChange)
         self.onChange();
 }

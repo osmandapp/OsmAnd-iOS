@@ -14,6 +14,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     private var detailsObject: BaseDetailsObject?
     private var renderedObject: OARenderedObject?
     private var provider: RenderedObjectAmenityProvider!
+    private var cityFetchStarted = false
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -39,12 +40,15 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func viewDidLoad() {
+        applyPolygonAddressIfNeeded()
         if detailsObject != nil {
             updateMenuWithDetailedObject()
         }
         super.viewDidLoad()
         if detailsObject == nil {
             resolveDetailedObjectInBackground()
+        } else {
+            resolveGeometryInBackground()
         }
     }
     
@@ -231,8 +235,22 @@ final class PlaceDetailsViewController: OAPOIViewController {
         updateTargetPoint(with: amenity)
     }
 
+    private func resolveGeometryInBackground() {
+        guard let poi = detailsObject?.syntheticAmenity ?? self.poi,
+              let targetPoint = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint()
+        else { return }
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(poi) else { return }
+            DispatchQueue.main.async {
+                _ = OARootViewController.instance()?.mapPanel?.updateContextMenuSelectedObject(geoObject, for: targetPoint)
+            }
+        }
+    }
+
     private func resolveDetailedObjectInBackground() {
-        guard let renderedObject else { return }
+        guard let renderedObject,
+              let targetPoint = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint()
+        else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
             DispatchQueue.main.async {
@@ -240,8 +258,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
-                      let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === renderedObject
+                      mapPanel.updateContextMenuSelectedObject(details, for: targetPoint)
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
@@ -262,6 +279,75 @@ final class PlaceDetailsViewController: OAPOIViewController {
         targetPoint.title = amenity.nameLocalized ?? amenity.name
         targetPoint.icon = amenity.type?.icon()
 
+        applyPolygonAddressIfNeeded()
         mapPanel.update(targetPoint)
+    }
+
+    private func applyPolygonAddressIfNeeded() {
+        guard let mapPanel = OARootViewController.instance()?.mapPanel,
+              let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
+
+        let amenity: OAPOI? = detailsObject?.syntheticAmenity ?? poi
+        let polygonPoints = max(Int(renderedObject?.x.count ?? 0), Int(amenity?.x.count ?? 0))
+        guard polygonPoints > 2 else { return }
+
+        targetPoint.shouldFetchAddress = false
+        if let address = polygonAddressString(amenity), !address.isEmpty {
+            targetPoint.titleAddress = address
+            targetPoint.addressFound = true
+        }
+        fetchCityInBackground(for: targetPoint)
+    }
+
+    private func fetchCityInBackground(for targetPoint: OATargetPoint) {
+        guard !cityFetchStarted else { return }
+        cityFetchStarted = true
+
+        let lat = targetPoint.location.latitude
+        let lon = targetPoint.location.longitude
+        let objectId = targetPoint.obfId
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let fullAddress = OAReverseGeocoder.instance().lookupAddress(atLat: lat, lon: lon, objectId: objectId)
+            let trimmed = fullAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+            DispatchQueue.main.async {
+                guard let self, !trimmed.isEmpty,
+                      let mapPanel = OARootViewController.instance()?.mapPanel,
+                      let currentTarget = mapPanel.getCurrentTargetPoint(),
+                      currentTarget === targetPoint else { return }
+                currentTarget.titleAddress = trimmed
+                currentTarget.addressFound = true
+                self.delegate?.refreshTargetPointHeader?()
+            }
+        }
+    }
+
+    private func polygonAddressString(_ amenity: OAPOI?) -> String? {
+        guard let amenity else { return nil }
+        let street = amenity.getAdditionalInfo("addr:street") ?? amenity.getAdditionalInfo("addr_street")
+        let house = amenity.getAdditionalInfo("addr:housenumber") ?? amenity.getAdditionalInfo("addr_housenumber")
+        let cityCandidates: [String?] = [
+            amenity.cityName,
+            amenity.getAdditionalInfo("addr:city"),
+            amenity.getAdditionalInfo("addr_city"),
+            amenity.getAdditionalInfo("addr:place"),
+            amenity.getAdditionalInfo("addr_place"),
+            amenity.getAdditionalInfo("is_in:city"),
+            amenity.getAdditionalInfo("is_in")
+        ]
+        let city = cityCandidates.compactMap { $0 }.first { !$0.isEmpty }
+        var line = ""
+        if let street, !street.isEmpty {
+            if let house, !house.isEmpty {
+                line = "\(street) \(house)"
+            } else {
+                line = street
+            }
+        }
+        var parts: [String] = []
+        if !line.isEmpty { parts.append(line) }
+        if let city, !city.isEmpty { parts.append(city) }
+        let result = parts.joined(separator: ", ")
+        return result.isEmpty ? nil : result
     }
 }

@@ -66,6 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;
 - (void) updateContextMenu:(OATargetPoint *)targetPoint;
+- (BOOL)updateContextMenuSelectedObject:(nullable id)selectedObject forTargetPoint:(OATargetPoint *)targetPoint;
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;

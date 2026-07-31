@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable BaseDetailsObject *)searchDetailedObject:(id)object;
 - (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request;
+- (nullable BaseDetailsObject *)resolveGeometryOnly:(OAPOI *)poi;
 
 - (NSArray<NSString *> *) getAmenityRepositories:(BOOL)includeTravel;
 

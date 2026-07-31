@@ -1562,28 +1562,16 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
+    [_mapViewController.mapLayers.contextMenuLayer setSelectedObject:targetPoint.targetObj];
+}
 
-    OAMapObject *obj = nil;
-    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
-    {
-        obj = targetPoint.targetObj;
+- (BOOL)updateContextMenuSelectedObject:(id)selectedObject forTargetPoint:(OATargetPoint *)targetPoint
+{
+    if (![self isContextMenuVisible] || [_targetMenuView isHiding] || _targetMenuView.targetPoint != targetPoint)
+        return NO;
 
-    }
-    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
-    {
-        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
-        obj = (OAMapObject *) [baseDetails syntheticAmenity];
-    }
-    if (obj != nil)
-    {
-        QVector<OsmAnd::PointI> points;
-        if (obj.x && obj.x.count > 0)
-        {
-            for (int i = 0; i < obj.x.count; i++)
-                points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
-        }
-        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
-    }
+    [_mapViewController.mapLayers.contextMenuLayer setSelectedObject:selectedObject];
+    return YES;
 }
 
 - (void) setupNetworkGpxProgress

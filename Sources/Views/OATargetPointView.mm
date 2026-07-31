@@ -923,6 +923,11 @@ static const NSInteger _buttonsCount = 4;
         [self.customController onMenuShown];
 }
 
+- (BOOL)isHiding
+{
+    return _hiding;
+}
+
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _hiding = YES;

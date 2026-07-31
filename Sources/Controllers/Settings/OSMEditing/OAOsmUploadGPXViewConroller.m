@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewControllerMode) {
 {
     _settings = [OAAppSettings sharedManager];
     _mode = EOAOsmUploadGPXViewControllerModeInitial;
-    _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
+    _selectedVisibility = EOAOsmUploadGPXVisibilityIdentifiable;
     _descriptionText = @"";
     _tagsText = [self tagsTextWithDefaultActivity];
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
@@ -550,7 +550,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewControllerMode) {
             
             NSString *visibility = [OAOsmUploadGPXVisibilityViewConroller toUrlParam:_selectedVisibility];
             if (!visibility)
-                visibility = [OAOsmUploadGPXVisibilityViewConroller toUrlParam:EOAOsmUploadGPXVisibilityPrivate];
+                visibility = [OAOsmUploadGPXVisibilityViewConroller toUrlParam:EOAOsmUploadGPXVisibilityIdentifiable];
             
             _filesUploadingProgress = [NSMutableDictionary dictionary];
             _failedFileNames = [NSMutableArray array];

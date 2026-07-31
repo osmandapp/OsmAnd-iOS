@@ -30,6 +30,7 @@
 
 #define kHeaderImageHeight 170
 static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
+static NSString * const kWikimediaThumbnailSize = @"330px-";
 
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
@@ -529,6 +530,22 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     _isDownloadImagesOnlyNow = onlyNow;
 }
 
+- (NSString *)normalizeLegacyWikimediaThumbnailUrls:(NSString *)html
+{
+    if (html.length == 0)
+        return html;
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:nil];
+    if (!regex)
+        return html;
+    return [regex stringByReplacingMatchesInString:html
+                                           options:0
+                                             range:NSMakeRange(0, html.length)
+                                      withTemplate:[NSString stringWithFormat:@"$1%@", kWikimediaThumbnailSize]];
+}
+
 #pragma mark - Web load
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
@@ -965,6 +982,8 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 {
     if (content == nil)
         return nil;
+    
+    content = [self normalizeLegacyWikimediaThumbnailUrls:content];
     
     NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
     return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];

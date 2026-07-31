@@ -777,7 +777,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     OACollapsablePoiView *collapsableView = [[OACollapsablePoiView alloc] init];
     [collapsableView setDataWithTitles:titles amenities:amenities];
+    collapsableView.collapsed = YES;
     row.collapsableView = collapsableView;
+    row.collapsed = YES;
 
     return row;
 }

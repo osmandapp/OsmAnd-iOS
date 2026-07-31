@@ -384,7 +384,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let bottom = routeTypeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -routeTypeButtonBottomInset(for: sheetState))
         routeTypeButtonBottomConstraint = bottom
         NSLayoutConstraint.activate([
-            routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             bottom
         ])
         routeTypeButton.accessibilityLabel = localizedString("route_between_points")

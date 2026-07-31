@@ -1498,6 +1498,15 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
     }
     
+    if (info.isUrl)
+    {
+        NSURL *onlineUrl = [NSURL URLWithString:url];
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:onlineUrl];
+        [OARootViewController.instance.mapPanel.navigationController presentViewController:safariViewController
+                                                                                  animated:YES completion:nil];
+        return;
+    }
+    
     if ([url containsString:kWikiLink])
     {
         if (!isWikiPurchased)

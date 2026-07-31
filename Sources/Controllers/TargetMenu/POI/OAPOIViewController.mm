@@ -400,6 +400,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     NSString *locale;
     NSString *description;
+    NSString *wikipediaUrl;
+    BOOL isOnlineURL = NO;
+    
     NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:SHORT_DESCRIPTION_TAG map:filteredInfo];
     if (pair)
     {
@@ -422,6 +425,19 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             
             if ([pairDescription.first isKindOfClass:NSString.class])
             {
+                NSArray<NSString *> *langs = [self.poi getNames:WIKI_LANG defTag:@"en"];
+                NSString *lang = langs.firstObject;
+                if (NSStringIsEmpty(lang))
+                    lang = @"en";
+                
+                NSString *title = [[self.poi getName:locale] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                
+                if (!NSStringIsEmpty(title))
+                {
+                    wikipediaUrl = [NSString stringWithFormat:@"https://%@%@%@", lang, WIKIPEDIA_ORG_WIKI_URL_PART, title];
+                    isOnlineURL = YES;
+                }
+                
                 description = pairDescription.first;
                 [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
             }
@@ -443,7 +459,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIImage *icon = [[UIImage templateImageNamed:@"ic_custom_wikipedia"] imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
         
         NSString *buttonText;
-        NSString *wikipediaUrl;
+        
         if (hasShortDescription)
         {
             buttonText = OALocalizedString(@"context_menu_read_full_article");
@@ -460,7 +476,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
         }
         
-        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:description hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderWikiShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:description hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:isOnlineURL order:kOrderWikiShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
         info.typeName = kShortDescriptionWikiRowType;
         
         [rows addObject:info];

@@ -382,7 +382,10 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
     
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView
@@ -400,7 +403,10 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
 + (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml

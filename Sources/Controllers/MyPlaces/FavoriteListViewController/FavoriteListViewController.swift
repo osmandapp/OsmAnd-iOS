@@ -130,7 +130,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        createMissingParentFolderIfNeeded()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
@@ -421,11 +420,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         }
     }
 
-    private func createMissingParentFolderIfNeeded() {
-        guard isRootFolder else { return }
-        OAFavoritesHelperBridge.shared().createMissingParentFolderIfNeeded()
-    }
-    
     deinit {
         unregisterDistanceAndDirectionObservers()
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)

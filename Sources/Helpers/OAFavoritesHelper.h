@@ -26,7 +26,6 @@
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
 + (OASGpxFile *)loadGpxFile:(NSString *)file;
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile;
-+ (void)createMissingParentFolderIfNeeded;
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType;
 + (void) setSpecialPoint:(OASpecialPointType *)specialType lat:(double)lat lon:(double)lon address:(NSString *)address;

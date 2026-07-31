@@ -186,94 +186,10 @@ static NSOperationQueue *_favQueue;
     return [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
 }
 
-+ (void)addParentGroupNamesForGroupName:(NSString *)groupName toSet:(NSMutableOrderedSet<NSString *> *)parentGroupNames
-{
-    if (groupName.length == 0 || ![groupName containsString:@"/"])
-        return;
-    
-    NSString *parentGroupName = @"";
-    NSArray<NSString *> *components = [groupName componentsSeparatedByString:@"/"];
-    for (NSUInteger i = 0; i + 1 < components.count; i++)
-    {
-        NSString *component = components[i];
-        if (component.length == 0)
-            continue;
-        
-        parentGroupName = parentGroupName.length == 0 ? component : [parentGroupName stringByAppendingFormat:@"/%@", component];
-        [parentGroupNames addObject:parentGroupName];
-    }
-}
-
-+ (void)createMissingParentGroupsForGpx:(OASGpxFile *)gpxFile
-{
-    NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
-    for (OASGpxUtilitiesPointsGroup *pointsGroup in gpxFile.pointsGroups.allValues)
-    {
-        for (OASWptPt *point in pointsGroup.points)
-        {
-            [self addParentGroupNamesForGroupName:point.category toSet:parentGroupNames];
-        }
-    }
-    
-    for (NSString *groupName in parentGroupNames)
-    {
-        if (groupName.length == 0 || _flatGroups[groupName])
-            continue;
-        
-        OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:YES color:nil];
-        _flatGroups[group.name] = group;
-        _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
-    }
-}
-
-+ (void)createMissingParentFolderIfNeeded
-{
-    NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
-    for (OAFavoriteGroup *group in _favoriteGroups)
-        [self addParentGroupNamesForGroupName:group.name toSet:parentGroupNames];
-
-    if (parentGroupNames.count == 0)
-        return;
-
-    BOOL createdGroup = NO;
-    BOOL changed = NO;
-    NSFileManager *manager = NSFileManager.defaultManager;
-    NSMutableArray<OAFavoriteGroup *> *groupsToSave = [NSMutableArray array];
-    for (NSString *groupName in parentGroupNames)
-    {
-        OAFavoriteGroup *group = _flatGroups[groupName];
-        if (!group)
-        {
-            group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:YES color:nil];
-            _flatGroups[group.name] = group;
-            _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
-            createdGroup = YES;
-            changed = YES;
-        }
-
-        NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:group.name];
-        if (![manager fileExistsAtPath:filePath])
-        {
-            [groupsToSave addObject:group];
-            changed = YES;
-        }
-    }
-
-    if (createdGroup)
-        [self sortAll];
-
-    for (OAFavoriteGroup *group in groupsToSave)
-        [self saveFile:@[group] file:[OsmAndApp.instance favoritesStorageFilename:group.name]];
-
-    if (changed)
-        [self notifyFavoritesStorageChanged];
-}
-
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile
 {
     NSString *defCategory = @"";
     OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
-    [self createMissingParentGroupsForGpx:gpxFile];
     NSArray<OASGpxUtilitiesPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
     BOOL favoritesImported = NO;
     for (OASGpxUtilitiesPointsGroup *pointsGroup in pointsGroups)

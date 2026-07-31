@@ -104,11 +104,6 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     });
 }
 
-- (void)createMissingParentFolderIfNeeded
-{
-    [OAFavoritesHelper createMissingParentFolderIfNeeded];
-}
-
 - (NSArray<NSString *> *)collapsedSections
 {
     return _collapsedSections;

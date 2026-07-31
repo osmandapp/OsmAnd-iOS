@@ -43,8 +43,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var headingUpdateObserver: OAAutoObserverProxy?
     var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
-    var savedScrollPosition: (linearIndex: Int, offsetY: CGFloat)?
-    var shouldRestoreScrollPosition = false
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -147,7 +145,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
         configureToolbar()
-        applySnapshot(shouldSaveScrollPosition: false)
+        applySnapshot()
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
         if isRootFolder {
@@ -157,7 +155,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     override func viewWillDisappear(_ animated: Bool) {
         unregisterDistanceAndDirectionObservers()
-        saveScrollPosition()
         if !isRootFolder {
             navigationItem.searchController = nil
             navigationController?.setNavigationBarHidden(true, animated: false)
@@ -165,12 +162,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
         definesPresentationContext = false
         super.viewWillDisappear(animated)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard shouldRestoreScrollPosition else { return }
-        restoreScrollPositionIfNeeded()
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
@@ -313,90 +304,13 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     }
     
     func resetScrollPosition() {
-        savedScrollPosition = nil
-        shouldRestoreScrollPosition = false
-        collectionView.layoutIfNeeded()
-        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: -collectionView.adjustedContentInset.top), animated: false)
-    }
-
-    func saveScrollPosition() {
-        guard !isSearchResultsMode else { return }
-        savedScrollPosition = currentScrollPosition()
-    }
-
-    private func currentScrollPosition() -> (linearIndex: Int, offsetY: CGFloat)? {
-        let topY = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
-        let visibleItems = collectionView.indexPathsForVisibleItems.compactMap { indexPath -> (indexPath: IndexPath, minY: CGFloat, maxY: CGFloat)? in
-            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { return nil }
-            return (indexPath: indexPath, minY: attributes.frame.minY, maxY: attributes.frame.maxY)
+        let indexPath = IndexPath(item: 0, section: 0)
+        guard collectionView.numberOfSections > indexPath.section,
+              collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else {
+            return
         }
 
-        let topEdgeItems = visibleItems.filter { $0.minY <= topY && $0.maxY > topY }
-        let candidates = topEdgeItems.isEmpty ? visibleItems.filter { $0.maxY > topY } : topEdgeItems
-        guard let anchor = (candidates.isEmpty ? visibleItems : candidates).min(by: { lhs, rhs in
-            let lhsDistance = abs(lhs.minY - topY)
-            let rhsDistance = abs(rhs.minY - topY)
-            if lhsDistance == rhsDistance {
-                return lhs.minY < rhs.minY
-            }
-
-            return lhsDistance < rhsDistance
-        }) else {
-            return nil
-        }
-
-        return (linearIndex: linearIndex(for: anchor.indexPath),
-                offsetY: max(0.0, topY - anchor.minY))
-    }
-
-    private func linearIndex(for indexPath: IndexPath) -> Int {
-        guard indexPath.section < collectionView.numberOfSections else { return 0 }
-        let previousItemsCount = (0..<indexPath.section).reduce(0) { result, section in
-            result + collectionView.numberOfItems(inSection: section)
-        }
-        return previousItemsCount + indexPath.item
-    }
-
-    private func restoreScrollPositionIfNeeded() {
-        guard !isSearchResultsMode, let savedScrollPosition else { return }
-        collectionView.layoutIfNeeded()
-
-        guard let indexPath = indexPath(for: savedScrollPosition.linearIndex) else { return }
         collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
-
-        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath) else { return }
-        self.savedScrollPosition = nil
-        shouldRestoreScrollPosition = false
-        let minY = -collectionView.adjustedContentInset.top
-        let offsetY = max(minY, attributes.frame.minY + savedScrollPosition.offsetY - collectionView.adjustedContentInset.top)
-        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: offsetY), animated: false)
-    }
-
-    private func indexPath(for linearIndex: Int) -> IndexPath? {
-        guard collectionView.numberOfSections > 0 else { return nil }
-        var remainingIndex = max(0, linearIndex)
-        for section in 0..<collectionView.numberOfSections {
-            let itemCount = collectionView.numberOfItems(inSection: section)
-            if remainingIndex < itemCount {
-                return IndexPath(item: remainingIndex, section: section)
-            }
-
-            remainingIndex -= itemCount
-        }
-
-        return lastIndexPath()
-    }
-
-    private func lastIndexPath() -> IndexPath? {
-        guard collectionView.numberOfSections > 0 else { return nil }
-        for section in stride(from: collectionView.numberOfSections - 1, through: 0, by: -1) {
-            let itemCount = collectionView.numberOfItems(inSection: section)
-            if itemCount > 0 {
-                return IndexPath(item: itemCount - 1, section: section)
-            }
-        }
-
-        return nil
     }
 
     private func registerDistanceAndDirectionObservers() {

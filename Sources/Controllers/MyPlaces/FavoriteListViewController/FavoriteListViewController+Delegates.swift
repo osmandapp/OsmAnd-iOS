@@ -50,7 +50,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
             self.isContextMenuVisible = false
             if self.shouldReloadCollectionView {
                 self.shouldReloadCollectionView = false
-                self.updateDistanceAndDirection(true)
+                self.applySnapshot(animatingDifferences: false)
             }
         }
     }

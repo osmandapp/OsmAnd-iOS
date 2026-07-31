@@ -166,8 +166,13 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     }
 
     func resetScrollPosition() {
-        collectionView.layoutIfNeeded()
-        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: -collectionView.adjustedContentInset.top), animated: false)
+        let indexPath = IndexPath(item: 0, section: 0)
+        guard collectionView.numberOfSections > indexPath.section,
+              collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else {
+            return
+        }
+
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
     }
 
     // MARK: - Generate Data

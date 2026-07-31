@@ -32,6 +32,14 @@ enum FavoriteListSection: Hashable {
     case content
     case statsFooter
     case emptyState
+
+    var isFolder: Bool {
+        if case .folderSection = self {
+            return true
+        }
+
+        return false
+    }
 }
 
 enum FavoriteListItem: Hashable {
@@ -53,6 +61,35 @@ enum FavoriteListItem: Hashable {
             return nil
         }
     }
+
+    var patchIdentifier: FavoriteListItemPatchIdentifier {
+        switch self {
+        case .sortHeader:
+            return .sortHeader
+        case .backupBanner:
+            return .backupBanner
+        case .header(let section):
+            return .header(section)
+        case .folder(let folder):
+            return .folder(folder.bridgeItem.groupName)
+        case .favorite(let favorite):
+            return .favorite(favorite.bridgeItem.identifier)
+        case .statsFooter:
+            return .statsFooter
+        case .emptyState:
+            return .emptyState
+        }
+    }
+}
+
+enum FavoriteListItemPatchIdentifier: Hashable {
+    case sortHeader
+    case backupBanner
+    case header(FavoriteFolderSection)
+    case folder(String)
+    case favorite(String)
+    case statsFooter
+    case emptyState
 }
 
 enum FavoriteSelectionItem: Hashable {

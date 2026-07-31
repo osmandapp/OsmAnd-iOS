@@ -78,8 +78,18 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     }
 
     func resetScrollPosition() {
-        tableView.layoutIfNeeded()
-        tableView.setContentOffset(CGPoint(x: tableView.contentOffset.x, y: -tableView.adjustedContentInset.top), animated: false)
+        if let tableHeaderView = tableView.tableHeaderView {
+            tableView.scrollRectToVisible(tableHeaderView.frame, animated: false)
+            return
+        }
+
+        let indexPath = IndexPath(row: 0, section: 0)
+        guard tableView.numberOfSections > indexPath.section,
+              tableView.numberOfRows(inSection: indexPath.section) > indexPath.row else {
+            return
+        }
+
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
     }
     
     func startAsyncInit() {

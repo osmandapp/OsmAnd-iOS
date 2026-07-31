@@ -1339,49 +1339,52 @@
     NSString *folderPath = (folder.length > 0) ? [gpxRootPath stringByAppendingPathComponent:folder] : gpxRootPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
     BOOL restoreOriginalActiveGpx = originalGpxPath.length > 0 && originalPoiStateSnapshot != nil && ![originalGpxPath isEqualToString:outFile];
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
         OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
         BOOL success = (exception == nil);
+        NSString *gpxFilePath = nil;
         if (success)
         {
-            gpx.path = outFile;
+            gpxFilePath = [OAUtilities getGpxShortPath:outFile];
             OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
-            NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
             OASGpxDataItem *item = [gpxDb getGPXItem:gpxFilePath];
             if (!item)
                 item = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
             [gpxDb updateDataItem:item];
-            if (!asCopy)
-            {
-                OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:gpx];
-                ctx.gpxData = gpxData;
-                [ctx setChangesSaved];
-                _initialPoiStateSnapshot = [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpx draftGpxFile:nil];
-                _editingPoiStateSnapshot = nil;
-            }
-            if (showOnMap)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[OAAppSettings sharedManager] showGpx:@[gpxFilePath]];
-                });
-            }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (success && restoreOriginalActiveGpx)
-            {
-                OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:originalGpxPath fallbackPath:nil];
-                if (activeGpxFile != nil)
-                {
-                    [self applyPoiStateSnapshot:originalPoiStateSnapshot toGpxFile:activeGpxFile draft:NO];
-                    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-                    [mapViewController.mapLayers.gpxMapLayer updateCachedGpxItem:originalGpxPath];
-                    [mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
-                }
-            }
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (success)
-                [self clearDraftGpx];
-            if (onComplete) onComplete(success, success ? outFile : nil);
+            {
+                gpx.path = outFile;
+                BOOL isCurrentContext = strongSelf != nil && [strongSelf editingContext] == ctx;
+                if (!asCopy && isCurrentContext)
+                {
+                    ctx.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+                    [ctx setChangesSaved];
+                    strongSelf->_initialPoiStateSnapshot = [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpx draftGpxFile:nil];
+                    strongSelf->_editingPoiStateSnapshot = nil;
+                }
+                if (showOnMap && gpxFilePath.length > 0)
+                    [[OAAppSettings sharedManager] showGpx:@[gpxFilePath]];
+                if (restoreOriginalActiveGpx && strongSelf != nil)
+                {
+                    OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:originalGpxPath fallbackPath:nil];
+                    if (activeGpxFile != nil)
+                    {
+                        [strongSelf applyPoiStateSnapshot:originalPoiStateSnapshot toGpxFile:activeGpxFile draft:NO];
+                        OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+                        [mapViewController.mapLayers.gpxMapLayer updateCachedGpxItem:originalGpxPath];
+                        [mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
+                    }
+                }
+                if (isCurrentContext)
+                    [strongSelf clearDraftGpx];
+            }
+            if (onComplete)
+                onComplete(success, success ? outFile : nil);
         });
     });
 }

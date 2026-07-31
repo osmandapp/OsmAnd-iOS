@@ -79,6 +79,8 @@
     CGPoint _cachedTargetPoint;
     
     OAMapSelectionHelper *_mapSelectionHelper;
+
+    id _selectedObject;
 }
 
 - (NSString *) layerId
@@ -648,6 +650,40 @@
     }];
 }
 
+- (QVector<OsmAnd::PointI>)polygonPointsForObject:(id)object
+{
+    QVector<OsmAnd::PointI> points;
+
+    OAMapObject *mapObject = nil;
+    if ([object isKindOfClass:OAMapObject.class])
+        mapObject = object;
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+        mapObject = (OAMapObject *) [(BaseDetailsObject *) object syntheticAmenity];
+
+    if (mapObject && mapObject.x && mapObject.y
+        && mapObject.x.count == mapObject.y.count && mapObject.x.count > 2)
+    {
+        for (NSUInteger i = 0; i < mapObject.x.count; i++)
+            points.push_back(OsmAnd::PointI(mapObject.x[i].intValue, mapObject.y[i].intValue));
+    }
+    return points;
+}
+
+- (void)updateSelectedObjectHighlight
+{
+    QVector<OsmAnd::PointI> points = [self polygonPointsForObject:_selectedObject];
+    if (points.size() > 2)
+        [self highlightPolygon:points];
+    else
+        [self hideRegionHighlight];
+}
+
+- (void)setSelectedObject:(id)selectedObject
+{
+    _selectedObject = selectedObject;
+    [self updateSelectedObjectHighlight];
+}
+
 - (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject
 {
     OAMapRendererView *mapView = (OAMapRendererView *)OARootViewController.instance.mapPanel.mapViewController.mapView;
@@ -802,6 +838,7 @@
 
 - (void)contextMenuDidHide
 {
+    [self setSelectedObject:nil];
     [self hideAnimatedPin];
     [self hideContextPinMarker];
 }

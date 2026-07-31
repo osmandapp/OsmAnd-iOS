@@ -57,7 +57,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         if detailsObject == nil {
             resolveDetailedObjectInBackground()
         } else {
-            highlightPolygonInBackground()
+            resolveGeometryInBackground()
         }
     }
 
@@ -244,33 +244,27 @@ final class PlaceDetailsViewController: OAPOIViewController {
         updateTargetPoint(with: amenity)
     }
 
-    private func highlightPolygonInBackground() {
-        let poi: OAPOI? = (sourceObject as? OAPOI) ?? detailsObject?.syntheticAmenity
-        guard let poi else { return }
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+    private func resolveGeometryInBackground() {
+        guard let poi = (sourceObject as? OAPOI) ?? detailsObject?.syntheticAmenity,
+              let targetPoint = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint()
+        else { return }
+        DispatchQueue.global(qos: .userInitiated).async {
             guard let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(poi) else { return }
             DispatchQueue.main.async {
-                guard let mapPanel = OARootViewController.instance()?.mapPanel,
-                      mapPanel.getCurrentTargetPoint() != nil
-                else { return }
-                mapPanel.highlightContextPinPolygon(geoObject)
+                _ = OARootViewController.instance()?.mapPanel?.updateContextMenuSelectedObject(geoObject, for: targetPoint)
             }
         }
     }
 
     private func resolveDetailedObjectInBackground() {
-        guard let sourceObject else { return }
+        guard let sourceObject,
+              let targetPoint = OARootViewController.instance()?.mapPanel?.getCurrentTargetPoint()
+        else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let poi = sourceObject as? OAPOI,
                let geoObject = OAAmenitySearcher.sharedInstance().resolveGeometryOnly(poi) {
                 DispatchQueue.main.async {
-                    guard let self,
-                          self.detailsObject == nil,
-                          let mapPanel = OARootViewController.instance()?.mapPanel,
-                          let targetPoint = mapPanel.getCurrentTargetPoint(),
-                          (targetPoint.targetObj as AnyObject) === sourceObject
-                    else { return }
-                    mapPanel.highlightContextPinPolygon(geoObject)
+                    _ = OARootViewController.instance()?.mapPanel?.updateContextMenuSelectedObject(geoObject, for: targetPoint)
                 }
             }
             let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
@@ -279,8 +273,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
-                      let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === sourceObject
+                      mapPanel.updateContextMenuSelectedObject(details, for: targetPoint)
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
@@ -290,7 +283,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.rebuildRows()
                 tableView.reloadData()
                 self.delegate?.refreshTargetPointHeader?()
-                mapPanel.highlightContextPinPolygon(details)
             }
         }
     }

@@ -1210,6 +1210,28 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:points routePoints:[self getRoutePoints]];
 }
 
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
+{
+    NSArray<OASWptPt *> *allPoints = [self getPoints];
+    if (startPointIndex < 0 || endPointIndex < startPointIndex || endPointIndex >= (NSInteger)allPoints.count)
+        return nil;
+
+    OASTrkSegment *trackSegment = [self getRouteSegment:startPointIndex endPointIndex:endPointIndex];
+    if (trackSegment == nil)
+        return nil;
+
+    NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+    {
+        OASWptPt *point = allPoints[i];
+        if (point.getTrkPtIndex != -1)
+            [routePoints addObject:point];
+    }
+    NSArray<NSArray<OASWptPt *> *> *routePointGroups = routePoints.count > 0 ? @[routePoints] : nil;
+
+    return [OARouteExporter exportRoute:gpxName trkSegments:@[trackSegment] points:nil routePoints:routePointGroups];
+}
+
 - (NSArray<OASTrkSegment *> *) getRouteSegments
 {
     NSMutableArray<OASTrkSegment *> *res = [NSMutableArray new];

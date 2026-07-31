@@ -123,6 +123,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OsmAnd::ColorARGB) getLineColor;
 
 - (OASGpxFile *) exportGpx:(NSString *)gpxName;
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex;
 - (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints;
 
 - (void) scheduleRouteCalculateIfNotEmpty;

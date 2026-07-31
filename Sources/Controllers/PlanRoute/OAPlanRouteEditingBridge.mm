@@ -1401,37 +1401,32 @@
         return;
     }
 
-    NSArray<OASWptPt *> *allPoints = ctx.getPoints;
     NSArray<NSNumber *> *sortedIndexes = [indexes sortedArrayUsingSelector:@selector(compare:)];
-
-    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
-    OASTrack *track = [[OASTrack alloc] init];
-    track.segments = [NSMutableArray array];
-    OASTrkSegment *segment = [[OASTrkSegment alloc] init];
-    NSMutableArray<OASWptPt *> *trkPoints = [NSMutableArray array];
-
-    for (NSNumber *indexNum in sortedIndexes)
-    {
-        NSInteger idx = indexNum.integerValue;
-        if (idx >= 0 && idx < (NSInteger)allPoints.count)
-        {
-            OASWptPt *pt = allPoints[idx];
-            OASWptPt *trkPoint = [[OASWptPt alloc] initWithWptPt:pt];
-            [trkPoints addObject:trkPoint];
-        }
-    }
-
-    if (trkPoints.count == 0)
+    if (sortedIndexes.count == 0)
     {
         if (onComplete) onComplete(NO, nil);
         return;
     }
 
-    segment.points = trkPoints;
-    [track.segments addObject:segment];
-    gpx.tracks = [@[track] mutableCopy];
+    NSInteger startPointIndex = sortedIndexes.firstObject.integerValue;
+    NSInteger endPointIndex = sortedIndexes.lastObject.integerValue;
+    for (NSInteger offset = 0; offset < (NSInteger)sortedIndexes.count; offset++)
+    {
+        if (sortedIndexes[offset].integerValue != startPointIndex + offset)
+        {
+            if (onComplete) onComplete(NO, nil);
+            return;
+        }
+    }
 
     NSString *trackName = fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route");
+    OASGpxFile *gpx = [ctx exportGpx:trackName startPointIndex:startPointIndex endPointIndex:endPointIndex];
+    if (gpx == nil)
+    {
+        if (onComplete) onComplete(NO, nil);
+        return;
+    }
+
     NSString *folderPath = OsmAndApp.instance.gpxPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
 

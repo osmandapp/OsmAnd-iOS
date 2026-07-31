@@ -194,10 +194,26 @@
             completionBlock();
         return;
     }
-    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType] typeName:historyItem.typeName name:historyItem.name];
-    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:historyItem.latitude longitude:historyItem.longitude] historyName:historyName];
+    
+    OARTargetPoint *backup = _app.data.pointToNavigateBackup;
+    BOOL isPreviousRoute = backup && [historyItem.iconName isEqualToString:@"ic_custom_point_to_point"]
+                                    && fabs(historyItem.latitude - backup.point.coordinate.latitude) < 1e-5
+                                    && fabs(historyItem.longitude - backup.point.coordinate.longitude) < 1e-5;
+    
+    if (isPreviousRoute)
+    {
+        [self startNavigationFromPreviousRoute];
+    }
+    else
+    {
+        OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType]
+                                                                          typeName:historyItem.typeName
+                                                                              name:historyItem.name];
+        [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:historyItem.latitude longitude:historyItem.longitude]
+                               historyName:historyName];
+    }
+    
     [self safePopToRootTemplateAnimated:YES];
-
     if (completionBlock)
         completionBlock();
 }

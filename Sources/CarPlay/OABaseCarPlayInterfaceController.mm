@@ -107,6 +107,17 @@
     }
 }
 
+- (void)startNavigationFromPreviousRoute
+{
+    [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
+    [OATargetPointsHelper.sharedInstance restoreTargetPoints:YES];
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil
+                                                                                 from:nil
+                                                                             fromName:nil
+                                                       useIntermediatePointsByDefault:YES
+                                                                           showDialog:NO];
+}
+
 - (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title
 {
     CPListItem *item = [[CPListItem alloc] initWithText:title detailText:nil];

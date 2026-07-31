@@ -5005,6 +5005,8 @@
 
 "no_elevation_data" = "No elevation data";
 "no_elevation_data_description" = "OsmAnd can retrieve elevation data from nearby roads or terrain maps.";
+"carplay_map_mode_vehicle_appearance" = "Vehicle appearance";
+
 "share_as_file" = "Share as file";
 "share_link" = "Share link";
 "get_elevation_data" = "Get elevation data";

@@ -4156,3 +4156,5 @@
 "rendering_attr_hideTidalFlats_description" = "Απόκρυψη λασπότοπων";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Ετικέτες fixme";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Εμφάνιση ετικετών fixme";
+"share_link" = "Κοινοποίηση συνδέσμου";
+"share_as_file" = "Κοινοποίηση ως αρχείο";

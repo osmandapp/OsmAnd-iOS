@@ -39,7 +39,6 @@
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
 - (void) hideRegionHighlight;
-- (void)setSelectedObject:(nullable id)selectedObject;
 
 - (NSArray<OARenderedObject *> *) retrievePolygonsAroundMapObject:(double)lat lon:(double)lon mapObject:(OAMapObject *)mapObject;
 

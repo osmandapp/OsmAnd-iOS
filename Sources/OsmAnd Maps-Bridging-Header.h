@@ -78,7 +78,6 @@
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"
 #import "OAPOIHelper.h"
-#import "OAReverseGeocoder.h"
 #import "OARenderedObject.h"
 #import "OAPOIType.h"
 #import "OAPOIFiltersHelper.h"

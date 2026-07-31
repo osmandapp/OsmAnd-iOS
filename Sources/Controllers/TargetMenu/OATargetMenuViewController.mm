@@ -94,6 +94,12 @@
     CGFloat _cachedYViewPort;
 }
 
+- (void)setupInitialState
+{
+    _topToolbarType = ETopToolbarTypeFixed;
+    _app = [OsmAndApp instance];
+}
+
 + (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     return [self.class createMenuController:targetPoint selectedObject:nil activeTargetType:activeTargetType activeViewControllerState:activeViewControllerState headerOnly:headerOnly];
@@ -453,10 +459,15 @@
 {
     self = [super init];
     if (self)
-    {
-        _topToolbarType = ETopToolbarTypeFixed;
-        _app = [OsmAndApp instance];
-    }
+        [self setupInitialState];
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+        [self setupInitialState];
     return self;
 }
 

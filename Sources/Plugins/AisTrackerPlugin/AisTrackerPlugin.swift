@@ -40,6 +40,30 @@ extension AisNmeaConnectionState: CustomStringConvertible {
     }
 }
 
+private struct AisNmeaConnectionConfig: Equatable {
+    let proto: AisNmeaProtocol
+    let host: String
+    let port: Int
+
+    var debugDescription: String {
+        switch proto {
+        case .udp:
+            return "UDP port=\(port)"
+        case .tcp:
+            return "TCP host=\(host) port=\(port)"
+        }
+    }
+
+    var isConnectable: Bool {
+        switch proto {
+        case .udp:
+            return port > 0
+        case .tcp:
+            return !host.isEmpty && port > 0
+        }
+    }
+}
+
 @objcMembers
 final class AisTrackerPlugin: OAPlugin {
     static let pluginId = "osmand.aistracker"
@@ -72,6 +96,7 @@ final class AisTrackerPlugin: OAPlugin {
     private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
 
     private var networkListener: AisMessageListener?
+    private var activeConnectionConfig: AisNmeaConnectionConfig?
     private var applicationModeObserver: OAAutoObserverProxy?
 
     private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
@@ -128,14 +153,9 @@ final class AisTrackerPlugin: OAPlugin {
         [OAApplicationMode.boat()]
     }
 
-    override func initPlugin() -> Bool {
-        let result = super.initPlugin()
-        updateConnectionForCurrentProfileSettings()
-        return result
-    }
-
     override func setEnabled(_ enabled: Bool) {
         super.setEnabled(enabled)
+        AisObjectHelper.debugLog("[AisTrackerPlugin] setEnabled=\(enabled)")
         if enabled {
             updateConnectionForCurrentProfileSettings()
         } else {
@@ -208,26 +228,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func restartConnection() {
-        guard isEnabled() else {
-            stopAisNetworkListener()
-            return
-        }
-        aisDataManager.startUpdates()
-        injectOrderOfIconsTestShip()
-        let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get())) ?? .udp
-        stopSharedNetworkListener(updateState: false)
-        updateConnectionState(.connecting)
-        switch proto {
-        case .udp:
-            let port = max(1, Int(udpPortPref.get()))
-            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA UDP port=\(port)")
-            networkListener = AisMessageListener(dataListener: networkDataListener, udpPort: Int32(port))
-        case .tcp:
-            let host = hostPref.get()
-            let port = max(1, Int(tcpPortPref.get()))
-            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA TCP host=\(host) port=\(port)")
-            networkListener = AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
-        }
+        updateConnectionForCurrentProfileSettings()
     }
 
     func stopAisNetworkListener() {
@@ -351,12 +352,13 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func connectionDescription() -> String {
-        let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get())) ?? .udp
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
+        let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get(appMode))) ?? .udp
         switch proto {
         case .udp:
-            return "UDP • \(udpPortPref.get())"
+            return "UDP • \(udpPortPref.get(appMode))"
         case .tcp:
-            return "TCP • \(hostPref.get()):\(tcpPortPref.get())"
+            return "TCP • \(hostPref.get(appMode)):\(tcpPortPref.get(appMode))"
         }
     }
 
@@ -373,47 +375,74 @@ final class AisTrackerPlugin: OAPlugin {
         }
     }
 
-    func injectOrderOfIconsTestShip() {
-        // Temporary test fixture for https://github.com/osmandapp/OsmAnd-iOS/issues/4844.
-        let mmsi: Int32 = 244123456
-        let position = AisObject(mmsi: mmsi,
-                                 msgType: 1,
-                                 timeStamp: 30,
-                                 navStatus: 0,
-                                 manInd: 0,
-                                 heading: 112,
-                                 cog: 112,
-                                 sog: 0.1,
-                                 lat: 51.96695,
-                                 lon: 5.32140,
-                                 rot: 0)
-        handleSimulatedAisObject(position)
-
-        let data = AisObject(mmsi: mmsi,
-                             msgType: 5,
-                             imo: 0,
-                             callSign: "ORDER",
-                             shipName: "ORDER-OF-ICONS",
-                             shipType: 60,
-                             dimensionToBow: 56,
-                             dimensionToStern: 65,
-                             dimensionToPort: 8,
-                             dimensionToStarboard: 12,
-                             draught: 2,
-                             destination: "Wijk bij Duurstede",
-                             etaMon: AisObjectConstants.shared.INVALID_ETA,
-                             etaDay: AisObjectConstants.shared.INVALID_ETA,
-                             etaHour: AisObjectConstants.shared.INVALID_ETA_HOUR,
-                             etaMin: AisObjectConstants.shared.INVALID_ETA_MIN)
-        handleSimulatedAisObject(data)
+    private func startConnection(with config: AisNmeaConnectionConfig) {
+        AisObjectHelper.debugLog("[AisTrackerPlugin] startConnection requested config=\(config.debugDescription) previous=\(activeConnectionConfig?.debugDescription ?? "none") state=\(connectionState)")
+        stopSharedNetworkListener(updateState: false)
+        updateConnectionState(.connecting)
+        activeConnectionConfig = config
+        switch config.proto {
+        case .udp:
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA UDP port=\(config.port)")
+            networkListener = AisMessageListener(dataListener: networkDataListener, udpPort: Int32(config.port))
+        case .tcp:
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start AIS/NMEA TCP host=\(config.host) port=\(config.port)")
+            networkListener = AisMessageListener(dataListener: networkDataListener, serverIp: config.host, serverPort: Int32(config.port))
+        }
     }
 
-    private func updateConnectionForCurrentProfileSettings() {
-        if isEnabled() {
-            restartConnection()
-        } else {
+    private func updateConnectionForCurrentProfileSettings(clearObjectsOnConnectionChange: Bool = false) {
+        guard isEnabled() else {
+            AisObjectHelper.debugLog("[AisTrackerPlugin] updateConnection skip: plugin disabled")
+            if clearObjectsOnConnectionChange {
+                clearSimulationObjects()
+            }
             stopAisNetworkListener()
+            return
         }
+
+        let config = currentConnectionConfig()
+        AisObjectHelper.debugLog("[AisTrackerPlugin] updateConnection config=\(config.debugDescription) active=\(activeConnectionConfig?.debugDescription ?? "none") listener=\(networkListener != nil) state=\(connectionState)")
+        guard config.isConnectable else {
+            AisObjectHelper.debugLog("[AisTrackerPlugin] updateConnection stop: config is not connectable")
+            if clearObjectsOnConnectionChange {
+                clearSimulationObjects()
+            }
+            stopAisNetworkListener()
+            return
+        }
+
+        if canReuseActiveConnection(for: config) {
+            aisDataManager.startUpdates()
+            AisObjectHelper.debugLog("[AisTrackerPlugin] updateConnection reuse active connection")
+            return
+        }
+        if clearObjectsOnConnectionChange {
+            clearSimulationObjects()
+        }
+        aisDataManager.startUpdates()
+        startConnection(with: config)
+    }
+
+    private func currentConnectionConfig() -> AisNmeaConnectionConfig {
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
+        let rawProtocol = Int(protocolPref.get(appMode))
+        let host = hostPref.get(appMode).trimmingCharacters(in: .whitespacesAndNewlines)
+        let tcpPort = Int(tcpPortPref.get(appMode))
+        let udpPort = Int(udpPortPref.get(appMode))
+        AisObjectHelper.debugLog("[AisTrackerPlugin] current profile=\(appMode.stringKey ?? "unknown") rawProtocol=\(rawProtocol) host=\(host) tcpPort=\(tcpPort) udpPort=\(udpPort)")
+        let proto = AisNmeaProtocol(rawValue: rawProtocol) ?? .udp
+        switch proto {
+        case .udp:
+            return AisNmeaConnectionConfig(proto: .udp, host: "", port: max(1, udpPort))
+        case .tcp:
+            return AisNmeaConnectionConfig(proto: .tcp, host: host, port: max(1, tcpPort))
+        }
+    }
+
+    private func canReuseActiveConnection(for config: AisNmeaConnectionConfig) -> Bool {
+        networkListener != nil
+            && activeConnectionConfig == config
+            && (connectionState == .connecting || connectionState == .connected)
     }
     
     private func handleAisSentence(_ sentence: String) {
@@ -430,10 +459,11 @@ final class AisTrackerPlugin: OAPlugin {
 
     private func stopSharedNetworkListener(updateState: Bool) {
         if networkListener != nil {
-            AisObjectHelper.debugLog("[AisTrackerPlugin] stop AIS/NMEA listener")
+            AisObjectHelper.debugLog("[AisTrackerPlugin] stop AIS/NMEA listener config=\(activeConnectionConfig?.debugDescription ?? "none") updateState=\(updateState)")
         }
         networkListener?.stopListener()
         networkListener = nil
+        activeConnectionConfig = nil
         if updateState {
             updateConnectionState(.disconnected)
         }
@@ -446,7 +476,11 @@ final class AisTrackerPlugin: OAPlugin {
             }
             return
         }
+        guard connectionState != state else {
+            return
+        }
         connectionState = state
+        AisObjectHelper.debugLog("[AisTrackerPlugin] connectionState=\(state)")
         NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
     }
 
@@ -484,11 +518,20 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     fileprivate func onNetworkListenerFailed() {
+        AisObjectHelper.debugLog("[AisTrackerPlugin] network listener failed config=\(activeConnectionConfig?.debugDescription ?? "none")")
         updateConnectionState(.failed)
     }
 
     @objc private func onApplicationModeChanged() {
-        updateConnectionForCurrentProfileSettings()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            let appMode = OAAppSettings.sharedManager().applicationMode.get()
+            AisObjectHelper.debugLog("[AisTrackerPlugin] applicationModeChanged mode=\(appMode.stringKey ?? "unknown")")
+            if !useNmeaLocationPref.get(appMode) {
+                resetNmeaLocationProvider()
+            }
+            updateConnectionForCurrentProfileSettings(clearObjectsOnConnectionChange: true)
+        }
     }
 
     deinit {

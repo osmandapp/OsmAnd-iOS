@@ -26,13 +26,17 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kHeaderImageHeight 170
+static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
 
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
 @property (nonatomic, strong) NSURL *externalURL;
 @property (nonatomic, copy) NSString *externalURLTitle;
+
+- (void)fetchWikipediaPageImageUrl:(void (^)(NSString *headerImageUrl))onComplete;
 
 @end
 
@@ -599,6 +603,33 @@
 
 - (void)fetchHeaderImageUrl:(void (^)(NSString *headerImageUrl))onComplete
 {
+    NSString *wikidataId = _isAstroArticle ? _astroWikidataId : _poi.values[WIKIDATA_TAG];
+    if (wikidataId.length == 0)
+    {
+        [self fetchWikipediaPageImageUrl:onComplete];
+        return;
+    }
+
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        NSMutableArray<OASWikiImage *> *wikiImages = [NSMutableArray array];
+        NSArray<OASWikiImage *> *images =
+            [[OASWikiCoreHelper shared] getWikidataImageWikidataWikidataId:wikidataId wikiImages:wikiImages];
+        NSString *imageUrl = images.firstObject.imageHiResUrl;
+        if (imageUrl.length > 0)
+        {
+            imageUrl = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+            if (onComplete)
+                onComplete(imageUrl);
+        }
+        else
+        {
+            [self fetchWikipediaPageImageUrl:onComplete];
+        }
+    });
+}
+
+- (void)fetchWikipediaPageImageUrl:(void (^)(NSString *headerImageUrl))onComplete
+{
     NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
     NSString *wikipediaTitle = [self wikipediaTitleURL];
     NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
@@ -794,7 +825,8 @@
 
 - (NSString *)headerImageCacheDbKey
 {
-    return [_imageCacheHelper getDbKeyByLink:[self getUrl].absoluteString];
+    NSString *articleUrl = [self getUrl].absoluteString;
+    return [_imageCacheHelper getDbKeyByLink:[articleUrl stringByAppendingString:kWikidataHeaderImageCacheSuffix]];
 }
 
 - (void) printHtmlToDebugFileIfEnabled:(NSString *)content

@@ -427,12 +427,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             {
                 NSArray<NSString *> *langs = [self.poi getNames:WIKI_LANG defTag:@"en"];
                 NSString *lang = langs.firstObject;
-                if (NSStringIsEmpty(lang))
-                    lang = @"en";
                 
-                NSString *title = [[self.poi getName:locale] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                NSString *title = [[self.poi getName:lang] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
                 
-                if (!NSStringIsEmpty(title))
+                if (!NSStringIsEmpty(lang) && !NSStringIsEmpty(title))
                 {
                     wikipediaUrl = [NSString stringWithFormat:@"https://%@%@%@", lang, WIKIPEDIA_ORG_WIKI_URL_PART, title];
                     isOnlineURL = YES;

@@ -63,6 +63,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     NSInteger _bodyImagesRequestId;
     BOOL _pendingBodyImagesInject;
     BOOL _bodyImagesOnlyNow;
+    BOOL _hasHeaderImage;
 }
 
 #pragma mark - Initialization
@@ -539,6 +540,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     
     if ([self isImageTagAppended])
     {
+        _hasHeaderImage = YES;
         loadWebView(_content);
         [self markBodyImagesInjectWithOnlyNow:onlyNow];
         return;
@@ -562,6 +564,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 
     if (![self isImagesDownloadingAllowed])
     {
+        _hasHeaderImage = NO;
         loadWebView(_content);
         [self printHtmlToDebugFileIfEnabled:_content];
         [self markBodyImagesInjectWithOnlyNow:onlyNow];
@@ -576,26 +579,33 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     }
     
     NSInteger requestId = ++_headerImageRequestId;
+    __weak __typeof(self) weakSelf = self;
 
     [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
         if (!headerImageUrl.length) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self removeHeaderImagePlaceholderWithRequestId:requestId];
+                [strongSelf removeHeaderImagePlaceholderWithRequestId:requestId];
             });
             return;
         }
-        [self->_imageCacheHelper fetchSingleImageByURL:headerImageUrl
+        [strongSelf->_imageCacheHelper fetchSingleImageByURL:headerImageUrl
                                              customKey:dbKey
-                                          downloadMode:[self getImagesDownloadMode]
+                                          downloadMode:[strongSelf getImagesDownloadMode]
                                                onlyNow:onlyNow
                                             onComplete:^(NSString *imageData) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (imageData.length == 0)
-                        [self removeHeaderImagePlaceholderWithRequestId:requestId];
-                    else
-                        [self injectHeaderImageBase64:imageData requestId:requestId];
-                });
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                
+                if (imageData.length == 0)
+                    [strongSelf removeHeaderImagePlaceholderWithRequestId:requestId];
+                else
+                    [strongSelf injectHeaderImageBase64:imageData requestId:requestId];
             });
         }];
     }];
@@ -677,10 +687,13 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 {
     if ([self isImageTagAppended])
     {
+        _hasHeaderImage = YES;
         return _content;
     }
     else
     {
+        _hasHeaderImage = YES;
+        
         BOOL isLight = [ThemeManager shared].isLightTheme;
         NSString *color1 = isLight ? @"#E8E8E8" : @"#222526";
         NSString *color2 = isLight ? @"#F4F4F4" : @"#2d3133";
@@ -726,6 +739,8 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     if (requestId != _headerImageRequestId)
         return;
     
+    _hasHeaderImage = YES;
+    
     NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
         NSString *js = [NSString stringWithFormat:
             @"var img = document.getElementById('wiki-header-image');"
@@ -741,6 +756,9 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 {
     if (requestId != _headerImageRequestId || !self.view.window)
         return;
+    
+    _hasHeaderImage = NO;
+    
     NSString *js =
         @"var img = document.getElementById('wiki-header-image');"
         @"if (img) img.remove();";
@@ -884,7 +902,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
         return 0.;
 
-    return kHeaderImageHeight;
+    return _hasHeaderImage ? kHeaderImageHeight : 0.;
 }
 
 #pragma mark - Additions
@@ -924,6 +942,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     if (content)
     {
         _headerImageRequestId++;
+        _hasHeaderImage = NO;
         _bodyImagesRequestId++;
         _contentLocale = locale;
         _content = content;
@@ -958,6 +977,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
         return;
     
     _headerImageRequestId++;
+    _hasHeaderImage = NO;
     _bodyImagesRequestId++;
     _astroRawHtml = data[@"html"];
     _astroTitle = data[@"title"];

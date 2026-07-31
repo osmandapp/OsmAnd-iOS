@@ -105,7 +105,9 @@
 - (IBAction)createNewTrackButtonPressed:(id)sender
 {
     [self hide:YES];
-    [PlanRouteScrollableViewController showNewRoute];
+    const auto point = OsmAnd::Utilities::convert31ToLatLon(OARootViewController.instance.mapPanel.mapViewController.mapView.target31);
+    CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(point.latitude, point.longitude);
+    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
 }
 
 - (IBAction)shareButtonPressed:(id)sender

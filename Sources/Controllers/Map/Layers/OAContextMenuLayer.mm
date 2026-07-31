@@ -665,6 +665,9 @@
 - (void) hideRegionHighlight
 {
     _highlightedPolygonPoints.clear();
+    if (_outlineCollection == nullptr)
+        return;
+
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_outlineCollection];
         _outlineCollection = nullptr;

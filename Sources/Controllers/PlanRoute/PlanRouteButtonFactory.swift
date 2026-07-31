@@ -17,6 +17,7 @@ enum PlanRouteButtonFactory {
     static let toolbarButtonSize: CGFloat = 48
     static let bottomButtonHeight: CGFloat = OAUtilities.isIPad() ? 48 : 44
     private static let bottomButtonHorizontalInset: CGFloat = 18
+    private static let bottomButtonCompactHorizontalInset: CGFloat = 12
     private static let bottomButtonImagePadding: CGFloat = 8
     private static let glassButtonDisabledAlpha: CGFloat = 0.45
     private static let glassButtonPressedAlpha: CGFloat = 0.88
@@ -39,7 +40,7 @@ enum PlanRouteButtonFactory {
     }
 
     static func bottomToolbarLabeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {
-        labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: OAUtilities.isIPad() ? .map : .glass)
+        labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: OAUtilities.isIPad() ? .map : .glass, horizontalInset: bottomButtonCompactHorizontalInset)
     }
 
     static func primaryButton(title: String, height: CGFloat = toolbarButtonSize) -> UIButton {
@@ -71,13 +72,13 @@ enum PlanRouteButtonFactory {
         return button
     }
 
-    private static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge, height: CGFloat, style: ButtonStyle) -> UIButton {
+    private static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge, height: CGFloat, style: ButtonStyle, horizontalInset: CGFloat = bottomButtonHorizontalInset) -> UIButton {
         var configuration = UIButton.Configuration.plain()
         configuration.title = title
         configuration.image = image
         configuration.imagePlacement = imagePlacement
         configuration.imagePadding = Self.bottomButtonImagePadding
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Self.bottomButtonHorizontalInset, bottom: 0, trailing: Self.bottomButtonHorizontalInset)
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: horizontalInset, bottom: 0, trailing: horizontalInset)
         configuration.baseForegroundColor = .textColorPrimary
         configuration.background.backgroundColor = style == .map ? .mapButtonBgColorDefault : .clear
         configuration.background.cornerRadius = height / 2

@@ -266,16 +266,29 @@ final class PlanRouteBottomToolbarView: UIView {
             addSubview($0)
         }
 
+        centerStack.setContentHuggingPriority(.required, for: .horizontal)
+        centerStack.setContentCompressionResistancePriority(.required, for: .horizontal)
+        [addPoiButton, routeButton].forEach {
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            $0.titleLabel?.numberOfLines = 1
+            $0.titleLabel?.lineBreakMode = .byTruncatingTail
+        }
+
         let inset = Self.edgeInset
         NSLayoutConstraint.activate([
             addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
             addPoiButton.topAnchor.constraint(equalTo: topAnchor),
+            addPoiButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 
             routeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
             routeButton.centerYAnchor.constraint(equalTo: addPoiButton.centerYAnchor),
+            routeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 
             centerStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            centerStack.centerYAnchor.constraint(equalTo: addPoiButton.centerYAnchor)
+            centerStack.centerYAnchor.constraint(equalTo: addPoiButton.centerYAnchor),
+
+            addPoiButton.trailingAnchor.constraint(lessThanOrEqualTo: centerStack.leadingAnchor, constant: -Self.buttonSpacing),
+            routeButton.leadingAnchor.constraint(greaterThanOrEqualTo: centerStack.trailingAnchor, constant: Self.buttonSpacing)
         ])
 
         addPoiButton.addTarget(self, action: #selector(onAddPoiTapped), for: .touchUpInside)

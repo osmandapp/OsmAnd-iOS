@@ -195,10 +195,16 @@
 
 - (void)prepareNewRoute
 {
+    [self prepareNewRouteWithApplicationMode:OAApplicationMode.DEFAULT];
+}
+
+- (void)prepareNewRouteWithApplicationMode:(OAApplicationMode *)applicationMode
+{
     OAMeasurementToolLayer *layer = [self layer];
     if (layer == nil)
         return;
     OAMeasurementEditingContext *ctx = [[OAMeasurementEditingContext alloc] init];
+    ctx.appMode = applicationMode;
     ctx.progressDelegate = self;
     layer.editingCtx = ctx;
     layer.delegate = self;

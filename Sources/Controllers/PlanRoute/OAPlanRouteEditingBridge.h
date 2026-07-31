@@ -48,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)dismiss;
 - (void)prepareNewRoute;
+- (void)prepareNewRouteWithApplicationMode:(OAApplicationMode *)applicationMode;
 - (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)openTrackWithFilePath:(NSString *)filePath;
 - (void)addCenterPoint;

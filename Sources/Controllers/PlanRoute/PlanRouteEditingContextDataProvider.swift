@@ -170,7 +170,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var cachedAnalysisData: PlanRouteAnalysisData?
     private var hasCachedAnalysisData = false
 
-    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil) {
+    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil, applicationMode: OAApplicationMode? = nil) {
         self.mode = mode
         self.filePath = filePath
         bridge.onChange = { [weak self] in
@@ -184,7 +184,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
         } else {
-            bridge.prepareNewRoute()
+            if let applicationMode {
+                bridge.prepareNewRoute(with: applicationMode)
+            } else {
+                bridge.prepareNewRoute()
+            }
             if let initialPoint {
                 bridge.addPoint(at: initialPoint)
             }

@@ -70,6 +70,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute, initialPoint: initialPoint))
     }
 
+    @objc(showNewRouteWithApplicationMode:) static func showNewRoute(applicationMode: OAApplicationMode) {
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute, applicationMode: applicationMode))
+    }
+
     @objc static func openExistingTrack(filePath: String) {
         openExistingTrack(filePath: filePath, navControllerHistory: [])
     }

@@ -82,7 +82,6 @@
     }
 }
 
-
 - (void)cancelApproximation
 {
     _currentApproximator.progressDelegate = nil;

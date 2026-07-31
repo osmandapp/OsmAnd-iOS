@@ -1343,7 +1343,7 @@
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
     BOOL restoreOriginalActiveGpx = originalGpxPath.length > 0 && originalPoiStateSnapshot != nil && ![originalGpxPath isEqualToString:outFile];
     __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
         OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
         BOOL success = (exception == nil);
@@ -1433,7 +1433,7 @@
     NSString *folderPath = OsmAndApp.instance.gpxPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
         OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
         BOOL success = exception == nil;

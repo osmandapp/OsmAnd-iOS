@@ -1216,18 +1216,42 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     if (startPointIndex < 0 || endPointIndex < startPointIndex || endPointIndex >= (NSInteger)allPoints.count)
         return nil;
 
+    NSMutableArray<NSNumber *> *savedTrkPtIndexes = [NSMutableArray arrayWithCapacity:(endPointIndex - startPointIndex + 1)];
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [savedTrkPtIndexes addObject:@(allPoints[i].getTrkPtIndex)];
+
     OASTrkSegment *trackSegment = [self getRouteSegment:startPointIndex endPointIndex:endPointIndex];
+
+    NSArray<NSArray<OASWptPt *> *> *routePointGroups = nil;
+    if (trackSegment != nil)
+    {
+        NSInteger lastTrackIndex = (NSInteger)trackSegment.points.count - 1;
+        NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
+        BOOL routePointsValid = YES;
+        for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        {
+            NSInteger trkPtIndex = allPoints[i].getTrkPtIndex;
+            if (trkPtIndex == -1)
+                continue;
+            if (i == endPointIndex)
+                trkPtIndex = lastTrackIndex;
+            if (trkPtIndex < 0 || trkPtIndex > lastTrackIndex)
+            {
+                routePointsValid = NO;
+                break;
+            }
+            OASWptPt *routePoint = [[OASWptPt alloc] initWithWptPt:allPoints[i]];
+            [routePoint setTrkPtIndexIndex:(int)trkPtIndex];
+            [routePoints addObject:routePoint];
+        }
+        routePointGroups = (routePointsValid && routePoints.count > 0) ? @[routePoints] : nil;
+    }
+
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [allPoints[i] setTrkPtIndexIndex:savedTrkPtIndexes[i - startPointIndex].intValue];
+
     if (trackSegment == nil)
         return nil;
-
-    NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
-    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
-    {
-        OASWptPt *point = allPoints[i];
-        if (point.getTrkPtIndex != -1)
-            [routePoints addObject:point];
-    }
-    NSArray<NSArray<OASWptPt *> *> *routePointGroups = routePoints.count > 0 ? @[routePoints] : nil;
 
     return [OARouteExporter exportRoute:gpxName trkSegments:@[trackSegment] points:nil routePoints:routePointGroups];
 }

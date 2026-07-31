@@ -247,7 +247,9 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
             amenity.setAdditionalInfo("wikidata", value: "Q\(id)")
         }
 
-        if let lang = properties.wikiLang, !lang.isEmpty {
+        let lang = (properties.lang?.isEmpty == false ? properties.lang : nil)
+            ?? (properties.wikiLang?.isEmpty == false ? properties.wikiLang : nil)
+        if let lang {
             amenity.setAdditionalInfo("\(WIKI_LANG):\(lang)", value: "yes")
         }
         

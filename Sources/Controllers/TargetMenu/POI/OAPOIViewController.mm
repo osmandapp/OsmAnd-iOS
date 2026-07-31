@@ -432,7 +432,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 
                 if (!NSStringIsEmpty(lang) && !NSStringIsEmpty(title))
                 {
-                    wikipediaUrl = [NSString stringWithFormat:@"https://%@%@%@", lang, WIKIPEDIA_ORG_WIKI_URL_PART, title];
+                    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://%@%@", lang, WIKIPEDIA_ORG_WIKI_URL_PART]];
+                    wikipediaUrl = [baseURL URLByAppendingPathComponent:title].absoluteString;
                     isOnlineURL = YES;
                 }
                 

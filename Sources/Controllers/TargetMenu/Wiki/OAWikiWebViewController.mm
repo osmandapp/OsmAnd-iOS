@@ -32,6 +32,18 @@
 static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
 static NSString * const kWikimediaThumbnailSize = @"330px-";
 
+static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
+{
+    static NSRegularExpression *regex;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
+                                                          options:NSRegularExpressionCaseInsensitive
+                                                            error:nil];
+    });
+    return regex;
+}
+
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
 @property (nonatomic, strong) NSURL *externalURL;
@@ -535,11 +547,7 @@ static NSString * const kWikimediaThumbnailSize = @"330px-";
     if (html.length == 0)
         return html;
     
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:nil];
-    if (!regex)
-        return html;
+    NSRegularExpression *regex = LegacyWikimediaThumbnailRegex();
     return [regex stringByReplacingMatchesInString:html
                                            options:0
                                              range:NSMakeRange(0, html.length)
@@ -803,23 +811,30 @@ static NSString * const kWikimediaThumbnailSize = @"330px-";
     BOOL onlyNow = _bodyImagesOnlyNow;
     OADownloadMode *downloadMode = [self getImagesDownloadMode];
     NSArray<NSString *> *links = [_imageCacheHelper extractImagesLinksFromHtml:_content];
-
+    __weak __typeof(self) weakSelf = self;
+    
     for (NSString *url in links)
     {
         if (![url hasPrefix:@"http"])
             continue;
-
-        [_imageCacheHelper fetchSingleImageByURL:url
-                                       customKey:nil
-                                    downloadMode:downloadMode
-                                         onlyNow:onlyNow
-                                      onComplete:^(NSString *imageData) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (requestId != self->_bodyImagesRequestId)
-                    return;
-                [self injectBodyImageBase64:imageData forOriginalSrc:url];
-            });
-        }];
+        
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (!self)
+                return;
+            [self->_imageCacheHelper fetchSingleImageByURL:url
+                                                 customKey:nil
+                                              downloadMode:downloadMode
+                                                   onlyNow:onlyNow
+                                                onComplete:^(NSString *imageData) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    __strong __typeof(weakSelf) self = weakSelf;
+                    if (!self || requestId != self->_bodyImagesRequestId)
+                        return;
+                    [self injectBodyImageBase64:imageData forOriginalSrc:url];
+                });
+            }];
+        });
     }
 }
 

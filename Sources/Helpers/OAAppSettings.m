@@ -130,6 +130,7 @@ static NSString * const lastStartLonkey = @"lastStartLonkey";
 static NSString * const applicationModeKey = @"applicationMode";
 static NSString * const defaultApplicationModeKey = @"default_application_mode_string";
 static NSString * const defaultCarplayModeKey = @"default_carplay_mode_string";
+static NSString * const carPlayMapAppearanceModeKey = @"carplay_map_appearance_mode";
 static NSString * const carPlayModeIsDefaultKey = @"carplay_mode_is_default_string";
 static NSString * const availableApplicationModesKey = @"available_application_modes";
 static NSString * const customAppModesKey = @"customAppModes";
@@ -6038,6 +6039,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _carPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"default_carplay_mode_string"];
         
+        _carPlayMapAppearanceMode = [[[OACommonDayNightMode withKey:carPlayMapAppearanceModeKey defValue:DayNightModeAppTheme] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMapAppearanceMode forKey:carPlayMapAppearanceModeKey];
+        
         _isCarPlayModeDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"carplay_mode_is_default_string"];
 
@@ -6470,7 +6474,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
-        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
+        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityIdentifiable] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -7487,15 +7491,35 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
+- (BOOL)isGpxVisible:(NSString *)filePath
+{
+    for (NSString *visiblePath in _mapSettingVisibleGpx.get)
+    {
+        if ([visiblePath compare:filePath] == NSOrderedSame)
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
 {
     BOOL added = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
     for (NSString *filePath in filePaths)
     {
-        if (![arr containsObject:filePath])
+        BOOL containsPath = NO;
+        for (NSString *visiblePath in arr)
         {
-            [arr addObject:filePath];
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                containsPath = YES;
+                break;
+            }
+        }
+        if (!containsPath)
+        {
+            [arr addObject:filePath.decomposedStringWithCanonicalMapping];
             added = YES;
         }
     }
@@ -7515,35 +7539,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     [self showGpx:filePaths update:YES];
 }
 
-- (void) updateGpx:(NSArray<NSString *> *)filePaths
-{
-    BOOL added = NO;
-    BOOL removed = NO;
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
-    for (NSString *filePath in filePaths)
-    {
-        if (![arr containsObject:filePath])
-        {
-            added = YES;
-            break;
-        }
-    }
-    for (NSString *visible in arr)
-    {
-        if (![filePaths containsObject:visible])
-        {
-            removed = YES;
-            break;
-        }
-    }
-
-    if (added || removed)
-    {
-        [self.mapSettingVisibleGpx set:[NSMutableArray arrayWithArray:filePaths]];
-        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
 - (void) hideGpx:(NSArray<NSString *> *)filePaths
 {
     [self hideGpx:filePaths update:YES];
@@ -7556,10 +7551,13 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filePath in filePaths)
     {
-        if ([arr containsObject:filePath])
+        for (NSString *visiblePath in arr)
         {
-            [arrToDelete addObject:filePath];
-            removed = YES;
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                [arrToDelete addObject:visiblePath];
+                removed = YES;
+            }
         }
     }
     [arr removeObjectsInArray:arrToDelete];
@@ -7583,12 +7581,16 @@ static NSString *kOfflineKey = @"OFFLINE";
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
 
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : gpx.gpxFilePath];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
+        NSString *existingFilepath = filenameWithoutPrefix ?: gpx.gpxFilePath;
+        NSString *path = existingFilepath ? [app.gpxPath stringByAppendingPathComponent:existingFilepath] : nil;
+        if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
             [arrToDelete addObject:filepath];
     }
     [arr removeObjectsInArray:arrToDelete];
-    [self.mapSettingVisibleGpx set:[NSArray arrayWithArray:arr]];
+    NSMutableOrderedSet<NSString *> *visiblePaths = [NSMutableOrderedSet orderedSet];
+    for (NSString *path in arr)
+        [visiblePaths addObject:path.decomposedStringWithCanonicalMapping];
+    [self.mapSettingVisibleGpx set:visiblePaths.array];
 }
 
 - (NSString *) getFormattedTrackInterval:(int)value

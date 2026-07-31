@@ -28,6 +28,8 @@
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *existingItems;
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *duplicateItems;
 
+- (BOOL)prepareItemsToApply;
+
 @end
 
 @implementation OAFavoritesSettingsItem
@@ -143,6 +145,36 @@
 
 - (void) apply
 {
+    [[self class] applyItems:@[self]];
+}
+
++ (void)applyItems:(NSArray<__kindof OASettingsItem *> *)items
+{
+    NSMutableArray<OAFavoriteGroup *> *groupsToApply = [NSMutableArray array];
+    for (OASettingsItem *settingsItem in items)
+    {
+        NSParameterAssert([settingsItem isKindOfClass:self]);
+        OAFavoritesSettingsItem *item = (OAFavoritesSettingsItem *)settingsItem;
+        if ([item prepareItemsToApply])
+            [groupsToApply addObjectsFromArray:item.appliedItems];
+    }
+
+    if (groupsToApply.count == 0)
+        return;
+
+    @synchronized (self)
+    {
+        [OAFavoritesHelper addFavoriteGroups:groupsToApply
+                              lookupAddress:NO
+                                sortAndSave:NO];
+        [OAFavoritesHelper sortAll];
+        [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+        [OAFavoritesHelper loadFavorites];
+    }
+}
+
+- (BOOL)prepareItemsToApply
+{
     NSArray<OAFavoriteGroup *> *newItems = [self getNewItems];
     if (_personalGroup)
         [self.duplicateItems addObject:_personalGroup];
@@ -176,20 +208,9 @@
                 }
             }
         }
-        @synchronized (self.class)
-        {
-            for (OAFavoriteGroup *group in self.appliedItems)
-            {
-                [OAFavoritesHelper addFavorites:group.points
-                                  lookupAddress:NO
-                                    sortAndSave:NO
-                                    pointsGroup:[group toPointsGroup]];
-            }
-            [OAFavoritesHelper sortAll];
-            [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
-            [OAFavoritesHelper loadFavorites];
-        }
+        return YES;
     }
+    return NO;
 }
 
 - (long) getEstimatedItemSize:(OAFavoriteGroup *)item

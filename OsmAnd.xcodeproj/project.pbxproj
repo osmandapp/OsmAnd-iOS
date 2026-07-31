@@ -169,8 +169,6 @@
 		157F3CD824A1F43C000A66F0 /* ic_custom_straight_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CD524A1F43B000A66F0 /* ic_custom_straight_line@3x.png */; };
 		157F3CDD24A1FC5D000A66F0 /* ic_custom_delete_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CDA24A1FC5A000A66F0 /* ic_custom_delete_disable@3x.png */; };
 		157F3CDF24A1FC5D000A66F0 /* ic_custom_delete_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CDC24A1FC5C000A66F0 /* ic_custom_delete_disable@2x.png */; };
-		157F3CE324A1FC85000A66F0 /* ic_checkmark_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CE024A1FC84000A66F0 /* ic_checkmark_default@3x.png */; };
-		157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */; };
 		157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */; };
 		157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */; };
 		158DE48E25AEF31B007C1B57 /* ic_destination_pin_6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158DE48825AEF31A007C1B57 /* ic_destination_pin_6@2x.png */; };
@@ -847,8 +845,6 @@
 		46AEDB9F27F4AC28006D90E8 /* ic_custom_umbrella@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB9D27F4AC28006D90E8 /* ic_custom_umbrella@3x.png */; };
 		46AEDBA227F4AC32006D90E8 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */; };
 		46AEDBA327F4AC32006D90E8 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */; };
-		46AF98FA28D077E900626C9C /* ic_custom_file_routing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */; };
-		46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */; };
 		46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
 		46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */; };
@@ -1383,6 +1379,7 @@
 		9F4844B82FD0000100484401 /* AisObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B72FD0000100484401 /* AisObjectViewController.swift */; };
 		9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */; };
 		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
+		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -1703,6 +1700,8 @@
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
 		CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */; };
+		CE72E15C30125FB400E89264 /* CarPlaySettingsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */; };
+		CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */; };
 		CE7339672FF6D01900A9B191 /* TrackPointsKDIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */; };
 		CE762AEE2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AED2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift */; };
 		CE762AF02FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */; };
@@ -1723,9 +1722,11 @@
 		CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */; };
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
+		CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */; };
 		CE7F960C30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */; };
 		CE8215E52FFF6376002A8617 /* StarMapArControlCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */; };
 		CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */; };
+		CE826BA1301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */; };
 		CE83DB4A2FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */; };
 		CE83DB4C2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
@@ -3789,8 +3790,6 @@
 		157F3CD524A1F43B000A66F0 /* ic_custom_straight_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_straight_line@3x.png"; path = "Resources/Icons/ic_custom_straight_line@3x.png"; sourceTree = "<group>"; };
 		157F3CDA24A1FC5A000A66F0 /* ic_custom_delete_disable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete_disable@3x.png"; path = "Resources/Icons/ic_custom_delete_disable@3x.png"; sourceTree = "<group>"; };
 		157F3CDC24A1FC5C000A66F0 /* ic_custom_delete_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete_disable@2x.png"; path = "Resources/Icons/ic_custom_delete_disable@2x.png"; sourceTree = "<group>"; };
-		157F3CE024A1FC84000A66F0 /* ic_checkmark_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_checkmark_default@3x.png"; path = "Resources/Icons/ic_checkmark_default@3x.png"; sourceTree = "<group>"; };
-		157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_checkmark_default@2x.png"; path = "Resources/Icons/ic_checkmark_default@2x.png"; sourceTree = "<group>"; };
 		157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@2x.png"; path = "Resources/Icons/ic_custom_undo_button@2x.png"; sourceTree = "<group>"; };
 		157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@3x.png"; path = "Resources/Icons/ic_custom_undo_button@3x.png"; sourceTree = "<group>"; };
 		158DE48825AEF31A007C1B57 /* ic_destination_pin_6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_pin_6@2x.png"; path = "Resources/Icons/ic_destination_pin_6@2x.png"; sourceTree = "<group>"; };
@@ -4644,8 +4643,6 @@
 		46AEDB9D27F4AC28006D90E8 /* ic_custom_umbrella@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_umbrella@3x.png"; path = "Resources/Icons/ic_custom_umbrella@3x.png"; sourceTree = "<group>"; };
 		46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@2x.png"; path = "Resources/Icons/ic_custom_wind@2x.png"; sourceTree = "<group>"; };
 		46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
-		46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_file_routing@3x.png"; path = "Resources/Icons/ic_custom_file_routing@3x.png"; sourceTree = "<group>"; };
-		46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_file_routing@2x.png"; path = "Resources/Icons/ic_custom_file_routing@2x.png"; sourceTree = "<group>"; };
 		46B0CC58299CEB45003D9F40 /* OABaseButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseButtonsViewController.h; sourceTree = "<group>"; };
 		46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseButtonsViewController.m; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
@@ -5247,6 +5244,8 @@
 		9F4844C02FD0000100484401 /* OAAisTrackerLayerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAisTrackerLayerBridge.h; sourceTree = "<group>"; };
 		9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAisTrackerLayerBridge.mm; sourceTree = "<group>"; };
 		9F4844D02FD0000100484401 /* AisTrackerProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerProduct.swift; sourceTree = "<group>"; };
+		9F5A00012FD0000100484401 /* AisObjectDrawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AisObjectDrawable.h; sourceTree = "<group>"; };
+		9F5A00022FD0000100484401 /* AisObjectDrawable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AisObjectDrawable.mm; sourceTree = "<group>"; };
 		A5A500012F50000100000001 /* AstronomyPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPlugin.swift; sourceTree = "<group>"; };
 		A5A500052F50000100000005 /* AstronomyPluginSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPluginSettings.swift; sourceTree = "<group>"; };
 		A5A500072F50000100000007 /* AstroDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataProvider.swift; sourceTree = "<group>"; };
@@ -5756,6 +5755,8 @@
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchEmptyView.swift; sourceTree = "<group>"; };
+		CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySettingsListController.swift; sourceTree = "<group>"; };
+		CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayMapModeListController.swift; sourceTree = "<group>"; };
 		CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPointsKDIndex.swift; sourceTree = "<group>"; };
 		CE762AED2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMagnitudeFilterButton.swift; sourceTree = "<group>"; };
 		CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMagnitudeSliderPanel.swift; sourceTree = "<group>"; };
@@ -5777,9 +5778,12 @@
 		CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroWikiBridge.swift; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
+		CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDeepLinkBuilder.swift; sourceTree = "<group>"; };
 		CE7F960B30025BA0000F2F22 /* StarMapObjectContextMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapObjectContextMenuBuilder.swift; sourceTree = "<group>"; };
 		CE8215E42FFF6376002A8617 /* StarMapArControlCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapArControlCard.swift; sourceTree = "<group>"; };
 		CE8215E62FFF6AF9002A8617 /* StarMapPlainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapPlainButton.swift; sourceTree = "<group>"; };
+		CE826B9F301B5B4500BD0DCE /* OARoutingParamsDeepLinkBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingParamsDeepLinkBridge.h; sourceTree = "<group>"; };
+		CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingParamsDeepLinkBridge.mm; sourceTree = "<group>"; };
 		CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsView.swift; sourceTree = "<group>"; };
 		CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsProvider.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
@@ -9312,8 +9316,6 @@
 				462545A528D3688700637964 /* ic_custom_cross_buy_colored_day_big@3x.png */,
 				462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */,
 				462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */,
-				46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */,
-				46AF98F828D077E800626C9C /* ic_custom_file_routing@3x.png */,
 				468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */,
 				468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */,
 				468AADDF28C77A6100BEC402 /* img_openstreetmap_logo@2x.png */,
@@ -9524,8 +9526,6 @@
 				323BD8DB2628850100D255ED /* ic_bg_point_square_top@3x.png */,
 				845E07011B60E72300DFC2A7 /* ic_checkmark_big_enable@2x.png */,
 				845E07021B60E72300DFC2A7 /* ic_checkmark_big_enable@3x.png */,
-				157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */,
-				157F3CE024A1FC84000A66F0 /* ic_checkmark_default@3x.png */,
 				845E07061B60E72300DFC2A7 /* ic_checkmark_small_enable@2x.png */,
 				845E07071B60E72300DFC2A7 /* ic_checkmark_small_enable@3x.png */,
 				84451A2D1AA050B3003F4D8D /* ic_close@2x.png */,
@@ -10642,6 +10642,8 @@
 				9F4844D02FD0000100484401 /* AisTrackerProduct.swift */,
 				9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */,
 				9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */,
+				9F5A00012FD0000100484401 /* AisObjectDrawable.h */,
+				9F5A00022FD0000100484401 /* AisObjectDrawable.mm */,
 				9F4844B12FD0000100484401 /* OAAisTrackerLayer.h */,
 				9F4844B22FD0000100484401 /* OAAisTrackerLayer.mm */,
 				9F4844C02FD0000100484401 /* OAAisTrackerLayerBridge.h */,
@@ -11564,6 +11566,8 @@
 				DADF31A828D07D1100DC2886 /* OACarPlayPurchaseViewController.m */,
 				DA5A797326C563A000F274C7 /* OADirectionsGridController.h */,
 				DA5A795B26C563A000F274C7 /* OADirectionsGridController.m */,
+				CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */,
+				CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -14447,6 +14451,8 @@
 				DA5A810126C563A600F274C7 /* OAWaypointHelper.mm */,
 				DABC7F2027B65FD6005C76E2 /* OARoutingHelperUtils.h */,
 				DABC7F2127B65FD6005C76E2 /* OARoutingHelperUtils.mm */,
+				CE826B9F301B5B4500BD0DCE /* OARoutingParamsDeepLinkBridge.h */,
+				CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */,
 				46BB3677294BE72100155EC8 /* OAEmissionHelper.h */,
 				46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */,
 				461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */,
@@ -14824,6 +14830,7 @@
 				27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */,
 				C56319452EF189EC008854B3 /* DeepLinkManager.swift */,
 				C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */,
+				CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */,
 			);
 			path = DeepLinkManager;
 			sourceTree = "<group>";
@@ -15803,7 +15810,6 @@
 				DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */,
 				DAF3456322F4482B009E2EB6 /* ic_custom_text_field_name@3x.png in Resources */,
 				DA6471A922CF5433008F937F /* ic_custom_contour_lines@2x.png in Resources */,
-				46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */,
 				DA5A82C426C563A800F274C7 /* OASegmentedControlCell.xib in Resources */,
 				DA5A83D126C563A800F274C7 /* OATransportRouteToolbarViewController.xib in Resources */,
 				C54260202AA0D2A000E76C00 /* ic_custom_visibility@3x.png in Resources */,
@@ -16048,7 +16054,6 @@
 				1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */,
 				46B3F326282BF9FE00A5A57D /* ic_share_coordinates@3x.png in Resources */,
 				0CBDD0A9245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_2@2x.png in Resources */,
-				157F3CE324A1FC85000A66F0 /* ic_checkmark_default@3x.png in Resources */,
 				DAF2F80E254825BA00967935 /* map_plan_route_point_normal@2x.png in Resources */,
 				32B50AE026BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png in Resources */,
 				8476E2701F6C1EEC00EC274F /* map_bicycle_location@3x.png in Resources */,
@@ -16383,7 +16388,6 @@
 				DA2EC79B29FBBE0400ECEB37 /* ic_action_start_navigation@3x.png in Resources */,
 				15C428C024A72B6B00B21005 /* img_settings_sreen_route_alerts@3x.png in Resources */,
 				DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */,
-				46AF98FA28D077E900626C9C /* ic_custom_file_routing@3x.png in Resources */,
 				844E07DF1E4231C200EFC525 /* ic_action_street_name@2x.png in Resources */,
 				DA1340CA243DC5A70039D214 /* map_action_skiing@3x.png in Resources */,
 				DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */,
@@ -17279,7 +17283,6 @@
 				DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */,
 				27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */,
 				DA68B3E1233B822F00F5ACCC /* ic_profile_bicycle@2x.png in Resources */,
-				157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */,
 				DAB854AE23054C7C002566A6 /* ic_navbar_search@3x.png in Resources */,
 				0AC29CF826E763E600A78C53 /* ic_custom_contour_lines_colored@2x.png in Resources */,
 				0A832603270BE0E3006B8946 /* OATitleSwitchRoundCell.xib in Resources */,
@@ -17904,6 +17907,7 @@
 				323B501B2C88565C002BDF31 /* MarkerDisplayOption.swift in Sources */,
 				DA5A815926C563A700F274C7 /* OASkiMapsPlugin.m in Sources */,
 				DA5A812026C563A700F274C7 /* OAProducts.mm in Sources */,
+				CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */,
 				DA5A84F426C563A900F274C7 /* OATargetPoint.m in Sources */,
 				DA9A2C3026FDB72800BEC681 /* OARouteColorize.mm in Sources */,
 				32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */,
@@ -17988,6 +17992,7 @@
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,
+				CE826BA1301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
 				32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
@@ -18263,6 +18268,7 @@
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
 				C5EB56EE2FD18B8A00D01657 /* FavoriteListViewController.swift in Sources */,
+				CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */,
 				C5EB56F12FD18B8A00D01657 /* FavoriteListViewController+Models.swift in Sources */,
 				C5EB56F32FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift in Sources */,
 				C5EB56F52FD18B8A00D01657 /* FavoriteListViewController+Cells.swift in Sources */,
@@ -18493,6 +18499,7 @@
 				9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */,
 				9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */,
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
+				9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */,
 				9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */,
 				9F4844B52FD0000100484401 /* AisTrackerHelper.swift in Sources */,
 				9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */,
@@ -18520,6 +18527,7 @@
 				3234101A28889D1B00E90FBA /* OAAmenityInfoRow.m in Sources */,
 				DAA61CB72A0102EC00AFF65D /* MapMarkerSideWidgetState.swift in Sources */,
 				FA4C57012D48E8C800438A5C /* NoInternetCardCell.swift in Sources */,
+				CE72E15C30125FB400E89264 /* CarPlaySettingsListController.swift in Sources */,
 				DA5A838826C563A800F274C7 /* OAPurchasesViewController.m in Sources */,
 				32B7DC372C761D7400E5E8BD /* OAColorsPaletteCell.m in Sources */,
 				32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */,

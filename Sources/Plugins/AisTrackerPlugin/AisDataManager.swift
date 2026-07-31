@@ -10,7 +10,7 @@ import OsmAndShared
 
 @objcMembers
 final class AisDataManager: NSObject {
-    private static let objectLimit = 200
+    private static let objectLimit = 20000
 
     var objects: [AisObject] {
         Array(objectsByMmsi.values)

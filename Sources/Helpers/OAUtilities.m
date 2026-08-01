@@ -2736,7 +2736,7 @@ static const double d180PI = 180.0 / M_PI_2;
     return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
 }
 
-+ (NSString *)getGpxFullPath:(NSString *)filePath
++ (NSString *)absoluteGpxPathForPath:(NSString *)filePath
 {
     if (filePath.length == 0 || filePath.isAbsolutePath)
         return filePath;

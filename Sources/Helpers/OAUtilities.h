@@ -434,7 +434,7 @@ static inline double normalizeDouble(double v)
 + (NSDate *) getFileLastModificationDate:(NSString *)fileName;
 
 + (NSString *)getGpxShortPath:(NSString *)fullFilePath;
-+ (NSString *)getGpxFullPath:(NSString *)filePath;
++ (NSString *)absoluteGpxPathForPath:(NSString *)filePath;
 
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddTracksFolder;
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(NSArray<NSString *> *)flattenedFilePaths shouldSort:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder;

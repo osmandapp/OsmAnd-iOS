@@ -310,7 +310,7 @@
 {
     NSMutableArray<OAGpxWptItem *> *items = [NSMutableArray array];
     OASGpxFile *gpxFile = [self editingContext].gpxData.gpxFile;
-    NSString *gpxPath = [OAUtilities getGpxFullPath:gpxFile.path];
+    NSString *gpxPath = [OAUtilities absoluteGpxPathForPath:gpxFile.path];
     for (OASWptPt *point in gpxFile.getPointsList)
     {
         OAGpxWptItem *item = [OAGpxWptItem withGpxWpt:point];
@@ -1060,7 +1060,7 @@
     if (!CLLocationCoordinate2DIsValid(location))
         return;
     
-    NSString *gpxFilePath = filePath.length == 0 ? [self gpxFileForWaypoints].path : [OAUtilities getGpxFullPath:filePath];
+    NSString *gpxFilePath = filePath.length == 0 ? [self gpxFileForWaypoints].path : [OAUtilities absoluteGpxPathForPath:filePath];
     if (gpxFilePath.length == 0)
         return;
 
@@ -1181,7 +1181,7 @@
     if (gpxFile.path.length == 0)
         return;
     
-    NSString *path = [OAUtilities getGpxFullPath:gpxFile.path];
+    NSString *path = [OAUtilities absoluteGpxPathForPath:gpxFile.path];
     OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:path fallbackPath:gpxFile.path];
     if (activeGpxFile != nil && activeGpxFile != gpxFile)
         [self applyPoiStateSnapshot:[[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] toGpxFile:activeGpxFile draft:NO];
@@ -1333,7 +1333,7 @@
         return;
     }
 
-    NSString *originalGpxPath = [OAUtilities getGpxFullPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
+    NSString *originalGpxPath = [OAUtilities absoluteGpxPathForPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
     PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
     NSString *trackName = (fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route")).decomposedStringWithCanonicalMapping;
     OASGpxFile *gpx = [ctx exportGpx:trackName];

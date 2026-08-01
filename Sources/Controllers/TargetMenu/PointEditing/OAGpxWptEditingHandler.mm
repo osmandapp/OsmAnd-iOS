@@ -48,16 +48,16 @@
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
 {
-    return [self initWithLocation:location title:formattedLocation address:address gpxFileName:gpxFileName poi:poi gpxDocument:nil];
+    return [self initWithLocation:location title:formattedLocation address:address gpxFileName:gpxFileName poi:poi gpxFile:nil];
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi gpxDocument:(OASGpxFile *)gpxDocument
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi gpxFile:(OASGpxFile *)gpxFile
 {
     self = [super init];
     if (self)
     {
         _gpxFileName = gpxFileName;
-        _gpxDocument = gpxDocument;
+        _gpxDocument = gpxFile;
         UIColor *color = [OADefaultFavorite getDefaultColor];
 
         OAGpxWptItem *wpt = [[OAGpxWptItem alloc] init];

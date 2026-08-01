@@ -48,6 +48,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var routeTypeButtonBottomConstraint: NSLayoutConstraint?
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
+    private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
@@ -84,9 +85,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                       navControllerHistory: navControllerHistory)
     }
 
-    private static func showPlanRoute(dataProvider: PlanRouteDataProvider, navControllerHistory: [UIViewController] = []) {
+    @objc(openExistingTrackWithFilePath:trackMenuState:) static func openExistingTrack(filePath: String, trackMenuState: OATrackMenuViewControllerState) {
+        let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath),
+                      trackMenuState: trackMenuState)
+    }
+
+    private static func showPlanRoute(dataProvider: PlanRouteDataProvider, navControllerHistory: [UIViewController] = [], trackMenuState: OATrackMenuViewControllerState? = nil) {
         let controller = PlanRouteScrollableViewController(dataProvider: dataProvider)
         controller.navControllerHistory = navControllerHistory
+        controller.trackMenuState = trackMenuState
         OARootViewController.instance().mapPanel?.showScrollableHudViewController(controller)
     }
 
@@ -186,7 +194,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             removeFromParent()
             view.removeFromSuperview()
-            restoreNavControllerHistoryIfNeeded()
+            restorePreviousScreenIfNeeded()
             onComplete?()
         }
         guard animated else {
@@ -210,14 +218,36 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         refreshMapControls()
     }
 
-    private func restoreNavControllerHistoryIfNeeded() {
+    private func restorePreviousScreenIfNeeded() {
+        if isForceHiding {
+            let hasNavHistory = !navControllerHistory.isEmpty
+                || !(trackMenuState?.navControllerHistory?.isEmpty ?? true)
+            if hasNavHistory {
+                OARootViewController.instance().navigationController?.restoreForceHidingScrollableHud()
+            }
+            return
+        }
+        if let trackMenuState {
+            restoreTrackMenu(trackMenuState)
+            return
+        }
         guard !navControllerHistory.isEmpty,
               let navigationController = OARootViewController.instance().navigationController else { return }
-        if isForceHiding {
-            navigationController.restoreForceHidingScrollableHud()
-        } else {
-            navigationController.setViewControllers(navControllerHistory, animated: true)
+        navigationController.setViewControllers(navControllerHistory, animated: true)
+    }
+
+    private func restoreTrackMenu(_ state: OATrackMenuViewControllerState) {
+        if state.openedFromTracksList, !state.openedFromTrackMenu,
+           let history = state.navControllerHistory, !history.isEmpty {
+            OARootViewController.instance().navigationController?.setViewControllers(history, animated: true)
+            return
         }
+        state.openedFromTrackMenu = false
+        guard let filePath = state.gpxFilePath, !filePath.isEmpty,
+              let gpx = OAGPXDatabase.sharedDb().getGPXItem(filePath) else { return }
+        let trackItem = TrackItem(file: gpx.file)
+        trackItem.dataItem = gpx
+        OARootViewController.instance().mapPanel?.openTargetView(withGPX: trackItem, trackHudMode: .menuHudMode, state: state)
     }
 
     private func reloadRouteInfo() {

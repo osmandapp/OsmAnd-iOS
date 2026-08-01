@@ -1376,8 +1376,16 @@
                     strongSelf->_initialPoiStateSnapshot = [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpx draftGpxFile:nil];
                     strongSelf->_editingPoiStateSnapshot = nil;
                 }
-                if (showOnMap && gpxFilePath.length > 0)
-                    [[OAAppSettings sharedManager] showGpx:@[gpxFilePath]];
+                OAAppSettings *settings = OAAppSettings.sharedManager;
+                BOOL isVisible = gpxFilePath.length > 0 && [settings isGpxVisible:gpxFilePath];
+                if (isVisible || showOnMap)
+                {
+                    [OASelectedGPXHelper.instance addGpxFile:gpx for:outFile];
+                    if (isVisible)
+                        [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
+                    else if (gpxFilePath.length > 0)
+                        [settings showGpx:@[gpxFilePath]];
+                }
                 if (restoreOriginalActiveGpx && strongSelf != nil)
                 {
                     OASGpxFile *activeGpxFile = [OASelectedGPXHelper.instance activeGpxFileForPath:originalGpxPath fallbackPath:nil];

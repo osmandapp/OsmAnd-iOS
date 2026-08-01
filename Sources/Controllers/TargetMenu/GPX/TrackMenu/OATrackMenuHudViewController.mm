@@ -978,11 +978,11 @@
 - (void)editSegment
 {
     _pushedNewScreen = YES;
-    __weak __typeof(self) weakSelf = self;
+    OATrackMenuViewControllerState *state = [self getCurrentState];
+    state.openedFromTrackMenu = YES;
+    NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
     [self hide:YES duration:.2 onComplete:^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:strongSelf.gpx.gpxFilePath];
-        [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath];
+        [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath trackMenuState:state];
     }];
 }
 

@@ -3817,7 +3817,7 @@
 "sort_lowest_first" = "Χαμηλότερα πρώτα";
 "set_step_size" = "Ορισμός μεγέθους βήματος";
 "set_step_size_summary" = "Επιλέξτε μέγεθος βήματος για ομαδοποίηση των ιχνών σας.";
-"map_variant_duplicate_title" = "Διπλότυπος χάρτης";
+"map_variant_duplicate_title" = "Δημιουργία διπλότυπου χάρτη";
 "map_variant_has_standard_download_road_message" = "Έχετε ήδη τον τυπικό χάρτη για %@.\n\nΗ λήψη ενός χάρτη μόνο δρόμων, θα δημιουργήσει διπλότυπα δεδομένα και ίσως υποβαθμίσει την απόδοση.";
 "map_variant_has_road_download_standard_message" = "Έχετε ήδη τον χάρτη μόνο δρόμων για %@.\n\nΗ λήψη ενός τυπικού χάρτη, θα δημιουργήσει διπλότυπα δεδομένα και ίσως υποβαθμίσει την απόδοση.";
 "map_variant_replace_with_road_only" = "Αντικατάσταση με Μόνο δρόμοι";
@@ -4158,3 +4158,4 @@
 "rendering_attr_OSMMapperAssistantFixme_description" = "Εμφάνιση ετικετών fixme";
 "share_link" = "Κοινοποίηση συνδέσμου";
 "share_as_file" = "Κοινοποίηση ως αρχείο";
+"carplay_map_mode_vehicle_appearance" = "Εμφάνιση οχήματος";

@@ -1210,6 +1210,52 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:points routePoints:[self getRoutePoints]];
 }
 
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
+{
+    NSArray<OASWptPt *> *allPoints = [self getPoints];
+    if (startPointIndex < 0 || endPointIndex < startPointIndex || endPointIndex >= (NSInteger)allPoints.count)
+        return nil;
+
+    NSMutableArray<NSNumber *> *savedTrkPtIndexes = [NSMutableArray arrayWithCapacity:(endPointIndex - startPointIndex + 1)];
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [savedTrkPtIndexes addObject:@(allPoints[i].getTrkPtIndex)];
+
+    OASTrkSegment *trackSegment = [self getRouteSegment:startPointIndex endPointIndex:endPointIndex];
+
+    NSArray<NSArray<OASWptPt *> *> *routePointGroups = nil;
+    if (trackSegment != nil)
+    {
+        NSInteger lastTrackIndex = (NSInteger)trackSegment.points.count - 1;
+        NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
+        BOOL routePointsValid = YES;
+        for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        {
+            NSInteger trkPtIndex = allPoints[i].getTrkPtIndex;
+            if (trkPtIndex == -1)
+                continue;
+            if (i == endPointIndex)
+                trkPtIndex = lastTrackIndex;
+            if (trkPtIndex < 0 || trkPtIndex > lastTrackIndex)
+            {
+                routePointsValid = NO;
+                break;
+            }
+            OASWptPt *routePoint = [[OASWptPt alloc] initWithWptPt:allPoints[i]];
+            [routePoint setTrkPtIndexIndex:(int)trkPtIndex];
+            [routePoints addObject:routePoint];
+        }
+        routePointGroups = (routePointsValid && routePoints.count > 0) ? @[routePoints] : nil;
+    }
+
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [allPoints[i] setTrkPtIndexIndex:savedTrkPtIndexes[i - startPointIndex].intValue];
+
+    if (trackSegment == nil)
+        return nil;
+
+    return [OARouteExporter exportRoute:gpxName trkSegments:@[trackSegment] points:nil routePoints:routePointGroups];
+}
+
 - (NSArray<OASTrkSegment *> *) getRouteSegments
 {
     NSMutableArray<OASTrkSegment *> *res = [NSMutableArray new];
@@ -1298,8 +1344,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         progress = (int) (_calculatedPairs * pairProgress + (double) progress / pairs);
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.progressDelegate)
-           [self.progressDelegate updateProgress:progress];
+        if ([self.progressDelegate respondsToSelector:@selector(updateProgress:)])
+            [self.progressDelegate updateProgress:progress];
     });
 }
 

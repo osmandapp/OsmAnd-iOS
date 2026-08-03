@@ -42,7 +42,6 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _pointMarkers;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _selectedMarkerCollection;
     
-    sk_sp<SkImage> _pointMarkerIcon;
     sk_sp<SkImage> _selectedMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
@@ -65,7 +64,6 @@
     _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
     _selectedMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_movable"];
     
     _initDone = YES;
@@ -156,7 +154,7 @@
     return nullptr;
 }
 
-- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(sk_sp<SkImage>&)bitmap
+- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(const sk_sp<SkImage> &)bitmap
 {
     if (collection->getMarkers().isEmpty())
     {
@@ -184,7 +182,7 @@
 
 - (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    return [self drawMarker:position collection:collection bitmap:_pointMarkerIcon];
+    return [self drawMarker:position collection:collection bitmap:[OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"]];
 }
 
 - (void) updateLastPointToCenter
@@ -273,8 +271,20 @@
 
 - (OASWptPt *) addCenterPoint:(BOOL)addPointBefore
 {
-    const auto center = [self.mapViewController.mapView getCenterPixel];
-    const auto elevated31 = [OANativeUtilities get31FromElevatedPixel:center];
+    OsmAnd::PointI elevated31;
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = self.mapViewController.mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        OsmAnd::PointI location31;
+        [self.mapViewController.mapView convert:scaledPoint toLocation:&location31];
+        elevated31 = location31;
+    }
+    else
+    {
+        const auto center = [self.mapViewController.mapView getCenterPixel];
+        elevated31 = [OANativeUtilities get31FromElevatedPixel:center];
+    }
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
     
     OASWptPt *pt = [[OASWptPt alloc] init];
@@ -288,6 +298,59 @@
         return pt;
     }
     return nil;
+}
+
+- (CLLocationCoordinate2D)crosshairLocation
+{
+    OAMapRendererView *mapView = self.mapViewController.mapView;
+    if (mapView == nil)
+        return kCLLocationCoordinate2DInvalid;
+    
+    OsmAnd::PointI location31;
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        [mapView convert:scaledPoint toLocation:&location31];
+    }
+    else
+    {
+        const auto center = [mapView getCenterPixel];
+        location31 = [OANativeUtilities get31FromElevatedPixel:center];
+    }
+    
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(location31);
+    return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+}
+
+- (NSInteger)findNearestPointToCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    OAMapRendererView *mapView = self.mapViewController.mapView;
+    if (_editingCtx == nil || _editingCtx.getPointsCount == 0 || mapView == nil)
+        return -1;
+    
+    CGPoint p0 = CGPointZero;
+    CGPoint p1 = CGPointMake(0., 44.);
+    OsmAnd::PointI ip0, ip1;
+    [mapView convert:p0 toLocation:&ip0];
+    [mapView convert:p1 toLocation:&ip1];
+    OsmAnd::LatLon ll0 = OsmAnd::Utilities::convert31ToLatLon(ip0);
+    OsmAnd::LatLon ll1 = OsmAnd::Utilities::convert31ToLatLon(ip1);
+    double hitRadius = [OAMapUtils getDistance:ll0.latitude lon1:ll0.longitude lat2:ll1.latitude lon2:ll1.longitude];
+    NSInteger nearest = -1;
+    double lowestDist = hitRadius;
+    for (NSInteger i = 0; i < _editingCtx.getPointsCount; i++)
+    {
+        OASWptPt *pt = _editingCtx.getPoints[i];
+        double dist = [OAMapUtils getDistance:coordinate.latitude lon1:coordinate.longitude lat2:pt.getLatitude lon2:pt.getLongitude];
+        if (dist < lowestDist)
+        {
+            lowestDist = dist;
+            nearest = i;
+        }
+    }
+    
+    return nearest;
 }
 
 - (double) getPointsDensity
@@ -328,13 +391,7 @@
 - (void) drawPointMarkers:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
     collection->removeAllMarkers();
-    OsmAnd::MapMarkerBuilder pointMarkerBuilder;
-    pointMarkerBuilder.setIsAccuracyCircleSupported(false);
-    pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
-    pointMarkerBuilder.setIsHidden(false);
-    pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-    pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-    pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(_pointMarkerIcon));
+    sk_sp<SkImage> pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
     
     if (_editingCtx.getPointsCount > 500)
     {
@@ -351,6 +408,13 @@
                 prevPnt = p;
                 if (currentDist > distThreshold)
                 {
+                    OsmAnd::MapMarkerBuilder pointMarkerBuilder;
+                    pointMarkerBuilder.setIsAccuracyCircleSupported(false);
+                    pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
+                    pointMarkerBuilder.setIsHidden(false);
+                    pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+                    pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+                    pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(pointMarkerIcon));
                     auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
                     marker->setPosition(p);
                     marker->setUpdateAfterCreated(true);
@@ -363,6 +427,13 @@
     {
         for (const auto& p : points)
         {
+            OsmAnd::MapMarkerBuilder pointMarkerBuilder;
+            pointMarkerBuilder.setIsAccuracyCircleSupported(false);
+            pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
+            pointMarkerBuilder.setIsHidden(false);
+            pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+            pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+            pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(pointMarkerIcon));
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);
             marker->setUpdateAfterCreated(true);
@@ -400,8 +471,17 @@
     NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
 
     OsmAnd::PointI center;
-    auto centerPixel = self.mapViewController.mapView.getCenterPixel;
-    [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = self.mapViewController.mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        [self.mapViewController.mapView convert:scaledPoint toLocation:&center];
+    }
+    else
+    {
+        auto centerPixel = self.mapViewController.mapView.getCenterPixel;
+        [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
+    }
     if (center == _cachedCenter)
         return;
 

@@ -539,9 +539,9 @@ extension FavoriteListViewController {
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
 
         if foldersCount > 0 && pointsCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: "The title with numbers of folders to delete"), foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount)
         } else if pointsCount > 0 && foldersCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: "The title with numbers of points to delete"), pointsCount)
+            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount)
         } else {
             return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
         }
@@ -556,7 +556,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
-        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: "The message with numbers of folders and points to delete"), folders.count, pointsCount)
+        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, pointsCount)
     }
     
     private func openPickerToImport() {

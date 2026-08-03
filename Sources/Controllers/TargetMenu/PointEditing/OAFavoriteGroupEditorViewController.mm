@@ -209,7 +209,7 @@
                    saveImmediately:NO];
 
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];
     [self dismissViewController];
 }

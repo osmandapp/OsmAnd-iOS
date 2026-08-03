@@ -170,6 +170,19 @@ extension FavoriteListViewController {
         }
     }
 
+    func favoritePointRows(_ items: [OAFavoritePointBridgeItem], sortMode: FavoriteSortMode? = nil) -> [FavoritePointRow] {
+        let sortMode = sortMode ?? currentSortMode
+        if sortMode.isMapCenterDistanceOriented {
+            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+            let mapAzimuth = Double(mapViewController.azimuth())
+            items.forEach { $0.updateDistanceAndDirection(fromMapCenter: mapViewController.getMapLocation().coordinate, mapAzimuth: mapAzimuth) }
+        } else if sortMode.isCurrentLocationDistanceOriented {
+            items.forEach { $0.updateDistanceAndDirection() }
+        }
+
+        return items.map { FavoritePointRow(item: $0) }
+    }
+
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
         guard currentSortMode != sortMode else { return }
 
@@ -315,6 +328,11 @@ extension FavoriteListViewController {
 
         let currentSections = snapshot.sectionIdentifiers
         let currentItems = snapshot.itemIdentifiers
+        if hasDuplicatePatchIdentifiers(in: snapshot) || hasDuplicatePatchIdentifiers(in: newSnapshot) {
+            dataSource.apply(newSnapshot, animatingDifferences: animatingDifferences)
+            return
+        }
+
         patchSections(in: &snapshot, with: newSnapshot)
         patchItems(in: &snapshot, with: newSnapshot)
         guard snapshot.sectionIdentifiers != currentSections || snapshot.itemIdentifiers != currentItems else {
@@ -322,6 +340,17 @@ extension FavoriteListViewController {
         }
 
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
+
+    private func hasDuplicatePatchIdentifiers(in snapshot: Snapshot) -> Bool {
+        for section in snapshot.sectionIdentifiers where !section.isFolder {
+            var identifiers = Set<FavoriteListItemPatchIdentifier>()
+            for item in snapshot.itemIdentifiers(inSection: section) where !identifiers.insert(item.patchIdentifier).inserted {
+                return true
+            }
+        }
+
+        return false
     }
 
     private func patchSections(in snapshot: inout Snapshot, with newSnapshot: Snapshot) {
@@ -332,10 +361,8 @@ extension FavoriteListViewController {
             snapshot.deleteSections(sectionsToDelete)
         }
 
-        for section in newSections {
-            if !snapshot.sectionIdentifiers.contains(section) {
-                insertSection(section, in: &snapshot, matching: newSections)
-            }
+        for section in newSections where !snapshot.sectionIdentifiers.contains(section) {
+            insertSection(section, in: &snapshot, matching: newSections)
         }
     }
 
@@ -419,19 +446,6 @@ extension FavoriteListViewController {
         }
 
         return sections
-    }
-
-    func favoritePointRows(_ items: [OAFavoritePointBridgeItem], sortMode: FavoriteSortMode? = nil) -> [FavoritePointRow] {
-        let sortMode = sortMode ?? currentSortMode
-        if sortMode.isMapCenterDistanceOriented {
-            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
-            let mapAzimuth = Double(mapViewController.azimuth())
-            items.forEach { $0.updateDistanceAndDirection(fromMapCenter: mapViewController.getMapLocation().coordinate, mapAzimuth: mapAzimuth) }
-        } else if sortMode.isCurrentLocationDistanceOriented {
-            items.forEach { $0.updateDistanceAndDirection() }
-        }
-
-        return items.map { FavoritePointRow(item: $0) }
     }
 
     private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {

@@ -41,7 +41,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var shouldReloadCollectionView = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
-    var collapsedRootSections = FavoriteListViewController.loadCollapsedSections()
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
@@ -77,6 +76,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         parentGroupName ?? ""
     }
 
+    lazy var collapsedRootSections = Self.loadCollapsedSections()
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear

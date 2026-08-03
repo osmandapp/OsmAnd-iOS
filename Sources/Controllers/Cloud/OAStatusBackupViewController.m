@@ -18,7 +18,6 @@
 #import "OAExportSettingsType.h"
 #import "OAApplicationMode.h"
 #import "OABackupDbHelper.h"
-#import "OASettingsItem.h"
 #import "OATableRowData.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"

@@ -1569,8 +1569,4 @@
         backgroundIconName:backgroundIconName];
 }
 
-- (void)onEditorUpdated
-{
-}
-
 @end

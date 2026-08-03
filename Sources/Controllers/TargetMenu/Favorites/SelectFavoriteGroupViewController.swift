@@ -24,12 +24,12 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
         case group
     }
 
-    private enum ItemKey {
-        static let title = "title"
-        static let value = "value"
-        static let description = "description"
-        static let isSelected = "isSelected"
-        static let color = "color"
+    private enum ItemKey: String {
+        case title
+        case value
+        case description
+        case isSelected
+        case color
     }
     
     weak var delegate: SelectFavoriteGroupDelegate?
@@ -136,8 +136,8 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             cell.descriptionLabel.text = item.descr
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = (item.obj(forKey: ItemKey.color) as? UIColor) ?? .iconColorActive
-            cell.accessoryType = item.bool(forKey: ItemKey.isSelected) ? .checkmark : .none
+            cell.leftIconView.tintColor = (item.obj(forKey: ItemKey.color.rawValue) as? UIColor) ?? .iconColorActive
+            cell.accessoryType = item.bool(forKey: ItemKey.isSelected.rawValue) ? .checkmark : .none
             return cell
         }
 
@@ -152,8 +152,8 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
             groupEditor.delegate = self
             showModalViewController(groupEditor)
         } else if item.key == RowKey.group.rawValue {
-            let selectedName = item.string(forKey: ItemKey.value) ?? item.title ?? ""
-            if !item.bool(forKey: ItemKey.isSelected) {
+            let selectedName = item.string(forKey: ItemKey.value.rawValue) ?? item.title ?? ""
+            if !item.bool(forKey: ItemKey.isSelected.rawValue) {
                 delegate?.onGroupSelected(selectedName)
             }
             dismiss(animated: true)
@@ -191,13 +191,13 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
 
     private func addGpxWptGroupRows(to section: OATableSectionData, groups: [[String: String]]) {
         for group in groups {
-            let title = group[ItemKey.title] ?? ""
+            let title = group[ItemKey.title.rawValue] ?? ""
             addGroupRow(
                 to: section,
                 title: title,
                 description: String(Int(group["count"] ?? "") ?? 0),
                 isSelected: title == selectedGroupName,
-                color: group[ItemKey.color].flatMap { UIColor(argb: Int(UIColor.toNumber(from: $0))) } ?? .iconColorActive
+                color: group[ItemKey.color.rawValue].flatMap { UIColor(argb: Int(UIColor.toNumber(from: $0))) } ?? .iconColorActive
             )
         }
     }
@@ -215,12 +215,12 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
         row.title = title
         row.descr = description
         row.iconName = "ic_custom_folder"
-        row.setObj(isSelected, forKey: ItemKey.isSelected)
+        row.setObj(isSelected, forKey: ItemKey.isSelected.rawValue)
         if let value {
-            row.setObj(value, forKey: ItemKey.value)
+            row.setObj(value, forKey: ItemKey.value.rawValue)
         }
         if let color {
-            row.setObj(color, forKey: ItemKey.color)
+            row.setObj(color, forKey: ItemKey.color.rawValue)
         }
     }
 }
@@ -231,8 +231,6 @@ extension SelectFavoriteGroupViewController: OAEditorDelegate {
         dismiss(animated: true)
         delegate?.addNewGroup(withName: name ?? "", iconName: iconName, color: color, backgroundIconName: backgroundIconName)
     }
-
-    func onEditorUpdated() {}
 
     func selectColorItem(_ colorItem: PaletteItemSolid) {
         delegate?.selectColorItem(colorItem)

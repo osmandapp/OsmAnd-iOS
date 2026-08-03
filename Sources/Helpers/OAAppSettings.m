@@ -7677,7 +7677,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (NSDictionary<NSString *, NSString *> *)getFavoriteSortModes
 {
-    return [self getFavoriteSortModesWithArray:[_favoriteSortModes get]];
+    return [self favoriteSortModesWithArray:[_favoriteSortModes get]];
 }
 
 - (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
@@ -7696,7 +7696,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [sortModes copy];
 }
 
-- (NSDictionary<NSString *, NSString *> *)getFavoriteSortModesWithArray:(NSArray<NSString *> *)modes
+- (NSDictionary<NSString *, NSString *> *)favoriteSortModesWithArray:(NSArray<NSString *> *)modes
 {
     NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
     if (modes != nil && modes.count > 0)
@@ -7723,7 +7723,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (void)saveFavoriteSortModes:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
 {
-    NSArray<NSString *> *sortModes = [self getPlainFavoriteSortModesFromDictionary:favoriteSortModes];
+    NSArray<NSString *> *sortModes = [self plainFavoriteSortModesFromDictionary:favoriteSortModes];
     [_favoriteSortModes set:sortModes];
 }
 
@@ -7740,7 +7740,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [sortTypes copy];
 }
 
-- (NSArray<NSString *> *)getPlainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
+- (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
 {
     NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
     for (NSString *key in favoriteSortModes.allKeys)

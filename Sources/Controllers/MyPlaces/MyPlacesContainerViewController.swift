@@ -265,8 +265,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func switchTo(tab: Tab) {
+        let targetTab = availableTabs.first(where: { $0 == tab }) ?? .default
+        let isCurrentTabVisible = pageViewController?.viewControllers?.first?.isKind(of: targetTab.controllerType) == true
+        guard !isCurrentTabVisible else { return }
+        
         let previousTab = selectedTab
-        selectedTab = availableTabs.first(where: { $0 == tab }) ?? .default
+        selectedTab = targetTab
         if let viewController = viewController(for: selectedTab) {
             if previousTab != selectedTab {
                 (viewController as? MyPlacesScrollResettable)?.resetScrollPosition()

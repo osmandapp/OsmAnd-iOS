@@ -19,13 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
                      color:(UIColor *)color
         backgroundIconName:(NSString *)backgroundIconName;
 
-- (void)onEditorUpdated;
-
 - (void)selectColorItem:(OASPaletteItemSolid *)colorItem;
 - (nullable OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color;
 - (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color;
 - (nullable OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem;
 - (void)deleteColorItem:(OASPaletteItemSolid *)colorItem;
+
+@optional
+- (void)onEditorUpdated;
 
 @end
 

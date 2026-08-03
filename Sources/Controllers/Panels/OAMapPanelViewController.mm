@@ -1537,9 +1537,7 @@ typedef enum
     
     [_targetMenuView setSelectedObject:selectedObject.object];
 
-    if (targetPoint.type != OATargetRenderedObject
-        && targetPoint.type != OATargetWiki
-        && targetPoint.type != OATargetPOI)
+    if (targetPoint.type != OATargetRenderedObject)
     {
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)

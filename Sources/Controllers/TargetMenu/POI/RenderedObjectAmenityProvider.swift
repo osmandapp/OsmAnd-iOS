@@ -48,8 +48,7 @@ final class RenderedObjectAmenityProvider: NSObject {
     func searchObjectTypeByAmenityTags(_ amenity: OAPOI) -> String? {
         let poiTranslator = OAPOIHelper.sharedInstance()
         
-        let mainSubType = amenity.subType?.components(separatedBy: ";").first ?? amenity.subType
-        var translation = poiTranslator.translation(mainSubType, withDefault: false)
+        var translation = poiTranslator.translation(amenity.subType, withDefault: false)
         
         for key in amenity.getAdditionalInfoKeys() {
             let translationKey = key

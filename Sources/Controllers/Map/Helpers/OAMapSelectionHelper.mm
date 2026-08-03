@@ -180,16 +180,16 @@ static int TILE_SIZE = 256;
                         if (name)
                             [names addObject:name];
                     }
-                    
+
                     NSString *nativeName = cppAmenity->nativeName.toNSString();
                     if (nativeName)
                         [names addObject:nativeName];
-                    
+
                     OAPOI *requestAmenity = [[OAPOI alloc] init];
                     requestAmenity.obfId = cppAmenity->id.id;
                     [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
                     [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
-                    
+
                     OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
                     detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
                 }

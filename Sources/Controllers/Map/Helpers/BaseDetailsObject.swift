@@ -515,7 +515,7 @@ final class BaseDetailsObject: NSObject {
                 return .travel
             }
         }
-        if amenity.type?.category?.isWiki() == true {
+        if amenity.type?.category.isWiki() == true {
             return .wikipedia
         }
         return .detailed

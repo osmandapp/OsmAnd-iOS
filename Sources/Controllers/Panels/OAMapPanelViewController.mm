@@ -2566,7 +2566,10 @@ typedef enum
         case OATargetWiki:
         {
             if (controller)
+            {
                 [self.targetMenuView doInit:showFullMenu];
+                ((OAWikiMenuViewController *)controller).menuDelegate = self;
+            }
             break;
         }
         case OATargetWpt:

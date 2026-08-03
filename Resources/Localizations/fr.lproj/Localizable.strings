@@ -4284,3 +4284,15 @@
 "ais_destination" = "Destination";
 "ais_message_types" = "Types de messages AIS";
 "ais_clear_simulation" = "Effacer la simulation AIS";
+"ais_draught" = "Brouillon";
+"ais_last_update" = "Dernière mise à jour";
+"ais_type_aid_to_navigation" = "Aide au guidage";
+"ais_unknown" = "inconnu";
+"ais_not_specified" = "non spécifié";
+"ais_ship_type_fishing" = "Pêche";
+"ais_ship_type_towing" = "Treuillage";
+"ais_ship_type_antipollution" = "Matériel antipollution";
+"ais_ship_type_medical_transport" = "Transports médicaux";
+"ais_ship_type_passenger" = "Passager";
+"astro_direction" = "Direction";
+"share_link" = "Partager le lien";

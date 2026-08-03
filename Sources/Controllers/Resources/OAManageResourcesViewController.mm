@@ -3208,6 +3208,11 @@ static BOOL _repositoryUpdated = NO;
 
             return (subregion != nil);
         }
+        else if ([identifier isEqualToString:kOpenDetailsSegue] && (cellPath.section == _localTravelSection || cellPath.section == _localAstronomySection))
+        {
+            // These cells already open details programmatically from didSelectRowAtIndexPath.
+            return NO;
+        }
         else if ([identifier isEqualToString:kOpenDetailsSegue] && [self shouldDisplayWeatherForecast:self.region] && cellPath.row == _weatherForecastRow)
         {
             return NO;

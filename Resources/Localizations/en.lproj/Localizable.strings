@@ -4976,5 +4976,8 @@
 "auto_select_nearest_points" = "Auto-select nearest points";
 "auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";
 
+"carplay_map_mode_vehicle_appearance" = "Vehicle appearance";
+
 "share_as_file" = "Share as file";
 "share_link" = "Share link";
+

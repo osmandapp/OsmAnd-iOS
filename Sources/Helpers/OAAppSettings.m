@@ -130,6 +130,7 @@ static NSString * const lastStartLonkey = @"lastStartLonkey";
 static NSString * const applicationModeKey = @"applicationMode";
 static NSString * const defaultApplicationModeKey = @"default_application_mode_string";
 static NSString * const defaultCarplayModeKey = @"default_carplay_mode_string";
+static NSString * const carPlayMapAppearanceModeKey = @"carplay_map_appearance_mode";
 static NSString * const carPlayModeIsDefaultKey = @"carplay_mode_is_default_string";
 static NSString * const availableApplicationModesKey = @"available_application_modes";
 static NSString * const customAppModesKey = @"customAppModes";
@@ -6038,6 +6039,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _carPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"default_carplay_mode_string"];
         
+        _carPlayMapAppearanceMode = [[[OACommonDayNightMode withKey:carPlayMapAppearanceModeKey defValue:DayNightModeAppTheme] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMapAppearanceMode forKey:carPlayMapAppearanceModeKey];
+        
         _isCarPlayModeDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"carplay_mode_is_default_string"];
 
@@ -6470,7 +6474,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
-        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
+        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityIdentifiable] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];

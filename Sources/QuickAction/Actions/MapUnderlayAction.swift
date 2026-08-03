@@ -73,11 +73,9 @@ final class MapUnderlayAction: OASwitchableAction {
     }
     
     override func nextSelectedItem() -> String {
-        guard let sources = loadListFromParams() as? [[String]] else { return "" }
-        let sourcesByName = sources.map { source in
-            [source.first == noUnderlay ? noUnderlay : source.last ?? ""]
-        }
-        return next(fromSource: sourcesByName, defValue: noUnderlay) ?? ""
+        guard let sources = loadListFromParams() as? [[String]],
+              let nextSource = next(fromSource: sources) else { return "" }
+        return nextSource.first == noUnderlay ? noUnderlay : nextSource.last ?? ""
     }
     
     override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
@@ -116,12 +114,7 @@ final class MapUnderlayAction: OASwitchableAction {
             return
         }
         
-        let nextItem = nextSelectedItem()
-        if nextItem == noUnderlay {
-            execute(withParams: [noUnderlay])
-            return
-        }
-        guard let nextSource = sources.first(where: { $0.last == nextItem }) else { return }
+        guard let nextSource = next(fromSource: sources) else { return }
         execute(withParams: nextSource)
     }
     
@@ -141,6 +134,24 @@ final class MapUnderlayAction: OASwitchableAction {
             app?.data.underlayMapSource = nil
         }
         OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
+    }
+
+    private func next(fromSource sources: [[String]]) -> [String]? {
+        guard let firstSource = sources.first else { return nil }
+
+        let currentSource = OsmAndApp.swiftInstance().data.underlayMapSource
+        let currentIndex = sources.firstIndex { source in
+            if let currentSource {
+                return source.first == currentSource.variant && source.last == currentSource.name
+            }
+            return source.first == noUnderlay
+        }
+        if sources.count == 1, currentIndex == 0 {
+            return [noUnderlay, localizedString("no_underlay")]
+        } else if let currentIndex, currentIndex < sources.count - 1 {
+            return sources[currentIndex + 1]
+        }
+        return firstSource
     }
     
     override func getUIModel() -> OrderedDictionary<AnyObject, AnyObject> {

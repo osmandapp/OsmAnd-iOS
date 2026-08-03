@@ -152,7 +152,8 @@
             break;
         
         NSString *imageLink = [html substringWithRange:NSMakeRange(currentIndex, srcEndTagRange.location - srcStartTagRange.location - srcStartTagRange.length)];
-        [allImageLinks addObject:imageLink];
+        if ([imageLink hasPrefix:@"http"])
+            [allImageLinks addObject:imageLink];
         
         currentIndex = srcEndTagRange.location + srcEndTagRange.length;
         nextImgTagRange = [html rangeOfString:@"<img" options:0 range:NSMakeRange(currentIndex, [html length] - currentIndex)];
@@ -171,7 +172,7 @@
         if (!imageAsBase64String && imageAsBase64String.length == 0 )
             imageAsBase64String = @"";
         
-        NSString *srcTagContent = [OAImageToStringConverter getHtmlImgSrcTagContent:imageAsBase64String];
+        NSString *srcTagContent = [OAImageToStringConverter htmlImgSrcTagContent:imageAsBase64String];
         resultHtml = [resultHtml stringByReplacingOccurrencesOfString:link withString:srcTagContent];
     }
     return resultHtml;

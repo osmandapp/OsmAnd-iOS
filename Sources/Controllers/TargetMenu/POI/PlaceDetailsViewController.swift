@@ -47,7 +47,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             resolveDetailedObjectInBackground()
         }
     }
-
+    
     override func setObject(_ object: Any) {
         if let detailsObj = object as? BaseDetailsObject {
             poi = detailsObj.syntheticAmenity

@@ -13,6 +13,8 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private var detailsObject: BaseDetailsObject?
     private var renderedObject: OARenderedObject?
+    private var sourceObject: AnyObject?
+    private var preservesAmenityPresentation = false
     private var provider: RenderedObjectAmenityProvider!
     
     required init?(coder: NSCoder) {
@@ -23,6 +25,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         super.init(poi: detailsObject.syntheticAmenity)
         self.detailsObject = detailsObject
         self.renderedObject = renderedObject
+        self.sourceObject = renderedObject ?? detailsObject.syntheticAmenity
         self.provider = RenderedObjectAmenityProvider(detailsObject: detailsObject, renderedObject: renderedObject)
         setObject(detailsObject)
     }
@@ -31,7 +34,15 @@ final class PlaceDetailsViewController: OAPOIViewController {
         let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject
+        self.sourceObject = renderedObject
         self.provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
+    }
+
+    init(amenityPoi poi: OAPOI) {
+        super.init(poi: poi)
+        self.sourceObject = poi
+        self.preservesAmenityPresentation = true
+        self.provider = RenderedObjectAmenityProvider()
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -47,7 +58,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             resolveDetailedObjectInBackground()
         }
     }
-    
+
     override func setObject(_ object: Any) {
         if let detailsObj = object as? BaseDetailsObject {
             poi = detailsObj.syntheticAmenity
@@ -57,6 +68,10 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     override func getNameStr() -> String? {
+        if preservesAmenityPresentation {
+            return super.getNameStr()
+        }
+
         let name = provider.nameOnlyString()
         
         if !name.isEmpty {
@@ -232,16 +247,19 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     private func resolveDetailedObjectInBackground() {
-        guard let renderedObject else { return }
+        guard let sourceObject else { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
+            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
+            if let details, let sourcePoi = sourceObject as? OAPOI {
+                details.addObject(sourcePoi)
+            }
             DispatchQueue.main.async {
                 guard let self,
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
                       let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === renderedObject
+                      (targetPoint.targetObj as AnyObject) === sourceObject
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
@@ -259,8 +277,12 @@ final class PlaceDetailsViewController: OAPOIViewController {
         guard let mapPanel = OARootViewController.instance()?.mapPanel,
               let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
 
-        targetPoint.title = amenity.nameLocalized ?? amenity.name
-        targetPoint.icon = amenity.type?.icon()
+        if let title = amenity.nameLocalized ?? amenity.name, !title.isEmpty {
+            targetPoint.title = title
+        }
+        if let icon = amenity.type?.icon() {
+            targetPoint.icon = icon
+        }
 
         mapPanel.update(targetPoint)
     }

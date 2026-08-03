@@ -8,7 +8,9 @@
 
 #import "OAWikiMenuViewController.h"
 #import "OAPOI.h"
+#import "OAAmenitySearcher.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static const NSInteger kOrderContentRow = 1;
 
@@ -39,6 +41,32 @@ static const NSInteger kOrderContentRow = 1;
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    OAPOI *sourcePoi = self.poi;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:sourcePoi];
+
+        if (!detailsObject)
+            return;
+        [detailsObject addObject:sourcePoi];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || !strongSelf.viewIfLoaded.window || strongSelf.poi != sourcePoi)
+                return;
+
+            [strongSelf setup:detailsObject.syntheticAmenity];
+            [strongSelf rebuildRows];
+            [strongSelf.tableView reloadData];
+            [strongSelf.delegate refreshTargetPointHeader];
+        });
+    });
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -60,4 +88,3 @@ static const NSInteger kOrderContentRow = 1;
 }
 
 @end
-

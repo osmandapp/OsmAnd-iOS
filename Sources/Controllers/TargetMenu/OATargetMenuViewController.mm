@@ -176,10 +176,13 @@
 
         case OATargetPOI:
         {
-            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
                 controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:targetPoint.targetObj];
+            }
+            else
+            {
+                controller = [[PlaceDetailsViewController alloc] initWithAmenityPoi:targetPoint.targetObj];
             }
 
             break;

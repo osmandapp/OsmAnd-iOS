@@ -410,10 +410,10 @@ final class OsmEditsListViewController: UIViewController {
     private func updateNavigationBarTitle() {
         var title = localizedString("osm_edits_title")
         if collectionView.isEditing {
-            let totalSelectedPoints = selectionManager.selectedItems.count
-            if totalSelectedPoints == 0 {
+            if selectionManager.selectedItems.isEmpty {
                 title = localizedString("select_items")
             } else {
+                let totalSelectedPoints = selectionManager.selectedItems.count
                 let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
                 title = "\(totalSelectedPoints) \(itemText)"
             }

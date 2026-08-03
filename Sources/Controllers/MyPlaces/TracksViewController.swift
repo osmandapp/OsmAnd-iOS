@@ -1186,7 +1186,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func setEdit(_ edit: Bool) {
+        let shouldHideSearch = edit && isSearchActive
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
         tableView.setEditing(edit, animated: true)
+        if shouldHideSearch {
+            hideSearch()
+        }
         myPlacesDelegate?.updateEditMode(edit)
     }
     
@@ -2163,8 +2172,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func hideSearch() {
-        searchController.isActive = false
-        navigationItem.searchController = nil
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else {
+            searchController.isActive = false
+            navigationItem.searchController = nil
+        }
     }
     
     // MARK: - TableView

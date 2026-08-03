@@ -277,7 +277,7 @@
 - (void)onBackupFinished:(NSNotification *)notification
 {
     NSString *error = notification.userInfo[@"error"];
-
+    
     if (error != nil)
     {
         [OAUtilities showToast:nil details:[[OABackupError alloc] initWithError:error].getLocalizedError duration:.4 inView:self.view];

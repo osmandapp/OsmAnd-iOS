@@ -1041,6 +1041,8 @@
             data.category = savingGroup;
             [_pointHandler savePoint:data newPoint:NO];
         }
+        if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
+            [_appearanceCollection selectColor:_selectedColorItem];
         if (_editPointType == EOAEditPointTypeFavorite)
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
@@ -1490,6 +1492,7 @@
         if (group)
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
+            _isNewColorSelected = NO;
             _selectedIconName = group.iconName;
             _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
         }

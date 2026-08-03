@@ -77,6 +77,8 @@ final class AisTrackerPlugin: OAPlugin {
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
     static let cpaWarningDistancePrefId = "ais_cpa_warning_distance"
 
+    private static let nmeaLocationTimeout: TimeInterval = 10
+
     let protocolPref: OACommonInteger
     let hostPref: OACommonString
     let tcpPortPref: OACommonInteger
@@ -97,6 +99,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     private var networkListener: AisMessageListener?
     private var activeConnectionConfig: AisNmeaConnectionConfig?
+    private var nmeaLocationWatchdogWorkItem: DispatchWorkItem?
     private var applicationModeObserver: OAAutoObserverProxy?
 
     private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
@@ -238,9 +241,14 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func resetNmeaLocationProvider() {
-        DispatchQueue.main.async {
-            OsmAndApp.swiftInstance().locationServices?.resetLocationFromExternalProvider()
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.resetNmeaLocationProvider()
+            }
+            return
         }
+        cancelNmeaLocationWatchdog()
+        OsmAndApp.swiftInstance().locationServices?.resetLocationFromExternalProvider()
     }
 
     func fakeOwnPosition(_ location: CLLocation?) {
@@ -377,6 +385,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     private func startConnection(with config: AisNmeaConnectionConfig) {
         AisObjectHelper.debugLog("[AisTrackerPlugin] startConnection requested config=\(config.debugDescription) previous=\(activeConnectionConfig?.debugDescription ?? "none") state=\(connectionState)")
+        resetNmeaLocationProvider()
         stopSharedNetworkListener(updateState: false)
         updateConnectionState(.connecting)
         activeConnectionConfig = config
@@ -458,6 +467,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     private func stopSharedNetworkListener(updateState: Bool) {
+        cancelNmeaLocationWatchdog()
         if networkListener != nil {
             AisObjectHelper.debugLog("[AisTrackerPlugin] stop AIS/NMEA listener config=\(activeConnectionConfig?.debugDescription ?? "none") updateState=\(updateState)")
         }
@@ -467,6 +477,36 @@ final class AisTrackerPlugin: OAPlugin {
         if updateState {
             updateConnectionState(.disconnected)
         }
+    }
+
+    private func scheduleNmeaLocationWatchdog() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.scheduleNmeaLocationWatchdog()
+            }
+            return
+        }
+        cancelNmeaLocationWatchdog()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            nmeaLocationWatchdogWorkItem = nil
+            guard useNmeaLocationPref.get(), networkListener != nil else { return }
+            AisObjectHelper.debugLog("[AisTrackerPlugin] NMEA location timeout; falling back to CoreLocation")
+            resetNmeaLocationProvider()
+        }
+        nmeaLocationWatchdogWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.nmeaLocationTimeout, execute: workItem)
+    }
+
+    private func cancelNmeaLocationWatchdog() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.cancelNmeaLocationWatchdog()
+            }
+            return
+        }
+        nmeaLocationWatchdogWorkItem?.cancel()
+        nmeaLocationWatchdogWorkItem = nil
     }
 
     private func updateConnectionState(_ state: AisNmeaConnectionState) {
@@ -494,10 +534,6 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     fileprivate func onNetworkNmeaLocationReceived(_ location: AisLocation) {
-        guard useNmeaLocationPref.get() else {
-            resetNmeaLocationProvider()
-            return
-        }
         if connectionState != .connected {
             updateConnectionState(.connected)
         }
@@ -509,17 +545,23 @@ final class AisTrackerPlugin: OAPlugin {
                                     course: location.hasBearing ? CLLocationDirection(location.bearing) : -1,
                                     speed: location.hasSpeed ? CLLocationSpeed(location.speed) : -1,
                                     timestamp: Date())
-        DispatchQueue.main.async {
-            OsmAndApp.swiftInstance().locationServices?.setLocationFromExternalProvider(clLocation)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard useNmeaLocationPref.get() else {
+                resetNmeaLocationProvider()
+                return
+            }
+            guard let locationServices = OsmAndApp.swiftInstance().locationServices else { return }
+            guard !locationServices.isRouteAnimating() else {
+                resetNmeaLocationProvider()
+                return
+            }
+            locationServices.setLocationFromExternalProvider(clLocation)
+            scheduleNmeaLocationWatchdog()
             if AisLogger.shared.isEnabled {
                 AisObjectHelper.debugLog("[AisTrackerPlugin] location from NMEA lat=\(clLocation.coordinate.latitude) lon=\(clLocation.coordinate.longitude)")
             }
         }
-    }
-
-    fileprivate func onNetworkListenerFailed() {
-        AisObjectHelper.debugLog("[AisTrackerPlugin] network listener failed config=\(activeConnectionConfig?.debugDescription ?? "none")")
-        updateConnectionState(.failed)
     }
 
     @objc private func onApplicationModeChanged() {
@@ -535,6 +577,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     deinit {
+        nmeaLocationWatchdogWorkItem?.cancel()
         applicationModeObserver?.detach()
     }
 }

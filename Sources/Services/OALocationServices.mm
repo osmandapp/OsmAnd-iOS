@@ -340,12 +340,12 @@
 {
     @synchronized(_lock)
     {
-        if ([self doStart])
+        BOOL wasSuspended = _isSuspended;
+        _isSuspended = NO;
+        BOOL didStart = [self doStart];
+        if (didStart || wasSuspended)
         {
             OALog(@"Resumed location services");
-
-            _isSuspended = NO;
-
             [_statusObservable notifyEvent];
         }
     }
@@ -504,6 +504,15 @@
         return YES;
 
     return NO;
+}
+
+- (BOOL)shouldRestartSystemLocationAfterExternalProviderReset
+{
+    return !_isSuspended
+        && (_app.mapMode == OAMapModePositionTrack
+            || _settings.mapSettingTrackRecording
+            || [_routingHelper isFollowingMode]
+            || UIApplication.sharedApplication.isCarPlayConnected);
 }
 
 - (void) onMapModeChanged
@@ -670,12 +679,18 @@
     [self setLocation:location];
 }
 
-- (void) setLocationFromExternalProvider:(CLLocation *)location
+- (void)setLocationFromExternalProvider:(CLLocation *)location
 {
+    if (!location)
+        return;
+
     BOOL wasLocationUnknown = (_lastLocation == nil);
     BOOL didChangeStatus = NO;
     @synchronized(_lock)
     {
+        if (_isSuspended)
+            return;
+
         if (!_externalProviderActive)
         {
             _externalProviderActive = YES;
@@ -692,15 +707,17 @@
         [_updateFirstTimeObserver notifyEvent];
 }
 
-- (void) resetLocationFromExternalProvider
+- (void)resetLocationFromExternalProvider
 {
     BOOL didChangeStatus = NO;
+    BOOL shouldRestartSystemLocation = NO;
     @synchronized(_lock)
     {
         if (_externalProviderActive)
         {
             _externalProviderActive = NO;
             didChangeStatus = YES;
+            shouldRestartSystemLocation = [self shouldRestartSystemLocationAfterExternalProviderReset];
         }
     }
 
@@ -710,12 +727,20 @@
     _lastHeading = NAN;
     _lastMagneticHeading = NAN;
     [self setLocation:nil];
-    [_statusObservable notifyEvent];
+    if (shouldRestartSystemLocation)
+        [self start];
+    else
+        [_statusObservable notifyEvent];
 }
 
 - (BOOL) isInLocationSimulation
 {
     return _simulatePosition != nil;
+}
+
+- (BOOL)isRouteAnimating
+{
+    return [_locationSimulation isRouteAnimating];
 }
 
 - (void) setLocation:(CLLocation *)location

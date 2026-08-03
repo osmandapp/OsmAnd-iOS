@@ -31,6 +31,7 @@
 #define kHeaderImageHeight 170
 static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
 static NSString * const kWikimediaThumbnailSize = @"330px-";
+static NSString * const kTransparentPixel = @"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
 {
@@ -577,8 +578,8 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     {
         NSString *html = [self appendHeaderImageTag];
         NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:cached];
-        html = [html stringByReplacingOccurrencesOfString:
-                    @"id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"\""
+        NSString *imgTag = [NSString stringWithFormat: @"id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"%@\"", kTransparentPixel];
+        html = [html stringByReplacingOccurrencesOfString:imgTag
                                                withString:[NSString stringWithFormat:@"id=\"wiki-header-image\" src=\"%@\"", src]];
         _content = html;
         loadWebView(html);
@@ -718,33 +719,8 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     else
     {
         _hasHeaderImage = YES;
-        
-        BOOL isLight = [ThemeManager shared].isLightTheme;
-        NSString *color1 = isLight ? @"#E8E8E8" : @"#222526";
-        NSString *color2 = isLight ? @"#F4F4F4" : @"#2d3133";
-        
-        NSString *shimmerCSS = [NSString stringWithFormat:
-                                @"<style>"
-                                @"#wiki-header-image.wiki-header-shimmer {"
-                                @"  width:100%%;"
-                                @"  border:0;"
-                                @"  outline:0;"
-                                @"  background:linear-gradient(90deg,%@ 25%%,%@ 50%%,%@ 75%%);"
-                                @"  background-size:200%% 100%%;"
-                                @"  animation:wikiHeaderShimmer 1.2s infinite linear;"
-                                @"}"
-                                @"@keyframes wikiHeaderShimmer {"
-                                @"  0%%{background-position:200%% 0;}"
-                                @"  100%%{background-position:-200%% 0;}"
-                                @"}"
-                                @"</style>",
-                                color1, color2, color1];
-        
-        NSString *imgTag = [NSString stringWithFormat:
-                            @"%@<img id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"\" "
-                            @"style=\"object-fit:cover; object-position:center; width:100%%; height:%dpx; display:block; border:0;\" />",
-                            shimmerCSS,
-                            kHeaderImageHeight];
+      
+        NSString *imgTag = [NSString stringWithFormat: @"<img id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"%@\" />", kTransparentPixel];
         
         return [_content stringByReplacingOccurrencesOfString:@"</head>"
                                                    withString:[imgTag stringByAppendingString:@"</head>"]];
@@ -1001,7 +977,7 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     content = [self normalizeLegacyWikimediaThumbnailUrls:content];
     
     NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
-    return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];
+    return [NSString stringWithFormat:@"<html class=\"%@\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, nightModeClass, content];
 }
 
 - (void)updateAstroWikiData:(NSString *)locale

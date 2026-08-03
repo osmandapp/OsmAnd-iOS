@@ -716,7 +716,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"route_members");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
-                [self appendInfoRow:row];
+                [rows addObject:row];
+                [self updateInfoRows];
             }
         }];
     }
@@ -728,7 +729,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"route_part_of");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
-                [self appendInfoRow:row];
+                [rows addObject:row];
+                [self updateInfoRows];
             }
         }];
         
@@ -737,7 +739,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"multipoligon_related");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_RELATED_ROUTES_ROW_KEY title:title];
-                [self appendInfoRow:row];
+                [rows addObject:row];
+                [self updateInfoRows];
             }
         }];
     }

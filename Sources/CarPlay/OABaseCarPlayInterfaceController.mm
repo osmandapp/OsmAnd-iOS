@@ -14,6 +14,7 @@
 #import "OAMapActions.h"
 #import "OAApplicationMode.h"
 #import <CarPlay/CarPlay.h>
+#import "OAAppSettings.h"
 
 @implementation OABaseCarPlayInterfaceController
 
@@ -109,13 +110,22 @@
 
 - (void)startNavigationFromPreviousRoute
 {
-    [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAApplicationMode *mode = [settings.lastRouteApplicationMode get];
+    
+    if (mode == OAApplicationMode.DEFAULT)
+        mode = [OARoutingHelper.sharedInstance getAppMode];
+    
+    OAMapActions *actions = OARootViewController.instance.mapPanel.mapActions;
+    [actions enterRoutePlanningModeGivenGpx:nil
+                                    appMode:mode
+                                       path:nil
+                                       from:nil
+                                   fromName:nil
+             useIntermediatePointsByDefault:YES
+                                 showDialog:NO];
+    
     [OATargetPointsHelper.sharedInstance restoreTargetPoints:YES];
-    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil
-                                                                                 from:nil
-                                                                             fromName:nil
-                                                       useIntermediatePointsByDefault:YES
-                                                                           showDialog:NO];
 }
 
 - (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title

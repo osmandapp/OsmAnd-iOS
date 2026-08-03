@@ -278,7 +278,7 @@ private final class AstroIndeterminateProgressLine: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalToConstant: 2).isActive = true
         progressView.translatesAutoresizingMaskIntoConstraints = false
-        progressView.trackTintColor = .customSeparator.withAlphaComponent(0.25)
+        progressView.trackTintColor = .adaptiveSeparator.withAlphaComponent(0.25)
         progressView.progressTintColor = .buttonBgColorPrimary
         addSubview(progressView)
         NSLayoutConstraint.activate([

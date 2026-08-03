@@ -248,9 +248,9 @@
     buttonsView.frame = _buttonsView.bounds;
     buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_buttonsView insertSubview:buttonsView atIndex:0];
-    UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+    UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, [UIScreen adaptiveSeparatorThickness]}];
     divider.tag = kButtonsDividerTag;
-    divider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    divider.backgroundColor = [UIColor adaptiveSeparator];
     divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_buttonsView addSubview:divider];
     _cancelButton.backgroundColor = UIColor.clearColor;
@@ -268,7 +268,7 @@
     _tableView.clipsToBounds = YES;
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    _tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    _tableView.separatorColor = [UIColor adaptiveSeparator];
     
     [self setupView];
     

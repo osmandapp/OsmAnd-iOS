@@ -45,7 +45,7 @@
 {
     btn.layer.cornerRadius = 6.;
     btn.layer.borderWidth = 1.;
-    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
 }
 - (void) layoutSubviews
 {

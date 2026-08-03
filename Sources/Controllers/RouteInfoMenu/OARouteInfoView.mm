@@ -989,7 +989,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     button.layer.cornerRadius = 42 / 2;
     button.layer.borderWidth = 1.0;
-    button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    button.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
 }
 
 - (CGPoint) calculateInitialPoint
@@ -1626,7 +1626,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentContainer.layer.cornerRadius = 6;
         cell.contentContainer.layer.borderWidth = 1;
-        cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        cell.contentContainer.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
         cell.label.text = item[@"title"];
         [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1718,11 +1718,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (cell)
         {
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [UIColor adaptiveSeparator];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
-            cell.dividerHight = 0.5;
+            cell.dividerHight = [UIScreen adaptiveSeparatorThickness];
         }
         return cell;
     }
@@ -1966,7 +1966,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:[UIScreen adaptiveSeparatorThickness] dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
     else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])

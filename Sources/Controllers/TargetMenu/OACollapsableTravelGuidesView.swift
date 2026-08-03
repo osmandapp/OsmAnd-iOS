@@ -103,7 +103,7 @@ final class OACollapsableTravelGuidesView: OACollapsableView  {
         btn.layer.cornerRadius = 4.0
         btn.layer.masksToBounds = true
         btn.layer.borderWidth = 0.8
-        btn.layer.borderColor = UIColor.customSeparator.cgColor
+        btn.layer.borderColor = UIColor.adaptiveSeparator.cgColor
         btn.setBackgroundImage(OAUtilities.image(with: .clear), for: .normal)
         btn.tintColor = UIColor.iconColorActive
         btn.delegate = self
@@ -112,7 +112,7 @@ final class OACollapsableTravelGuidesView: OACollapsableView  {
     
     private func updateButtonBorderColor() {
         for button in buttons {
-            button.layer.borderColor = UIColor.customSeparator.cgColor
+            button.layer.borderColor = UIColor.adaptiveSeparator.cgColor
         }
     }
 }

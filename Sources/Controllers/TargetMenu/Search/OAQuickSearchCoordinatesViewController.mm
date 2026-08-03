@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 
     self.navigationItem.title = OALocalizedString(@"coords_search");
     
@@ -188,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    appearance.shadowColor = [UIColor adaptiveSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]

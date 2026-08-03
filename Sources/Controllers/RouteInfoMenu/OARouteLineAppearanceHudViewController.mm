@@ -1448,7 +1448,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     {
         OADividerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OADividerCell.reuseIdentifier];
         cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+        cell.dividerColor = [UIColor adaptiveSeparator];
         cell.dividerInsets = UIEdgeInsetsZero;
         cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
         cell.dividerHight = 0.;

@@ -74,7 +74,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     [self registerCells];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    _horizontalLine.backgroundColor = [[UIColor adaptiveSeparator] CGColor];
     
     self.navigationItem.title = OALocalizedString(@"download_tab_updates");
     [self setupDownloadingCellHelper];
@@ -123,7 +123,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 {
     [super viewWillLayoutSubviews];
 
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, [UIScreen adaptiveSeparatorThickness]);
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -148,7 +148,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+        _horizontalLine.backgroundColor = [[UIColor adaptiveSeparator] CGColor];
 }
 
 - (void)registerCells

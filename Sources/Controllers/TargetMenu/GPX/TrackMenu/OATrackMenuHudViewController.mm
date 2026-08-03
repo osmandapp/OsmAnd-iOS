@@ -2388,7 +2388,7 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.separatorView.backgroundColor = [UIColor adaptiveSeparator];
         }
         if (cell)
         {
@@ -2451,7 +2451,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.separatorView.backgroundColor = [UIColor adaptiveSeparator];
         }
         if (cell)
         {

@@ -94,7 +94,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    appearance.shadowColor = [UIColor adaptiveSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]

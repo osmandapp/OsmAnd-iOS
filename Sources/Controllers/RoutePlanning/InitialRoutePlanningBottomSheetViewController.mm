@@ -55,7 +55,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _separatorHeight = 1.0 / [UIScreen mainScreen].scale;
+    _separatorHeight = [UIScreen adaptiveSeparatorThickness];
     
     [self.rightButton removeFromSuperview];
     self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
@@ -189,7 +189,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.separatorView.backgroundColor = [UIColor adaptiveSeparator];
         }
         return cell;
     }
@@ -229,7 +229,7 @@
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.separatorView.backgroundColor = [UIColor adaptiveSeparator];
             cell.separatorHeightConstraint.constant = _separatorHeight;
         }
         return cell;

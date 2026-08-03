@@ -64,7 +64,7 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 }

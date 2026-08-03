@@ -27,7 +27,7 @@
     _timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     _wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     
-    _separatorHeightConstraint.constant = 0.5;
+    _separatorHeightConstraint.constant = [UIScreen adaptiveSeparatorThickness];
     
     [self setRightButtonVisibility:NO];
 }

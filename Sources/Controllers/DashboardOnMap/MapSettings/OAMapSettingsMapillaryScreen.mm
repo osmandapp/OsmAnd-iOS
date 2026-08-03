@@ -392,9 +392,9 @@ static const NSInteger panoImageFilterSection = 2;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [UIColor adaptiveSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = 0.5;
+            cell.dividerHight = [UIScreen adaptiveSeparatorThickness];
         }
         return cell;
     }
@@ -580,7 +580,7 @@ static const NSInteger panoImageFilterSection = 2;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:[UIScreen adaptiveSeparatorThickness] dividerInsets:UIEdgeInsetsZero];
     }
     return 44.0;
 }

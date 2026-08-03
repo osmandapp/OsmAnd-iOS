@@ -7,6 +7,14 @@
 //
 
 extension UIScreen {
+    @objc static var adaptiveSeparatorThickness: CGFloat {
+        if #available(iOS 26.0, *) {
+            return 1.0
+        } else {
+            return 1.0 / UIScreen.main.scale
+        }
+    }
+
     // NOTE: Apple does not provide an API to obtain an accurate ppi value. The property returns ppi with a margin of error. For an exact ppi value, you need to refer to the device's specifications.
     @objc
     var ppi: CGFloat {

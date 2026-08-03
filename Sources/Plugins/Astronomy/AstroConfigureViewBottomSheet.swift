@@ -833,7 +833,7 @@ private final class AstroSwitchRow: UIControl {
             self?.switchChanged()
         }, for: .valueChanged)
 
-        dividerView.backgroundColor = .customSeparator
+        dividerView.backgroundColor = .adaptiveSeparator
         dividerView.isHidden = !showDivider
         dividerView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -851,7 +851,7 @@ private final class AstroSwitchRow: UIControl {
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 62),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.heightAnchor.constraint(equalToConstant: UIScreen.adaptiveSeparatorThickness),
             iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
@@ -884,7 +884,7 @@ private final class AstroSwitchRow: UIControl {
         iconView.image = AstroIcon.template(checked ? iconNameEnabled : iconNameDisabled)
         iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
         titleLabel.textColor = .textColorPrimary
-        dividerView.backgroundColor = .customSeparator
+        dividerView.backgroundColor = .adaptiveSeparator
     }
     
     private func updateAccessibility() {

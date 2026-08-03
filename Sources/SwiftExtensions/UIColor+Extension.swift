@@ -9,6 +9,14 @@
 import UIKit
 
 extension UIColor {
+    @objc static var adaptiveSeparator: UIColor {
+        if #available(iOS 26.0, *) {
+            return .customSeparatorSolid
+        } else {
+            return .customSeparator
+        }
+    }
+
     @objc var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
     @objc var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
     @objc var currentMapThemeColor: UIColor { OAAppSettings.sharedManager().nightMode ? dark : light }

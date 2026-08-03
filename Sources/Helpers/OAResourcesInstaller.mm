@@ -448,7 +448,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
             if (success)
             {
-                const auto resource = _app.resourcesManager->getResource(resourceId);
+                const auto resource = _app.resourcesManager->getLocalResource(resourceId);
                 if (resource && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion ||
                                  resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion))
                     [_app.data.mapLayerChangeObservable notifyEvent];

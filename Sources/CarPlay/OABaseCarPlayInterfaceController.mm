@@ -111,10 +111,10 @@
 - (void)startNavigationFromPreviousRoute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    OAApplicationMode *mode = [settings.lastRouteApplicationMode get];
+    OAApplicationMode *mode = settings.lastRoutingApplicationMode;
     
-    if (mode == OAApplicationMode.DEFAULT)
-        mode = [OARoutingHelper.sharedInstance getAppMode];
+    if (!mode || mode == OAApplicationMode.DEFAULT || ![OAApplicationMode.values containsObject:mode])
+        mode = OAApplicationMode.getFirstAvailableNavigationMode;
     
     OAMapActions *actions = OARootViewController.instance.mapPanel.mapActions;
     [actions enterRoutePlanningModeGivenGpx:nil

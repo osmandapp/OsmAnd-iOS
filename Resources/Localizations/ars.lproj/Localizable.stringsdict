@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>حذف %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld مفضلات</string>
+			<key>one</key>
+			<string>%ld مفضلة</string>
+			<key>two</key>
+			<string>%ld مفضلتان</string>
+			<key>few</key>
+			<string>%ld مفضلات</string>
+			<key>many</key>
+			<string>%ld مفضلة</string>
+			<key>other</key>
+			<string>%ld مفضلة</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>حذف %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld مجلدات</string>
+			<key>one</key>
+			<string>%ld مجلد</string>
+			<key>two</key>
+			<string>%ld مجلدان</string>
+			<key>few</key>
+			<string>%ld مجلدات</string>
+			<key>many</key>
+			<string>%ld مجلدا</string>
+			<key>other</key>
+			<string>%ld مجلد</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>حذف %#@folders@ و %#@points@. لا يمكن التراجع عن هذا الإجراء.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld مجلدات</string>
+			<key>one</key>
+			<string>%ld مجلد</string>
+			<key>two</key>
+			<string>%ld مجلدان</string>
+			<key>few</key>
+			<string>%ld مجلدات</string>
+			<key>many</key>
+			<string>%ld مجلدا</string>
+			<key>other</key>
+			<string>%ld مجلد</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld نقاط</string>
+			<key>one</key>
+			<string>%ld نقطة</string>
+			<key>two</key>
+			<string>%ld نقطتان</string>
+			<key>few</key>
+			<string>%ld نقاط</string>
+			<key>many</key>
+			<string>%ld نقطة</string>
+			<key>other</key>
+			<string>%ld نقطة</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -80,6 +80,7 @@
                 <outlet property="collectionView" destination="GgU-uD-f9j" id="lqs-4m-UtL"/>
                 <outlet property="rightActionButton" destination="Zdi-Io-AaC" id="Ynt-mw-Qjs"/>
                 <outlet property="rightActionContainerView" destination="vYQ-vX-ZxQ" id="66q-T9-RKX"/>
+                <outlet property="rightActionDividerView" destination="1O1-Eo-wqf" id="cod-se-004"/>
             </connections>
             <point key="canvasLocation" x="-389" y="-16"/>
         </tableViewCell>

@@ -105,6 +105,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *groupsButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
@@ -247,6 +248,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
 
     if ([self openedFromMap])
         [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];

@@ -85,6 +85,7 @@ static const NSInteger sectionCount = 2;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];

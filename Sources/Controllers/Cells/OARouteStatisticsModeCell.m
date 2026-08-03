@@ -11,11 +11,18 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+@interface OARouteStatisticsModeCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *dividerView;
+
+@end
+
 @implementation OARouteStatisticsModeCell
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.dividerView.backgroundColor = [UIColor adaptiveSeparator];
     // Initialization code
     self.contentContainer.layer.cornerRadius = 9.;
     self.contentContainer.layer.borderWidth = 1.;

@@ -33,6 +33,8 @@
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *bottomButtonsContainerView;
 @property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
+@property (weak, nonatomic) IBOutlet UIView *bottomSeparatorView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *leftBottomButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightBottomButton;
 
@@ -76,6 +78,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.bottomSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.bottomSeparatorHeightConstraint.constant = [UIScreen adaptiveSeparatorThickness];
     
     self.navigationItem.title = OALocalizedString(@"cloud_recent_changes");
     

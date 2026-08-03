@@ -23,6 +23,8 @@
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, FolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
+
 @end
 
 @implementation OASaveTrackViewController
@@ -75,7 +77,9 @@
 
 - (void) viewDidLoad
 {
-        [super viewDidLoad];
+    [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

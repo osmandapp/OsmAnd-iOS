@@ -246,6 +246,7 @@
                 <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
                 <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="J4e-1M-9qa"/>
                 <outlet property="separatorOffsetViewWidth" destination="yPT-QH-hVa" id="yjB-o9-RFo"/>
+                <outlet property="separatorView" destination="fki-YG-97m" id="cod-se-003"/>
                 <outlet property="topButton" destination="ND9-vB-K4j" id="2Zh-g8-I35"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>

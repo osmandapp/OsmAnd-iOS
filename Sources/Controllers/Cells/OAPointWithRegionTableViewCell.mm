@@ -7,8 +7,21 @@
 //
 
 #import "OAPointWithRegionTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
+
+@interface OAPointWithRegionTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *regionDividerView;
+
+@end
 
 @implementation OAPointWithRegionTableViewCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.regionDividerView.backgroundColor = [UIColor adaptiveSeparator];
+}
 
 - (void)updateConstraints
 {

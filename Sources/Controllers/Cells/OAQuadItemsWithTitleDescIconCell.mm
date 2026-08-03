@@ -7,8 +7,22 @@
 //
 
 #import "OAQuadItemsWithTitleDescIconCell.h"
+#import "OsmAnd_Maps-Swift.h"
+
+@interface OAQuadItemsWithTitleDescIconCell ()
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
+
+@end
 
 @implementation OAQuadItemsWithTitleDescIconCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.separatorHeightConstraint.constant = [UIScreen adaptiveSeparatorThickness];
+}
 
 - (void)updateConstraints
 {

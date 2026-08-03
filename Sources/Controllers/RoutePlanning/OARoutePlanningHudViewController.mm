@@ -100,6 +100,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet OAHudButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
+@property (weak, nonatomic) IBOutlet UIView *headerSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *topSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *sideSeparatorView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewTailingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *landscapeHeaderLeftContainerConstraint;
@@ -247,6 +250,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.headerSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.topSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.sideSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
     _hudMode = EOAHudModeRoutePlanning;
     _cachedYViewPort = _mapPanel.mapViewController.mapView.viewportYScale;
 

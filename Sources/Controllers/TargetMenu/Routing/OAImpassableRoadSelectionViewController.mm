@@ -72,6 +72,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.bottomToolBarDividerView.backgroundColor = [UIColor adaptiveSeparator];
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [_avoidRoads addListener:self];
     
@@ -92,7 +94,7 @@
     _eleDownImageView.tintColor = eleTint;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
-    bottomDividerFrame.size.height = 0.5;
+    bottomDividerFrame.size.height = [UIScreen adaptiveSeparatorThickness];
     _bottomToolBarDividerView.frame = bottomDividerFrame;
 }
 

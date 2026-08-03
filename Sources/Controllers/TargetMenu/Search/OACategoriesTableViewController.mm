@@ -16,6 +16,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIFiltersHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -39,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
 }

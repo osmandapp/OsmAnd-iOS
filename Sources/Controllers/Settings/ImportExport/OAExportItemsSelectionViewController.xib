@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="cancelButton" destination="lEU-Xt-jjA" id="4xa-6i-jpF"/>
                 <outlet property="saveButton" destination="smY-jn-jCI" id="cb6-D0-mFN"/>
+                <outlet property="separatorView" destination="gjX-FC-sw6" id="cod-se-023"/>
                 <outlet property="tableView" destination="voN-vv-Xyy" id="WbO-er-1tn"/>
                 <outlet property="view" destination="WWe-0c-ywu" id="6dF-6u-vdT"/>
             </connections>

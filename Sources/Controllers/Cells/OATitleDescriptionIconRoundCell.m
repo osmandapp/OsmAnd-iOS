@@ -31,6 +31,7 @@ static UIFont *_descrFont;
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     if (!_titleFont)
         _titleFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     if (!_descrFont)

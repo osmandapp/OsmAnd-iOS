@@ -327,6 +327,7 @@
                 <outlet property="activityDirectionConstraint" destination="d1T-n9-2kM" id="bOP-Tt-j3J"/>
                 <outlet property="activityNoDirectionConstraint" destination="tmw-4c-tMg" id="uZd-QO-Pb4"/>
                 <outlet property="appearanceButton" destination="vDF-Mt-jg2" id="mF1-rx-VgB"/>
+                <outlet property="bottomDividerHeightConstraint" destination="jDd-9D-qD8" id="cod-th-012"/>
                 <outlet property="bottomDividerView" destination="77c-3b-9tk" id="pFU-kg-NwT"/>
                 <outlet property="descriptionView" destination="WmA-ig-XeZ" id="ALT-Le-c3n"/>
                 <outlet property="directionContainerView" destination="Iio-8u-at5" id="7m0-xY-S07"/>

@@ -72,6 +72,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 }
 
 - (void) didReceiveMemoryWarning

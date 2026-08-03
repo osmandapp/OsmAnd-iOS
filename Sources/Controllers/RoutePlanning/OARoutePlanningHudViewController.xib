@@ -25,6 +25,7 @@
                 <outlet property="doneButton" destination="fzm-by-GwC" id="TLk-p8-YWs"/>
                 <outlet property="doneButtonContainerView" destination="cZ1-QP-9LE" id="GN4-eV-3m1"/>
                 <outlet property="expandButton" destination="1a9-hh-9hN" id="qtD-HP-Bpb"/>
+                <outlet property="headerSeparatorView" destination="VkI-Al-pSd" id="cod-se-019"/>
                 <outlet property="landscapeAddPointButton" destination="4Jq-MM-wpZ" id="ONX-oB-6si"/>
                 <outlet property="landscapeExpandButton" destination="V78-cH-ojd" id="JGk-mx-5XT"/>
                 <outlet property="landscapeHeaderContainerView" destination="rgr-DA-wDw" id="Gol-Fd-dfA"/>
@@ -43,6 +44,7 @@
                 <outlet property="progressView" destination="zFE-tM-QGM" id="rQT-Gg-kRR"/>
                 <outlet property="redoButton" destination="FIz-se-4BK" id="Tju-by-mBp"/>
                 <outlet property="scrollableView" destination="7aH-3y-W6U" id="W3f-q3-2Rm"/>
+                <outlet property="sideSeparatorView" destination="1PO-25-egA" id="cod-se-021"/>
                 <outlet property="sliderView" destination="YKP-RZ-ZK0" id="Iz3-UJ-XmB"/>
                 <outlet property="statusBarBackgroundView" destination="hwf-gF-YvT" id="xhp-2i-eE2"/>
                 <outlet property="tableView" destination="kp4-4r-XHO" id="M68-fi-ZrG"/>
@@ -50,6 +52,7 @@
                 <outlet property="titleView" destination="erB-WB-vq9" id="cmm-1L-PCu"/>
                 <outlet property="toolBarView" destination="rjd-Gq-WEk" id="xxf-9x-Z2J"/>
                 <outlet property="topHeaderContainerView" destination="yao-ZD-271" id="6Dt-gD-u5U"/>
+                <outlet property="topSeparatorView" destination="1uP-Yj-PLm" id="cod-se-020"/>
                 <outlet property="undoButton" destination="v2b-cF-R7u" id="xpi-IR-yD8"/>
                 <outlet property="view" destination="EUM-2U-3I2" id="2Wo-U9-QYT"/>
             </connections>

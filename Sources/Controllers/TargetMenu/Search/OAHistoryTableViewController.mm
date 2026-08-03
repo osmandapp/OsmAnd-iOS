@@ -62,6 +62,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
     
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longTapHandler:)];

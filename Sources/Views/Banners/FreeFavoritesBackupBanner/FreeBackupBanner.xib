@@ -96,6 +96,7 @@
                 <outlet property="imageView" destination="kUA-vC-GQM" id="XNS-Vq-iZJ"/>
                 <outlet property="leadingSubviewConstraint" destination="9In-jS-AVq" id="ANB-4m-aoO"/>
                 <outlet property="osmAndCloudButton" destination="X7E-aX-qVf" id="VEk-0E-LvB"/>
+                <outlet property="separatorView" destination="xJm-7d-FQ5" id="cod-se-036"/>
                 <outlet property="separatorViewHeightConstraint" destination="S8A-0R-Dxs" id="VFc-Gp-Q0u"/>
                 <outlet property="titleLabel" destination="qXa-fC-2qj" id="npZ-GU-kOI"/>
                 <outlet property="trailingSubviewConstraint" destination="SYj-qk-wc1" id="pB0-P6-tet"/>

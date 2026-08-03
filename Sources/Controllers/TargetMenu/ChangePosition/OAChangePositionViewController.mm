@@ -7,6 +7,7 @@
 //
 
 #import "OAChangePositionViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OASizes.h"
@@ -91,11 +92,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.bottomToolBarDividerView.backgroundColor = [UIColor adaptiveSeparator];
     [_contextLayer enterChangePositionMode:_targetPoint.targetObj];
     _contextLayer.changePositionDelegate = self;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
-    bottomDividerFrame.size.height = 0.5;
+    bottomDividerFrame.size.height = [UIScreen adaptiveSeparatorThickness];
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
     if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])

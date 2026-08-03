@@ -9,6 +9,14 @@
 
 final class СhoicePairedDeviceTableViewCell: SearchDeviceTableViewCell {
     @IBOutlet private weak var checkmarkImageView: UIImageView!
+    @IBOutlet private weak var bottomSeparatorView: UIView!
+    @IBOutlet private weak var bottomSeparatorHeightConstraint: NSLayoutConstraint!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        bottomSeparatorView.backgroundColor = .adaptiveSeparator
+        bottomSeparatorHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+    }
     
     override func configure(item: Device) {
         super.configure(item: item)

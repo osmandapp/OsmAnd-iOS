@@ -71,6 +71,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
     [self registerCells];
     
     _horizontalLine = [CALayer layer];

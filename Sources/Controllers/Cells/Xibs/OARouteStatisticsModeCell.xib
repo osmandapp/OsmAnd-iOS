@@ -90,6 +90,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="contentContainer" destination="lMm-Of-Cn0" id="XgD-WL-Flk"/>
+                <outlet property="dividerView" destination="UWC-ay-0Co" id="cod-se-009"/>
                 <outlet property="iconButton" destination="aJH-ak-zSC" id="aem-ZS-ldc"/>
                 <outlet property="modeButton" destination="EoH-8q-pfl" id="X59-9a-pOP"/>
                 <outlet property="rightIconButton" destination="DVs-5Q-29Y" id="woc-k8-f6S"/>

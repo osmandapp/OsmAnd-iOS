@@ -97,6 +97,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="groupBg"/>
                                         <connections>
+                                            <outlet property="bottomSeparatorHeightConstraint" destination="urB-JK-cPK" id="cod-th-007"/>
+                                            <outlet property="bottomSeparatorView" destination="Wvy-CM-dFA" id="cod-se-033"/>
                                             <outlet property="checkmarkImageView" destination="ZnZ-6b-3p8" id="ZQ2-he-VHk"/>
                                             <outlet property="connectStatusLabel" destination="b6T-qF-BhX" id="dfb-Rz-s3M"/>
                                             <outlet property="deviceImageView" destination="pu1-Zc-sYK" id="FUM-51-HuW"/>

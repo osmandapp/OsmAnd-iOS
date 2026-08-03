@@ -33,6 +33,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.rightActionDividerView.backgroundColor = [UIColor adaptiveSeparator];
 
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;

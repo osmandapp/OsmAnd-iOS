@@ -7,6 +7,7 @@
 //
 
 #import "OASwitchTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OASwitchTableViewCell ()
 
@@ -17,6 +18,12 @@
 @end
 
 @implementation OASwitchTableViewCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.dividerView.backgroundColor = [UIColor adaptiveSeparator];
+}
 
 - (void)dividerVisibility:(BOOL)show
 {

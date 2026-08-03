@@ -14,6 +14,8 @@
 
 @interface OAInfoBottomView () <UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
+
 @end
 
 @implementation OAInfoBottomView
@@ -57,6 +59,7 @@
 {
     [NSBundle.mainBundle loadNibNamed:@"OAInfoBottomView" owner:self options:nil];
     [self addSubview:_contentView];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     _contentView.frame = self.bounds;
     _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     

@@ -40,6 +40,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *disableButton;
 @property (weak, nonatomic) IBOutlet UIButton *enableButton;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @end
 
@@ -94,6 +95,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     [self setupDownloadingCellHelper];
     
     self.enableButton.layer.cornerRadius = 9.;

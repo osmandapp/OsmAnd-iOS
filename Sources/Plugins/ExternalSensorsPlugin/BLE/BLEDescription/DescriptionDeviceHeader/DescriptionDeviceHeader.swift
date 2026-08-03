@@ -16,11 +16,23 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectActivityView: UIActivityIndicatorView!
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
+    @IBOutlet private weak var topDividerView: UIView!
+    @IBOutlet private weak var bottomDividerView: UIView!
+    @IBOutlet private weak var topDividerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomDividerHeightConstraint: NSLayoutConstraint!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPairedDeviceAction: (() -> Void)?
     
     private var device: Device?
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        topDividerView.backgroundColor = .adaptiveSeparator
+        bottomDividerView.backgroundColor = .adaptiveSeparator
+        topDividerHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+        bottomDividerHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+    }
     
     // MARK: - Configure
     func configure(device: Device) {

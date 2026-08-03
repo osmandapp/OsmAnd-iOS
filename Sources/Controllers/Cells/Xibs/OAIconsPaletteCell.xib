@@ -226,6 +226,7 @@
                 <outlet property="descriptionLabelStackView" destination="qcG-On-Sc6" id="qhq-Rr-ScY"/>
                 <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="Qla-HS-OjB"/>
                 <outlet property="separatorOffsetViewWidth" destination="S8O-9z-rpL" id="a0u-Ia-8P6"/>
+                <outlet property="separatorView" destination="fki-YG-97m" id="cod-se-005"/>
                 <outlet property="topButton" destination="6Na-Pk-W0m" id="Elh-4F-GaI"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>

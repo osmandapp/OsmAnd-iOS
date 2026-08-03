@@ -59,9 +59,12 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomSeparatorHeightConstraint" destination="7Fl-xv-PVS" id="cod-th-008"/>
+                <outlet property="bottomSeparatorView" destination="wQu-gh-Vai" id="cod-se-034"/>
                 <outlet property="deviceImageView" destination="VP6-qR-MKM" id="0Wn-nE-IY7"/>
                 <outlet property="separatorBottomInsetLeftConstraint" destination="AJs-rG-wba" id="2wZ-67-jQ9"/>
                 <outlet property="titleLabel" destination="dJi-6c-xLK" id="5zY-HA-8i0"/>
+                <outlet property="topSeparatorHeightConstraint" destination="51y-kQ-Onu" id="cod-th-010"/>
                 <outlet property="topSeparatorView" destination="7Pi-Dk-jYc" id="kTf-Ad-ghI"/>
             </connections>
             <point key="canvasLocation" x="-28.244274809160306" y="52.112676056338032"/>

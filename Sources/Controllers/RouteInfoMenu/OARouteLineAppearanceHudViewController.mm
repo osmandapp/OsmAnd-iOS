@@ -204,6 +204,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *headerSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerSeparatorHeightConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonTrailingConstraint;
@@ -388,6 +391,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.headerSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.headerSeparatorHeightConstraint.constant = [UIScreen adaptiveSeparatorThickness];
+    self.bottomDividerView.backgroundColor = [UIColor adaptiveSeparator];
 
     [self generateData];
     [self setupView];

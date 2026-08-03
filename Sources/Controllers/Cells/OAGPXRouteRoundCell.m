@@ -20,6 +20,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     
     _rightIconImageVIew.image = [UIImage templateImageNamed:@"ic_custom_trip"];
     _distanceImageView.image = [UIImage templateImageNamed:@"ic_custom_length"];

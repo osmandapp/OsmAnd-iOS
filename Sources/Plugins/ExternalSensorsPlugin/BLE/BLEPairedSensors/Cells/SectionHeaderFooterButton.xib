@@ -48,6 +48,8 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomDividerHeightConstraint" destination="ubh-OB-dOE" id="cod-th-009"/>
+                <outlet property="bottomDividerView" destination="AYX-pK-pQb" id="cod-se-035"/>
                 <outlet property="button" destination="H21-Vd-Lip" id="AYw-0o-xub"/>
             </connections>
             <point key="canvasLocation" x="-54.198473282442748" y="55.281690140845072"/>

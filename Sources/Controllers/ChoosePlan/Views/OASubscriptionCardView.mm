@@ -97,6 +97,7 @@
 
 - (void)commonInit
 {
+    self.viewBottomSeparator.backgroundColor = [UIColor adaptiveSeparator];
     self.labelTitle.font = [UIFont scaledSystemFontOfSize:34 weight:UIFontWeightBold];
     self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];

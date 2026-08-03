@@ -18,6 +18,7 @@
                 <outlet property="leftButton" destination="E9v-GD-wqu" id="OTn-SJ-Q8H"/>
                 <outlet property="leftIconView" destination="A82-Si-Nre" id="ZLo-MK-zj6"/>
                 <outlet property="rightButton" destination="0lf-h4-bKO" id="VBP-6Q-pgi"/>
+                <outlet property="separatorView" destination="0YQ-hO-f8m" id="cod-se-018"/>
                 <outlet property="sliderView" destination="hDT-Xv-tZT" id="xh5-6k-kT4"/>
                 <outlet property="tableView" destination="LmH-OX-TLM" id="M0V-nQ-WN1"/>
                 <outlet property="titleView" destination="lfT-nN-zar" id="CWo-U4-b1x"/>

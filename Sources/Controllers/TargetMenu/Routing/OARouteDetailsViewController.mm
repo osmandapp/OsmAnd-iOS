@@ -499,6 +499,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.bottomToolBarDividerView.backgroundColor = [UIColor adaptiveSeparator];
 
     OAEmissionHelper *emissionHelper = [OAEmissionHelper sharedInstance];
     OAMotorType *motorType = [emissionHelper getMotorTypeForMode:[self.routingHelper getAppMode]];
@@ -520,7 +522,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     _tableView.estimatedRowHeight = 125.;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
-    bottomDividerFrame.size.height = 0.5;
+    bottomDividerFrame.size.height = [UIScreen adaptiveSeparatorThickness];
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
     [self setupShareMenu];

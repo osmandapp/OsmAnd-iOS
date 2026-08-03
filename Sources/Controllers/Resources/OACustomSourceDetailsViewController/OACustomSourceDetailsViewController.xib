@@ -14,6 +14,7 @@
                 <outlet property="actionButton" destination="QVS-be-wRN" id="xrG-Up-fp9"/>
                 <outlet property="backButton" destination="NLm-L3-v9H" id="VAX-h3-ngm"/>
                 <outlet property="navBarView" destination="f84-f4-qvY" id="qyO-kZ-ngQ"/>
+                <outlet property="separatorView" destination="Zxh-vE-99x" id="cod-se-013"/>
                 <outlet property="tableView" destination="DiK-Ha-FOj" id="sK0-N1-hb4"/>
                 <outlet property="titleView" destination="9j4-Tn-O5z" id="Qu9-Y2-rmM"/>
                 <outlet property="view" destination="fdK-Qo-Xuh" id="z5w-Ei-clv"/>

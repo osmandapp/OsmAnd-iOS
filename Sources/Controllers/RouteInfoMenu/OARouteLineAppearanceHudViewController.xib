@@ -19,8 +19,11 @@
                 <outlet property="backButtonContainerView" destination="ZNq-to-nq3" id="pua-VM-mU3"/>
                 <outlet property="backButtonLeadingConstraint" destination="QKW-sr-AxL" id="5dE-Ic-loc"/>
                 <outlet property="backNavBarButton" destination="gJn-N4-lwR" id="gOG-Wr-gSO"/>
+                <outlet property="bottomDividerView" destination="Plt-VQ-IPp" id="cod-se-015"/>
                 <outlet property="contentContainer" destination="QyC-iu-oJ2" id="Gae-uA-qdV"/>
                 <outlet property="descriptionNavBarView" destination="ijY-eK-eks" id="9DP-O9-0fA"/>
+                <outlet property="headerSeparatorHeightConstraint" destination="4uW-mr-c17" id="cod-th-002"/>
+                <outlet property="headerSeparatorView" destination="IjP-Ok-skA" id="cod-se-014"/>
                 <outlet property="scrollableView" destination="ZPG-6u-And" id="Vi4-H7-kba"/>
                 <outlet property="sliderView" destination="0y8-Bd-jz2" id="Bbg-mW-qi4"/>
                 <outlet property="statusBarBackgroundView" destination="Y3O-U6-e8m" id="cAF-E1-kGg"/>

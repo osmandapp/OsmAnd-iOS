@@ -15,6 +15,7 @@
                 <outlet property="cancelButton" destination="dj9-4i-jfO" id="3tL-vf-RvR"/>
                 <outlet property="doneButton" destination="SjJ-8f-vqm" id="xcN-37-6Tk"/>
                 <outlet property="navbarView" destination="Bs9-2L-ti4" id="ibU-c4-UdB"/>
+                <outlet property="separatorView" destination="kiz-Fv-xhW" id="cod-se-016"/>
                 <outlet property="tableView" destination="NrM-78-nBe" id="TGz-iw-9pj"/>
                 <outlet property="titleLabel" destination="krK-4A-igo" id="uhV-5C-3aD"/>
                 <outlet property="view" destination="Q3I-vz-wne" id="ypL-hP-jmO"/>

@@ -33,6 +33,8 @@
     [super viewDidLoad];
     [self setupNavBarHeight];
     [self.backImageButton setImage:[UIImage rtlImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    _tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);

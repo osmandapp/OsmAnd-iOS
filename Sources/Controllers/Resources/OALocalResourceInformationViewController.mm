@@ -44,6 +44,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor adaptiveSeparator] CGColor];

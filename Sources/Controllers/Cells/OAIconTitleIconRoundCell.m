@@ -8,6 +8,7 @@
 
 #import "OAIconTitleIconRoundCell.h"
 #import "OAUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kTitleTopBottomMargin 13.0
 #define defaultCellHeight 48.0
@@ -22,6 +23,12 @@ static UIFont *_titleFont;
 {
     BOOL _bottomCorners;
     BOOL _topCorners;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
 }
 
 + (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth

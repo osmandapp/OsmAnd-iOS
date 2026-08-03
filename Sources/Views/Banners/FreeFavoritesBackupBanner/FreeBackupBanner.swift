@@ -27,6 +27,7 @@ final class FreeBackupBanner: UIView {
     
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var closeButton: UIButton!
+    @IBOutlet private weak var separatorView: UIView!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
             osmAndCloudButton.setTitle(localizedString("get_osmand_cloud"), for: .normal)
@@ -35,8 +36,13 @@ final class FreeBackupBanner: UIView {
     
     @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
         didSet {
-            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
+            separatorViewHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
         }
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        separatorView.backgroundColor = .adaptiveSeparator
     }
     
     var didCloseButtonAction: (() -> Void)?

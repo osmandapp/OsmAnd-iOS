@@ -54,6 +54,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 @property (nonatomic) UIImage *minZoomTileImage;
 @property (nonatomic) UIImage *maxZoomTileImage;
 
@@ -192,6 +193,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)
                                                         andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];

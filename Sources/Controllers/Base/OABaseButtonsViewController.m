@@ -57,6 +57,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.separatorBottomView.backgroundColor = [UIColor adaptiveSeparator];
 
     [self updateBottomButtons];
 }

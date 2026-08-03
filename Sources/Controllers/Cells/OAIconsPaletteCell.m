@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeight;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @end
 
@@ -28,6 +29,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     [self setupViews];
     [self topButtonVisibility:NO];
 }

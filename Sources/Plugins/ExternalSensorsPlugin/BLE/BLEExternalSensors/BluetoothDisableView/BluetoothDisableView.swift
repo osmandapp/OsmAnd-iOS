@@ -22,6 +22,11 @@ final class BluetoothDisableView: UIView {
     }
     
     @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var topDividerView: UIView!
+    @IBOutlet private weak var separatorView: UIView!
+    @IBOutlet private weak var bottomDividerView: UIView!
+    @IBOutlet private weak var topDividerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomDividerHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var settingsButton: UIButton! {
         didSet {
             settingsButton.setTitle(localizedString("ant_plus_open_settings"), for: .normal)
@@ -30,8 +35,17 @@ final class BluetoothDisableView: UIView {
     
     @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
         didSet {
-            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
+            separatorViewHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
         }
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        topDividerView.backgroundColor = .adaptiveSeparator
+        separatorView.backgroundColor = .adaptiveSeparator
+        bottomDividerView.backgroundColor = .adaptiveSeparator
+        topDividerHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+        bottomDividerHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
     }
     
     // MARK: - @IBActions

@@ -98,11 +98,16 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomDividerHeightConstraint" destination="RHS-8i-Liw" id="cod-th-006"/>
+                <outlet property="bottomDividerView" destination="ebP-O7-4Aq" id="cod-se-032"/>
                 <outlet property="descriptionLabel" destination="3dG-e2-OE4" id="3To-Oj-fBx"/>
                 <outlet property="imageView" destination="Lhc-H7-DS9" id="0eS-dP-o74"/>
+                <outlet property="separatorView" destination="jnD-t4-TiZ" id="cod-se-031"/>
                 <outlet property="separatorViewHeightConstraint" destination="5My-lt-sqG" id="2xJ-jS-cgz"/>
                 <outlet property="settingsButton" destination="i2u-50-9tC" id="51B-jj-HwY"/>
                 <outlet property="titleLabel" destination="K2I-6s-jjW" id="hNI-Yw-Tpm"/>
+                <outlet property="topDividerHeightConstraint" destination="jzc-gT-FPh" id="cod-th-005"/>
+                <outlet property="topDividerView" destination="Guc-jW-K1C" id="cod-se-030"/>
             </connections>
             <point key="canvasLocation" x="99.236641221374043" y="-85.211267605633807"/>
         </view>

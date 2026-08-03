@@ -16,6 +16,7 @@
                 <outlet property="leftButton" destination="5z6-ty-UG8" id="gB0-6k-KxZ"/>
                 <outlet property="leftIconView" destination="MYf-5X-Eur" id="TLG-21-Ltv"/>
                 <outlet property="rightButton" destination="q5p-SZ-G8J" id="NzQ-JM-xXo"/>
+                <outlet property="separatorView" destination="uri-VU-2iv" id="cod-se-017"/>
                 <outlet property="tableView" destination="0LQ-wU-CWL" id="UTm-GM-MxC"/>
                 <outlet property="titleView" destination="E5l-P8-lOD" id="ZJN-yq-Sdn"/>
             </connections>

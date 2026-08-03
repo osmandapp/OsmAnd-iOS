@@ -104,9 +104,11 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomSeparatorView" destination="iIX-79-Rqj" id="cod-se-012"/>
                 <outlet property="dateCollectionView" destination="IOB-SJ-nfi" id="Z4t-hq-2UG"/>
                 <outlet property="playButton" destination="TBr-ZQ-5ff" id="gvz-6Q-KfN"/>
                 <outlet property="timeSliderView" destination="H2C-uP-knh" id="fZf-5P-ZH3"/>
+                <outlet property="topSeparatorView" destination="cAi-yw-VnC" id="cod-se-011"/>
                 <outlet property="weatherStackView" destination="F33-ES-4SU" id="5lS-ws-Kcc"/>
             </connections>
             <point key="canvasLocation" x="-179.30232558139534" y="136.80257510729615"/>

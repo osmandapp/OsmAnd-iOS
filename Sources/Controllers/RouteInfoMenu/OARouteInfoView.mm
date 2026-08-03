@@ -905,7 +905,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, goLabelOffset, 0, 0);
     }
     
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, [UIScreen adaptiveSeparatorThickness]);
     
     _sliderView.hidden = isLandscape;
     

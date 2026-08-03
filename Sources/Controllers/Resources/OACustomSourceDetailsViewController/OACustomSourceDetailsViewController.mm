@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @end
 
@@ -149,6 +150,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColor.clearColor;

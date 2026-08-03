@@ -112,6 +112,7 @@
             <connections>
                 <outlet property="alertImageView" destination="NF3-p3-V1W" id="jsh-uy-Cuq"/>
                 <outlet property="keyContainerView" destination="hCV-JO-h52" id="ab1-F5-1Ym"/>
+                <outlet property="separatorView" destination="LbS-A2-v0k" id="cod-se-002"/>
                 <outlet property="titleContainerView" destination="EBn-gp-hpW" id="SSE-U4-ffX"/>
                 <outlet property="titleLabel" destination="S35-qG-G9Y" id="C9q-EA-t4L"/>
                 <outlet property="warningContainerView" destination="NmR-mL-PUA" id="O21-WL-U0d"/>

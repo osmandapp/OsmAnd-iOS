@@ -28,6 +28,7 @@ static UIFont *_titleFont;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

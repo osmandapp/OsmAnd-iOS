@@ -17,6 +17,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.dividerView.backgroundColor = [UIColor adaptiveSeparator];
 
     self.selectionButtonContainer.layer.cornerRadius = 10.75;
     self.selectionButtonContainer.layer.borderWidth = 1.5;

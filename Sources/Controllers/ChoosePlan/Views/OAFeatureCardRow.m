@@ -84,6 +84,7 @@
 
 - (void) commonInit
 {
+    self.viewBottomSeparator.backgroundColor = [UIColor adaptiveSeparator];
     self.labelDescription.hidden = _type != EOAFeatureCardRowInclude;
     self.imageViewFirstRightIcon.hidden = _type != EOAFeatureCardRowPlan;
     self.viewBottomSeparator.hidden = _type == EOAFeatureCardRowInclude;

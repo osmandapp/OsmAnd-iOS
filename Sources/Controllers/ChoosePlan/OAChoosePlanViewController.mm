@@ -113,6 +113,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.viewNavigationSeparator.backgroundColor = [UIColor adaptiveSeparator];
 
     self.scrollView.delegate = self;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;

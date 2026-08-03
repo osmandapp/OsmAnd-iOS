@@ -32,6 +32,8 @@
 
 @interface OATrackMenuHeaderView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomDividerHeightConstraint;
+
 @end
 
 @implementation OATrackMenuHeaderView
@@ -73,6 +75,8 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.bottomDividerView.backgroundColor = [UIColor adaptiveSeparator];
+    self.bottomDividerHeightConstraint.constant = [UIScreen adaptiveSeparatorThickness];
 
     self.statisticsCollectionView.delegate = self;
     self.statisticsCollectionView.dataSource = self;

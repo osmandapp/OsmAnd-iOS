@@ -76,6 +76,7 @@
                 <outlet property="button" destination="fIu-LW-wzj" id="h6w-id-hxN"/>
                 <outlet property="contentContainer" destination="nJE-Cm-rxU" id="lJ6-JX-Vqf"/>
                 <outlet property="label" destination="Hdr-qR-uSf" id="FYs-fJ-dFy"/>
+                <outlet property="separatorView" destination="FnC-WM-WP2" id="cod-se-001"/>
             </connections>
             <point key="canvasLocation" x="67.938931297709928" y="-2.8169014084507045"/>
         </tableViewCell>

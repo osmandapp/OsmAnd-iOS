@@ -10,6 +10,14 @@ import UIKit
 
 final class SectionHeaderFooterButton: UITableViewHeaderFooterView {
     @IBOutlet private weak var button: UIButton!
+    @IBOutlet private weak var bottomDividerView: UIView!
+    @IBOutlet private weak var bottomDividerHeightConstraint: NSLayoutConstraint!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        bottomDividerView.backgroundColor = .adaptiveSeparator
+        bottomDividerHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+    }
     
     static var nib: UINib {
         UINib(nibName: String(describing: self), bundle: nil)

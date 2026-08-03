@@ -227,6 +227,7 @@
                 <outlet property="bottomRightIcon" destination="W3j-Po-VQQ" id="Fzl-Ve-fdh"/>
                 <outlet property="bottomRightTitle" destination="x6Y-UT-93h" id="wwH-MV-9a5"/>
                 <outlet property="bottomRightView" destination="egg-Ml-OGh" id="MHS-Ti-j9x"/>
+                <outlet property="separatorHeightConstraint" destination="YGL-31-0vg" id="cod-th-011"/>
                 <outlet property="separatorView" destination="Azg-8w-bDb" id="0ox-G9-HRa"/>
                 <outlet property="separatorWithBottomButtonsConstraint" destination="1UR-dg-CUd" id="q0i-l0-9ar"/>
                 <outlet property="topButtonsNoBottomButtonsConstraint" destination="Zmw-eg-c7J" id="rAU-Ih-Bxa"/>

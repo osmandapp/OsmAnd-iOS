@@ -8,8 +8,11 @@
 
 #import "OABaseTableViewController.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseTableViewController()
+
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @end
 
@@ -26,6 +29,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
 }
 
 - (void) applyLocalization

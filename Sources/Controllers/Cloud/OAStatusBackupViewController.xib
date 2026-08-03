@@ -12,6 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAStatusBackupViewController">
             <connections>
                 <outlet property="bottomButtonsContainerView" destination="Zcf-ec-NaU" id="Wsp-ca-xaC"/>
+                <outlet property="bottomSeparatorHeightConstraint" destination="9BX-py-vjK" id="cod-th-001"/>
+                <outlet property="bottomSeparatorView" destination="W8p-yd-t9f" id="cod-se-010"/>
                 <outlet property="contentView" destination="n0A-4x-QAp" id="QSa-iw-WIM"/>
                 <outlet property="leftBottomButton" destination="9q6-TF-xEY" id="Pl0-oH-wrs"/>
                 <outlet property="rightBottomButton" destination="OtT-YD-HbK" id="par-fO-hLt"/>

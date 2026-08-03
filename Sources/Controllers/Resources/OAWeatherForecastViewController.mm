@@ -117,6 +117,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [UIColor adaptiveSeparator];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

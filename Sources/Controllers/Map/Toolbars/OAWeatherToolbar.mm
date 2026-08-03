@@ -50,6 +50,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 @property (weak, nonatomic) IBOutlet OAWeatherTimeSegmentedSlider *timeSliderView;
 @property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIView *topSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *bottomSeparatorView;
 
 @end
 
@@ -228,6 +230,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.topSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.bottomSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOpacity = .2;
     self.layer.shadowRadius = 5.;

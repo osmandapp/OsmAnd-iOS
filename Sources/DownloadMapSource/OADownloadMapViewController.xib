@@ -17,6 +17,7 @@
                 <outlet property="downloadButton" destination="wqi-dd-jcU" id="OFC-qa-zOf"/>
                 <outlet property="navBar" destination="MiG-kc-i6V" id="K4K-vS-pUX"/>
                 <outlet property="navBarBackground" destination="1p9-n9-owc" id="fY2-gQ-mJJ"/>
+                <outlet property="separatorView" destination="olN-PV-UVk" id="cod-se-027"/>
                 <outlet property="tableView" destination="rnN-AE-pZ6" id="PeQ-df-KNL"/>
                 <outlet property="titleView" destination="eYU-CN-sQT" id="usp-s5-SCx"/>
                 <outlet property="view" destination="QOL-bQ-xbz" id="GcO-3E-PrS"/>

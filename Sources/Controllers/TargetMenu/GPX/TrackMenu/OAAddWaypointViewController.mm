@@ -98,6 +98,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.bottomSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.bottomSeparatorHeight.constant = [UIScreen adaptiveSeparatorThickness];
 
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];

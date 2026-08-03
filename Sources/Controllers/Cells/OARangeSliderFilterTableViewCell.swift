@@ -16,9 +16,13 @@ final class OARangeSliderFilterTableViewCell: UITableViewCell {
     @IBOutlet weak var minTextField: UITextField!
     @IBOutlet weak var maxTextField: UITextField!
     @IBOutlet weak var rangeSlider: OARangeSlider!
+    @IBOutlet private weak var verticalDividerView: UIView!
+    @IBOutlet private weak var horizontalDividerView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        verticalDividerView.backgroundColor = .adaptiveSeparator
+        horizontalDividerView.backgroundColor = .adaptiveSeparator
         setupSliderView()
     }
     

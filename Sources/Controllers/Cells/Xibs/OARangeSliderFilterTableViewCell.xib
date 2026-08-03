@@ -146,6 +146,7 @@
                 <constraint firstItem="98o-LP-9NV" firstAttribute="centerX" secondItem="0vC-Lq-4zt" secondAttribute="centerX" id="vX8-SC-eNq"/>
             </constraints>
             <connections>
+                <outlet property="horizontalDividerView" destination="d1b-20-NsX" id="cod-se-008"/>
                 <outlet property="maxLabel" destination="LNq-ji-71i" id="fNt-fP-NKl"/>
                 <outlet property="maxTextField" destination="J9T-2f-rtP" id="kjd-5i-pMi"/>
                 <outlet property="maxValueLabel" destination="DRi-n5-0nI" id="aSi-Wp-TFN"/>
@@ -153,6 +154,7 @@
                 <outlet property="minTextField" destination="jho-0O-HB2" id="O5A-tP-p33"/>
                 <outlet property="minValueLabel" destination="W1c-C5-RV7" id="QEr-sz-WBX"/>
                 <outlet property="rangeSlider" destination="feN-Gu-6uj" id="MMe-GF-9tj"/>
+                <outlet property="verticalDividerView" destination="98o-LP-9NV" id="cod-se-007"/>
             </connections>
             <point key="canvasLocation" x="261" y="111"/>
         </tableViewCell>

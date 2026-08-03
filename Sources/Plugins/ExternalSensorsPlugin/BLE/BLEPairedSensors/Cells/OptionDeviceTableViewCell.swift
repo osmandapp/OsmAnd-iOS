@@ -16,6 +16,9 @@ final class OptionDevice: Device {
 
 final class OptionDeviceTableViewCell: UITableViewCell {
     @IBOutlet weak var topSeparatorView: UIView!
+    @IBOutlet private weak var topSeparatorHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomSeparatorView: UIView!
+    @IBOutlet private weak var bottomSeparatorHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var deviceImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     
@@ -32,6 +35,14 @@ final class OptionDeviceTableViewCell: UITableViewCell {
         imgView.image = UIImage(named: "ic_checkmark_default")
         return imgView
     }()
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        topSeparatorView.backgroundColor = .adaptiveSeparator
+        bottomSeparatorView.backgroundColor = .adaptiveSeparator
+        topSeparatorHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+        bottomSeparatorHeightConstraint.constant = UIScreen.adaptiveSeparatorThickness
+    }
     
     func configure(optionDevice: OptionDevice, widgetType: WidgetType, title: String) {
         backgroundColor = UIColor.groupBg

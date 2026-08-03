@@ -8,10 +8,12 @@
 
 #import "OAFoldersCell.h"
 #import "OAFoldersCollectionView.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAFoldersCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *rightActionContainerView;
+@property (weak, nonatomic) IBOutlet UIView *rightActionDividerView;
 
 @end
 
@@ -20,6 +22,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.rightActionDividerView.backgroundColor = [UIColor adaptiveSeparator];
 }
 
 - (void)rightActionButtonVisibility:(BOOL)show

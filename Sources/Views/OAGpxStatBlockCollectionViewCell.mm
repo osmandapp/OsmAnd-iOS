@@ -7,12 +7,14 @@
 //
 
 #import "OAGpxStatBlockCollectionViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGpxStatBlockCollectionViewCell
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.separatorView.backgroundColor = [UIColor adaptiveSeparator];
     self.valueView.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
 }
 

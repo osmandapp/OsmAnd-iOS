@@ -13,6 +13,7 @@ final class KeyTableViewCell: UITableViewCell {
     @IBOutlet private weak var keyContainerView: UIView!
     @IBOutlet private weak var warningContainerView: UIView!
     @IBOutlet private weak var alertImageView: UIImageView!
+    @IBOutlet private weak var separatorView: UIView!
     
     private let horizontalSpace: CGFloat = 25
     private let verticalSpace: CGFloat = 23
@@ -27,6 +28,7 @@ final class KeyTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        separatorView.backgroundColor = .adaptiveSeparator
         setupKeyView()
     }
     

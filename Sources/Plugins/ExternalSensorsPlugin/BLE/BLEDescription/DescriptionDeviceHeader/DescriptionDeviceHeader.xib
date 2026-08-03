@@ -128,6 +128,8 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="bottomDividerHeightConstraint" destination="7RV-6K-U0a" id="cod-th-004"/>
+                <outlet property="bottomDividerView" destination="Xg5-ru-81P" id="cod-se-029"/>
                 <outlet property="connectActivityView" destination="h0J-ik-bhZ" id="oJn-nJ-grk"/>
                 <outlet property="connectButton" destination="C4V-Q7-dfT" id="00a-Gm-SVL"/>
                 <outlet property="connectStatusLabel" destination="yzi-QD-JYr" id="bY8-b0-oXv"/>
@@ -135,6 +137,8 @@
                 <outlet property="deviceNameLabel" destination="sah-A4-PB2" id="tGO-oV-icR"/>
                 <outlet property="imageContainerView" destination="0uJ-Dc-WGi" id="ud8-k9-OK4"/>
                 <outlet property="signalIndicatorImageView" destination="0OA-N9-CDl" id="fvK-UD-R9f"/>
+                <outlet property="topDividerHeightConstraint" destination="uMs-Hq-NxD" id="cod-th-003"/>
+                <outlet property="topDividerView" destination="NkN-F9-TSx" id="cod-se-028"/>
             </connections>
             <point key="canvasLocation" x="130.53435114503816" y="16.901408450704228"/>
         </view>

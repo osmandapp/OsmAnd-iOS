@@ -19,6 +19,7 @@
                 <outlet property="doneButton" destination="xxM-tZ-ruc" id="O47-5i-lib"/>
                 <outlet property="doneButtonContainerView" destination="ZCE-pt-ron" id="izl-MN-szy"/>
                 <outlet property="doneButtonTrailingConstraint" destination="qkG-BL-tY7" id="7KK-jI-sXr"/>
+                <outlet property="headerSeparatorView" destination="WZz-Dd-qQQ" id="cod-se-025"/>
                 <outlet property="scrollableView" destination="Uoh-AI-2F5" id="iMa-gt-v4X"/>
                 <outlet property="sliderView" destination="Yei-Pg-q9A" id="kHU-6h-g1R"/>
                 <outlet property="statusBarBackgroundView" destination="wCQ-jO-kha" id="MJv-ZF-zKK"/>

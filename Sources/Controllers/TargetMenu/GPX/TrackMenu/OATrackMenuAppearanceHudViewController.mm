@@ -95,6 +95,7 @@ static const NSInteger kColorsSection = 1;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
+@property (weak, nonatomic) IBOutlet UIView *headerSeparatorView;
 
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
@@ -514,6 +515,8 @@ static const NSInteger kColorsSection = 1;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.headerSeparatorView.backgroundColor = [UIColor adaptiveSeparator];
+    self.bottomSeparatorHeight.constant = [UIScreen adaptiveSeparatorThickness];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

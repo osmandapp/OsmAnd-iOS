@@ -210,6 +210,7 @@
                 <outlet property="iconView" destination="SCa-JN-ypM" id="aY2-WL-pwW"/>
                 <outlet property="locationContainerView" destination="IDx-nd-Kah" id="rqw-wR-Uae"/>
                 <outlet property="locationSeparatorView" destination="2sI-4R-ptC" id="5Ha-rP-g8h"/>
+                <outlet property="regionDividerView" destination="Gab-I3-aZY" id="cod-se-006"/>
                 <outlet property="regionNoDirectionConstraint" destination="c7q-tp-zTi" id="uNC-d7-jmO"/>
                 <outlet property="regionTextView" destination="i7t-Wf-A6C" id="T1j-S1-3zh"/>
                 <outlet property="regionWithDirectionConstraint" destination="pRe-E4-ffX" id="rYa-Gv-zBi"/>

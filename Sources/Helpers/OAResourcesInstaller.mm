@@ -445,6 +445,14 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
                 [plugin clearCachedData];
             }
+
+            if (success)
+            {
+                const auto resource = _app.resourcesManager->getLocalResource(resourceId);
+                if (resource && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion ||
+                                 resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion))
+                    [_app.data.mapLayerChangeObservable notifyEvent];
+            }
         }
 
         // Remove downloaded file anyways

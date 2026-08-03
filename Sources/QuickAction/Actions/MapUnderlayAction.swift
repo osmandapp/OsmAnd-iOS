@@ -73,8 +73,11 @@ final class MapUnderlayAction: OASwitchableAction {
     }
     
     override func nextSelectedItem() -> String {
-        guard let sources: [[String]] = loadListFromParams() as? [[String]], let next = next(fromSource: sources, defValue: noUnderlay) else { return "" }
-        return next
+        guard let sources = loadListFromParams() as? [[String]] else { return "" }
+        let sourcesByName = sources.map { source in
+            [source.first == noUnderlay ? noUnderlay : source.last ?? ""]
+        }
+        return next(fromSource: sourcesByName, defValue: noUnderlay) ?? ""
     }
     
     override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
@@ -113,17 +116,23 @@ final class MapUnderlayAction: OASwitchableAction {
             return
         }
         
-        execute(withParams: [nextSelectedItem()])
+        let nextItem = nextSelectedItem()
+        if nextItem == noUnderlay {
+            execute(withParams: [noUnderlay])
+            return
+        }
+        guard let nextSource = sources.first(where: { $0.last == nextItem }) else { return }
+        execute(withParams: nextSource)
     }
     
     override func execute(withParams params: [String]) {
         let app = OsmAndApp.swiftInstance()
-        guard let param = params.first else { return }
-        let hasUnderlay = param != noUnderlay
+        guard let variant = params.first, let name = params.last else { return }
+        let hasUnderlay = variant != noUnderlay
         OAAppSettings.sharedManager().setUnderlayOpacitySliderVisibility(hasUnderlay)
         if hasUnderlay {
             var newMapSource: OAMapSource?
-            for resource in onlineMapSources where resource.mapSource().name == param {
+            for resource in onlineMapSources where resource.mapSource().variant == variant && resource.mapSource().name == name {
                 newMapSource = resource.mapSource()
                 break
             }

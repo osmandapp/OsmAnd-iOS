@@ -375,7 +375,7 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
+        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper favoriteGroups];
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
             [names addObject:OALocalizedString(@"favorites_item")];

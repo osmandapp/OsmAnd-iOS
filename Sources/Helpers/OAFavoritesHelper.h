@@ -88,7 +88,7 @@
              pinned:(BOOL)pinned
     saveImmediately:(BOOL)saveImmediately;
 
-+ (NSArray<OAFavoriteGroup *> *)getFavoriteGroups;
++ (NSArray<OAFavoriteGroup *> *)favoriteGroups;
 
 + (void) addFavoriteGroup:(NSString *)name
                     color:(UIColor *)color

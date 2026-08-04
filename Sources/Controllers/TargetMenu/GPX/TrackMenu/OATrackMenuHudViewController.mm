@@ -2051,7 +2051,7 @@
     _editingWaypointsGroupName = groupName;
     _groupColor = groupColor;
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
         [groupNames addObject:group.name];
     }

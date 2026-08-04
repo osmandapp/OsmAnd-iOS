@@ -46,7 +46,7 @@
     [super initialization];
 
     _settings = [OAAppSettings sharedManager];
-    self.existingItems = [[OAFavoritesHelper getFavoriteGroups] mutableCopy];
+    self.existingItems = [[OAFavoritesHelper favoriteGroups] mutableCopy];
 }
 
 - (EOASettingsItemType) type

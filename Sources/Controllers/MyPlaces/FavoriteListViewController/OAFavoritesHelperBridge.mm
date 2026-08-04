@@ -121,7 +121,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
         if (_favoriteFoldersCache)
             return _favoriteFoldersCache;
 
-        NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper getFavoriteGroups] ?: @[];
+        NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper favoriteGroups] ?: @[];
         NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
         NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
         [groups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger index, BOOL * _Nonnull stop) {
@@ -141,7 +141,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 - (NSArray<NSString *> *)favoriteGroupNames
 {
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
         [groupNames addObject:group.name];
 
     return [groupNames copy];
@@ -416,7 +416,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     }
 
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
     {
         NSString *favoriteGroupName = favoriteGroup.name;
         BOOL isInsideSelectedGroup = NO;
@@ -1032,7 +1032,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 {
     NSMutableArray<OAFavoriteGroup *> *result = [NSMutableArray array];
     NSString *parentGroupName = groupName ?: @"";
-    for (OAFavoriteGroup *favoriteGroup in [[OAFavoritesHelper getFavoriteGroups] copy])
+    for (OAFavoriteGroup *favoriteGroup in [[OAFavoritesHelper favoriteGroups] copy])
     {
         if ([self isGroupName:favoriteGroup.name insideOrEqualToGroupName:parentGroupName])
             [result addObject:favoriteGroup];
@@ -1046,7 +1046,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     if (identifier.length == 0)
         return nil;
 
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
         for (OAFavoriteItem *point in group.points)
         {

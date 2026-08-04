@@ -156,7 +156,7 @@
         return NO;
 
     NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
     {
         NSString *favoriteGroupName = favoriteGroup.name;
         if ([favoriteGroupName hasPrefix:nestedPrefix])

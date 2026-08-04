@@ -9,8 +9,12 @@ import UIKit
 
 final class PlanRoutePointCell: UITableViewCell {
 
+    private static let horizontalInset: CGFloat = 16
     private static let circleSize: CGFloat = 28
     private static let deleteSize: CGFloat = 24
+    private static let deleteNumberSpacing: CGFloat = 12
+    private static let numberTextSpacing: CGFloat = 16
+    private static let textLeadingInset = horizontalInset + deleteSize + deleteNumberSpacing + circleSize + numberTextSpacing
 
     var onDelete: (() -> Void)?
 
@@ -30,6 +34,10 @@ final class PlanRoutePointCell: UITableViewCell {
     }
 
     func configure(with point: PlanRoutePoint, tintColor: UIColor) {
+        separatorInset = UIEdgeInsets(top: 0,
+                                      left: Self.textLeadingInset,
+                                      bottom: 0,
+                                      right: Self.horizontalInset)
         numberLabel.text = "\(point.index + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
@@ -76,12 +84,12 @@ final class PlanRoutePointCell: UITableViewCell {
         }
 
         NSLayoutConstraint.activate([
-            deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             deleteButton.widthAnchor.constraint(equalToConstant: Self.deleteSize),
             deleteButton.heightAnchor.constraint(equalToConstant: Self.deleteSize),
 
-            numberContainer.leadingAnchor.constraint(equalTo: deleteButton.trailingAnchor, constant: 12),
+            numberContainer.leadingAnchor.constraint(equalTo: deleteButton.trailingAnchor, constant: Self.deleteNumberSpacing),
             numberContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             numberContainer.widthAnchor.constraint(equalToConstant: Self.circleSize),
             numberContainer.heightAnchor.constraint(equalToConstant: Self.circleSize),
@@ -90,8 +98,8 @@ final class PlanRoutePointCell: UITableViewCell {
             numberLabel.leadingAnchor.constraint(greaterThanOrEqualTo: numberContainer.leadingAnchor, constant: 2),
             numberLabel.trailingAnchor.constraint(lessThanOrEqualTo: numberContainer.trailingAnchor, constant: -2),
 
-            textStack.leadingAnchor.constraint(equalTo: numberContainer.trailingAnchor, constant: 12),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            textStack.leadingAnchor.constraint(equalTo: numberContainer.trailingAnchor, constant: Self.numberTextSpacing),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8)
         ])

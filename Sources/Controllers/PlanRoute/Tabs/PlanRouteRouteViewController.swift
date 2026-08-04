@@ -21,11 +21,20 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let headerMenu: UIMenu?
         let rows: [Row]
         let isStartNewSegment: Bool
+
+        var hasProfileGroupHeaders: Bool {
+            rows.contains {
+                if case .profileGroup = $0 { return true }
+                return false
+            }
+        }
     }
 
     private static let sectionHorizontalInset: CGFloat = 16
     private static let separatorLeftInset: CGFloat = 76
     private static let bottomContentInset: CGFloat = 72
+    private static let pointRowHeight: CGFloat = 68
+    private static let compactPointRowHeight: CGFloat = 53
 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
@@ -362,6 +371,15 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension PlanRouteRouteViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let section = sections[indexPath.section]
+        guard !section.isStartNewSegment else { return UITableView.automaticDimension }
+        if case .point = section.rows[indexPath.row] {
+            return section.hasProfileGroupHeaders ? Self.compactPointRowHeight : Self.pointRowHeight
+        }
+        return UITableView.automaticDimension
+    }
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard sections[section].headerTitle != nil else { return 0 }
         return sections[section].headerSubtitle != nil ? 60 : 44

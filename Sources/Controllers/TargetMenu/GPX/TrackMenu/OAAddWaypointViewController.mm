@@ -91,6 +91,13 @@
         auto rect = _currentGpx.getRect;
         movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
     }
+
+    if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+    {
+        OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+        if (state.openedFromMap)
+            movedPoint.position = state.pinLocation;
+    }
  
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
@@ -151,12 +158,6 @@
 {
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    
-    auto rect = _currentGpx.getRect;
-    [_mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
-                                  bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
-                                  bottomInset:([self isLandscape] ? 0. : self.delegate ? self.delegate.getVisibleHeight : 0.)
-                                    leftInset:([self isLandscape] ? self.view.frame.size.width : 0.)];
 }
 
 - (void)onMenuDismissed

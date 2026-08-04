@@ -12,7 +12,6 @@ import CoreLocation
 final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
     private static let topPartViewHeight: CGFloat = 50
     private static let sheetGrabberAreaHeight: CGFloat = 16
-    private static let segmentControlContainerHeight: CGFloat = 36
     private static let bottomToolbarReservedHeight: CGFloat = 60
     private static let sheetContentHorizontalInset: CGFloat = 16
     private static let sheetCornerRadius: CGFloat = 28
@@ -31,7 +30,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let topToolbar = PlanRouteTopToolbarView()
     private let bottomToolbar = PlanRouteBottomToolbarView()
     private let topPartView = PlanRouteTopPartView()
-    private let segmentControlContainerView = UIView()
     private let segmentControl = UISegmentedControl()
     private let tabContainerView = UIView()
     private let crosshairView: UIImageView = {
@@ -305,27 +303,20 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setupContent() {
         let horizontalInset = Self.sheetContentHorizontalInset
-        let segmentControlContainerHeight = Self.segmentControlContainerHeight
         setupSegmentControl()
         tabContainerView.clipsToBounds = true
-        [segmentControlContainerView, tabContainerView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            sheetView.addSubview($0)
+        let contentViews = [segmentControl, tabContainerView]
+        for contentView in contentViews {
+            contentView.translatesAutoresizingMaskIntoConstraints = false
+            sheetView.addSubview(contentView)
         }
-        segmentControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentControlContainerView.addSubview(segmentControl)
         sheetView.bringSubviewToFront(bottomToolbar)
         NSLayoutConstraint.activate([
-            segmentControlContainerView.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
-            segmentControlContainerView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset),
-            segmentControlContainerView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
-            segmentControlContainerView.heightAnchor.constraint(equalToConstant: segmentControlContainerHeight),
+            segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset),
+            segmentControl.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
 
-            segmentControl.leadingAnchor.constraint(equalTo: segmentControlContainerView.leadingAnchor),
-            segmentControl.trailingAnchor.constraint(equalTo: segmentControlContainerView.trailingAnchor),
-            segmentControl.centerYAnchor.constraint(equalTo: segmentControlContainerView.centerYAnchor),
-
-            tabContainerView.topAnchor.constraint(equalTo: segmentControlContainerView.bottomAnchor, constant: 12),
+            tabContainerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12),
             tabContainerView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
             tabContainerView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
             tabContainerView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor)
@@ -333,14 +324,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSegmentControl() {
-        let containerHeight = Self.segmentControlContainerHeight
         segmentControl.removeAllSegments()
         for (index, tab) in tabs.enumerated() {
             segmentControl.insertSegment(withTitle: tab.title, at: index, animated: false)
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
-        segmentControlContainerView.backgroundColor = .groupBgColorSecondary
-        segmentControlContainerView.layer.cornerRadius = containerHeight / 2
         segmentControl.backgroundColor = .groupBgColorSecondary
         segmentControl.selectedSegmentTintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: 0x636366) : .white }
         let segmentFont = UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
@@ -539,7 +527,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func height(for state: EOADraggableMenuState) -> CGFloat {
         let screenHeight = OAUtilities.calculateScreenHeight()
-        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + 8 + Self.segmentControlContainerHeight + 12
+        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + 8 + segmentControl.intrinsicContentSize.height + 12
             + PlanRouteButtonFactory.bottomButtonHeight + 8 + OAUtilities.getBottomMargin()
         switch state {
         case .initial:

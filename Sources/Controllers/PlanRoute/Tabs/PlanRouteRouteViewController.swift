@@ -23,6 +23,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let isStartNewSegment: Bool
     }
 
+    private static let sectionHorizontalInset: CGFloat = 16
     private static let separatorLeftInset: CGFloat = 76
     private static let bottomContentInset: CGFloat = 72
 
@@ -74,6 +75,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func setupTableView() {
+        let horizontalInset = Self.sectionHorizontalInset
         view.backgroundColor = .clear
         tableView.backgroundColor = .viewBg
         tableView.dataSource = self
@@ -81,6 +83,10 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.alwaysBounceVertical = true
+        tableView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0,
+                                                                     leading: horizontalInset,
+                                                                     bottom: 0,
+                                                                     trailing: horizontalInset)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderTopPadding = 0

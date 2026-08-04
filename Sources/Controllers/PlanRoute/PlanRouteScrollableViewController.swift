@@ -14,7 +14,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let sheetGrabberAreaHeight: CGFloat = 16
     private static let segmentControlHeight: CGFloat = 36
     private static let bottomToolbarReservedHeight: CGFloat = 60
-    private static let sheetContentHorizontalInset: CGFloat = 20
+    private static let sheetContentHorizontalInset: CGFloat = 16
     private static let sheetCornerRadius: CGFloat = 28
     private static let fullScreenSheetTopInset: CGFloat = 8
     private static let sheetAnimationDuration: TimeInterval = 0.3
@@ -360,10 +360,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         bottomToolbar.translatesAutoresizingMaskIntoConstraints = false
         sheetView.addSubview(bottomToolbar)
-        let inset = Self.sheetContentHorizontalInset
         NSLayoutConstraint.activate([
-            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: inset),
-            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -inset),
+            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
+            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
             bottomToolbar.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             bottomToolbar.heightAnchor.constraint(equalToConstant: PlanRouteButtonFactory.bottomButtonHeight)
         ])

@@ -607,6 +607,16 @@ final class OpeningHoursParserTest: XCTestCase {
         assertInfo("06.10.2025 12:00", hours: hours, equals: "Open until 15:00")
         assertInfo("06.10.2025 16:00", hours: hours, equals: "Open until 20:00")
 
+        // Overnight opening with an "off" window after midnight: the off start is 00:00
+        // in the next calendar day, so it must still shorten the closing time before midnight.
+        hours = makeHours("Mo-Su 20:00-02:00; Mo-Su 00:00-01:00 off")
+        assertOpened("06.10.2025 23:00", hours: hours, expected: true)
+        assertInfo("06.10.2025 23:00", hours: hours, equals: "Will close at 00:00")
+        assertOpened("07.10.2025 00:30", hours: hours, expected: false)
+        assertInfo("07.10.2025 00:30", hours: hours, equals: "Will open at 01:00")
+        assertOpened("07.10.2025 01:30", hours: hours, expected: true)
+        assertInfo("07.10.2025 01:30", hours: hours, equals: "Will close at 02:00")
+
         // Whole-day "off" rules by year/day-month ranges must discard the opening time of that day (#21780).
         hours = makeHours("Mo-Fr 09:00-20:00; Sa 09:00-18:00; 2025 Jan 07 - 2025 Feb 26 closed")
         assertOpened("23.01.2025 07:40", hours: hours, expected: false)

@@ -17,7 +17,7 @@ final class RouteDeepLinkBuilder: NSObject {
         
         func percentEncodedQueryValue(_ value: String) -> String {
             var allowed = CharacterSet.urlQueryAllowed
-            allowed.remove(charactersIn: ",;")
+            allowed.remove(charactersIn: ",;:")
             return value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
         }
         
@@ -29,7 +29,7 @@ final class RouteDeepLinkBuilder: NSObject {
         var components = URLComponents()
         components.scheme = kHttpsScheme
         components.host = kOsmAndHost
-        components.path = kOsmAndMapPathPrefix
+        components.path = kOsmAndMapPathPrefix + "/navigate"
 
         var items: [URLQueryItem] = []
 
@@ -47,10 +47,13 @@ final class RouteDeepLinkBuilder: NSObject {
             items.append(URLQueryItem(name: "end", value: formatLatLon(end.point)))
         }
 
-        items.append(URLQueryItem(
-            name: "profile",
-            value: OARoutingHelper.sharedInstance().getAppMode().stringKey
-        ))
+        let appMode = OARoutingHelper.sharedInstance().getAppMode()
+        items.append(URLQueryItem(name: "profile", value: appMode.stringKey))
+        
+        if let params = OARoutingParamsDeepLinkBridge.routingParamsQueryValue(forAppMode: appMode), !params.isEmpty {
+            items.append(URLQueryItem(name: "params", value: params))
+        }
+        
         components.percentEncodedQueryItems = items.map {
             URLQueryItem(name: $0.name, value: $0.value.map(percentEncodedQueryValue))
         }

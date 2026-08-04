@@ -4103,3 +4103,7 @@
 "shared_string_step" = "階梯";
 "shared_string_unlock" = "解鎖";
 "shared_string_url" = "連結";
+"routing_attr_motor_type_ethanol_name" = "乙醇";
+"traffic_warning_red_light_camera" = "闖紅燈照相機";
+"astro_search_info_nebulas" = "星雲是宇宙中由塵埃與氣體構成的巨大雲團，通常是恆星誕生的區域。";
+"plugin_ais_tracker_name" = "AIS 船隻追蹤器";

@@ -393,9 +393,6 @@ static NSOperationQueue *_favQueue;
             [mutablePoints addObject:point];
             favoriteLocations.append(point.favorite);
         }
-
-        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
     }
 
     if (res)
@@ -418,7 +415,6 @@ static NSOperationQueue *_favQueue;
 {
     BOOL res = NO;
     NSMutableArray<OAFavoriteItem *> *mutablePoints = [NSMutableArray arrayWithArray:_cachedFavoritePoints];
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> favoriteLocations;
 
     for (OAFavoriteGroup *importGroup in groups)
@@ -462,8 +458,6 @@ static NSOperationQueue *_favQueue;
                     [mutablePoints addObject:point];
                     favoriteLocations.append(point.favorite);
                 }
-
-                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
             }
         }
     }
@@ -576,10 +570,6 @@ static NSOperationQueue *_favQueue;
 
         [newGroup.points addObject:item];
     }
-
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[item getColor] toARGBNumber]]];
-
     [self sortAll];
     [self saveCurrentPointsIntoFile];
     return YES;

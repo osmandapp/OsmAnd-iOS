@@ -73,8 +73,9 @@ final class MapUnderlayAction: OASwitchableAction {
     }
     
     override func nextSelectedItem() -> String {
-        guard let sources: [[String]] = loadListFromParams() as? [[String]], let next = next(fromSource: sources, defValue: noUnderlay) else { return "" }
-        return next
+        guard let sources = loadListFromParams() as? [[String]],
+              let nextSource = next(fromSource: sources) else { return "" }
+        return nextSource.first == noUnderlay ? noUnderlay : nextSource.last ?? ""
     }
     
     override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
@@ -113,17 +114,18 @@ final class MapUnderlayAction: OASwitchableAction {
             return
         }
         
-        execute(withParams: [nextSelectedItem()])
+        guard let nextSource = next(fromSource: sources) else { return }
+        execute(withParams: nextSource)
     }
     
     override func execute(withParams params: [String]) {
         let app = OsmAndApp.swiftInstance()
-        guard let param = params.first else { return }
-        let hasUnderlay = param != noUnderlay
+        guard let variant = params.first, let name = params.last else { return }
+        let hasUnderlay = variant != noUnderlay
         OAAppSettings.sharedManager().setUnderlayOpacitySliderVisibility(hasUnderlay)
         if hasUnderlay {
             var newMapSource: OAMapSource?
-            for resource in onlineMapSources where resource.mapSource().name == param {
+            for resource in onlineMapSources where resource.mapSource().variant == variant && resource.mapSource().name == name {
                 newMapSource = resource.mapSource()
                 break
             }
@@ -132,6 +134,24 @@ final class MapUnderlayAction: OASwitchableAction {
             app?.data.underlayMapSource = nil
         }
         OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
+    }
+
+    private func next(fromSource sources: [[String]]) -> [String]? {
+        guard let firstSource = sources.first else { return nil }
+
+        let currentSource = OsmAndApp.swiftInstance().data.underlayMapSource
+        let currentIndex = sources.firstIndex { source in
+            if let currentSource {
+                return source.first == currentSource.variant && source.last == currentSource.name
+            }
+            return source.first == noUnderlay
+        }
+        if sources.count == 1, currentIndex == 0 {
+            return [noUnderlay, localizedString("no_underlay")]
+        } else if let currentIndex, currentIndex < sources.count - 1 {
+            return sources[currentIndex + 1]
+        }
+        return firstSource
     }
     
     override func getUIModel() -> OrderedDictionary<AnyObject, AnyObject> {

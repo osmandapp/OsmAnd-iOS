@@ -36,6 +36,6 @@ final class RouteAction: OAQuickAction {
     }
     
     override func execute() {
-        OARootViewController.instance().mapPanel.showScrollableHudViewController(OARoutePlanningHudViewController())
+        PlanRouteScrollableViewController.showNewRoute()
     }
 }

@@ -177,6 +177,18 @@
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
 {
+    return [self initWithLocation:location title:formattedTitle address:address customParam:customParam pointType:pointType targetMenuState:targetMenuState poi:poi gpxFile:nil];
+}
+
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                         address:(NSString *)address
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi
+                     gpxFile:(OASGpxFile *)gpxFile
+{
     self = [super init];
     if (self)
     {
@@ -193,7 +205,7 @@
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi gpxFile:gpxFile];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }
@@ -1046,6 +1058,8 @@
             data.category = savingGroup;
             [_pointHandler savePoint:data newPoint:NO];
         }
+        if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
+            [_appearanceCollection selectColor:_selectedColorItem];
         if (_editPointType == EOAEditPointTypeFavorite)
         {
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
@@ -1505,6 +1519,7 @@
         if (group)
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
+            _isNewColorSelected = NO;
             _selectedIconName = group.iconName;
             _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
         }

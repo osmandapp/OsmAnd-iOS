@@ -586,7 +586,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
         trackRow.setObj(fileName, forKey: fileNameKey)
         trackRow.iconName = "ic_custom_trip"
-        let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
+        let isVisible = settings.isGpxVisible(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(trackIconColor(for: track, isVisible: isVisible), forKey: colorKey)
         trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: shouldShowFolderInfo), forKey: trackSortDescrKey)
@@ -1201,7 +1201,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func setEdit(_ edit: Bool) {
+        let shouldHideSearch = edit && isSearchActive
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
         tableView.setEditing(edit, animated: true)
+        if shouldHideSearch {
+            hideSearch()
+        }
         myPlacesDelegate?.updateEditMode(edit)
     }
     
@@ -1213,15 +1222,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if hasSelectedItems() {
             var tracksToShow: [String] = []
             tracksToShow.append(contentsOf: selectedTracks.compactMap {
-                settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath
+                settings.isGpxVisible($0.gpxFilePath) ? nil : $0.gpxFilePath
             })
             
             for folderName in selectedFolders {
                 if let folder = currentFolder.getSubFolders().first(where: { $0.getName() == folderName }) {
-                    let folderTracksToShow = folder.getFlattenedTrackItems().compactMap { settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath }
+                    let folderTracksToShow = folder.getFlattenedTrackItems().compactMap { settings.isGpxVisible($0.gpxFilePath) ? nil : $0.gpxFilePath }
                     tracksToShow.append(contentsOf: folderTracksToShow)
                 } else if let smartFolder = smartFolderHelper.getSmartFolder(name: folderName) {
-                    let folderTracksToShow = smartFolder.getTrackItems().compactMap { settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath }
+                    let folderTracksToShow = smartFolder.getTrackItems().compactMap { settings.isGpxVisible($0.gpxFilePath) ? nil : $0.gpxFilePath }
                     tracksToShow.append(contentsOf: folderTracksToShow)
                 }
             }
@@ -1354,7 +1363,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 
                 for track in self.selectedTracks {
-                    let isVisible = self.settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
+                    let isVisible = self.settings.isGpxVisible(track.gpxFilePath)
                     if isVisible {
                         self.settings.hideGpx([track.gpxFilePath])
                     }
@@ -1684,17 +1693,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func onTrackEditClicked(_ track: TrackItem?) {
-        guard let track else { return }
-        
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            state.gpxFilePath = track.gpxFilePath
-            state.navControllerHistory = newCurrentHistory
-            if let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
-                rootVC.mapPanel.showScrollableHudViewController(vc)
-            }
-        }
+        guard let track,
+              let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(),
+              !newCurrentHistory.isEmpty else { return }
+
+        PlanRouteScrollableViewController.openExistingTrack(filePath: track.gpxFilePath, navControllerHistory: newCurrentHistory)
     }
     
     private func onTrackDuplicateClicked(track: TrackItem?) {
@@ -1766,7 +1769,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 updateData()
             } else {
                 guard let dataItem = trackItem.dataItem else { return }
-                let isVisible = settings.mapSettingVisibleGpx.contains(trackItem.gpxFilePath)
+                let isVisible = settings.isGpxVisible(trackItem.gpxFilePath)
                 if isVisible {
                     settings.hideGpx([trackItem.gpxFilePath])
                 }
@@ -1935,7 +1938,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func updateRenamedGpx(src: KFile, dest: KFile) {
-        GpxDbHelper.shared.rename(currentFile: src, newFile: dest)
+        guard gpxDB.renameCurrentFile(src, newFile: dest) else {
+            NSLog("updateRenamedGpx -> renameCurrentFile failed")
+            return
+        }
+
         handleDeletedGpxFile(gpxFile: src)
         let trackItem = TrackItem(file: dest)
         trackItem.dataItem = OAGPXDatabase.sharedDb().getGPXItem(dest.path())
@@ -1943,21 +1950,22 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func renameFolder(newName: String, oldName: String) {
+        let normalizedNewName = newName.decomposedStringWithCanonicalMapping
         if let smartFolder = smartFolderHelper.getSmartFolder(name: oldName) {
             let oldSmartFolderId = smartFolder.getId()
-            smartFolderHelper.renameSmartFolder(smartFolder: smartFolder, newName: newName)
+            smartFolderHelper.renameSmartFolder(smartFolder: smartFolder, newName: normalizedNewName)
             renameSortModeKey(from: oldSmartFolderId, to: smartFolder.getId())
             updateData()
         }
         
         guard let trackFolder = getTrackFolderByPath(oldName) else { return }
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
-        let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
+        let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(normalizedNewName)
         
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             let oldDir = KFile(filePath: oldFolderPath)
             if let parentFile = oldDir.getParentFile() {
-                let newDir = KFile(file: parentFile, fileName: newName)
+                let newDir = KFile(file: parentFile, fileName: normalizedNewName)
                 if oldDir.renameTo(toFile: newDir) {
                     trackFolder.setDirFile(dirFile: newDir)
                     trackFolder.resetCachedData()
@@ -2005,7 +2013,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                         gpxDB.removeGpxItem($0, withLocalRemove: false)
                         handleDeletedGpxFile(gpxFile: $0.file)
                         let gpxFilePath = $0.gpxFilePath
-                        let isVisible = settings.mapSettingVisibleGpx.contains(gpxFilePath)
+                        let isVisible = settings.isGpxVisible(gpxFilePath)
                         if isVisible {
                             settings.hideGpx([gpxFilePath])
                         }
@@ -2044,7 +2052,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let newPathCount = oldPath.count
             let oldPathString = visibleGpx[i]
             let modifiedString = newPath + oldPathString.dropFirst(newPathCount)
-            visibleGpx[i] = modifiedString
+            visibleGpx[i] = modifiedString.decomposedStringWithCanonicalMapping
         }
         settings.mapSettingVisibleGpx.set(visibleGpx)
     }
@@ -2173,8 +2181,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func hideSearch() {
-        searchController.isActive = false
-        navigationItem.searchController = nil
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else {
+            searchController.isActive = false
+            navigationItem.searchController = nil
+        }
     }
     
     // MARK: - TableView
@@ -2524,7 +2536,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 guard let self else { return nil }
                 let showOnMapAction = UIAction(title: localizedString("show_all_tracks_on_the_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
                     guard let self else { return }
-                    let tracksToShow = group.getTrackItems().compactMap { $0.gpxFilePath }.filter { !self.settings.mapSettingVisibleGpx.contains($0) }
+                    let tracksToShow = group.getTrackItems().compactMap { $0.gpxFilePath }.filter { !self.settings.isGpxVisible($0) }
                     if !tracksToShow.isEmpty {
                         self.settings.showGpx(tracksToShow, update: true)
                     }

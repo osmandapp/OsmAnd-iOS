@@ -23,7 +23,7 @@ final class ImageToStringConverter : NSObject {
         return nil
     }
     
-    static func getHtmlImgSrcTagContent(_ base64String: String) -> String {
+    static func htmlImgSrcTagContent(_ base64String: String) -> String {
         return "data:image/png;base64, " + base64String
     }
 }

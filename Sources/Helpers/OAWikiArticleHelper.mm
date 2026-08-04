@@ -23,6 +23,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -101,12 +102,31 @@
                 {
                     if (app.resourcesManager->isResourceInstalled(repository.resourceId))
                     {
-                        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-                        NSArray<OAPOI *> *wikiPoints = [OAAmenitySearcher findPOIsByTagName:nil name:_name location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
-                        
-                        [results addObjectsFromArray:wikiPoints];
-                        if (results.count > 0)
+                        NSMutableArray<OAPOI *> *wikiPoints = [NSMutableArray array];
+                        OAResultMatcher<OAPOI *> *matcher = [self createResultMatcher:wikiPoints];
+
+                        [OAAmenitySearcher searchAmenitiesByName:_name
+                                                      resourceId:repository.resourceId.toNSString()
+                                                        location:location
+                                                         matcher:matcher];
+
+                        if (wikiPoints.count > 1)
+                        {
+                            [wikiPoints sortUsingComparator:^NSComparisonResult(OAPOI *a, OAPOI *b) {
+                                CLLocation *la = [[CLLocation alloc] initWithLatitude:a.latitude longitude:a.longitude];
+                                CLLocation *lb = [[CLLocation alloc] initWithLatitude:b.latitude longitude:b.longitude];
+                                CLLocationDistance da = [location distanceFromLocation:la];
+                                CLLocationDistance db = [location distanceFromLocation:lb];
+                                if (da < db) return NSOrderedAscending;
+                                if (da > db) return NSOrderedDescending;
+                                return NSOrderedSame;
+                            }];
+                        }
+                        if (wikiPoints.count > 0)
+                        {
+                            [results addObject:wikiPoints.firstObject];
                             break;
+                        }
                     }
                     else
                     {
@@ -148,6 +168,30 @@
     _isCanceled = YES;
     if (_onComplete)
         _onComplete();
+}
+
+- (OAResultMatcher<OAPOI *> *)createResultMatcher:(NSMutableArray<OAPOI *> *)results
+{
+    NSString *articleName = _name;
+    return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
+        NSString *localeName = (*poi).name;
+        if ([articleName isEqualToString:localeName])
+        {
+            [results addObject:*poi];
+            return YES;
+        }
+        for (NSString *amenityName in (*poi).localizedNames.allValues)
+        {
+            if ([articleName isEqualToString:amenityName])
+            {
+                [results addObject:*poi];
+                return YES;
+            }
+        }
+        return NO;
+    } cancelledFunc:^BOOL {
+        return NO;
+    }];
 }
 
 - (BOOL)isRegionAdded:(OAWorldRegion *)region
@@ -338,7 +382,10 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
     
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView
@@ -356,7 +403,10 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
 + (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml

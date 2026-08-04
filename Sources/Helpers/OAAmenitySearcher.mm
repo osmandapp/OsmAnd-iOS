@@ -1098,6 +1098,73 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return nil;
 }
 
++ (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)name
+                                 resourceId:(NSString *)resourceId
+                                   location:(nullable CLLocation *)location
+                                    matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+    if (!localResource)
+        return @[];
+
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController(
+        [&matcher](const OsmAnd::FunctorQueryController* const controller)
+        {
+            return matcher && [matcher isCancelled];
+        }));
+
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria =
+        std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(
+            new OsmAnd::AmenitiesByNameSearch::Criteria);
+
+    searchCriteria->name = QString::fromNSString(name);
+    searchCriteria->matcherMode = OsmAnd::StringMatcherMode::CHECK_EQUALS;
+    searchCriteria->obfInfoAreaFilter = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+    searchCriteria->localResources = { localResource };
+    
+    if (location)
+    {
+        OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
+        searchCriteria->xy31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    }
+
+    const auto search =
+        std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(
+            new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    
+    search->performSearch(*searchCriteria,
+                          [&arr, &matcher](const OsmAnd::ISearch::Criteria& criteria,
+                                           const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+        const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+        if (!amenity)
+            return;
+        
+        OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:NO];
+        if (!poi)
+            return;
+        
+        if (matcher)
+        {
+            if ([matcher publish:poi])
+                [OAPOIHelper fetchValuesContentPOIByAmenity:amenity poi:poi];
+        }
+        else
+        {
+            [OAPOIHelper fetchValuesContentPOIByAmenity:amenity poi:poi];
+            [arr addObject:poi];
+        }
+    },
+    ctrl);
+
+    return [NSArray arrayWithArray:arr];
+}
+
 + (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];

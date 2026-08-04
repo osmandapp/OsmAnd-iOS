@@ -289,6 +289,9 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
                                            limit:(NSInteger)limit
                              skipIfOneDownloaded:(BOOL)skipIfOneDownloaded;
 
++ (BOOL)isIndexItemDownloadedAt:(CLLocationCoordinate2D)coordinate
+                           type:(OsmAndResourceType)type;
+
 + (CLLocationCoordinate2D) getMapLocation;
 
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;

@@ -82,6 +82,13 @@
     }
 }
 
+- (void)cancelApproximation
+{
+    _currentApproximator.progressDelegate = nil;
+    [_currentApproximator cancelApproximation];
+    _currentApproximator = nil;
+}
+
 - (OAGpxApproximator *)getNewGpxApproximator:(OALocationsHolder *)locationsHolder
 {
     OAGpxApproximator *gpxApproximator = [[OAGpxApproximator alloc] initWithApplicationMode:_appMode pointApproximation:_distanceThreshold locationsHolder:locationsHolder];
@@ -112,12 +119,9 @@
             return NO;
         }]];
     } else {
-        if (approximateResult.count > 0)
-        {
-            NSArray *pair = [self processApproximationResults:approximateResult];
-            if (self.delegate)
-                [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
-        }
+        NSArray *pair = [self processApproximationResults:approximateResult];
+        if (self.delegate)
+            [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
     }
 }
 

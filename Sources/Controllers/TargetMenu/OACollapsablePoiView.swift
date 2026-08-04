@@ -61,7 +61,7 @@ final class OACollapsablePoiView: OACollapsableView  {
         btn.layer.cornerRadius = 4.0
         btn.layer.masksToBounds = true
         btn.layer.borderWidth = 0.8
-        btn.layer.borderColor = UIColor.adaptiveSeparator.cgColor
+        btn.layer.borderColor = UIColor.customSeparator.cgColor
         btn.setBackgroundImage(OAUtilities.image(with: .clear), for: .normal)
         btn.tintColor = UIColor.iconColorActive
         btn.delegate = self
@@ -77,7 +77,7 @@ final class OACollapsablePoiView: OACollapsableView  {
     
     private func updateButtonBorderColor() {
         for button in buttons {
-            button.layer.borderColor = UIColor.adaptiveSeparator.cgColor
+            button.layer.borderColor = UIColor.customSeparator.cgColor
         }
     }
     

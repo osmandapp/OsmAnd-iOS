@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     btn.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
     btn.tag = tag;
     [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
@@ -190,7 +190,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
         }
     }
 }

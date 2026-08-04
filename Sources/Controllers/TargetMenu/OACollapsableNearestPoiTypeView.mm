@@ -106,7 +106,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.clearColor] forState:UIControlStateNormal];
     btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     btn.delegate = self;
@@ -155,7 +155,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
         }
     }
 }

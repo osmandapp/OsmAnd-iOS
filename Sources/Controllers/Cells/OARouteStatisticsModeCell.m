@@ -26,7 +26,7 @@
     // Initialization code
     self.contentContainer.layer.cornerRadius = 9.;
     self.contentContainer.layer.borderWidth = 1.;
-    self.contentContainer.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+    self.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 
     self.modeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.rightModeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
@@ -44,7 +44,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        self.contentContainer.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+        self.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 
 @end

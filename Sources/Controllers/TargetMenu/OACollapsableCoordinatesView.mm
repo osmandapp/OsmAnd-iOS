@@ -106,7 +106,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+        btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
         btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
@@ -124,7 +124,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
         }
     }
 }
@@ -208,7 +208,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+                button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
                 button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }];
         }];

@@ -987,7 +987,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     button.layer.cornerRadius = 42 / 2;
     button.layer.borderWidth = 1.0;
-    button.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+    button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 
 - (CGPoint) calculateInitialPoint
@@ -1619,7 +1619,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentContainer.layer.cornerRadius = 6;
         cell.contentContainer.layer.borderWidth = 1;
-        cell.contentContainer.layer.borderColor = [UIColor adaptiveSeparator].CGColor;
+        cell.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
         cell.label.text = item[@"title"];
         [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

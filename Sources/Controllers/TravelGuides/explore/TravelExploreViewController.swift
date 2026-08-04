@@ -496,7 +496,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
                     cell.statisticsCells = statisticsCells
                 }
-                cell.usernameView.layer.borderColor = UIColor.adaptiveSeparator.cgColor
+                cell.usernameView.layer.borderColor = UIColor.customSeparator.cgColor
                 cell.usernameView.layer.borderWidth = 1
                 cell.usernameView.layer.cornerRadius = 4
                 

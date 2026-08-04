@@ -11,10 +11,10 @@ final class PlanRoutePointCell: UITableViewCell {
 
     private static let horizontalInset: CGFloat = 16
     private static let circleSize: CGFloat = 28
-    private static let deleteSize: CGFloat = 24
-    private static let deleteNumberSpacing: CGFloat = 32
+    private static let deleteButtonSize: CGFloat = 30
+    private static let deleteNumberSpacing: CGFloat = 26
     private static let numberTextSpacing: CGFloat = 16
-    private static let textLeadingInset = horizontalInset + deleteSize + deleteNumberSpacing + circleSize + numberTextSpacing
+    private static let textLeadingInset = horizontalInset + deleteButtonSize + deleteNumberSpacing + circleSize + numberTextSpacing
 
     var onDelete: (() -> Void)?
 
@@ -55,8 +55,7 @@ final class PlanRoutePointCell: UITableViewCell {
         selectionStyle = .none
         showsReorderControl = true
 
-        deleteButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
-        deleteButton.tintColor = .systemRed
+        deleteButton.setImage(.icCustomDelete, for: .normal)
         deleteButton.addTarget(self, action: #selector(onDeleteTapped), for: .touchUpInside)
         deleteButton.accessibilityLabel = localizedString("shared_string_delete")
 
@@ -88,8 +87,8 @@ final class PlanRoutePointCell: UITableViewCell {
         NSLayoutConstraint.activate([
             deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            deleteButton.widthAnchor.constraint(equalToConstant: Self.deleteSize),
-            deleteButton.heightAnchor.constraint(equalToConstant: Self.deleteSize),
+            deleteButton.widthAnchor.constraint(equalToConstant: Self.deleteButtonSize),
+            deleteButton.heightAnchor.constraint(equalToConstant: Self.deleteButtonSize),
 
             numberContainer.leadingAnchor.constraint(equalTo: deleteButton.trailingAnchor, constant: Self.deleteNumberSpacing),
             numberContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),

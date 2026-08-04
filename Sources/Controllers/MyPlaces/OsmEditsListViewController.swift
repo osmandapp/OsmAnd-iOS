@@ -48,6 +48,11 @@ final class OsmEditsListViewController: UIViewController {
         case sortHeader(SortHeader)
         case header(Header)
         case point(OsmPoint)
+
+        var selectionItem: OsmPoint? {
+            guard case .point(let point) = self else { return nil }
+            return point
+        }
     }
     
     // MARK: - Properties
@@ -70,6 +75,8 @@ final class OsmEditsListViewController: UIViewController {
 
     private var sortMode: MyPlacesSortMode = .nameAZ
     private var isSearchActive = false
+    private var isSelectionModeInSearch = false
+    private var selectionManager = SelectionManager<OsmPoint>(allItems: [])
 
     private let estimatedRowHeight: CGFloat = 48.0
     private let poiTypeTag = "poi_type_tag"
@@ -201,7 +208,7 @@ final class OsmEditsListViewController: UIViewController {
 
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             config.backgroundColor = .clear
-            if !self.isSearchActive {
+            if !self.isSearchActive && !self.isSelectionModeInSearch {
                 config.headerMode = .firstItemInSection
             }
 
@@ -362,8 +369,16 @@ final class OsmEditsListViewController: UIViewController {
 
     private func setupNavbarButtons() {
         if collectionView.isEditing {
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems(nil, animated: false)
-            navigationItem.setRightBarButtonItems(nil, animated: false)
+            let selectAllTitle = localizedString(selectionManager.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+            let selectAllButton = UIBarButtonItem(
+                title: selectAllTitle,
+                style: .plain,
+                target: self,
+                action: #selector(selectDeselectAllButtonPressed(_:))
+            )
+            selectAllButton.accessibilityLabel = selectAllTitle
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([selectAllButton], animated: false)
+            navigationItem.setRightBarButtonItems([selectAllButton], animated: false)
             return
         }
 
@@ -395,10 +410,10 @@ final class OsmEditsListViewController: UIViewController {
     private func updateNavigationBarTitle() {
         var title = localizedString("osm_edits_title")
         if collectionView.isEditing {
-            let totalSelectedPoints = collectionView.indexPathsForSelectedItems?.count ?? 0
-            if totalSelectedPoints == 0 {
+            if selectionManager.selectedItems.isEmpty {
                 title = localizedString("select_items")
             } else {
+                let totalSelectedPoints = selectionManager.selectedItems.count
                 let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
                 title = "\(totalSelectedPoints) \(itemText)"
             }
@@ -410,7 +425,29 @@ final class OsmEditsListViewController: UIViewController {
     }
     
     private func setEdit(_ isEdit: Bool) {
+        let shouldHideSearch = isEdit && isSearchActive
+        let shouldResetSearchSelection = !isEdit && isSelectionModeInSearch
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
+        if isEdit {
+            let selectionItems = dataSource.snapshot().itemIdentifiers.compactMap { $0.selectionItem }
+            selectionManager = SelectionManager(allItems: selectionItems)
+        } else {
+            selectionManager.deselectAll()
+            updateCollectionViewSelection()
+        }
+
         collectionView.isEditing = isEdit
+        if shouldHideSearch {
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else if shouldResetSearchSelection {
+            isSelectionModeInSearch = false
+            collectionView.setCollectionViewLayout(createLayout(), animated: false)
+            applySnapshot()
+        }
         navigationController?.setToolbarHidden(!isEdit, animated: true)
         myPlacesDelegate?.updateEditMode(isEdit)
         setupNavbar()
@@ -529,7 +566,20 @@ final class OsmEditsListViewController: UIViewController {
     }
     
     private func configureToolbar() {
-        let isSelected = !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
+        if isSearchActive {
+            let selectButton = UIBarButtonItem(
+                title: localizedString("shared_string_select"),
+                style: .plain,
+                target: self,
+                action: #selector(selectButtonPressed(_:))
+            )
+            let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.iconColorActive]
+            selectButton.setTitleTextAttributes(attributes, for: .normal)
+            myPlacesDelegate?.updateToolbar(with: [selectButton])
+            return
+        }
+
+        let isSelected = !selectionManager.isEmpty
         
         let uploadButton = UIBarButtonItem(title: localizedString("shared_string_upload" ), style: .plain, target: self, action: #selector(uploadButtonPressed))
         let uploadAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.textColorActive]
@@ -546,6 +596,20 @@ final class OsmEditsListViewController: UIViewController {
         let items = [uploadButton, flexibleSpacer, deleteButton]
         myPlacesDelegate?.updateToolbar(with: items)
     }
+
+    private func updateCollectionViewSelection() {
+        for section in 0..<collectionView.numberOfSections {
+            for item in 0..<collectionView.numberOfItems(inSection: section) {
+                let indexPath = IndexPath(item: item, section: section)
+                guard let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem else { continue }
+                if selectionManager.selectedItems.contains(selectionItem) {
+                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+                } else {
+                    collectionView.deselectItem(at: indexPath, animated: false)
+                }
+            }
+        }
+    }
     
     // MARK: - Actions
 
@@ -559,18 +623,34 @@ final class OsmEditsListViewController: UIViewController {
         myPlacesDelegate?.updateSearchEnabling(true)
         isSearchActive = true
         setupNavbarButtons()
+        navigationController?.setToolbarHidden(false, animated: true)
+        configureToolbar()
     }
 
     @objc
     private func cancelButtonPressed(_ sender: Any) {
         setEdit(false)
     }
+
+    @objc
+    private func selectDeselectAllButtonPressed(_ sender: Any) {
+        if selectionManager.areAllSelected {
+            selectionManager.deselectAll()
+        } else {
+            selectionManager.selectAll()
+        }
+        updateCollectionViewSelection()
+        updateNavigationBarTitle()
+        setupNavbarButtons()
+        configureToolbar()
+    }
     
     @objc
     private func deleteButtonPressed(_ sender: Any) {
         let shouldEdit = !collectionView.isEditing
-        if let indexes = collectionView.indexPathsForSelectedItems, !indexes.isEmpty {
-            let count = indexes.count
+        let selectedPoints = Array(selectionManager.selectedItems)
+        if !selectedPoints.isEmpty {
+            let count = selectedPoints.count
             let message = String(format: localizedString("osm_edits_delete_items_confirmation"), count)
             let attributedString = NSMutableAttributedString(string: message)
 
@@ -586,11 +666,7 @@ final class OsmEditsListViewController: UIViewController {
                 UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
                     guard let self else { return }
 
-                    for path in indexes {
-                        guard case .point(let point) = dataSource.itemIdentifier(for: path) else {
-                            continue
-                        }
-
+                    for point in selectedPoints {
                         let item = point.item
                         if item.getGroup() == .poi {
                             if let item = item as? OAOpenStreetMapPoint {
@@ -614,15 +690,10 @@ final class OsmEditsListViewController: UIViewController {
     @objc
     private func uploadButtonPressed(_ sender: Any) {
         let shouldEdit = !collectionView.isEditing
-        let indexes = collectionView.indexPathsForSelectedItems ?? []
         var edits: [OAOsmPoint] = []
         var notes: [OAOsmPoint] = []
 
-        for indexPath in indexes {
-            guard case .point(let point) = dataSource.itemIdentifier(for: indexPath) else {
-                continue
-            }
-
+        for point in selectionManager.selectedItems {
             let item = point.item
             if item.getGroup() == .poi {
                 edits.append(item)
@@ -688,23 +759,33 @@ final class OsmEditsListViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension OsmEditsListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let item = dataSource.itemIdentifier(for: indexPath), !collectionView.isEditing,
+        if let item = dataSource.itemIdentifier(for: indexPath),
            case .point(let osmPoint) = item {
-            navigationController?.popToRootViewController(animated: true)
+            if collectionView.isEditing {
+                selectionManager.toggle(osmPoint)
+            } else {
+                navigationController?.popToRootViewController(animated: true)
 
-            let mapPanel = OARootViewController.instance().mapPanel
+                let mapPanel = OARootViewController.instance().mapPanel
 
-            if let newTarget = mapPanel?.mapViewController.osmEditsTargetPoint(osmPoint.item, touch: nil) {
-                newTarget.centerMap = true
-                mapPanel?.showContextMenu(newTarget)
+                if let newTarget = mapPanel?.mapViewController.osmEditsTargetPoint(osmPoint.item, touch: nil) {
+                    newTarget.centerMap = true
+                    mapPanel?.showContextMenu(newTarget)
+                }
             }
         }
         updateNavigationBarTitle()
+        setupNavbarButtons()
         configureToolbar()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if collectionView.isEditing,
+           let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem {
+            selectionManager.toggle(selectionItem)
+        }
         updateNavigationBarTitle()
+        setupNavbarButtons()
         configureToolbar()
     }
     
@@ -775,6 +856,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
             applySnapshot()
         } else if searchController.isActive && !searchText.isEmpty {
+            isSearchActive = true
             var snapshot = Snapshot()
             let poi = OAOsmEditsDBHelper.sharedDatabase().getOpenstreetmapPoints()
             let notes = OAOsmBugsDBHelper.sharedDatabase().getOsmBugsPoints()
@@ -810,10 +892,14 @@ extension OsmEditsListViewController: MyPlacesSearchable {
             dataSource.apply(snapshot, animatingDifferences: false)
         } else {
             isSearchActive = false
-            collectionView.setCollectionViewLayout(createLayout(), animated: false)
-            applySnapshot()
+            if !isSelectionModeInSearch {
+                collectionView.setCollectionViewLayout(createLayout(), animated: false)
+                applySnapshot()
+            }
         }
         setupNavbarButtons()
+        navigationController?.setToolbarHidden(!searchController.isActive && !collectionView.isEditing, animated: true)
+        configureToolbar()
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

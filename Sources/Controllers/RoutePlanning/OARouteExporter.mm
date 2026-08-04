@@ -7,7 +7,9 @@
 //
 
 #import "OARouteExporter.h"
+#import "OAAppVersion.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAMapUtils.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
@@ -82,6 +84,50 @@
         }
     }
     
+    return gpx;
+}
+
++ (OASGpxFile *)exportTrackWithPoints:(NSArray<OASWptPt *> *)points
+{
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASTrack *track = [[OASTrack alloc] init];
+    track.segments = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *trkPoints = [NSMutableArray array];
+    OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+    OASWptPt *previousPoint = nil;
+    double cumulativeDistance = 0;
+    for (OASWptPt *point in points)
+    {
+        if (point.isGap)
+        {
+            if (trkPoints.count > 0)
+            {
+                segment.points = trkPoints;
+                [track.segments addObject:segment];
+            }
+            trkPoints = [NSMutableArray array];
+            segment = [[OASTrkSegment alloc] init];
+            previousPoint = nil;
+            cumulativeDistance = 0;
+            continue;
+        }
+        OASWptPt *trkPoint = [[OASWptPt alloc] initWithWptPt:point];
+        if (previousPoint != nil)
+            cumulativeDistance += [OAMapUtils getDistance:previousPoint.lat lon1:previousPoint.lon lat2:point.lat lon2:point.lon];
+        else
+            cumulativeDistance = 0;
+        trkPoint.distance = cumulativeDistance;
+        [trkPoints addObject:trkPoint];
+        previousPoint = point;
+    }
+
+    if (trkPoints.count > 0)
+    {
+        segment.points = trkPoints;
+        [track.segments addObject:segment];
+    }
+
+    gpx.tracks = [@[track] mutableCopy];
     return gpx;
 }
 

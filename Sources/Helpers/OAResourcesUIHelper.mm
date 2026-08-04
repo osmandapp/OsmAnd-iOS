@@ -1078,6 +1078,20 @@ includeHidden:(BOOL)includeHidden
     return downloadRegion.superregion != nil && [self.class isIndexItemDownloaded:type downloadRegion:downloadRegion.superregion res:res];
 }
 
++ (BOOL)isIndexItemDownloadedAt:(CLLocationCoordinate2D)coordinate
+                           type:(OsmAndResourceType)type
+{
+    NSArray<OAWorldRegion *> *regions =
+        [[OsmAndApp instance].worldRegion getWorldRegionsAt:coordinate.latitude
+                                                 longitude:coordinate.longitude];
+    for (OAWorldRegion *region in regions)
+    {
+        if ([self isIndexItemDownloaded:type downloadRegion:region res:nil])
+            return YES;
+    }
+    return NO;
+}
+
 + (BOOL) addIndexItem:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
 {
     NSArray<OAResourceItem *> *otherIndexItems = [OAResourcesUIHelper requestMapDownloadInfo:@[downloadRegion] resourceTypes:@[[OAResourceType toValue:type]] isGroup:NO];

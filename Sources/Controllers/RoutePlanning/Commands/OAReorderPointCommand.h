@@ -15,5 +15,6 @@
 @interface OAReorderPointCommand : OAMeasurementModeCommand
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer from:(NSInteger)from to:(NSInteger)to;
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer from:(NSInteger)from to:(NSInteger)to move:(BOOL)move;
 
 @end

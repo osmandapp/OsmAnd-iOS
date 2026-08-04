@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -165,8 +165,6 @@
 		157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */; };
 		157F3CD224A1F36D000A66F0 /* ic_custom_import@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CCF24A1F36C000A66F0 /* ic_custom_import@3x.png */; };
 		157F3CD324A1F36D000A66F0 /* ic_custom_import@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CD024A1F36D000A66F0 /* ic_custom_import@2x.png */; };
-		157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CD424A1F43B000A66F0 /* ic_custom_straight_line@2x.png */; };
-		157F3CD824A1F43C000A66F0 /* ic_custom_straight_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CD524A1F43B000A66F0 /* ic_custom_straight_line@3x.png */; };
 		157F3CDD24A1FC5D000A66F0 /* ic_custom_delete_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CDA24A1FC5A000A66F0 /* ic_custom_delete_disable@3x.png */; };
 		157F3CDF24A1FC5D000A66F0 /* ic_custom_delete_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CDC24A1FC5C000A66F0 /* ic_custom_delete_disable@2x.png */; };
 		157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */; };
@@ -1742,8 +1740,50 @@
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
+		D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */; };
+		D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */; };
+		D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013F301B768C003CECB8 /* ElevationActionRow.swift */; };
+		D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */; };
+		D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */; };
+		D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */; };
+		D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */; };
+		D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */; };
+		D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */; };
+		D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */; };
+		D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */; };
+		D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */; };
+		D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210149301B768C003CECB8 /* RouteGroupCell.swift */; };
+		D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */; };
+		D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */; };
+		D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */; };
+		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
+		D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014E301B768C003CECB8 /* StatusCardCell.swift */; };
+		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
+		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
+		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
+		D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */; };
+		D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */; };
+		D7210180301B768C003CECB8 /* OAPlanRouteEditingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */; };
+		D7210181301B768C003CECB8 /* PlanRouteButtonFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */; };
+		D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */; };
+		D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */; };
+		D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015B301B768C003CECB8 /* PlanRouteModels.swift */; };
+		D7210185301B768C003CECB8 /* PlanRoutePointMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */; };
+		D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */; };
+		D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */; };
+		D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */; };
+		D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */; };
+		D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */; };
+		D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */; };
+		D721018C301B768C003CECB8 /* RouteTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210163301B768C003CECB8 /* RouteTypeViewController.swift */; };
+		D721018D301B768C003CECB8 /* SegmentReorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */; };
+		D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */; };
+		D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */; };
+		D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210167301B768C003CECB8 /* TwoLineTitleView.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
+		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
+		D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -2786,14 +2826,11 @@
 		DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5226C563A400F274C7 /* OARoadSegmentData.mm */; };
 		DA5A848C26C563A900F274C7 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5426C563A400F274C7 /* OASelectTrackFolderViewController.m */; };
 		DA5A848D26C563A900F274C7 /* OASaveTrackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5726C563A400F274C7 /* OASaveTrackViewController.xib */; };
-		DA5A848E26C563A900F274C7 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */; };
 		DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5C26C563A400F274C7 /* OABaseTableViewController.m */; };
 		DA5A849026C563A900F274C7 /* OABaseTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5D26C563A400F274C7 /* OABaseTableViewController.xib */; };
-		DA5A849126C563A900F274C7 /* OASaveGpxRouteAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */; };
 		DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */; };
 		DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */; };
 		DA5A849426C563A900F274C7 /* OASaveTrackBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */; };
-		DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */; };
 		DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6926C563A400F274C7 /* InitialRoutePlanningBottomSheetViewController.mm */; };
 		DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6A26C563A500F274C7 /* OAGpxData.mm */; };
 		DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6B26C563A500F274C7 /* OAExitRoutePlanningBottomSheetViewController.m */; };
@@ -3245,17 +3282,11 @@
 		DADC09EA27295A4C00ADBB3B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC09E927295A4B00ADBB3B /* MobileCoreServices.framework */; };
 		DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADF31A828D07D1100DC2886 /* OACarPlayPurchaseViewController.m */; };
 		DAE08311253F0953009B5A11 /* ic_custom_settings@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082F7253F094D009B5A11 /* ic_custom_settings@3x.png */; };
-		DAE08313253F0953009B5A11 /* ic_custom_add_to_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082F8253F094D009B5A11 /* ic_custom_add_to_track@2x.png */; };
 		DAE08315253F0953009B5A11 /* ic_custom_save_complete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082F9253F094E009B5A11 /* ic_custom_save_complete@2x.png */; };
 		DAE08319253F0953009B5A11 /* ic_custom_settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082FB253F094E009B5A11 /* ic_custom_settings@2x.png */; };
 		DAE0831B253F0953009B5A11 /* ic_custom_new_segment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082FC253F094E009B5A11 /* ic_custom_new_segment@2x.png */; };
-		DAE0831D253F0953009B5A11 /* ic_custom_save_as_new_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082FD253F094F009B5A11 /* ic_custom_save_as_new_file@2x.png */; };
 		DAE0831F253F0953009B5A11 /* ic_custom_new_segment@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082FE253F094F009B5A11 /* ic_custom_new_segment@3x.png */; };
 		DAE08321253F0953009B5A11 /* ic_custom_save_complete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE082FF253F094F009B5A11 /* ic_custom_save_complete@3x.png */; };
-		DAE08331253F0953009B5A11 /* ic_custom_save_as_new_file@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE08307253F0951009B5A11 /* ic_custom_save_as_new_file@3x.png */; };
-		DAE08335253F0953009B5A11 /* ic_custom_save_to_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE08309253F0952009B5A11 /* ic_custom_save_to_file@2x.png */; };
-		DAE08337253F0953009B5A11 /* ic_custom_save_to_file@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE0830A253F0952009B5A11 /* ic_custom_save_to_file@3x.png */; };
-		DAE08339253F0953009B5A11 /* ic_custom_add_to_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE0830B253F0953009B5A11 /* ic_custom_add_to_track@3x.png */; };
 		DAE08345253F0CFD009B5A11 /* ic_custom_redo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE0833F253F0CFB009B5A11 /* ic_custom_redo@2x.png */; };
 		DAE0834B253F0CFD009B5A11 /* ic_custom_undo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE08342253F0CFC009B5A11 /* ic_custom_undo@3x.png */; };
 		DAE0834F253F0CFD009B5A11 /* ic_custom_redo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE08344253F0CFC009B5A11 /* ic_custom_redo@3x.png */; };
@@ -3786,8 +3817,6 @@
 		157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@3x.png"; path = "Resources/Icons/ic_custom_navigation@3x.png"; sourceTree = "<group>"; };
 		157F3CCF24A1F36C000A66F0 /* ic_custom_import@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_import@3x.png"; path = "Resources/Icons/ic_custom_import@3x.png"; sourceTree = "<group>"; };
 		157F3CD024A1F36D000A66F0 /* ic_custom_import@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_import@2x.png"; path = "Resources/Icons/ic_custom_import@2x.png"; sourceTree = "<group>"; };
-		157F3CD424A1F43B000A66F0 /* ic_custom_straight_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_straight_line@2x.png"; path = "Resources/Icons/ic_custom_straight_line@2x.png"; sourceTree = "<group>"; };
-		157F3CD524A1F43B000A66F0 /* ic_custom_straight_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_straight_line@3x.png"; path = "Resources/Icons/ic_custom_straight_line@3x.png"; sourceTree = "<group>"; };
 		157F3CDA24A1FC5A000A66F0 /* ic_custom_delete_disable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete_disable@3x.png"; path = "Resources/Icons/ic_custom_delete_disable@3x.png"; sourceTree = "<group>"; };
 		157F3CDC24A1FC5C000A66F0 /* ic_custom_delete_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete_disable@2x.png"; path = "Resources/Icons/ic_custom_delete_disable@2x.png"; sourceTree = "<group>"; };
 		157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@2x.png"; path = "Resources/Icons/ic_custom_undo_button@2x.png"; sourceTree = "<group>"; };
@@ -5799,8 +5828,52 @@
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
+		D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeCardCell.swift; sourceTree = "<group>"; };
+		D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeRouteAttributeHeaderView.swift; sourceTree = "<group>"; };
+		D721013F301B768C003CECB8 /* ElevationActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationActionRow.swift; sourceTree = "<group>"; };
+		D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteActionCell.swift; sourceTree = "<group>"; };
+		D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEmptyCell.swift; sourceTree = "<group>"; };
+		D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteMenuActionCell.swift; sourceTree = "<group>"; };
+		D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiGroupHeaderView.swift; sourceTree = "<group>"; };
+		D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePointCell.swift; sourceTree = "<group>"; };
+		D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileGroupCell.swift; sourceTree = "<group>"; };
+		D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentHeaderView.swift; sourceTree = "<group>"; };
+		D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteStartSegmentCell.swift; sourceTree = "<group>"; };
+		D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadAttributeLegendItem.swift; sourceTree = "<group>"; };
+		D7210149301B768C003CECB8 /* RouteGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGroupCell.swift; sourceTree = "<group>"; };
+		D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingNavigationCell.swift; sourceTree = "<group>"; };
+		D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingToggleCell.swift; sourceTree = "<group>"; };
+		D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeModeCell.swift; sourceTree = "<group>"; };
+		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
+		D721014E301B768C003CECB8 /* StatusCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCardCell.swift; sourceTree = "<group>"; };
+		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
+		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
+		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
+		D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteRouteViewController.swift; sourceTree = "<group>"; };
+		D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetElevationDataViewController.swift; sourceTree = "<group>"; };
+		D7210156301B768C003CECB8 /* OAPlanRouteEditingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPlanRouteEditingBridge.h; sourceTree = "<group>"; };
+		D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridge.mm; sourceTree = "<group>"; };
+		D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteButtonFactory.swift; sourceTree = "<group>"; };
+		D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEditingContextDataProvider.swift; sourceTree = "<group>"; };
+		D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEditingModels.swift; sourceTree = "<group>"; };
+		D721015B301B768C003CECB8 /* PlanRouteModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteModels.swift; sourceTree = "<group>"; };
+		D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePointMenuViewController.swift; sourceTree = "<group>"; };
+		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
+		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
+		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
+		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
+		D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBetweenPointsViewController.swift; sourceTree = "<group>"; };
+		D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingsViewController.swift; sourceTree = "<group>"; };
+		D7210163301B768C003CECB8 /* RouteTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeViewController.swift; sourceTree = "<group>"; };
+		D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderViewController.swift; sourceTree = "<group>"; };
+		D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentRouteSettingsViewController.swift; sourceTree = "<group>"; };
+		D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackFavoriteSortModeHelper.swift; sourceTree = "<group>"; };
+		D7210167301B768C003CECB8 /* TwoLineTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineTitleView.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
+		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
+		D7EE671E301782CA0047F171 /* OAReorderSegmentCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAReorderSegmentCommand.h; sourceTree = "<group>"; };
+		D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderSegmentCommand.mm; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -7445,21 +7518,16 @@
 		DA5A7F5626C563A400F274C7 /* OARouteExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteExporter.h; sourceTree = "<group>"; };
 		DA5A7F5726C563A400F274C7 /* OASaveTrackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASaveTrackViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5826C563A400F274C7 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
-		DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutePlanningHudViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5A26C563A400F274C7 /* OAGpxApproximationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationViewController.h; sourceTree = "<group>"; };
 		DA5A7F5B26C563A400F274C7 /* OAPlanningPopupBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPlanningPopupBaseViewController.h; sourceTree = "<group>"; };
 		DA5A7F5C26C563A400F274C7 /* OABaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseTableViewController.m; sourceTree = "<group>"; };
 		DA5A7F5D26C563A400F274C7 /* OABaseTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABaseTableViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5E26C563A400F274C7 /* OASnapTrackWarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASnapTrackWarningViewController.h; sourceTree = "<group>"; };
-		DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASaveGpxRouteAsyncTask.mm; sourceTree = "<group>"; };
-		DA5A7F6026C563A400F274C7 /* OARoutePlanningHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePlanningHudViewController.h; sourceTree = "<group>"; };
 		DA5A7F6126C563A400F274C7 /* OASaveTrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASaveTrackViewController.h; sourceTree = "<group>"; };
 		DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMeasurementEditingContext.mm; sourceTree = "<group>"; };
 		DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6426C563A400F274C7 /* OAMeasurementEditingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContext.h; sourceTree = "<group>"; };
 		DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASaveTrackBottomSheetViewController.xib; sourceTree = "<group>"; };
-		DA5A7F6626C563A400F274C7 /* OASaveGpxRouteAsyncTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASaveGpxRouteAsyncTask.h; sourceTree = "<group>"; };
-		DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePlanningHudViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6826C563A400F274C7 /* OASelectTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectTrackFolderViewController.h; sourceTree = "<group>"; };
 		DA5A7F6926C563A400F274C7 /* InitialRoutePlanningBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InitialRoutePlanningBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6A26C563A500F274C7 /* OAGpxData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxData.mm; sourceTree = "<group>"; };
@@ -8124,17 +8192,11 @@
 		DADF31A728D07D1100DC2886 /* OACarPlayPurchaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayPurchaseViewController.h; sourceTree = "<group>"; };
 		DADF31A828D07D1100DC2886 /* OACarPlayPurchaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACarPlayPurchaseViewController.m; sourceTree = "<group>"; };
 		DAE082F7253F094D009B5A11 /* ic_custom_settings@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings@3x.png"; path = "Resources/Icons/ic_custom_settings@3x.png"; sourceTree = "<group>"; };
-		DAE082F8253F094D009B5A11 /* ic_custom_add_to_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add_to_track@2x.png"; path = "Resources/Icons/ic_custom_add_to_track@2x.png"; sourceTree = "<group>"; };
 		DAE082F9253F094E009B5A11 /* ic_custom_save_complete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_complete@2x.png"; path = "Resources/Icons/ic_custom_save_complete@2x.png"; sourceTree = "<group>"; };
 		DAE082FB253F094E009B5A11 /* ic_custom_settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings@2x.png"; path = "Resources/Icons/ic_custom_settings@2x.png"; sourceTree = "<group>"; };
 		DAE082FC253F094E009B5A11 /* ic_custom_new_segment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_new_segment@2x.png"; path = "Resources/Icons/ic_custom_new_segment@2x.png"; sourceTree = "<group>"; };
-		DAE082FD253F094F009B5A11 /* ic_custom_save_as_new_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_as_new_file@2x.png"; path = "Resources/Icons/ic_custom_save_as_new_file@2x.png"; sourceTree = "<group>"; };
 		DAE082FE253F094F009B5A11 /* ic_custom_new_segment@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_new_segment@3x.png"; path = "Resources/Icons/ic_custom_new_segment@3x.png"; sourceTree = "<group>"; };
 		DAE082FF253F094F009B5A11 /* ic_custom_save_complete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_complete@3x.png"; path = "Resources/Icons/ic_custom_save_complete@3x.png"; sourceTree = "<group>"; };
-		DAE08307253F0951009B5A11 /* ic_custom_save_as_new_file@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_as_new_file@3x.png"; path = "Resources/Icons/ic_custom_save_as_new_file@3x.png"; sourceTree = "<group>"; };
-		DAE08309253F0952009B5A11 /* ic_custom_save_to_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_to_file@2x.png"; path = "Resources/Icons/ic_custom_save_to_file@2x.png"; sourceTree = "<group>"; };
-		DAE0830A253F0952009B5A11 /* ic_custom_save_to_file@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_save_to_file@3x.png"; path = "Resources/Icons/ic_custom_save_to_file@3x.png"; sourceTree = "<group>"; };
-		DAE0830B253F0953009B5A11 /* ic_custom_add_to_track@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add_to_track@3x.png"; path = "Resources/Icons/ic_custom_add_to_track@3x.png"; sourceTree = "<group>"; };
 		DAE0833F253F0CFB009B5A11 /* ic_custom_redo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_redo@2x.png"; path = "Resources/Icons/ic_custom_redo@2x.png"; sourceTree = "<group>"; };
 		DAE08341253F0CFC009B5A11 /* ic_custom_undo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo@2x.png"; path = "Resources/Icons/ic_custom_undo@2x.png"; sourceTree = "<group>"; };
 		DAE08342253F0CFC009B5A11 /* ic_custom_undo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo@3x.png"; path = "Resources/Icons/ic_custom_undo@3x.png"; sourceTree = "<group>"; };
@@ -9548,8 +9610,6 @@
 				DA6D077B255173C5004FE017 /* ic_custom_add_point_after@3x.png */,
 				DA6D0771255173C1004FE017 /* ic_custom_add_point_before@2x.png */,
 				DA6D0774255173C2004FE017 /* ic_custom_add_point_before@3x.png */,
-				DAE082F8253F094D009B5A11 /* ic_custom_add_to_track@2x.png */,
-				DAE0830B253F0953009B5A11 /* ic_custom_add_to_track@3x.png */,
 				DA68B401233B826E00F5ACCC /* ic_custom_add@2x.png */,
 				DA68B400233B826D00F5ACCC /* ic_custom_add@3x.png */,
 				DA23424123477F32003911B8 /* ic_custom_alert_color@2x.png */,
@@ -9778,12 +9838,8 @@
 				1571CE2824ADEE2E00083F92 /* ic_custom_ruler@3x.png */,
 				780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */,
 				780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */,
-				DAE082FD253F094F009B5A11 /* ic_custom_save_as_new_file@2x.png */,
-				DAE08307253F0951009B5A11 /* ic_custom_save_as_new_file@3x.png */,
 				DAE082F9253F094E009B5A11 /* ic_custom_save_complete@2x.png */,
 				DAE082FF253F094F009B5A11 /* ic_custom_save_complete@3x.png */,
-				DAE08309253F0952009B5A11 /* ic_custom_save_to_file@2x.png */,
-				DAE0830A253F0952009B5A11 /* ic_custom_save_to_file@3x.png */,
 				0A8F544B263949FB0020F5CF /* ic_custom_search_categories@2x.png */,
 				0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */,
 				DA1BC103233F9AFC004DAF78 /* ic_custom_search@2x.png */,
@@ -9810,8 +9866,6 @@
 				DAF820CA2369BC5C007003FA /* ic_custom_start_point@3x.png */,
 				DA32844C26CBC0450036BA73 /* ic_custom_stop@2x.png */,
 				DA32844F26CBC0460036BA73 /* ic_custom_stop@3x.png */,
-				157F3CD424A1F43B000A66F0 /* ic_custom_straight_line@2x.png */,
-				157F3CD524A1F43B000A66F0 /* ic_custom_straight_line@3x.png */,
 				DA65833A22BBB6F90095B03D /* ic_custom_success@2x.png */,
 				DA65833922BBB6F90095B03D /* ic_custom_success@3x.png */,
 				DAF3452422F44823009E2EB6 /* ic_custom_sun@2x.png */,
@@ -10990,6 +11044,70 @@
 				CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		D7210150301B768C003CECB8 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */,
+				D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */,
+				D721013F301B768C003CECB8 /* ElevationActionRow.swift */,
+				D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */,
+				D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */,
+				D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */,
+				D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */,
+				D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */,
+				D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */,
+				D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */,
+				D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */,
+				D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */,
+				D7210149301B768C003CECB8 /* RouteGroupCell.swift */,
+				D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */,
+				D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */,
+				D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */,
+				D721014D301B768C003CECB8 /* SegmentReorderCell.swift */,
+				D721014E301B768C003CECB8 /* StatusCardCell.swift */,
+				D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		D7210154301B768C003CECB8 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */,
+				D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */,
+				D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		D7210168301B768C003CECB8 /* PlanRoute */ = {
+			isa = PBXGroup;
+			children = (
+				D7210150301B768C003CECB8 /* Cells */,
+				D7210154301B768C003CECB8 /* Tabs */,
+				D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */,
+				D7210156301B768C003CECB8 /* OAPlanRouteEditingBridge.h */,
+				D7210157301B768C003CECB8 /* OAPlanRouteEditingBridge.mm */,
+				D7210158301B768C003CECB8 /* PlanRouteButtonFactory.swift */,
+				D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */,
+				D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */,
+				D721015B301B768C003CECB8 /* PlanRouteModels.swift */,
+				D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */,
+				D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */,
+				D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */,
+				D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */,
+				D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */,
+				D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */,
+				D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */,
+				D7210163301B768C003CECB8 /* RouteTypeViewController.swift */,
+				D7210164301B768C003CECB8 /* SegmentReorderViewController.swift */,
+				D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */,
+				D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */,
+				D7210167301B768C003CECB8 /* TwoLineTitleView.swift */,
+			);
+			path = PlanRoute;
 			sourceTree = "<group>";
 		};
 		DA0133122A20E1E900920C14 /* Helpers */ = {
@@ -12267,6 +12385,7 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D7210168301B768C003CECB8 /* PlanRoute */,
 				46624E6F2993B20100F425AE /* Base */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,
@@ -13756,11 +13875,6 @@
 				DA5A7F5226C563A400F274C7 /* OARoadSegmentData.mm */,
 				DA5A7F5626C563A400F274C7 /* OARouteExporter.h */,
 				DA5A7F8826C563A500F274C7 /* OARouteExporter.mm */,
-				DA5A7F6026C563A400F274C7 /* OARoutePlanningHudViewController.h */,
-				DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */,
-				DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */,
-				DA5A7F6626C563A400F274C7 /* OASaveGpxRouteAsyncTask.h */,
-				DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */,
 				DA5A7F5126C563A400F274C7 /* OASaveTrackBottomSheetViewController.h */,
 				DA5A7F8B26C563A500F274C7 /* OASaveTrackBottomSheetViewController.mm */,
 				DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */,
@@ -13778,6 +13892,8 @@
 		DA5A7F6E26C563A500F274C7 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				D7EE671E301782CA0047F171 /* OAReorderSegmentCommand.h */,
+				D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */,
 				DA5A7F8626C563A500F274C7 /* OAAddPointCommand.h */,
 				DA5A7F7E26C563A500F274C7 /* OAAddPointCommand.mm */,
 				DA5A7F8526C563A500F274C7 /* OAApplyGpxApproximationCommand.h */,
@@ -14092,6 +14208,7 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D7EE67193017818E0047F171 /* CancelableTableView.swift */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
 				DA5A806626C563A500F274C7 /* OAButton.m */,
@@ -16323,7 +16440,6 @@
 				DA2EC67229FBBE0300ECEB37 /* ic_action_target@3x.png in Resources */,
 				DA2EC78129FBBE0400ECEB37 /* ic_action_bearing@2x.png in Resources */,
 				DA2EC7DB29FFB76A00ECEB37 /* ic_navbar_screen_side_left@2x.png in Resources */,
-				DAE08313253F0953009B5A11 /* ic_custom_add_to_track@2x.png in Resources */,
 				DA2EC7E229FFB76A00ECEB37 /* ic_navbar_screen_side_right@3x.png in Resources */,
 				DA2EC6CA29FBBE0300ECEB37 /* ic_action_max_speed@3x.png in Resources */,
 				32309A642698D1F7005751F5 /* ic_custom_direction_bearing_day@3x.png in Resources */,
@@ -16470,7 +16586,6 @@
 				4613BFAA2A93DECC004385FB /* ic_custom_screen_side_left_48@2x.png in Resources */,
 				FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */,
 				DA32846726CBF76B0036BA73 /* img_plugin_wikipedia.jpg in Resources */,
-				DAE08335253F0953009B5A11 /* ic_custom_save_to_file@2x.png in Resources */,
 				329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */,
 				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
 				DA0D1633281BEEF500CEEF58 /* map_turn_roundabout_right@2x.png in Resources */,
@@ -16562,7 +16677,6 @@
 				DA5A828426C563A700F274C7 /* OAHomeWorkCollectionViewCell.xib in Resources */,
 				323BD9032628850400D255ED /* ic_bg_point_circle_bottom_small@3x.png in Resources */,
 				464C9B4428E49793006F57B7 /* ic_custom_globe_upload@3x.png in Resources */,
-				DAE08339253F0953009B5A11 /* ic_custom_add_to_track@3x.png in Resources */,
 				8458BB971B0F1E7A00738132 /* ic_working_time@3x.png in Resources */,
 				8476E2881F6C1EEC00EC274F /* map_car_location_night@3x.png in Resources */,
 				DA04D776284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png in Resources */,
@@ -16744,7 +16858,6 @@
 				155B8049249217F7003ADA42 /* img_placeholder_online_source@3x.png in Resources */,
 				C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
-				157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */,
 				C52776A92CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.xib in Resources */,
 				DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */,
 				DA5A826526C563A700F274C7 /* OAQuickActionCell.xib in Resources */,
@@ -16885,7 +16998,6 @@
 				DA13A01D2345FA0100C1A1A8 /* ic_custom_allow_private_access@2x.png in Resources */,
 				DA5A82AC26C563A700F274C7 /* OARouteStatisticsModeCell.xib in Resources */,
 				DA8DB8E4218DA8AA00EBF914 /* ic_ruler_center_light@2x.png in Resources */,
-				DA5A848E26C563A900F274C7 /* OARoutePlanningHudViewController.xib in Resources */,
 				DA5A829326C563A700F274C7 /* OADestinationCollectionViewCell.xib in Resources */,
 				DA2EC78329FBBE0400ECEB37 /* warnings_railways_us@3x.png in Resources */,
 				DA5A827A26C563A700F274C7 /* OAHeaderRoundCell.xib in Resources */,
@@ -17070,7 +17182,6 @@
 				DA80D9A62716CC1800445DAF /* map_track_point_start@2x.png in Resources */,
 				DA5A82DD26C563A800F274C7 /* OAGPXRouteRoundCell.xib in Resources */,
 				DA5A84AB26C563A900F274C7 /* OAInfoBottomView.xib in Resources */,
-				DAE08331253F0953009B5A11 /* ic_custom_save_as_new_file@3x.png in Resources */,
 				DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */,
 				DA5A82A626C563A700F274C7 /* OABottomSheetHeaderCell.xib in Resources */,
 				461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */,
@@ -17202,7 +17313,6 @@
 				FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */,
 				DA68B3B8233B81DB00F5ACCC /* ic_custom_home@3x.png in Resources */,
 				DA2EC6C829FBBE0300ECEB37 /* warnings_railways@3x.png in Resources */,
-				DAE08337253F0953009B5A11 /* ic_custom_save_to_file@3x.png in Resources */,
 				323BD8EF2628850400D255ED /* ic_bg_point_square_bottom_small@3x.png in Resources */,
 				8476E2E01F6C1EEC00EC274F /* map_pedestrian_location@2x.png in Resources */,
 				8A755A7121CBF92400E42699 /* ic_live_monthly_updates@3x.png in Resources */,
@@ -17360,7 +17470,6 @@
 				DA5A82D626C563A800F274C7 /* OALineChartCell.xib in Resources */,
 				DA2EC77029FBBE0400ECEB37 /* ic_action_start_navigation@2x.png in Resources */,
 				15BDDE8224D95F8E00079C83 /* ic_custom_2_5d_view@2x.png in Resources */,
-				157F3CD824A1F43C000A66F0 /* ic_custom_straight_line@3x.png in Resources */,
 				3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */,
 				DA0D161B281BEEF500CEEF58 /* map_turn_continue_dark@2x.png in Resources */,
 				DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */,
@@ -17407,7 +17516,6 @@
 				843E5D051AB341E000BE14BE /* icon_star_fill@3x.png in Resources */,
 				0A8D1A1226FBA1750042444C /* ic_small_altitude@2x.png in Resources */,
 				46453B32283524A8001F9A3A /* ic_custom_umbrella_colored_big@2x.png in Resources */,
-				DAE0831D253F0953009B5A11 /* ic_custom_save_as_new_file@2x.png in Resources */,
 				46693AB3284919DA00ADA1A1 /* ic_custom_hazmat_limit_colored@3x.png in Resources */,
 				B247458527F3583F00C18C3F /* ic_navbar_settings@3x.png in Resources */,
 				8476E1E51F6AA01000EC274F /* ic_list_destination@3x.png in Resources */,
@@ -17684,8 +17792,10 @@
 				32EEB6322E286525002216B0 /* OATravelSelectionLayer.mm in Sources */,
 				FA1FC6BF2EA1285E00A60962 /* BLEScannerViewController.swift in Sources */,
 				DA5A845F26C563A900F274C7 /* OAImpassableRoadsLayer.mm in Sources */,
+				D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */,
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
+				D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */,
 				DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */,
 				27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */,
 				FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */,
@@ -17694,7 +17804,6 @@
 				321C839A2F33CC140028FCCC /* PopulationRowBehaviour.swift in Sources */,
 				DA5A84E326C563A900F274C7 /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				32B383122AEFDE2D0072A3FB /* TravelGuidesImageCacheHelper.swift in Sources */,
-				DA5A849126C563A900F274C7 /* OASaveGpxRouteAsyncTask.mm in Sources */,
 				DA5A812126C563A700F274C7 /* OAAnalyticsHelper.m in Sources */,
 				DA5A84EE26C563A900F274C7 /* OASuperViewController.m in Sources */,
 				DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */,
@@ -17891,7 +18000,6 @@
 				FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */,
 				DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */,
 				462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */,
-				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
 				C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */,
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
@@ -17925,6 +18033,46 @@
 				DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */,
 				DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */,
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
+				D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */,
+				D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */,
+				D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */,
+				D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */,
+				D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */,
+				D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */,
+				D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */,
+				D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */,
+				D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */,
+				D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */,
+				D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */,
+				D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */,
+				D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */,
+				D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */,
+				D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */,
+				D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */,
+				D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */,
+				D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */,
+				D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */,
+				D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */,
+				D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */,
+				D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */,
+				D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */,
+				D7210180301B768C003CECB8 /* OAPlanRouteEditingBridge.mm in Sources */,
+				D7210181301B768C003CECB8 /* PlanRouteButtonFactory.swift in Sources */,
+				D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */,
+				D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */,
+				D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */,
+				D7210185301B768C003CECB8 /* PlanRoutePointMenuViewController.swift in Sources */,
+				D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */,
+				D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */,
+				D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */,
+				D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */,
+				D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */,
+				D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */,
+				D721018C301B768C003CECB8 /* RouteTypeViewController.swift in Sources */,
+				D721018D301B768C003CECB8 /* SegmentReorderViewController.swift in Sources */,
+				D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */,
+				D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */,
+				D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */,
 				DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */,
 				DA5A81B326C563A700F274C7 /* OAPOIUIFilter.mm in Sources */,
 				46B8F5C22936C0D9001AA71A /* OAAngleStraightLineViewController.mm in Sources */,

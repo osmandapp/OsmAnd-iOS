@@ -29,12 +29,14 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 @class OASWptPt, OASTrkSegment, OASGpxFile;
 
-@protocol OASnapToRoadProgressDelegate
+@protocol OASnapToRoadProgressDelegate <NSObject>
 
 - (void) showProgressBar;
-- (void) updateProgress:(int)progress;
 - (void) hideProgressBar;
 - (void) refresh;
+
+@optional
+- (void) updateProgress:(int)progress;
 
 @end
 
@@ -121,6 +123,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OsmAnd::ColorARGB) getLineColor;
 
 - (OASGpxFile *) exportGpx:(NSString *)gpxName;
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex;
 - (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints;
 
 - (void) scheduleRouteCalculateIfNotEmpty;

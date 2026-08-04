@@ -1370,10 +1370,9 @@ static BOOL _repositoryUpdated = NO;
         {
             if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
             {
-                if (item.resourceType == OsmAndResourceType::StarMap)
-                    [_localAstronomyItems addObject:item];
-                else
-                    [_localTravelItems addObject:item];
+                NSMutableArray *localItems = item.resourceType == OsmAndResourceType::StarMap ? _localAstronomyItems : _localTravelItems;
+                if (![localItems containsObject:item])
+                    [localItems addObject:item];
             }
             else
             {
@@ -2667,8 +2666,8 @@ static BOOL _repositoryUpdated = NO;
             localItem = item;
             cellTypeId = localResourceCell;
             title = item.title;
-            if (item.size > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@", OALocalizedString(@"shared_string_wikivoyage"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+            if (item.resource->size > 0)
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", OALocalizedString(@"shared_string_wikivoyage"), [NSByteCountFormatter stringFromByteCount:item.resource->size countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = OALocalizedString(@"shared_string_wikivoyage");
         }
@@ -2678,8 +2677,8 @@ static BOOL _repositoryUpdated = NO;
             localItem = item;
             cellTypeId = localResourceCell;
             title = item.title;
-            if (item.size > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+            if (item.resource->size > 0)
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.resource->size countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = [OAResourceType resourceTypeLocalized:item.resourceType];
         }

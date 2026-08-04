@@ -80,6 +80,20 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     return _activeGpx[path];
 }
 
+- (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath
+{
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = self.activeGpx;
+    OASGpxFile *activeGpxFile = activeGpx[path];
+    if (activeGpxFile == nil && fallbackPath.length > 0)
+        activeGpxFile = activeGpx[fallbackPath];
+    if (activeGpxFile == nil && path.lastPathComponent.length > 0)
+        activeGpxFile = activeGpx[path.lastPathComponent];
+    if (activeGpxFile == nil && fallbackPath.lastPathComponent.length > 0)
+        activeGpxFile = activeGpx[fallbackPath.lastPathComponent];
+
+    return activeGpxFile;
+}
+
 - (BOOL)containsGpxFileWith:(NSString *)path
 {
     return (_activeGpx[path] != nil);

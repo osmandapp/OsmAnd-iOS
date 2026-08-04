@@ -60,6 +60,7 @@
 #import "OrderedDictionary.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -1497,6 +1498,15 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
     }
     
+    if (info.isUrl)
+    {
+        NSURL *onlineUrl = [NSURL URLWithString:url];
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:onlineUrl];
+        [OARootViewController.instance.mapPanel.navigationController presentViewController:safariViewController
+                                                                                  animated:YES completion:nil];
+        return;
+    }
+    
     if ([url containsString:kWikiLink])
     {
         if (!isWikiPurchased)
@@ -1513,16 +1523,33 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         if (index != NSNotFound)
         {
+            MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
+            
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            [OAWikiArticleHelper showWikiArticle:location
-                                             url:url
-                                      sourceView:[_tableView cellForRowAtIndexPath:indexPath]];
+            [OAWikiArticleHelper showWikiArticle:@[location]
+                                             url:url onStart:^{
+                if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
+                    [progressHUD show:YES];
+            } sourceView:[_tableView cellForRowAtIndexPath:indexPath] onComplete:^{
+                [progressHUD hide:YES];
+            }];
         }
     }
     else
     {
         [OAUtilities callUrl:url];
     }
+}
+
+- (MBProgressHUD *)createWikiArticleSearchHUD
+{
+    UIView *hostView = OARootViewController.instance.view;
+    MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:hostView];
+    progressHUD.removeFromSuperViewOnHide = YES;
+    progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
+    [hostView addSubview:progressHUD];
+    [hostView bringSubviewToFront:progressHUD];
+    return progressHUD;
 }
 
 #pragma mark - UITableViewDataSource
@@ -1874,10 +1901,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:self.location.latitude
-                                                                                longitude:self.location.longitude]
-                                                 url:info.text
-                                          sourceView:[tableView cellForRowAtIndexPath:indexPath]];
+                MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
+                
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:self.location.latitude
+                                                                  longitude:self.location.longitude];
+                
+                [OAWikiArticleHelper showWikiArticle:@[location]
+                                                 url:info.text onStart:^{
+                    if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
+                        [progressHUD show:YES];
+                } sourceView:[tableView cellForRowAtIndexPath:indexPath] onComplete:^{
+                    [progressHUD hide:YES];
+                }];
             }
             else
             {

@@ -28,5 +28,6 @@ struct RouteSegmentResult;
 - (OASTrkSegment *)generateRouteSegment;
 
 + (OASGpxFile *)exportRoute:(NSString *)name trkSegments:(NSArray<OASTrkSegment *> *)trkSegments points:(NSArray<OASWptPt *> *)points routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints;
++ (OASGpxFile *)exportTrackWithPoints:(NSArray<OASWptPt *> *)points;
 
 @end

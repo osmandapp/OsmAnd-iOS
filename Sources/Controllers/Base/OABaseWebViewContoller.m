@@ -136,6 +136,10 @@
         onViewCommitted();
 }
 
+- (void)webViewDidFinishNavigation
+{
+}
+
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation
@@ -150,6 +154,11 @@
                         }
                         completion:nil];
     }];
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    [self webViewDidFinishNavigation];
 }
 
 @end

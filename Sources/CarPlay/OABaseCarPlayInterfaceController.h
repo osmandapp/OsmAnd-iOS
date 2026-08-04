@@ -19,18 +19,19 @@ typedef void (^OACarPlayTemplateCompletion)(BOOL completed, NSError * _Nullable 
 
 @property (nonatomic, readonly) CPInterfaceController *interfaceController;
 
-- (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController;
+- (instancetype)initWithInterfaceController:(CPInterfaceController *)interfaceController;
 
-- (void) present;
+- (void)present;
 
 - (void)safeSetRootTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated;
 - (void)safePushTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated;
 - (void)safePopTemplateAnimated:(BOOL)animated completion:(nullable OACarPlayTemplateCompletion)completion;
 - (void)safePopToRootTemplateAnimated:(BOOL)animated;
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName;
+- (void)startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName;
+- (void)startNavigationFromPreviousRoute;
 
-- (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title;
+- (NSArray<CPListSection *> *)generateSingleItemSectionWithTitle:(NSString *)title;
 
 @end
 

@@ -253,11 +253,8 @@
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"create_new_route"])
     {
-        OAApplicationMode *routeMode = [[OAAppSettings sharedManager].applicationMode get];
-        if ([routeMode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT])
-            routeMode = OAApplicationMode.DEFAULT;
         [self hide:YES completion:^{
-            [PlanRouteScrollableViewController showNewRouteWithApplicationMode:routeMode];
+            [PlanRouteScrollableViewController showNewRoute];
         }];
         return;
     }

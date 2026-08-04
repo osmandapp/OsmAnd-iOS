@@ -169,6 +169,14 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var cachedRouteSegments: [PlanRouteSegment]?
     private var cachedAnalysisData: PlanRouteAnalysisData?
     private var hasCachedAnalysisData = false
+    private var initialApplicationMode: OAApplicationMode {
+        var supportedModes = bridge.availableModes()
+        if let directLineMode = OAApplicationMode.default() {
+            supportedModes.append(directLineMode)
+        }
+        let currentMode = OAAppSettings.sharedManager().applicationMode.get()
+        return supportedModes.first(where: { $0.stringKey == currentMode.stringKey }) ?? .default()
+    }
 
     init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil, applicationMode: OAApplicationMode? = nil) {
         self.mode = mode
@@ -184,11 +192,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
         } else {
-            if let applicationMode {
-                bridge.prepareNewRoute(with: applicationMode)
-            } else {
-                bridge.prepareNewRoute()
-            }
+            bridge.prepareNewRoute(with: applicationMode ?? initialApplicationMode)
             if let initialPoint {
                 bridge.addPoint(at: initialPoint)
             }

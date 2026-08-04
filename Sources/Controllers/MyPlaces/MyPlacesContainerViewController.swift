@@ -78,7 +78,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     var tracksFolderPathToOpenOnLoad: String?
     
     private let segmentedControlIconSize: CGFloat = 24
-    private let searchAnimationDuration: CGFloat = 0.4
+    private let searchAnimationDuration: TimeInterval = 0.4
     private var availableViewControllers: [Tab: UIViewController] = [:]
     private var pageViewController: UIPageViewController?
     private var searchController: UISearchController?

@@ -81,8 +81,7 @@ extension FavoriteListViewController {
             searchText = ""
             selectionManager.deselectAll()
         } else {
-            let selectableItems = selectableIndexPaths().compactMap { dataSource.itemIdentifier(for: $0)?.selectionItem }
-            selectionManager = SelectionManager(allItems: selectableItems)
+            selectionManager = SelectionManager(allItems: selectableItems())
         }
 
         collectionView.isEditing = isEditing
@@ -394,22 +393,10 @@ extension FavoriteListViewController {
         updateDistanceAndDirection(false)
     }
     
-    private func selectableIndexPaths() -> [IndexPath] {
-        var indexPaths: [IndexPath] = []
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(item: item, section: section)
-                guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
-                switch itemIdentifier {
-                case .folder, .favorite:
-                    indexPaths.append(indexPath)
-                default:
-                    continue
-                }
-            }
+    private func selectableItems() -> [FavoriteSelectionItem] {
+        dataSource.snapshot().sectionIdentifiers.flatMap { section in
+            dataSource.snapshot(for: section).items.compactMap(\.selectionItem)
         }
-
-        return indexPaths
     }
     
     private func openNewFavoriteGroupEditor() {

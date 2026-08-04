@@ -221,7 +221,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  attributes: .destructive) { [weak self] _ in
             self?.deleteSegment(pointIndexes: segment.pointIndexes)
         })
-        return UIMenu(children: children)
+        return makeSeparatedMenu(children: children)
     }
 
     private func makeGroupMenu(for group: PlanRouteProfileGroup, in segment: PlanRouteSegment) -> UIMenu {
@@ -238,7 +238,9 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                      attributes: .destructive) { [weak self] _ in
             self?.deleteSegment(pointIndexes: groupIndexes)
         }
-        return UIMenu(children: [changeRouteType, makeSortMenu(pointIndexes: groupIndexes), deleteSection])
+        return makeSeparatedMenu(children: [changeRouteType,
+                                            makeSortMenu(pointIndexes: groupIndexes),
+                                            deleteSection])
     }
 
     private func makeRouteTypeMenu() -> UIMenu {
@@ -247,6 +249,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             self?.onChangeRouteType?(.wholeTrack)
         }
         return UIMenu(children: [changeRouteType])
+    }
+
+    private func makeSeparatedMenu(children: [UIMenuElement]) -> UIMenu {
+        let menuSections = children.map { UIMenu(options: .displayInline, children: [$0]) }
+        return UIMenu(children: menuSections)
     }
 
     private func sortKey(for pointIndexes: [Int]) -> String {

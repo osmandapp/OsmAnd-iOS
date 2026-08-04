@@ -12,7 +12,7 @@ final class PlanRoutePointCell: UITableViewCell {
     private static let horizontalInset: CGFloat = 16
     private static let circleSize: CGFloat = 28
     private static let deleteSize: CGFloat = 24
-    private static let deleteNumberSpacing: CGFloat = 12
+    private static let deleteNumberSpacing: CGFloat = 32
     private static let numberTextSpacing: CGFloat = 16
     private static let textLeadingInset = horizontalInset + deleteSize + deleteNumberSpacing + circleSize + numberTextSpacing
 
@@ -33,11 +33,13 @@ final class PlanRoutePointCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with point: PlanRoutePoint, tintColor: UIColor) {
-        separatorInset = UIEdgeInsets(top: 0,
-                                      left: Self.textLeadingInset,
-                                      bottom: 0,
-                                      right: Self.horizontalInset)
+    func configure(with point: PlanRoutePoint, tintColor: UIColor, showsFullWidthSeparator: Bool) {
+        separatorInset = showsFullWidthSeparator
+            ? .zero
+            : UIEdgeInsets(top: 0,
+                           left: Self.textLeadingInset,
+                           bottom: 0,
+                           right: Self.horizontalInset)
         numberLabel.text = "\(point.index + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name

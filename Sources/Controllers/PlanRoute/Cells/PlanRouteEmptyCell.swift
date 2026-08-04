@@ -9,7 +9,13 @@ import UIKit
 
 final class PlanRouteEmptyCell: UITableViewCell {
 
-    private static let iconSize: CGFloat = 30
+    private enum Layout {
+        static let horizontalInset: CGFloat = 16
+        static let verticalInset: CGFloat = 20
+        static let textSpacing: CGFloat = 6
+        static let iconSpacing: CGFloat = 16
+        static let iconSize: CGFloat = 30
+    }
 
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -24,31 +30,35 @@ final class PlanRouteEmptyCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(title: String, description: String, icon: UIImage?, iconTint: UIColor) {
+        titleLabel.text = title
+        descriptionLabel.text = description
+        iconView.image = icon
+        iconView.tintColor = iconTint
+        titleLabel.accessibilityLabel = [title, description].joined(separator: ". ")
+    }
+
     private func setupCell() {
         backgroundColor = .groupBg
         selectionStyle = .none
 
-        titleLabel.text = localizedString("plan_route_no_points_title")
-        titleLabel.font = .scaledSystemFont(ofSize: 17)
+        titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 0
+        titleLabel.adjustsFontForContentSizeCategory = true
 
-        descriptionLabel.text = localizedString("plan_route_no_points_descr")
-        descriptionLabel.font = .scaledSystemFont(ofSize: 15)
+        descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         descriptionLabel.textColor = .textColorSecondary
         descriptionLabel.numberOfLines = 0
+        descriptionLabel.adjustsFontForContentSizeCategory = true
 
-        iconView.image = .templateImageNamed("ic_custom_plan_route")
-        iconView.tintColor = .iconColorActive
         iconView.contentMode = .scaleAspectFit
         iconView.isAccessibilityElement = false
         descriptionLabel.isAccessibilityElement = false
-        titleLabel.accessibilityLabel = [titleLabel.text, descriptionLabel.text]
-            .compactMap { $0 }.joined(separator: ". ")
 
         let textStack = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         textStack.axis = .vertical
-        textStack.spacing = 6
+        textStack.spacing = Layout.textSpacing
 
         [textStack, iconView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -56,15 +66,15 @@ final class PlanRouteEmptyCell: UITableViewCell {
         }
 
         NSLayoutConstraint.activate([
-            textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Layout.verticalInset),
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Layout.horizontalInset),
+            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Layout.verticalInset),
 
-            iconView.leadingAnchor.constraint(equalTo: textStack.trailingAnchor, constant: 12),
-            iconView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            iconView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            iconView.widthAnchor.constraint(equalToConstant: Self.iconSize),
-            iconView.heightAnchor.constraint(equalToConstant: Self.iconSize)
+            iconView.leadingAnchor.constraint(equalTo: textStack.trailingAnchor, constant: Layout.iconSpacing),
+            iconView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Layout.horizontalInset),
+            iconView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Layout.verticalInset),
+            iconView.widthAnchor.constraint(equalToConstant: Layout.iconSize),
+            iconView.heightAnchor.constraint(equalToConstant: Layout.iconSize)
         ])
     }
 }

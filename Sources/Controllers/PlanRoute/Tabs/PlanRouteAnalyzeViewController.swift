@@ -149,7 +149,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 72, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)

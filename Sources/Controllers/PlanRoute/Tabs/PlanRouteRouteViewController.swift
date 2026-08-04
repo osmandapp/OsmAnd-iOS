@@ -331,6 +331,10 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteEmptyCell.reuseIdentifier, for: indexPath) as? PlanRouteEmptyCell else {
                 return UITableViewCell()
             }
+            cell.configure(title: localizedString("plan_route_no_points_title"),
+                           description: localizedString("plan_route_no_points_descr"),
+                           icon: .icCustomPlanRoute,
+                           iconTint: .iconColorActive)
             return cell
         case let .profileGroup(group, segment):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteProfileGroupCell.reuseIdentifier, for: indexPath) as? PlanRouteProfileGroupCell else {

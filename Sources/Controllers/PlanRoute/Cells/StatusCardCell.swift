@@ -12,7 +12,9 @@ final class StatusCardCell: UITableViewCell {
     private enum Layout {
         static let cornerRadius: CGFloat = 24
         static let horizontalInset: CGFloat = 16
-        static let contentInset: CGFloat = 16
+        static let verticalInset: CGFloat = 20
+        static let textSpacing: CGFloat = 6
+        static let iconSpacing: CGFloat = 16
         static let trailingSize: CGFloat = 30
         static let actionRowHeight: CGFloat = 50
     }
@@ -94,10 +96,13 @@ final class StatusCardCell: UITableViewCell {
 
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.textColor = .textColorPrimary
+        titleLabel.numberOfLines = 0
+        titleLabel.adjustsFontForContentSizeCategory = true
 
         descLabel.font = .preferredFont(forTextStyle: .subheadline)
         descLabel.textColor = .textColorSecondary
         descLabel.numberOfLines = 0
+        descLabel.adjustsFontForContentSizeCategory = true
 
         iconView.contentMode = .scaleAspectFit
         separator.backgroundColor = .customSeparator
@@ -111,13 +116,13 @@ final class StatusCardCell: UITableViewCell {
             trailingContainer.addSubview($0)
         }
 
-        let descBottom = descLabel.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -Layout.contentInset)
+        let descBottom = descLabel.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -Layout.verticalInset)
         descBottomConstraint = descBottom
 
         actionConstraints = [
-            separator.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 12),
-            separator.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.contentInset),
-            separator.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -Layout.contentInset),
+            separator.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: Layout.verticalInset),
+            separator.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.horizontalInset),
+            separator.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -Layout.horizontalInset),
             separator.heightAnchor.constraint(equalToConstant: 0.5),
 
             actionRow.topAnchor.constraint(equalTo: separator.bottomAnchor),
@@ -133,8 +138,8 @@ final class StatusCardCell: UITableViewCell {
             card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Layout.horizontalInset),
             card.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            trailingContainer.topAnchor.constraint(equalTo: card.topAnchor, constant: Layout.contentInset),
-            trailingContainer.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -Layout.contentInset),
+            trailingContainer.topAnchor.constraint(equalTo: card.topAnchor, constant: Layout.verticalInset),
+            trailingContainer.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -Layout.horizontalInset),
             trailingContainer.widthAnchor.constraint(equalToConstant: Layout.trailingSize),
             trailingContainer.heightAnchor.constraint(equalToConstant: Layout.trailingSize),
 
@@ -146,13 +151,13 @@ final class StatusCardCell: UITableViewCell {
             spinner.centerXAnchor.constraint(equalTo: trailingContainer.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: trailingContainer.centerYAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: card.topAnchor, constant: Layout.contentInset),
-            titleLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.contentInset),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingContainer.leadingAnchor, constant: -8),
+            titleLabel.topAnchor.constraint(equalTo: card.topAnchor, constant: Layout.verticalInset),
+            titleLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.horizontalInset),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingContainer.leadingAnchor, constant: -Layout.iconSpacing),
 
-            descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            descLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.contentInset),
-            descLabel.trailingAnchor.constraint(equalTo: trailingContainer.leadingAnchor, constant: -8)
+            descLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Layout.textSpacing),
+            descLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Layout.horizontalInset),
+            descLabel.trailingAnchor.constraint(equalTo: trailingContainer.leadingAnchor, constant: -Layout.iconSpacing)
         ])
 
         descBottom.isActive = true

@@ -1729,6 +1729,8 @@
 		CE826BA1301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */; };
 		CE83DB4A2FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */; };
 		CE83DB4C2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */; };
+		CE85DBBB30232CF40096FB6F /* OAPOIMapLayerData.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE85DBBA30232CF40096FB6F /* OAPOIMapLayerData.mm */; };
+		CE85DBBF30232D560096FB6F /* OAPOITileProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE85DBBE30232D560096FB6F /* OAPOITileProvider.mm */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		CE948E792FEA5EAB0023FA12 /* WikipediaContextMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */; };
 		CEAF08182FD91C4A0048A74A /* FolderCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */; };
@@ -5786,6 +5788,10 @@
 		CE826BA0301B5B5700BD0DCE /* OARoutingParamsDeepLinkBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingParamsDeepLinkBridge.mm; sourceTree = "<group>"; };
 		CE83DB492FEE4B20002D7685 /* StarMapSearchSortFilterChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsView.swift; sourceTree = "<group>"; };
 		CE83DB4B2FEE4B20002D7685 /* StarMapSearchSortFilterChipsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchSortFilterChipsProvider.swift; sourceTree = "<group>"; };
+		CE85DBB930232C8F0096FB6F /* OAPOIMapLayerData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOIMapLayerData.h; sourceTree = "<group>"; };
+		CE85DBBA30232CF40096FB6F /* OAPOIMapLayerData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIMapLayerData.mm; sourceTree = "<group>"; };
+		CE85DBBD30232D470096FB6F /* OAPOITileProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOITileProvider.h; sourceTree = "<group>"; };
+		CE85DBBE30232D560096FB6F /* OAPOITileProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOITileProvider.mm; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
 		CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuView.swift; sourceTree = "<group>"; };
 		CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -10992,6 +10998,17 @@
 			path = Import;
 			sourceTree = "<group>";
 		};
+		CE85DBBC30232D2B0096FB6F /* SearchByName */ = {
+			isa = PBXGroup;
+			children = (
+				CE85DBB930232C8F0096FB6F /* OAPOIMapLayerData.h */,
+				CE85DBBA30232CF40096FB6F /* OAPOIMapLayerData.mm */,
+				CE85DBBD30232D470096FB6F /* OAPOITileProvider.h */,
+				CE85DBBE30232D560096FB6F /* OAPOITileProvider.mm */,
+			);
+			path = SearchByName;
+			sourceTree = "<group>";
+		};
 		DA0133122A20E1E900920C14 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -13566,6 +13583,7 @@
 				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
 				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
 				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				CE85DBBC30232D2B0096FB6F /* SearchByName */,
 				FA5DD0FA2F222977002F3F79 /* OAPOILayerTopPlacesProvider */,
 				DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */,
 				DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */,
@@ -18570,6 +18588,7 @@
 				FA7000012F90000000000001 /* FFCircularProgressView.m in Sources */,
 				FA7000012F90000000000002 /* UIColor+iOS7.m in Sources */,
 				FA7000012F90000000000003 /* TTRangeSlider.m in Sources */,
+				CE85DBBF30232D560096FB6F /* OAPOITileProvider.mm in Sources */,
 				FA7000012F90000000000004 /* MBProgressHUD.m in Sources */,
 				FA7000012F90000000000005 /* JASidePanelController.m in Sources */,
 				FA7000012F90000000000006 /* UIViewController+JASidePanel.m in Sources */,
@@ -18982,6 +19001,7 @@
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */,
+				CE85DBBB30232CF40096FB6F /* OAPOIMapLayerData.mm in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
 				271A5C442FCDE1D700C27411 /* SortButtonCollectionViewCell.swift in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,

@@ -1679,6 +1679,46 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return [NSArray arrayWithArray:arr];
 }
 
++ (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    if (query.length == 0)
+        return [NSArray array];
+
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return matcher && [matcher isCancelled];
+                                                  }));
+
+    const auto searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+    searchCriteria->name = QString::fromNSString(query);
+    OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
+    OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
+    searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    search->performSearch(*searchCriteria,
+                          [&arr, &matcher]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry];
+                              if (poi)
+                              {
+                                  if (matcher)
+                                      [matcher publish:poi];
+                                  [arr addObject:poi];
+                              }
+                          },
+                          ctrl);
+
+    return [NSArray arrayWithArray:arr];
+}
+
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];

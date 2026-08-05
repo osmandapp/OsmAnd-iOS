@@ -45,6 +45,15 @@ final class PoiUIFilterDataProvider: NSObject {
                 rightLongitude: rightLongitude,
                 matcher: matcher
             )
+        } else if filter.filterId == BY_NAME_FILTER_ID {
+            return filter.searchAmenities(
+                topLatitude,
+                left: leftLongitude,
+                bottom: bottomLatitude,
+                right: rightLongitude,
+                zoom: Int32(zoom),
+                matcher: matcher,
+                filterUnique: false)
         } else {
             return OAPoiUIFilterDataProviderWrapper.searchAmenities(
                 filter,

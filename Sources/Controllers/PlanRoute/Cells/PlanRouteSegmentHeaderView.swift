@@ -9,6 +9,7 @@ import UIKit
 
 final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
 
+    private static let horizontalInset: CGFloat = 16
     private static let optionsButtonSize: CGFloat = 44
 
     private let titleLabel = UILabel()
@@ -67,18 +68,18 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
             contentView.addSubview($0)
         }
 
-        let constraints = [
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+        let textConstraints = [
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-
-            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12)
+        ]
+        textConstraints.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(textConstraints + [
+            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             optionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.optionsButtonSize),
             optionsButton.heightAnchor.constraint(equalToConstant: Self.optionsButtonSize)
-        ]
-        constraints.forEach { $0.priority = UILayoutPriority(999) }
-        NSLayoutConstraint.activate(constraints)
+        ])
     }
 }

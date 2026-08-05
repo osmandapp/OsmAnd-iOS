@@ -126,8 +126,14 @@ struct PlanRouteInfo {
     let bearing: Double
 
     var showsTime: Bool {
-        !isNewRoute && !isStraightLine && duration > 0
+        !isStraightLine && duration > 0
     }
+}
+
+enum PlanRoutePointEditMode: Int {
+    case move
+    case addBefore
+    case addAfter
 }
 
 struct PlanRoutePoint {
@@ -286,6 +292,7 @@ protocol PlanRouteAnalyzeDataSource: AnyObject {
 protocol PlanRoutePointsDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
     var routeSegments: [PlanRouteSegment] { get }
+    var pendingEmptySegmentIndex: Int? { get }
     var defaultMode: OAApplicationMode? { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
@@ -336,8 +343,12 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var onRouteInfoChanged: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
+    var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }
 
     func setCrosshairPosition(screenPoint: CGPoint)
+    func applyPointEdit()
+    func cancelPointEdit()
+    func addAnotherPoint()
     func dismissLayer()
 }
 

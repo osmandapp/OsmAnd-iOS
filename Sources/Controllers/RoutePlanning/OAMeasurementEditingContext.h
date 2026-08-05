@@ -10,6 +10,7 @@
 // Partially synced!
 
 #import <Foundation/Foundation.h>
+#import "OAMeasurementEditingContextTypes.h"
 
 #include <OsmAndCore/Color.h>
 
@@ -17,12 +18,6 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 {
     NEXT_SEGMENT = 0,
     WHOLE_TRACK
-};
-
-typedef NS_ENUM(NSInteger, EOAAddPointMode) {
-    EOAAddPointModeUndefined = -1,
-    EOAAddPointModeBefore = 0,
-    EOAAddPointModeAfter
 };
 
 @class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OARoadSegmentData, OAGpxRouteApproximation;

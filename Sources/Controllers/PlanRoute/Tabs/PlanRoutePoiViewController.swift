@@ -412,7 +412,7 @@ extension PlanRoutePoiViewController {
         let sortingOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.lastModified, group: group)])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.nameAZ, group: group), makePoiGroupSortAction(.nameZA, group: group)])
         let dateOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.newestDateFirst, group: group), makePoiGroupSortAction(.oldestDateFirst, group: group)])
-        return UIMenu(title: localizedString("shared_string_sort"), image: .templateImageNamed("ic_custom_swap"), children: [sortingOptions, alphabeticalOptions, dateOptions])
+        return UIMenu(title: localizedString("shared_string_sort"), image: .icCustomSwap, children: [sortingOptions, alphabeticalOptions, dateOptions])
     }
 
     private func makePoiGroupSortAction(_ sortMode: TrackFavoriteSortMode, group: PlanRoutePoiGroup) -> UIAction {

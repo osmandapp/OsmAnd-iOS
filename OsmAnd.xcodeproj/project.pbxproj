@@ -7527,6 +7527,7 @@
 		DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMeasurementEditingContext.mm; sourceTree = "<group>"; };
 		DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6426C563A400F274C7 /* OAMeasurementEditingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContext.h; sourceTree = "<group>"; };
+		C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContextTypes.h; sourceTree = "<group>"; };
 		DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASaveTrackBottomSheetViewController.xib; sourceTree = "<group>"; };
 		DA5A7F6826C563A400F274C7 /* OASelectTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectTrackFolderViewController.h; sourceTree = "<group>"; };
 		DA5A7F6926C563A400F274C7 /* InitialRoutePlanningBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InitialRoutePlanningBottomSheetViewController.mm; sourceTree = "<group>"; };
@@ -13865,6 +13866,7 @@
 				DA5A7F6C26C563A500F274C7 /* OAInfoBottomView.mm */,
 				DA5A7F8D26C563A500F274C7 /* OAInfoBottomView.xib */,
 				DA5A7F6426C563A400F274C7 /* OAMeasurementEditingContext.h */,
+				C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */,
 				DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */,
 				DA5A7F4E26C563A400F274C7 /* OAOpenAddTrackViewController.h */,
 				DA5A7F8F26C563A500F274C7 /* OAOpenAddTrackViewController.mm */,

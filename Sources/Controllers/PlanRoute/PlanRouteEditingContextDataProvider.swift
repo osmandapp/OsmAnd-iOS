@@ -17,6 +17,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
+    var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
+    private(set) var pendingEmptySegmentIndex: Int?
 
     weak var presenterViewController: UIViewController? {
         get { bridge.presenterViewController }
@@ -52,8 +54,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         }
         let segments = bridgeSegments()
         let isStraightLine = !segments.isEmpty && segments.allSatisfy { !$0.routed }
-        let analysis = cachedAnalysisData
-        let duration: TimeInterval = analysis?.timeInMotion ?? 0
+        let analysis = analysisData
+        let routeDuration = bridge.routeDuration
+        let duration = routeDuration > 0 ? routeDuration : analysis?.timeInMotion ?? 0
         let uphill: Double = analysis?.uphill ?? 0
         let downhill: Double = analysis?.downhill ?? 0
         let arrivalTime: Date? = duration > 0 && !isStraightLine ? Date(timeIntervalSinceNow: duration) : nil
@@ -182,12 +185,32 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         self.mode = mode
         self.filePath = filePath
         bridge.onChange = { [weak self] in
-            self?.invalidateCachedData()
-            self?.onDataChanged?()
+            guard let self else { return }
+            invalidateCachedData()
+            updatePendingEmptySegment()
+            onDataChanged?()
+        }
+        bridge.onNewSegmentStarted = { [weak self] in
+            guard let self else { return }
+            pendingEmptySegmentIndex = routeSegments.count + 1
         }
         bridge.onRouteInfoChanged = { [weak self] in
             self?.invalidateRouteInfoCache()
             self?.onRouteInfoChanged?()
+        }
+        bridge.onPointEditModeRequested = { [weak self] editMode in
+            let mode: PlanRoutePointEditMode
+            switch editMode {
+            case .move:
+                mode = .move
+            case .addBefore:
+                mode = .addBefore
+            case .addAfter:
+                mode = .addAfter
+            @unknown default:
+                return
+            }
+            self?.onPointEditModeRequested?(mode)
         }
         if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
@@ -253,6 +276,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func undo() {
+        pendingEmptySegmentIndex = nil
         bridge.undo()
     }
 
@@ -368,6 +392,18 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.trim(after: index)
     }
 
+    func applyPointEdit() {
+        bridge.applyPointEdit()
+    }
+
+    func cancelPointEdit() {
+        bridge.cancelPointEdit()
+    }
+
+    func addAnotherPoint() {
+        bridge.addAnotherPoint()
+    }
+
     func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams {
         let settings = OAAppSettings.sharedManager()
         let useElevationData = settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).get(mode)
@@ -408,6 +444,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     private func invalidateRouteInfoCache() {
         cachedRouteInfo = nil
+    }
+
+    private func updatePendingEmptySegment() {
+        guard let pendingEmptySegmentIndex else { return }
+        let segmentCount = bridgeSegments().count
+        if segmentCount == 0 || segmentCount >= pendingEmptySegmentIndex {
+            self.pendingEmptySegmentIndex = nil
+        } else {
+            self.pendingEmptySegmentIndex = segmentCount + 1
+        }
     }
 
     private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {

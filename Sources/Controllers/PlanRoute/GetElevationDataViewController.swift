@@ -29,7 +29,7 @@ final class GetElevationDataViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .viewBg
 
-        let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_navbar_close"), size: 44)
+        let closeButton = PlanRouteButtonFactory.iconButton(image: .icNavbarClose, size: 44)
         closeButton.layer.shadowOpacity = 0
         closeButton.addTarget(self, action: #selector(onClose), for: .touchUpInside)
         view.addSubview(closeButton)
@@ -56,7 +56,7 @@ final class GetElevationDataViewController: UIViewController {
         view.addSubview(optionsCard)
 
         let nearbyRoadsRow = makeOptionRow(
-            icon: .templateImageNamed("ic_custom_attach_track"),
+            icon: .icCustomAttachTrack,
             title: localizedString("use_nearby_roads"),
             subtitle: localizedString("may_adjust_track_geometry"),
             useNearbyRoads: true
@@ -66,7 +66,7 @@ final class GetElevationDataViewController: UIViewController {
         separatorView.translatesAutoresizingMaskIntoConstraints = false
 
         let terrainRow = makeOptionRow(
-            icon: .templateImageNamed("ic_custom_terrain"),
+            icon: .icCustomTerrain,
             title: localizedString("use_terrain_maps"),
             subtitle: localizedString("track_geometry_stays_unchanged"),
             useNearbyRoads: false

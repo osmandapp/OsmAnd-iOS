@@ -32,12 +32,10 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
     var onChangeRouteType: ((SegmentRouteContext) -> Void)?
-    var onOpenRouteBetweenPoints: ((PlanRouteSegment) -> Void)?
     var onSaveSegment: (([Int]) -> Void)?
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
-    private var pendingEmptySegmentIndex: Int?
     private var lastContentSignature: String?
     private var doorToDoorSortedKeys: Set<String> = []
     private var isApplyingDoorToDoorSort = false
@@ -61,10 +59,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     func reloadData() {
         guard isViewLoaded else { return }
         let segments = dataSource?.routeSegments ?? []
-        if let pendingIndex = pendingEmptySegmentIndex,
-           segments.count >= pendingIndex {
-            pendingEmptySegmentIndex = nil
-        }
         let signature = contentSignature(for: segments)
         guard lastContentSignature != signature else { return }
         if !isApplyingDoorToDoorSort {
@@ -109,7 +103,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func buildSections(with segments: [PlanRouteSegment]) -> [SectionModel] {
         guard !segments.isEmpty else {
-            pendingEmptySegmentIndex = nil
             return [SectionModel(headerTitle: localizedString("route_points"),
                                  headerSubtitle: nil,
                                  headerMenu: makeRouteTypeMenu(),
@@ -117,6 +110,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  isStartNewSegment: false)]
         }
 
+        let pendingEmptySegmentIndex = dataSource?.pendingEmptySegmentIndex
         let multipleSegments = segments.count > 1 || pendingEmptySegmentIndex != nil
         var result: [SectionModel] = segments.flatMap { makeSections(for: $0, multipleSegments: multipleSegments) }
 
@@ -138,7 +132,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func contentSignature(for segments: [PlanRouteSegment]) -> String {
-        let pendingSignature = pendingEmptySegmentIndex.map(String.init) ?? "nil"
+        let pendingSignature = (dataSource?.pendingEmptySegmentIndex).map(String.init) ?? "nil"
         let canStartNewSegment = dataSource?.canStartNewSegment ?? false
         let segmentsSignature = segments.map { segment in
             let segmentMode = segment.singleMode?.toHumanString() ?? "nil"
@@ -208,7 +202,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             children.append(UIAction(title: localizedString("change_mode"),
                                      subtitle: segment.singleMode?.toHumanString(),
                                      image: segment.singleMode?.getIcon()) { [weak self] _ in
-                self?.onOpenRouteBetweenPoints?(segment)
+                self?.onChangeRouteType?(.wholeSegment(segment))
             })
         }
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
@@ -245,7 +239,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func makeRouteTypeMenu() -> UIMenu {
         let changeRouteType = UIAction(title: localizedString("change_mode"),
-                                       image: .templateImageNamed("ic_custom_point_to_point")) { [weak self] _ in
+                                       image: .icCustomPointToPoint) { [weak self] _ in
             self?.onChangeRouteType?(.wholeTrack)
         }
         return UIMenu(children: [changeRouteType])
@@ -272,7 +266,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             self?.rebuildSections()
         }
         let doorToDoor = UIAction(title: localizedString("intermediate_items_sort_by_distance"),
-                                  image: .templateImageNamed("ic_custom_sort_door_to_door"),
+                                  image: .icCustomSortDoorToDoor,
                                   state: isSortedDoorToDoor ? .on : .off) { [weak self] _ in
             guard let self else { return }
             doorToDoorSortedKeys.insert(key)
@@ -297,8 +291,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func startNewSegment() {
-        let nextIndex = (dataSource?.routeSegments.count ?? 0) + 1
-        pendingEmptySegmentIndex = nextIndex
         dataSource?.startNewSegment()
     }
 

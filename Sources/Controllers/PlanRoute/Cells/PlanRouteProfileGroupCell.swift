@@ -58,7 +58,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         distanceLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.templateImageNamed("ic_custom_overflow_menu_stroke")
+        configuration.image = .icCustomOverflowMenuStroke
         configuration.baseForegroundColor = .iconColorDefault
         configuration.background.backgroundColor = .clear
         configuration.contentInsets = .zero

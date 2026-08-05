@@ -588,7 +588,21 @@
         OASWptPt *pt = _editingCtx.getPoints[pos];
         auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
         auto point31 = [OANativeUtilities convertFromPointI:point];
-        [self.mapViewController goToPosition:point31 animated:YES];
+        if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+        {
+            OAMapRendererView *mapView = self.mapViewController.mapView;
+            CGFloat scale = mapView.contentScaleFactor;
+            OsmAnd::PointI targetScreenPoint = mapView.getTargetScreenPosition;
+            OsmAnd::PointI screenPoint(static_cast<int32_t>(_cursorScreenPoint.x * scale),
+                                       static_cast<int32_t>(_cursorScreenPoint.y * scale));
+            [self.mapViewController goToPosition:point31 animated:NO];
+            [mapView setMapTarget:screenPoint location31:point];
+            [mapView resetMapTargetPixelCoordinates:targetScreenPoint];
+        }
+        else
+        {
+            [self.mapViewController goToPosition:point31 animated:YES];
+        }
     }
 }
 

@@ -1170,7 +1170,7 @@
     {
         qRegionNames.append(QString::fromNSString(region));
     }
-    OsmAnd::CommonWords::getInstance().addRegionNames(qRegionNames);
+    OsmAnd::CommonWords::getInstance(qRegionNames);
 }
 
 - (void)parseRegionNames:(OAWorldRegion *)region result:(NSMutableArray<NSString *> *)result

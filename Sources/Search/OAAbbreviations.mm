@@ -51,7 +51,7 @@ static NSDictionary<NSString *, NSString *> *OAAbbreviationsToNSDictionary(
 
 + (NSDictionary<NSString *, NSString *> *) getSearchAbbreviations
 {
-    return OAAbbreviationsToNSDictionary(OsmAnd::Abbreviations::getSearchabbreviations());
+    return OAAbbreviationsToNSDictionary(OsmAnd::Abbreviations::getSearchAbbreviations());
 }
 
 + (BOOL) isCommonSkipOtherCnt:(NSString *)lowerCase

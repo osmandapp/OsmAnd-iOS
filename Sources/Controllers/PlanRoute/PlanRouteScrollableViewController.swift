@@ -882,6 +882,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc private func onRouteTypeButtonTapped() {
+        if dataProvider.shouldShowApproximationWarning,
+           let warningViewController = dataProvider.approximationWarningViewController {
+            showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: true)
+            warningViewController.navigationController?.setNavigationBarHidden(true, animated: false)
+            warningViewController.navigationController?.isModalInPresentation = true
+            return
+        }
         let segments = dataProvider.routeSegments
         let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
         if isComplex {

@@ -131,9 +131,7 @@ struct PlanRouteInfo {
 }
 
 enum PlanRoutePointEditMode: Int {
-    case move
-    case addBefore
-    case addAfter
+    case move, addBefore, addAfter
 }
 
 struct PlanRoutePoint {
@@ -295,6 +293,8 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var pendingEmptySegmentIndex: Int? { get }
     var defaultMode: OAApplicationMode? { get }
     var isTrackReadyToCalculate: Bool { get }
+    var shouldShowApproximationWarning: Bool { get }
+    var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 

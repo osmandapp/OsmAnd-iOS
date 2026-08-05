@@ -147,6 +147,14 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isTrackReadyToCalculate
     }
 
+    var shouldShowApproximationWarning: Bool {
+        bridge.shouldShowApproximationWarning
+    }
+
+    var approximationWarningViewController: UIViewController? {
+        bridge.approximationWarningViewController
+    }
+
     var canStartNewSegment: Bool {
         bridge.isAddNewSegmentAllowed
     }

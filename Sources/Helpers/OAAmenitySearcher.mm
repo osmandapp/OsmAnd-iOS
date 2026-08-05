@@ -1679,11 +1679,16 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
++ (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)query
+                               topLatitude:(double)topLatitude
+                             leftLongitude:(double)leftLongitude
+                            bottomLatitude:(double)bottomLatitude
+                            rightLongitude:(double)rightLongitude
+                                   matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
-    if (query.length == 0)
-        return [NSArray array];
+    if (query.trim.length == 0)
+        return arr;
 
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -1695,28 +1700,31 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                                       return matcher && [matcher isCancelled];
                                                   }));
 
-    const auto searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+    const auto searchCriteria = std::make_shared<OsmAnd::AmenitiesByNameSearch::Criteria>();
     searchCriteria->name = QString::fromNSString(query);
+    searchCriteria->matcherMode = OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
+
     OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
     OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
-    searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+    const auto bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+    searchCriteria->bbox31 = bbox31;
+    searchCriteria->obfInfoAreaFilter = bbox31;
+    searchCriteria->xy31 = bbox31.center();
 
-    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    const auto search = std::make_shared<const OsmAnd::AmenitiesByNameSearch>(obfsCollection);
     search->performSearch(*searchCriteria,
                           [&arr, &matcher]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry];
-                              if (poi)
-                              {
-                                  if (matcher)
-                                      [matcher publish:poi];
-                                  [arr addObject:poi];
-                              }
+                              OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:NO];
+                              if (!poi)
+                                  return;
+                              if (matcher && ![matcher publish:poi])
+                                  return;
+                              [arr addObject:poi];
                           },
                           ctrl);
-
-    return [NSArray arrayWithArray:arr];
+    return arr;
 }
 
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher

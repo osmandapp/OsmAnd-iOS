@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 static const int kPoiMapLayerStartZoom = 5;
 static const int kPoiTilePointsLimit = 25;
+static const int kPoiMapLayerZoomThreshold = 0;
 
 @interface OAPOIMapLayerData : NSObject
 
@@ -27,6 +28,12 @@ static const int kPoiTilePointsLimit = 25;
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter NS_DESIGNATED_INITIALIZER;
 
 - (void)clear;
+
+- (BOOL)coversTop:(double)top
+             left:(double)left
+           bottom:(double)bottom
+            right:(double)right
+             zoom:(int)zoom;
 
 - (void)queryNewDataTop:(double)top
                    left:(double)left

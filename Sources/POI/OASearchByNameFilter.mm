@@ -58,13 +58,13 @@ static NSString* const FILTER_ID = BY_NAME_FILTER_ID;
             if (limit != -1 && currentSearchResult.count > limit)
                 elimit = YES;
 
-            if ([matcher publish:*object])
+            if (!matcher || [matcher publish:*object])
                 return YES;
 
             return NO;
 
         } cancelledFunc:^BOOL{
-            return [matcher isCancelled] || elimit;
+            return (matcher && [matcher isCancelled]) || elimit;
         }]];
         
         result = [OAMapUtils sortPOI:result lat:lat lon:lon];

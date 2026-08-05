@@ -15,6 +15,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
+#import "OASearchByNameFilter.h"
 #import "OARenderedObject.h"
 #import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
@@ -39,9 +40,13 @@
 #import "OAMapTopPlace.h"
 #import "OANativeUtilities.h"
 #import "OAPOILayerTopPlacesProvider.h"
+#import "OAPOIMapLayerData.h"
+#import "OAPOITileProvider.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/TextRasterizer.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
@@ -759,6 +764,9 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void)updateWikiOnlineAmenitiesControllerVisibleState;
 - (void)invalidateWikiOnlineAmenitiesController;
+- (void)clearPoiTileProvider;
+- (void)refreshByNamePoiDataIfNeeded;
+- (void)showByNamePoiTileProviderWithPois:(NSArray<OAPOI *> *)pois;
 - (void)resetNotifiedTiles;
 - (BOOL)isOnTopPlacesCacheQueue;
 - (void)resetNotifiedTilesOnTopPlacesCacheQueue;
@@ -771,6 +779,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 {
     BOOL _showPoiOnMap;
     BOOL _showWikiOnMap;
+    BOOL _byNameTextSearchActive;
 
     OAPOIUIFilter *_poiUiFilter;
     OAPOIUIFilter *_wikiUiFilter;
@@ -788,6 +797,16 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
     OATopWikiOnlineAmenitiesController *_wikiOnlineAmenitiesController;
+    OAPOIMapLayerData *_byNameLayerData;
+    std::shared_ptr<OAPOITileProvider> _poiTileProvider;
+    NSArray<OAPOI *> *_byNameLastDisplayedPois;
+    NSUInteger _byNameRefreshToken;
+    BOOL _byNameHasScheduledBounds;
+    double _byNameSchedTop;
+    double _byNameSchedLeft;
+    double _byNameSchedBottom;
+    double _byNameSchedRight;
+    int _byNameSchedZoom;
     BOOL _topPlacesEnabled;
     CGFloat _topPlacesTextScale;
     EOAWikiDataSourceType _topPlacesWikiDataSourceType;
@@ -804,6 +823,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 - (void)onMapFrameAnimatorsUpdated
 {
     [self updateWikiOnlineAmenitiesControllerVisibleState];
+    [self refreshByNamePoiDataIfNeeded];
     [_topPlacesProvider drawTopPlacesIfNeeded:NO];
 }
 
@@ -855,6 +875,126 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         [_wikiOnlineAmenitiesController invalidate];
         _wikiOnlineAmenitiesController = nil;
     }
+}
+
+- (void)clearPoiTileProvider
+{
+    [self.mapViewController runWithRenderSync:^{
+        if (_poiTileProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_poiTileProvider];
+            _poiTileProvider.reset();
+        }
+    }];
+    [_byNameLayerData clear];
+    _byNameLayerData = nil;
+    _byNameLastDisplayedPois = nil;
+    _byNameHasScheduledBounds = NO;
+    _byNameRefreshToken++;
+}
+
+- (void)showByNamePoiTileProviderWithPois:(NSArray<OAPOI *> *)pois
+{
+    if (_poiTileProvider && pois == _byNameLastDisplayedPois)
+        return;
+
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL showLabels = settings.mapSettingShowPoiLabel.get;
+    float textScale = settings.textSize.get;
+    const float rasterTileSize = (float)self.mapViewController.referenceTileSizeRasterOrigInPixels;
+
+    OsmAnd::TextRasterizer::Style captionStyle;
+    captionStyle.setSize(textScale * 13.0f * UIScreen.mainScreen.scale);
+
+    [self.mapViewController runWithRenderSync:^{
+        if (_poiTileProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_poiTileProvider];
+            _poiTileProvider.reset();
+        }
+        if (!_byNameTextSearchActive)
+            return;
+
+        _byNameLastDisplayedPois = pois;
+        _poiTileProvider = std::make_shared<OAPOITileProvider>(
+            pois ?: @[],
+            self.pointsOrder,
+            QList<OsmAnd::PointI>(),
+            showLabels,
+            captionStyle,
+            2.0 * UIScreen.mainScreen.scale,
+            rasterTileSize > 0 ? rasterTileSize : 256.f,
+            textScale);
+        [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:_poiTileProvider];
+    }];
+}
+
+- (void)refreshByNamePoiDataIfNeeded
+{
+    if (!_byNameTextSearchActive || !_poiUiFilter)
+        return;
+
+    __block OsmAnd::AreaI visibleBBox31;
+    __block OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+    [self.mapViewController runWithRenderSync:^{
+        visibleBBox31 = [self.mapView getVisibleBBox31];
+        visibleZoom = self.mapView.zoomLevel;
+    }];
+    if (visibleZoom == OsmAnd::InvalidZoomLevel || (int)visibleZoom < kPoiMapLayerStartZoom)
+        return;
+
+    const double top = OsmAnd::Utilities::get31LatitudeY(visibleBBox31.top());
+    const double bottom = OsmAnd::Utilities::get31LatitudeY(visibleBBox31.bottom());
+    const double left = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.left());
+    const double right = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.right());
+    const int zoom = (int)visibleZoom;
+
+    if (!_byNameLayerData || _byNameLayerData.filter != _poiUiFilter)
+        _byNameLayerData = [[OAPOIMapLayerData alloc] initWithFilter:_poiUiFilter];
+
+    if (_poiTileProvider
+        && [_byNameLayerData coversTop:top left:left bottom:bottom right:right zoom:zoom])
+    {
+        return;
+    }
+
+    if (_byNameHasScheduledBounds
+        && _byNameSchedZoom == zoom
+        && fabs(_byNameSchedTop - top) < 1e-6
+        && fabs(_byNameSchedBottom - bottom) < 1e-6
+        && fabs(_byNameSchedLeft - left) < 1e-6
+        && fabs(_byNameSchedRight - right) < 1e-6)
+    {
+        return;
+    }
+
+    _byNameSchedTop = top;
+    _byNameSchedLeft = left;
+    _byNameSchedBottom = bottom;
+    _byNameSchedRight = right;
+    _byNameSchedZoom = zoom;
+    _byNameHasScheduledBounds = YES;
+
+    const NSUInteger token = ++_byNameRefreshToken;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __typeof(self) strongSelf = weakSelf;
+        if (!strongSelf || token != strongSelf->_byNameRefreshToken || !strongSelf->_byNameTextSearchActive)
+            return;
+
+        [strongSelf->_byNameLayerData queryNewDataTop:top
+                                                 left:left
+                                               bottom:bottom
+                                                right:right
+                                                 zoom:zoom
+                                              matcher:nil
+                                           completion:^(NSArray<OAPOI *> *displayedResults) {
+            __typeof(self) innerSelf = weakSelf;
+            if (!innerSelf || !innerSelf->_byNameTextSearchActive)
+                return;
+            [innerSelf showByNamePoiTileProviderWithPois:displayedResults];
+        }];
+    });
 }
 
 - (void)resetNotifiedTiles
@@ -942,10 +1082,16 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void) resetLayer
 {
+    [self clearPoiTileProvider];
+    _byNameTextSearchActive = NO;
     if (_amenitySymbolsProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
         _amenitySymbolsProvider.reset();
+        _showPoiOnMap = NO;
+    }
+    else if (_showPoiOnMap)
+    {
         _showPoiOnMap = NO;
     }
     if (_wikiSymbolsProvider)
@@ -965,13 +1111,18 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void) updateVisiblePoiFilter
 {
-    if (_showPoiOnMap && _amenitySymbolsProvider)
+    if (_showPoiOnMap && (_amenitySymbolsProvider || _poiTileProvider || _byNameTextSearchActive))
     {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-            _amenitySymbolsProvider.reset();
-        }];
+        [self clearPoiTileProvider];
+        if (_amenitySymbolsProvider)
+        {
+            [self.mapViewController runWithRenderSync:^{
+                [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+                _amenitySymbolsProvider.reset();
+            }];
+        }
         _showPoiOnMap = NO;
+        _byNameTextSearchActive = NO;
     }
 
     if (_showWikiOnMap && _wikiSymbolsProvider)
@@ -1031,9 +1182,30 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             && [filters.allObjects.firstObject.name isEqualToString:OALocalizedString(@"poi_filter_by_name")]
             && !filters.allObjects.firstObject.filterByName;
 
-    _poiUiFilter = noValidByName ? nil : [_filtersHelper combineSelectedFilters:filters];
+    BOOL isByNameTextSearch = NO;
+    OAPOIUIFilter *byNameFilter = nil;
+    if (filters.count == 1)
+    {
+        OAPOIUIFilter *singleFilter = filters.allObjects.firstObject;
+        if (([singleFilter isKindOfClass:[OASearchByNameFilter class]]
+             || [singleFilter.filterId isEqualToString:BY_NAME_FILTER_ID])
+            && singleFilter.filterByName.length > 0)
+        {
+            isByNameTextSearch = YES;
+            byNameFilter = singleFilter;
+        }
+    }
+    _byNameTextSearchActive = isByNameTextSearch && !noValidByName;
+
+    if (_byNameTextSearchActive && byNameFilter)
+        _poiUiFilter = byNameFilter;
+    else
+        _poiUiFilter = noValidByName ? nil : [_filtersHelper combineSelectedFilters:filters];
     if (noValidByName)
+    {
+        _byNameTextSearchActive = NO;
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
+    }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowPoiUiFilterOnMap];
@@ -1063,6 +1235,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> preparedAmenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> preparedWikiSymbolsProvider;
     OATopWikiOnlineAmenitiesController *preparedWikiOnlineAmenitiesController = nil;
+    const BOOL byNameTextSearch = _byNameTextSearchActive;
 
     auto prepareProvider = [&](OAPOIUIFilter *f, BOOL isWiki) -> std::shared_ptr<OsmAnd::AmenitySymbolsProvider> {
         auto categoriesFilter = QHash<QString, QStringList>();
@@ -1193,7 +1366,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         return symbolsProvider;
     };
 
-    if (poiUiFilter)
+    if (poiUiFilter && !byNameTextSearch)
         preparedAmenitySymbolsProvider = prepareProvider(poiUiFilter, NO);
     if (wikiUiFilter)
         preparedWikiSymbolsProvider = prepareProvider(wikiUiFilter, YES);
@@ -1206,6 +1379,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             return;
 
         didCommitPreparedProviders = YES;
+        if (_poiTileProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_poiTileProvider];
+            _poiTileProvider.reset();
+        }
         if (_amenitySymbolsProvider)
         {
             [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
@@ -1241,6 +1419,56 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     [oldWikiOnlineAmenitiesController invalidate];
     if (shouldResetNotifiedTiles || wikiUiFilter)
         [self resetNotifiedTiles];
+
+    if (byNameTextSearch && poiUiFilter)
+    {
+        _byNameLastDisplayedPois = nil;
+        _byNameHasScheduledBounds = NO;
+        _byNameRefreshToken++;
+        _byNameLayerData = [[OAPOIMapLayerData alloc] initWithFilter:poiUiFilter];
+
+        __block OsmAnd::AreaI visibleBBox31;
+        __block OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+        [self.mapViewController runWithRenderSync:^{
+            visibleBBox31 = [self.mapView getVisibleBBox31];
+            visibleZoom = self.mapView.zoomLevel;
+        }];
+        if (visibleZoom != OsmAnd::InvalidZoomLevel && (int)visibleZoom >= kPoiMapLayerStartZoom)
+        {
+            const double top = OsmAnd::Utilities::get31LatitudeY(visibleBBox31.top());
+            const double bottom = OsmAnd::Utilities::get31LatitudeY(visibleBBox31.bottom());
+            const double left = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.left());
+            const double right = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.right());
+            const int zoom = (int)visibleZoom;
+            _byNameSchedTop = top;
+            _byNameSchedLeft = left;
+            _byNameSchedBottom = bottom;
+            _byNameSchedRight = right;
+            _byNameSchedZoom = zoom;
+            _byNameHasScheduledBounds = YES;
+            __weak __typeof(self) weakSelf = self;
+            [_byNameLayerData queryNewDataTop:top
+                                         left:left
+                                       bottom:bottom
+                                        right:right
+                                         zoom:zoom
+                                      matcher:nil
+                                   completion:^(NSArray<OAPOI *> *displayedResults) {
+                __typeof(self) strongSelf = weakSelf;
+                if (!strongSelf || !strongSelf->_byNameTextSearchActive)
+                    return;
+                [strongSelf showByNamePoiTileProviderWithPois:displayedResults];
+            }];
+        }
+    }
+    else
+    {
+        [_byNameLayerData clear];
+        _byNameLayerData = nil;
+        _byNameLastDisplayedPois = nil;
+        _byNameHasScheduledBounds = NO;
+        _byNameRefreshToken++;
+    }
 
     if (wikiUiFilter)
     {
@@ -1641,10 +1869,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                 unknownLocation:(BOOL)unknownLocation
       excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    const auto objects = [_topPlacesProvider displayedAmenities];
-    if (objects.isEmpty())
-        return;
-    
     OAMapRendererView *mapView =
     (OAMapRendererView *)[OARootViewController instance]
         .mapPanel.mapViewController.view;
@@ -1659,7 +1883,21 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     
     if (touchPolygon31.isEmpty())
         return;
-    
+
+    if (_byNameTextSearchActive)
+    {
+        for (OAPOI *poi in _byNameLastDisplayedPois)
+        {
+            if (![OANativeUtilities isPointInsidePolygonLat:poi.latitude lon:poi.longitude polygon31:touchPolygon31])
+                continue;
+            [result collect:poi provider:self];
+        }
+    }
+
+    const auto objects = [_topPlacesProvider displayedAmenities];
+    if (objects.isEmpty())
+        return;
+
     const auto topPlaces = [_topPlacesProvider topPlaces];
     NSMutableSet<NSNumber *> *topPlaceIds = [NSMutableSet setWithCapacity:topPlaces.size()];
     for (const auto& topPlace : topPlaces)

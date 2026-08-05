@@ -13,6 +13,7 @@
 
 #include <OsmAndCore/Utilities.h>
 #include <vector>
+#include <cmath>
 
 @implementation OAPOIMapLayerData
 {
@@ -20,6 +21,14 @@
     NSArray<OAPOI *> *_results;
     NSArray<OAPOI *> *_displayedResults;
     uint64_t _generation;
+    dispatch_queue_t _queryQueue;
+
+    BOOL _hasExtendedCache;
+    double _extTop;
+    double _extLeft;
+    double _extBottom;
+    double _extRight;
+    int _extZoom;
 }
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter
@@ -29,6 +38,8 @@
     {
         _filter = filter;
         _generation = 0;
+        _hasExtendedCache = NO;
+        _queryQueue = dispatch_queue_create("com.osmand.poi.mapLayerData", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -42,6 +53,33 @@
     _generation++;
     _results = nil;
     _displayedResults = nil;
+    _hasExtendedCache = NO;
+}
+
+- (BOOL)extendedCacheContainsTop:(double)top
+                            left:(double)left
+                          bottom:(double)bottom
+                           right:(double)right
+                            zoom:(int)zoom
+{
+    if (!_hasExtendedCache)
+        return NO;
+    if (std::abs(zoom - _extZoom) > kPoiMapLayerZoomThreshold)
+        return NO;
+
+    return top <= _extTop
+        && bottom >= _extBottom
+        && left >= _extLeft
+        && right <= _extRight;
+}
+
+- (BOOL)coversTop:(double)top
+             left:(double)left
+           bottom:(double)bottom
+            right:(double)right
+             zoom:(int)zoom
+{
+    return [self extendedCacheContainsTop:top left:left bottom:bottom right:right zoom:zoom];
 }
 
 - (void)queryNewDataTop:(double)top
@@ -56,28 +94,58 @@
     {
         _results = @[];
         _displayedResults = @[];
+        _hasExtendedCache = NO;
         if (completion)
             completion(_displayedResults);
         return;
     }
 
+    if ([self extendedCacheContainsTop:top left:left bottom:bottom right:right zoom:zoom])
+    {
+        if (completion)
+            completion(_displayedResults ?: @[]);
+        return;
+    }
+
+    const double latPad = (top - bottom) * 0.5;
+    const double lonPad = (right - left) * 0.5;
+    const double extTop = MIN(90.0, top + latPad);
+    const double extBottom = MAX(-90.0, bottom - latPad);
+    const double extLeft = MAX(-180.0, left - lonPad);
+    const double extRight = MIN(180.0, right + lonPad);
+
     const uint64_t gen = ++_generation;
     OAPOIUIFilter *filter = _filter;
+    void (^completionCopy)(NSArray<OAPOI *> *) = [completion copy];
 
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        NSArray<OAPOI *> *amenities = [filter searchAmenities:top
-                                                         left:left
-                                                       bottom:bottom
-                                                        right:right
+    dispatch_async(_queryQueue, ^{
+        OAResultMatcher<OAPOI *> *cancelMatcher =
+            [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
+                if (matcher)
+                    return [matcher publish:*object];
+                return YES;
+            } cancelledFunc:^BOOL{
+                if (gen != self->_generation)
+                    return YES;
+                return matcher && [matcher isCancelled];
+            }];
+
+        NSArray<OAPOI *> *amenities = [filter searchAmenities:extTop
+                                                         left:extLeft
+                                                       bottom:extBottom
+                                                        right:extRight
                                                          zoom:zoom
-                                                      matcher:matcher
+                                                      matcher:cancelMatcher
                                                  filterUnique:NO];
 
+        if (gen != self->_generation)
+            return;
+
         NSArray<OAPOI *> *displayed = [OAPOIMapLayerData collectDisplayedPoints:amenities
-                                                                           top:top
-                                                                          left:left
-                                                                        bottom:bottom
-                                                                         right:right
+                                                                           top:extTop
+                                                                          left:extLeft
+                                                                        bottom:extBottom
+                                                                         right:extRight
                                                                           zoom:zoom];
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -85,8 +153,14 @@
                 return;
             self->_results = amenities ?: @[];
             self->_displayedResults = displayed ?: @[];
-            if (completion)
-                completion(self->_displayedResults);
+            self->_extTop = extTop;
+            self->_extLeft = extLeft;
+            self->_extBottom = extBottom;
+            self->_extRight = extRight;
+            self->_extZoom = zoom;
+            self->_hasExtendedCache = YES;
+            if (completionCopy)
+                completionCopy(self->_displayedResults);
         });
     });
 }

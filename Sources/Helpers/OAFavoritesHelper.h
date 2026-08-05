@@ -21,6 +21,7 @@
 
 + (const std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> &)getFavoritesCollection;
 + (OAObservable *)favoritesStorageChangedObservable;
++ (void)notifyFavoritesStorageChanged;
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;

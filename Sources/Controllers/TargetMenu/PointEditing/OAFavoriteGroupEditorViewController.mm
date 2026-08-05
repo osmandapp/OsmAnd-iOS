@@ -208,6 +208,7 @@
                            newName:self.editName
                    saveImmediately:NO];
 
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];

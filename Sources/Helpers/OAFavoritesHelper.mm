@@ -139,21 +139,16 @@ static NSOperationQueue *_favQueue;
     return _favoriteGroups;
 }
 
-+ (void)setFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups
-{
-    _favoriteGroups = [favoriteGroups copy];
-    [self notifyFavoritesStorageChanged];
-}
-
 + (void)loadFavorites
 {
     _cachedFavoritePoints = @[];
     _flatGroups = [self loadGroups];
-    self.favoriteGroups = _flatGroups.allValues;
+    _favoriteGroups = [_flatGroups.allValues copy];
 
     [self sortAll];
     [self recalculateCachedFavPoints];
-    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:self.favoriteGroups];
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:_favoriteGroups];
+    [self notifyFavoritesStorageChanged];
 }
 
 + (const std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> &)getFavoritesCollection;
@@ -220,6 +215,7 @@ static NSOperationQueue *_favQueue;
     if (favoritesImported)
     {
         [self sortAll];
+        [self notifyFavoritesStorageChanged];
         [self saveCurrentPointsIntoFile];
     }
 }
@@ -278,7 +274,7 @@ static NSOperationQueue *_favQueue;
 {
     _favoritesCollection->clearFavoriteLocations();
     NSMutableArray *allPoints = [NSMutableArray array];
-    for (OAFavoriteGroup *group in self.favoriteGroups)
+    for (OAFavoriteGroup *group in _favoriteGroups)
     {
         [allPoints addObjectsFromArray:group.points];
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > favoriteLocations;
@@ -286,7 +282,7 @@ static NSOperationQueue *_favQueue;
         {
             favoriteLocations.append(point.favorite);
         }
-        _favoritesCollection->addFavoriteLocations(favoriteLocations, group == self.favoriteGroups.lastObject);
+        _favoritesCollection->addFavoriteLocations(favoriteLocations, group == _favoriteGroups.lastObject);
     }
     _cachedFavoritePoints = [allPoints copy];
 }
@@ -403,6 +399,7 @@ static NSOperationQueue *_favQueue;
         if (sortAndSave)
         {
             [self sortAll];
+            [self notifyFavoritesStorageChanged];
             [self saveCurrentPointsIntoFile];
         }
     }
@@ -471,6 +468,7 @@ static NSOperationQueue *_favQueue;
         if (sortAndSave)
         {
             [self sortAll];
+            [self notifyFavoritesStorageChanged];
             [self saveCurrentPointsIntoFile];
         }
     }
@@ -514,7 +512,7 @@ static NSOperationQueue *_favQueue;
         return group;
     
     NSString *trimmedName = [nameId trim];
-    for (OAFavoriteGroup *favoriteGroup in self.favoriteGroups)
+    for (OAFavoriteGroup *favoriteGroup in _favoriteGroups)
     {
         NSString *favoriteGroupName = [favoriteGroup.name trim];
         if ([favoriteGroupName isEqualToString:trimmedName])
@@ -590,6 +588,7 @@ static NSOperationQueue *_favQueue;
     if (description)
         [item setDescription:description];
     
+    [self notifyFavoritesStorageChanged];
     [self saveCurrentPointsIntoFile];
     return YES;
 }
@@ -621,9 +620,9 @@ static NSOperationQueue *_favQueue;
         }
         else
         {
-            NSMutableArray *mutableGroups = [self.favoriteGroups mutableCopy];
+            NSMutableArray *mutableGroups = [_favoriteGroups mutableCopy];
             [mutableGroups removeObject:group];
-            self.favoriteGroups = mutableGroups;
+            _favoriteGroups = [mutableGroups copy];
         }
 
         for (OAFavoriteItem *point in group.points)
@@ -715,8 +714,7 @@ static NSOperationQueue *_favQueue;
 {
     [_favQueue cancelAllOperations];
 
-    __block NSArray<OAFavoriteGroup *> *favoriteGroups = [[NSArray alloc] initWithArray:self.favoriteGroups copyItems:YES];
-    [self notifyFavoritesStorageChanged];
+    __block NSArray<OAFavoriteGroup *> *favoriteGroups = [[NSArray alloc] initWithArray:_favoriteGroups copyItems:YES];
     __block NSBlockOperation *operation;
     operation = [NSBlockOperation blockOperationWithBlock:^{
 
@@ -976,7 +974,7 @@ static NSOperationQueue *_favQueue;
 
 + (void) sortAll
 {
-    NSArray *sortedGroups = [self.favoriteGroups sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteGroup *obj1, OAFavoriteGroup *obj2) {
+    NSArray *sortedGroups = [_favoriteGroups sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteGroup *obj1, OAFavoriteGroup *obj2) {
         if ([obj1 isPersonal])
             return NSOrderedAscending;
         else if ([obj2 isPersonal])
@@ -1005,7 +1003,7 @@ static NSOperationQueue *_favQueue;
         _cachedFavoritePoints = sortedCachedPoints;
     }
 
-    self.favoriteGroups = sortedGroups;
+    _favoriteGroups = [sortedGroups copy];
 }
 
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
@@ -1022,7 +1020,7 @@ static NSOperationQueue *_favQueue;
     {
         favoriteGroup = [[OAFavoriteGroup alloc] initWithPoint:item];
         _flatGroups[favoriteGroup.name] = favoriteGroup;
-        self.favoriteGroups = [self.favoriteGroups arrayByAddingObject:favoriteGroup];
+        _favoriteGroups = [_favoriteGroups arrayByAddingObject:favoriteGroup];
     }
     [self updateGroupAppearance:favoriteGroup pointsGroup:pointsGroup];
     
@@ -1053,7 +1051,7 @@ static NSOperationQueue *_favQueue;
     group.iconName = iconName;
     group.backgroundType = backgroundIconName;
     _flatGroups[group.name] = group;
-    self.favoriteGroups = [self.favoriteGroups arrayByAddingObject:group];
+    _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
     
     [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
 }
@@ -1111,8 +1109,8 @@ static NSOperationQueue *_favQueue;
             if (group && group.points.count == 0 && (!isNewFavorite || (isNewFavorite && group.name.length > 0)))
             {
                 [_flatGroups removeObjectForKey:group.name];
-                self.favoriteGroups = [self.favoriteGroups filteredArrayUsingPredicate:
-                                       [NSPredicate predicateWithFormat:@"SELF != %@", group]];
+                _favoriteGroups = [_favoriteGroups filteredArrayUsingPredicate:
+                                   [NSPredicate predicateWithFormat:@"SELF != %@", group]];
             }
         }
     }
@@ -1123,14 +1121,15 @@ static NSOperationQueue *_favQueue;
         {
             [self deleteFavorites:group.points.copy saveImmediately:NO];
             [_flatGroups removeObjectForKey:group.name];
-            self.favoriteGroups = [self.favoriteGroups filteredArrayUsingPredicate:
-                                   [NSPredicate predicateWithFormat:@"SELF != %@", group]];
+            _favoriteGroups = [_favoriteGroups filteredArrayUsingPredicate:
+                               [NSPredicate predicateWithFormat:@"SELF != %@", group]];
         }
     }
     
     if (!isNewFavorite)
     {
         [self recalculateCachedFavPoints];
+        [self notifyFavoritesStorageChanged];
         [self saveCurrentPointsIntoFile];
     }
     

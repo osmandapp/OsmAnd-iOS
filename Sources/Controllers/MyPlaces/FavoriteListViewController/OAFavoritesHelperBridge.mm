@@ -221,6 +221,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
         [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
     }
 
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
@@ -230,7 +231,9 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     if (!group)
         return;
 
-    [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:YES];
+    [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:NO];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 - (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
@@ -256,6 +259,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
 }
@@ -280,6 +284,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
 }
@@ -300,6 +305,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
                                   color:color
                                iconName:iconName
                      backgroundIconName:backgroundIconName];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
 }
@@ -337,7 +343,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     if ([sourceGroupName isEqualToString:newGroupName])
         return NO;
 
-    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:newGroupName];
+    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:newGroupName notifyAndSave:NO];
 }
 
 - (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName
@@ -348,6 +354,8 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     NSString *groupName = targetGroupName ?: @"";
     NSMutableSet<NSString *> *movedGroupNames = [NSMutableSet set];
     NSMutableSet<NSString *> *movedItemKeys = [NSMutableSet set];
+    BOOL movedGroups = NO;
+    BOOL movedPoints = NO;
 
     for (id item in favoriteItems)
     {
@@ -361,7 +369,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
         NSString *sourceGroupName = group.name;
         if ([self moveFavoriteGroup:sourceGroupName toGroupName:groupName])
+        {
             [movedGroupNames addObject:sourceGroupName];
+            movedGroups = YES;
+        }
     }
 
     for (id item in favoriteItems)
@@ -396,9 +407,18 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
                                           group:groupName
                                           descr:[favorite getDescription]
                                         address:[favorite getAddress]])
+        {
             [movedItemKeys addObject:itemKey];
+            movedPoints = YES;
+        }
     }
 
+    if (movedGroups || movedPoints)
+    {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
+        if (movedGroups)
+            [OAFavoritesHelper saveCurrentPointsIntoFile];
+    }
 }
 
 - (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
@@ -492,6 +512,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
 }
@@ -609,7 +630,9 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     if (!favorite)
         return NO;
 
-    [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:YES];
+    [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:NO];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
 }
 
@@ -684,7 +707,9 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     if (itemsToDelete.count > 0)
     {
-        [OAFavoritesHelper deleteFavorites:itemsToDelete saveImmediately:YES];
+        [OAFavoritesHelper deleteFavorites:itemsToDelete saveImmediately:NO];
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
         didDelete = YES;
     }
 
@@ -1065,6 +1090,11 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
 - (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName
 {
+    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:targetGroupName notifyAndSave:YES];
+}
+
+- (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName notifyAndSave:(BOOL)notifyAndSave
+{
     NSString *source = sourceGroupName ?: @"";
     NSString *target = targetGroupName ?: @"";
     if ([source isEqualToString:target])
@@ -1082,8 +1112,9 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
         changed = YES;
     }
 
-    if (changed)
+    if (changed && notifyAndSave)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
 

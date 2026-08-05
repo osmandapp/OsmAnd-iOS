@@ -294,6 +294,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var routeSegments: [PlanRouteSegment] { get }
     var pendingEmptySegmentIndex: Int? { get }
     var defaultMode: OAApplicationMode? { get }
+    var isTrackReadyToCalculate: Bool { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 

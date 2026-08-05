@@ -39,11 +39,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }()
 
     private let tabs = PlanRouteTab.allCases
-    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .icCustomStraightLine)
+    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .icCustomQuestionmark)
     private var sheetState: EOADraggableMenuState = .expanded
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
     private var crosshairCenterYConstraint: NSLayoutConstraint?
+    private var dayNightObserver: OAAutoObserverProxy?
     private var routeTypeButtonBottomConstraint: NSLayoutConstraint?
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
@@ -62,6 +63,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        dayNightObserver?.detach()
     }
 
     @objc static func showNewRoute() {
@@ -113,6 +118,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupTopToolbar()
         setupRouteTypeButton()
         setupCrosshair()
+        dayNightObserver = OAAutoObserverProxy(self,
+                                               withHandler: #selector(onDayNightModeChanged),
+                                               andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
         dataProvider.presenterViewController = self
         dataProvider.onDataChanged = { [weak self] in
             self?.reloadData()
@@ -402,7 +410,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        crosshairView.image = .mapRulerCenterDay
+        crosshairView.image = OAAppSettings.sharedManager().nightMode
+            ? .mapRulerCenterNight
+            : .mapRulerCenterDay
         crosshairView.isAccessibilityElement = false
     }
 
@@ -440,7 +450,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func updateRouteTypeButton() {
         let mode = dataProvider.defaultMode
         let icon: UIImage?
-        if let mode {
+        if !dataProvider.isTrackReadyToCalculate {
+            icon = .icCustomQuestionmark
+        } else if let mode {
             icon = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
         } else {
             icon = .icCustomStraightLine
@@ -876,6 +888,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             presentRouteBetweenPoints()
         } else {
             presentSettingsForContext(.wholeTrack)
+        }
+    }
+
+    @objc private func onDayNightModeChanged() {
+        DispatchQueue.main.async { [weak self] in
+            self?.updateCrosshairImage()
+            self?.setNeedsStatusBarAppearanceUpdate()
         }
     }
 

@@ -120,6 +120,12 @@
     return (mode == OAApplicationMode.DEFAULT) ? nil : mode;
 }
 
+- (BOOL)isTrackReadyToCalculate
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && (![ctx shouldCheckApproximation] || ![ctx isApproximationNeeded] || [ctx isNewData]);
+}
+
 - (BOOL)hasChanges
 {
     OAMeasurementEditingContext *ctx = [self editingContext];

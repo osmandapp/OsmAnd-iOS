@@ -144,7 +144,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         tableView.estimatedSectionHeaderHeight = 60
         tableView.sectionHeaderTopPadding = 0
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
-        tableView.register(PlanRouteEmptyCell.self, forCellReuseIdentifier: PlanRouteEmptyCell.reuseIdentifier)
+        tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRoutePoiGroupHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -238,7 +238,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         return DateFormatter.detailsDateFormatter.string(from: Date(timeIntervalSince1970: time / 1000))
     }
 
-    private func configureEmptyAddPointsCell(_ cell: PlanRouteEmptyCell) {
+    private func configureEmptyAddPointsCell(_ cell: HorizontalEmptyCell) {
         cell.configure(title: localizedString("add_points"),
                        description: localizedString("add_points_description"),
                        icon: .icCustomFolderOpen,
@@ -308,7 +308,7 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if isEmptyState {
             if indexPath.section == 0 {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteEmptyCell.reuseIdentifier, for: indexPath) as? PlanRouteEmptyCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else {
                     return UITableViewCell()
                 }
                 configureEmptyAddPointsCell(cell)

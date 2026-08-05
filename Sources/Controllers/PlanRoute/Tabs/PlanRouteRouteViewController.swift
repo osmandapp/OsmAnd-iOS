@@ -88,7 +88,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.sectionHeaderTopPadding = 0
         tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.reuseIdentifier)
         tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.reuseIdentifier)
-        tableView.register(PlanRouteEmptyCell.self, forCellReuseIdentifier: PlanRouteEmptyCell.reuseIdentifier)
+        tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.reuseIdentifier)
         tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -329,7 +329,7 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
         }
         switch section.rows[indexPath.row] {
         case .empty:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteEmptyCell.reuseIdentifier, for: indexPath) as? PlanRouteEmptyCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_no_points_title"),

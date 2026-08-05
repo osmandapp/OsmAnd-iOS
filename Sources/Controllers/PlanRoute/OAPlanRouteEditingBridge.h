@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly, nullable) OASGpxFile *exportedGpxFile;
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
+@property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
 @property (nonatomic, readonly) BOOL hasChanges;
 @property (nonatomic, readonly) BOOL canUndo;
 @property (nonatomic, readonly) BOOL canRedo;

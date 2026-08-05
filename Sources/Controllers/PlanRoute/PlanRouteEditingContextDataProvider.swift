@@ -143,6 +143,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.defaultAppMode
     }
 
+    var isTrackReadyToCalculate: Bool {
+        bridge.isTrackReadyToCalculate
+    }
+
     var canStartNewSegment: Bool {
         bridge.isAddNewSegmentAllowed
     }

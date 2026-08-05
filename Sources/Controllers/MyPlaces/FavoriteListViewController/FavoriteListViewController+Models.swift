@@ -119,15 +119,6 @@ struct FavoritePointRow: Hashable, FavoriteSortablePoint {
 
     var lastModified: Date? { bridgeItem.timestampDate }
 
-    var titleColor: UIColor {
-        bridgeItem.isVisible ? .textColorPrimary : .textColorSecondary
-    }
-
-    var titleFont: UIFont {
-        guard !bridgeItem.isVisible, let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withSymbolicTraits(.traitItalic) else { return .preferredFont(forTextStyle: .body) }
-        return UIFont(descriptor: descriptor, size: 0)
-    }
-
     init(item: OAFavoritePointBridgeItem) {
         bridgeItem = item
     }

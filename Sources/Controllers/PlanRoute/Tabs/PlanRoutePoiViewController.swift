@@ -12,6 +12,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     private static let separatorLeftInset: CGFloat = 72
     private static let bottomContentInset: CGFloat = 72
     private static let emptySectionsCount = 2
+    private static let poiCellReuseIdentifier = "PointListTableViewCell"
     
     let planRouteTab: PlanRouteTab = .poi
     
@@ -85,8 +86,20 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
 
     private func updateVisiblePoiCells() {
         tableView.indexPathsForVisibleRows?.forEach { indexPath in
-            guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath) as? OASimpleTableViewCell else { return }
-            configurePoiCell(cell, with: groups[indexPath.section].points[indexPath.row])
+            guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath) else { return }
+            let group = groups[indexPath.section]
+            configurePoiCell(cell, with: group.points[indexPath.row], sortMode: sortMode(for: group.name))
+        }
+
+        tableView.performBatchUpdates(nil)
+    }
+
+    private func updateVisiblePoiCellsDistanceAndDirection() {
+        tableView.indexPathsForVisibleRows?.forEach { indexPath in
+            guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath), var configuration = cell.contentConfiguration as? PointContentConfiguration else { return }
+            let group = groups[indexPath.section]
+            configuration.secondaryContent = poiSecondaryContent(for: group.points[indexPath.row], sortMode: sortMode(for: group.name))
+            cell.contentConfiguration = configuration
         }
     }
 
@@ -130,12 +143,13 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         tableView.delegate = self
         tableView.alwaysBounceVertical = true
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 66
+        tableView.estimatedRowHeight = PointContentConfiguration.estimatedRowHeight
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 60
         tableView.sectionHeaderTopPadding = 0
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Self.poiCellReuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OARightIconTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OARightIconTableViewCell.reuseIdentifier)
         tableView.register(PlanRoutePoiGroupHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier)
@@ -149,64 +163,16 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         ])
     }
     
-    private func configurePoiCell(_ cell: OASimpleTableViewCell, with point: PlanRoutePoiPoint) {
-        cell.backgroundColor = .groupBg
+    private func configurePoiCell(_ cell: UITableViewCell, with point: PlanRoutePoiPoint, sortMode: TrackFavoriteSortMode) {
         cell.selectionStyle = .none
-        cell.titleLabel.text = point.name
-        cell.titleLabel.textColor = .textColorPrimary
-        cell.descriptionLabel.text = nil
-        cell.descriptionLabel.textColor = .textColorSecondary
-        let description = poiDescription(for: point)
-        cell.descriptionLabel.attributedText = description
-        cell.descriptionVisibility(description != nil)
-        cell.leftIconView.image = point.icon
-        cell.leftIconView.contentMode = .scaleAspectFit
-        cell.leftIconVisibility(true)
-        cell.leftEditButtonVisibility(false)
-        cell.setLeftIconSize(36)
+        cell.contentConfiguration = PointContentConfiguration(icon: point.icon, title: point.name, secondaryContent: poiSecondaryContent(for: point, sortMode: sortMode))
+        cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
     }
 
-    private func poiDescription(for point: PlanRoutePoiPoint) -> NSAttributedString? {
-        let font = UIFont.scaledSystemFont(ofSize: 15)
-        let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.iconColorDirectionActive]
-        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
-        let result = NSMutableAttributedString()
+    private func poiSecondaryContent(for point: PlanRoutePoiPoint, sortMode: TrackFavoriteSortMode) -> PointSecondaryContent {
         let date = poiDate(for: point)
         let distanceAndDirection = poiDistanceAndDirection(for: point)
-        if let distance = distanceAndDirection.distance, !distance.isEmpty {
-            appendPoiSecondarySeparatorIfNeeded(to: result, attributes: secondaryAttributes)
-            if let directionIcon = poiDirectionIcon(font: font, direction: distanceAndDirection.direction) {
-                result.append(directionIcon)
-            }
-            result.append(NSAttributedString(string: distance, attributes: directionAttributes))
-        }
-
-        let address = poiAddress(for: point)
-        appendPoiSecondaryText(address, to: result, attributes: secondaryAttributes)
-        appendPoiSecondaryText(date, to: result, attributes: secondaryAttributes)
-
-        return result.length > 0 ? result : nil
-    }
-
-    private func appendPoiSecondaryText(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard let text, !text.isEmpty else { return }
-        appendPoiSecondarySeparatorIfNeeded(to: result, attributes: attributes)
-        result.append(NSAttributedString(string: text, attributes: attributes))
-    }
-
-    private func appendPoiSecondarySeparatorIfNeeded(to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard result.length > 0 else { return }
-        result.append(NSAttributedString(string: " • ", attributes: attributes))
-    }
-
-    private func poiDirectionIcon(font: UIFont, direction: CGFloat) -> NSAttributedString? {
-        let size = UIFontMetrics.default.scaledValue(for: 18)
-        guard let image = OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(.iconColorDirectionActive, renderingMode: .alwaysOriginal) else { return nil }
-        let rotatedImage = image.rotateWithDiagonalSize(radians: direction) ?? image
-        let attachment = NSTextAttachment()
-        attachment.image = rotatedImage
-        attachment.bounds = CGRect(x: 0, y: (font.capHeight - rotatedImage.size.height) / 2, width: rotatedImage.size.width, height: rotatedImage.size.height)
-        return NSAttributedString(attachment: attachment)
+        return PointSecondaryContent(formattedDistance: distanceAndDirection.distance, direction: distanceAndDirection.direction, address: poiAddress(for: point), date: date, isDateFirst: sortMode.isDateOriented)
     }
 
     private func poiDistanceAndDirection(for point: PlanRoutePoiPoint) -> (distance: String?, direction: CGFloat) {
@@ -290,7 +256,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
             let currentTime = Date.now.timeIntervalSince1970
             guard currentTime - lastDistanceAndDirectionUpdate >= 0.3 else { return }
             lastDistanceAndDirectionUpdate = currentTime
-            updateVisiblePoiCells()
+            updateVisiblePoiCellsDistanceAndDirection()
         }
     }
 }
@@ -315,8 +281,9 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
             configureEmptyAddGroupCell(cell)
             return cell
         }
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else { return UITableViewCell() }
-        configurePoiCell(cell, with: groups[indexPath.section].points[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: Self.poiCellReuseIdentifier, for: indexPath)
+        let group = groups[indexPath.section]
+        configurePoiCell(cell, with: group.points[indexPath.row], sortMode: sortMode(for: group.name))
         return cell
     }
 }

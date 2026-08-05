@@ -95,7 +95,7 @@
     if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
     {
         OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
-        if (state.openedFromMap)
+        if (state.openedFromMap && CLLocationCoordinate2DIsValid(state.pinLocation))
             movedPoint.position = state.pinLocation;
     }
  

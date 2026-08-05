@@ -143,6 +143,7 @@
 #import "OADestinationBarWidget.h"
 #import "OADownloadMapWidget.h"
 #import "MBProgressHUD.h"
+#import "OATableViewCustomHeaderView.h"
 
 // Plugins
 #import "OAPlugin.h"

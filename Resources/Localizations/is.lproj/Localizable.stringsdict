@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Eyða %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Eftirlæti</string>
+			<key>other</key>
+			<string>%ld Eftirlæti</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Eyða %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Mappa</string>
+			<key>other</key>
+			<string>%ld möppur</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Eyða %#@folders@ og %#@points@. Það er ekki hægt að afturkalla við þessa aðgerð.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Mappa</string>
+			<key>other</key>
+			<string>%ld möppur</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Punktur</string>
+			<key>other</key>
+			<string>%ld Punktar</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

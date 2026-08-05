@@ -403,7 +403,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     CFAbsoluteTime phaseStartTime = methodStartTime;
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper favoriteGroups];
     if (favoriteGroups.count > 0)
         myPlacesItems[OAExportSettingsType.FAVORITES] = favoriteGroups;
     [_cloudSyncOperationLog log:[NSString stringWithFormat:@"COLLECT_LOCAL_DIAG myPlaces favorites duration=%.3f ms count=%ld",

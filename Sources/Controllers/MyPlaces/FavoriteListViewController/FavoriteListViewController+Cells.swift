@@ -34,7 +34,7 @@ extension FavoriteListViewController {
     }
 
     var folderCellRegistration: RowCellRegistration<FavoriteFolderRow> {
-        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
+        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, indexPath, folder in
             var content = cell.defaultContentConfiguration()
             content.image = (folder.isPinned ? .icCustomFolderPin : UIImage.templateImageNamed(folder.iconName))?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
             content.imageProperties.tintColor = folder.iconColor
@@ -47,11 +47,12 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+            self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 
     var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
-        RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+        RowCellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
             if let self, !self.currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
@@ -67,6 +68,7 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = [.multiselect()]
+            self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 
@@ -116,9 +118,10 @@ extension FavoriteListViewController {
 
     private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
         let font = UIFont.scaledSystemFont(ofSize: 15)
+        let color: UIColor = currentSortMode.isMapCenterDistanceOriented ? .iconColorDirectionMapCenter : .iconColorDirectionActive
         let directionAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: UIColor.textColorDirectionActive
+            .foregroundColor: color
         ]
         let secondaryAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
@@ -135,6 +138,7 @@ extension FavoriteListViewController {
                                    to: result,
                                    font: font,
                                    directionAttributes: directionAttributes,
+                                   color: color,
                                    separatorAttributes: secondaryAttributes)
             appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
         } else {
@@ -142,6 +146,7 @@ extension FavoriteListViewController {
                                    to: result,
                                    font: font,
                                    directionAttributes: directionAttributes,
+                                   color: color,
                                    separatorAttributes: secondaryAttributes)
             appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
             appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
@@ -163,10 +168,11 @@ extension FavoriteListViewController {
                                         to result: NSMutableAttributedString,
                                         font: UIFont,
                                         directionAttributes: [NSAttributedString.Key: Any],
+                                        color: UIColor,
                                         separatorAttributes: [NSAttributedString.Key: Any]) {
         guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
         appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
-        if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
+        if let directionIcon = favoriteDirectionIcon(tintColor: color) {
             let rotatedDirectionIcon = directionIcon.rotatedWithinBounds(by: favorite.bridgeItem.direction)
             let attachment = NSTextAttachment()
             attachment.image = rotatedDirectionIcon

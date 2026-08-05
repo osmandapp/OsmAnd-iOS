@@ -35,7 +35,7 @@
     }
     else
     {
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:self.editName];
+        _favoriteGroup = [OAFavoritesHelper groupByName:self.editName];
     }
 }
 
@@ -46,7 +46,7 @@
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
 {
-    return [OAFavoritesHelper getGroupByName:[self targetGroupNameForName:name]];
+    return [OAFavoritesHelper groupByTrimmedName:[self targetGroupNameForName:name]];
 }
 
 - (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
@@ -156,7 +156,7 @@
         return NO;
 
     NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
     {
         NSString *favoriteGroupName = favoriteGroup.name;
         if ([favoriteGroupName hasPrefix:nestedPrefix])
@@ -208,8 +208,9 @@
                            newName:self.editName
                    saveImmediately:NO];
 
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];
     [self dismissViewController];
 }

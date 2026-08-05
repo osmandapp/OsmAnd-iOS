@@ -1,14 +1,13 @@
 //
-//  OAFavoritesBridgeHelper.mm
+//  OAFavoritesHelperBridge.mm
 //  OsmAnd Maps
 //
 //  Created by Vladyslav Lysenko on 05.06.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-#import "OAFavoritesBridgeHelper.h"
+#import "OAFavoritesHelperBridge.h"
 #import "OAAppSettings.h"
-#import "OAEditGroupViewController.h"
 #import "OAEditPointViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoriteGroupEditorViewController.h"
@@ -20,8 +19,9 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 #import "OAOpenAddTrackViewController.h"
+#import "OAObservable.h"
 #import "OADefaultFavorite.h"
 #import "OAOsmAndFormatter.h"
 #import "OAPointDescription.h"
@@ -39,37 +39,137 @@
 
 #include <OsmAndCore/Utilities.h>
 
-static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
+static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorageChangedNotification";
 
-@implementation OAFavoritesBridgeHelper
-
-+ (void)invalidateFavoriteFoldersCache
+@implementation OAFavoritesHelperBridge
 {
-    favoriteFoldersCache = nil;
+    NSArray<OAFavoriteFolderBridgeItem *> *_favoriteFoldersCache;
+    NSArray<NSString *> *_collapsedSections;
+    OAAutoObserverProxy *_favoritesStorageChangedObserver;
 }
 
-+ (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
++ (OAFavoritesHelperBridge *)shared
 {
-    if (favoriteFoldersCache)
-        return favoriteFoldersCache;
-
-    NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper getFavoriteGroups] ?: @[];
-    NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
-    NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
-    [groups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger index, BOOL * _Nonnull stop) {
-        NSString *groupName = group.name;
-        NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
-        NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
-        long long fileSize = [fileAttributes[NSFileSize] longLongValue];
-        NSUInteger subtreePointsCount = [self subtreePointsCountForGroupName:groupName groups:groups];
-        [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize subtreePointsCount:subtreePointsCount]];
-    }];
-    
-    favoriteFoldersCache = [folders copy];
-    return favoriteFoldersCache;
+    static OAFavoritesHelperBridge *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[OAFavoritesHelperBridge alloc] init];
+    });
+    return sharedInstance;
 }
 
-+ (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _collapsedSections = @[];
+        [self registerFavoritesStorageObserver];
+    }
+
+    return self;
+}
+
+- (void)dealloc
+{
+    [_favoritesStorageChangedObserver detach];
+}
+
+- (void)invalidateFavoriteFoldersCache
+{
+    @synchronized (self)
+    {
+        _favoriteFoldersCache = nil;
+    }
+}
+
+- (void)registerFavoritesStorageObserver
+{
+    _favoritesStorageChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onFavoritesStorageChanged)
+                                                                  andObserve:OAFavoritesHelper.favoritesStorageChangedObservable];
+}
+
+- (void)onFavoritesStorageChanged
+{
+    [self invalidateFavoriteFoldersCache];
+    [self notifyFavoriteFoldersDidChange];
+}
+
+- (void)notifyFavoriteFoldersDidChange
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:
+         kFavoritesStorageChangedNotification object:nil userInfo:nil];
+    });
+}
+
+- (NSArray<NSString *> *)collapsedSections
+{
+    return _collapsedSections;
+}
+
+- (void)updateCollapsedSections:(NSArray<NSString *> *)sections
+{
+    _collapsedSections = [sections copy];
+}
+
+- (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
+{
+    @synchronized (self)
+    {
+        if (_favoriteFoldersCache)
+            return _favoriteFoldersCache;
+
+        NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper favoriteGroups] ?: @[];
+        NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
+        NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
+        [groups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger index, BOOL * _Nonnull stop) {
+            NSString *groupName = group.name;
+            NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
+            NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
+            long long fileSize = [fileAttributes[NSFileSize] longLongValue];
+            NSUInteger subtreePointsCount = [self subtreePointsCountForGroupName:groupName groups:groups];
+            [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize subtreePointsCount:subtreePointsCount]];
+        }];
+
+        _favoriteFoldersCache = [folders copy];
+        return _favoriteFoldersCache;
+    }
+}
+
+- (NSArray<NSString *> *)favoriteGroupNames
+{
+    NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
+        [groupNames addObject:group.name];
+
+    return [groupNames copy];
+}
+
+- (BOOL)hasFavoriteGroup:(NSString *)groupName
+{
+    return [[OAFavoritesHelper getGroups].allKeys containsObject:groupName];
+}
+
+- (NSString *)displayNameForFavoriteGroup:(NSString *)groupName
+{
+    return [OAFavoriteGroup getDisplayName:groupName];
+}
+
+- (NSInteger)pointsCountForFavoriteGroup:(NSString *)groupName
+{
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByName:groupName];
+    return group.points.count;
+}
+
+- (UIColor *)colorForFavoriteGroup:(NSString *)groupName
+{
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByName:groupName];
+    return group.color ?: [OADefaultFavorite getDefaultColor];
+}
+
+- (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName
 {
     NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:[self favoriteGroupWithName:groupName]];
     NSMutableArray<OAFavoritePointBridgeItem *> *items = [NSMutableArray arrayWithCapacity:points.count];
@@ -79,7 +179,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return items.copy;
 }
 
-+ (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+- (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
     NSMutableArray<NSString *> *query = [NSMutableArray array];
     if (favoriteItem.encodedNameForLink.length > 0)
@@ -94,7 +194,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [NSString stringWithFormat:@"%@?%@#%@", kSharePoiBaseUrl, queryPart, fragment];
 }
 
-+ (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+- (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
     return [OAUtilities buildGeoUrl:favoriteItem.latitude
                           longitude:favoriteItem.longitude
@@ -102,7 +202,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
                               label:favoriteItem.title];
 }
 
-+ (NSString *)formattedCoordinatesForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+- (NSString *)formattedCoordinatesForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
     NSInteger format = [OAAppSettings.sharedManager.settingGeoFormat get];
     return [OAOsmAndFormatter getFormattedCoordinatesWithLat:favoriteItem.latitude
@@ -110,7 +210,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
                                                 outputFormat:format];
 }
 
-+ (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible
+- (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible
 {
     NSArray<OAFavoriteGroup *> *groups = [self favoriteGroupsInsideOrEqualToGroupName:groupName];
     if (groups.count == 0)
@@ -121,21 +221,22 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
     }
 
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    [self invalidateFavoriteFoldersCache];
 }
 
-+ (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned
+- (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     if (!group)
         return;
 
-    [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:YES];
-    [self invalidateFavoriteFoldersCache];
+    [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:NO];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
-+ (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
+- (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
 {
     if (groupNames.count == 0)
         return;
@@ -158,12 +259,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
-+ (void)setFavoriteGroupsPinned:(NSArray<NSString *> *)groupNames pinned:(BOOL)pinned
+- (void)setFavoriteGroupsPinned:(NSArray<NSString *> *)groupNames pinned:(BOOL)pinned
 {
     if (groupNames.count == 0)
         return;
@@ -183,12 +284,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
-+ (BOOL)addFavoriteGroup:(NSString *)name
+- (BOOL)addFavoriteGroup:(NSString *)name
          parentGroupName:(nullable NSString *)parentGroupName
                 iconName:(nullable NSString *)iconName
                    color:(nullable UIColor *)color
@@ -197,19 +298,19 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
     NSString *parent = parentGroupName ?: @"";
     NSString *groupName = parent.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", parent, trimmedName] : trimmedName;
-    if (groupName.length == 0 || [self favoriteGroupWithName:groupName])
+    if (groupName.length == 0 || [OAFavoritesHelper groupByTrimmedName:groupName])
         return NO;
 
     [OAFavoritesHelper addFavoriteGroup:groupName
                                   color:color
                                iconName:iconName
                      backgroundIconName:backgroundIconName];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    [self invalidateFavoriteFoldersCache];
     return YES;
 }
 
-+ (void)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName
+- (void)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     NSString *trimmedName = [newName stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
@@ -220,10 +321,14 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if ([sourceGroupName isEqualToString:trimmedName])
         return;
 
+    OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:trimmedName];
+    if (existingGroup && ![existingGroup.name isEqualToString:sourceGroupName])
+        return;
+
     [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:trimmedName];
 }
 
-+ (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName
+- (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     if (!group)
@@ -238,10 +343,10 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if ([sourceGroupName isEqualToString:newGroupName])
         return NO;
 
-    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:newGroupName];
+    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:newGroupName notifyAndSave:NO];
 }
 
-+ (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName
+- (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName
 {
     if (favoriteItems.count == 0)
         return;
@@ -249,6 +354,8 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *groupName = targetGroupName ?: @"";
     NSMutableSet<NSString *> *movedGroupNames = [NSMutableSet set];
     NSMutableSet<NSString *> *movedItemKeys = [NSMutableSet set];
+    BOOL movedGroups = NO;
+    BOOL movedPoints = NO;
 
     for (id item in favoriteItems)
     {
@@ -262,7 +369,10 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
         NSString *sourceGroupName = group.name;
         if ([self moveFavoriteGroup:sourceGroupName toGroupName:groupName])
+        {
             [movedGroupNames addObject:sourceGroupName];
+            movedGroups = YES;
+        }
     }
 
     for (id item in favoriteItems)
@@ -297,14 +407,21 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
                                           group:groupName
                                           descr:[favorite getDescription]
                                         address:[favorite getAddress]])
+        {
             [movedItemKeys addObject:itemKey];
+            movedPoints = YES;
+        }
     }
 
-    if (movedItemKeys.count > 0)
-        [self invalidateFavoriteFoldersCache];
+    if (movedGroups || movedPoints)
+    {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
+        if (movedGroups)
+            [OAFavoritesHelper saveCurrentPointsIntoFile];
+    }
 }
 
-+ (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
+- (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
 {
     NSMutableSet<NSString *> *selectedGroupNames = [NSMutableSet set];
     for (id item in favoriteItems)
@@ -319,7 +436,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     }
 
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
     {
         NSString *favoriteGroupName = favoriteGroup.name;
         BOOL isInsideSelectedGroup = NO;
@@ -342,7 +459,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [groupNames copy];
 }
 
-+ (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex
+- (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex
 {
     if (favoriteItems.count == 0)
         return;
@@ -395,12 +512,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     if (changed)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 }
 
-+ (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName
+- (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     if (!group)
@@ -408,12 +525,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return group ? [group toPointsGroup] : nil;
 }
 
-+ (BOOL)canUseGroupWithName:(NSString *)groupName
+- (BOOL)canUseGroupWithName:(NSString *)groupName
 {
     return [self favoriteItemsInsideOrEqualToGroupName:groupName].count > 0;
 }
 
-+ (NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
+- (NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
         return nil;
@@ -493,7 +610,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [self fileURLForSharingFavoriteGroups:groupsByName.allValues];
 }
 
-+ (BOOL)deleteFavoriteGroup:(NSString *)groupName
+- (BOOL)deleteFavoriteGroup:(NSString *)groupName
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     if (!group)
@@ -504,23 +621,22 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         return NO;
 
     BOOL didDelete = [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil];
-    if (didDelete)
-        [self invalidateFavoriteFoldersCache];
     return didDelete;
 }
 
-+ (BOOL)deleteFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+- (BOOL)deleteFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
     OAFavoriteItem *favorite = [self favoritePointWithIdentifier:favoriteItem.identifier];
     if (!favorite)
         return NO;
 
-    [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:YES];
-    [self invalidateFavoriteFoldersCache];
+    [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:NO];
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
 }
 
-+ (BOOL)deleteFavoriteItems:(NSArray *)favoriteItems
+- (BOOL)deleteFavoriteItems:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
         return NO;
@@ -591,16 +707,16 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
     if (itemsToDelete.count > 0)
     {
-        [OAFavoritesHelper deleteFavorites:itemsToDelete saveImmediately:YES];
+        [OAFavoritesHelper deleteFavorites:itemsToDelete saveImmediately:NO];
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
         didDelete = YES;
     }
 
-    if (didDelete)
-        [self invalidateFavoriteFoldersCache];
     return didDelete;
 }
 
-+ (void)openFavoritePointWithIdentifier:(NSString *)identifier
+- (void)openFavoritePointWithIdentifier:(NSString *)identifier
 {
     OAFavoriteItem *favorite = [self favoritePointWithIdentifier:identifier];
     if (!favorite)
@@ -618,7 +734,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     [rootViewController.mapPanel openTargetViewWithFavorite:favorite pushed:YES];
 }
 
-+ (OAEditPointViewController *)editPointViewControllerForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+- (OAEditPointViewController *)editPointViewControllerForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
     OAFavoriteItem *favorite = [self favoritePointWithIdentifier:favoriteItem.identifier];
     if (!favorite)
@@ -627,7 +743,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [[OAEditPointViewController alloc] initWithFavorite:favorite];
 }
 
-+ (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems
+- (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
         return;
@@ -637,6 +753,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         return;
 
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL addedMarker = NO;
     for (OAFavoriteItem *favorite in itemsToAdd)
     {
         CLLocation *location = [self locationForFavorite:favorite];
@@ -644,10 +761,14 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
             continue;
 
         [mapPanel addMapMarker:location.coordinate.latitude lon:location.coordinate.longitude description:[favorite getDisplayName]];
+        addedMarker = YES;
     }
+
+    if (addedMarker)
+        [mapPanel showDestinations];
 }
 
-+ (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
+- (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
 {
     NSArray<OAFavoriteItem *> *points = [self favoriteItemsInsideOrEqualToGroupName:groupName];
     if (points.count == 0)
@@ -684,7 +805,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
 }
 
-+ (void)addFavoriteGroupToNavigation:(NSString *)groupName
+- (void)addFavoriteGroupToNavigation:(NSString *)groupName
 {
     NSArray<OAFavoriteItem *> *points = [self favoriteItemsInsideOrEqualToGroupName:groupName];
     NSMutableArray<OAFavoritePointBridgeItem *> *items = [NSMutableArray arrayWithCapacity:points.count];
@@ -696,7 +817,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     [self addFavoriteItemsToNavigation:items];
 }
 
-+ (void)addFavoriteItemsToTrack:(NSArray *)favoriteItems gpxFileName:(nullable NSString *)gpxFileName
+- (void)addFavoriteItemsToTrack:(NSArray *)favoriteItems gpxFileName:(nullable NSString *)gpxFileName
 {
     if (favoriteItems.count == 0)
         return;
@@ -736,7 +857,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
-+ (void)addFavoriteItemsToNavigation:(NSArray *)favoriteItems
+- (void)addFavoriteItemsToNavigation:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
         return;
@@ -773,7 +894,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
                                                                 showDialog:YES];
 }
 
-+ (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points
+- (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points
 {
     return [points sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
         BOOL obj1Visible = obj1.isVisible;
@@ -785,12 +906,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     }];
 }
 
-+ (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group
+- (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group
 {
     return [self sortedFavoritePoints:group.points ?: @[]];
 }
 
-+ (NSArray<OAFavoriteItem *> *)favoriteItemsForBridgeItemsToAdd:(NSArray *)favoriteItems standalonePointItems:(BOOL)standalonePointItems
+- (NSArray<OAFavoriteItem *> *)favoriteItemsForBridgeItemsToAdd:(NSArray *)favoriteItems standalonePointItems:(BOOL)standalonePointItems
 {
     NSMutableArray<OAFavoriteItem *> *result = [NSMutableArray array];
     NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
@@ -822,7 +943,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [result copy];
 }
 
-+ (NSArray<OAFavoriteItem *> *)favoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
+- (NSArray<OAFavoriteItem *> *)favoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
 {
     NSMutableArray<OAFavoriteItem *> *result = [NSMutableArray array];
     NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
@@ -830,7 +951,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [result copy];
 }
 
-+ (void)addFavoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
+- (void)addFavoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
                                         toArray:(NSMutableArray<OAFavoriteItem *> *)result
                                  addedPointKeys:(NSMutableSet<NSString *> *)addedPointKeys
 {
@@ -841,7 +962,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     }
 }
 
-+ (void)addFavoriteItem:(OAFavoriteItem *)favorite
+- (void)addFavoriteItem:(OAFavoriteItem *)favorite
                pointKey:(NSString *)pointKey
                 toArray:(NSMutableArray<OAFavoriteItem *> *)result
          addedPointKeys:(NSMutableSet<NSString *> *)addedPointKeys
@@ -857,9 +978,10 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     [result addObject:favorite];
 }
 
-+ (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
+- (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
 {
     NSDate *lastModifiedDate = nil;
+    QString lastTimestamp;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in groups)
     {
@@ -873,16 +995,37 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
         for (OAFavoriteItem *point in favoriteGroup.points)
         {
-            NSDate *timestamp = [point getTimestamp];
-            if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
-                lastModifiedDate = timestamp;
+            const auto timestamp = point.favorite->getTime();
+            if (timestamp.isNull())
+                continue;
+
+            if (lastTimestamp.isNull() || timestamp.compare(lastTimestamp) > 0)
+                lastTimestamp = timestamp;
         }
+    }
+
+    if (!lastTimestamp.isNull())
+    {
+        NSDate *timestamp = [[self favoriteTimestampFormatter] dateFromString:lastTimestamp.toNSString()];
+        if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
+            lastModifiedDate = timestamp;
     }
 
     return lastModifiedDate;
 }
 
-+ (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups
+- (NSISO8601DateFormatter *)favoriteTimestampFormatter
+{
+    static NSISO8601DateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [NSISO8601DateFormatter new];
+        formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    });
+    return formatter;
+}
+
+- (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups
 {
     NSUInteger pointsCount = 0;
     NSString *parentGroupName = groupName ?: @"";
@@ -895,7 +1038,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return pointsCount;
 }
 
-+ (NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)favoriteStorageAttributesForGroups:(NSArray<OAFavoriteGroup *> *)groups
+- (NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)favoriteStorageAttributesForGroups:(NSArray<OAFavoriteGroup *> *)groups
 {
     NSMutableDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *result = [NSMutableDictionary dictionaryWithCapacity:groups.count];
     for (OAFavoriteGroup *group in groups)
@@ -910,11 +1053,11 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return result.copy;
 }
 
-+ (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName
+- (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName
 {
     NSMutableArray<OAFavoriteGroup *> *result = [NSMutableArray array];
     NSString *parentGroupName = groupName ?: @"";
-    for (OAFavoriteGroup *favoriteGroup in [[OAFavoritesHelper getFavoriteGroups] copy])
+    for (OAFavoriteGroup *favoriteGroup in [[OAFavoritesHelper favoriteGroups] copy])
     {
         if ([self isGroupName:favoriteGroup.name insideOrEqualToGroupName:parentGroupName])
             [result addObject:favoriteGroup];
@@ -923,12 +1066,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return result.copy;
 }
 
-+ (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier
+- (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier
 {
     if (identifier.length == 0)
         return nil;
 
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
         for (OAFavoriteItem *point in group.points)
         {
@@ -940,12 +1083,17 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return nil;
 }
 
-+ (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName
+- (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName
 {
-    return [OAFavoritesHelper getGroupByName:groupName ?: @""];
+    return [OAFavoritesHelper groupByName:groupName ?: @""];
 }
 
-+ (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName
+- (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName
+{
+    return [self renameFavoriteGroupTreeFromGroupName:sourceGroupName toGroupName:targetGroupName notifyAndSave:YES];
+}
+
+- (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName notifyAndSave:(BOOL)notifyAndSave
 {
     NSString *source = sourceGroupName ?: @"";
     NSString *target = targetGroupName ?: @"";
@@ -964,16 +1112,16 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         changed = YES;
     }
 
-    if (changed)
+    if (changed && notifyAndSave)
     {
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [self invalidateFavoriteFoldersCache];
     }
 
     return changed;
 }
 
-+ (BOOL)isGroupName:(NSString *)groupName insideOrEqualToGroupName:(NSString *)parentGroupName
+- (BOOL)isGroupName:(NSString *)groupName insideOrEqualToGroupName:(NSString *)parentGroupName
 {
     NSString *name = groupName ?: @"";
     NSString *parent = parentGroupName ?: @"";
@@ -983,29 +1131,29 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (parent.length == 0)
         return NO;
 
-    return [name hasPrefix:[parent stringByAppendingString:@"/"]];
+    return [name hasPrefix:[parent stringByAppendingString:@"/"]] || [name hasPrefix:[parent stringByAppendingString:@" /"]];
 }
 
-+ (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName
+- (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName
 {
     NSString *lastComponent = [self lastComponentForGroupName:groupName];
     return !parentGroupName || parentGroupName.length == 0 ? lastComponent : [NSString stringWithFormat:@"%@/%@", parentGroupName, lastComponent];
 }
 
-+ (NSString *)suffixForGroupName:(NSString *)groupName parentGroupName:(NSString *)parentGroupName
+- (NSString *)suffixForGroupName:(NSString *)groupName parentGroupName:(NSString *)parentGroupName
 {
     NSString *name = groupName ?: @"";
     NSString *parent = parentGroupName ?: @"";
     return name.length > parent.length ? [name substringFromIndex:parent.length] : @"";
 }
 
-+ (NSString *)lastComponentForGroupName:(NSString *)groupName
+- (NSString *)lastComponentForGroupName:(NSString *)groupName
 {
     NSArray<NSString *> *components = [(groupName ?: @"") componentsSeparatedByString:@"/"];
     return components.lastObject ?: @"";
 }
 
-+ (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points
+- (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points
 {
     OAFavoriteGroup *groupToShare = [[OAFavoriteGroup alloc] initWithPoints:points ?: @[]
                                                                        name:group.name
@@ -1017,7 +1165,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return groupToShare;
 }
 
-+ (NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups
+- (NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     if (favoriteGroups.count == 0)
         return nil;
@@ -1038,7 +1186,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [NSURL fileURLWithPath:fullFilename];
 }
 
-+ (CLLocation *)locationForFavorite:(OAFavoriteItem *)favorite
+- (CLLocation *)locationForFavorite:(OAFavoriteItem *)favorite
 {
     if (!favorite.favorite)
         return nil;
@@ -1046,12 +1194,12 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     return [[CLLocation alloc] initWithLatitude:[favorite getLatitude] longitude:[favorite getLongitude]];
 }
 
-+ (int)currentMapZoomLevel
+- (int)currentMapZoomLevel
 {
     return [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
 }
 
-+ (OAFavoriteItem *)standaloneFavoritePoint:(OAFavoriteItem *)favorite
+- (OAFavoriteItem *)standaloneFavoritePoint:(OAFavoriteItem *)favorite
 {
     OASWptPt *point = [favorite toWpt];
     point.category = nil;

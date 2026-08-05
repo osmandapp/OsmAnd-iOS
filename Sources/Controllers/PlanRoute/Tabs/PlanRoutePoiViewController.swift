@@ -267,20 +267,22 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        isEmptyState ? 1 : groups[section].points.count
+        isEmptyState ? 1 : max(groups[section].points.count, 1)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if isEmptyState {
-            if indexPath.section == 0 {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier, for: indexPath) as? OARightIconTableViewCell else { return UITableViewCell() }
-                configureEmptyAddPointsCell(cell)
-                return cell
-            }
+        if isEmptyState, indexPath.section == 1 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else { return UITableViewCell() }
             configureEmptyAddGroupCell(cell)
             return cell
         }
+
+        if isEmptyState || groups[indexPath.section].points.isEmpty {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier, for: indexPath) as? OARightIconTableViewCell else { return UITableViewCell() }
+            configureEmptyAddPointsCell(cell)
+            return cell
+        }
+
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.poiCellReuseIdentifier, for: indexPath)
         let group = groups[indexPath.section]
         configurePoiCell(cell, with: group.points[indexPath.row], sortMode: sortMode(for: group.name))
@@ -307,6 +309,7 @@ extension PlanRoutePoiViewController: UITableViewDelegate {
             return
         }
 
+        guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row) else { return }
         OARootViewController.instance().mapPanel?.openTargetView(withWpt: groups[indexPath.section].points[indexPath.row].item, pushed: false)
     }
 

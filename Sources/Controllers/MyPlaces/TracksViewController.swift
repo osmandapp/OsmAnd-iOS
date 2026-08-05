@@ -1186,7 +1186,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func setEdit(_ edit: Bool) {
+        let shouldHideSearch = edit && isSearchActive
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
         tableView.setEditing(edit, animated: true)
+        if shouldHideSearch {
+            hideSearch()
+        }
         myPlacesDelegate?.updateEditMode(edit)
     }
     
@@ -1669,17 +1678,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func onTrackEditClicked(_ track: TrackItem?) {
-        guard let track else { return }
-        
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            state.gpxFilePath = track.gpxFilePath
-            state.navControllerHistory = newCurrentHistory
-            if let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
-                rootVC.mapPanel.showScrollableHudViewController(vc)
-            }
-        }
+        guard let track,
+              let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(),
+              !newCurrentHistory.isEmpty else { return }
+
+        PlanRouteScrollableViewController.openExistingTrack(filePath: track.gpxFilePath, navControllerHistory: newCurrentHistory)
     }
     
     private func onTrackDuplicateClicked(track: TrackItem?) {
@@ -2163,8 +2166,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func hideSearch() {
-        searchController.isActive = false
-        navigationItem.searchController = nil
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else {
+            searchController.isActive = false
+            navigationItem.searchController = nil
+        }
     }
     
     // MARK: - TableView

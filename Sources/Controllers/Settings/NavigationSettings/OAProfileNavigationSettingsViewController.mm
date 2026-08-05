@@ -221,7 +221,7 @@
         if (self.openFromRouteInfo)
         {
             [self dismissViewControllerAnimated:YES completion:^{
-                if (self.delegate)
+                if ([self.delegate respondsToSelector:@selector(closeSettingsScreenWithRouteInfo)])
                     [self.delegate closeSettingsScreenWithRouteInfo];
             }];
         }

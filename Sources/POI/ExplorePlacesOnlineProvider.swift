@@ -246,6 +246,15 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         if let id {
             amenity.setAdditionalInfo("wikidata", value: "Q\(id)")
         }
+
+        var lang = properties.lang
+        if lang?.isEmpty != false {
+            lang = properties.wikiLang
+        }
+        if let lang, !lang.isEmpty {
+            amenity.setAdditionalInfo("\(WIKI_LANG):\(lang)", value: "yes")
+        }
+        
         amenity.name = properties.wikiTitle
         // NOTE: android use TransliterationHelper
         amenity.enName = amenity.name ?? ""

@@ -4430,6 +4430,50 @@ static char kMapSourceUpdateQueueKey;
     return heights;
 }
 
+- (void)fetchAltitudesForCoordinates:(NSArray<NSValue *> *)coordinates callback:(void (^ _Nonnull)(NSArray<NSNumber *> *heights))callback
+{
+    NSUInteger count = coordinates.count;
+    NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:count];
+    for (NSUInteger i = 0; i < count; i++)
+        [results addObject:@(kMinAltitudeValue)];
+
+    NSMutableArray<NSNumber *> *missingIndices = [NSMutableArray array];
+    QList<OsmAnd::PointI> missingPoints;
+
+    for (NSUInteger i = 0; i < count; i++)
+    {
+        CLLocationCoordinate2D coord;
+        [coordinates[i] getValue:&coord];
+        OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coord.latitude, coord.longitude));
+        double altitude = [_mapView getLocationHeightInMeters:point];
+        if (altitude > kMinAltitudeValue)
+        {
+            results[i] = @(altitude);
+        }
+        else
+        {
+            [missingIndices addObject:@(i)];
+            missingPoints.push_back(point);
+        }
+    }
+
+    if (missingIndices.count == 0)
+    {
+        callback([results copy]);
+        return;
+    }
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        QList<float> heights = [self getHeightsForPoints:missingPoints];
+        for (NSUInteger j = 0; j < (NSUInteger)missingIndices.count; j++)
+        {
+            NSUInteger idx = missingIndices[j].unsignedIntegerValue;
+            results[idx] = (j < (NSUInteger)heights.count()) ? @(heights[(qsizetype)j]) : @(kMinAltitudeValue);
+        }
+        callback([results copy]);
+    });
+}
+
 - (void)fitTrackOnMap:(LineChartView *)lineChartView
              startPos:(double)startPos
                endPos:(double)endPos
@@ -4450,14 +4494,14 @@ static char kMapSourceUpdateQueueKey;
         CGPoint mapPoint;
         [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
 
-        if (forceFit && trackChartHelper.delegate)
+        if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
         {
             [trackChartHelper.delegate centerMapOnBBox:rect];
         }
         else if (CLLocationCoordinate2DIsValid(location)
                  && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
         {
-            if (!trackChartHelper.isLandscape && trackChartHelper.delegate)
+            if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
                 [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
             [self goToPosition:[OANativeUtilities convertFromPointI:point]
                       animated:YES];

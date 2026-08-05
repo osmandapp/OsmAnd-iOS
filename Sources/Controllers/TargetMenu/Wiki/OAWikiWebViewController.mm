@@ -30,6 +30,20 @@
 
 #define kHeaderImageHeight 170
 static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
+static NSString * const kWikimediaThumbnailSize = @"330px-";
+static NSString * const kTransparentPixel = @"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
+{
+    static NSRegularExpression *regex;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
+                                                          options:NSRegularExpressionCaseInsensitive
+                                                            error:nil];
+    });
+    return regex;
+}
 
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
@@ -59,6 +73,11 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     NSURL *_astroOnlineURL;
     NSString *_astroWikidataId;
     NSArray<NSString *> *_astroAvailableLocales;
+    NSInteger _headerImageRequestId;
+    NSInteger _bodyImagesRequestId;
+    BOOL _pendingBodyImagesInject;
+    BOOL _bodyImagesOnlyNow;
+    BOOL _hasHeaderImage;
 }
 
 #pragma mark - Initialization
@@ -273,6 +292,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
                 [alert.view addConstraints:constraints];
                 [spinner setUserInteractionEnabled:NO];
                 
+                _headerImageRequestId++;
                 _content = nil;
                 [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude]] url:newUrl onStart:^{
                     [spinner startAnimating];
@@ -310,6 +330,14 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     }
 
     [super viewDidLoad];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.isMovingFromParentViewController || self.isBeingDismissed)
+        _headerImageRequestId++;
 }
 
 #pragma mark - Base setup UI
@@ -485,7 +513,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
         return _externalURL;
     } else {
         NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-        NSString *wikipediaTitle = [self getWikipediaTitleURL];
+        NSString *wikipediaTitle = [self wikipediaTitleURL];
         NSString *wikiUrl = [OAWikiAlgorithms getWikiUrlWithText:[NSString stringWithFormat:@"%@:%@", locale, wikipediaTitle]];
         return [NSURL URLWithString:wikiUrl];
     }
@@ -515,44 +543,98 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     _isDownloadImagesOnlyNow = onlyNow;
 }
 
+- (NSString *)normalizeLegacyWikimediaThumbnailUrls:(NSString *)html
+{
+    if (html.length == 0)
+        return html;
+    
+    NSRegularExpression *regex = LegacyWikimediaThumbnailRegex();
+    return [regex stringByReplacingMatchesInString:html
+                                           options:0
+                                             range:NSMakeRange(0, html.length)
+                                      withTemplate:[NSString stringWithFormat:@"$1%@", kWikimediaThumbnailSize]];
+}
+
 #pragma mark - Web load
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
 {
-    if (!loadWebView || [self isImageTagAppended])
+    if (!loadWebView)
         return;
 
-    NSString *headerImageCacheKey = [self getHeaderImageCacheDbKey];
-    NSString *cachedHeaderImage = [_imageCacheHelper readImageByDbKey:headerImageCacheKey];
-    if (cachedHeaderImage)
+    BOOL onlyNow = [self isDownloadImagesOnlyNow];
+    
+    if ([self isImageTagAppended])
+    {
+        _hasHeaderImage = YES;
+        loadWebView(_content);
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
+        return;
+    }
+
+    NSString *dbKey = [self headerImageCacheDbKey];
+    NSString *cached = [_imageCacheHelper readImageByDbKey:dbKey];
+    if (cached.length > 0)
     {
         NSString *html = [self appendHeaderImageTag];
-        [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
+        NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:cached];
+        NSString *imgTag = [NSString stringWithFormat: @"id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"%@\"", kTransparentPixel];
+        html = [html stringByReplacingOccurrencesOfString:imgTag
+                                               withString:[NSString stringWithFormat:@"id=\"wiki-header-image\" src=\"%@\"", src]];
+        _content = html;
+        loadWebView(html);
+        [self printHtmlToDebugFileIfEnabled:html];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
+        return;
+    }
+
+    if (![self isImagesDownloadingAllowed])
+    {
+        _hasHeaderImage = NO;
+        loadWebView(_content);
+        [self printHtmlToDebugFileIfEnabled:_content];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
+        return;
     }
     else
     {
-        if ([self isImagesDownloadingAllowed])
-        {
-            [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
-                if (headerImageUrl.length == 0)
-                {
-                    [self injectCachedImagesToHtmlAndReload:_content loadWebView:loadWebView];
-                    return;
-                }
-
-                //download header image and save it to cache
-                [_imageCacheHelper fetchSingleImageByURL:headerImageUrl customKey:headerImageCacheKey downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *imageData) {
-                    NSString *html = imageData.length > 0 ? [self appendHeaderImageTag] : _content;
-                    [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
-                }];
-            }];
-        }
-        else
-        {
-            loadWebView(_content);
-            [self printHtmlToDebugFileIfEnabled:_content];
-        }
+        _content = [self appendHeaderImageTag];
+        loadWebView(_content);
+        [self printHtmlToDebugFileIfEnabled:_content];
+        [self markBodyImagesInjectWithOnlyNow:onlyNow];
     }
+    
+    NSInteger requestId = ++_headerImageRequestId;
+    __weak __typeof(self) weakSelf = self;
+
+    [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        if (!headerImageUrl.length) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf removeHeaderImagePlaceholderWithRequestId:requestId];
+            });
+            return;
+        }
+        [strongSelf->_imageCacheHelper fetchSingleImageByURL:headerImageUrl
+                                             customKey:dbKey
+                                          downloadMode:[strongSelf getImagesDownloadMode]
+                                               onlyNow:onlyNow
+                                            onComplete:^(NSString *imageData) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                
+                if (imageData.length == 0)
+                    [strongSelf removeHeaderImagePlaceholderWithRequestId:requestId];
+                else
+                    [strongSelf injectHeaderImageBase64:imageData requestId:requestId];
+            });
+        }];
+    }];
 }
 
 - (void)fetchHeaderImageUrl:(void (^)(NSString *headerImageUrl))onComplete
@@ -585,7 +667,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 - (void)fetchWikipediaPageImageUrl:(void (^)(NSString *headerImageUrl))onComplete
 {
     NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-    NSString *wikipediaTitle = [self getWikipediaTitleURL];
+    NSString *wikipediaTitle = [self wikipediaTitleURL];
     NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
                                 locale,
                                 wikipediaTitle,
@@ -631,30 +713,132 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 {
     if ([self isImageTagAppended])
     {
+        _hasHeaderImage = YES;
         return _content;
     }
     else
     {
-        return [_content stringByReplacingOccurrencesOfString:@"</head>" withString:[NSString stringWithFormat:@"<img src=\"%@\" style=\"object-fit:cover; object-position:center; height:%dpx;\"></head>", [self getHeaderImageCacheDbKey], kHeaderImageHeight]];
+        _hasHeaderImage = YES;
+      
+        NSString *imgTag = [NSString stringWithFormat: @"<img id=\"wiki-header-image\" class=\"wiki-header-shimmer\" src=\"%@\" />", kTransparentPixel];
+        
+        return [_content stringByReplacingOccurrencesOfString:@"</head>"
+                                                   withString:[imgTag stringByAppendingString:@"</head>"]];
     }
 }
 
 - (BOOL)isImageTagAppended
 {
-    return [_content containsString:@"px;\"></head>"];
+    return [_content containsString:@"id=\"wiki-header-image\""];
 }
 
-- (void)injectCachedImagesToHtmlAndReload:(NSString *)html loadWebView:(void(^)(NSString *content))loadWebView
+- (void)injectHeaderImageBase64:(NSString *)base64 requestId:(NSInteger)requestId
 {
-    [_imageCacheHelper processWholeHTML:html downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *htmlWithImages) {
+    if (base64.length == 0 || !self.view.window)
+        return;
+
+    if (requestId != _headerImageRequestId)
+        return;
+    
+    _hasHeaderImage = YES;
+    
+    NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
+        NSString *js = [NSString stringWithFormat:
+            @"var img = document.getElementById('wiki-header-image');"
+            @"if (img) {"
+            @"  img.classList.remove('wiki-header-shimmer');"
+            @"  img.src = '%@';"
+            @"}",
+            src];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+- (void)removeHeaderImagePlaceholderWithRequestId:(NSInteger)requestId
+{
+    if (requestId != _headerImageRequestId || !self.view.window)
+        return;
+    
+    _hasHeaderImage = NO;
+    
+    NSString *js =
+        @"var img = document.getElementById('wiki-header-image');"
+        @"if (img) img.remove();";
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+- (void)markBodyImagesInjectWithOnlyNow:(BOOL)onlyNow
+{
+    _bodyImagesOnlyNow = onlyNow;
+    _pendingBodyImagesInject = YES;
+    _bodyImagesRequestId++;
+}
+
+- (void)startInjectingBodyImagesIfNeeded
+{
+    if (!_pendingBodyImagesInject)
+        return;
+    
+    _pendingBodyImagesInject = NO;
+    
+    if (_content.length == 0)
+        return;
+
+    NSInteger requestId = _bodyImagesRequestId;
+    BOOL onlyNow = _bodyImagesOnlyNow;
+    OADownloadMode *downloadMode = [self getImagesDownloadMode];
+    NSArray<NSString *> *links = [_imageCacheHelper extractImagesLinksFromHtml:_content];
+    __weak __typeof(self) weakSelf = self;
+    
+    for (NSString *url in links)
+    {
+        if (![url hasPrefix:@"http"])
+            continue;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *content = htmlWithImages.length > 0 ? htmlWithImages : html;
-            _content = content;
-            loadWebView(content);
-            [self printHtmlToDebugFileIfEnabled:content];
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (!self)
+                return;
+            [self->_imageCacheHelper fetchSingleImageByURL:url
+                                                 customKey:nil
+                                              downloadMode:downloadMode
+                                                   onlyNow:onlyNow
+                                                onComplete:^(NSString *imageData) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    __strong __typeof(weakSelf) self = weakSelf;
+                    if (!self || requestId != self->_bodyImagesRequestId)
+                        return;
+                    [self injectBodyImageBase64:imageData forOriginalSrc:url];
+                });
+            }];
         });
-    }];
+    }
+}
+
+- (void)injectBodyImageBase64:(NSString *)base64 forOriginalSrc:(NSString *)originalSrc
+{
+    if (base64.length == 0 || originalSrc.length == 0 || !self.view.window)
+        return;
+
+    NSString *src = [OAImageToStringConverter htmlImgSrcTagContent:base64];
+    NSString *escapedSrc = [self jsEscapedString:originalSrc];
+    NSString *js = [NSString stringWithFormat:
+        @"document.querySelectorAll('img').forEach(function(img) {"
+        @"  if (img.id === 'wiki-header-image') return;"
+        @"  if (img.getAttribute('src') === '%@') {"
+        @"    img.src = '%@';"
+        @"  }"
+        @"});",
+        escapedSrc, src];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+- (NSString *)jsEscapedString:(NSString *)string
+{
+    NSString *result = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    result = [result stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    result = [result stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    result = [result stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
+    return result;
 }
 
 - (BOOL) isImagesDownloadingAllowed
@@ -665,7 +849,7 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
         ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi]);
 }
 
-- (NSString *)getHeaderImageCacheDbKey
+- (NSString *)headerImageCacheDbKey
 {
     NSString *articleUrl = [self getUrl].absoluteString;
     return [_imageCacheHelper getDbKeyByLink:[articleUrl stringByAppendingString:kWikidataHeaderImageCacheSuffix]];
@@ -726,12 +910,12 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
         return 0.;
 
-    return kHeaderImageHeight;
+    return _hasHeaderImage ? kHeaderImageHeight : 0.;
 }
 
 #pragma mark - Additions
 
-- (NSString *)getWikipediaTitleURL
+- (NSString *)wikipediaTitleURL
 {
     NSString *title = [self getTitle];
     BOOL hasLocalizedName = ![title isEqualToString:OALocalizedString(@"download_wikipedia_maps")];
@@ -750,14 +934,14 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
 
 - (void)loadWebView
 {
-  if (_externalURL)
-  {
-    [self.webView loadRequest:[NSURLRequest requestWithURL:_externalURL]];
-    self.webView.hidden = NO;
-  } else
-  {
-    [super loadWebView];
-  }
+    if (_externalURL)
+    {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:_externalURL]];
+        self.webView.hidden = NO;
+    } else
+    {
+        [super loadWebView];
+    }
 }
 
 - (void)updateWikiData:(NSString *)locale
@@ -765,6 +949,9 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     NSString *content = [self appendHeadToContent:_poi.localizedContent[locale]];
     if (content)
     {
+        _headerImageRequestId++;
+        _hasHeaderImage = NO;
+        _bodyImagesRequestId++;
         _contentLocale = locale;
         _content = content;
         [self createLanguagesNavbarButton];
@@ -787,8 +974,10 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     if (content == nil)
         return nil;
     
+    content = [self normalizeLegacyWikimediaThumbnailUrls:content];
+    
     NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
-    return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];
+    return [NSString stringWithFormat:@"<html class=\"%@\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, nightModeClass, content];
 }
 
 - (void)updateAstroWikiData:(NSString *)locale
@@ -796,7 +985,10 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
     NSDictionary *data = [AstroWikiBridge loadArticleWithWikidataId:_astroWikidataId lang:locale ?: @""];
     if (!data)
         return;
-
+    
+    _headerImageRequestId++;
+    _hasHeaderImage = NO;
+    _bodyImagesRequestId++;
     _astroRawHtml = data[@"html"];
     _astroTitle = data[@"title"];
     _contentLocale = data[@"locale"];
@@ -845,6 +1037,11 @@ static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-ima
             if (onViewCommitted)
                 onViewCommitted();
         }];
+}
+
+- (void)webViewDidFinishNavigation
+{
+    [self startInjectingBodyImagesIfNeeded];
 }
 
 #pragma mark - SFSafariViewControllerDelegate

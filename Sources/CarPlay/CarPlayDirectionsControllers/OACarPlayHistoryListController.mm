@@ -30,6 +30,7 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAHistoryItem *_prevRouteHistoryitem;
 }
 
 - (void)commonInit
@@ -79,13 +80,13 @@
         OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
         if (pointToNavigateBackup)
         {
-            OAHistoryItem *prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
-            prevRouteHistoryitem.name = pointToNavigateBackup.pointDescription.name;
-            prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
-            prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
-            prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
-            prevRouteHistoryitem.date = [NSDate date];
-            [historyItems addObject:prevRouteHistoryitem];
+            _prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
+            _prevRouteHistoryitem.name = pointToNavigateBackup.pointDescription.name;
+            _prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
+            _prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
+            _prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
+            _prevRouteHistoryitem.date = [NSDate date];
+            [historyItems addObject:_prevRouteHistoryitem];
         }
     }
 
@@ -194,10 +195,21 @@
             completionBlock();
         return;
     }
-    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType] typeName:historyItem.typeName name:historyItem.name];
-    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:historyItem.latitude longitude:historyItem.longitude] historyName:historyName];
-    [self safePopToRootTemplateAnimated:YES];
 
+    if (historyItem == _prevRouteHistoryitem)
+    {
+        [self startNavigationFromPreviousRoute];
+    }
+    else
+    {
+        OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType]
+                                                                          typeName:historyItem.typeName
+                                                                              name:historyItem.name];
+        [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:historyItem.latitude longitude:historyItem.longitude]
+                               historyName:historyName];
+    }
+    
+    [self safePopToRootTemplateAnimated:YES];
     if (completionBlock)
         completionBlock();
 }

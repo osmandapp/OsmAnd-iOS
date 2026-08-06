@@ -9,10 +9,12 @@
 import UIKit
 
 final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
+    private static let sectionHorizontalInset: CGFloat = 16
     private static let separatorLeftInset: CGFloat = 72
     private static let bottomContentInset: CGFloat = 72
     private static let emptySectionsCount = 2
     private static let poiCellReuseIdentifier = "PointListTableViewCell"
+    private static let emptyStateTopInset: CGFloat = 10
     
     let planRouteTab: PlanRouteTab = .poi
     
@@ -137,6 +139,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     }
 
     private func setupTableView() {
+        let horizontalInset = Self.sectionHorizontalInset
         view.backgroundColor = .clear
         tableView.backgroundColor = .viewBg
         tableView.dataSource = self
@@ -144,6 +147,10 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         tableView.alwaysBounceVertical = true
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = PointContentConfiguration.estimatedRowHeight
+        tableView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0,
+                                                                     leading: horizontalInset,
+                                                                     bottom: 0,
+                                                                     trailing: horizontalInset)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
@@ -151,7 +158,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         tableView.sectionHeaderTopPadding = 0
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Self.poiCellReuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OARightIconTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OARightIconTableViewCell.reuseIdentifier)
+        tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRoutePoiGroupHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -197,17 +204,11 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         return DateFormatter.detailsDateFormatter.string(from: Date(timeIntervalSince1970: time / 1000))
     }
 
-    private func configureEmptyAddPointsCell(_ cell: OARightIconTableViewCell) {
-        cell.backgroundColor = .groupBg
-        cell.selectionStyle = .none
-        cell.titleLabel.text = localizedString("add_points")
-        cell.titleLabel.textColor = .textColorPrimary
-        cell.descriptionLabel.text = localizedString("add_points_description")
-        cell.descriptionLabel.textColor = .textColorSecondary
-        cell.leftIconVisibility(false)
-        cell.rightIconVisibility(true)
-        cell.rightIconView.image = .icCustomFolderOpen
-        cell.rightIconView.tintColor = .iconColorSecondary
+    private func configureEmptyAddPointsCell(_ cell: HorizontalEmptyCell) {
+        cell.configure(title: localizedString("add_points"),
+                       description: localizedString("add_points_description"),
+                       icon: .icCustomFolderOpen,
+                       iconTint: .iconColorSecondary)
     }
 
     private func configureEmptyAddGroupCell(_ cell: OASimpleTableViewCell) {
@@ -271,14 +272,21 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if isEmptyState, indexPath.section == 1 {
+        if isEmptyState {
+            if indexPath.section == 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else {
+                    return UITableViewCell()
+                }
+                configureEmptyAddPointsCell(cell)
+                return cell
+            }
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else { return UITableViewCell() }
             configureEmptyAddGroupCell(cell)
             return cell
         }
 
-        if isEmptyState || groups[indexPath.section].points.isEmpty {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier, for: indexPath) as? OARightIconTableViewCell else { return UITableViewCell() }
+        if groups[indexPath.section].points.isEmpty {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else { return UITableViewCell() }
             configureEmptyAddPointsCell(cell)
             return cell
         }
@@ -291,6 +299,11 @@ extension PlanRoutePoiViewController: UITableViewDataSource {
 }
 
 extension PlanRoutePoiViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard isEmptyState else { return UITableView.automaticDimension }
+        return section == 0 ? Self.emptyStateTopInset : .leastNormalMagnitude
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard !isEmptyState else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRoutePoiGroupHeaderView.reuseIdentifier) as? PlanRoutePoiGroupHeaderView else { return nil }
@@ -374,7 +387,7 @@ extension PlanRoutePoiViewController {
         let sortingOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.lastModified, group: group)])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.nameAZ, group: group), makePoiGroupSortAction(.nameZA, group: group)])
         let dateOptions = UIMenu(options: .displayInline, children: [makePoiGroupSortAction(.newestDateFirst, group: group), makePoiGroupSortAction(.oldestDateFirst, group: group)])
-        return UIMenu(title: localizedString("shared_string_sort"), image: .templateImageNamed("ic_custom_swap"), children: [sortingOptions, alphabeticalOptions, dateOptions])
+        return UIMenu(title: localizedString("shared_string_sort"), image: .icCustomSwap, children: [sortingOptions, alphabeticalOptions, dateOptions])
     }
 
     private func makePoiGroupSortAction(_ sortMode: TrackFavoriteSortMode, group: PlanRoutePoiGroup) -> UIAction {

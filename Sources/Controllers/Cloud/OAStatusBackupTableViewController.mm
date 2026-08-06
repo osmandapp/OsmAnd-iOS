@@ -102,7 +102,6 @@
 
 - (void)setupNotificationListeners
 {
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
@@ -843,10 +842,6 @@
 }
 
 // MARK: Sync callbacks
-
-- (void)onBackupFinished:(NSNotification *)notification
-{
-}
 
 - (void)onBackupStarted
 {

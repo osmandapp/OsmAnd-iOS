@@ -6189,7 +6189,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_favoriteSortModes forKey:favoriteSortModesKey];
 
-        _searchFavoriteSortMode = [OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeTitle]];
+        _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
 
         _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
@@ -7679,7 +7679,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (NSDictionary<NSString *, NSString *> *)getFavoriteSortModes
 {
-    return [self getTrackSortModesWithArray:[_favoriteSortModes get]];
+    return [self favoriteSortModesWithArray:[_favoriteSortModes get]];
 }
 
 - (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
@@ -7698,6 +7698,25 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [sortModes copy];
 }
 
+- (NSDictionary<NSString *, NSString *> *)favoriteSortModesWithArray:(NSArray<NSString *> *)modes
+{
+    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
+    if (modes != nil && modes.count > 0)
+    {
+        NSString *joinedSortModes = [modes componentsJoinedByString:@","];
+        for (NSString *sortMode in [joinedSortModes componentsSeparatedByString:@";;"])
+        {
+            if (sortMode.length == 0)
+                continue;
+            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
+            if (parts.count == 2)
+                sortModes[parts[0]] = parts[1];
+        }
+    }
+
+    return [sortModes copy];
+}
+
 - (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
 {
     NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
@@ -7706,7 +7725,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (void)saveFavoriteSortModes:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
 {
-    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:favoriteSortModes];
+    NSArray<NSString *> *sortModes = [self plainFavoriteSortModesFromDictionary:favoriteSortModes];
     [_favoriteSortModes set:sortModes];
 }
 
@@ -7721,6 +7740,19 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
     
     return [sortTypes copy];
+}
+
+- (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
+{
+    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
+    for (NSString *key in favoriteSortModes.allKeys)
+    {
+        NSString *value = favoriteSortModes[key];
+        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
+        [sortTypes addObject:combined];
+    }
+
+    return sortTypes.count > 0 ? @[[[sortTypes componentsJoinedByString:@";;"] stringByAppendingString:@";;"]] : @[];
 }
 
 // navigation settings

@@ -924,7 +924,7 @@
 "empty_profile_name_warning" = "Ime profila ne može biti prazno.";
 "err_profile_import" = "Greška pri čitanju podataka stavke: %@";
 "reading_file" = "Čitanje fajla";
-"preparing_file" = "Priprema datoteke";
+"preparing_file" = "Priprema fajla";
 "profile_import_success" = "Profil aplikacije je uspešno uvezen";
 "profile_prefs_reset_successful" = "Sve podešavanja profila vraćene su na podrazumevano.";
 "not_available_profile_name" = "Profil sa ovim imenom već postoji.";
@@ -4488,3 +4488,9 @@
 "share_as_file" = "Deli kao fajl";
 "share_link" = "Deli link";
 "carplay_map_mode_vehicle_appearance" = "Izgled vozila";
+"shared_string_copy_from" = "Kopiraj iz";
+"add_points" = "Dodaj tačke";
+"add_points_description" = "Izaberite mesta na mapi ili ih kopirajte iz omiljenih da biste ih videli duž rute.";
+"shared_string_new_name" = "Novo ime";
+"shared_string_undo" = "Poništi";
+"shared_string_redo" = "Povrati";

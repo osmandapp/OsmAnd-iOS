@@ -22,22 +22,22 @@ protocol FavoriteSortablePoint {
     var lastModified: Date? { get }
 }
 
-@objc enum FavoriteSortMode: Int, CaseIterable {
-    case lastModified
-    case nameAZ
-    case nameZA
-    case nearest
-    case farthest
-    case newestDateFirst
-    case oldestDateFirst
+enum FavoriteSortMode: String, CaseIterable {
+    case lastModified = "LAST_MODIFIED"
+    case nameAZ = "NAME_ASCENDING"
+    case nameZA = "NAME_DESCENDING"
+    case nearestToCurrentLocation = "NEAREST"
+    case nearestToMapCenter = "NEAREST_TO_MAP_CENTER"
+    case newestDateFirst = "DATE_ASCENDING"
+    case oldestDateFirst = "DATE_DESCENDING"
 
     var title: String {
         switch self {
         case .lastModified: return localizedString("sort_last_modified")
         case .nameAZ: return localizedString("track_sort_az")
         case .nameZA: return localizedString("track_sort_za")
-        case .nearest: return localizedString("distance_nearest")
-        case .farthest: return localizedString("distance_farthest")
+        case .nearestToCurrentLocation: return localizedString("sort_by_nearest_to_current_location")
+        case .nearestToMapCenter: return localizedString("sort_by_nearest_to_map_center")
         case .newestDateFirst: return localizedString("newest_date_first")
         case .oldestDateFirst: return localizedString("oldest_date_first")
         }
@@ -48,8 +48,8 @@ protocol FavoriteSortablePoint {
         case .lastModified: return .icCustomLastModified
         case .nameAZ: return .icCustomSortNameAscending
         case .nameZA: return .icCustomSortNameDescending
-        case .nearest: return .icCustomSortNear
-        case .farthest: return .icCustomSortFar
+        case .nearestToCurrentLocation: return .icCustomSortNear
+        case .nearestToMapCenter: return .icCustomNearestMapCenter
         case .newestDateFirst: return .icCustomSortDateNewest
         case .oldestDateFirst: return .icCustomSortDateOldest
         }
@@ -60,11 +60,15 @@ protocol FavoriteSortablePoint {
     }
     
     var isDistanceOriented: Bool {
-        self == .nearest || self == .farthest
+        isCurrentLocationDistanceOriented || isMapCenterDistanceOriented
     }
 
-    static func byTitle(_ title: String) -> FavoriteSortMode {
-        allCases.first { $0.title == title } ?? .nameAZ
+    var isCurrentLocationDistanceOriented: Bool {
+        self == .nearestToCurrentLocation
+    }
+
+    var isMapCenterDistanceOriented: Bool {
+        self == .nearestToMapCenter
     }
 }
 
@@ -81,8 +85,8 @@ protocol FavoriteSortablePoint {
         .nameAZ
     }
 
-    @objc static func defaultSortModeTitle() -> String {
-        defaultSortMode().title
+    @objc static func defaultSortModeValue() -> String {
+        defaultSortMode().rawValue
     }
 
     private static func compareFolders<Folder: FavoriteSortableFolder>(_ lhs: Folder, _ rhs: Folder, mode: FavoriteSortMode) -> ComparisonResult {
@@ -103,7 +107,7 @@ protocol FavoriteSortablePoint {
             return compareTitles(lhs.title, rhs.title)
         case .nameZA:
             return compareTitles(rhs.title, lhs.title)
-        case .nearest, .farthest:
+        case .nearestToCurrentLocation, .nearestToMapCenter:
             return .orderedSame
         }
     }
@@ -114,10 +118,8 @@ protocol FavoriteSortablePoint {
             return compareTitles(lhs.title, rhs.title)
         case .nameZA:
             return compareTitles(rhs.title, lhs.title)
-        case .nearest:
+        case .nearestToCurrentLocation, .nearestToMapCenter:
             return compareDistances(lhs.distance, rhs.distance, nearestFirst: true, lhsTitle: lhs.title, rhsTitle: rhs.title)
-        case .farthest:
-            return compareDistances(lhs.distance, rhs.distance, nearestFirst: false, lhsTitle: lhs.title, rhsTitle: rhs.title)
         case .lastModified, .newestDateFirst:
             return compareDates(lhs.lastModified, rhs.lastModified, newestFirst: true, lhsTitle: lhs.title, rhsTitle: rhs.title)
         case .oldestDateFirst:

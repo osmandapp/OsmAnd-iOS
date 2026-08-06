@@ -34,7 +34,7 @@ extension FavoriteListViewController {
     }
 
     var folderCellRegistration: RowCellRegistration<FavoriteFolderRow> {
-        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
+        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, indexPath, folder in
             var content = cell.defaultContentConfiguration()
             content.image = (folder.isPinned ? .icCustomFolderPin : UIImage.templateImageNamed(folder.iconName))?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
             content.imageProperties.tintColor = folder.iconColor
@@ -47,11 +47,12 @@ extension FavoriteListViewController {
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+            self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 
     var favoriteCellRegistration: CellRegistration<FavoritePointRow> {
-        CellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+        CellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
             guard let self else { return }
             if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
@@ -59,6 +60,7 @@ extension FavoriteListViewController {
             cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
+            updateVisibleSelectionState(at: indexPath)
         }
     }
 
@@ -113,11 +115,12 @@ extension FavoriteListViewController {
     private func favoriteSecondaryContent(for favorite: FavoritePointRow) -> PointSecondaryContent {
         let date = favorite.lastModified.map { DateFormatter.detailsDateFormatter.string(from: $0) }
         let formattedDistance = favorite.distance.flatMap { OAOsmAndFormatter.getFormattedDistance(Float($0)) }
+        let directionColor: UIColor = currentSortMode.isMapCenterDistanceOriented ? .iconColorDirectionMapCenter : .iconColorDirectionActive
         var groupName: String?
         if isSearchResultsMode {
             groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
         }
 
-        return PointSecondaryContent(formattedDistance: formattedDistance, direction: favorite.bridgeItem.direction, address: favorite.bridgeItem.address, date: date, trailingText: groupName, isDateFirst: currentSortMode.isDateOriented)
+        return PointSecondaryContent(formattedDistance: formattedDistance, direction: favorite.bridgeItem.direction, directionColor: directionColor, address: favorite.bridgeItem.address, date: date, trailingText: groupName, isDateFirst: currentSortMode.isDateOriented)
     }
 }

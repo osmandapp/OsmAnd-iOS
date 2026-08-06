@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Hapus %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld Favorit</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Hapus %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld folder</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Hapus %#@folders@ dan %#@points@. Tindakan ini tidak bisa dibatalkan.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld folder</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld Titik</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

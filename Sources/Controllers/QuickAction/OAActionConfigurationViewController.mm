@@ -256,7 +256,7 @@
 - (NSArray<NSString *> *)getItemGroups
 {
     NSMutableArray *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
         [groupNames addObject:group.name];
     }

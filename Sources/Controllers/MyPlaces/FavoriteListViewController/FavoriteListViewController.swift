@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-final class FavoriteListViewController: UIViewController {
+final class FavoriteListViewController: UIViewController, MyPlacesScrollResettable {
     typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
     typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
@@ -25,7 +25,6 @@ final class FavoriteListViewController: UIViewController {
     let settings = OAAppSettings.sharedManager()
     var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var groupController: OAEditGroupViewController?
     var colorController: OAEditColorViewController?
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
@@ -76,6 +75,7 @@ final class FavoriteListViewController: UIViewController {
         parentGroupName ?? ""
     }
 
+    lazy var collapsedRootSections = Self.loadCollapsedSections()
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
@@ -122,12 +122,18 @@ final class FavoriteListViewController: UIViewController {
         super.init(coder: coder)
     }
     
+    private static func loadCollapsedSections() -> Set<FavoriteFolderSection> {
+        let sections = OAFavoritesHelperBridge.shared().collapsedSections()
+        return Set(sections.compactMap(FavoriteFolderSection.init(rawValue:)))
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
@@ -159,10 +165,13 @@ final class FavoriteListViewController: UIViewController {
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in
-                self?.updateDistanceAndDirection(forceUpdate)
+                guard let self, !self.currentSortMode.isMapCenterDistanceOriented else { return }
+                self.updateDistanceAndDirection(forceUpdate)
             }
             return
         }
+
+        guard !currentSortMode.isMapCenterDistanceOriented else { return }
 
         if isContextMenuVisible {
             shouldReloadCollectionView = true
@@ -200,7 +209,7 @@ final class FavoriteListViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         if !isRootFolder {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
+            appearance.configureWithDefaultBackground()
             navigationController?.navigationBar.standardAppearance = appearance
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
             navigationController?.navigationBar.tintColor = .iconColorActive
@@ -221,7 +230,7 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
+        let isSelected = !selectionManager.selectedItems.isEmpty
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -292,6 +301,16 @@ final class FavoriteListViewController: UIViewController {
         }
     }
     
+    func resetScrollPosition() {
+        let indexPath = IndexPath(item: 0, section: 0)
+        guard collectionView.numberOfSections > indexPath.section,
+              collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else {
+            return
+        }
+
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+    }
+
     private func registerDistanceAndDirectionObservers() {
         unregisterDistanceAndDirectionObservers()
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
@@ -381,12 +400,7 @@ final class FavoriteListViewController: UIViewController {
     
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
-            let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
-            guard !selectedItems.isEmpty else {
-                setNavigationTitle("", subtitle: "", hideSubtitle: true)
-                return
-            }
-            
+            let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
             let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
             setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
@@ -404,14 +418,16 @@ final class FavoriteListViewController: UIViewController {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
     }
-    
+
     deinit {
         unregisterDistanceAndDirectionObservers()
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 }
 
 extension Notification.Name {
     static let favoriteImportViewControllerDidDismiss = Notification.Name("OAFavoriteImportViewControllerDidDismissNotification")
+    static let favoritesStorageDidChange = Notification.Name("FavoritesStorageChangedNotification")
 }

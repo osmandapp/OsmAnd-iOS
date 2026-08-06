@@ -16,7 +16,6 @@
 #import "OATextInputFloatingCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAShapesTableViewCell.h"
-#import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
@@ -63,7 +62,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, SelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -365,7 +364,7 @@
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     UIColor *selectedColor;
     if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
-        selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
+        selectedColor = [OAFavoritesHelper groupByTrimmedName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
     else
         selectedColor = [_pointHandler getColor];
     if (!selectedColor)
@@ -388,7 +387,7 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
+        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper favoriteGroups];
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
             [names addObject:OALocalizedString(@"favorites_item")];
@@ -429,7 +428,7 @@
     _selectedIconName = preselectedIconName;
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
@@ -860,11 +859,11 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        OASelectFavoriteGroupViewController *selectGroupController;
+        SelectFavoriteGroupViewController *selectGroupController;
         if (_editPointType == EOAEditPointTypeFavorite)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
         else if (_editPointType == EOAEditPointTypeWaypoint)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
 
         selectGroupController.delegate = self;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectGroupController];
@@ -1012,6 +1011,12 @@
     {
         OAPointEditingData *data = [[OAPointEditingData alloc] init];
         NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
+        if (_editPointType == EOAEditPointTypeFavorite)
+        {
+            OAFavoriteGroup *existingFavoriteGroup = [OAFavoritesHelper groupByTrimmedName:savingGroup];
+            if (existingFavoriteGroup)
+                savingGroup = existingFavoriteGroup.name;
+        }
         
         data.descr = self.desc ? self.desc : @"";
         data.address = self.address ? self.address : @"";
@@ -1056,7 +1061,9 @@
         if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
             [_appearanceCollection selectColor:_selectedColorItem];
         if (_editPointType == EOAEditPointTypeFavorite)
+        {
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
+        }
     }
     [self.delegate saveTapped];
     [self dismissViewController];
@@ -1161,7 +1168,7 @@
     [self showModalViewController:groupEditor];
 }
 
-#pragma mark - OASelectFavoriteGroupDelegate
+#pragma mark - SelectFavoriteGroupDelegate
 
 - (void)onGroupSelected:(NSString *)selectedGroupName
 {
@@ -1249,10 +1256,18 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        [OAFavoritesHelper addFavoriteGroup:editedGroupName
-                                      color:color
-                                   iconName:iconName
-                         backgroundIconName:backgroundIconName];
+        OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
+        if (existingGroup)
+        {
+            editedGroupName = existingGroup.name;
+        }
+        else
+        {
+            [OAFavoritesHelper addFavoriteGroup:editedGroupName
+                                          color:color
+                                       iconName:iconName
+                             backgroundIconName:backgroundIconName];
+        }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1500,7 +1515,7 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-        OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
         if (group)
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
@@ -1567,10 +1582,6 @@
                   iconName:iconName
                      color:color
         backgroundIconName:backgroundIconName];
-}
-
-- (void)onEditorUpdated
-{
 }
 
 @end

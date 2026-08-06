@@ -649,8 +649,8 @@
 "shared_string_subfolders_in" = "Subfolders in";
 "shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
-"distance_nearest" = "Nearest first";
-"distance_farthest" = "Farthest first";
+"sort_by_nearest_to_current_location" = "Nearest to current location";
+"sort_by_nearest_to_map_center" = "Nearest to map center";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
 "newest_date_first" = "Newest date first";
@@ -1072,11 +1072,8 @@
 "tracks_delete_confirmation_message" = "This action cannot be undone.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
-"favorites_delete_confirmation_title" = "Delete %ld favorites?";
 "items_delete_confirmation_title" = "Delete %ld items?";
-"folders_delete_confirmation_title" = "Delete %ld folders?";
 "favorites_delete_confirmation_message" = "This action cannot be undone.";
-"mixed_delete_confirmation_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
 "empty_state_favourites" = "Add Favorites";
 "empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
 "tracks_empty_folder" = "Empty folder";
@@ -2504,6 +2501,11 @@
 "ais_port_nmea_server_description" = "Define TCP port number of the NMEA data source";
 "ais_port_nmea_local" = "UDP port of local NMEA data receiver";
 "ais_port_nmea_local_description" = "Define UDP port where OsmAnd receives NMEA data";
+"ais_use_nmea_location" = "Use NMEA as location source";
+"ais_use_nmea_location_description" = "Use GPS positions from RMC/GGA NMEA messages as My location.";
+"ais_apply_setting_to_profiles" = "Apply setting";
+"ais_apply_to_current_profile" = "Apply to %@";
+"ais_apply_to_all_profiles" = "Apply to all profiles";
 "ais_object_lost_timeouts" = "Timeout settings for AIS signal reception";
 "ais_object_lost_timeouts_description" = "Set timeout values to identify lost AIS objects if no signal was received for a specific time.";
 "ais_object_lost_timeout" = "Timeout for visibility when ship is lost";

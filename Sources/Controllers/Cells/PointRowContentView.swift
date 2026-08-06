@@ -11,14 +11,16 @@ import UIKit
 struct PointSecondaryContent {
     let formattedDistance: String?
     let direction: CGFloat
+    let directionColor: UIColor?
     let address: String?
     let date: String?
     let trailingText: String?
     let isDateFirst: Bool
 
-    init(formattedDistance: String?, direction: CGFloat, address: String?, date: String?, trailingText: String? = nil, isDateFirst: Bool = false) {
+    init(formattedDistance: String?, direction: CGFloat, directionColor: UIColor? = nil, address: String?, date: String?, trailingText: String? = nil, isDateFirst: Bool = false) {
         self.formattedDistance = formattedDistance
         self.direction = direction
+        self.directionColor = directionColor
         self.address = address
         self.date = date
         self.trailingText = trailingText
@@ -31,10 +33,10 @@ struct PointSecondaryContent {
         result.append(NSAttributedString(string: text, attributes: attributes))
     }
 
-    private func appendDistance(to result: NSMutableAttributedString, font: UIFont, directionAttributes: [NSAttributedString.Key: Any], separatorAttributes: [NSAttributedString.Key: Any]) {
+    private func appendDistance(to result: NSMutableAttributedString, font: UIFont, directionAttributes: [NSAttributedString.Key: Any], directionIconColor: UIColor, separatorAttributes: [NSAttributedString.Key: Any]) {
         guard let formattedDistance, !formattedDistance.isEmpty else { return }
         appendSeparatorIfNeeded(to: result, attributes: separatorAttributes)
-        if let directionIcon = directionIcon(font: font) {
+        if let directionIcon = directionIcon(font: font, color: directionIconColor) {
             result.append(directionIcon)
         }
 
@@ -46,9 +48,9 @@ struct PointSecondaryContent {
         result.append(NSAttributedString(string: " • ", attributes: attributes))
     }
 
-    private func directionIcon(font: UIFont) -> NSAttributedString? {
+    private func directionIcon(font: UIFont, color: UIColor) -> NSAttributedString? {
         let size = UIFontMetrics.default.scaledValue(for: PointContentConfiguration.directionIconSize)
-        guard let image = OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(.iconColorDirectionActive) else { return nil }
+        guard let image = OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(color) else { return nil }
         let rotatedImage = image.rotatedWithinBounds(by: direction)
         let attachment = NSTextAttachment()
         attachment.image = rotatedImage
@@ -58,15 +60,16 @@ struct PointSecondaryContent {
 
     fileprivate func attributedText() -> NSAttributedString? {
         let font = UIFont.scaledSystemFont(ofSize: PointContentConfiguration.secondaryTextSize)
-        let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorDirectionActive]
+        let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: directionColor ?? UIColor.textColorDirectionActive]
+        let directionIconColor = directionColor ?? UIColor.iconColorDirectionActive
         let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
         let result = NSMutableAttributedString()
         if isDateFirst {
             append(date, to: result, attributes: secondaryAttributes)
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, separatorAttributes: secondaryAttributes)
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
             append(address, to: result, attributes: secondaryAttributes)
         } else {
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, separatorAttributes: secondaryAttributes)
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
             append(address, to: result, attributes: secondaryAttributes)
             append(date, to: result, attributes: secondaryAttributes)
         }

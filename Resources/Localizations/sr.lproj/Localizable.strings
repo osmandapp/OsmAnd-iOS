@@ -4490,3 +4490,9 @@
 "share_as_file" = "Дели као фајл";
 "share_link" = "Дели линк";
 "carplay_map_mode_vehicle_appearance" = "Изглед возила";
+"shared_string_copy_from" = "Копирај из";
+"add_points" = "Додај тачке";
+"add_points_description" = "Изаберите места на мапи или их копирајте из омиљених да бисте их видели дуж руте.";
+"shared_string_new_name" = "Ново име";
+"shared_string_undo" = "Поништи";
+"shared_string_redo" = "Поврати";

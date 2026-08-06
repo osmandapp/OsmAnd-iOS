@@ -13,13 +13,15 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
+@class OAObservable, OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
 + (void) initFavorites;
 
 + (const std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> &)getFavoritesCollection;
++ (OAObservable *)favoritesStorageChangedObservable;
++ (void)notifyFavoritesStorageChanged;
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
@@ -34,7 +36,8 @@
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon;
 + (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups;
-+ (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
++ (OAFavoriteGroup *)groupByName:(NSString *)nameId;
++ (OAFavoriteGroup *)groupByTrimmedName:(NSString *)nameId;
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
 + (void) lookupAddress:(OAFavoriteItem *)point;
 
@@ -86,7 +89,7 @@
              pinned:(BOOL)pinned
     saveImmediately:(BOOL)saveImmediately;
 
-+ (NSArray<OAFavoriteGroup *> *)getFavoriteGroups;
++ (NSArray<OAFavoriteGroup *> *)favoriteGroups;
 
 + (void) addFavoriteGroup:(NSString *)name
                     color:(UIColor *)color

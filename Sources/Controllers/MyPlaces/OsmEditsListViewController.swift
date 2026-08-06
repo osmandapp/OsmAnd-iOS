@@ -40,7 +40,7 @@ final class OsmPoint: NSObject {
     }
 }
 
-final class OsmEditsListViewController: UIViewController {
+final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettable {
     private typealias DataSource = UICollectionViewDiffableDataSource<Header, ListItem>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<Header, ListItem>
     
@@ -170,6 +170,16 @@ final class OsmEditsListViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         definesPresentationContext = false
+    }
+
+    func resetScrollPosition() {
+        let indexPath = IndexPath(item: 0, section: 0)
+        guard collectionView.numberOfSections > indexPath.section,
+              collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else {
+            return
+        }
+
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
     }
 
     // MARK: - Generate Data

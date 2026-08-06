@@ -32,7 +32,7 @@ final class RouteTypeModeCell: UITableViewCell {
         iconView.image = icon?.withRenderingMode(.alwaysTemplate)
         iconView.tintColor = tintColor
         titleLabel.text = title
-        checkmarkView.image = isSelected ? .templateImageNamed("ic_checkmark_default") : nil
+        checkmarkView.image = isSelected ? .icCheckmarkDefault : nil
         accessoryType = .none
         let inset = Self.leadingInset + Self.checkmarkSize + Self.gap + Self.iconSize + Self.gap
         separatorInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: Self.leadingInset)

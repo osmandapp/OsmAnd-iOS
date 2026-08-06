@@ -2501,6 +2501,11 @@
 "ais_port_nmea_server_description" = "Define TCP port number of the NMEA data source";
 "ais_port_nmea_local" = "UDP port of local NMEA data receiver";
 "ais_port_nmea_local_description" = "Define UDP port where OsmAnd receives NMEA data";
+"ais_use_nmea_location" = "Use NMEA as location source";
+"ais_use_nmea_location_description" = "Use GPS positions from RMC/GGA NMEA messages as My location.";
+"ais_apply_setting_to_profiles" = "Apply setting";
+"ais_apply_to_current_profile" = "Apply to %@";
+"ais_apply_to_all_profiles" = "Apply to all profiles";
 "ais_object_lost_timeouts" = "Timeout settings for AIS signal reception";
 "ais_object_lost_timeouts_description" = "Set timeout values to identify lost AIS objects if no signal was received for a specific time.";
 "ais_object_lost_timeout" = "Timeout for visibility when ship is lost";

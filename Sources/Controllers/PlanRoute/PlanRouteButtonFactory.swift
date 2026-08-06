@@ -17,8 +17,10 @@ enum PlanRouteButtonFactory {
     static let toolbarButtonSize: CGFloat = 48
     static let bottomButtonHeight: CGFloat = OAUtilities.isIPad() ? 48 : 44
     private static let bottomButtonHorizontalInset: CGFloat = 18
-    private static let bottomButtonCompactHorizontalInset: CGFloat = 12
     private static let bottomButtonImagePadding: CGFloat = 8
+    private static let bottomToolbarIconSideInset: CGFloat = 9
+    private static let bottomToolbarTitleSideInset: CGFloat = 16
+    private static let bottomToolbarImagePadding: CGFloat = 6
     private static let glassButtonDisabledAlpha: CGFloat = 0.45
     private static let glassButtonPressedAlpha: CGFloat = 0.88
     private static let glassButtonShadowOpacity: Float = 0.12
@@ -36,11 +38,17 @@ enum PlanRouteButtonFactory {
     }
 
     static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {
-        labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: .map)
+        let contentInsets = NSDirectionalEdgeInsets(top: 0, leading: bottomButtonHorizontalInset, bottom: 0, trailing: bottomButtonHorizontalInset)
+        return labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: .map, contentInsets: contentInsets, imagePadding: bottomButtonImagePadding)
     }
 
     static func bottomToolbarLabeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {
-        labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: OAUtilities.isIPad() ? .map : .glass, horizontalInset: bottomButtonCompactHorizontalInset)
+        let isIconLeading = imagePlacement == .leading
+        let contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                    leading: isIconLeading ? bottomToolbarIconSideInset : bottomToolbarTitleSideInset,
+                                                    bottom: 0,
+                                                    trailing: isIconLeading ? bottomToolbarTitleSideInset : bottomToolbarIconSideInset)
+        return labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: OAUtilities.isIPad() ? .map : .glass, contentInsets: contentInsets, imagePadding: bottomToolbarImagePadding)
     }
 
     static func primaryButton(title: String, height: CGFloat = toolbarButtonSize) -> UIButton {
@@ -72,13 +80,13 @@ enum PlanRouteButtonFactory {
         return button
     }
 
-    private static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge, height: CGFloat, style: ButtonStyle, horizontalInset: CGFloat = bottomButtonHorizontalInset) -> UIButton {
+    private static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge, height: CGFloat, style: ButtonStyle, contentInsets: NSDirectionalEdgeInsets, imagePadding: CGFloat) -> UIButton {
         var configuration = UIButton.Configuration.plain()
         configuration.title = title
         configuration.image = image
         configuration.imagePlacement = imagePlacement
-        configuration.imagePadding = Self.bottomButtonImagePadding
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: horizontalInset, bottom: 0, trailing: horizontalInset)
+        configuration.imagePadding = imagePadding
+        configuration.contentInsets = contentInsets
         configuration.baseForegroundColor = .textColorPrimary
         configuration.background.backgroundColor = style == .map ? .mapButtonBgColorDefault : .clear
         configuration.background.cornerRadius = height / 2

@@ -11,9 +11,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import "CLLocation+Extension.h"
 #import "OAMapLayers.h"
+#import "OAMeasurementEditingContext.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
 #import "OAAddPointCommand.h"
+#import "OAMovePointCommand.h"
+#import "OAJoinPointsCommand.h"
 #import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
 #import "OAReorderPointCommand.h"
@@ -30,10 +33,15 @@
 #import "OAGpxApproximationHelper.h"
 #import "OAGpxApproximationParams.h"
 #import "OAApplyGpxApproximationCommand.h"
+#import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
 #import "OsmAnd_Maps-Swift.h"
 
-@class OAMeasurementToolLayer, OAMeasurementEditingContext;
+#include <routeSegmentResult.h>
+
+static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
+
+@class OAMeasurementToolLayer;
 
 @interface OAMeasurementEditingContext (PlanRouteSettings)
 
@@ -41,7 +49,7 @@
 
 @end
 
-@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAGpxWptEditingHandlerDelegate, OAEditWaypointsGroupOptionsDelegate, OAGpxApproximationHelperDelegate, OASnapToRoadProgressDelegate, PlanRoutePoiStateRestoring>
+@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAGpxWptEditingHandlerDelegate, OAEditWaypointsGroupOptionsDelegate, OAGpxApproximationHelperDelegate, OASnapToRoadProgressDelegate, OAPlanningPopupDelegate, PlanRoutePoiStateRestoring>
 {
     OASGpxFile *_draftGpxFile;
     NSString *_draftGpxPath;
@@ -59,7 +67,11 @@
     OASGpxFile *_terrainElevationGpxFile;
     NSUInteger _pointsVersion;
     NSUInteger _terrainElevationVersion;
+    NSTimeInterval _lastRouteInfoRefreshTime;
+    OAPlanningPopupBaseViewController *_approximationPopupController;
 }
+
+- (void)finishPointEditCancelled:(BOOL)cancelled;
 
 @end
 
@@ -113,6 +125,28 @@
     return (mode == OAApplicationMode.DEFAULT) ? nil : mode;
 }
 
+- (BOOL)isTrackReadyToCalculate
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && (![ctx shouldCheckApproximation] || ![ctx isApproximationNeeded] || [ctx isNewData]);
+}
+
+- (BOOL)shouldShowApproximationWarning
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && [ctx shouldCheckApproximation] && [ctx isApproximationNeeded] && [ctx hasTimestamps];
+}
+
+- (UIViewController *)approximationWarningViewController
+{
+    if (![self shouldShowApproximationWarning])
+        return nil;
+    OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
+    warningController.delegate = self;
+    _approximationPopupController = warningController;
+    return warningController;
+}
+
 - (BOOL)hasChanges
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -141,6 +175,21 @@
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     return ctx != nil ? [ctx getRouteDistance] : 0;
+}
+
+- (NSTimeInterval)routeDuration
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return 0;
+
+    NSTimeInterval duration = 0;
+    for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
+    {
+        for (const auto &segment : data.segments)
+            duration += segment->segmentTime;
+    }
+    return duration;
 }
 
 - (NSArray<OAApplicationMode *> *)availableModes
@@ -867,10 +916,12 @@
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = ctx.getPointsCount - 1;
-    [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
+    BOOL started = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
     ctx.selectedPointPosition = -1;
     [layer updateLayer];
-    if (self.onChange)
+    if (started && self.onNewSegmentStarted)
+        self.onNewSegmentStarted();
+    if (started && self.onChange)
         self.onChange();
 }
 
@@ -931,12 +982,18 @@
 
 - (void)selectPointAtIndex:(NSInteger)index
 {
+    OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
+    [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
-    if (self.onPointSelected)
-        self.onPointSelected(index);
+    if (self.onPointEditModeRequested)
+        self.onPointEditModeRequested(EOAPlanRoutePointEditModeMove);
+    ctx.originalPointToMove = ctx.getPoints[index];
+    [layer enterMovingPointMode];
+    if (self.onChange)
+        self.onChange();
 }
 
 - (void)showPointOptionsAtIndex:(NSInteger)index
@@ -960,12 +1017,16 @@
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
-    [self beginRouteCalculationIfNeededForContext:ctx];
     ctx.selectedPointPosition = index;
-    [layer addCenterPoint:YES];
+    if (self.onPointEditModeRequested)
+        self.onPointEditModeRequested(EOAPlanRoutePointEditModeAddBefore);
+    [layer moveMapToPoint:index];
+    ctx.addPointMode = EOAAddPointModeBefore;
+    [ctx splitSegments:index];
+    [layer updateLayer];
     if (self.onChange)
         self.onChange();
 }
@@ -974,12 +1035,16 @@
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
-    [self beginRouteCalculationIfNeededForContext:ctx];
     ctx.selectedPointPosition = index;
-    [layer addCenterPoint:NO];
+    if (self.onPointEditModeRequested)
+        self.onPointEditModeRequested(EOAPlanRoutePointEditModeAddAfter);
+    [layer moveMapToPoint:index];
+    ctx.addPointMode = EOAAddPointModeAfter;
+    [ctx splitSegments:index + 1];
+    [layer updateLayer];
     if (self.onChange)
         self.onChange();
 }
@@ -993,6 +1058,8 @@
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeBefore]];
+    ctx.selectedPointPosition = -1;
+    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1007,6 +1074,79 @@
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAfter]];
+    ctx.selectedPointPosition = -1;
+    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)applyPointEdit
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [self invalidateTerrainElevationGpx];
+    if (ctx.originalPointToMove != nil)
+    {
+        [self beginRouteCalculationIfNeededForContext:ctx];
+        OASWptPt *newPoint = [layer getMovedPointToApply];
+        [ctx.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:layer
+                                                                        oldPoint:ctx.originalPointToMove
+                                                                        newPoint:newPoint
+                                                                        position:ctx.selectedPointPosition]];
+        [ctx addPoint:newPoint];
+    }
+    else if (ctx.isInAddPointMode)
+    {
+        [self addAnotherPoint];
+    }
+    [self finishPointEditCancelled:NO];
+}
+
+- (void)cancelPointEdit
+{
+    [self finishPointEditCancelled:YES];
+}
+
+- (void)addAnotherPoint
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || !ctx.isInAddPointMode)
+        return;
+    [self invalidateTerrainElevationGpx];
+    [self beginRouteCalculationIfNeededForContext:ctx];
+    NSInteger selectedPoint = ctx.selectedPointPosition;
+    NSInteger pointsCount = ctx.getPointsCount;
+    if ([ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:YES]])
+    {
+        if (selectedPoint == pointsCount)
+            [ctx splitSegments:ctx.getPointsCount - 1];
+        else
+            ctx.selectedPointPosition = selectedPoint + 1;
+        if (self.onChange)
+            self.onChange();
+    }
+}
+
+- (void)finishPointEditCancelled:(BOOL)cancelled
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    if (ctx.originalPointToMove != nil)
+    {
+        if (cancelled)
+            [ctx addPoint:ctx.originalPointToMove];
+        ctx.originalPointToMove = nil;
+        [layer exitMovingMode];
+    }
+    ctx.selectedPointPosition = -1;
+    ctx.addPointMode = EOAAddPointModeUndefined;
+    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1627,8 +1767,7 @@
 
 - (void)onMovePoint:(NSInteger)point
 {
-    if (self.onPointSelected)
-        self.onPointSelected(point);
+    [self selectPointAtIndex:point];
 }
 
 - (void)onClearPoints:(EOAClearPointsMode)mode
@@ -1680,8 +1819,53 @@
 - (void)onClearSelection
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx)
+    if (ctx && ctx.originalPointToMove == nil && !ctx.isInAddPointMode)
         ctx.selectedPointPosition = -1;
+}
+
+- (void)onSplitPointsBefore
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [self invalidateTerrainElevationGpx];
+    [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:NO]];
+    ctx.selectedPointPosition = -1;
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)onSplitPointsAfter
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    BOOL startsNewSegment = ctx.selectedPointPosition == -1 || ctx.selectedPointPosition == ctx.getPointsCount - 1;
+    [self invalidateTerrainElevationGpx];
+    BOOL split = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
+    ctx.selectedPointPosition = -1;
+    [layer updateLayer];
+    if (split && startsNewSegment && self.onNewSegmentStarted)
+        self.onNewSegmentStarted();
+    if (split && self.onChange)
+        self.onChange();
+}
+
+- (void)onJoinPoints
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [self invalidateTerrainElevationGpx];
+    [ctx.commandManager execute:[[OAJoinPointsCommand alloc] initWithLayer:layer]];
+    ctx.selectedPointPosition = -1;
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
 }
 
 // MARK: - Route statistics
@@ -1689,11 +1873,11 @@
 - (NSArray<OARouteStatistics *> *)calculateRouteStatistics
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || ctx.roadSegmentData.count == 0)
+    if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)
         return @[];
 
     std::vector<std::shared_ptr<RouteSegmentResult>> combined;
-    for (OARoadSegmentData *data in ctx.roadSegmentData.allValues)
+    for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
         const auto &segs = data.segments;
         combined.insert(combined.end(), segs.begin(), segs.end());
@@ -1969,6 +2153,7 @@
 - (void)showProgressBar
 {
     _isCalculatingRoute = YES;
+    _lastRouteInfoRefreshTime = 0;
     if (self.onChange)
         self.onChange();
 }
@@ -1976,14 +2161,79 @@
 - (void)hideProgressBar
 {
     _isCalculatingRoute = NO;
+    _lastRouteInfoRefreshTime = 0;
     if (self.onChange)
         self.onChange();
 }
 
 - (void)refresh
 {
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    if (currentTime - _lastRouteInfoRefreshTime < kRouteInfoRefreshInterval)
+        return;
+    _lastRouteInfoRefreshTime = currentTime;
+    if (self.onRouteInfoChanged)
+        self.onRouteInfoChanged();
+}
+
+#pragma mark - OAPlanningPopupDelegate
+
+- (void)onPopupDismissed
+{
+    UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
+    _approximationPopupController = nil;
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    ctx.inApproximationMode = NO;
+    if (hasApproximationStarted)
+        [ctx.commandManager undo];
+    [[self layer] updateLayer];
+    [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
+}
+
+- (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
+{
+    _approximationPopupController = approximationController;
+}
+
+- (void)onApplyGpxApproximation
+{
+    [self editingContext].inApproximationMode = NO;
+    _approximationPopupController = nil;
+    [[self layer] updateLayer];
+    [self invalidateTerrainElevationGpx];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations
+                    pointsList:(NSArray<NSArray<OASWptPt *> *> *)pointsList
+                          mode:(OAApplicationMode *)mode
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    OAMeasurementToolLayer *layer = [self layer];
+    if (ctx == nil || layer == nil)
+        return;
+    BOOL wasApproximationMode = ctx.approximationMode;
+    ctx.approximationMode = YES;
+    OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];
+    if (!wasApproximationMode || ![ctx.commandManager update:command])
+        [ctx.commandManager execute:command];
+    [layer updateLayer];
+    [self invalidateTerrainElevationGpx];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (OAMeasurementEditingContext *)getCurrentEditingContext
+{
+    return [self editingContext];
 }
 
 // MARK: - OAGpxApproximationHelperDelegate

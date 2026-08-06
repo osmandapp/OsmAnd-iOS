@@ -192,6 +192,14 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     return self;
 }
 
+- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder pointsOrder:(int)pointsOrder
+{
+    self = [self initWithMapViewController:mapViewController baseOrder:baseOrder];
+    if (self)
+        self.pointsOrder = pointsOrder;
+    return self;
+}
+
 - (NSString *)layerId
 {
     return kAisTrackerLayerId;

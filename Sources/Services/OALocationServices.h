@@ -43,6 +43,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property (readonly) OAObservable *updateHeadingObserver;
 @property (readonly) OAObservable *updateFirstTimeObserver;
 @property (readonly) OALocationSimulation *locationSimulation;
+@property (readonly) BOOL externalProviderActive;
 
 + (void) showDeniedAlert;
 
@@ -56,7 +57,10 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc;
 
 - (void) setLocationFromSimulation:(CLLocation *)location;
+- (void)setLocationFromExternalProvider:(CLLocation *)location;
+- (void)resetLocationFromExternalProvider;
 - (BOOL) isInLocationSimulation;
+- (BOOL)isRouteAnimating;
 
 - (void)resume;
 - (void)suspend;

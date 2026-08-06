@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1744,9 +1744,8 @@
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
 		D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */; };
 		D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */; };
-		D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013F301B768C003CECB8 /* ElevationActionRow.swift */; };
 		D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */; };
-		D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */; };
+		D721016D301B768C003CECB8 /* HorizontalEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210141301B768C003CECB8 /* HorizontalEmptyCell.swift */; };
 		D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */; };
 		D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */; };
 		D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */; };
@@ -1759,7 +1758,6 @@
 		D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */; };
 		D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */; };
 		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
-		D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014E301B768C003CECB8 /* StatusCardCell.swift */; };
 		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
 		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
 		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
@@ -5705,6 +5703,7 @@
 		C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+Delegates.swift"; sourceTree = "<group>"; };
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
 		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
+		C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContextTypes.h; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
 		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
@@ -5914,9 +5913,8 @@
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
 		D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeCardCell.swift; sourceTree = "<group>"; };
 		D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeRouteAttributeHeaderView.swift; sourceTree = "<group>"; };
-		D721013F301B768C003CECB8 /* ElevationActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationActionRow.swift; sourceTree = "<group>"; };
 		D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteActionCell.swift; sourceTree = "<group>"; };
-		D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteEmptyCell.swift; sourceTree = "<group>"; };
+		D7210141301B768C003CECB8 /* HorizontalEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalEmptyCell.swift; sourceTree = "<group>"; };
 		D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteMenuActionCell.swift; sourceTree = "<group>"; };
 		D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiGroupHeaderView.swift; sourceTree = "<group>"; };
 		D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePointCell.swift; sourceTree = "<group>"; };
@@ -5929,7 +5927,6 @@
 		D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingToggleCell.swift; sourceTree = "<group>"; };
 		D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTypeModeCell.swift; sourceTree = "<group>"; };
 		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
-		D721014E301B768C003CECB8 /* StatusCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCardCell.swift; sourceTree = "<group>"; };
 		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
 		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
 		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
@@ -11134,9 +11131,7 @@
 			children = (
 				D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */,
 				D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */,
-				D721013F301B768C003CECB8 /* ElevationActionRow.swift */,
 				D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */,
-				D7210141301B768C003CECB8 /* PlanRouteEmptyCell.swift */,
 				D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */,
 				D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */,
 				D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */,
@@ -11149,7 +11144,6 @@
 				D721014B301B768C003CECB8 /* RouteSettingToggleCell.swift */,
 				D721014C301B768C003CECB8 /* RouteTypeModeCell.swift */,
 				D721014D301B768C003CECB8 /* SegmentReorderCell.swift */,
-				D721014E301B768C003CECB8 /* StatusCardCell.swift */,
 				D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */,
 			);
 			path = Cells;
@@ -12745,6 +12739,7 @@
 				DA5A7CB226C563A200F274C7 /* OAFilledButtonCell.h */,
 				DA5A7BAD26C563A100F274C7 /* OAFilledButtonCell.mm */,
 				C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */,
+				D7210141301B768C003CECB8 /* HorizontalEmptyCell.swift */,
 				DA5A7C6A26C563A200F274C7 /* OAFoldersCell.h */,
 				DA5A7CE226C563A200F274C7 /* OAFoldersCell.m */,
 				DA5A7CD526C563A200F274C7 /* OAFoldersCollectionViewCell.h */,
@@ -13947,6 +13942,7 @@
 				DA5A7F6C26C563A500F274C7 /* OAInfoBottomView.mm */,
 				DA5A7F8D26C563A500F274C7 /* OAInfoBottomView.xib */,
 				DA5A7F6426C563A400F274C7 /* OAMeasurementEditingContext.h */,
+				C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */,
 				DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */,
 				DA5A7F4E26C563A400F274C7 /* OAOpenAddTrackViewController.h */,
 				DA5A7F8F26C563A500F274C7 /* OAOpenAddTrackViewController.mm */,
@@ -18118,9 +18114,8 @@
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
 				D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */,
 				D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */,
-				D721016B301B768C003CECB8 /* ElevationActionRow.swift in Sources */,
 				D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */,
-				D721016D301B768C003CECB8 /* PlanRouteEmptyCell.swift in Sources */,
+				D721016D301B768C003CECB8 /* HorizontalEmptyCell.swift in Sources */,
 				D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */,
 				D721016F301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift in Sources */,
 				D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */,
@@ -18133,7 +18128,6 @@
 				D7210177301B768C003CECB8 /* RouteSettingToggleCell.swift in Sources */,
 				D7210178301B768C003CECB8 /* RouteTypeModeCell.swift in Sources */,
 				D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */,
-				D721017A301B768C003CECB8 /* StatusCardCell.swift in Sources */,
 				D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */,
 				D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */,
 				D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */,

@@ -82,10 +82,10 @@
         if (_editingCtx.getPointsCount > 0)
         {
             OASWptPt *lastPoint = _editingCtx.getPoints[_editingCtx.getPointsCount - 1];
-            OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(self.mapView.target31);
-            distance = getDistance(lastPoint.getLatitude, lastPoint.getLongitude, centerLatLon.latitude, centerLatLon.longitude);
+            CLLocationCoordinate2D crosshairLocation = self.crosshairLocation;
+            distance = getDistance(lastPoint.getLatitude, lastPoint.getLongitude, crosshairLocation.latitude, crosshairLocation.longitude);
             CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:lastPoint.getLatitude longitude:lastPoint.getLongitude];
-            CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:centerLatLon.latitude longitude:centerLatLon.longitude];
+            CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:crosshairLocation.latitude longitude:crosshairLocation.longitude];
             bearing = [loc1 bearingTo:loc2];
         }
         [_delegate onMeasure:distance bearing:bearing];
@@ -241,11 +241,11 @@
 
 - (OASWptPt *) getMovedPointToApply
 {
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
+    CLLocationCoordinate2D crosshairLocation = self.crosshairLocation;
     
     OASWptPt *point = _editingCtx.originalPointToMove ? [[OASWptPt alloc] initWithWptPt:_editingCtx.originalPointToMove] : [[OASWptPt alloc] init];
-    point.lat = latLon.latitude;
-    point.lon = latLon.longitude;
+    point.lat = crosshairLocation.latitude;
+    point.lon = crosshairLocation.longitude;
     [point doCopyExtensionsE:_editingCtx.originalPointToMove];
     return point;
 }
@@ -588,7 +588,21 @@
         OASWptPt *pt = _editingCtx.getPoints[pos];
         auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
         auto point31 = [OANativeUtilities convertFromPointI:point];
-        [self.mapViewController goToPosition:point31 animated:YES];
+        if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+        {
+            OAMapRendererView *mapView = self.mapViewController.mapView;
+            CGFloat scale = mapView.contentScaleFactor;
+            OsmAnd::PointI targetScreenPoint = mapView.getTargetScreenPosition;
+            OsmAnd::PointI screenPoint(static_cast<int32_t>(_cursorScreenPoint.x * scale),
+                                       static_cast<int32_t>(_cursorScreenPoint.y * scale));
+            [self.mapViewController goToPosition:point31 animated:NO];
+            [mapView setMapTarget:screenPoint location31:point];
+            [mapView resetMapTargetPixelCoordinates:targetScreenPoint];
+        }
+        else
+        {
+            [self.mapViewController goToPosition:point31 animated:YES];
+        }
     }
 }
 

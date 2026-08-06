@@ -149,11 +149,11 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 72, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
-        tableView.register(StatusCardCell.self, forCellReuseIdentifier: StatusCardCell.reuseIdentifier)
+        tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(AnalyzeCardCell.self, forCellReuseIdentifier: AnalyzeCardCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -941,33 +941,35 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     // MARK: - Status card cell (no data / calculating)
 
     private func makeNoElevationStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
+        guard let cell = dequeueHorizontalEmptyCell(tableView, indexPath) else { return UITableViewCell() }
         cell.configure(
-            icon: .icCustomDesert,
-            iconTint: .iconColorDefault,
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
+            icon: .icCustomDesert,
+            iconTint: .iconColorDefault,
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
-            action: {
-                [weak self] in self?.showGetElevationSheet()
+            containerStyle: .card,
+            action: { [weak self] in
+                self?.showGetElevationSheet()
             }
         )
         return cell
     }
 
     private func makeElevationCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
+        guard let cell = dequeueHorizontalEmptyCell(tableView, indexPath) else { return UITableViewCell() }
         let calcDescKey = calculatingWithNearbyRoads
             ? "calculating_elevation_nearby_roads_description"
             : "calculating_elevation_terrain_maps_description"
         cell.configure(
-            icon: nil,
-            iconTint: .clear,
             title: localizedString("route_is_being_calculated"),
             description: localizedString(calcDescKey),
+            icon: nil,
+            iconTint: .clear,
             actionTitle: localizedString("shared_string_cancel"),
             isSpinner: true,
+            containerStyle: .card,
             action: { [weak self] in self?.dataSource?.cancelElevationCalculation() }
         )
         return cell
@@ -982,8 +984,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return (localizedString("route_is_being_calculated"), description)
     }
 
-    private func dequeueStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> StatusCardCell? {
-        tableView.dequeueReusableCell(withIdentifier: StatusCardCell.reuseIdentifier, for: indexPath) as? StatusCardCell
+    private func dequeueHorizontalEmptyCell(_ tableView: UITableView, _ indexPath: IndexPath) -> HorizontalEmptyCell? {
+        tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell
     }
 
     private func dequeueCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> AnalyzeCardCell? {
@@ -991,15 +993,16 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func makeRouteCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dequeueStatusCardCell(tableView, indexPath) else { return UITableViewCell() }
+        guard let cell = dequeueHorizontalEmptyCell(tableView, indexPath) else { return UITableViewCell() }
         let texts = routeCalculatingTexts()
         cell.configure(
-            icon: nil,
-            iconTint: .clear,
             title: texts.title,
             description: texts.description,
+            icon: nil,
+            iconTint: .clear,
             actionTitle: nil,
             isSpinner: true,
+            containerStyle: .card,
             action: nil
         )
         return cell

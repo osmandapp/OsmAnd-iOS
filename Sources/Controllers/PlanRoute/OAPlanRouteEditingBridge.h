@@ -14,11 +14,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, PlanRoutePointData, PlanRouteGroupData, PlanRouteSegmentData, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
 
+typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
+    EOAPlanRoutePointEditModeMove = 0,
+    EOAPlanRoutePointEditModeAddBefore,
+    EOAPlanRoutePointEditModeAddAfter
+};
+
 @interface OAPlanRouteEditingBridge : NSObject
 
 @property (nonatomic, copy, nullable) void (^onChange)(void);
 @property (nonatomic, copy, nullable) void (^onRouteInfoChanged)(void);
-@property (nonatomic, copy, nullable) void (^onPointSelected)(NSInteger index);
+@property (nonatomic, copy, nullable) void (^onNewSegmentStarted)(void);
+@property (nonatomic, copy, nullable) void (^onPointEditModeRequested)(EOAPlanRoutePointEditMode mode);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeBeforeHandler) void (^onChangeRouteTypeBefore)(NSInteger pointIndex);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeAfterHandler) void (^onChangeRouteTypeAfter)(NSInteger pointIndex);
 @property (nonatomic, weak, nullable) UIViewController *presenterViewController;
@@ -28,11 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) OASGpxFile *exportedGpxFile;
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
+@property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
+@property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
+@property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;
 @property (nonatomic, readonly) BOOL canUndo;
 @property (nonatomic, readonly) BOOL canRedo;
 @property (nonatomic, readonly) BOOL hasRoute;
 @property (nonatomic, readonly) double routeDistance;
+@property (nonatomic, readonly) NSTimeInterval routeDuration;
 @property (nonatomic, readonly) double distanceToMapCenter;
 @property (nonatomic, readonly) double bearingToMapCenter;
 @property (nonatomic, readonly) BOOL isCalculatingElevation;
@@ -84,6 +95,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addPointAfterIndex:(NSInteger)index;
 - (void)trimBeforeIndex:(NSInteger)index;
 - (void)trimAfterIndex:(NSInteger)index;
+- (void)applyPointEdit;
+- (void)cancelPointEdit;
+- (void)addAnotherPoint;
 
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder

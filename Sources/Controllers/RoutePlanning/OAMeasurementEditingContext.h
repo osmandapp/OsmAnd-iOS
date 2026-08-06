@@ -10,6 +10,7 @@
 // Partially synced!
 
 #import <Foundation/Foundation.h>
+#import "OAMeasurementEditingContextTypes.h"
 
 #include <OsmAndCore/Color.h>
 
@@ -17,12 +18,6 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 {
     NEXT_SEGMENT = 0,
     WHOLE_TRACK
-};
-
-typedef NS_ENUM(NSInteger, EOAAddPointMode) {
-    EOAAddPointModeUndefined = -1,
-    EOAAddPointModeBefore = 0,
-    EOAAddPointModeAfter
 };
 
 @class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OARoadSegmentData, OAGpxRouteApproximation;
@@ -62,6 +57,10 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic, assign) BOOL approximationMode;
 
 @property (nonatomic) NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData;
+
+- (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData;
+- (void)beginBatchPointUpdates;
+- (void)endBatchPointUpdates;
 
 - (NSArray<OASWptPt *> *) getAllPoints;
 - (NSArray<OASWptPt *> *) getPoints;
@@ -126,7 +125,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex;
 - (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints;
 
-- (void) scheduleRouteCalculateIfNotEmpty;
+- (void)scheduleRouteCalculateIfNotEmpty;
 
 - (void) setChangesSaved;
 - (BOOL) hasChanges;

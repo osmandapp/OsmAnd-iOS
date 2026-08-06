@@ -63,7 +63,9 @@ QByteArray OAWebClient::downloadData(
     if (url != nullptr && !url.isEmpty())
     {
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
-        [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? OAAppVersion.getVersionForUrl : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
+        const auto headers = getRequestHeaders(userAgent, dataRequest);
+        for (auto it = headers.constBegin(); it != headers.constEnd(); ++it)
+            [request addValue:it.value().toNSString() forHTTPHeaderField:it.key().toNSString()];
 
         unsigned int responseCode = 0;
         NSURLResponse __block *response = nil;
@@ -115,6 +117,22 @@ QByteArray OAWebClient::downloadData(
         dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
     }
     return res;
+}
+
+QHash<QString, QString> OAWebClient::getRequestHeaders(
+    const QString& userAgent,
+    const IWebClient::DataRequest& dataRequest)
+{
+    const auto webClientDataRequest = dynamic_cast<const OAWebClientDataRequest*>(&dataRequest);
+    QHash<QString, QString> headers = webClientDataRequest
+        ? webClientDataRequest->headers
+        : QHash<QString, QString>();
+
+    headers[QStringLiteral("User-Agent")] = (userAgent.isNull() || userAgent.isEmpty())
+        ? QString::fromNSString(OAAppVersion.getVersionForUrl)
+        : userAgent;
+
+    return headers;
 }
 
 QString OAWebClient::downloadString(

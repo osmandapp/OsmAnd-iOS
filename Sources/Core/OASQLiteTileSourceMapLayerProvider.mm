@@ -45,7 +45,10 @@ OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QSt
             if (ok)
                 _tileSize = (int) tileSize;
             
-            ok = true;
+            auto referer = meta.getReferer(&ok);
+            if (ok)
+                _referer = referer;
+
             auto userAgent = meta.getUserAgent(&ok);
             if (ok)
                 _userAgent = userAgent;
@@ -148,8 +151,10 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     const auto& tileUrl = getUrlToLoad(tileId, zoom);
     if (!tileUrl.isEmpty())
     {
-        OsmAnd::IWebClient::DataRequest dataRequest;
+        OAWebClientDataRequest dataRequest;
         dataRequest.queryController = queryController;
+        if (!_referer.isEmpty())
+            dataRequest.headers[QStringLiteral("Referer")] = _referer;
         const auto& downloadResult = _webClient->downloadData(tileUrl, dataRequest, _userAgent);
         
         // If there was error, check what the error was

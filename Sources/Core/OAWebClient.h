@@ -13,7 +13,13 @@
 #include <objc/objc.h>
 
 #include <OsmAndCore/IWebClient.h>
+#include <QHash>
 
+class OAWebClientDataRequest : public OsmAnd::IWebClient::DataRequest
+{
+public:
+    QHash<QString, QString> headers;
+};
 
 class OARequestResult : public OsmAnd::IWebClient::IRequestResult
 {
@@ -63,6 +69,10 @@ public:
         const QString& fileName,
         const long long lastTime,
         IWebClient::DataRequest& dataRequest) const;
+
+    static QHash<QString, QString> getRequestHeaders(
+        const QString& userAgent,
+        const IWebClient::DataRequest& dataRequest);
 };
 
 

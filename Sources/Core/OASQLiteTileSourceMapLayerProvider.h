@@ -29,6 +29,7 @@ private:
     
     std::shared_ptr<OsmAnd::TileSqliteDatabase> _ts;
     QString _fileName;
+    QString _referer;
     QString _userAgent;
     int _tileSize;
     QList<QString> _randomsArray;

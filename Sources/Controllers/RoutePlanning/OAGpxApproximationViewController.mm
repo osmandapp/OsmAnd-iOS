@@ -179,7 +179,7 @@ static const float kProgressUpdateLimit = 0.9f;
 {
     [_progressUpdateTimer invalidate];
     __weak __typeof(self) weakSelf = self;
-    _progressUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:kProgressUpdateInterval repeats:YES block:^(NSTimer *timer) {
+    _progressUpdateTimer = [NSTimer timerWithTimeInterval:kProgressUpdateInterval repeats:YES block:^(NSTimer *timer) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
         {
@@ -189,6 +189,7 @@ static const float kProgressUpdateLimit = 0.9f;
         float updatedProgress = MIN(strongSelf->_progressBarView.progress + kProgressUpdateStep, kProgressUpdateLimit);
         [strongSelf->_progressBarView setProgress:updatedProgress animated:YES];
     }];
+    [[NSRunLoop mainRunLoop] addTimer:_progressUpdateTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void)stopProgressUpdates

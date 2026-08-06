@@ -1546,10 +1546,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     {
         if (hasScrollableHudVisible)
         {
-            if (isPlanRoute && isLandscape)
-                extraBottom += toolbarHeight;
-            else
-                extraBottom += MAX(0.f, viewHeight - bottomInset);
+            extraBottom += MAX(0.f, viewHeight - bottomInset);
         }
         else
         {
@@ -1947,10 +1944,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         {
             if (_mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview)
             {
-                if (isPlanRoute && isLandscape)
-                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getToolbarHeight] + [OAUtilities getBottomMargin];
-                else
-                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
+                contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
             }
             else
             {

@@ -32,6 +32,12 @@ private struct AnalyzeRenderState: Equatable {
     }
 }
 
+private struct AnalyzeStatItem {
+    let value: String
+    let label: String
+    let accessibilityValue: String
+}
+
 private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
     var onNothingSelected: (() -> Void)?
     var onValueSelected: (() -> Void)?
@@ -483,6 +489,19 @@ private enum AnalyzeState: Equatable {
 // MARK: - Section indices
 
 private extension PlanRouteAnalyzeViewController {
+    static let accessibilityMeasurementFormatter: MeasurementFormatter = {
+        let formatter = MeasurementFormatter()
+        formatter.unitStyle = .long
+        formatter.unitOptions = .providedUnit
+        formatter.locale = .current
+        formatter.numberFormatter.maximumFractionDigits = 0
+        return formatter
+    }()
+    static let accessibilityListFormatter: ListFormatter = {
+        let formatter = ListFormatter()
+        formatter.locale = .current
+        return formatter
+    }()
     static let graphSection = 0
     static let statsSection = 1
     static let roadAttributesBase = 2
@@ -691,13 +710,37 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         } else {
             altRange = "–"
         }
-        let items: [(String, String)] = [
-            (fmtAlt(data.uphill), localizedString("shared_string_uphill")),
-            (fmtAlt(data.downhill), localizedString("shared_string_downhill")),
-            (altRange, localizedString("altitude_range")),
-            (fmtSpeed(data.avgSpeed), localizedString("average_speed")),
-            (fmtSpeed(data.maxSpeed), localizedString("shared_string_max_speed")),
-            (fmtTime(data.timeInMotion), localizedString("moving_time"))
+        let items = [
+            AnalyzeStatItem(
+                value: fmtAlt(data.uphill),
+                label: localizedString("shared_string_uphill"),
+                accessibilityValue: accessibilityAltitude(data.uphill)
+            ),
+            AnalyzeStatItem(
+                value: fmtAlt(data.downhill),
+                label: localizedString("shared_string_downhill"),
+                accessibilityValue: accessibilityAltitude(data.downhill)
+            ),
+            AnalyzeStatItem(
+                value: altRange,
+                label: localizedString("altitude_range"),
+                accessibilityValue: accessibilityAltitudeRange(minimum: data.altMin, maximum: data.altMax)
+            ),
+            AnalyzeStatItem(
+                value: fmtSpeed(data.avgSpeed),
+                label: localizedString("average_speed"),
+                accessibilityValue: accessibilitySpeed(data.avgSpeed)
+            ),
+            AnalyzeStatItem(
+                value: fmtSpeed(data.maxSpeed),
+                label: localizedString("shared_string_max_speed"),
+                accessibilityValue: accessibilitySpeed(data.maxSpeed)
+            ),
+            AnalyzeStatItem(
+                value: fmtTime(data.timeInMotion),
+                label: localizedString("moving_time"),
+                accessibilityValue: accessibilityDuration(data.timeInMotion)
+            )
         ]
 
         let topRow = makeGridRow(items: Array(items[0...2]))
@@ -730,8 +773,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return cell
     }
 
-    private func makeGridRow(items: [(String, String)]) -> UIStackView {
-        let itemViews = items.map { statItemView(value: $0.0, label: $0.1) }
+    private func makeGridRow(items: [AnalyzeStatItem]) -> UIStackView {
+        let itemViews = items.map(statItemView)
         var arranged: [UIView] = []
         for (i, view) in itemViews.enumerated() {
             arranged.append(view)
@@ -768,16 +811,16 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return wrapper
     }
 
-    private func statItemView(value: String, label: String) -> UIView {
+    private func statItemView(_ item: AnalyzeStatItem) -> UIView {
         let valueLabel = UILabel()
-        valueLabel.text = value
+        valueLabel.text = item.value
         valueLabel.font = .preferredFont(forTextStyle: .footnote)
         valueLabel.textColor = .textColorActive
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.7
 
         let nameLabel = UILabel()
-        nameLabel.text = label
+        nameLabel.text = item.label
         nameLabel.font = .preferredFont(forTextStyle: .caption2)
         nameLabel.textColor = .textColorSecondary
 
@@ -786,6 +829,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         stack.spacing = 2
         stack.layoutMargins = UIEdgeInsets(top: 12, left: 16, bottom: 9, right: 16)
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.isAccessibilityElement = true
+        stack.accessibilityLabel = item.label
+        stack.accessibilityValue = item.accessibilityValue
         return stack
     }
 
@@ -949,9 +995,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             description: localizedString("no_elevation_data_description"),
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
-            action: {
-                [weak self] in self?.showGetElevationSheet()
-            }
+            action: { [weak self] in self?.showGetElevationSheet() }
         )
         return cell
     }
@@ -1019,6 +1063,89 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func fmtTime(_ interval: TimeInterval?) -> String {
         guard let interval, interval > 0 else { return "–" }
         return OAOsmAndFormatter.getFormattedDuration(interval) ?? "–"
+    }
+
+    private func accessibilityAltitude(_ value: Double?) -> String {
+        let formatter = Self.accessibilityMeasurementFormatter
+        guard let value, value.isFinite else { return localizedString("shared_string_not_available") }
+        let altitudeMetric = OAAppSettings.sharedManager().altitudeMetric.get()
+        let unit: UnitLength = OAAltitudeMetricsConstant.shouldUseFeet(altitudeMetric) ? .feet : .meters
+        let measurement = Measurement(value: value, unit: UnitLength.meters).converted(to: unit)
+        return formatter.string(from: measurement)
+    }
+
+    private func accessibilityAltitudeRange(minimum: Double?, maximum: Double?) -> String {
+        let listFormatter = Self.accessibilityListFormatter
+        guard let minimum, minimum.isFinite, let maximum, maximum.isFinite else {
+            return localizedString("shared_string_not_available")
+        }
+        let values = [accessibilityAltitude(minimum), accessibilityAltitude(maximum)]
+        return listFormatter.string(from: values)
+            ?? String(format: localizedString("ltr_or_rtl_combine_via_comma"), values[0], values[1])
+    }
+
+    private func accessibilitySpeed(_ value: Double?) -> String {
+        let formatter = Self.accessibilityMeasurementFormatter
+        guard let value, value.isFinite, value > 0 else {
+            return localizedString("shared_string_not_available")
+        }
+        let speedSystem = OAAppSettings.sharedManager().speedSystem.get()
+        let measurement = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
+        if speedSystem == EOASpeedConstant.KILOMETERS_PER_HOUR {
+            return formatter.string(from: measurement.converted(to: .kilometersPerHour))
+        } else if speedSystem == EOASpeedConstant.MILES_PER_HOUR {
+            return formatter.string(from: measurement.converted(to: .milesPerHour))
+        } else if speedSystem == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
+            return formatter.string(from: measurement.converted(to: .knots))
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_KILOMETER {
+            return accessibilityPace(value, distance: 1_000, unit: .kilometers)
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_MILE {
+            return accessibilityPace(value, distance: Double(METERS_IN_ONE_MILE), unit: .miles)
+        } else if speedSystem == EOASpeedConstant.FEET_PER_SECOND {
+            return accessibilityFeetPerSecond(value)
+        }
+        return formatter.string(from: measurement)
+    }
+
+    private func accessibilityPace(_ metersPerSecond: Double, distance: Double, unit: UnitLength) -> String {
+        let formatter = Self.accessibilityMeasurementFormatter
+        let duration = formatter.string(
+            from: Measurement(value: distance / metersPerSecond / 60, unit: UnitDuration.minutes)
+        )
+        let length = formatter.string(from: Measurement(value: 1, unit: unit))
+        return String(format: localizedString("ltr_or_rtl_combine_via_per"), duration, length)
+    }
+
+    private func accessibilityFeetPerSecond(_ metersPerSecond: Double) -> String {
+        let formatter = Self.accessibilityMeasurementFormatter
+        let length = formatter.string(
+            from: Measurement(value: metersPerSecond, unit: UnitLength.meters).converted(to: .feet)
+        )
+        let duration = formatter.string(from: Measurement(value: 1, unit: UnitDuration.seconds))
+        return String(format: localizedString("ltr_or_rtl_combine_via_per"), length, duration)
+    }
+
+    private func accessibilityDuration(_ interval: TimeInterval?) -> String {
+        let formatter = Self.accessibilityMeasurementFormatter
+        let listFormatter = Self.accessibilityListFormatter
+        guard let interval, interval.isFinite, interval > 0 else {
+            return localizedString("shared_string_not_available")
+        }
+        let totalSeconds = Int(interval.rounded())
+        let hours = totalSeconds / 3_600
+        let minutes = totalSeconds / 60 % 60
+        let seconds = totalSeconds % 60
+        var values = [String]()
+        if hours > 0 {
+            values.append(formatter.string(from: Measurement(value: Double(hours), unit: UnitDuration.hours)))
+        }
+        if minutes > 0 {
+            values.append(formatter.string(from: Measurement(value: Double(minutes), unit: UnitDuration.minutes)))
+        }
+        if seconds > 0 || values.isEmpty {
+            values.append(formatter.string(from: Measurement(value: Double(seconds), unit: UnitDuration.seconds)))
+        }
+        return listFormatter.string(from: values) ?? localizedString("shared_string_not_available")
     }
 }
 

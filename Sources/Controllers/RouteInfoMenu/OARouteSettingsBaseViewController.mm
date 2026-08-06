@@ -172,7 +172,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
         }
         else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamHazmatCategory] && [_settings.drivingRegion get:am] != DR_US)
         {
-            OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:[self.routingHelper getAppMode]];
+            OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:am];
             hazmatCategory.routingParameter = r;
             hazmatCategory.delegate = self;
             [list addObject:hazmatCategory];
@@ -181,7 +181,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 
     if (reliefFactorParameters.size() > 0)
     {
-        OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:[self.routingHelper getAppMode]
+        OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:am
                                                                                           groupName:kRouteParamReliefSmoothnessFactor];
         group.delegate = self;
         for (const auto& p : reliefFactorParameters)

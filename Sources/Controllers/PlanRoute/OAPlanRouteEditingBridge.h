@@ -14,6 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, PlanRoutePointData, PlanRouteGroupData, PlanRouteSegmentData, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
 
+@interface OAPlanRouteShowAlongSettingsBridge : NSObject
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)applicationMode;
+- (BOOL)isEnabledForType:(NSInteger)type;
+- (void)setEnabled:(BOOL)enabled forType:(NSInteger)type;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
     EOAPlanRoutePointEditModeMove = 0,
     EOAPlanRoutePointEditModeAddBefore,

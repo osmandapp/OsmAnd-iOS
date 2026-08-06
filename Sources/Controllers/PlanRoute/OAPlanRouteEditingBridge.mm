@@ -35,11 +35,79 @@
 #import "OAApplyGpxApproximationCommand.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
+#import "OAAppSettings.h"
+#import "OAWaypointHelper.h"
+#import "OALocationPointWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 
 static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
+
+static const NSInteger kPlanRouteShowAlongPoi = 0;
+static const NSInteger kPlanRouteShowAlongFavorites = 1;
+static const NSInteger kPlanRouteShowAlongTrafficWarnings = 2;
+
+@implementation OAPlanRouteShowAlongSettingsBridge
+{
+    OAApplicationMode *_applicationMode;
+    OAAppSettings *_settings;
+}
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)applicationMode
+{
+    self = [super init];
+    if (self)
+    {
+        _applicationMode = applicationMode;
+        _settings = OAAppSettings.sharedManager;
+    }
+    return self;
+}
+
+- (BOOL)isEnabledForType:(NSInteger)type
+{
+    if (type == kPlanRouteShowAlongPoi)
+        return [_settings.showNearbyPoi get:_applicationMode];
+    if (type == kPlanRouteShowAlongFavorites)
+        return [_settings.showNearbyFavorites get:_applicationMode];
+    if (type == kPlanRouteShowAlongTrafficWarnings)
+        return [_settings.showScreenAlerts get:_applicationMode] && [_settings.showTrafficWarnings get:_applicationMode];
+    return NO;
+}
+
+- (void)setEnabled:(BOOL)enabled forType:(NSInteger)type
+{
+    NSInteger waypointType = -1;
+    if (type == kPlanRouteShowAlongPoi)
+    {
+        [_settings.showNearbyPoi set:enabled mode:_applicationMode];
+        [_settings.announceNearbyPoi set:enabled mode:_applicationMode];
+        waypointType = LPW_POI;
+    }
+    else if (type == kPlanRouteShowAlongFavorites)
+    {
+        [_settings.showNearbyFavorites set:enabled mode:_applicationMode];
+        [_settings.announceNearbyFavorites set:enabled mode:_applicationMode];
+        waypointType = LPW_FAVORITES;
+    }
+    else if (type == kPlanRouteShowAlongTrafficWarnings)
+    {
+        if (enabled)
+            [_settings.showScreenAlerts set:YES mode:_applicationMode];
+        [_settings.showTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.speakTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.showPedestrian set:enabled mode:_applicationMode];
+        [_settings.speakPedestrian set:enabled mode:_applicationMode];
+        [_settings.showTunnels set:enabled mode:_applicationMode];
+        [_settings.speakTunnels set:enabled mode:_applicationMode];
+        waypointType = LPW_ALARMS;
+    }
+    if (waypointType >= 0)
+        [OAWaypointHelper.sharedInstance recalculatePoints:(int)waypointType];
+}
+
+@end
 
 @class OAMeasurementToolLayer;
 

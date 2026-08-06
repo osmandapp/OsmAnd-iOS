@@ -102,7 +102,7 @@
 - (BOOL) isChecked
 {
     if (([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamShortWay]))
-        return ![self.settings.fastRouteMode get:[self.routingHelper getAppMode]];
+        return ![self.settings.fastRouteMode get:self.getApplicationMode];
     else
         return [self isSelected];
 }
@@ -165,7 +165,7 @@
 - (void)applyNewParameterValue:(BOOL)isChecked
 {
     if ([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamShortWay])
-        [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
+        [self.settings.fastRouteMode set:!isChecked mode:self.getApplicationMode];
     
     [self setSelected:isChecked];
     
@@ -964,16 +964,12 @@
     OACommonString *_property;
 }
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+- (void)setRoutingParameter:(RoutingParameter)routingParameter
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        NSString *id = @(self.routingParameter.id.c_str());
-        NSString *defaultValue = @(self.routingParameter.getDefaultString().c_str());
-        _property = [self.settings getCustomRoutingProperty:id defaultValue:defaultValue];
-    }
-    return self;
+    [super setRoutingParameter:routingParameter];
+    NSString *parameterId = @(routingParameter.id.c_str());
+    NSString *defaultValue = @(routingParameter.getDefaultString().c_str());
+    _property = [self.settings getCustomRoutingProperty:parameterId defaultValue:defaultValue];
 }
 
 - (UIImage *)getIcon
@@ -993,10 +989,10 @@
 
 - (NSString *)getValue
 {
-    return [self getValue:[_property get:[self getApplicationMode]].integerValue];
+    return [self valueForIndex:[_property get:[self getApplicationMode]].integerValue];
 }
 
-- (NSString *)getValue:(NSInteger)index
+- (NSString *)valueForIndex:(NSInteger)index
 {
     NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.possibleValueDescriptions[index].c_str()];
     NSString *value = [defaultValue stringByReplacingOccurrencesOfString:@" " withString:@"_"].lowercaseString;
@@ -1046,15 +1042,11 @@
     OACommonBoolean *_property;
 }
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+- (void)setRoutingParameter:(RoutingParameter)routingParameter
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
-        _property = [self.settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:self.routingParameter.id.c_str()] defaultValue:self.routingParameter.defaultBoolean];
-    }
-    return self;
+    [super setRoutingParameter:routingParameter];
+    NSString *parameterId = @(routingParameter.id.c_str());
+    _property = [self.settings getCustomRoutingBooleanProperty:parameterId defaultValue:routingParameter.defaultBoolean];
 }
 
 - (UIImage *)getIcon

@@ -56,7 +56,9 @@ static NSString *dangerousGoodsRouteSettingsUsaKey = @"dangerousGoodsRouteSettin
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup, OALocalRoutingParameter;
 
+#ifdef __cplusplus
 struct RoutingParameter;
+#endif
 
 @protocol OARoutePreferencesParametersDelegate <NSObject>
 
@@ -82,7 +84,9 @@ struct RoutingParameter;
 
 @property (nonatomic, weak) id<OARoutePreferencesParametersDelegate> delegate;
 
+#ifdef __cplusplus
 @property struct RoutingParameter routingParameter;
+#endif
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)am;
 - (void) commonInit;
@@ -124,7 +128,9 @@ struct RoutingParameter;
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)am groupName:(NSString *)groupName;
 
+#ifdef __cplusplus
 - (void) addRoutingParameter:(RoutingParameter)routingParameter;
+#endif
 - (NSString *) getGroupName;
 - (NSMutableArray<OALocalRoutingParameter *> *) getRoutingParameters;
 - (OALocalRoutingParameter *) getSelected;
@@ -163,7 +169,7 @@ struct RoutingParameter;
 
 @interface OAHazmatRoutingParameter : OALocalRoutingParameter
 
-- (NSString *)getValue:(NSInteger)index;
+- (NSString *)valueForIndex:(NSInteger)index;
 - (void)setValue:(NSInteger)index;
 
 @end

@@ -170,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
             else
             {
                 OAHazmatRoutingParameter *parameter = (OAHazmatRoutingParameter *) _parameter;
-                NSString *value = [parameter getValue:indexPath.row];
+                NSString *value = [parameter valueForIndex:indexPath.row];
                 isSelected = [[_parameter getValue] isEqualToString:value];
                 text = value;
             }

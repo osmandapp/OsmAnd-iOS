@@ -506,6 +506,10 @@ private extension PlanRouteAnalyzeViewController {
     static let statsSection = 1
     static let roadAttributesBase = 2
     static let cardHorizontalInset: CGFloat = 16
+    static let compactLegendBorderWidth: CGFloat = 1
+    static let compactLegendMarkerSize: CGFloat = 16
+    static let compactLegendInnerSpacing: CGFloat = 6
+    static let compactLegendMinimumContrastRatio: CGFloat = 1.5
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
@@ -965,20 +969,25 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func compactLegendItem(title: String, color: UIColor) -> UIView {
         let dot = UIView()
         dot.backgroundColor = color
-        dot.layer.cornerRadius = 6
+        dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
+        dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
+        let contrastRatio = contrastRatio(foreground: color, background: .groupBg)
+        dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
+            ? Self.compactLegendBorderWidth
+            : 0
         dot.translatesAutoresizingMaskIntoConstraints = false
-        dot.widthAnchor.constraint(equalToConstant: 12).isActive = true
-        dot.heightAnchor.constraint(equalToConstant: 12).isActive = true
+        dot.widthAnchor.constraint(equalToConstant: Self.compactLegendMarkerSize).isActive = true
+        dot.heightAnchor.constraint(equalToConstant: Self.compactLegendMarkerSize).isActive = true
 
         let label = UILabel()
         label.text = title
-        label.font = .preferredFont(forTextStyle: .caption1)
+        label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .textColorPrimary
         label.numberOfLines = 1
 
         let stack = UIStackView(arrangedSubviews: [dot, label])
         stack.axis = .horizontal
-        stack.spacing = 6
+        stack.spacing = Self.compactLegendInnerSpacing
         stack.alignment = .center
         stack.setContentHuggingPriority(.required, for: .horizontal)
         return stack
@@ -1338,7 +1347,7 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func compactLegendRows(items: [RoadAttributeLegendItem], maxWidth: CGFloat) -> [[RoadAttributeLegendItem]] {
-        let font = UIFont.preferredFont(forTextStyle: .caption1)
+        let font = UIFont.preferredFont(forTextStyle: .footnote)
         let itemSpacing: CGFloat = 16
         return items.reduce(into: [[RoadAttributeLegendItem]]()) { rows, item in
             let itemWidth = compactLegendItemWidth(title: item.title, font: font)
@@ -1356,10 +1365,49 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func compactLegendItemWidth(title: String, font: UIFont) -> CGFloat {
-        let dotWidth: CGFloat = 12
-        let innerSpacing: CGFloat = 6
         let titleWidth = ceil((title as NSString).size(withAttributes: [.font: font]).width)
-        return dotWidth + innerSpacing + titleWidth
+        return Self.compactLegendMarkerSize + Self.compactLegendInnerSpacing + titleWidth
+    }
+
+    private func contrastRatio(foreground: UIColor, background: UIColor) -> CGFloat {
+        guard let foregroundComponents = rgbaComponents(for: foreground),
+              let backgroundComponents = rgbaComponents(for: background) else { return .greatestFiniteMagnitude }
+        let alpha = foregroundComponents.alpha
+        let red = foregroundComponents.red * alpha + backgroundComponents.red * (1 - alpha)
+        let green = foregroundComponents.green * alpha + backgroundComponents.green * (1 - alpha)
+        let blue = foregroundComponents.blue * alpha + backgroundComponents.blue * (1 - alpha)
+        let foregroundLuminance = relativeLuminance(red: red, green: green, blue: blue)
+        let backgroundLuminance = relativeLuminance(
+            red: backgroundComponents.red,
+            green: backgroundComponents.green,
+            blue: backgroundComponents.blue
+        )
+        let lighter = max(foregroundLuminance, backgroundLuminance)
+        let darker = min(foregroundLuminance, backgroundLuminance)
+        return (lighter + 0.05) / (darker + 0.05)
+    }
+
+    private func rgbaComponents(for color: UIColor) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)? {
+        let resolvedColor = color.resolvedColor(with: traitCollection)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard resolvedColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
+        return (red, green, blue, alpha)
+    }
+
+    private func relativeLuminance(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat {
+        0.2126 * linearizedColorComponent(red)
+            + 0.7152 * linearizedColorComponent(green)
+            + 0.0722 * linearizedColorComponent(blue)
+    }
+
+    private func linearizedColorComponent(_ component: CGFloat) -> CGFloat {
+        if component <= 0.03928 {
+            return component / 12.92
+        }
+        return pow((component + 0.055) / 1.055, 2.4)
     }
 
     private func rowWidth(for items: [RoadAttributeLegendItem], font: UIFont, itemSpacing: CGFloat) -> CGFloat {

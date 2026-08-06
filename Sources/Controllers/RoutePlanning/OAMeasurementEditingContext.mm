@@ -34,6 +34,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 @property (nonatomic, assign) BOOL checkApproximation;
+- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
+- (void)removeUnusedRoadSegmentData;
+- (void)updateSegmentsForSnap:(BOOL)both;
+- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index;
 @end
 
 @implementation OAMeasurementEditingContext
@@ -201,6 +205,30 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (BOOL) hasRoute
 {
     return self.orderedRoadSegmentData.count > 0;
+}
+
+- (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData
+{
+    NSMutableArray<OARoadSegmentData *> *data = [NSMutableArray array];
+    for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
+    {
+        OARoadSegmentData *segmentData = _roadSegmentData[pair];
+        if (segmentData != nil)
+            [data addObject:segmentData];
+    }
+    return [data copy];
+}
+
+- (void)beginBatchPointUpdates
+{
+    _batchPointUpdates = YES;
+}
+
+- (void)endBatchPointUpdates
+{
+    _batchPointUpdates = NO;
+    [self removeUnusedRoadSegmentData];
+    [self updateSegmentsForSnap:NO];
 }
 
 - (void) clearSnappedToRoadPoints
@@ -626,7 +654,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return res;
 }
 
-- (NSArray<NSArray<OASWptPt *> *> *) getOrderedRoadSegmentDataKeys
+- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys
 {
     NSMutableArray<NSArray<OASWptPt *> *> *keys = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
@@ -639,19 +667,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return keys;
 }
 
-- (NSArray<OARoadSegmentData *> *) orderedRoadSegmentData
-{
-    NSMutableArray<OARoadSegmentData *> *data = [NSMutableArray array];
-    for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
-    {
-        OARoadSegmentData *segmentData = _roadSegmentData[pair];
-        if (segmentData != nil)
-            [data addObject:segmentData];
-    }
-    return data;
-}
-
-- (void) removeUnusedRoadSegmentData
+- (void)removeUnusedRoadSegmentData
 {
     NSSet<NSArray<OASWptPt *> *> *usedPairs = [NSSet setWithArray:[self getOrderedRoadSegmentDataKeys]];
     NSMutableArray<NSArray<OASWptPt *> *> *unusedPairs = [NSMutableArray array];
@@ -663,33 +679,21 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     [_roadSegmentData removeObjectsForKeys:unusedPairs];
 }
 
-- (void) beginBatchPointUpdates
-{
-    _batchPointUpdates = YES;
-}
-
-- (void) endBatchPointUpdates
-{
-    _batchPointUpdates = NO;
-    [self removeUnusedRoadSegmentData];
-    [self updateSegmentsForSnap:NO];
-}
-
-- (void) scheduleRouteCalculateIfNotEmpty
+- (void)scheduleRouteCalculateIfNotEmpty
 {
     if (_before.points.count == 0 && _after.points.count == 0)
         return;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    if (/*progressListener != null &&*/!routingHelper.isRouteBeingCalculated)
+    id<OASnapToRoadProgressDelegate> progressDelegate = self.progressDelegate;
+    if (progressDelegate != nil && !routingHelper.isRouteBeingCalculated)
     {
         OARouteCalculationParams *params = [self getParams:YES];
         if (params != nil)
         {
-            [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.progressDelegate)
-                    [self.progressDelegate showProgressBar];
+                [progressDelegate showProgressBar];
             });
+            [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
         }
     }
 }
@@ -956,17 +960,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	
 	NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
 	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
-	OASWptPt *currentPoint = nil;
 	for (NSInteger i = 0; i < gpxPoints.size(); i++)
 	{
 		const auto& gp1 = gpxPoints[i];
-		if (currentPoint == nil)
-		{
-			currentPoint = [[OASWptPt alloc] init];
-			currentPoint.lat = gp1->lat;
-			currentPoint.lon = gp1->lon;
-			[routePoints addObject:currentPoint];
-		}
 		BOOL lastGpxPoint = [self isLastGpxPoint:gpxPoints index:i];
 		NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
 		vector<SHARED_PTR<RouteSegmentResult>> segments;
@@ -978,38 +974,41 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 				segments.push_back(seg);
 			}
 		}
+		BOOL duplicatePoint = [self needDuplicatePoint:gpxPoints index:i];
 		for (NSInteger k = 0; k < segments.size(); k++)
 		{
 			const auto& seg = segments[k];
-			[self fillPointsArray:points seg:seg includeEndPoint:lastGpxPoint && k == segments.size() - 1];
-		}
-		OASWptPt *nextPoint = nil;
-		if (!lastGpxPoint)
-		{
-			const auto& gp2 = gpxPoints[i + 1];
-			nextPoint = [[OASWptPt alloc] init];
-			nextPoint.lat = gp2->lat;
-			nextPoint.lon = gp2->lon;
-			[routePoints addObject:nextPoint];
-		}
-		else if (points.count > 0)
-		{
-			OASWptPt *lastObject = points.lastObject;
-			nextPoint = [[OASWptPt alloc] init];
-			nextPoint.lat = lastObject.lat;
-			nextPoint.lon = lastObject.lon;
-			[routePoints addObject:nextPoint];
+			BOOL includeEndPoint = (duplicatePoint || lastGpxPoint) && k == segments.size() - 1;
+			[self fillPointsArray:points seg:seg includeEndPoint:includeEndPoint];
 		}
 		if (points.count > 0)
 		{
-			[currentPoint setProfileTypeProfileType:mode.stringKey];
-			[nextPoint setProfileTypeProfileType:mode.stringKey];
-			NSArray<OASWptPt *> *pair = @[currentPoint, nextPoint];
-			_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:mode start:pair.firstObject end:pair.lastObject points:points segments:segments];
+			OASWptPt *wp1 = [[OASWptPt alloc] init];
+			wp1.lat = gp1->lat;
+			wp1.lon = gp1->lon;
+			[wp1 setProfileTypeProfileType:mode.stringKey];
+			[routePoints addObject:wp1];
+			OASWptPt *wp2 = [[OASWptPt alloc] init];
+			if (lastGpxPoint)
+			{
+				OASWptPt *lastObject = points.lastObject;
+				wp2.lat = lastObject.lat;
+				wp2.lon = lastObject.lon;
+				[routePoints addObject:wp2];
+			}
+			else
+			{
+				const auto& gp2 = gpxPoints[i + 1];
+				wp2.lat = gp2->lat;
+				wp2.lon = gp2->lon;
+			}
+			[wp2 setProfileTypeProfileType:mode.stringKey];
+			NSArray<OASWptPt *> *pair = @[wp1, wp2];
+			if (_roadSegmentData[pair] == nil)
+				_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
 		}
 		if (lastGpxPoint)
 			break;
-		currentPoint = nextPoint;
 	}
 	OASWptPt *lastOriginalPoint = originalPoints.lastObject;
 	OASWptPt *lastRoutePoint = routePoints.lastObject;
@@ -1018,6 +1017,16 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	
 	[self replacePoints:originalPoints points:routePoints];
 	return routePoints;
+}
+
+- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index
+{
+	if (index == gpxPoints.size() - 1)
+		return NO;
+	const auto& routeToTarget = gpxPoints[index]->routeToTarget;
+	const auto& nextRouteToTarget = gpxPoints[index + 1]->routeToTarget;
+	return !routeToTarget.empty() && !nextRouteToTarget.empty()
+		&& routeToTarget.back()->getEndPoint().isEquals(nextRouteToTarget.front()->getStartPoint());
 }
 
 - (void) replacePoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
@@ -1401,7 +1410,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 #pragma mark - OARouteCalculationResultListener
 
-- (BOOL) isRoadSegmentPairUsed:(NSArray<OASWptPt *> *)pair
+- (BOOL)isRoadSegmentPairUsed:(NSArray<OASWptPt *> *)pair
 {
     if (pair.count != 2)
         return NO;
@@ -1417,7 +1426,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return NO;
 }
 
-- (BOOL) isCurrentRouteCalculationForPair:(NSArray<OASWptPt *> *)pair
+- (BOOL)isCurrentRouteCalculationForPair:(NSArray<OASWptPt *> *)pair
                                     route:(OARouteCalculationResult *)route
                                     start:(CLLocation *)start
                                       end:(CLLocation *)end

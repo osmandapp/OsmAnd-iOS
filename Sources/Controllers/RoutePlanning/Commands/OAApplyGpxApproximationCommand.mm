@@ -76,14 +76,13 @@
     [self refreshMap];
 }
 
-
 - (void) redo
 {
     [self applyAllApproximations];
     [self refreshMap];
 }
 
-- (void) restoreOriginalState
+- (void)restoreOriginalState
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     [ctx clearSegments];
@@ -91,7 +90,7 @@
     [ctx setPoints:_points];
 }
 
-- (void) applyAllApproximations
+- (void)applyAllApproximations
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     [ctx cancelSnapToRoad];
@@ -104,7 +103,7 @@
         OAGpxRouteApproximation *approximation = _approximations[i];
         NSArray<OASWptPt *> *segmentPoints = _originalSegmentPointsList[i];
         NSArray<OASWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
-        
+
         if (newSegmentPoints != nil && newSegmentPoints.count > 0)
         {
             int64_t initialTimestamp = segmentPoints.count == 0

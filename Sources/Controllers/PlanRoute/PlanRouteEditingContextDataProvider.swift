@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import OsmAndShared
 
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
@@ -437,13 +438,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
               !hasCachedAnalysisData,
               pendingAnalysisGeneration == nil,
               !bridge.isCalculatingRoute else { return }
-        let gpxFile: GpxFile?
-        switch mode {
-        case .editTrack:
-            gpxFile = bridge.currentGpxFile
-        case .newRoute:
-            gpxFile = bridge.exportedGpxFile
-        }
+        let fileTimestamp = mode.isEditTrack ? bridge.currentGpxFile?.modifiedTime ?? 0 : 0
+        let gpxFile = bridge.exportedGpxFile
         guard let gpxFile else {
             hasCachedAnalysisData = true
             cachedAnalysisData = nil
@@ -453,7 +449,12 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         let generation = analysisGeneration
         pendingAnalysisGeneration = generation
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let analysis = gpxFile.getAnalysis(fileTimestamp: 0)
+            let analysis = gpxFile.getAnalysis(
+                fileTimestamp: fileTimestamp,
+                fromDistance: nil,
+                toDistance: nil,
+                pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
+            )
             let analysisData = PlanRouteAnalysisData(
                 uphill: analysis.diffElevationUp,
                 downhill: analysis.diffElevationDown,

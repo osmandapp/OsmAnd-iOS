@@ -58,6 +58,10 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 @property (nonatomic) NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData;
 
+- (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData;
+- (void)beginBatchPointUpdates;
+- (void)endBatchPointUpdates;
+
 - (NSArray<OASWptPt *> *) getAllPoints;
 - (NSArray<OASWptPt *> *) getPoints;
 - (NSArray<NSArray<OASWptPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route;
@@ -87,9 +91,6 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (void) addPoint:(NSInteger)position point:(OASWptPt *)pt mode:(EOAAddPointMode)mode;
 
 - (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode;
-- (void) beginBatchPointUpdates;
-- (void) endBatchPointUpdates;
-- (NSArray<OARoadSegmentData *> *) orderedRoadSegmentData;
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
@@ -124,7 +125,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex;
 - (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints;
 
-- (void) scheduleRouteCalculateIfNotEmpty;
+- (void)scheduleRouteCalculateIfNotEmpty;
 
 - (void) setChangesSaved;
 - (BOOL) hasChanges;

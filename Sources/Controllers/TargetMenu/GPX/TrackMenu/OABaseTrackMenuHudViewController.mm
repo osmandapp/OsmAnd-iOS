@@ -243,18 +243,6 @@
     if (!_analysis)
         [self updateAnalysis];
 
-    if (!_isCurrentTrack
-        && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0
-        && _analysis && _analysis.locationStart)
-    {
-        auto locationStart = _analysis.locationStart;
-        OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon)];
-        NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
-        [[OASGpxDbHelper shared] updateDataItemParameterItem:_gpx.dataItem
-                                                   parameter:OASGpxParameter.nearestCityName
-                                                       value:nearestCityString];
-    }
-
     if (replaceGPX)
     {
         if (_isCurrentTrack)
@@ -273,6 +261,28 @@
             _gpx = [[OASTrackItem alloc] initWithFile:gpx.file];
             _gpx.dataItem = gpx;
         }
+    }
+
+    // Restoring Track Menu after saving a track in Plan Route may trigger a slow first-time city search, so keep it off the main thread.
+    if (!_isCurrentTrack && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0 && _analysis && _analysis.locationStart)
+    {
+        auto locationStart = _analysis.locationStart;
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(locationStart.lat, locationStart.lon);
+        OASGpxDataItem *dataItem = _gpx.dataItem;
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+            OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:coordinate];
+            NSString *nearestCityString = nearestCity ? nearestCity.nameLocalized : @"";
+            [[OASGpxDbHelper shared] updateDataItemParameterItem:dataItem parameter:OASGpxParameter.nearestCityName value:nearestCityString];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                strongSelf.gpx.nearestCity = nearestCityString;
+                [strongSelf setupHeaderView];
+            });
+        });
     }
 }
 

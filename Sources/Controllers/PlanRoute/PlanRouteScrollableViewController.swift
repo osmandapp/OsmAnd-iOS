@@ -205,6 +205,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.height(for: self.sheetState))
         }, completion: { _ in dismiss() })
     }
+    
+    override func isLeftSidePresentation() -> Bool {
+        false
+    }
 
     func reloadData() {
         let routeInfo = dataProvider.routeInfo

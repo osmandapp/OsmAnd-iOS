@@ -209,6 +209,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override func isLeftSidePresentation() -> Bool {
         false
     }
+    
+    override var currentState: EOADraggableMenuState {
+        sheetState
+    }
 
     func reloadData() {
         let routeInfo = dataProvider.routeInfo

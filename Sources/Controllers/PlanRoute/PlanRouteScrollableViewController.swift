@@ -573,7 +573,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentApproximationWarningIfNeeded() -> Bool {
         guard dataProvider.shouldShowApproximationWarning,
               let warningViewController = dataProvider.approximationWarningViewController else { return false }
-        showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: false)
+        showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: true)
+        warningViewController.navigationController?.setNavigationBarHidden(true, animated: false)
+        warningViewController.navigationController?.isModalInPresentation = true
         return true
     }
 

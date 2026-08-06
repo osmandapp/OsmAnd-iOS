@@ -10,7 +10,6 @@
 #import "OAGpxApproximationViewController.h"
 #import "OAApplicationMode.h"
 #import "OAMeasurementEditingContext.h"
-#import "OAGpxApproximationViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -58,9 +57,9 @@
         editingCtx.appMode = nil;
     OAGpxApproximationViewController *approximationVC = [[OAGpxApproximationViewController alloc] initWithMode:editingCtx.appMode routePoints:[editingCtx getPointsSegments:YES route:NO]];
     approximationVC.delegate = self.delegate;
+    [self.navigationController pushViewController:approximationVC animated:YES];
     if (self.delegate)
         [self.delegate onContinueSnapApproximation:approximationVC];
-    [self.navigationController pushViewController:approximationVC animated:YES];
 }
 
 - (void) onBottomSheetDismissed

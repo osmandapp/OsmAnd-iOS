@@ -39,6 +39,8 @@
 
 #include <routeSegmentResult.h>
 
+static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
+
 @class OAMeasurementToolLayer;
 
 @interface OAMeasurementEditingContext (PlanRouteSettings)
@@ -65,6 +67,7 @@
     OASGpxFile *_terrainElevationGpxFile;
     NSUInteger _pointsVersion;
     NSUInteger _terrainElevationVersion;
+    NSTimeInterval _lastRouteInfoRefreshTime;
     OAPlanningPopupBaseViewController *_approximationPopupController;
 }
 
@@ -181,7 +184,7 @@
         return 0;
 
     NSTimeInterval duration = 0;
-    for (OARoadSegmentData *data in ctx.roadSegmentData.allValues)
+    for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
         for (const auto &segment : data.segments)
             duration += segment->segmentTime;
@@ -1870,11 +1873,11 @@
 - (NSArray<OARouteStatistics *> *)calculateRouteStatistics
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || ctx.roadSegmentData.count == 0)
+    if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)
         return @[];
 
     std::vector<std::shared_ptr<RouteSegmentResult>> combined;
-    for (OARoadSegmentData *data in ctx.roadSegmentData.allValues)
+    for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
         const auto &segs = data.segments;
         combined.insert(combined.end(), segs.begin(), segs.end());
@@ -2150,6 +2153,7 @@
 - (void)showProgressBar
 {
     _isCalculatingRoute = YES;
+    _lastRouteInfoRefreshTime = 0;
     if (self.onChange)
         self.onChange();
 }
@@ -2157,14 +2161,19 @@
 - (void)hideProgressBar
 {
     _isCalculatingRoute = NO;
+    _lastRouteInfoRefreshTime = 0;
     if (self.onChange)
         self.onChange();
 }
 
 - (void)refresh
 {
-    if (self.onChange)
-        self.onChange();
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    if (currentTime - _lastRouteInfoRefreshTime < kRouteInfoRefreshInterval)
+        return;
+    _lastRouteInfoRefreshTime = currentTime;
+    if (self.onRouteInfoChanged)
+        self.onRouteInfoChanged();
 }
 
 #pragma mark - OAPlanningPopupDelegate
@@ -2201,8 +2210,6 @@
     [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
-    if (self.onRouteInfoChanged)
-        self.onRouteInfoChanged();
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations

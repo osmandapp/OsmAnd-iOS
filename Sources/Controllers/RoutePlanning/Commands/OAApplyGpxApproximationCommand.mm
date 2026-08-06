@@ -23,7 +23,6 @@
 {
     NSArray<OASWptPt *> *_points;
     NSDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
-    NSMutableArray<NSArray<OASWptPt *> *> *_segmentPointsList;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OASWptPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode
@@ -31,7 +30,6 @@
     self = [super initWithLayer:measurementLayer];
     if (self) {
         _approximations = approximations;
-        _segmentPointsList = [NSMutableArray arrayWithArray:segmentPointsList];
         _originalSegmentPointsList = [NSArray arrayWithArray:segmentPointsList];
         _mode = appMode;
     }
@@ -47,7 +45,7 @@
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     _points = [NSArray arrayWithArray:ctx.getPoints];
-    _roadSegmentData = ctx.roadSegmentData;
+    _roadSegmentData = [ctx.roadSegmentData copy];
     [self applyAllApproximations];
     [self refreshMap];
     return true;
@@ -70,15 +68,11 @@
 - (void) undo
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    [ctx cancelSnapToRoad];
     [ctx resetAppMode];
-    [ctx clearSegments];
-    ctx.roadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_roadSegmentData];
-    [ctx addPoints:_points];
-    _segmentPointsList = [NSMutableArray arrayWithCapacity:_originalSegmentPointsList.count];
-    // Populate with empty data
-    NSArray<OASWptPt *> *emptyArr = [NSArray array];
-    for (NSInteger i = 0; i < _originalSegmentPointsList.count; i++)
-        [_segmentPointsList addObject:emptyArr];
+    [ctx beginBatchPointUpdates];
+    [self restoreOriginalState];
+    [ctx endBatchPointUpdates];
     [self refreshMap];
 }
 
@@ -89,24 +83,37 @@
     [self refreshMap];
 }
 
-- (void)applyAllApproximations
+- (void) restoreOriginalState
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    [ctx clearSegments];
+    ctx.roadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_roadSegmentData];
+    [ctx setPoints:_points];
+}
+
+- (void) applyAllApproximations
+{
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    [ctx cancelSnapToRoad];
+    [ctx beginBatchPointUpdates];
+    [self restoreOriginalState];
     ctx.appMode = _mode;
-    for (NSInteger i = 0; i < _approximations.count; i++)
+    NSInteger count = MIN(_approximations.count, _originalSegmentPointsList.count);
+    for (NSInteger i = 0; i < count; i++)
     {
         OAGpxRouteApproximation *approximation = _approximations[i];
-        NSArray<OASWptPt *> *segmentPoints = _segmentPointsList[i];
+        NSArray<OASWptPt *> *segmentPoints = _originalSegmentPointsList[i];
         NSArray<OASWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
         
-        if (newSegmentPoints != nil && newSegmentPoints.count > 0) {
+        if (newSegmentPoints != nil && newSegmentPoints.count > 0)
+        {
             int64_t initialTimestamp = segmentPoints.count == 0
             ? 0
             : [[segmentPoints firstObject] time];
             [[newSegmentPoints firstObject] setTime:initialTimestamp];
-            _segmentPointsList[i] = newSegmentPoints;
         }
     }
+    [ctx endBatchPointUpdates];
 }
 
 @end

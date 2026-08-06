@@ -43,6 +43,7 @@
     self = [super init];
     if (self)
     {
+        _snapToRoadAppMode = mode;
         NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
         for (NSArray<OASWptPt *> *points in routePoints)
             [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:points]];
@@ -61,16 +62,16 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self setHeaderViewVisibility:YES];
     
-    _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
-    _approximationHelper.delegate = self;
-    [_approximationHelper calculateGpxApproximationAsync];
-    
     _progressBarView = [[UIProgressView alloc] init];
     _progressBarView.hidden = YES;
     _progressBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _progressBarView.progressTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     _progressBarView.frame = CGRectMake(0., -3., self.view.frame.size.width, 3.);
     [self.buttonsView addSubview:_progressBarView];
+
+    _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
+    _approximationHelper.delegate = self;
+    [_approximationHelper calculateGpxApproximationAsync];
 }
 
 - (CGFloat)initialHeight
@@ -86,9 +87,13 @@
 
 - (void)onRightButtonPressed
 {
-    if (self.delegate)
-        [self.delegate onApplyGpxApproximation];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self setApplyButtonEnabled:NO];
+    __weak __typeof(self) weakSelf = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf.delegate)
+            [strongSelf.delegate onApplyGpxApproximation];
+    }];
 }
 
 - (void)onLeftButtonPressed
@@ -115,7 +120,8 @@
         @"title" : OALocalizedString(@"select_profile")
     }];
     NSArray<OAApplicationMode *> *profiles = [self getProfiles];
-    _snapToRoadAppMode = profiles.firstObject;
+    if (_snapToRoadAppMode == nil || ![profiles containsObject:_snapToRoadAppMode])
+        _snapToRoadAppMode = profiles.firstObject;
     for (OAApplicationMode *profile in profiles)
     {
         [profilesSectionArray addObject:@{

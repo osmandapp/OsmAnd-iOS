@@ -558,6 +558,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
+        guard !presentApproximationWarningIfNeeded() else { return }
         let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex)
         let nav = UINavigationController(rootViewController: settingsVC)
         nav.modalPresentationStyle = .pageSheet
@@ -567,6 +568,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         present(nav, animated: true)
+    }
+
+    private func presentApproximationWarningIfNeeded() -> Bool {
+        guard dataProvider.shouldShowApproximationWarning,
+              let warningViewController = dataProvider.approximationWarningViewController else { return false }
+        showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: false)
+        return true
     }
 
     private func findPointContext(index: Int, in segments: [PlanRouteSegment]) -> (PlanRouteSegment, PlanRouteProfileGroup, PlanRoutePoint)? {
@@ -882,13 +890,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc private func onRouteTypeButtonTapped() {
-        if dataProvider.shouldShowApproximationWarning,
-           let warningViewController = dataProvider.approximationWarningViewController {
-            showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: true)
-            warningViewController.navigationController?.setNavigationBarHidden(true, animated: false)
-            warningViewController.navigationController?.isModalInPresentation = true
-            return
-        }
+        guard !presentApproximationWarningIfNeeded() else { return }
         let segments = dataProvider.routeSegments
         let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
         if isComplex {

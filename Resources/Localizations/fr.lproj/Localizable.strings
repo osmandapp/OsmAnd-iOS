@@ -4296,3 +4296,7 @@
 "ais_ship_type_passenger" = "Passager";
 "astro_direction" = "Direction";
 "share_link" = "Partager le lien";
+"shared_string_copy_from" = "Copier depuis";
+"add_points" = "Ajouter des points";
+"add_points_description" = "Sélectionnez des lieux sur la carte ou copiez-les depuis vos Favoris pour les voir le long de votre itinéraire.";
+"shared_string_new_name" = "Nouveau nom";

@@ -611,6 +611,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      secondType: secondType,
                                      axisType: selectedXAxisType,
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
+        chart.dragYEnabled = false
 
         let recalcSeparator = UIView()
         recalcSeparator.backgroundColor = .customSeparator
@@ -807,6 +808,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                     statistics: stat,
                                     analysis: analysis,
                                     nightMode: OAAppSettings.sharedManager().nightMode)
+        barChart.dragYEnabled = false
         barChart.extraTopOffset = 0
         barChart.extraBottomOffset = 12
         barChart.minOffset = 0

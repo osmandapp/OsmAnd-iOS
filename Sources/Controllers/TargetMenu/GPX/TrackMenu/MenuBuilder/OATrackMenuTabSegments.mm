@@ -109,7 +109,7 @@
 
     BOOL useHours = (analysis.timeSpan / 3600000) > 0;
     [GpxUIHelper setupElevationChartWithChartView:cell.chartView showXInMarker:YES startTime:analysis.startTime useHours:useHours];
-
+    cell.chartView.dragYEnabled = NO;
     if (_trackChartHelper)
     {
         [_trackChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]

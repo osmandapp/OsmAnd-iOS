@@ -406,7 +406,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 - (BOOL)copyCoordinates:(BaseDetailsObject *)detailsObject binaryObject:(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)mapObject
 {
     const int pointsLength = mapObject->points31.size();
-    if ([detailsObject getPointsLength] < pointsLength)
+    if (pointsLength > 2)
     {
         [detailsObject clearGeometry];
         for (int i = 0; i < pointsLength; i++)
@@ -489,7 +489,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
         for (const auto& obj : loadedBinaryMapObjects)
         {
-            if (!obj)
+            if (!obj || obj->isDeleted())
                 continue;
 
             if (!matcher || matcher(obj))

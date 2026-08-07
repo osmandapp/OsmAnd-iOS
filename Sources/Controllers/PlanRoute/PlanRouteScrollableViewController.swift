@@ -243,7 +243,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     func reloadData() {
         let routeInfo = dataProvider.routeInfo
-        topPartView.configure(with: routeInfo)
+        topPartView.configure(with: routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
         updateTopToolbar()
         bottomToolbar.isUndoEnabled = dataProvider.canUndo
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
@@ -287,7 +287,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func reloadRouteInfo() {
         guard isViewLoaded else { return }
-        topPartView.configure(with: dataProvider.routeInfo)
+        topPartView.configure(with: dataProvider.routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
         updateTopToolbar()
     }
 

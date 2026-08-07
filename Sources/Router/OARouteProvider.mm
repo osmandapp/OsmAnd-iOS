@@ -1086,27 +1086,41 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         return nullptr;
     }
 
-    @synchronized (_nativeRoutingLock) {
-        const auto resultAcceptor =
-        [resultMatcher]
-        (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
-        {
-            if (approximation == nullptr)
-            {
-                [resultMatcher publish:nil];
-                return true;
+    BOOL didPublishResult = NO;
+    @try {
+        try {
+            @synchronized (_nativeRoutingLock) {
+                const auto resultAcceptor =
+                [resultMatcher, &didPublishResult]
+                (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
+                {
+                    didPublishResult = YES;
+                    if (approximation == nullptr)
+                    {
+                        [resultMatcher publish:nil];
+                        return true;
+                    }
+                    OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+                    [resultMatcher publish:approx];
+                    return true;
+                };
+                env.router->setUseGeometryBasedApproximation(true);
+                env.router->searchGpxRoute(gctx, points, resultAcceptor);
             }
-
-            OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
-            [resultMatcher publish:approx];
-            return true;
-        };
-
-        env.router->setUseGeometryBasedApproximation(true);
-        env.router->searchGpxRoute(gctx, points, resultAcceptor);
-
-        return gctx;
+        }
+        catch (const std::exception &)
+        {
+        }
+        catch (...)
+        {
+        }
     }
+    @catch (__unused NSException *exception)
+    {
+    }
+    if (!didPublishResult)
+        [resultMatcher publish:nil];
+    return gctx;
 }
 
 - (OARoutingEnvironment *) calculateRoutingEnvironment:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute skipComplex:(BOOL)skipComplex
@@ -1866,7 +1880,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         OAGpxApproximationParams *approximationParams = params.gpxRoute.approximationParams;
         if (approximationParams != nil && ![params.gpxRoute.gpxFile isAttachedToRoads])
         {
-            OAGpxApproximationHelper *approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:approximationParams.locationsHolders initialAppMode:[[OARoutingHelper sharedInstance] getAppMode] initialThreshold:[[OAAppSettings sharedManager].gpxApproximationDistance get:[[OARoutingHelper sharedInstance] getAppMode]]];
+            OAApplicationMode *appMode = [[OARoutingHelper sharedInstance] getAppMode];
+            [approximationParams setAppMode:appMode];
+            [approximationParams setDistanceThreshold:[[OAAppSettings sharedManager].gpxApproximationDistance get:appMode]];
+            OAGpxApproximationHelper *approximationHelper = [[OAGpxApproximationHelper alloc] initWithParams:approximationParams];
             OASGpxFile *gpx = [approximationHelper approximateGpxSync:params.gpxRoute.gpxFile params:approximationParams];
             if (![gpx error] && [gpx isAttachedToRoads])
                 params.gpxRoute = [[[OAGPXRouteParamsBuilder alloc] initWithFile:gpx params:params.gpxRoute] build:params.end];

@@ -32,9 +32,11 @@
 #import "OARoadSegmentData.h"
 #import "OAGpxApproximationHelper.h"
 #import "OAGpxApproximationParams.h"
+#import "OAGpxApproximationViewController.h"
 #import "OAApplyGpxApproximationCommand.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
+#import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
@@ -64,6 +66,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSUInteger _elevationCalculationRequestId;
     NSUInteger _elevationHelperRequestId;
     __weak OAMeasurementEditingContext *_elevationCalculationContext;
+    OAApplicationMode *_elevationCalculationMode;
     OASGpxFile *_terrainElevationGpxFile;
     NSUInteger _pointsVersion;
     NSUInteger _terrainElevationVersion;
@@ -1910,9 +1913,53 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _isCalculatingElevation;
 }
 
+- (BOOL)isTerrainElevationAvailable
+{
+    return [OAIAPHelper isOsmAndProAvailable];
+}
+
 - (BOOL)isCalculatingRoute
 {
     return _isCalculatingRoute;
+}
+
+- (UIViewController *)makeElevationApproximationViewController
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount == 0)
+        return nil;
+
+    OAApplicationMode *mode = ctx.appMode;
+    BOOL isUnsupportedMode = mode == nil
+        || mode == OAApplicationMode.DEFAULT
+        || [mode.getRoutingProfile isEqualToString:@"public_transport"];
+    if (!isUnsupportedMode)
+        return nil;
+
+    OAGpxApproximationViewController *viewController = [[OAGpxApproximationViewController alloc]
+                                                         initWithMode:nil
+                                                         routePoints:[ctx getPointsSegments:YES route:YES]
+                                                         shouldCalculateOnApply:YES];
+    viewController.delegate = self;
+    __weak __typeof(self) weakSelf = self;
+    viewController.onApplyConfiguration = ^(OAApplicationMode *appMode, float distanceThreshold) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf == nil)
+            return;
+
+        strongSelf->_approximationPopupController = nil;
+        OAMeasurementEditingContext *currentContext = [strongSelf editingContext];
+        if (currentContext == nil || currentContext.getPointsCount == 0)
+            return;
+
+        [strongSelf invalidateElevationCalculationShouldNotify:NO];
+        [strongSelf invalidateTerrainElevationGpx];
+        [strongSelf startNearbyRoadsApproximationForContext:currentContext
+                                                    appMode:appMode ?: OAApplicationMode.CAR
+                                          distanceThreshold:distanceThreshold];
+    };
+    _approximationPopupController = viewController;
+    return viewController;
 }
 
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads
@@ -1926,13 +1973,21 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
     if (useNearbyRoads)
     {
-        [self startNearbyRoadsApproximationForContext:ctx];
+        [self startNearbyRoadsApproximationForContext:ctx
+                                              appMode:ctx.appMode ?: OAApplicationMode.CAR
+                                    distanceThreshold:50];
         return;
     }
 
+    if (![self isTerrainElevationAvailable])
+        return;
+
     NSArray<OASWptPt *> *points = [ctx.getPoints copy];
     if (points.count == 0)
+    {
+        [self showElevationCalculationError];
         return;
+    }
 
     NSMutableArray<NSNumber *> *originalIndexMap = [NSMutableArray array];
     NSMutableArray<OASWptPt *> *densifiedPoints = [self densifiedPointsFromPoints:points originalIndexMap:originalIndexMap];
@@ -1940,19 +1995,25 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 }
 
 - (void)startNearbyRoadsApproximationForContext:(OAMeasurementEditingContext *)ctx
+                                        appMode:(OAApplicationMode *)appMode
+                              distanceThreshold:(float)distanceThreshold
 {
     NSArray<NSArray<OASWptPt *> *> *segments = [ctx getPointsSegments:YES route:YES];
     if (segments.count == 0)
+    {
+        [self showElevationCalculationError];
         return;
+    }
 
     OAGpxApproximationParams *params = [[OAGpxApproximationParams alloc] init];
-    params.appMode = ctx.appMode ?: [OAApplicationMode DEFAULT];
-    params.distanceThreshold = 50;
+    params.appMode = appMode;
+    params.distanceThreshold = distanceThreshold;
     [params setTrackPoints:segments];
-    _elevationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:params.locationsHolders initialAppMode:params.appMode initialThreshold:params.distanceThreshold];
+    _elevationHelper = [[OAGpxApproximationHelper alloc] initWithParams:params];
     _elevationHelper.delegate = self;
     _elevationHelperRequestId = _elevationCalculationRequestId;
     _elevationCalculationContext = ctx;
+    _elevationCalculationMode = appMode;
     _isCalculatingElevation = YES;
     if (self.onChange)
         self.onChange();
@@ -2014,7 +2075,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     if (mapViewController == nil)
+    {
+        [self showElevationCalculationError];
         return;
+    }
 
     NSUInteger requestId = _elevationCalculationRequestId;
     NSUInteger snapshotVersion = _pointsVersion;
@@ -2029,6 +2093,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
         [coordinates addObject:[NSValue value:&coord withObjCType:@encode(CLLocationCoordinate2D)]];
         [nonGapIndices addObject:@(i)];
+    }
+
+    if (coordinates.count == 0)
+    {
+        [self showElevationCalculationError];
+        return;
     }
 
     _isCalculatingElevation = YES;
@@ -2103,6 +2173,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         self->_terrainElevationGpxFile = [OARouteExporter exportTrackWithPoints:densifiedPoints];
         self->_terrainElevationVersion = self->_pointsVersion;
     }
+    else
+    {
+        [self showElevationCalculationError];
+    }
     
     self->_isCalculatingElevation = NO;
     if (self.onChange)
@@ -2113,9 +2187,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     _elevationCalculationRequestId++;
     _elevationHelper.delegate = nil;
-    [_elevationHelper cancelApproximation];
+    [_elevationHelper cancelApproximationIfPossible];
     _elevationHelper = nil;
     _elevationCalculationContext = nil;
+    _elevationCalculationMode = nil;
     _isCalculatingElevation = NO;
     if (shouldNotify && self.onChange)
         self.onChange();
@@ -2124,6 +2199,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)cancelElevationCalculation
 {
     [self invalidateElevationCalculationShouldNotify:YES];
+}
+
+- (void)showElevationCalculationError
+{
+    [OAUtilities showToast:OALocalizedString(@"empty_route_calculated")
+                   details:nil
+                  duration:4
+                    inView:OARootViewController.instance.view];
 }
 
 // MARK: - Chart highlight on map
@@ -2252,12 +2335,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil || ctx != [self editingContext])
     {
         _elevationHelper = nil;
+        _elevationCalculationContext = nil;
+        _elevationCalculationMode = nil;
+        _isCalculatingElevation = NO;
+        if (self.onChange)
+            self.onChange();
         return;
     }
 
     if (approximations.count > 0 && points.count == approximations.count)
     {
-        OAApplicationMode *appMode = ctx.appMode ?: [OAApplicationMode DEFAULT];
+        OAApplicationMode *appMode = _elevationCalculationMode ?: OAApplicationMode.CAR;
         OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc]
                                                    initWithLayer:[self layer]
                                                    approximations:approximations
@@ -2268,9 +2356,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (!wasApproximationMode || ![ctx.commandManager update:command])
             [ctx.commandManager execute:command];
     }
+    else
+    {
+        [self showElevationCalculationError];
+    }
     _elevationHelper = nil;
     _isCalculatingElevation = NO;
     _elevationCalculationContext = nil;
+    _elevationCalculationMode = nil;
     if (self.onChange)
         self.onChange();
 }

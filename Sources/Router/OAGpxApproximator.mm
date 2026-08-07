@@ -30,85 +30,25 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 
 @interface OAGpxApproximator ()
 
-@property (nonatomic) NSThread *approximationTask;
+@property (atomic) NSOperation *approximationTask;
+
+- (void)calculateGpxApproximationSync:(SHARED_PTR<GpxRouteApproximation>)gctx
+                        resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 @end
 
-@interface OAApproximationTask : NSThread
-
-@property (nonatomic) NSThread *previousTask;
-
-- (instancetype)initWithApproximator:(OAGpxApproximator *)approximator
-								 env:(OARoutingEnvironment *)env
-								gctx:(SHARED_PTR<GpxRouteApproximation> &)gctx
-							  points:(const std::vector<SHARED_PTR<GpxPoint>> &)points
-					   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
-
-@end
-
-@implementation OAApproximationTask
+static NSOperationQueue *OAGetGpxApproximationQueue(void)
 {
-	__weak OAGpxApproximator *_approximator;
-	OARoutingEnvironment *_env;
-	SHARED_PTR<GpxRouteApproximation> _gctx;
-	std::vector<SHARED_PTR<GpxPoint>> _points;
-	OAResultMatcher<OAGpxRouteApproximation *> *_resultMatcher;
+    static NSOperationQueue *queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = [[NSOperationQueue alloc] init];
+        queue.maxConcurrentOperationCount = 1;
+        queue.qualityOfService = NSQualityOfServiceUserInitiated;
+        queue.name = @"net.osmand.gpx-approximation";
+    });
+    return queue;
 }
-
-- (instancetype)initWithApproximator:(OAGpxApproximator *)approximator
-								 env:(OARoutingEnvironment *)env
-								gctx:(SHARED_PTR<GpxRouteApproximation> &)gctx
-							  points:(const std::vector<SHARED_PTR<GpxPoint>> &)points
-					   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
-{
-	self = [super init];
-	if (self)
-	{
-		self.qualityOfService = NSQualityOfServiceUtility;
-		_approximator = approximator;
-		_env = env;
-		_gctx = gctx;
-		_points = points;
-		_resultMatcher = resultMatcher;
-	}
-	return self;
-}
-
-- (void) main
-{
-	@synchronized (_approximator)
-	{
-		_approximator.approximationTask = self;
-	}
-	
-	if (self.previousTask)
-	{
-		while (self.previousTask.executing)
-		{
-			[NSThread sleepForTimeInterval:.05];
-		}
-	}
-	@synchronized (_approximator)
-	{
-		_approximator.approximationTask = self;
-	}
-	if (!OAIsValidRoutingEnvironment(_env) || !OAHasValidProgress(_gctx) || _points.empty())
-	{
-		[_resultMatcher publish:nil];
-		@synchronized (_approximator)
-		{
-			_approximator.approximationTask = nil;
-		}
-		return;
-	}
-	[OARoutingHelper.sharedInstance calculateGpxApproximation:_env gctx:_gctx points:_points resultMatcher:_resultMatcher];
-	@synchronized (_approximator)
-	{
-		_approximator.approximationTask = nil;
-	}
-}
-
-@end
 
 @implementation OAGpxApproximator
 {
@@ -119,6 +59,7 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 	vector<SHARED_PTR<GpxPoint>> _points;
 	CLLocation *_start;
 	CLLocation *_end;
+	NSUInteger _approximationTaskNumber;
 	
 }
 
@@ -210,12 +151,15 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 
 - (void) cancelApproximation
 {
+	[self.approximationTask cancel];
+	self.approximationTask = nil;
 	if (OAHasValidProgress(_gctx))
 		_gctx->ctx->progress->cancelled = true;
 }
 
-- (void) calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+- (void) calculateGpxApproximationAsync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
+	[self.approximationTask cancel];
 	if (OAHasValidProgress(_gctx))
 		_gctx->ctx->progress->cancelled = true;
 	auto gctx = [self getNewGpxApproximationContext];
@@ -226,20 +170,37 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 		return;
 	}
 
-	std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
-	if (points.empty())
-	{
-		_gctx = nullptr;
-		[resultMatcher publish:nil];
-		return;
-	}
-
 	_gctx = gctx;
-	[self startProgress];
-	[self updateProgress:gctx];
-	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self env:_env gctx:_gctx points:points resultMatcher:resultMatcher];
-	task.previousTask = _approximationTask;
-	[task start];
+	[self notifyOnStart];
+	[self notifyUpdateProgress:gctx];
+    NSUInteger taskNumber;
+    @synchronized (self)
+    {
+        taskNumber = ++_approximationTaskNumber;
+    }
+    __weak __typeof(self) weakSelf = self;
+    __block __weak NSBlockOperation *weakTask = nil;
+    NSBlockOperation *task = [NSBlockOperation blockOperationWithBlock:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        NSBlockOperation *operation = weakTask;
+        if (strongSelf == nil || operation.isCancelled)
+        {
+            [resultMatcher publish:nil];
+            return;
+        }
+        [strongSelf calculateGpxApproximationSync:gctx resultMatcher:resultMatcher];
+        @synchronized (strongSelf)
+        {
+            if (strongSelf->_approximationTaskNumber == taskNumber)
+                strongSelf.approximationTask = nil;
+        }
+    }];
+    weakTask = task;
+    @synchronized (self)
+    {
+        self.approximationTask = task;
+    }
+    [OAGetGpxApproximationQueue() addOperation:task];
 }
 
 - (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
@@ -251,36 +212,46 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
             [resultMatcher publish:nil];
             return;
         }
-
-        std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
-        if (points.empty())
-        {
-            [resultMatcher publish:nil];
-            return;
-        }
-
-        [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
-    } @catch (NSException *exception) {
+        _gctx = gctx;
+        [self calculateGpxApproximationSync:gctx resultMatcher:resultMatcher];
+    } @catch (__unused NSException *exception) {
         [resultMatcher publish:nil];
-        NSLog(@"Error: %@", exception.reason);
     }
 }
 
-- (void) startProgress
+- (void)calculateGpxApproximationSync:(SHARED_PTR<GpxRouteApproximation>)gctx
+                        resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    _gctx = gctx;
+    if (!OAIsValidRoutingEnvironment(_env) || !OAHasValidProgress(gctx) || gctx->ctx->progress->isCancelled())
+    {
+        [resultMatcher publish:nil];
+        return;
+    }
+    std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+    if (gctx->ctx->progress->isCancelled() || points.empty())
+    {
+        [resultMatcher publish:nil];
+        return;
+    }
+    [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
+}
+
+- (void)notifyOnStart
 {
     // UI Thread +
     if ([self.progressDelegate respondsToSelector:@selector(start:)])
         [self.progressDelegate start:self];
 }
 
-- (void) finishProgress
+- (void)notifyOnFinish
 {
     // + UI Thread
     if ([self.progressDelegate respondsToSelector:@selector(finish:)])
         [self.progressDelegate finish:self];
 }
 
-- (void) updateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
+- (void)notifyUpdateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
 {
 	if (!OAHasValidProgress(gctx))
 		return;
@@ -289,14 +260,17 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 	{
 		double delayInSeconds = 0.3;
 		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+			dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 			if (!OAHasValidProgress(gctx))
 				return;
 
             // + UI Thread
 			const auto calculationProgress = gctx->ctx->progress;
 			if (!_approximationTask && _gctx == gctx)
-				[self finishProgress];
+			{
+				[self notifyOnFinish];
+				return;
+			}
 			
 			if (_approximationTask != nil && calculationProgress != nullptr && !calculationProgress->isCancelled())
 			{
@@ -304,7 +278,7 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
                 if ([self.progressDelegate respondsToSelector:@selector(updateProgress:progress:)])
                     [self.progressDelegate updateProgress:self progress:(int)pr];
 				if (_gctx == gctx)
-					[self updateProgress:gctx];
+					[self notifyUpdateProgress:gctx];
 			}
 		});
 	}

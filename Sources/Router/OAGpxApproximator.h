@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithLocationsHolder:(OALocationsHolder *)locationsHolder;
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)mode pointApproximation:(double)pointApproximation locationsHolder:(OALocationsHolder *)locationsHolder;
 
-- (void) calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+- (void) calculateGpxApproximationAsync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 - (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 - (BOOL) isCancelled;
 - (void) cancelApproximation;

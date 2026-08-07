@@ -46,10 +46,12 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly) NSTimeInterval routeDuration;
 @property (nonatomic, readonly) double distanceToMapCenter;
 @property (nonatomic, readonly) double bearingToMapCenter;
+@property (nonatomic, readonly) BOOL isTerrainElevationAvailable;
 @property (nonatomic, readonly) BOOL isCalculatingElevation;
 @property (nonatomic, readonly) BOOL isCalculatingRoute;
 
 - (NSArray<OARouteStatistics *> *)calculateRouteStatistics;
+- (nullable UIViewController *)makeElevationApproximationViewController;
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads;
 - (void)cancelElevationCalculation;
 

@@ -973,12 +973,16 @@
     OACommonString *_property;
 }
 
-- (void)setRoutingParameter:(RoutingParameter)routingParameter
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
-    [super setRoutingParameter:routingParameter];
-    NSString *parameterId = @(routingParameter.id.c_str());
-    NSString *defaultValue = @(routingParameter.getDefaultString().c_str());
-    _property = [self.settings getCustomRoutingProperty:parameterId defaultValue:defaultValue];
+    self = [super initWithAppMode:appMode];
+    if (self)
+    {
+        NSString *id = @(self.routingParameter.id.c_str());
+        NSString *defaultValue = @(self.routingParameter.getDefaultString().c_str());
+        _property = [self.settings getCustomRoutingProperty:id defaultValue:defaultValue];
+    }
+    return self;
 }
 
 - (UIImage *)getIcon
@@ -1051,11 +1055,15 @@
     OACommonBoolean *_property;
 }
 
-- (void)setRoutingParameter:(RoutingParameter)routingParameter
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
-    [super setRoutingParameter:routingParameter];
-    NSString *parameterId = @(routingParameter.id.c_str());
-    _property = [self.settings getCustomRoutingBooleanProperty:parameterId defaultValue:routingParameter.defaultBoolean];
+    self = [super initWithAppMode:appMode];
+    if (self)
+    {
+        NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
+        _property = [self.settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:self.routingParameter.id.c_str()] defaultValue:self.routingParameter.defaultBoolean];
+    }
+    return self;
 }
 
 - (UIImage *)getIcon

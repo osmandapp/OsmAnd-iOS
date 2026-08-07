@@ -56,6 +56,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var pointEditingHeight: CGFloat?
     private weak var currentTabViewController: UIViewController?
 
+    private var suggestedFileName: String {
+        switch dataProvider.mode {
+        case .newRoute: OAUtilities.generateCurrentDateFilename()
+        case .editTrack(let fileName): fileName
+        }
+    }
+
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
         super.init(nibName: nil, bundle: nil)
@@ -732,7 +739,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let sections: [[PlanRouteMenuAction]] = [
             [.saveAs, .saveAsCopy, .appendToExistingTrack],
             [.changeSegmentOrder],
-            [.viewDirections, .reverseRoute],
+            [.reverseRoute],
             [.navigation],
             [.clearAllPoints]
         ]
@@ -819,8 +826,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             presentAppendToTrack()
         case .changeSegmentOrder:
             presentSegmentReorder()
-        case .viewDirections:
-            presentViewDirections()
         case .reverseRoute:
             dataProvider.reverseRoute()
         case .navigation:
@@ -846,12 +851,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentSaveDialog(duplicate: Bool) {
         isPendingSaveAsCopy = duplicate
         pendingSegmentPointIndexes = nil
-        let fileName: String
-        switch dataProvider.mode {
-        case .newRoute: fileName = localizedString("quick_action_new_route")
-        case .editTrack(let name): fileName = name
-        }
-        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
     }
@@ -859,12 +859,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentSegmentSaveDialog(pointIndexes: [Int]) {
         pendingSegmentPointIndexes = pointIndexes
         isPendingSaveAsCopy = false
-        let fileName: String
-        switch dataProvider.mode {
-        case .newRoute: fileName = localizedString("quick_action_new_route")
-        case .editTrack(let name): fileName = name
-        }
-        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
+        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
     }
@@ -873,11 +868,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         guard let vc = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
-    }
-
-    private func presentViewDirections() {
-        guard let gpx = dataProvider.routeGpxFile else { return }
-        OARootViewController.instance()?.mapPanel?.openTargetView(withRouteDetails: gpx, analysis: nil)
     }
 
     private func confirmClearAllPoints() {

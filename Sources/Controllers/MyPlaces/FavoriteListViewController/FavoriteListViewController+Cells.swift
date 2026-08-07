@@ -51,24 +51,16 @@ extension FavoriteListViewController {
         }
     }
 
-    var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
-        RowCellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
-            if let self, !self.currentSortMode.isDistanceOriented {
+    var favoriteCellRegistration: CellRegistration<FavoritePointRow> {
+        CellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
+            guard let self else { return }
+            if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
-            var content = cell.defaultContentConfiguration()
-            content.image = OAUtilities.resize(favorite.bridgeItem.icon(), newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
-            content.text = favorite.title
-            content.textProperties.numberOfLines = 2
-            content.textProperties.color = favorite.titleColor
-            content.textProperties.font = favorite.titleFont
-            content.secondaryAttributedText = self?.favoriteSecondaryAttributedText(for: favorite, includesGroupName: self?.isSearchResultsMode == true)
-            content.secondaryTextProperties.color = .textColorSecondary
-            content.secondaryTextProperties.numberOfLines = 1
-            cell.contentConfiguration = content
-            cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
+            cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
+            cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
-            self?.updateVisibleSelectionState(at: indexPath)
+            updateVisibleSelectionState(at: indexPath)
         }
     }
 
@@ -105,93 +97,30 @@ extension FavoriteListViewController {
     func updateVisibleFavoriteCellsDistanceAndDirection() {
         for indexPath in collectionView.indexPathsForVisibleItems {
             guard case .favorite(let favorite) = dataSource.itemIdentifier(for: indexPath),
-                  let cell = collectionView.cellForItem(at: indexPath) as? FavoriteListCell,
-                  var content = cell.contentConfiguration as? UIListContentConfiguration else {
+                  let cell = collectionView.cellForItem(at: indexPath) as? UICollectionViewListCell,
+                  var configuration = cell.contentConfiguration as? PointContentConfiguration else {
                 continue
             }
 
             favorite.bridgeItem.updateDistanceAndDirection()
-            content.secondaryAttributedText = favoriteSecondaryAttributedText(for: favorite, includesGroupName: isSearchResultsMode)
-            cell.contentConfiguration = content
+            configuration.secondaryContent = favoriteSecondaryContent(for: favorite)
+            cell.contentConfiguration = configuration
         }
     }
 
-    private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
-        let font = UIFont.scaledSystemFont(ofSize: 15)
-        let color: UIColor = currentSortMode.isMapCenterDistanceOriented ? .iconColorDirectionMapCenter : .iconColorDirectionActive
-        let directionAttributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: color
-        ]
-        let secondaryAttributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: UIColor.textColorSecondary
-        ]
+    private func favoriteContentConfiguration(for favorite: FavoritePointRow) -> PointContentConfiguration {
+        PointContentConfiguration(icon: favorite.bridgeItem.icon(), title: favorite.title, isVisible: favorite.bridgeItem.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
+    }
 
-        let result = NSMutableAttributedString()
+    private func favoriteSecondaryContent(for favorite: FavoritePointRow) -> PointSecondaryContent {
         let date = favorite.lastModified.map { DateFormatter.detailsDateFormatter.string(from: $0) }
-        let groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
-
-        if currentSortMode.isDateOriented {
-            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
-            appendFavoriteDistance(favorite,
-                                   to: result,
-                                   font: font,
-                                   directionAttributes: directionAttributes,
-                                   color: color,
-                                   separatorAttributes: secondaryAttributes)
-            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
-        } else {
-            appendFavoriteDistance(favorite,
-                                   to: result,
-                                   font: font,
-                                   directionAttributes: directionAttributes,
-                                   color: color,
-                                   separatorAttributes: secondaryAttributes)
-            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
-            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
-        }
-        if includesGroupName {
-            appendFavoriteSecondaryText(groupName, to: result, attributes: secondaryAttributes)
+        let formattedDistance = favorite.distance.flatMap { OAOsmAndFormatter.getFormattedDistance(Float($0)) }
+        let directionColor: UIColor = currentSortMode.isMapCenterDistanceOriented ? .iconColorDirectionMapCenter : .iconColorDirectionActive
+        var groupName: String?
+        if isSearchResultsMode {
+            groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
         }
 
-        return result
-    }
-
-    private func appendFavoriteSecondaryText(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard let text, !text.isEmpty else { return }
-        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: attributes)
-        result.append(NSAttributedString(string: text, attributes: attributes))
-    }
-
-    private func appendFavoriteDistance(_ favorite: FavoritePointRow,
-                                        to result: NSMutableAttributedString,
-                                        font: UIFont,
-                                        directionAttributes: [NSAttributedString.Key: Any],
-                                        color: UIColor,
-                                        separatorAttributes: [NSAttributedString.Key: Any]) {
-        guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
-        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
-        if let directionIcon = favoriteDirectionIcon(tintColor: color) {
-            let rotatedDirectionIcon = directionIcon.rotatedWithinBounds(by: favorite.bridgeItem.direction)
-            let attachment = NSTextAttachment()
-            attachment.image = rotatedDirectionIcon
-            attachment.bounds = CGRect(x: 0.0,
-                                       y: (font.capHeight - rotatedDirectionIcon.size.height) / 2.0,
-                                       width: rotatedDirectionIcon.size.width,
-                                       height: rotatedDirectionIcon.size.height)
-            result.append(NSAttributedString(attachment: attachment))
-        }
-        result.append(NSAttributedString(string: formattedDistance, attributes: directionAttributes))
-    }
-
-    private func appendFavoriteSecondarySeparatorIfNeeded(to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard result.length > 0 else { return }
-        result.append(NSAttributedString(string: " • ", attributes: attributes))
-    }
-
-    private func favoriteDirectionIcon(tintColor: UIColor) -> UIImage? {
-        let size = UIFontMetrics.default.scaledValue(for: 18.0)
-        return OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(tintColor)
+        return PointSecondaryContent(formattedDistance: formattedDistance, direction: favorite.bridgeItem.direction, directionColor: directionColor, address: favorite.bridgeItem.address, date: date, trailingText: groupName, isDateFirst: currentSortMode.isDateOriented)
     }
 }

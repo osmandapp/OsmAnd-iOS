@@ -1533,6 +1533,7 @@
 		C547116A2F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */; };
 		C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
+		C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54BBE6D3023553E00691F10 /* PointRowContentView.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C55357392F56D76F00F7154E /* DeepLinkAppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
@@ -5483,6 +5484,7 @@
 		C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButtonConfiguration+Extension.swift"; sourceTree = "<group>"; };
 		C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfigurationHelper.swift; sourceTree = "<group>"; };
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
+		C54BBE6D3023553E00691F10 /* PointRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRowContentView.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
 		C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkAppRouter.swift; sourceTree = "<group>"; };
@@ -12939,6 +12941,7 @@
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
+				C54BBE6D3023553E00691F10 /* PointRowContentView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -19372,6 +19375,7 @@
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				C56E3AF82B4DA0D60084080A /* MapSettingsGpxViewController.swift in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
+				C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,

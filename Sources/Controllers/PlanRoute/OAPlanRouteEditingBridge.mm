@@ -63,13 +63,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (BOOL)isEnabledForType:(EOAPlanRouteShowAlongType)type
 {
-    if (type == EOAPlanRouteShowAlongTypePoi)
+    switch (type)
+    {
+    case EOAPlanRouteShowAlongTypePoi:
         return [_settings.showNearbyPoi get:_applicationMode];
-    if (type == EOAPlanRouteShowAlongTypeFavorites)
+    case EOAPlanRouteShowAlongTypeFavorites:
         return [_settings.showNearbyFavorites get:_applicationMode];
-    if (type == EOAPlanRouteShowAlongTypeTrafficWarnings)
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
         return [_settings.showScreenAlerts get:_applicationMode] && [_settings.showTrafficWarnings get:_applicationMode];
-    return NO;
+    default:
+        return NO;
+    }
 }
 
 - (void)setEnabled:(BOOL)enabled forType:(EOAPlanRouteShowAlongType)type

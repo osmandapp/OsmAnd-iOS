@@ -227,9 +227,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             return
         }
         UIView.animate(withDuration: duration, animations: { [weak self] in
-            guard let self else { return }
-            let height = approximationHeight ?? self.height(for: sheetState)
-            sheetView.transform = CGAffineTransform(translationX: 0, y: height)
+            let height = self?.approximationHeight ?? self.map { $0.height(for: $0.sheetState) } ?? 0
+            self?.sheetView.transform = CGAffineTransform(translationX: 0, y: height)
         }, completion: { _ in dismiss() })
     }
     

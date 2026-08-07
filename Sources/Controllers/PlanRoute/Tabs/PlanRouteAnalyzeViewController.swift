@@ -502,19 +502,6 @@ private enum AnalyzeState: Equatable {
 // MARK: - Section indices
 
 private extension PlanRouteAnalyzeViewController {
-    static let accessibilityMeasurementFormatter: MeasurementFormatter = {
-        let formatter = MeasurementFormatter()
-        formatter.unitStyle = .long
-        formatter.unitOptions = .providedUnit
-        formatter.locale = .current
-        formatter.numberFormatter.maximumFractionDigits = 0
-        return formatter
-    }()
-    static let accessibilityListFormatter: ListFormatter = {
-        let formatter = ListFormatter()
-        formatter.locale = .current
-        return formatter
-    }()
     static let graphSection = 0
     static let statsSection = 1
     static let roadAttributesBase = 2
@@ -1093,7 +1080,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityAltitude(_ value: Double?) -> String {
-        let formatter = Self.accessibilityMeasurementFormatter
+        let formatter = Self.accessibilityIntegerMeasurementFormatter
         guard let value, value.isFinite else { return localizedString("shared_string_not_available") }
         let altitudeMetric = OAAppSettings.sharedManager().altitudeMetric.get()
         let unit: UnitLength = OAAltitudeMetricsConstant.shouldUseFeet(altitudeMetric) ? .feet : .meters
@@ -1112,48 +1099,72 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilitySpeed(_ value: Double?) -> String {
-        let formatter = Self.accessibilityMeasurementFormatter
         guard let value, value.isFinite, value > 0 else {
             return localizedString("shared_string_not_available")
         }
-        let speedSystem = OAAppSettings.sharedManager().speedSystem.get()
-        let measurement = Measurement(value: value, unit: UnitSpeed.metersPerSecond)
-        if speedSystem == EOASpeedConstant.KILOMETERS_PER_HOUR {
-            return formatter.string(from: measurement.converted(to: .kilometersPerHour))
-        } else if speedSystem == EOASpeedConstant.MILES_PER_HOUR {
-            return formatter.string(from: measurement.converted(to: .milesPerHour))
-        } else if speedSystem == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
-            return formatter.string(from: measurement.converted(to: .knots))
-        } else if speedSystem == EOASpeedConstant.MINUTES_PER_KILOMETER {
-            return accessibilityPace(value, distance: 1_000, unit: .kilometers)
-        } else if speedSystem == EOASpeedConstant.MINUTES_PER_MILE {
-            return accessibilityPace(value, distance: Double(METERS_IN_ONE_MILE), unit: .miles)
-        } else if speedSystem == EOASpeedConstant.FEET_PER_SECOND {
-            return accessibilityFeetPerSecond(value)
+        let valueUnitArray: NSMutableArray = []
+        OAOsmAndFormatter.getFormattedSpeed(Float(value), valueUnitArray: valueUnitArray)
+        guard let formattedValue = valueUnitArray.firstObject as? String, formattedValue != "-" else {
+            return localizedString("shared_string_not_available")
         }
-        return formatter.string(from: measurement)
+        let speedSystem = OAAppSettings.sharedManager().speedSystem.get()
+        if speedSystem == EOASpeedConstant.KILOMETERS_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.kilometersPerHour)
+        } else if speedSystem == EOASpeedConstant.MILES_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.milesPerHour)
+        } else if speedSystem == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.knots)
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_KILOMETER {
+            return accessibilityPace(formattedValue, unit: .kilometers)
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_MILE {
+            return accessibilityPace(formattedValue, unit: .miles)
+        } else if speedSystem == EOASpeedConstant.FEET_PER_SECOND {
+            return accessibilityFeetPerSecond(formattedValue)
+        }
+        return accessibilityMeasurement(formattedValue, unit: UnitSpeed.metersPerSecond)
     }
 
-    private func accessibilityPace(_ metersPerSecond: Double, distance: Double, unit: UnitLength) -> String {
-        let formatter = Self.accessibilityMeasurementFormatter
-        let duration = formatter.string(
-            from: Measurement(value: distance / metersPerSecond / 60, unit: UnitDuration.minutes)
-        )
-        let length = formatter.string(from: Measurement(value: 1, unit: unit))
+    private func accessibilityMeasurement<UnitType: Dimension>(_ value: String, unit: UnitType) -> String {
+        guard let number = Self.accessibilityNumberFormatter.number(from: value) else {
+            return localizedString("shared_string_not_available")
+        }
+        let measurement = Measurement<Unit>(value: number.doubleValue, unit: unit)
+        return Self.accessibilityDecimalMeasurementFormatter.string(from: measurement)
+    }
+
+    private func accessibilityPace(_ value: String, unit: UnitLength) -> String {
+        let formatter = Self.accessibilityIntegerMeasurementFormatter
+        let durationComponents = value.split(separator: ":")
+        let duration: String
+        if durationComponents.count == 2,
+           let minutes = Double(durationComponents[0]),
+           let seconds = Double(durationComponents[1]) {
+            let minutesMeasurement = Measurement<Unit>(value: minutes, unit: UnitDuration.minutes)
+            let secondsMeasurement = Measurement<Unit>(value: seconds, unit: UnitDuration.seconds)
+            let values = [
+                formatter.string(from: minutesMeasurement),
+                formatter.string(from: secondsMeasurement)
+            ]
+            duration = Self.accessibilityListFormatter.string(from: values)
+                ?? String(format: localizedString("ltr_or_rtl_combine_via_comma"), values[0], values[1])
+        } else {
+            duration = accessibilityMeasurement(value, unit: UnitDuration.minutes)
+        }
+        let lengthMeasurement = Measurement<Unit>(value: 1, unit: unit)
+        let length = formatter.string(from: lengthMeasurement)
         return String(format: localizedString("ltr_or_rtl_combine_via_per"), duration, length)
     }
 
-    private func accessibilityFeetPerSecond(_ metersPerSecond: Double) -> String {
-        let formatter = Self.accessibilityMeasurementFormatter
-        let length = formatter.string(
-            from: Measurement(value: metersPerSecond, unit: UnitLength.meters).converted(to: .feet)
-        )
-        let duration = formatter.string(from: Measurement(value: 1, unit: UnitDuration.seconds))
+    private func accessibilityFeetPerSecond(_ value: String) -> String {
+        let formatter = Self.accessibilityIntegerMeasurementFormatter
+        let length = accessibilityMeasurement(value, unit: UnitLength.feet)
+        let durationMeasurement = Measurement<Unit>(value: 1, unit: UnitDuration.seconds)
+        let duration = formatter.string(from: durationMeasurement)
         return String(format: localizedString("ltr_or_rtl_combine_via_per"), length, duration)
     }
 
     private func accessibilityDuration(_ interval: TimeInterval?) -> String {
-        let formatter = Self.accessibilityMeasurementFormatter
+        let formatter = Self.accessibilityIntegerMeasurementFormatter
         let listFormatter = Self.accessibilityListFormatter
         guard let interval, interval.isFinite, interval > 0 else {
             return localizedString("shared_string_not_available")
@@ -1391,9 +1402,10 @@ private extension PlanRouteAnalyzeViewController {
         guard let foregroundComponents = rgbaComponents(for: foreground),
               let backgroundComponents = rgbaComponents(for: background) else { return .greatestFiniteMagnitude }
         let alpha = foregroundComponents.alpha
-        let red = foregroundComponents.red * alpha + backgroundComponents.red * (1 - alpha)
-        let green = foregroundComponents.green * alpha + backgroundComponents.green * (1 - alpha)
-        let blue = foregroundComponents.blue * alpha + backgroundComponents.blue * (1 - alpha)
+        let inverseAlpha = 1 - alpha
+        let red = foregroundComponents.red * alpha + backgroundComponents.red * inverseAlpha
+        let green = foregroundComponents.green * alpha + backgroundComponents.green * inverseAlpha
+        let blue = foregroundComponents.blue * alpha + backgroundComponents.blue * inverseAlpha
         let foregroundLuminance = relativeLuminance(red: red, green: green, blue: blue)
         let backgroundLuminance = relativeLuminance(
             red: backgroundComponents.red,

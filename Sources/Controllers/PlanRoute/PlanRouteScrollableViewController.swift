@@ -225,6 +225,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override func isLeftSidePresentation() -> Bool {
         false
     }
+    
+    override var currentState: EOADraggableMenuState {
+        sheetState
+    }
 
     func reloadData() {
         let routeInfo = dataProvider.routeInfo
@@ -286,8 +290,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let heightConstraint = sheetView.heightAnchor.constraint(equalToConstant: height(for: sheetState))
         sheetHeightConstraint = heightConstraint
         NSLayoutConstraint.activate([
-            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sheetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            sheetView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             heightConstraint
         ])
@@ -401,8 +405,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.addSubview(topToolbar)
         NSLayoutConstraint.activate([
             topToolbar.topAnchor.constraint(equalTo: view.topAnchor),
-            topToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            topToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             topToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: PlanRouteTopToolbarView.contentHeight)
         ])
     }

@@ -54,6 +54,10 @@
     
     _titleView.text = _title;
     _distanceView.text = _distance;
+    self.isAccessibilityElement = YES;
+    self.accessibilityLabel = _title;
+    self.accessibilityValue = _distance;
+    self.accessibilityTraits = UIAccessibilityTraitStaticText;
 }
 
 @end

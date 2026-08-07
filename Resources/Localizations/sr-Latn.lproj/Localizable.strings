@@ -4537,3 +4537,8 @@
 "calculating_elevation_terrain_maps_description" = "Preuzimanje podataka o nadmorskoj visini sa mapa terena.";
 "recalculate_elevation" = "Ponovo izračunaj nadmorsku visinu";
 "average_speed" = "Pros. brzina";
+"ais_use_nmea_location" = "Koristi NMEA kao izvor lokacije";
+"ais_use_nmea_location_description" = "Koristi GPS pozicije iz RMC/GGA NMEA poruka kao Moju lokaciju.";
+"ais_apply_setting_to_profiles" = "Primeni podešavanje";
+"ais_apply_to_current_profile" = "Primeni na %@";
+"ais_apply_to_all_profiles" = "Primeni na sve profile";

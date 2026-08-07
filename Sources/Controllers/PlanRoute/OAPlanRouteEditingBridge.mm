@@ -35,6 +35,7 @@
 #import "OAApplyGpxApproximationCommand.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
+#import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
@@ -139,7 +140,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (UIViewController *)approximationWarningViewController
 {
-    if (![self shouldShowApproximationWarning])
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount == 0)
         return nil;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
@@ -1915,10 +1917,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _isCalculatingRoute;
 }
 
+- (BOOL)isTerrainElevationAvailable
+{
+    return [OAIAPHelper isOsmAndProAvailable];
+}
+
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
+        return;
+    if (!useNearbyRoads && ![self isTerrainElevationAvailable])
         return;
 
     [self invalidateElevationCalculationShouldNotify:NO];
@@ -2182,7 +2191,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
-    [controller dismissViewControllerAnimated:YES completion:nil];
+    if (controller.presentingViewController != nil)
+        [controller dismissViewControllerAnimated:YES completion:nil];
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
@@ -2210,6 +2222,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations

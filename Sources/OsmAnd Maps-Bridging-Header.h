@@ -195,6 +195,7 @@
 #import "OATrackSegmentsViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OAInfoBottomView.h"
+#import "OAPlanningPopupBaseViewController.h"
 #import "OAPlanRouteEditingBridge.h"
 #import "OABaseSettingsViewController.h"
 #import "OAAvoidPreferParametersViewController.h"

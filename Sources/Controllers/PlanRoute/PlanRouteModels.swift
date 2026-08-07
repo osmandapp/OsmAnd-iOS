@@ -278,6 +278,7 @@ protocol PlanRouteAnalyzeDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
     var isCalculatingElevation: Bool { get }
     var isCalculatingRoute: Bool { get }
+    var isTerrainElevationAvailable: Bool { get }
     var analysisData: PlanRouteAnalysisData? { get }
 
     func startElevationCalculation(useNearbyRoads: Bool)
@@ -342,6 +343,7 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var presenterViewController: UIViewController? { get set }
     var onDataChanged: (() -> Void)? { get set }
     var onRouteInfoChanged: (() -> Void)? { get set }
+    var onApproximationPopupDismissed: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }

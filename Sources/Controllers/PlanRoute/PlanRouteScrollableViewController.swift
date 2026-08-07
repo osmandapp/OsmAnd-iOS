@@ -54,6 +54,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
     private var pointEditingHeight: CGFloat?
+    private var approximationHeight: CGFloat?
+    private var approximationPreviousSheetState: EOADraggableMenuState?
+    private var approximationNavigationController: UINavigationController?
     private weak var currentTabViewController: UIViewController?
 
     init(dataProvider: PlanRouteDataProvider) {
@@ -133,6 +136,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         dataProvider.onPointEditModeRequested = { [weak self] mode in
             self?.showPointEditingView(mode: mode)
         }
+        dataProvider.onApproximationPopupDismissed = { [weak self] in
+            DispatchQueue.main.async { [weak self] in
+                self?.dismissApproximationPopup()
+            }
+        }
         selectTab(.default)
         reloadData()
     }
@@ -141,7 +149,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         super.viewWillAppear(animated)
         updateCrosshairImage()
         navigationController?.setNavigationBarHidden(true, animated: false)
-        let height = pointEditingHeight ?? height(for: sheetState)
+        let height = approximationHeight ?? pointEditingHeight ?? height(for: sheetState)
         sheetHeightConstraint?.constant = height
         tabContainerView.alpha = isContentVisible(in: sheetState) ? 1 : 0
         if view.window != nil {
@@ -162,24 +170,25 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate { _ in
-            let height = self.pointEditingHeight ?? self.height(for: self.sheetState)
-            self.sheetHeightConstraint?.constant = height
-            self.crosshairCenterYConstraint?.constant = self.crosshairCenterY(sheetHeight: height)
-            self.routeTypeButtonBottomConstraint?.constant = self.pointEditingHeight == nil
-                ? -self.routeTypeButtonBottomInset(for: self.sheetState)
+        coordinator.animate { [weak self] _ in
+            guard let self else { return }
+            let height = approximationHeight ?? pointEditingHeight ?? self.height(for: sheetState)
+            sheetHeightConstraint?.constant = height
+            crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)
+            routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
+                ? -routeTypeButtonBottomInset(for: sheetState)
                 : -(height + 12)
-            self.updateCrosshairMapCenter(sheetHeight: height)
-            self.refreshMapControls()
+            updateCrosshairMapCenter(sheetHeight: height)
+            refreshMapControls()
         }
     }
 
     override func getViewHeight() -> CGFloat {
-        pointEditingHeight ?? mapControlsReservedHeight(for: sheetState)
+        approximationHeight ?? pointEditingHeight ?? mapControlsReservedHeight(for: sheetState)
     }
 
     override func getViewHeight(_ state: EOADraggableMenuState) -> CGFloat {
-        pointEditingHeight ?? mapControlsReservedHeight(for: state)
+        approximationHeight ?? pointEditingHeight ?? mapControlsReservedHeight(for: state)
     }
 
     override func getNavbarHeight() -> CGFloat {
@@ -217,8 +226,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dismiss()
             return
         }
-        UIView.animate(withDuration: duration, animations: {
-            self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.height(for: self.sheetState))
+        UIView.animate(withDuration: duration, animations: { [weak self] in
+            guard let self else { return }
+            let height = approximationHeight ?? self.height(for: sheetState)
+            sheetView.transform = CGAffineTransform(translationX: 0, y: height)
         }, completion: { _ in dismiss() })
     }
     
@@ -579,12 +590,71 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func presentApproximationWarningIfNeeded() -> Bool {
-        guard dataProvider.shouldShowApproximationWarning,
+        presentApproximationWarning(force: false)
+    }
+
+    private func presentApproximationWarning(force: Bool) -> Bool {
+        if approximationNavigationController != nil { return true }
+        guard (force || dataProvider.shouldShowApproximationWarning),
               let warningViewController = dataProvider.approximationWarningViewController else { return false }
-        showMediumSheetViewController(viewController: warningViewController, isLargeAvailable: true)
-        warningViewController.navigationController?.setNavigationBarHidden(true, animated: false)
-        warningViewController.navigationController?.isModalInPresentation = true
+        let navigationController = UINavigationController(rootViewController: warningViewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.delegate = self
+        navigationController.view.frame = sheetView.bounds
+        navigationController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        approximationPreviousSheetState = sheetState
+        approximationNavigationController = navigationController
+        addChild(navigationController)
+        sheetView.addSubview(navigationController.view)
+        navigationController.didMove(toParent: self)
+        sheetView.bringSubviewToFront(grabberView)
+        routeTypeButton.isHidden = true
+        crosshairView.isHidden = true
+        updateApproximationPopupHeight(warningViewController, animated: true)
         return true
+    }
+
+    private func dismissApproximationPopup() {
+        guard let navigationController = approximationNavigationController else { return }
+        navigationController.willMove(toParent: nil)
+        navigationController.view.removeFromSuperview()
+        navigationController.removeFromParent()
+        approximationNavigationController = nil
+        approximationHeight = nil
+        sheetView.layer.cornerRadius = Self.sheetCornerRadius
+        grabberView.isHidden = false
+        routeTypeButton.isHidden = false
+        crosshairView.isHidden = false
+        let state = approximationPreviousSheetState ?? sheetState
+        approximationPreviousSheetState = nil
+        setState(state, animated: true)
+    }
+
+    private func updateApproximationPopupHeight(_ viewController: UIViewController, animated: Bool) {
+        guard let popupViewController = viewController as? OAPlanningPopupBaseViewController else { return }
+        sheetView.layoutIfNeeded()
+        popupViewController.loadViewIfNeeded()
+        popupViewController.view.layoutIfNeeded()
+        sheetView.layer.cornerRadius = popupViewController.view.layer.cornerRadius
+        let targetHeight = min(popupViewController.initialHeight(), height(for: .fullScreen))
+        approximationHeight = targetHeight
+        sheetHeightConstraint?.constant = targetHeight
+        updateCrosshairMapCenter(sheetHeight: targetHeight)
+        let updates: () -> Void = { [weak self] in
+            guard let self else { return }
+            view.layoutIfNeeded()
+            approximationNavigationController?.view.frame = sheetView.bounds
+            approximationNavigationController?.view.setNeedsLayout()
+            approximationNavigationController?.view.layoutIfNeeded()
+            popupViewController.view.setNeedsLayout()
+            popupViewController.view.layoutIfNeeded()
+            refreshMapControls()
+        }
+        if animated {
+            UIView.animate(withDuration: Self.sheetAnimationDuration, animations: updates)
+        } else {
+            updates()
+        }
     }
 
     private func findPointContext(index: Int, in segments: [PlanRouteSegment]) -> (PlanRouteSegment, PlanRouteProfileGroup, PlanRoutePoint)? {
@@ -690,7 +760,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .poi:
             return PlanRoutePoiViewController(dataSource: dataProvider)
         case .analyze:
-            return PlanRouteAnalyzeViewController(dataSource: dataProvider)
+            let analyzeViewController = PlanRouteAnalyzeViewController(dataSource: dataProvider)
+            analyzeViewController.onAttachToRoadsRequested = { [weak self] in
+                self?.presentApproximationWarning(force: true)
+            }
+            return analyzeViewController
         case .route:
             let routeVC = PlanRouteRouteViewController(dataSource: dataProvider)
             routeVC.onPointSelected = { [weak self] point, _, _ in
@@ -953,10 +1027,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 }
 
+extension PlanRouteScrollableViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        guard navigationController === approximationNavigationController else { return }
+        grabberView.isHidden = viewController !== navigationController.viewControllers.first
+        updateApproximationPopupHeight(viewController, animated: animated)
+    }
+}
+
 // MARK: - UIGestureRecognizerDelegate
 extension PlanRouteScrollableViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard pointEditingView == nil else { return false }
+        guard pointEditingView == nil, approximationNavigationController == nil else { return false }
         let location = gestureRecognizer.location(in: tabContainerView)
         return !tabContainerView.bounds.contains(location)
     }

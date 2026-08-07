@@ -466,7 +466,7 @@
     else if ([itemKey isEqualToString:@"tempUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[CoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
@@ -478,7 +478,7 @@
         settingsViewController.delegate = self;
         if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
-        else if ([itemKey isEqualToString:@"externalImputDevice"])
+        else if ([itemKey isEqualToString:@"externalImputDevice"] || [itemKey isEqualToString:@"coordsFormat"])
             [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];

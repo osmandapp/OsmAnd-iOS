@@ -2242,6 +2242,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementToolLayer *layer = [self layer];
     if (ctx == nil || layer == nil)
         return;
+    if (gpxApproximations.count == 0 || pointsList.count != gpxApproximations.count)
+        return;
     BOOL wasApproximationMode = ctx.approximationMode;
     ctx.approximationMode = YES;
     OAApplyGpxApproximationCommand *command = [[OAApplyGpxApproximationCommand alloc] initWithLayer:layer approximations:gpxApproximations segmentPointsList:pointsList appMode:mode];

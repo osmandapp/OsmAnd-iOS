@@ -23,6 +23,8 @@
 #define kApproximationMinDistance 0
 #define kApproximationMaxDistance 100
 
+static const float kProgressMaximumValue = 100.f;
+
 @interface OAGpxApproximationViewController () <UITableViewDelegate, UITableViewDataSource, OAGpxApproximationHelperDelegate>
 
 @end
@@ -36,6 +38,7 @@
     OAGpxApproximationHelper *_approximationHelper;
     NSArray<OALocationsHolder *> *_locationsHolders;
     UIProgressView *_progressBarView;
+    BOOL _hasAppliedApproximationPreview;
 }
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
@@ -98,9 +101,16 @@
 
 - (void)onLeftButtonPressed
 {
-    if (self.delegate)
-        [self.delegate onCancelSnapApproximation:YES];
     [self dismiss];
+}
+
+- (void)dismiss
+{
+    [_approximationHelper cancelApproximation];
+    if (self.delegate)
+        [self.delegate onCancelSnapApproximation:_hasAppliedApproximationPreview];
+    _hasAppliedApproximationPreview = NO;
+    [super dismiss];
 }
 
 - (void)initData
@@ -160,7 +170,8 @@
     {
         if (_progressBarView.hidden)
             _progressBarView.hidden = NO;
-        _progressBarView.progress = progress;
+        float normalizedProgress = MIN(MAX((float)progress / kProgressMaximumValue, 0.f), 1.f);
+        [_progressBarView setProgress:MAX(_progressBarView.progress, normalizedProgress) animated:YES];
     }
 }
 
@@ -174,9 +185,13 @@
     if (_progressBarView)
         _progressBarView.hidden = YES;
 
-    if (self.delegate)
+    BOOL hasValidApproximations = approximations.count > 0 && points.count == approximations.count;
+    if (hasValidApproximations && self.delegate)
+    {
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
-    [self setApplyButtonEnabled:approximations.count > 0];
+        _hasAppliedApproximationPreview = YES;
+    }
+    [self setApplyButtonEnabled:hasValidApproximations];
 }
 
 - (void) setApplyButtonEnabled:(BOOL)enabled

@@ -98,8 +98,10 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
 
     private func updateVisiblePoiCellsDistanceAndDirection() {
         tableView.indexPathsForVisibleRows?.forEach { indexPath in
-            guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath), var configuration = cell.contentConfiguration as? PointContentConfiguration else { return }
+            guard groups.indices.contains(indexPath.section) else { return }
             let group = groups[indexPath.section]
+            guard group.points.indices.contains(indexPath.row) else { return }
+            guard let cell = tableView.cellForRow(at: indexPath), var configuration = cell.contentConfiguration as? PointContentConfiguration else { return }
             configuration.secondaryContent = poiSecondaryContent(for: group.points[indexPath.row], sortMode: sortMode(for: group.name))
             cell.contentConfiguration = configuration
         }

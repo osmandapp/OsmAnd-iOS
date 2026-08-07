@@ -263,6 +263,11 @@
         }
     }
 
+    [self updateNearestCityIfNeeded];
+}
+
+- (void)updateNearestCityIfNeeded
+{
     // Restoring Track Menu after saving a track in Plan Route may trigger a slow first-time city search, so keep it off the main thread.
     if (!_isCurrentTrack && _gpx.dataItem && _gpx.dataItem.nearestCity.length == 0 && _analysis && _analysis.locationStart)
     {
@@ -276,7 +281,7 @@
             [[OASGpxDbHelper shared] updateDataItemParameterItem:dataItem parameter:OASGpxParameter.nearestCityName value:nearestCityString];
             dispatch_async(dispatch_get_main_queue(), ^{
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf)
+                if (!strongSelf || strongSelf.gpx.dataItem != dataItem)
                     return;
 
                 strongSelf.gpx.nearestCity = nearestCityString;

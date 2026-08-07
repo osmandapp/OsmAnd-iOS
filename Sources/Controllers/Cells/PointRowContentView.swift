@@ -26,6 +26,26 @@ struct PointSecondaryContent {
         self.trailingText = trailingText
         self.isDateFirst = isDateFirst
     }
+    
+    func attributedText() -> NSAttributedString? {
+        let font = UIFont.scaledSystemFont(ofSize: PointContentConfiguration.secondaryTextSize)
+        let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: directionColor ?? UIColor.textColorDirectionActive]
+        let directionIconColor = directionColor ?? UIColor.iconColorDirectionActive
+        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
+        let result = NSMutableAttributedString()
+        if isDateFirst {
+            append(date, to: result, attributes: secondaryAttributes)
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
+            append(address, to: result, attributes: secondaryAttributes)
+        } else {
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
+            append(address, to: result, attributes: secondaryAttributes)
+            append(date, to: result, attributes: secondaryAttributes)
+        }
+
+        append(trailingText, to: result, attributes: secondaryAttributes)
+        return result.length > 0 ? result : nil
+    }
 
     private func append(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
         guard let text, !text.isEmpty else { return }
@@ -56,26 +76,6 @@ struct PointSecondaryContent {
         attachment.image = rotatedImage
         attachment.bounds = CGRect(x: 0, y: (font.capHeight - rotatedImage.size.height) / 2, width: rotatedImage.size.width, height: rotatedImage.size.height)
         return NSAttributedString(attachment: attachment)
-    }
-
-    fileprivate func attributedText() -> NSAttributedString? {
-        let font = UIFont.scaledSystemFont(ofSize: PointContentConfiguration.secondaryTextSize)
-        let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: directionColor ?? UIColor.textColorDirectionActive]
-        let directionIconColor = directionColor ?? UIColor.iconColorDirectionActive
-        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
-        let result = NSMutableAttributedString()
-        if isDateFirst {
-            append(date, to: result, attributes: secondaryAttributes)
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
-            append(address, to: result, attributes: secondaryAttributes)
-        } else {
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
-            append(address, to: result, attributes: secondaryAttributes)
-            append(date, to: result, attributes: secondaryAttributes)
-        }
-
-        append(trailingText, to: result, attributes: secondaryAttributes)
-        return result.length > 0 ? result : nil
     }
 }
 
@@ -119,9 +119,9 @@ private final class PointRowContentView: UIView, UIContentView {
         get { appliedConfiguration }
         set {
             guard let configuration = newValue as? PointContentConfiguration else { return }
-            let hasSamePrimaryContent = appliedConfiguration.icon === configuration.icon && appliedConfiguration.title == configuration.title && appliedConfiguration.isVisible == configuration.isVisible
+            let shouldUpdateOnlySecondaryContent = hasSamePrimaryContent(as: configuration)
             appliedConfiguration = configuration
-            if hasSamePrimaryContent {
+            if shouldUpdateOnlySecondaryContent {
                 applySecondaryContent(configuration.secondaryContent)
             } else {
                 apply(configuration)
@@ -148,6 +148,12 @@ private final class PointRowContentView: UIView, UIContentView {
         super.traitCollectionDidChange(previousTraitCollection)
         guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
         apply(appliedConfiguration)
+    }
+
+    private func hasSamePrimaryContent(as configuration: PointContentConfiguration) -> Bool {
+        appliedConfiguration.icon === configuration.icon
+        && appliedConfiguration.title == configuration.title
+        && appliedConfiguration.isVisible == configuration.isVisible
     }
 
     private func setupView() {

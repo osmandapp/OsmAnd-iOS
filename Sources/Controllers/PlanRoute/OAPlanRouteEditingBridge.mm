@@ -44,10 +44,6 @@
 
 static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
-static const NSInteger kPlanRouteShowAlongPoi = 0;
-static const NSInteger kPlanRouteShowAlongFavorites = 1;
-static const NSInteger kPlanRouteShowAlongTrafficWarnings = 2;
-
 @implementation OAPlanRouteShowAlongSettingsBridge
 {
     OAApplicationMode *_applicationMode;
@@ -65,33 +61,33 @@ static const NSInteger kPlanRouteShowAlongTrafficWarnings = 2;
     return self;
 }
 
-- (BOOL)isEnabledForType:(NSInteger)type
+- (BOOL)isEnabledForType:(EOAPlanRouteShowAlongType)type
 {
-    if (type == kPlanRouteShowAlongPoi)
+    if (type == EOAPlanRouteShowAlongTypePoi)
         return [_settings.showNearbyPoi get:_applicationMode];
-    if (type == kPlanRouteShowAlongFavorites)
+    if (type == EOAPlanRouteShowAlongTypeFavorites)
         return [_settings.showNearbyFavorites get:_applicationMode];
-    if (type == kPlanRouteShowAlongTrafficWarnings)
+    if (type == EOAPlanRouteShowAlongTypeTrafficWarnings)
         return [_settings.showScreenAlerts get:_applicationMode] && [_settings.showTrafficWarnings get:_applicationMode];
     return NO;
 }
 
-- (void)setEnabled:(BOOL)enabled forType:(NSInteger)type
+- (void)setEnabled:(BOOL)enabled forType:(EOAPlanRouteShowAlongType)type
 {
     NSInteger waypointType = -1;
-    if (type == kPlanRouteShowAlongPoi)
+    if (type == EOAPlanRouteShowAlongTypePoi)
     {
         [_settings.showNearbyPoi set:enabled mode:_applicationMode];
         [_settings.announceNearbyPoi set:enabled mode:_applicationMode];
         waypointType = LPW_POI;
     }
-    else if (type == kPlanRouteShowAlongFavorites)
+    else if (type == EOAPlanRouteShowAlongTypeFavorites)
     {
         [_settings.showNearbyFavorites set:enabled mode:_applicationMode];
         [_settings.announceNearbyFavorites set:enabled mode:_applicationMode];
         waypointType = LPW_FAVORITES;
     }
-    else if (type == kPlanRouteShowAlongTrafficWarnings)
+    else if (type == EOAPlanRouteShowAlongTypeTrafficWarnings)
     {
         if (enabled)
             [_settings.showScreenAlerts set:YES mode:_applicationMode];

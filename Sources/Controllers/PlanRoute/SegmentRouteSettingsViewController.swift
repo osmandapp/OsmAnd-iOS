@@ -170,10 +170,10 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func makeSettingsVC() -> RouteSettingsViewController {
-        guard let appMode = settingsMode else {
+        guard let settingsMode else {
             return RouteSettingsViewController(appMode: OAApplicationMode.default())
         }
-        let vc = RouteSettingsViewController(appMode: appMode)
+        let vc = RouteSettingsViewController(appMode: settingsMode)
         vc.onAvoidRoadsTapped = { [weak self] in
             guard let self, let appMode = self.settingsMode,
                   let avoidVC = OAAvoidPreferParametersViewController(appMode: appMode, isAvoid: true) else { return }
@@ -188,7 +188,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navigationController?.pushViewController(navSettingsVC, animated: true)
         }
         vc.settingsChangedHandler = { [weak self] in
-            self?.dataSource?.refreshRoute(for: appMode)
+            self?.dataSource?.refreshRoute(for: settingsMode)
         }
         return vc
     }

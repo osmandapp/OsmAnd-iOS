@@ -7,7 +7,7 @@
 //
 
 #import "OARouteSettingsBaseViewController.h"
-#import "OARoutePreferencesParameters.h"
+#import "OARouteParametersInternal+cpp.h"
 #import "OARouteSettingsParameterController.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"

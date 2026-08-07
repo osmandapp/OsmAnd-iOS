@@ -9,6 +9,10 @@ import UIKit
 
 final class RouteSettingsViewController: UIViewController {
 
+    private enum ParameterSection: Int {
+        case route = 1
+    }
+
     private enum Row {
         case parameter(OALocalRoutingParameter)
         case hazmatUsa([AnyHashable: Any])
@@ -79,8 +83,9 @@ final class RouteSettingsViewController: UIViewController {
 
     private func buildSections() -> [SectionModel] {
         let provider = OARouteSettingsBaseViewController()
+        let routeSection = NSNumber(value: ParameterSection.route.rawValue)
         guard let routingData = provider.getRoutingParameters(appMode),
-              let routeParameters = routingData[1] as? [Any] else {
+              let routeParameters = routingData[routeSection] as? [Any] else {
             return [SectionModel(rows: [.navigationSettings])]
         }
         let rows: [Row] = routeParameters.compactMap { item in
@@ -117,7 +122,7 @@ final class RouteSettingsViewController: UIViewController {
         cell.configure(title: title,
                        value: parameterValue(parameter),
                        icon: icon,
-                       tintColor: profileColor)
+                       tintColor: parameter.getTintColor() ?? profileColor)
         return cell
     }
 
@@ -209,9 +214,6 @@ extension RouteSettingsViewController: OARoutePreferencesParametersDelegate {
         onNavigationSettingsTapped?()
     }
 
-    func openRouteLineAppearance() {
-    }
-
     func showParameterGroupScreen(_ group: OALocalRoutingParameterGroup) {
         let viewController = OARouteParameterValuesViewController(routingParameterGroup: group, appMode: appMode)
         viewController.delegate = self
@@ -224,20 +226,8 @@ extension RouteSettingsViewController: OARoutePreferencesParametersDelegate {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func selectVoiceGuidance(_ tableView: UITableView, indexPath: IndexPath) {
-    }
-
     func showAvoidRoadsScreen() {
         onAvoidRoadsTapped?()
-    }
-
-    func showTripSettingsScreen() {
-    }
-
-    func showAvoidTransportScreen() {
-    }
-
-    func openSimulateNavigationScreen() {
     }
 
     func openShowAlongScreen() {
@@ -268,6 +258,17 @@ private final class PlanRouteShowAlongSettingsViewController: UIViewController {
                 return localizedString("my_favorites")
             case .trafficWarnings:
                 return localizedString("show_traffic_warnings")
+            }
+        }
+
+        var type: EOAPlanRouteShowAlongType {
+            switch self {
+            case .poi:
+                return .poi
+            case .favorites:
+                return .favorites
+            case .trafficWarnings:
+                return .trafficWarnings
             }
         }
     }
@@ -339,7 +340,7 @@ extension PlanRouteShowAlongSettingsViewController: UITableViewDataSource {
               let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier) else {
             return UITableViewCell()
         }
-        let isOn = settingsBridge.isEnabled(forType: item.rawValue)
+        let isOn = settingsBridge.isEnabled(for: item.type)
         var content = cell.defaultContentConfiguration()
         content.text = item.title
         content.textProperties.font = .scaledSystemFont(ofSize: 17)
@@ -355,7 +356,7 @@ extension PlanRouteShowAlongSettingsViewController: UITableViewDataSource {
         toggle.accessibilityLabel = item.title
         toggle.addAction(UIAction { [weak self, weak toggle] _ in
             guard let toggle else { return }
-            self?.settingsBridge.setEnabled(toggle.isOn, forType: item.rawValue)
+            self?.settingsBridge.setEnabled(toggle.isOn, for: item.type)
         }, for: .valueChanged)
         cell.accessoryView = toggle
         return cell

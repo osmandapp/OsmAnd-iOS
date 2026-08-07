@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OARoutePreferencesParameters.h"
+#import "OARouteParametersInternal+cpp.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
@@ -25,10 +25,19 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+@interface OALocalRoutingParameter ()
+
+@property struct RoutingParameter routingParameter;
+
+@end
+
 @implementation OALocalRoutingParameter
 {
     OAApplicationMode *_am;
+    RoutingParameter _routingParameter;
 }
+
+@synthesize routingParameter = _routingParameter;
 
 - (instancetype)init
 {
@@ -534,7 +543,7 @@
 
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(selectVoiceGuidance:indexPath:)])
         [self.delegate selectVoiceGuidance:tableView indexPath:indexPath];
 }
 
@@ -713,7 +722,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(showAvoidTransportScreen)])
         [self.delegate showAvoidTransportScreen];
 }
 
@@ -769,7 +778,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(showTripSettingsScreen)])
         [self.delegate showTripSettingsScreen];
 }
 
@@ -836,7 +845,7 @@
 
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(openSimulateNavigationScreen)])
         [self.delegate openSimulateNavigationScreen];
 }
 
@@ -948,7 +957,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(openRouteLineAppearance)])
         [self.delegate openRouteLineAppearance];
 }
 

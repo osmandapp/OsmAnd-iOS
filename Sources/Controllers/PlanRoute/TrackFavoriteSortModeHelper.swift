@@ -34,6 +34,10 @@ import UIKit
         case .oldestDateFirst: .icCustomSortDateOldest
         }
     }
+
+    var isDateOriented: Bool {
+        self == .lastModified || self == .newestDateFirst || self == .oldestDateFirst
+    }
 }
 
 @objc final class TrackFavoriteSortModeHelper: NSObject {

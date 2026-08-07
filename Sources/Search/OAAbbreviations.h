@@ -6,14 +6,19 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/main/java/net/osmand/binary/Abbreviations.java
-//  git revision /54e26c5a6195beb371c210746c5d89674016b9f7
+//  git revision 383f15bc221f56ee5a60072f8226898221c20076
 
 #import <Foundation/Foundation.h>
 
 @interface OAAbbreviations : NSObject
 
++ (BOOL) likelyPartOfRef:(NSString *)word wordSplit:(NSSet<NSString *> *)wordSplit;
++ (BOOL) likelyPartOfBuilding:(NSString *)word wordSplit:(NSSet<NSString *> *)wordSplit;
++ (NSDictionary<NSString *, NSString *> *) getSearchAbbreviations;
++ (BOOL) isCommonSkipOtherCnt:(NSString *)lowerCase;
 + (NSString *) replace:(NSString *)word;
 + (NSString *) replaceAll:(NSString *)phrase;
-+ (NSDictionary *) getAbbreviations;
++ (NSDictionary<NSString *, NSString *> *) getAbbreviations;
++ (BOOL) isConjunction:(NSString *)lowerCase;
 
 @end

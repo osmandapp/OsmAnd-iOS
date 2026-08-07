@@ -313,6 +313,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     OAGpxData *gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
     ctx.gpxData = gpxData;
+    NSArray<OASWptPt *> *routePoints = gpxFile.getRoutePoints;
+    if (routePoints.count > 0)
+    {
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:routePoints.lastObject.getProfileType
+                                                                     def:nil];
+        if (appMode != nil)
+            ctx.appMode = appMode;
+    }
     ctx.progressDelegate = self;
     _initialPoiStateSnapshot = gpxFile != nil ? [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
     _editingPoiStateSnapshot = nil;

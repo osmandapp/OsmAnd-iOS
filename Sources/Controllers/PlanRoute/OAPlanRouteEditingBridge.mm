@@ -78,21 +78,20 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)setEnabled:(BOOL)enabled forType:(EOAPlanRouteShowAlongType)type
 {
-    NSInteger waypointType = -1;
-    if (type == EOAPlanRouteShowAlongTypePoi)
+    NSInteger waypointType;
+    switch (type)
     {
+    case EOAPlanRouteShowAlongTypePoi:
         [_settings.showNearbyPoi set:enabled mode:_applicationMode];
         [_settings.announceNearbyPoi set:enabled mode:_applicationMode];
         waypointType = LPW_POI;
-    }
-    else if (type == EOAPlanRouteShowAlongTypeFavorites)
-    {
+        break;
+    case EOAPlanRouteShowAlongTypeFavorites:
         [_settings.showNearbyFavorites set:enabled mode:_applicationMode];
         [_settings.announceNearbyFavorites set:enabled mode:_applicationMode];
         waypointType = LPW_FAVORITES;
-    }
-    else if (type == EOAPlanRouteShowAlongTypeTrafficWarnings)
-    {
+        break;
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
         if (enabled)
             [_settings.showScreenAlerts set:YES mode:_applicationMode];
         [_settings.showTrafficWarnings set:enabled mode:_applicationMode];
@@ -102,9 +101,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         [_settings.showTunnels set:enabled mode:_applicationMode];
         [_settings.speakTunnels set:enabled mode:_applicationMode];
         waypointType = LPW_ALARMS;
+        break;
+    default:
+        return;
     }
-    if (waypointType >= 0)
-        [OAWaypointHelper.sharedInstance recalculatePoints:(int)waypointType];
+    [OAWaypointHelper.sharedInstance recalculatePoints:(int)waypointType];
 }
 
 @end

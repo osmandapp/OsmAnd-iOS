@@ -14,7 +14,7 @@ final class GetElevationDataViewController: UIViewController {
 
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
-    private let separatorView = UIView()
+    private let separatorView = SeparatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +62,6 @@ final class GetElevationDataViewController: UIViewController {
             useNearbyRoads: true
         )
 
-        separatorView.backgroundColor = .customSeparator
         separatorView.translatesAutoresizingMaskIntoConstraints = false
 
         let terrainRow = makeOptionRow(
@@ -99,7 +98,6 @@ final class GetElevationDataViewController: UIViewController {
             separatorView.topAnchor.constraint(equalTo: nearbyRoadsRow.bottomAnchor),
             separatorView.leadingAnchor.constraint(equalTo: optionsCard.leadingAnchor, constant: 56),
             separatorView.trailingAnchor.constraint(equalTo: optionsCard.trailingAnchor, constant: -16),
-            separatorView.heightAnchor.constraint(equalToConstant: 0.5),
 
             terrainRow.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
             terrainRow.leadingAnchor.constraint(equalTo: optionsCard.leadingAnchor),

@@ -613,8 +613,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
         chart.dragYEnabled = false
 
-        let recalcSeparator = UIView()
-        recalcSeparator.backgroundColor = .customSeparator
+        let recalcSeparator = SeparatorView()
         recalcSeparator.translatesAutoresizingMaskIntoConstraints = false
 
         let recalcBtn = UIButton(type: .system)
@@ -641,7 +640,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcSeparator.topAnchor.constraint(equalTo: chart.bottomAnchor, constant: 10),
             recalcSeparator.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             recalcSeparator.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            recalcSeparator.heightAnchor.constraint(equalToConstant: 0.5),
 
             recalcBtn.topAnchor.constraint(equalTo: recalcSeparator.bottomAnchor),
             recalcBtn.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
@@ -704,8 +702,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let topRow = makeGridRow(items: Array(items[0...2]))
         topRow.translatesAutoresizingMaskIntoConstraints = false
 
-        let hDivider = UIView()
-        hDivider.backgroundColor = .customSeparator
+        let hDivider = SeparatorView()
         hDivider.translatesAutoresizingMaskIntoConstraints = false
 
         let bottomRow = makeGridRow(items: Array(items[3...5]))
@@ -721,7 +718,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             hDivider.topAnchor.constraint(equalTo: topRow.bottomAnchor),
             hDivider.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             hDivider.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            hDivider.heightAnchor.constraint(equalToConstant: 0.5),
 
             bottomRow.topAnchor.constraint(equalTo: hDivider.bottomAnchor),
             bottomRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
@@ -754,10 +750,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func makeVerticalDivider() -> UIView {
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false
-        wrapper.widthAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true
 
-        let line = UIView()
-        line.backgroundColor = .customSeparator
+        let line = VerticalSeparatorView()
         line.translatesAutoresizingMaskIntoConstraints = false
         wrapper.addSubview(line)
         NSLayoutConstraint.activate([
@@ -892,10 +886,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
             guard index < items.count - 1 else { continue }
             let separatorContainer = UIView()
-            separatorContainer.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
 
-            let separator = UIView()
-            separator.backgroundColor = .customSeparator
+            let separator = SeparatorView()
             separator.translatesAutoresizingMaskIntoConstraints = false
             separatorContainer.addSubview(separator)
             NSLayoutConstraint.activate([

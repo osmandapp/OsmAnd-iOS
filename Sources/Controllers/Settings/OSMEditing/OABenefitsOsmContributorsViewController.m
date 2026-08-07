@@ -212,11 +212,11 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [SeparatorAppearance color];
         }
         if (cell)
         {
-            cell.dividerHight = 1. / [UIScreen mainScreen].scale;
+            cell.dividerHight = [SeparatorAppearance thickness];
             cell.dividerInsets = UIEdgeInsetsMake(0., [item.allKeys containsObject:@"left_inset"]
                     ? [item[@"left_inset"] floatValue] : 0., 0., 0.);
         }
@@ -315,7 +315,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return 1. / [UIScreen mainScreen].scale;
+        return [SeparatorAppearance thickness];
     }
     else if (estimated)
     {

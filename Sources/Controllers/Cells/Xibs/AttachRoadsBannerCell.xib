@@ -29,12 +29,15 @@
                                 <color key="textColor" name="textColorPrimary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FnC-WM-WP2" userLabel="Separator View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FnC-WM-WP2" userLabel="Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                 <rect key="frame" x="20" y="84" width="345" height="1"/>
                                 <color key="backgroundColor" name="customSeparator"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="hd9-48-hhe"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="thicknessConstraint" destination="hd9-48-hhe" id="s01-TC-001"/>
+                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIu-LW-wzj">
                                 <rect key="frame" x="20" y="85" width="345" height="48"/>

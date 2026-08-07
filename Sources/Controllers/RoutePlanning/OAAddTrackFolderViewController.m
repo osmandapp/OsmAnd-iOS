@@ -40,7 +40,7 @@
     
     [self updateFileNameFromEditText:_newFolderName];
 
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     _isFirstLaunch = YES;
 }
 

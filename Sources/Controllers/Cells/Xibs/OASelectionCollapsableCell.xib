@@ -40,13 +40,16 @@
                             <constraint firstAttribute="height" constant="30" id="Gk3-ep-x5C"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RJs-NT-27z" userLabel="Divider View">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RJs-NT-27z" userLabel="Divider View" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                         <rect key="frame" x="351" y="12" width="1" height="30"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="ecO-0R-MxR"/>
                             <constraint firstAttribute="height" constant="30" id="yUf-g0-tCz"/>
                         </constraints>
+                        <connections>
+                            <outlet property="thicknessConstraint" destination="ecO-0R-MxR" id="s01-TC-001"/>
+                        </connections>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ktH-lW-QhX">
                         <rect key="frame" x="60" y="0.0" width="291" height="54"/>

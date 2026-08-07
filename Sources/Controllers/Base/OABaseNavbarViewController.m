@@ -77,6 +77,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = [SeparatorAppearance color];
     [self registerCells];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     NSString *tableFooterText = [self getTableFooterText];

@@ -176,8 +176,8 @@
         CGFloat textWidth = self.tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
         CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
         
-        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
-        topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+        CGFloat separatorThickness = [SeparatorAppearance thicknessForView:self.tableView];
+        UIView *topImageDivider = [[SeparatorView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, separatorThickness)];
         
         UIImageView *imageView = nil;
         UIView *imageBackgroundView = nil;
@@ -188,17 +188,16 @@
             imageView.image = image;
             imageView.contentMode = UIViewContentModeScaleAspectFit;
             
-            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., separatorThickness, self.tableView.frame.size.width, imageView.frame.size.height)];
             imageBackgroundView.backgroundColor = UIColor.whiteColor;
         }
         else
         {
             imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, 0)];
-            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, 0)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., separatorThickness, self.tableView.frame.size.width, 0)];
         }
         
-        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
-        bottomImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+        UIView *bottomImageDivider = [[SeparatorView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, separatorThickness)];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kPaddingOnSideOfContent + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

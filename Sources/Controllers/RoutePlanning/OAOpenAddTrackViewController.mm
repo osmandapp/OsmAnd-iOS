@@ -270,7 +270,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:UIEdgeInsetsZero];
     else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
@@ -313,7 +313,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -356,9 +355,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [SeparatorAppearance color];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = 0.5;
+            cell.dividerHight = [SeparatorAppearance thickness];
         }
         return cell;
     }

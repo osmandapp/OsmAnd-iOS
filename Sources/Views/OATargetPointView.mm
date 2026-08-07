@@ -230,7 +230,7 @@ static const NSInteger _buttonsCount = 4;
     self.buttonShadow.hidden = YES;
 
     _horizontalRouteLine = [CALayer layer];
-    _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -253,7 +253,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+        _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
         [self setupControlButton:self.controlButtonLeft];
         [self setupControlButton:self.controlButtonRight];
         [self setupControlButton:self.controlButtonDownload];
@@ -1440,7 +1440,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _horizontalRouteLine.hidden = NO;
-        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, [SeparatorAppearance thicknessForView:self]);
     }
     
     if (self.customController && [self.customController hasBottomToolbar])

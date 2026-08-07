@@ -17,6 +17,8 @@ final class SeparatorAppearance: NSObject {
         return .customSeparator
     }
 
+    private override init() {}
+
     static func thickness() -> CGFloat {
         thickness(forScreen: UIScreen.main)
     }
@@ -31,11 +33,15 @@ final class SeparatorAppearance: NSObject {
     static func thickness(forView view: UIView) -> CGFloat {
         thickness(forScreen: view.window?.screen ?? UIScreen.main)
     }
-
-    private override init() {}
 }
 
 class SeparatorView: UIView {
+    @IBOutlet private weak var thicknessConstraint: NSLayoutConstraint? {
+        didSet {
+            updateThicknessConstraint()
+        }
+    }
+
     override var intrinsicContentSize: CGSize {
         CGSize(width: UIView.noIntrinsicMetric, height: SeparatorAppearance.thickness(forView: self))
     }
@@ -52,6 +58,7 @@ class SeparatorView: UIView {
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
+        updateThicknessConstraint()
         invalidateIntrinsicContentSize()
     }
 
@@ -59,6 +66,7 @@ class SeparatorView: UIView {
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         configureAppearance()
+        updateThicknessConstraint()
         invalidateIntrinsicContentSize()
     }
 #endif
@@ -67,6 +75,10 @@ class SeparatorView: UIView {
         backgroundColor = SeparatorAppearance.color
         setContentHuggingPriority(.required, for: .vertical)
         setContentCompressionResistancePriority(.required, for: .vertical)
+    }
+
+    private func updateThicknessConstraint() {
+        thicknessConstraint?.constant = SeparatorAppearance.thickness(forView: self)
     }
 }
 

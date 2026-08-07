@@ -5013,7 +5013,6 @@
 "share_link" = "Share link";
 "get_elevation_data" = "Get elevation data";
 "get_elevation_data_description" = "Select a method to retrieve altitude data from offline maps or terrain maps.";
-"terrain_maps_osmand_pro_description" = "Available with OsmAnd Pro.";
 "message_graph_will_be_available_after_recalculation" = "Please wait.\nGraph will be available after route recalculation.";
 "plan_route_graph_available_after_recalculation" = "Graph will be available after route recalculation.";
 "use_nearby_roads" = "Use nearby roads";

@@ -12,11 +12,7 @@
 
 @interface OAGpxApproximationViewController : OAPlanningPopupBaseViewController
 
-@property (nonatomic, copy, nullable) void (^onApplyConfiguration)(OAApplicationMode *mode, float distanceThreshold);
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints;
-- (instancetype)initWithMode:(OAApplicationMode *)mode
-                 routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
-      shouldCalculateOnApply:(BOOL)shouldCalculateOnApply;
 
 @end

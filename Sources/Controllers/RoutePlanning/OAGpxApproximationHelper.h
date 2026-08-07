@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAApplicationMode, OAGpxApproximationParams, OAGpxApproximator, OAGpxRouteApproximation, OALocationsHolder, OASGpxFile, OASWptPt;
+@class OAApplicationMode, OAGpxApproximationParams, OAGpxRouteApproximation, OALocationsHolder, OASGpxFile, OASWptPt;
 
 @protocol OAGpxApproximationHelperDelegate <NSObject>
 
@@ -23,18 +23,12 @@
 
 @property (nonatomic, weak) id<OAGpxApproximationHelperDelegate> delegate;
 
-- (instancetype)initWithParams:(OAGpxApproximationParams *)params;
+- (instancetype)initWithLocations:(NSArray<OALocationsHolder *> *)locations initialAppMode:(OAApplicationMode *)appMode initialThreshold:(float)threshold;
 
 - (void)calculateGpxApproximationAsync;
-- (OAGpxApproximator *)createApproximator:(OALocationsHolder *)holder;
-- (void)setAppMode:(OAApplicationMode *)appMode recalculate:(BOOL)recalculate;
-- (void)setDistanceThreshold:(int)threshold recalculate:(BOOL)recalculate;
-- (OAApplicationMode *)getAppMode;
-- (NSString *)getModeKey;
-- (int)getDistanceThreshold;
-- (BOOL)isSameApproximator:(OAGpxApproximator *)approximator;
-- (BOOL)canApproximate;
-- (void)cancelApproximationIfPossible;
+- (void)cancelApproximation;
 - (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params;
+- (void)updateAppMode:(OAApplicationMode *)appMode;
+- (void)updateDistanceThreshold:(float)threshold;
 
 @end

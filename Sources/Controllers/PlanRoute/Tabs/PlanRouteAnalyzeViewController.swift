@@ -174,27 +174,12 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func showGetElevationSheet() {
         let presenter = parent ?? self
         let sheet = GetElevationDataViewController()
-        sheet.isTerrainMapsAvailable = dataSource?.isTerrainElevationAvailable ?? false
-        sheet.onRequestTerrainMapsAccess = {
-            guard let navigationController = OARootViewController.instance().navigationController else { return }
-            OAChoosePlanHelper.showChoosePlanScreen(
-                with: OAFeature.terrain(),
-                navController: navigationController
-            )
-        }
         sheet.onSelectMethod = { [weak self] useNearbyRoads in
             guard let self else { return }
             calculatingWithNearbyRoads = useNearbyRoads
             allowsTerrainFallbackSteepness = !useNearbyRoads
             if useNearbyRoads == false {
                 reloadData()
-            }
-            if useNearbyRoads, let viewController = dataSource?.makeElevationApproximationViewController() {
-                let presenter = parent ?? self
-                presenter.showMediumSheetViewController(viewController: viewController, isLargeAvailable: true)
-                viewController.navigationController?.setNavigationBarHidden(true, animated: false)
-                viewController.navigationController?.isModalInPresentation = true
-                return
             }
             dataSource?.startElevationCalculation(useNearbyRoads: useNearbyRoads)
         }
@@ -358,7 +343,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                               hasOverviewData: Bool,
                               roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
-        if isElevationCalculating { return .elevationCalculating }
+        if isElevationCalculating {
+            return !calculatingWithNearbyRoads && !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
+        }
         if hasOverviewData || !roadAttributeStatistics.isEmpty { return .hasData }
         return .noData
     }

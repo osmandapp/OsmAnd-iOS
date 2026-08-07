@@ -11,8 +11,6 @@ import UIKit
 final class GetElevationDataViewController: UIViewController {
 
     var onSelectMethod: ((Bool) -> Void)?
-    var onRequestTerrainMapsAccess: (() -> Void)?
-    var isTerrainMapsAvailable = true
 
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -68,13 +66,10 @@ final class GetElevationDataViewController: UIViewController {
         separatorView.translatesAutoresizingMaskIntoConstraints = false
 
         let terrainRow = makeOptionRow(
-            icon: isTerrainMapsAvailable ? .icCustomTerrain : .icCustomProLogoOutlined,
+            icon: .icCustomTerrain,
             title: localizedString("use_terrain_maps"),
-            subtitle: isTerrainMapsAvailable
-                ? localizedString("track_geometry_stays_unchanged")
-                : localizedString("terrain_maps_osmand_pro_description"),
-            useNearbyRoads: false,
-            isAvailable: isTerrainMapsAvailable
+            subtitle: localizedString("track_geometry_stays_unchanged"),
+            useNearbyRoads: false
         )
 
         [nearbyRoadsRow, separatorView, terrainRow].forEach {
@@ -113,22 +108,18 @@ final class GetElevationDataViewController: UIViewController {
         ])
     }
 
-    private func makeOptionRow(icon: UIImage?,
-                               title: String,
-                               subtitle: String,
-                               useNearbyRoads: Bool,
-                               isAvailable: Bool = true) -> UIView {
+    private func makeOptionRow(icon: UIImage?, title: String, subtitle: String, useNearbyRoads: Bool) -> UIView {
         let row = UIView()
 
         let iconView = UIImageView(image: icon)
-        iconView.tintColor = isAvailable ? .iconColorActive : .iconColorDefault
+        iconView.tintColor = .iconColorActive
         iconView.contentMode = .scaleAspectFit
         iconView.translatesAutoresizingMaskIntoConstraints = false
 
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = .preferredFont(forTextStyle: .body)
-        titleLabel.textColor = isAvailable ? .textColorPrimary : .textColorSecondary
+        titleLabel.textColor = .textColorPrimary
 
         let subtitleLabel = UILabel()
         subtitleLabel.text = subtitle
@@ -176,23 +167,14 @@ final class GetElevationDataViewController: UIViewController {
     }
 
     @objc private func onNearbyRoads() {
-        let onSelectMethod = onSelectMethod
-        dismiss(animated: true) {
-            onSelectMethod?(true)
+        dismiss(animated: true) { [weak self] in
+            self?.onSelectMethod?(true)
         }
     }
 
     @objc private func onTerrainMaps() {
-        if !isTerrainMapsAvailable {
-            let onRequestTerrainMapsAccess = onRequestTerrainMapsAccess
-            dismiss(animated: true) {
-                onRequestTerrainMapsAccess?()
-            }
-            return
-        }
-        let onSelectMethod = onSelectMethod
-        dismiss(animated: true) {
-            onSelectMethod?(false)
+        dismiss(animated: true) { [weak self] in
+            self?.onSelectMethod?(false)
         }
     }
 }

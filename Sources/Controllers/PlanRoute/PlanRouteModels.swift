@@ -276,12 +276,10 @@ protocol PlanRoutePoiDataSource: AnyObject {
 
 protocol PlanRouteAnalyzeDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
-    var isTerrainElevationAvailable: Bool { get }
     var isCalculatingElevation: Bool { get }
     var isCalculatingRoute: Bool { get }
     var analysisData: PlanRouteAnalysisData? { get }
 
-    func makeElevationApproximationViewController() -> UIViewController?
     func startElevationCalculation(useNearbyRoads: Bool)
     func cancelElevationCalculation()
     func hideChartHighlight()

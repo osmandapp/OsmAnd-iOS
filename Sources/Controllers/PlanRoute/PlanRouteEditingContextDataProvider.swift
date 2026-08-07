@@ -80,10 +80,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isCalculatingElevation
     }
 
-    var isTerrainElevationAvailable: Bool {
-        bridge.isTerrainElevationAvailable
-    }
-
     var isCalculatingRoute: Bool {
         bridge.isCalculatingRoute
     }
@@ -214,10 +210,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func startElevationCalculation(useNearbyRoads: Bool) {
         bridge.startElevationCalculation(withNearbyRoads: useNearbyRoads)
-    }
-
-    func makeElevationApproximationViewController() -> UIViewController? {
-        bridge.makeElevationApproximationViewController()
     }
 
     func cancelElevationCalculation() {

@@ -1067,7 +1067,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityAltitude(_ value: Double?) -> String {
-        let formatter = Self.accessibilityIntegerMeasurementFormatter
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
         guard let value, value.isFinite else { return localizedString("shared_string_not_available") }
         let altitudeMetric = OAAppSettings.sharedManager().altitudeMetric.get()
         let unit: UnitLength = OAAltitudeMetricsConstant.shouldUseFeet(altitudeMetric) ? .feet : .meters
@@ -1076,7 +1076,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityAltitudeRange(minimum: Double?, maximum: Double?) -> String {
-        let listFormatter = Self.accessibilityListFormatter
+        let listFormatter = ListFormatter.accessibilityFormatter
         guard let minimum, minimum.isFinite, let maximum, maximum.isFinite else {
             return localizedString("shared_string_not_available")
         }
@@ -1112,15 +1112,15 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityMeasurement<UnitType: Dimension>(_ value: String, unit: UnitType) -> String {
-        guard let number = Self.accessibilityNumberFormatter.number(from: value) else {
+        guard let number = NumberFormatter.localizedNumberFormatter.number(from: value) else {
             return localizedString("shared_string_not_available")
         }
         let measurement = Measurement<Unit>(value: number.doubleValue, unit: unit)
-        return Self.accessibilityDecimalMeasurementFormatter.string(from: measurement)
+        return MeasurementFormatter.accessibilityDecimalFormatter.string(from: measurement)
     }
 
     private func accessibilityPace(_ value: String, unit: UnitLength) -> String {
-        let formatter = Self.accessibilityIntegerMeasurementFormatter
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
         let durationComponents = value.split(separator: ":")
         let duration: String
         if durationComponents.count == 2,
@@ -1132,7 +1132,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                 formatter.string(from: minutesMeasurement),
                 formatter.string(from: secondsMeasurement)
             ]
-            duration = Self.accessibilityListFormatter.string(from: values)
+            duration = ListFormatter.accessibilityFormatter.string(from: values)
                 ?? String(format: localizedString("ltr_or_rtl_combine_via_comma"), values[0], values[1])
         } else {
             duration = accessibilityMeasurement(value, unit: UnitDuration.minutes)
@@ -1143,7 +1143,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityFeetPerSecond(_ value: String) -> String {
-        let formatter = Self.accessibilityIntegerMeasurementFormatter
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
         let length = accessibilityMeasurement(value, unit: UnitLength.feet)
         let durationMeasurement = Measurement<Unit>(value: 1, unit: UnitDuration.seconds)
         let duration = formatter.string(from: durationMeasurement)
@@ -1151,8 +1151,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     }
 
     private func accessibilityDuration(_ interval: TimeInterval?) -> String {
-        let formatter = Self.accessibilityIntegerMeasurementFormatter
-        let listFormatter = Self.accessibilityListFormatter
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
+        let listFormatter = ListFormatter.accessibilityFormatter
         guard let interval, interval.isFinite, interval > 0 else {
             return localizedString("shared_string_not_available")
         }

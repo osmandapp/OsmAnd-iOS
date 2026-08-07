@@ -20,7 +20,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let sheetFlingVelocityThresholdPointsPerSecond: CGFloat = 800
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        OAAppSettings.sharedManager().nightMode ? .lightContent : .default
+        .lightContent
     }
 
     private let dataProvider: PlanRouteDataProvider
@@ -39,7 +39,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }()
 
     private let tabs = PlanRouteTab.allCases
-    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .icCustomQuestionmark)
+    private let routeTypeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomQuestionmark)
     private var sheetState: EOADraggableMenuState = .expanded
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
@@ -161,6 +161,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         refreshMapControls()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setMapHudStatusBarHidden(true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setMapHudStatusBarHidden(false)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate { _ in
             let height = self.pointEditingHeight ?? self.height(for: self.sheetState)
@@ -206,6 +216,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
+            setMapHudStatusBarHidden(false)
             dataProvider.dismissLayer()
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             removeFromParent()
@@ -462,9 +473,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             icon = .icCustomStraightLine
         }
         routeTypeButton.setImage(icon, for: .normal)
-        var config = routeTypeButton.configuration
-        config?.baseForegroundColor = .mapButtonIconColorActive
-        routeTypeButton.configuration = config
+        let activeColor = UIColor.mapButtonIconColorActive
+        routeTypeButton.tintColorDay = activeColor.light
+        routeTypeButton.tintColorNight = activeColor.dark
+        routeTypeButton.updateColors(forPressedState: false)
     }
 
     private func presentRouteBetweenPoints() {
@@ -679,6 +691,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func refreshMapControls() {
         let style: UIStatusBarStyle = OAAppSettings.sharedManager().nightMode ? .lightContent : .default
         OARootViewController.instance().mapPanel?.targetUpdateControlsLayout(true, customStatusBarStyle: style)
+    }
+
+    private func setMapHudStatusBarHidden(_ isHidden: Bool) {
+        OARootViewController.instance()
+            .mapPanel?
+            .hudViewController?
+            .statusBarView?
+            .isHidden = isHidden
     }
 
     private func makeTabViewController(for tab: PlanRouteTab) -> UIViewController {
@@ -909,6 +929,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @objc private func onDayNightModeChanged() {
         DispatchQueue.main.async { [weak self] in
             self?.updateCrosshairImage()
+            self?.topToolbar.updateMapTheme()
+            self?.updateRouteTypeButton()
             self?.setNeedsStatusBarAppearanceUpdate()
         }
     }

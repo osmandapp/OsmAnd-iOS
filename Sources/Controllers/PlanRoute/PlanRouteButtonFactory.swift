@@ -33,6 +33,19 @@ enum PlanRouteButtonFactory {
         iconButton(image: image, size: size, style: .map)
     }
 
+    static func iconMapButton(image: UIImage?) -> OAHudButton {
+        let size = toolbarButtonSize
+        let button = OAHudButton(frame: CGRect(x: 0, y: 0, width: size, height: size))
+        button.setCustomAppearanceParams(nil)
+        button.setImage(image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: size),
+            button.heightAnchor.constraint(equalToConstant: size)
+        ])
+        return button
+    }
+
     static func bottomToolbarIconButton(image: UIImage?, size: CGFloat = bottomButtonHeight) -> UIButton {
         iconButton(image: image, size: size, style: OAUtilities.isIPad() ? .map : .glass)
     }
@@ -51,14 +64,34 @@ enum PlanRouteButtonFactory {
         return labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: OAUtilities.isIPad() ? .map : .glass, contentInsets: contentInsets, imagePadding: bottomToolbarImagePadding)
     }
 
-    static func primaryButton(title: String, height: CGFloat = toolbarButtonSize) -> UIButton {
-        var configuration = UIButton.Configuration.filled()
+    static func primaryButton(title: String, height: CGFloat = toolbarButtonSize) -> OAHudButton {
+        let normalColor = UIColor.buttonBgColorPrimary
+        var configuration = UIButton.Configuration.plain()
         configuration.title = title
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 18, bottom: 0, trailing: 18)
         configuration.baseForegroundColor = .white
-        configuration.baseBackgroundColor = .buttonBgColorPrimary
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 18, bottom: 0, trailing: 18)
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
+            return outgoing
+        }
         configuration.background.cornerRadius = height / 2
-        let button = UIButton(configuration: configuration)
+
+        let button = OAHudButton()
+        button.configuration = configuration
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.contentHorizontalAlignment = .center
+
+        button.unpressedColorDay = normalColor.light
+        button.unpressedColorNight = normalColor.dark
+        button.pressedColorDay = normalColor.light
+        button.pressedColorNight = normalColor.dark
+        button.tintColorDay = .white
+        button.tintColorNight = .white
+        button.borderWidthDay = 0
+        button.borderWidthNight = 0
+        button.updateColors(forPressedState: false)
+
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: height).isActive = true
         return button

@@ -4500,3 +4500,8 @@
 "no_elevation_data_description" = "Az OsmAnd képes a közeli utakról vagy a domborzati térképekről származó magassági adatokat lekérni.";
 "get_elevation_data_description" = "Válasszon ki egy módszert a tengerszint feletti magassági adatok lekéréséhez az offline vagy a domborzati térképekről.";
 "plan_route_view_directions" = "Navigáció megtekintése";
+"ais_use_nmea_location" = "NMEA használata helyforrásként";
+"ais_use_nmea_location_description" = "GPS-koordináták használata az RMC/GGA NMEA-üzenetekből „Saját helyként”.";
+"ais_apply_setting_to_profiles" = "Beállítás alkalmazása";
+"ais_apply_to_current_profile" = "Alkalmazás erre: %@";
+"ais_apply_to_all_profiles" = "Alkalmazás az összes profilra";

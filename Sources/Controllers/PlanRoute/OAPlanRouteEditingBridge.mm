@@ -958,13 +958,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = YES;
-    if (self.onChange)
+    _isCalculatingRoute = mode != OAApplicationMode.DEFAULT;
+    if (_isCalculatingRoute && self.onChange)
         self.onChange();
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
+    if (!_isCalculatingRoute && self.onChange)
+        self.onChange();
 }
 
 - (void)refreshRouteForMode:(OAApplicationMode *)mode

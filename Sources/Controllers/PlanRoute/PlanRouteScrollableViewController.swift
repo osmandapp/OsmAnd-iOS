@@ -600,13 +600,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let navigationController = UINavigationController(rootViewController: warningViewController)
         navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.delegate = self
-        navigationController.view.frame = sheetView.bounds
         navigationController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         approximationPreviousSheetState = sheetState
         approximationNavigationController = navigationController
-        addChild(navigationController)
+        add(navigationController, frame: sheetView.bounds)
         sheetView.addSubview(navigationController.view)
-        navigationController.didMove(toParent: self)
         sheetView.bringSubviewToFront(grabberView)
         routeTypeButton.isHidden = true
         crosshairView.isHidden = true
@@ -616,9 +614,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func dismissApproximationPopup() {
         guard let navigationController = approximationNavigationController else { return }
-        navigationController.willMove(toParent: nil)
-        navigationController.view.removeFromSuperview()
-        navigationController.removeFromParent()
+        navigationController.remove()
         approximationNavigationController = nil
         approximationHeight = nil
         sheetView.layer.cornerRadius = Self.sheetCornerRadius

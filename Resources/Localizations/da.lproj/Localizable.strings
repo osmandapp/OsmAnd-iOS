@@ -4537,3 +4537,8 @@
 "calculating_elevation_terrain_maps_description" = "Henter højdedata fra terrænkort.";
 "recalculate_elevation" = "Genberegn højde";
 "average_speed" = "Gns. hastighed";
+"ais_use_nmea_location" = "Brug NMEA som positionskilde";
+"ais_use_nmea_location_description" = "Brug GPS-positioner fra RMC/GGA NMEA-meddelelser som Min position.";
+"ais_apply_setting_to_profiles" = "Anvend indstilling";
+"ais_apply_to_current_profile" = "Anvend på %@";
+"ais_apply_to_all_profiles" = "Anvend på alle profiler";

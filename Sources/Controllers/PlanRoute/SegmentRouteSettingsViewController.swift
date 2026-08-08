@@ -22,7 +22,10 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private var selectedMode: OAApplicationMode?
     private var routingParams: PlanRouteSegmentRoutingParams
 
-    private let segmentControl = UISegmentedControl()
+    private let segmentControl = UISegmentedControl(items: [
+        localizedString("layer_route"),
+        localizedString("shared_string_settings")
+    ])
     private let tabContainerView = UIView()
     private var routeTypeVC: RouteTypeViewController?
     private var settingsVC: RouteSettingsViewController?
@@ -91,18 +94,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func setupSegmentControl() {
-        segmentControl.removeAllSegments()
-        segmentControl.insertSegment(withTitle: localizedString("layer_route"), at: 0, animated: false)
-        segmentControl.insertSegment(withTitle: localizedString("shared_string_settings"), at: 1, animated: false)
         segmentControl.selectedSegmentIndex = 0
-        segmentControl.backgroundColor = .groupBgColorSecondary
-        segmentControl.selectedSegmentTintColor = UIColor.white
-        let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
-        ]
-        segmentControl.setTitleTextAttributes(attrs, for: .normal)
-        segmentControl.setTitleTextAttributes(attrs, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
 
         segmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -110,8 +102,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            segmentControl.heightAnchor.constraint(equalToConstant: 36)
+            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
 

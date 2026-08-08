@@ -4539,3 +4539,8 @@
 "calculating_elevation_terrain_maps_description" = "Преузимање података о надморској висини са мапа терена.";
 "recalculate_elevation" = "Поново израчунај надморску висину";
 "average_speed" = "Прос. брзина";
+"ais_use_nmea_location" = "Користи НМЕА као извор локације";
+"ais_use_nmea_location_description" = "Користи ГПС позиције из РМЦ/ГГА НМЕА порука као Моју локацију.";
+"ais_apply_setting_to_profiles" = "Примени подешавање";
+"ais_apply_to_current_profile" = "Примени на %@";
+"ais_apply_to_all_profiles" = "Примени на све профиле";

@@ -4339,8 +4339,8 @@
 "ais_type_cargo_tanker" = "Cargo / pétrolier";
 "ais_type_commercial_vessel" = "Navire de commerce";
 "set_single_mode" = "Un seul type d'itinéraire";
-"ais_type_authorities_vessel" = "Navire officiel";
-"ais_type_base_station" = "Station émettrice";
+"ais_type_authorities_vessel" = "Navire des autorités";
+"ais_type_base_station" = "Station de base";
 "ais_type_virtual_aid_to_navigation" = "Aide virtuelle à la navigation";
 "ais_type_other_vessel" = "Autre type de navire";
 "ais_type_object" = "Objet AIS";
@@ -4462,3 +4462,16 @@
 "average_speed" = "Vitesse moy.";
 "astro_my_data_no_daily_paths_title" = "Aucune course quotidienne";
 "astro_my_data_no_daily_paths_description" = "Activez une course quotidienne pour un objet à partir de son menu contextuel afin de le voir ici";
+"plan_route_section_recalculate_format" = "La section %1$@ de %2$@ sera recalculée à l'aide du profil sélectionné.";
+"plan_route_segment_recalculate_format" = "%@ sera recalculé à l'aide du profil sélectionné.";
+"ais_use_nmea_location_description" = "Utiliser les positions GPS issues des messages NMEA RMC/GGA comme « Ma position ».";
+"ais_type_sar_vessel" = "navire de recherche et sauvetage";
+"ais_type_sar_aircraft" = "Aéronefs de recherche et sauvetage";
+"ais_type_sart" = "AIS-SART";
+"ais_ship_type_wig" = "Aile au sol (WIG)";
+"ais_ship_type_wig_hazard_a" = "WIG, catégorie de risque A";
+"ais_ship_type_wig_hazard_b" = "WIG, catégorie de risque B";
+"ais_ship_type_wig_hazard_c" = "WIG, catégorie de risque C";
+"ais_ship_type_wig_hazard_d" = "WIG, catégorie de risque D";
+"ais_ship_type_dredging" = "Dragage";
+"ais_ship_type_hsc" = "Embarcations à grande vitesse (HSC)";

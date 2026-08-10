@@ -44,8 +44,16 @@ class WidgetsSettingsHelper: NSObject {
         }
 
         settings.transparentMapTheme.resetMode(toDefault: appMode)
-        mapButtonsHelper.getCompassButtonState().visibilityPref.resetMode(toDefault: appMode)
         settings.showDistanceRuler.resetMode(toDefault: appMode)
+        settings.distanceByTapTextSize.resetMode(toDefault: appMode)
+        settings.positionPlacementOnMap.resetMode(toDefault: appMode)
+        settings.showSpeedometer.resetMode(toDefault: appMode)
+        settings.speedometerSize.resetMode(toDefault: appMode)
+        settings.showSpeedLimitWarning.resetMode(toDefault: appMode)
+
+        for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
+            buttonState.resetForMode(appMode)
+        }
         mapButtonsHelper.resetQuickActions(for: appMode)
     }
 
@@ -54,9 +62,17 @@ class WidgetsSettingsHelper: NSObject {
             copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
         }
         copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: mapButtonsHelper.getCompassButtonState().visibilityPref, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
-        mapButtonsHelper.copyQuickActions(from: settings.applicationMode.get(), fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.positionPlacementOnMap, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.showSpeedometer, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.speedometerSize, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.showSpeedLimitWarning, fromAppMode: fromAppMode)
+
+        for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
+            buttonState.copyForMode(from: fromAppMode, to: appMode)
+        }
+        mapButtonsHelper.copyQuickActions(from: appMode, fromAppMode: fromAppMode)
     }
 
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {

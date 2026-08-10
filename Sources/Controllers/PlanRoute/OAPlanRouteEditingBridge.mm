@@ -397,6 +397,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return [OAMapUtils getDistance:from.lat lon1:from.lon lat2:to.lat lon2:to.lon];
 }
 
+- (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
+{
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
+}
+
 - (NSArray<PlanRouteSegmentData *> *)buildSegments
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -903,7 +909,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASWptPt *previous = allPoints[index - 1];
             if (!previous.isGap)
             {
-                legDistance = [self distanceFrom:previous to:point];
+                legDistance = [self routeDistanceFrom:previous to:point];
                 CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
                 CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
                 bearing = [OAMapUtils normalizeDegrees360:[previousLocation bearingTo:pointLocation]];

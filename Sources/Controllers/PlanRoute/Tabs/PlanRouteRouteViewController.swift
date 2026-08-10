@@ -199,9 +199,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func makeSegmentMenu(for segment: PlanRouteSegment) -> UIMenu {
         var children: [UIMenuElement] = []
         if !segment.multiMode {
+            let modeSubtitle = segment.singleMode?.toHumanString() ?? localizedString("plan_route_straight_line")
+            let modeIcon = segment.singleMode?.getIcon() ?? .icCustomStraightLine
             children.append(UIAction(title: localizedString("change_mode"),
-                                     subtitle: segment.singleMode?.toHumanString(),
-                                     image: segment.singleMode?.getIcon()) { [weak self] _ in
+                                     subtitle: modeSubtitle,
+                                     image: modeIcon) { [weak self] _ in
                 self?.onChangeRouteType?(.wholeSegment(segment))
             })
         }

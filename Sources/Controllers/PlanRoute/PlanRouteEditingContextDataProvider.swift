@@ -405,7 +405,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         cachedBridgeSegments = nil
         invalidateRouteInfoCache()
         cachedRouteSegments = nil
-        cachedAnalysisData = nil
+        if !bridge.hasPoints {
+            cachedAnalysisData = nil
+        }
         hasCachedAnalysisData = false
         analysisGeneration += 1
     }

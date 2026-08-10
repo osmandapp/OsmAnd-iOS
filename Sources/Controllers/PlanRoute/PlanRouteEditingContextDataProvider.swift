@@ -12,8 +12,6 @@ import OsmAndShared
 
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
-    private static let heightObstaclesParameterKey = "height_obstacles"
-
     let mode: PlanRouteMode
 
     var onDataChanged: (() -> Void)?
@@ -388,23 +386,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func addAnotherPoint() {
         bridge.addAnotherPoint()
-    }
-
-    func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams {
-        let settings = OAAppSettings.sharedManager()
-        let useElevationData = settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).get(mode)
-        let considerTemporaryLimitations = settings.enableTimeConditionalRouting.get(mode)
-        return PlanRouteSegmentRoutingParams(useElevationData: useElevationData,
-                                             considerTemporaryLimitations: considerTemporaryLimitations)
-    }
-
-    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, mode: OAApplicationMode) {
-        let currentParams = routingParams(for: mode)
-        guard currentParams != params else { return }
-        let settings = OAAppSettings.sharedManager()
-        settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).set(params.useElevationData, mode: mode)
-        settings.enableTimeConditionalRouting.set(params.considerTemporaryLimitations, mode: mode)
-        bridge.refreshRoute(for: mode)
     }
 
     func refreshRoute(for mode: OAApplicationMode) {

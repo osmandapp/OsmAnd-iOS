@@ -7,7 +7,7 @@
 //
 
 #import "OARouteSettingsParameterController.h"
-#import "OARoutePreferencesParameters.h"
+#import "OARouteParametersInternal+cpp.h"
 #import "OARoutingHelper.h"
 #import "OARightIconTableViewCell.h"
 #import "OATableViewCustomFooterView.h"

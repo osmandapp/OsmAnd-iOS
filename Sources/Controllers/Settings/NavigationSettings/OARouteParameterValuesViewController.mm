@@ -6,12 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OARouteParameterValuesViewController.h"
+#import "OARouteParametersInternal+cpp.h"
 #import "OAAppSettings.h"
 #import "OARightIconTableViewCell.h"
 #import "OARoutingHelper.h"
 #import "OAApplicationMode.h"
-#import "OARoutePreferencesParameters.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
@@ -170,7 +169,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
             else
             {
                 OAHazmatRoutingParameter *parameter = (OAHazmatRoutingParameter *) _parameter;
-                NSString *value = [parameter getValue:indexPath.row];
+                NSString *value = [parameter valueForIndex:indexPath.row];
                 isSelected = [[_parameter getValue] isEqualToString:value];
                 text = value;
             }

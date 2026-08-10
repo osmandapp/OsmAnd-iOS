@@ -7214,6 +7214,7 @@
 		DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
 		DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeCell.xib; sourceTree = "<group>"; };
 		DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesParameters.h; sourceTree = "<group>"; };
+		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
 		DA5A7D6226C563A300F274C7 /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
 		DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GpxUIHelper.swift; sourceTree = "<group>"; };
 		DA5A7D6426C563A300F274C7 /* OANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationController.h; sourceTree = "<group>"; };
@@ -13108,6 +13109,7 @@
 				CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */,
 				460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */,
 				DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */,
+				A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */,
 				DA5A7D5626C563A300F274C7 /* OARoutePreferencesParameters.mm */,
 				DA5A7D4726C563A300F274C7 /* OARouteSegmentShieldView.h */,
 				DA5A7D5526C563A300F274C7 /* OARouteSegmentShieldView.mm */,

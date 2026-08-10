@@ -189,11 +189,6 @@ struct PlanRouteAnalysisData {
     let routeStatistics: [OARouteStatistics]
 }
 
-struct PlanRouteSegmentRoutingParams: Equatable {
-    var useElevationData: Bool
-    var considerTemporaryLimitations: Bool
-}
-
 enum SegmentRouteContext {
     case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
     case wholeSegment(PlanRouteSegment)
@@ -318,8 +313,6 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func addPointAfter(index: Int)
     func trimBefore(index: Int)
     func trimAfter(index: Int)
-    func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams
-    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, mode: OAApplicationMode)
     func refreshRoute(for mode: OAApplicationMode)
 }
 

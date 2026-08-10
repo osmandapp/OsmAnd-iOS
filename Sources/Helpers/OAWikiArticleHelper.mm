@@ -140,9 +140,7 @@
         }];
         if (foundRepository && results.count == 0)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView];
-            });
+            [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView];
         }
     }
     return results;

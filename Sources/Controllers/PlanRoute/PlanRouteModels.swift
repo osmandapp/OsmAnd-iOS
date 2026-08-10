@@ -53,7 +53,6 @@ enum PlanRouteMenuAction: CaseIterable {
     case saveAsCopy
     case appendToExistingTrack
     case changeSegmentOrder
-    case viewDirections
     case reverseRoute
     case navigation
     case clearAllPoints
@@ -64,7 +63,6 @@ enum PlanRouteMenuAction: CaseIterable {
         case .saveAsCopy: localizedString("save_as_copy")
         case .appendToExistingTrack: localizedString("plan_route_append_to_existing_track")
         case .changeSegmentOrder: localizedString("plan_route_change_segment_order")
-        case .viewDirections: localizedString("plan_route_view_directions")
         case .reverseRoute: localizedString("reverse_route")
         case .navigation: localizedString("shared_string_navigation")
         case .clearAllPoints: localizedString("distance_measurement_clear_route")
@@ -77,7 +75,6 @@ enum PlanRouteMenuAction: CaseIterable {
         case .saveAsCopy: .icCustomSaveAsNewFile
         case .appendToExistingTrack: .icCustomAddToTrack
         case .changeSegmentOrder: .icCustomList
-        case .viewDirections: .icCustomSwap
         case .reverseRoute: .icCustomSwap
         case .navigation: .icCustomNavigationOutlined
         case .clearAllPoints: .icCustomTrashOutlined

@@ -55,6 +55,10 @@ class WidgetsSettingsHelper: NSObject {
             buttonState.resetForMode(appMode)
         }
         mapButtonsHelper.resetQuickActions(for: appMode)
+        mapButtonsHelper.getDefaultSizePref().resetMode(toDefault: appMode)
+        mapButtonsHelper.getDefaultOpacityPref().resetMode(toDefault: appMode)
+        mapButtonsHelper.getDefaultCornerRadiusPref().resetMode(toDefault: appMode)
+        mapButtonsHelper.getDefaultGlassStylePref().resetMode(toDefault: appMode)
     }
 
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
@@ -68,6 +72,10 @@ class WidgetsSettingsHelper: NSObject {
         copyPrefFromAppMode(pref: settings.showSpeedometer, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.speedometerSize, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.showSpeedLimitWarning, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultSizePref(), fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultOpacityPref(), fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultCornerRadiusPref(), fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultGlassStylePref(), fromAppMode: fromAppMode)
 
         for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
             buttonState.copyForMode(from: fromAppMode, to: appMode)

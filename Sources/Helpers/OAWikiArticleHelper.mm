@@ -42,6 +42,7 @@
     NSString *_name;
     UIView *_sourceView;
     BOOL _isCanceled;
+    BOOL _isHowToOpenAlertShowed;
     OAWikiArticleSearchTaskBlockType _onStart;
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
@@ -139,6 +140,7 @@
         }];
         if (foundRepository && results.count == 0)
         {
+            _isHowToOpenAlertShowed = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView];
             });
@@ -157,7 +159,7 @@
         OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:found[0] locale:_lang];
         [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
     }
-    else
+    else if (!_isHowToOpenAlertShowed)
     {
         [OAWikiArticleHelper warnAboutExternalLoad:_url sourceView:_sourceView];
     }

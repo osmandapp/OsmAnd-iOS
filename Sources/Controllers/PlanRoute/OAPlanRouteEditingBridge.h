@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, copy, nullable) void (^onRouteInfoChanged)(void);
 @property (nonatomic, copy, nullable) void (^onNewSegmentStarted)(void);
 @property (nonatomic, copy, nullable) void (^onPointEditModeRequested)(EOAPlanRoutePointEditMode mode);
+@property (nonatomic, copy, nullable) void (^onApproximationPopupDismissed)(void);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeBeforeHandler) void (^onChangeRouteTypeBefore)(NSInteger pointIndex);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeAfterHandler) void (^onChangeRouteTypeAfter)(NSInteger pointIndex);
 @property (nonatomic, weak, nullable) UIViewController *presenterViewController;
@@ -50,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
 @property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
+@property (nonatomic, readonly) BOOL isApproximationNeeded;
 @property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
 @property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;
@@ -62,6 +64,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly) double bearingToMapCenter;
 @property (nonatomic, readonly) BOOL isCalculatingElevation;
 @property (nonatomic, readonly) BOOL isCalculatingRoute;
+@property (nonatomic, readonly) BOOL isTerrainElevationAvailable;
 
 - (NSArray<OARouteStatistics *> *)calculateRouteStatistics;
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads;

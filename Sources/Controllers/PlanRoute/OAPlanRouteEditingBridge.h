@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
 @property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
+@property (nonatomic, readonly) BOOL isApproximationNeeded;
 @property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
 @property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;

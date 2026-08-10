@@ -91,12 +91,8 @@ static const float kProgressMaximumValue = 100.f;
 - (void)onRightButtonPressed
 {
     [self setApplyButtonEnabled:NO];
-    __weak __typeof(self) weakSelf = self;
-    [self dismissViewControllerAnimated:YES completion:^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf.delegate)
-            [strongSelf.delegate onApplyGpxApproximation];
-    }];
+    if (self.delegate)
+        [self.delegate onApplyGpxApproximation];
 }
 
 - (void)onLeftButtonPressed

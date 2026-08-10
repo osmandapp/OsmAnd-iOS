@@ -124,6 +124,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isTrackReadyToCalculate
     }
 
+    var isApproximationNeeded: Bool {
+        bridge.isApproximationNeeded
+    }
+
     var shouldShowApproximationWarning: Bool {
         bridge.shouldShowApproximationWarning
     }

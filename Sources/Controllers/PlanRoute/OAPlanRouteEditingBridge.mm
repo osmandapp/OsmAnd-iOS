@@ -201,6 +201,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && (![ctx shouldCheckApproximation] || ![ctx isApproximationNeeded] || [ctx isNewData]);
 }
 
+- (BOOL)isApproximationNeeded
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && [ctx isApproximationNeeded];
+}
+
 - (BOOL)shouldShowApproximationWarning
 {
     OAMeasurementEditingContext *ctx = [self editingContext];

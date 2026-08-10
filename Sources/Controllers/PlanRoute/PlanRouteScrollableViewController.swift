@@ -137,7 +137,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.showPointEditingView(mode: mode)
         }
         dataProvider.onApproximationPopupDismissed = { [weak self] in
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.async {
                 self?.dismissApproximationPopup()
             }
         }
@@ -226,9 +226,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dismiss()
             return
         }
-        UIView.animate(withDuration: duration, animations: { [weak self] in
-            let height = self?.approximationHeight ?? self.map { $0.height(for: $0.sheetState) } ?? 0
-            self?.sheetView.transform = CGAffineTransform(translationX: 0, y: height)
+        UIView.animate(withDuration: duration, animations: {
+            let height = self.approximationHeight ?? self.height(for: self.sheetState)
+            self.sheetView.transform = CGAffineTransform(translationX: 0, y: height)
         }, completion: { _ in dismiss() })
     }
     

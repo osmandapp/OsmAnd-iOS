@@ -116,7 +116,7 @@
             regionName = OALocalizedString(@"download_wiki_region_placeholder");
         }
         
-        if (_resourceItem && app.resourcesManager->isResourceInstalled(_resourceItem.resourceId))
+        if ([OAResourcesUIHelper isIndexItemDownloadedAt:CLLocationCoordinate2DMake(_latitude, _longitude) type:OsmAndResourceType::WikiMapRegion])
         {
             _bannerView = nil;
             _bannerLabel = nil;

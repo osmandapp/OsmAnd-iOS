@@ -352,7 +352,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper favoriteGroups];
     if (favoriteGroups.count > 0)
         myPlacesItems[OAExportSettingsType.FAVORITES] = favoriteGroups;
     

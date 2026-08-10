@@ -62,8 +62,10 @@
 - (NSArray<OARouteColorizationPoint *> *)getResult
 {
     NSMutableArray<OARouteColorizationPoint *> *result = [NSMutableArray array];
-    for (OASRouteColorizeRouteColorizationPoint *colorizationPoint in _routeColorize.result)
+    NSArray<OASRouteColorizeRouteColorizationPoint *> *routeColorizeResult = _routeColorize.result;
+    for (NSUInteger i = 0; i < routeColorizeResult.count; i++)
     {
+        OASRouteColorizeRouteColorizationPoint *colorizationPoint = routeColorizeResult[i];
         OARouteColorizationPoint *point = [[OARouteColorizationPoint alloc] initWithIdentifier:colorizationPoint.id
                                                                                            lat:colorizationPoint.lat
                                                                                            lon:colorizationPoint.lon
@@ -77,8 +79,10 @@
 - (QList<OsmAnd::FColorARGB>)getResultQList
 {
     QList<OsmAnd::FColorARGB> result;
-    for (OASRouteColorizeRouteColorizationPoint *colorizationPoint in _routeColorize.result)
+    NSArray<OASRouteColorizeRouteColorizationPoint *> *routeColorizeResult = _routeColorize.result;
+    for (NSUInteger i = 0; i < routeColorizeResult.count; i++)
     {
+        OASRouteColorizeRouteColorizationPoint *colorizationPoint = routeColorizeResult[i];
         result.append(OsmAnd::ColorARGB((uint32_t) colorizationPoint.primaryColor));
     }
     

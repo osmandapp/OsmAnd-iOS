@@ -496,6 +496,9 @@
                            location = "group:PlatformUtil.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:PoiAdditionalLangLookup.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:NamingUtils.kt">
                         </FileRef>
                         <FileRef
@@ -506,6 +509,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:UrlEncoder.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MergeLocalizedTagsAlgorithm.kt">
                         </FileRef>
                         <FileRef
                            location = "group:KGeoPointParserUtil.kt">
@@ -1150,6 +1156,9 @@
                         <FileRef
                            location = "group:LinkMediaFactory.kt">
                         </FileRef>
+                        <FileRef
+                           location = "group:MediaFileNameFormat.kt">
+                        </FileRef>
                         <Group
                            location = "group:domain"
                            name = "domain">
@@ -1308,8 +1317,5 @@
    </FileRef>
    <FileRef
       location = "group:../baked/fat-ios-clang.xcode/OsmAnd_projects.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

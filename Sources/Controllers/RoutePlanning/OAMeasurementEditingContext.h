@@ -10,6 +10,7 @@
 // Partially synced!
 
 #import <Foundation/Foundation.h>
+#import "OAMeasurementEditingContextTypes.h"
 
 #include <OsmAndCore/Color.h>
 
@@ -19,22 +20,18 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
     WHOLE_TRACK
 };
 
-typedef NS_ENUM(NSInteger, EOAAddPointMode) {
-    EOAAddPointModeUndefined = -1,
-    EOAAddPointModeBefore = 0,
-    EOAAddPointModeAfter
-};
-
 @class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OARoadSegmentData, OAGpxRouteApproximation;
 
 @class OASWptPt, OASTrkSegment, OASGpxFile;
 
-@protocol OASnapToRoadProgressDelegate
+@protocol OASnapToRoadProgressDelegate <NSObject>
 
 - (void) showProgressBar;
-- (void) updateProgress:(int)progress;
 - (void) hideProgressBar;
 - (void) refresh;
+
+@optional
+- (void) updateProgress:(int)progress;
 
 @end
 
@@ -60,6 +57,10 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic, assign) BOOL approximationMode;
 
 @property (nonatomic) NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData;
+
+- (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData;
+- (void)beginBatchPointUpdates;
+- (void)endBatchPointUpdates;
 
 - (NSArray<OASWptPt *> *) getAllPoints;
 - (NSArray<OASWptPt *> *) getPoints;
@@ -121,9 +122,10 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OsmAnd::ColorARGB) getLineColor;
 
 - (OASGpxFile *) exportGpx:(NSString *)gpxName;
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex;
 - (NSArray<NSArray<OASWptPt *> *> *) getRoutePoints;
 
-- (void) scheduleRouteCalculateIfNotEmpty;
+- (void)scheduleRouteCalculateIfNotEmpty;
 
 - (void) setChangesSaved;
 - (BOOL) hasChanges;

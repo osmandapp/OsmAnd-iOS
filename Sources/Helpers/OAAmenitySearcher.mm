@@ -406,7 +406,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 - (BOOL)copyCoordinates:(BaseDetailsObject *)detailsObject binaryObject:(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)mapObject
 {
     const int pointsLength = mapObject->points31.size();
-    if ([detailsObject getPointsLength] < pointsLength)
+    if (pointsLength > 2)
     {
         [detailsObject clearGeometry];
         for (int i = 0; i < pointsLength; i++)
@@ -489,7 +489,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
         for (const auto& obj : loadedBinaryMapObjects)
         {
-            if (!obj)
+            if (!obj || obj->isDeleted())
                 continue;
 
             if (!matcher || matcher(obj))
@@ -1098,6 +1098,73 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return nil;
 }
 
++ (NSArray<OAPOI *> *)searchAmenitiesByName:(NSString *)name
+                                 resourceId:(NSString *)resourceId
+                                   location:(nullable CLLocation *)location
+                                    matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+    if (!localResource)
+        return @[];
+
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController(
+        [&matcher](const OsmAnd::FunctorQueryController* const controller)
+        {
+            return matcher && [matcher isCancelled];
+        }));
+
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria =
+        std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(
+            new OsmAnd::AmenitiesByNameSearch::Criteria);
+
+    searchCriteria->name = QString::fromNSString(name);
+    searchCriteria->matcherMode = OsmAnd::StringMatcherMode::CHECK_EQUALS;
+    searchCriteria->obfInfoAreaFilter = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+    searchCriteria->localResources = { localResource };
+    
+    if (location)
+    {
+        OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
+        searchCriteria->xy31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    }
+
+    const auto search =
+        std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(
+            new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    
+    search->performSearch(*searchCriteria,
+                          [&arr, &matcher](const OsmAnd::ISearch::Criteria& criteria,
+                                           const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+        const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+        if (!amenity)
+            return;
+        
+        OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:NO];
+        if (!poi)
+            return;
+        
+        if (matcher)
+        {
+            if ([matcher publish:poi])
+                [OAPOIHelper fetchValuesContentPOIByAmenity:amenity poi:poi];
+        }
+        else
+        {
+            [OAPOIHelper fetchValuesContentPOIByAmenity:amenity poi:poi];
+            [arr addObject:poi];
+        }
+    },
+    ctrl);
+
+    return [NSArray arrayWithArray:arr];
+}
+
 + (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1176,13 +1243,13 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return res;
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName radius:(int)radius
 {
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
     return [self findPOIsByTagName:tagName name:name location:location categoryName:categoryName poiTypeName:typeName bbox31:bbox31];
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName bboxTopLeft:(CLLocationCoordinate2D)bboxTopLeft bboxBottomRight:(CLLocationCoordinate2D)bboxBottomRight;
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName bboxTopLeft:(CLLocationCoordinate2D)bboxTopLeft bboxBottomRight:(CLLocationCoordinate2D)bboxBottomRight;
 {
     OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bboxTopLeft.latitude, bboxTopLeft.longitude));
     OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bboxBottomRight.latitude, bboxBottomRight.longitude));
@@ -1190,7 +1257,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return [self findPOIsByTagName:tagName name:name location:location categoryName:categoryName poiTypeName:typeName bbox31:bbox31];
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName bbox31:(OsmAnd::AreaI)bbox31
++ (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName bbox31:(OsmAnd::AreaI)bbox31
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;

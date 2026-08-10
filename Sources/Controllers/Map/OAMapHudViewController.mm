@@ -1546,10 +1546,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     {
         if (hasScrollableHudVisible)
         {
-            if (isPlanRoute && isLandscape)
-                extraBottom += toolbarHeight;
-            else
-                extraBottom += MAX(0.f, viewHeight - bottomInset);
+            extraBottom += MAX(0.f, viewHeight - bottomInset);
         }
         else
         {
@@ -1772,6 +1769,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isTopPanelVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets];
     BOOL isLeftPanelVisible = [self hasLeftWidget];
     BOOL isRightPanelVisible = [self hasRightWidget];
+    BOOL isPlanRouteFullscreen = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
@@ -1779,7 +1779,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         || _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph
-        || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings;
+        || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || isPlanRouteFullscreen;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible && !isWeatherToolbarVisible;
@@ -1947,10 +1948,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         {
             if (_mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview)
             {
-                if (isPlanRoute && isLandscape)
-                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getToolbarHeight] + [OAUtilities getBottomMargin];
-                else
-                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
+                contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
             }
             else
             {

@@ -24,7 +24,7 @@ final class CarPlayNavigationModeProvider {
     }
     
     func configureForCarPlay() {
-        guard let routing = OARoutingHelper.sharedInstance() else { return }
+        let routing = OARoutingHelper.sharedInstance()
         
         let settings = OAAppSettings.sharedManager()
         captureOriginalModeIfNeeded()
@@ -44,7 +44,7 @@ final class CarPlayNavigationModeProvider {
         guard let originalAppMode else { return }
         guard !isRoutingActive() else { return }
         OAAppSettings.sharedManager().setApplicationModePref(originalAppMode)
-        OARoutingHelper.sharedInstance()?.setAppMode(originalAppMode)
+        OARoutingHelper.sharedInstance().setAppMode(originalAppMode)
         self.originalAppMode = nil
     }
     

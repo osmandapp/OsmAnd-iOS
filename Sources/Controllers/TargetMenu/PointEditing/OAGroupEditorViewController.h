@@ -10,10 +10,14 @@
 
 @class OASGpxUtilitiesPointsGroup;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAGroupEditorViewController: OABaseEditorViewController
 
 @property(nonatomic, readonly) OASGpxUtilitiesPointsGroup *group;
 
-- (instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group;
+- (nullable instancetype)initWithGroup:(OASGpxUtilitiesPointsGroup *)group;
 
 @end
+
+NS_ASSUME_NONNULL_END

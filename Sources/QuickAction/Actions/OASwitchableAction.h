@@ -8,29 +8,33 @@
 
 #import "OAQuickAction.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OASwitchableAction : OAQuickAction
 
 - (void)executeWithParams:(NSArray<NSString *> *)params;
 
-- (NSString *)getTranslatedItemName:(NSString *)item;
+- (nullable NSString *)getTranslatedItemName:(NSString *)item;
 
-- (NSString *)getTitle:(NSArray *)filters;
-- (NSString *)getItemName:(id)item;
+- (nullable NSString *)getTitle:(NSArray *)filters;
+- (nullable NSString *)getItemName:(id)item;
 
-- (NSString *)getAddBtnText;
-- (NSString *)getDescrHint;
-- (NSString *)getDescrTitle;
+- (nullable NSString *)getAddBtnText;
+- (nullable NSString *)getDescrHint;
+- (nullable NSString *)getDescrTitle;
 
-- (NSArray *)loadListFromParams;
+- (nullable NSArray *)loadListFromParams;
 
-- (NSString *)getListKey;
+- (nullable NSString *)getListKey;
 
-- (NSString *)disabledItem;
-- (NSString *)selectedItem;
-- (NSString *)nextSelectedItem;
+- (nullable NSString *)disabledItem;
+- (nullable NSString *)selectedItem;
+- (nullable NSString *)nextSelectedItem;
 
 - (nullable NSString *)nextFromSource:(NSArray<NSArray<NSString *> *> *)sources defValue:(NSString *)defValue;
 
 //protected abstract View.OnClickListener getOnAddBtnClickListener(MapActivity activity, final Adapter adapter);
 
 @end
+
+NS_ASSUME_NONNULL_END

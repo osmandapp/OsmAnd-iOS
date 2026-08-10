@@ -63,14 +63,11 @@
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" title="Export"/>
-                            <connections>
-                                <action selector="buttonDonePressed:" destination="-1" eventType="touchUpInside" id="pC8-DO-7eF"/>
-                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="groupBg"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="jdG-1m-7Mk" secondAttribute="bottom" constant="3" id="2yS-HP-COC"/>
+                        <constraint firstAttribute="bottom" secondItem="jdG-1m-7Mk" secondAttribute="bottom" constant="6" id="2yS-HP-COC"/>
                         <constraint firstItem="U3D-Z8-K0Z" firstAttribute="leading" secondItem="42a-aj-Np6" secondAttribute="trailing" constant="5" id="4yb-C0-cH5"/>
                         <constraint firstAttribute="bottom" secondItem="42a-aj-Np6" secondAttribute="bottom" constant="6" id="R2k-8F-djo"/>
                         <constraint firstItem="U3D-Z8-K0Z" firstAttribute="centerX" secondItem="PEh-9Y-73x" secondAttribute="centerX" id="UeG-wc-Nwq"/>

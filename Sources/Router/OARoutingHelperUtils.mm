@@ -16,6 +16,7 @@
 #import "OAAppSettings.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "CLLocation+Extension.h"
+#import "OsmAndApp.h"
 
 #define CACHE_RADIUS 100000
 #define MAX_BEARING_DEVIATION 45
@@ -34,7 +35,7 @@
                             ref:(NSString *)originalRef
                     destination:(NSString *)destination
                         towards:(NSString *)towards
-                        shields:(NSArray<RoadShield *> *)shields
+                        shields:(nullable NSArray<RoadShield *> *)shields
 {
     NSMutableString *formattedStreetName = [NSMutableString string];
     if (originalRef && originalRef.length > 0)
@@ -194,6 +195,133 @@
         {
             [[OAMapViewTrackingUtilities instance] detectDrivingRegion:newStartLocation];
             [settings setLastStartPoint:newStartLocation];
+        }
+    }
+}
+
++ (NSString *)routingParamsQueryValueForAppMode:(OAApplicationMode *)mode
+{
+    if (!mode)
+        return nil;
+    
+    auto router = [OsmAndApp.instance getRouter:mode];
+    if (!router)
+        return nil;
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSMutableArray<NSString *> *parts = [NSMutableArray arrayWithObject:mode.stringKey];
+    BOOL anyChanged = NO;
+    
+    auto parameters = [self getParametersForDerivedProfile:mode router:router];
+    for (const auto &it : parameters)
+    {
+        const auto &key = it.first;
+        const auto &pr = it.second;
+        NSString *attrName = @(key.c_str());
+        
+        if (key == GeneralRouterConstants::USE_SHORTEST_WAY ||
+            [attrName isEqualToString:kRouteParamShortWay])
+        {
+            BOOL shortWay = ![settings.fastRouteMode get:mode];
+            if (shortWay) {
+                anyChanged = YES;
+                [parts addObject:kRouteParamShortWay];
+            }
+            continue;
+        }
+        
+        if (pr.type == RoutingParameterType::BOOLEAN)
+        {
+            BOOL def = pr.defaultBoolean;
+            BOOL val = [[settings getCustomRoutingBooleanProperty:attrName defaultValue:def] get:mode];
+            if (val == def)
+                continue;
+            anyChanged = YES;
+            if (val)
+                [parts addObject:attrName];
+            else
+                [parts addObject:[NSString stringWithFormat:@"%@:false", attrName]];
+        }
+        else
+        {
+            NSString *defStr = @(pr.getDefaultString().c_str());
+            NSString *val = [[settings getCustomRoutingProperty:attrName defaultValue:defStr] get:mode];
+            if (!val.length || [val isEqualToString:defStr])
+                continue;
+            anyChanged = YES;
+            [parts addObject:[NSString stringWithFormat:@"%@:%@", attrName, val]];
+        }
+    }
+    
+    return anyChanged ? [parts componentsJoinedByString:@","] : nil;
+}
+
++ (void)applyRoutingParamsQueryValue:(NSString *)params forAppMode:(OAApplicationMode *)mode
+{
+    if (!mode || params.length == 0)
+        return;
+    
+    auto router = [OsmAndApp.instance getRouter:mode];
+    if (!router)
+        return;
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    auto parameters = [self getParametersForDerivedProfile:mode router:router];
+    
+    for (const auto &it : parameters)
+    {
+        NSString *attr = @(it.first.c_str());
+        const auto &pr = it.second;
+        if (it.first == GeneralRouterConstants::USE_SHORTEST_WAY ||
+            [attr isEqualToString:kRouteParamShortWay])
+        {
+            [settings.fastRouteMode set:YES mode:mode];
+            continue;
+        }
+        if (pr.type == RoutingParameterType::BOOLEAN)
+            [[settings getCustomRoutingBooleanProperty:attr defaultValue:pr.defaultBoolean] set:pr.defaultBoolean mode:mode];
+        else
+            [[settings getCustomRoutingProperty:attr defaultValue:@(pr.getDefaultString().c_str())]
+             set:@(pr.getDefaultString().c_str()) mode:mode];
+    }
+    
+    for (NSString *raw in [params componentsSeparatedByString:@","])
+    {
+        NSString *token = [raw stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+        if (token.length == 0)
+            continue;
+        
+        NSString *key = token;
+        NSString *val = @"true";
+        NSRange sep = [token rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@":="]];
+        if (sep.location != NSNotFound)
+        {
+            key = [token substringToIndex:sep.location];
+            val = [token substringFromIndex:sep.location + 1];
+        }
+        
+        if ([key isEqualToString:mode.stringKey] || [key isEqualToString:mode.getRoutingProfile])
+            continue;
+        
+        if ([key isEqualToString:kRouteParamShortWay])
+        {
+            BOOL on = ![val isEqualToString:@"false"];
+            [settings.fastRouteMode set:!on mode:mode];
+            continue;
+        }
+        
+        auto it = parameters.find(key.UTF8String);
+        if (it == parameters.end())
+            continue;
+        
+        if (it->second.type == RoutingParameterType::BOOLEAN)
+        {
+            BOOL b = ![val isEqualToString:@"false"];
+            [[settings getCustomRoutingBooleanProperty:key defaultValue:it->second.defaultBoolean] set:b mode:mode];
+        }
+        else
+        {
+            [[settings getCustomRoutingProperty:key defaultValue:@(it->second.getDefaultString().c_str())] set:val mode:mode];
         }
     }
 }

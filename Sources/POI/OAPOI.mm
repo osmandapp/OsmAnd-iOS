@@ -311,7 +311,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     return names;
 }
 
-- (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
+- (NSString *)getContentLanguage:(NSString *)tag lang:(nullable NSString *)lang defLang:(NSString *)defLang
 {
     if (lang)
     {

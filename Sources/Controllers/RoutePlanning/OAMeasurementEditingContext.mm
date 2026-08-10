@@ -34,6 +34,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 @property (nonatomic, assign) BOOL checkApproximation;
+- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
+- (void)removeUnusedRoadSegmentData;
+- (void)updateSegmentsForSnap:(BOOL)both;
+- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index;
 @end
 
 @implementation OAMeasurementEditingContext
@@ -52,6 +56,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     NSArray<OASWptPt *> *_currentPair;
     
     BOOL _insertIntermediates;
+    BOOL _batchPointUpdates;
     
     std::shared_ptr<RouteCalculationProgress> _calculationProgress;
 }
@@ -199,7 +204,31 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (BOOL) hasRoute
 {
-    return _roadSegmentData.count > 0;
+    return self.orderedRoadSegmentData.count > 0;
+}
+
+- (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData
+{
+    NSMutableArray<OARoadSegmentData *> *data = [NSMutableArray array];
+    for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
+    {
+        OARoadSegmentData *segmentData = _roadSegmentData[pair];
+        if (segmentData != nil)
+            [data addObject:segmentData];
+    }
+    return [data copy];
+}
+
+- (void)beginBatchPointUpdates
+{
+    _batchPointUpdates = YES;
+}
+
+- (void)endBatchPointUpdates
+{
+    _batchPointUpdates = NO;
+    [self removeUnusedRoadSegmentData];
+    [self updateSegmentsForSnap:NO];
 }
 
 - (void) clearSnappedToRoadPoints
@@ -618,14 +647,14 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             OASWptPt *endPoint = points[i + 1];
             NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
             
-            if (_roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute))
+            if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
                 [res addObject:pair];
         }
     }
     return res;
 }
 
-- (NSArray<NSArray<OASWptPt *> *> *) getOrderedRoadSegmentDataKeys
+- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys
 {
     NSMutableArray<NSArray<OASWptPt *> *> *keys = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
@@ -638,21 +667,33 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return keys;
 }
 
-- (void) scheduleRouteCalculateIfNotEmpty
+- (void)removeUnusedRoadSegmentData
+{
+    NSSet<NSArray<OASWptPt *> *> *usedPairs = [NSSet setWithArray:[self getOrderedRoadSegmentDataKeys]];
+    NSMutableArray<NSArray<OASWptPt *> *> *unusedPairs = [NSMutableArray array];
+    for (NSArray<OASWptPt *> *pair in _roadSegmentData.allKeys)
+    {
+        if (![usedPairs containsObject:pair])
+            [unusedPairs addObject:pair];
+    }
+    [_roadSegmentData removeObjectsForKeys:unusedPairs];
+}
+
+- (void)scheduleRouteCalculateIfNotEmpty
 {
     if (_before.points.count == 0 && _after.points.count == 0)
         return;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    if (/*progressListener != null &&*/!routingHelper.isRouteBeingCalculated)
+    id<OASnapToRoadProgressDelegate> progressDelegate = self.progressDelegate;
+    if (progressDelegate != nil && !routingHelper.isRouteBeingCalculated)
     {
         OARouteCalculationParams *params = [self getParams:YES];
         if (params != nil)
         {
-            [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.progressDelegate)
-                    [self.progressDelegate showProgressBar];
+                [progressDelegate showProgressBar];
             });
+            [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
         }
     }
 }
@@ -933,40 +974,41 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 				segments.push_back(seg);
 			}
 		}
+		BOOL duplicatePoint = [self needDuplicatePoint:gpxPoints index:i];
 		for (NSInteger k = 0; k < segments.size(); k++)
 		{
 			const auto& seg = segments[k];
-			[self fillPointsArray:points seg:seg includeEndPoint:lastGpxPoint && k == segments.size() - 1];
+			BOOL includeEndPoint = (duplicatePoint || lastGpxPoint) && k == segments.size() - 1;
+			[self fillPointsArray:points seg:seg includeEndPoint:includeEndPoint];
 		}
 		if (points.count > 0)
 		{
 			OASWptPt *wp1 = [[OASWptPt alloc] init];
-            wp1.lat = gp1->lat;
-            wp1.lon = gp1->lon;
+			wp1.lat = gp1->lat;
+			wp1.lon = gp1->lon;
 			[wp1 setProfileTypeProfileType:mode.stringKey];
 			[routePoints addObject:wp1];
 			OASWptPt *wp2 = [[OASWptPt alloc] init];
 			if (lastGpxPoint)
 			{
-                OASWptPt *lastObject = points.lastObject;
+				OASWptPt *lastObject = points.lastObject;
 				wp2.lat = lastObject.lat;
-                wp2.lon = lastObject.lon;
+				wp2.lon = lastObject.lon;
 				[routePoints addObject:wp2];
 			}
 			else
 			{
 				const auto& gp2 = gpxPoints[i + 1];
-                wp2.lat = gp2->lat;
-                wp2.lon = gp2->lon;
+				wp2.lat = gp2->lat;
+				wp2.lon = gp2->lon;
 			}
 			[wp2 setProfileTypeProfileType:mode.stringKey];
 			NSArray<OASWptPt *> *pair = @[wp1, wp2];
-			_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
+			if (_roadSegmentData[pair] == nil)
+				_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
 		}
 		if (lastGpxPoint)
-		{
 			break;
-		}
 	}
 	OASWptPt *lastOriginalPoint = originalPoints.lastObject;
 	OASWptPt *lastRoutePoint = routePoints.lastObject;
@@ -975,6 +1017,16 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	
 	[self replacePoints:originalPoints points:routePoints];
 	return routePoints;
+}
+
+- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index
+{
+	if (index == gpxPoints.size() - 1)
+		return NO;
+	const auto& routeToTarget = gpxPoints[index]->routeToTarget;
+	const auto& nextRouteToTarget = gpxPoints[index + 1]->routeToTarget;
+	return !routeToTarget.empty() && !nextRouteToTarget.empty()
+		&& routeToTarget.back()->getEndPoint().isEquals(nextRouteToTarget.front()->getStartPoint());
 }
 
 - (void) replacePoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
@@ -1003,7 +1055,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	{
         _before.points = [points mutableCopy];
 	}
-	[self updateSegmentsForSnap:NO];
+	if (!_batchPointUpdates)
+	{
+		[self removeUnusedRoadSegmentData];
+		[self updateSegmentsForSnap:NO];
+	}
 }
 
 - (BOOL) isLastGpxPoint:(std::vector<SHARED_PTR<GpxPoint>>)gpxPoints index:(NSInteger)index
@@ -1128,9 +1184,12 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (void) cancelSnapToRoad
 {
+    _currentPair = nil;
+    _params = nil;
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.progressDelegate)
-            [self.progressDelegate hideProgressBar];
+        if (weakSelf.progressDelegate)
+            [weakSelf.progressDelegate hideProgressBar];
     });
     if (_calculationProgress != nullptr)
         _calculationProgress->cancelled = true;
@@ -1208,6 +1267,52 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         points = [_gpxData.gpxFile getPointsList];
     
     return [OARouteExporter exportRoute:gpxName trkSegments:[self getRouteSegments] points:points routePoints:[self getRoutePoints]];
+}
+
+- (nullable OASGpxFile *) exportGpx:(NSString *)gpxName startPointIndex:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
+{
+    NSArray<OASWptPt *> *allPoints = [self getPoints];
+    if (startPointIndex < 0 || endPointIndex < startPointIndex || endPointIndex >= (NSInteger)allPoints.count)
+        return nil;
+
+    NSMutableArray<NSNumber *> *savedTrkPtIndexes = [NSMutableArray arrayWithCapacity:(endPointIndex - startPointIndex + 1)];
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [savedTrkPtIndexes addObject:@(allPoints[i].getTrkPtIndex)];
+
+    OASTrkSegment *trackSegment = [self getRouteSegment:startPointIndex endPointIndex:endPointIndex];
+
+    NSArray<NSArray<OASWptPt *> *> *routePointGroups = nil;
+    if (trackSegment != nil)
+    {
+        NSInteger lastTrackIndex = (NSInteger)trackSegment.points.count - 1;
+        NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
+        BOOL routePointsValid = YES;
+        for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        {
+            NSInteger trkPtIndex = allPoints[i].getTrkPtIndex;
+            if (trkPtIndex == -1)
+                continue;
+            if (i == endPointIndex)
+                trkPtIndex = lastTrackIndex;
+            if (trkPtIndex < 0 || trkPtIndex > lastTrackIndex)
+            {
+                routePointsValid = NO;
+                break;
+            }
+            OASWptPt *routePoint = [[OASWptPt alloc] initWithWptPt:allPoints[i]];
+            [routePoint setTrkPtIndexIndex:(int)trkPtIndex];
+            [routePoints addObject:routePoint];
+        }
+        routePointGroups = (routePointsValid && routePoints.count > 0) ? @[routePoints] : nil;
+    }
+
+    for (NSInteger i = startPointIndex; i <= endPointIndex; i++)
+        [allPoints[i] setTrkPtIndexIndex:savedTrkPtIndexes[i - startPointIndex].intValue];
+
+    if (trackSegment == nil)
+        return nil;
+
+    return [OARouteExporter exportRoute:gpxName trkSegments:@[trackSegment] points:nil routePoints:routePointGroups];
 }
 
 - (NSArray<OASTrkSegment *> *) getRouteSegments
@@ -1298,18 +1403,57 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         progress = (int) (_calculatedPairs * pairProgress + (double) progress / pairs);
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.progressDelegate)
-           [self.progressDelegate updateProgress:progress];
+        if ([self.progressDelegate respondsToSelector:@selector(updateProgress:)])
+            [self.progressDelegate updateProgress:progress];
     });
 }
 
 #pragma mark - OARouteCalculationResultListener
+
+- (BOOL)isRoadSegmentPairUsed:(NSArray<OASWptPt *> *)pair
+{
+    if (pair.count != 2)
+        return NO;
+
+    for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
+    {
+        for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
+        {
+            if (points[i] == pair.firstObject && points[i + 1] == pair.lastObject)
+                return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isCurrentRouteCalculationForPair:(NSArray<OASWptPt *> *)pair
+                                    route:(OARouteCalculationResult *)route
+                                    start:(CLLocation *)start
+                                      end:(CLLocation *)end
+{
+    if (_batchPointUpdates || pair == nil || _currentPair != pair || ![self isRoadSegmentPairUsed:pair])
+        return NO;
+
+    OASWptPt *startPoint = pair.firstObject;
+    OASWptPt *endPoint = pair.lastObject;
+    BOOL matchesCoordinates = getDistance(startPoint.lat, startPoint.lon, start.coordinate.latitude, start.coordinate.longitude) < 1
+        && getDistance(endPoint.lat, endPoint.lon, end.coordinate.latitude, end.coordinate.longitude) < 1;
+    if (!matchesCoordinates)
+        return NO;
+
+    OAApplicationMode *expectedMode = [OAApplicationMode valueOfStringKey:startPoint.getProfileType def:OAApplicationMode.DEFAULT];
+    return [route.appMode.stringKey isEqualToString:expectedMode.stringKey];
+}
 
 - (void)onRouteCalculated:(OARouteCalculationResult *)route
                   segment:(OAWalkingRouteSegment *)segment
                     start:(CLLocation *)start
                       end:(CLLocation *)end
 {
+    NSArray<OASWptPt *> *pair = _currentPair;
+    if (![self isCurrentRouteCalculationForPair:pair route:route start:start end:end])
+        return;
+
     NSArray<CLLocation *> *locations = route.getRouteLocations;
     NSMutableArray<OASWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];
     double prevAltitude = NAN;
@@ -1329,26 +1473,31 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         }
         [pts addObject:pt];
     }
-    _calculatedPairs++;
-    [_params.calculationProgressCallback updateProgress:0];
     auto originalRoute = route.getOriginalRoute;
     if (originalRoute.size() == 0)
         originalRoute = { RoutePlannerFrontEnd::generateStraightLineSegment(DEFAULT_APP_MODE.getDefaultSpeed, [self waypointsToLocations:pts]) };
-    
-    _roadSegmentData[_currentPair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:_currentPair.firstObject end:_currentPair.lastObject points:pts segments:originalRoute];
+
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateSegmentsForSnap:YES calculateIfNeeded:NO];
-        if (self.progressDelegate)
-            [self.progressDelegate refresh];
-        OARouteCalculationParams *params = [self getParams:NO];
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (![strongSelf isCurrentRouteCalculationForPair:pair route:route start:start end:end])
+            return;
+
+        strongSelf->_calculatedPairs++;
+        [strongSelf updateProgress:0];
+        strongSelf->_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:pair.firstObject end:pair.lastObject points:pts segments:originalRoute];
+        [strongSelf updateSegmentsForSnap:YES calculateIfNeeded:NO];
+        if (strongSelf.progressDelegate)
+            [strongSelf.progressDelegate refresh];
+        OARouteCalculationParams *params = [strongSelf getParams:NO];
         if (params)
             [OARoutingHelper.sharedInstance startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
         else
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.progressDelegate)
-                    [self.progressDelegate hideProgressBar];
-            });
+            strongSelf->_currentPair = nil;
+            strongSelf->_params = nil;
+            if (strongSelf.progressDelegate)
+                [strongSelf.progressDelegate hideProgressBar];
         }
     });
 }

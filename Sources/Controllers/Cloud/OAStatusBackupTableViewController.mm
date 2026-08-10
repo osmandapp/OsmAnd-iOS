@@ -87,7 +87,7 @@
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type syncProgress:(float)syncProgress
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];
+    self = [super initWithStyle:UITableViewStyleInsetGrouped];
     if (self)
     {
         _tableType = type;
@@ -102,7 +102,6 @@
 
 - (void)setupNotificationListeners
 {
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
@@ -114,7 +113,7 @@
 
     [self setupDownloadingCellHelper];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 16)];
     [self generateData];
 }
 
@@ -843,10 +842,6 @@
 }
 
 // MARK: Sync callbacks
-
-- (void)onBackupFinished:(NSNotification *)notification
-{
-}
 
 - (void)onBackupStarted
 {

@@ -12,6 +12,7 @@ final class StarCompassButton: StarMapButton {
     var onSingleTap: (() -> Void)?
     private let arrowView = UIImageView(image: AstroIcon.original("ic_custom_direction_compass"))
     private var currentRotation: CGFloat = 0
+    private var arDirectionEnabled = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,11 +35,28 @@ final class StarCompassButton: StarMapButton {
             arrowView.transform = transform
         }
     }
+    
+    func setArDirectionEnabled(_ enabled: Bool) {
+        guard enabled != arDirectionEnabled else { return }
+        arDirectionEnabled = enabled
+        updateArrowIcon()
+    }
 
     override func updateTheme() {
         super.updateTheme()
         setImage(nil, for: .normal)
+        updateArrowIcon()
         arrowView.transform = CGAffineTransform(rotationAngle: currentRotation * .pi / 180.0)
+    }
+    
+    private func updateArrowIcon() {
+        if arDirectionEnabled {
+            arrowView.image = .icCustomDirectionCompass.withRenderingMode(.alwaysOriginal)
+            arrowView.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        } else {
+            arrowView.image = .icCustomDirectionManual.withRenderingMode(.alwaysOriginal)
+            arrowView.overrideUserInterfaceStyle = nightMode ? .dark : .light
+        }
     }
 
     private func commonInit() {
@@ -57,9 +75,5 @@ final class StarCompassButton: StarMapButton {
             self?.onSingleTap?()
         }, for: .touchUpInside)
         updateTheme()
-    }
-
-    func shouldShow() -> Bool {
-        true
     }
 }

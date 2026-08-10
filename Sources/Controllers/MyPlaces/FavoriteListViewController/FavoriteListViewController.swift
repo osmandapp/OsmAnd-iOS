@@ -6,15 +6,15 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-final class FavoriteListViewController: UIViewController {
+final class FavoriteListViewController: UIViewController, MyPlacesScrollResettable {
     typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
     typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
     typealias RowCellRegistration<Item> = UICollectionView.CellRegistration<FavoriteListCell, Item>
 
     static let imageSize: CGFloat = 30.0
-    static let favoriteIconSize: CGFloat = 36.0
     static let sortHeaderHeight: CGFloat = 44.0
+    static let emptyStateHeaderTopPadding: CGFloat = 22.0
     static let navigationTitleFontSize: CGFloat = 17.0
     static let navigationTitleMaximumSize: CGFloat = 22.0
     static let navigationSubtitleFontSize: CGFloat = 12.0
@@ -25,7 +25,6 @@ final class FavoriteListViewController: UIViewController {
     let settings = OAAppSettings.sharedManager()
     var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var groupController: OAEditGroupViewController?
     var colorController: OAEditColorViewController?
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
@@ -76,6 +75,7 @@ final class FavoriteListViewController: UIViewController {
         parentGroupName ?? ""
     }
 
+    lazy var collapsedRootSections = Self.loadCollapsedSections()
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
@@ -122,12 +122,18 @@ final class FavoriteListViewController: UIViewController {
         super.init(coder: coder)
     }
     
+    private static func loadCollapsedSections() -> Set<FavoriteFolderSection> {
+        let sections = OAFavoritesHelperBridge.shared().collapsedSections()
+        return Set(sections.compactMap(FavoriteFolderSection.init(rawValue:)))
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
         configureCollectionView()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
@@ -140,6 +146,9 @@ final class FavoriteListViewController: UIViewController {
         applySnapshot()
         registerDistanceAndDirectionObservers()
         updateDistanceAndDirection(true)
+        if isRootFolder {
+            myPlacesDelegate?.updateContentScrollView(collectionView)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -156,10 +165,13 @@ final class FavoriteListViewController: UIViewController {
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in
-                self?.updateDistanceAndDirection(forceUpdate)
+                guard let self, !self.currentSortMode.isMapCenterDistanceOriented else { return }
+                self.updateDistanceAndDirection(forceUpdate)
             }
             return
         }
+
+        guard !currentSortMode.isMapCenterDistanceOriented else { return }
 
         if isContextMenuVisible {
             shouldReloadCollectionView = true
@@ -197,7 +209,7 @@ final class FavoriteListViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         if !isRootFolder {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
+            appearance.configureWithDefaultBackground()
             navigationController?.navigationBar.standardAppearance = appearance
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
             navigationController?.navigationBar.tintColor = .iconColorActive
@@ -218,7 +230,7 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
+        let isSelected = !selectionManager.selectedItems.isEmpty
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -260,17 +272,22 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(false)
             } else {
-                self.navigationItem.hidesBackButton = true
+                navigationItem.hidesBackButton = true
             }
         } else {
             let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
-            actionsButton.tintColor = .label
+            actionsButton.tintColor = .textColorPrimary
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
-            let searchButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: .label, action: #selector(searchButtonPressed(_:)), target: self, menu: nil)
-            searchButton?.accessibilityLabel = localizedString("shared_string_search")
+            let searchIcon = UIImage(systemName: "magnifyingglass",
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+            let searchButton = UIBarButtonItem(image: searchIcon,
+                                               style: .plain,
+                                               target: self,
+                                               action: #selector(searchButtonPressed(_:)))
+            searchButton.accessibilityLabel = localizedString("shared_string_search")
             if #available(iOS 26.0, *) {
-                searchButton?.style = .prominent
-                searchButton?.tintColor = .clear
+                searchButton.style = .prominent
+                searchButton.tintColor = .clear
             }
 
             let rightBarButtonItems = [actionsButton, isSearchActive ? nil : searchButton].compactMap { $0 }
@@ -279,11 +296,21 @@ final class FavoriteListViewController: UIViewController {
             if isRootFolder {
                 myPlacesDelegate?.showBackButton(true)
             } else {
-                self.navigationItem.hidesBackButton = false
+                navigationItem.hidesBackButton = false
             }
         }
     }
     
+    func resetScrollPosition() {
+        let indexPath = IndexPath(item: 0, section: 0)
+        guard collectionView.numberOfSections > indexPath.section,
+              collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else {
+            return
+        }
+
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+    }
+
     private func registerDistanceAndDirectionObservers() {
         unregisterDistanceAndDirectionObservers()
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
@@ -306,6 +333,9 @@ final class FavoriteListViewController: UIViewController {
     private func configureCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.topAnchor), collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor), collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor), collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        if !isRootFolder {
+            setContentScrollView(collectionView, for: .top)
+        }
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -319,6 +349,10 @@ final class FavoriteListViewController: UIViewController {
 
             if section == .statsFooter {
                 return self.statsFooterLayoutSection()
+            }
+
+            if section == .emptyState {
+                configuration.headerTopPadding = Self.emptyStateHeaderTopPadding
             }
 
             if case .folderSection = section, self.isRootFolder {
@@ -344,16 +378,12 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func configureSearchVisibility() {
-        guard !isRootFolder else {
-            navigationController?.navigationBar.topItem?.hidesSearchBarWhenScrolling = false
-            return
-        }
+        guard !isRootFolder else { return }
 
         if #available(iOS 26.0, *), !OAUtilities.isIPad() {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
-
-        navigationItem.hidesSearchBarWhenScrolling = false
+        
         navigationItem.searchController = collectionView.isEditing || !isSearchActive ? nil : subfolderSearchController
     }
     
@@ -370,12 +400,7 @@ final class FavoriteListViewController: UIViewController {
     
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
-            let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
-            guard !selectedItems.isEmpty else {
-                setNavigationTitle("", subtitle: "", hideSubtitle: true)
-                return
-            }
-            
+            let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
             let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
             setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
@@ -393,14 +418,16 @@ final class FavoriteListViewController: UIViewController {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
     }
-    
+
     deinit {
         unregisterDistanceAndDirectionObservers()
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .favoritesStorageDidChange, object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 }
 
 extension Notification.Name {
     static let favoriteImportViewControllerDidDismiss = Notification.Name("OAFavoriteImportViewControllerDidDismissNotification")
+    static let favoritesStorageDidChange = Notification.Name("FavoritesStorageChangedNotification")
 }

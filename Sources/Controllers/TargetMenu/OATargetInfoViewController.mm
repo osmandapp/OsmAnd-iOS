@@ -60,6 +60,7 @@
 #import "OrderedDictionary.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -130,7 +131,6 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
     NSArray<OAPOI *> *_nearestPoi;
-    BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
     
     OAAmenityInfoRow *_onlinePhotoCardsRowInfo;
@@ -138,6 +138,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
     BOOL _otherCardsReady;
     BOOL _isFetchingNearestPoi;
+    BOOL _isFetchingNearestWiki;
 }
 
 - (instancetype)init
@@ -490,36 +491,65 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
 - (void)buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener
 {
-    if ([OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
-    {
-        if (OAIAPHelper.sharedInstance.wiki.disabled)
-        {
-            [self buildGetWikipediaBanner:rows];
-        }
-        else
-        {
-            OAPOI *poi = [self getTargetPoiIfExisted];
-            if (poi)
-            {
-                [self processNearestWiki:poi];
-                
-                NSArray<OAPOI *> *nearest = _nearestWiki;
-                NSString *rowText = [NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int) nearest.count];
+    if (![OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
+        return;
 
-                if (nearest.count > 0)
-                {
-                    OAPOIUIFilter *wikiFilter = [self getPoiFilterForType:poi isWiki:YES];
-                    UIImage *icon = [UIImage mapSvgImageNamed:@"mx_wiki_place"];
-                    OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderNearestRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-                    rowInfo.collapsed = YES;
-                    rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-                    [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(_hasOsmWiki) latitude:self.location.latitude longitude:self.location.longitude filter:wikiFilter];
-                    rowInfo.order = kOrderNearestRow;
-                    [rows addObject:rowInfo];
-                }
-            }
-        }
+    if (OAIAPHelper.sharedInstance.wiki.disabled)
+    {
+        [self buildGetWikipediaBanner:rows];
+        return;
     }
+
+    if (OARowsContainKey(rows, @"nearest_wiki"))
+        return;
+
+    if (_isFetchingNearestWiki)
+        return;
+
+    OAPOI *poi = [self getTargetPoiIfExisted];
+    if (!poi)
+        return;
+
+    OAPOIUIFilter *wikiFilter = [self getPoiFilterForType:poi isWiki:YES];
+    if (!wikiFilter)
+        return;
+
+    if (_nearestWiki)
+    {
+        [self addNearestWikiRowIfNeeded:rows poi:poi filter:wikiFilter];
+        return;
+    }
+
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
+    BOOL (^acceptByLanguage)(OAPOI *) = nil;
+    if (wikiPlugin && ![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
+    {
+        NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
+        NSUInteger enIndex = [languagesToShow indexOfObject:@"en"];
+        if (enIndex != NSNotFound)
+            [languagesToShow replaceObjectAtIndex:enIndex withObject:@""];
+        acceptByLanguage = ^BOOL(OAPOI *w) {
+            return [w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow] != nil;
+        };
+    }
+
+    _isFetchingNearestWiki = YES;
+    __weak __typeof(self) weakSelf = self;
+    [self fetchNearestWiki:poi accept:acceptByLanguage completion:^(NSArray<OAPOI *> *results) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf->_nearestWiki = [results copy];
+
+        NSMutableArray<OAAmenityInfoRow *> *currentRows = strongSelf->_rows;
+        if (results.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_wiki"))
+        {
+            [strongSelf addNearestWikiRowIfNeeded:currentRows poi:poi filter:wikiFilter];
+            [strongSelf updateInfoRows];
+        }
+        strongSelf->_isFetchingNearestWiki = NO;
+    }];
 }
 
 - (void)buildGetWikipediaBanner:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -548,6 +578,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     if (!poi || ![self showNearestPoi])
         return;
 
+    if (poi.type.category.isWiki)
+        return;
+
     OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
     if (!filter)
         return;
@@ -559,16 +592,17 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     }
     _isFetchingNearestPoi = YES;
     __weak __typeof(self) weakSelf = self;
-    [self fetchNearestPoi:poi filter:filter completion:^(NSArray<OAPOI *> *results) {
+    [self fetchNearestPoi:poi filter:filter accept:nil completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
 
         strongSelf->_nearestPoi = [results copy];
 
-        if (results.count > 0)
+        NSMutableArray<OAAmenityInfoRow *> *currentRows = strongSelf->_rows;
+        if (results.count > 0 && currentRows && !OARowsContainKey(currentRows, @"nearest_poi"))
         {
-            [strongSelf addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
+            [strongSelf addNearestPoiRowIfNeeded:currentRows poi:poi filter:filter];
             [strongSelf updateInfoRows];
         }
         strongSelf->_isFetchingNearestPoi = NO;
@@ -591,6 +625,48 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc]
         initWithKey:@"nearest_poi"
               icon:poi.icon
+        textPrefix:nil
+              text:rowText
+         textColor:nil
+            isText:NO
+         needLinks:NO
+             order:kOrderNearestRow
+          typeName:@""
+     isPhoneNumber:NO
+             isUrl:NO];
+
+    rowInfo.collapsed = YES;
+    rowInfo.order = kOrderNearestRow;
+
+    OACollapsableNearestPoiWikiView *view =
+        [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+
+    [view setData:nearest
+         hasItems:YES
+         latitude:self.location.latitude
+        longitude:self.location.longitude
+           filter:filter];
+
+    rowInfo.collapsableView = view;
+
+    [rows addObject:rowInfo];
+}
+
+- (void)addNearestWikiRowIfNeeded:(NSMutableArray<OAAmenityInfoRow *> *)rows
+                              poi:(OAPOI *)poi
+                           filter:(OAPOIUIFilter *)filter
+{
+    NSArray<OAPOI *> *nearest = _nearestWiki;
+    if (nearest.count == 0)
+        return;
+
+    NSString *rowText = [NSString stringWithFormat:@"%@ (%d)",
+                         OALocalizedString(@"wiki_around"),
+                         (int)nearest.count];
+
+    OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc]
+        initWithKey:@"nearest_wiki"
+              icon:[UIImage mapSvgImageNamed:@"mx_wiki_place"]
         textPrefix:nil
               text:rowText
          textColor:nil
@@ -849,98 +925,107 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     [self buildMenu:[NSMutableArray array]];
 }
 
-- (void)processNearestWiki:(OAPOI *)poi
-{
-    int radius = kNearbyPoiMinRadius;
-    OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
-    NSMutableArray<OAPOI *> *osmwiki = [NSMutableArray new];
-    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
-    NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
-    if ([languagesToShow containsObject:@"en"])
-    {
-        NSInteger index = [languagesToShow indexOfObject:@"en"];
-        [languagesToShow replaceObjectAtIndex:index withObject:@""];
-    }
-
-    while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
-    {
-        osmwiki = [[OAAmenitySearcher findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:radius] mutableCopy];
-        [osmwiki removeObject:poi];
-
-        if (![wikiPlugin isShowAllLanguages] && [wikiPlugin hasLanguagesFilter])
-        {
-            NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
-            for (OAPOI *w in osmwiki)
-            {
-                if (![w.localizedContent.allKeys firstObjectCommonWithArray:languagesToShow])
-                    [itemsToRemove addObject:w];
-            }
-            [osmwiki removeObjectsInArray:itemsToRemove];
-        }
-
-        radius *= kNearbyPoiSearchFactory;
-    }
-    osmwiki = [[OAMapUtils sortPOI:osmwiki lat:self.location.latitude lon:self.location.longitude] mutableCopy];
-
-    _hasOsmWiki = osmwiki.count > 0 && [osmwiki firstObjectCommonWithArray:osmwiki];
-    _nearestWiki = [NSArray arrayWithArray:[osmwiki subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, osmwiki.count))]];
-}
-
 - (void)fetchNearestPoi:(OAPOI *)poi
                  filter:(OAPOIUIFilter *)filter
+                 accept:(BOOL (^)(OAPOI *poi))accept
              completion:(void(^)(NSArray<OAPOI *> *results))completion
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         
         NSMutableArray<OAPOI *> *amenities = [NSMutableArray new];
         
-        if (!poi.type.category.isWiki)
+        int radius = kNearbyPoiMinRadius;
+        OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+        
+        while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
         {
-            int radius = kNearbyPoiMinRadius;
-            OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+            const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
             
-            while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+            NSArray<OAPOI *> *found = [filter searchAmenities:OsmAnd::Utilities::get31LatitudeY(rect.top())
+                                                        left:OsmAnd::Utilities::get31LongitudeX(rect.left())
+                                                      bottom:OsmAnd::Utilities::get31LatitudeY(rect.bottom())
+                                                       right:OsmAnd::Utilities::get31LongitudeX(rect.right())
+                                                        zoom:-1 matcher:nil filterUnique:YES];
+            
+            if (found.count > 0)
             {
-                const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
-                
-                NSArray<OAPOI *> *found = [filter searchAmenities:OsmAnd::Utilities::get31LatitudeY(rect.top())
-                                                            left:OsmAnd::Utilities::get31LongitudeX(rect.left())
-                                                          bottom:OsmAnd::Utilities::get31LatitudeY(rect.bottom())
-                                                           right:OsmAnd::Utilities::get31LongitudeX(rect.right())
-                                                            zoom:-1 matcher:nil filterUnique:YES];
-                
-                if (found.count > 0)
+                for (OAPOI *a in found)
                 {
-                    for (OAPOI *a in found)
-                    {
-                        if (![amenities containsObject:a]) {
-                            [amenities addObject:a];
-                        }
+                    if (accept && !accept(a))
+                        continue;
+                    if (![amenities containsObject:a]) {
+                        [amenities addObject:a];
                     }
                 }
-                
-                if (amenities.count >= kNearbyPoiMaxCount)
-                    break;
-                radius *= kNearbyPoiSearchFactory;
             }
             
-            NSMutableArray<OAPOI *> *filteredAmenities = [NSMutableArray new];
-            NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
-            for (OAPOI *amenity in amenities)
-            {
-                if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
-                    [filteredAmenities addObject:amenity];
-            }
-            
-            NSArray *sorted = [OAMapUtils sortPOI:filteredAmenities lat:self.location.latitude lon:self.location.longitude];
-            
-            NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
-            amenities = [[sorted subarrayWithRange:NSMakeRange(0, finalCount)] mutableCopy];
+            if (amenities.count >= kNearbyPoiMaxCount)
+                break;
+            radius *= kNearbyPoiSearchFactory;
         }
+        
+        NSMutableArray<OAPOI *> *filteredAmenities = [NSMutableArray new];
+        NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
+        for (OAPOI *amenity in amenities)
+        {
+            if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
+                [filteredAmenities addObject:amenity];
+        }
+        
+        NSArray *sorted = [OAMapUtils sortPOI:filteredAmenities lat:self.location.latitude lon:self.location.longitude];
+        
+        NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
+        amenities = [[sorted subarrayWithRange:NSMakeRange(0, finalCount)] mutableCopy];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
                 completion([amenities copy]);
+            }
+        });
+    });
+}
+
+- (void)fetchNearestWiki:(OAPOI *)poi
+                  accept:(BOOL (^)(OAPOI *poi))accept
+              completion:(void(^)(NSArray<OAPOI *> *results))completion
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+
+        NSMutableArray<OAPOI *> *osmwiki = [NSMutableArray new];
+        int radius = kNearbyPoiMinRadius;
+        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+
+        while (osmwiki.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+        {
+            osmwiki = [[OAAmenitySearcher findPOIsByTagName:nil
+                                                       name:nil
+                                                   location:locI
+                                               categoryName:OSM_WIKI_CATEGORY
+                                                poiTypeName:nil
+                                                     radius:radius] mutableCopy];
+            [osmwiki removeObject:poi];
+
+            if (accept)
+            {
+                NSMutableArray<OAPOI *> *itemsToRemove = [NSMutableArray new];
+                for (OAPOI *w in osmwiki)
+                {
+                    if (!accept(w))
+                        [itemsToRemove addObject:w];
+                }
+                [osmwiki removeObjectsInArray:itemsToRemove];
+            }
+
+            radius *= kNearbyPoiSearchFactory;
+        }
+
+        NSArray *sorted = [OAMapUtils sortPOI:osmwiki lat:self.location.latitude lon:self.location.longitude];
+        NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
+        NSArray<OAPOI *> *result = [sorted subarrayWithRange:NSMakeRange(0, finalCount)];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(result);
             }
         });
     });
@@ -1413,6 +1498,15 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
     }
     
+    if (info.isUrl)
+    {
+        NSURL *onlineUrl = [NSURL URLWithString:url];
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:onlineUrl];
+        [OARootViewController.instance.mapPanel.navigationController presentViewController:safariViewController
+                                                                                  animated:YES completion:nil];
+        return;
+    }
+    
     if ([url containsString:kWikiLink])
     {
         if (!isWikiPurchased)
@@ -1429,16 +1523,33 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         if (index != NSNotFound)
         {
+            MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
+            
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            [OAWikiArticleHelper showWikiArticle:location
-                                             url:url
-                                      sourceView:[_tableView cellForRowAtIndexPath:indexPath]];
+            [OAWikiArticleHelper showWikiArticle:@[location]
+                                             url:url onStart:^{
+                if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
+                    [progressHUD show:YES];
+            } sourceView:[_tableView cellForRowAtIndexPath:indexPath] onComplete:^{
+                [progressHUD hide:YES];
+            }];
         }
     }
     else
     {
         [OAUtilities callUrl:url];
     }
+}
+
+- (MBProgressHUD *)createWikiArticleSearchHUD
+{
+    UIView *hostView = OARootViewController.instance.view;
+    MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:hostView];
+    progressHUD.removeFromSuperViewOnHide = YES;
+    progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
+    [hostView addSubview:progressHUD];
+    [hostView bringSubviewToFront:progressHUD];
+    return progressHUD;
 }
 
 #pragma mark - UITableViewDataSource
@@ -1790,10 +1901,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:self.location.latitude
-                                                                                longitude:self.location.longitude]
-                                                 url:info.text
-                                          sourceView:[tableView cellForRowAtIndexPath:indexPath]];
+                MBProgressHUD *progressHUD = [self createWikiArticleSearchHUD];
+                
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:self.location.latitude
+                                                                  longitude:self.location.longitude];
+                
+                [OAWikiArticleHelper showWikiArticle:@[location]
+                                                 url:info.text onStart:^{
+                    if ([OAResourcesUIHelper isIndexItemDownloadedAt:location.coordinate type:OsmAndResourceType::WikiMapRegion])
+                        [progressHUD show:YES];
+                } sourceView:[tableView cellForRowAtIndexPath:indexPath] onComplete:^{
+                    [progressHUD hide:YES];
+                }];
             }
             else
             {

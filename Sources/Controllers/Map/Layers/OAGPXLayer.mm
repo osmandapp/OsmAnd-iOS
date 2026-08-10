@@ -2172,6 +2172,9 @@ colorizationScheme:(int)colorizationScheme
 
 - (EOAPinVerticalAlignment) getPointIconVerticalAlignment
 {
+    if ([OARootViewController instance].mapPanel.activeTargetType == OATargetNewMovableWpt)
+        return EOAPinAlignmentTop;
+
     return EOAPinAlignmentCenterVertical;
 }
 

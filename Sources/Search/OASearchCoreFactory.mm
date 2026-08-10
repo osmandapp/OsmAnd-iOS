@@ -596,7 +596,7 @@
 {
     for (NSString * leftUnknownSearchWord in [res filterUnknownSearchWord:nil])
     {
-        BOOL isNumber2Letters = OsmAnd::CommonWords::isNumber2Letters(QString::fromNSString(leftUnknownSearchWord));
+        BOOL isNumber2Letters = OsmAnd::SearchAlgorithms::isNumber2Letters(QString::fromNSString(leftUnknownSearchWord));
         if (!isNumber2Letters)
         {
             return YES;
@@ -1145,7 +1145,7 @@
 
 @implementation OATopIndexMatch
 
-- (instancetype)initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue key:(NSString *)key
+- (instancetype)initWithSubType:(NSString *)value translatedValue:(nullable NSString *)translatedValue key:(NSString *)key
 {
     self = [super init];
     if (self)
@@ -1728,12 +1728,12 @@
     }
 }
 
-- (OAPOIBaseType *) getUnselectedPoiType
+- (nullable OAPOIBaseType *) getUnselectedPoiType
 {
     return _unselectedPoiType;
 }
 
-- (NSString *) getNameFilter
+- (nullable NSString *) getNameFilter
 {
     return _nameFilter;
 }
@@ -2210,7 +2210,7 @@
             }
         }
         QString streetIntersection = s->intersectedStreets.size() > 0 ? QString::fromNSString([phrase getUnknownWordToSearch]) : QString();
-        if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getCommonSearch(streetIntersection) == -1))
+        if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getInstance().getCommonSearch(streetIntersection) == -1))
         {
             for (const auto& street : s->intersectedStreets)
             {

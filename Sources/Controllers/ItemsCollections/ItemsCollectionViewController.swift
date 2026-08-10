@@ -164,10 +164,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     // MARK: - Base UI
 
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-
     override func registerCells() {
         switch collectionType {
         case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:

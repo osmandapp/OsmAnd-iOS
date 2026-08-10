@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary<NSString *, OASGpxFile *> *)activeGpx;
 - (void)removeGpxFileWith:(NSString *)path;
 - (nullable OASGpxFile *)getGpxFileFor:(NSString *)path;
+- (nullable OASGpxFile *)activeGpxFileForPath:(NSString *)path fallbackPath:(nullable NSString *)fallbackPath;
 - (BOOL)containsGpxFileWith:(NSString *)path;
 - (void)addGpxFile:(OASGpxFile *)file for:(NSString *)path;
 

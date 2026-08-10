@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Διαγραφή %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Αγαπημένο</string>
+			<key>other</key>
+			<string>%ld Αγαπημένα</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Διαγραφή %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Φάκελος</string>
+			<key>other</key>
+			<string>%ld Φάκελοι</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Διαγραφή %#@folders@ και %#@points@. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Φάκελος</string>
+			<key>other</key>
+			<string>%ld Φάκελοι</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Σημείο</string>
+			<key>other</key>
+			<string>%ld Σημεία</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

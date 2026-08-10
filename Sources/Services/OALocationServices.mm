@@ -26,8 +26,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAverageSpeedComputer.h"
 
-#import <FormatterKit/TTTLocationFormatter.h>
-
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -50,6 +48,7 @@
     CLLocationManager* _manager;
     BOOL _locationActive;
     BOOL _compassActive;
+    BOOL _externalProviderActive;
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _followTheRouteObserver;
@@ -94,6 +93,7 @@
 
     _locationActive = NO;
     _compassActive = NO;
+    _externalProviderActive = NO;
     _statusObservable = [[OAObservable alloc] init];
 
     _stateObservable = [[OAObservable alloc] init];
@@ -211,11 +211,19 @@
             return OALocationServicesStatusAuthorizing;
         if (_isSuspended)
             return OALocationServicesStatusSuspended;
-        return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
+        return (_locationActive || _compassActive || _externalProviderActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
     }
 }
 
 @synthesize statusObservable = _statusObservable;
+
+- (BOOL) externalProviderActive
+{
+    @synchronized(_lock)
+    {
+        return _externalProviderActive;
+    }
+}
 
 - (BOOL) doStart
 {
@@ -223,6 +231,8 @@
 
     // Do nothing if manager is not initialized or waiting for authorization
     if (!manager || self.status == OALocationServicesStatusAuthorizing)
+        return NO;
+    if (_externalProviderActive)
         return NO;
     
     BOOL didChange = NO;
@@ -255,7 +265,7 @@
         _compassActive = YES;
         didChange = YES;
     }
-    
+
     return didChange;
 }
 
@@ -274,6 +284,19 @@
 
 - (BOOL) doStop
 {
+    BOOL didChange = [self doStopSystemLocation];
+
+    if (_externalProviderActive)
+    {
+        _externalProviderActive = NO;
+        didChange = YES;
+    }
+
+    return didChange;
+}
+
+- (BOOL) doStopSystemLocation
+{
     CLLocationManager *manager = self.getLocationManager;
     BOOL didChange = NO;
 
@@ -282,7 +305,7 @@
         _waitingForAuthorization = NO;
         didChange = YES;
     }
-    
+
     if (manager && _locationActive)
     {
         [manager stopUpdatingLocation];
@@ -317,12 +340,12 @@
 {
     @synchronized(_lock)
     {
-        if ([self doStart])
+        BOOL wasSuspended = _isSuspended;
+        _isSuspended = NO;
+        BOOL didStart = [self doStart];
+        if (didStart || wasSuspended)
         {
             OALog(@"Resumed location services");
-
-            _isSuspended = NO;
-
             [_statusObservable notifyEvent];
         }
     }
@@ -461,6 +484,8 @@
     CLLocationManager *manager = self.getLocationManager;
     if (!manager)
         return;
+    if (_externalProviderActive)
+        return;
 
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
     if (manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
@@ -479,6 +504,15 @@
         return YES;
 
     return NO;
+}
+
+- (BOOL)shouldRestartSystemLocationAfterExternalProviderReset
+{
+    return !_isSuspended
+        && (_app.mapMode == OAMapModePositionTrack
+            || _settings.mapSettingTrackRecording
+            || [_routingHelper isFollowingMode]
+            || UIApplication.sharedApplication.isCarPlayConnected);
 }
 
 - (void) onMapModeChanged
@@ -579,6 +613,9 @@
 
 - (void) onLocationLost
 {
+    if (_externalProviderActive)
+        return;
+
     _gpsSignalLost = YES;
     if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0)
         [[_routingHelper getVoiceRouter] gpsLocationLost];
@@ -642,9 +679,68 @@
     [self setLocation:location];
 }
 
+- (void)setLocationFromExternalProvider:(CLLocation *)location
+{
+    if (!location)
+        return;
+
+    BOOL wasLocationUnknown = (_lastLocation == nil);
+    BOOL didChangeStatus = NO;
+    @synchronized(_lock)
+    {
+        if (_isSuspended)
+            return;
+
+        if (!_externalProviderActive)
+        {
+            _externalProviderActive = YES;
+            didChangeStatus = YES;
+        }
+    }
+    didChangeStatus = [self doStopSystemLocation] || didChangeStatus;
+    _lastHeading = location.course;
+    _lastMagneticHeading = location.course;
+    [self setLocation:location];
+    if (didChangeStatus)
+        [_statusObservable notifyEvent];
+    if (wasLocationUnknown)
+        [_updateFirstTimeObserver notifyEvent];
+}
+
+- (void)resetLocationFromExternalProvider
+{
+    BOOL didChangeStatus = NO;
+    BOOL shouldRestartSystemLocation = NO;
+    @synchronized(_lock)
+    {
+        if (_externalProviderActive)
+        {
+            _externalProviderActive = NO;
+            didChangeStatus = YES;
+            shouldRestartSystemLocation = [self shouldRestartSystemLocationAfterExternalProviderReset];
+        }
+    }
+
+    if (!didChangeStatus)
+        return;
+
+    _lastHeading = NAN;
+    _lastMagneticHeading = NAN;
+    [self setLocation:nil];
+    if (shouldRestartSystemLocation)
+        [self start];
+    else
+        [_statusObservable notifyEvent];
+}
+
 - (BOOL) isInLocationSimulation
 {
     return _simulatePosition != nil;
+}
+
+- (BOOL)isRouteAnimating
+{
+    return [_locationSimulation isRouteAnimating];
 }
 
 - (void) setLocation:(CLLocation *)location
@@ -716,7 +812,17 @@
 
     // If services were running, but now authorization was revoked, stop them
     if (status != kCLAuthorizationStatusAuthorizedAlways && status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
-        [self stop];
+    {
+        if (_externalProviderActive)
+        {
+            if ([self doStopSystemLocation])
+                [_statusObservable notifyEvent];
+        }
+        else
+        {
+            [self stop];
+        }
+    }
     else if (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse)
         [self start];
 
@@ -732,7 +838,17 @@
             // User have denied services or revoked authorization, stop the services
             // If services were running, but now authorization was revoked, stop them
             if (_locationActive || _compassActive)
-                [self stop];
+            {
+                if (_externalProviderActive)
+                {
+                    if ([self doStopSystemLocation])
+                        [_statusObservable notifyEvent];
+                }
+                else
+                {
+                    [self stop];
+                }
+            }
             return;
         }
         else if (error.code == kCLErrorLocationUnknown)
@@ -753,11 +869,14 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
+
+    if (_externalProviderActive)
+        return;
     
     if (!locations || ![locations lastObject] || [_locationSimulation isRouteAnimating])
         return;
 
-    BOOL wasLocationUnknown = (_lastLocation == nil);
+    BOOL wasLocationUnknown = _lastLocation == nil;
     
     [self setLocation:[locations lastObject]];
 
@@ -773,6 +892,10 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
+
+    if (_externalProviderActive)
+        return;
+
     @synchronized(_lock)
     {
         _lastHeading = newHeading.trueHeading;
@@ -789,20 +912,6 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"loc_access_denied") message:OALocalizedString(@"loc_access_denied_desc") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
     [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-}
-
-- (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation
-{
-    CLLocation *location = self.lastKnownLocation;
-    if (location && destinationLocation)
-    {
-        TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
-        return [formatter stringFromBearingFromLocation:location toLocation:destinationLocation];
-    }
-    else
-    {
-        return nil;
-    }
 }
 
 // Relative to north

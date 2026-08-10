@@ -90,7 +90,6 @@
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
 #import "OAEditPointViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
@@ -407,7 +406,7 @@ typedef enum
 
     self.sidePanelController.recognizesPanGesture = NO;
 
-    if ([controller isKindOfClass:OARoutePlanningHudViewController.class])
+    if ([controller isKindOfClass:PlanRouteScrollableViewController.class])
         _activeTargetType = OATargetRoutePlanning;
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
@@ -437,11 +436,6 @@ typedef enum
     [_hudViewController updateDependentButtonsVisibility];
 }
 
-- (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
-{
-    _activeTargetType = OATargetRoutePlanning;
-    [self showScrollableHudViewController:controller];
-}
 
 - (void)showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller
 {
@@ -939,12 +933,12 @@ typedef enum
     }
 }
 
-- (void) mapSettingsButtonClick:(id)sender
+- (void) mapSettingsButtonClick:(nullable id)sender
 {
     [self mapSettingsButtonClick:sender mode:nil];
 }
 
-- (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode
+- (void) mapSettingsButtonClick:(nullable id)sender mode:(nullable OAApplicationMode *)targetMode
 {
     [OAAnalyticsHelper logEvent:@"configure_map_open"];
     
@@ -1312,7 +1306,7 @@ typedef enum
     navController.navigationBarHidden = YES;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
-    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class])
+    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
         _isNewContextMenuStillEnabled = YES;
 
     [self presentViewController:navController animated:YES completion:nil];
@@ -1414,7 +1408,7 @@ typedef enum
     [self showContextMenuWithPoints:targetPoints selectedObjects:nil touchPointLatLon:nil];
 }
 
-- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(CLLocation *)touchPointLatLon
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
     if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
         [_scrollableHudViewController forceHide];
@@ -2412,11 +2406,10 @@ typedef enum
 
 - (void) targetOpenPlanRoute
 {
+    CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude);
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
-                                                                                        initWithLatitude:_targetLatitude
-                                                                                               longitude:_targetLongitude]]];
+    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
 }
 
 - (void) targetGoToPoint
@@ -2973,9 +2966,6 @@ typedef enum
     UIImage *icon = [item icon];
     
     targetPoint.type = OATargetHistoryItem;
-
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = [self findRoadNameByLat:lat lon:lon];
     _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
@@ -2983,10 +2973,10 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
-    targetPoint.titleAddress = _formattedTargetName;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
+    targetPoint.shouldFetchAddress = YES;
     
     [_targetMenuView setTargetPoint:targetPoint];
     
@@ -3115,11 +3105,11 @@ typedef enum
 }
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item
-                        items:(NSArray<OASGpxDataItem *> *)items
-                     routeKey:(OARouteKey *)routeKey
+                        items:(nullable NSArray<OASGpxDataItem *> *)items
+                     routeKey:(nullable OARouteKey *)routeKey
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state
-                     analysis:(OASGpxTrackAnalysis *)analysis;
+                     analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
     if (_scrollableHudViewController)
     {
@@ -3135,11 +3125,11 @@ typedef enum
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
-                items:(NSArray<OASGpxDataItem *> *)items
-             routeKey:(OARouteKey *)routeKey
+                items:(nullable NSArray<OASGpxDataItem *> *)items
+             routeKey:(nullable OARouteKey *)routeKey
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
-             analysis:(OASGpxTrackAnalysis *)analysis
+             analysis:(nullable OASGpxTrackAnalysis *)analysis
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 
@@ -3729,7 +3719,7 @@ typedef enum
 
     _targetDestination = destination;
 
-    _targetMenuView.isAddressFound = YES;
+    _targetMenuView.isAddressFound = NO;
     _formattedTargetName = caption;
     _targetMode = EOATargetPoint;
     _targetLatitude = destination.latitude;
@@ -3739,7 +3729,7 @@ typedef enum
     targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
     targetPoint.title = _formattedTargetName;
     targetPoint.icon = icon;
-    targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
+    targetPoint.shouldFetchAddress = YES;
 
     [_targetMenuView setTargetPoint:targetPoint];
     [self enterContextMenuMode];
@@ -4311,10 +4301,10 @@ typedef enum
     
     BOOL hasIntermediatePoints = points.count > 0;
     
+    [[OsmAndApp instance].data clearIntermediatePoints];
+    
     if (hasIntermediatePoints)
     {
-        [[OsmAndApp instance].data clearIntermediatePoints];
-        
         for (CLLocation *point in points)
         {
             [[OsmAndApp instance].data insertIntermediatePoint:[OARTargetPoint create:point name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""]] index:(int)[[OsmAndApp instance].data intermediatePoints].count];

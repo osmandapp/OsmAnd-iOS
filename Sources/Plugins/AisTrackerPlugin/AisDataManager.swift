@@ -10,7 +10,7 @@ import OsmAndShared
 
 @objcMembers
 final class AisDataManager: NSObject {
-    private static let objectLimit = 200
+    private static let objectLimit = 20000
 
     var objects: [AisObject] {
         Array(objectsByMmsi.values)
@@ -18,12 +18,18 @@ final class AisDataManager: NSObject {
     
     private var objectsByMmsi: [Int: AisObject] = [:]
     private var cleanupTimer: Timer?
+    private var memoryWarningObserver: NSObjectProtocol?
     
     private weak var plugin: AisTrackerPlugin?
     
     init(plugin: AisTrackerPlugin) {
         self.plugin = plugin
         super.init()
+        memoryWarningObserver = NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification,
+                                                                       object: nil,
+                                                                       queue: .main) { [weak self] _ in
+            self?.removeAllObjectsOnMemoryWarning()
+        }
     }
 
     func startUpdates() {
@@ -42,8 +48,7 @@ final class AisDataManager: NSObject {
 
     func cleanupResources() {
         stopUpdates()
-        objectsByMmsi.removeAll()
-        plugin?.onAisObjectsChanged()
+        removeAllObjects(reason: "cleanup")
     }
 
     func onAisObjectReceived(_ ais: AisObject) {
@@ -89,5 +94,32 @@ final class AisDataManager: NSObject {
             AisObjectHelper.debugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(oldest))")
         }
         plugin?.onAisObjectRemoved(oldest)
+    }
+
+    private func removeAllObjectsOnMemoryWarning() {
+        guard let plugin, plugin.isEnabled() else {
+            objectsByMmsi.removeAll()
+            return
+        }
+        removeAllObjects(reason: "memory-warning")
+    }
+
+    private func removeAllObjects(reason: String) {
+        let removedCount = objectsByMmsi.count
+        guard removedCount > 0 else { return }
+
+        objectsByMmsi.removeAll()
+
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("[AisDataManager] data remove-all reason=\(reason) removed=\(removedCount)")
+        }
+
+        plugin?.onAisObjectsChanged()
+    }
+
+    deinit {
+        if let memoryWarningObserver {
+            NotificationCenter.default.removeObserver(memoryWarningObserver)
+        }
     }
 }

@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="EmptyStateCollectionViewCell" customModule="OsmAnd_Maps" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="417" height="247"/>
+            <rect key="frame" x="0.0" y="0.0" width="417" height="248"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="417" height="247"/>
+                <rect key="frame" x="0.0" y="0.0" width="417" height="248"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGg-TU-lOT">
-                        <rect key="frame" x="30" y="145" width="357" height="18"/>
+                        <rect key="frame" x="30" y="146" width="357" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uv7-Qe-aCC">
-                        <rect key="frame" x="30" y="183" width="357" height="44"/>
+                        <rect key="frame" x="30" y="184" width="357" height="44"/>
                         <color key="backgroundColor" name="buttonBgColorTertiary"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="myJ-ng-E4T"/>
@@ -61,7 +61,7 @@
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="jGg-TU-lOT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leadingMargin" constant="10" id="2yn-g4-D2K"/>
-                <constraint firstItem="jGg-TU-lOT" firstAttribute="top" secondItem="hVD-cm-iau" secondAttribute="bottom" constant="6" id="76z-YL-V4W"/>
+                <constraint firstItem="jGg-TU-lOT" firstAttribute="top" secondItem="hVD-cm-iau" secondAttribute="bottom" constant="7" id="76z-YL-V4W"/>
                 <constraint firstAttribute="bottom" secondItem="Uv7-Qe-aCC" secondAttribute="bottom" constant="20" id="7yK-ks-mJh"/>
                 <constraint firstAttribute="trailingMargin" secondItem="Uv7-Qe-aCC" secondAttribute="trailing" constant="10" id="CUQ-pc-nsa"/>
                 <constraint firstItem="hVD-cm-iau" firstAttribute="top" secondItem="OjP-rq-aR6" secondAttribute="bottom" constant="30" id="Hqe-sE-7FK"/>

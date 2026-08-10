@@ -22,6 +22,8 @@ final class MigrationManager: NSObject {
         case migrationHudButtonPositionsKey
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
+        case migrateAstronomyPreferences
+        case migrateCarPlayMapAppearanceMode
     }
     
     private struct HudMigrationScenario {
@@ -103,6 +105,14 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue) {
                 migrateLocationIconSizeAndCourseIconSize()
                 defaults.set(true, forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateAstronomyPreferences.rawValue) {
+                migrateAstronomyPreferences()
+                defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
+                migrateCarPlayMapAppearanceMode()
+                defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
             }
         }
     }
@@ -600,6 +610,18 @@ final class MigrationManager: NSObject {
         }
     }
 
+    private func migrateAstronomyPreferences() {
+        if let plugin = OAPluginsHelper.getPlugin(AstronomyPlugin.self) as? AstronomyPlugin {
+            plugin.migrateLegacyStarWatcherSettingsIfNeeded()
+        }
+    }
+    
+    private func migrateCarPlayMapAppearanceMode() {
+        let carPlayMode = settings.carPlayMode.get()
+        let profileMapMode = settings.appearanceMode.get(carPlayMode)
+        settings.carPlayMapAppearanceMode.set(profileMapMode)
+    }
+
     // MARK: - Import old versions
 
     func changeJsonMigrationToV2(_ json: [String: String]) -> [String: String] {
@@ -610,7 +632,8 @@ final class MigrationManager: NSObject {
             "top_widget_panel_order": "widget_top_panel_order",
             "bottom_widget_panel_order": "widget_bottom_panel_order",
             "shared_string_automatic": "driving_region_automatic",
-            "external_input_device": "selected_external_input_device"
+            "external_input_device": "selected_external_input_device",
+            "star_watcher_settings": "astronomy_settings"
         ]
 
         let changeWidgetIds = [

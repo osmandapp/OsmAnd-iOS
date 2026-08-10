@@ -525,7 +525,7 @@
     NSString *newGroupName = [textView.text trim];
     if (newGroupName.length == 0 ||
         [self isIncorrectFileName:textView.text] ||
-        [OAFavoritesHelper getGroupByName:newGroupName] ||
+        [OAFavoritesHelper groupByName:newGroupName] ||
         [newGroupName isEqualToString:OALocalizedString(@"favorites_item")] ||
         [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
         [newGroupName isEqualToString:kPersonalCategory] ||

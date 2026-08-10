@@ -173,7 +173,7 @@ enum AstroVisibilityCardViewHolder {
 
     private static func makeDivider() -> UIView {
         let divider = UIView()
-        divider.backgroundColor = .customSeparator
+        divider.backgroundColor = .customSeparatorSolid
         divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false

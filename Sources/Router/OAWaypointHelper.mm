@@ -251,7 +251,7 @@
         [self commitPointsRemoval:checkedIntermediates];
 }
 
-- (OALocationPointWrapper *) getMostImportantLocationPoint:(NSMutableArray<OALocationPointWrapper *> *)list
+- (nullable OALocationPointWrapper *) getMostImportantLocationPoint:(nullable NSMutableArray<OALocationPointWrapper *> *)list
 {
     //Location lastProjection = app.getRoutingHelper().getLastProjection();
     if (list)

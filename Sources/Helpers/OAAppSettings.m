@@ -130,6 +130,7 @@ static NSString * const lastStartLonkey = @"lastStartLonkey";
 static NSString * const applicationModeKey = @"applicationMode";
 static NSString * const defaultApplicationModeKey = @"default_application_mode_string";
 static NSString * const defaultCarplayModeKey = @"default_carplay_mode_string";
+static NSString * const carPlayMapAppearanceModeKey = @"carplay_map_appearance_mode";
 static NSString * const carPlayModeIsDefaultKey = @"carplay_mode_is_default_string";
 static NSString * const availableApplicationModesKey = @"available_application_modes";
 static NSString * const customAppModesKey = @"customAppModes";
@@ -1807,7 +1808,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 {
 }
 
-- (NSString *)toStringValue:(OAApplicationMode *)mode
+- (NSString *)toStringValue:(nullable OAApplicationMode *)mode
 {
     return @"";
 }
@@ -2144,7 +2145,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @implementation OACommonString
 
-+ (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
++ (instancetype) withKey:(NSString *)key defValue:(nullable NSString *)defValue
 {
     OACommonString *obj = [[OACommonString alloc] init];
     if (obj)
@@ -2169,12 +2170,12 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return self.defValue;
 }
 
-- (void) set:(NSString *)string
+- (void) set:(nullable NSString *)string
 {
     [self set:string mode:self.appMode];
 }
 
-- (void) set:(NSString *)string mode:(OAApplicationMode *)mode
+- (void) set:(nullable NSString *)string mode:(OAApplicationMode *)mode
 {
     [self setValue:string mode:mode];
 }
@@ -2493,13 +2494,13 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OACommonMapSource ()
 
-@property (nonatomic) OAMapSource *defValue;
+@property (nonatomic, nullable) OAMapSource *defValue;
 
 @end
 
 @implementation OACommonMapSource
 
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
++ (instancetype) withKey:(NSString *)key defValue:(nullable OAMapSource *)defValue
 {
     OACommonMapSource *obj = [[OACommonMapSource alloc] init];
     if (obj)
@@ -2510,23 +2511,23 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
-- (OAMapSource *) get
+- (nullable OAMapSource *) get
 {
     return [self get:self.appMode];
 }
 
-- (OAMapSource *) get:(OAApplicationMode *)mode
+- (nullable OAMapSource *) get:(OAApplicationMode *)mode
 {
     NSObject *val = [self getValue:mode];
     return val ? [OAMapSource fromDictionary:(NSDictionary *)val] : self.defValue;
 }
 
-- (void) set:(OAMapSource *)mapSource
+- (void) set:(nullable OAMapSource *)mapSource
 {
     [self set:mapSource mode:self.appMode];
 }
 
-- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+- (void) set:(nullable OAMapSource *)mapSource mode:(OAApplicationMode *)mode
 {
     [self setValue:[mapSource toDictionary] mode:mode];
 }
@@ -6038,6 +6039,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _carPlayMode = [[[OACommonAppMode withKey:defaultCarplayModeKey defValue:OAApplicationMode.CAR] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"default_carplay_mode_string"];
         
+        _carPlayMapAppearanceMode = [[[OACommonDayNightMode withKey:carPlayMapAppearanceModeKey defValue:DayNightModeAppTheme] makeGlobal] makeShared];
+        [_globalPreferences setObject:_carPlayMapAppearanceMode forKey:carPlayMapAppearanceModeKey];
+        
         _isCarPlayModeDefault = [[[OACommonBoolean withKey:carPlayModeIsDefaultKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_carPlayMode forKey:@"carplay_mode_is_default_string"];
 
@@ -6185,7 +6189,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_favoriteSortModes forKey:favoriteSortModesKey];
 
-        _searchFavoriteSortMode = [OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeTitle]];
+        _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
 
         _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
@@ -6470,7 +6474,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
-        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
+        _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityIdentifiable] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -7487,15 +7491,35 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
+- (BOOL)isGpxVisible:(NSString *)filePath
+{
+    for (NSString *visiblePath in _mapSettingVisibleGpx.get)
+    {
+        if ([visiblePath compare:filePath] == NSOrderedSame)
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update
 {
     BOOL added = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
     for (NSString *filePath in filePaths)
     {
-        if (![arr containsObject:filePath])
+        BOOL containsPath = NO;
+        for (NSString *visiblePath in arr)
         {
-            [arr addObject:filePath];
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                containsPath = YES;
+                break;
+            }
+        }
+        if (!containsPath)
+        {
+            [arr addObject:filePath.decomposedStringWithCanonicalMapping];
             added = YES;
         }
     }
@@ -7515,35 +7539,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     [self showGpx:filePaths update:YES];
 }
 
-- (void) updateGpx:(NSArray<NSString *> *)filePaths
-{
-    BOOL added = NO;
-    BOOL removed = NO;
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
-    for (NSString *filePath in filePaths)
-    {
-        if (![arr containsObject:filePath])
-        {
-            added = YES;
-            break;
-        }
-    }
-    for (NSString *visible in arr)
-    {
-        if (![filePaths containsObject:visible])
-        {
-            removed = YES;
-            break;
-        }
-    }
-
-    if (added || removed)
-    {
-        [self.mapSettingVisibleGpx set:[NSMutableArray arrayWithArray:filePaths]];
-        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
-    }
-}
-
 - (void) hideGpx:(NSArray<NSString *> *)filePaths
 {
     [self hideGpx:filePaths update:YES];
@@ -7556,10 +7551,13 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *filePath in filePaths)
     {
-        if ([arr containsObject:filePath])
+        for (NSString *visiblePath in arr)
         {
-            [arrToDelete addObject:filePath];
-            removed = YES;
+            if ([visiblePath compare:filePath] == NSOrderedSame)
+            {
+                [arrToDelete addObject:visiblePath];
+                removed = YES;
+            }
         }
     }
     [arr removeObjectsInArray:arrToDelete];
@@ -7583,12 +7581,16 @@ static NSString *kOfflineKey = @"OFFLINE";
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
 
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : gpx.gpxFilePath];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
+        NSString *existingFilepath = filenameWithoutPrefix ?: gpx.gpxFilePath;
+        NSString *path = existingFilepath ? [app.gpxPath stringByAppendingPathComponent:existingFilepath] : nil;
+        if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
             [arrToDelete addObject:filepath];
     }
     [arr removeObjectsInArray:arrToDelete];
-    [self.mapSettingVisibleGpx set:[NSArray arrayWithArray:arr]];
+    NSMutableOrderedSet<NSString *> *visiblePaths = [NSMutableOrderedSet orderedSet];
+    for (NSString *path in arr)
+        [visiblePaths addObject:path.decomposedStringWithCanonicalMapping];
+    [self.mapSettingVisibleGpx set:visiblePaths.array];
 }
 
 - (NSString *) getFormattedTrackInterval:(int)value
@@ -7677,7 +7679,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (NSDictionary<NSString *, NSString *> *)getFavoriteSortModes
 {
-    return [self getTrackSortModesWithArray:[_favoriteSortModes get]];
+    return [self favoriteSortModesWithArray:[_favoriteSortModes get]];
 }
 
 - (NSDictionary<NSString *, NSString *> *)getTrackSortModesWithArray:(NSArray<NSString *> *)modes
@@ -7696,6 +7698,25 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [sortModes copy];
 }
 
+- (NSDictionary<NSString *, NSString *> *)favoriteSortModesWithArray:(NSArray<NSString *> *)modes
+{
+    NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
+    if (modes != nil && modes.count > 0)
+    {
+        NSString *joinedSortModes = [modes componentsJoinedByString:@","];
+        for (NSString *sortMode in [joinedSortModes componentsSeparatedByString:@";;"])
+        {
+            if (sortMode.length == 0)
+                continue;
+            NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
+            if (parts.count == 2)
+                sortModes[parts[0]] = parts[1];
+        }
+    }
+
+    return [sortModes copy];
+}
+
 - (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
 {
     NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
@@ -7704,7 +7725,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (void)saveFavoriteSortModes:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
 {
-    NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:favoriteSortModes];
+    NSArray<NSString *> *sortModes = [self plainFavoriteSortModesFromDictionary:favoriteSortModes];
     [_favoriteSortModes set:sortModes];
 }
 
@@ -7719,6 +7740,19 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
     
     return [sortTypes copy];
+}
+
+- (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
+{
+    NSMutableArray<NSString *> *sortTypes = [NSMutableArray array];
+    for (NSString *key in favoriteSortModes.allKeys)
+    {
+        NSString *value = favoriteSortModes[key];
+        NSString *combined = [NSString stringWithFormat:@"%@,,%@", key, value];
+        [sortTypes addObject:combined];
+    }
+
+    return sortTypes.count > 0 ? @[[[sortTypes componentsJoinedByString:@";;"] stringByAppendingString:@";;"]] : @[];
 }
 
 // navigation settings

@@ -151,6 +151,15 @@ final class AstroDataDbProvider: AstroDataProvider {
         }
         return bestArticle ?? enArticle
     }
+    
+    override func getAstroArticleLanguages(wikidataId: String) -> [String] {
+        guard let db = openDatabase() else { return [] }
+        return db.rows("""
+            SELECT DISTINCT lang FROM Wikipedia
+            WHERE wikidata = ? AND mobile_html IS NOT NULL
+            ORDER BY lang
+        """, arguments: [wikidataId]).compactMap { $0.string("lang") }
+    }
 
     private func openDatabase() -> SQLiteDatabase? {
         for path in databaseLookupPaths() where FileManager.default.fileExists(atPath: path) {

@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     _sortedByNameFavoriteItems = [[NSMutableArray alloc] init];
     _sortedByDistFavoriteItems = [[NSMutableArray alloc] init];
 
-    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
         FavTableGroup *itemData = [[FavTableGroup alloc] init];
         itemData.groupName = [OAFavoriteGroup getDisplayName:group.name];

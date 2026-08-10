@@ -16,7 +16,6 @@
 #import "OATextInputFloatingCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAShapesTableViewCell.h"
-#import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
@@ -63,7 +62,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, SelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -178,6 +177,18 @@
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
 {
+    return [self initWithLocation:location title:formattedTitle address:address customParam:customParam pointType:pointType targetMenuState:targetMenuState poi:poi gpxFile:nil];
+}
+
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                         address:(NSString *)address
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi
+                     gpxFile:(OASGpxFile *)gpxFile
+{
     self = [super init];
     if (self)
     {
@@ -194,7 +205,7 @@
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi gpxFile:gpxFile];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }
@@ -353,7 +364,7 @@
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     UIColor *selectedColor;
     if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
-        selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
+        selectedColor = [OAFavoritesHelper groupByTrimmedName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
     else
         selectedColor = [_pointHandler getColor];
     if (!selectedColor)
@@ -376,7 +387,7 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
+        NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper favoriteGroups];
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
             [names addObject:OALocalizedString(@"favorites_item")];
@@ -417,7 +428,7 @@
     _selectedIconName = preselectedIconName;
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:groupName];
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
@@ -848,11 +859,11 @@
     }
     else if ([key isEqualToString:kSelectGroupKey])
     {
-        OASelectFavoriteGroupViewController *selectGroupController;
+        SelectFavoriteGroupViewController *selectGroupController;
         if (_editPointType == EOAEditPointTypeFavorite)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
         else if (_editPointType == EOAEditPointTypeWaypoint)
-            selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
 
         selectGroupController.delegate = self;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectGroupController];
@@ -1000,6 +1011,12 @@
     {
         OAPointEditingData *data = [[OAPointEditingData alloc] init];
         NSString *savingGroup = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle] trim];
+        if (_editPointType == EOAEditPointTypeFavorite)
+        {
+            OAFavoriteGroup *existingFavoriteGroup = [OAFavoritesHelper groupByTrimmedName:savingGroup];
+            if (existingFavoriteGroup)
+                savingGroup = existingFavoriteGroup.name;
+        }
         
         data.descr = self.desc ? self.desc : @"";
         data.address = self.address ? self.address : @"";
@@ -1041,8 +1058,12 @@
             data.category = savingGroup;
             [_pointHandler savePoint:data newPoint:NO];
         }
+        if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
+            [_appearanceCollection selectColor:_selectedColorItem];
         if (_editPointType == EOAEditPointTypeFavorite)
+        {
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
+        }
     }
     [self.delegate saveTapped];
     [self dismissViewController];
@@ -1147,7 +1168,7 @@
     [self showModalViewController:groupEditor];
 }
 
-#pragma mark - OASelectFavoriteGroupDelegate
+#pragma mark - SelectFavoriteGroupDelegate
 
 - (void)onGroupSelected:(NSString *)selectedGroupName
 {
@@ -1235,10 +1256,18 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        [OAFavoritesHelper addFavoriteGroup:editedGroupName
-                                      color:color
-                                   iconName:iconName
-                         backgroundIconName:backgroundIconName];
+        OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
+        if (existingGroup)
+        {
+            editedGroupName = existingGroup.name;
+        }
+        else
+        {
+            [OAFavoritesHelper addFavoriteGroup:editedGroupName
+                                          color:color
+                                       iconName:iconName
+                             backgroundIconName:backgroundIconName];
+        }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1486,10 +1515,11 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-        OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
         if (group)
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
+            _isNewColorSelected = NO;
             _selectedIconName = group.iconName;
             _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
         }
@@ -1552,10 +1582,6 @@
                   iconName:iconName
                      color:color
         backgroundIconName:backgroundIconName];
-}
-
-- (void)onEditorUpdated
-{
 }
 
 @end

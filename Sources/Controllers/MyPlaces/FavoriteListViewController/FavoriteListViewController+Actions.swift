@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 extension FavoriteListViewController {
     func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesBridgeHelper.pointsGroup(forGroupName: groupName)) else { return }
+        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
         favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
@@ -19,19 +19,18 @@ extension FavoriteListViewController {
     }
 
     func openFavoriteItemsMove(_ favoriteItems: [Any]) {
-        guard !favoriteItems.isEmpty,
-              let navigationController,
-              let groupController = OAEditGroupViewController(groupName: nil, groups: OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
+        guard !favoriteItems.isEmpty, let navigationController else {
             return
         }
-        self.groupController = groupController
+        let viewController = SelectFavoriteGroupViewController(selectedGroupName: parentGroupName,
+                                                               favoriteGroupNames: OAFavoritesHelperBridge.shared().favoriteGroupNames(forMovingFavoriteItems: favoriteItems))
         favoriteItemsToMove = favoriteItems
-        groupController.delegate = self
-        navigationController.present(UINavigationController(rootViewController: groupController), animated: true)
+        viewController.delegate = self
+        navigationController.present(UINavigationController(rootViewController: viewController), animated: true)
     }
 
     func openFavoriteGroupAddToTrack(_ groupName: String) {
-        guard OAFavoritesBridgeHelper.canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
+        guard OAFavoritesHelperBridge.shared().canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
         addToTrackGroupName = groupName
         addToTrackFavoriteItems = nil
         viewController.delegate = self
@@ -48,16 +47,16 @@ extension FavoriteListViewController {
 
     func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
         let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
-        let favorites = OAFavoritesBridgeHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
+        let favorites = favoritePointRows(OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: groupName), sortMode: sortMode)
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
     }
 
     func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesBridgeHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
+        favoritePointRows(allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.bridgeItem.groupName) })
     }
 
     func makeActionsMenu() -> UIMenu {
-        let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage(systemName: "checkmark.circle")?.resizedMenuImage()) { [weak self] _ in
+        let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
             self?.selectButtonPressed()
         }
         let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
@@ -82,8 +81,7 @@ extension FavoriteListViewController {
             searchText = ""
             selectionManager.deselectAll()
         } else {
-            let selectableItems = selectableIndexPaths().compactMap { dataSource.itemIdentifier(for: $0)?.selectionItem }
-            selectionManager = SelectionManager(allItems: selectableItems)
+            selectionManager = SelectionManager(allItems: selectableItems())
         }
 
         collectionView.isEditing = isEditing
@@ -108,7 +106,7 @@ extension FavoriteListViewController {
                 return
             }
 
-            OAFavoritesBridgeHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
+            OAFavoritesHelperBridge.shared().renameFavoriteGroup(oldGroupName, newName: newGroupName)
             self.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
             self.applySnapshot(animatingDifferences: true)
         }
@@ -128,7 +126,7 @@ extension FavoriteListViewController {
         let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
         let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesBridgeHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
+            guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
             self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
             self?.applySnapshot(animatingDifferences: true)
         })
@@ -141,7 +139,7 @@ extension FavoriteListViewController {
         let title = String(format: localizedString("delete_favorite_confirmation_title"), favorite.title)
         let alert = UIAlertController(title: title, message: localizedString("favorites_delete_confirmation_message"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesBridgeHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
+            guard OAFavoritesHelperBridge.shared().deleteFavoritePoint(favorite.bridgeItem) else { return }
             self?.applySnapshot(animatingDifferences: true)
         })
 
@@ -185,8 +183,31 @@ extension FavoriteListViewController {
         }
     }
 
+    func bridgeItems(for selectionItems: Set<FavoriteSelectionItem>) -> [Any] {
+        guard !selectionItems.isEmpty else { return [] }
+        var bridgeItems: [Any] = []
+        for section in dataSource.snapshot().sectionIdentifiers {
+            for item in dataSource.snapshot(for: section).items {
+                guard let selectionItem = item.selectionItem, selectionItems.contains(selectionItem) else {
+                    continue
+                }
+
+                switch item {
+                case .folder(let folder):
+                    bridgeItems.append(folder.bridgeItem)
+                case .favorite(let favorite):
+                    bridgeItems.append(favorite.bridgeItem)
+                default:
+                    break
+                }
+            }
+        }
+
+        return bridgeItems
+    }
+
     func openFavoriteItemsAppearance() {
-        guard collectionView.indexPathsForSelectedItems?.isEmpty == false else {
+        guard !selectionManager.selectedItems.isEmpty else {
             let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
             present(alert, animated: true)
@@ -206,6 +227,20 @@ extension FavoriteListViewController {
         selectionManager.toggle(selectionItem)
     }
 
+    func updateVisibleSelectionState(at indexPath: IndexPath) {
+        guard collectionView.isEditing,
+              let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem else {
+            return
+        }
+
+        let isSelected = selectionManager.selectedItems.contains(selectionItem)
+        if isSelected {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        } else {
+            collectionView.deselectItem(at: indexPath, animated: false)
+        }
+    }
+
     func showSearchController() {
         if isRootFolder {
             myPlacesDelegate?.updateSearchEnabling(true)
@@ -214,7 +249,6 @@ extension FavoriteListViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
 
-            navigationItem.hidesSearchBarWhenScrolling = false
             navigationItem.searchController = subfolderSearchController
             subfolderSearchController.isActive = true
         }
@@ -263,21 +297,18 @@ extension FavoriteListViewController {
     }
 
     @objc func selectAllButtonPressed() {
-        let selectableIndexPaths = selectableIndexPaths()
         if selectionManager.areAllSelected {
-            selectableIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: false) }
             selectionManager.deselectAll()
         } else {
-            selectableIndexPaths.forEach { collectionView.selectItem(at: $0, animated: false, scrollPosition: []) }
             selectionManager.selectAll()
         }
 
+        collectionView.reloadData()
         updateSelectionUI()
     }
 
     @objc func favoriteDataDidChange() {
         DispatchQueue.main.async { [weak self] in
-            OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
             self?.applySnapshot(animatingDifferences: true)
         }
     }
@@ -296,7 +327,8 @@ extension FavoriteListViewController {
     }
 
     @objc func moveButtonClicked(_ sender: Any) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: localizedString("shared_string_ok"), style: .default)
             alert.addAction(defaultAction)
@@ -304,12 +336,12 @@ extension FavoriteListViewController {
             return
         }
 
-        openFavoriteItemsMove(bridgeItems(for: selectedItems))
+        openFavoriteItemsMove(selectedBridgeItems)
     }
 
     @objc func deleteButtonClicked(_ sender: Any) {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        if selectedIndexPaths.isEmpty {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        if selectedBridgeItems.isEmpty {
             let alert = UIAlertController(title: nil, message: localizedString("fav_select_remove"), preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: localizedString("ok"), style: .default)
             alert.addAction(defaultAction)
@@ -317,7 +349,6 @@ extension FavoriteListViewController {
             return
         }
 
-        let selectedBridgeItems = bridgeItems(for: selectedIndexPaths)
         let title = deleteConfirmationTitle(for: selectedBridgeItems)
         let message = deleteConfirmationMessage(for: selectedBridgeItems)
 
@@ -331,7 +362,7 @@ extension FavoriteListViewController {
             title: localizedString("shared_string_delete"),
             style: .destructive
         ) { [weak self] _ in
-            self?.removeSelectedFavoriteItems()
+            self?.removeSelectedFavoriteItems(selectedBridgeItems)
         }
 
         let cancelButton = UIAlertAction(
@@ -362,22 +393,10 @@ extension FavoriteListViewController {
         updateDistanceAndDirection(false)
     }
     
-    private func selectableIndexPaths() -> [IndexPath] {
-        var indexPaths: [IndexPath] = []
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(item: item, section: section)
-                guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
-                switch itemIdentifier {
-                case .folder, .favorite:
-                    indexPaths.append(indexPath)
-                default:
-                    continue
-                }
-            }
+    private func selectableItems() -> [FavoriteSelectionItem] {
+        dataSource.snapshot().sectionIdentifiers.flatMap { section in
+            dataSource.snapshot(for: section).items.compactMap(\.selectionItem)
         }
-
-        return indexPaths
     }
     
     private func openNewFavoriteGroupEditor() {
@@ -409,9 +428,10 @@ extension FavoriteListViewController {
     }
 
     private func hasFolderInList(named groupName: String, excluding excludedGroupName: String) -> Bool {
-        favoriteFolders().contains { folder in
+        let normalizedGroupName = groupName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return favoriteFolders().contains { folder in
             let existingGroupName = folder.bridgeItem.groupName
-            return existingGroupName != excludedGroupName && existingGroupName == groupName
+            return existingGroupName != excludedGroupName && existingGroupName.trimmingCharacters(in: .whitespacesAndNewlines) == normalizedGroupName
         }
     }
     
@@ -422,7 +442,7 @@ extension FavoriteListViewController {
         appendFavoritePointShareLine(point.displayGroupName, to: sharingText)
         appendFavoritePointShareLine(point.itemDescription, to: sharingText)
         appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
-        if let url = URL(string: OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)) {
+        if let url = URL(string: OAFavoritesHelperBridge.shared().sharePoiURLString(forFavoritePoint: point)) {
             items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon()))
         }
         if sharingText.length > 0 {
@@ -440,12 +460,12 @@ extension FavoriteListViewController {
     }
     
     private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
-        let geoURLString = OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: point)
+        let geoURLString = OAFavoritesHelperBridge.shared().geoURLString(forFavoritePoint: point)
         if !geoURLString.isEmpty {
             sharingText.append("\n\(localizedString("shared_string_location")): \(geoURLString)")
         }
 
-        let shareURLString = OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)
+        let shareURLString = OAFavoritesHelperBridge.shared().sharePoiURLString(forFavoritePoint: point)
         if !shareURLString.isEmpty {
             sharingText.append("\n\(shareURLString)")
         }
@@ -461,7 +481,8 @@ extension FavoriteListViewController {
     }
     
     private func shareItems(for sourceView: UIView) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
+        let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
+        guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(
                 title: "",
                 message: localizedString("fav_export_select"),
@@ -479,7 +500,7 @@ extension FavoriteListViewController {
             return
         }
 
-        guard let favoritesUrl = OAFavoritesBridgeHelper.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
+        guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
         showActivity(
             [favoritesUrl],
             sourceView: sourceView,
@@ -490,11 +511,9 @@ extension FavoriteListViewController {
         )
     }
 
-    private func removeSelectedFavoriteItems() {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        let items = bridgeItems(for: selectedIndexPaths)
+    private func removeSelectedFavoriteItems(_ items: [Any]) {
         let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
-        if OAFavoritesBridgeHelper.deleteFavoriteItems(items) {
+        if OAFavoritesHelperBridge.shared().deleteFavoriteItems(items) {
             clearFavoriteSortModes(forGroupNames: groupNames)
         }
 
@@ -507,9 +526,9 @@ extension FavoriteListViewController {
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
 
         if foldersCount > 0 && pointsCount == 0 {
-            return String(format: localizedString("folders_delete_confirmation_title"), foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount)
         } else if pointsCount > 0 && foldersCount == 0 {
-            return String(format: localizedString("favorites_delete_confirmation_title"), pointsCount)
+            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount)
         } else {
             return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
         }
@@ -524,8 +543,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
-
-        return String(format: localizedString("mixed_delete_confirmation_message"), folders.count, pointsCount)
+        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, pointsCount)
     }
     
     private func openPickerToImport() {

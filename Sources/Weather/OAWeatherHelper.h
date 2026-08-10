@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 
 @class OAWorldRegion, OAResourceItem, OAObservable;
 
-//NS_ASSUME_NONNULL_BEGIN
+NS_ASSUME_NONNULL_BEGIN
 
 @interface OAWeatherHelper : NSObject
 
@@ -60,15 +60,15 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 
 - (uint64_t)getOfflineForecastSize:(OAWorldRegion *)region forUpdate:(BOOL)forUpdate;
 
-- (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete;
+- (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^ _Nullable)(void))onComplete;
 - (void)calculateFullCacheSize:(BOOL)localData
-                    onComplete:(void (^)(unsigned long long))onComplete;
+                    onComplete:(void (^ _Nullable)(unsigned long long))onComplete;
 - (uint64_t)getOfflineWeatherForecastCacheSize;
 - (NSArray<NSString *> *)getRegionIdsForDownloadedWeatherForecast;
 - (BOOL)isDownloadedWeatherForecastForRegionId:(NSString *)regionId;
 - (BOOL)isUndefinedDownloadStateFor:(OAWorldRegion *)region;
 
-- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region;
+- (void)clearCache:(BOOL)localData regionIds:(nullable NSArray<NSString *> *)regionIds region:(nullable OAWorldRegion *)region;
 - (void)clearOutdatedCache;
 - (void)removeLocalForecast:(NSString *)regionId region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
 - (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
@@ -111,4 +111,4 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 
 @end
 
-//NS_ASSUME_NONNULL_END
+NS_ASSUME_NONNULL_END

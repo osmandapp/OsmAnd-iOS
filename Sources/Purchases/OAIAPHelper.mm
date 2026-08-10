@@ -162,7 +162,9 @@ static OASubscriptionState *EXPIRED;
 {
     OAAppSettings *_settings;
     SKProductsRequest * _productsRequest;
-    RequestProductsCompletionHandler _completionHandler;
+    NSMutableArray *_productsRequestCompletionHandlers;
+    BOOL _productsRequestInProgress;
+    BOOL _productsRequestFinishing;
     
     RequestActiveProductsCompletionHandler _activeProductsCompletionHandler;
     SKReceiptRefreshRequest *_receiptRequest;
@@ -663,6 +665,7 @@ static OASubscriptionState *EXPIRED;
     {
         _settings = [OAAppSettings sharedManager];
         _products = [[OAProducts alloc] init];
+        _productsRequestCompletionHandlers = [NSMutableArray array];
         _wasProductListFetched = NO;
     }
     return self;
@@ -699,21 +702,72 @@ static OASubscriptionState *EXPIRED;
     }
 }
 
+- (void)startProductsRequest
+{
+    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
+    productsRequest.delegate = self;
+    _productsRequest = productsRequest;
+    [productsRequest start];
+}
+
+- (void)completeProductsRequestWithSuccess:(BOOL)success
+{
+    NSArray *completionHandlers;
+    @synchronized (self)
+    {
+        if (!_productsRequestInProgress || !_productsRequestFinishing)
+            return;
+
+        completionHandlers = _productsRequestCompletionHandlers.copy;
+        [_productsRequestCompletionHandlers removeAllObjects];
+        _productsRequestInProgress = NO;
+        _productsRequestFinishing = NO;
+    }
+
+    for (RequestProductsCompletionHandler completionHandler in completionHandlers)
+        completionHandler(success);
+}
+
+- (void)finishProductsRequestWithSuccess:(BOOL)success
+{
+    @synchronized (self)
+    {
+        if (!_productsRequestInProgress || _productsRequestFinishing)
+            return;
+        _productsRequestFinishing = YES;
+    }
+
+    if (success)
+    {
+        [self checkBackupPurchaseIfNeeded:^(BOOL backupPurchaseSuccess) {
+            [self completeProductsRequestWithSuccess:backupPurchaseSuccess];
+        }];
+    }
+    else
+    {
+        [self completeProductsRequestWithSuccess:NO];
+    }
+}
+
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
 {
+    RequestProductsCompletionHandler completion = [completionHandler copy];
+    @synchronized (self)
+    {
+        if (completion)
+            [_productsRequestCompletionHandlers addObject:completion];
+        if (_productsRequestInProgress)
+            return;
+
+        _productsRequestInProgress = YES;
+    }
+
     // Add self as transaction observer
     if (!_wasAddedToQueue)
     {
         _wasAddedToQueue = YES;
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
-    
-    RequestProductsCompletionHandler onComplete = ^(BOOL success) {
-        if (success)
-            [self checkBackupPurchaseIfNeeded:completionHandler];
-        else if (completionHandler)
-            completionHandler(NO);
-    };
     
     NSString *ver = OAAppVersion.getVersion;
     
@@ -800,10 +854,7 @@ static OASubscriptionState *EXPIRED;
                             }
                         }];
                         
-                        _completionHandler = [onComplete copy];
-                        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
-                        _productsRequest.delegate = self;
-                        [_productsRequest start];
+                        [self startProductsRequest];
                     });
                     return;
                 }
@@ -813,10 +864,7 @@ static OASubscriptionState *EXPIRED;
             }
         }
         
-        _completionHandler = [onComplete copy];
-        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
-        _productsRequest.delegate = self;
-        [_productsRequest start];
+        [self startProductsRequest];
     }];
 }
 
@@ -877,23 +925,17 @@ static OASubscriptionState *EXPIRED;
     else
     {
         OAIAPHelper * __weak weakSelf = self;
-        _completionHandler = ^(BOOL success) {
-            if (!success)
+        [self requestProductsWithCompletionHandler:^(BOOL success) {
+            OAProduct *requestedProduct = [weakSelf product:product.productIdentifier];
+            if (!success || !requestedProduct.skProduct)
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"buyInApp: Cannot request product: %@", product.productIdentifier]}];
             }
             else
             {
-                OAProduct *p = [weakSelf product:product.productIdentifier];
-                if (p)
-                    [weakSelf buyProduct:p];
+                [weakSelf buyProduct:requestedProduct];
             }
-        };
-        
-        NSSet *s = [[NSSet alloc] initWithObjects:product.productIdentifier, nil];
-        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
-        _productsRequest.delegate = self;
-        [_productsRequest start];
+        }];
     }
 }
 
@@ -965,23 +1007,17 @@ static OASubscriptionState *EXPIRED;
     else
     {
         OAIAPHelper * __weak weakSelf = self;
-        _completionHandler = ^(BOOL success) {
-            if (!success)
+        [self requestProductsWithCompletionHandler:^(BOOL success) {
+            OAProduct *requestedProduct = [weakSelf product:subscription.productIdentifier];
+            if (!success || !requestedProduct.skProduct || ![requestedProduct isKindOfClass:[OASubscription class]])
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"buySubscription: Cannot request product: %@", subscription.productIdentifier]}];
             }
             else
             {
-                OAProduct *p = [weakSelf product:subscription.productIdentifier];
-                if (p && [p isKindOfClass:[OASubscription class]])
-                    [weakSelf buySubscription:(OASubscription *)p];
+                [weakSelf buySubscription:(OASubscription *)requestedProduct];
             }
-        };
-        
-        NSSet *s = [[NSSet alloc] initWithObjects:subscription.productIdentifier, nil];
-        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
-        _productsRequest.delegate = self;
-        [_productsRequest start];
+        }];
     }
 }
 
@@ -1271,10 +1307,7 @@ static OASubscriptionState *EXPIRED;
         if (isPaidVersion != isPaidVersionChecked || isOsmAndProAvailable != isOsmAndProChecked)
             [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 
-        if (_completionHandler)
-            _completionHandler(success);
-        
-        _completionHandler = nil;
+        [self finishProductsRequestWithSuccess:success];
     }];
 }
 
@@ -1311,11 +1344,7 @@ static OASubscriptionState *EXPIRED;
     if (request == _productsRequest)
     {
         _productsRequest = nil;
-        
-        if (_completionHandler)
-            _completionHandler(NO);
-        
-        _completionHandler = nil;
+        [self finishProductsRequestWithSuccess:NO];
     }
     else if (request == _receiptRequest)
     {

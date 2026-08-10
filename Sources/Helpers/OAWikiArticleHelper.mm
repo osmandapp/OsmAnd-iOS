@@ -23,6 +23,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -45,7 +46,11 @@
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations
+                               url:(NSString *)url
+                           onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+                        sourceView:(nullable UIView *)sourceView
+                        onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete
 {
     self = [super init];
     if (self)
@@ -97,12 +102,31 @@
                 {
                     if (app.resourcesManager->isResourceInstalled(repository.resourceId))
                     {
-                        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-                        NSArray<OAPOI *> *wikiPoints = [OAAmenitySearcher findPOIsByTagName:nil name:_name location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
-                        
-                        [results addObjectsFromArray:wikiPoints];
-                        if (results.count > 0)
+                        NSMutableArray<OAPOI *> *wikiPoints = [NSMutableArray array];
+                        OAResultMatcher<OAPOI *> *matcher = [self createResultMatcher:wikiPoints];
+
+                        [OAAmenitySearcher searchAmenitiesByName:_name
+                                                      resourceId:repository.resourceId.toNSString()
+                                                        location:location
+                                                         matcher:matcher];
+
+                        if (wikiPoints.count > 1)
+                        {
+                            [wikiPoints sortUsingComparator:^NSComparisonResult(OAPOI *a, OAPOI *b) {
+                                CLLocation *la = [[CLLocation alloc] initWithLatitude:a.latitude longitude:a.longitude];
+                                CLLocation *lb = [[CLLocation alloc] initWithLatitude:b.latitude longitude:b.longitude];
+                                CLLocationDistance da = [location distanceFromLocation:la];
+                                CLLocationDistance db = [location distanceFromLocation:lb];
+                                if (da < db) return NSOrderedAscending;
+                                if (da > db) return NSOrderedDescending;
+                                return NSOrderedSame;
+                            }];
+                        }
+                        if (wikiPoints.count > 0)
+                        {
+                            [results addObject:wikiPoints.firstObject];
                             break;
+                        }
                     }
                     else
                     {
@@ -144,6 +168,30 @@
     _isCanceled = YES;
     if (_onComplete)
         _onComplete();
+}
+
+- (OAResultMatcher<OAPOI *> *)createResultMatcher:(NSMutableArray<OAPOI *> *)results
+{
+    NSString *articleName = _name;
+    return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
+        NSString *localeName = (*poi).name;
+        if ([articleName isEqualToString:localeName])
+        {
+            [results addObject:*poi];
+            return YES;
+        }
+        for (NSString *amenityName in (*poi).localizedNames.allValues)
+        {
+            if ([articleName isEqualToString:amenityName])
+            {
+                [results addObject:*poi];
+                return YES;
+            }
+        }
+        return NO;
+    } cancelledFunc:^BOOL {
+        return NO;
+    }];
 }
 
 - (BOOL)isRegionAdded:(OAWorldRegion *)region
@@ -207,7 +255,7 @@
 
 @implementation OAWikiArticleHelper
 
-+ (nullable NSString *) readArchiveString:(NSData *)archiveData
++ (nullable NSString *) readArchiveString:(nullable NSData *)archiveData
 {
     if (!archiveData || archiveData.length == 0)
         return nil;
@@ -230,7 +278,7 @@
     return nil;
 }
 
-+ (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
++ (nullable OAWorldRegion *) findWikiRegion:(nullable OAWorldRegion *)mapRegion
 {
     if (mapRegion)
     {
@@ -276,12 +324,16 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(nullable UIView *)sourceView
 {
     [self showWikiArticle:@[location] url:url onStart:nil sourceView:sourceView onComplete:nil];
 }
 
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations
+                     url:(NSString *)url
+                 onStart:(nullable OAWikiArticleSearchTaskBlockType)onStart
+              sourceView:(nullable UIView *)sourceView
+              onComplete:(nullable OAWikiArticleSearchTaskBlockType)onComplete
 {
     OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart sourceView:sourceView onComplete:onComplete];
     [task execute];
@@ -330,10 +382,13 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
     
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView
++ (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -348,10 +403,13 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *top = [OARootViewController instance];
+    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
+        top = top.presentedViewController;
+    [top presentViewController:alert animated:YES completion:nil];
 }
 
-+ (NSString *) getFirstParagraph:(NSString *)descriptionHtml
++ (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml
 {
    if (descriptionHtml)
    {
@@ -362,7 +420,7 @@
    return descriptionHtml;
 }
 
-+ (NSString *) getPartialContent:(NSString *)source
++ (nullable NSString *) getPartialContent:(nullable NSString *)source
 {
     if (!source || source.length == 0)
         return nil;
@@ -427,7 +485,7 @@
         return url;
 }
 
-+ (NSString *) getLang:(NSString *)url
++ (nullable NSString *) getLang:(NSString *)url
 {
     if ([url hasPrefix:kPagePrefixHttp])
     {
@@ -442,7 +500,7 @@
     return @"";
 }
 
-+ (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang
++ (nullable NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang
 {
     NSString *domain = [url containsString:kWikivoyageDomain] ? kWikivoyageDomain : [url containsString:kWikiDomain] ? kWikiDomain : kWikiDomainCom;
     NSString *articleName = @"";
@@ -456,7 +514,7 @@
     return articleName;
 }
 
-+ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate
++ (nullable UIMenu *)createLanguagesMenu:(nullable NSArray<NSString *> *)availableLocales selectedLocale:(nullable NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate
 {
     UIMenu *languageMenu;
     NSMutableArray<UIMenuElement *> *languageOptions = [NSMutableArray array];

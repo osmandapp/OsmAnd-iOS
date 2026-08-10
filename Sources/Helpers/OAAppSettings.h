@@ -426,7 +426,7 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 - (void)resetModeToDefault:(OAApplicationMode *)mode;
 - (void)resetToDefault;
 - (void)setValueFromString:(NSString *)strValue appMode:(nullable OAApplicationMode *)mode;
-- (NSString *)toStringValue:(OAApplicationMode *)mode;
+- (NSString *)toStringValue:(nullable OAApplicationMode *)mode;
 - (NSString *)toStringFromValue:(id)value;
 - (void)copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
@@ -492,9 +492,9 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 + (instancetype) withKey:(NSString *)key defValue:(nullable NSString *)defValue;
 
 - (NSString *) get;
-- (void) set:(NSString *)string;
+- (void) set:(nullable NSString *)string;
 - (NSString *) get:(OAApplicationMode *)mode;
-- (void) set:(NSString *)string mode:(OAApplicationMode *)mode;
+- (void) set:(nullable NSString *)string mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -552,12 +552,12 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @interface OACommonMapSource : OACommonPreference
 
-+ (instancetype)withKey:(NSString *)key defValue:(OAMapSource *)defValue;
++ (instancetype)withKey:(NSString *)key defValue:(nullable OAMapSource *)defValue;
 
-- (OAMapSource *)get;
-- (OAMapSource *)get:(OAApplicationMode *)mode;
-- (void)set:(OAMapSource *)mapSource;
-- (void)set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+- (nullable OAMapSource *)get;
+- (nullable OAMapSource *)get:(OAApplicationMode *)mode;
+- (void)set:(nullable OAMapSource *)mapSource;
+- (void)set:(nullable OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
 - (void)setModeDefaultValue:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
 
 @end
@@ -1100,6 +1100,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *availableApplicationModes;
 @property (nonatomic) OACommonAppMode *defaultApplicationMode;
 @property (nonatomic) OACommonAppMode *carPlayMode;
+@property (nonatomic) OACommonDayNightMode *carPlayMapAppearanceMode;
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
@@ -1321,9 +1322,9 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (BOOL) removeImpassableRoad:(CLLocation *)location;
 - (void) clearImpassableRoads;
 
+- (BOOL)isGpxVisible:(NSString *)filePath;
 - (void) showGpx:(NSArray<NSString *> *)filePaths;
 - (void) showGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
-- (void) updateGpx:(NSArray<NSString *> *)filePaths;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths;
 - (void) hideGpx:(NSArray<NSString *> *)filePaths update:(BOOL)update;
 - (void) hideRemovedGpx;

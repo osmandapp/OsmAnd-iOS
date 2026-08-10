@@ -22,7 +22,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups
+- (nullable instancetype)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups
 {
     self = [super init];
     if (self) {

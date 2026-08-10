@@ -20,9 +20,8 @@ final class CarPlayService: NSObject {
     private let navigationModeProvider = CarPlayNavigationModeProvider()
     
     private var sessionConfiguration: CPSessionConfiguration?
-    /// MapAppearanceMode that was active before switching to a CarPlay mode.
-    private var appMapAppearanceMode: DayNightMode?
-    private var carPlayMapAppearanceMode: DayNightMode?
+    private var lastContentStyle: CPContentStyle?
+    private var isMapAppearanceConfigured = false
     /// Indicates whether Search Core resources have been prepared for CarPlay.
     private var isSearchUICorePrepared = false
     
@@ -33,9 +32,11 @@ final class CarPlayService: NSObject {
     func configure() {
         reconnectOBDIfNeeded()
         navigationModeProvider.configureForCarPlay()
-        saveAppMapAppearanceModeIfNeeded()
-        saveCarPlayMapAppearanceIfNeeded()
         initSessionConfiguration()
+        if !isMapAppearanceConfigured {
+            isMapAppearanceConfigured = true
+            applyCarPlayMapAppearance()
+        }
         OARoutingHelper.sharedInstance().resumeNavigationAfterCarPlayReconnect()
     }
     
@@ -43,12 +44,15 @@ final class CarPlayService: NSObject {
         guard OsmAndApp.swiftInstance().initialized else {
             return
         }
+
         sessionConfiguration = nil
-        restoreOriginalMapAppearanceModeIfNeeded()
-        appMapAppearanceMode = nil
-        carPlayMapAppearanceMode = nil
+        lastContentStyle = nil
         OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
         navigationModeProvider.restoreOnDisconnect()
+        if !UIApplication.shared.isAnyCarPlaySceneActive, isMapAppearanceConfigured {
+            isMapAppearanceConfigured = false
+            OADayNightHelper.instance().resetCarPlayMode()
+        }
         if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
             OAQuickSearchHelper.instance().setResourcesForSearchUICore()
             isSearchUICorePrepared = false
@@ -66,37 +70,39 @@ final class CarPlayService: NSObject {
         isSearchUICorePrepared = true
     }
 
-    // MARK: - Save / Restore appearance mode
-    
-    private func saveAppMapAppearanceModeIfNeeded() {
-        guard appMapAppearanceMode == nil else { return }
-        
-        if let originalAppMode = navigationModeProvider.originalAppMode {
-            appMapAppearanceMode = DayNightMode(rawValue: OAAppSettings.sharedManager().appearanceMode.get(originalAppMode))
+    // MARK: - Apply appearance mode
+
+    func applyCarPlayMapAppearance() {
+        let mode = DayNightMode(rawValue: OAAppSettings.sharedManager().carPlayMapAppearanceMode.get()) ?? .appTheme
+        switch mode {
+        case .day, .night, .auto:
+            OADayNightHelper.instance().setCarPlayMode(Int(mode.rawValue))
+        case .appTheme:
+            if let lastContentStyle {
+                applyVehicleAppearance(with: lastContentStyle)
+            }
         }
     }
     
-    private func saveCarPlayMapAppearanceIfNeeded() {
-        guard carPlayMapAppearanceMode == nil else { return }
-        // appearanceMode already stores the appearance for CarPlay
-        carPlayMapAppearanceMode = DayNightMode(rawValue: OAAppSettings.sharedManager().appearanceMode.get())
-    }
-    
-    private func restoreOriginalMapAppearanceModeIfNeeded() {
-        guard let appMapAppearanceMode else { return }
-        guard let originalAppMode = navigationModeProvider.originalAppMode else { return }
-
-        OAAppSettings.sharedManager().appearanceMode.set(appMapAppearanceMode.rawValue, mode: originalAppMode)
-        let currentMode = OAAppSettings.sharedManager().currentMode
-        if originalAppMode != currentMode {
-            guard let carPlayMapAppearanceMode else { return }
-            OAAppSettings.sharedManager().appearanceMode.set(carPlayMapAppearanceMode.rawValue, mode: currentMode)
+    private func applyVehicleAppearance(with contentStyle: CPContentStyle) {
+        lastContentStyle = contentStyle
+        if contentStyle.contains(.dark) {
+            NSLog("[CarPlayService] vehicle appearance → night (%lu)", UInt(contentStyle.rawValue))
+            OADayNightHelper.instance().setCarPlayMode(Int(DayNightMode.night.rawValue))
+        } else if contentStyle.contains(.light) {
+            NSLog("[CarPlayService] vehicle appearance → day (%lu)", UInt(contentStyle.rawValue))
+            OADayNightHelper.instance().setCarPlayMode(Int(DayNightMode.day.rawValue))
+        } else {
+            NSLog("[CarPlayService] vehicle appearance: unknown contentStyle, keep previous")
         }
     }
     
     private func initSessionConfiguration() {
         guard sessionConfiguration == nil else { return }
         sessionConfiguration = CPSessionConfiguration(delegate: self)
+        if let style = sessionConfiguration?.contentStyle {
+            lastContentStyle = style
+        }
     }
 }
 
@@ -120,19 +126,12 @@ extension CarPlayService: CPSessionConfigurationDelegate {
     /// Handle CarPlay content-style updates triggered by the “Always Show Dark Maps” setting.
     func sessionConfiguration(_ sessionConfiguration: CPSessionConfiguration,
                               contentStyleChanged contentStyle: CPContentStyle) {
-        updateMapStyle(with: contentStyle)
-    }
-    
-    private func updateMapStyle(with contentStyle: CPContentStyle) {
-        switch contentStyle {
-        case _ where contentStyle.contains(.dark):
-            NSLog("[CarPlayService] -> onUpdateMapStyle: %lu (dark)", UInt(contentStyle.rawValue))
-            OAAppSettings.sharedManager().appearanceMode.set(DayNightMode.night.rawValue)
-        case _ where contentStyle.contains(.light):
-            NSLog("[CarPlayService] -> onUpdateMapStyle: %lu (light)", UInt(contentStyle.rawValue))
-            OAAppSettings.sharedManager().appearanceMode.set(DayNightMode.day.rawValue)
-        default:
-            NSLog("[CarPlayService] -> onUpdateMapStyle: unknown style, keeping previous appearanceMode")
+        lastContentStyle = contentStyle
+        let mode = DayNightMode(rawValue: OAAppSettings.sharedManager().carPlayMapAppearanceMode.get()) ?? .appTheme
+        guard mode == .appTheme else {
+            NSLog("[CarPlayService] contentStyle changed, ignored (map mode=%d)", mode.rawValue)
+            return
         }
+        applyVehicleAppearance(with: contentStyle)
     }
 }

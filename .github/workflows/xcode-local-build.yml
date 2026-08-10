@@ -154,17 +154,20 @@ jobs:
     - name: Creating iOS archive
       env:
         LANG: "en_US.UTF-8"
-        BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
-        RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
-      run: 'xcodebuild
-            -workspace ios/OsmAnd.xcworkspace
-            -scheme "OsmAnd Maps Release"
-            -sdk iphoneos
-            -configuration AppStoreDistribution
-            -archivePath OsmAndMaps.xcarchive
-            CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}"
-            MARKETING_VERSION="${RELEASE_IOS_VERSION}"
-            archive | xcpretty'
+        BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }}
+        RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }}
+      run: |
+        set -o pipefail
+        xcodebuild \
+          -workspace ios/OsmAnd.xcworkspace \
+          -scheme "OsmAnd Maps Release" \
+          -sdk iphoneos \
+          -destination "generic/platform=iOS" \
+          -configuration Release \
+          -archivePath OsmAndMaps.xcarchive \
+          CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}" \
+          MARKETING_VERSION="${RELEASE_IOS_VERSION}" \
+          archive | xcpretty
     - name: Zip iOS archive
       env:
         LANG: "en_US.UTF-8"

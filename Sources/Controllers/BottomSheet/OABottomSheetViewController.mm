@@ -59,7 +59,7 @@
     return self;
 }
 
-- (instancetype) initWithParam:(id)param
+- (instancetype) initWithParam:(nullable id)param
 {
     self = [super init];
     if (self)
@@ -391,12 +391,12 @@
     [self dismiss:nil animated:YES];
 }
 
-- (void) dismiss:(id)sender
+- (void) dismiss:(nullable id)sender
 {
     [self dismiss:sender animated:YES];
 }
 
-- (void) dismiss:(id)sender animated:(BOOL)animated
+- (void) dismiss:(nullable id)sender animated:(BOOL)animated
 {
     _hiding = YES;
     self.visible = NO;
@@ -582,4 +582,3 @@
 }
 
 @end
-

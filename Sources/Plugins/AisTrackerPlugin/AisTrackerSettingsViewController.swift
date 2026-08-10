@@ -23,7 +23,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
 
         var rows: [Row] {
             switch self {
-            case .address: [.protocolType, .host, .tcpPort, .udpPort]
+            case .address: [.protocolType, .host, .tcpPort, .udpPort, .useNmeaLocation]
             case .timeouts: [.shipLostTimeout, .objectLostTimeout]
             case .cpa: [.cpaWarningTime, .cpaWarningDistance]
             }
@@ -35,6 +35,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         case host
         case tcpPort
         case udpPort
+        case useNmeaLocation
         case shipLostTimeout
         case objectLostTimeout
         case cpaWarningTime
@@ -42,13 +43,23 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
     }
 
     private let plugin: AisTrackerPlugin
+    private let appMode: OAApplicationMode
     private let objectLostTimeoutValues = [3, 5, 7, 10, 12, 15, 20]
     private let shipLostTimeoutValues = [2, 3, 4, 5, 7, 10, 15, 100]
     private let cpaWarningTimeValues = [0, 1, 5, 10, 20, 30, 60]
     private let cpaWarningDistanceValues = [0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]
 
-    init(plugin: AisTrackerPlugin) {
+    private var isSelectedProfileActive: Bool {
+        appMode == OAAppSettings.sharedManager().applicationMode.get()
+    }
+
+    convenience init(plugin: AisTrackerPlugin) {
+        self.init(plugin: plugin, appMode: OAAppSettings.sharedManager().applicationMode.get())
+    }
+
+    init(plugin: AisTrackerPlugin, appMode: OAApplicationMode) {
         self.plugin = plugin
+        self.appMode = appMode
         super.init()
     }
 
@@ -63,10 +74,6 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
 
     override func getTitle() -> String {
         localizedString("plugin_ais_tracker_name")
-    }
-
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
     }
 
     override func sectionsCount() -> Int {
@@ -99,25 +106,33 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             cell.detailTextLabel?.text = protocolText()
         case .host:
             cell.textLabel?.text = localizedString("ais_address_nmea_server")
-            cell.detailTextLabel?.text = plugin.hostPref.get()
+            cell.detailTextLabel?.text = plugin.hostPref.get(appMode)
         case .tcpPort:
             cell.textLabel?.text = localizedString("ais_port_nmea_server")
-            cell.detailTextLabel?.text = "\(plugin.tcpPortPref.get())"
+            cell.detailTextLabel?.text = "\(plugin.tcpPortPref.get(appMode))"
         case .udpPort:
             cell.textLabel?.text = localizedString("ais_port_nmea_local")
-            cell.detailTextLabel?.text = "\(plugin.udpPortPref.get())"
+            cell.detailTextLabel?.text = "\(plugin.udpPortPref.get(appMode))"
+        case .useNmeaLocation:
+            cell.textLabel?.text = localizedString("ais_use_nmea_location")
+            cell.detailTextLabel?.text = localizedString("ais_use_nmea_location_description")
+            let switchView = UISwitch()
+            switchView.isOn = plugin.useNmeaLocationPref.get(appMode)
+            switchView.addTarget(self, action: #selector(onUseNmeaLocationChanged(_:)), for: .valueChanged)
+            cell.accessoryView = switchView
+            cell.selectionStyle = .none
         case .objectLostTimeout:
             cell.textLabel?.text = localizedString("ais_object_lost_timeout")
-            cell.detailTextLabel?.text = minutesText(Int(plugin.objectLostTimeoutPref.get()))
+            cell.detailTextLabel?.text = minutesText(Int(plugin.objectLostTimeoutPref.get(appMode)))
         case .shipLostTimeout:
             cell.textLabel?.text = localizedString("ais_ship_lost_timeout")
-            cell.detailTextLabel?.text = shipLostTimeoutText(Int(plugin.shipLostTimeoutPref.get()))
+            cell.detailTextLabel?.text = shipLostTimeoutText(Int(plugin.shipLostTimeoutPref.get(appMode)))
         case .cpaWarningTime:
             cell.textLabel?.text = localizedString("ais_cpa_warning_time")
-            cell.detailTextLabel?.text = cpaWarningTimeText(Int(plugin.cpaWarningTimePref.get()))
+            cell.detailTextLabel?.text = cpaWarningTimeText(Int(plugin.cpaWarningTimePref.get(appMode)))
         case .cpaWarningDistance:
             cell.textLabel?.text = localizedString("ais_cpa_warning_distance")
-            cell.detailTextLabel?.text = nauticalMilesText(plugin.cpaWarningDistancePref.get())
+            cell.detailTextLabel?.text = nauticalMilesText(plugin.cpaWarningDistancePref.get(appMode))
         }
         return cell
     }
@@ -129,65 +144,60 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         case .protocolType:
             chooseProtocol(sourceRow: indexPath)
         case .host:
-            editString(title: localizedString("ais_address_nmea_server"), message: descriptionText(for: row), value: plugin.hostPref.get()) { [weak self] value in
+            editString(title: localizedString("ais_address_nmea_server"), message: descriptionText(for: row), value: plugin.hostPref.get(appMode)) { [weak self] value in
                 let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard self?.isValidIPv4(value) == true else {
                     self?.showValidationError(localizedString("ais_error_ipv4_only"))
                     return false
                 }
-                self?.plugin.hostPref.set(value)
-                self?.plugin.restartConnection()
+                self?.applyStringPreference(self?.plugin.hostPref, value: value, restartsConnection: true)
                 return true
             }
         case .tcpPort:
-            editPort(title: localizedString("ais_port_nmea_server"), message: descriptionText(for: row), value: Int(plugin.tcpPortPref.get())) { [weak self] value in
-                self?.plugin.tcpPortPref.set(Int32(value))
-                self?.plugin.restartConnection()
+            editPort(title: localizedString("ais_port_nmea_server"), message: descriptionText(for: row), value: Int(plugin.tcpPortPref.get(appMode))) { [weak self] value in
+                self?.applyIntPreference(self?.plugin.tcpPortPref, value: Int32(value), restartsConnection: true)
             }
         case .udpPort:
-            editPort(title: localizedString("ais_port_nmea_local"), message: descriptionText(for: row), value: Int(plugin.udpPortPref.get())) { [weak self] value in
-                self?.plugin.udpPortPref.set(Int32(value))
-                self?.plugin.restartConnection()
+            editPort(title: localizedString("ais_port_nmea_local"), message: descriptionText(for: row), value: Int(plugin.udpPortPref.get(appMode))) { [weak self] value in
+                self?.applyIntPreference(self?.plugin.udpPortPref, value: Int32(value), restartsConnection: true)
             }
+        case .useNmeaLocation:
+            applyBoolPreference(plugin.useNmeaLocationPref, value: !plugin.useNmeaLocationPref.get(appMode))
         case .objectLostTimeout:
             chooseIntValue(title: localizedString("ais_object_lost_timeout"),
                            message: descriptionText(for: row),
                            values: objectLostTimeoutValues,
-                           current: Int(plugin.objectLostTimeoutPref.get()),
+                           current: Int(plugin.objectLostTimeoutPref.get(appMode)),
                            titleProvider: minutesText,
                            sourceRow: indexPath) { [weak self] value in
-                self?.plugin.objectLostTimeoutPref.set(Int32(value))
-                self?.tableView.reloadData()
+                self?.applyIntPreference(self?.plugin.objectLostTimeoutPref, value: Int32(value))
             }
         case .shipLostTimeout:
             chooseIntValue(title: localizedString("ais_ship_lost_timeout"),
                            message: descriptionText(for: row),
                            values: shipLostTimeoutValues,
-                           current: Int(plugin.shipLostTimeoutPref.get()),
+                           current: Int(plugin.shipLostTimeoutPref.get(appMode)),
                            titleProvider: shipLostTimeoutText,
                            sourceRow: indexPath) { [weak self] value in
-                self?.plugin.shipLostTimeoutPref.set(Int32(value))
-                self?.tableView.reloadData()
+                self?.applyIntPreference(self?.plugin.shipLostTimeoutPref, value: Int32(value))
             }
         case .cpaWarningTime:
             chooseIntValue(title: localizedString("ais_cpa_warning_time"),
                            message: descriptionText(for: row),
                            values: cpaWarningTimeValues,
-                           current: Int(plugin.cpaWarningTimePref.get()),
+                           current: Int(plugin.cpaWarningTimePref.get(appMode)),
                            titleProvider: cpaWarningTimeText,
                            sourceRow: indexPath) { [weak self] value in
-                self?.plugin.cpaWarningTimePref.set(Int32(value))
-                self?.tableView.reloadData()
+                self?.applyIntPreference(self?.plugin.cpaWarningTimePref, value: Int32(value))
             }
         case .cpaWarningDistance:
             chooseDoubleValue(title: localizedString("ais_cpa_warning_distance"),
                               message: descriptionText(for: row),
                               values: cpaWarningDistanceValues,
-                              current: plugin.cpaWarningDistancePref.get(),
+                              current: plugin.cpaWarningDistancePref.get(appMode),
                               titleProvider: nauticalMilesText,
                               sourceRow: indexPath) { [weak self] value in
-                self?.plugin.cpaWarningDistancePref.set(value)
-                self?.tableView.reloadData()
+                self?.applyDoublePreference(self?.plugin.cpaWarningDistancePref, value: value)
             }
         }
     }
@@ -195,17 +205,48 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
     private func chooseProtocol(sourceRow: IndexPath) {
         let alert = UIAlertController(title: localizedString("ais_nmea_protocol"), message: descriptionText(for: .protocolType), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "UDP", style: .default) { [weak self] _ in
-            self?.plugin.protocolPref.set(Int32(AisNmeaProtocol.udp.rawValue))
-            self?.plugin.restartConnection()
-            self?.tableView.reloadData()
+            self?.applyIntPreference(self?.plugin.protocolPref, value: Int32(AisNmeaProtocol.udp.rawValue), restartsConnection: true)
         })
         alert.addAction(UIAlertAction(title: "TCP", style: .default) { [weak self] _ in
-            self?.plugin.protocolPref.set(Int32(AisNmeaProtocol.tcp.rawValue))
-            self?.plugin.restartConnection()
-            self?.tableView.reloadData()
+            self?.applyIntPreference(self?.plugin.protocolPref, value: Int32(AisNmeaProtocol.tcp.rawValue), restartsConnection: true)
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         presentActionSheet(alert, sourceRow: sourceRow)
+    }
+
+    private func applyIntPreference(_ preference: OACommonInteger?, value: Int32, restartsConnection: Bool = false) {
+        guard let preference else { return }
+        preference.set(value, mode: appMode)
+        finishPreferenceChange(restartsConnection: restartsConnection && isSelectedProfileActive,
+                               affectedActiveProfile: isSelectedProfileActive)
+    }
+
+    private func applyDoublePreference(_ preference: OACommonDouble?, value: Double) {
+        guard let preference else { return }
+        preference.set(value, mode: appMode)
+        finishPreferenceChange(affectedActiveProfile: isSelectedProfileActive)
+    }
+
+    private func applyStringPreference(_ preference: OACommonString?, value: String, restartsConnection: Bool = false) {
+        guard let preference else { return }
+        preference.set(value, mode: appMode)
+        finishPreferenceChange(restartsConnection: restartsConnection && isSelectedProfileActive,
+                               affectedActiveProfile: isSelectedProfileActive)
+    }
+
+    private func applyBoolPreference(_ preference: OACommonBoolean, value: Bool) {
+        preference.set(value, mode: appMode)
+        finishPreferenceChange(affectedActiveProfile: isSelectedProfileActive)
+    }
+
+    private func finishPreferenceChange(restartsConnection: Bool = false, affectedActiveProfile: Bool = true) {
+        if restartsConnection {
+            plugin.restartConnection()
+        }
+        if affectedActiveProfile && !plugin.useNmeaLocationPref.get() {
+            plugin.resetNmeaLocationProvider()
+        }
+        tableView.reloadData()
     }
 
     private func editString(title: String, message: String?, value: String, onSave: @escaping (String) -> Bool) {
@@ -265,7 +306,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
                 popover.sourceRect = cell.bounds
             } else {
                 popover.sourceView = view
-                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 1, height: 1)
+                popover.sourceRect = .init(x: view.bounds.midX, y: view.bounds.midY, width: 1, height: 1)
             }
             popover.permittedArrowDirections = [.up, .down]
         }
@@ -283,6 +324,8 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             key = "ais_port_nmea_server_description"
         case .udpPort:
             key = "ais_port_nmea_local_description"
+        case .useNmeaLocation:
+            key = "ais_use_nmea_location_description"
         case .shipLostTimeout:
             key = "ais_ship_lost_timeout_description"
         case .objectLostTimeout:
@@ -305,7 +348,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
     }
 
     private func isTcpSelected() -> Bool {
-        (AisNmeaProtocol(rawValue: Int(plugin.protocolPref.get())) ?? .udp) == .tcp
+        (AisNmeaProtocol(rawValue: Int(plugin.protocolPref.get(appMode))) ?? .udp) == .tcp
     }
 
     private func isRowEnabled(_ row: Row) -> Bool {
@@ -314,8 +357,10 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             return isTcpSelected()
         case .udpPort:
             return !isTcpSelected()
+        case .useNmeaLocation:
+            return true
         case .cpaWarningDistance:
-            return plugin.cpaWarningTimePref.get() > 0
+            return plugin.cpaWarningTimePref.get(appMode) > 0
         default:
             return true
         }
@@ -371,5 +416,9 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
 
     @objc private func reloadStatus() {
         tableView.reloadData()
+    }
+
+    @objc private func onUseNmeaLocationChanged(_ sender: UISwitch) {
+        applyBoolPreference(plugin.useNmeaLocationPref, value: sender.isOn)
     }
 }

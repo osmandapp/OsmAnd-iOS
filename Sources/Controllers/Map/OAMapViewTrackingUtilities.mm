@@ -83,6 +83,7 @@ static double const TILT_ANIMATION_TIME = 0.4;
 
     CLLocation *_myLocation;
     CLLocationDirection _heading;
+    NSUInteger _movingToMyLocationRequestId;
 }
 
 + (OAMapViewTrackingUtilities *)instance
@@ -490,6 +491,18 @@ static double const TILT_ANIMATION_TIME = 0.4;
     _mapView.mapAnimator->pause();
 }
 
+- (void)cancelCurrentLocationCenteringAnimations
+{
+    if (!_mapView.mapAnimator)
+        return;
+
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+    _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+    _mapView.mapAnimator->cancelCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    _mapView.mapAnimator->resume();
+}
 
 - (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(double)finalRotation elevationAngle:(float)elevationAngle movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(void (^)(void))finishAnimationCallback
 {
@@ -927,6 +940,18 @@ static double const TILT_ANIMATION_TIME = 0.4;
         if (!_app.locationServices.lastKnownLocation && newMode == OAMapModePositionTrack)
             [_app showToastMessage:OALocalizedString(@"unknown_location")];
         
+        if (_app.locationServices.externalProviderActive)
+        {
+            [self cancelCurrentLocationCenteringAnimations];
+
+            _movingToMyLocation = YES;
+            NSUInteger requestId = ++_movingToMyLocationRequestId;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((kFastAnimationTime + 0.1) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (_movingToMyLocationRequestId == requestId)
+                    _movingToMyLocation = NO;
+            });
+        }
+
         _forceZoom = forceZoom;
         _app.mapMode = newMode;
     }
@@ -1054,13 +1079,9 @@ static double const TILT_ANIMATION_TIME = 0.4;
         
         EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
         if (placement == EOAPositionPlacementAuto)
-        {
-            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode ? BOTTOM_CONSTANT : CENTER_CONSTANT);
-        }
+            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING ? BOTTOM_CONSTANT : CENTER_CONSTANT);
         else
-        {
-            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
-        }
+            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter ? CENTER_CONSTANT : BOTTOM_CONSTANT);
     }
 }
 

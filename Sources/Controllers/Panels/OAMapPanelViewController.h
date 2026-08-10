@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem, OASTrkSegment, OAMapObject, OARouteKey, SelectedMapObject;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OASGpxDataItem, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OASGpxFile, OASGpxTrackAnalysis, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter, OASGpxDataItem, OASGpxFile, OASTrackItem, OASTrkSegment, OAMapObject, OARouteKey, SelectedMapObject;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -52,7 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
 
-- (void) showPlanRouteViewController:(OARoutePlanningHudViewController *)controller;
 - (void) showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller;
 
 - (BOOL) gpxModeActive;
@@ -62,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) swapStartAndFinish;
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints;
-- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(CLLocation *)touchPointLatLon;
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon;
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;
 - (void) updateContextMenu:(OATargetPoint *)targetPoint;
@@ -79,8 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isDashboardVisible;
 - (BOOL) isTargetMultiMenuViewVisible;
 - (void) closeDashboardLastScreen;
-- (void) mapSettingsButtonClick:(id)sender;
-- (void) mapSettingsButtonClick:(id)sender mode:(nullable OAApplicationMode *)targetMode;
+- (void) mapSettingsButtonClick:(nullable id)sender;
+- (void) mapSettingsButtonClick:(nullable id)sender mode:(nullable OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void)showRouteInfo:(BOOL)fullScreen;
@@ -158,11 +157,11 @@ NS_ASSUME_NONNULL_BEGIN
                                 selectedTab:(EOATrackMenuHudTab)selectedTab;
 
 - (void)openTargetViewWithGPX:(OASTrackItem *)item
-                        items:(NSArray<OASGpxDataItem *> *)items
-                     routeKey:(OARouteKey *)routeKey
+                        items:(nullable NSArray<OASGpxDataItem *> *)items
+                     routeKey:(nullable OARouteKey *)routeKey
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state
-                     analysis:(OASGpxTrackAnalysis *)analysis;
+                     analysis:(nullable OASGpxTrackAnalysis *)analysis;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 

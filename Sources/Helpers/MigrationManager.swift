@@ -24,6 +24,7 @@ final class MigrationManager: NSObject {
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
+        case migrateCoordinateFormatPreferredIds
     }
     
     private struct HudMigrationScenario {
@@ -113,6 +114,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
                 migrateCarPlayMapAppearanceMode()
                 defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue) {
+                settings.coordinateFormatSettingsStorage.migrateFromLegacyIfNeeded()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue)
             }
         }
     }

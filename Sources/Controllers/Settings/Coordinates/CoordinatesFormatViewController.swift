@@ -29,6 +29,12 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
         tableView.reloadData()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTableBottomInset()
+        relayoutTableHeaderViewIfNeeded()
+    }
+    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
@@ -48,13 +54,13 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         let copyAction = UIAction(
             title: localizedString("copy_from_other_profile"),
-            image: UIImage.templateImageNamed("ic_custom_copy")
+            image: .icCustomCopy
         ) { [weak self] _ in
             self?.onCopyFromAnotherProfile()
         }
         let resetAction = UIAction(
             title: localizedString("reset_to_default"),
-            image: UIImage.templateImageNamed("ic_custom_reset")
+            image: .icCustomReset
         ) { [weak self] _ in
             self?.onResetToDefault()
         }
@@ -67,6 +73,9 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
             target: self,
             menu: menu
         ) else { return [] }
+        
+        button.accessibilityLabel = localizedString("shared_string_options")
+        
         return [button]
     }
     
@@ -79,21 +88,31 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
                 .foregroundColor: UIColor.textColorSecondary
             ]
         )
+
         let width = view.bounds.width
-        let left = OAUtilities.getLeftMargin() + 36
-        let right = OAUtilities.getLeftMargin() + 36
+        let horizontalInset: CGFloat = 36 + OAUtilities.getLeftMargin()
         let top: CGFloat = 12
         let bottom: CGFloat = 8
-        let textWidth = width - left - right
+        let textWidth = max(0, width - horizontalInset * 2)
         let textHeight = OAUtilities.calculateTextBounds(attr, width: textWidth).height
-        let label = UILabel(frame: CGRect(x: left, y: top, width: textWidth, height: textHeight))
+
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: width, height: top + textHeight + bottom))
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = attr
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .natural
         label.adjustsFontForContentSizeCategory = true
-        label.autoresizingMask = .flexibleWidth
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: width, height: top + textHeight + bottom))
         header.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: horizontalInset),
+            label.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -horizontalInset),
+            label.topAnchor.constraint(equalTo: header.topAnchor, constant: top),
+            label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -bottom)
+        ])
+
         tableView.tableHeaderView = header
     }
     
@@ -106,12 +125,12 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
 
         let section = tableData.createNewSection()
 
-        let formats = resolveFormats(formatStorage.getPreferredIds(appMode))
+        let formats = resolveFormats(formatStorage.preferredIds(appMode))
         for (index, format) in formats.enumerated() {
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.title = format.title
-            row.descr = getFormatSummary(format, primary: index == 0)
+            row.descr = formatSummary(format, primary: index == 0)
             row.setObj(format.id, forKey: Self.formatIdKey)
         }
     }
@@ -131,7 +150,20 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
         cell.descriptionVisibility(!(item.descr ?? "").isEmpty)
         cell.titleLabel.text = item.title
         cell.descriptionLabel.text = item.descr
-        cell.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
+        cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
+        
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = item.title
+        cell.accessibilityValue = item.descr
+        cell.accessibilityTraits = .staticText
+        cell.accessibilityHint = nil
+
+        cell.setCustomLeftSeparatorInset(true)
+        cell.separatorInset = UIEdgeInsets(top: 0,
+                                           left: 16,
+                                           bottom: 0,
+                                           right: 16)
+        
         return cell
     }
 
@@ -141,6 +173,31 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
 
     override func getBottomButtonTitle() -> String {
         ""
+    }
+    
+    // MARK: - Layout
+    
+    private func updateTableBottomInset() {
+        let bottom = toolbarView.bounds.height
+        guard tableView.contentInset.bottom != bottom else { return }
+        var inset = tableView.contentInset
+        inset.bottom = bottom
+        tableView.contentInset = inset
+        tableView.verticalScrollIndicatorInsets.bottom = bottom
+    }
+    
+    private func relayoutTableHeaderViewIfNeeded() {
+        guard let header = tableView.tableHeaderView else { return }
+        let width = tableView.bounds.width
+        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+        let height = header.systemLayoutSizeFitting(
+            target,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        guard abs(header.frame.height - height) > 0.5 || abs(header.frame.width - width) > 0.5 else { return }
+        header.frame.size = CGSize(width: width, height: height)
+        tableView.tableHeaderView = header
     }
     
     // MARK: - Toolbar
@@ -225,7 +282,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
         ids.compactMap { BuiltInCoordinateFormat.resolve($0) }
     }
 
-    private func getFormatSummary(_ format: CoordinateFormat, primary: Bool) -> String {
+    private func formatSummary(_ format: CoordinateFormat, primary: Bool) -> String {
         if let epsgCode = format.epsgCode {
             return "EPSG:\(epsgCode)"
         }
@@ -276,8 +333,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
 // MARK: - OACopyProfileBottomSheetDelegate
 
 extension CoordinatesFormatViewController: OACopyProfileBottomSheetDelegate {
-    func onCopyProfileCompleted() {
-    }
+    func onCopyProfileCompleted() { }
     
     func onCopyProfile(_ fromMode: OAApplicationMode!) {
         formatStorage.copyPreferredIds(from: fromMode, to: appMode)

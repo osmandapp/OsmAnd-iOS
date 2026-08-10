@@ -31,16 +31,15 @@ final class CoordinateFormatSettingsStorage: NSObject {
 
     // MARK: - Preferred
 
-    func getPreferredIds() -> [String] {
-        getPreferredIds(settings.currentMode)
+    func preferredIds() -> [String] {
+        preferredIds(settings.currentMode)
     }
 
-    func getPreferredIds(_ mode: OAApplicationMode) -> [String] {
+    func preferredIds(_ mode: OAApplicationMode) -> [String] {
         sanitizePreferredIds(preferredPreference.get(mode))
     }
 
-    @discardableResult
-    func setPreferredIds(_ mode: OAApplicationMode, ids: [String]) -> Bool {
+    @discardableResult func setPreferredIds(_ mode: OAApplicationMode, ids: [String]) -> Bool {
         let sanitized = sanitizePreferredIds(ids)
         preferredPreference.set(sanitized, mode: mode)
         syncLegacyFormat(mode, primaryId: sanitized.first)
@@ -48,30 +47,23 @@ final class CoordinateFormatSettingsStorage: NSObject {
     }
 
     func getPrimaryId(_ mode: OAApplicationMode) -> String {
-        getPreferredIds(mode).first ?? CoordinateFormatIds.builtinDdd
+        preferredIds(mode).first ?? CoordinateFormatIds.builtinDdd
     }
 
-    @discardableResult
-    func resetPreferredIds(_ mode: OAApplicationMode) -> Bool {
+    @discardableResult func resetPreferredIds(_ mode: OAApplicationMode) -> Bool {
         setPreferredIds(mode, ids: CoordinateFormatIds.defaultFormatIds)
     }
 
-    @discardableResult
-    func copyPreferredIds(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) -> Bool {
-        setPreferredIds(toMode, ids: getPreferredIds(fromMode))
+    @discardableResult func copyPreferredIds(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) -> Bool {
+        setPreferredIds(toMode, ids: preferredIds(fromMode))
     }
 
-    @discardableResult
-    func addPreferredId(_ mode: OAApplicationMode, id: String) -> Bool {
+    @discardableResult func addPreferredId(_ mode: OAApplicationMode, id: String) -> Bool {
         guard let normalized = CoordinateFormatIds.normalize(id) else { return false }
-        var ids = getPreferredIds(mode)
+        var ids = preferredIds(mode)
         guard !ids.contains(normalized) else { return false }
         ids.append(normalized)
         return setPreferredIds(mode, ids: ids)
-    }
-
-    func isPreferredIdsSet(for mode: OAApplicationMode) -> Bool {
-        preferredPreference.isSet(for: mode)
     }
 
     // MARK: - Recent
@@ -82,8 +74,7 @@ final class CoordinateFormatSettingsStorage: NSObject {
                     maxCount: Self.maxRecentFormatIds)
     }
 
-    @discardableResult
-    func addRecentId(_ id: String) -> Bool {
+    @discardableResult func addRecentId(_ id: String) -> Bool {
         guard let normalized = CoordinateFormatIds.normalize(id) else { return false }
         var ids = getRecentIds()
         ids.removeAll { $0 == normalized }
@@ -97,16 +88,19 @@ final class CoordinateFormatSettingsStorage: NSObject {
 
     // MARK: - Migration
 
-    func migrateIfNeeded() {
+    func migrateFromLegacyIfNeeded() {
         for mode in OAApplicationMode.allPossibleValues() {
-            if !isPreferredIdsSet(for: mode) {
-                let legacy = Int(settings.settingGeoFormat.get(mode))
-                setPreferredIds(mode, ids: Self.legacyPreferredIds(legacyFormat: legacy))
-            }
+            guard !isPreferredIdsSet(for: mode) else { continue }
+            let legacy = Int(settings.settingGeoFormat.get(mode))
+            setPreferredIds(mode, ids: legacyPreferredIds(legacyFormat: legacy))
         }
     }
+    
+    private func isPreferredIdsSet(for mode: OAApplicationMode) -> Bool {
+        preferredPreference.isSet(for: mode)
+    }
 
-    static func legacyPreferredIds(legacyFormat: Int) -> [String] {
+    private func legacyPreferredIds(legacyFormat: Int) -> [String] {
         var ids = [String]()
         var seen = Set<String>()
         if let primary = CoordinateFormatIds.fromOldFormat(legacyFormat) {

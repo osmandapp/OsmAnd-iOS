@@ -6357,7 +6357,6 @@ static NSString *kOfflineKey = @"OFFLINE";
             [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
                                                  preferredPreference:_preferredCoordinateFormatIds
                                                     recentPreference:_recentlyAddedCoordinateFormatIds];
-        [_coordinateFormatSettingsStorage migrateIfNeeded];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];

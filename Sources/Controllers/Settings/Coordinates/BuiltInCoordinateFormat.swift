@@ -38,20 +38,15 @@ enum BuiltInCoordinateFormat: CaseIterable {
         }
     }
 
-    // Titles: follow task/Figma where they differ from Android short "UTM"/"OLC"
     var title: String {
         switch self {
         case .ddd: return localizedString("navigate_point_format_D")
         case .ddm: return localizedString("navigate_point_format_DM")
         case .dms: return localizedString("navigate_point_format_DMS")
-        case .utm: return "Universal Transverse Mercator"
+        case .utm: return localizedString("navigate_point_format_UTM")
         case .olc: return localizedString("navigate_point_olc")
-        case .mgrs: return "MGRS"
+        case .mgrs: return localizedString("navigate_point_mgrs")
         }
-    }
-
-    func toCoordinateFormat() -> CoordinateFormat {
-        .builtIn(id: id, title: title, legacyFormat: legacyFormat)
     }
 
     static func fromId(_ id: String?) -> BuiltInCoordinateFormat? {
@@ -61,5 +56,9 @@ enum BuiltInCoordinateFormat: CaseIterable {
 
     static func resolve(_ id: String?) -> CoordinateFormat? {
         fromId(id)?.toCoordinateFormat()
+    }
+    
+    func toCoordinateFormat() -> CoordinateFormat {
+        .builtIn(id: id, title: title, legacyFormat: legacyFormat)
     }
 }

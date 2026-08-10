@@ -18,12 +18,10 @@ enum CoordinateFormatIds {
 
     static let epsgPrefix = "epsg:"
 
-    /// Default preferred list for new installs (как Android DEFAULT_FORMAT_IDS).
     static let defaultFormatIds: [String] = [
         builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc
     ]
 
-    /// Все built-in (для миграции / sanitize).
     static let allBuiltInFormatIds: [String] = [
         builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc, builtinMgrs
     ]
@@ -40,13 +38,13 @@ enum CoordinateFormatIds {
         if builtInIdSet.contains(trimmed) {
             return trimmed
         }
-        if let code = getEpsgCode(trimmed) {
+        if let code = epsgCode(trimmed) {
             return epsg(code)
         }
         return nil
     }
 
-    static func getEpsgCode(_ id: String?) -> Int? {
+    static func epsgCode(_ id: String?) -> Int? {
         guard let trimmed = id?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
               trimmed.hasPrefix(epsgPrefix),
               let code = Int(trimmed.dropFirst(epsgPrefix.count)),
@@ -54,7 +52,6 @@ enum CoordinateFormatIds {
         return code
     }
 
-    /// Как Android `CoordinateFormatIds.fromOldFormat`.
     static func fromOldFormat(_ format: Int) -> String? {
         switch format {
         case Int(FORMAT_DEGREES): return builtinDdd

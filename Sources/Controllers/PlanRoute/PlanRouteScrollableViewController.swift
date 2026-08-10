@@ -760,6 +760,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         if animated {
             UIView.animate(withDuration: Self.sheetAnimationDuration, animations: updates)
+            crosshairView.layer.removeAnimation(forKey: "position")
         } else {
             updates()
         }

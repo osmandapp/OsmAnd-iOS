@@ -36,11 +36,80 @@
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
 #import "OAIAPHelper.h"
+#import "OAAppSettings.h"
+#import "OAWaypointHelper.h"
+#import "OALocationPointWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 
 static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
+
+@implementation OAPlanRouteShowAlongSettingsBridge
+{
+    OAApplicationMode *_applicationMode;
+    OAAppSettings *_settings;
+}
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)applicationMode
+{
+    self = [super init];
+    if (self)
+    {
+        _applicationMode = applicationMode;
+        _settings = OAAppSettings.sharedManager;
+    }
+    return self;
+}
+
+- (BOOL)isEnabledForType:(EOAPlanRouteShowAlongType)type
+{
+    switch (type)
+    {
+    case EOAPlanRouteShowAlongTypePoi:
+        return [_settings.showNearbyPoi get:_applicationMode];
+    case EOAPlanRouteShowAlongTypeFavorites:
+        return [_settings.showNearbyFavorites get:_applicationMode];
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
+        return [_settings.showScreenAlerts get:_applicationMode] && [_settings.showTrafficWarnings get:_applicationMode];
+    default:
+        return NO;
+    }
+}
+
+- (void)setEnabled:(BOOL)enabled forType:(EOAPlanRouteShowAlongType)type
+{
+    NSInteger waypointType;
+    switch (type)
+    {
+    case EOAPlanRouteShowAlongTypePoi:
+        [_settings.showNearbyPoi set:enabled mode:_applicationMode];
+        [_settings.announceNearbyPoi set:enabled mode:_applicationMode];
+        waypointType = LPW_POI;
+        break;
+    case EOAPlanRouteShowAlongTypeFavorites:
+        [_settings.showNearbyFavorites set:enabled mode:_applicationMode];
+        [_settings.announceNearbyFavorites set:enabled mode:_applicationMode];
+        waypointType = LPW_FAVORITES;
+        break;
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
+        if (enabled)
+            [_settings.showScreenAlerts set:YES mode:_applicationMode];
+        [_settings.showTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.speakTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.showPedestrian set:enabled mode:_applicationMode];
+        [_settings.speakPedestrian set:enabled mode:_applicationMode];
+        [_settings.showTunnels set:enabled mode:_applicationMode];
+        [_settings.speakTunnels set:enabled mode:_applicationMode];
+        waypointType = LPW_ALARMS;
+        break;
+    default:
+        return;
+    }
+    [OAWaypointHelper.sharedInstance recalculatePoints:(int)waypointType];
+}
+
+@end
 
 @class OAMeasurementToolLayer;
 
@@ -336,6 +405,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
     return [OAMapUtils getDistance:from.lat lon1:from.lon lat2:to.lat lon2:to.lon];
+}
+
+- (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
+{
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
 }
 
 - (NSArray<PlanRouteSegmentData *> *)buildSegments
@@ -844,7 +919,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASWptPt *previous = allPoints[index - 1];
             if (!previous.isGap)
             {
-                legDistance = [self distanceFrom:previous to:point];
+                legDistance = [self routeDistanceFrom:previous to:point];
                 CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
                 CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
                 bearing = [OAMapUtils normalizeDegrees360:[previousLocation bearingTo:pointLocation]];
@@ -968,13 +1043,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = YES;
-    if (self.onChange)
+    _isCalculatingRoute = mode != OAApplicationMode.DEFAULT;
+    if (_isCalculatingRoute && self.onChange)
         self.onChange();
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
+    if (!_isCalculatingRoute && self.onChange)
+        self.onChange();
 }
 
 - (void)refreshRouteForMode:(OAApplicationMode *)mode

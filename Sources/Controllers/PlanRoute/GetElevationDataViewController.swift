@@ -12,9 +12,19 @@ final class GetElevationDataViewController: UIViewController {
 
     var onSelectMethod: ((Bool) -> Void)?
 
+    private let isTerrainMapsAvailable: Bool
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let separatorView = UIView()
+
+    init(isTerrainMapsAvailable: Bool) {
+        self.isTerrainMapsAvailable = isTerrainMapsAvailable
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +79,8 @@ final class GetElevationDataViewController: UIViewController {
             icon: .icCustomTerrain,
             title: localizedString("use_terrain_maps"),
             subtitle: localizedString("track_geometry_stays_unchanged"),
-            useNearbyRoads: false
+            useNearbyRoads: false,
+            accessoryImage: isTerrainMapsAvailable ? nil : .icPaymentLabelPro
         )
 
         [nearbyRoadsRow, separatorView, terrainRow].forEach {
@@ -108,7 +119,7 @@ final class GetElevationDataViewController: UIViewController {
         ])
     }
 
-    private func makeOptionRow(icon: UIImage?, title: String, subtitle: String, useNearbyRoads: Bool) -> UIView {
+    private func makeOptionRow(icon: UIImage?, title: String, subtitle: String, useNearbyRoads: Bool, accessoryImage: UIImage? = nil) -> UIView {
         let row = UIView()
 
         let iconView = UIImageView(image: icon)
@@ -135,6 +146,23 @@ final class GetElevationDataViewController: UIViewController {
             row.addSubview($0)
         }
 
+        let textTrailingConstraint: NSLayoutConstraint
+        if let accessoryImage {
+            let accessoryView = UIImageView(image: accessoryImage)
+            accessoryView.contentMode = .scaleAspectFit
+            accessoryView.setContentCompressionResistancePriority(.required, for: .horizontal)
+            accessoryView.setContentHuggingPriority(.required, for: .horizontal)
+            accessoryView.translatesAutoresizingMaskIntoConstraints = false
+            row.addSubview(accessoryView)
+            NSLayoutConstraint.activate([
+                accessoryView.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+                accessoryView.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16)
+            ])
+            textTrailingConstraint = textStack.trailingAnchor.constraint(lessThanOrEqualTo: accessoryView.leadingAnchor, constant: -16)
+        } else {
+            textTrailingConstraint = textStack.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16)
+        }
+
         NSLayoutConstraint.activate([
             iconView.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 16),
             iconView.centerYAnchor.constraint(equalTo: row.centerYAnchor),
@@ -142,7 +170,7 @@ final class GetElevationDataViewController: UIViewController {
             iconView.heightAnchor.constraint(equalToConstant: 30),
 
             textStack.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
-            textStack.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16),
+            textTrailingConstraint,
             textStack.topAnchor.constraint(equalTo: row.topAnchor, constant: 12),
             textStack.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -12)
         ])
@@ -173,6 +201,11 @@ final class GetElevationDataViewController: UIViewController {
     }
 
     @objc private func onTerrainMaps() {
+        guard OAIAPHelper.isOsmAndProAvailable() else {
+            guard let navigationController else { return }
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.terrain(), navController: navigationController)
+            return
+        }
         dismiss(animated: true) { [weak self] in
             self?.onSelectMethod?(false)
         }

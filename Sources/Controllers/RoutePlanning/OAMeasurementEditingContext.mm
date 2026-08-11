@@ -1429,7 +1429,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     NSMutableArray<CLLocation *> *locations = [NSMutableArray new];
-    NSMutableArray<OASWptPt *> *sourcePoints = [NSMutableArray new];
     std::vector<int> routePointIndexes;
     routePointIndexes.push_back(0);
     for (NSInteger i = startPointIndex; i < endPointIndex; i++)
@@ -1444,10 +1443,15 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         {
             for (OASWptPt *pt in dataPoints)
             {
-                CLLocation *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude) altitude:pt.ele horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.date];
-                
-                [locations addObject:l];
-                [sourcePoints addObject:pt];
+                NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0];
+                CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude)
+                                                                     altitude:pt.ele
+                                                           horizontalAccuracy:0
+                                                             verticalAccuracy:0
+                                                                       course:0
+                                                                        speed:pt.speed
+                                                                    timestamp:timestamp];
+                [locations addObject:location];
             }
             [pair.lastObject setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
             route.insert(route.end(), dataSegments.begin(), dataSegments.end());
@@ -1462,16 +1466,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                                                                     locations:locations
                                                             routePointIndexes:routePointIndexes
                                                                        points:nil];
-        OASTrkSegment *routeSegment = [routeExporter generateRouteSegment];
-        NSInteger pointsCount = MIN(routeSegment.points.count, sourcePoints.count);
-        for (NSInteger index = 0; index < pointsCount; index++)
-        {
-            OASWptPt *sourcePoint = sourcePoints[index];
-            OASWptPt *routePoint = routeSegment.points[index];
-            routePoint.time = sourcePoint.time;
-            routePoint.speed = sourcePoint.speed;
-        }
-        return routeSegment;
+        return [routeExporter generateRouteSegment];
     }
     else if (endPointIndex - startPointIndex >= 0)
     {

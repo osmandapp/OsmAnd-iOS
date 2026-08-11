@@ -74,6 +74,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var hasCompletedElevationCalculation = false
     private var cachedState: AnalyzeState = .noData
     private var cachedHasOverviewData = false
+    private var cachedHasElevationData = false
+    private var cachedHasSpeedData = false
     private var cachedRoadAttributeStatistics: [OARouteStatistics] = []
     private var cachedSyntheticSteepness: OARouteStatistics?
     private var cachedSyntheticSteepnessSignature: Double = -1
@@ -105,6 +107,30 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         cachedState
     }
 
+    private var effectiveYAxisTypes: [NSNumber] {
+        let availableTypes = selectedYAxisTypes.filter { number in
+            guard let type = GPXDataSetType(rawValue: number.intValue) else { return false }
+            switch type {
+            case .altitude, .slope:
+                return cachedHasElevationData
+            case .speed:
+                return cachedHasSpeedData
+            default:
+                return true
+            }
+        }
+        if !availableTypes.isEmpty {
+            return availableTypes
+        }
+        if cachedHasSpeedData {
+            return [NSNumber(value: GPXDataSetType.speed.rawValue)]
+        }
+        if cachedHasElevationData {
+            return [NSNumber(value: GPXDataSetType.altitude.rawValue)]
+        }
+        return []
+    }
+
     init(dataSource: PlanRouteAnalyzeDataSource?) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
@@ -134,7 +160,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         }
         wasCalculatingElevation = isElevationCalculating
         let analysisData = dataSource?.analysisData
-        cachedHasOverviewData = analysisData?.hasElevationData == true
+        cachedHasElevationData = analysisData?.hasElevationData == true
+        cachedHasSpeedData = analysisData?.hasSpeedData == true
+        cachedHasOverviewData = cachedHasElevationData || cachedHasSpeedData
         scheduleSteepnessComputationIfNeeded(analysisData: analysisData)
         cachedRoadAttributeStatistics = buildRoadAttributeStatistics(from: analysisData)
         expandedStatIndexes = Set(expandedStatIndexes.filter { $0 < cachedRoadAttributeStatistics.count })
@@ -190,7 +218,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func showAxisPicker(startingOnYAxis: Bool) {
         guard let analysis = dataSource?.analysisData?.gpxAnalysis else { return }
         let sheet = StatisticsSelectionBottomSheetViewController(
-            types: selectedYAxisTypes,
+            types: effectiveYAxisTypes,
             selectedXAxisMode: selectedXAxisType,
             analysis: analysis,
             isYAxisMode: startingOnYAxis
@@ -332,9 +360,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func resolvedYAxisTypes() -> (GPXDataSetType, GPXDataSetType) {
-        let first = selectedYAxisTypes.first.flatMap { GPXDataSetType(rawValue: $0.intValue) } ?? .altitude
-        let second = selectedYAxisTypes.count > 1
-            ? (GPXDataSetType(rawValue: selectedYAxisTypes[1].intValue) ?? .none)
+        let first = effectiveYAxisTypes.first.flatMap { GPXDataSetType(rawValue: $0.intValue) } ?? .none
+        let second = effectiveYAxisTypes.count > 1
+            ? (GPXDataSetType(rawValue: effectiveYAxisTypes[1].intValue) ?? .none)
             : .none
         return (first, second)
     }
@@ -345,14 +373,14 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                               roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
         if isElevationCalculating {
-            return !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
+            return hasOverviewData || !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
         }
         if hasOverviewData || !roadAttributeStatistics.isEmpty { return .hasData }
         return .noData
     }
 
     private func yAxisButtonTitle() -> String {
-        let titles = selectedYAxisTypes.compactMap { GPXDataSetType(rawValue: $0.intValue)?.getTitle() }
+        let titles = effectiveYAxisTypes.compactMap { GPXDataSetType(rawValue: $0.intValue)?.getTitle() }
         guard let firstTitle = titles.first else { return "" }
         guard titles.count > 1, let secondTitle = titles.last else { return firstTitle }
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"), firstTitle, secondTitle)
@@ -400,7 +428,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
               let gpxFile = analysisData?.gpxFile else {
             return nil
         }
-        let yTypes = selectedYAxisTypes.map(\.stringValue).joined(separator: ",")
+        let yTypes = effectiveYAxisTypes.map(\.stringValue).joined(separator: ",")
         return [
             gpxFile.path,
             String(analysis.totalDistance),
@@ -414,6 +442,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func statsSignature(for analysisData: PlanRouteAnalysisData?) -> String? {
         guard cachedHasOverviewData, let analysisData else { return nil }
         return [
+            String(analysisData.hasElevationData),
+            String(analysisData.hasSpeedData),
             String(analysisData.uphill),
             String(analysisData.downhill),
             String(analysisData.altMin ?? .nan),
@@ -634,6 +664,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         recalcBtn.titleLabel?.font = .preferredFont(forTextStyle: .body)
         recalcBtn.contentHorizontalAlignment = .left
         recalcBtn.addTarget(self, action: #selector(onRecalculateTapped), for: .touchUpInside)
+        recalcBtn.isEnabled = dataSource?.isCalculatingElevation != true
         recalcBtn.translatesAutoresizingMaskIntoConstraints = false
 
         [buttonStack, chart, recalcSeparator, recalcBtn].forEach { card.addSubview($0) }
@@ -695,8 +726,12 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
               let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
         let card = cell.cardView
 
+        let uphill = data.hasElevationData ? data.uphill : nil
+        let downhill = data.hasElevationData ? data.downhill : nil
+        let altitudeMinimum = data.hasElevationData ? data.altMin : nil
+        let altitudeMaximum = data.hasElevationData ? data.altMax : nil
         let altRange: String
-        if let min = data.altMin, let max = data.altMax {
+        if let min = altitudeMinimum, let max = altitudeMaximum {
             let minStr = OAOsmAndFormatter.getFormattedAlt(min) ?? "–"
             let maxStr = OAOsmAndFormatter.getFormattedAlt(max) ?? "–"
             altRange = "\(minStr), \(maxStr)"
@@ -705,19 +740,19 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         }
         let items = [
             AnalyzeStatItem(
-                value: fmtAlt(data.uphill),
+                value: fmtAlt(uphill),
                 label: localizedString("shared_string_uphill"),
-                accessibilityValue: accessibilityAltitude(data.uphill)
+                accessibilityValue: accessibilityAltitude(uphill)
             ),
             AnalyzeStatItem(
-                value: fmtAlt(data.downhill),
+                value: fmtAlt(downhill),
                 label: localizedString("shared_string_downhill"),
-                accessibilityValue: accessibilityAltitude(data.downhill)
+                accessibilityValue: accessibilityAltitude(downhill)
             ),
             AnalyzeStatItem(
                 value: altRange,
                 label: localizedString("altitude_range"),
-                accessibilityValue: accessibilityAltitudeRange(minimum: data.altMin, maximum: data.altMax)
+                accessibilityValue: accessibilityAltitudeRange(minimum: altitudeMinimum, maximum: altitudeMaximum)
             ),
             AnalyzeStatItem(
                 value: fmtSpeed(data.avgSpeed),
@@ -1052,8 +1087,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     // MARK: - Formatters
 
-    private func fmtAlt(_ value: Double) -> String {
-        OAOsmAndFormatter.getFormattedAlt(value) ?? "–"
+    private func fmtAlt(_ value: Double?) -> String {
+        guard let value else { return "–" }
+        return OAOsmAndFormatter.getFormattedAlt(value) ?? "–"
     }
 
     private func fmtSpeed(_ value: Double?) -> String {

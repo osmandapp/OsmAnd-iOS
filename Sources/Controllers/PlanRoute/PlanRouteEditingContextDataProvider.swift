@@ -458,6 +458,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 maxSpeed: analysis.maxSpeed > 0 ? Double(analysis.maxSpeed) : nil,
                 timeInMotion: analysis.timeMoving > 0 ? TimeInterval(analysis.timeMoving) / 1000 : nil,
                 hasElevationData: analysis.hasElevationData(),
+                hasSpeedData: analysis.isSpeedSpecified(),
                 gpxAnalysis: analysis,
                 gpxFile: gpxFile,
                 routeStatistics: stats

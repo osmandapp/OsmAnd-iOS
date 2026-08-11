@@ -1045,12 +1045,19 @@ static BOOL _isDeviatedFromRoute = false;
 	return [_provider generateGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
 }
 
-- (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
-														   gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
-														 points:(std::vector<SHARED_PTR<GpxPoint>> &)points
-												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+- (SHARED_PTR<GpxRouteApproximation>)calculateGpxApproximation:(OARoutingEnvironment *)env
+                                                         gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+                                                       points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+                                              locationsHolder:(OALocationsHolder *)locationsHolder
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
-	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
+	return [_provider calculateGpxApproximation:env
+											 gctx:gctx
+										   points:points
+								  locationsHolder:locationsHolder
+							 useExternalTimestamps:useExternalTimestamps
+									resultMatcher:resultMatcher];
 }
 
 - (nullable CLLocation *) getLastProjection

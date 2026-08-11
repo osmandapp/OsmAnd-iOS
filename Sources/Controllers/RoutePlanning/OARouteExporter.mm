@@ -170,6 +170,10 @@
         OASWptPt *pt = [[OASWptPt alloc] initWithLat:loc.coordinate.latitude lon:loc.coordinate.longitude];
         if (loc.speed > 0)
             pt.speed = loc.speed;
+
+        NSTimeInterval timestamp = loc.timestamp.timeIntervalSince1970;
+        if (timestamp > 0)
+            pt.time = (int64_t)(timestamp * 1000.0);
         
         if (loc.altitude > 0)
             pt.ele = loc.altitude;

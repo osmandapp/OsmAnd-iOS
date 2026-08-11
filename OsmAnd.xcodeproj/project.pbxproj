@@ -1532,6 +1532,7 @@
 		C547116A2F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */; };
 		C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
+		C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54BBE6D3023553E00691F10 /* PointRowContentView.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C55357392F56D76F00F7154E /* DeepLinkAppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
@@ -1765,6 +1766,7 @@
 		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
 		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
 		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
+		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
 		D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */; };
 		D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */; };
@@ -5548,6 +5550,7 @@
 		C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButtonConfiguration+Extension.swift"; sourceTree = "<group>"; };
 		C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfigurationHelper.swift; sourceTree = "<group>"; };
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
+		C54BBE6D3023553E00691F10 /* PointRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRowContentView.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
 		C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkAppRouter.swift; sourceTree = "<group>"; };
@@ -5927,6 +5930,7 @@
 		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
 		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
 		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
+		A11CE00133EF000100000001 /* ListFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Extension.swift"; sourceTree = "<group>"; };
 		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
 		D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteRouteViewController.swift; sourceTree = "<group>"; };
 		D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetElevationDataViewController.swift; sourceTree = "<group>"; };
@@ -7208,6 +7212,7 @@
 		DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
 		DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeCell.xib; sourceTree = "<group>"; };
 		DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesParameters.h; sourceTree = "<group>"; };
+		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
 		DA5A7D6226C563A300F274C7 /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
 		DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GpxUIHelper.swift; sourceTree = "<group>"; };
 		DA5A7D6426C563A300F274C7 /* OANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationController.h; sourceTree = "<group>"; };
@@ -12960,6 +12965,7 @@
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
+				C54BBE6D3023553E00691F10 /* PointRowContentView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -13126,6 +13132,7 @@
 				CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */,
 				460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */,
 				DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */,
+				A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */,
 				DA5A7D5626C563A300F274C7 /* OARoutePreferencesParameters.mm */,
 				DA5A7D4726C563A300F274C7 /* OARouteSegmentShieldView.h */,
 				DA5A7D5526C563A300F274C7 /* OARouteSegmentShieldView.mm */,
@@ -14836,6 +14843,7 @@
 				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
 				27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */,
+				A11CE00133EF000100000001 /* ListFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
@@ -18153,6 +18161,7 @@
 				D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */,
 				D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */,
 				D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */,
+				A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */,
 				D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */,
 				D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */,
 				D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */,
@@ -19396,6 +19405,7 @@
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				C56E3AF82B4DA0D60084080A /* MapSettingsGpxViewController.swift in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
+				C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,

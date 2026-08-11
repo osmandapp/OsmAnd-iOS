@@ -31,6 +31,7 @@ final class AnalyzeCardCell: UITableViewCell {
     }
 
     private func setupView() {
+        isAccessibilityElement = false
         selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear

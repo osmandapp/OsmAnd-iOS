@@ -13,7 +13,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     typealias RowCellRegistration<Item> = UICollectionView.CellRegistration<FavoriteListCell, Item>
 
     static let imageSize: CGFloat = 30.0
-    static let favoriteIconSize: CGFloat = 36.0
     static let sortHeaderHeight: CGFloat = 44.0
     static let emptyStateHeaderTopPadding: CGFloat = 22.0
     static let navigationTitleFontSize: CGFloat = 17.0

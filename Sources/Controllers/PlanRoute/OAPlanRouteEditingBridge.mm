@@ -35,11 +35,81 @@
 #import "OAApplyGpxApproximationCommand.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
+#import "OAIAPHelper.h"
+#import "OAAppSettings.h"
+#import "OAWaypointHelper.h"
+#import "OALocationPointWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 
 static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
+
+@implementation OAPlanRouteShowAlongSettingsBridge
+{
+    OAApplicationMode *_applicationMode;
+    OAAppSettings *_settings;
+}
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)applicationMode
+{
+    self = [super init];
+    if (self)
+    {
+        _applicationMode = applicationMode;
+        _settings = OAAppSettings.sharedManager;
+    }
+    return self;
+}
+
+- (BOOL)isEnabledForType:(EOAPlanRouteShowAlongType)type
+{
+    switch (type)
+    {
+    case EOAPlanRouteShowAlongTypePoi:
+        return [_settings.showNearbyPoi get:_applicationMode];
+    case EOAPlanRouteShowAlongTypeFavorites:
+        return [_settings.showNearbyFavorites get:_applicationMode];
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
+        return [_settings.showScreenAlerts get:_applicationMode] && [_settings.showTrafficWarnings get:_applicationMode];
+    default:
+        return NO;
+    }
+}
+
+- (void)setEnabled:(BOOL)enabled forType:(EOAPlanRouteShowAlongType)type
+{
+    NSInteger waypointType;
+    switch (type)
+    {
+    case EOAPlanRouteShowAlongTypePoi:
+        [_settings.showNearbyPoi set:enabled mode:_applicationMode];
+        [_settings.announceNearbyPoi set:enabled mode:_applicationMode];
+        waypointType = LPW_POI;
+        break;
+    case EOAPlanRouteShowAlongTypeFavorites:
+        [_settings.showNearbyFavorites set:enabled mode:_applicationMode];
+        [_settings.announceNearbyFavorites set:enabled mode:_applicationMode];
+        waypointType = LPW_FAVORITES;
+        break;
+    case EOAPlanRouteShowAlongTypeTrafficWarnings:
+        if (enabled)
+            [_settings.showScreenAlerts set:YES mode:_applicationMode];
+        [_settings.showTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.speakTrafficWarnings set:enabled mode:_applicationMode];
+        [_settings.showPedestrian set:enabled mode:_applicationMode];
+        [_settings.speakPedestrian set:enabled mode:_applicationMode];
+        [_settings.showTunnels set:enabled mode:_applicationMode];
+        [_settings.speakTunnels set:enabled mode:_applicationMode];
+        waypointType = LPW_ALARMS;
+        break;
+    default:
+        return;
+    }
+    [OAWaypointHelper.sharedInstance recalculatePoints:(int)waypointType];
+}
+
+@end
 
 @class OAMeasurementToolLayer;
 
@@ -131,6 +201,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && (![ctx shouldCheckApproximation] || ![ctx isApproximationNeeded] || [ctx isNewData]);
 }
 
+- (BOOL)isApproximationNeeded
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && [ctx isApproximationNeeded];
+}
+
 - (BOOL)shouldShowApproximationWarning
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -139,7 +215,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (UIViewController *)approximationWarningViewController
 {
-    if (![self shouldShowApproximationWarning])
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount == 0)
         return nil;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
@@ -311,6 +388,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     OAGpxData *gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
     ctx.gpxData = gpxData;
+    NSArray<OASWptPt *> *routePoints = gpxFile.getRoutePoints;
+    if (routePoints.count > 0)
+    {
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:routePoints.lastObject.getProfileType
+                                                                     def:nil];
+        if (appMode != nil)
+            ctx.appMode = appMode;
+    }
     ctx.progressDelegate = self;
     _initialPoiStateSnapshot = gpxFile != nil ? [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
     _editingPoiStateSnapshot = nil;
@@ -326,6 +411,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
     return [OAMapUtils getDistance:from.lat lon1:from.lon lat2:to.lat lon2:to.lon];
+}
+
+- (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
+{
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
 }
 
 - (NSArray<PlanRouteSegmentData *> *)buildSegments
@@ -834,7 +925,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASWptPt *previous = allPoints[index - 1];
             if (!previous.isGap)
             {
-                legDistance = [self distanceFrom:previous to:point];
+                legDistance = [self routeDistanceFrom:previous to:point];
                 CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
                 CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
                 bearing = [OAMapUtils normalizeDegrees360:[previousLocation bearingTo:pointLocation]];
@@ -958,13 +1049,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = YES;
-    if (self.onChange)
+    _isCalculatingRoute = mode != OAApplicationMode.DEFAULT;
+    if (_isCalculatingRoute && self.onChange)
         self.onChange();
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
+    if (!_isCalculatingRoute && self.onChange)
+        self.onChange();
 }
 
 - (void)refreshRouteForMode:(OAApplicationMode *)mode
@@ -1915,10 +2008,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _isCalculatingRoute;
 }
 
+- (BOOL)isTerrainElevationAvailable
+{
+    return [OAIAPHelper isOsmAndProAvailable];
+}
+
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
+        return;
+    if (!useNearbyRoads && ![self isTerrainElevationAvailable])
         return;
 
     [self invalidateElevationCalculationShouldNotify:NO];
@@ -2182,7 +2282,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
-    [controller dismissViewControllerAnimated:YES completion:nil];
+    if (controller.presentingViewController != nil)
+        [controller dismissViewControllerAnimated:YES completion:nil];
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
@@ -2210,6 +2313,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations
@@ -2219,6 +2324,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     OAMeasurementToolLayer *layer = [self layer];
     if (ctx == nil || layer == nil)
+        return;
+    if (gpxApproximations.count == 0 || pointsList.count != gpxApproximations.count)
         return;
     BOOL wasApproximationMode = ctx.approximationMode;
     ctx.approximationMode = YES;

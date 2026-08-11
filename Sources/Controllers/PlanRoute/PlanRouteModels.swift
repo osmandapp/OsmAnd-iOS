@@ -53,7 +53,6 @@ enum PlanRouteMenuAction: CaseIterable {
     case saveAsCopy
     case appendToExistingTrack
     case changeSegmentOrder
-    case viewDirections
     case reverseRoute
     case navigation
     case clearAllPoints
@@ -64,7 +63,6 @@ enum PlanRouteMenuAction: CaseIterable {
         case .saveAsCopy: localizedString("save_as_copy")
         case .appendToExistingTrack: localizedString("plan_route_append_to_existing_track")
         case .changeSegmentOrder: localizedString("plan_route_change_segment_order")
-        case .viewDirections: localizedString("plan_route_view_directions")
         case .reverseRoute: localizedString("reverse_route")
         case .navigation: localizedString("shared_string_navigation")
         case .clearAllPoints: localizedString("distance_measurement_clear_route")
@@ -77,7 +75,6 @@ enum PlanRouteMenuAction: CaseIterable {
         case .saveAsCopy: .icCustomSaveAsNewFile
         case .appendToExistingTrack: .icCustomAddToTrack
         case .changeSegmentOrder: .icCustomList
-        case .viewDirections: .icCustomSwap
         case .reverseRoute: .icCustomSwap
         case .navigation: .icCustomNavigationOutlined
         case .clearAllPoints: .icCustomTrashOutlined
@@ -189,11 +186,6 @@ struct PlanRouteAnalysisData {
     let routeStatistics: [OARouteStatistics]
 }
 
-struct PlanRouteSegmentRoutingParams: Equatable {
-    var useElevationData: Bool
-    var considerTemporaryLimitations: Bool
-}
-
 enum SegmentRouteContext {
     case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
     case wholeSegment(PlanRouteSegment)
@@ -278,6 +270,7 @@ protocol PlanRouteAnalyzeDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
     var isCalculatingElevation: Bool { get }
     var isCalculatingRoute: Bool { get }
+    var isTerrainElevationAvailable: Bool { get }
     var analysisData: PlanRouteAnalysisData? { get }
 
     func startElevationCalculation(useNearbyRoads: Bool)
@@ -293,6 +286,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var pendingEmptySegmentIndex: Int? { get }
     var defaultMode: OAApplicationMode? { get }
     var isTrackReadyToCalculate: Bool { get }
+    var isApproximationNeeded: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
     var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
@@ -318,8 +312,6 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func addPointAfter(index: Int)
     func trimBefore(index: Int)
     func trimAfter(index: Int)
-    func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams
-    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, mode: OAApplicationMode)
     func refreshRoute(for mode: OAApplicationMode)
 }
 
@@ -342,6 +334,7 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var presenterViewController: UIViewController? { get set }
     var onDataChanged: (() -> Void)? { get set }
     var onRouteInfoChanged: (() -> Void)? { get set }
+    var onApproximationPopupDismissed: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }

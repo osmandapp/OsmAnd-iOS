@@ -1569,7 +1569,7 @@ includeHidden:(BOOL)includeHidden
 + (void)presentAlert:(UIAlertController *)alert
 {
     auto rootController = OARootViewController.instance;
-    [rootController canPresentAlertController:alert completion:^(BOOL canPresent) {
+    [rootController canPresentAlertControllerWithCompletion:^(BOOL canPresent) {
         if (canPresent)
             [rootController presentViewController:alert animated:YES completion:nil];
     }];

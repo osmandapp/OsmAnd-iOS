@@ -12,10 +12,18 @@ import Foundation
 @objcMembers
 class WidgetsPanel: NSObject, NSCopying {
     
-    static let leftPanel = WidgetsPanel("ic_custom_screen_side_left", title: localizedString("map_widget_left"))
-    static let rightPanel = WidgetsPanel("ic_custom_screen_side_right", title: localizedString("map_widget_right"))
-    static let topPanel = WidgetsPanel("ic_custom_screen_side_top", title: localizedString("top_widgets_panel"))
-    static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom", title: localizedString("bottom_widgets_panel"))
+    static let leftPanel = WidgetsPanel("ic_custom_screen_side_left",
+                                       landscapeIconName: "ic_custom_screen_side_left_landscape",
+                                       title: localizedString("map_widget_left"))
+    static let rightPanel = WidgetsPanel("ic_custom_screen_side_right",
+                                        landscapeIconName: "ic_custom_screen_side_right_landscape",
+                                        title: localizedString("map_widget_right"))
+    static let topPanel = WidgetsPanel("ic_custom_screen_side_top",
+                                      landscapeIconName: "ic_custom_screen_side_top_landscape",
+                                      title: localizedString("top_widgets_panel"))
+    static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom",
+                                         landscapeIconName: "ic_custom_screen_side_bottom_landscape",
+                                         title: localizedString("bottom_widgets_panel"))
     
     static let values: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
     
@@ -37,25 +45,20 @@ class WidgetsPanel: NSObject, NSCopying {
     
     let title: String
     let iconName: String
+    let landscapeIconName: String
 
     var isPanelVertical: Bool {
         self == .topPanel || self == .bottomPanel
     }
 
-    internal required init(_ iconName: String, title: String) {
+    internal required init(_ iconName: String, landscapeIconName: String, title: String) {
         self.title = title
         self.iconName = iconName
+        self.landscapeIconName = landscapeIconName
     }
 
-    private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
-        if !rtl || self == .topPanel || self == .bottomPanel {
-            return self
-        } else if self == .leftPanel {
-            return .rightPanel
-        } else if self == .rightPanel {
-            return .leftPanel
-        }
-        fatalError("Unsupported panel")
+    func getIconName(_ screenLayoutMode: ScreenLayoutMode) -> String {
+        screenLayoutMode.isPortrait ? iconName : landscapeIconName
     }
 
     func getOriginalOrder() -> [String] {
@@ -89,6 +92,17 @@ class WidgetsPanel: NSObject, NSCopying {
 
     func getWidgetOrder(_ widgetId: String, appMode: OAApplicationMode) -> Int {
         return getPagedOrder(widgetId, appMode: appMode).1
+    }
+    
+    private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
+        if !rtl || self == .topPanel || self == .bottomPanel {
+            return self
+        } else if self == .leftPanel {
+            return .rightPanel
+        } else if self == .rightPanel {
+            return .leftPanel
+        }
+        fatalError("Unsupported panel")
     }
 
     private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {

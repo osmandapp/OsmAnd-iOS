@@ -134,14 +134,16 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         
         let widgetsSection = tableData.createNewSection()
         widgetsSection.headerText = localizedString("shared_string_widgets")
-        if !isSharedLandscapeLayout {
+
+        let visibleWidgetPanels = !isSharedLandscapeLayout ? WidgetsPanel.values : []
+        if !visibleWidgetPanels.isEmpty {
             widgetsSection.footerText = localizedString("widget_panels_descr")
-            for panel in WidgetsPanel.values {
+            for panel in visibleWidgetPanels {
                 let widgetsCount = getWidgetsCount(panel: panel)
                 let row = widgetsSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.title = panel.title
-                row.iconName = panel.iconName
+                row.iconName = panel.getIconName(screenLayoutMode)
                 row.setObj(panel, forKey: "panel")
                 row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode!.getProfileColor()
                 row.descr = String(widgetsCount)
@@ -242,6 +244,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     }
 
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
+        // todo
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         return widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count

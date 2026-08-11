@@ -5026,3 +5026,6 @@
 
 "coordinate_format_description" = "Preferred formats for quick access from context menu and search.";
 "coordinate_format_primary" = "Primary";
+"coordinate_format_cancel_changes_title" = "Discard changes?";
+"coordinate_format_cancel_changes_message" = "Your changes to preferred formats will not be saved.";
+"coordinate_format_last_item_warning" = "At least one coordinate format is required.";

@@ -1379,6 +1379,7 @@
 		9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */; };
 		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
+		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -1725,6 +1726,8 @@
 		CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */; };
 		CE7AC1B22FE02A2600495411 /* SelectPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */; };
 		CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */; };
+		CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */; };
+		CE7CC394302B11530048D36F /* CoordinateFormatHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */; };
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
 		CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */; };
@@ -1766,7 +1769,6 @@
 		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
 		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
 		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
-		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
 		D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */; };
 		D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */; };
@@ -5329,6 +5331,8 @@
 		9F5A00022FD0000100484401 /* AisObjectDrawable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AisObjectDrawable.mm; sourceTree = "<group>"; };
 		A0CF279954D69E24AEAACBF0 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pl; path = pl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		A0EC68AFE40C27F9670CE9C5 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hi; path = hi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
+		A11CE00133EF000100000001 /* ListFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Extension.swift"; sourceTree = "<group>"; };
 		A5A500012F50000100000001 /* AstronomyPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPlugin.swift; sourceTree = "<group>"; };
 		A5A500052F50000100000005 /* AstronomyPluginSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPluginSettings.swift; sourceTree = "<group>"; };
 		A5A500072F50000100000007 /* AstroDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataProvider.swift; sourceTree = "<group>"; };
@@ -5884,6 +5888,8 @@
 		CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTracksViewController.swift; sourceTree = "<group>"; };
 		CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPointsViewController.swift; sourceTree = "<group>"; };
 		CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroWikiBridge.swift; sourceTree = "<group>"; };
+		CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatEditViewController.swift; sourceTree = "<group>"; };
+		CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatHelper.swift; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
 		CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDeepLinkBuilder.swift; sourceTree = "<group>"; };
@@ -5930,7 +5936,6 @@
 		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
 		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
 		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
-		A11CE00133EF000100000001 /* ListFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Extension.swift"; sourceTree = "<group>"; };
 		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
 		D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteRouteViewController.swift; sourceTree = "<group>"; };
 		D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetElevationDataViewController.swift; sourceTree = "<group>"; };
@@ -7212,7 +7217,6 @@
 		DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
 		DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeCell.xib; sourceTree = "<group>"; };
 		DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesParameters.h; sourceTree = "<group>"; };
-		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
 		DA5A7D6226C563A300F274C7 /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
 		DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GpxUIHelper.swift; sourceTree = "<group>"; };
 		DA5A7D6426C563A300F274C7 /* OANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationController.h; sourceTree = "<group>"; };
@@ -11109,6 +11113,8 @@
 			isa = PBXGroup;
 			children = (
 				CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */,
+				CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */,
+				CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */,
 				CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */,
 				CE79CF273025D15B00B3BA15 /* CoordinateFormat.swift */,
 				CE79CF293025D18800B3BA15 /* BuiltInCoordinateFormat.swift */,
@@ -18167,6 +18173,7 @@
 				D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */,
 				D7210180301B768C003CECB8 /* OAPlanRouteEditingBridge.mm in Sources */,
 				D7210181301B768C003CECB8 /* PlanRouteButtonFactory.swift in Sources */,
+				CE7CC394302B11530048D36F /* CoordinateFormatHelper.swift in Sources */,
 				D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */,
 				D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */,
 				D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */,
@@ -18556,6 +18563,7 @@
 				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
+				CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */,
 				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
 				DA5A833226C563A800F274C7 /* OAPoiCollectionViewCell.m in Sources */,
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,

@@ -260,14 +260,8 @@ static const NSInteger kOrderWptPointLinkRow = 2;
 
 - (void) leftControlButtonPressed
 {
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if ([mapPanel.prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
-    {
-        [mapPanel targetHideMenu:0 backButtonClicked:NO onComplete:nil];
-        return;
-    }
-
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
         if (gpx)
         {

@@ -4470,11 +4470,8 @@
 "no_search_results" = "Ingen resultater";
 "favorite_search_empty_state_description" = "Juster din søgning eller filtre for at se, om det hjælper";
 "favorites_empty_folder_description" = "Denne mappe har endnu ingen punkter.";
-"favorites_delete_confirmation_title" = "Slet %ld favoritter?";
 "items_delete_confirmation_title" = "Slet %ld elementer?";
-"folders_delete_confirmation_title" = "Slet %ld mapper?";
 "favorites_delete_confirmation_message" = "Denne handling kan ikke fortrydes.";
-"mixed_delete_confirmation_message" = "Dette vil slette %ld mapper og %ld punkter. Denne handling kan ikke fortrydes.";
 "empty_state_favourites" = "Tilføj favoritter";
 "empty_state_favourites_desc" = "Importer favoritter, eller tilføj dem ved at markere punkter på kortet.";
 "tracks_empty_folder" = "Tom mappe";

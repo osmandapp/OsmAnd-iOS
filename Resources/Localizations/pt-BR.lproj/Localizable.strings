@@ -4435,9 +4435,6 @@
 "ais_type_aid_to_navigation" = "Auxílios à navegação";
 "ais_type_virtual_aid_to_navigation" = "Auxílio virtual à navegação";
 "ais_unknown" = "desconhecido";
-"favorites_delete_confirmation_title" = "Excluir %ld favoritos?";
-"folders_delete_confirmation_title" = "Excluir %ld pastas?";
-"mixed_delete_confirmation_message" = "Isso excluirá %ld pastas e %ld itens. Essa ação não pode ser desfeita.";
 "share_as_file" = "Compartilhe como arquivo";
 "share_link" = "Compartilhar link";
 "shared_string_kts" = "kts";

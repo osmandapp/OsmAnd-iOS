@@ -56,22 +56,22 @@ static NSString *dangerousGoodsRouteSettingsUsaKey = @"dangerousGoodsRouteSettin
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup, OALocalRoutingParameter;
 
-struct RoutingParameter;
-
 @protocol OARoutePreferencesParametersDelegate <NSObject>
 
 @required
 - (void) updateParameters;
 - (void) openNavigationSettings;
-- (void) openRouteLineAppearance;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
 - (void) showParameterValuesScreen:(OALocalRoutingParameter *)parameter;
-- (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
+- (void) openShowAlongScreen;
+
+@optional
+- (void) openRouteLineAppearance;
+- (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showTripSettingsScreen;
 - (void) showAvoidTransportScreen;
 - (void) openSimulateNavigationScreen;
-- (void) openShowAlongScreen;
 
 @end
 
@@ -81,8 +81,6 @@ struct RoutingParameter;
 @property (nonatomic) OAAppSettings *settings;
 
 @property (nonatomic, weak) id<OARoutePreferencesParametersDelegate> delegate;
-
-@property struct RoutingParameter routingParameter;
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)am;
 - (void) commonInit;
@@ -124,7 +122,6 @@ struct RoutingParameter;
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)am groupName:(NSString *)groupName;
 
-- (void) addRoutingParameter:(RoutingParameter)routingParameter;
 - (NSString *) getGroupName;
 - (NSMutableArray<OALocalRoutingParameter *> *) getRoutingParameters;
 - (OALocalRoutingParameter *) getSelected;
@@ -163,7 +160,7 @@ struct RoutingParameter;
 
 @interface OAHazmatRoutingParameter : OALocalRoutingParameter
 
-- (NSString *)getValue:(NSInteger)index;
+- (NSString *)valueForIndex:(NSInteger)index;
 - (void)setValue:(NSInteger)index;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "OAReorderSegmentCommand.h"
+#import "OAApplicationMode.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -87,7 +88,15 @@
         else
         {
             if (lastPt.isGap)
-                [lastPt removeProfileType];
+            {
+                NSMutableArray<OASWptPt *> *segment = segments[i];
+                OASWptPt *previousPoint = segment.count > 1 ? segment[segment.count - 2] : nil;
+                NSString *profileType = previousPoint.getProfileType;
+                if (profileType.length > 0)
+                    [lastPt setProfileTypeProfileType:profileType];
+                else
+                    [lastPt removeProfileType];
+            }
         }
     }
 
@@ -96,6 +105,8 @@
         [newPoints addObjectsFromArray:seg];
 
     [editingCtx setPoints:newPoints];
+    OASWptPt *lastPoint = newPoints.lastObject;
+    editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     [editingCtx updateSegmentsForSnap];
     [self.measurementLayer updateLayer];
 }

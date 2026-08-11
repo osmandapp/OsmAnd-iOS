@@ -9,7 +9,11 @@ import UIKit
 
 final class PlanRouteProfileGroupCell: UITableViewCell {
 
-    private static let iconSize: CGFloat = 24
+    private static let horizontalInset: CGFloat = 16
+    private static let verticalInset: CGFloat = 11
+    private static let iconSize: CGFloat = 30
+    private static let iconTitleSpacing: CGFloat = 26
+    private static let titleLeadingInset = horizontalInset + iconSize + iconTitleSpacing
     private static let optionsButtonSize: CGFloat = 30
 
     private let iconView = UIImageView()
@@ -39,6 +43,10 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
     private func setupCell() {
         backgroundColor = .groupBg
         selectionStyle = .none
+        separatorInset = UIEdgeInsets(top: 0,
+                                      left: Self.titleLeadingInset,
+                                      bottom: 0,
+                                      right: Self.horizontalInset)
 
         iconView.contentMode = .scaleAspectFit
 
@@ -50,7 +58,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         distanceLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.templateImageNamed("ic_custom_overflow_menu_stroke")
+        configuration.image = .icCustomOverflowMenuStroke
         configuration.baseForegroundColor = .iconColorDefault
         configuration.background.backgroundColor = .clear
         configuration.contentInsets = .zero
@@ -65,12 +73,14 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         }
 
         NSLayoutConstraint.activate([
-            iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            iconView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: Self.verticalInset),
+            iconView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -Self.verticalInset),
             iconView.widthAnchor.constraint(equalToConstant: Self.iconSize),
             iconView.heightAnchor.constraint(equalToConstant: Self.iconSize),
 
-            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: Self.iconTitleSpacing),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 10),
 
@@ -78,7 +88,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
             distanceLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             optionsButton.leadingAnchor.constraint(equalTo: distanceLabel.trailingAnchor, constant: 12),
-            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             optionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.optionsButtonSize),
             optionsButton.heightAnchor.constraint(equalToConstant: Self.optionsButtonSize)

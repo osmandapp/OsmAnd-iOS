@@ -48,7 +48,7 @@ static const NSInteger kOrderFavGroupRow = 1;
     {
         _app = [OsmAndApp instance];
         _favorite = favorite;
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        _favoriteGroup = [OAFavoritesHelper groupByName:[self.favorite getCategory]];
         _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
         [self acquireOriginObject];

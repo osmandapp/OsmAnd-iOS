@@ -23,6 +23,8 @@
 #define kApproximationMinDistance 0
 #define kApproximationMaxDistance 100
 
+static const float kProgressMaximumValue = 100.f;
+
 @interface OAGpxApproximationViewController () <UITableViewDelegate, UITableViewDataSource, OAGpxApproximationHelperDelegate>
 
 @end
@@ -36,6 +38,7 @@
     OAGpxApproximationHelper *_approximationHelper;
     NSArray<OALocationsHolder *> *_locationsHolders;
     UIProgressView *_progressBarView;
+    BOOL _hasAppliedApproximationPreview;
 }
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
@@ -43,6 +46,7 @@
     self = [super init];
     if (self)
     {
+        _snapToRoadAppMode = mode;
         NSMutableArray<OALocationsHolder *> *locationsHolders = [NSMutableArray array];
         for (NSArray<OASWptPt *> *points in routePoints)
             [locationsHolders addObject:[[OALocationsHolder alloc] initWithLocations:points]];
@@ -60,17 +64,17 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self setHeaderViewVisibility:YES];
-    
-    _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
-    _approximationHelper.delegate = self;
-    [_approximationHelper calculateGpxApproximationAsync];
-    
+
     _progressBarView = [[UIProgressView alloc] init];
     _progressBarView.hidden = YES;
     _progressBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _progressBarView.progressTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     _progressBarView.frame = CGRectMake(0., -3., self.view.frame.size.width, 3.);
     [self.buttonsView addSubview:_progressBarView];
+
+    _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
+    _approximationHelper.delegate = self;
+    [_approximationHelper calculateGpxApproximationAsync];
 }
 
 - (CGFloat)initialHeight
@@ -86,16 +90,23 @@
 
 - (void)onRightButtonPressed
 {
+    [self setApplyButtonEnabled:NO];
     if (self.delegate)
         [self.delegate onApplyGpxApproximation];
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onLeftButtonPressed
 {
-    if (self.delegate)
-        [self.delegate onCancelSnapApproximation:YES];
     [self dismiss];
+}
+
+- (void)dismiss
+{
+    [_approximationHelper cancelApproximation];
+    if (self.delegate)
+        [self.delegate onCancelSnapApproximation:_hasAppliedApproximationPreview];
+    _hasAppliedApproximationPreview = NO;
+    [super dismiss];
 }
 
 - (void)initData
@@ -115,7 +126,8 @@
         @"title" : OALocalizedString(@"select_profile")
     }];
     NSArray<OAApplicationMode *> *profiles = [self getProfiles];
-    _snapToRoadAppMode = profiles.firstObject;
+    if (_snapToRoadAppMode == nil || ![profiles containsObject:_snapToRoadAppMode])
+        _snapToRoadAppMode = profiles.firstObject;
     for (OAApplicationMode *profile in profiles)
     {
         [profilesSectionArray addObject:@{
@@ -154,7 +166,8 @@
     {
         if (_progressBarView.hidden)
             _progressBarView.hidden = NO;
-        _progressBarView.progress = progress;
+        float normalizedProgress = MIN(MAX((float)progress / kProgressMaximumValue, 0.f), 1.f);
+        [_progressBarView setProgress:MAX(_progressBarView.progress, normalizedProgress) animated:YES];
     }
 }
 
@@ -167,10 +180,14 @@
 {
     if (_progressBarView)
         _progressBarView.hidden = YES;
-    
-    if (self.delegate)
+
+    BOOL hasValidApproximations = approximations.count > 0 && points.count == approximations.count;
+    if (hasValidApproximations && self.delegate)
+    {
         [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
-    [self setApplyButtonEnabled:approximations.count > 0];
+        _hasAppliedApproximationPreview = YES;
+    }
+    [self setApplyButtonEnabled:hasValidApproximations];
 }
 
 - (void) setApplyButtonEnabled:(BOOL)enabled

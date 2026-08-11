@@ -778,6 +778,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 - (BOOL) updateInfo
 {
     BOOL visible = [self isRulerWidgetOn];
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    _imageView.hidden = mapPanel.activeTargetType == OATargetRoutePlanning;
     if (visible)
     {
         if (_firstUpdate || _cachedMapMode != _settings.nightMode)

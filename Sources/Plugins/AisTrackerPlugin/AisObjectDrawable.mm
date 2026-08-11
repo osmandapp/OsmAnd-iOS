@@ -24,8 +24,7 @@ static const int kAisDirectionLineStartZoom = 10;
 static const CGFloat kAisBaseIconSize = 48.0;
 static const CGFloat kAisRestIconScale = 0.7;
 static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
-static int kAisIconKeyStorage;
-static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
+static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
 static std::unordered_map<std::string, sk_sp<SkImage>> kAisImagesCache;
 
 static BOOL AisDrawableTypeEquals(OASAisObjType *type, OASAisObjType *expected)

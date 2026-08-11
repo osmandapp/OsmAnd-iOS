@@ -24,6 +24,7 @@
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"
 #import "OAResultMatcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -382,10 +383,7 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
     
-    UIViewController *top = [OARootViewController instance];
-    while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
-        top = top.presentedViewController;
-    [top presentViewController:alert animated:YES completion:nil];
+    [self presentAlertController:alert];
 }
 
 + (void) warnAboutExternalLoad:(NSString *)url sourceView:(nullable UIView *)sourceView
@@ -403,10 +401,18 @@
     popPresenter.sourceView = sourceView;
     popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
 
+    [self presentAlertController:alert];
+}
+
++ (void)presentAlertController:(UIAlertController *)alert
+{
     UIViewController *top = [OARootViewController instance];
     while (top.presentedViewController && !top.presentedViewController.isBeingDismissed)
         top = top.presentedViewController;
-    [top presentViewController:alert animated:YES completion:nil];
+    [top canPresentAlertControllerWithCompletion:^(BOOL canPresent) {
+        if (canPresent)
+            [top presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 + (nullable NSString *) getFirstParagraph:(nullable NSString *)descriptionHtml

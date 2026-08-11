@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Видалити %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld закладку</string>
+			<key>few</key>
+			<string>%ld закладки</string>
+			<key>many</key>
+			<string>%ld закладок</string>
+			<key>other</key>
+			<string>%ld закладки</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Видалити %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld папку</string>
+			<key>few</key>
+			<string>%ld папки</string>
+			<key>many</key>
+			<string>%ld папок</string>
+			<key>other</key>
+			<string>%ld папки</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Видалити %#@folders@ та %#@points@. Цю дію не можна скасувати.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld папку</string>
+			<key>few</key>
+			<string>%ld папки</string>
+			<key>many</key>
+			<string>%ld папок</string>
+			<key>other</key>
+			<string>%ld папки</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld точку</string>
+			<key>few</key>
+			<string>%ld точки</string>
+			<key>many</key>
+			<string>%ld точок</string>
+			<key>other</key>
+			<string>%ld точки</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

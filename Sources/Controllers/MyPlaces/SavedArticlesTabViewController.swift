@@ -6,9 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable {
+final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable, MyPlacesScrollResettable {
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
@@ -76,6 +74,21 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func isNavbarVisible() -> Bool {
         true
     }
+
+    func resetScrollPosition() {
+        if let tableHeaderView = tableView.tableHeaderView {
+            tableView.scrollRectToVisible(tableHeaderView.frame, animated: false)
+            return
+        }
+
+        let indexPath = IndexPath(row: 0, section: 0)
+        guard tableView.numberOfSections > indexPath.section,
+              tableView.numberOfRows(inSection: indexPath.section) > indexPath.row else {
+            return
+        }
+
+        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+    }
     
     func startAsyncInit() {
         self.view.addSpinner(inCenterOfCurrentView: true)
@@ -87,10 +100,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
     }
     
-    deinit {
-        savedArticlesObserver?.detach()
-    }
-
     @objc func update() {
         DispatchQueue.main.async {
             self.updateData()
@@ -224,7 +233,67 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
         return nil
     }
-    
+
+    // MARK: GpxReadDelegate
+
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
+        // Open TravelGpx track
+        article.gpxFile = gpxFile
+        let filename = TravelObfHelper.shared.createGpxFile(article: article)
+        view.removeSpinner()
+
+        guard let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile), gpx.wptPoints != 0 else {
+            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
+            return
+        }
+
+        guard let documentAdapter = article.gpxFile else { return }
+        OATravelGuidesHelper.showGpx(filename, documentAdapter: documentAdapter)
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            let trackItem = TrackItem(file: gpx.file)
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: false,
+                                                                           selectedTab: .pointsTab)
+        }
+    }
+
+    // MARK: MyPlacesSearchable
+
+    func searchResults(for searchController: UISearchController) {
+        if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
+            isSearchActive = true
+            isFiltered = false
+        } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
+            isSearchActive = true
+            isFiltered = true
+            searchText = searchController.searchBar.searchTextField.text ?? ""
+        } else {
+            isSearchActive = false
+            isFiltered = false
+        }
+        updateData()
+        setupNavbarButtons()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isSearchActive = false
+        isFiltered = false
+        myPlacesDelegate?.updateSearchEnabling(false)
+    }
+
+    // MARK: TravelExploreViewControllerDelegate
+
+    func close() {
+        self.view.addSpinner(inCenterOfCurrentView: true)
+        if let indexPath = lastSelectedIndexPath {
+            let item = tableData.item(for: indexPath)
+            if let article = item.obj(forKey: "article") as? TravelArticle, let lang = item.string(forKey: "lang") {
+                _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
+            }
+        }
+    }
+
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
         headerView.backgroundColor = .clear
@@ -306,70 +375,13 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         tableView.reloadData()
     }
     
-    @objc
-    private func searchButtonPressed(_ sender: Any) {
+    @objc private func searchButtonPressed(_ sender: Any) {
         myPlacesDelegate?.updateSearchEnabling(true)
         isSearchActive = true
         setupNavbarButtons()
     }
 
-    // MARK: GpxReadDelegate
-    
-    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
-        // Open TravelGpx track
-        article.gpxFile = gpxFile
-        let filename = TravelObfHelper.shared.createGpxFile(article: article)
-        OATravelGuidesHelper.createGpxFile(article, fileName: filename)
-        view.removeSpinner()
-
-        guard let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile), gpx.wptPoints != 0 else {
-            OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
-            return
-        }
-
-        OAAppSettings.sharedManager().showGpx([filename], update: true)
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            let trackItem = TrackItem(file: gpx.file)
-            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: trackItem,
-                                                                           navControllerHistory: newCurrentHistory,
-                                                                           fromTrackMenu: false,
-                                                                           selectedTab: .pointsTab)
-        }
-    }
-    
-    // MARK: MyPlacesSearchable
-    
-    func searchResults(for searchController: UISearchController) {
-        if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
-            isSearchActive = true
-            isFiltered = false
-        } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
-            isSearchActive = true
-            isFiltered = true
-            searchText = searchController.searchBar.searchTextField.text ?? ""
-        } else {
-            isSearchActive = false
-            isFiltered = false
-        }
-        updateData()
-        setupNavbarButtons()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearchActive = false
-        isFiltered = false
-        myPlacesDelegate?.updateSearchEnabling(false)
-    }
-    
-    // MARK: TravelExploreViewControllerDelegate
-    
-    func close() {
-        self.view.addSpinner(inCenterOfCurrentView: true)
-        if let indexPath = lastSelectedIndexPath {
-            let item = tableData.item(for: indexPath)
-            if let article = item.obj(forKey: "article") as? TravelArticle, let lang = item.string(forKey: "lang") {
-                _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
-            }
-        }
+    deinit {
+        savedArticlesObserver?.detach()
     }
 }

@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OAMeasurementEditingContext.h"
+#import "OAMeasurementEditingContextTypes.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOABottomInfoViewType) {
     EOABottomInfoViewTypeMove = 0,
@@ -27,7 +29,7 @@ typedef NS_ENUM(NSInteger, EOABottomInfoViewType) {
 
 @interface OAInfoBottomView : UIView
 
-@property (nonatomic, weak) id<OAInfoBottomViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<OAInfoBottomViewDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 
@@ -39,10 +41,12 @@ typedef NS_ENUM(NSInteger, EOABottomInfoViewType) {
 @property (weak, nonatomic) IBOutlet UIButton *leftButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightButton;
 
-@property (nonatomic) NSString *headerViewText;
+@property (nonatomic, copy) NSString *headerViewText;
 
 - (instancetype) initWithType:(EOABottomInfoViewType)type;
 
 - (CGFloat) getViewHeight;
 
 @end
+
+NS_ASSUME_NONNULL_END

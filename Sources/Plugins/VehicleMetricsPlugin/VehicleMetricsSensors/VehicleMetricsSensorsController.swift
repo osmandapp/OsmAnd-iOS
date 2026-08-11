@@ -296,7 +296,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
-        headerEmptyView.backgroundColor = UIColor.groupBg
+        headerEmptyView.backgroundColor = .groupBg
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

@@ -8,15 +8,19 @@
 
 import UIKit
 import CoreLocation
+import OsmAndShared
 
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
-
-    private static let heightObstaclesParameterKey = "height_obstacles"
 
     let mode: PlanRouteMode
 
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
+    var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
+    var onApproximationPopupDismissed: (() -> Void)? {
+        didSet { bridge.onApproximationPopupDismissed = onApproximationPopupDismissed }
+    }
+    private(set) var pendingEmptySegmentIndex: Int?
 
     weak var presenterViewController: UIViewController? {
         get { bridge.presenterViewController }
@@ -52,8 +56,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         }
         let segments = bridgeSegments()
         let isStraightLine = !segments.isEmpty && segments.allSatisfy { !$0.routed }
+        scheduleAnalysisIfNeeded()
         let analysis = cachedAnalysisData
-        let duration: TimeInterval = analysis?.timeInMotion ?? 0
+        let routeDuration = bridge.routeDuration
+        let duration = routeDuration > 0 ? routeDuration : analysis?.timeInMotion ?? 0
         let uphill: Double = analysis?.uphill ?? 0
         let downhill: Double = analysis?.downhill ?? 0
         let arrivalTime: Date? = duration > 0 && !isStraightLine ? Date(timeIntervalSinceNow: duration) : nil
@@ -79,42 +85,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isCalculatingRoute
     }
 
+    var isTerrainElevationAvailable: Bool {
+        bridge.isTerrainElevationAvailable
+    }
+
     var analysisData: PlanRouteAnalysisData? {
         if hasCachedAnalysisData {
             return cachedAnalysisData
         }
-        let gpxFile: GpxFile?
-        switch mode {
-        case .editTrack:
-            gpxFile = bridge.currentGpxFile
-        case .newRoute:
-            gpxFile = bridge.exportedGpxFile
-        }
-        guard let gpxFile else {
-            hasCachedAnalysisData = true
-            cachedAnalysisData = nil
-            return nil
-        }
-        let analysis = gpxFile.getAnalysis(fileTimestamp: 0)
-        let hasElevation = analysis.hasElevationData()
-        let stats = bridge.calculateRouteStatistics()
-        let analysisData = PlanRouteAnalysisData(
-            uphill: analysis.diffElevationUp,
-            downhill: analysis.diffElevationDown,
-            altMin: analysis.minElevation,
-            altMax: analysis.maxElevation,
-            avgSpeed: analysis.avgSpeed > 0 ? Double(analysis.avgSpeed) : nil,
-            maxSpeed: analysis.maxSpeed > 0 ? Double(analysis.maxSpeed) : nil,
-            timeInMotion: analysis.timeMoving > 0 ? TimeInterval(analysis.timeMoving) / 1000 : nil,
-            hasElevationData: hasElevation,
-            gpxAnalysis: analysis,
-            gpxFile: gpxFile,
-            routeStatistics: stats
-        )
-        cachedAnalysisData = analysisData
-        hasCachedAnalysisData = true
-        cachedRouteInfo = nil
-        return analysisData
+        scheduleAnalysisIfNeeded()
+        return nil
     }
 
     var poiGroups: [PlanRoutePoiGroup] {
@@ -138,6 +118,22 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     var defaultMode: OAApplicationMode? {
         bridge.defaultAppMode
+    }
+
+    var isTrackReadyToCalculate: Bool {
+        bridge.isTrackReadyToCalculate
+    }
+
+    var isApproximationNeeded: Bool {
+        bridge.isApproximationNeeded
+    }
+
+    var shouldShowApproximationWarning: Bool {
+        bridge.shouldShowApproximationWarning
+    }
+
+    var approximationWarningViewController: UIViewController? {
+        bridge.approximationWarningViewController
     }
 
     var canStartNewSegment: Bool {
@@ -169,6 +165,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var cachedRouteSegments: [PlanRouteSegment]?
     private var cachedAnalysisData: PlanRouteAnalysisData?
     private var hasCachedAnalysisData = false
+    private var analysisGeneration = 0
+    private var pendingAnalysisGeneration: Int?
     private var initialApplicationMode: OAApplicationMode {
         var supportedModes = bridge.availableModes()
         if let directLineMode = OAApplicationMode.default() {
@@ -182,12 +180,32 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         self.mode = mode
         self.filePath = filePath
         bridge.onChange = { [weak self] in
-            self?.invalidateCachedData()
-            self?.onDataChanged?()
+            guard let self else { return }
+            invalidateCachedData()
+            updatePendingEmptySegment()
+            onDataChanged?()
+        }
+        bridge.onNewSegmentStarted = { [weak self] in
+            guard let self else { return }
+            pendingEmptySegmentIndex = routeSegments.count + 1
         }
         bridge.onRouteInfoChanged = { [weak self] in
             self?.invalidateRouteInfoCache()
             self?.onRouteInfoChanged?()
+        }
+        bridge.onPointEditModeRequested = { [weak self] editMode in
+            let mode: PlanRoutePointEditMode
+            switch editMode {
+            case .move:
+                mode = .move
+            case .addBefore:
+                mode = .addBefore
+            case .addAfter:
+                mode = .addAfter
+            @unknown default:
+                return
+            }
+            self?.onPointEditModeRequested?(mode)
         }
         if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
@@ -253,6 +271,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func undo() {
+        pendingEmptySegmentIndex = nil
         bridge.undo()
     }
 
@@ -368,21 +387,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.trim(after: index)
     }
 
-    func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams {
-        let settings = OAAppSettings.sharedManager()
-        let useElevationData = settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).get(mode)
-        let considerTemporaryLimitations = settings.enableTimeConditionalRouting.get(mode)
-        return PlanRouteSegmentRoutingParams(useElevationData: useElevationData,
-                                             considerTemporaryLimitations: considerTemporaryLimitations)
+    func applyPointEdit() {
+        bridge.applyPointEdit()
     }
 
-    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, mode: OAApplicationMode) {
-        let currentParams = routingParams(for: mode)
-        guard currentParams != params else { return }
-        let settings = OAAppSettings.sharedManager()
-        settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).set(params.useElevationData, mode: mode)
-        settings.enableTimeConditionalRouting.set(params.considerTemporaryLimitations, mode: mode)
-        bridge.refreshRoute(for: mode)
+    func cancelPointEdit() {
+        bridge.cancelPointEdit()
+    }
+
+    func addAnotherPoint() {
+        bridge.addAnotherPoint()
     }
 
     func refreshRoute(for mode: OAApplicationMode) {
@@ -402,12 +416,75 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         cachedBridgeSegments = nil
         invalidateRouteInfoCache()
         cachedRouteSegments = nil
-        cachedAnalysisData = nil
+        if !bridge.hasPoints {
+            cachedAnalysisData = nil
+        }
         hasCachedAnalysisData = false
+        analysisGeneration += 1
     }
 
     private func invalidateRouteInfoCache() {
         cachedRouteInfo = nil
+    }
+
+    private func scheduleAnalysisIfNeeded() {
+        guard isTrackReadyToCalculate,
+              !hasCachedAnalysisData,
+              pendingAnalysisGeneration == nil,
+              !bridge.isCalculatingRoute else { return }
+        let fileTimestamp = mode.isEditTrack ? bridge.currentGpxFile?.modifiedTime ?? 0 : 0
+        let gpxFile = bridge.exportedGpxFile
+        guard let gpxFile else {
+            hasCachedAnalysisData = true
+            cachedAnalysisData = nil
+            return
+        }
+        let stats = bridge.calculateRouteStatistics()
+        let generation = analysisGeneration
+        pendingAnalysisGeneration = generation
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let analysis = gpxFile.getAnalysis(
+                fileTimestamp: fileTimestamp,
+                fromDistance: nil,
+                toDistance: nil,
+                pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
+            )
+            let analysisData = PlanRouteAnalysisData(
+                uphill: analysis.diffElevationUp,
+                downhill: analysis.diffElevationDown,
+                altMin: analysis.minElevation,
+                altMax: analysis.maxElevation,
+                avgSpeed: analysis.avgSpeed > 0 ? Double(analysis.avgSpeed) : nil,
+                maxSpeed: analysis.maxSpeed > 0 ? Double(analysis.maxSpeed) : nil,
+                timeInMotion: analysis.timeMoving > 0 ? TimeInterval(analysis.timeMoving) / 1000 : nil,
+                hasElevationData: analysis.hasElevationData(),
+                gpxAnalysis: analysis,
+                gpxFile: gpxFile,
+                routeStatistics: stats
+            )
+            DispatchQueue.main.async { [weak self] in
+                guard let self, pendingAnalysisGeneration == generation else { return }
+                pendingAnalysisGeneration = nil
+                guard analysisGeneration == generation else {
+                    scheduleAnalysisIfNeeded()
+                    return
+                }
+                cachedAnalysisData = analysisData
+                hasCachedAnalysisData = true
+                invalidateRouteInfoCache()
+                onDataChanged?()
+            }
+        }
+    }
+
+    private func updatePendingEmptySegment() {
+        guard let pendingEmptySegmentIndex else { return }
+        let segmentCount = bridgeSegments().count
+        if segmentCount == 0 || segmentCount >= pendingEmptySegmentIndex {
+            self.pendingEmptySegmentIndex = nil
+        } else {
+            self.pendingEmptySegmentIndex = segmentCount + 1
+        }
     }
 
     private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {

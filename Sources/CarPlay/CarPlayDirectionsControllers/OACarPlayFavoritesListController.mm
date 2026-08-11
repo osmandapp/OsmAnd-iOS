@@ -27,7 +27,7 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper favoriteGroups];
     if (favoriteGroups.count > 0)
     {
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];

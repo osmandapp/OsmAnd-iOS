@@ -46,7 +46,7 @@
     [super initialization];
 
     _settings = [OAAppSettings sharedManager];
-    self.existingItems = [[OAFavoritesHelper getFavoriteGroups] mutableCopy];
+    self.existingItems = [[OAFavoritesHelper favoriteGroups] mutableCopy];
 }
 
 - (EOASettingsItemType) type
@@ -187,7 +187,7 @@
             BOOL shouldReplace = [self shouldReplace] || isPersonal;
             if (shouldReplace)
             {
-                OAFavoriteGroup *existingGroup = [OAFavoritesHelper getGroupByName:duplicate.name];
+                OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByName:duplicate.name];
                 if (existingGroup)
                     [OAFavoritesHelper deleteFavorites:existingGroup.points.copy saveImmediately:NO];
             }

@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OARoutePreferencesParameters.h"
+#import "OARouteParametersInternal+cpp.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
@@ -25,10 +25,19 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+@interface OALocalRoutingParameter ()
+
+@property struct RoutingParameter routingParameter;
+
+@end
+
 @implementation OALocalRoutingParameter
 {
     OAApplicationMode *_am;
+    RoutingParameter _routingParameter;
 }
+
+@synthesize routingParameter = _routingParameter;
 
 - (instancetype)init
 {
@@ -102,7 +111,7 @@
 - (BOOL) isChecked
 {
     if (([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamShortWay]))
-        return ![self.settings.fastRouteMode get:[self.routingHelper getAppMode]];
+        return ![self.settings.fastRouteMode get:self.getApplicationMode];
     else
         return [self isSelected];
 }
@@ -165,7 +174,7 @@
 - (void)applyNewParameterValue:(BOOL)isChecked
 {
     if ([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamShortWay])
-        [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
+        [self.settings.fastRouteMode set:!isChecked mode:self.getApplicationMode];
     
     [self setSelected:isChecked];
     
@@ -534,7 +543,7 @@
 
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(selectVoiceGuidance:indexPath:)])
         [self.delegate selectVoiceGuidance:tableView indexPath:indexPath];
 }
 
@@ -713,7 +722,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(showAvoidTransportScreen)])
         [self.delegate showAvoidTransportScreen];
 }
 
@@ -769,7 +778,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(showTripSettingsScreen)])
         [self.delegate showTripSettingsScreen];
 }
 
@@ -836,7 +845,7 @@
 
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(openSimulateNavigationScreen)])
         [self.delegate openSimulateNavigationScreen];
 }
 
@@ -948,7 +957,7 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate)
+    if ([self.delegate respondsToSelector:@selector(openRouteLineAppearance)])
         [self.delegate openRouteLineAppearance];
 }
 
@@ -993,10 +1002,10 @@
 
 - (NSString *)getValue
 {
-    return [self getValue:[_property get:[self getApplicationMode]].integerValue];
+    return [self valueForIndex:[_property get:[self getApplicationMode]].integerValue];
 }
 
-- (NSString *)getValue:(NSInteger)index
+- (NSString *)valueForIndex:(NSInteger)index
 {
     NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.possibleValueDescriptions[index].c_str()];
     NSString *value = [defaultValue stringByReplacingOccurrencesOfString:@" " withString:@"_"].lowercaseString;

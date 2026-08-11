@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>favorites_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Выдаліць %#@favorites@?</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld абраную кропку</string>
+			<key>few</key>
+			<string>%ld абраныя кропкі</string>
+			<key>many</key>
+			<string>%ld абраных кропак</string>
+			<key>other</key>
+			<string>%ld абраных кропак</string>
+		</dict>
+	</dict>
+	<key>folders_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Выдаліць %#@folders@?</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld папку</string>
+			<key>few</key>
+			<string>%ld папкі</string>
+			<key>many</key>
+			<string>%ld папак</string>
+			<key>other</key>
+			<string>%ld папак</string>
+		</dict>
+	</dict>
+	<key>folders_favorites_delete_message</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Выдаліць %#@folders@ і %#@points@. Гэта дзеянне нельга скасаваць.</string>
+		<key>folders</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld папку</string>
+			<key>few</key>
+			<string>%ld папкі</string>
+			<key>many</key>
+			<string>%ld папак</string>
+			<key>other</key>
+			<string>%ld папак</string>
+		</dict>
+		<key>points</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld кропку</string>
+			<key>few</key>
+			<string>%ld кропкі</string>
+			<key>many</key>
+			<string>%ld кропак</string>
+			<key>other</key>
+			<string>%ld кропак</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

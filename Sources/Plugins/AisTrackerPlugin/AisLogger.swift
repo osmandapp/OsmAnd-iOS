@@ -13,8 +13,11 @@ final class AisLogger: NSObject {
     static let debugLoggingPrefId = "ais_debug_logging"
     
     var isEnabled: Bool {
-        didSet {
-            debugLoggingPref.set(isEnabled)
+        get {
+            debugLoggingPref.get() && OAPluginsHelper.isEnabled(OAOsmandDevelopmentPlugin.self)
+        }
+        set {
+            debugLoggingPref.set(newValue)
         }
     }
     
@@ -22,12 +25,12 @@ final class AisLogger: NSObject {
     
     override private init() {
         debugLoggingPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.debugLoggingPrefId, defValue: false)
-        isEnabled = debugLoggingPref.get()
+        super.init()
     }
     
     func log(_ message: String) {
         guard isEnabled else { return }
         
-        debugPrint("[AIS] \(message)")
+        NSLog("[AIS] %@", message)
     }
 }

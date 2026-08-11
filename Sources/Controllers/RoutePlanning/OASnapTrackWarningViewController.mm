@@ -10,7 +10,6 @@
 #import "OAGpxApproximationViewController.h"
 #import "OAApplicationMode.h"
 #import "OAMeasurementEditingContext.h"
-#import "OAGpxApproximationViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -27,7 +26,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_attach_track"]];
+    [self.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomAttachTrack]];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
@@ -46,6 +45,11 @@
     return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height + 16. + self.headerView.frame.size.height + 60.;
 }
 
+- (void)onLeftButtonPressed
+{
+    [self onBottomSheetDismissed];
+}
+
 - (void)onRightButtonPressed
 {
     OAMeasurementEditingContext *editingCtx = self.delegate.getCurrentEditingContext;
@@ -53,9 +57,9 @@
         editingCtx.appMode = nil;
     OAGpxApproximationViewController *approximationVC = [[OAGpxApproximationViewController alloc] initWithMode:editingCtx.appMode routePoints:[editingCtx getPointsSegments:YES route:NO]];
     approximationVC.delegate = self.delegate;
+    [self.navigationController pushViewController:approximationVC animated:YES];
     if (self.delegate)
         [self.delegate onContinueSnapApproximation:approximationVC];
-    [self.navigationController pushViewController:approximationVC animated:YES];
 }
 
 - (void) onBottomSheetDismissed

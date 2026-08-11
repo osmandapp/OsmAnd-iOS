@@ -1270,6 +1270,7 @@ private extension PlanRouteAnalyzeViewController {
     private func scheduleSteepnessComputationIfNeeded(analysisData: PlanRouteAnalysisData?) {
         guard let analysisData,
               let gpxAnalysis = analysisData.gpxAnalysis,
+              isRoadAttributeDataAvailable(analysisData),
               !analysisData.routeStatistics.contains(where: { $0.name == Self.steepnessAttributeName }) else {
             return
         }
@@ -1300,6 +1301,7 @@ private extension PlanRouteAnalyzeViewController {
             guard let fallback = buildImmediateTerrainFallbackSteepnessStatistics() else { return [] }
             return Self.routeAttributeNames.compactMap { $0 == Self.steepnessAttributeName ? fallback : nil }
         }
+        guard isRoadAttributeDataAvailable(analysisData) else { return [] }
         let routeStatistics = analysisData.routeStatistics
         let groupedStatistics = Dictionary(grouping: routeStatistics) { $0.name }
         let syntheticSteepness: OARouteStatistics?
@@ -1319,6 +1321,10 @@ private extension PlanRouteAnalyzeViewController {
             }
             return groupedStatistics[attributeName]?.first
         }
+    }
+
+    private func isRoadAttributeDataAvailable(_ analysisData: PlanRouteAnalysisData) -> Bool {
+        hasCompletedElevationCalculation || allowsTerrainFallbackSteepness || !analysisData.routeStatistics.isEmpty
     }
 
     private func buildImmediateTerrainFallbackSteepnessStatistics() -> OARouteStatistics? {

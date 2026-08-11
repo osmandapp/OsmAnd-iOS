@@ -17,6 +17,96 @@
 #import "OAGPXDatabase.h"
 #import "OAGpxData.h"
 
+#include <gpxRouteApproximation.h>
+#include <routeSegment.h>
+#include <routeSegmentResult.h>
+
+static BOOL hasValidExternalTimestamps(NSArray<OASWptPt *> *points)
+{
+    if (points.count == 0)
+        return NO;
+
+    int64_t lastTimestamp = 0;
+    for (OASWptPt *point in points)
+    {
+        if (point.time == 0 || point.time < lastTimestamp)
+            return NO;
+        lastTimestamp = point.time;
+    }
+    return YES;
+}
+
+static float externalSpeed(const SHARED_PTR<GpxPoint> &gpxPoint,
+                           const SHARED_PTR<RouteSegmentResult> &segment,
+                           NSArray<OASWptPt *> *sourcePoints)
+{
+    NSInteger startIndex = gpxPoint->ind;
+    NSInteger endIndex = gpxPoint->targetInd;
+    if (endIndex == -1 && startIndex >= 0 && startIndex + 1 < sourcePoints.count)
+        endIndex = startIndex + 1;
+
+    if (startIndex < 0 || endIndex <= 0 || startIndex >= endIndex || endIndex >= sourcePoints.count)
+        return segment->segmentSpeed;
+
+    int64_t duration = sourcePoints[endIndex].time - sourcePoints[startIndex].time;
+    if (duration <= 0)
+        return segment->segmentSpeed;
+
+    double distance = 0;
+    for (NSInteger index = startIndex; index < endIndex; index++)
+    {
+        OASWptPt *firstPoint = sourcePoints[index];
+        OASWptPt *secondPoint = sourcePoints[index + 1];
+        distance += getDistance(firstPoint.getLatitude,
+                                firstPoint.getLongitude,
+                                secondPoint.getLatitude,
+                                secondPoint.getLongitude);
+    }
+    return distance > 0 ? distance / (duration / 1000.0) : segment->segmentSpeed;
+}
+
+static void recalculateTimeAndDistance(const vector<SHARED_PTR<RouteSegmentResult>> &segments)
+{
+    for (const auto &segment : segments)
+    {
+        float speed = segment->segmentSpeed;
+        if (speed == 0)
+            continue;
+
+        BOOL isForward = segment->getStartPointIndex() < segment->getEndPointIndex();
+        double distance = 0;
+        for (NSInteger index = segment->getStartPointIndex(); index != segment->getEndPointIndex();)
+        {
+            NSInteger nextIndex = isForward ? index + 1 : index - 1;
+            distance += measuredDist31(segment->object->getPoint31XTile((int)index),
+                                       segment->object->getPoint31YTile((int)index),
+                                       segment->object->getPoint31XTile((int)nextIndex),
+                                       segment->object->getPoint31YTile((int)nextIndex));
+            index = nextIndex;
+        }
+        segment->segmentTime = distance / speed;
+        segment->segmentSpeed = speed;
+        segment->distance = distance;
+    }
+}
+
+static void applyExternalTimestamps(OAGpxRouteApproximation *approximation,
+                                    OALocationsHolder *locationsHolder)
+{
+    NSArray<OASWptPt *> *sourcePoints = locationsHolder.getWptPtList;
+    if (approximation == nil || approximation.gpxApproximation == nullptr)
+        return;
+    if (!hasValidExternalTimestamps(sourcePoints))
+        return;
+
+    for (const auto &gpxPoint : approximation.gpxApproximation->finalPoints)
+    {
+        for (const auto &segment : gpxPoint->routeToTarget)
+            segment->segmentSpeed = externalSpeed(gpxPoint, segment, sourcePoints);
+        recalculateTimeAndDistance(gpxPoint->routeToTarget);
+    }
+}
+
 @interface OAGpxApproximationHelper () <OAGpxApproximationProgressDelegate>
 
 @end
@@ -105,13 +195,16 @@
         OAGpxApproximator *gpxApproximator = approximationsToDo.firstObject;
         [approximationsToDo removeObjectAtIndex:0];
         _currentApproximator = gpxApproximator;
+        __weak __typeof(self) weakSelf = self;
         [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approxPtr) {
             OAGpxRouteApproximation *strongApprox = (approxPtr && *approxPtr) ? *approxPtr : nil;
+            applyExternalTimestamps(strongApprox, gpxApproximator.locationsHolder);
             dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
                 if (!gpxApproximator.isCancelled)
                 {
                     approximateResult[gpxApproximator.locationsHolder] = strongApprox;
-                    [self approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
+                    [strongSelf approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
                 }
             });
             return YES;
@@ -151,7 +244,10 @@
         {
             [approximator calculateGpxApproximationSync:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
                 if (approximation && *approximation)
+                {
+                    applyExternalTimestamps(*approximation, holder);
                     approximateResult[holder] = *approximation;
+                }
                 return YES;
             } cancelledFunc:^BOOL {
                 return NO;

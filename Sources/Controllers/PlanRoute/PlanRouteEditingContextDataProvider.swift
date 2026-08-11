@@ -428,7 +428,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func scheduleAnalysisIfNeeded() {
-        guard isTrackReadyToCalculate,
+        guard bridge.hasPoints,
               !hasCachedAnalysisData,
               pendingAnalysisGeneration == nil,
               !bridge.isCalculatingRoute else { return }

@@ -51,7 +51,7 @@
 
 + (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
 
-+ (void) showGpx:(NSString *)path documentAdapter:(OAGPXDocumentAdapter *)document;
++ (void)showGpx:(NSString *)path documentAdapter:(OAGPXDocumentAdapter *)documentAdapter;
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 

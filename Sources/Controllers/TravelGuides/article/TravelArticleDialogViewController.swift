@@ -19,7 +19,8 @@ protocol TravelArticleDialogProtocol: AnyObject {
 }
 
 @objcMembers
-@objc(OATravelArticleDialogViewController) final class TravelArticleDialogViewController: OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate {
+@objc(OATravelArticleDialogViewController)
+final class TravelArticleDialogViewController: OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate {
     
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]

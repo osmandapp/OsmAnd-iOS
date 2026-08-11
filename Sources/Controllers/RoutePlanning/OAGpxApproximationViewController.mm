@@ -24,9 +24,6 @@
 #define kApproximationMaxDistance 100
 
 static const float kProgressMaximumValue = 100.f;
-static const NSTimeInterval kProgressUpdateInterval = 0.3;
-static const float kProgressUpdateStep = 0.015f;
-static const float kProgressUpdateLimit = 0.9f;
 
 @interface OAGpxApproximationViewController () <UITableViewDelegate, UITableViewDataSource, OAGpxApproximationHelperDelegate>
 
@@ -41,8 +38,7 @@ static const float kProgressUpdateLimit = 0.9f;
     OAGpxApproximationHelper *_approximationHelper;
     NSArray<OALocationsHolder *> *_locationsHolders;
     UIProgressView *_progressBarView;
-    NSTimer *_progressUpdateTimer;
-    BOOL _isApplying;
+    BOOL _hasAppliedApproximationPreview;
 }
 
 - (instancetype)initWithMode:(OAApplicationMode *)mode routePoints:(NSArray<NSArray<OASWptPt *> *> *)routePoints
@@ -60,11 +56,6 @@ static const float kProgressUpdateLimit = 0.9f;
     return self;
 }
 
-- (void)dealloc
-{
-    [_progressUpdateTimer invalidate];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -73,7 +64,7 @@ static const float kProgressUpdateLimit = 0.9f;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self setHeaderViewVisibility:YES];
-    
+
     _progressBarView = [[UIProgressView alloc] init];
     _progressBarView.hidden = YES;
     _progressBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -83,7 +74,7 @@ static const float kProgressUpdateLimit = 0.9f;
 
     _approximationHelper = [[OAGpxApproximationHelper alloc] initWithLocations:_locationsHolders initialAppMode:_snapToRoadAppMode initialThreshold:_distanceThreshold];
     _approximationHelper.delegate = self;
-    [self setApplyButtonEnabled:YES];
+    [_approximationHelper calculateGpxApproximationAsync];
 }
 
 - (CGFloat)initialHeight
@@ -99,36 +90,23 @@ static const float kProgressUpdateLimit = 0.9f;
 
 - (void)onRightButtonPressed
 {
-    if (_isApplying)
-        return;
-    _isApplying = YES;
     [self setApplyButtonEnabled:NO];
-    [_approximationHelper calculateGpxApproximationAsync];
-}
-
-- (void)finishApplying
-{
-    [_progressBarView setProgress:1.f animated:YES];
-    __weak __typeof(self) weakSelf = self;
-    [self dismissViewControllerAnimated:YES completion:^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        strongSelf->_isApplying = NO;
-        [strongSelf stopProgressUpdates];
-        if (strongSelf.delegate)
-            [strongSelf.delegate onApplyGpxApproximation];
-    }];
+    if (self.delegate)
+        [self.delegate onApplyGpxApproximation];
 }
 
 - (void)onLeftButtonPressed
 {
-    _isApplying = NO;
-    [_approximationHelper cancelApproximation];
-    [self stopProgressUpdates];
-    if (self.delegate)
-        [self.delegate onCancelSnapApproximation:NO];
     [self dismiss];
+}
+
+- (void)dismiss
+{
+    [_approximationHelper cancelApproximation];
+    if (self.delegate)
+        [self.delegate onCancelSnapApproximation:_hasAppliedApproximationPreview];
+    _hasAppliedApproximationPreview = NO;
+    [super dismiss];
 }
 
 - (void)initData
@@ -175,42 +153,16 @@ static const float kProgressUpdateLimit = 0.9f;
     return profiles;
 }
 
-- (void)startProgressUpdates
-{
-    [_progressUpdateTimer invalidate];
-    __weak __typeof(self) weakSelf = self;
-    _progressUpdateTimer = [NSTimer timerWithTimeInterval:kProgressUpdateInterval repeats:YES block:^(NSTimer *timer) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-        {
-            [timer invalidate];
-            return;
-        }
-        float updatedProgress = MIN(strongSelf->_progressBarView.progress + kProgressUpdateStep, kProgressUpdateLimit);
-        [strongSelf->_progressBarView setProgress:updatedProgress animated:YES];
-    }];
-    [[NSRunLoop mainRunLoop] addTimer:_progressUpdateTimer forMode:NSRunLoopCommonModes];
-}
-
-- (void)stopProgressUpdates
-{
-    [_progressUpdateTimer invalidate];
-    _progressUpdateTimer = nil;
-}
-
 - (void)didStartProgress
 {
-    if (!_isApplying)
-        return;
     if (_progressBarView)
         _progressBarView.progress = 0;
     _progressBarView.hidden = NO;
-    [self startProgressUpdates];
 }
 
 - (void)didUpdateProgress:(NSInteger)progress
 {
-    if (_isApplying && _progressBarView)
+    if (_progressBarView)
     {
         if (_progressBarView.hidden)
             _progressBarView.hidden = NO;
@@ -226,17 +178,16 @@ static const float kProgressUpdateLimit = 0.9f;
 
 - (void)didFinishAllApproximationsWithResults:(NSArray<OAGpxRouteApproximation *> *)approximations points:(NSArray<NSArray<OASWptPt *> *> *)points
 {
-    if (self.delegate)
-        [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
-    if (_isApplying && approximations.count > 0)
+    if (_progressBarView)
+        _progressBarView.hidden = YES;
+
+    BOOL hasValidApproximations = approximations.count > 0 && points.count == approximations.count;
+    if (hasValidApproximations && self.delegate)
     {
-        [self finishApplying];
-        return;
+        [self.delegate onGpxApproximationDone:approximations pointsList:points mode:_snapToRoadAppMode];
+        _hasAppliedApproximationPreview = YES;
     }
-    _isApplying = NO;
-    [self stopProgressUpdates];
-    _progressBarView.hidden = YES;
-    [self setApplyButtonEnabled:YES];
+    [self setApplyButtonEnabled:hasValidApproximations];
 }
 
 - (void) setApplyButtonEnabled:(BOOL)enabled
@@ -252,6 +203,7 @@ static const float kProgressUpdateLimit = 0.9f;
     UISlider *slider = sender;
     _distanceThreshold = slider.value;
     [_approximationHelper updateDistanceThreshold:_distanceThreshold];
+    [_approximationHelper calculateGpxApproximationAsync];
     OATitleSliderRoundCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     cell.valueLabel.text = [OAOsmAndFormatter getFormattedDistance:_distanceThreshold];
 }
@@ -350,6 +302,7 @@ static const float kProgressUpdateLimit = 0.9f;
         _snapToRoadAppMode = item[@"profile"];
         [_approximationHelper updateAppMode:_snapToRoadAppMode];
         [tableView reloadData];
+        [_approximationHelper calculateGpxApproximationAsync];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

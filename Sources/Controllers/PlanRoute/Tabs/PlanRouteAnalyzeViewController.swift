@@ -59,6 +59,7 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabContent {
 
     let planRouteTab: PlanRouteTab = .analyze
+    var onAttachToRoadsRequested: (() -> Void)?
 
     private let tableView = CancelableTableView(frame: .zero, style: .plain)
 
@@ -68,7 +69,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     ]
     private var selectedXAxisType: GPXDataSetAxisType = .distance
     private var expandedStatIndexes: Set<Int> = []
-    private var calculatingWithNearbyRoads: Bool = true
     private var allowsTerrainFallbackSteepness = false
     private var wasCalculatingElevation = false
     private var hasCompletedElevationCalculation = false
@@ -173,15 +173,16 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private func showGetElevationSheet() {
         let presenter = parent ?? self
-        let sheet = GetElevationDataViewController()
+        let sheet = GetElevationDataViewController(isTerrainMapsAvailable: dataSource?.isTerrainElevationAvailable ?? false)
         sheet.onSelectMethod = { [weak self] useNearbyRoads in
             guard let self else { return }
-            calculatingWithNearbyRoads = useNearbyRoads
-            allowsTerrainFallbackSteepness = !useNearbyRoads
-            if useNearbyRoads == false {
-                reloadData()
+            if useNearbyRoads {
+                onAttachToRoadsRequested?()
+                return
             }
-            dataSource?.startElevationCalculation(useNearbyRoads: useNearbyRoads)
+            allowsTerrainFallbackSteepness = true
+            reloadData()
+            dataSource?.startElevationCalculation(useNearbyRoads: false)
         }
         presenter.showMediumSheetViewController(viewController: sheet, isLargeAvailable: false)
     }
@@ -344,7 +345,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                               roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
         if isElevationCalculating {
-            return !calculatingWithNearbyRoads && !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
+            return !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
         }
         if hasOverviewData || !roadAttributeStatistics.isEmpty { return .hasData }
         return .noData
@@ -385,7 +386,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         case .noData:
             return "noData"
         case .elevationCalculating:
-            return "elevationCalculating:\(calculatingWithNearbyRoads)"
+            return "elevationCalculating"
         case .routeCalculating:
             return "routeCalculating"
         case .hasData:
@@ -1003,12 +1004,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     private func makeElevationCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         guard let cell = dequeueHorizontalEmptyCell(tableView, indexPath) else { return UITableViewCell() }
-        let calcDescKey = calculatingWithNearbyRoads
-            ? "calculating_elevation_nearby_roads_description"
-            : "calculating_elevation_terrain_maps_description"
         cell.configure(
             title: localizedString("route_is_being_calculated"),
-            description: localizedString(calcDescKey),
+            description: localizedString("calculating_elevation_terrain_maps_description"),
             icon: nil,
             iconTint: .clear,
             actionTitle: localizedString("shared_string_cancel"),

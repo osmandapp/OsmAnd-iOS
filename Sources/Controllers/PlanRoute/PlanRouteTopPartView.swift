@@ -11,6 +11,7 @@ import UIKit
 final class PlanRouteTopPartView: UIView {
     private static let statusIconSize: CGFloat = 30
     private static let horizontalInset: CGFloat = 20
+    private static let progressDisplayDelay: TimeInterval = 1
     private static let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
@@ -20,10 +21,14 @@ final class PlanRouteTopPartView: UIView {
     var onTap: (() -> Void)?
 
     private let statusIconView = UIImageView()
+    private let progressIndicator = UIActivityIndicatorView(style: .medium)
     private let firstLineLabel = UILabel()
     private let secondLineLabel = UILabel()
     private let textStackView = UIStackView()
+    private var isCalculatingRoute = false
     private var lastRenderSignature: String?
+    private var progressDisplayGeneration = 0
+    private var progressDisplayWorkItem: DispatchWorkItem?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,7 +39,8 @@ final class PlanRouteTopPartView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with info: PlanRouteInfo) {
+    func configure(with info: PlanRouteInfo, isCalculatingRoute: Bool) {
+        updateCalculationState(isCalculatingRoute)
         let totalDistance = formattedDistance(info.totalDistance)
         let uphill = formattedDistance(info.uphill)
         let downhill = formattedDistance(info.downhill)
@@ -73,6 +79,11 @@ final class PlanRouteTopPartView: UIView {
         statusIconView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(statusIconView)
 
+        progressIndicator.color = .iconColorSecondary
+        progressIndicator.hidesWhenStopped = true
+        progressIndicator.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(progressIndicator)
+
         firstLineLabel.numberOfLines = 1
         firstLineLabel.adjustsFontForContentSizeCategory = true
         secondLineLabel.numberOfLines = 1
@@ -95,6 +106,9 @@ final class PlanRouteTopPartView: UIView {
             statusIconView.widthAnchor.constraint(equalToConstant: statusIconSize),
             statusIconView.heightAnchor.constraint(equalToConstant: statusIconSize),
 
+            progressIndicator.centerXAnchor.constraint(equalTo: statusIconView.centerXAnchor),
+            progressIndicator.centerYAnchor.constraint(equalTo: statusIconView.centerYAnchor),
+
             textStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             textStackView.leadingAnchor.constraint(equalTo: statusIconView.trailingAnchor, constant: 12),
             textStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -horizontalInset)
@@ -102,6 +116,31 @@ final class PlanRouteTopPartView: UIView {
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onViewTapped))
         addGestureRecognizer(tapRecognizer)
+    }
+
+    private func updateCalculationState(_ isCalculatingRoute: Bool) {
+        guard self.isCalculatingRoute != isCalculatingRoute else { return }
+        self.isCalculatingRoute = isCalculatingRoute
+        progressDisplayWorkItem?.cancel()
+        progressDisplayWorkItem = nil
+        progressDisplayGeneration += 1
+
+        guard isCalculatingRoute else {
+            progressIndicator.stopAnimating()
+            statusIconView.isHidden = false
+            return
+        }
+
+        let progressDisplayGeneration = self.progressDisplayGeneration
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self,
+                  self.isCalculatingRoute,
+                  self.progressDisplayGeneration == progressDisplayGeneration else { return }
+            statusIconView.isHidden = true
+            progressIndicator.startAnimating()
+        }
+        progressDisplayWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.progressDisplayDelay, execute: workItem)
     }
 
     private func makeFirstLine(_ info: PlanRouteInfo,

@@ -87,6 +87,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     }
 
     private func updateVisiblePoiCells() {
+        guard tableView.window != nil else { return }
         tableView.indexPathsForVisibleRows?.forEach { indexPath in
             guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row), let cell = tableView.cellForRow(at: indexPath) else { return }
             let group = groups[indexPath.section]

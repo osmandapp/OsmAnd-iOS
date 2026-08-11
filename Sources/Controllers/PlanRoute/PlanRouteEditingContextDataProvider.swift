@@ -17,6 +17,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
+    var onApproximationPopupDismissed: (() -> Void)? {
+        didSet { bridge.onApproximationPopupDismissed = onApproximationPopupDismissed }
+    }
     private(set) var pendingEmptySegmentIndex: Int?
 
     weak var presenterViewController: UIViewController? {
@@ -82,6 +85,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isCalculatingRoute
     }
 
+    var isTerrainElevationAvailable: Bool {
+        bridge.isTerrainElevationAvailable
+    }
+
     var analysisData: PlanRouteAnalysisData? {
         if hasCachedAnalysisData {
             return cachedAnalysisData
@@ -115,6 +122,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     var isTrackReadyToCalculate: Bool {
         bridge.isTrackReadyToCalculate
+    }
+
+    var isApproximationNeeded: Bool {
+        bridge.isApproximationNeeded
     }
 
     var shouldShowApproximationWarning: Bool {

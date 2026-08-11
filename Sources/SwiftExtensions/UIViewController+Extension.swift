@@ -199,11 +199,11 @@ extension UINavigationController {
 }
 
 extension UIViewController {
-    @objc func canPresentAlertController(_ alert: UIAlertController,
-                                         completion: @escaping (Bool) -> Void) {
+    @objc func canPresentAlertController(completion: @escaping (Bool) -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let self,
-                  UIApplication.shared.applicationState != .background else {
+                  UIApplication.shared.applicationState != .background,
+                    !(self is UIAlertController) else {
                 completion(false)
                 return
             }

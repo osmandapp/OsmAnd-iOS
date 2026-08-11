@@ -35,6 +35,7 @@
 #import "OAApplyGpxApproximationCommand.h"
 #import "OASnapTrackWarningViewController.h"
 #import "OARouteExporter.h"
+#import "OAIAPHelper.h"
 #import "OAAppSettings.h"
 #import "OAWaypointHelper.h"
 #import "OALocationPointWrapper.h"
@@ -200,6 +201,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && (![ctx shouldCheckApproximation] || ![ctx isApproximationNeeded] || [ctx isNewData]);
 }
 
+- (BOOL)isApproximationNeeded
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    return ctx != nil && [ctx isApproximationNeeded];
+}
+
 - (BOOL)shouldShowApproximationWarning
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -208,7 +215,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (UIViewController *)approximationWarningViewController
 {
-    if (![self shouldShowApproximationWarning])
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount == 0)
         return nil;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
@@ -380,6 +388,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     OAGpxData *gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
     ctx.gpxData = gpxData;
+    NSArray<OASWptPt *> *routePoints = gpxFile.getRoutePoints;
+    if (routePoints.count > 0)
+    {
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:routePoints.lastObject.getProfileType
+                                                                     def:nil];
+        if (appMode != nil)
+            ctx.appMode = appMode;
+    }
     ctx.progressDelegate = self;
     _initialPoiStateSnapshot = gpxFile != nil ? [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
     _editingPoiStateSnapshot = nil;
@@ -1992,10 +2008,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _isCalculatingRoute;
 }
 
+- (BOOL)isTerrainElevationAvailable
+{
+    return [OAIAPHelper isOsmAndProAvailable];
+}
+
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
+        return;
+    if (!useNearbyRoads && ![self isTerrainElevationAvailable])
         return;
 
     [self invalidateElevationCalculationShouldNotify:NO];
@@ -2259,7 +2282,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
-    [controller dismissViewControllerAnimated:YES completion:nil];
+    if (controller.presentingViewController != nil)
+        [controller dismissViewControllerAnimated:YES completion:nil];
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
@@ -2287,6 +2313,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
+    if (self.onApproximationPopupDismissed)
+        self.onApproximationPopupDismissed();
 }
 
 - (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations
@@ -2296,6 +2324,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     OAMeasurementToolLayer *layer = [self layer];
     if (ctx == nil || layer == nil)
+        return;
+    if (gpxApproximations.count == 0 || pointsList.count != gpxApproximations.count)
         return;
     BOOL wasApproximationMode = ctx.approximationMode;
     ctx.approximationMode = YES;

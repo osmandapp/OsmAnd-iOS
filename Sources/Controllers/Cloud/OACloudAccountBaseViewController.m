@@ -323,7 +323,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }
@@ -358,7 +358,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [SeparatorAppearance thickness];
+        return SeparatorAppearance.thickness;
     }
     return UITableViewAutomaticDimension;
 }

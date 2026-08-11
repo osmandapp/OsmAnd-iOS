@@ -17,11 +17,11 @@ final class SeparatorAppearance: NSObject {
         return .customSeparator
     }
 
-    private override init() {}
-
-    static func thickness() -> CGFloat {
+    static var thickness: CGFloat {
         thickness(forScreen: UIScreen.main)
     }
+
+    private override init() {}
 
     static func thickness(forScreen screen: UIScreen) -> CGFloat {
         if #available(iOS 26.0, *) {

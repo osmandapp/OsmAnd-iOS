@@ -19,7 +19,6 @@
     [super awakeFromNib];
 
     _divider = [[SeparatorView alloc] init];
-    _divider.userInteractionEnabled = NO;
     [self.contentView addSubview:_divider];
 }
 

@@ -203,7 +203,7 @@
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         if (cell)
         {
@@ -407,7 +407,7 @@
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
 {
     if ([self isDividerCell:indexPath])
-        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
     else if (_isSRTM && indexPath.section == 0)
         return 36.;
     else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1 && !_isSingleSRTM) || (!_isSRTM && indexPath.section == 0)))

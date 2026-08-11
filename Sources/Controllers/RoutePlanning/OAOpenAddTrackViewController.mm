@@ -270,7 +270,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
     else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
@@ -357,7 +357,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }

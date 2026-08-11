@@ -394,7 +394,7 @@ static const NSInteger panoImageFilterSection = 2;
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }
@@ -580,7 +580,7 @@ static const NSInteger panoImageFilterSection = 2;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
     }
     return 44.0;
 }

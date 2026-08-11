@@ -216,7 +216,7 @@
         }
         if (cell)
         {
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
             cell.dividerInsets = UIEdgeInsetsMake(0., [item.allKeys containsObject:@"left_inset"]
                     ? [item[@"left_inset"] floatValue] : 0., 0., 0.);
         }
@@ -315,7 +315,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [SeparatorAppearance thickness];
+        return SeparatorAppearance.thickness;
     }
     else if (estimated)
     {

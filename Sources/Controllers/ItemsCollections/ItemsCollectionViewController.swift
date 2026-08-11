@@ -350,7 +350,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             cell.backgroundColor = .clear
             cell.dividerColor = SeparatorAppearance.color
             cell.dividerInsets = UIEdgeInsets.zero
-            cell.dividerHight = SeparatorAppearance.thickness()
+            cell.dividerHight = SeparatorAppearance.thickness
             return cell
         } else if item.cellType == OAFoldersCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAFoldersCell.reuseIdentifier, for: indexPath) as! OAFoldersCell
@@ -406,7 +406,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
         if item.cellType == OADividerCell.reuseIdentifier {
-            return SeparatorAppearance.thickness()
+            return SeparatorAppearance.thickness
         } else if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
             return 52
         }

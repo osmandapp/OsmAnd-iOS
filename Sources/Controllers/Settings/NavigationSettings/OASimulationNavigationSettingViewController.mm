@@ -241,7 +241,7 @@
     }
     else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [SeparatorAppearance thickness];
+        return SeparatorAppearance.thickness;
     }
     return UITableViewAutomaticDimension;
 }
@@ -338,7 +338,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         cell.dividerInsets = UIEdgeInsetsMake(0, [item[@"inset"] doubleValue], 0, 0);
         return cell;

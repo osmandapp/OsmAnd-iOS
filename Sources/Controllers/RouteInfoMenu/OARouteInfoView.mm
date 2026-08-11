@@ -1434,6 +1434,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if ([type isEqualToString:@"start"])
             {
                 cell.finishPoint = NO;
+                [cell setDividerVisibility:NO];
                 OARTargetPoint *point = [_pointsHelper getPointToStart];
                 cell.titleLabel.text = OALocalizedString(@"route_from");
                 if (point)
@@ -1715,7 +1716,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }
@@ -1959,7 +1960,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:[OARoutingSettingsCell getCellIdentifier]])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
     else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])

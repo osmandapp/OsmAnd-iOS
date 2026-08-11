@@ -206,7 +206,7 @@
     CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
     _menuHeight += fmax(labelHeight, kSwitchCellLabelHeight) + kSwitchCellFixedHeight;
     
-    _dividerHeight = [SeparatorAppearance thickness];
+    _dividerHeight = SeparatorAppearance.thickness;
     NSNumber *dividerInset = @(0.);
     NSDictionary *dividerCell = @{
         @"cellId" : OADividerCell.getCellIdentifier,

@@ -211,7 +211,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [OADividerCell cellHeight:[SeparatorAppearance thickness] dividerInsets:UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0)];
     }
     else
     {
@@ -274,7 +274,7 @@
             CGFloat leftInset = [cell isDirectionRTL] ? 0 : 70.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 70.0 : 0;
             cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
-            cell.dividerHight = [SeparatorAppearance thickness];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }

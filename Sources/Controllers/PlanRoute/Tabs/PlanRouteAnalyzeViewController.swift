@@ -32,6 +32,12 @@ private struct AnalyzeRenderState: Equatable {
     }
 }
 
+private struct AnalyzeStatItem {
+    let value: String
+    let label: String
+    let accessibilityValue: String
+}
+
 private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
     var onNothingSelected: (() -> Void)?
     var onValueSelected: (() -> Void)?
@@ -53,6 +59,7 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabContent {
 
     let planRouteTab: PlanRouteTab = .analyze
+    var onAttachToRoadsRequested: (() -> Void)?
 
     private let tableView = CancelableTableView(frame: .zero, style: .plain)
 
@@ -62,7 +69,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     ]
     private var selectedXAxisType: GPXDataSetAxisType = .distance
     private var expandedStatIndexes: Set<Int> = []
-    private var calculatingWithNearbyRoads: Bool = true
     private var allowsTerrainFallbackSteepness = false
     private var wasCalculatingElevation = false
     private var hasCompletedElevationCalculation = false
@@ -167,15 +173,16 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private func showGetElevationSheet() {
         let presenter = parent ?? self
-        let sheet = GetElevationDataViewController()
+        let sheet = GetElevationDataViewController(isTerrainMapsAvailable: dataSource?.isTerrainElevationAvailable ?? false)
         sheet.onSelectMethod = { [weak self] useNearbyRoads in
             guard let self else { return }
-            calculatingWithNearbyRoads = useNearbyRoads
-            allowsTerrainFallbackSteepness = !useNearbyRoads
-            if useNearbyRoads == false {
-                reloadData()
+            if useNearbyRoads {
+                onAttachToRoadsRequested?()
+                return
             }
-            dataSource?.startElevationCalculation(useNearbyRoads: useNearbyRoads)
+            allowsTerrainFallbackSteepness = true
+            reloadData()
+            dataSource?.startElevationCalculation(useNearbyRoads: false)
         }
         presenter.showMediumSheetViewController(viewController: sheet, isLargeAvailable: false)
     }
@@ -338,7 +345,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                               roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
         if isElevationCalculating {
-            return !calculatingWithNearbyRoads && !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
+            return !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
         }
         if hasOverviewData || !roadAttributeStatistics.isEmpty { return .hasData }
         return .noData
@@ -379,7 +386,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         case .noData:
             return "noData"
         case .elevationCalculating:
-            return "elevationCalculating:\(calculatingWithNearbyRoads)"
+            return "elevationCalculating"
         case .routeCalculating:
             return "routeCalculating"
         case .hasData:
@@ -487,6 +494,10 @@ private extension PlanRouteAnalyzeViewController {
     static let statsSection = 1
     static let roadAttributesBase = 2
     static let cardHorizontalInset: CGFloat = 16
+    static let compactLegendBorderWidth: CGFloat = 1
+    static let compactLegendMarkerSize: CGFloat = 16
+    static let compactLegendInnerSpacing: CGFloat = 6
+    static let compactLegendMinimumContrastRatio: CGFloat = 1.5
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
@@ -690,13 +701,37 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         } else {
             altRange = "–"
         }
-        let items: [(String, String)] = [
-            (fmtAlt(data.uphill), localizedString("shared_string_uphill")),
-            (fmtAlt(data.downhill), localizedString("shared_string_downhill")),
-            (altRange, localizedString("altitude_range")),
-            (fmtSpeed(data.avgSpeed), localizedString("average_speed")),
-            (fmtSpeed(data.maxSpeed), localizedString("shared_string_max_speed")),
-            (fmtTime(data.timeInMotion), localizedString("moving_time"))
+        let items = [
+            AnalyzeStatItem(
+                value: fmtAlt(data.uphill),
+                label: localizedString("shared_string_uphill"),
+                accessibilityValue: accessibilityAltitude(data.uphill)
+            ),
+            AnalyzeStatItem(
+                value: fmtAlt(data.downhill),
+                label: localizedString("shared_string_downhill"),
+                accessibilityValue: accessibilityAltitude(data.downhill)
+            ),
+            AnalyzeStatItem(
+                value: altRange,
+                label: localizedString("altitude_range"),
+                accessibilityValue: accessibilityAltitudeRange(minimum: data.altMin, maximum: data.altMax)
+            ),
+            AnalyzeStatItem(
+                value: fmtSpeed(data.avgSpeed),
+                label: localizedString("average_speed"),
+                accessibilityValue: accessibilitySpeed(data.avgSpeed)
+            ),
+            AnalyzeStatItem(
+                value: fmtSpeed(data.maxSpeed),
+                label: localizedString("shared_string_max_speed"),
+                accessibilityValue: accessibilitySpeed(data.maxSpeed)
+            ),
+            AnalyzeStatItem(
+                value: fmtTime(data.timeInMotion),
+                label: localizedString("moving_time"),
+                accessibilityValue: accessibilityDuration(data.timeInMotion)
+            )
         ]
 
         let topRow = makeGridRow(items: Array(items[0...2]))
@@ -727,8 +762,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return cell
     }
 
-    private func makeGridRow(items: [(String, String)]) -> UIStackView {
-        let itemViews = items.map { statItemView(value: $0.0, label: $0.1) }
+    private func makeGridRow(items: [AnalyzeStatItem]) -> UIStackView {
+        let itemViews = items.map(statItemView)
         var arranged: [UIView] = []
         for (i, view) in itemViews.enumerated() {
             arranged.append(view)
@@ -763,16 +798,16 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return wrapper
     }
 
-    private func statItemView(value: String, label: String) -> UIView {
+    private func statItemView(_ item: AnalyzeStatItem) -> UIView {
         let valueLabel = UILabel()
-        valueLabel.text = value
+        valueLabel.text = item.value
         valueLabel.font = .preferredFont(forTextStyle: .footnote)
         valueLabel.textColor = .textColorActive
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.7
 
         let nameLabel = UILabel()
-        nameLabel.text = label
+        nameLabel.text = item.label
         nameLabel.font = .preferredFont(forTextStyle: .caption2)
         nameLabel.textColor = .textColorSecondary
 
@@ -781,6 +816,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         stack.spacing = 2
         stack.layoutMargins = UIEdgeInsets(top: 12, left: 16, bottom: 9, right: 16)
         stack.isLayoutMarginsRelativeArrangement = true
+        stack.isAccessibilityElement = true
+        stack.accessibilityLabel = item.label
+        stack.accessibilityValue = item.accessibilityValue
         return stack
     }
 
@@ -913,20 +951,25 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func compactLegendItem(title: String, color: UIColor) -> UIView {
         let dot = UIView()
         dot.backgroundColor = color
-        dot.layer.cornerRadius = 6
+        dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
+        dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
+        let contrastRatio = contrastRatio(foreground: color, background: .groupBg)
+        dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
+            ? Self.compactLegendBorderWidth
+            : 0
         dot.translatesAutoresizingMaskIntoConstraints = false
-        dot.widthAnchor.constraint(equalToConstant: 12).isActive = true
-        dot.heightAnchor.constraint(equalToConstant: 12).isActive = true
+        dot.widthAnchor.constraint(equalToConstant: Self.compactLegendMarkerSize).isActive = true
+        dot.heightAnchor.constraint(equalToConstant: Self.compactLegendMarkerSize).isActive = true
 
         let label = UILabel()
         label.text = title
-        label.font = .preferredFont(forTextStyle: .caption1)
+        label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .textColorPrimary
         label.numberOfLines = 1
 
         let stack = UIStackView(arrangedSubviews: [dot, label])
         stack.axis = .horizontal
-        stack.spacing = 6
+        stack.spacing = Self.compactLegendInnerSpacing
         stack.alignment = .center
         stack.setContentHuggingPriority(.required, for: .horizontal)
         return stack
@@ -953,12 +996,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     private func makeElevationCalculatingStatusCardCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         guard let cell = dequeueHorizontalEmptyCell(tableView, indexPath) else { return UITableViewCell() }
-        let calcDescKey = calculatingWithNearbyRoads
-            ? "calculating_elevation_nearby_roads_description"
-            : "calculating_elevation_terrain_maps_description"
         cell.configure(
             title: localizedString("route_is_being_calculated"),
-            description: localizedString(calcDescKey),
+            description: localizedString("calculating_elevation_terrain_maps_description"),
             icon: nil,
             iconTint: .clear,
             actionTitle: localizedString("shared_string_cancel"),
@@ -1016,6 +1056,113 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func fmtTime(_ interval: TimeInterval?) -> String {
         guard let interval, interval > 0 else { return "–" }
         return OAOsmAndFormatter.getFormattedDuration(interval) ?? "–"
+    }
+
+    private func accessibilityAltitude(_ value: Double?) -> String {
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
+        guard let value, value.isFinite else { return localizedString("shared_string_not_available") }
+        let altitudeMetric = OAAppSettings.sharedManager().altitudeMetric.get()
+        let unit: UnitLength = OAAltitudeMetricsConstant.shouldUseFeet(altitudeMetric) ? .feet : .meters
+        let measurement = Measurement(value: value, unit: UnitLength.meters).converted(to: unit)
+        return formatter.string(from: measurement)
+    }
+
+    private func accessibilityAltitudeRange(minimum: Double?, maximum: Double?) -> String {
+        let listFormatter = ListFormatter.accessibilityFormatter
+        guard let minimum, minimum.isFinite, let maximum, maximum.isFinite else {
+            return localizedString("shared_string_not_available")
+        }
+        let values = [accessibilityAltitude(minimum), accessibilityAltitude(maximum)]
+        return listFormatter.string(from: values)
+            ?? String(format: localizedString("ltr_or_rtl_combine_via_comma"), values[0], values[1])
+    }
+
+    private func accessibilitySpeed(_ value: Double?) -> String {
+        guard let value, value.isFinite, value > 0 else {
+            return localizedString("shared_string_not_available")
+        }
+        let valueUnitArray: NSMutableArray = []
+        OAOsmAndFormatter.getFormattedSpeed(Float(value), valueUnitArray: valueUnitArray)
+        guard let formattedValue = valueUnitArray.firstObject as? String, formattedValue != "-" else {
+            return localizedString("shared_string_not_available")
+        }
+        let speedSystem = OAAppSettings.sharedManager().speedSystem.get()
+        if speedSystem == EOASpeedConstant.KILOMETERS_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.kilometersPerHour)
+        } else if speedSystem == EOASpeedConstant.MILES_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.milesPerHour)
+        } else if speedSystem == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
+            return accessibilityMeasurement(formattedValue, unit: UnitSpeed.knots)
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_KILOMETER {
+            return accessibilityPace(formattedValue, unit: .kilometers)
+        } else if speedSystem == EOASpeedConstant.MINUTES_PER_MILE {
+            return accessibilityPace(formattedValue, unit: .miles)
+        } else if speedSystem == EOASpeedConstant.FEET_PER_SECOND {
+            return accessibilityFeetPerSecond(formattedValue)
+        }
+        return accessibilityMeasurement(formattedValue, unit: UnitSpeed.metersPerSecond)
+    }
+
+    private func accessibilityMeasurement<UnitType: Dimension>(_ value: String, unit: UnitType) -> String {
+        guard let number = NumberFormatter.localizedNumberFormatter.number(from: value) else {
+            return localizedString("shared_string_not_available")
+        }
+        let measurement = Measurement<Unit>(value: number.doubleValue, unit: unit)
+        return MeasurementFormatter.accessibilityDecimalFormatter.string(from: measurement)
+    }
+
+    private func accessibilityPace(_ value: String, unit: UnitLength) -> String {
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
+        let durationComponents = value.split(separator: ":")
+        let duration: String
+        if durationComponents.count == 2,
+           let minutes = Double(durationComponents[0]),
+           let seconds = Double(durationComponents[1]) {
+            let minutesMeasurement = Measurement<Unit>(value: minutes, unit: UnitDuration.minutes)
+            let secondsMeasurement = Measurement<Unit>(value: seconds, unit: UnitDuration.seconds)
+            let values = [
+                formatter.string(from: minutesMeasurement),
+                formatter.string(from: secondsMeasurement)
+            ]
+            duration = ListFormatter.accessibilityFormatter.string(from: values)
+                ?? String(format: localizedString("ltr_or_rtl_combine_via_comma"), values[0], values[1])
+        } else {
+            duration = accessibilityMeasurement(value, unit: UnitDuration.minutes)
+        }
+        let lengthMeasurement = Measurement<Unit>(value: 1, unit: unit)
+        let length = formatter.string(from: lengthMeasurement)
+        return String(format: localizedString("ltr_or_rtl_combine_via_per"), duration, length)
+    }
+
+    private func accessibilityFeetPerSecond(_ value: String) -> String {
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
+        let length = accessibilityMeasurement(value, unit: UnitLength.feet)
+        let durationMeasurement = Measurement<Unit>(value: 1, unit: UnitDuration.seconds)
+        let duration = formatter.string(from: durationMeasurement)
+        return String(format: localizedString("ltr_or_rtl_combine_via_per"), length, duration)
+    }
+
+    private func accessibilityDuration(_ interval: TimeInterval?) -> String {
+        let formatter = MeasurementFormatter.accessibilityIntegerFormatter
+        let listFormatter = ListFormatter.accessibilityFormatter
+        guard let interval, interval.isFinite, interval > 0 else {
+            return localizedString("shared_string_not_available")
+        }
+        let totalSeconds = Int(interval.rounded())
+        let hours = totalSeconds / 3_600
+        let minutes = totalSeconds / 60 % 60
+        let seconds = totalSeconds % 60
+        var values = [String]()
+        if hours > 0 {
+            values.append(formatter.string(from: Measurement(value: Double(hours), unit: UnitDuration.hours)))
+        }
+        if minutes > 0 {
+            values.append(formatter.string(from: Measurement(value: Double(minutes), unit: UnitDuration.minutes)))
+        }
+        if seconds > 0 || values.isEmpty {
+            values.append(formatter.string(from: Measurement(value: Double(seconds), unit: UnitDuration.seconds)))
+        }
+        return listFormatter.string(from: values) ?? localizedString("shared_string_not_available")
     }
 }
 
@@ -1208,7 +1355,7 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func compactLegendRows(items: [RoadAttributeLegendItem], maxWidth: CGFloat) -> [[RoadAttributeLegendItem]] {
-        let font = UIFont.preferredFont(forTextStyle: .caption1)
+        let font = UIFont.preferredFont(forTextStyle: .footnote)
         let itemSpacing: CGFloat = 16
         return items.reduce(into: [[RoadAttributeLegendItem]]()) { rows, item in
             let itemWidth = compactLegendItemWidth(title: item.title, font: font)
@@ -1226,10 +1373,50 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func compactLegendItemWidth(title: String, font: UIFont) -> CGFloat {
-        let dotWidth: CGFloat = 12
-        let innerSpacing: CGFloat = 6
         let titleWidth = ceil((title as NSString).size(withAttributes: [.font: font]).width)
-        return dotWidth + innerSpacing + titleWidth
+        return Self.compactLegendMarkerSize + Self.compactLegendInnerSpacing + titleWidth
+    }
+
+    private func contrastRatio(foreground: UIColor, background: UIColor) -> CGFloat {
+        guard let foregroundComponents = rgbaComponents(for: foreground),
+              let backgroundComponents = rgbaComponents(for: background) else { return .greatestFiniteMagnitude }
+        let alpha = foregroundComponents.alpha
+        let inverseAlpha = 1 - alpha
+        let red = foregroundComponents.red * alpha + backgroundComponents.red * inverseAlpha
+        let green = foregroundComponents.green * alpha + backgroundComponents.green * inverseAlpha
+        let blue = foregroundComponents.blue * alpha + backgroundComponents.blue * inverseAlpha
+        let foregroundLuminance = relativeLuminance(red: red, green: green, blue: blue)
+        let backgroundLuminance = relativeLuminance(
+            red: backgroundComponents.red,
+            green: backgroundComponents.green,
+            blue: backgroundComponents.blue
+        )
+        let lighter = max(foregroundLuminance, backgroundLuminance)
+        let darker = min(foregroundLuminance, backgroundLuminance)
+        return (lighter + 0.05) / (darker + 0.05)
+    }
+
+    private func rgbaComponents(for color: UIColor) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)? {
+        let resolvedColor = color.resolvedColor(with: traitCollection)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        guard resolvedColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
+        return (red, green, blue, alpha)
+    }
+
+    private func relativeLuminance(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat {
+        0.2126 * linearizedColorComponent(red)
+            + 0.7152 * linearizedColorComponent(green)
+            + 0.0722 * linearizedColorComponent(blue)
+    }
+
+    private func linearizedColorComponent(_ component: CGFloat) -> CGFloat {
+        if component <= 0.03928 {
+            return component / 12.92
+        }
+        return pow((component + 0.055) / 1.055, 2.4)
     }
 
     private func rowWidth(for items: [RoadAttributeLegendItem], font: UIFont, itemSpacing: CGFloat) -> CGFloat {

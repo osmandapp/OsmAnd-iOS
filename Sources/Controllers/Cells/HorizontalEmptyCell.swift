@@ -160,12 +160,15 @@ final class HorizontalEmptyCell: UITableViewCell {
 
         let descriptionBottomConstraint = descriptionLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor,
                                                                                      constant: -Layout.verticalInset)
+        descriptionBottomConstraint.priority = UILayoutPriority(999)
         let cardLeadingConstraint = cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         let cardTrailingConstraint = cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         self.descriptionBottomConstraint = descriptionBottomConstraint
         self.cardLeadingConstraint = cardLeadingConstraint
         self.cardTrailingConstraint = cardTrailingConstraint
 
+        let actionRowBottomConstraint = actionRow.bottomAnchor.constraint(equalTo: cardView.bottomAnchor)
+        actionRowBottomConstraint.priority = UILayoutPriority(999)
         actionConstraints = [
             separatorView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Layout.verticalInset),
             separatorView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Layout.horizontalInset),
@@ -174,7 +177,7 @@ final class HorizontalEmptyCell: UITableViewCell {
             actionRow.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
             actionRow.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
             actionRow.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            actionRow.bottomAnchor.constraint(equalTo: cardView.bottomAnchor),
+            actionRowBottomConstraint,
             actionRow.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.minimumActionRowHeight)
         ]
 

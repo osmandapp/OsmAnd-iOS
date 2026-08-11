@@ -20,19 +20,16 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private let applyUpToPointIndex: Int?
     private var activeTab: ActiveTab = .routeType
     private var selectedMode: OAApplicationMode?
-    private var routingParams: PlanRouteSegmentRoutingParams
 
-    private let segmentControl = UISegmentedControl()
+    private let segmentControl = UISegmentedControl(items: [
+        localizedString("layer_route"),
+        localizedString("shared_string_settings")
+    ])
     private let tabContainerView = UIView()
     private var routeTypeVC: RouteTypeViewController?
     private var settingsVC: RouteSettingsViewController?
     private var activeTabViewController: UIViewController?
     private weak var dataSource: PlanRoutePointsDataSource?
-
-    private var defaultRoutingParams: PlanRouteSegmentRoutingParams {
-        PlanRouteSegmentRoutingParams(useElevationData: false,
-                                      considerTemporaryLimitations: true)
-    }
 
     private var settingsMode: OAApplicationMode? {
         selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
@@ -48,9 +45,6 @@ final class SegmentRouteSettingsViewController: UIViewController {
         } else {
             self.selectedMode = context.currentMode
         }
-        let resolvedSettingsMode = self.selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
-        self.routingParams = resolvedSettingsMode.flatMap { dataSource?.routingParams(for: $0) } ?? PlanRouteSegmentRoutingParams(useElevationData: false,
-                                                                                                                                    considerTemporaryLimitations: true)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -65,6 +59,10 @@ final class SegmentRouteSettingsViewController: UIViewController {
         setupSegmentControl()
         setupTabContainer()
         switchTab(to: .routeType, animated: false)
+    }
+
+    override func isNavbarVisible() -> Bool {
+        true
     }
 
     private func setupNavigationBar() {
@@ -91,18 +89,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func setupSegmentControl() {
-        segmentControl.removeAllSegments()
-        segmentControl.insertSegment(withTitle: localizedString("layer_route"), at: 0, animated: false)
-        segmentControl.insertSegment(withTitle: localizedString("shared_string_settings"), at: 1, animated: false)
         segmentControl.selectedSegmentIndex = 0
-        segmentControl.backgroundColor = .groupBgColorSecondary
-        segmentControl.selectedSegmentTintColor = UIColor.white
-        let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.textColorPrimary,
-            .font: UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
-        ]
-        segmentControl.setTitleTextAttributes(attrs, for: .normal)
-        segmentControl.setTitleTextAttributes(attrs, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
 
         segmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -110,8 +97,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            segmentControl.heightAnchor.constraint(equalToConstant: 36)
+            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
 
@@ -136,7 +122,6 @@ final class SegmentRouteSettingsViewController: UIViewController {
             routeTypeVC = vc
             newVC = vc
         case .settings:
-            reloadRoutingParams()
             let vc = makeSettingsVC()
             settingsVC = vc
             newVC = vc
@@ -176,12 +161,10 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func makeSettingsVC() -> RouteSettingsViewController {
-        let vc = RouteSettingsViewController(
-            params: routingParams,
-            onParamsChanged: { [weak self] updated in
-                self?.applyRoutingParams(updated)
-            }
-        )
+        guard let settingsMode else {
+            return RouteSettingsViewController(appMode: OAApplicationMode.default())
+        }
+        let vc = RouteSettingsViewController(appMode: settingsMode)
         vc.onAvoidRoadsTapped = { [weak self] in
             guard let self, let appMode = self.settingsMode,
                   let avoidVC = OAAvoidPreferParametersViewController(appMode: appMode, isAvoid: true) else { return }
@@ -195,26 +178,14 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navSettingsVC.delegate = self
             navigationController?.pushViewController(navSettingsVC, animated: true)
         }
+        vc.settingsChangedHandler = { [weak self] in
+            self?.dataSource?.refreshRoute(for: settingsMode)
+        }
         return vc
     }
 
-    private func reloadRoutingParams() {
-        guard let settingsMode else {
-            routingParams = defaultRoutingParams
-            return
-        }
-        routingParams = dataSource?.routingParams(for: settingsMode) ?? defaultRoutingParams
-    }
-
-    private func applyRoutingParams(_ updatedParams: PlanRouteSegmentRoutingParams) {
-        routingParams = updatedParams
-        guard let settingsMode else { return }
-        dataSource?.applyRoutingParams(updatedParams, mode: settingsMode)
-    }
-
     private func refreshSettingsState() {
-        reloadRoutingParams()
-        settingsVC?.update(params: routingParams)
+        settingsVC?.reloadData()
     }
 
     @objc private func onSegmentChanged() {

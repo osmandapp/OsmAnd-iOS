@@ -258,6 +258,8 @@
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A3E02330051E10004969BE /* ScreenElementsViewController.swift */; };
+		32C0DE01300A100100000001 /* ScreenLayoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE02300A100100000002 /* ScreenLayoutMode.swift */; };
+		32C0DE03300A100100000003 /* PanelsLayoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE04300A100100000004 /* PanelsLayoutMode.swift */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27B0967E2F8FCB0A00EDC462 /* GeoNavigationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */; };
 		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
@@ -3917,6 +3919,8 @@
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27A3E02330051E10004969BE /* ScreenElementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenElementsViewController.swift; sourceTree = "<group>"; };
+		32C0DE02300A100100000002 /* ScreenLayoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutMode.swift; sourceTree = "<group>"; };
+		32C0DE04300A100100000004 /* PanelsLayoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelsLayoutMode.swift; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoNavigationParser.swift; sourceTree = "<group>"; };
 		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
@@ -14803,6 +14807,8 @@
 				2745FEF52F3A11F2004F6AB4 /* Views */,
 				DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */,
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
+				32C0DE02300A100100000002 /* ScreenLayoutMode.swift */,
+				32C0DE04300A100100000004 /* PanelsLayoutMode.swift */,
 				27A3E02330051E10004969BE /* ScreenElementsViewController.swift */,
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
@@ -18735,6 +18741,8 @@
 				9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */,
 				9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */,
 				27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */,
+				32C0DE01300A100100000001 /* ScreenLayoutMode.swift in Sources */,
+				32C0DE03300A100100000003 /* PanelsLayoutMode.swift in Sources */,
 				9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */,
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
 				9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */,

@@ -1617,6 +1617,11 @@
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
 "new_plugin_added" = "New plugin added";
 "screen_elements" = "Screen elements";
+"screen_elements_descr" = "Landscape uses the same screen elements as Portrait. Changes in one orientation apply to both.";
+"switch_to_independent" = "Switch to Independent";
+"panels_layout" = "Panels layout";
+"panels_layout_wide" = "Wide";
+"panels_layout_compact" = "Compact";
 
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";

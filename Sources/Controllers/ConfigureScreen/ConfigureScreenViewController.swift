@@ -20,13 +20,21 @@ protocol MapButtonsDelegate: AnyObject {
 
 @objc(OAConfigureScreenViewController)
 @objcMembers
-class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
+class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
 
     private static let selectedKey = "selected"
+    private static let screenElementsKey = "screen_elements"
+    private static let separatorHorizontalInset: CGFloat = 16
 
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     private var mapButtonsHelper: OAMapButtonsHelper!
+    private var screenLayoutMode: ScreenLayoutMode = .portrait
+    private var landscapeScreenElementsMode: ScreenElementsMode = .shared // todo
+
+    private var isSharedLandscapeLayout: Bool {
+        screenLayoutMode == .landscape && landscapeScreenElementsMode == .shared
+    }
 
     // MARK: Initialization
 
@@ -45,22 +53,18 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     override func getTitle() -> String {
         localizedString("layer_map_appearance")
     }
+
+    override func createSubview() -> UIView {
+        let segmentedControl = UISegmentedControl(items: ScreenLayoutMode.allCases.map { $0.title })
+        segmentedControl.selectedSegmentIndex = screenLayoutMode.rawValue
+        segmentedControl.addTarget(self, action: #selector(onLayoutModeChanged(_:)), for: .valueChanged)
+        return segmentedControl
+    }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        // TODO
         let screenElementsAction = UIAction(title: localizedString("screen_elements"),
-                                            image: .icCustomMapScreenLayoutPortrait) { _ in
-            let screenElementsViewController = ScreenElementsViewController()
-            let navigationController = UINavigationController()
-            navigationController.setViewControllers([screenElementsViewController], animated: true)
-            
-            navigationController.modalPresentationStyle = .pageSheet
-            let sheet = navigationController.sheetPresentationController
-            if let sheet {
-                sheet.detents = [.medium(), .large()]
-                sheet.preferredCornerRadius = 20
-            }
-            self.navigationController?.present(navigationController, animated: true)
+                                            image: .icCustomMapScreenLayoutPortrait) { [weak self] _ in
+            self?.showScreenElements()
         }
         let copyAction = UIAction(title: localizedString("copy_from_other_profile"),
                                   image: .icCustomCopy) { [weak self] _ in
@@ -112,35 +116,64 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         false
     }
 
+    override func shouldShowSubviewSeparator() -> Bool {
+        false
+    }
+
     // MARK: Table data
 
     override func generateData() {
         tableData.clearAllData()
+
+        if isSharedLandscapeLayout {
+            let screenElementsSection = tableData.createNewSection()
+            let screenElementsRow = screenElementsSection.createNewRow()
+            screenElementsRow.key = Self.screenElementsKey
+            screenElementsRow.cellType = HorizontalEmptyCell.reuseIdentifier
+        }
         
         let widgetsSection = tableData.createNewSection()
         widgetsSection.headerText = localizedString("shared_string_widgets")
-        widgetsSection.footerText = localizedString("widget_panels_descr")
-        for panel in WidgetsPanel.values {
-            let widgetsCount = getWidgetsCount(panel: panel)
-            let row = widgetsSection.createNewRow()
-            row.cellType = OAValueTableViewCell.reuseIdentifier
-            row.title = panel.title
-            row.iconName = panel.iconName
-            row.setObj(panel, forKey: "panel")
-            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : appMode!.getProfileColor();
-            row.descr = String(widgetsCount)
-            row.accessibilityLabel = panel.title
-            row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
-            if panel == WidgetsPanel.values.last {
-                row.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
+        if !isSharedLandscapeLayout {
+            widgetsSection.footerText = localizedString("widget_panels_descr")
+            for panel in WidgetsPanel.values {
+                let widgetsCount = getWidgetsCount(panel: panel)
+                let row = widgetsSection.createNewRow()
+                row.cellType = OAValueTableViewCell.reuseIdentifier
+                row.title = panel.title
+                row.iconName = panel.iconName
+                row.setObj(panel, forKey: "panel")
+                row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode!.getProfileColor()
+                row.descr = String(widgetsCount)
+                row.accessibilityLabel = panel.title
+                row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
             }
         }
+
+        let panelsLayoutMode = PanelsLayoutMode.defaultMode
+        let panelsLayoutRow = widgetsSection.createNewRow()
+        panelsLayoutRow.key = "panels_layout"
+        panelsLayoutRow.title = localizedString("panels_layout")
+        panelsLayoutRow.descr = panelsLayoutMode.title
+        panelsLayoutRow.iconName = panelsLayoutMode.iconName(for: screenLayoutMode)
+        panelsLayoutRow.iconTintColor = appMode.getProfileColor()
+        panelsLayoutRow.cellType = OAValueTableViewCell.reuseIdentifier
+        panelsLayoutRow.accessibilityLabel = panelsLayoutRow.title
+        panelsLayoutRow.accessibilityValue = panelsLayoutRow.descr
+        if !isSharedLandscapeLayout {
+            panelsLayoutRow.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
+        }
+
         let transparencyRow = widgetsSection.createNewRow()
         transparencyRow.title = localizedString("map_widget_transparent")
         transparencyRow.key = "map_widget_transparent"
         transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
         transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: Self.selectedKey)
         transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
+
+        if isSharedLandscapeLayout {
+            return
+        }
         
         let buttonsSection = tableData.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
@@ -257,7 +290,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     }
     
     private func showResetToDefaultAlert() {
-        // TODO
         let actionSheet = UIAlertController(title: title,
                                             message: localizedString("reset_all_settings_desc"),
                                             preferredStyle: .actionSheet)
@@ -275,6 +307,24 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         OARootViewController.instance().mapPanel.recreateAllControls()
         reloadDataWith(animated: true, completion: nil)
     }
+
+    private func showScreenElements() {
+        let screenElementsViewController = ScreenElementsViewController()
+        let navigationController = UINavigationController(rootViewController: screenElementsViewController)
+        navigationController.modalPresentationStyle = .pageSheet
+        if let sheet = navigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.preferredCornerRadius = 20
+        }
+        present(navigationController, animated: true)
+    }
+
+    @objc private func onLayoutModeChanged(_ segmentedControl: UISegmentedControl) {
+        guard let mode = ScreenLayoutMode(rawValue: segmentedControl.selectedSegmentIndex),
+              mode != screenLayoutMode else { return }
+        screenLayoutMode = mode
+        reloadDataWith(animated: true, completion: nil)
+    }
 }
 
 // TableView
@@ -282,22 +332,48 @@ extension ConfigureScreenViewController {
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(OASwitchTableViewCell.reuseIdentifier)
+        tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
     }
     
     fileprivate func applyAccessibility(_ cell: UITableViewCell, _ item: OATableRowData) {
         cell.accessibilityLabel = item.accessibilityLabel
         cell.accessibilityValue = item.accessibilityValue
     }
+
+    fileprivate func applySeparatorInsets(_ cell: OASimpleTableViewCell, isCustomLeftSeparatorInset: Bool) {
+        cell.setCustomLeftSeparatorInset(true)
+        if !isCustomLeftSeparatorInset {
+            cell.updateSeparatorInset()
+        }
+        cell.separatorInset = UIEdgeInsets(top: 0,
+                                           left: isCustomLeftSeparatorInset
+                                               ? Self.separatorHorizontalInset
+                                               : cell.separatorInset.left,
+                                           bottom: 0,
+                                           right: Self.separatorHorizontalInset)
+    }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OAValueTableViewCell.reuseIdentifier {
+        if item.cellType == HorizontalEmptyCell.reuseIdentifier {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier,
+                                                           for: indexPath) as? HorizontalEmptyCell else {
+                return UITableViewCell()
+            }
+            cell.configure(title: localizedString("screen_elements"),
+                           description: localizedString("screen_elements_descr"),
+                           icon: .icCustomMapScreenLayoutPortraitColored,
+                           iconTint: nil,
+                           isOriginalIcon: true,
+                           actionTitle: localizedString("switch_to_independent"),
+                           action: { [weak self] in
+                               self?.showScreenElements()
+                           })
+            return cell
+        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
-            let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
-            cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
-            cell.separatorInset = .zero
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
@@ -312,6 +388,7 @@ extension ConfigureScreenViewController {
                 cell.leftIconView.image = UIImage(named: iconName)
             }
             applyAccessibility(cell, item)
+            applySeparatorInsets(cell, isCustomLeftSeparatorInset: item.bool(forKey: "isCustomLeftSeparatorInset"))
             return cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
@@ -322,13 +399,14 @@ extension ConfigureScreenViewController {
             }
 
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ?item.iconTintColor : .iconColorDefault
+            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
             cell.switchView.tag = indexPath.section << 10 | indexPath.row
             cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             applyAccessibility(cell, item)
+            applySeparatorInsets(cell, isCustomLeftSeparatorInset: item.bool(forKey: "isCustomLeftSeparatorInset"))
             return cell
         }
         return nil

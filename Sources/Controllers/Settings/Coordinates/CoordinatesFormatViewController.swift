@@ -261,7 +261,18 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     }
     
     @objc private func onAddAction() {
-        
+        let ids = formatStorage.preferredIds(appMode)
+        let vc = CoordinatesFormatAddViewController(appMode: appMode, excludedIds: ids)
+        vc.onFormatAdded = { [weak self] id in
+            guard let self else { return }
+            self.formatStorage.addPreferredId(self.appMode, id: id)
+            self.generateData()
+            self.tableView.reloadData()
+            self.delegate?.onSettingsChanged()
+        }
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: true)
     }
     
     @objc private func onEditAction() {

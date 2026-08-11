@@ -1728,6 +1728,9 @@
 		CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */; };
 		CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */; };
 		CE7CC394302B11530048D36F /* CoordinateFormatHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */; };
+		CE7CC396302B4EA40048D36F /* CoordinatesFormatAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */; };
+		CE7CC398302B6E940048D36F /* EpsgCatalogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */; };
+		CE7CC39B302B72160048D36F /* OAEpsgCoordinateTransformer.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */; };
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
 		CE7D50E530136F9F0062614B /* RouteDeepLinkBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */; };
@@ -5890,6 +5893,10 @@
 		CE7AC79F3008E3EE00A864B9 /* AstroWikiBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroWikiBridge.swift; sourceTree = "<group>"; };
 		CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatEditViewController.swift; sourceTree = "<group>"; };
 		CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatHelper.swift; sourceTree = "<group>"; };
+		CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatAddViewController.swift; sourceTree = "<group>"; };
+		CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpsgCatalogRepository.swift; sourceTree = "<group>"; };
+		CE7CC399302B71EE0048D36F /* OAEpsgCoordinateTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEpsgCoordinateTransformer.h; sourceTree = "<group>"; };
+		CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEpsgCoordinateTransformer.mm; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
 		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
 		CE7D50E430136F9F0062614B /* RouteDeepLinkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDeepLinkBuilder.swift; sourceTree = "<group>"; };
@@ -11114,11 +11121,15 @@
 			children = (
 				CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */,
 				CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */,
+				CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */,
+				CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */,
 				CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */,
 				CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */,
 				CE79CF273025D15B00B3BA15 /* CoordinateFormat.swift */,
 				CE79CF293025D18800B3BA15 /* BuiltInCoordinateFormat.swift */,
 				CE79CF2B30261E4000B3BA15 /* CoordinateFormatSettingsStorage.swift */,
+				CE7CC399302B71EE0048D36F /* OAEpsgCoordinateTransformer.h */,
+				CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */,
 			);
 			path = Coordinates;
 			sourceTree = "<group>";
@@ -18827,6 +18838,7 @@
 				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
+				CE7CC398302B6E940048D36F /* EpsgCatalogRepository.swift in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				3279D5132DF99EAA007A5F6E /* OAClickableWayMenuProvider.mm in Sources */,
@@ -19018,6 +19030,7 @@
 				DA4ABF242876DA6800B996EF /* OAOsmNotesSettingsItem.mm in Sources */,
 				DA5A84C026C563A900F274C7 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */,
 				FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */,
+				CE7CC396302B4EA40048D36F /* CoordinatesFormatAddViewController.swift in Sources */,
 				DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */,
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
@@ -19306,6 +19319,7 @@
 				C56FAB4C29B226A40096192F /* OACameraTiltWidget.mm in Sources */,
 				DA5A84DB26C563A900F274C7 /* OAMapSettingsMainScreen.mm in Sources */,
 				DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */,
+				CE7CC39B302B72160048D36F /* OAEpsgCoordinateTransformer.mm in Sources */,
 				46FB65B82A8BBC2000A21850 /* CoordinatesCurrentLocationWidget.swift in Sources */,
 				DA5A855226C563A900F274C7 /* OAMapUtils.mm in Sources */,
 				DAA61CBC2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift in Sources */,

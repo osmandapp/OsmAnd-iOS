@@ -35,6 +35,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         super.viewDidLoad()
         tableView.sectionHeaderTopPadding = 0
         tableView.setEditing(true, animated: false)
+        tableView.allowsSelectionDuringEditing = true
     }
 
     override func viewDidLayoutSubviews() {
@@ -279,7 +280,20 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     }
 
     @objc private func onAddAction() {
-        // Add format screen is not implemented yet.
+        let vc = CoordinatesFormatAddViewController(appMode: appMode, excludedIds: editableIds)
+        vc.onFormatAdded = { [weak self] id in
+            self?.appendToDraft(id)
+        }
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: true)
+    }
+
+    private func appendToDraft(_ id: String) {
+        guard let normalized = CoordinateFormatIds.normalize(id),
+              !editableIds.contains(normalized) else { return }
+        editableIds.append(normalized)
+        reloadDraft(animated: true)
     }
 }
 

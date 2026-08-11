@@ -11,11 +11,41 @@ import UIKit
 enum CoordinateFormatHelper {
     static let exampleLat = 50.43855
     static let exampleLon = 30.50124
+    static let unavailablePlaceholder = "—"
+    
+    private static let searchDebounce: TimeInterval = 0.25
+    private static var searchWorkItem: DispatchWorkItem?
 
     static func resolve(_ ids: [String]) -> [CoordinateFormat] {
-        ids.compactMap { BuiltInCoordinateFormat.resolve($0) }
+        ids.map { id in
+            BuiltInCoordinateFormat.resolve(id) ?? EpsgCatalogRepository.shared.resolveFormat(id)
+        }
     }
 
+    static func cancelSearch() {
+        searchWorkItem?.cancel()
+        searchWorkItem = nil
+    }
+    
+    static func search(_ query: String?, completion: @escaping ([CoordinateFormat]) -> Void) {
+        cancelSearch()
+        let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let work = DispatchWorkItem {
+            let results = trimmed.isEmpty
+                ? EpsgCatalogRepository.shared.listAll()
+                : EpsgCatalogRepository.shared.search(trimmed)
+            DispatchQueue.main.async {
+                completion(results)
+            }
+        }
+        searchWorkItem = work
+        if trimmed.isEmpty {
+            DispatchQueue.global(qos: .userInitiated).async(execute: work)
+        } else {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + searchDebounce, execute: work)
+        }
+    }
+    
     static func summary(_ format: CoordinateFormat, primary: Bool) -> String {
         if let epsgCode = format.epsgCode {
             return "EPSG:\(epsgCode)"
@@ -85,5 +115,33 @@ enum CoordinateFormatHelper {
             verticalFittingPriority: .fittingSizeLevel
         ).height
         header.frame.size = CGSize(width: width, height: height)
+    }
+
+    static func format(_ format: CoordinateFormat, lat: Double, lon: Double) -> String {
+        if format.type == .builtIn, let legacy = format.legacyFormat {
+            return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy)
+                ?? unavailablePlaceholder
+        }
+        if let code = format.epsgCode,
+           let point = OAEpsgCoordinateTransformer.sharedInstance().fromLonLat(withCode: code, lon: lon, lat: lat) {
+            return formatEpsgPoint(easting: point.easting, northing: point.northing)
+        }
+        return unavailablePlaceholder
+    }
+
+    static func formatEpsgPoint(easting: Double, northing: Double) -> String {
+        "\(formatEpsgValue(easting)), \(formatEpsgValue(northing))"
+    }
+
+    static func formatEpsgValue(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        formatter.decimalSeparator = "."
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.usesGroupingSeparator = true
+        return formatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
     }
 }

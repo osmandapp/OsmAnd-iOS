@@ -4066,6 +4066,7 @@ static char kMapSourceUpdateQueueKey;
         dispatch_async(dispatch_get_main_queue(), ^{
             [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         });
+        return YES;
     }
 
     BOOL found = NO;

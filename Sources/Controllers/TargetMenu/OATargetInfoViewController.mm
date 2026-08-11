@@ -873,7 +873,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void) setupTableView
 {
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];

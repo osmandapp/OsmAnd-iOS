@@ -92,6 +92,7 @@ static const NSInteger groupCount = 1;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;

@@ -100,7 +100,6 @@ static const NSInteger kColorsSection = 1;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *doneButtonTrailingConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) OATrackMenuViewControllerState *reopeningTrackMenuState;

@@ -33,7 +33,7 @@
                     <rect key="frame" x="364" y="9" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" id="ba5-tG-6hD" userLabel="Bottom Separator View">
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" id="ba5-tG-6hD" userLabel="Bottom Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="66" y="47" width="348" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="customSeparator"/>

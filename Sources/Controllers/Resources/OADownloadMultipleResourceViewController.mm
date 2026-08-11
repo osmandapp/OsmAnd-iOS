@@ -202,8 +202,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
-            cell.dividerHight = (1.0 / [UIScreen mainScreen].scale);
+            cell.dividerColor = [SeparatorAppearance color];
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         if (cell)
         {
@@ -407,7 +407,7 @@
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
 {
     if ([self isDividerCell:indexPath])
-        return [OADividerCell cellHeight:(1.0 / [UIScreen mainScreen].scale) dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
     else if (_isSRTM && indexPath.section == 0)
         return 36.;
     else if (indexPath.row == 1 && ((_isSRTM && indexPath.section == 1 && !_isSingleSRTM) || (!_isSRTM && indexPath.section == 0)))

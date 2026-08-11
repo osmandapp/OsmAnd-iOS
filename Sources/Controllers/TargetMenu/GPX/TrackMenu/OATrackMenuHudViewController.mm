@@ -2433,7 +2433,6 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -2496,7 +2495,6 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {

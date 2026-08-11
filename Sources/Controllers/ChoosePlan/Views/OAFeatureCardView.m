@@ -167,6 +167,7 @@
     if ([self isDirectionRTL])
         [self rtlApplication];
     
+    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self.viewHeaderSeparator];
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleLeftMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -208,9 +209,9 @@
 
     self.viewHeaderSeparator.frame = CGRectMake(
             0.,
-            self.labelProductIncluded.frame.origin.y + self.labelProductIncluded.frame.size.height + 13. - kSeparatorHeight,
+            self.labelProductIncluded.frame.origin.y + self.labelProductIncluded.frame.size.height + 13. - separatorHeight,
             width,
-            kSeparatorHeight
+            separatorHeight
     );
 
     CGFloat yRow = 0.;
@@ -220,7 +221,7 @@
     }
     self.viewFeatureRowsContainer.frame = CGRectMake(
             0.,
-            self.viewHeaderSeparator.frame.origin.y + kSeparatorHeight,
+            self.viewHeaderSeparator.frame.origin.y + separatorHeight,
             width,
             yRow
     );
@@ -239,12 +240,12 @@
 
     self.viewBottomSeparator.frame = CGRectMake(
             0.,
-            self.viewChoosePlanButtonsContainer.frame.origin.y + self.viewChoosePlanButtonsContainer.frame.size.height + 4. - kSeparatorHeight,
+            self.viewChoosePlanButtonsContainer.frame.origin.y + self.viewChoosePlanButtonsContainer.frame.size.height + 4. - separatorHeight,
             width,
-            kSeparatorHeight
+            separatorHeight
     );
 
-    self.frame = CGRectMake(0., y, width, self.viewBottomSeparator.frame.origin.y + kSeparatorHeight);
+    self.frame = CGRectMake(0., y, width, self.viewBottomSeparator.frame.origin.y + separatorHeight);
     return self.frame.size.height;
 }
 

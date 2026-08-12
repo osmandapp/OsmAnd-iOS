@@ -1622,6 +1622,8 @@
 "panels_layout" = "Panels layout";
 "panels_layout_wide" = "Wide";
 "panels_layout_compact" = "Compact";
+"panels_layout_wide_descr" = "Top and bottom panels span the full screen width.";
+"panels_layout_compact_descr" = "Top and bottom panels fit between side panels and buttons.";
 
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";

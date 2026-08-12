@@ -934,6 +934,17 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
+@interface OACommonPanelsLayoutMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)panelsLayoutMode;
+- (void)set:(int)panelsLayoutMode mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonWidgetDefaultView : OACommonInteger
 
 + (instancetype)withKey:(NSString *)key defValue:(int)defValue;
@@ -1236,6 +1247,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *searchFavoriteSortMode;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
 @property (nonatomic) OACommonString *osmEditsSortMode;
+
+- (OACommonPanelsLayoutMode *)getPanelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;

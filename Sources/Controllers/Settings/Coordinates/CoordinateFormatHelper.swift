@@ -64,12 +64,11 @@ enum CoordinateFormatHelper {
         return example
     }
 
-    static func exampleString(_ format: CoordinateFormat) -> String {
-        guard let legacy = format.legacyFormat else { return "—" }
+    static func exampleString(_ coordFormat: CoordinateFormat) -> String {
         let location = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation
         let lat = location?.coordinate.latitude ?? exampleLat
         let lon = location?.coordinate.longitude ?? exampleLon
-        return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy) ?? "—"
+        return format(coordFormat, lat: lat, lon: lon)
     }
 
     static func makeDescriptionHeader(width: CGFloat) -> UIView {

@@ -1708,6 +1708,9 @@
 		CE762AF02FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */; };
 		CE762AF22FFE1197001BF551 /* StarMapGlassBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AF12FFE1197001BF551 /* StarMapGlassBackground.swift */; };
 		CE762AF42FFE251B001BF551 /* StarMapTimeControlCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AF32FFE251B001BF551 /* StarMapTimeControlCard.swift */; };
+		CE7787D6302C70D300BEA7A6 /* SwissGridApproximation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */; };
+		CE7787D8302C70FC00BEA7A6 /* MaidenheadPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */; };
+		CE7787DA302C71E600BEA7A6 /* CoordinateGridFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */; };
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		CE79CF243025D00000B3BA15 /* CoordinatesFormatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */; };
 		CE79CF263025D13600B3BA15 /* CoordinateFormatIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */; };
@@ -5872,6 +5875,9 @@
 		CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMagnitudeSliderPanel.swift; sourceTree = "<group>"; };
 		CE762AF12FFE1197001BF551 /* StarMapGlassBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapGlassBackground.swift; sourceTree = "<group>"; };
 		CE762AF32FFE251B001BF551 /* StarMapTimeControlCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapTimeControlCard.swift; sourceTree = "<group>"; };
+		CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwissGridApproximation.swift; sourceTree = "<group>"; };
+		CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaidenheadPoint.swift; sourceTree = "<group>"; };
+		CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatting.swift; sourceTree = "<group>"; };
 		CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuCell.swift; sourceTree = "<group>"; };
 		CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatViewController.swift; sourceTree = "<group>"; };
 		CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatIds.swift; sourceTree = "<group>"; };
@@ -11130,6 +11136,9 @@
 				CE79CF2B30261E4000B3BA15 /* CoordinateFormatSettingsStorage.swift */,
 				CE7CC399302B71EE0048D36F /* OAEpsgCoordinateTransformer.h */,
 				CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */,
+				CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */,
+				CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */,
+				CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */,
 			);
 			path = Coordinates;
 			sourceTree = "<group>";
@@ -18316,6 +18325,7 @@
 				DA5A824D26C563A700F274C7 /* OAScreenAlertsViewController.m in Sources */,
 				FA73410D2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift in Sources */,
 				DA4ABF172876DA6800B996EF /* OAGlobalSettingsItem.mm in Sources */,
+				CE7787DA302C71E600BEA7A6 /* CoordinateGridFormatting.swift in Sources */,
 				DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */,
 				CE948E792FEA5EAB0023FA12 /* WikipediaContextMenuView.swift in Sources */,
 				2CFF22942F7AB48A000C5477 /* OARegionPriorityProvider.mm in Sources */,
@@ -18745,6 +18755,7 @@
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
+				CE7787D6302C70D300BEA7A6 /* SwissGridApproximation.swift in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */,
 				C5DF39B52DBB6CA800332496 /* OACoordinatesGridLayer.mm in Sources */,
@@ -18979,6 +18990,7 @@
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				FA1394AC2EB11B2000197297 /* HudGridOverlay.swift in Sources */,
 				FA1394AD2EB11B2000197297 /* MapHudLayout.swift in Sources */,
+				CE7787D8302C70FC00BEA7A6 /* MaidenheadPoint.swift in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */,

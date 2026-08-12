@@ -15,6 +15,9 @@ enum CoordinateFormatIds {
     static let builtinUtm = "builtin:utm"
     static let builtinOlc = "builtin:olc"
     static let builtinMgrs = "builtin:mgrs"
+    static let builtinSwissGrid = "builtin:swiss_grid"
+    static let builtinSwissGridPlus = "builtin:swiss_grid_plus"
+    static let builtinMaidenhead = "builtin:maidenhead"
 
     static let epsgPrefix = "epsg:"
 
@@ -23,7 +26,8 @@ enum CoordinateFormatIds {
     ]
 
     static let allBuiltInFormatIds: [String] = [
-        builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc, builtinMgrs
+        builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc, builtinMgrs,
+        builtinSwissGrid, builtinSwissGridPlus, builtinMaidenhead
     ]
 
     private static let builtInIdSet = Set(allBuiltInFormatIds)
@@ -60,6 +64,9 @@ enum CoordinateFormatIds {
         case Int(FORMAT_UTM): return builtinUtm
         case Int(FORMAT_OLC): return builtinOlc
         case Int(FORMAT_MGRS): return builtinMgrs
+        case Int(SWISS_GRID_FORMAT): return builtinSwissGrid
+        case Int(SWISS_GRID_PLUS_FORMAT): return builtinSwissGridPlus
+        case Int(MAIDENHEAD_FORMAT): return builtinMaidenhead
         default: return nil
         }
     }

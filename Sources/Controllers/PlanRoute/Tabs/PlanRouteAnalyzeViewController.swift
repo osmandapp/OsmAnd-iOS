@@ -498,6 +498,8 @@ private extension PlanRouteAnalyzeViewController {
     static let compactLegendMarkerSize: CGFloat = 16
     static let compactLegendInnerSpacing: CGFloat = 6
     static let compactLegendMinimumContrastRatio: CGFloat = 1.5
+    static let expandedLegendFadeDelay: TimeInterval = 0.08
+    static let expandedLegendFadeDuration: TimeInterval = 0.17
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
@@ -853,24 +855,30 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.labelTextColor = .textColorSecondary
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
-        legendView.isUserInteractionEnabled = false
-        legendView.translatesAutoresizingMaskIntoConstraints = false
-
-        [barChart, legendView].forEach { card.addSubview($0) }
+        card.addSubview(barChart)
+        addRoadAttrLegend(legendView, to: card, below: barChart)
 
         NSLayoutConstraint.activate([
             barChart.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
             barChart.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             barChart.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            barChart.heightAnchor.constraint(equalToConstant: 54),
+            barChart.heightAnchor.constraint(equalToConstant: 54)
+        ])
 
+        return cell
+    }
+
+    private func addRoadAttrLegend(_ legendView: UIView, to card: UIView, below barChart: UIView) {
+        legendView.isUserInteractionEnabled = false
+        legendView.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(legendView)
+
+        NSLayoutConstraint.activate([
             legendView.topAnchor.constraint(equalTo: barChart.bottomAnchor),
             legendView.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             legendView.trailingAnchor.constraint(equalTo: card.trailingAnchor),
             legendView.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
-
-        return cell
     }
 
     private func makeCompactRoadAttrLegend(stat: OARouteStatistics) -> UIView {
@@ -1427,14 +1435,47 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func toggleRoadAttribute(at index: Int) {
+        let expandedLegendFadeDelay = Self.expandedLegendFadeDelay
+        let expandedLegendFadeDuration = Self.expandedLegendFadeDuration
+        guard roadAttributeStatistics.indices.contains(index) else { return }
         if expandedStatIndexes.contains(index) {
             expandedStatIndexes.remove(index)
         } else {
             expandedStatIndexes.insert(index)
         }
 
-        let section = IndexSet(integer: index + roadAttributesSectionStart)
-        tableView.reloadSections(section, with: .automatic)
+        let section = index + roadAttributesSectionStart
+        let indexPath = IndexPath(row: 0, section: section)
+        let stat = roadAttributeStatistics[index]
+        let isExpanded = expandedStatIndexes.contains(index)
+        (tableView.headerView(forSection: section) as? AnalyzeRouteAttributeHeaderView)?.setExpanded(isExpanded)
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? AnalyzeCardCell,
+              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else { return }
+
+        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        let shouldFadeExpandedLegend = isExpanded && !UIAccessibility.isReduceMotionEnabled
+        legendView.alpha = shouldFadeExpandedLegend ? 0 : 1
+
+        cell.cardView.subviews.filter { $0 !== barChart }.forEach { $0.removeFromSuperview() }
+        addRoadAttrLegend(legendView, to: cell.cardView, below: barChart)
+
+        if UIAccessibility.isReduceMotionEnabled {
+            UIView.performWithoutAnimation {
+                tableView.performBatchUpdates(nil)
+            }
+            return
+        }
+
+        tableView.performBatchUpdates(nil)
+
+        guard shouldFadeExpandedLegend else { return }
+        UIView.animate(
+            withDuration: expandedLegendFadeDuration,
+            delay: expandedLegendFadeDelay,
+            options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseIn],
+            animations: { legendView.alpha = 1 }
+        )
     }
 
     private func buildSyntheticSteepnessStatistics(

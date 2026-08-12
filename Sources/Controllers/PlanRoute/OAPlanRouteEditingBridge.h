@@ -81,6 +81,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)openTrackWithFilePath:(NSString *)filePath;
 - (void)addCenterPoint;
 - (void)setCrosshairScreenPoint:(CGPoint)point;
++ (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)undo;
 - (void)redo;
 - (void)reverseRoute;

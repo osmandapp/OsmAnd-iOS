@@ -24,6 +24,7 @@
 @implementation OASimpleTableViewCell
 {
     BOOL _isCustomLeftSeparatorInset;
+    CGFloat _rightSeparatorInset;
     UITapGestureRecognizer *_tapRecognizer;
 }
 
@@ -39,6 +40,11 @@
     _isCustomLeftSeparatorInset = isCustom;
 }
 
+- (void)setRightSeparatorInset:(CGFloat)inset
+{
+    _rightSeparatorInset = inset;
+}
+
 - (void)setLeftIconSize:(CGFloat)size
 {
     _leftIconHeightConstraint.constant = size;
@@ -47,7 +53,7 @@
 
 - (void)updateSeparatorInset
 {
-    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., 0.);
+    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., _rightSeparatorInset);
 }
 
 - (CGFloat)getLeftInsetToView:(UIView *)view

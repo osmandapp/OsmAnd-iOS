@@ -32,9 +32,14 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.setEditing(true, animated: false)
+        tableView.sectionHeaderTopPadding = 0
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.sectionHeaderTopPadding = 0
         setupSearchController()
     }
     
@@ -79,7 +84,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
             info.cellType = OARightIconTableViewCell.reuseIdentifier
             info.title = localizedString("coordinate_format_add_empty_title")
             info.descr = localizedString("coordinate_format_add_empty_body")
-            info.iconName = "ic_custom_coordinates_location"
+            info.icon = .icCustomCoordinatesLocation
         }
 
         let formats = visibleFormats()
@@ -112,16 +117,22 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
             cell.leftEditButtonVisibility(false)
             cell.rightIconVisibility(true)
             cell.descriptionVisibility(true)
+            cell.titleLabel.font = .preferredFont(forTextStyle: .body)
+            cell.titleLabel.textColor = .textColorPrimary
             cell.titleLabel.text = item.title
-            cell.descriptionLabel.text = item.descr
+            cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
+            cell.descriptionLabel.textColor = .textColorSecondary
             cell.descriptionLabel.numberOfLines = 0
-            cell.rightIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.descriptionLabel.text = item.descr
+            cell.rightIconView.image = item.icon
             cell.rightIconView.tintColor = .iconColorDefault
+            cell.anchorContent(.topStyle)
+            cell.textIndentsStyle(.increasedTopCenterIndentStyle)
             cell.isAccessibilityElement = true
             cell.accessibilityLabel = item.title
             cell.accessibilityValue = item.descr
             cell.accessibilityTraits = .staticText
-            cell.anchorContent(.topStyle)
+            
             return cell
         }
 
@@ -138,13 +149,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         cell.titleLabel.textColor = .textColorPrimary
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-        cell.delegate = self
-
-        cell.leftEditButtonVisibility(true)
-        cell.leftEditButton.isUserInteractionEnabled = false
-        cell.leftEditButton.setImage(.icCustomKeyPlus, for: .normal)
-        cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row
-        cell.leftEditButton.accessibilityLabel = localizedString("shared_string_add")
+        cell.setRightSeparatorInset(16)
 
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = item.title
@@ -154,9 +159,25 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         return cell
     }
     
-    override func onRowSelected(_ indexPath: IndexPath?) {
-        guard let indexPath else { return }
-        tableView.deselectRow(at: indexPath, animated: true)
+    override func tableView(_ tableView: UITableView,
+                            canEditRowAt indexPath: IndexPath) -> Bool {
+        tableData.item(for: indexPath).key != Self.infoRowKey
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        tableData.item(for: indexPath).key == Self.infoRowKey ? .none : .insert
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        tableData.item(for: indexPath).key != Self.infoRowKey
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath) {
+        guard editingStyle == .insert else { return }
         addFormatIfPossible(at: indexPath)
     }
 
@@ -218,15 +239,6 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     }
 }
 
-// MARK: - OATableViewCellDelegate
-
-extension CoordinatesFormatAddViewController: OATableViewCellDelegate {
-    func onLeftEditButtonPressed(_ tag: Int) {
-        let indexPath = IndexPath(row: tag & 0x3FF, section: tag >> 10)
-        addFormatIfPossible(at: indexPath)
-    }
-}
-
 // MARK: - UISearchResultsUpdating
 
 extension CoordinatesFormatAddViewController: UISearchResultsUpdating {
@@ -249,7 +261,7 @@ extension CoordinatesFormatAddViewController: UISearchResultsUpdating {
     }
 }
 
-// MARK: - UISearchResultsUpdating
+// MARK: - UISearchControllerDelegate
 
 extension CoordinatesFormatAddViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {

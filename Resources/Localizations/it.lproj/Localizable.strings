@@ -2627,7 +2627,7 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Confini naturali";
 "rendering_attr_OSMMapperAssistantNote_name" = "Etichette Note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Nascondi i confini delle riserve naturali, delle aree protette e dei parchi naturali.";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a bassi livelli di zoom per quei POI che di solito non vengono visualizzati";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Una rappresentazione schematica delle icone a bassi livelli di zoom per quei PDI che di solito non sono visualizzati";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
 "download_wikipedia_data" = "Scarica dati di Wikipedia";

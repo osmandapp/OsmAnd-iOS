@@ -237,9 +237,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth),
             pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
             pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
-            pageContainerView.widthAnchor.constraint(equalToConstant: 0),
             pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
         ])
+        if !isHorizontal {
+            pageContainerView.widthAnchor.constraint(equalToConstant: 0).isActive = true
+        }
         
         // Add the page view controller as a child view controller
         addChild(pageViewController)

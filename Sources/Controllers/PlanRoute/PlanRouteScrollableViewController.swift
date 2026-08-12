@@ -228,6 +228,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.bounds.width
     }
 
+    override func shouldIgnoreTopBottomOffsets() -> Bool {
+        true
+    }
+
     override func hide() {
         hide(true, duration: Self.sheetAnimationDuration, onComplete: nil)
     }
@@ -714,14 +718,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let centerX = targetScreenSize.width / 2
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let viewportYScale = Double(2 * centerY / targetScreenSize.height)
-        OARootViewController.instance().mapPanel.mapViewController.setViewportScaleY(viewportYScale)
+        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = viewportYScale
         dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: centerX, y: centerY))
     }
 
     private func restoreMapViewport() {
         guard let cachedMapViewportYScale else { return }
         self.cachedMapViewportYScale = nil
-        OARootViewController.instance().mapPanel.mapViewController.setViewportScaleY(cachedMapViewportYScale)
+        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = cachedMapViewportYScale
     }
 
     private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {

@@ -820,6 +820,11 @@ static char kMapSourceUpdateQueueKey;
     return _mapView.viewportYScale;
 }
 
+- (void)setViewportYScale:(double)viewportYScale
+{
+    [self setViewportScaleY:viewportYScale];
+}
+
 - (void)setViewportScaleX:(double)x
 {
     if (_mapView.viewportXScale != x && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)

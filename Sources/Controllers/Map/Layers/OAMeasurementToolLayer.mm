@@ -590,7 +590,7 @@
     }
 }
 
-- (void) moveMapToCoordinate:(CLLocationCoordinate2D)coordinate
+- (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate
 {
     auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coordinate.latitude, coordinate.longitude));
     auto point31 = [OANativeUtilities convertFromPointI:point];

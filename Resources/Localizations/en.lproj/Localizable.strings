@@ -228,12 +228,12 @@
 "setup" = "Setup";
 "gitHub_discussion" = "GitHub Discussion";
 "telegram_chats" = "Telegram chats";
-"report_an_issues" = "Report an issue";
+"report_an_issues" = "Report a problem";
 "open_issue_on_gitHub" = "Open issue on GitHub";
 "about_osmAnd" = "About OsmAnd";
 "osmAnd_team" = "OsmAnd Team";
 "testFlight" = "TestFlight";
-"ask_question_propose_features" = "Ask question, propose features";
+"ask_question_propose_features" = "Ask questions, propose features";
 "detailed_log_file" = "Detailed log file";
 "download_install_beta_version" = "Download and install beta version of OsmAnd";
 "rotate_map_to" = "Map orientation";

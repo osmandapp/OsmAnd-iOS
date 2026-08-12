@@ -1454,22 +1454,13 @@ private extension PlanRouteAnalyzeViewController {
               let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else { return }
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
-        let shouldFadeExpandedLegend = isExpanded && !UIAccessibility.isReduceMotionEnabled
-        legendView.alpha = shouldFadeExpandedLegend ? 0 : 1
+        legendView.alpha = isExpanded ? 0 : 1
 
         cell.cardView.subviews.filter { $0 !== barChart }.forEach { $0.removeFromSuperview() }
         addRoadAttrLegend(legendView, to: cell.cardView, below: barChart)
-
-        if UIAccessibility.isReduceMotionEnabled {
-            UIView.performWithoutAnimation {
-                tableView.performBatchUpdates(nil)
-            }
-            return
-        }
-
         tableView.performBatchUpdates(nil)
 
-        guard shouldFadeExpandedLegend else { return }
+        guard isExpanded else { return }
         UIView.animate(
             withDuration: expandedLegendFadeDuration,
             delay: expandedLegendFadeDelay,

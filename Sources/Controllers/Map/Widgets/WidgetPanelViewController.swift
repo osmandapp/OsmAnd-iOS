@@ -236,10 +236,10 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
             pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth),
             pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
-            pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
             pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
         ])
         if !isHorizontal {
+            pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor).isActive = true
             pageContainerView.widthAnchor.constraint(equalToConstant: 0).isActive = true
         }
         

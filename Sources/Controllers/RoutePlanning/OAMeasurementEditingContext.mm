@@ -1465,7 +1465,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                                                                         route:route
                                                                     locations:locations
                                                             routePointIndexes:routePointIndexes
-                                                                       points:nil];
+                                                                       points:nil
+                                                           preserveTimestamps:YES];
         return [routeExporter generateRouteSegment];
     }
     else if (endPointIndex - startPointIndex >= 0)

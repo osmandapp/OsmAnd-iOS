@@ -112,22 +112,8 @@
 
 - (int64_t)timeAtIndex:(NSInteger)index
 {
-	switch (_locationType)
-	{
-		case LOCATION_TYPE_LOCATION:
-		{
-			if (index >= 0 && index < _locationList.count)
-				return (int64_t)(_locationList[index].timestamp.timeIntervalSince1970 * 1000.0);
-			break;
-		}
-		case LOCATION_TYPE_WPTPT:
-		{
-			if (index >= 0 && index < _wptPtList.count)
-				return _wptPtList[index].time;
-		}
-		default:
-			return 0;
-	}
+	if (_locationType == LOCATION_TYPE_WPTPT && index >= 0 && index < _wptPtList.count)
+		return _wptPtList[index].time;
 	return 0;
 }
 

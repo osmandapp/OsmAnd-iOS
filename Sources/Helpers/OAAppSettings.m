@@ -7039,7 +7039,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     return self;
 }
 
-- (OACommonPanelsLayoutMode *)getPanelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+- (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
 {
     BOOL separate = (ScreenElementsMode)screenElementsMode == ScreenElementsModeIndependent;
     switch ((ScreenLayoutMode)screenLayoutMode)

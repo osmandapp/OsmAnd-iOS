@@ -31,7 +31,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
          screenElementsMode: ScreenElementsMode,
          appMode: OAApplicationMode) {
         let settings = OAAppSettings.sharedManager()
-        let preference = settings.getPanelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
+        let preference = settings.panelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
         let mode = PanelsLayoutMode(rawValue: preference.get(appMode)) ?? .defaultMode
         self.screenLayoutMode = screenLayoutMode
         self.appMode = appMode

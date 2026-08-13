@@ -50,7 +50,7 @@ class WidgetsSettingsHelper: NSObject {
         }
 
         ScreenElementsMode.allCases.forEach {
-            settings.getPanelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
+            settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
         }
         settings.useSeparateLayouts.resetMode(toDefault: appMode)
         settings.transparentMapTheme.resetMode(toDefault: appMode)
@@ -76,7 +76,7 @@ class WidgetsSettingsHelper: NSObject {
             copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
         }
         ScreenElementsMode.allCases.forEach {
-            copyPrefFromAppMode(pref: settings.getPanelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
         }
         copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)

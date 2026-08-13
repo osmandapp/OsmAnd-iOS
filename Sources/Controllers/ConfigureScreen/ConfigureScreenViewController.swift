@@ -145,7 +145,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 let row = widgetsSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.title = panel.title
-                row.iconName = panel.getIconName(screenLayoutMode)
+                row.iconName = panel.iconName(for: screenLayoutMode)
                 row.setObj(panel, forKey: "panel")
                 row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode!.getProfileColor()
                 row.descr = String(widgetsCount)
@@ -153,7 +153,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
             }
         }
-        let panelsLayoutPreference = settings.getPanelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
+        let panelsLayoutPreference = settings.panelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
         let panelsLayoutMode = PanelsLayoutMode(rawValue: panelsLayoutPreference.get(appMode)) ?? .defaultMode
         let panelsLayoutRow = widgetsSection.createNewRow()
         panelsLayoutRow.key = "panels_layout"

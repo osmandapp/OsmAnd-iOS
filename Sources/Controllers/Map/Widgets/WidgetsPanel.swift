@@ -57,7 +57,7 @@ class WidgetsPanel: NSObject, NSCopying {
         self.landscapeIconName = landscapeIconName
     }
 
-    func getIconName(_ screenLayoutMode: ScreenLayoutMode) -> String {
+    func iconName(for screenLayoutMode: ScreenLayoutMode) -> String {
         screenLayoutMode.isPortrait ? iconName : landscapeIconName
     }
 

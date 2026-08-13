@@ -13,6 +13,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         case information, receivedData, settings, forgetSensor
     }
     
+    private static let estimatedRowHeight: CGFloat = 66
+
     var device: Device! {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
@@ -46,6 +48,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = Self.estimatedRowHeight
 
         configureHeader()
         headerView.configure(device: device)

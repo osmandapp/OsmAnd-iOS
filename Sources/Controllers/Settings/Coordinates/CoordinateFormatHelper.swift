@@ -143,4 +143,56 @@ enum CoordinateFormatHelper {
         formatter.usesGroupingSeparator = true
         return formatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
     }
+    
+    static func preferredFormats() -> [CoordinateFormat] {
+        let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
+        return resolve(storage.preferredIds())
+    }
+
+    static func formatPreferred(lat: Double, lon: Double) -> [FormattedCoordinate] {
+        preferredFormats().enumerated().map { index, format in
+            FormattedCoordinate(
+                format: format,
+                text: Self.format(format, lat: lat, lon: lon),
+                primary: index == 0
+            )
+        }
+    }
+
+    static func formatPrimary(lat: Double, lon: Double) -> String {
+        if let primary = formatPreferred(lat: lat, lon: lon).first {
+            return primary.text
+        }
+        return OAOsmAndFormatter.getFormattedCoordinates(
+            withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES)
+        ) ?? unavailablePlaceholder
+    }
+
+    static func primaryRowPrefix(lat: Double, lon: Double) -> String {
+        if let code = preferredFormats().first?.epsgCode {
+            return "EPSG:\(code)"
+        }
+        return localizedString("coordinates")
+    }
+
+    static func collapsedLocationData(lat: Double, lon: Double) -> [FormattedCoordinate] {
+        var rows = [FormattedCoordinate]()
+        let preferred = formatPreferred(lat: lat, lon: lon)
+
+        if let short = OAOsmAndFormatter.getFormattedCoordinates(
+            withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES_SHORT)
+        ), !short.isEmpty {
+            rows.append(.plain(short))
+        }
+        if preferred.count > 1 {
+            rows.append(contentsOf: preferred.dropFirst())
+        }
+
+        rows.append(.plain(OAPointDescription.shareLink(forLat: lat, lon: lon)))
+        
+        if let osm = OAPointDescription.osmEditingLink(forLat: lat, lon: lon) {
+            rows.append(.plain(osm))
+        }
+        return rows
+    }
 }

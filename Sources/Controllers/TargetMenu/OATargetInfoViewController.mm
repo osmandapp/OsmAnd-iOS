@@ -2027,7 +2027,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         OAAmenityInfoRow *info = _rows[indexPath.row];
         NSString *textToCopy;
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
-            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+            textToCopy = [CoordinateFormatBridge formatPrimaryWithLat:self.location.latitude lon:self.location.longitude];
         else
             textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
 

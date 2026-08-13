@@ -219,6 +219,20 @@
     return results;
 }
 
++ (NSString *)shareLinkForLat:(double)lat lon:(double)lon
+{
+    int zoom = [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
+    return [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
+}
+
++ (NSString *)osmEditingLinkForLat:(double)lat lon:(double)lon
+{
+    if (![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+        return nil;
+    int zoom = [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
+    return [NSString stringWithFormat:kOsmCoordinatesLink, lat, lon, zoom, lat, lon];
+}
+
 + (NSString *) formatToHumanString:(NSInteger)format
 {
     switch (format) {

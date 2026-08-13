@@ -77,6 +77,9 @@ static const int POINT_LOCATION_LIST_HEADER = 201;
 + (NSString *) formatToHumanString:(NSInteger)format;
 + (NSInteger) coordinatesFormatToFormatterMode:(NSInteger)format;
 
++ (NSString *)shareLinkForLat:(double)lat lon:(double)lon;
++ (nullable NSString *)osmEditingLinkForLat:(double)lat lon:(double)lon;
+
 - (BOOL) isLocation;
 - (BOOL) isAddress;
 - (BOOL) isWpt;

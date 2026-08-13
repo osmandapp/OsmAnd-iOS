@@ -133,7 +133,8 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
 
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode, mode != selectedMode else {
+        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode,
+              mode != selectedMode else {
             return
         }
         selectedMode = mode

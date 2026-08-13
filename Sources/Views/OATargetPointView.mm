@@ -42,6 +42,7 @@
 #import "OAGPXWptViewController.h"
 #import "OAButton.h"
 #import "OAPluginsHelper.h"
+#import "OAOperationLog.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -866,7 +867,8 @@ static const NSInteger _buttonsCount = 4;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-    
+    OAOperationLog *animationLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Show animation" debug:YES];
+    [animationLog startOperation:animated ? @"animated=yes" : @"animated=no"];
     if (animated)
     {
         CGRect frame = self.frame;
@@ -887,16 +889,19 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         }
         
+        __weak __typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.2 animations:^{
             
-            self.frame = frame;
+            weakSelf.frame = frame;
             
         } completion:^(BOOL finished) {
+            [animationLog finishOperation:finished ? @"result=finished" : @"result=interrupted"];
             if (onComplete)
                 onComplete();
-            
-            if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
-                [self.menuViewDelegate targetViewEnableMapInteraction];
+
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf && !strongSelf->_showFullScreen && strongSelf.customController && [strongSelf.customController supportMapInteraction])
+                [strongSelf.menuViewDelegate targetViewEnableMapInteraction];
         }];
     }
     else
@@ -908,7 +913,7 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         
         self.frame = frame;
-        
+        [animationLog finishOperation:@"result=finished"];
         if (onComplete)
             onComplete();
 
@@ -2787,6 +2792,8 @@ static const NSInteger _buttonsCount = 4;
         return;
 
     _addressLookupTarget = targetPoint;
+    OAOperationLog *addressLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Address resolution" debug:YES];
+    [addressLog startOperation];
 
     __weak __typeof(self) weakSelf = self;
 
@@ -2801,11 +2808,21 @@ static const NSInteger _buttonsCount = 4;
 
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf)
+            {
+                [addressLog finishOperation:@"result=discarded reason=view_released"];
                 return;
+            }
 
             strongSelf->_addressLookupTarget = nil;
             if (strongSelf.targetPoint == targetPoint)
+            {
                 [strongSelf updateTargetPointAddress];
+                [addressLog finishOperation:@"result=applied"];
+            }
+            else
+            {
+                [addressLog finishOperation:@"result=discarded reason=target_changed"];
+            }
 
             [strongSelf fetchAddressIfNeededAsync];
         });

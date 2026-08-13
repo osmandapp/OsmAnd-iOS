@@ -16,6 +16,7 @@
 #import "OAAppData.h"
 #import "OALocationServices.h"
 #import "OALog.h"
+#import "OAOperationLog.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OAGPXDatabase.h"
@@ -1443,7 +1444,7 @@ typedef enum
     
     if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
         validSelectedObjects = nil;
-    
+
     if (validPoints.count == 0)
     {
         return;
@@ -1499,6 +1500,10 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
 
+    OAOperationLog *targetSetupLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Target setup" debug:YES];
+    [targetSetupLog startOperation:[NSString stringWithFormat:@"targetType=%ld object=%@",
+                                    (long)targetPoint.type,
+                                    targetPoint.targetObj ? NSStringFromClass([targetPoint.targetObj class]) : @"none"]];
     _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1510,6 +1515,7 @@ typedef enum
         [self goToTargetPointMapillary];
         [self hideMultiMenuIfNeeded];
         [self setNeedsStatusBarAppearanceUpdate];
+        [targetSetupLog finishOperation:@"result=mapillary"];
         return;
     }
     else if (targetPoint.type == OATargetMapDownload)
@@ -1542,15 +1548,16 @@ typedef enum
     }
 
     [self setSelectedObject:targetPoint];
+    [targetSetupLog finishOperation:[NSString stringWithFormat:@"result=ready targetType=%ld", (long)targetPoint.type]];
 
+    __weak __typeof(self) weakSelf = self;
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-        
-        [_mapViewController contextMenuDidShow:selectedObject.object];
+        [weakSelf.mapViewController contextMenuDidShow:selectedObject.object];
         if (targetPoint.centerMap)
-            [self goToTargetPointWithZoom:preferredZoom];
+            [weakSelf goToTargetPointWithZoom:preferredZoom];
         
-        if (_targetMenuView.needsManualContextMode)
-            [self enterContextMenuMode];
+        if (weakSelf.targetMenuView.needsManualContextMode)
+            [weakSelf enterContextMenuMode];
     }];
 }
 
@@ -2486,6 +2493,8 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete afterComplete:(void (^)(void))afterComplete
 {
+    OAOperationLog *presentationLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Presentation" debug:YES];
+    [presentationLog startOperation:[NSString stringWithFormat:@"targetType=%ld", (long)_targetMenuView.targetPoint.type]];
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
@@ -2500,11 +2509,14 @@ typedef enum
         _activeTargetActive = NO;
         BOOL activeTargetChildPushed = _activeTargetChildPushed;
         _activeTargetChildPushed = NO;
-        
+        [presentationLog finishOperation:@"result=restarting_after_active_target"];
+        __weak __typeof(self) weakSelf = self;
         [self hideTargetPointMenu:.1 onComplete:^{
-            [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
-            _activeTargetChildPushed = activeTargetChildPushed;
-            
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            [strongSelf showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
+            strongSelf->_activeTargetChildPushed = activeTargetChildPushed;
         } hideActiveTarget:YES mapGestureAction:NO];
         
         return;
@@ -2517,8 +2529,14 @@ typedef enum
         [self saveMapStateNoRestore];
     
     _mapStateSaved = saveMapState;
-    
+
+    OAOperationLog *controllerLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Controller creation"];
+    [controllerLog startOperation];
     OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
+    [controllerLog finishOperation:[NSString stringWithFormat:@"controller=%@",
+                                    controller ? NSStringFromClass([controller class]) : @"none"]];
+    OAOperationLog *preparationLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] View preparation" debug:YES];
+    [preparationLog startOperation];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {
@@ -2617,6 +2635,8 @@ typedef enum
         [self.targetMenuView setCustomViewController:controller needFullMenu:NO];
         [self.targetMenuView prepareNoInit];
     }
+    [preparationLog finishOperation:[NSString stringWithFormat:@"controller=%@",
+                                     controller ? NSStringFromClass([controller class]) : @"none"]];
     
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -2629,6 +2649,7 @@ typedef enum
     if (_targetMenuView.targetPoint.minimized)
     {
         _targetMenuView.targetPoint.minimized = NO;
+        [presentationLog finishOperation:@"result=minimized"];
         if (onComplete)
             onComplete();
         
@@ -2642,8 +2663,10 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController updateDependentButtonsVisibility];
+    __weak __typeof(self) weakSelf = self;
     [self.targetMenuView show:YES onComplete:^{
-        self.sidePanelController.recognizesPanGesture = NO;
+        [presentationLog finishOperation:@"result=shown"];
+        weakSelf.sidePanelController.recognizesPanGesture = NO;
         if (afterComplete)
             afterComplete();
     }];

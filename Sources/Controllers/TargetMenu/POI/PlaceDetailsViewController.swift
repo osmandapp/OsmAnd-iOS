@@ -39,10 +39,13 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func viewDidLoad() {
+        let operationLog: OAOperationLog = OAOperationLog(operationName: "[ContextMenu] Initial content", debug: true)
+        operationLog.startOperation("preloaded=\(detailsObject != nil ? "yes" : "no")")
         if detailsObject != nil {
             updateMenuWithDetailedObject()
         }
         super.viewDidLoad()
+        operationLog.finishOperation()
         if detailsObject == nil {
             resolveDetailedObjectInBackground()
         }
@@ -233,16 +236,35 @@ final class PlaceDetailsViewController: OAPOIViewController {
 
     private func resolveDetailedObjectInBackground() {
         guard let renderedObject else { return }
+        let detailsLog: OAOperationLog = OAOperationLog(operationName: "[ContextMenu] Background details", debug: true)
+        detailsLog.startOperation()
+        let backgroundQueueLog: OAOperationLog = OAOperationLog(operationName: "[ContextMenu] Background queue wait", debug: false, logThreshold: 0.1)
+        backgroundQueueLog.startOperation()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            backgroundQueueLog.finishOperation("result=started")
             let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
-            DispatchQueue.main.async {
-                guard let self,
-                      let details,
-                      let tableView = self.tableView,
+            let mainQueueLog: OAOperationLog = OAOperationLog(operationName: "[ContextMenu] Main queue wait", debug: false, logThreshold: 0.1)
+            mainQueueLog.startOperation()
+            DispatchQueue.main.async { [weak self] in
+                mainQueueLog.finishOperation("result=started")
+                guard let self else {
+                    detailsLog.finishOperation("result=discarded reason=controller_released")
+                    return
+                }
+                guard let details else {
+                    detailsLog.finishOperation("result=discarded reason=not_found")
+                    return
+                }
+                guard let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
                       let targetPoint = mapPanel.getCurrentTargetPoint(),
                       (targetPoint.targetObj as AnyObject) === renderedObject
-                else { return }
+                else {
+                    detailsLog.finishOperation("result=discarded reason=target_changed")
+                    return
+                }
+                let updateLog: OAOperationLog = OAOperationLog(operationName: "[ContextMenu] Details update", debug: true)
+                updateLog.startOperation()
                 self.detailsObject = details
                 self.provider.detailsObject = details
                 let amenity = details.syntheticAmenity
@@ -251,6 +273,8 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.rebuildRows()
                 tableView.reloadData()
                 self.delegate?.refreshTargetPointHeader?()
+                updateLog.finishOperation()
+                detailsLog.finishOperation("result=applied")
             }
         }
     }

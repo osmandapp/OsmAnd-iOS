@@ -23,6 +23,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kWidgetAddParamsKey = "widget_add_params"
     
     private let panels = WidgetsPanel.values
+    private let screenLayoutMode: ScreenLayoutMode
     
     private var editingComplexWidget: MapWidgetInfo?
     
@@ -57,12 +58,18 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     // MARK: - Initialization
     
-    init(widgetPanel: WidgetsPanel!) {
+    convenience init(widgetPanel: WidgetsPanel!) {
+        self.init(widgetPanel: widgetPanel, screenLayoutMode: .defaultMode)
+    }
+
+    init(widgetPanel: WidgetsPanel!, screenLayoutMode: ScreenLayoutMode) {
         self.widgetPanel = widgetPanel
+        self.screenLayoutMode = screenLayoutMode
         super.init()
     }
     
     required init?(coder: NSCoder) {
+        screenLayoutMode = .defaultMode
         super.init(coder: coder)
     }
     
@@ -76,11 +83,18 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         if editMode {
             return nil
         }
-        let segmentedControl = UISegmentedControl(items: [
-            UIImage(named: "ic_custom20_screen_side_left")!,
-            UIImage(named: "ic_custom20_screen_side_right")!,
-            UIImage(named: "ic_custom20_screen_side_top")!,
-            UIImage(named: "ic_custom20_screen_side_bottom")!])
+        let useLandscapeIcons = screenLayoutMode == .landscape
+            && OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+        let iconNames = useLandscapeIcons
+            ? ["ic_custom20_screen_side_landscape_left",
+               "ic_custom20_screen_side_landscape_right",
+               "ic_custom20_screen_side_landscape_top",
+               "ic_custom20_screen_side_landscape_bottom"]
+            : ["ic_custom20_screen_side_left",
+               "ic_custom20_screen_side_right",
+               "ic_custom20_screen_side_top",
+               "ic_custom20_screen_side_bottom"]
+        let segmentedControl = UISegmentedControl(items: iconNames.map { UIImage(named: $0)! })
         segmentedControl.selectedSegmentIndex = panels.firstIndex(of: widgetPanel) ?? 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl

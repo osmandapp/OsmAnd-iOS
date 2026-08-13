@@ -478,7 +478,7 @@ extension ConfigureScreenViewController {
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
-                let vc = WidgetsListViewController(widgetPanel: panel)
+                let vc = WidgetsListViewController(widgetPanel: panel, screenLayoutMode: screenLayoutMode)
                 show(vc)
             }
         }

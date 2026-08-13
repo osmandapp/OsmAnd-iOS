@@ -13,8 +13,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private var detailsObject: BaseDetailsObject?
     private var renderedObject: OARenderedObject?
-    private var sourceObject: AnyObject?
-    private var preservesAmenityPresentation = false
     private var provider: RenderedObjectAmenityProvider!
     
     required init?(coder: NSCoder) {
@@ -25,7 +23,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
         super.init(poi: detailsObject.syntheticAmenity)
         self.detailsObject = detailsObject
         self.renderedObject = renderedObject
-        self.sourceObject = renderedObject ?? detailsObject.syntheticAmenity
         self.provider = RenderedObjectAmenityProvider(detailsObject: detailsObject, renderedObject: renderedObject)
         setObject(detailsObject)
     }
@@ -34,19 +31,29 @@ final class PlaceDetailsViewController: OAPOIViewController {
         let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject
-        self.sourceObject = renderedObject
         self.provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
     }
 
     init(amenityPoi poi: OAPOI) {
         super.init(poi: poi)
-        self.sourceObject = poi
-        self.preservesAmenityPresentation = true
         self.provider = RenderedObjectAmenityProvider()
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: "OAPOIViewController", bundle: nibBundleOrNil)
+    }
+
+    private static func mergedDetailsObject(_ detailsObject: BaseDetailsObject, sourceObject: AnyObject) -> BaseDetailsObject {
+        let x = detailsObject.syntheticAmenity.x.compactMap { ($0 as? NSNumber)?.intValue }
+        let y = detailsObject.syntheticAmenity.y.compactMap { ($0 as? NSNumber)?.intValue }
+        let mergedDetails = BaseDetailsObject(lang: detailsObject.lang)
+        mergedDetails.addObject(sourceObject)
+        mergedDetails.addObject(detailsObject)
+        if !x.isEmpty, x.count == y.count {
+            mergedDetails.setX(x)
+            mergedDetails.setY(y)
+        }
+        return mergedDetails
     }
 
     override func viewDidLoad() {
@@ -68,16 +75,16 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     override func getNameStr() -> String? {
-        if preservesAmenityPresentation {
-            return super.getNameStr()
-        }
-
         let name = provider.nameOnlyString()
         
         if !name.isEmpty {
             return name
         }
-        
+
+        if renderedObject == nil {
+            return super.getNameStr()
+        }
+
         return getTypeStr()
     }
 
@@ -247,25 +254,28 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     private func resolveDetailedObjectInBackground() {
-        guard let sourceObject else { return }
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
-            if let details, let sourcePoi = sourceObject as? OAPOI {
-                details.addObject(sourcePoi)
+        let sourceObject: AnyObject
+        if let renderedObject {
+            sourceObject = renderedObject
+        } else {
+            sourceObject = poi
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            let searchedDetails = OAAmenitySearcher.sharedInstance().searchDetailedObject(sourceObject)
+            let details = searchedDetails.map {
+                Self.mergedDetailsObject($0, sourceObject: sourceObject)
             }
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 guard let self,
                       let details,
                       let tableView = self.tableView,
                       let mapPanel = OARootViewController.instance()?.mapPanel,
-                      let targetPoint = mapPanel.getCurrentTargetPoint(),
-                      (targetPoint.targetObj as AnyObject) === sourceObject
+                      mapPanel.replaceContextMenuObject(detailsObject: details, replacing: sourceObject)
                 else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
                 let amenity = details.syntheticAmenity
                 self.setup(amenity)
-                self.updateTargetPoint(with: amenity)
                 self.rebuildRows()
                 tableView.reloadData()
                 self.delegate?.refreshTargetPointHeader?()

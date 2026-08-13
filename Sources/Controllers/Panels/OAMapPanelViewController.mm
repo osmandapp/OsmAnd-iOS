@@ -1539,7 +1539,8 @@ typedef enum
 
     if (targetPoint.type != OATargetRenderedObject
         && targetPoint.type != OATargetWiki
-        && targetPoint.type != OATargetPOI)
+        && targetPoint.type != OATargetPOI
+        && targetPoint.type != OATargetBaseDetailsObject)
     {
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
@@ -1564,28 +1565,54 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
-
-    OAMapObject *obj = nil;
+    OAMapObject *mapObject = nil;
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
-        obj = targetPoint.targetObj;
-
+        mapObject = targetPoint.targetObj;
     }
-    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    else if ([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
     {
         BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
-        obj = (OAMapObject *) [baseDetails syntheticAmenity];
+        mapObject = (OAMapObject *) [baseDetails syntheticAmenity];
     }
-    if (obj != nil)
+    if (mapObject)
     {
         QVector<OsmAnd::PointI> points;
-        if (obj.x && obj.x.count > 0)
+        if (mapObject.x.count > 0)
         {
-            for (int i = 0; i < obj.x.count; i++)
-                points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
+            for (int i = 0; i < mapObject.x.count; i++)
+                points.push_back(OsmAnd::PointI(mapObject.x[i].intValue, mapObject.y[i].intValue));
         }
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
+}
+
+- (BOOL)replaceContextMenuObjectWithDetailsObject:(BaseDetailsObject *)detailsObject replacingObject:(id)object
+{
+    OATargetPoint *targetPoint = _targetMenuView.targetPoint;
+    if (targetPoint.targetObj != object)
+        return NO;
+
+    OAPOI *amenity = detailsObject.syntheticAmenity;
+    NSString *title = amenity.nameLocalized.length > 0 ? amenity.nameLocalized : amenity.name;
+    if (title.length > 0)
+        targetPoint.title = title;
+    UIImage *icon = [amenity.type icon];
+    if (icon)
+        targetPoint.icon = icon;
+    targetPoint.values = amenity.values;
+    targetPoint.localizedNames = amenity.localizedNames;
+    targetPoint.localizedContent = amenity.localizedContent;
+    targetPoint.obfId = amenity.obfId;
+    targetPoint.type = OATargetBaseDetailsObject;
+    targetPoint.sortIndex = (NSInteger) targetPoint.type;
+    targetPoint.targetObj = detailsObject;
+
+    [self applyTargetPoint:targetPoint];
+    [_targetMenuView setTargetPoint:targetPoint];
+    [_targetMenuView setSelectedObject:detailsObject];
+    [self setSelectedObject:targetPoint];
+    return YES;
 }
 
 - (void) setupNetworkGpxProgress

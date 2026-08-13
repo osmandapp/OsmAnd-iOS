@@ -166,33 +166,28 @@ static int TILE_SIZE = 256;
             
             if (cppAmenity != nullptr)
             {
-                OAPOI *parsedPoi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
-                if (parsedPoi)
+                if ([self isAmenityAlreadyCollected:cppAmenity->id.id selectedObjects:result.allObjects])
+                    continue;
+
+                NSMutableArray<NSString *> *names = [NSMutableArray new];
+                for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
                 {
-                    [result collect:parsedPoi provider:_provider];
+                    NSString *name = entry.value().toNSString();
+                    if (name)
+                        [names addObject:name];
                 }
-                else
-                {
-                    NSMutableArray<NSString *> *names = [NSMutableArray new];
-                    for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
-                    {
-                        NSString *name = entry.value().toNSString();
-                        if (name)
-                            [names addObject:name];
-                    }
 
-                    NSString *nativeName = cppAmenity->nativeName.toNSString();
-                    if (nativeName)
-                        [names addObject:nativeName];
+                NSString *nativeName = cppAmenity->nativeName.toNSString();
+                if (nativeName)
+                    [names addObject:nativeName];
 
-                    OAPOI *requestAmenity = [[OAPOI alloc] init];
-                    requestAmenity.obfId = cppAmenity->id.id;
-                    [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
-                    [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
+                OAPOI *requestAmenity = [[OAPOI alloc] init];
+                requestAmenity.obfId = cppAmenity->id.id;
+                [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
+                [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
 
-                    OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
-                    detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
-                }
+                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
+                detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
             }
             else
             {
@@ -561,6 +556,29 @@ static int TILE_SIZE = 256;
         }
     }
     return YES;
+}
+
+- (BOOL)isAmenityAlreadyCollected:(uint64_t)obfId selectedObjects:(NSArray<SelectedMapObject *> *)selectedObjects
+{
+    if (obfId == 0 || obfId == [OAMapObject getInvalidObfId])
+        return NO;
+
+    for (SelectedMapObject *selectedObject in selectedObjects)
+    {
+        OAPOI *amenity = nil;
+        if ([selectedObject.object isKindOfClass:OAPOI.class])
+        {
+            amenity = selectedObject.object;
+        }
+        else if ([selectedObject.object isKindOfClass:BaseDetailsObject.class])
+        {
+            BaseDetailsObject *detailsObject = selectedObject.object;
+            amenity = detailsObject.syntheticAmenity;
+        }
+        if (amenity.obfId == obfId)
+            return YES;
+    }
+    return NO;
 }
 
 - (BOOL)isTransportStop:(NSArray<SelectedMapObject *> *)selectedObjects detail:(BaseDetailsObject *)detail

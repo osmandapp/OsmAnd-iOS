@@ -162,15 +162,8 @@
 
         case OATargetBaseDetailsObject:
         {
-            BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
-            if (detailsObject)
-            {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:nil];
-            }
-            else
-            {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj renderedObject:nil];
-            }
+            BaseDetailsObject *detailsObject = targetPoint.targetObj;
+            controller = [[PlaceDetailsViewController alloc] initWithPoi:detailsObject.syntheticAmenity detailsObject:detailsObject renderedObject:nil];
             break;
         }
 
@@ -178,7 +171,7 @@
         {
             if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:targetPoint.targetObj];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:selectedObject renderedObject:nil];
             }
             else
             {

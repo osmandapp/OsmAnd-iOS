@@ -2947,12 +2947,12 @@
 "shared_string_cancelled" = "Otkazano";
 "shared_string_delete_data" = "Obriši podatke";
 "toggle_wind" = "Prikaži/sakrij - sloj vetra";
-"report_an_issues" = "Prijavi grešku";
+"report_an_issues" = "Prijavi problem";
 "open_issue_on_gitHub" = "Otvori grešku na GitHubu";
 "about_osmAnd" = "O aplikaciji";
 "osmAnd_team" = "OsmAnd Tim";
 "testFlight" = "TestLet";
-"ask_question_propose_features" = "Postavi pitanje, predloži nove mogućnosti";
+"ask_question_propose_features" = "Postavljajte pitanja, predlažite karakteristike";
 "detailed_log_file" = "Fajl detaljnog dnevnika";
 "download_install_beta_version" = "Preuzmite i instalirajte beta verziju OsmAnda";
 "animate_my_location_descr" = "Glatka tranzicija lokacije na mapi tokom navigacije";

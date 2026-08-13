@@ -6,10 +6,13 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-enum ScreenLayoutMode: Int, CaseIterable {
+@objc
+enum ScreenLayoutMode: Int32, CaseIterable {
     case portrait
     case landscape
 
+    static let defaultMode: ScreenLayoutMode = .portrait
+    
     var title: String {
         switch self {
         case .portrait:
@@ -22,9 +25,4 @@ enum ScreenLayoutMode: Int, CaseIterable {
     var isPortrait: Bool {
         self == .portrait
     }
-}
-
-enum ScreenElementsMode {
-    case shared
-    case independent
 }

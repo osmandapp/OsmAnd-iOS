@@ -18,6 +18,7 @@ class WidgetsSettingsHelper: NSObject {
     private var appMode: OAApplicationMode
     private var settings: OAAppSettings
     private var mapButtonsHelper: OAMapButtonsHelper
+    private var layoutMode: ScreenLayoutMode
 
     init(appMode: OAApplicationMode) {
         self.appMode = appMode
@@ -25,10 +26,15 @@ class WidgetsSettingsHelper: NSObject {
         widgetsFactory = MapWidgetsFactory()
         settings = OAAppSettings.sharedManager()
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
+        layoutMode = .portrait // todo
     }
 
     func setAppMode(_ appMode: OAApplicationMode) {
         self.appMode = appMode
+    }
+    
+    func setLayoutMode(_ layoutMode: ScreenLayoutMode) {
+        self.layoutMode = layoutMode
     }
 
     func resetConfigureScreenSettings() {
@@ -43,6 +49,10 @@ class WidgetsSettingsHelper: NSObject {
             panel.getOrderPreference().resetMode(toDefault: appMode)
         }
 
+        ScreenElementsMode.allCases.forEach {
+            settings.getPanelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
+        }
+        settings.useSeparateLayouts.resetMode(toDefault: appMode)
         settings.transparentMapTheme.resetMode(toDefault: appMode)
         settings.showDistanceRuler.resetMode(toDefault: appMode)
         settings.distanceByTapTextSize.resetMode(toDefault: appMode)
@@ -65,6 +75,10 @@ class WidgetsSettingsHelper: NSObject {
         for panel in WidgetsPanel.values {
             copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
         }
+        ScreenElementsMode.allCases.forEach {
+            copyPrefFromAppMode(pref: settings.getPanelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
+        }
+        copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)

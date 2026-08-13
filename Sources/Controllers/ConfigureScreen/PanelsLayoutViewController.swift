@@ -1,35 +1,41 @@
 //
-//  ScreenElementsViewController.swift
+//  PanelsLayoutViewController.swift
 //  OsmAnd Maps
 //
-//  Created by Vladyslav Lysenko on 13.07.2026.
+//  Created by Vladyslav Lysenko on 12.08.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
 import UIKit
 
-final class ScreenElementsViewController: OABaseNavbarViewController {
+final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
     weak var delegate: OASettingsDataDelegate?
 
     private let previewKey = "previewKey"
     private let modeKey = "modeKey"
     private let tableTopInset: CGFloat = 16
-    private let previewHeight: CGFloat = 180
+    private let previewHeight: CGFloat = 240
+    private let previewVerticalInset: CGFloat = 16
     private let previewCornerRadius: CGFloat = 26
     private let selectedIconSize: CGFloat = 30
     private let separatorLeftOffset: CGFloat = 8
     private let separatorRightInset: CGFloat = 16
-    private let settings: OAAppSettings
+    private let screenLayoutMode: ScreenLayoutMode
     private let appMode: OAApplicationMode
-    private let initialMode: ScreenElementsMode
+    private let preference: OACommonPanelsLayoutMode
+    private let initialMode: PanelsLayoutMode
+    
+    private var selectedMode: PanelsLayoutMode
 
-    private var selectedMode: ScreenElementsMode
-
-    init(appMode: OAApplicationMode) {
+    init(screenLayoutMode: ScreenLayoutMode,
+         screenElementsMode: ScreenElementsMode,
+         appMode: OAApplicationMode) {
         let settings = OAAppSettings.sharedManager()
-        let mode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
-        self.settings = settings
+        let preference = settings.getPanelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
+        let mode = PanelsLayoutMode(rawValue: preference.get(appMode)) ?? .defaultMode
+        self.screenLayoutMode = screenLayoutMode
         self.appMode = appMode
+        self.preference = preference
         initialMode = mode
         selectedMode = mode
         super.init()
@@ -47,7 +53,7 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
     }
 
     override func getTitle() -> String {
-        localizedString("screen_elements")
+        localizedString("panels_layout")
     }
 
     override func systemLeftBarButtonItem() -> UIBarButtonItem? {
@@ -65,21 +71,21 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
     }
 
     override func registerCells() {
-        addCell(DoubleImageHeaderCell.reuseIdentifier)
+        addCell(ImageHeaderCell.reuseIdentifier)
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
 
     override func generateData() {
         tableData.clearAllData()
-
         let previewSection = tableData.createNewSection()
-        previewSection.footerText = localizedString("screen_elements_mode_descr")
+        previewSection.footerText = selectedMode.description
         let previewRow = previewSection.createNewRow()
         previewRow.key = previewKey
-        previewRow.cellType = DoubleImageHeaderCell.reuseIdentifier
+        previewRow.cellType = ImageHeaderCell.reuseIdentifier
+        previewRow.iconName = selectedMode.imageName(for: screenLayoutMode)
 
         let modesSection = tableData.createNewSection()
-        for mode in ScreenElementsMode.allCases {
+        for mode in PanelsLayoutMode.allCases {
             let row = modesSection.createNewRow()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.title = mode.title
@@ -89,20 +95,20 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
 
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
-        if item.cellType == DoubleImageHeaderCell.reuseIdentifier {
-            let isShared = selectedMode == .shared
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: DoubleImageHeaderCell.reuseIdentifier, for: indexPath) as? DoubleImageHeaderCell else {
+        if item.cellType == ImageHeaderCell.reuseIdentifier {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageHeaderCell.reuseIdentifier, for: indexPath) as? ImageHeaderCell else {
                 return UITableViewCell()
             }
-            cell.backgroundConfiguration = .clear()
-            cell.leftBackgroundImageView.image = .imgPanelsLayoutPortraitWide
-            cell.rightBackgroundImageView.image = .imgPanelsLayoutLandscapeWide
-            cell.secondBackgroundImageView.image = .imgPanelsLayoutLandscapeCompact2
-            cell.configure(isSingleView: isShared, cornerRadius: previewCornerRadius)
+            cell.backgroundImageView.image = UIImage(named: item.iconName ?? "")
+            cell.backgroundImageView.backgroundColor = .groupBg
+            cell.backgroundImageView.contentMode = .center
+            cell.backgroundImageView.layer.cornerRadius = previewCornerRadius
+            cell.backgroundImageView.clipsToBounds = true
+            cell.configure(verticalSpace: previewVerticalInset, horizontalSpace: .zero)
             return cell
         }
-
-        guard let mode = item.obj(forKey: modeKey) as? ScreenElementsMode,
+        
+        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode,
               let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else {
             return UITableViewCell()
         }
@@ -127,12 +133,13 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
 
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        guard let mode = item.obj(forKey: modeKey) as? ScreenElementsMode,
+        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode,
               mode != selectedMode else {
             return
         }
         selectedMode = mode
         updateDoneButtonState()
+        generateData()
         tableView.reloadData()
     }
 
@@ -140,7 +147,7 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         return item.key == previewKey ? previewHeight : UITableView.automaticDimension
     }
-
+    
     private func updateDoneButtonState() {
         navigationItem.rightBarButtonItem?.isEnabled = selectedMode != initialMode
     }
@@ -150,11 +157,8 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
     }
 
     @objc private func onDonePressed() {
-        if selectedMode != initialMode {
-            settings.useSeparateLayouts.set(selectedMode.usesSeparateLayouts, mode: appMode)
-            OARootViewController.instance().mapPanel.recreateAllControls()
-            delegate?.onSettingsChanged()
-        }
+        preference.set(selectedMode.rawValue, mode: appMode)
+        delegate?.onSettingsChanged()
         dismiss(animated: true)
     }
 }

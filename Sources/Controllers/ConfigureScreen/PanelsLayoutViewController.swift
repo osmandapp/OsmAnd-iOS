@@ -11,8 +11,8 @@ import UIKit
 final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
     weak var delegate: OASettingsDataDelegate?
 
-    private let previewKey = "preview"
-    private let modeKey = "mode"
+    private let previewKey = "previewKey"
+    private let modeKey = "modeKey"
     private let tableTopInset: CGFloat = 16
     private let previewHeight: CGFloat = 240
     private let previewVerticalInset: CGFloat = 16

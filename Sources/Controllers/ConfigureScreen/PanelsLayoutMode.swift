@@ -10,6 +10,8 @@
 enum PanelsLayoutMode: Int32, CaseIterable {
     case wide
     case compact
+    
+    static let defaultMode: PanelsLayoutMode = .wide
 
     var title: String {
         switch self {
@@ -60,9 +62,5 @@ enum PanelsLayoutMode: Int32, CaseIterable {
         case (.landscape, .compact):
             "img_panels_layout_landscape_compact"
         }
-    }
-
-    static var defaultMode: PanelsLayoutMode {
-        .wide
     }
 }

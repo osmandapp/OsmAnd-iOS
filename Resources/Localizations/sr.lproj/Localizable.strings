@@ -2611,7 +2611,7 @@
 "help_article_map_legend_ski_map_name" = "Стил Скијашке мапе";
 "help_article_map_interact_with_map_name" = "Међудејство са мапом";
 "help_article_map_map_context_menu_name" = "Приручни мени мапе";
-"ask_question_propose_features" = "Упитајте, предложите нове могућности";
+"ask_question_propose_features" = "Постављајте питања, предлажите карактеристике";
 "second_marker_widget_desc" = "Можете подесити справицу да приказује растојање или процењено преостало време доласка на другој ознаци карте.";
 "coordinates_widget_current_location_desc" = "Приказује земљописне координате тренутног земаљског положаја";
 "true_bearing_widget_desc" = "Угао између правог Севера и циљане тачке гледано са Вашег положаја.";
@@ -2634,7 +2634,7 @@
 "troubleshooting" = "Решавање проблема";
 "gitHub_discussion" = "Разговор на Гитхубу";
 "telegram_chats" = "Ћаскања Телеграмом";
-"report_an_issues" = "Пријави грешку";
+"report_an_issues" = "Пријави проблем";
 "about_osmAnd" = "О ОсмАнду";
 "osmAnd_team" = "OsmAnd Тим";
 "testFlight" = "ТестЛет";

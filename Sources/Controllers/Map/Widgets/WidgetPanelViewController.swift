@@ -232,9 +232,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         
         // Set up constraints
         pageContainerView.translatesAutoresizingMaskIntoConstraints = false
+        let pageContainerViewTrailingConstraint = pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth)
+        pageContainerViewTrailingConstraint.priority = isHorizontal ? .required : UILayoutPriority(999)
         NSLayoutConstraint.activate([
             pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
-            pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth),
+            pageContainerViewTrailingConstraint,
             pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
             pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
         ])
@@ -269,10 +271,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         guard UIApplication.shared.mainScene != nil else { return }
         let contentSize = calculateContentSize()
         let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
+        let sidePanelWidth = hasWidgets() ? contentSize.width + Self.borderWidth * 2 : 0
         if self == mapHudViewController?.mapInfoController?.leftPanelController {
-            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width
+            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = sidePanelWidth
         } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
-            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width
+            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = sidePanelWidth
         } else if self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
             mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width
             mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height

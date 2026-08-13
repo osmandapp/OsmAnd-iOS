@@ -180,6 +180,19 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private func showToastForComplexWidget(_ widgetTitle: String) {
         OAUtilities.showToast("", details: String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), duration: 4, in: view)
     }
+
+    private func copyFromLayoutAction(_ screenLayoutMode: ScreenLayoutMode) -> UIAction {
+        let sourceScreenLayoutMode: ScreenLayoutMode = screenLayoutMode.isPortrait ? .landscape : .portrait
+        let titleKey = sourceScreenLayoutMode.isPortrait ? "copy_from_portrait_layout" : "copy_from_landscape_layout"
+        let icon: UIImage = sourceScreenLayoutMode.isPortrait ? .icCustomCopyFromPortrait : .icCustomCopyFromLandscape
+        return UIAction(title: localizedString(titleKey), image: icon) { [weak self] _ in
+            self?.copyWidgets(from: sourceScreenLayoutMode)
+        }
+    }
+
+    private func copyWidgets(from screenLayoutMode: ScreenLayoutMode) {
+        // TODO: Copy widgets from the selected screen layout.
+    }
     
     func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
         let lastSection = tableData.sectionCount() - 1
@@ -644,14 +657,15 @@ extension WidgetsListViewController {
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        var menuElements: [UIMenuElement]?
+        var menu: UIMenu?
         var resetAlert: UIAlertController?
         if !editMode {
+            let useSeparateLayouts = OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
             resetAlert = UIAlertController(title: widgetPanel.title,
                                            message: localizedString("reset_all_settings_desc"),
                                            preferredStyle: .actionSheet)
             let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
-                                                 image: UIImage(systemName: "gobackward")) { [weak self] _ in
+                                                 image: .icCustomReset) { [weak self] _ in
                 let actionSheet = UIAlertController(title: self?.widgetPanel.title,
                                                     message: localizedString("reset_all_settings_desc"),
                                                     preferredStyle: .actionSheet)
@@ -668,7 +682,7 @@ extension WidgetsListViewController {
                 self?.present(actionSheet, animated: true)
             }
             let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
-                                                image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                                                image: .icCustomCopy) { [weak self] _ in
                 guard let self else { return }
                 
                 let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: self.selectedAppMode)
@@ -676,14 +690,15 @@ extension WidgetsListViewController {
                 bottomSheet.present(in: self)
             }
             let helpAction: UIAction = UIAction(title: localizedString("shared_string_help"),
-                                                image: UIImage(systemName: "questionmark.circle")) { [weak self] _ in
+                                                image: .icNavbarHelp) { [weak self] _ in
                 guard let self else { return }
                 openSafariWithURL(kDocsWidgetConfigureScreen.localizedURLIfAvailable())
             }
-            let helpMenuAction: UIMenu = UIMenu(options: .displayInline, children: [helpAction])
-            menuElements = [resetAction, copyAction, helpMenuAction]
+            let copyActions = useSeparateLayouts
+                ? [copyFromLayoutAction(screenLayoutMode), copyAction]
+                : [copyAction]
+            menu = UIMenu.composedMenu(from: [copyActions, [resetAction], [helpAction]])
         }
-        let menu: UIMenu? = editMode ? nil : UIMenu(children: menuElements ?? [])
         let button = createRightNavbarButton(editMode ? localizedString("shared_string_done") : nil,
                                              iconName: editMode ? nil : "ic_navbar_overflow_menu_stroke",
                                              action: #selector(onRightNavbarButtonPressed),

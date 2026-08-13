@@ -1622,6 +1622,8 @@
 "screen_elements_mode_descr" = "Choose whether Portrait and Landscape share the same screen elements or have independent sets.";
 "screen_elements_shared" = "Shared";
 "screen_elements_independent" = "Independent";
+"copy_from_portrait_layout" = "Copy from Portrait layout";
+"copy_from_landscape_layout" = "Copy from Landscape layout";
 "panels_layout" = "Panels layout";
 "panels_layout_wide" = "Wide";
 "panels_layout_compact" = "Compact";

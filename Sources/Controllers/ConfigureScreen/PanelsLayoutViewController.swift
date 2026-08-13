@@ -139,7 +139,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = tableData.item(for: indexPath)
         return item.key == previewKey
-            ? previewHeight + 2 * previewVerticalInset
+            ? previewHeight
             : UITableView.automaticDimension
     }
 

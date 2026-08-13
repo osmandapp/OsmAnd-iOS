@@ -241,7 +241,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
         ])
         if !isHorizontal {
-            pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor).isActive = true
+            let pageContainerViewBottomConstraint = pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor)
+            pageContainerViewBottomConstraint.priority = UILayoutPriority(999)
+            pageContainerViewBottomConstraint.isActive = true
             pageContainerView.widthAnchor.constraint(equalToConstant: 0).isActive = true
         }
         

@@ -31,11 +31,11 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import "OAOperationLog.h"
 #import "Localization.h"
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 #include <OsmAndCore/CommonTypes.h>
@@ -304,10 +304,10 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         OAPOI *amenity = [self findByName:amenities names:names searchLatLon:latLon];
         if (amenity)
         {
-            filtered = [[self filterByOsmIdOrWikidata:amenities
-                                                osmId:[amenity getOsmId]
-                                                point:[amenity getLocation]
-                                             wikidata:[amenity getWikidata]] mutableCopy];
+                filtered = [[self filterByOsmIdOrWikidata:amenities
+                                                    osmId:[amenity getOsmId]
+                                                    point:[amenity getLocation]
+                                                 wikidata:[amenity getWikidata]] mutableCopy];
         }
     }
 
@@ -331,22 +331,19 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     NSInteger radius = [request.type isEqualToString:kEntityTypeRelation]
         ? AMENITY_SEARCH_RADIUS_FOR_RELATION
         : AMENITY_SEARCH_RADIUS;
-    NSUInteger repositoryCount = [self getAmenityRepositories:YES].count;
 
-    OAOperationLog *lookupLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] Nearby POI scan" debug:YES];
-    [lookupLog startOperation:[NSString stringWithFormat:@"radius=%ld repositories=%lu",
-                               (long)radius,
-                               (unsigned long)repositoryCount]];
+    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan BEGIN radius=%ld", (long)radius);
+    CFTimeInterval searchStartTime = CACurrentMediaTime();
     NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
                                                      searchLatLon:latLon
                                                            radius:radius
                                                     includeTravel:YES];
-    [lookupLog finishOperation:[NSString stringWithFormat:@"candidates=%lu", (unsigned long)amenities.count]];
+    CFTimeInterval searchDuration = (CACurrentMediaTime() - searchStartTime) * 1000.0;
+    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan END (%.3f ms) candidates=%lu",
+          searchDuration,
+          (unsigned long)amenities.count);
 
-    OAOperationLog *matchingLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] Candidate matching"];
-    [matchingLog startOperation:[NSString stringWithFormat:@"candidates=%lu", (unsigned long)amenities.count]];
     NSMutableArray<OAPOI *> *filtered = [self filterAmenities:amenities request:request];
-    [matchingLog finishOperation:[NSString stringWithFormat:@"matched=%lu", (unsigned long)filtered.count]];
 
     if (!NSArrayIsEmpty(filtered))
     {
@@ -364,11 +361,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                 return m1 ? NSOrderedAscending : NSOrderedDescending;
             }];
         }
-        OAOperationLog *constructionLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] Details construction"];
-        [constructionLog startOperation:[NSString stringWithFormat:@"objects=%lu", (unsigned long)filtered.count]];
-        BaseDetailsObject *detailsObject = [[BaseDetailsObject alloc] initWithMapObjects:filtered lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
-        [constructionLog finishOperation];
-        return detailsObject;
+        return [[BaseDetailsObject alloc] initWithMapObjects:filtered lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
     }
 
     return nil;
@@ -376,14 +369,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (void) completeGeometry:(BaseDetailsObject *)detailsObject object:(id)object
 {
-    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] Geometry"];
-    [operationLog startOperation:[NSString stringWithFormat:@"object=%@",
-                                  object ? NSStringFromClass([object class]) : @"none"]];
     if (!detailsObject)
-    {
-        [operationLog finishOperation:@"result=skipped reason=no_details"];
         return;
-    }
 
     NSMutableArray<NSNumber *> *xx;
     NSMutableArray<NSNumber *> *yy;
@@ -411,8 +398,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     {
         [detailsObject setX:xx];
         [detailsObject setY:yy];
-        [operationLog finishOperation:[NSString stringWithFormat:@"source=embedded points=%ld",
-                                       (long)[detailsObject getPointsLength]]];
     }
     else
     {
@@ -422,9 +407,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
             if ([self copyCoordinates:detailsObject binaryObject:dataObject])
                 break;
         }
-        [operationLog finishOperation:[NSString stringWithFormat:@"source=binary objects=%d points=%ld",
-                                       (int)dataObjects.size(),
-                                       (long)[detailsObject getPointsLength]]];
     }
 }
 
@@ -496,16 +478,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         if (limit != -1 && list.size() >= limit)
             break;
 
-        NSString *repositoryName = [res->filePath.toNSString() lastPathComponent];
-        OAOperationLog *repositoryLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] Geometry repository"];
-        [repositoryLog startOperation];
         const auto& obfsDataInterface = obfsCollection->obtainDataInterface(res);
         if (!obfsDataInterface)
-        {
-            [repositoryLog finishOperation:[NSString stringWithFormat:@"repository=%@ result=no_interface",
-                                            repositoryName]];
             continue;
-        }
 
         QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> loadedBinaryMapObjects;
         QList<std::shared_ptr<const OsmAnd::Road>> loadedRoads;
@@ -531,10 +506,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                     break;
             }
         }
-        [repositoryLog finishOperation:[NSString stringWithFormat:@"repository=%@ loaded=%d matched=%d",
-                                        repositoryName,
-                                        (int)loadedBinaryMapObjects.size(),
-                                        (int)list.size()]];
     }
 
     return list;
@@ -1666,8 +1637,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
             }
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
-            OAOperationLog *repositoryLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu][AmenitySearch] POI repository"];
-            [repositoryLog startOperation];
 
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
@@ -1699,9 +1668,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                         }
                                   },
                                   ctrl);
-            [repositoryLog finishOperation:[NSString stringWithFormat:@"repository=%@ found=%lu",
-                                            [repoName lastPathComponent],
-                                            (unsigned long)foundAmenities.count]];
 
             NSMutableSet<NSNumber *> *localIds = [NSMutableSet set];
             for (OAPOI *amenity in foundAmenities)

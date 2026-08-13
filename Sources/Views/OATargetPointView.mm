@@ -42,9 +42,9 @@
 #import "OAGPXWptViewController.h"
 #import "OAButton.h"
 #import "OAPluginsHelper.h"
-#import "OAOperationLog.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kMargin = 16.0;
 static const CGFloat kButtonsViewHeight = 44.0;
@@ -867,8 +867,9 @@ static const NSInteger _buttonsCount = 4;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-    OAOperationLog *animationLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Show animation" debug:YES];
-    [animationLog startOperation:animated ? @"animated=yes" : @"animated=no"];
+
+    NSLog(@"[ContextMenu] Show animation BEGIN animated=%@", animated ? @"yes" : @"no");
+    CFTimeInterval animationStartTime = CACurrentMediaTime();
     if (animated)
     {
         CGRect frame = self.frame;
@@ -889,19 +890,20 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         }
         
-        __weak __typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.2 animations:^{
             
-            weakSelf.frame = frame;
+            self.frame = frame;
             
         } completion:^(BOOL finished) {
-            [animationLog finishOperation:finished ? @"result=finished" : @"result=interrupted"];
+            CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=%@",
+                  animationDuration,
+                  finished ? @"finished" : @"interrupted");
             if (onComplete)
                 onComplete();
-
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf && !strongSelf->_showFullScreen && strongSelf.customController && [strongSelf.customController supportMapInteraction])
-                [strongSelf.menuViewDelegate targetViewEnableMapInteraction];
+            
+            if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
+                [self.menuViewDelegate targetViewEnableMapInteraction];
         }];
     }
     else
@@ -913,7 +915,9 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         
         self.frame = frame;
-        [animationLog finishOperation:@"result=finished"];
+        CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=finished", animationDuration);
+
         if (onComplete)
             onComplete();
 
@@ -2792,8 +2796,8 @@ static const NSInteger _buttonsCount = 4;
         return;
 
     _addressLookupTarget = targetPoint;
-    OAOperationLog *addressLog = [[OAOperationLog alloc] initWithOperationName:@"[ContextMenu] Address resolution" debug:YES];
-    [addressLog startOperation];
+    NSLog(@"[ContextMenu] Address resolution BEGIN");
+    CFTimeInterval addressStartTime = CACurrentMediaTime();
 
     __weak __typeof(self) weakSelf = self;
 
@@ -2809,7 +2813,8 @@ static const NSInteger _buttonsCount = 4;
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf)
             {
-                [addressLog finishOperation:@"result=discarded reason=view_released"];
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=view_released", addressDuration);
                 return;
             }
 
@@ -2817,11 +2822,13 @@ static const NSInteger _buttonsCount = 4;
             if (strongSelf.targetPoint == targetPoint)
             {
                 [strongSelf updateTargetPointAddress];
-                [addressLog finishOperation:@"result=applied"];
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=applied", addressDuration);
             }
             else
             {
-                [addressLog finishOperation:@"result=discarded reason=target_changed"];
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=target_changed", addressDuration);
             }
 
             [strongSelf fetchAddressIfNeededAsync];

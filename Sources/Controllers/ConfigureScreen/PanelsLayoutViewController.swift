@@ -23,6 +23,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
     private let screenLayoutMode: ScreenLayoutMode
     private let appMode: OAApplicationMode
     private let preference: OACommonPanelsLayoutMode
+    private let initialMode: PanelsLayoutMode
     
     private var selectedMode: PanelsLayoutMode
 
@@ -35,6 +36,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
         self.screenLayoutMode = screenLayoutMode
         self.appMode = appMode
         self.preference = preference
+        initialMode = mode
         selectedMode = mode
         super.init()
     }
@@ -59,7 +61,9 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
     }
 
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
-        [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDonePressed))]
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDonePressed))
+        doneButton.isEnabled = selectedMode != initialMode
+        return [doneButton]
     }
 
     override func hideFirstHeader() -> Bool {
@@ -89,12 +93,12 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
         }
     }
 
-    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
         if item.cellType == ImageHeaderCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ImageHeaderCell.reuseIdentifier,
-                                                     for: indexPath) as! ImageHeaderCell
-            cell.selectionStyle = .none
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageHeaderCell.reuseIdentifier, for: indexPath) as? ImageHeaderCell else {
+                return UITableViewCell()
+            }
             cell.backgroundImageView.image = UIImage(named: item.iconName ?? "")
             cell.backgroundImageView.backgroundColor = .groupBg
             cell.backgroundImageView.contentMode = .center
@@ -103,16 +107,16 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
             cell.configure(verticalSpace: previewVerticalInset, horizontalSpace: .zero)
             return cell
         }
-        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode else {
+        
+        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode,
+              let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else {
             return UITableViewCell()
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier,
-                                                 for: indexPath) as! OASimpleTableViewCell
         let isSelected = mode == selectedMode
         cell.selectionStyle = .default
         cell.descriptionVisibility(false)
         cell.leftIconVisibility(true)
-        cell.leftIconView.image = isSelected ? UIImage.templateImageNamed("ic_checkmark_default") : nil
+        cell.leftIconView.image = isSelected ? .icCheckmarkDefault : nil
         cell.leftIconView.tintColor = .iconColorActive
         cell.setLeftIconSize(selectedIconSize)
         cell.titleLabel.text = item.title
@@ -129,18 +133,22 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
 
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode,
-              mode != selectedMode else { return }
+        guard let mode = item.obj(forKey: modeKey) as? PanelsLayoutMode, mode != selectedMode else {
+            return
+        }
         selectedMode = mode
+        updateDoneButtonState()
         generateData()
         tableView.reloadData()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = tableData.item(for: indexPath)
-        return item.key == previewKey
-            ? previewHeight
-            : UITableView.automaticDimension
+        return item.key == previewKey ? previewHeight : UITableView.automaticDimension
+    }
+    
+    private func updateDoneButtonState() {
+        navigationItem.rightBarButtonItem?.isEnabled = selectedMode != initialMode
     }
 
     @objc private func onClosePressed() {

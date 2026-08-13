@@ -1619,6 +1619,9 @@
 "screen_elements" = "Screen elements";
 "screen_elements_descr" = "Landscape uses the same screen elements as Portrait. Changes in one orientation apply to both.";
 "switch_to_independent" = "Switch to Independent";
+"screen_elements_mode_descr" = "Choose whether Portrait and Landscape share the same screen elements or have independent sets.";
+"screen_elements_shared" = "Shared";
+"screen_elements_independent" = "Independent";
 "panels_layout" = "Panels layout";
 "panels_layout_wide" = "Wide";
 "panels_layout_compact" = "Compact";

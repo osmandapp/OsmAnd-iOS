@@ -1236,6 +1236,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *showNearbyPoi;
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
+@property (nonatomic) OACommonBoolean *useSeparateLayouts;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 @property (nonatomic) OACommonBoolean *showElevationProfileWidget;

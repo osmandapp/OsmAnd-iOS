@@ -492,6 +492,7 @@ static NSString * const singleLandscapePanelsLayoutModeKey = @"single_landscape_
 static NSString * const singlePortraitPanelsLayoutModeKey = @"single_portrait_panels_layout_mode";
 static NSString * const separateLandscapePanelsLayoutModeKey = @"separate_landscape_panels_layout_mode";
 static NSString * const separatePortraitPanelsLayoutModeKey = @"separate_portrait_panels_layout_mode";
+static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 @interface OAMetricsConstant()
 
@@ -6267,6 +6268,9 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
         [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
+
+        _useSeparateLayouts = [OACommonBoolean withKey:useSeparateLayoutsKey defValue:NO];
+        [_profilePreferences setObject:_useSeparateLayouts forKey:useSeparateLayoutsKey];
 
         _singleLandscapePanelsLayoutMode = [OACommonPanelsLayoutMode withKey:singleLandscapePanelsLayoutModeKey
                                                                           defValue:PanelsLayoutModeWide];

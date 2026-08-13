@@ -25,12 +25,13 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private let selectedKey = "selected"
     private let screenElementsKey = "screen_elements"
     private let separatorHorizontalInset: CGFloat = 16
+    private let screenElementsDetentHeightRatio: CGFloat = 0.8
 
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     private var mapButtonsHelper: OAMapButtonsHelper!
-    private var screenLayoutMode: ScreenLayoutMode = .portrait
-    private var screenElementsMode: ScreenElementsMode = .shared // todo
+    private var screenLayoutMode: ScreenLayoutMode = .defaultMode
+    private var screenElementsMode: ScreenElementsMode = .defaultMode
 
     private var isSharedLandscapeLayout: Bool {
         screenLayoutMode == .landscape && screenElementsMode == .shared
@@ -42,6 +43,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
+        updateScreenElementsMode()
     }
 
     override func registerObservers() {
@@ -254,6 +256,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         settings.setApplicationModePref(appMode)
         self.appMode = appMode
+        updateScreenElementsMode()
         updateUIAnimated(nil)
     }
     
@@ -309,18 +312,20 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     }
 
     private func applyConfigureScreenSettings() {
+        updateScreenElementsMode()
         OARootViewController.instance().mapPanel.recreateAllControls()
         reloadDataWith(animated: true, completion: nil)
     }
 
+    private func updateScreenElementsMode() {
+        screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
+    }
+
     private func showScreenElements() {
-        let screenElementsViewController = ScreenElementsViewController()
+        let screenElementsViewController = ScreenElementsViewController(appMode: appMode)
+        screenElementsViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: screenElementsViewController)
         navigationController.modalPresentationStyle = .pageSheet
-        if let sheet = navigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.preferredCornerRadius = 20
-        }
         present(navigationController, animated: true)
     }
 
@@ -493,6 +498,7 @@ extension ConfigureScreenViewController {
 
 extension ConfigureScreenViewController: OASettingsDataDelegate {
     func onSettingsChanged() {
+        updateScreenElementsMode()
         reloadDataWith(animated: true, completion: nil)
     }
     

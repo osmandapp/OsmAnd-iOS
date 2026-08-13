@@ -11,6 +11,8 @@ enum ScreenLayoutMode: Int32, CaseIterable {
     case portrait
     case landscape
 
+    static let defaultMode: ScreenLayoutMode = .portrait
+    
     var title: String {
         switch self {
         case .portrait:
@@ -23,14 +25,4 @@ enum ScreenLayoutMode: Int32, CaseIterable {
     var isPortrait: Bool {
         self == .portrait
     }
-    
-    static var defaultMode: ScreenLayoutMode {
-        .portrait
-    }
-}
-
-@objc
-enum ScreenElementsMode: Int32, CaseIterable {
-    case shared
-    case independent
 }

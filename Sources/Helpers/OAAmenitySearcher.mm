@@ -40,6 +40,7 @@
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
+#include <OsmAndCore/Data/ObfInfo.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/Road.h>
@@ -745,17 +746,6 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     result.append(baseMaps);
     result.append(travelMaps);
     return result;
-}
-
-+ (NSArray<NSString *> *) getAmenityRepositoriesNames:(BOOL)includeTravel
-{
-    NSMutableArray<NSString *> *filePaths = [NSMutableArray new];
-    const auto files = [self getAmenityRepositories:includeTravel];
-    for (const auto file : files)
-    {
-        [filePaths addObject:file->filePath.toNSString()];
-    }
-    return filePaths;
 }
 
 + (BOOL) isWorldMap:(NSString *)obfFilePath
@@ -1612,10 +1602,11 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
-    NSArray<NSString *> *repos = [self getAmenityRepositoriesNames:includeTravel];
+    const auto repositories = [self getAmenityRepositories:includeTravel];
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     
-    if (bbox31.width() != 0 && bbox31.height() != 0)
+    const BOOL shouldFilterRepositories = bbox31.width() != 0 && bbox31.height() != 0;
+    if (shouldFilterRepositories)
     {
         searchCriteria->bbox31 = bbox31;
     }
@@ -1629,16 +1620,18 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     if (!isEmpty || additionalFilter)
     {
         NSMutableSet<NSNumber *> *allIds = [NSMutableSet set]; // live updates filter
-        for (NSString *repoName in repos)
+        for (const auto& repository : repositories)
         {
             if (matcher && matcher.isCancelled)
             {
                 break;
             }
+            if (shouldFilterRepositories && repository->obfInfo && !repository->obfInfo->containsPOIFor(bbox31))
+                continue;
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
-            search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
+            search->performTravelGuidesSearch(repository->filePath, *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto am = OAGetAmenityFromSearchResult(resultEntry);

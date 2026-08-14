@@ -62,9 +62,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private var suggestedFileName: String {
         switch dataProvider.mode {
-        case .newRoute: OAUtilities.generateCurrentDateFilename()
+        case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())
         case .editTrack(let fileName): fileName
         }
+    }
+
+    private var suggestedFilePath: String? {
+        guard case .editTrack(let fileName) = dataProvider.mode,
+              let gpxFileName = (fileName as NSString).appendingPathExtension("gpx") else { return nil }
+        guard let folder = dataProvider.editTrackFolder, !folder.isEmpty else { return gpxFileName }
+        return (folder as NSString).appendingPathComponent(gpxFileName)
     }
 
     private var currentScreenHeight: CGFloat {
@@ -892,23 +899,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func handleSave() {
         guard ensurePointsForSaving() else { return }
+        let fileName: String
+        let folder: String?
         switch dataProvider.mode {
         case .newRoute:
-            presentSaveDialog(duplicate: false)
-        case .editTrack(let fileName):
-            dataProvider.saveAs(fileName: fileName, folder: dataProvider.editTrackFolder, showOnMap: true) { [weak self] success, _ in
-                guard let self else { return }
-                if success {
-                    let message = String(format: localizedString("gpx_saved_successfully"), fileName)
-                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
-                    hide(true, duration: Self.sheetAnimationDuration) {
-                        OARootViewController.instance().present(alert, animated: true)
-                    }
-                } else {
-                    showSaveError()
-                }
-            }
+            fileName = suggestedFileName
+            folder = nil
+        case .editTrack(let existingFileName):
+            fileName = existingFileName
+            folder = dataProvider.editTrackFolder
+        }
+        dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true) { [weak self] success, filePath in
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
     }
 
@@ -932,10 +934,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         switch action {
         case .saveAs:
             guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: false)
+            presentSaveDialog(saveAsCopy: false)
         case .saveAsCopy:
             guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: true)
+            presentSaveDialog(saveAsCopy: true)
         case .appendToExistingTrack:
             guard ensurePointsForSaving() else { return }
             presentAppendToTrack()
@@ -964,12 +966,59 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return true
     }
 
-    private func presentSaveDialog(duplicate: Bool) {
-        isPendingSaveAsCopy = duplicate
+    private func presentSaveDialog(saveAsCopy: Bool) {
+        isPendingSaveAsCopy = saveAsCopy
         pendingSegmentPointIndexes = nil
-        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        let fileName = saveAsCopy ? uniqueCopyFileName(for: suggestedFileName) : suggestedFileName
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func uniqueCopyFileName(for fileName: String) -> String {
+        let suffixPattern = #"_\((\d+)\)$"#
+        var baseName = fileName
+        var index = 2
+        if let suffixRange = fileName.range(of: suffixPattern, options: .regularExpression) {
+            let suffix = fileName[suffixRange]
+            let number = suffix.dropFirst(2).dropLast()
+            if let suffixNumber = Int(number), suffixNumber < Int.max {
+                baseName = String(fileName[..<suffixRange.lowerBound])
+                index = max(index, suffixNumber + 1)
+            }
+        }
+
+        var gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        if let folder = dataProvider.editTrackFolder, !folder.isEmpty {
+            gpxDirectory.appendPathComponent(folder, isDirectory: true)
+        }
+        let fileManager = FileManager.default
+        for _ in 0..<100_000 {
+            let candidate = "\(baseName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+            guard index < Int.max else { break }
+            index += 1
+        }
+        return "\(baseName)_\(UUID().uuidString)"
+    }
+
+    private func uniqueFileName(for fileName: String) -> String {
+        let gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        let fileManager = FileManager.default
+        let initialFile = gpxDirectory.appendingPathComponent(fileName).appendingPathExtension("gpx")
+        guard fileManager.fileExists(atPath: initialFile.path) else { return fileName }
+
+        for index in 2..<100_000 {
+            let candidate = "\(fileName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+        }
+        return fileName
     }
 
     private func presentSegmentSaveDialog(pointIndexes: [Int]) {
@@ -995,6 +1044,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+
+    private func handleSaveResult(success: Bool, filePath: String?, fallbackFileName: String) {
+        guard success else {
+            showSaveError()
+            return
+        }
+        let path = filePath ?? fallbackFileName
+        hide(true, duration: Self.sheetAnimationDuration) {
+            let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
+            bottomSheet?.present(in: OARootViewController.instance())
+        }
     }
 
     private func showSaveError() {
@@ -1103,16 +1164,7 @@ extension PlanRouteScrollableViewController: OAInfoBottomViewDelegate {
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
         let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
-            guard let self else { return }
-            if success {
-                let path = filePath ?? fileName
-                hide(true, duration: Self.sheetAnimationDuration) {
-                    let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
-                    bottomSheet?.present(in: OARootViewController.instance())
-                }
-            } else {
-                showSaveError()
-            }
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
         if let pointIndexes = pendingSegmentPointIndexes {
             pendingSegmentPointIndexes = nil

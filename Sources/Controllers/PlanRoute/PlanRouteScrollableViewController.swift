@@ -67,6 +67,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
     }
 
+    private var suggestedFilePath: String? {
+        guard case .editTrack(let fileName) = dataProvider.mode,
+              let gpxFileName = (fileName as NSString).appendingPathExtension("gpx") else { return nil }
+        guard let folder = dataProvider.editTrackFolder, !folder.isEmpty else { return gpxFileName }
+        return (folder as NSString).appendingPathComponent(gpxFileName)
+    }
+
     private var currentScreenHeight: CGFloat {
         guard isViewLoaded, view.bounds.height > 0 else { return OAUtilities.calculateScreenHeight() }
         return view.bounds.height
@@ -892,23 +899,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func handleSave() {
         guard ensurePointsForSaving() else { return }
+        let fileName: String
+        let folder: String?
         switch dataProvider.mode {
         case .newRoute:
-            presentSaveDialog(duplicate: false)
-        case .editTrack(let fileName):
-            dataProvider.saveAs(fileName: fileName, folder: dataProvider.editTrackFolder, showOnMap: true) { [weak self] success, _ in
-                guard let self else { return }
-                if success {
-                    let message = String(format: localizedString("gpx_saved_successfully"), fileName)
-                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
-                    hide(true, duration: Self.sheetAnimationDuration) {
-                        OARootViewController.instance().present(alert, animated: true)
-                    }
-                } else {
-                    showSaveError()
-                }
-            }
+            fileName = suggestedFileName
+            folder = nil
+        case .editTrack(let existingFileName):
+            fileName = existingFileName
+            folder = dataProvider.editTrackFolder
+        }
+        dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true) { [weak self] success, filePath in
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
     }
 
@@ -931,11 +933,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
         switch action {
         case .saveAs:
-            guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: false)
+            handleSave()
         case .saveAsCopy:
             guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: true)
+            presentSaveAsCopyDialog()
         case .appendToExistingTrack:
             presentAppendToTrack()
         case .changeSegmentOrder:
@@ -963,10 +964,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return true
     }
 
-    private func presentSaveDialog(duplicate: Bool) {
-        isPendingSaveAsCopy = duplicate
+    private func presentSaveAsCopyDialog() {
+        isPendingSaveAsCopy = true
         pendingSegmentPointIndexes = nil
-        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
     }
@@ -1010,6 +1011,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+
+    private func handleSaveResult(success: Bool, filePath: String?, fallbackFileName: String) {
+        guard success else {
+            showSaveError()
+            return
+        }
+        let path = filePath ?? fallbackFileName
+        hide(true, duration: Self.sheetAnimationDuration) {
+            let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
+            bottomSheet?.present(in: OARootViewController.instance())
+        }
     }
 
     private func showSaveError() {
@@ -1118,16 +1131,7 @@ extension PlanRouteScrollableViewController: OAInfoBottomViewDelegate {
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
         let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
-            guard let self else { return }
-            if success {
-                let path = filePath ?? fileName
-                hide(true, duration: Self.sheetAnimationDuration) {
-                    let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
-                    bottomSheet?.present(in: OARootViewController.instance())
-                }
-            } else {
-                showSaveError()
-            }
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
         if let pointIndexes = pendingSegmentPointIndexes {
             pendingSegmentPointIndexes = nil

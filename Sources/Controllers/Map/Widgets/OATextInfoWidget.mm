@@ -184,8 +184,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     ]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_imageView.heightAnchor constraintEqualToConstant:imageSide],
-        [_imageView.widthAnchor constraintEqualToConstant:imageSide],
+        [_imageView.heightAnchor constraintEqualToConstant:imageSide]
     ]];
 }
 

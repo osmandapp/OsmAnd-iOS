@@ -498,7 +498,7 @@
         CGSize leftSize = [_leftPanelController calculateContentSize];
         CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
         _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
+        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width + (_leftPanelController.view.layer.borderWidth * 2);
     }
     else
     {
@@ -540,7 +540,7 @@
         CGSize rightSize = [_rightPanelController calculateContentSize];
         CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
+        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width + (_rightPanelController.view.layer.borderWidth * 2);
     }
     else
     {

@@ -76,6 +76,7 @@ final class WidgetPageViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        bottomStackViewConstraint.priority = UILayoutPriority(999)
         heightStackViewConstraint = stackView.heightAnchor.constraint(equalToConstant: 44)
         if isMultipleWidgetsInRow {
             bottomStackViewConstraint.isActive = true

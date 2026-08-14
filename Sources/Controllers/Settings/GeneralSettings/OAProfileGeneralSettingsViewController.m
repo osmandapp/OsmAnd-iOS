@@ -202,30 +202,7 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    NSString *geoFormatValue;
-    switch ([_settings.settingGeoFormat get:self.appMode]) {
-        case MAP_GEO_FORMAT_DEGREES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-        case MAP_GEO_FORMAT_MINUTES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DM");
-            break;
-        case MAP_GEO_FORMAT_SECONDS:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DMS");
-            break;
-        case MAP_GEO_UTM_FORMAT:
-            geoFormatValue = @"UTM";
-            break;
-        case MAP_GEO_OLC_FORMAT:
-            geoFormatValue = @"OLC";
-            break;
-        case MAP_GEO_MGRS_FORMAT:
-            geoFormatValue = @"MGRS";
-            break;
-        default:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-    }
+    NSString *geoFormatValue = [CoordinateFormatBridge primaryFormatTitleWithMode:self.appMode];
     
     NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])

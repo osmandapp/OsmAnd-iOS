@@ -47,21 +47,21 @@ enum CoordinateFormatHelper {
     }
     
     static func summary(_ format: CoordinateFormat, primary: Bool) -> String {
-        if let epsgCode = format.epsgCode {
-            return "EPSG:\(epsgCode)"
-        }
-
-        let example = exampleString(format)
+        var parts: [String] = []
         if primary {
-            return "\(localizedString("coordinate_format_primary")) • \(example)"
+            parts.append(localizedString("coordinate_format_primary"))
         }
-        if format.id == CoordinateFormatIds.builtinUtm {
-            return "UTM • \(example)"
+        if let epsgCode = format.epsgCode {
+            parts.append("EPSG:\(epsgCode)")
+        } else {
+            if format.id == CoordinateFormatIds.builtinUtm {
+                parts.append("UTM")
+            } else if format.id == CoordinateFormatIds.builtinOlc {
+                parts.append("OLC")
+            }
+            parts.append(exampleString(format))
         }
-        if format.id == CoordinateFormatIds.builtinOlc {
-            return "OLC • \(example)"
-        }
-        return example
+        return parts.joined(separator: " • ")
     }
 
     static func exampleString(_ coordFormat: CoordinateFormat) -> String {

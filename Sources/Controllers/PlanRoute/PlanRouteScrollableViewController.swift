@@ -933,10 +933,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
         switch action {
         case .saveAs:
-            handleSave()
+            guard ensurePointsForSaving() else { return }
+            presentSaveDialog(saveAsCopy: false)
         case .saveAsCopy:
             guard ensurePointsForSaving() else { return }
-            presentSaveAsCopyDialog()
+            presentSaveDialog(saveAsCopy: true)
         case .appendToExistingTrack:
             presentAppendToTrack()
         case .changeSegmentOrder:
@@ -964,12 +965,43 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return true
     }
 
-    private func presentSaveAsCopyDialog() {
-        isPendingSaveAsCopy = true
+    private func presentSaveDialog(saveAsCopy: Bool) {
+        isPendingSaveAsCopy = saveAsCopy
         pendingSegmentPointIndexes = nil
-        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
+        let fileName = saveAsCopy ? uniqueCopyFileName(for: suggestedFileName) : suggestedFileName
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func uniqueCopyFileName(for fileName: String) -> String {
+        let suffixPattern = #"_\((\d+)\)$"#
+        var baseName = fileName
+        var index = 2
+        if let suffixRange = fileName.range(of: suffixPattern, options: .regularExpression) {
+            let suffix = fileName[suffixRange]
+            let number = suffix.dropFirst(2).dropLast()
+            if let suffixNumber = Int(number), suffixNumber < Int.max {
+                baseName = String(fileName[..<suffixRange.lowerBound])
+                index = max(index, suffixNumber + 1)
+            }
+        }
+
+        var gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        if let folder = dataProvider.editTrackFolder, !folder.isEmpty {
+            gpxDirectory.appendPathComponent(folder, isDirectory: true)
+        }
+        let fileManager = FileManager.default
+        for _ in 0..<100_000 {
+            let candidate = "\(baseName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+            guard index < Int.max else { break }
+            index += 1
+        }
+        return "\(baseName)_\(UUID().uuidString)"
     }
 
     private func uniqueFileName(for fileName: String) -> String {

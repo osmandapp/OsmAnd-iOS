@@ -2311,7 +2311,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
                 let tracksFoldersKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey, organizedGroupKey]
                 if tracksFoldersKeys.contains(where: { $0 == item.key }) {
-                    cell.setCustomLeftSeparatorInset(true)
+                    cell.setCustomLeftSeparatorInset(!tableView.isEditing)
                     cell.separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
                 } else {
                     cell.setCustomLeftSeparatorInset(false)

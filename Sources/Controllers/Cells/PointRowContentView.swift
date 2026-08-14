@@ -130,6 +130,7 @@ private final class PointRowContentView: UIView, UIContentView {
     }
 
     private let rowContentView = UIListContentView(configuration: .cell())
+    private var separatorConstraint: NSLayoutConstraint?
 
     private var appliedConfiguration: PointContentConfiguration
 
@@ -142,6 +143,13 @@ private final class PointRowContentView: UIView, UIContentView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil, separatorConstraint == nil, let cell = sequence(first: self as UIResponder, next: \.next).first(where: { $0 is UICollectionViewListCell }) as? UICollectionViewListCell, let textLayoutGuide = rowContentView.textLayoutGuide else { return }
+        separatorConstraint = cell.separatorLayoutGuide.leadingAnchor.constraint(equalTo: textLayoutGuide.leadingAnchor)
+        separatorConstraint?.isActive = true
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

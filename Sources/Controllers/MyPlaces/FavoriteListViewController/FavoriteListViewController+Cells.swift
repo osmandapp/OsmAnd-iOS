@@ -51,8 +51,8 @@ extension FavoriteListViewController {
         }
     }
 
-    var favoriteCellRegistration: CellRegistration<FavoritePointRow> {
-        CellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
+    var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
+        RowCellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
             guard let self else { return }
             if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()

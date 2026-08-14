@@ -612,6 +612,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func setupNavbar() {
+        navigationController?.setDefaultNavigationBarAppearance()
         if tableView.isEditing {
             hideBackButton(true)
             let cancelBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_cancel"), icon: nil, color: .label, action: #selector(onNavbarCancelButtonClicked), target: self, menu: nil)

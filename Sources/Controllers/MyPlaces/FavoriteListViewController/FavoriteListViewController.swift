@@ -81,6 +81,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         collectionView.backgroundColor = .clear
         collectionView.tintColor = .iconColorActive
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -207,14 +208,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     func configureNavigation() {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        if !isRootFolder {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            navigationController?.navigationBar.tintColor = .iconColorActive
-        }
-
+        navigationController?.setDefaultNavigationBarAppearance()
         navigationController?.navigationBar.prefersLargeTitles = false
         configureNavigationButtons()
         configureSearchVisibility()

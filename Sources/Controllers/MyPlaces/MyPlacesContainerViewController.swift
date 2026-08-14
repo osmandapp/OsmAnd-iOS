@@ -230,16 +230,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
     
-    private func setupNavbar(isClearNavBar: Bool = false) {
-        let backgroundColor: UIColor = isClearNavBar ? .clear : .viewBg
-        let standardAppearance = UINavigationBarAppearance()
-        standardAppearance.backgroundColor = backgroundColor
-        navigationController?.navigationBar.standardAppearance = standardAppearance
-        let scrollEdgeAppearance = UINavigationBarAppearance()
-        scrollEdgeAppearance.backgroundColor = backgroundColor
-        navigationController?.navigationBar.scrollEdgeAppearance = scrollEdgeAppearance
-        safeAreaTopConstraint.isActive = !isClearNavBar
-        superviewTopConstraint.isActive = isClearNavBar
+    private func setupNavbar() {
+        navigationController?.setDefaultNavigationBarAppearance()
+        safeAreaTopConstraint.isActive = true
+        superviewTopConstraint.isActive = false
     }
     
     private func updateSearchController() {
@@ -358,7 +352,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     func updateEditMode(_ edit: Bool) {
         isSelectionMode = edit
         updateSegmentedControlVisibility(!edit)
-        setupNavbar(isClearNavBar: edit)
+        setupNavbar()
     }
     
     func updateTitle(_ title: String, hideSubtitle: Bool) {
@@ -374,6 +368,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateSearchEnabling(_ isEnabled: Bool) {
+        setupNavbar()
         if isEnabled {
             searchController?.searchBar.alpha = 0
             navigationItem.searchController = searchController
@@ -387,7 +382,6 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
             }
         } else {
             UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: .showHideTransitionViews) {
-                self.setupNavbar(isClearNavBar: isEnabled)
                 self.updateSegmentedControlVisibility(!isEnabled)
                 self.segmentContainerView.alpha = 1
                 self.searchController?.isActive = false

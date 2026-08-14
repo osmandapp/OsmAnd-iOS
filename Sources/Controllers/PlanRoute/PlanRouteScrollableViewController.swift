@@ -937,6 +937,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             guard ensurePointsForSaving() else { return }
             presentSaveDialog(duplicate: true)
         case .appendToExistingTrack:
+            guard ensurePointsForSaving() else { return }
             presentAppendToTrack()
         case .changeSegmentOrder:
             presentSegmentReorder()
@@ -1129,7 +1130,15 @@ extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
         dataProvider.appendToTrack(filePath: gpxFilePath) { [weak self] success in
             guard let self else { return }
-            if !success { showSaveError() }
+            guard success else {
+                showSaveError()
+                return
+            }
+            let absolutePath = OAUtilities.absoluteGpxPath(forPath: gpxFilePath)
+            hide(true, duration: Self.sheetAnimationDuration) {
+                let bottomSheet = OASaveTrackBottomSheetViewController(fileName: absolutePath)
+                bottomSheet?.present(in: OARootViewController.instance())
+            }
         }
     }
 }

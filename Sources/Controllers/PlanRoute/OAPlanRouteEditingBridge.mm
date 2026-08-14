@@ -1716,24 +1716,49 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
            onComplete:(void (^)(BOOL success))onComplete
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    OASGpxFile *currentGpx = ctx != nil ? [ctx exportGpx:@"tmp_append"] : nil;
+    if (ctx == nil || filePath.length == 0)
+    {
+        if (onComplete) onComplete(NO);
+        return;
+    }
+
+    NSString *trackName = filePath.lastPathComponent.stringByDeletingPathExtension.decomposedStringWithCanonicalMapping;
+    OASGpxFile *currentGpx = [ctx exportGpx:trackName];
     if (currentGpx == nil || currentGpx.tracks.count == 0)
     {
         if (onComplete) onComplete(NO);
         return;
     }
-    NSString *absPath = filePath.isAbsolutePath ? filePath : [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
-    NSArray<OASTrack *> *tracksToAppend = [currentGpx.tracks copy];
+
+    [self addPoiGroupsFromGpx:ctx.gpxData.gpxFile toGpx:currentGpx];
+    [self addDraftWaypointsToGpx:currentGpx];
+
+    NSString *absPath = [OAUtilities absoluteGpxPathForPath:filePath].stringByStandardizingPath;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:absPath];
         OASGpxFile *existingGpx = [OASGpxUtilities.shared loadGpxFileFile:file];
         BOOL success = NO;
         if (existingGpx != nil)
         {
-            NSMutableArray *allTracks = existingGpx.tracks ? [existingGpx.tracks mutableCopy] : [NSMutableArray array];
-            [allTracks addObjectsFromArray:tracksToAppend];
-            existingGpx.tracks = allTracks;
-            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:existingGpx];
+            NSMutableArray<OASTrack *> *mergedTracks = currentGpx.tracks
+                ? [currentGpx.tracks mutableCopy]
+                : [NSMutableArray array];
+            if (existingGpx.tracks.count > 0)
+                [mergedTracks addObjectsFromArray:existingGpx.tracks];
+            currentGpx.tracks = mergedTracks;
+
+            NSMutableArray *mergedRoutes = currentGpx.routes
+                ? [currentGpx.routes mutableCopy]
+                : [NSMutableArray array];
+            if (existingGpx.routes.count > 0)
+                [mergedRoutes addObjectsFromArray:existingGpx.routes];
+            currentGpx.routes = mergedRoutes;
+
+            NSArray<OASWptPt *> *existingPoints = existingGpx.getPointsList;
+            if (existingPoints.count > 0)
+                [currentGpx addPointsCollection:existingPoints];
+
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:currentGpx];
             success = exception == nil;
             if (success)
             {
@@ -1745,6 +1770,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (success)
+            {
+                [OASelectedGPXHelper.instance markTrackForReload:absPath];
+                [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
+            }
             if (onComplete) onComplete(success);
         });
     });

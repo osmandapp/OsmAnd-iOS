@@ -62,7 +62,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private var suggestedFileName: String {
         switch dataProvider.mode {
-        case .newRoute: OAUtilities.generateCurrentDateFilename()
+        case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())
         case .editTrack(let fileName): fileName
         }
     }
@@ -969,6 +969,22 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func uniqueFileName(for fileName: String) -> String {
+        let gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        let fileManager = FileManager.default
+        let initialFile = gpxDirectory.appendingPathComponent(fileName).appendingPathExtension("gpx")
+        guard fileManager.fileExists(atPath: initialFile.path) else { return fileName }
+
+        for index in 2..<100_000 {
+            let candidate = "\(fileName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+        }
+        return fileName
     }
 
     private func presentSegmentSaveDialog(pointIndexes: [Int]) {

@@ -8,7 +8,6 @@
 
 #import "OACollatorStringMatcher.h"
 #import "OAUtilities.h"
-#import "OAArabicNormalizer.h"
 #import "OASearchAlgorithms.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
@@ -250,12 +249,7 @@ static NSCharacterSet * _APOSTROPHES;
 
 + (NSString *) alignChars:(NSString *)fullText
 {
-    if ([OAArabicNormalizer isSpecialArabic:fullText]) {
-        fullText = [OAArabicNormalizer normalize:fullText] ?: fullText;
-    }
-    fullText = [OASearchAlgorithms removeApostrophes:fullText];
-    fullText = [OASearchAlgorithms replaceGermanSS:fullText];
-    return fullText;
+    return [OASearchAlgorithms alignChars:fullText];
 }
 
 + (NSString *) replaceHyphen:(NSString *)text replacement:(NSString *)replacement

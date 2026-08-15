@@ -37,7 +37,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     }
 
     private func setupView() {
-        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 1
 

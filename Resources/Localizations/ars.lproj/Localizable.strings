@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "خرائط أوسماند";
+"send_crash_log" = "إرسال سجل الأعطال";
+"send_crash_log_descr" = "يحتوي فقط على معلومات حول الأعطال";
 "download_depth_countours" = "ملامح العمق البحري";
 "day_short" = "يوم";
 "week_short" = "أسبوع";

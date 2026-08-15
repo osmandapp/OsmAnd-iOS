@@ -1,4 +1,6 @@
 "shared_string_ok" = "Ok";
+"send_crash_log" = "Enviar registo de falha de sistema";
+"send_crash_log_descr" = "Contém apenas informações sobre falhas";
 "shared_string_cancel" = "Cancelar";
 "shared_string_yes" = "Sim";
 "shared_string_no" = "Não";

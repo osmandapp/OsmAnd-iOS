@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd kort";
+"send_crash_log" = "Send logfiler om app-nedbrud";
+"send_crash_log_descr" = "Indeholder kun oplysninger om nedbrud";
 // Shared Strings
 "shared_string_back" = "Tilbage";
 "shared_string_cancel" = "Annuller";

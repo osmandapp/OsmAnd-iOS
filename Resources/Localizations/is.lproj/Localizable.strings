@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd-kort";
+"send_crash_log" = "Senda hrunskýrslu";
+"send_crash_log_descr" = "Inniheldur einungis upplýsingar um hrun";
 // Shared Strings
 "shared_string_select" = "Velja";
 "shared_string_back" = "Til baka";

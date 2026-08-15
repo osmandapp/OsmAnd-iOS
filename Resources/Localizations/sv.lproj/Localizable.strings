@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd kartor";
+"send_crash_log" = "Skicka kraschlogg";
+"send_crash_log_descr" = "Innehåller endast information om krascher";
 "download_depth_countours" = "Nautiska djupkurvor";
 "weeks_short" = "v";
 "months_short" = "mån.";

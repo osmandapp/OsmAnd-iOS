@@ -1,4 +1,6 @@
 "shared_string_yes" = "Sì";
+"send_crash_log" = "Invia rapporto errori";
+"send_crash_log_descr" = "Contiene solo informazioni sugli arresti anomali";
 "shared_string_save" = "Salva";
 "shared_string_delete" = "Elimina";
 // Rendering categories

@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Карте Османда";
+"send_crash_log" = "Пошаљите дневнике рушења програма";
+"send_crash_log_descr" = "Садржи само податке о рушењима програма";
 "download_depth_countours" = "Поморски дубински обриси";
 "week_short" = "Сдмц";
 "weeks_short" = "Сдмца";

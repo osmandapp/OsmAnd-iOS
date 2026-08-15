@@ -1,4 +1,6 @@
 "download_depth_countours" = "Sakonera nautikoaren sestra-kurbak";
+"send_crash_log" = "Bidali hutsegiteen erregistroa";
+"send_crash_log_descr" = "Erroreei buruzko informazioa bakarrik dauka";
 "day" = "Egun";
 "days_2_4" = "Egunak";
 "days_5" = "Egun";

@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd地图";
+"send_crash_log" = "发送崩溃日志";
+"send_crash_log_descr" = "只包含有关崩溃的信息";
 "nothing_found" = "什么都没找到";
 "nothing_found_descr" = "更改搜索或增加其半径。";
 "select_street" = "选择街道";

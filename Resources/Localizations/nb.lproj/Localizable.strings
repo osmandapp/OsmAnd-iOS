@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd-kart";
+"send_crash_log" = "Send krasjlogg";
+"send_crash_log_descr" = "Inneholder kun informasjon om krasjer";
 "years_short" = "År";
 "day" = "Dag";
 "days_2_4" = "Dager";

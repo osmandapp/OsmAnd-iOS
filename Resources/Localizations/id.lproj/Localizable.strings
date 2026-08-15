@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Peta OsmAnd";
+"send_crash_log" = "Kirim log crash aplikasi";
+"send_crash_log_descr" = "Hanya berisi informasi tentang pemogokan";
 "download_depth_countours" = "Kontur kedalaman laut";
 "day_short" = "H";
 "week_short" = "Mg";

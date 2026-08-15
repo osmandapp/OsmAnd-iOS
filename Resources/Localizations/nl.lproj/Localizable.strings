@@ -1,4 +1,6 @@
 "shared_string_previous" = "Vorige";
+"send_crash_log" = "Crashrapport verzenden";
+"send_crash_log_descr" = "Bevat uitsluitend informatie over vastlopers";
 "route_stops_before" = "nog %@ haltes";
 "transport_Routes" = "Lijnen";
 "transport_nearby_routes_within" = "Nabije routes binnen";

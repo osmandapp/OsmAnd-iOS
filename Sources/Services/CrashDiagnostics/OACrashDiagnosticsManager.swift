@@ -28,7 +28,24 @@ final class OACrashDiagnosticsManager: NSObject {
     private override init() {
         let fileManager = FileManager.default
         self.fileManager = fileManager
+
         var repositoryInitializationError: Error?
+        do {
+            let documentsURL = try fileManager.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            )
+            repository = OACrashReportRepository(
+                directoryURL: documentsURL.appendingPathComponent("Logs", isDirectory: true)
+            )
+        } catch {
+            repository = nil
+            repositoryInitializationError = error
+        }
+
+        var applicationSupportInitializationError: Error?
         do {
             let applicationSupportURL = try fileManager.url(
                 for: .applicationSupportDirectory,
@@ -36,25 +53,27 @@ final class OACrashDiagnosticsManager: NSObject {
                 appropriateFor: nil,
                 create: true
             )
-            repository = OACrashReportRepository(
-                directoryURL: applicationSupportURL.appendingPathComponent("CrashDiagnostics", isDirectory: true)
-            )
             shareSnapshotsDirectoryURL = applicationSupportURL.appendingPathComponent(
                 "CrashDiagnosticsShareSnapshots",
                 isDirectory: true
             )
         } catch {
-            repository = nil
             shareSnapshotsDirectoryURL = nil
-            repositoryInitializationError = error
+            applicationSupportInitializationError = error
         }
 
         super.init()
 
         if let repositoryInitializationError {
             Self.logStorageFailure(
-                "locate the Application Support directory",
+                "locate the Documents directory",
                 error: repositoryInitializationError
+            )
+        }
+        if let applicationSupportInitializationError {
+            Self.logStorageFailure(
+                "locate the Application Support directory",
+                error: applicationSupportInitializationError
             )
         }
     }

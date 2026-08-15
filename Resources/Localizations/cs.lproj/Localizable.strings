@@ -2979,7 +2979,7 @@
 "shared_string_hand" = "Ruka";
 "external_device_forget_sensor" = "Zapomenout senzor";
 "setup" = "Nastavení";
-"ask_question_propose_features" = "Položte otázku, navrhněte funkci";
+"ask_question_propose_features" = "Položte otázky, navrhněte funkce";
 "shared_string_setup_route" = "Připravit trasu";
 "apply_to_existing_favorites_descr" = "Použít změny na stávající oblíbené body skupiny, nebo pouze na nové\?";
 "help_article_navigation_routing_direct_to_point_routing_name" = "Navigace přímo do bodu (Loď)";
@@ -4411,3 +4411,18 @@
 "delete_favorite_confirmation_title" = "Odstranit \"%@\"?";
 "add_new_folder" = "Přidat novou složku";
 "ais_cpa_warning_distance" = "Výstražná vzdálenost pro nejbližší bod přiblížení (CPA)";
+"sort_by_nearest_to_current_location" = "Nejblíž k aktuální poloze";
+"sort_by_nearest_to_map_center" = "Nejblíž ke středu mapy";
+"shared_string_copy_from" = "Kopírovat z";
+"add_points" = "Přidat body";
+"add_points_description" = "Vyberte místa na mapě nebo je zkopírujte z vašich Oblíbených abyste je viděli na trase.";
+"shared_string_new_name" = "Nový název";
+"shared_string_undo" = "Vrátit";
+"shared_string_redo" = "Znovu";
+"save_as_copy" = "Uložit jako kopii";
+"distance_measurement_clear_route" = "Vymazat všechny body";
+"plan_route_save_as" = "Uložit jako…";
+"plan_route_change_segment_order" = "Změna pořadí segmentu";
+"plan_route_no_points_descr" = "Klepněte kdekoli na mapě nebo použijte hledání k přidání prvních bodů vaší trasy.";
+"shared_string_sort" = "Řadit";
+"shared_string_manual" = "Ručně";

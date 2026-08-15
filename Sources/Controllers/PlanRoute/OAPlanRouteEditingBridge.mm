@@ -1057,7 +1057,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = mode != OAApplicationMode.DEFAULT;
+    _isCalculatingRoute = ctx.getPointsCount > 1 && mode != OAApplicationMode.DEFAULT;
     if (_isCalculatingRoute && self.onChange)
         self.onChange();
     ctx.appMode = mode;

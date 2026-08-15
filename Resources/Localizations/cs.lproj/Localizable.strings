@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Mapy OsmAnd";
+"send_crash_log" = "Odeslat záznamy o pádu";
+"send_crash_log_descr" = "Obsahuje pouze informace o pádech aplikace";
 "shared_string_previous" = "Předchozí";
 "route_stops_before" = "%@ zastávek před";
 "transport_Routes" = "Cesty";

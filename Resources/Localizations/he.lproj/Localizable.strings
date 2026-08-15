@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "מפות OsmAnd";
+"send_crash_log" = "שליחת יומן קריסה";
+"send_crash_log_descr" = "מכיל מידע על קריסות בלבד";
 "download_depth_countours" = "קווי מתאר של עומק הים";
 "day_short" = "י";
 "week_short" = "שב";

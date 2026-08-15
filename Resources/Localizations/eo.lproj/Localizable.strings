@@ -1,4 +1,6 @@
 "download_depth_countours" = "Maraj profundec-kurboj";
+"send_crash_log" = "Sendi pane-protokolon";
+"send_crash_log_descr" = "Enhavas nur informojn pri paneoj";
 "day" = "tago";
 "days_2_4" = "tagoj";
 "days_5" = "tagoj";

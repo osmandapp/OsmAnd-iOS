@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd mape";
+"send_crash_log" = "Pošalji logove o padovima aplikacije";
+"send_crash_log_descr" = "Sadrži samo podatke o rušenjima programa";
 "download_depth_countours" = "Pomorske izobate";
 "week_short" = "Ned.";
 "weeks_short" = "Ned.";

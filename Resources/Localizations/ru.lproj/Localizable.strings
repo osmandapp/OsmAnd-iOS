@@ -1,4 +1,6 @@
 "shared_string_yes" = "Да";
+"send_crash_log" = "Отправить журнал сбоев";
+"send_crash_log_descr" = "Содержит только информацию о сбоях";
 "shared_string_save" = "Сохранить";
 "shared_string_done" = "Готово";
 "shared_string_update" = "Обновить";

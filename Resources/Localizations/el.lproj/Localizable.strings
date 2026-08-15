@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Χάρτες OsmAnd";
+"send_crash_log" = "Αποστολή αρχείου καταγραφής κρασαρίσματος";
+"send_crash_log_descr" = "Περιλαμβάνει μόνο πληροφορίες σχετικά με τα κρασαρίσματα";
 "next_proceed" = "Επόμενο";
 "subcategories" = "Υποκατηγορίες";
 "nautical_maps" = "Ναυτικοί χάρτες";

@@ -24,6 +24,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
 
     weak var selectorDelegate: CoordinateFormatSelectorDelegate?
 
+    private let appMode: OAApplicationMode
     private let selectedFormatId: String
     private let showSelectOther: Bool
     private var preferredFormats: [CoordinateFormat] = []
@@ -35,18 +36,20 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
 
     // MARK: - Init
 
-    init(selectedFormatId: String?, showSelectOther: Bool = true) {
-        let settings = OAAppSettings.sharedManager()
-        let primary = settings.coordinateFormatSettingsStorage.getPrimaryId(
-            settings.applicationMode.get()
-        )
+    init(selectedFormatId: String?, appMode: OAApplicationMode, showSelectOther: Bool = true) {
+        let primary = OAAppSettings.sharedManager().coordinateFormatSettingsStorage.getPrimaryId(appMode)
+
         self.selectedFormatId = CoordinateFormatIds.normalize(selectedFormatId) ?? primary
+        self.appMode = appMode
         self.showSelectOther = showSelectOther
         super.init()
     }
 
     @objc convenience init(selectedFormatId: String?) {
-        self.init(selectedFormatId: selectedFormatId, showSelectOther: true)
+        self.init(
+            selectedFormatId: selectedFormatId,
+            appMode: OAAppSettings.sharedManager().applicationMode.get()
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -55,11 +58,17 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
     
     @objc static func present(from presenter: UIViewController,
                               selectedFormatId: String?,
+                              appMode: OAApplicationMode,
                               delegate: CoordinateFormatSelectorDelegate?) {
-        let vc = CoordinateFormatSelectorViewController(selectedFormatId: selectedFormatId)
+        let vc = CoordinateFormatSelectorViewController(
+            selectedFormatId: selectedFormatId,
+            appMode: appMode
+        )
         vc.selectorDelegate = delegate
+        
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .pageSheet
+        
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
@@ -234,8 +243,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
     }
 
     private func reloadFormats() {
-        let mode = OAAppSettings.sharedManager().applicationMode.get()
-        let preferredIds = storage.preferredIds(mode)
+        let preferredIds = storage.preferredIds(appMode)
         var recentIds = storage.getRecentIds().filter { !preferredIds.contains($0) }
 
         if !preferredIds.contains(selectedFormatId),
@@ -259,14 +267,24 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
 @objcMembers
 final class CoordinateFormatSelectorRouter: NSObject {
     @objc static func presentAdd(from presenter: UIViewController,
+                                 appMode: OAApplicationMode,
                                  excludedIds: [String],
                                  onSelected: @escaping (String) -> Void) {
-        let mode = OAAppSettings.sharedManager().applicationMode.get()
-        let addVC = CoordinatesFormatAddViewController(appMode: mode, excludedIds: excludedIds)
+        let addVC = CoordinatesFormatAddViewController(
+            appMode: appMode,
+            excludedIds: excludedIds
+        )
+
         addVC.onFormatAdded = { id in
-            OAAppSettings.sharedManager().coordinateFormatSettingsStorage.addRecentId(id)
-            presenter.dismiss(animated: true) { onSelected(id) }
+            OAAppSettings.sharedManager()
+                .coordinateFormatSettingsStorage
+                .addRecentId(id)
+
+            presenter.dismiss(animated: true) {
+                onSelected(id)
+            }
         }
+
         let navVC = UINavigationController(rootViewController: addVC)
         navVC.modalPresentationStyle = .pageSheet
         presenter.present(navVC, animated: true)

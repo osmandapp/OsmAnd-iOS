@@ -29,11 +29,11 @@ final class MapWidgetsFactory: NSObject {
         case .secondNextTurn:
             return OANextTurnWidget(horisontalMini: true, nextNext: true, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .coordinatesCurrentLocation:
-            let widget = CoordinatesCurrentLocationWidget()
+            let widget = CoordinatesCurrentLocationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .coordinatesMapCenter:
-            let widget = CoordinatesMapCenterWidget()
+            let widget = CoordinatesMapCenterWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .streetName:

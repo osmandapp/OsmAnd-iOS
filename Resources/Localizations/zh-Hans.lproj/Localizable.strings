@@ -2936,3 +2936,4 @@
 "plugin_ais_tracker_description" = "显示 AIS 位置和周围船只的信息。AIS 数据通过网络从外部 AIS 接收器接收。";
 "plugin_ais_tracker_disclaimer" = "免责声明\n\n本插件仅为业余爱好项目，并非为可靠性和正确性而设计。请勿以任何方式依赖本软件，包括导航和/或人身安全。";
 "external_sensor_widgets" = "外部传感器";
+"preparing_file" = "正在准备文件";

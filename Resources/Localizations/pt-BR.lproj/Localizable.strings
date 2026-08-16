@@ -4459,3 +4459,5 @@
 "add_points_description" = "Selecione locais no mapa ou copie-os dos seus Favoritos para vê-los ao longo do seu trajeto.";
 "distance_measurement_clear_route" = "Apagar todos os pontos";
 "plan_route_append_to_existing_track" = "Anexar à trilha existente";
+"no_crashes_recorded" = "Não foram registradas falhas";
+"share_crash_log" = "Compartilhar registro de falhas";

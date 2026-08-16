@@ -4504,3 +4504,10 @@
 "ais_apply_setting_to_profiles" = "Beállítás alkalmazása";
 "ais_apply_to_current_profile" = "Alkalmazás erre: %@";
 "ais_apply_to_all_profiles" = "Alkalmazás az összes profilra";
+"no_crashes_recorded" = "Nincsenek rögzített összeomlások";
+"share_crash_log" = "Összeomlási napló megosztása";
+"crash_report_prompt_title" = "Az OsmAnd váratlan hibába ütközött.";
+"crash_report_prompt_description" = "Segítsen fejleszteni az alkalmazást a hibajelentés elküldésével. A hibajelentése segít azonosítani és javítani a problémát.";
+"shared_string_send" = "Küldés";
+"send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
+"send_current_app_log_descr" = "Alkalmazás indulása óta";

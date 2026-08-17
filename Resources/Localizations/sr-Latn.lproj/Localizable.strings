@@ -4541,3 +4541,10 @@
 "ais_apply_setting_to_profiles" = "Primeni podešavanje";
 "ais_apply_to_current_profile" = "Primeni na %@";
 "ais_apply_to_all_profiles" = "Primeni na sve profile";
+"no_crashes_recorded" = "Nisu zabeležena rušenja";
+"share_crash_log" = "Podeli dnevnik rušenja";
+"crash_report_prompt_title" = "OsmAnd je naišao na neočekivanu grešku.";
+"crash_report_prompt_description" = "Molimo vas da nam pomognete da poboljšamo aplikaciju tako što ćete nam poslati izveštaj o padu. Vaš izveštaj o padu će nam pomoći da identifikujemo i rešimo problem.";
+"shared_string_send" = "Pošalji";
+"send_current_app_log" = "Pošalji trenutni dnevnik aplikacije";
+"send_current_app_log_descr" = "Od početka aplikacije";

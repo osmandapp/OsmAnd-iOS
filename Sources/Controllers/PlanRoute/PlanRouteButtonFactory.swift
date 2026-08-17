@@ -120,6 +120,7 @@ enum PlanRouteButtonFactory {
         configuration.image = image
         configuration.imagePlacement = imagePlacement
         configuration.imagePadding = imagePadding
+        configuration.titleLineBreakMode = .byTruncatingTail
         configuration.contentInsets = contentInsets
         configuration.baseForegroundColor = .textColorPrimary
         configuration.background.backgroundColor = style == .map ? .mapButtonBgColorDefault : .clear

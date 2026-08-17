@@ -123,9 +123,15 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         if isSearchActive || !isSelectionModeInSearch {
             searchText = searchState.text
         }
+        let shouldHideToolbarBeforeSnapshot = shouldHideSearchToolbar()
         configureToolbar()
-        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
+        navigationController?.setToolbarHidden(shouldHideToolbarBeforeSnapshot, animated: true)
         applySnapshot(animatingDifferences: false)
+        let shouldHideToolbarAfterSnapshot = shouldHideSearchToolbar()
+        if shouldHideToolbarBeforeSnapshot != shouldHideToolbarAfterSnapshot {
+            configureToolbar()
+            navigationController?.setToolbarHidden(shouldHideToolbarAfterSnapshot, animated: true)
+        }
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

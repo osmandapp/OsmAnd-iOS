@@ -5032,3 +5032,5 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"carplay_trip_via_point" = "Via %@";

@@ -40,6 +40,7 @@
 #import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAReverseGeocoder.h"
 
 static NSString * const kUnitsKm = OALocalizedString(@"km");
 static NSString * const kUnitsM = OALocalizedString(@"m");
@@ -50,6 +51,7 @@ static NSString * const kUnitsNm = OALocalizedString(@"nm");
 
 static const CGFloat kTurnArrowSize = 16.0;
 static const CGFloat kTurnArrowRenderSize = 32.0;
+static const NSInteger kTripSubtitleMaxLength = 30;
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
@@ -159,6 +161,114 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
+- (NSString *)fullAddressForPoint:(OARTargetPoint *)point
+{
+    return [[OAReverseGeocoder instance] lookupAddressAtLat:point.getLatitude
+                                                        lon:point.getLongitude];
+}
+
+- (NSString *)shortAddressForPoint:(OARTargetPoint *)point
+{
+    NSString *address = [self fullAddressForPoint:point];
+    if (![self isMeaningfulName:address])
+        return nil;
+
+    NSRange comma = [address rangeOfString:@"," options:NSBackwardsSearch];
+    if (comma.location != NSNotFound)
+    {
+        NSString *shortAddr = [[address substringToIndex:comma.location]
+                               stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        if (shortAddr.length > 0)
+            return shortAddr;
+    }
+    return address;
+}
+
+- (NSString *)normalizedName:(NSString *)name
+{
+    if (name.length == 0)
+        return @"";
+    return [[name stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet] lowercaseString];
+}
+
+- (BOOL)isMeaningfulName:(NSString *)name
+{
+    if (name.length == 0)
+        return NO;
+
+    return ![name isEqualToString:[OAPointDescription getSearchAddressStr]]
+        && ![name isEqualToString:[OAPointDescription getAddressNotFoundStr]]
+        && ![name isEqualToString:OALocalizedString(@"map_no_address")];
+}
+
+- (BOOL)pointHasProperName:(OARTargetPoint *)point
+{
+    OAPointDescription *pointDescription = point.pointDescription;
+    if (!pointDescription)
+        return NO;
+    return [pointDescription isPoi]
+            || [pointDescription isFavorite]
+            || [pointDescription isWpt]
+            || [pointDescription isGpxPoint]
+            || [pointDescription isMapMarker];
+}
+
+- (NSString *)poiNameForPoint:(OARTargetPoint *)point
+{
+    OAPointDescription *pointDescription = point.pointDescription;
+    NSString *name = pointDescription.name;
+    if (!pointDescription || ![self isMeaningfulName:name] || [pointDescription isAddress])
+        return nil;
+    
+    if ([self pointHasProperName:point])
+        return name;
+    
+    NSString *address = [self fullAddressForPoint:point];
+    if ([self isMeaningfulName:address]
+        && [[self normalizedName:name] isEqualToString:[self normalizedName:address]])
+        return nil;
+    return name;
+}
+
+- (NSString *)addressForPoint:(OARTargetPoint *)point
+{
+    NSString *address = [self fullAddressForPoint:point];
+    
+    if ([self isMeaningfulName:address])
+        return address;
+    OAPointDescription *pd = point.pointDescription;
+    return ([pd isLocation] && [self isMeaningfulName:pd.name]) ? pd.name : nil;
+}
+
+- (NSString *)coordinatesForPoint:(OARTargetPoint *)point
+{
+    return [OAPointDescription getLocationNamePlain:point.getLatitude lon:point.getLongitude];
+}
+
+- (NSString *)intermediateSubtitleForPoints:(NSArray<OARTargetPoint *> *)points
+{
+    if (points.count == 0)
+        return nil;
+
+    if (points.count == 1)
+    {
+        OARTargetPoint *point = points.firstObject;
+        NSString *name = [self poiNameForPoint:point] ?: [self shortAddressForPoint:point];
+
+        if (name.length > 0)
+        {
+            NSString *subtitle = [NSString stringWithFormat:OALocalizedString(@"carplay_trip_via_point"), name];
+            if (subtitle.length <= kTripSubtitleMaxLength)
+                return subtitle;
+        }
+
+        NSString *coords = [self coordinatesForPoint:point];
+        return [NSString stringWithFormat:OALocalizedString(@"carplay_trip_via_point"), coords];
+    }
+
+    return [NSString localizedStringWithFormat:NSLocalizedString(@"carplay_trip_via_stops", nil), (long)points.count];
+}
+
 - (void) enterRoutePreviewMode:(BOOL)shouldCheckConnectedMainScene
 {
     if ([[OAMapViewTrackingUtilities instance] is3DMode])
@@ -176,13 +286,81 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CLLocationCoordinate2D finishCoord = CLLocationCoordinate2DMake(finish.getLatitude, finish.getLongitude);
     
-    MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:startCoord]];
-    MKMapItem *finishItem = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:finishCoord]];
+    NSString *destinationTitle = nil;
+    NSString *destinationSubtitle = nil;
+    NSString *poiName = [self poiNameForPoint:finish];
+    if (poiName)
+    {
+        destinationTitle = poiName;
+        NSString *address = [self addressForPoint:finish];
+        if (address && ![address isEqualToString:poiName])
+            destinationSubtitle = address;
+    }
+    else
+    {
+        destinationTitle = [self addressForPoint:finish] ?: [self coordinatesForPoint:finish];
+    }
     
-    startItem.name = OALocalizedString(@"shared_string_my_location");
-    finishItem.name = finish.pointDescription.name;
+    NSString *intermediateSubtitle = [self intermediateSubtitleForPoints:[targetHelper getIntermediatePointsNavigation]];
     
-    _currentTrip = [[CPTrip alloc] initWithOrigin:startItem destination:finishItem routeChoices:@[routeChoice]];
+    if (intermediateSubtitle)
+        destinationSubtitle = intermediateSubtitle;
+    
+    if (destinationSubtitle.length > 0 && [destinationSubtitle isEqualToString:destinationTitle])
+        destinationSubtitle = nil;
+    
+    if (@available(iOS 26.4, *)) {
+        CPLocationCoordinate3D originPoint = {
+            .latitude = startCoord.latitude,
+            .longitude = startCoord.longitude,
+            .altitude = CLLocationDistanceMax
+        };
+        CPLocationCoordinate3D destinationPoint = {
+            .latitude = finishCoord.latitude,
+            .longitude = finishCoord.longitude,
+            .altitude = CLLocationDistanceMax
+        };
+        CPLocationCoordinate3D unusedEntryPoint = destinationPoint;
+        
+        CPNavigationWaypoint *origin = [[CPNavigationWaypoint alloc]
+                                        initWithCenterPoint:originPoint
+                                        locationThreshold:nil
+                                        name:OALocalizedString(@"shared_string_my_location")
+                                        address:nil
+                                        entryPoints:&unusedEntryPoint
+                                        entryPointsCount:0
+                                        timeZone:nil];
+
+        CPNavigationWaypoint *destination = [[CPNavigationWaypoint alloc]
+                                             initWithCenterPoint:destinationPoint
+                                             locationThreshold:nil
+                                             name:destinationTitle
+                                             address:destinationSubtitle
+                                             entryPoints:&unusedEntryPoint
+                                             entryPointsCount:0
+                                             timeZone:nil];
+
+        _currentTrip = [[CPTrip alloc] initWithOriginWaypoint:origin
+                                          destinationWaypoint:destination
+                                                 routeChoices:@[routeChoice]];
+    } else {
+        
+        NSMutableDictionary<NSString *, NSString *> *addressDict = [NSMutableDictionary dictionary];
+        
+        if (destinationSubtitle.length > 0)
+            addressDict[@"City"] = destinationSubtitle;
+        
+        MKPlacemark *finishPlacemark = [[MKPlacemark alloc] initWithCoordinate:finishCoord
+                                                             addressDictionary:addressDict];
+        
+        MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:startCoord]];
+        MKMapItem *finishItem = [[MKMapItem alloc] initWithPlacemark:finishPlacemark];
+        
+        startItem.name = OALocalizedString(@"shared_string_my_location");
+        finishItem.name = destinationTitle ?: @"";
+        
+        _currentTrip = [[CPTrip alloc] initWithOrigin:startItem destination:finishItem routeChoices:@[routeChoice]];
+    }
     
     CPTripPreviewTextConfiguration *config = [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:OALocalizedString(@"shared_string_control_start") additionalRoutesButtonTitle:nil overviewButtonTitle:nil];
     

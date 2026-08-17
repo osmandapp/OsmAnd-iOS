@@ -97,6 +97,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic, assign) BOOL shouldFetchAddress;
 
 - (void)initAddressIfNeeded;
+- (void)resolveAddressWithCompletion:(void (^)(void))completion;
 - (BOOL)isValidObfId;
 
 @end

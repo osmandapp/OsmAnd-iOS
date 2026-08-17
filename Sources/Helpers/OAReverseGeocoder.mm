@@ -24,7 +24,11 @@
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
 
 @interface OAReverseGeocoder ()
+
 @property (nonatomic, strong) NSCache<NSString *, NSString *> *addressCache;
+@property (nonatomic, strong) NSOperationQueue *lookupQueue;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableArray *> *pendingLookups;
+
 @end
 
 @implementation OAReverseGeocoder
@@ -46,6 +50,12 @@
     {
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
+        _pendingLookups = [NSMutableDictionary dictionary];
+
+        _lookupQueue = [[NSOperationQueue alloc] init];
+        _lookupQueue.name = @"net.osmand.reverse-geocoder";
+        _lookupQueue.maxConcurrentOperationCount = 5;
+        _lookupQueue.qualityOfService = NSQualityOfServiceUserInitiated;
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(clearCache)
@@ -60,31 +70,128 @@
     [self.addressCache removeAllObjects];
 }
 
+- (NSString *)lookupKeyAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
+    BOOL transliterate = settings.settingMapLanguageTranslit.get;
+
+    if (objectId != 0)
+        return [NSString stringWithFormat:@"id:%llu:%@:%d", objectId, prefLang, transliterate];
+
+    return [NSString stringWithFormat:@"ll:%.7f:%.7f:%@:%d", lat, lon, prefLang, transliterate];
+}
+
+- (NSString *)cachedAddressForKey:(NSString *)cacheKey
+{
+    return [self.addressCache objectForKey:cacheKey];
+}
+
+- (void)cacheAddress:(NSString *)address forKey:(NSString *)cacheKey
+{
+    [self.addressCache setObject:address forKey:cacheKey];
+}
+
 - (NSString *)lookupAddressAtLat:(double)lat
                              lon:(double)lon
                         objectId:(uint64_t)objectId
 {
+    NSString *lookupKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
+    NSString *cachedAddress = [self cachedAddressForKey:lookupKey];
+    if (cachedAddress)
+        return cachedAddress;
+
+    if (NSThread.isMainThread)
+    {
+        NSLog(@"[OAReverseGeocoder] Synchronous lookup skipped on main thread. Use async lookupAddressAtLat:lon:objectId:completion: instead.");
+        return @"";
+    }
+
+    return [self performLookupAddressAtLat:lat lon:lon objectId:objectId];
+}
+
+- (void)lookupAddressAtLat:(double)lat
+                       lon:(double)lon
+                  objectId:(uint64_t)objectId
+                completion:(void (^)(NSString *address))completion
+{
+    NSString *lookupKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
+    NSString *cachedAddress = nil;
+
+    BOOL shouldStartLookup = NO;
+    @synchronized (self)
+    {
+        cachedAddress = [self cachedAddressForKey:lookupKey];
+        if (!cachedAddress)
+        {
+            NSMutableArray *pendingCompletions = self.pendingLookups[lookupKey];
+            if (pendingCompletions)
+            {
+                if (completion)
+                    [pendingCompletions addObject:[completion copy]];
+            }
+            else
+            {
+                pendingCompletions = [NSMutableArray array];
+                if (completion)
+                    [pendingCompletions addObject:[completion copy]];
+                self.pendingLookups[lookupKey] = pendingCompletions;
+                shouldStartLookup = YES;
+            }
+        }
+    }
+
+    if (cachedAddress)
+    {
+        [NSOperationQueue.mainQueue addOperationWithBlock:^{
+            if (completion)
+                completion(cachedAddress);
+        }];
+        return;
+    }
+
+    if (!shouldStartLookup)
+        return;
+
+    [self.lookupQueue addOperationWithBlock:^{
+        @autoreleasepool
+        {
+            NSString *address = [self performLookupAddressAtLat:lat lon:lon objectId:objectId];
+            NSArray *completions;
+            @synchronized (self)
+            {
+                completions = [self.pendingLookups[lookupKey] copy];
+                [self.pendingLookups removeObjectForKey:lookupKey];
+            }
+
+            [NSOperationQueue.mainQueue addOperationWithBlock:^{
+                for (void (^pendingCompletion)(NSString *) in completions)
+                    pendingCompletion(address);
+            }];
+        }
+    }];
+}
+
+- (NSString *)performLookupAddressAtLat:(double)lat
+                                    lon:(double)lon
+                               objectId:(uint64_t)objectId
+{
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
     
-    NSString *cacheKey = nil;
-    
-    if (objectId != 0)
-    {
-        cacheKey = prefLang.length > 0
-            ? [NSString stringWithFormat:@"%llu_%@", objectId, prefLang]
-            : [NSString stringWithFormat:@"%llu", objectId];
-        NSString *cachedAddress = [self.addressCache objectForKey:cacheKey];
-        if (cachedAddress)
-            return cachedAddress;
-    }
+    NSString *cacheKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
+    NSString *cachedAddress = [self cachedAddressForKey:cacheKey];
+    if (cachedAddress)
+        return cachedAddress;
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    const auto& geocoder = std::shared_ptr<OsmAnd::ReverseGeocoder>(new OsmAnd::ReverseGeocoder(obfsCollection, std::shared_ptr<OsmAnd::RoadLocator>(new OsmAnd::RoadLocator(obfsCollection))));
+    const auto geocoder = std::make_shared<OsmAnd::ReverseGeocoder>(
+        obfsCollection,
+        std::make_shared<OsmAnd::RoadLocator>(obfsCollection));
     
-    const auto& geoCriteria = std::shared_ptr<OsmAnd::ReverseGeocoder::Criteria>(new OsmAnd::ReverseGeocoder::Criteria);
+    const auto geoCriteria = std::make_shared<OsmAnd::ReverseGeocoder::Criteria>();
     geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     const auto object = geocoder->performSearch(*geoCriteria);
     
@@ -101,17 +208,27 @@
                 bldName = object->buildingInterpolation;
             else
                 bldName = object->building->getName(lang, transliterate);
-            
-            [geocodingResult appendFormat:@"%@ %@, %@",
-                object->street->getName(lang, transliterate).toNSString(),
-                bldName.toNSString(),
-                object->streetGroup->getName(lang, transliterate).toNSString()];
+
+            NSString *buildingName = bldName.toNSString();
+            NSString *streetName = object->street ? object->street->getName(lang, transliterate).toNSString() : nil;
+            NSString *groupName = object->streetGroup ? object->streetGroup->getName(lang, transliterate).toNSString() : nil;
+            NSMutableArray<NSString *> *addressParts = [NSMutableArray array];
+            if (streetName.length > 0 && buildingName.length > 0)
+                [addressParts addObject:[NSString stringWithFormat:@"%@ %@", streetName, buildingName]];
+            else if (buildingName.length > 0)
+                [addressParts addObject:buildingName];
+            if (groupName.length > 0)
+                [addressParts addObject:groupName];
+            [geocodingResult appendString:[addressParts componentsJoinedByString:@", "]];
         }
         else if (object->street)
         {
-            [geocodingResult appendFormat:@"%@, %@",
-                object->street->getName(lang, transliterate).toNSString(),
-                object->streetGroup->getName(lang, transliterate).toNSString()];
+            NSString *streetName = object->street->getName(lang, transliterate).toNSString();
+            NSString *groupName = object->streetGroup ? object->streetGroup->getName(lang, transliterate).toNSString() : nil;
+            if (groupName.length > 0)
+                [geocodingResult appendFormat:@"%@, %@", streetName, groupName];
+            else
+                [geocodingResult appendString:streetName];
         }
         else if (object->streetGroup)
         {
@@ -125,10 +242,9 @@
         }
     }
     
-    NSString *finalAddress = [NSString stringWithString:geocodingResult];
+    NSString *finalAddress = [geocodingResult copy];
     
-    if (cacheKey)
-        [self.addressCache setObject:finalAddress forKey:cacheKey];
+    [self cacheAddress:finalAddress forKey:cacheKey];
     
     return finalAddress;
 }

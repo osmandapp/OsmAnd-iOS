@@ -24,6 +24,7 @@ final class MigrationManager: NSObject {
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
+        case migrateWidgetLayoutPreferences
     }
     
     private struct HudMigrationScenario {
@@ -113,6 +114,45 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
                 migrateCarPlayMapAppearanceMode()
                 defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue) {
+                migrateWidgetLayoutPreferences()
+                defaults.set(true, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
+            }
+            defaults.set(false, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
+        }
+    }
+
+    private func migrateWidgetLayoutPreferences() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            for screenLayoutMode in ScreenLayoutMode.allCases {
+                let sourceVisibility = settings.mapInfoControls(screenLayoutMode.rawValue,
+                                                                screenElementsMode: ScreenElementsMode.shared.rawValue)
+                let targetVisibility = settings.mapInfoControls(screenLayoutMode.rawValue,
+                                                                screenElementsMode: ScreenElementsMode.independent.rawValue)
+                if sourceVisibility.isSet(for: appMode), !targetVisibility.isSet(for: appMode) {
+                    targetVisibility.set(sourceVisibility.get(appMode), mode: appMode)
+                }
+
+                let sourceCustomKeys = settings.customWidgetKeys(screenLayoutMode.rawValue,
+                                                                 screenElementsMode: ScreenElementsMode.shared.rawValue)
+                let targetCustomKeys = settings.customWidgetKeys(screenLayoutMode.rawValue,
+                                                                 screenElementsMode: ScreenElementsMode.independent.rawValue)
+                if sourceCustomKeys.isSet(for: appMode), !targetCustomKeys.isSet(for: appMode) {
+                    targetCustomKeys.set(sourceCustomKeys.get(appMode), mode: appMode)
+                }
+
+                for panel in WidgetsPanel.values {
+                    let sourceOrder = settings.widgetPanelOrder(panel,
+                                                                screenLayoutMode: screenLayoutMode.rawValue,
+                                                                screenElementsMode: ScreenElementsMode.shared.rawValue)
+                    let targetOrder = settings.widgetPanelOrder(panel,
+                                                                screenLayoutMode: screenLayoutMode.rawValue,
+                                                                screenElementsMode: ScreenElementsMode.independent.rawValue)
+                    if sourceOrder.isSet(for: appMode), !targetOrder.isSet(for: appMode) {
+                        targetOrder.set(sourceOrder.get(appMode), mode: appMode)
+                    }
+                }
             }
         }
     }

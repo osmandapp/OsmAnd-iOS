@@ -80,7 +80,7 @@ extension OABaseWidgetView {
     private func showAddWidgetController(addToNext: Bool, selectedWidget: String) {
         guard let widgetInfo = getWidgetInfo() else { return }
         
-        let vc = WidgetGroupListViewController()
+        let vc = WidgetGroupListViewController(screenLayoutMode: widgetInfo.screenLayoutMode)
         vc.widgetPanel = widgetInfo.widgetPanel
         vc.addToNext = addToNext
         vc.selectedWidget = selectedWidget

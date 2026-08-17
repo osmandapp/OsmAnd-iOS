@@ -16,14 +16,26 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     var widgetPanel: WidgetsPanel!
     var addToNext: Bool?
     var selectedWidget: String?
+    let screenLayoutMode: ScreenLayoutMode
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+
+    init(screenLayoutMode: ScreenLayoutMode) {
+        self.screenLayoutMode = screenLayoutMode
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func generateData() {
         let section = tableData.createNewSection()
         let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         for widget in sortedWidgets {
-            let widgetInfo = widgetRegistry.getWidgetInfo(for: widget)
+            let widgetInfo = widgetRegistry.getWidgetInfo(for: widget,
+                                                          appMode: OAAppSettings.sharedManager().applicationMode.get(),
+                                                          screenLayoutMode: screenLayoutMode.rawValue)
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()

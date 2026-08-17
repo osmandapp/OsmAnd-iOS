@@ -17,6 +17,8 @@ class MapWidgetInfo: NSObject, Comparable {
     
     let key: String
     let widget: OABaseWidgetView
+    let appMode: OAApplicationMode
+    let screenLayoutMode: ScreenLayoutMode
     
     var widgetPanel: WidgetsPanel
     var priority: Int
@@ -32,9 +34,13 @@ class MapWidgetInfo: NSObject, Comparable {
          message: String,
          page: Int,
          order: Int,
-         widgetPanel: WidgetsPanel) {
+         widgetPanel: WidgetsPanel,
+         appMode: OAApplicationMode,
+         screenLayoutMode: ScreenLayoutMode) {
         self.key = key
         self.widget = widget
+        self.appMode = appMode
+        self.screenLayoutMode = screenLayoutMode
         self.widgetState = widget.getWidgetState()
         self.settingsIconId = settingsIconId
         self.message = message
@@ -257,7 +263,7 @@ class MapWidgetInfo: NSObject, Comparable {
             newVisibilityString.removeLast()
         }
 
-        getVisibilityPreference().set(newVisibilityString, mode: appMode)
+        visibilityPreference(appMode).set(newVisibilityString, mode: appMode)
 
         if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode), (enabled == nil || !enabled!.boolValue) {
             settingsPref.resetMode(toDefault: appMode)
@@ -265,12 +271,15 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     private func getWidgetsVisibility(_ appMode: OAApplicationMode) -> [String] {
-        let widgetsVisibilityString = getVisibilityPreference().get(appMode)
+        let widgetsVisibilityString = visibilityPreference(appMode).get(appMode)
         return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
     }
     
-    private func getVisibilityPreference() -> OACommonString {
-        OAAppSettings.sharedManager().mapInfoControls
+    private func visibilityPreference(_ appMode: OAApplicationMode) -> OACommonString {
+        let settings = OAAppSettings.sharedManager()
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
+        return settings.mapInfoControls(screenLayoutMode.rawValue,
+                                        screenElementsMode: screenElementsMode.rawValue)
     }
 
     override func isEqual(_ obj: Any?) -> Bool {

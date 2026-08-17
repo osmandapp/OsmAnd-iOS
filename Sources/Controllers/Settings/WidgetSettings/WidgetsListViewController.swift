@@ -54,14 +54,11 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode,
+                                                                   layoutMode: screenLayoutMode)
     
     // MARK: - Initialization
     
-    convenience init(widgetPanel: WidgetsPanel!) {
-        self.init(widgetPanel: widgetPanel, screenLayoutMode: .defaultMode)
-    }
-
     init(widgetPanel: WidgetsPanel!, screenLayoutMode: ScreenLayoutMode) {
         self.widgetPanel = widgetPanel
         self.screenLayoutMode = screenLayoutMode
@@ -69,8 +66,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     required init?(coder: NSCoder) {
-        screenLayoutMode = .defaultMode
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func registerNotifications() {
@@ -155,7 +151,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     override func onTopButtonPressed() {
-        let vc = WidgetGroupListViewController()
+        let vc = WidgetGroupListViewController(screenLayoutMode: screenLayoutMode)
         vc.widgetPanel = widgetPanel
         vc.addToNext = nil
         vc.selectedWidget = nil
@@ -287,6 +283,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                    panel: widgetPanel,
                                    selectedAppMode: selectedAppMode,
+                                   screenLayoutMode: screenLayoutMode,
                                    widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
     }
 }
@@ -557,7 +554,10 @@ extension WidgetsListViewController {
     }
     
     private func updateEnabledWidgets() {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])!
+        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+                                                               filterModes: Self.enabledWidgetsFilter,
+                                                               panels: [widgetPanel],
+                                                               screenLayoutMode: screenLayoutMode.rawValue)!
         let noEnabledWidgets = enabledWidgets.count == 0
         if noEnabledWidgets && !editMode {
             var iconName = "ic_custom_screen_side_left_48"
@@ -578,7 +578,10 @@ extension WidgetsListViewController {
             row.iconTintColor = .iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
+            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
+                                                              panel: widgetPanel,
+                                                              filterModes: Self.enabledWidgetsFilter,
+                                                              screenLayoutMode: screenLayoutMode.rawValue)!
             tableData.clearAllData()
             tableData.createNewSection()
             for i in 0..<pagedWidgets.count {
@@ -714,14 +717,16 @@ extension WidgetsListViewController {
     override func getTopButtonTitle() -> String {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
-                                                               panels: [widgetPanel])!
+                                                               panels: [widgetPanel],
+                                                               screenLayoutMode: screenLayoutMode.rawValue)!
         return editMode || enabledWidgets.count > 0 ? localizedString("add_widget") : ""
     }
     
     override func getBottomButtonTitle() -> String {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
-                                                               panels: [widgetPanel])!
+                                                               panels: [widgetPanel],
+                                                               screenLayoutMode: screenLayoutMode.rawValue)!
         return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     

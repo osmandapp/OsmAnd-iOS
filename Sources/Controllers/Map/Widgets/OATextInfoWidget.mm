@@ -1059,7 +1059,17 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] || self.widgetType.getPanel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+
+    OAApplicationMode *appMode = [self getAppMode];
+    BOOL useSeparateLayouts = [[[OAAppSettings sharedManager] useSeparateLayouts] get:appMode];
+    ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape] ? ScreenLayoutModeLandscape : ScreenLayoutModePortrait;
+    NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
+    OAWidgetsPanel *storedPanel = [self.widgetType getPanel:widgetId
+                                                   appMode:appMode
+                                          screenLayoutMode:screenLayoutMode];
+    BOOL verticalPanel = [[self getWidgetPanel] isPanelVertical] || storedPanel.isPanelVertical;
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
+                                                                   defValue:verticalPanel ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

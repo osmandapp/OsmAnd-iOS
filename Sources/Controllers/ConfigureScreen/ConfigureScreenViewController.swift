@@ -246,10 +246,12 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     }
 
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
-        // todo
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
+        return widgetRegistry.getWidgetsForPanel(appMode,
+                                                 filterModes: filter,
+                                                 panels: [panel],
+                                                 screenLayoutMode: screenLayoutMode.rawValue).count
     }
     
     // MARK: AppModeSelectionDelegate
@@ -301,8 +303,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let self else { return }
-            let helper = WidgetsSettingsHelper(appMode: appMode)
-            helper.setLayoutMode(screenLayoutMode)
+            let helper = WidgetsSettingsHelper(appMode: appMode, layoutMode: screenLayoutMode)
             helper.resetConfigureScreenSettings()
             applyConfigureScreenSettings()
         })
@@ -516,8 +517,7 @@ extension ConfigureScreenViewController: OACopyProfileBottomSheetDelegate {
 
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        let helper = WidgetsSettingsHelper(appMode: appMode)
-        helper.setLayoutMode(screenLayoutMode)
+        let helper = WidgetsSettingsHelper(appMode: appMode, layoutMode: screenLayoutMode)
         helper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
                                            widgetParams: ["selectedAppMode": appMode])
         applyConfigureScreenSettings()

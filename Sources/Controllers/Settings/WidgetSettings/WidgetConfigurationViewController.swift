@@ -411,7 +411,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
         guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
                                                                 panel: widgetPanel,
-                                                                filterModes: enabledWidgetsFilter),
+                                                                filterModes: enabledWidgetsFilter,
+                                                                screenLayoutMode: widgetInfo.screenLayoutMode.rawValue),
               let widget = mapWidgetInfo.widget as? OATextInfoWidget else {
             return
         }
@@ -518,6 +519,7 @@ extension WidgetConfigurationViewController {
                 let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
                                                                    panel: widgetPanel,
                                                                    appMode: selectedAppMode,
+                                                                   screenLayoutMode: widgetInfo.screenLayoutMode,
                                                                    selectedWidget: selectedWidget,
                                                                    widgetParams: widgetConfigurationParams,
                                                                    addToNext: addToNext)

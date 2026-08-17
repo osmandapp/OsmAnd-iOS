@@ -10,6 +10,7 @@ import Foundation
 
 @objc(OAWidgetRegistrationDelegate)
 protocol WidgetRegistrationDelegate {
+    var screenLayoutMode: ScreenLayoutMode { get }
     func addWidget(_ widgetInfo: MapWidgetInfo)
 }
 
@@ -17,14 +18,16 @@ protocol WidgetRegistrationDelegate {
 @objcMembers
 class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     private let appMode: OAApplicationMode
+    let screenLayoutMode: ScreenLayoutMode
     private let factory: MapWidgetsFactory
     private let creator: WidgetInfoCreator
     private var mapWidgetsCache: [MapWidgetInfo] = []
     
-    private init(_ appMode: OAApplicationMode) {
+    private init(_ appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
         self.appMode = appMode
+        self.screenLayoutMode = screenLayoutMode
         self.factory = MapWidgetsFactory()
-        self.creator = WidgetInfoCreator(appMode: appMode)
+        self.creator = WidgetInfoCreator(appMode: appMode, screenLayoutMode: screenLayoutMode)
     }
     
     private func createAllControls() -> [MapWidgetInfo] {
@@ -96,7 +99,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     
     private func createCustomWidgets() {
         updateUniqueKeys()
-        let widgetKeys = OAAppSettings.sharedManager().customWidgetKeys.get(appMode)
+        let widgetKeys = customWidgetKeysPreference().get(appMode)
         if !widgetKeys.isEmpty {
             for key in widgetKeys {
                 if let widgetType = WidgetType.getById(key) {
@@ -109,7 +112,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     }
 
     private func updateUniqueKeys() {
-        let customWidgetKeys = OAAppSettings.sharedManager().customWidgetKeys
+        let customWidgetKeys = customWidgetKeysPreference()
         let widgetKeys = customWidgetKeys.get(appMode)
         if !widgetKeys.isEmpty {
             let uniqueKeys = Array(Set(widgetKeys))
@@ -119,9 +122,16 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         }
     }
 
-    static func createAllControls(appMode: OAApplicationMode) -> [MapWidgetInfo] {
-        let initializer = WidgetsInitializer(appMode)
+    static func createAllControls(appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> [MapWidgetInfo] {
+        let initializer = WidgetsInitializer(appMode, screenLayoutMode: screenLayoutMode)
         return initializer.createAllControls()
+    }
+
+    private func customWidgetKeysPreference() -> OACommonStringList {
+        let settings = OAAppSettings.sharedManager()
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
+        return settings.customWidgetKeys(screenLayoutMode.rawValue,
+                                         screenElementsMode: screenElementsMode.rawValue)
     }
     
     // MARK: WidgetRegistrationDelegate

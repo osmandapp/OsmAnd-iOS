@@ -15,15 +15,15 @@ class CenterWidgetInfo: MapWidgetInfo {
         let widgetType = getWidgetType()
         
         if let widgetType {
-            if (widgetType.defaultPanel == .bottomPanel && WidgetsPanel.topPanel.contains(widgetId: key)) {
+            if (widgetType.defaultPanel == .bottomPanel && WidgetsPanel.topPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode)) {
                 widgetPanel = .topPanel;
-            } else if (widgetType.defaultPanel == .topPanel && WidgetsPanel.bottomPanel.contains(widgetId: key)) {
+            } else if (widgetType.defaultPanel == .topPanel && WidgetsPanel.bottomPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode)) {
                 widgetPanel = .bottomPanel
             } else {
                 widgetPanel = widgetType.defaultPanel
             }
         } else {
-            widgetPanel = WidgetsPanel.topPanel.contains(widgetId: key) ? .topPanel : .bottomPanel
+            widgetPanel = WidgetsPanel.topPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode) ? .topPanel : .bottomPanel
         }
         return widgetPanel
     }

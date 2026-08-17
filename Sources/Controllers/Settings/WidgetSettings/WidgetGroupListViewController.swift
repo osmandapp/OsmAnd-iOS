@@ -15,6 +15,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     var widgetPanel: WidgetsPanel!
     var addToNext: Bool?
     var selectedWidget: String?
+    let screenLayoutMode: ScreenLayoutMode
     
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
@@ -23,6 +24,15 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     private var filteredSection: OATableSectionData!
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+
+    init(screenLayoutMode: ScreenLayoutMode) {
+        self.screenLayoutMode = screenLayoutMode
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func generateData() {
         filteredSection = OATableSectionData()
@@ -47,7 +57,10 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         
         let filter = Int(KWidgetModeAvailable | kWidgetModeDefault)
         
-        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: filter, panels: [widgetPanel])!
+        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(),
+                                                                 filterModes: filter,
+                                                                 panels: [widgetPanel],
+                                                                 screenLayoutMode: screenLayoutMode.rawValue)!
         let hasAvailableWidgets = availableWidgets.count > 0
         
         if hasAvailableWidgets {
@@ -326,7 +339,7 @@ extension WidgetGroupListViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = getItem(indexPath)
         if let widgetGroup = item.obj(forKey: "widget_group") as? WidgetGroup {
-            let vc = WidgetGroupItemsViewController()
+            let vc = WidgetGroupItemsViewController(screenLayoutMode: screenLayoutMode)
             vc.widgetPanel = widgetPanel
             vc.widgetGroup = widgetGroup
             vc.addToNext = addToNext
@@ -334,10 +347,15 @@ extension WidgetGroupListViewController {
             navigationController?.pushViewController(vc, animated: true)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
-                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType) else {
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType,
+                                                                appMode: OAAppSettings.sharedManager().applicationMode.get(),
+                                                                screenLayoutMode: screenLayoutMode.rawValue) else {
                 return
             }
-            if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: Self.enabledWidgetsFilter, panels: WidgetsPanel.values).array as? [MapWidgetInfo] {
+            if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(),
+                                                                      filterModes: Self.enabledWidgetsFilter,
+                                                                      panels: WidgetsPanel.values,
+                                                                      screenLayoutMode: screenLayoutMode.rawValue).array as? [MapWidgetInfo] {
                 let similarAlreadyExist = enabledWidgets.contains { $0.key == widgetInfo.key }
                 let possibleSimilarWidgetArray = [WidgetType.averageSpeed.id]
                 if similarAlreadyExist, possibleSimilarWidgetArray.contains(widgetInfo.key) {

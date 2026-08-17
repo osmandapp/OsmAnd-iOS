@@ -93,13 +93,17 @@ class WidgetsSettingsHelper: NSObject {
         mapButtonsHelper.copyQuickActions(from: appMode, fromAppMode: fromAppMode)
     }
 
-    func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {
+    func copyWidgetsForPanel(fromAppMode: OAApplicationMode,
+                             fromLayoutMode: ScreenLayoutMode? = nil,
+                             panel: WidgetsPanel,
+                             widgetParams: [String: Any]? = nil) {
         let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
         let panels = [panel]
+        let sourceLayoutMode = fromLayoutMode ?? layoutMode
         let widgetInfosToCopy = widgetRegistry.getWidgetsForPanel(fromAppMode,
                                                                   filterModes: Int(filter),
                                                                   panels: panels,
-                                                                  screenLayoutMode: layoutMode.rawValue)
+                                                                  screenLayoutMode: sourceLayoutMode.rawValue)
 
         var previousPage = -1
         var newPagedOrder = [[String]]()

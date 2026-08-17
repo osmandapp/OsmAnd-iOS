@@ -186,8 +186,13 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
 
-    private func copyWidgets(from screenLayoutMode: ScreenLayoutMode) {
-        // TODO: Copy widgets from the selected screen layout.
+    private func copyWidgets(from sourceScreenLayoutMode: ScreenLayoutMode) {
+        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: selectedAppMode,
+                                                  fromLayoutMode: sourceScreenLayoutMode,
+                                                  panel: widgetPanel,
+                                                  widgetParams: ["selectedAppMode": selectedAppMode])
+        OARootViewController.instance().mapPanel.recreateAllControls()
+        updateUIAnimated(nil)
     }
     
     func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {

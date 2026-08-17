@@ -79,6 +79,7 @@ enum PlanRouteButtonFactory {
 
         let button = OAHudButton()
         button.configuration = configuration
+        button.layer.cornerRadius = height / 2
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentHorizontalAlignment = .center
 

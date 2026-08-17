@@ -192,17 +192,21 @@ enum PlanRouteButtonFactory {
     private static func applySystemGlass(to button: UIButton, cornerRadius: CGFloat) {
         button.viewWithTag(glassEffectTag)?.removeFromSuperview()
 
-        let glass = UIGlassEffect(style: .regular)
-        glass.tintColor = OAAppSettings.sharedManager().nightMode
-            ? UIColor.black.withAlphaComponent(0.16)
-            : UIColor.white.withAlphaComponent(0.12)
+        let shouldUseClearGlass = !ThemeManager.shared.isLightTheme()
+        let isDarkAppearance = shouldUseClearGlass || OAAppSettings.sharedManager().nightMode
+        let glass = UIGlassEffect(style: shouldUseClearGlass ? .clear : .regular)
+        if !shouldUseClearGlass {
+            glass.tintColor = isDarkAppearance
+                ? UIColor.black.withAlphaComponent(0.16)
+                : UIColor.white.withAlphaComponent(0.12)
+        }
 
         let glassView = UIVisualEffectView(effect: glass)
         glassView.tag = glassEffectTag
         glassView.isUserInteractionEnabled = false
         glassView.layer.cornerRadius = cornerRadius
         glassView.layer.masksToBounds = true
-        glassView.overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
+        glassView.overrideUserInterfaceStyle = isDarkAppearance ? .dark : .light
         glassView.translatesAutoresizingMaskIntoConstraints = false
         button.insertSubview(glassView, at: 0)
 

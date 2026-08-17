@@ -29,6 +29,12 @@ final class ZoomLevelWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId).set(typePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId).set(typePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getZoomLevelType() -> EOAWidgetZoomLevelType {
         typePreference.get()

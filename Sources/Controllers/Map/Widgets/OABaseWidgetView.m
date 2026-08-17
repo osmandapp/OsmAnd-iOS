@@ -145,6 +145,15 @@
         [widgetState copyPrefs:appMode customId:customId];
 }
 
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    OAWidgetState *widgetState = [self getWidgetState];
+    if (widgetState)
+        [widgetState copyPrefsFromMode:fromAppMode appMode:appMode customId:customId];
+}
+
 - (OAWidgetState *)getWidgetState {
     return nil;
 }

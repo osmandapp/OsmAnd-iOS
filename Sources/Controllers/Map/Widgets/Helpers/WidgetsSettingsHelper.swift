@@ -63,10 +63,15 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
+        let sourceScreenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(fromAppMode))
         copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
-        for panel in WidgetsPanel.values {
-            copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
-        }
+        copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
+
+        let otherScreenElementsMode: ScreenElementsMode = sourceScreenElementsMode == .shared ? .independent : .shared
+        settings.useSeparateLayouts.set(otherScreenElementsMode.usesSeparateLayouts, mode: appMode)
+        copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
+        settings.useSeparateLayouts.set(sourceScreenElementsMode.usesSeparateLayouts, mode: appMode)
+
         ScreenElementsMode.allCases.forEach {
             copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
         }
@@ -123,6 +128,10 @@ class WidgetsSettingsHelper: NSObject {
                 }
 
                 if !widgetIdToAdd.isEmpty {
+                    let customId = widgetIdToAdd == defaultWidgetInfo.key ? nil : widgetIdToAdd
+                    info.widget.copySettings(from: fromAppMode,
+                                             appMode: appMode,
+                                             customId: customId)
                     if previousPage != info.pageIndex || newPagedOrder.isEmpty {
                         previousPage = info.pageIndex
                         newPagedOrder.append([String]())
@@ -224,6 +233,15 @@ class WidgetsSettingsHelper: NSObject {
 
     private func copyPrefFromAppMode(pref: OACommonPreference, fromAppMode: OAApplicationMode) {
         pref.setValueFrom(pref.toStringValue(fromAppMode), appMode: appMode)
+    }
+
+    private func copyWidgetsForAllPanels(fromAppMode: OAApplicationMode,
+                                         widgetParams: [String: Any]) {
+        for panel in WidgetsPanel.values {
+            copyWidgetsForPanel(fromAppMode: fromAppMode,
+                                panel: panel,
+                                widgetParams: widgetParams)
+        }
     }
 
     private func resetWidgetPreferences(_ screenElementsMode: ScreenElementsMode) {

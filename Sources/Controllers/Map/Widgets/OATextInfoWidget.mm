@@ -1085,4 +1085,24 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     return _appMode;
 }
 
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    [super copySettingsFromMode:fromAppMode appMode:appMode customId:customId];
+    if (!self.widgetType)
+        return;
+
+    if (self.widgetSizePref)
+    {
+        OACommonWidgetSizeStyle *sizePreference = [self registerWidgetSizePref:customId];
+        [sizePreference set:[self.widgetSizePref get:fromAppMode] mode:appMode];
+    }
+    if (_showIconPref)
+    {
+        OACommonBoolean *showIconPreference = [self registerShowIconPref:customId];
+        [showIconPreference set:[_showIconPref get:fromAppMode] mode:appMode];
+    }
+}
+
 @end

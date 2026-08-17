@@ -200,6 +200,14 @@ final class GlideAverageWidget: GlideBaseWidget {
         Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref?.get(appMode) ?? AverageValueComputer.defaultIntervalMillis, mode: appMode)
     }
 
+    override func copySettings(from fromAppMode: OAApplicationMode,
+                               appMode toAppMode: OAApplicationMode,
+                               customId: String?) {
+        super.copySettings(from: fromAppMode, appMode: toAppMode, customId: customId)
+        Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref?.get(fromAppMode) ?? AverageValueComputer.defaultIntervalMillis,
+                                                        mode: toAppMode)
+    }
+
     private static func registerMeasuredIntervalPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonLong {
         var prefId: String
         if let customId, !customId.isEmpty {

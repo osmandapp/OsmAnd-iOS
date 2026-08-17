@@ -103,8 +103,7 @@
 
     if (NSThread.isMainThread)
     {
-        NSLog(@"[OAReverseGeocoder] Synchronous lookup skipped on main thread. Use async lookupAddressAtLat:lon:objectId:completion: instead.");
-        return @"";
+        NSLog(@"[OAReverseGeocoder] [WARNING] Synchronous reverse geocoding must not be performed on the main thread. Use async lookupAddressAtLat:lon:objectId:completion: instead.");
     }
 
     return [self performLookupAddressAtLat:lat lon:lon objectId:objectId];

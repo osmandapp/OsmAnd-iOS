@@ -119,7 +119,6 @@ final class MigrationManager: NSObject {
                 migrateWidgetLayoutPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
             }
-            defaults.set(false, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
         }
     }
 

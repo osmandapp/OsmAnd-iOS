@@ -35,6 +35,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var searchText = ""
     var isSearchActive = false
     var isSelectionModeInSearch = false
+    var isCancellingSearch = false
     var lastDistanceDirectionUpdate: TimeInterval = 0.0
     var isContextMenuVisible = false
     var shouldReloadCollectionView = false

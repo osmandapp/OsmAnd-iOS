@@ -112,6 +112,7 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
     }
 
     func searchResults(for searchController: UISearchController) {
+        guard !isCancellingSearch else { return }
         isSearchActive = searchController.isActive
         if isSearchActive || !isSelectionModeInSearch {
             searchText = searchController.searchBar.searchTextField.text ?? ""
@@ -122,6 +123,7 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isCancellingSearch = true
         isSearchActive = false
         if !isSelectionModeInSearch {
             searchText = ""
@@ -132,6 +134,9 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         configureToolbar()
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
+        DispatchQueue.main.async {
+            self.isCancellingSearch = false
+        }
     }
 
     func presentSearchController(_ searchController: UISearchController) {

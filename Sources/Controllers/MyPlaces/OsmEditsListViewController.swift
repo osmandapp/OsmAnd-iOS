@@ -48,6 +48,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         case sortHeader(SortHeader)
         case header(Header)
         case point(OsmPoint)
+        case emptyState
 
         var selectionItem: OsmPoint? {
             guard case .point(let point) = self else { return nil }
@@ -113,6 +114,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, _, headerItem) in
         cell.sortButton.setImage(headerItem.sortMode.image?.resizedMenuImage(), for: .normal)
         cell.sortButton.menu = headerItem.menu
+    }
+
+    private let emptyStateCellRegistration = UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { cell, _, _ in
+        cell.configure(image: .icActionOpenstreetmapLogo, title: localizedString("osm_edits_empty_state_title"), description: localizedString("osm_edits_empty_state_description"))
+        cell.button.isHidden = true
     }
 
     // MARK: - Init
@@ -218,7 +224,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
 
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             config.backgroundColor = .clear
-            if !self.isSearchActive && !self.isSelectionModeInSearch {
+            if !self.isSearchActive && !self.isSelectionModeInSearch && !self.isEmptyStateSection(at: sectionIndex) {
                 config.headerMode = .firstItemInSection
             }
 
@@ -236,28 +242,29 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
             return true
         }
     }
+
+    private func isEmptyStateSection(at sectionIndex: Int) -> Bool {
+        guard let dataSource else { return false }
+        let snapshot = dataSource.snapshot()
+        guard snapshot.sectionIdentifiers.indices.contains(sectionIndex) else { return false }
+        return snapshot.itemIdentifiers(inSection: snapshot.sectionIdentifiers[sectionIndex]).contains(.emptyState)
+    }
     
     private func makeDataSource() -> DataSource {
         let source = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item -> UICollectionViewCell in
             guard let self else { return UICollectionViewCell() }
             switch item {
             case .sortHeader(let headerItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: headerItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: headerItem)
             case .header(let headerItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: headerItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration, for: indexPath, item: headerItem)
             case .point(let pointItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
-                                                                        for: indexPath,
-                                                                        item: pointItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: pointItem)
+            case .emptyState:
+                return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
+
         return source
     }
     
@@ -265,6 +272,13 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         var snapshot = Snapshot()
         let poi = OAOsmEditsDBHelper.sharedDatabase().getOpenstreetmapPoints()
         let notes = OAOsmBugsDBHelper.sharedDatabase().getOsmBugsPoints()
+        guard !poi.isEmpty || !notes.isEmpty else {
+            let emptyStateSection = Header(title: "", points: [])
+            snapshot.appendSections([emptyStateSection])
+            snapshot.appendItems([.emptyState], toSection: emptyStateSection)
+            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            return
+        }
         
         let sortSection = Header(title: "", points: [])
         let sortHeader = SortHeader(sortMode: sortMode, menu: createSortMenu())

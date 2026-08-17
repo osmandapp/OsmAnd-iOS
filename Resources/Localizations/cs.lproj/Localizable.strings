@@ -4417,7 +4417,7 @@
 "sort_by_nearest_to_map_center" = "Nejblíž ke středu mapy";
 "shared_string_copy_from" = "Kopírovat z";
 "add_points" = "Přidat body";
-"add_points_description" = "Vyberte místa na mapě nebo je zkopírujte z vašich Oblíbených abyste je viděli na trase.";
+"add_points_description" = "Vyberte místa na mapě nebo je zkopírujte z vašich Oblíbených, abyste je viděli na trase.";
 "shared_string_new_name" = "Nový název";
 "shared_string_undo" = "Vrátit";
 "shared_string_redo" = "Znovu";
@@ -4428,3 +4428,6 @@
 "plan_route_no_points_descr" = "Klepněte kdekoli na mapě nebo použijte hledání k přidání prvních bodů vaší trasy.";
 "shared_string_sort" = "Řadit";
 "shared_string_manual" = "Ručně";
+"send_current_app_log_descr" = "Od spuštění aplikace";
+"send_current_app_log" = "Odeslat aktuální protokol aplikace";
+"shared_string_send" = "Odeslat";

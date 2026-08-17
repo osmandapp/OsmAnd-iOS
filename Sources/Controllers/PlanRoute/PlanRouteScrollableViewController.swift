@@ -40,7 +40,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private let tabs = PlanRouteTab.allCases
     private let routeTypeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomQuestionmark)
-    private var sheetState: EOADraggableMenuState = .expanded
+    private var sheetState: EOADraggableMenuState
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
     private var crosshairCenterYConstraint: NSLayoutConstraint?
@@ -81,6 +81,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
+        sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded
         super.init(nibName: nil, bundle: nil)
     }
 

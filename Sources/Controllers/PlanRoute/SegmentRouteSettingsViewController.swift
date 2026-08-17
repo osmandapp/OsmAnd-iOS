@@ -81,7 +81,13 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navigationItem.leftBarButtonItem = closeButton
         }
 
-        let checkmarkImage = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let checkmarkColor: UIColor
+        if #available(iOS 26.0, *) {
+            checkmarkColor = .white
+        } else {
+            checkmarkColor = .iconColorActive
+        }
+        let checkmarkImage = UIImage.icCheckmarkDefault.withTintColor(checkmarkColor, renderingMode: .alwaysOriginal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: checkmarkImage,
                                                             style: .done,
                                                             target: self,

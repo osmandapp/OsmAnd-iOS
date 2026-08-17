@@ -102,9 +102,7 @@
         return cachedAddress;
 
     if (NSThread.isMainThread)
-    {
         NSLog(@"[OAReverseGeocoder] [WARNING] Synchronous reverse geocoding must not be performed on the main thread. Use async lookupAddressAtLat:lon:objectId:completion: instead.");
-    }
 
     return [self performLookupAddressAtLat:lat lon:lon objectId:objectId];
 }
@@ -209,21 +207,33 @@
                 bldName = object->building->getName(lang, transliterate);
 
             NSString *buildingName = bldName.toNSString();
-            NSString *streetName = object->street ? object->street->getName(lang, transliterate).toNSString() : nil;
-            NSString *groupName = object->streetGroup ? object->streetGroup->getName(lang, transliterate).toNSString() : nil;
+            NSString *streetName = object->street
+                ? object->street->getName(lang, transliterate).toNSString()
+                : nil;
+            NSString *groupName = object->streetGroup
+                ? object->streetGroup->getName(lang, transliterate).toNSString()
+                : nil;
+
             NSMutableArray<NSString *> *addressParts = [NSMutableArray array];
+
             if (streetName.length > 0 && buildingName.length > 0)
                 [addressParts addObject:[NSString stringWithFormat:@"%@ %@", streetName, buildingName]];
+            else if (streetName.length > 0)
+                [addressParts addObject:streetName];
             else if (buildingName.length > 0)
                 [addressParts addObject:buildingName];
+
             if (groupName.length > 0)
                 [addressParts addObject:groupName];
+
             [geocodingResult appendString:[addressParts componentsJoinedByString:@", "]];
         }
         else if (object->street)
         {
             NSString *streetName = object->street->getName(lang, transliterate).toNSString();
-            NSString *groupName = object->streetGroup ? object->streetGroup->getName(lang, transliterate).toNSString() : nil;
+            NSString *groupName = object->streetGroup
+            ? object->streetGroup->getName(lang, transliterate).toNSString()
+            : nil;
             if (groupName.length > 0)
                 [geocodingResult appendFormat:@"%@, %@", streetName, groupName];
             else

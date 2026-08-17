@@ -30,23 +30,6 @@
     return self;
 }
 
-- (void)initAddressIfNeeded
-{
-    if (self.addressFound)
-        return;
-
-    OAReverseGeocoder *geocoder = OAReverseGeocoder.instance;
-    NSString *roadTitle = self.obfId > 0 && self.isValidObfId
-        ? [geocoder lookupAddressAtLat:_location.latitude
-                                   lon:_location.longitude
-                              objectId:self.obfId]
-        : [geocoder lookupAddressAtLat:_location.latitude
-                                   lon:_location.longitude];
-
-    self.titleAddress = roadTitle;
-    self.addressFound = roadTitle.length > 0;
-}
-
 - (void)resolveAddressWithCompletion:(void (^)(void))completion
 {
     if (self.addressFound)

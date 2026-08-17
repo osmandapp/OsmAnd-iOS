@@ -34,6 +34,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var pointToShare: OAFavoritePointBridgeItem?
     var searchText = ""
     var isSearchActive = false
+    var lastAppliedSearchState: (isActive: Bool, text: String)?
     var isSelectionModeInSearch = false
     var isCancellingSearch = false
     var lastDistanceDirectionUpdate: TimeInterval = 0.0

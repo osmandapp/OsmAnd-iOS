@@ -276,6 +276,7 @@ extension FavoriteListViewController {
     }
 
     @objc func searchButtonPressed(_ sender: Any) {
+        lastAppliedSearchState = nil
         isSearchActive = true
         showSearchController()
         configureNavigationButtons()

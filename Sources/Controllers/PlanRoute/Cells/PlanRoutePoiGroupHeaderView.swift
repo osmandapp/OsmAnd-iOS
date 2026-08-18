@@ -8,6 +8,7 @@
 import UIKit
 
 final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
+    private static let horizontalInset: CGFloat = 16
     private static let buttonSize: CGFloat = 44
 
     private let titleLabel = UILabel()
@@ -46,7 +47,7 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
-        subtitleLabel.font = .preferredFont(forTextStyle: .footnote)
+        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
         subtitleLabel.textColor = .textColorSecondary
         subtitleLabel.numberOfLines = 0
         subtitleLabel.adjustsFontForContentSizeCategory = true
@@ -64,10 +65,10 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         }
 
         let constraints = [
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             optionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.buttonSize),

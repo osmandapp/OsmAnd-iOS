@@ -54,6 +54,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
     private var pointEditingHeight: CGFloat?
+    private var cachedMapTargetScreenPointRatio: CGPoint?
     private var cachedMapViewportYScale: Double?
     private var approximationHeight: CGFloat?
     private var approximationPreviousSheetState: EOADraggableMenuState?
@@ -134,7 +135,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cachedMapViewportYScale = OARootViewController.instance().mapPanel.mapViewController.viewportYScale
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewSize = mapViewController.view.bounds.size
+        if let mapTargetScreenPoint = mapViewController.mapRendererView?.mapTargetScreenPoint,
+           mapViewSize.width > 0,
+           mapViewSize.height > 0 {
+            cachedMapTargetScreenPointRatio = CGPoint(x: mapTargetScreenPoint.x / mapViewSize.width,
+                                                      y: mapTargetScreenPoint.y / mapViewSize.height)
+        }
+        cachedMapViewportYScale = mapViewController.viewportYScale
         (view as? OAUserInteractionPassThroughView)?.isScreenClickable = true
         setupSheet()
         setupTopPart()
@@ -181,7 +190,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
             ? -routeTypeButtonBottomInset(for: sheetState)
             : -(height + 12)
-        updateCrosshairMapCenter(sheetHeight: height)
+        updateCrosshair(sheetHeight: height, preserveMapPosition: true)
         if animated {
             sheetView.transform = CGAffineTransform(translationX: 0, y: height)
             UIView.animate(withDuration: Self.sheetAnimationDuration) {
@@ -211,7 +220,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
                 ? -routeTypeButtonBottomInset(for: sheetState)
                 : -(height + 12)
-            updateCrosshairMapCenter(sheetHeight: height, screenSize: size)
+            updateCrosshair(sheetHeight: height, screenSize: size)
             refreshMapControls()
         }
     }
@@ -287,7 +296,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         updateRouteTypeButton()
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
-        updateCrosshairMapCenter(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState))
+        updateCrosshair(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState),
+                        preserveMapPosition: true)
         refreshMapControls()
     }
 
@@ -585,7 +595,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetHeightConstraint?.constant = targetHeight
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: targetHeight)
         routeTypeButtonBottomConstraint?.constant = -(targetHeight + 12)
-        updateCrosshairMapCenter(sheetHeight: targetHeight)
+        updateCrosshair(sheetHeight: targetHeight)
         view.layoutIfNeeded()
         refreshMapControls()
     }
@@ -675,7 +685,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let targetHeight = min(popupViewController.initialHeight(), height(for: .fullScreen))
         approximationHeight = targetHeight
         sheetHeightConstraint?.constant = targetHeight
-        updateCrosshairMapCenter(sheetHeight: targetHeight)
+        updateCrosshair(sheetHeight: targetHeight)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()
@@ -720,20 +730,37 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return visibleTop + (visibleBottom - visibleTop) / 2
     }
 
-    private func updateCrosshairMapCenter(sheetHeight: CGFloat, screenSize: CGSize? = nil) {
+    private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
         let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
         let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
         let centerX = targetScreenSize.width / 2
         guard centerX > 0, targetScreenSize.height > 0 else { return }
-        let viewportYScale = Double(2 * centerY / targetScreenSize.height)
-        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = viewportYScale
-        dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: centerX, y: centerY))
+        let screenPoint = CGPoint(x: centerX, y: centerY)
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        if preserveMapPosition {
+            mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
+        } else {
+            mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
+            mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint
+        }
+        dataProvider.setCrosshairPosition(screenPoint: screenPoint)
     }
 
     private func restoreMapViewport() {
-        guard let cachedMapViewportYScale else { return }
-        self.cachedMapViewportYScale = nil
-        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = cachedMapViewportYScale
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewSize = mapViewController.view.bounds.size
+        if let cachedMapTargetScreenPointRatio,
+           mapViewSize.width > 0,
+           mapViewSize.height > 0 {
+            self.cachedMapTargetScreenPointRatio = nil
+            let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
+                                               y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
+            mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if let cachedMapViewportYScale {
+            self.cachedMapViewportYScale = nil
+            mapViewController.viewportYScale = cachedMapViewportYScale
+        }
     }
 
     private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {
@@ -766,7 +793,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetHeightConstraint?.constant = height
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)
         routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: state)
-        updateCrosshairMapCenter(sheetHeight: height)
+        updateCrosshair(sheetHeight: height)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()

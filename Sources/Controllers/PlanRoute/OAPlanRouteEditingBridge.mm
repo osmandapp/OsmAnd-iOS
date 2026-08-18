@@ -142,6 +142,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 }
 
 - (void)finishPointEditCancelled:(BOOL)cancelled;
+- (BOOL)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx
+                                           mode:(OAApplicationMode *)mode
+                                     pointIndex:(NSInteger)pointIndex
+                                     wholeRoute:(BOOL)wholeRoute;
+- (BOOL)hasRoutePairForMovingPointInContext:(nullable OAMeasurementEditingContext *)ctx;
 
 @end
 
@@ -283,7 +288,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    [self beginRouteCalculationIfNeededForContext:ctx];
+    if (!ctx.getPoints.lastObject.isGap)
+        [self beginRouteCalculationIfNeededForContext:ctx];
     [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:YES]];
     [layer updateLayer];
     if (self.onChange)
@@ -1057,14 +1063,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    _isCalculatingRoute = ctx.getPointsCount > 1 && mode != OAApplicationMode.DEFAULT;
-    if (_isCalculatingRoute && self.onChange)
-        self.onChange();
+    BOOL startsRouteCalculation = [self beginRouteCalculationIfNeededForContext:ctx
+                                                                           mode:mode
+                                                                     pointIndex:pointIndex
+                                                                     wholeRoute:wholeRoute];
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
-    if (!_isCalculatingRoute && self.onChange)
+    if (!startsRouteCalculation && self.onChange)
         self.onChange();
 }
 
@@ -1191,7 +1198,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self invalidateTerrainElevationGpx];
     if (ctx.originalPointToMove != nil)
     {
-        [self beginRouteCalculationIfNeededForContext:ctx];
+        if ([self hasRoutePairForMovingPointInContext:ctx])
+            [self beginRouteCalculationIfNeededForContext:ctx];
         OASWptPt *newPoint = [layer getMovedPointToApply];
         [ctx.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:layer
                                                                         oldPoint:ctx.originalPointToMove
@@ -2021,6 +2029,33 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 }
 
 // MARK: - Elevation calculation
+
+- (BOOL)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx
+                                           mode:(OAApplicationMode *)mode
+                                     pointIndex:(NSInteger)pointIndex
+                                     wholeRoute:(BOOL)wholeRoute
+{
+    if (ctx == nil)
+        return NO;
+    BOOL hasRoutePair = wholeRoute
+        ? ctx.getPointsCount > 1
+        : pointIndex >= 0 && pointIndex < ctx.getPointsCount - 1 && !ctx.getPoints[pointIndex].isGap;
+    if (!hasRoutePair || mode == OAApplicationMode.DEFAULT)
+        return NO;
+    _isCalculatingRoute = YES;
+    if (self.onChange)
+        self.onChange();
+    return YES;
+}
+
+- (BOOL)hasRoutePairForMovingPointInContext:(nullable OAMeasurementEditingContext *)ctx
+{
+    if (ctx == nil)
+        return NO;
+    BOOL hasPreviousRoutePair = ctx.getBeforePoints.count > 0 && !ctx.getBeforePoints.lastObject.isGap;
+    BOOL hasNextRoutePair = ctx.getAfterPoints.count > 0 && !ctx.originalPointToMove.isGap;
+    return hasPreviousRoutePair || hasNextRoutePair;
+}
 
 - (BOOL)shouldShowRouteCalculationStateForContext:(nullable OAMeasurementEditingContext *)ctx
 {

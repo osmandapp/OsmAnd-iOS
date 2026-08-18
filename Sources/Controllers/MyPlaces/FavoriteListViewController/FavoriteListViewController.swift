@@ -35,6 +35,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var searchText = ""
     var isSearchActive = false
     var lastAppliedSearchState: (isActive: Bool, text: String)?
+    var cachedSearchFavoriteItems: [OAFavoritePointBridgeItem]?
     var isSelectionModeInSearch = false
     var isCancellingSearch = false
     var lastDistanceDirectionUpdate: TimeInterval = 0.0
@@ -196,6 +197,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
         lastDistanceDirectionUpdate = currentTime
         if currentSortMode.isDistanceOriented {
+            cachedSearchFavoriteItems = nil
             applySnapshot(animatingDifferences: false)
         } else {
             updateVisibleFavoriteCellsDistanceAndDirection()

@@ -255,6 +255,7 @@ extension FavoriteListViewController {
     }
 
     func hideSearchController() {
+        cachedSearchFavoriteItems = nil
         if isRootFolder {
             let searchController = navigationController?.navigationBar.topItem?.searchController
             searchController?.isActive = false
@@ -277,6 +278,7 @@ extension FavoriteListViewController {
 
     @objc func searchButtonPressed(_ sender: Any) {
         lastAppliedSearchState = nil
+        cachedSearchFavoriteItems = nil
         isSearchActive = true
         showSearchController()
         configureNavigationButtons()
@@ -315,6 +317,7 @@ extension FavoriteListViewController {
 
     @objc func favoriteDataDidChange() {
         DispatchQueue.main.async { [weak self] in
+            self?.cachedSearchFavoriteItems = nil
             self?.applySnapshot(animatingDifferences: true)
         }
     }

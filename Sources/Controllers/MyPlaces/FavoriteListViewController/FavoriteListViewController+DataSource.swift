@@ -194,6 +194,7 @@ extension FavoriteListViewController {
             settings.saveFavoriteSortModes(sortModes)
         }
 
+        cachedSearchFavoriteItems = nil
         applySnapshot(animatingDifferences: false)
     }
     
@@ -482,7 +483,14 @@ extension FavoriteListViewController {
     }
 
     private func searchFavoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }
+        let favoriteRows: [FavoritePointRow]
+        if let cachedSearchFavoriteItems {
+            favoriteRows = favoritePointRows(cachedSearchFavoriteItems)
+        } else {
+            favoriteRows = favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName)
+            cachedSearchFavoriteItems = favoriteRows.map { $0.bridgeItem }
+        }
+        return favoriteRows.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }
     }
 
     private func saveCollapsedSections() {

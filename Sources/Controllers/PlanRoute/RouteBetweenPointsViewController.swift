@@ -152,7 +152,8 @@ final class RouteBetweenPointsViewController: UIViewController {
                                 multiMode: false,
                                 singleMode: mode,
                                 distance: 0,
-                                isPendingEmpty: true)
+                                isPendingEmpty: true,
+                                gapAfter: nil)
     }
 
     private func makeSegmentSection(_ segment: PlanRouteSegment) -> SectionModel {

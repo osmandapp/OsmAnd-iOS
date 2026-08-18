@@ -12,6 +12,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private enum Row {
         case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
         case point(PlanRoutePoint, color: UIColor)
+        case gap(PlanRouteSegmentGap)
         case empty
     }
 
@@ -28,6 +29,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private static let bottomContentInset: CGFloat = 72
     private static let pointRowHeight: CGFloat = 68
     private static let profileGroupRowHeight: CGFloat = 53
+    private static let gapRowHeight: CGFloat = 62
 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
@@ -88,6 +90,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.sectionHeaderTopPadding = 0
         tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.reuseIdentifier)
         tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.reuseIdentifier)
+        tableView.register(PlanRouteSegmentGapCell.self, forCellReuseIdentifier: PlanRouteSegmentGapCell.reuseIdentifier)
         tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.reuseIdentifier)
         tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier)
@@ -112,7 +115,17 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
         let pendingEmptySegmentIndex = dataSource?.pendingEmptySegmentIndex
         let multipleSegments = segments.count > 1 || pendingEmptySegmentIndex != nil
-        var result: [SectionModel] = segments.flatMap { makeSections(for: $0, multipleSegments: multipleSegments) }
+        var result: [SectionModel] = segments.flatMap { segment in
+            var segmentSections = makeSections(for: segment, multipleSegments: multipleSegments)
+            if let gapAfter = segment.gapAfter {
+                segmentSections.append(SectionModel(headerTitle: nil,
+                                                    headerSubtitle: nil,
+                                                    headerMenu: nil,
+                                                    rows: [.gap(gapAfter)],
+                                                    isStartNewSegment: false))
+            }
+            return segmentSections
+        }
 
         if let pendingIndex = pendingEmptySegmentIndex {
             let title = String(format: localizedString("segments_count"), pendingIndex)
@@ -141,7 +154,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                 let pointIndexes = group.points.map(\.index).map(String.init).joined(separator: ",")
                 return "mode=\(groupMode),distance=\(Int(group.distance.rounded())),last=\(group.lastPointIndex),points=\(pointIndexes)"
             }.joined(separator: ";")
-            return "index=\(segment.index),routed=\(segment.routed),multi=\(segment.multiMode),mode=\(segmentMode),distance=\(Int(segment.distance.rounded())),groups=\(groupsSignature)"
+            let gapSignature = segment.gapAfter.map { "\(Int($0.distance.rounded())),\(Int($0.bearing))" } ?? "nil"
+            return "index=\(segment.index),routed=\(segment.routed),multi=\(segment.multiMode),mode=\(segmentMode),distance=\(Int(segment.distance.rounded())),gap=\(gapSignature),groups=\(groupsSignature)"
         }.joined(separator: "|")
         return "pending=\(pendingSignature),canStart=\(canStartNewSegment),segments=\(segmentsSignature)"
     }
@@ -369,6 +383,13 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
                 self?.deletePoint(at: point.index)
             }
             return cell
+        case let .gap(gap):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteSegmentGapCell.reuseIdentifier, for: indexPath) as? PlanRouteSegmentGapCell else {
+                return UITableViewCell()
+            }
+            let title = "\(formattedDistance(gap.distance)) • \(Int(gap.bearing))°"
+            cell.configure(title: title)
+            return cell
         }
     }
 }
@@ -383,6 +404,8 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             return Self.profileGroupRowHeight
         case .point:
             return Self.pointRowHeight
+        case .gap:
+            return Self.gapRowHeight
         case .empty:
             return UITableView.automaticDimension
         }
@@ -416,7 +439,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             }
         case let .profileGroup(group, segment):
             onChangeRouteType?(.profileGroup(group, segment: segment))
-        case .empty:
+        case .gap, .empty:
             break
         }
     }

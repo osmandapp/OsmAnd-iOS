@@ -148,6 +148,11 @@ struct PlanRouteProfileGroup {
     let points: [PlanRoutePoint]
 }
 
+struct PlanRouteSegmentGap {
+    let distance: Double
+    let bearing: Double
+}
+
 struct PlanRouteSegment {
     let index: Int
     let groups: [PlanRouteProfileGroup]
@@ -156,6 +161,7 @@ struct PlanRouteSegment {
     let singleMode: OAApplicationMode?
     let distance: Double
     let isPendingEmpty: Bool
+    let gapAfter: PlanRouteSegmentGap?
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }

@@ -58,13 +58,27 @@ final class PlanRouteSegmentData: NSObject {
     let singleMode: OAApplicationMode?
     let distance: Double
     let groups: [PlanRouteGroupData]
+    let hasGapAfter: Bool
+    let gapDistance: Double
+    let gapBearing: Double
     
-    init(index: Int, routed: Bool, multiMode: Bool, singleMode: OAApplicationMode?, distance: Double, groups: [PlanRouteGroupData]) {
+    init(index: Int,
+         routed: Bool,
+         multiMode: Bool,
+         singleMode: OAApplicationMode?,
+         distance: Double,
+         groups: [PlanRouteGroupData],
+         hasGapAfter: Bool,
+         gapDistance: Double,
+         gapBearing: Double) {
         self.index = index
         self.routed = routed
         self.multiMode = multiMode
         self.singleMode = singleMode
         self.distance = distance
         self.groups = groups
+        self.hasGapAfter = hasGapAfter
+        self.gapDistance = gapDistance
+        self.gapBearing = gapBearing
     }
 }

@@ -1758,6 +1758,7 @@
 		D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */; };
 		D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */; };
 		D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */; };
+		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */; };
 		D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210149301B768C003CECB8 /* RouteGroupCell.swift */; };
 		D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */; };
@@ -5922,6 +5923,7 @@
 		D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileGroupCell.swift; sourceTree = "<group>"; };
 		D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentHeaderView.swift; sourceTree = "<group>"; };
 		D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteStartSegmentCell.swift; sourceTree = "<group>"; };
+		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadAttributeLegendItem.swift; sourceTree = "<group>"; };
 		D7210149301B768C003CECB8 /* RouteGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGroupCell.swift; sourceTree = "<group>"; };
 		D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingNavigationCell.swift; sourceTree = "<group>"; };
@@ -11152,6 +11154,7 @@
 				D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */,
 				D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */,
 				D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */,
+				D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */,
 				D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */,
 				D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */,
 				D7210149301B768C003CECB8 /* RouteGroupCell.swift */,
@@ -18157,6 +18160,7 @@
 				D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */,
 				D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */,
 				D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */,
+				D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */,
 				D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */,
 				D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */,
 				D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */,

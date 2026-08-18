@@ -492,13 +492,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {
-        PlanRouteSegment(index: segment.index,
-                         groups: segment.groups.map { mapGroup($0) },
-                         routed: segment.routed,
-                         multiMode: segment.multiMode,
-                         singleMode: segment.singleMode,
-                         distance: segment.distance,
-                         isPendingEmpty: false)
+        let gapAfter = segment.hasGapAfter
+            ? PlanRouteSegmentGap(distance: segment.gapDistance, bearing: segment.gapBearing)
+            : nil
+        return PlanRouteSegment(index: segment.index,
+                                groups: segment.groups.map { mapGroup($0) },
+                                routed: segment.routed,
+                                multiMode: segment.multiMode,
+                                singleMode: segment.singleMode,
+                                distance: segment.distance,
+                                isPendingEmpty: false,
+                                gapAfter: gapAfter)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {

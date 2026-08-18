@@ -914,12 +914,27 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     BOOL routed = routedCount > 0;
     BOOL multiMode = groups.count > 1;
+    BOOL hasGapAfter = allPoints[segmentEndIndex].isGap && segmentEndIndex + 1 < (NSInteger)allPoints.count;
+    double gapDistance = 0;
+    double gapBearing = 0;
+    if (hasGapAfter)
+    {
+        OASWptPt *gapStart = allPoints[segmentEndIndex];
+        OASWptPt *gapEnd = allPoints[segmentEndIndex + 1];
+        gapDistance = [self distanceFrom:gapStart to:gapEnd];
+        CLLocation *gapStartLocation = [[CLLocation alloc] initWithLatitude:gapStart.lat longitude:gapStart.lon];
+        CLLocation *gapEndLocation = [[CLLocation alloc] initWithLatitude:gapEnd.lat longitude:gapEnd.lon];
+        gapBearing = [OAMapUtils normalizeDegrees360:[gapStartLocation bearingTo:gapEndLocation]];
+    }
     return [[PlanRouteSegmentData alloc] initWithIndex:segmentIndex
                                                   routed:routed
                                                multiMode:multiMode
                                               singleMode:multiMode ? nil : singleMode
                                                 distance:distance
-                                                  groups:groups];
+                                                  groups:groups
+                                             hasGapAfter:hasGapAfter
+                                              gapDistance:gapDistance
+                                               gapBearing:gapBearing];
 }
 
 - (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key

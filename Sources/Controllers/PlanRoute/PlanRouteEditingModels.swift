@@ -11,14 +11,22 @@ import Foundation
 @objcMembers
 final class PlanRoutePointData: NSObject {
     let globalIndex: Int
+    let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
     let bearing: Double
     let isStart: Bool
     let isDestination: Bool
     
-    init(globalIndex: Int, name: String, distanceFromPrevious: Double, bearing: Double, isStart: Bool, isDestination: Bool) {
+    init(globalIndex: Int,
+         indexInSegment: Int,
+         name: String,
+         distanceFromPrevious: Double,
+         bearing: Double,
+         isStart: Bool,
+         isDestination: Bool) {
         self.globalIndex = globalIndex
+        self.indexInSegment = indexInSegment
         self.name = name
         self.distanceFromPrevious = distanceFromPrevious
         self.bearing = bearing

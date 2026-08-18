@@ -840,6 +840,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     NSMutableArray<PlanRouteGroupData *> *groups = [NSMutableArray array];
     NSMutableArray<NSNumber *> *currentIndexes = [NSMutableArray array];
+    NSInteger segmentStartIndex = pointIndexes.firstObject.integerValue;
+    NSInteger segmentEndIndex = pointIndexes.lastObject.integerValue;
     NSString *currentKey = nil;
     BOOL hasCurrent = NO;
 
@@ -855,14 +857,22 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         BOOL isGap = allPoints[index].isGap;
         if (!isGap && ![key isEqualToString:currentKey] && currentIndexes.count > 0)
         {
-            [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
+            [groups addObject:[self buildGroupWithKey:currentKey
+                                              indexes:currentIndexes
+                                            allPoints:allPoints
+                                    segmentStartIndex:segmentStartIndex
+                                      segmentEndIndex:segmentEndIndex]];
             currentIndexes = [NSMutableArray array];
             currentKey = key;
         }
         [currentIndexes addObject:indexNumber];
     }
     if (currentIndexes.count > 0)
-        [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
+        [groups addObject:[self buildGroupWithKey:currentKey
+                                          indexes:currentIndexes
+                                        allPoints:allPoints
+                                segmentStartIndex:segmentStartIndex
+                                  segmentEndIndex:segmentEndIndex]];
 
     NSMutableArray<PlanRouteGroupData *> *mergedGroups = [NSMutableArray array];
     for (PlanRouteGroupData *group in groups)
@@ -915,6 +925,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key
                                     indexes:(NSArray<NSNumber *> *)indexes
                                   allPoints:(NSArray<OASWptPt *> *)allPoints
+                          segmentStartIndex:(NSInteger)segmentStartIndex
+                            segmentEndIndex:(NSInteger)segmentEndIndex
 {
     OAApplicationMode *appMode = nil;
     if (key.length > 0)
@@ -929,9 +941,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     for (NSNumber *indexNumber in indexes)
     {
         NSInteger index = indexNumber.integerValue;
+        NSInteger indexInSegment = index - segmentStartIndex;
         OASWptPt *point = allPoints[index];
-        BOOL isStart = index == 0;
-        BOOL isDestination = index == (NSInteger) allPoints.count - 1;
+        BOOL isStart = index == segmentStartIndex;
+        BOOL isDestination = index == segmentEndIndex;
         double legDistance = 0;
         double bearing = 0;
         if (index > 0)
@@ -946,8 +959,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                 groupDistance += legDistance;
             }
         }
-        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (index + 1)];
+        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (indexInSegment + 1)];
         [points addObject:[[PlanRoutePointData alloc] initWithGlobalIndex:index
+                                                          indexInSegment:indexInSegment
                                                                        name:name
                                                        distanceFromPrevious:legDistance
                                                                     bearing:bearing

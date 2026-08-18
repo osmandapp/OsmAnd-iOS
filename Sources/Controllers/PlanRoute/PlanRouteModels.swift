@@ -133,6 +133,7 @@ enum PlanRoutePointEditMode: Int {
 
 struct PlanRoutePoint {
     let index: Int
+    let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
     let bearing: Double

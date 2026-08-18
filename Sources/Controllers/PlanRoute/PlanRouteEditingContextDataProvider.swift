@@ -523,6 +523,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     private func mapPoint(_ point: PlanRoutePointData) -> PlanRoutePoint {
         PlanRoutePoint(index: point.globalIndex,
+                       indexInSegment: point.indexInSegment,
                        name: point.name,
                        distanceFromPrevious: point.distanceFromPrevious,
                        bearing: point.bearing,

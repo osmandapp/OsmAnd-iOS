@@ -174,7 +174,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                 }
             }
             return [SectionModel(headerTitle: title,
-                                 headerSubtitle: nil,
+                                 headerSubtitle: formattedDistance(segment.distance),
                                  headerMenu: segmentMenu,
                                  rows: rows,
                                  isStartNewSegment: false)]

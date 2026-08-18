@@ -489,10 +489,6 @@ static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_ord
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
-static NSString * const singleLandscapePanelsLayoutModeKey = @"single_landscape_panels_layout_mode";
-static NSString * const singlePortraitPanelsLayoutModeKey = @"single_portrait_panels_layout_mode";
-static NSString * const separateLandscapePanelsLayoutModeKey = @"separate_landscape_panels_layout_mode";
-static NSString * const separatePortraitPanelsLayoutModeKey = @"separate_portrait_panels_layout_mode";
 static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 @interface OAMetricsConstant()
@@ -5835,10 +5831,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     
     OACommonDouble *_lastStartLat;
     OACommonDouble *_lastStartLon;
-    OACommonPanelsLayoutMode *_singleLandscapePanelsLayoutMode;
-    OACommonPanelsLayoutMode *_singlePortraitPanelsLayoutMode;
-    OACommonPanelsLayoutMode *_separateLandscapePanelsLayoutMode;
-    OACommonPanelsLayoutMode *_separatePortraitPanelsLayoutMode;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -5862,7 +5854,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     if (screenElementsMode == ScreenElementsModeShared)
         return basePreference;
 
-    NSString *layoutPrefix = screenLayoutMode == ScreenLayoutModeLandscape ? @"landscape" : @"portrait";
+    NSString *layoutPrefix = [ScreenLayoutModeWrapper keyFor:screenLayoutMode];
     NSString *key = [NSString stringWithFormat:@"%@_%@", layoutPrefix, preferenceKey];
     @synchronized(_profilePreferences)
     {
@@ -5899,6 +5891,15 @@ static NSString *kOfflineKey = @"OFFLINE";
                 preferenceKey:preferenceKey
               screenLayoutMode:ScreenLayoutModeLandscape
             screenElementsMode:ScreenElementsModeIndependent];
+    }
+
+    for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+    {
+        for (NSNumber *screenElementsMode in [ScreenElementsModeWrapper allValues])
+        {
+            [self panelsLayoutMode:screenLayoutMode.intValue
+                screenElementsMode:screenElementsMode.intValue];
+        }
     }
 }
 
@@ -6357,19 +6358,6 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _useSeparateLayouts = [OACommonBoolean withKey:useSeparateLayoutsKey defValue:NO];
         [_profilePreferences setObject:_useSeparateLayouts forKey:useSeparateLayoutsKey];
-
-        _singleLandscapePanelsLayoutMode = [OACommonPanelsLayoutMode withKey:singleLandscapePanelsLayoutModeKey
-                                                                          defValue:PanelsLayoutModeWide];
-        _singlePortraitPanelsLayoutMode = [OACommonPanelsLayoutMode withKey:singlePortraitPanelsLayoutModeKey
-                                                                         defValue:PanelsLayoutModeWide];
-        _separateLandscapePanelsLayoutMode = [OACommonPanelsLayoutMode withKey:separateLandscapePanelsLayoutModeKey
-                                                                            defValue:PanelsLayoutModeWide];
-        _separatePortraitPanelsLayoutMode = [OACommonPanelsLayoutMode withKey:separatePortraitPanelsLayoutModeKey
-                                                                           defValue:PanelsLayoutModeWide];
-        [_profilePreferences setObject:_singleLandscapePanelsLayoutMode forKey:singleLandscapePanelsLayoutModeKey];
-        [_profilePreferences setObject:_singlePortraitPanelsLayoutMode forKey:singlePortraitPanelsLayoutModeKey];
-        [_profilePreferences setObject:_separateLandscapePanelsLayoutMode forKey:separateLandscapePanelsLayoutModeKey];
-        [_profilePreferences setObject:_separatePortraitPanelsLayoutMode forKey:separatePortraitPanelsLayoutModeKey];
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
@@ -7129,15 +7117,20 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
 {
-    BOOL separate = (ScreenElementsMode)screenElementsMode == ScreenElementsModeIndependent;
-    switch ((ScreenLayoutMode)screenLayoutMode)
+    NSString *screenElementsPrefix = [ScreenElementsModeWrapper keyFor:(ScreenElementsMode)screenElementsMode];
+    NSString *screenLayoutPrefix = [ScreenLayoutModeWrapper keyFor:(ScreenLayoutMode)screenLayoutMode];
+    NSString *key = [NSString stringWithFormat:@"%@_%@_panels_layout_mode", screenElementsPrefix, screenLayoutPrefix];
+    @synchronized(_profilePreferences)
     {
-        case ScreenLayoutModePortrait:
-            return separate ? _separatePortraitPanelsLayoutMode : _singlePortraitPanelsLayoutMode;
-        case ScreenLayoutModeLandscape:
-            return separate ? _separateLandscapePanelsLayoutMode : _singleLandscapePanelsLayoutMode;
+        OACommonPanelsLayoutMode *preference = (OACommonPanelsLayoutMode *)[_profilePreferences objectForKey:key];
+        if (!preference)
+        {
+            preference = [OACommonPanelsLayoutMode withKey:key defValue:PanelsLayoutModeWide];
+            [_profilePreferences setObject:preference forKey:key];
+            [self registerPreference:preference forKey:key];
+        }
+        return preference;
     }
-    return _singlePortraitPanelsLayoutMode;
 }
 
 - (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode

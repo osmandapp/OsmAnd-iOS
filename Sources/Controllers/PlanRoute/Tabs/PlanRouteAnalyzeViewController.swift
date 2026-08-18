@@ -57,6 +57,7 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 }
 
 final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabContent {
+    private static let contentTopInset: CGFloat = 10
 
     let planRouteTab: PlanRouteTab = .analyze
     var onAttachToRoadsRequested: (() -> Void)?
@@ -183,7 +184,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 72, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
@@ -1253,6 +1254,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section != 0 else { return Self.contentTopInset }
         guard case .hasData = currentState, section >= roadAttributesSectionStart else {
             return .leastNormalMagnitude
         }

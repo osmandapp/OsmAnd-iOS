@@ -37,7 +37,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     }
 
     private func setupView() {
-        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 1
 
@@ -49,13 +49,9 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
         textStack.axis = .vertical
         textStack.spacing = 2
 
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
         var configuration = UIButton.Configuration.plain()
-        configuration.title = "⋯"
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attributes in
-            var updated = attributes
-            updated.font = .systemFont(ofSize: 17, weight: .bold)
-            return updated
-        }
+        configuration.image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfiguration)
         configuration.baseForegroundColor = .buttonAccentsBlue
         configuration.background.image = .blueCircleFill
         configuration.contentInsets = .zero

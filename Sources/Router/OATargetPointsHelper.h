@@ -54,6 +54,7 @@
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
 - (void) makeWayPointDestination:(BOOL)updateRoute index:(int)index;
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index;
+- (void) removeWayPoint:(BOOL)updateRoute index:(int)index updateBackup:(BOOL)updateBackup;
 - (void) restoreTargetPoints:(BOOL)updateRoute;
 - (void) removeAllWayPoints:(BOOL)updateRoute clearBackup:(BOOL)clearBackup;
 - (BOOL) checkPointToNavigateShort;

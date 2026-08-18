@@ -624,7 +624,7 @@ static BOOL _isDeviatedFromRoute = false;
                 }
             }
             if (ind >= 0)
-                [targets removeWayPoint:false index:ind];
+                [targets removeWayPoint:false index:ind updateBackup:NO];
         }
         if (_isFollowingMode)
             [_voiceRouter arrivedIntermediatePoint:name];

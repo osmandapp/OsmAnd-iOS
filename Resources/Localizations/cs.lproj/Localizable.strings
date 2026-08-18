@@ -4431,3 +4431,7 @@
 "send_current_app_log_descr" = "Od spuštění aplikace";
 "send_current_app_log" = "Odeslat aktuální protokol aplikace";
 "shared_string_send" = "Odeslat";
+"crash_report_prompt_description" = "Prosím pomozte nám vylepšit aplikaci odesláním protokolu o pádu. Pomůže nám identifikovat a opravit problém.";
+"crash_report_prompt_title" = "OsmAnd zaznamenal neočekávanou chybu.";
+"share_crash_log" = "Sdílet protokol o pádu";
+"no_crashes_recorded" = "Nebyly zaznamenány žádné pády";

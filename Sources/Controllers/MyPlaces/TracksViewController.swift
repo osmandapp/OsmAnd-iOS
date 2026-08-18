@@ -2282,6 +2282,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as? OASimpleTableViewCell
             if let cell {
                 updateEditingAppearance(cell, item: item, isEditing: tableView.isEditing)
+                cell.backgroundView = UIView()
+                cell.backgroundView?.backgroundColor = .groupBg
                 cell.selectedBackgroundView = UIView()
                 cell.selectedBackgroundView?.backgroundColor = .groupBg
                 cell.titleLabel.textColor = .textColorPrimary

@@ -12,11 +12,6 @@ final class PlanRouteTopPartView: UIView {
     private static let statusIconSize: CGFloat = 30
     private static let horizontalInset: CGFloat = 20
     private static let progressDisplayDelay: TimeInterval = 1
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter
-    }()
 
     var onTap: (() -> Void)?
 
@@ -148,8 +143,9 @@ final class PlanRouteTopPartView: UIView {
                                duration: String,
                                arrivalTime: String) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-        let primary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorPrimary]
-        let secondary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorSecondary]
+        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
+        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
+        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
         let distanceParts = totalDistance.components(separatedBy: " ")
@@ -173,7 +169,8 @@ final class PlanRouteTopPartView: UIView {
                                 mapCenterDistance: String,
                                 bearing: String) -> NSAttributedString {
         let subheadFont = UIFont.preferredFont(forTextStyle: .subheadline)
-        let attributes: [NSAttributedString.Key: Any] = [.font: subheadFont, .foregroundColor: UIColor.textColorSecondary]
+        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: subheadFont.pointSize, weight: .regular)
+        let attributes: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
         result.append(symbolAttachment("arrow.up.right", font: subheadFont))
@@ -197,11 +194,22 @@ final class PlanRouteTopPartView: UIView {
     }
 
     private func formattedDuration(_ duration: TimeInterval) -> String {
-        OAOsmAndFormatter.getFormattedTimeInterval(duration, shortFormat: true)
+        let totalSeconds = Int(duration)
+        let hours = totalSeconds / 3600
+        let minutes = totalSeconds / 60 % 60
+        if hours > 0 {
+            let formattedHours = "\(hours) \(localizedString("int_hour"))"
+            guard minutes > 0 else { return formattedHours }
+            return "\(formattedHours) \(minutes) \(localizedString("shared_string_minute_lowercase"))"
+        }
+        if minutes > 0 {
+            return "\(minutes) \(localizedString("shared_string_minute_lowercase"))"
+        }
+        return "\(totalSeconds) \(localizedString("units_sec_short"))"
     }
 
     private func formattedTime(_ date: Date) -> String {
-        Self.timeFormatter.string(from: date)
+        DateFormatter.shortTimeFormatter.string(from: date)
     }
 
     @objc private func onViewTapped() {

@@ -424,6 +424,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         [_mapInfoController viewWillTransition:size];
         [self resetToDefaultRulerLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        OAApplicationMode *appMode = [_settings.applicationMode get];
+        if ([_settings.useSeparateLayouts get:appMode])
+            [_mapInfoController recreateControls];
         [self updateControlsLayout:YES];
         [self updateMapRulerData];
     }];

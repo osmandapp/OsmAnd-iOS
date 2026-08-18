@@ -44,7 +44,7 @@ final class WidgetUtils: NSObject {
                                                                                         screenLayoutMode: screenLayoutMode.rawValue)
         let widgetsToDelete: [MapWidgetInfo] = (currentWidgetInfos.array as! [MapWidgetInfo]).filter { !enabledWidgets.contains($0.key) }
         if !widgetsToDelete.isEmpty {
-            let widgets: NSMutableOrderedSet = widgetRegistry.getWidgetsFor(panel)
+            let widgets: NSMutableOrderedSet = widgetRegistry.widgets(for: panel)
             for widgetInfo in widgetsToDelete {
                 widgets.remove(widgetInfo)
                 AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
@@ -163,7 +163,7 @@ final class WidgetUtils: NSObject {
         }
         mapWidgetInfo.priority = newOrder.firstIndex(of: mapWidgetInfo.key) ?? newOrder.count - 1
         mapWidgetInfo.pageIndex = newOrders.firstIndex(of: newOrder) ?? newOrders.count
-        widgetRegistry.getWidgetsFor(panel)?.add(mapWidgetInfo)
+        widgetRegistry.widgets(for: panel)?.add(mapWidgetInfo)
         widgetRegistry.enableDisableWidget(for: selectedAppMode,
                                            widgetInfo: mapWidgetInfo,
                                            enabled: NSNumber(value: true),
@@ -218,7 +218,7 @@ extension WidgetUtils {
         var pagedOrder: [Int: [String]] = [:]
         let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)
         
         targetWidget.widgetPanel = widgetsPanel
         
@@ -237,7 +237,7 @@ extension WidgetUtils {
         if pagedOrder.isEmpty {
             targetWidget.pageIndex = 0
             targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).add(targetWidget)
+            widgetRegistry.widgets(for: targetWidget.widgetPanel).add(targetWidget)
             
             var flatOrder: [[String]] = []
             flatOrder.append([targetWidget.key])
@@ -274,7 +274,7 @@ extension WidgetUtils {
                 }
                 orders[orders.count - 1] = lastPageOrder
             }
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
             widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
@@ -291,7 +291,7 @@ extension WidgetUtils {
         let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)
         targetWidget.widgetPanel = widgetsPanel
         
         for widget in sortedWidgets {
@@ -307,7 +307,7 @@ extension WidgetUtils {
         if pagedOrder.isEmpty {
             targetWidget.pageIndex = 0
             targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
             
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
@@ -342,7 +342,7 @@ extension WidgetUtils {
             }
             orders[insertPage] = pageToAddWidget
             
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
             widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }

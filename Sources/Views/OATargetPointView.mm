@@ -2801,39 +2801,32 @@ static const NSInteger _buttonsCount = 4;
 
     __weak __typeof(self) weakSelf = self;
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool
+    [targetPoint resolveAddressWithCompletion:^{
+        targetPoint.shouldFetchAddress = NO;
+
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
         {
-            [targetPoint initAddressIfNeeded];
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=view_released", addressDuration);
+            return;
         }
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            targetPoint.shouldFetchAddress = NO;
+        strongSelf->_addressLookupTarget = nil;
+        if (strongSelf.targetPoint == targetPoint)
+        {
+            [strongSelf updateTargetPointAddress];
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=applied", addressDuration);
+        }
+        else
+        {
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=target_changed", addressDuration);
+        }
 
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-            {
-                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
-                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=view_released", addressDuration);
-                return;
-            }
-
-            strongSelf->_addressLookupTarget = nil;
-            if (strongSelf.targetPoint == targetPoint)
-            {
-                [strongSelf updateTargetPointAddress];
-                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
-                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=applied", addressDuration);
-            }
-            else
-            {
-                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
-                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=target_changed", addressDuration);
-            }
-
-            [strongSelf fetchAddressIfNeededAsync];
-        });
-    });
+        [strongSelf fetchAddressIfNeededAsync];
+    }];
 }
 
 - (void)updateTargetPointAddress

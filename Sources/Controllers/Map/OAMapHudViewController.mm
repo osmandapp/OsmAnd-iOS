@@ -1672,12 +1672,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             {
                 if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
                 {
-                    NSString *positionAddress;
                     _previousLocation = currentLocation;
-                    positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    [OAReverseGeocoder.instance lookupAddressAtLat:currentLocation.coordinate.latitude
+                                                               lon:currentLocation.coordinate.longitude
+                                                          objectId:0
+                                                        completion:^(NSString *positionAddress) {
                         _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
-                    });
+                    }];
                 }
             }
         }

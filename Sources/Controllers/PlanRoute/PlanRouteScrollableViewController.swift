@@ -1070,7 +1070,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @objc private func onRouteTypeButtonTapped() {
         guard !presentApproximationWarningIfNeeded() else { return }
         let segments = dataProvider.routeSegments
-        let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
+        let isComplex = dataProvider.pendingEmptySegmentIndex != nil
+            || segments.count > 1
+            || (segments.count == 1 && segments[0].multiMode)
         if isComplex {
             presentRouteBetweenPoints()
         } else {

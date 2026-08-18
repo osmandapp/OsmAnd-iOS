@@ -333,7 +333,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
         guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
-        if case let .profileGroup(group, _) = context {
+        if case let .profileGroup(_, segment) = context, segment.isPendingEmpty {
+            guard let pointIndex = routeSegments.last?.pointIndexes.last else { return }
+            bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
+        } else if case let .profileGroup(group, _) = context {
             for point in group.points {
                 bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
             }
@@ -494,7 +497,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                          routed: segment.routed,
                          multiMode: segment.multiMode,
                          singleMode: segment.singleMode,
-                         distance: segment.distance)
+                         distance: segment.distance,
+                         isPendingEmpty: false)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {

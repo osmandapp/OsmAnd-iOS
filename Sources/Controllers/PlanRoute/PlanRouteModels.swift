@@ -154,6 +154,7 @@ struct PlanRouteSegment {
     let multiMode: Bool
     let singleMode: OAApplicationMode?
     let distance: Double
+    let isPendingEmpty: Bool
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }

@@ -40,12 +40,12 @@ final class PlanRouteTopPartView: UIView {
         let uphill = formattedDistance(info.uphill)
         let downhill = formattedDistance(info.downhill)
         let mapCenterDistance = formattedDistance(info.mapCenterDistance)
-        let duration = info.showsTime ? formattedDuration(info.duration) : ""
+        let duration = info.showsTime ? formattedDuration(info.duration) : NSAttributedString(string: "")
         let arrivalTime = info.arrivalTime.map { formattedTime($0) } ?? ""
         let bearing = "\(Int(info.bearing))"
         let signature = [
             totalDistance,
-            duration,
+            duration.string,
             arrivalTime,
             uphill,
             downhill,
@@ -140,7 +140,7 @@ final class PlanRouteTopPartView: UIView {
 
     private func makeFirstLine(_ info: PlanRouteInfo,
                                totalDistance: String,
-                               duration: String,
+                               duration: NSAttributedString,
                                arrivalTime: String) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
         let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
@@ -157,7 +157,7 @@ final class PlanRouteTopPartView: UIView {
         guard info.showsTime else { return result }
 
         result.append(NSAttributedString(string: "  •  ", attributes: secondary))
-        result.append(NSAttributedString(string: duration, attributes: secondary))
+        result.append(duration)
         if !arrivalTime.isEmpty {
             result.append(NSAttributedString(string: " (\(arrivalTime))", attributes: secondary))
         }
@@ -193,19 +193,33 @@ final class PlanRouteTopPartView: UIView {
         OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
     }
 
-    private func formattedDuration(_ duration: TimeInterval) -> String {
-        let totalSeconds = Int(duration)
-        let hours = totalSeconds / 3600
-        let minutes = totalSeconds / 60 % 60
+    private func formattedDuration(_ duration: TimeInterval) -> NSAttributedString {
+        let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
+        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
+        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        var hours: Int32 = 0
+        var minutes: Int32 = 0
+        var seconds: Int32 = 0
+        OAUtilities.getHMS(duration, hours: &hours, minutes: &minutes, seconds: &seconds)
+
+        let result = NSMutableAttributedString()
         if hours > 0 {
-            let formattedHours = "\(hours) \(localizedString("int_hour"))"
-            guard minutes > 0 else { return formattedHours }
-            return "\(formattedHours) \(minutes) \(localizedString("shared_string_minute_lowercase"))"
+            result.append(NSAttributedString(string: "\(hours)", attributes: primary))
+            result.append(NSAttributedString(string: " \(localizedString("int_hour"))", attributes: secondary))
         }
         if minutes > 0 {
-            return "\(minutes) \(localizedString("shared_string_minute_lowercase"))"
+            if result.length > 0 {
+                result.append(NSAttributedString(string: " ", attributes: secondary))
+            }
+            result.append(NSAttributedString(string: "\(minutes)", attributes: primary))
+            result.append(NSAttributedString(string: " \(localizedString("shared_string_minute_lowercase"))", attributes: secondary))
         }
-        return "\(totalSeconds) \(localizedString("units_sec_short"))"
+        if hours == 0 && minutes == 0 {
+            result.append(NSAttributedString(string: "\(seconds)", attributes: primary))
+            result.append(NSAttributedString(string: " \(localizedString("units_sec_short"))", attributes: secondary))
+        }
+        return result
     }
 
     private func formattedTime(_ date: Date) -> String {

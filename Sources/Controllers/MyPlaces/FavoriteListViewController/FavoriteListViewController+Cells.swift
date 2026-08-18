@@ -46,7 +46,7 @@ extension FavoriteListViewController {
             content.secondaryTextProperties.color = .textColorSecondary
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
-            cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+            cell.accessories = [.multiselect(), .disclosureIndicator(displayed: .whenNotEditing)]
             self?.updateVisibleSelectionState(at: indexPath)
         }
     }

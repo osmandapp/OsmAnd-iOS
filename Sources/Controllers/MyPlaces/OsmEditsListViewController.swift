@@ -195,6 +195,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelectionDuringEditing = true
         collectionView.tintColor = .iconColorActive

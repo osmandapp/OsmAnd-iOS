@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon;
 - (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId;
+- (NSString *)lookupShortAddressAtLat:(double)lat lon:(double)lon;
 
 @end
 

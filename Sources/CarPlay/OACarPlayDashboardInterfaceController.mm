@@ -169,19 +169,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSString *)shortAddressForPoint:(OARTargetPoint *)point
 {
-    NSString *address = [self fullAddressForPoint:point];
-    if (![self isMeaningfulName:address])
-        return nil;
-
-    NSRange comma = [address rangeOfString:@"," options:NSBackwardsSearch];
-    if (comma.location != NSNotFound)
-    {
-        NSString *shortAddr = [[address substringToIndex:comma.location]
-                               stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
-        if (shortAddr.length > 0)
-            return shortAddr;
-    }
-    return address;
+    NSString *address = [[OAReverseGeocoder instance] lookupShortAddressAtLat:point.getLatitude
+                                                                          lon:point.getLongitude];
+    return [self isMeaningfulName:address] ? address : nil;
 }
 
 - (NSString *)normalizedName:(NSString *)name

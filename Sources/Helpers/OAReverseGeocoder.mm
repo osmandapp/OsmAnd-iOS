@@ -133,6 +133,56 @@
     return finalAddress;
 }
 
+- (NSString *)lookupShortAddressAtLat:(double)lat
+                                  lon:(double)lon
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
+
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+
+    const auto& geocoder = std::shared_ptr<OsmAnd::ReverseGeocoder>(new OsmAnd::ReverseGeocoder(obfsCollection, std::shared_ptr<OsmAnd::RoadLocator>(new OsmAnd::RoadLocator(obfsCollection))));
+    
+    const auto& geoCriteria = std::shared_ptr<OsmAnd::ReverseGeocoder::Criteria>(new OsmAnd::ReverseGeocoder::Criteria);
+    geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    const auto object = geocoder->performSearch(*geoCriteria);
+    
+    NSMutableString *geocodingResult = [NSMutableString string];
+    if (object)
+    {
+        QString lang = QString::fromNSString(prefLang);
+        bool transliterate = settings.settingMapLanguageTranslit.get;
+        
+        if (object->building)
+        {
+            QString bldName;
+            if (!object->buildingInterpolation.isEmpty())
+                bldName = object->buildingInterpolation;
+            else
+                bldName = object->building->getName(lang, transliterate);
+            
+            [geocodingResult appendFormat:@"%@ %@",
+                object->street->getName(lang, transliterate).toNSString(),
+                bldName.toNSString()];
+        }
+        else if (object->street)
+        {
+            [geocodingResult appendString:object->street->getName(lang, transliterate).toNSString()];
+        }
+        else if (object->road && object->road->hasGeocodingAccess())
+        {
+            QString sname = object->road->getName(lang, transliterate);
+            if (!sname.isNull())
+                [geocodingResult appendString:sname.toNSString()];
+        }
+    }
+    
+    NSString *finalAddress = [NSString stringWithString:geocodingResult];
+
+    return finalAddress;
+}
+
 - (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon
 {
     return [self lookupAddressAtLat:lat lon:lon objectId:0];

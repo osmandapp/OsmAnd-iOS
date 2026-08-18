@@ -54,7 +54,7 @@ final class GlideAverageWidget: GlideBaseWidget {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func getWidgetState() -> OAWidgetState? {
+    override func storedWidgetState() -> OAWidgetState? {
         widgetState
     }
 

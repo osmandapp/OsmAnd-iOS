@@ -57,7 +57,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         
         let filter = Int(KWidgetModeAvailable | kWidgetModeDefault)
         
-        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(),
+        let availableWidgets = widgetRegistry.widgets(forPanel: OAAppSettings.sharedManager().applicationMode.get(),
                                                                  filterModes: filter,
                                                                  panels: [widgetPanel],
                                                                  screenLayoutMode: screenLayoutMode.rawValue)!
@@ -134,7 +134,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     private func listDefaultWidgets(_ widgets: NSOrderedSet) -> [WidgetType] {
         var defaultWidgets: [Int: WidgetType] = [:]
         for widgetInfo in widgets {
-            let widgetType: WidgetType? = (widgetInfo as? MapWidgetInfo)?.getWidgetType()
+            let widgetType: WidgetType? = (widgetInfo as? MapWidgetInfo)?.widgetType()
             if widgetType != nil {
                 defaultWidgets[widgetType!.ordinal] = widgetType
             }
@@ -347,12 +347,12 @@ extension WidgetGroupListViewController {
             navigationController?.pushViewController(vc, animated: true)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
-                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType,
-                                                                appMode: OAAppSettings.sharedManager().applicationMode.get(),
-                                                                screenLayoutMode: screenLayoutMode.rawValue) else {
+                  let widgetInfo = widgetRegistry.widgetInfo(for: widgetType,
+                                                             appMode: OAAppSettings.sharedManager().applicationMode.get(),
+                                                             screenLayoutMode: screenLayoutMode.rawValue) else {
                 return
             }
-            if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(),
+            if let enabledWidgets = widgetRegistry.widgets(forPanel: OAAppSettings.sharedManager().applicationMode.get(),
                                                                       filterModes: Self.enabledWidgetsFilter,
                                                                       panels: WidgetsPanel.values,
                                                                       screenLayoutMode: screenLayoutMode.rawValue).array as? [MapWidgetInfo] {

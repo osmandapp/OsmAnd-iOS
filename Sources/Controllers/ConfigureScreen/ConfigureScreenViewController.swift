@@ -248,7 +248,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry.getWidgetsForPanel(appMode,
+        return widgetRegistry.widgets(forPanel: appMode,
                                                  filterModes: filter,
                                                  panels: [panel],
                                                  screenLayoutMode: screenLayoutMode.rawValue).count

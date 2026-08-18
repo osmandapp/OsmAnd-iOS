@@ -1044,11 +1044,11 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (OAWidgetsPanel *)getWidgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [self getWidgetInfo];
+    OAMapWidgetInfo *widgetInfo = [self widgetInfo];
     return widgetInfo.widgetPanel;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -1064,9 +1064,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     BOOL useSeparateLayouts = [[[OAAppSettings sharedManager] useSeparateLayouts] get:appMode];
     ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape] ? ScreenLayoutModeLandscape : ScreenLayoutModePortrait;
     NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
-    OAWidgetsPanel *storedPanel = [self.widgetType getPanel:widgetId
-                                                   appMode:appMode
-                                          screenLayoutMode:screenLayoutMode];
+    OAWidgetsPanel *storedPanel = [self.widgetType panel:widgetId
+                                                appMode:appMode
+                                       screenLayoutMode:screenLayoutMode];
     BOOL verticalPanel = [[self getWidgetPanel] isPanelVertical] || storedPanel.isPanelVertical;
     return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
                                                                    defValue:verticalPanel ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];

@@ -319,7 +319,7 @@
         }
         for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
-            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
+            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
                 [self updateColors:state sideWidget:widgetInfo.widget];
             }

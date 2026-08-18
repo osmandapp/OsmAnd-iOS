@@ -36,7 +36,7 @@ class SideWidgetInfo: MapWidgetInfo {
     }
     
     override func getUpdatedPanel() -> WidgetsPanel {
-        let widgetType = getWidgetType()
+        let widgetType = widgetType()
         if let widgetType {
             if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .rightPanel

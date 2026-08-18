@@ -33,9 +33,9 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
         let section = tableData.createNewSection()
         let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         for widget in sortedWidgets {
-            let widgetInfo = widgetRegistry.getWidgetInfo(for: widget,
-                                                          appMode: OAAppSettings.sharedManager().applicationMode.get(),
-                                                          screenLayoutMode: screenLayoutMode.rawValue)
+            let widgetInfo = widgetRegistry.widgetInfo(for: widget,
+                                                       appMode: OAAppSettings.sharedManager().applicationMode.get(),
+                                                       screenLayoutMode: screenLayoutMode.rawValue)
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()

@@ -41,7 +41,7 @@ class MapWidgetInfo: NSObject, Comparable {
         self.widget = widget
         self.appMode = appMode
         self.screenLayoutMode = screenLayoutMode
-        self.widgetState = widget.getWidgetState()
+        self.widgetState = widget.storedWidgetState()
         self.settingsIconId = settingsIconId
         self.message = message
         self.pageIndex = page
@@ -53,7 +53,7 @@ class MapWidgetInfo: NSObject, Comparable {
         return key.contains(MapWidgetInfo.DELIMITER)
     }
     
-    func getWidgetState() -> OAWidgetState? {
+    func storedWidgetState() -> OAWidgetState? {
         return widgetState
     }
     
@@ -84,7 +84,7 @@ class MapWidgetInfo: NSObject, Comparable {
         }
     }
     
-    func getWidgetType() -> WidgetType? {
+    func widgetType() -> WidgetType? {
         widget.widgetType
     }
     
@@ -173,7 +173,7 @@ class MapWidgetInfo: NSObject, Comparable {
         
         switch widgetView.widgetType {
         case .sunPosition:
-            if let sunState = getWidgetState() as? OASunriseSunsetWidgetState {
+            if let sunState = storedWidgetState() as? OASunriseSunsetWidgetState {
                 return sunState.getWidgetIconName()
             }
             return widgetView.widgetType?.iconName

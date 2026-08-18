@@ -27,10 +27,10 @@ class SimpleWidgetInfo: MapWidgetInfo {
     }
 
     override func getUpdatedPanel() -> WidgetsPanel {
-        if let widgetType = getWidgetType() {
-            return widgetType.getPanel(key,
-                                       appMode: appMode,
-                                       screenLayoutMode: screenLayoutMode)
+        if let widgetType = widgetType() {
+            return widgetType.panel(key,
+                                    appMode: appMode,
+                                    screenLayoutMode: screenLayoutMode)
         }
         return widgetPanel
     }

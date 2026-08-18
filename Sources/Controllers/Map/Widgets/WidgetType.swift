@@ -132,7 +132,7 @@ class WidgetType: NSObject {
         defaultPanel.getOriginalWidgetOrder(widgetId: id)
     }
 
-    func getPanel(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel {
+    func panel(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel {
         if let widgetsPanel = Self.findWidgetPanel(widgetId: widgetId,
                                                   mode: appMode,
                                                   screenLayoutMode: screenLayoutMode) {
@@ -158,7 +158,7 @@ class WidgetType: NSObject {
         var unsetPanels: [WidgetsPanel] = []
 
         for panel in [WidgetsPanel.leftPanel, WidgetsPanel.topPanel, WidgetsPanel.rightPanel, WidgetsPanel.bottomPanel] {
-            if panel.getOrderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode).isSet(for: appMode) {
+            if panel.orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode).isSet(for: appMode) {
                 setPanels.append(panel)
             } else {
                 unsetPanels.append(panel)

@@ -27,7 +27,7 @@ final class WidgetUtils: NSObject {
                                         widgetRegistry: widgetRegistry,
                                         widgetParamsArray: widgetParamsArray)
         
-        panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+        panel.updateWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
     }
@@ -38,7 +38,7 @@ final class WidgetUtils: NSObject {
                                             screenLayoutMode: ScreenLayoutMode,
                                             widgetRegistry: OAMapWidgetRegistry) {
         let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
-        let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(appMode,
+        let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.widgets(forPanel: appMode,
                                                                                         filterModes: Int(filter),
                                                                                         panels: [panel],
                                                                                         screenLayoutMode: screenLayoutMode.rawValue)
@@ -91,7 +91,7 @@ final class WidgetUtils: NSObject {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
         if !enabledWidgets.isEmpty {
-            let visibleInfos = widgetRegistry.getWidgetsForPanel(appMode,
+            let visibleInfos = widgetRegistry.widgets(forPanel: appMode,
                                                                  filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
                                                                  panels: [panel],
                                                                  screenLayoutMode: screenLayoutMode.rawValue)?.array as? [MapWidgetInfo] ?? []
@@ -216,7 +216,7 @@ extension WidgetUtils {
                                        screenLayoutMode: ScreenLayoutMode) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder: [Int: [String]] = [:]
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         
         widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
         
@@ -241,7 +241,7 @@ extension WidgetUtils {
             
             var flatOrder: [[String]] = []
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             
@@ -275,7 +275,7 @@ extension WidgetUtils {
                 orders[orders.count - 1] = lastPageOrder
             }
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     
@@ -288,7 +288,7 @@ extension WidgetUtils {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder = [Int: [String]]()
         
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         
         widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
@@ -311,7 +311,7 @@ extension WidgetUtils {
             
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             var orders = sortedPagedOrder.map { $0.value }
@@ -343,7 +343,7 @@ extension WidgetUtils {
             orders[insertPage] = pageToAddWidget
             
             widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     
@@ -358,9 +358,9 @@ extension WidgetUtils {
                                                       panels: [WidgetsPanel] = [WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]) {
         for panel in panels {
             let pagedWidgets: [[MapWidgetInfo]] = OAMapWidgetRegistry.sharedInstance()
-                .getPagedWidgets(forPanel: appMode,
-                                 panel: panel,
-                                 filterModes: filterModes)
+                .pagedWidgets(forPanel: appMode,
+                              panel: panel,
+                              filterModes: filterModes)
                 .compactMap { $0.array as? [MapWidgetInfo] }
             
             for pageWidgets in pagedWidgets {

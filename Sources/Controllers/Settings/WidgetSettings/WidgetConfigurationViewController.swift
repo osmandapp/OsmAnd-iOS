@@ -409,10 +409,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
         let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
-        guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
-                                                                panel: widgetPanel,
-                                                                filterModes: enabledWidgetsFilter,
-                                                                screenLayoutMode: widgetInfo.screenLayoutMode.rawValue),
+        guard let pagedWidgets = widgetRegistry.pagedWidgets(forPanel: selectedAppMode,
+                                                             panel: widgetPanel,
+                                                             filterModes: enabledWidgetsFilter,
+                                                             screenLayoutMode: widgetInfo.screenLayoutMode.rawValue),
               let widget = mapWidgetInfo.widget as? OATextInfoWidget else {
             return
         }
@@ -489,7 +489,7 @@ extension WidgetConfigurationViewController {
     }
     
     override func getTableHeaderDescriptionAttr() -> NSAttributedString {
-        guard let widgetType = widgetInfo.getWidgetType() else { return NSAttributedString(string: "") }
+        guard let widgetType = widgetInfo.widgetType() else { return NSAttributedString(string: "") }
         let attrStr = NSMutableAttributedString(string: widgetType.descr)
         // Set font attribute
         let font = UIFont.systemFont(ofSize: 17)

@@ -54,8 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
                      appMode:(OAApplicationMode *)appMode
                     customId:(nullable NSString *)customId;
-- (nullable OAWidgetState *) getWidgetState;
-- (nullable OAMapWidgetInfo *)getWidgetInfo;
+- (nullable OAWidgetState *)storedWidgetState;
+- (nullable OAMapWidgetInfo *)widgetInfo;
 - (BOOL)isExternal;
 
 - (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode

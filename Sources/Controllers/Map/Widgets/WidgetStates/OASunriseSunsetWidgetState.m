@@ -38,7 +38,7 @@
     return self;
 }
 
-- (OAWidgetType *)getWidgetType
+- (OAWidgetType *)widgetType
 {
     return _widgetType;
 }

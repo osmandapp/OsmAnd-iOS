@@ -559,7 +559,7 @@ extension WidgetsListViewController {
     }
     
     private func updateEnabledWidgets() {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
                                                                screenLayoutMode: screenLayoutMode.rawValue)!
@@ -583,10 +583,10 @@ extension WidgetsListViewController {
             row.iconTintColor = .iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
-                                                              panel: widgetPanel,
-                                                              filterModes: Self.enabledWidgetsFilter,
-                                                              screenLayoutMode: screenLayoutMode.rawValue)!
+            let pagedWidgets = widgetRegistry.pagedWidgets(forPanel: selectedAppMode,
+                                                           panel: widgetPanel,
+                                                           filterModes: Self.enabledWidgetsFilter,
+                                                           screenLayoutMode: screenLayoutMode.rawValue)!
             tableData.clearAllData()
             tableData.createNewSection()
             for i in 0..<pagedWidgets.count {
@@ -720,7 +720,7 @@ extension WidgetsListViewController {
     }
     
     override func getTopButtonTitle() -> String {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
                                                                screenLayoutMode: screenLayoutMode.rawValue)!
@@ -728,7 +728,7 @@ extension WidgetsListViewController {
     }
     
     override func getBottomButtonTitle() -> String {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
                                                                screenLayoutMode: screenLayoutMode.rawValue)!

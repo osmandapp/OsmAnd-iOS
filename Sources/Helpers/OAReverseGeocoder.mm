@@ -89,7 +89,8 @@
 
 - (void)cacheAddress:(NSString *)address forKey:(NSString *)cacheKey
 {
-    [self.addressCache setObject:address forKey:cacheKey];
+    if (address.length > 0)
+        [self.addressCache setObject:address forKey:cacheKey];
 }
 
 - (NSString *)lookupAddressAtLat:(double)lat

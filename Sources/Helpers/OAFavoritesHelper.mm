@@ -202,8 +202,7 @@ static NSOperationQueue *_favQueue;
     {
         NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
         [self checkDuplicateNames:favorites];
-        [self deleteFavorites:favorites.copy saveImmediately:NO];
-        if ([self addFavorites:favorites lookupAddress:YES sortAndSave:NO pointsGroup:pointsGroup])
+        if ([self mergeImportedFavorites:favorites pointsGroup:pointsGroup])
             favoritesImported = YES;
         for (OAFavoriteItem *favorite in favorites)
         {
@@ -220,54 +219,166 @@ static NSOperationQueue *_favQueue;
     }
 }
 
++ (void)renameFavorite:(OAFavoriteItem *)favorite
+                atIndex:(NSUInteger)index
+                 toName:(NSString *)newName
+                inIndex:(NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableIndexSet *> *> *)indexesByCategoryAndName
+{
+    NSString *category = [favorite getCategory] ?: @"";
+    NSString *oldName = [favorite getName] ?: @"";
+    if ([oldName isEqualToString:newName])
+        return;
+
+    NSMutableDictionary<NSString *, NSMutableIndexSet *> *indexesByName = indexesByCategoryAndName[category];
+    [indexesByName[oldName] removeIndex:index];
+    NSMutableIndexSet *newNameIndexes = indexesByName[newName];
+    if (!newNameIndexes)
+        indexesByName[newName] = newNameIndexes = [NSMutableIndexSet indexSet];
+    [newNameIndexes addIndex:index];
+    [favorite setName:newName];
+}
+
 + (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites
 {
     if (favorites.count <= 1)
         return;
 
-    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *> *categoryMap =
+    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableIndexSet *> *> *indexesByCategoryAndName =
         [NSMutableDictionary dictionaryWithCapacity:favorites.count];
 
-    for (OAFavoriteItem *item in favorites)
-    {
-        NSString *name = [item getName] ?: @"";
+    [favorites enumerateObjectsUsingBlock:^(OAFavoriteItem *item, NSUInteger index, BOOL *stop) {
         NSString *category = [item getCategory] ?: @"";
+        NSString *name = [item getName] ?: @"";
+        NSMutableDictionary<NSString *, NSMutableIndexSet *> *indexesByName = indexesByCategoryAndName[category];
+        if (!indexesByName)
+            indexesByCategoryAndName[category] = indexesByName = [NSMutableDictionary dictionary];
+        NSMutableIndexSet *indexes = indexesByName[name];
+        if (!indexes)
+            indexesByName[name] = indexes = [NSMutableIndexSet indexSet];
+        [indexes addIndex:index];
+    }];
 
-        NSMutableDictionary *nameMap = categoryMap[category];
-        if (!nameMap)
-            categoryMap[category] = nameMap = [NSMutableDictionary dictionary];
+    [favorites enumerateObjectsUsingBlock:^(OAFavoriteItem *point, NSUInteger pointIndex, BOOL *stop) {
+        NSString *name = [[point getName] copy] ?: @"";
+        NSString *category = [point getCategory] ?: @"";
+        NSIndexSet *matchingIndexes = [indexesByCategoryAndName[category][name] copy];
+        __block NSInteger number = 1;
 
-        NSMutableArray *group = nameMap[name];
-        if (!group)
-            nameMap[name] = group = [NSMutableArray array];
-
-        BOOL isAlreadyInGroup = NO;
-        for (OAFavoriteItem *existingItem in group)
-        {
-            if ([item isEqual:existingItem])
+        [matchingIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *innerStop) {
+            OAFavoriteItem *favoritePoint = favorites[index];
+            if (![name isEqualToString:[favoritePoint getName]])
+                return;
+            if (![point isEqual:favoritePoint])
             {
-                isAlreadyInGroup = YES;
-                break;
-            }
-        }
-
-        if (!isAlreadyInGroup)
-            [group addObject:item];
-    }
-
-    [categoryMap enumerateKeysAndObjectsUsingBlock:^(NSString *category, NSMutableDictionary *nameMap, BOOL *stop) {
-        [nameMap enumerateKeysAndObjectsUsingBlock:^(NSString *name, NSMutableArray<OAFavoriteItem *> *items, BOOL *stop) {
-            
-            if (items.count > 1)
-            {
-                for (NSInteger i = 0; i < items.count; i++)
-                {
-                    NSString *newName = [NSString stringWithFormat:@"%@ (%ld)", name, (long)(i + 1)];
-                    [items[i] setName:newName];
-                }
+                if (number == 1)
+                    [self renameFavorite:point
+                                 atIndex:pointIndex
+                                  toName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
+                                 inIndex:indexesByCategoryAndName];
+                number++;
+                [self renameFavorite:favoritePoint
+                             atIndex:index
+                              toName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
+                             inIndex:indexesByCategoryAndName];
             }
         }];
     }];
+}
+
++ (BOOL)mergeImportedFavorites:(NSArray<OAFavoriteItem *> *)favorites
+       pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup
+{
+    BOOL changed = NO;
+    BOOL favoritesAdded = NO;
+    QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> removedFavoriteLocations;
+    QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> addedFavoriteLocations;
+    NSMutableArray<OAFavoriteItem *> *mutablePoints = _cachedFavoritePoints
+        ? [_cachedFavoritePoints mutableCopy]
+        : [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *> *favoritesByCategoryAndName =
+        [NSMutableDictionary dictionary];
+
+    for (OAFavoriteGroup *group in _favoriteGroups)
+    {
+        NSString *category = group.name ?: @"";
+        NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *favoritesByName = [NSMutableDictionary dictionary];
+        for (OAFavoriteItem *point in group.points)
+        {
+            NSString *name = [point getName] ?: @"";
+            NSMutableArray<OAFavoriteItem *> *favoritesWithName = favoritesByName[name];
+            if (!favoritesWithName)
+                favoritesByName[name] = favoritesWithName = [NSMutableArray array];
+            [favoritesWithName addObject:point];
+        }
+        favoritesByCategoryAndName[category] = favoritesByName;
+    }
+
+    for (OAFavoriteItem *point in favorites)
+    {
+        NSString *category = [point getCategory] ?: @"";
+        NSString *name = [point getName] ?: @"";
+        NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *favoritesByName = favoritesByCategoryAndName[category];
+        if (!favoritesByName)
+            favoritesByCategoryAndName[category] = favoritesByName = [NSMutableDictionary dictionary];
+        NSMutableArray<OAFavoriteItem *> *favoritesWithName = favoritesByName[name];
+        if (!favoritesWithName)
+            favoritesByName[name] = favoritesWithName = [NSMutableArray array];
+
+        OAFavoriteItem *equalFavorite = nil;
+        for (OAFavoriteItem *existingFavorite in favoritesWithName)
+        {
+            if ([point isEqual:existingFavorite])
+            {
+                equalFavorite = existingFavorite;
+                break;
+            }
+        }
+        if (equalFavorite)
+        {
+            OAFavoriteGroup *group = _flatGroups[category];
+            [group.points removeObjectIdenticalTo:equalFavorite];
+            [mutablePoints removeObjectIdenticalTo:equalFavorite];
+            if (!addedFavoriteLocations.removeOne(equalFavorite.favorite))
+                removedFavoriteLocations.append(equalFavorite.favorite);
+            [favoritesWithName removeObjectIdenticalTo:equalFavorite];
+            changed = YES;
+        }
+
+        if (favoritesWithName.count > 0)
+            continue;
+
+        if ([point getAltitude] == 0)
+            [point initAltitude];
+        if (![point isAddressSpecified])
+            [self lookupAddress:point];
+
+        OAFavoriteGroup *group = [self getOrCreateGroup:point pointsGroup:pointsGroup];
+        if (name.length > 0)
+        {
+            [point setVisible:group.isVisible];
+            if (point.specialPointType == [OASpecialPointType PARKING])
+                [point setColor:[point.specialPointType getIconColor]];
+            else if (![point getColor])
+                [point setColor:group.color];
+
+            [group addPoint:point];
+            [mutablePoints addObject:point];
+            [favoritesWithName addObject:point];
+            addedFavoriteLocations.append(point.favorite);
+            favoritesAdded = YES;
+            changed = YES;
+        }
+    }
+
+    if (!removedFavoriteLocations.isEmpty())
+        _favoritesCollection->removeFavoriteLocations(removedFavoriteLocations);
+    if (!addedFavoriteLocations.isEmpty())
+        _favoritesCollection->addFavoriteLocations(addedFavoriteLocations, true);
+    _cachedFavoritePoints = [mutablePoints copy];
+
+    if (favoritesAdded)
+        [[OAAppSettings sharedManager] setShowFavorites:YES];
+    return changed;
 }
 
 + (void) recalculateCachedFavPoints

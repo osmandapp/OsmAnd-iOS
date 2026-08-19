@@ -914,7 +914,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     BOOL routed = routedCount > 0;
     BOOL multiMode = groups.count > 1;
-    BOOL hasGapAfter = allPoints[segmentEndIndex].isGap && segmentEndIndex + 1 < (NSInteger)allPoints.count;
+    BOOL hasGapAfter = segmentEndIndex + 1 < (NSInteger)allPoints.count && allPoints[segmentEndIndex].isGap;
     double gapDistance = 0;
     double gapBearing = 0;
     if (hasGapAfter)

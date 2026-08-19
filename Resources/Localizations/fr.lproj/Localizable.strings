@@ -811,7 +811,7 @@
 "opening_hours" = "Heures d\'ouverture";
 "poi_select_category" = "Sélectionner une catégorie";
 "map_widget_ruler_control" = "Règle de rayon";
-"shared_string_upload" = "Envoyer";
+"shared_string_upload" = "Télécharger";
 "poi_overlay" = "Surcouche POI";
 "poi_dialog_poi_type" = "Type de POI";
 "import_from_docs" = "Importation à partir de documents";
@@ -4539,3 +4539,10 @@
 "ais_aid_racon" = "RACON";
 "ais_aid_leading_light_front" = "Front de lumière principal";
 "ais_aid_leading_light_rear" = "Feu arrière de position";
+"no_crashes_recorded" = "Aucun accident n'a été signalé";
+"share_crash_log" = "Partager le journal des erreurs";
+"crash_report_prompt_title" = "OsmAnd a rencontré une erreur inattendue.";
+"crash_report_prompt_description" = "Aidez-nous à améliorer l'application en nous envoyant le rapport d'erreur. Ce rapport nous permettra d'identifier et de résoudre le problème.";
+"shared_string_send" = "Envoyer";
+"send_current_app_log" = "Envoyer le journal actuel de l'application";
+"send_current_app_log_descr" = "Depuis le lancement de l'application";

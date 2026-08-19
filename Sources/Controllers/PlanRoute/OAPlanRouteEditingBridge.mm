@@ -1092,15 +1092,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    BOOL startsRouteCalculation = [self beginRouteCalculationIfNeededForContext:ctx
-                                                                           mode:mode
-                                                                     pointIndex:pointIndex
-                                                                     wholeRoute:wholeRoute];
+    [self beginRouteCalculationIfNeededForContext:ctx
+                                             mode:mode
+                                       pointIndex:pointIndex
+                                       wholeRoute:wholeRoute];
     ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
-    if (!startsRouteCalculation && self.onChange)
+    if (self.onChange)
         self.onChange();
 }
 
@@ -2072,8 +2072,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (!hasRoutePair || mode == OAApplicationMode.DEFAULT)
         return NO;
     _isCalculatingRoute = YES;
-    if (self.onChange)
-        self.onChange();
     return YES;
 }
 
@@ -2096,8 +2094,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (![self shouldShowRouteCalculationStateForContext:ctx] || _isCalculatingRoute)
         return;
     _isCalculatingRoute = YES;
-    if (self.onChange)
-        self.onChange();
 }
 
 - (BOOL)isCalculatingElevation

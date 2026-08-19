@@ -874,8 +874,11 @@
     [items setObject:[NSDictionary dictionaryWithDictionary:item] atIndexedSubscript:indexPath.row];
     [_data setObject:[NSArray arrayWithArray:items] forKey:key];
     [self hideTagToolbar];
-    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [cell.textField.textView setText:@""];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+        [((OATextInputFloatingCellWithIcon *)cell).textField.textView setText:@""];
+    else if ([cell isKindOfClass:OAMultilineTextViewCell.class])
+        [((OAMultilineTextViewCell *)cell).inputField.textView setText:@""];
     [self.tableView endUpdates];
 }
 

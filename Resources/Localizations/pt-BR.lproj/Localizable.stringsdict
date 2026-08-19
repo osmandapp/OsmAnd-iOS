@@ -69,5 +69,21 @@
 			<string>%ld Pontos</string>
 		</dict>
 	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld parada</string>
+			<key>other</key>
+			<string>%ld paradas</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

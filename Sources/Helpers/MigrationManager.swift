@@ -131,14 +131,14 @@ final class MigrationManager: NSObject {
         let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
         for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
             let value = legacyPreference.get(appMode)
-            let preferences = [
+            var preferences = [
                 settings.transparentWidgets(ScreenLayoutMode.portrait.rawValue,
-                                            screenElementsMode: ScreenElementsMode.shared.rawValue),
-                settings.transparentWidgets(ScreenLayoutMode.portrait.rawValue,
-                                            screenElementsMode: ScreenElementsMode.independent.rawValue),
-                settings.transparentWidgets(ScreenLayoutMode.landscape.rawValue,
-                                            screenElementsMode: ScreenElementsMode.independent.rawValue)
+                                            screenElementsMode: ScreenElementsMode.shared.rawValue)
             ]
+            ScreenLayoutMode.allCases.forEach {
+                preferences.append(settings.transparentWidgets($0.rawValue,
+                                                               screenElementsMode: ScreenElementsMode.independent.rawValue))
+            }
             for preference in preferences where !preference.isSet(for: appMode) {
                 preference.set(value, mode: appMode)
             }

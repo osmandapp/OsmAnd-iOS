@@ -27,8 +27,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private static let sectionHorizontalInset: CGFloat = 16
     private static let separatorLeftInset: CGFloat = 76
     private static let bottomContentInset: CGFloat = 72
-    private static let pointRowHeight: CGFloat = 68
-    private static let profileGroupRowHeight: CGFloat = 53
+    private static let estimatedRowHeight: CGFloat = 68
+    private static let estimatedSectionHeaderHeight: CGFloat = 60
 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
@@ -80,12 +80,16 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.alwaysBounceVertical = true
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = Self.estimatedRowHeight
         tableView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0,
                                                                      leading: horizontalInset,
                                                                      bottom: 0,
                                                                      trailing: horizontalInset)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = Self.estimatedSectionHeaderHeight
         tableView.sectionHeaderTopPadding = 0
         tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.reuseIdentifier)
         tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.reuseIdentifier)
@@ -395,24 +399,8 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension PlanRouteRouteViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let section = sections[indexPath.section]
-        guard !section.isStartNewSegment else { return UITableView.automaticDimension }
-        switch section.rows[indexPath.row] {
-        case .profileGroup:
-            return Self.profileGroupRowHeight
-        case .point:
-            return Self.pointRowHeight
-        case .gap:
-            return UITableView.automaticDimension
-        case .empty:
-            return UITableView.automaticDimension
-        }
-    }
-
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard sections[section].headerTitle != nil else { return 0 }
-        return sections[section].headerSubtitle != nil ? 60 : 44
+        sections[section].headerTitle == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

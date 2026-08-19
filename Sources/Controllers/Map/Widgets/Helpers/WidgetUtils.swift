@@ -12,20 +12,22 @@ final class WidgetUtils: NSObject {
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
                                selectedAppMode: OAApplicationMode,
+                               screenLayoutMode: ScreenLayoutMode,
                                widgetParamsArray: [[String: Any]]? = nil) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
-        removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, widgetRegistry: widgetRegistry)
+        removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode, widgetRegistry: widgetRegistry)
         
         let newOrders = createNewOrders(enabledWidgets: enabledWidgets,
                                         orderedWidgetPages: orderedWidgetPages,
                                         panel: panel,
                                         appMode: selectedAppMode,
+                                        screenLayoutMode: screenLayoutMode,
                                         widgetRegistry: widgetRegistry,
                                         widgetParamsArray: widgetParamsArray)
         
-        panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode)
+        panel.updateWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
     }
@@ -33,15 +35,17 @@ final class WidgetUtils: NSObject {
     private static func removeUnusedWidgets(enabledWidgets: [String],
                                             panel: WidgetsPanel,
                                             appMode: OAApplicationMode,
+                                            screenLayoutMode: ScreenLayoutMode,
                                             widgetRegistry: OAMapWidgetRegistry) {
         let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
-        let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(appMode,
+        let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.widgets(forPanel: appMode,
                                                                                         filterModes: Int(filter),
-                                                                                        panels: [panel])
+                                                                                        panels: [panel],
+                                                                                        screenLayoutMode: screenLayoutMode.rawValue)
         let widgetsToDelete: [MapWidgetInfo] = (currentWidgetInfos.array as! [MapWidgetInfo]).filter { !enabledWidgets.contains($0.key) }
         if !widgetsToDelete.isEmpty {
-            let widgets: NSMutableOrderedSet = widgetRegistry.getWidgetsFor(panel)
-            for widgetInfo in widgetsToDelete where widgets.contains(widgetInfo) {
+            let widgets: NSMutableOrderedSet = widgetRegistry.widgets(for: panel)
+            for widgetInfo in widgetsToDelete {
                 widgets.remove(widgetInfo)
                 AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
                 widgetRegistry.enableDisableWidget(for: appMode,
@@ -56,9 +60,10 @@ final class WidgetUtils: NSObject {
                                         orderedWidgetPages: [[String]],
                                         panel: WidgetsPanel,
                                         appMode: OAApplicationMode,
+                                        screenLayoutMode: ScreenLayoutMode,
                                         widgetRegistry: OAMapWidgetRegistry,
                                         widgetParamsArray: [[String: Any]]? = nil) -> [[String]] {
-        let newWidgetsList: NSMutableArray = buildNewWidgetsList(enabledWidgets: enabledWidgets, panel: panel, appMode: appMode, widgetRegistry: widgetRegistry, widgetParamsArray: widgetParamsArray)
+        let newWidgetsList: NSMutableArray = buildNewWidgetsList(enabledWidgets: enabledWidgets, panel: panel, appMode: appMode, screenLayoutMode: screenLayoutMode, widgetRegistry: widgetRegistry, widgetParamsArray: widgetParamsArray)
         var newOrders = [[String]]()
         for page in orderedWidgetPages {
             var newOrder: [String] = []
@@ -80,12 +85,16 @@ final class WidgetUtils: NSObject {
     private static func buildNewWidgetsList(enabledWidgets: [String],
                                             panel: WidgetsPanel,
                                             appMode: OAApplicationMode,
+                                            screenLayoutMode: ScreenLayoutMode,
                                             widgetRegistry: OAMapWidgetRegistry,
                                             widgetParamsArray: [[String: Any]]? = nil) -> NSMutableArray {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
         if !enabledWidgets.isEmpty {
-            let visibleInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [panel])?.array as? [MapWidgetInfo] ?? []
+            let visibleInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                                 filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                                 panels: [panel],
+                                                                 screenLayoutMode: screenLayoutMode.rawValue)?.array as? [MapWidgetInfo] ?? []
             let currentWidgetIds = NSMutableArray(array: visibleInfos.map(\.key))
             var widgetParamsArrayLocal = widgetParamsArray
             for widgetInfoId in enabledWidgets {
@@ -104,12 +113,13 @@ final class WidgetUtils: NSObject {
                                                            panel: panel,
                                                            widgetsFactory: widgetsFactory,
                                                            selectedAppMode: appMode,
+                                                           screenLayoutMode: screenLayoutMode,
                                                            widgetParams: params) {
                         newWidgetsList.add(newMapWidgetInfo)
                         currentWidgetIds.remove(widgetInfoId)
                     }
                 } else {
-                    if let mapWidgetInfo = widgetRegistry.getWidgetInfo(byId: widgetInfoId) {
+                    if let mapWidgetInfo = visibleInfos.first(where: { $0.key == widgetInfoId }) {
                         newWidgetsList.add(mapWidgetInfo)
                         currentWidgetIds.remove(widgetInfoId)
                     }
@@ -123,6 +133,7 @@ final class WidgetUtils: NSObject {
                                      panel: WidgetsPanel,
                                      widgetsFactory: MapWidgetsFactory,
                                      selectedAppMode: OAApplicationMode,
+                                     screenLayoutMode: ScreenLayoutMode,
                                      widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         guard let widgetType = WidgetType.getById(widgetId) else {
             return nil
@@ -131,8 +142,10 @@ final class WidgetUtils: NSObject {
         guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, widgetParams: widgetParams) else {
             return nil
         }
-        OAAppSettings.sharedManager().customWidgetKeys.add(id)
-        let creator = WidgetInfoCreator(appMode: selectedAppMode)
+        let settings = OAAppSettings.sharedManager()
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(selectedAppMode))
+        settings.customWidgetKeys(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue).add(id, appMode: selectedAppMode)
+        let creator = WidgetInfoCreator(appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         return creator.createCustomWidgetInfo(widgetId: id,
                                               widget: widget,
                                               widgetType: widgetType,
@@ -145,12 +158,12 @@ final class WidgetUtils: NSObject {
                                    panel: WidgetsPanel,
                                    selectedAppMode: OAApplicationMode,
                                    widgetRegistry: OAMapWidgetRegistry) {
-        guard !widgetRegistry.isWidgetVisible(mapWidgetInfo.key) else {
+        guard !mapWidgetInfo.isEnabledForAppMode(selectedAppMode) else {
             return
         }
         mapWidgetInfo.priority = newOrder.firstIndex(of: mapWidgetInfo.key) ?? newOrder.count - 1
         mapWidgetInfo.pageIndex = newOrders.firstIndex(of: newOrder) ?? newOrders.count
-        widgetRegistry.getWidgetsFor(panel)?.add(mapWidgetInfo)
+        widgetRegistry.widgets(for: panel)?.add(mapWidgetInfo)
         widgetRegistry.enableDisableWidget(for: selectedAppMode,
                                            widgetInfo: mapWidgetInfo,
                                            enabled: NSNumber(value: true),
@@ -163,6 +176,7 @@ extension WidgetUtils {
     static func createNewWidgets(widgetsIds: [String],
                                  panel: WidgetsPanel,
                                  appMode: OAApplicationMode,
+                                 screenLayoutMode: ScreenLayoutMode,
                                  selectedWidget: String?,
                                  widgetParams: [String: Any]?,
                                  addToNext: Bool?) -> [MapWidgetInfo] {
@@ -175,15 +189,17 @@ extension WidgetUtils {
                                              panel: panel,
                                              widgetsFactory: widgetsFactory,
                                              selectedAppMode: appMode,
+                                             screenLayoutMode: screenLayoutMode,
                                              widgetParams: widgetParams) {
                 if let addToNext, let selectedWidget {
                     addWidgetToSpecificPlace(with: widgetInfo,
                                              widgetsPanel: panel,
                                              selectedAppMode: appMode,
+                                             screenLayoutMode: screenLayoutMode,
                                              selectedWidget: selectedWidget,
                                              addToNext: addToNext)
                 } else {
-                    addWidgetToEnd(with: widgetInfo, widgetsPanel: panel, selectedAppMode: appMode)
+                    addWidgetToEnd(with: widgetInfo, widgetsPanel: panel, selectedAppMode: appMode, screenLayoutMode: screenLayoutMode)
                 }
                 resultWidgetsInfos.append(widgetInfo)
                 widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: true, recreateControls: false)
@@ -196,12 +212,13 @@ extension WidgetUtils {
     
     private static func addWidgetToEnd(with targetWidget: MapWidgetInfo,
                                        widgetsPanel: WidgetsPanel,
-                                       selectedAppMode: OAApplicationMode) {
+                                       selectedAppMode: OAApplicationMode,
+                                       screenLayoutMode: ScreenLayoutMode) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder: [Int: [String]] = [:]
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)
         
         targetWidget.widgetPanel = widgetsPanel
         
@@ -220,11 +237,11 @@ extension WidgetUtils {
         if pagedOrder.isEmpty {
             targetWidget.pageIndex = 0
             targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).add(targetWidget)
+            widgetRegistry.widgets(for: targetWidget.widgetPanel).add(targetWidget)
             
             var flatOrder: [[String]] = []
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             
@@ -244,7 +261,7 @@ extension WidgetUtils {
                 if lastPageOrder.count > 1 {
                     let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
                     
-                    if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
+                    if let previousLastVisibleWidgetInfo = sortedWidgets.first(where: { $0.key == previousLastWidgetId }) {
                         targetWidget.pageIndex = previousLastVisibleWidgetInfo.pageIndex
                         targetWidget.priority = previousLastVisibleWidgetInfo.priority + 1
                     } else {
@@ -257,23 +274,24 @@ extension WidgetUtils {
                 }
                 orders[orders.count - 1] = lastPageOrder
             }
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     
     private static func addWidgetToSpecificPlace(with targetWidget: MapWidgetInfo,
                                                  widgetsPanel: WidgetsPanel,
                                                  selectedAppMode: OAApplicationMode,
+                                                 screenLayoutMode: ScreenLayoutMode,
                                                  selectedWidget: String,
                                                  addToNext: Bool) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder = [Int: [String]]()
         
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel])
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
         let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
+        widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)
         targetWidget.widgetPanel = widgetsPanel
         
         for widget in sortedWidgets {
@@ -289,11 +307,11 @@ extension WidgetUtils {
         if pagedOrder.isEmpty {
             targetWidget.pageIndex = 0
             targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
             
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             var orders = sortedPagedOrder.map { $0.value }
@@ -314,7 +332,7 @@ extension WidgetUtils {
             pageToAddWidget.insert(targetWidget.key, at: insertOrder)
             
             for (index, widgetId) in pageToAddWidget.enumerated() {
-                if let widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId) {
+                if let widgetInfo = sortedWidgets.first(where: { $0.key == widgetId }) {
                     widgetInfo.pageIndex = insertPage
                     widgetInfo.priority = index
                 } else if widgetId == targetWidget.key {
@@ -324,8 +342,8 @@ extension WidgetUtils {
             }
             orders[insertPage] = pageToAddWidget
             
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
+            widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
+            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     
@@ -340,9 +358,9 @@ extension WidgetUtils {
                                                       panels: [WidgetsPanel] = [WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]) {
         for panel in panels {
             let pagedWidgets: [[MapWidgetInfo]] = OAMapWidgetRegistry.sharedInstance()
-                .getPagedWidgets(forPanel: appMode,
-                                 panel: panel,
-                                 filterModes: filterModes)
+                .pagedWidgets(forPanel: appMode,
+                              panel: panel,
+                              filterModes: filterModes)
                 .compactMap { $0.array as? [MapWidgetInfo] }
             
             for pageWidgets in pagedWidgets {

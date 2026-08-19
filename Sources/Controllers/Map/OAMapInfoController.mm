@@ -100,7 +100,7 @@
                    containerView:(ShadowPathView *)containerView
                              top:(BOOL)top
 {
-    if ([_settings.transparentMapTheme get])
+    if (_settings.isTransparentWidgets)
         containerView.direction = ShadowPathDirectionClear;
     else
         containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
@@ -305,7 +305,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     
@@ -319,7 +319,7 @@
         }
         for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
-            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
+            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
                 [self updateColors:state sideWidget:widgetInfo.widget];
             }
@@ -406,7 +406,7 @@
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
 {
-    view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
+    view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -774,7 +774,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];

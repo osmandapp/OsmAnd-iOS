@@ -44,7 +44,7 @@ static const double locationChangeAccuracy = 0.0001;
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _state = state;
-        self.widgetType = [state getWidgetType];
+        self.widgetType = [state widgetType];
         [self configurePrefsWithId:state.customId appMode:appMode widgetParams:widgetParams];
         
         __weak OASunriseSunsetWidget *selfWeak = self;
@@ -137,7 +137,7 @@ static const double locationChangeAccuracy = 0.0001;
     return [_state getPreference];
 }
 
-- (OAWidgetState *)getWidgetState
+- (OAWidgetState *)storedWidgetState
 {
     return _state;
 }
@@ -146,7 +146,7 @@ static const double locationChangeAccuracy = 0.0001;
             widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
                              isCreate:(BOOL)isCreate
 {
-    OAWidgetType *type = [_state getWidgetType];
+    OAWidgetType *type = [_state widgetType];
     
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -325,7 +325,7 @@ static const double locationChangeAccuracy = 0.0001;
 }
 
 - (NSString *)getNextEventString:(EOASunPositionMode)sunPositionMode {
-    OAWidgetType *type = [_state getWidgetType];
+    OAWidgetType *type = [_state widgetType];
     NSString *eventString = @"";
     
     if (OAWidgetType.sunPosition == type)
@@ -385,7 +385,7 @@ static const double locationChangeAccuracy = 0.0001;
     NSDate *sunset = [sunriseSunset getSunset];
     NSDate *nextTimeDate;
     EOASunPositionMode sunPositionMode = (EOASunPositionMode)[[_state getSunPositionPreference] get];
-    OAWidgetType *type = [_state getWidgetType];
+    OAWidgetType *type = [_state widgetType];
     if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == EOASunPositionModeSunsetMode))
     {
         nextTimeDate = sunset;

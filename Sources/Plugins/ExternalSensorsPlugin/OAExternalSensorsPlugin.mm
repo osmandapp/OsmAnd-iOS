@@ -163,7 +163,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode screenLayoutMode:delegate.screenLayoutMode];
     auto widgetTypeArray = @[OAWidgetType.heartRate,
                              OAWidgetType.bicycleCadence,
                              OAWidgetType.bicycleDistance,

@@ -1044,11 +1044,11 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (OAWidgetsPanel *)getWidgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [self getWidgetInfo];
+    OAMapWidgetInfo *widgetInfo = [self widgetInfo];
     return widgetInfo.widgetPanel;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -1059,7 +1059,17 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] || self.widgetType.getPanel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+
+    OAApplicationMode *appMode = [self getAppMode];
+    BOOL useSeparateLayouts = [[[OAAppSettings sharedManager] useSeparateLayouts] get:appMode];
+    ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape] ? ScreenLayoutModeLandscape : ScreenLayoutModePortrait;
+    NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
+    OAWidgetsPanel *storedPanel = [self.widgetType panel:widgetId
+                                                appMode:appMode
+                                       screenLayoutMode:screenLayoutMode];
+    BOOL verticalPanel = [[self getWidgetPanel] isPanelVertical] || storedPanel.isPanelVertical;
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
+                                                                   defValue:verticalPanel ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId
@@ -1073,6 +1083,26 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 - (OAApplicationMode *)getAppMode
 {
     return _appMode;
+}
+
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    [super copySettingsFromMode:fromAppMode appMode:appMode customId:customId];
+    if (!self.widgetType)
+        return;
+
+    if (self.widgetSizePref)
+    {
+        OACommonWidgetSizeStyle *sizePreference = [self registerWidgetSizePref:customId];
+        [sizePreference set:[self.widgetSizePref get:fromAppMode] mode:appMode];
+    }
+    if (_showIconPref)
+    {
+        OACommonBoolean *showIconPreference = [self registerShowIconPref:customId];
+        [showIconPreference set:[_showIconPref get:fromAppMode] mode:appMode];
+    }
 }
 
 @end

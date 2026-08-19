@@ -139,9 +139,9 @@
     OAApplicationMode *appMode = [settings.applicationMode get];
 
     OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
-    NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry getWidgetsForPanel:appMode
-                                                                                    filterModes:kWidgetModeEnabled
-                                                                                         panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
+    NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry widgetsForPanel:appMode
+                                                                                 filterModes:kWidgetModeEnabled
+                                                                                      panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
     {
         if ([widgetInfo.key hasPrefix:OAWidgetType.markersTopBar.id])

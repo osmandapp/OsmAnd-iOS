@@ -69,14 +69,14 @@ class MarkerWidgetsHelper: NSObject {
     // MARK: Callbacks
     
     func onWidgetRegistered(_ widgetInfo: MapWidgetInfo) {
-        let widgetType = widgetInfo.getWidgetType()
+        let widgetType = widgetInfo.widgetType()
         if isMarkerWidget(widgetType) && widgetInfo.isEnabledForAppMode(settings.applicationMode.get()) {
             addWidget(widgetInfo, widgetType)
         }
     }
     
     func onWidgetVisibilityChanged(_ widgetInfo: MapWidgetInfo) {
-        let widgetType = widgetInfo.getWidgetType()
+        let widgetType = widgetInfo.widgetType()
         if isMarkerWidget(widgetType) {
             if widgetInfo.isEnabledForAppMode(settings.applicationMode.get()) {
                 addWidget(widgetInfo, widgetType)
@@ -136,4 +136,3 @@ class MarkerWidgetsHelper: NSObject {
 protocol CustomLatLonListener {
     func setCustomLatLon(_ customLatLon: CLLocation?)
 }
-

@@ -333,7 +333,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
         guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
-        if case let .profileGroup(group, _) = context {
+        if case let .profileGroup(_, segment) = context, segment.isPendingEmpty {
+            guard let pointIndex = routeSegments.last?.pointIndexes.last else { return }
+            bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
+        } else if case let .profileGroup(group, _) = context {
             for point in group.points {
                 bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
             }
@@ -489,12 +492,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {
-        PlanRouteSegment(index: segment.index,
-                         groups: segment.groups.map { mapGroup($0) },
-                         routed: segment.routed,
-                         multiMode: segment.multiMode,
-                         singleMode: segment.singleMode,
-                         distance: segment.distance)
+        let gapAfter = segment.hasGapAfter
+            ? PlanRouteSegmentGap(distance: segment.gapDistance, bearing: segment.gapBearing)
+            : nil
+        return PlanRouteSegment(index: segment.index,
+                                groups: segment.groups.map { mapGroup($0) },
+                                routed: segment.routed,
+                                multiMode: segment.multiMode,
+                                singleMode: segment.singleMode,
+                                distance: segment.distance,
+                                isPendingEmpty: false,
+                                gapAfter: gapAfter)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {
@@ -519,6 +527,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     private func mapPoint(_ point: PlanRoutePointData) -> PlanRoutePoint {
         PlanRoutePoint(index: point.globalIndex,
+                       indexInSegment: point.indexInSegment,
                        name: point.name,
                        distanceFromPrevious: point.distanceFromPrevious,
                        bearing: point.bearing,

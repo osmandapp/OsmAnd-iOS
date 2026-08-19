@@ -133,6 +133,7 @@ enum PlanRoutePointEditMode: Int {
 
 struct PlanRoutePoint {
     let index: Int
+    let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
     let bearing: Double
@@ -147,6 +148,11 @@ struct PlanRouteProfileGroup {
     let points: [PlanRoutePoint]
 }
 
+struct PlanRouteSegmentGap {
+    let distance: Double
+    let bearing: Double
+}
+
 struct PlanRouteSegment {
     let index: Int
     let groups: [PlanRouteProfileGroup]
@@ -154,6 +160,8 @@ struct PlanRouteSegment {
     let multiMode: Bool
     let singleMode: OAApplicationMode?
     let distance: Double
+    let isPendingEmpty: Bool
+    let gapAfter: PlanRouteSegmentGap?
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }

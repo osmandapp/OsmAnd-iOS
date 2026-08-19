@@ -355,6 +355,47 @@ static NSOperationQueue *_favQueue;
                   pointsGroup:nil];
 }
 
++ (NSInteger)addFavoritesSkippingDuplicates:(NSArray<OAFavoriteItem *> *)favorites
+{
+    NSInteger skippedCount = 0;
+    NSMutableArray<OAFavoriteItem *> *favoritesToAdd = [NSMutableArray arrayWithCapacity:favorites.count];
+    NSMutableDictionary<NSString *, NSMutableSet<NSString *> *> *namesByCategory = [NSMutableDictionary dictionary];
+
+    for (OAFavoriteItem *point in favorites)
+    {
+        NSString *category = [point getCategory] ?: @"";
+        NSString *name = [point getName] ?: @"";
+        NSMutableSet<NSString *> *names = namesByCategory[category];
+        if (!names)
+        {
+            names = [NSMutableSet set];
+            OAFavoriteGroup *group = _flatGroups[category];
+            for (OAFavoriteItem *existingPoint in group.points)
+            {
+                NSString *existingName = [existingPoint getName];
+                if (existingName.length > 0)
+                    [names addObject:existingName];
+            }
+            namesByCategory[category] = names;
+        }
+
+        if (name.length > 0 && [names containsObject:name])
+        {
+            skippedCount++;
+            continue;
+        }
+
+        [favoritesToAdd addObject:point];
+        if (name.length > 0)
+            [names addObject:name];
+    }
+
+    if (favoritesToAdd.count > 0)
+        [self addFavorites:favoritesToAdd];
+
+    return skippedCount;
+}
+
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave

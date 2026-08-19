@@ -9,11 +9,13 @@ import UIKit
 
 final class PlanRouteSegmentGapCell: UITableViewCell {
 
-    private static let horizontalInset: CGFloat = 16
-    private static let topInset: CGFloat = 10
-    private static let iconSize: CGFloat = 30
-    private static let iconTitleSpacing: CGFloat = 16
-    private static let cornerRadius: CGFloat = 26
+    private enum Constants {
+        static let horizontalInset: CGFloat = 16
+        static let topInset: CGFloat = 10
+        static let iconSize: CGFloat = 30
+        static let iconTitleSpacing: CGFloat = 16
+        static let cornerRadius: CGFloat = 26
+    }
 
     private let borderView = UIView()
     private let iconView = UIImageView()
@@ -39,11 +41,11 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
     }
 
     private func setupCell() {
-        let horizontalInset = Self.horizontalInset
-        let topInset = Self.topInset
-        let iconSize = Self.iconSize
-        let iconTitleSpacing = Self.iconTitleSpacing
-        let cornerRadius = Self.cornerRadius
+        let horizontalInset = Constants.horizontalInset
+        let topInset = Constants.topInset
+        let iconSize = Constants.iconSize
+        let iconTitleSpacing = Constants.iconTitleSpacing
+        let cornerRadius = Constants.cornerRadius
 
         backgroundColor = .clear
         contentView.backgroundColor = .clear

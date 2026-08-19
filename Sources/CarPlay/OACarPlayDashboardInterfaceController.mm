@@ -40,7 +40,6 @@
 #import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
-#import "OAReverseGeocoder.h"
 
 static NSString * const kUnitsKm = OALocalizedString(@"km");
 static NSString * const kUnitsM = OALocalizedString(@"m");
@@ -161,17 +160,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
-- (NSString *)fullAddressForPoint:(OARTargetPoint *)point
-{
-    return [[OAReverseGeocoder instance] lookupAddressAtLat:point.getLatitude
-                                                        lon:point.getLongitude];
-}
-
-- (NSString *)shortAddressForPoint:(OARTargetPoint *)point
-{
-    return nil;
-}
-
 - (NSString *)normalizedName:(NSString *)name
 {
     if (name.length == 0)
@@ -203,15 +191,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSString *)poiNameForPoint:(OARTargetPoint *)point
 {
-    OAPointDescription *pointDescription = point.pointDescription;
-    NSString *name = pointDescription.name;
-    if (!pointDescription || ![self isMeaningfulName:name] || [pointDescription isAddress])
+    OAPointDescription *pd = point.pointDescription;
+    NSString *name = pd.name;
+    if (!pd || ![self isMeaningfulName:name] || [pd isAddress])
         return nil;
-    
     if ([self pointHasProperName:point])
         return name;
-    
-    NSString *address = [self fullAddressForPoint:point];
+    NSString *address = pd.address;
     if ([self isMeaningfulName:address]
         && [[self normalizedName:name] isEqualToString:[self normalizedName:address]])
         return nil;
@@ -220,12 +206,20 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSString *)addressForPoint:(OARTargetPoint *)point
 {
-    NSString *address = [self fullAddressForPoint:point];
-    
-    if ([self isMeaningfulName:address])
-        return address;
     OAPointDescription *pd = point.pointDescription;
+    if ([self isMeaningfulName:pd.address])
+        return pd.address;
     return ([pd isLocation] && [self isMeaningfulName:pd.name]) ? pd.name : nil;
+}
+
+- (NSString *)shortAddressForPoint:(OARTargetPoint *)point
+{
+    NSString *address = point.pointDescription.address;
+    if (![self isMeaningfulName:address])
+        return nil;
+    NSString *shortAddress = [[address componentsSeparatedByString:@","] firstObject];
+    shortAddress = [shortAddress stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+    return [self isMeaningfulName:shortAddress] ? shortAddress : nil;
 }
 
 - (NSString *)coordinatesForPoint:(OARTargetPoint *)point
@@ -250,8 +244,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 return subtitle;
         }
 
-        NSString *coords = [self coordinatesForPoint:point];
-        return [NSString stringWithFormat:OALocalizedString(@"carplay_trip_via_point"), coords];
+        return [NSString localizedStringWithFormat:NSLocalizedString(@"carplay_trip_via_stops", nil), (long)1];
     }
 
     return [NSString localizedStringWithFormat:NSLocalizedString(@"carplay_trip_via_stops", nil), (long)points.count];

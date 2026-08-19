@@ -646,12 +646,19 @@
 
 - (void) lookupAddressForDestinationPoint
 {
-    if (_pointToNavigate != nil && [_pointToNavigate isSearchingAddress] && !_isSearchingDestination)
+    BOOL isNameNotValid = _pointToNavigate != nil && [_pointToNavigate isSearchingAddress];
+    BOOL isAddresEmpty = _pointToNavigate != nil && NSStringIsEmpty(_pointToNavigate.pointDescription.address);
+    
+    if ((isNameNotValid || isAddresEmpty) && !_isSearchingDestination)
     {
         _isSearchingDestination = YES;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:_pointToNavigate.point];
-            [_pointToNavigate.pointDescription setName:pointName];
+            if (isNameNotValid)
+                [_pointToNavigate.pointDescription setName:pointName];
+            
+            _pointToNavigate.pointDescription.address = pointName;
+                
             [_app.data setPointToNavigate:_pointToNavigate];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateRouteAndRefresh:NO];
@@ -663,11 +670,18 @@
 
 - (void) lookupAddressForIntermediatePoint:(OARTargetPoint *) point
 {
-    if (point != nil && [point isSearchingAddress])
+    BOOL isNameNotValid = point != nil && [point isSearchingAddress];
+    BOOL isAddresEmpty = point != nil && NSStringIsEmpty(point.pointDescription.address) && _intermediatePoints.firstObject == point;
+    
+    if (isNameNotValid || isAddresEmpty)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:point.point];
-            [point.pointDescription setName:pointName];
+            if (isNameNotValid)
+                [point.pointDescription setName:pointName];
+            
+            point.pointDescription.address = pointName;
+            
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateRouteAndRefresh:NO];
             });

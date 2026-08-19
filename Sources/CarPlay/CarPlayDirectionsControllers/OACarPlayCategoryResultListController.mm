@@ -227,6 +227,15 @@
     }
     CLLocation *loc = searchItem.getSearchResult.location;
     OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[searchItem getName]];
+    
+    OASearchResult *searchResult = searchItem.getSearchResult;
+    if (searchResult.objectType == EOAObjectTypePoi) {
+        NSString *address = searchResult.alternateName;
+        if (address.length > 0 && ![address isEqualToString:historyName.name]) {
+            historyName.address = address;
+        }
+    }
+    
     [self startNavigationGivenLocation:loc historyName:historyName];
     [self safePopToRootTemplateAnimated:YES];
 

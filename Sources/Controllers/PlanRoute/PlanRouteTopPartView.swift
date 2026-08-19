@@ -9,9 +9,12 @@
 import UIKit
 
 final class PlanRouteTopPartView: UIView {
-    private static let statusIconSize: CGFloat = 30
-    private static let horizontalInset: CGFloat = 20
-    private static let progressDisplayDelay: TimeInterval = 1
+    private enum Constants {
+        static let statusIconSize: CGFloat = 30
+        static let horizontalInset: CGFloat = 20
+        static let progressDisplayDelay: TimeInterval = 1
+        static let durationNumberRegex = try? NSRegularExpression(pattern: #"<?\p{Nd}+"#)
+    }
 
     var onTap: (() -> Void)?
 
@@ -92,8 +95,8 @@ final class PlanRouteTopPartView: UIView {
         textStackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textStackView)
 
-        let horizontalInset = Self.horizontalInset
-        let statusIconSize = Self.statusIconSize
+        let horizontalInset = Constants.horizontalInset
+        let statusIconSize = Constants.statusIconSize
 
         NSLayoutConstraint.activate([
             statusIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalInset),
@@ -135,7 +138,7 @@ final class PlanRouteTopPartView: UIView {
             progressIndicator.startAnimating()
         }
         progressDisplayWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.progressDisplayDelay, execute: workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.progressDisplayDelay, execute: workItem)
     }
 
     private func makeFirstLine(_ info: PlanRouteInfo,
@@ -198,26 +201,13 @@ final class PlanRouteTopPartView: UIView {
         let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
         let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
         let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
-        var hours: Int32 = 0
-        var minutes: Int32 = 0
-        var seconds: Int32 = 0
-        OAUtilities.getHMS(duration, hours: &hours, minutes: &minutes, seconds: &seconds)
-
-        let result = NSMutableAttributedString()
-        if hours > 0 {
-            result.append(NSAttributedString(string: "\(hours)", attributes: primary))
-            result.append(NSAttributedString(string: " \(localizedString("int_hour"))", attributes: secondary))
-        }
-        if minutes > 0 {
-            if result.length > 0 {
-                result.append(NSAttributedString(string: " ", attributes: secondary))
-            }
-            result.append(NSAttributedString(string: "\(minutes)", attributes: primary))
-            result.append(NSAttributedString(string: " \(localizedString("shared_string_minute_lowercase"))", attributes: secondary))
-        }
-        if hours == 0 && minutes == 0 {
-            result.append(NSAttributedString(string: "\(seconds)", attributes: primary))
-            result.append(NSAttributedString(string: " \(localizedString("units_sec_short"))", attributes: secondary))
+        let durationText = OAOsmAndFormatter.getFormattedDuration(duration) ?? ""
+        let result = NSMutableAttributedString(string: durationText, attributes: secondary)
+        guard let durationNumberRegex = Constants.durationNumberRegex else { return result }
+        let fullRange = NSRange(durationText.startIndex..., in: durationText)
+        durationNumberRegex.enumerateMatches(in: durationText, range: fullRange) { match, _, _ in
+            guard let range = match?.range else { return }
+            result.addAttributes(primary, range: range)
         }
         return result
     }

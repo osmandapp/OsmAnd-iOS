@@ -29,7 +29,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private static let bottomContentInset: CGFloat = 72
     private static let pointRowHeight: CGFloat = 68
     private static let profileGroupRowHeight: CGFloat = 53
-    private static let gapRowHeight: CGFloat = 62
 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
@@ -405,7 +404,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
         case .point:
             return Self.pointRowHeight
         case .gap:
-            return Self.gapRowHeight
+            return UITableView.automaticDimension
         case .empty:
             return UITableView.automaticDimension
         }

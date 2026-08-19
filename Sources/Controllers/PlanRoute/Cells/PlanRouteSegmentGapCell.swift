@@ -91,6 +91,6 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
     }
 
     private func updateBorderColor() {
-        borderView.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
+        borderView.layer.borderColor = UIColor.customSeparatorSolid.cgColor
     }
 }

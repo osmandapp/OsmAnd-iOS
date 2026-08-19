@@ -25,6 +25,7 @@ final class MigrationManager: NSObject {
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
         case migrateWidgetLayoutPreferences
+        case migrateTransparentWidgets
     }
     
     private struct HudMigrationScenario {
@@ -118,6 +119,28 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue) {
                 migrateWidgetLayoutPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgets.rawValue) {
+                migrateTransparentWidgets()
+                defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
+            }
+        }
+    }
+
+    private func migrateTransparentWidgets() {
+        let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
+        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
+            let value = legacyPreference.get(appMode)
+            let preferences = [
+                settings.transparentWidgets(ScreenLayoutMode.portrait.rawValue,
+                                            screenElementsMode: ScreenElementsMode.shared.rawValue),
+                settings.transparentWidgets(ScreenLayoutMode.portrait.rawValue,
+                                            screenElementsMode: ScreenElementsMode.independent.rawValue),
+                settings.transparentWidgets(ScreenLayoutMode.landscape.rawValue,
+                                            screenElementsMode: ScreenElementsMode.independent.rawValue)
+            ]
+            for preference in preferences where !preference.isSet(for: appMode) {
+                preference.set(value, mode: appMode)
             }
         }
     }

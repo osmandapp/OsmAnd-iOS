@@ -427,12 +427,6 @@
     return widgets;
 }
 
-- (void) resetDefaultAppearance:(OAApplicationMode *)appMode
-{
-    [_settings.transparentMapTheme resetToDefault];
-    [_settings.positionPlacementOnMap resetToDefault];
-}
-
 - (void) registerAllControls
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;

@@ -137,7 +137,7 @@ static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
 static NSString * const mapInfoControlsLayoutKey = @"map_info_controls";
-static NSString * const transparentMapThemeKey = @"transparentMapTheme";
+static NSString * const transparentMapThemeKey = @"transparent_map_theme";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
@@ -1966,6 +1966,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonBoolean *)[self setupCopy:[OACommonBoolean withKey:key defValue:self.defValue]];
 }
 
 - (BOOL) get
@@ -5874,6 +5879,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSArray<NSArray *> *preferences = @[
         @[_mapInfoControls, mapInfoControlsLayoutKey],
         @[_customWidgetKeys, customWidgetKeys],
+        @[_transparentMapTheme, transparentMapThemeKey],
         @[_leftWidgetPanelOrder, leftWidgetPanelOrderKey],
         @[_rightWidgetPanelOrder, rightWidgetPanelOrderKey],
         @[_topWidgetPanelOrder, topWidgetPanelOrderOldKey],
@@ -6354,7 +6360,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
-        [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
+        [_profilePreferences setObject:_transparentMapTheme forKey:transparentMapThemeKey];
 
         _useSeparateLayouts = [OACommonBoolean withKey:useSeparateLayoutsKey defValue:NO];
         [_profilePreferences setObject:_useSeparateLayouts forKey:useSeparateLayoutsKey];
@@ -7131,6 +7137,30 @@ static NSString *kOfflineKey = @"OFFLINE";
         }
         return preference;
     }
+}
+
+- (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+{
+    return (OACommonBoolean *)[self layoutPreference:_transparentMapTheme
+                                      preferenceKey:transparentMapThemeKey
+                                    screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
+                                  screenElementsMode:(ScreenElementsMode)screenElementsMode];
+}
+
+- (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode
+{
+    BOOL useSeparateLayouts = [_useSeparateLayouts get:appMode];
+    ScreenElementsMode screenElementsMode = useSeparateLayouts ? ScreenElementsModeIndependent : ScreenElementsModeShared;
+    ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape]
+        ? ScreenLayoutModeLandscape
+        : ScreenLayoutModePortrait;
+    return [self transparentWidgets:screenLayoutMode screenElementsMode:screenElementsMode];
+}
+
+- (BOOL)isTransparentWidgets
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self transparentWidgetsForAppMode:appMode] get:appMode];
 }
 
 - (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode

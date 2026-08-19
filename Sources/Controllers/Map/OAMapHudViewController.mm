@@ -969,7 +969,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     BOOL compassChanged = [preferenceKeys intersectsSet:[self compassPropertyKeysForButtonState:compassButtonState]];
     BOOL colorsChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
-        _settings.transparentMapTheme,
+        [_settings transparentWidgetsForAppMode:[_settings.applicationMode get]],
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
@@ -1629,7 +1629,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (UIColor *) getStatusBarBackgroundColor
 {
     BOOL isNight = _settings.nightMode;
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])
         statusBarColor = UIColor.clearColor;

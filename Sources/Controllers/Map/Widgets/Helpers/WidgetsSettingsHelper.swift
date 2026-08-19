@@ -44,7 +44,8 @@ class WidgetsSettingsHelper: NSObject {
             settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
         }
         settings.useSeparateLayouts.resetMode(toDefault: appMode)
-        settings.transparentMapTheme.resetMode(toDefault: appMode)
+        settings.transparentWidgets(layoutMode.rawValue,
+                                    screenElementsMode: screenElementsMode.rawValue).resetMode(toDefault: appMode)
         settings.showDistanceRuler.resetMode(toDefault: appMode)
         settings.distanceByTapTextSize.resetMode(toDefault: appMode)
         settings.positionPlacementOnMap.resetMode(toDefault: appMode)
@@ -74,8 +75,10 @@ class WidgetsSettingsHelper: NSObject {
 
         ScreenElementsMode.allCases.forEach {
             copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.transparentWidgets(layoutMode.rawValue,
+                                                                  screenElementsMode: $0.rawValue),
+                                fromAppMode: fromAppMode)
         }
-        copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.positionPlacementOnMap, fromAppMode: fromAppMode)

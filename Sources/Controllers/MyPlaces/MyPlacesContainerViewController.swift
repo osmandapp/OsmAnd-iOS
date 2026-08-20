@@ -70,8 +70,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var segmentContainerView: UIView!
     @IBOutlet private weak var segmentControl: UISegmentedControl!
-    @IBOutlet private var safeAreaTopConstraint: NSLayoutConstraint!
-    @IBOutlet private var superviewTopConstraint: NSLayoutConstraint!
     
     var selectedTab: Tab = .default
     var availableTabs: [Tab] = []
@@ -92,6 +90,11 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewDidLoad()
         setupSegmentControl()
         setupTabs()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateContentSafeAreaInsets()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -232,10 +235,17 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     private func setupNavbar() {
         navigationController?.setDefaultNavigationBarAppearance()
-        safeAreaTopConstraint.isActive = true
-        superviewTopConstraint.isActive = false
     }
-    
+
+    private func updateContentSafeAreaInsets() {
+        guard let pageViewController else { return }
+        let topInset = segmentContainerView.isHidden ? 0 : segmentContainerView.bounds.height
+        guard pageViewController.additionalSafeAreaInsets.top != topInset else { return }
+        var insets = pageViewController.additionalSafeAreaInsets
+        insets.top = topInset
+        pageViewController.additionalSafeAreaInsets = insets
+    }
+
     private func updateSearchController() {
         searchController?.searchBar.searchTextField.placeholder = localizedString("search_activity")
     }
@@ -347,6 +357,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         pageViewController.delegate = isVisible ? self : nil
         pageViewController.dataSource = isVisible ? self : nil
         segmentContainerView.isHidden = !isVisible
+        updateContentSafeAreaInsets()
     }
     
     func updateEditMode(_ edit: Bool) {

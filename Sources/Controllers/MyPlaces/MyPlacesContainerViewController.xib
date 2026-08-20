@@ -12,10 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyPlacesContainerViewController">
             <connections>
                 <outlet property="contentView" destination="bel-oP-mWo" id="v5w-ap-IVD"/>
-                <outlet property="safeAreaTopConstraint" destination="b6L-gG-ajR" id="ZhY-uw-IjL"/>
                 <outlet property="segmentContainerView" destination="COI-FC-npu" id="sNY-Ax-vDI"/>
                 <outlet property="segmentControl" destination="CDK-ru-NR9" id="Nrv-Pj-iKN"/>
-                <outlet property="superviewTopConstraint" destination="sue-5G-SP3" id="fik-jQ-nOO"/>
                 <outlet property="view" destination="iN0-l3-epB" id="qqm-iF-NSb"/>
             </connections>
         </placeholder>
@@ -24,49 +22,41 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="PGt-Ow-fLH">
-                    <rect key="frame" x="0.0" y="118" width="393" height="734"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
+                    <rect key="frame" x="0.0" y="118" width="393" height="41"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="31"/>
-                            <subviews>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
-                                    <rect key="frame" x="16" y="0.0" width="361" height="32"/>
-                                    <segments>
-                                        <segment title="First"/>
-                                        <segment title="Second"/>
-                                    </segments>
-                                </segmentedControl>
-                            </subviews>
-                            <constraints>
-                                <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
-                                <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" id="TlK-OO-4ge"/>
-                                <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
-                                <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
-                            </constraints>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
-                            <rect key="frame" x="0.0" y="41" width="393" height="693"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        </view>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
+                            <rect key="frame" x="16" y="0.0" width="361" height="32"/>
+                            <segments>
+                                <segment title="First"/>
+                                <segment title="Second"/>
+                            </segments>
+                        </segmentedControl>
                     </subviews>
-                </stackView>
+                    <constraints>
+                        <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
+                        <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" constant="10" id="TlK-OO-4ge"/>
+                        <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
+                        <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="PGt-Ow-fLH" secondAttribute="bottom" id="9jd-oq-g5S"/>
-                <constraint firstItem="PGt-Ow-fLH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6L-gG-ajR"/>
-                <constraint firstItem="PGt-Ow-fLH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="skG-Xg-FWe"/>
-                <constraint firstItem="PGt-Ow-fLH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sue-5G-SP3"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="PGt-Ow-fLH" secondAttribute="trailing" id="wHS-tv-KiB"/>
+                <constraint firstItem="bel-oP-mWo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4Vf-Pt-HyP"/>
+                <constraint firstItem="COI-FC-npu" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6L-gG-ajR"/>
+                <constraint firstItem="COI-FC-npu" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="dCU-EB-ZR8"/>
+                <constraint firstAttribute="bottom" secondItem="bel-oP-mWo" secondAttribute="bottom" id="eMH-OJ-GUH"/>
+                <constraint firstItem="bel-oP-mWo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jgh-dq-mih"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="COI-FC-npu" secondAttribute="trailing" id="kDc-yN-NuQ"/>
+                <constraint firstAttribute="trailing" secondItem="bel-oP-mWo" secondAttribute="trailing" id="nnq-w7-MLT"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="sue-5G-SP3"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="19" y="68"/>
         </view>
     </objects>

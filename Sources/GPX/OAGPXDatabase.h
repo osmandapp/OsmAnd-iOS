@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
 - (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile;
 - (NSArray<OASGpxDataItem *> *)getDataItems;
+- (NSArray<OASGpxDataItem *> *)recentlyModifiedItemsWithLimit:(NSUInteger)limit;
 - (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName;
 - (NSString *)getFileDir:(NSString *)filePath;
 

@@ -40,7 +40,7 @@ final class PlanRoutePointCell: UITableViewCell {
                            left: Self.textLeadingInset,
                            bottom: 0,
                            right: Self.horizontalInset)
-        numberLabel.text = "\(point.index + 1)"
+        numberLabel.text = "\(point.indexInSegment + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
         subtitleLabel.text = subtitle(for: point)

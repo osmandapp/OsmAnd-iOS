@@ -57,6 +57,15 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         reloadData()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard isViewLoaded,
+              previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.performBatchUpdates(nil)
+        }
+    }
+
     func reloadData() {
         guard isViewLoaded else { return }
         let segments = dataSource?.routeSegments ?? []

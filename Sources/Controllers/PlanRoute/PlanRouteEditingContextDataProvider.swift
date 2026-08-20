@@ -501,8 +501,13 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         let gapAfter = segment.hasGapAfter
             ? PlanRouteSegmentGap(distance: segment.gapDistance, bearing: segment.gapBearing)
             : nil
+        var distanceFromStart = 0.0
+        var groups: [PlanRouteProfileGroup] = []
+        for group in segment.groups {
+            groups.append(mapGroup(group, distanceFromStart: &distanceFromStart))
+        }
         return PlanRouteSegment(index: segment.index,
-                                groups: segment.groups.map { mapGroup($0) },
+                                groups: groups,
                                 routed: segment.routed,
                                 multiMode: segment.multiMode,
                                 singleMode: segment.singleMode,
@@ -524,18 +529,24 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                                  item: item)
     }
 
-    private func mapGroup(_ group: PlanRouteGroupData) -> PlanRouteProfileGroup {
-        PlanRouteProfileGroup(appMode: group.appMode,
-                              distance: group.distance,
-                              lastPointIndex: group.lastGlobalIndex,
-                              points: group.points.map { mapPoint($0) })
+    private func mapGroup(_ group: PlanRouteGroupData, distanceFromStart: inout Double) -> PlanRouteProfileGroup {
+        var points: [PlanRoutePoint] = []
+        for point in group.points {
+            distanceFromStart += point.distanceFromPrevious
+            points.append(mapPoint(point, distanceFromStart: distanceFromStart))
+        }
+        return PlanRouteProfileGroup(appMode: group.appMode,
+                                     distance: group.distance,
+                                     lastPointIndex: group.lastGlobalIndex,
+                                     points: points)
     }
 
-    private func mapPoint(_ point: PlanRoutePointData) -> PlanRoutePoint {
+    private func mapPoint(_ point: PlanRoutePointData, distanceFromStart: Double) -> PlanRoutePoint {
         PlanRoutePoint(index: point.globalIndex,
                        indexInSegment: point.indexInSegment,
                        name: point.name,
                        distanceFromPrevious: point.distanceFromPrevious,
+                       distanceFromStart: distanceFromStart,
                        bearing: point.bearing,
                        isStart: point.isStart,
                        isDestination: point.isDestination)

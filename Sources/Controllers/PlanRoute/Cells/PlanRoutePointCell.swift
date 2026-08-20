@@ -110,7 +110,7 @@ final class PlanRoutePointCell: UITableViewCell {
         if point.isStart {
             return localizedString("start_point")
         }
-        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromPrevious)) ?? ""
+        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromStart)) ?? ""
         if point.isDestination {
             return "\(distance) • \(localizedString("route_descr_destination"))"
         }

@@ -173,6 +173,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return [self editingContext].getPoints.count > 0;
 }
 
+- (BOOL)hasTrailingGap
+{
+    return [self editingContext].getPoints.lastObject.isGap;
+}
+
 - (OASGpxFile *)currentGpxFile
 {
     return [self editingContext].gpxData.gpxFile;
@@ -1096,9 +1101,34 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                              mode:mode
                                        pointIndex:pointIndex
                                        wholeRoute:wholeRoute];
-    ctx.appMode = mode;
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
-    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
+    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
+                                                                          appMode:mode
+                                                                   changeRouteType:type
+                                                                        pointIndex:pointIndex]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || pointIndexes.count == 0)
+        return;
+    [self invalidateTerrainElevationGpx];
+    for (NSNumber *indexNumber in pointIndexes)
+    {
+        if ([self beginRouteCalculationIfNeededForContext:ctx
+                                                     mode:mode
+                                               pointIndex:indexNumber.integerValue
+                                               wholeRoute:NO])
+            break;
+    }
+    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
+                                                                          appMode:mode
+                                                                     pointIndexes:pointIndexes]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();

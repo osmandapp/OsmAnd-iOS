@@ -154,6 +154,7 @@
 - (void)undo
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
+    [editingCtx cancelSnapToRoad];
     [self applyProfileTypes:_oldProfileTypes toPoints:_oldPoints];
     [editingCtx clearPoints];
     [editingCtx addPoints:_oldPoints];
@@ -165,6 +166,7 @@
 
 - (void)redo
 {
+    [[self getEditingCtx] cancelSnapToRoad];
     [self executeCommand];
 }
 

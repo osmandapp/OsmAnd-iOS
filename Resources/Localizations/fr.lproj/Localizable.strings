@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Cartes OsmAnd";
+"send_crash_log" = "Envoyer les journaux des plantages de l\'application";
+"send_crash_log_descr" = "Contient uniquement les information concernant les plantages";
 // Shared Strings
 "shared_string_back" = "Retour";
 "shared_string_cancel" = "Annuler";

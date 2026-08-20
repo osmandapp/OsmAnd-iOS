@@ -290,7 +290,6 @@ static NSOperationQueue *_favQueue;
 {
     BOOL changed = NO;
     BOOL favoritesAdded = NO;
-    QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> removedFavoriteLocations;
     QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> addedFavoriteLocations;
     NSMutableArray<OAFavoriteItem *> *mutablePoints = _cachedFavoritePoints
         ? [_cachedFavoritePoints mutableCopy]
@@ -324,26 +323,6 @@ static NSOperationQueue *_favQueue;
         if (!favoritesWithName)
             favoritesByName[name] = favoritesWithName = [NSMutableArray array];
 
-        OAFavoriteItem *equalFavorite = nil;
-        for (OAFavoriteItem *existingFavorite in favoritesWithName)
-        {
-            if ([point isEqual:existingFavorite])
-            {
-                equalFavorite = existingFavorite;
-                break;
-            }
-        }
-        if (equalFavorite)
-        {
-            OAFavoriteGroup *group = _flatGroups[category];
-            [group.points removeObjectIdenticalTo:equalFavorite];
-            [mutablePoints removeObjectIdenticalTo:equalFavorite];
-            if (!addedFavoriteLocations.removeOne(equalFavorite.favorite))
-                removedFavoriteLocations.append(equalFavorite.favorite);
-            [favoritesWithName removeObjectIdenticalTo:equalFavorite];
-            changed = YES;
-        }
-
         if (favoritesWithName.count > 0)
             continue;
 
@@ -370,8 +349,6 @@ static NSOperationQueue *_favQueue;
         }
     }
 
-    if (!removedFavoriteLocations.isEmpty())
-        _favoritesCollection->removeFavoriteLocations(removedFavoriteLocations);
     if (!addedFavoriteLocations.isEmpty())
         _favoritesCollection->addFavoriteLocations(addedFavoriteLocations, true);
     _cachedFavoritePoints = [mutablePoints copy];

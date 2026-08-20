@@ -182,6 +182,33 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 
 #pragma mark - Additions
 
+- (OAFavoriteItem *)matchedFavorite:(OAFavoriteItem *)importedFavorite
+                         candidates:(NSArray<OAFavoriteItem *> *)candidates
+                          excluding:(NSHashTable<OAFavoriteItem *> *)excludedFavorites
+{
+    OAFavoriteItem *firstMatch = nil;
+    OAFavoriteItem *locationMatch = nil;
+    for (OAFavoriteItem *candidate in candidates)
+    {
+        if ([excludedFavorites containsObject:candidate])
+            continue;
+        if (!firstMatch)
+            firstMatch = candidate;
+        if ([importedFavorite isEqual:candidate])
+            return candidate;
+        if (!locationMatch &&
+            [OAUtilities isCoordEqual:[candidate getLatitude]
+                               srcLon:[candidate getLongitude]
+                              destLat:[importedFavorite getLatitude]
+                              destLon:[importedFavorite getLongitude]
+                           upToDigits:6])
+        {
+            locationMatch = candidate;
+        }
+    }
+    return locationMatch ?: firstMatch;
+}
+
 - (BOOL)isFavoritesValid
 {
     if (!_gpxFile)
@@ -191,7 +218,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     if (favoriteItems.count == 0)
         return YES;
 
-    NSMutableDictionary<NSString *, OAFavoriteItem *> *localIndex =
+    NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *localFavoritesByKey =
         [NSMutableDictionary dictionaryWithCapacity:favoriteItems.count];
 
     for (OAFavoriteItem *item in favoriteItems)
@@ -203,7 +230,10 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
         NSString *cat = [item getCategory] ?: @"";
         NSString *key = [[cat stringByAppendingString:@"|"] stringByAppendingString:name];
 
-        localIndex[key] = item;
+        NSMutableArray<OAFavoriteItem *> *favoritesWithKey = localFavoritesByKey[key];
+        if (!favoritesWithKey)
+            localFavoritesByKey[key] = favoritesWithKey = [NSMutableArray array];
+        [favoritesWithKey addObject:item];
     }
 
     NSMutableSet<NSString *> *ignoredSet = [_ignoredNames mutableCopy];
@@ -226,8 +256,15 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             NSString *cat = wpt.category ?: @"";
             NSString *key = [[cat stringByAppendingString:@"|"] stringByAppendingString:name];
 
-            OAFavoriteItem *match = localIndex[key];
-            if (!match)
+            NSArray<OAFavoriteItem *> *candidates = localFavoritesByKey[key];
+            if (candidates.count == 0)
+                continue;
+
+            OAFavoriteItem *importedFavorite = [OAFavoriteItem fromWpt:wpt category:cat];
+            OAFavoriteItem *match = [self matchedFavorite:importedFavorite
+                                               candidates:candidates
+                                                excluding:nil];
+            if ([importedFavorite isEqual:match])
                 continue;
 
             _conflictedItem = wpt;
@@ -289,10 +326,14 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                 if (!strongSelf)
                     return;
 
-                OAFavoriteItem *toDelete = match;
+                [OAFavoritesHelper deleteFavorites:@[match] saveImmediately:NO];
+                [OAFavoritesHelper addFavorites:@[importedFavorite]
+                                  lookupAddress:YES
+                                    sortAndSave:YES
+                                    pointsGroup:group];
 
-                [OAFavoritesHelper deleteFavoriteGroups:nil
-                                      andFavoritesItems:@[toDelete]];
+                if (strongSelf->_conflictedItem.name)
+                    [strongSelf->_ignoredNames addObject:strongSelf->_conflictedItem.name];
 
                 [strongSelf onRightNavbarButtonPressed];
             }]];
@@ -306,8 +347,10 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                 if (!strongSelf)
                     return;
 
-                NSMutableArray<OAFavoriteItem *> *toDelete =
-                    [NSMutableArray array];
+                NSMutableArray<OAFavoriteItem *> *toDelete = [NSMutableArray array];
+                NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *toAddByGroup = [NSMutableDictionary dictionary];
+                NSHashTable<OAFavoriteItem *> *selectedFavorites =
+                    [NSHashTable hashTableWithOptions:NSPointerFunctionsObjectPointerPersonality];
 
                 for (NSString *gKey in strongSelf->_gpxFile.pointsGroups)
                 {
@@ -322,18 +365,41 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                         NSString *ptCat = pt.category ?: @"";
                         NSString *ptKey = [[ptCat stringByAppendingString:@"|"] stringByAppendingString:ptName];
 
-                        OAFavoriteItem *fav = localIndex[ptKey];
-                        if (fav)
-                        {
-                            [toDelete addObject:fav];
-                        }
+                        NSArray<OAFavoriteItem *> *candidates = localFavoritesByKey[ptKey];
+                        if (candidates.count == 0)
+                            continue;
+
+                        OAFavoriteItem *importedFavorite = [OAFavoriteItem fromWpt:pt category:ptCat];
+                        OAFavoriteItem *favoriteToReplace =
+                            [strongSelf matchedFavorite:importedFavorite
+                                             candidates:candidates
+                                              excluding:selectedFavorites];
+                        if (!favoriteToReplace)
+                            continue;
+
+                        [selectedFavorites addObject:favoriteToReplace];
+                        [toDelete addObject:favoriteToReplace];
+                        NSMutableArray<OAFavoriteItem *> *importedFavorites = toAddByGroup[gKey];
+                        if (!importedFavorites)
+                            toAddByGroup[gKey] = importedFavorites = [NSMutableArray array];
+                        [importedFavorites addObject:importedFavorite];
+                        [strongSelf->_ignoredNames addObject:ptName];
                     }
                 }
 
                 if (toDelete.count > 0)
                 {
-                    [OAFavoritesHelper deleteFavoriteGroups:nil
-                                          andFavoritesItems:toDelete];
+                    [OAFavoritesHelper deleteFavorites:toDelete saveImmediately:NO];
+                    [toAddByGroup enumerateKeysAndObjectsUsingBlock:^(NSString *gKey, NSArray<OAFavoriteItem *> *importedFavorites, BOOL *stop) {
+                        OASGpxUtilitiesPointsGroup *group = strongSelf->_gpxFile.pointsGroups[gKey];
+                        [OAFavoritesHelper addFavorites:importedFavorites
+                                          lookupAddress:YES
+                                            sortAndSave:NO
+                                            pointsGroup:group];
+                    }];
+                    [OAFavoritesHelper sortAll];
+                    [OAFavoritesHelper notifyFavoritesStorageChanged];
+                    [OAFavoritesHelper saveCurrentPointsIntoFile];
                 }
 
                 [strongSelf onRightNavbarButtonPressed];

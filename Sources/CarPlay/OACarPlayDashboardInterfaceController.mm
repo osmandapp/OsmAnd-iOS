@@ -160,11 +160,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
-- (NSString *)normalizedName:(NSString *)name
+- (NSString *)normalizedString:(NSString *)string
 {
-    if (name.length == 0)
+    if (string.length == 0)
         return @"";
-    return [[name stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet] lowercaseString];
+    return [[string stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet] lowercaseString];
 }
 
 - (BOOL)isMeaningfulName:(NSString *)name
@@ -193,13 +193,20 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     OAPointDescription *pd = point.pointDescription;
     NSString *name = pd.name;
+    
     if (!pd || ![self isMeaningfulName:name] || [pd isAddress])
         return nil;
     if ([self pointHasProperName:point])
         return name;
+    
     NSString *address = pd.address;
-    if ([self isMeaningfulName:address]
-        && [[self normalizedName:name] isEqualToString:[self normalizedName:address]])
+    NSString *normalizedName = [self normalizedString:name];
+    NSString *normalizedAddress = [self normalizedString:address];
+    NSString *normalizedShortAddress = [self normalizedString:[self shortAddressForPoint:point]];
+    
+    BOOL isNameEqualAddress = [normalizedName isEqualToString:normalizedAddress] || [normalizedName isEqualToString:normalizedShortAddress];
+    
+    if ([self isMeaningfulName:address] && isNameEqualAddress)
         return nil;
     return name;
 }
@@ -250,6 +257,18 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return [NSString localizedStringWithFormat:NSLocalizedString(@"carplay_trip_via_stops", nil), (long)points.count];
 }
 
+- (NSString *)gpxDisplayName
+{
+    NSString *gpxPath = _settings.followTheGpxRoute.get;
+    if (gpxPath.length == 0)
+        return nil;
+
+    NSString *name = [gpxPath.lastPathComponent stringByDeletingPathExtension];
+    name = [[name stringByReplacingOccurrencesOfString:@"_" withString:@" "]
+            stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+    return name.length > 0 ? name : nil;
+}
+
 - (void) enterRoutePreviewMode:(BOOL)shouldCheckConnectedMainScene
 {
     if ([[OAMapViewTrackingUtilities instance] is3DMode])
@@ -267,31 +286,73 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CLLocationCoordinate2D finishCoord = CLLocationCoordinate2DMake(finish.getLatitude, finish.getLongitude);
     
+    BOOL isGpxOnly = NO;
+    OAGPXRouteParamsBuilder *gpxRoute = [_routingHelper getCurrentGPXRoute];
+    if (gpxRoute != nil && finish != nil)
+    {
+        NSArray<CLLocation *> *trackPoints = gpxRoute.getPoints;
+        CLLocation *trackEnd = trackPoints.lastObject;
+        if (trackEnd)
+        {
+            isGpxOnly = [OAUtilities isCoordEqual:trackEnd.coordinate.latitude
+                                           srcLon:trackEnd.coordinate.longitude
+                                          destLat:finish.getLatitude
+                                          destLon:finish.getLongitude];
+        }
+    }
+    BOOL isGpxWithSeparateDestination = (gpxRoute != nil && !isGpxOnly);
+
     NSString *destinationTitle = nil;
     NSString *destinationSubtitle = nil;
-    NSString *poiName = [self poiNameForPoint:finish];
-    if (poiName)
+
+    if (isGpxOnly)
     {
-        destinationTitle = poiName;
-        NSString *address = [self addressForPoint:finish];
-        if (address && ![address isEqualToString:poiName])
-            destinationSubtitle = address;
+        NSString *gpxName = [self gpxDisplayName];
+        destinationTitle = gpxName.length > 0
+            ? gpxName
+            : ([self addressForPoint:finish] ?: [self coordinatesForPoint:finish]);
+        destinationSubtitle = [self addressForPoint:finish];
+    }
+    else if (isGpxWithSeparateDestination)
+    {
+        NSString *poiName = [self poiNameForPoint:finish];
+        if (poiName)
+            destinationTitle = poiName;
+        else
+            destinationTitle = [self addressForPoint:finish] ?: [self coordinatesForPoint:finish];
+
+        NSString *gpxName = [self gpxDisplayName];
+        if (gpxName.length > 0)
+            destinationSubtitle = [NSString stringWithFormat:OALocalizedString(@"carplay_trip_via_point"), gpxName];
+
+        if (destinationSubtitle.length > 0 && [destinationSubtitle isEqualToString:destinationTitle])
+            destinationSubtitle = nil;
     }
     else
     {
-        destinationTitle = [self addressForPoint:finish] ?: [self coordinatesForPoint:finish];
+        NSString *poiName = [self poiNameForPoint:finish];
+        if (poiName)
+        {
+            destinationTitle = poiName;
+            NSString *address = [self addressForPoint:finish];
+            if (address && ![address isEqualToString:poiName])
+                destinationSubtitle = address;
+        }
+        else
+        {
+            destinationTitle = [self addressForPoint:finish] ?: [self coordinatesForPoint:finish];
+        }
+
+        NSString *intermediateSubtitle = [self intermediateSubtitleForPoints:[targetHelper getIntermediatePointsNavigation]];
+        if (intermediateSubtitle)
+            destinationSubtitle = intermediateSubtitle;
+
+        if (destinationSubtitle.length > 0 && [destinationSubtitle isEqualToString:destinationTitle])
+            destinationSubtitle = nil;
     }
     
-    NSString *intermediateSubtitle = [self intermediateSubtitleForPoints:[targetHelper getIntermediatePointsNavigation]];
-    
-    if (intermediateSubtitle)
-        destinationSubtitle = intermediateSubtitle;
-    
-    if (destinationSubtitle.length > 0 && [destinationSubtitle isEqualToString:destinationTitle])
-        destinationSubtitle = nil;
-    
     if (@available(iOS 26.4, *)) {
-        CPLocationCoordinate3D originPoint = {
+        CPLocationCoordinate3D startPoint = {
             .latitude = startCoord.latitude,
             .longitude = startCoord.longitude,
             .altitude = CLLocationDistanceMax
@@ -304,7 +365,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         CPLocationCoordinate3D unusedEntryPoint = destinationPoint;
         
         CPNavigationWaypoint *origin = [[CPNavigationWaypoint alloc]
-                                        initWithCenterPoint:originPoint
+                                        initWithCenterPoint:startPoint
                                         locationThreshold:nil
                                         name:OALocalizedString(@"shared_string_my_location")
                                         address:nil

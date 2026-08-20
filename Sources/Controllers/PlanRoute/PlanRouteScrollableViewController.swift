@@ -789,6 +789,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setState(_ state: EOADraggableMenuState, animated: Bool) {
         sheetState = state
+        routeTypeButton.isHidden = state == .fullScreen
         let height = height(for: state)
         sheetHeightConstraint?.constant = height
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)

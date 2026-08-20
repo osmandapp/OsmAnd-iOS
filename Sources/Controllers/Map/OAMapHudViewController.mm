@@ -1861,7 +1861,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isScrollableHudAllowed = _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings;
     BOOL isTargetMultiMenuViewVisible = [_mapPanelViewController isTargetMultiMenuViewVisible];
     BOOL isBottomPanelVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
-    BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings;
+    BOOL isPlanRouteFullscreen = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
+    BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
+        || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || isPlanRouteFullscreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible & !isTargetMultiMenuViewVisible && !isWeatherToolbarVisible;

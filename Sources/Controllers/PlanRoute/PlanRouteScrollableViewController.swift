@@ -80,6 +80,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return view.bounds.height
     }
 
+    var mapViewportBounds: CGRect {
+        let bounds = view.bounds
+        let minY = bounds.minY + getNavbarHeight()
+        let maxY = max(minY, bounds.maxY - getViewHeight())
+        return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
+    }
+
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
         sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded

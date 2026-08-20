@@ -50,10 +50,11 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
         textStack.spacing = 2
 
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
-        var configuration = UIButton.Configuration.plain()
+        var configuration = UIButton.Configuration.tinted()
         configuration.image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfiguration)
+        configuration.baseBackgroundColor = .buttonAccentsBlue
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.background.image = .blueCircleFill
+        configuration.cornerStyle = .capsule
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true

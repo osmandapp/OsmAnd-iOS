@@ -421,7 +421,7 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
-    NSString *formattedTargetName = OALocalizedString(@"shared_string_location");
+    NSString *formattedTargetName = OALocalizedString(@"map_no_address");
     
     OAPOIType *poiType = [[OAPOILocationType alloc] init];
     

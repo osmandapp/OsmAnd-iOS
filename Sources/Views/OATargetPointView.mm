@@ -2834,7 +2834,15 @@ static const NSInteger _buttonsCount = 4;
     if (self.targetPoint.titleAddress.length == 0)
         self.targetPoint.titleAddress = OALocalizedString(@"map_no_address");
 
-    [self addressLabelUpdated];
+    if (self.targetPoint.addressFound && [self.targetPoint.title isEqualToString:OALocalizedString(@"map_no_address")])
+    {
+        self.targetPoint.title = self.targetPoint.titleAddress;
+        [self applyTargetPoint];
+    }
+    else
+    {
+        [self addressLabelUpdated];
+    }
 }
 
 @end

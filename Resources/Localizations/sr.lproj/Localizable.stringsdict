@@ -69,5 +69,23 @@
 			<string>%ld тачака</string>
 		</dict>
 	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld станица</string>
+			<key>few</key>
+			<string>%ld станице</string>
+			<key>other</key>
+			<string>%ld станица</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -136,6 +136,7 @@ struct PlanRoutePoint {
     let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
+    let distanceFromStart: Double
     let bearing: Double
     let isStart: Bool
     let isDestination: Bool

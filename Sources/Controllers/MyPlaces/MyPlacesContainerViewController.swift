@@ -107,7 +107,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupSegments()
         initialSelectedTab()
         setupNavbar()
-        segmentContainerView.backgroundColor = .clear
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .label
@@ -404,6 +403,18 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateContentScrollView(_ scrollView: UIScrollView) {
         setContentScrollView(scrollView, for: .top)
+        if #available(iOS 26.0, *) {
+            segmentContainerView.backgroundColor = .clear
+            let interaction = segmentContainerView.interactions.compactMap { $0 as? UIScrollEdgeElementContainerInteraction }.first ?? UIScrollEdgeElementContainerInteraction()
+            interaction.scrollView = scrollView
+            interaction.edge = .top
+            if interaction.view == nil {
+                segmentContainerView.addInteraction(interaction)
+            }
+        } else {
+            segmentContainerView.backgroundColor = .viewBg
+            navigationItem.standardAppearance = navigationController?.navigationBar.scrollEdgeAppearance
+        }
     }
 }
 

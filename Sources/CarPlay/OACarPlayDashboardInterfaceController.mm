@@ -151,7 +151,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _isInRoutePreview = NO;
     
     CPBarButton *panningButton = [self createBarButton:EOACarPlayButtonTypePanMap];
-    _mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings], panningButton];
+    _mapTemplate.trailingNavigationBarButtons = @[panningButton, [self createBarButton:EOACarPlayButtonTypeSettings]];
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDirections]];
 
     _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D];
@@ -534,7 +534,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     else
         [self enterBrowsingState];
     
-    _mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings], [self createBarButton:EOACarPlayButtonTypePanMap]];
+    _mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypePanMap], [self createBarButton:EOACarPlayButtonTypeSettings]];
 }
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate panWithDirection:(CPPanDirection)direction

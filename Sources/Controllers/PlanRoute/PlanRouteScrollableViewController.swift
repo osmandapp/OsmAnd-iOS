@@ -83,7 +83,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     var mapViewportBounds: CGRect {
         let bounds = view.bounds
         let minY = bounds.minY + getNavbarHeight()
-        let maxY = max(minY, bounds.maxY - getViewHeight())
+        let sheetHeight = height(for: sheetState)
+        let maxY = max(minY, bounds.maxY - sheetHeight)
         return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
     }
 

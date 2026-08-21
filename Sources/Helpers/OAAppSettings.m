@@ -7850,6 +7850,11 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [_dayNightHelper isNightMode];
 }
 
+- (BOOL) nightModeCarPlay
+{
+    return [_dayNightHelper isNightModeCarPlay];
+}
+
 - (void) fetchImpassableRoads
 {
     id avoidRoadsInfoObjects = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];

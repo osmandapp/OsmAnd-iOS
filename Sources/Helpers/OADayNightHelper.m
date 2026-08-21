@@ -17,25 +17,29 @@
 @implementation OADayNightHelper
 {
     NSTimeInterval _lastTime;
+    NSTimeInterval _lastTimeCarPlay;
     BOOL _lastNightMode;
+    BOOL _lastNightModeCarPlay;
     BOOL _firstCall;
     NSTimeInterval _recalcInterval;
+    NSTimeInterval _recalcIntervalCarPlay;
     NSNumber *_tempMode;
     NSNumber *_carPlayMode;
 }
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
         _firstCall = YES;
         _recalcInterval = 1.0;
+        _recalcIntervalCarPlay = 1.0;
     }
     return self;
 }
 
-+ (OADayNightHelper *) instance
++ (OADayNightHelper *)instance
 {
     static dispatch_once_t once;
     static OADayNightHelper * instance;
@@ -45,10 +49,16 @@
     return instance;
 }
 
-- (void) forceUpdate
+- (void)forceUpdate
 {
     _lastTime = 0;
     [self isNightMode];
+}
+
+- (void)forceUpdateCarPlay
+{
+    _lastTimeCarPlay = 0;
+    [self isNightModeCarPlay];
 }
 
 /**
@@ -58,9 +68,7 @@
 - (BOOL)isNightMode
 {
     NSInteger dayNightMode;
-    if (_carPlayMode)
-        dayNightMode = _carPlayMode.integerValue;
-    else if (_tempMode)
+    if (_tempMode)
         dayNightMode = _tempMode.integerValue;
     else
         dayNightMode = [[OAAppSettings sharedManager].appearanceMode get];
@@ -113,6 +121,45 @@
     return nightMode;
 }
 
+- (BOOL)isNightModeCarPlay
+{
+    NSInteger dayNightMode;
+    if (_carPlayMode)
+        dayNightMode = _carPlayMode.integerValue;
+    else
+        dayNightMode = [[OAAppSettings sharedManager].carPlayMapAppearanceMode get];
+
+    BOOL nightMode = _lastNightModeCarPlay;
+    if (dayNightMode == DayNightModeDay)
+        nightMode = NO;
+    else if (dayNightMode == DayNightModeNight)
+        nightMode = YES;
+    else if (dayNightMode == DayNightModeAuto)
+    {
+        NSTimeInterval currentTime = CACurrentMediaTime();
+        
+        if (currentTime - _lastTimeCarPlay > _recalcIntervalCarPlay)
+        {
+            _lastTimeCarPlay = currentTime;
+            SunriseSunset *daynightSwitch = [self getSunriseSunset];
+            if (daynightSwitch)
+            {
+                _recalcIntervalCarPlay = 60.0;
+                BOOL daytime = [daynightSwitch isDaytime];
+                nightMode = !daytime;
+            }
+        }
+    }
+
+    if (_lastNightModeCarPlay != nightMode)
+    {
+        _lastNightModeCarPlay = nightMode;
+        [[[OsmAndApp instance] carPlayDayNightModeObservable] notifyEvent];
+    }
+    
+    return nightMode;
+}
+
 - (BOOL)setTempMode:(NSInteger)dayNightMode
 {
     _tempMode = @(dayNightMode);
@@ -129,15 +176,10 @@
 
 - (void)setCarPlayMode:(NSInteger)dayNightMode {
     _carPlayMode = @(dayNightMode);
-    [self forceUpdate];
+    [self forceUpdateCarPlay];
 }
 
-- (void)resetCarPlayMode {
-    _carPlayMode = nil;
-    [self forceUpdate];
-}
-
-- (SunriseSunset *) getSunriseSunset
+- (SunriseSunset *)getSunriseSunset
 {
     CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
     if (!lastKnownLocation)

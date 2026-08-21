@@ -51,7 +51,6 @@ final class CarPlayService: NSObject {
         navigationModeProvider.restoreOnDisconnect()
         if !UIApplication.shared.isAnyCarPlaySceneActive, isMapAppearanceConfigured {
             isMapAppearanceConfigured = false
-            OADayNightHelper.instance().resetCarPlayMode()
         }
         if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
             OAQuickSearchHelper.instance().setResourcesForSearchUICore()

@@ -990,6 +990,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *appearanceProfileTheme; // 0 - System; 1 - Light; 2 - Dark
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
+@property (readonly, nonatomic) BOOL nightModeCarPlay;
 @property (nonatomic) OACommonMetricSystem *metricSystem;
 @property (nonatomic) OACommonAltitudeMetricSystem *altitudeMetric;
 @property (nonatomic) OACommonBoolean *drivingRegionAutomatic;

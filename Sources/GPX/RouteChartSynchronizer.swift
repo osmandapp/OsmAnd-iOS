@@ -20,8 +20,11 @@ private final class RouteStatisticsChartRenderer: HorizontalBarChartRenderer {
     }
 }
 
+private final class RouteChartScrubGestureRecognizer: UILongPressGestureRecognizer {
+}
+
 @objcMembers
-final class RouteChartSynchronizer: NSObject {
+final class RouteChartSynchronizer: NSObject, UIGestureRecognizerDelegate {
     private static let maxHighlightDistance: CGFloat = 10_000
 
     private let barCharts = NSHashTable<HorizontalBarChartView>.weakObjects()
@@ -54,6 +57,7 @@ final class RouteChartSynchronizer: NSObject {
         updateAxisRange(chart)
         chart.notifyDataSetChanged()
         barCharts.add(chart)
+        installScrubbingGesture(in: chart)
         applySelection(to: chart)
     }
 
@@ -90,8 +94,40 @@ final class RouteChartSynchronizer: NSObject {
         selectedProgress = nil
         primaryChart?.highlightValue(nil)
         primaryChart = nil
-        barCharts.allObjects.forEach { $0.highlightValue(nil) }
+        barCharts.allObjects.forEach { chart in
+            chart.highlightValue(nil)
+            removeScrubbingGesture(from: chart)
+        }
         barCharts.removeAllObjects()
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        gestureRecognizer is RouteChartScrubGestureRecognizer
+            && gestureRecognizer.view === otherGestureRecognizer.view
+    }
+
+    @objc private func onBarChartScrub(_ recognizer: RouteChartScrubGestureRecognizer) {
+        guard recognizer.state == .began || recognizer.state == .changed,
+              let chart = recognizer.view as? HorizontalBarChartView,
+              chart.isFullyZoomedOut else { return }
+        selectPrimaryChart(atX: recognizer.location(in: chart).x, sourceChart: chart, callDelegate: true)
+    }
+
+    private func installScrubbingGesture(in chart: HorizontalBarChartView) {
+        guard chart.gestureRecognizers?.contains(where: { $0 is RouteChartScrubGestureRecognizer }) != true else { return }
+        let recognizer = RouteChartScrubGestureRecognizer(target: self, action: #selector(onBarChartScrub(_:)))
+        recognizer.minimumPressDuration = 0
+        recognizer.allowableMovement = .greatestFiniteMagnitude
+        recognizer.cancelsTouchesInView = false
+        recognizer.delegate = self
+        chart.addGestureRecognizer(recognizer)
+    }
+
+    private func removeScrubbingGesture(from chart: HorizontalBarChartView) {
+        chart.gestureRecognizers?
+            .filter { $0 is RouteChartScrubGestureRecognizer }
+            .forEach(chart.removeGestureRecognizer)
     }
 
     private func updateAxisRange(_ chart: HorizontalBarChartView) {

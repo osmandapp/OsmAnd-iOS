@@ -297,12 +297,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func bindChartGestures(_ chart: HorizontalBarChartView) {
         chart.delegate = chartDelegateProxy
         chart.gestureRecognizers?.forEach { recognizer in
-            if recognizer is UIPanGestureRecognizer {
-                recognizer.addTarget(self, action: #selector(onBarChartScrolled(_:)))
-            }
             recognizer.addTarget(self, action: #selector(onChartGesture(_:)))
         }
-        chart.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onBarChartTapped(_:))))
     }
 
     private func chartSegment(for analysis: GpxTrackAnalysis, gpxFile: GpxFile) -> TrkSegment? {
@@ -333,23 +329,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private func hideChartLocation() {
         dataSource?.hideChartHighlight()
-    }
-
-    @objc private func onBarChartTapped(_ recognizer: UITapGestureRecognizer) {
-        guard recognizer.state == .ended,
-              let chart = recognizer.view as? HorizontalBarChartView else { return }
-        chartSynchronizer.selectPrimaryChart(atX: recognizer.location(in: chart).x,
-                                             sourceChart: chart,
-                                             callDelegate: true)
-    }
-
-    @objc private func onBarChartScrolled(_ recognizer: UIPanGestureRecognizer) {
-        guard recognizer.state == .changed,
-              let chart = recognizer.view as? HorizontalBarChartView,
-              chart.isFullyZoomedOut else { return }
-        chartSynchronizer.selectPrimaryChart(atX: recognizer.location(in: chart).x,
-                                             sourceChart: chart,
-                                             callDelegate: true)
     }
 
     @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {

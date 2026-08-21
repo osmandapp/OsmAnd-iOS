@@ -365,13 +365,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
             {
-                if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-                {
-                    [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
-                }
                 [recognizer addTarget:self action:@selector(onChartGesture:)];
             }
-            [cell.barChartView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBarChartTapped:)]];
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
@@ -770,27 +765,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                                                                  isRoute:YES];
     }
   
-}
-
-- (void)onBarChartTapped:(UITapGestureRecognizer *)recognizer
-{
-    if (recognizer.state != UIGestureRecognizerStateEnded || ![recognizer.view isKindOfClass:HorizontalBarChartView.class])
-        return;
-
-    HorizontalBarChartView *chart = (HorizontalBarChartView *)recognizer.view;
-    [_chartSynchronizer selectPrimaryChartAtX:[recognizer locationInView:chart].x sourceChart:chart callDelegate:YES];
-}
-
-- (void)onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
-{
-    if (recognizer.state != UIGestureRecognizerStateChanged || ![recognizer.view isKindOfClass:HorizontalBarChartView.class])
-        return;
-
-    HorizontalBarChartView *chart = (HorizontalBarChartView *)recognizer.view;
-    if (!chart.isFullyZoomedOut)
-        return;
-
-    [_chartSynchronizer selectPrimaryChartAtX:[recognizer locationInView:chart].x sourceChart:chart callDelegate:YES];
 }
 
 - (void)onChartGesture:(UIGestureRecognizer *)recognizer

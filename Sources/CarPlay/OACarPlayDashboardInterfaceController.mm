@@ -188,7 +188,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     [_mapTemplate showTripPreviews:@[_currentTrip] textConfiguration:config];
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeCancelRoute]];
-    _mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings]];
     
     _isInRoutePreview = YES;
     

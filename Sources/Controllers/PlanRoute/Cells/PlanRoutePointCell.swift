@@ -10,6 +10,8 @@ import UIKit
 final class PlanRoutePointCell: UITableViewCell {
 
     private static let horizontalInset: CGFloat = 16
+    private static let minimumHeight: CGFloat = 68
+    private static let verticalInset: CGFloat = 12
     private static let circleSize: CGFloat = 28
     private static let deleteButtonSize: CGFloat = 30
     private static let deleteNumberSpacing: CGFloat = 26
@@ -65,6 +67,7 @@ final class PlanRoutePointCell: UITableViewCell {
         numberLabel.font = .scaledSystemFont(ofSize: 13, weight: .semibold)
         numberLabel.textColor = .white
         numberLabel.textAlignment = .center
+        numberLabel.adjustsFontForContentSizeCategory = true
         numberLabel.adjustsFontSizeToFitWidth = true
         numberLabel.minimumScaleFactor = 0.5
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -72,17 +75,29 @@ final class PlanRoutePointCell: UITableViewCell {
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .textColorPrimary
-        subtitleLabel.font = .scaledSystemFont(ofSize: 13)
+        titleLabel.numberOfLines = 0
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
         subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+        subtitleLabel.lineBreakMode = .byWordWrapping
+        subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         let textStack = UIStackView(arrangedSubviews: [subtitleLabel, titleLabel])
         textStack.axis = .vertical
+        textStack.distribution = .fillProportionally
         textStack.spacing = 2
 
         [deleteButton, numberContainer, textStack].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
+
+        let textTopConstraint = textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.verticalInset)
+        let textBottomConstraint = textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.verticalInset)
 
         NSLayoutConstraint.activate([
             deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
@@ -101,8 +116,9 @@ final class PlanRoutePointCell: UITableViewCell {
 
             textStack.leadingAnchor.constraint(equalTo: numberContainer.trailingAnchor, constant: Self.numberTextSpacing),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
-            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8)
+            textTopConstraint,
+            textBottomConstraint,
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
         ])
     }
 

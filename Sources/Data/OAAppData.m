@@ -1626,14 +1626,8 @@
 
 - (void) deleteIntermediatePoint:(int)index
 {
-    [self deleteIntermediatePoint:index updateBackup:YES];
-}
-
-- (void) deleteIntermediatePoint:(int)index updateBackup:(BOOL)updateBackup
-{
     [_intermediates removeObjectAtIndex:index];
-    if (updateBackup)
-        [self backupTargetPoints];
+    [self backupTargetPoints];
 }
 
 - (void) clearPointToStart

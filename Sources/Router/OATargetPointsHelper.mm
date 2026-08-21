@@ -364,11 +364,6 @@
 
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index
 {
-    [self removeWayPoint:updateRoute index:index updateBackup:YES];
-}
-
-- (void) removeWayPoint:(BOOL)updateRoute index:(int)index updateBackup:(BOOL)updateBackup
-{
     if (index < 0)
     {
         [_app.data clearPointToNavigate];
@@ -376,7 +371,7 @@
         auto sz = _intermediatePoints.count;
         if (sz > 0)
         {
-            [_app.data deleteIntermediatePoint:(int)(sz - 1) updateBackup:updateBackup];
+            [_app.data deleteIntermediatePoint:(int)(sz - 1)];
             _pointToNavigate = _intermediatePoints[sz - 1];
             [_intermediatePoints removeObjectAtIndex:sz - 1];
             _pointToNavigate.intermediate = NO;
@@ -386,7 +381,7 @@
     }
     else
     {
-        [_app.data deleteIntermediatePoint:index updateBackup:updateBackup];
+        [_app.data deleteIntermediatePoint:index];
         [_intermediatePoints removeObjectAtIndex:index];
         int ind = 0;
         for (OARTargetPoint *tp in _intermediatePoints)

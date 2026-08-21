@@ -162,7 +162,6 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (void) addIntermediatePoint:(OARTargetPoint *)point;
 - (void) insertIntermediatePoint:(OARTargetPoint *)point index:(int)index;
 - (void) deleteIntermediatePoint:(int)index;
-- (void) deleteIntermediatePoint:(int)index updateBackup:(BOOL)updateBackup;
 - (void) clearIntermediatePoints;
 - (void) clearMyLocationToStart;
 

@@ -14,6 +14,7 @@
                 <outlet property="contentView" destination="bel-oP-mWo" id="v5w-ap-IVD"/>
                 <outlet property="segmentContainerView" destination="COI-FC-npu" id="sNY-Ax-vDI"/>
                 <outlet property="segmentControl" destination="CDK-ru-NR9" id="Nrv-Pj-iKN"/>
+                <outlet property="segmentContainerTopConstraint" destination="b6L-gG-ajR" id="Wf8-ox-4X9"/>
                 <outlet property="view" destination="iN0-l3-epB" id="qqm-iF-NSb"/>
             </connections>
         </placeholder>
@@ -27,10 +28,10 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
-                    <rect key="frame" x="0.0" y="118" width="393" height="41"/>
+                    <rect key="frame" x="0.0" y="118" width="393" height="52"/>
                     <subviews>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
-                            <rect key="frame" x="16" y="0.0" width="361" height="32"/>
+                            <rect key="frame" x="16" y="0.0" width="361" height="36"/>
                             <segments>
                                 <segment title="First"/>
                                 <segment title="Second"/>
@@ -39,7 +40,8 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
-                        <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" constant="10" id="TlK-OO-4ge"/>
+                        <constraint firstItem="CDK-ru-NR9" firstAttribute="height" constant="36" id="CJG-6w-htH"/>
+                        <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" constant="16" id="TlK-OO-4ge"/>
                         <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
                         <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
                     </constraints>
@@ -49,7 +51,7 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="bel-oP-mWo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4Vf-Pt-HyP"/>
-                <constraint firstItem="COI-FC-npu" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6L-gG-ajR"/>
+                <constraint firstItem="COI-FC-npu" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="118" id="b6L-gG-ajR"/>
                 <constraint firstItem="COI-FC-npu" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="dCU-EB-ZR8"/>
                 <constraint firstAttribute="bottom" secondItem="bel-oP-mWo" secondAttribute="bottom" id="eMH-OJ-GUH"/>
                 <constraint firstItem="bel-oP-mWo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jgh-dq-mih"/>

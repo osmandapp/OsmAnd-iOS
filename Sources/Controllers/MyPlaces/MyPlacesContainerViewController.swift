@@ -17,8 +17,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateContentScrollView(_ scrollView: UIScrollView)
 }
 
-@objc
-protocol MyPlacesSearchable: AnyObject {
+@objc protocol MyPlacesSearchable: AnyObject {
     func searchResults(for searchController: UISearchController)
     @objc optional func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
 }
@@ -34,6 +33,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         case tracks
         case osm
         case travel
+
+        static var `default`: Tab {
+            .favorites
+        }
         
         var image: UIImage {
             switch self {
@@ -61,40 +64,42 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             case .travel: SavedArticlesTabViewController.self
             }
         }
-        
-        static var `default`: Tab {
-            .favorites
-        }
     }
     
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var segmentContainerView: UIView!
     @IBOutlet private weak var segmentControl: UISegmentedControl!
+    @IBOutlet private weak var segmentContainerTopConstraint: NSLayoutConstraint!
     
     var selectedTab: Tab = .default
     var availableTabs: [Tab] = []
     var tracksFolderPathToOpenOnLoad: String?
-    
-    private let segmentedControlIconSize: CGFloat = 24
-    private let searchAnimationDuration: TimeInterval = 0.4
-    private var availableViewControllers: [Tab: UIViewController] = [:]
-    private var pageViewController: UIPageViewController?
-    private var searchController: UISearchController?
-    private var isSelectionMode = false
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .default
     }
     
+    private let segmentedControlIconSize: CGFloat = 24
+    private let searchAnimationDuration: TimeInterval = 0.2
+    private var availableViewControllers: [Tab: UIViewController] = [:]
+    private var pageViewController: UIPageViewController?
+    private var searchController: UISearchController?
+    private var isSelectionMode = false
+    private var isSearchActive = false
+    private var isSearchBarAnimating = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        segmentContainerTopConstraint.constant = view.safeAreaInsets.top
         setupSegmentControl()
         setupTabs()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateContentSafeAreaInsets()
+        guard !isSearchBarAnimating else { return }
+        segmentContainerTopConstraint.constant = view.safeAreaInsets.top
+        updateContentSafeAreaInsets(segmentIsVisible: !segmentContainerView.isHidden && searchController?.isActive != true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,6 +124,15 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationItem.searchController = nil
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        guard !isSearchBarAnimating else { return }
+        segmentContainerTopConstraint.constant = view.safeAreaInsets.top
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     func switchToWithSegmentControl(tab: Tab) {
@@ -201,11 +215,27 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
         searchController?.obscuresBackgroundDuringPresentation = false
+        searchController?.hidesNavigationBarDuringPresentation = true
         definesPresentationContext = true
-        if #available(iOS 26.0, *) {
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.largeTitleDisplayMode = .never
+        if #available(iOS 16.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         updateSearchController()
+    }
+
+    private func showSearchController() {
+        searchController?.searchBar.alpha = 0
+        navigationItem.searchController = searchController
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.navigationItem.searchController?.isActive = true
+        }
+    }
+
+    private func hideSearchController() {
+        navigationItem.searchController?.isActive = false
+        navigationItem.searchController = nil
     }
     
     private func setupNavbarTitle(with tab: Tab) {
@@ -236,9 +266,9 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         navigationController?.setDefaultNavigationBarAppearance()
     }
 
-    private func updateContentSafeAreaInsets() {
+    private func updateContentSafeAreaInsets(segmentIsVisible: Bool) {
         guard let pageViewController else { return }
-        let topInset = segmentContainerView.isHidden ? 0 : segmentContainerView.bounds.height
+        let topInset = segmentIsVisible ? segmentContainerView.bounds.height : 0
         guard pageViewController.additionalSafeAreaInsets.top != topInset else { return }
         var insets = pageViewController.additionalSafeAreaInsets
         insets.top = topInset
@@ -356,7 +386,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         pageViewController.delegate = isVisible ? self : nil
         pageViewController.dataSource = isVisible ? self : nil
         segmentContainerView.isHidden = !isVisible
-        updateContentSafeAreaInsets()
+        updateContentSafeAreaInsets(segmentIsVisible: isVisible)
     }
     
     func updateEditMode(_ edit: Bool) {
@@ -378,26 +408,30 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     }
     
     func updateSearchEnabling(_ isEnabled: Bool) {
-        setupNavbar()
         if isEnabled {
-            searchController?.searchBar.alpha = 0
-            navigationItem.searchController = searchController
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.searchController?.isActive = true
+            guard !isSearchActive else {
+                showSearchController()
+                return
             }
+            
+            isSearchActive = true
+            isSearchBarAnimating = true
+            updateContentSafeAreaInsets(segmentIsVisible: false)
+            showSearchController()
+            pageViewController?.delegate = nil
+            pageViewController?.dataSource = nil
+            let hiddenTransform = CGAffineTransform(translationX: 0, y: -segmentContainerView.bounds.height)
             UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: .showHideTransitionViews) {
-                self.updateSegmentedControlVisibility(false)
+                self.segmentContainerView.transform = hiddenTransform
                 self.segmentContainerView.alpha = 0
                 self.view.layoutIfNeeded()
+            } completion: { finished in
+                guard finished else { return }
+                self.segmentContainerView.isHidden = true
+                self.segmentContainerView.transform = .identity
             }
         } else {
-            UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: .showHideTransitionViews) {
-                self.updateSegmentedControlVisibility(!isEnabled)
-                self.segmentContainerView.alpha = 1
-                self.searchController?.isActive = false
-                self.navigationItem.searchController = nil
-                self.view.layoutIfNeeded()
-            }
+            hideSearchController()
         }
     }
     
@@ -421,6 +455,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
 // MARK: - UISearchResultsUpdating
 extension MyPlacesContainerViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        guard !isSearchBarAnimating || !searchController.isActive else { return }
         guard let searchableViewController = viewController(for: selectedTab) as? MyPlacesSearchable else {
             return
         }
@@ -440,20 +475,44 @@ extension MyPlacesContainerViewController: UISearchBarDelegate {
 
 // MARK: - UISearchControllerDelegate
 extension MyPlacesContainerViewController: UISearchControllerDelegate {
-    func presentSearchController(_ searchController: UISearchController) {
-        // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
-        // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
-        let searchBarActivationDelay = 0.1
-        DispatchQueue.main.async {
+    func didPresentSearchController(_ searchController: UISearchController) {
+        isSearchActive = true
+        isSearchBarAnimating = false
+        updateSearchResults(for: searchController)
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.beginFromCurrentState]) {
             searchController.searchBar.alpha = 1
-            if !searchController.searchBar.isFirstResponder {
-                searchController.searchBar.becomeFirstResponder()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
-                if searchController.isActive, !searchController.searchBar.isFirstResponder {
-                    searchController.searchBar.becomeFirstResponder()
-                }
-            }
+        }
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        isSearchBarAnimating = true
+        pageViewController?.delegate = self
+        pageViewController?.dataSource = self
+        segmentContainerView.transform = CGAffineTransform(translationX: 0, y: -segmentContainerView.bounds.height)
+        segmentContainerView.isHidden = false
+        UIView.animate(withDuration: 0.4, delay: 0, options: [.beginFromCurrentState]) {
+            searchController.searchBar.alpha = 0
+            self.segmentContainerView.transform = .identity
+            self.segmentContainerView.alpha = 1
+            self.updateContentSafeAreaInsets(segmentIsVisible: true)
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        isSearchBarAnimating = false
+        if navigationItem.searchController === searchController {
+            navigationItem.searchController = nil
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.isSearchActive = false
+        }
+    }
+    
+    func presentSearchController(_ searchController: UISearchController) {
+        if !searchController.searchBar.isFirstResponder {
+            searchController.searchBar.becomeFirstResponder()
         }
     }
 }

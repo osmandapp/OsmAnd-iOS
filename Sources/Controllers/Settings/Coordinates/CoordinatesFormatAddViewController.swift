@@ -9,11 +9,17 @@
 import UIKit
 
 final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
+    enum AddMode {
+        case preferred
+        case gridSelection
+    }
+    
     private static let infoRowKey = "info"
     private static let formatIdKey = "formatId"
 
     var onFormatAdded: ((String) -> Void)?
 
+    private let addMode: AddMode
     private let searchController = UISearchController(searchResultsController: nil)
     private var excludedIds: Set<String>
     private var searchQuery = ""
@@ -23,8 +29,10 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         isSearchActive
     }
 
-    init(appMode: OAApplicationMode, excludedIds: [String]) {
-        self.excludedIds = Set(excludedIds.compactMap { CoordinateFormatIds.normalize($0) })
+    init(appMode: OAApplicationMode, excludedIds: [String], addMode: AddMode = .preferred) {
+        self.addMode = addMode
+        let ids = (addMode == .gridSelection) ? [] : excludedIds
+        self.excludedIds = Set(ids.compactMap { CoordinateFormatIds.normalize($0) })
         super.init(appMode: appMode)
     }
     
@@ -182,9 +190,13 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     }
 
     private func availableFormats() -> [CoordinateFormat] {
-        BuiltInCoordinateFormat.allCases
+        let formats = BuiltInCoordinateFormat.allCases
             .map { $0.toCoordinateFormat() }
             .filter { !excludedIds.contains($0.id) }
+        if addMode == .gridSelection {
+            return formats.filter { CoordinateFormatHelper.gridFormatProvider.isSupported($0.id) }
+        }
+        return formats
     }
 
     private func visibleFormats() -> [CoordinateFormat] {
@@ -225,12 +237,17 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         definesPresentationContext = true
     }
     
-    private func runCatalogSearch(_ query: String) {
-        CoordinateFormatHelper.search(query) { [weak self] results in
-            guard let self, self.isSearchActive, self.searchQuery == query else { return }
+    private func runCatalogSearch(_ query: String, force: Bool = false) {
+        let handler: ([CoordinateFormat]) -> Void = { [weak self] results in
+            guard let self, (self.isSearchActive || force), self.searchQuery == query else { return }
             self.searchResults = results
             self.generateData()
             self.tableView.reloadData()
+        }
+        if addMode == .gridSelection {
+            CoordinateFormatHelper.searchGridFormats(query, completion: handler)
+        } else {
+            CoordinateFormatHelper.search(query, completion: handler)
         }
     }
     
@@ -245,13 +262,7 @@ extension CoordinatesFormatAddViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         searchQuery = searchController.searchBar.text ?? ""
         if isSearching {
-            let query = searchQuery
-            CoordinateFormatHelper.search(query) { [weak self] results in
-                guard let self, self.searchQuery == query else { return }
-                self.searchResults = results
-                self.generateData()
-                self.tableView.reloadData()
-            }
+            runCatalogSearch(searchQuery, force: true)
         } else {
             CoordinateFormatHelper.cancelSearch()
             searchResults = []

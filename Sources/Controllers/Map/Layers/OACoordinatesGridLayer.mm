@@ -29,7 +29,9 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     std::shared_ptr<OsmAnd::GridMarksProvider> _marksProvider;
     std::shared_ptr<OsmAnd::GridConfiguration> _gridConfiguration;
     
-    GridFormat _cachedGridFormat;
+    NSString *_cachedGridFormatId;
+    CoordinateGridFormatInfo *_cachedGridFormatInfo;
+    float _defaultGranularity;
     ZoomRange _cachedZoomLimits;
     GridLabelsPosition _cachedLabelsPosition;
     CGFloat _cachedTextScale;
@@ -158,48 +160,53 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)initVariablesWithAppMode:(OAApplicationMode *)appMode
 {
-    _cachedGridFormat = (GridFormat)[_gridSettings getGridFormatForAppMode:appMode];
-    _cachedLabelsPosition = (GridLabelsPosition)[_gridSettings getGridLabelsPositionForAppMode:appMode];
-    _cachedGridColorDay = [_gridSettings getDayGridColor];
-    _cachedGridColorNight = [_gridSettings getNightGridColor];
-    _cachedTextScale = [_gridSettings getTextScaleForAppMode:appMode];
+    NSString *formatId = [_gridSettings gridFormatIdForAppMode:appMode];
+    _cachedGridFormatInfo = [CoordinateGridFormatBridge resolveInfo:formatId];
+    _cachedGridFormatId = _cachedGridFormatInfo.formatId;
+    _cachedLabelsPosition = (GridLabelsPosition)[_gridSettings gridLabelsPositionForAppMode:appMode];
+    _cachedGridColorDay = [_gridSettings dayGridColor];
+    _cachedGridColorNight = [_gridSettings nightGridColor];
+    _cachedTextScale = [_gridSettings textScaleForAppMode:appMode];
     _cachedGridEnabled = [_gridSettings isEnabled];
-    _cachedZoomLimits = [_gridSettings getZoomLevelsWithRestrictionsForAppMode:appMode];
+    _cachedZoomLimits = [_gridSettings zoomLevelsWithRestrictionsForAppMode:appMode formatId:_cachedGridFormatId];
     _cachedNightMode = OADayNightHelper.instance.isNightMode;
 }
 
 - (BOOL)updateVariablesWithAppMode:(OAApplicationMode *)appMode
 {
     BOOL updated = NO;
-    GridFormat newGridFormat = (GridFormat)[_gridSettings getGridFormatForAppMode:appMode];
-    if (_cachedGridFormat != newGridFormat)
+    NSString *newFormatId = [_gridSettings gridFormatIdForAppMode:appMode];
+    CoordinateGridFormatInfo *newInfo = [CoordinateGridFormatBridge resolveInfo:newFormatId];
+    NSString *resolvedId = newInfo.formatId;
+    if (![_cachedGridFormatId isEqualToString:resolvedId])
     {
-        _cachedGridFormat = newGridFormat;
+        _cachedGridFormatId = resolvedId;
+        _cachedGridFormatInfo = newInfo;
         updated = YES;
     }
     
-    int newGridColorDay = [_gridSettings getDayGridColor];
+    int newGridColorDay = [_gridSettings dayGridColor];
     if (_cachedGridColorDay != newGridColorDay)
     {
         _cachedGridColorDay = newGridColorDay;
         updated = YES;
     }
     
-    int newGridColorNight = [_gridSettings getNightGridColor];
+    int newGridColorNight = [_gridSettings nightGridColor];
     if (_cachedGridColorNight != newGridColorNight)
     {
         _cachedGridColorNight = newGridColorNight;
         updated = YES;
     }
     
-    CGFloat newTextScale = [_gridSettings getTextScaleForAppMode:appMode];
+    CGFloat newTextScale = [_gridSettings textScaleForAppMode:appMode];
     if (fabs(_cachedTextScale - newTextScale) >= 0.0001f)
     {
         _cachedTextScale = newTextScale;
         updated = YES;
     }
     
-    GridLabelsPosition newLabelsPosition = (GridLabelsPosition)[_gridSettings getGridLabelsPositionForAppMode:appMode];
+    GridLabelsPosition newLabelsPosition = (GridLabelsPosition)[_gridSettings gridLabelsPositionForAppMode:appMode];
     if (_cachedLabelsPosition != newLabelsPosition)
     {
         _cachedLabelsPosition = newLabelsPosition;
@@ -218,10 +225,13 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)updateGridAppearance
 {
-    OAFormat oaFmt = [GridFormatWrapper getFormatFor:_cachedGridFormat];
-    OAProjection oaProj = [GridFormatWrapper projectionFor:_cachedGridFormat];
-    auto format = static_cast<OsmAnd::GridConfiguration::Format>(oaFmt);
-    auto projection = static_cast<OsmAnd::GridConfiguration::Projection>(oaProj);
+    CoordinateGridFormatInfo *info = _cachedGridFormatInfo;
+    if (!info)
+        info = [CoordinateGridFormatBridge resolveInfo:_cachedGridFormatId];
+
+    auto format = static_cast<OsmAnd::GridConfiguration::Format>(info.formatRaw);
+    auto secondaryProjection = static_cast<OsmAnd::GridConfiguration::Projection>(info.projectionRaw);
+
     OsmAnd::ZoomLevel minZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.min);
     OsmAnd::ZoomLevel maxZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.max);
     int colorInt = _cachedNightMode ? _cachedGridColorNight : _cachedGridColorDay;
@@ -229,13 +239,40 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     UIColor *haloUIColor = [OAUtilities isColorBright:colorFromARGB(colorInt)] ? [UIColor colorWithWhite:0 alpha:0.5] : [UIColor whiteColor];
     OsmAnd::FColorARGB haloColor = [haloUIColor toFColorARGB];
     
-    _gridConfiguration->setPrimaryProjection(projection);
+    _gridConfiguration->setPrimaryProjection(OsmAnd::GridConfiguration::Projection::WGS84);
     _gridConfiguration->setPrimaryFormat(format);
     _gridConfiguration->setPrimaryColor(color);
     _gridConfiguration->setPrimaryMinZoomLevel(minZoom);
     _gridConfiguration->setPrimaryMaxZoomLevel(maxZoom);
-    _gridConfiguration->setSecondaryProjection(projection);
+    _gridConfiguration->setSecondaryProjection(secondaryProjection);
     _gridConfiguration->setSecondaryFormat(format);
+
+    if (info.hasProjectionParameters)
+    {
+        _gridConfiguration->setProjectionParameters();
+        OsmAnd::PointD lonBounds(info.lonMin, info.lonMax);
+        OsmAnd::PointD latBounds(info.latMin, info.latMax);
+        OsmAnd::PointD semiMajor(info.semiMajor, info.invFlattening);
+        OsmAnd::PointD refLonLat(info.refLon, info.refLat);
+        OsmAnd::PointD falseEN(info.falseEasting, info.falseNorthing);
+        OsmAnd::PointD scale(info.scaleFactor, info.scaleFactorY);
+        _gridConfiguration->setSecondaryProjectionConstants(
+            secondaryProjection, lonBounds, latBounds, semiMajor, refLonLat, falseEN, scale);
+
+        OsmAnd::PointD tXY(info.translationsX, info.translationsY);
+        OsmAnd::PointD tZW(info.translationsZ, info.translationsW);
+        OsmAnd::PointD rXY(info.rotationsX, info.rotationsY);
+        OsmAnd::PointD rZScale(info.rotationsZ, info.ellipsoidScale);
+        _gridConfiguration->setSecondaryEllipsoidParameters(tXY, tZW, rXY, rZScale);
+    }
+
+    if (_defaultGranularity <= 0.f)
+        _defaultGranularity = _gridConfiguration->secondaryGranularity;
+    if (info.granularity != nil)
+        _gridConfiguration->setSecondaryGranularity(info.granularity.floatValue);
+    else
+        _gridConfiguration->setSecondaryGranularity(_defaultGranularity);
+
     _gridConfiguration->setSecondaryColor(color);
     _gridConfiguration->setSecondaryMinZoomLevel(minZoom);
     _gridConfiguration->setSecondaryMaxZoomLevel(maxZoom);
@@ -250,7 +287,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     NSString *meridian180 = OALocalizedStringForLocaleCode(mapLangCode, @"meridian_180");
     _marksProvider->setPrimary(false, equator.UTF8String, "", primeMeridian.UTF8String, meridian180.UTF8String);
     _marksProvider->setSecondaryStyle(secondaryStyle, 2.0f * _cachedTextScale, _cachedLabelsPosition == GridLabelsPositionCenter);
-    if ([GridFormatWrapper needSuffixesForFormat:_cachedGridFormat])
+    if (info.needSuffixes)
         _marksProvider->setSecondary(true, "N", "S", "E", "W");
     else
         _marksProvider->setSecondary(true, "", "", "", "");
@@ -258,7 +295,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (BOOL)updateZoomLevelsWithAppMode:(OAApplicationMode *)appMode
 {
-    ZoomRange newZoomLimits = [_gridSettings getZoomLevelsWithRestrictionsForAppMode:appMode];
+    ZoomRange newZoomLimits = [_gridSettings zoomLevelsWithRestrictionsForAppMode:appMode formatId:_cachedGridFormatId];
     if (_cachedZoomLimits.min != newZoomLimits.min || _cachedZoomLimits.max != newZoomLimits.max)
     {
         _cachedZoomLimits = newZoomLimits;

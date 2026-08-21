@@ -17,6 +17,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSInteger _supportedMaxZoom;
+    NSMutableDictionary<NSString *, NSValue *> *_supportedZoomByFormatId;
 }
 
 - (instancetype)init
@@ -27,6 +28,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _supportedMaxZoom = 22;
+        _supportedZoomByFormatId = [NSMutableDictionary new];
     }
     return self;
 }
@@ -57,22 +59,22 @@
     [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
 }
 
-- (int32_t)getGridFormatForAppMode:(OAApplicationMode *)appMode
+- (NSString *)gridFormatIdForAppMode:(OAApplicationMode *)appMode
 {
     return [_settings.coordinateGridFormat get:appMode];
 }
 
-- (void)setGridFormat:(int32_t)format forAppMode:(OAApplicationMode *)appMode
+- (void)setGridFormatId:(NSString *)formatId forAppMode:(OAApplicationMode *)appMode
 {
-    [_settings.coordinateGridFormat set:format mode:appMode];
+    [_settings.coordinateGridFormat set:formatId mode:appMode];
 }
 
-- (int)getDayGridColor
+- (int)dayGridColor
 {
     return [self getGridColor:NO];
 }
 
-- (int)getNightGridColor
+- (int)nightGridColor
 {
     return [self getGridColor:YES];
 }
@@ -105,7 +107,7 @@
     [_settings.coordinatesGridColorNight resetModeToDefault:appMode];
 }
 
-- (int32_t)getGridLabelsPositionForAppMode:(OAApplicationMode *)appMode
+- (int32_t)gridLabelsPositionForAppMode:(OAApplicationMode *)appMode
 {
     return [_settings.coordinatesGridLabelsPosition get:appMode];
 }
@@ -115,21 +117,77 @@
     [_settings.coordinatesGridLabelsPosition set:position mode:appMode];
 }
 
-- (ZoomRange)getZoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
+- (NSString *)resolvedGridFormatIdForAppMode:(OAApplicationMode *)appMode
 {
-    return [self getZoomLevelsWithRestrictionsForAppMode:appMode format:(GridFormat)[self getGridFormatForAppMode:appMode]];
+    NSString *formatId = [self gridFormatIdForAppMode:appMode];
+    CoordinateGridFormatInfo *info = [CoordinateGridFormatBridge resolveInfo:formatId];
+    return info.formatId ?: @"builtin:ddd";
 }
 
-- (ZoomRange)getZoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode format:(GridFormat)format
+- (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
+{
+    NSString *formatId = [self resolvedGridFormatIdForAppMode:appMode];
+    return [self zoomLevelsWithRestrictionsForAppMode:appMode formatId:formatId];
+}
+
+- (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
+                                            formatId:(NSString *)formatId
 {
     ZoomRange selected = [self getZoomLevelsForAppMode:appMode];
-    ZoomRange supported = [self getSupportedZoomLevelsForFormat:format];
+    ZoomRange supported = [self supportedZoomLevelsForFormatId:formatId];
     NSInteger minZoom = MIN(MAX(selected.min, supported.min), supported.max);
     NSInteger maxZoom = MIN(MAX(selected.max, supported.min), supported.max);
-    return (ZoomRange){.min = minZoom, .max = maxZoom};
+    return (ZoomRange){ .min = minZoom, .max = maxZoom };
 }
 
-- (ZoomRange)getZoomLevels
+- (ZoomRange)getSupportedZoomLevelsForAppMode:(OAApplicationMode *)appMode
+{
+    return [self supportedZoomLevelsForFormatId:[self resolvedGridFormatIdForAppMode:appMode]];
+}
+
+- (ZoomRange)supportedZoomLevelsForFormatId:(NSString *)formatId
+{
+    NSValue *cached = _supportedZoomByFormatId[formatId];
+    if (cached)
+    {
+        ZoomRange r;
+        [cached getValue:&r];
+        return r;
+    }
+    ZoomRange calculated = [self calculateSupportedZoomLevelsForFormatId:formatId];
+    NSValue *value = [NSValue valueWithBytes:&calculated objCType:@encode(ZoomRange)];
+    _supportedZoomByFormatId[formatId] = value;
+    return calculated;
+}
+
+- (ZoomRange)calculateSupportedZoomLevelsForFormatId:(NSString *)formatId
+{
+    CoordinateGridFormatInfo *info = [CoordinateGridFormatBridge resolveInfo:formatId];
+    int32_t minZoom = 1;
+    int32_t maxZoom = (int32_t)_supportedMaxZoom;
+
+    OsmAnd::GridConfiguration gridConfiguration;
+    auto proj = static_cast<OsmAnd::GridConfiguration::Projection>(info.projectionRaw);
+    auto form = static_cast<OsmAnd::GridConfiguration::Format>(info.formatRaw);
+    gridConfiguration.setPrimaryProjection(proj);
+    gridConfiguration.setSecondaryProjection(proj);
+    gridConfiguration.setPrimaryFormat(form);
+    gridConfiguration.setSecondaryFormat(form);
+    gridConfiguration.setProjectionParameters();
+
+    OsmAnd::GridParameters params = gridConfiguration.gridParameters[0];
+    minZoom = (int32_t)params.minZoom;
+
+    int maxFloat = (int)params.maxZoomForFloat;
+    int maxMixed = (int)params.maxZoomForMixed;
+    int fromParams = MAX(maxFloat, maxMixed);
+    if (fromParams > 0)
+        maxZoom = MIN(maxZoom, fromParams);
+
+    return (ZoomRange){ .min = minZoom, .max = maxZoom };
+}
+
+- (ZoomRange)zoomLevels
 {
     return [self getZoomLevelsForAppMode:[_settings.applicationMode get]];
 }
@@ -153,36 +211,12 @@
     [_settings.coordinateGridMaxZoom resetModeToDefault:appMode];
 }
 
-- (ZoomRange)getSupportedZoomLevels
+- (ZoomRange)supportedZoomLevels
 {
     return [self getSupportedZoomLevelsForAppMode:[_settings.applicationMode get]];
 }
 
-- (ZoomRange)getSupportedZoomLevelsForAppMode:(OAApplicationMode *)appMode
-{
-    return [self getSupportedZoomLevelsForFormat:(GridFormat)[self getGridFormatForAppMode:appMode]];
-}
-
-- (ZoomRange)getSupportedZoomLevelsForFormat:(GridFormat)gridFormat
-{
-    int32_t minZoom = 1;
-    OsmAnd::GridConfiguration gridConfiguration;
-    OAProjection proj = [GridFormatWrapper projectionFor:gridFormat];
-    auto cppProj = static_cast<OsmAnd::GridConfiguration::Projection>(proj);
-    gridConfiguration.setPrimaryProjection(cppProj);
-    gridConfiguration.setSecondaryProjection(cppProj);
-    OAFormat format = [GridFormatWrapper getFormatFor:gridFormat];
-    auto cppForm = static_cast<OsmAnd::GridConfiguration::Format>(format);
-    gridConfiguration.setPrimaryFormat(cppForm);
-    gridConfiguration.setSecondaryFormat(cppForm);
-    gridConfiguration.setProjectionParameters();
-    OsmAnd::GridParameters params = gridConfiguration.gridParameters[0];
-    OsmAnd::ZoomLevel min = params.minZoom;
-    minZoom = min;
-    return (ZoomRange){.min = minZoom, .max = _supportedMaxZoom};
-}
-
-- (float)getTextScaleForAppMode:(OAApplicationMode *)appMode
+- (float)textScaleForAppMode:(OAApplicationMode *)appMode
 {
     return [_settings.textSize get:appMode] * [OARootViewController.instance.mapPanel.mapViewController displayDensityFactor];
 }

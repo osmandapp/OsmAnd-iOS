@@ -1751,6 +1751,9 @@
 		CEAF081B2FD9226C0048A74A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF081A2FD9226C0048A74A /* Array+Extension.swift */; };
 		CEDB71E52FD993C3009DAA0D /* TrackStatsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */; };
 		CEFA10002D29000100ABCDEF /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = CEFA10012D29000100ABCDEF /* Localizable.stringsdict */; };
+		CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */; };
+		CEFC9E7230372F6500D224E4 /* CoordinateGridFormatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */; };
+		CEFC9E7430373A5300D224E4 /* CoordinateGridFormatBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
@@ -5922,6 +5925,9 @@
 		CEAF081A2FD9226C0048A74A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStatsTableCell.swift; sourceTree = "<group>"; };
 		CEFA10022D29000100ABCDEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormat.swift; sourceTree = "<group>"; };
+		CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatProvider.swift; sourceTree = "<group>"; };
+		CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatBridge.swift; sourceTree = "<group>"; };
 		CFAD0317D259939278620F4D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = da; path = da.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D086857B31B2466506C886C1 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cy; path = cy.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D11B1870D2F27BC8784B9B6E /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = eu; path = eu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -11141,7 +11147,10 @@
 				CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */,
 				CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */,
 				CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */,
+				CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */,
+				CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */,
 				CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */,
+				CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */,
 			);
 			path = Coordinates;
 			sourceTree = "<group>";
@@ -17962,6 +17971,7 @@
 				CE762AEE2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift in Sources */,
 				2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */,
 				C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */,
+				CEFC9E7430373A5300D224E4 /* CoordinateGridFormatBridge.swift in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */,
@@ -18028,6 +18038,7 @@
 				328EE35B2E171BA4003CDB48 /* SelectedGpxPoint.swift in Sources */,
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
+				CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
@@ -18972,6 +18983,7 @@
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
 				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
+				CEFC9E7230372F6500D224E4 /* CoordinateGridFormatProvider.swift in Sources */,
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,

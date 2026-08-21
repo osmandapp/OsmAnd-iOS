@@ -13,6 +13,8 @@ enum CoordinateFormatHelper {
     static let exampleLon = 30.50124
     static let unavailablePlaceholder = "—"
     
+    static let gridFormatProvider = CoordinateGridFormatProvider()
+    
     private static let searchDebounce: TimeInterval = 0.25
     private static var searchWorkItem: DispatchWorkItem?
 
@@ -44,6 +46,29 @@ enum CoordinateFormatHelper {
         } else {
             DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + searchDebounce, execute: work)
         }
+    }
+    
+    static func searchGridFormats(_ query: String?, completion: @escaping ([CoordinateFormat]) -> Void) {
+        cancelSearch()
+        let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let work = DispatchWorkItem {
+            let results = EpsgCatalogRepository.shared.searchGridFormats(trimmed.isEmpty ? nil : trimmed)
+            let builtIns = CoordinateFormatHelper.resolve(CoordinateFormatIds.allBuiltInFormatIds)
+                .filter { gridFormatProvider.isSupported($0.id) }
+            let merged: [CoordinateFormat]
+            if trimmed.isEmpty {
+                merged = builtIns + results
+            } else {
+                let q = trimmed.lowercased()
+                let filteredBuiltIns = builtIns.filter {
+                    $0.title.lowercased().contains(q) || $0.id.contains(q)
+                }
+                merged = filteredBuiltIns + results
+            }
+            DispatchQueue.main.async { completion(merged) }
+        }
+        searchWorkItem = work
+        DispatchQueue.global(qos: .userInitiated).async(execute: work)
     }
     
     static func summary(_ format: CoordinateFormat, primary: Bool) -> String {

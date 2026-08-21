@@ -18,7 +18,6 @@
 #import "OAContextMenuProvider.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"
 #import "OAMapObject+cpp.h"
@@ -422,28 +421,7 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
-    NSString *addressString = nil;
-    BOOL isAddressFound = NO;
-    NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
-    if (!roadTitle || roadTitle.length == 0)
-    {
-        addressString = OALocalizedString(@"map_no_address");
-    }
-    else
-    {
-        addressString = roadTitle;
-        isAddressFound = YES;
-    }
-    
-    if (isAddressFound || addressString)
-    {
-        formattedTargetName = addressString;
-    }
-    else
-    {
-        formattedTargetName = [OAPointDescription getLocationName:latitude lon:longitude sh:NO];
-    }
+    NSString *formattedTargetName = OALocalizedString(@"shared_string_location");
     
     OAPOIType *poiType = [[OAPOILocationType alloc] init];
     
@@ -465,9 +443,10 @@
     targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
     targetPoint.title = formattedTargetName;
     targetPoint.icon = [poiType icon];
-    targetPoint.titleAddress = roadTitle;
+    targetPoint.titleAddress = nil;
     targetPoint.type = OATargetPOI;
     targetPoint.targetObj = poi;
+    targetPoint.shouldFetchAddress = YES;
 
     return targetPoint;
 }

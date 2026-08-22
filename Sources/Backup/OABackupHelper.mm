@@ -51,6 +51,7 @@ static NSString *LIST_FILES_URL = [SERVER_URL stringByAppendingString:@"/userdat
 static NSString *DOWNLOAD_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/download-file"];
 static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file"];
 static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file-version"];
+static NSString *EMPTY_TRASH_URL = [SERVER_URL stringByAppendingString:@"/userdata/empty-trash"];
 static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
@@ -100,6 +101,11 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 + (NSString *) DELETE_FILE_URL
 {
     return DELETE_FILE_URL;
+}
+
++ (NSString *) EMPTY_TRASH_URL
+{
+    return EMPTY_TRASH_URL;
 }
 
 + (NSString *) ACCOUNT_DELETE_URL
@@ -667,6 +673,125 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [listener onFilesDeleteError:STATUS_EXECUTION_ERROR message:@"Execution error while deleting files"];
+            });
+        }
+    }
+}
+
+- (void) emptyTrash:(NSArray<OARemoteFile *> *)deletedFiles listener:(id<OAOnDeleteFilesListener>)listener
+{
+    @try
+    {
+        [self checkRegistered];
+        NSArray<OARemoteFile *> *files = [deletedFiles copy];
+        if (listener != nil)
+            [_backupListeners addDeleteFilesListener:listener];
+
+        [_executor addOperationWithBlock:^{
+            OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"emptyTrash" debug:BACKUP_DEBUG_LOGS];
+            [operationLog startOperation];
+
+            NSArray<id<OAOnDeleteFilesListener>> *listeners = self->_backupListeners.getDeleteFilesListeners;
+            for (id<OAOnDeleteFilesListener> deleteListener in listeners)
+                [deleteListener onFilesDeleteStarted:files];
+
+            NSMutableArray<NSDictionary *> *filesJson = [NSMutableArray array];
+            for (OARemoteFile *file in files)
+            {
+                [filesJson addObject:@{
+                    @"name": file.name,
+                    @"type": file.type,
+                    @"updatetime": @(file.updatetimems)
+                }];
+            }
+
+            NSError *jsonError = nil;
+            NSData *bodyData = [NSJSONSerialization dataWithJSONObject:filesJson options:0 error:&jsonError];
+            NSString *body = bodyData ? [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding] : nil;
+            __block NSData *responseData = nil;
+            __block NSHTTPURLResponse *httpResponse = nil;
+            __block NSError *requestError = nil;
+
+            if (!jsonError && body)
+            {
+                NSDictionary<NSString *, NSString *> *params = @{
+                    @"deviceid": self.getDeviceId,
+                    @"accessToken": self.getAccessToken
+                };
+                [OANetworkUtilities sendRequestWithUrl:EMPTY_TRASH_URL
+                                                params:params
+                                                  body:body
+                                           contentType:@"application/json"
+                                                  post:YES
+                                                 async:NO
+                                            onComplete:^(NSData *data, NSURLResponse *response, NSError *error) {
+                    responseData = data;
+                    httpResponse = (NSHTTPURLResponse *)response;
+                    requestError = error;
+                }];
+            }
+
+            NSInteger errorStatus = STATUS_SERVER_ERROR;
+            NSString *errorMessage = nil;
+            if (jsonError || !body)
+            {
+                errorStatus = STATUS_PARSE_JSON_ERROR;
+                errorMessage = @"Failed to create empty trash request";
+            }
+            else if (requestError)
+            {
+                errorMessage = requestError.localizedDescription;
+            }
+            else if (!httpResponse || !responseData)
+            {
+                errorStatus = STATUS_EMPTY_RESPONSE_ERROR;
+                errorMessage = @"Empty trash error: empty response";
+            }
+            else
+            {
+                NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+                if (httpResponse.statusCode != 200)
+                {
+                    errorMessage = responseString.length > 0 ? responseString : @"Empty trash request failed";
+                }
+                else
+                {
+                    NSError *responseError = nil;
+                    id responseJson = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&responseError];
+                    if (responseError || ![responseJson isKindOfClass:NSDictionary.class]
+                        || ![((NSDictionary *)responseJson)[@"status"] isEqualToString:@"ok"])
+                    {
+                        errorStatus = STATUS_PARSE_JSON_ERROR;
+                        errorMessage = @"Empty trash error: invalid response";
+                    }
+                }
+            }
+
+            [operationLog finishOperation:[NSString stringWithFormat:@"Files: %lu", (unsigned long)files.count]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSArray<id<OAOnDeleteFilesListener>> *currentListeners = self->_backupListeners.getDeleteFilesListeners;
+                if (errorMessage)
+                {
+                    for (id<OAOnDeleteFilesListener> deleteListener in currentListeners)
+                        [deleteListener onFilesDeleteError:errorStatus message:errorMessage];
+                }
+                else
+                {
+                    for (id<OAOnDeleteFilesListener> deleteListener in currentListeners)
+                        [deleteListener onFilesDeleteDone:@{}];
+                }
+                if (listener != nil)
+                    [self->_backupListeners removeDeleteFilesListener:listener];
+            });
+        }];
+    }
+    @catch (NSException *e)
+    {
+        if (listener != nil)
+        {
+            [_backupListeners removeDeleteFilesListener:listener];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [listener onFilesDeleteError:STATUS_EXECUTION_ERROR message:@"Execution error while emptying trash"];
             });
         }
     }

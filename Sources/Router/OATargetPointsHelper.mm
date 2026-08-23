@@ -639,25 +639,37 @@
     }
 }
 
-- (void) lookupAddressForDestinationPoint
+- (void)lookupAddressForDestinationPoint
 {
-    BOOL isNameNotValid = _pointToNavigate != nil && [_pointToNavigate isSearchingAddress];
-    BOOL isAddresEmpty = _pointToNavigate != nil && NSStringIsEmpty(_pointToNavigate.pointDescription.address);
-    
-    if ((isNameNotValid || isAddresEmpty) && !_isSearchingDestination)
+    OARTargetPoint *destination = _pointToNavigate;
+    BOOL isNameNotValid = destination != nil && [destination isSearchingAddress];
+    BOOL isAddressEmpty = destination != nil && NSStringIsEmpty(destination.pointDescription.address);
+
+    if ((isNameNotValid || isAddressEmpty) && !_isSearchingDestination)
     {
         _isSearchingDestination = YES;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:_pointToNavigate.point];
-            if (isNameNotValid)
-                [_pointToNavigate.pointDescription setName:pointName];
-            
-            _pointToNavigate.pointDescription.address = pointName;
-                
-            [_app.data setPointToNavigate:_pointToNavigate];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateRouteAndRefresh:NO];
-                _isSearchingDestination = NO;
+        CLLocation *location = destination.point;
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (!self) return;
+
+            NSString *pointName = [self getLocationName:location];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self->_pointToNavigate == destination)
+                {
+                    if (isNameNotValid) {
+                        [destination.pointDescription setName:pointName];
+                        destination.pointDescription.address = pointName;
+                        [self->_app.data setPointToNavigate:destination];
+                    } else {
+                        destination.pointDescription.address = pointName;
+                        [self->_app.data backupTargetPoints];
+                    }
+                    [self updateRouteAndRefresh:NO];
+                }
+                self->_isSearchingDestination = NO;
             });
         });
     }

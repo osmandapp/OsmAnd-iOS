@@ -617,9 +617,14 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateCarPlayMapAppearanceMode() {
-        let carPlayMode = settings.carPlayMode.get()
-        let profileMapMode = settings.appearanceMode.get(carPlayMode)
-        settings.carPlayMapAppearanceMode.set(profileMapMode)
+        let mode: OAApplicationMode
+        if settings.isCarPlayModeDefault.get() {
+            mode = CarPlayService.shared.firstCarMode()
+        } else {
+            mode = settings.carPlayMode.get()
+        }
+        let profile = mode.isDerivedRouting(from: .car()) ? mode : .car()
+        settings.carPlayMapAppearanceMode.set(settings.appearanceMode.get(profile))
     }
 
     // MARK: - Import old versions

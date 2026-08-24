@@ -1810,6 +1810,7 @@
 		DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */; };
 		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
 		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
+		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		DA06BB5529967A4C003B9212 /* depthcontourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */; };
@@ -5977,6 +5978,8 @@
 		DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@2x.png"; sourceTree = "<group>"; };
 		DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupExporter.h; sourceTree = "<group>"; };
 		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
+		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
+		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = depthcontourlines.addon.render.xml; path = ../resources/rendering_styles/depthcontourlines.addon.render.xml; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerDistanceWidget.swift; sourceTree = "<group>"; };
@@ -14910,6 +14913,8 @@
 			isa = PBXGroup;
 			children = (
 				46D5E4192D31A3EC00428227 /* BackupUtils.swift */,
+				C0D517770001000000000001 /* OAFavoritesBackupMerger.h */,
+				C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */,
 				DAA9F44B27EC9E99002BB1A8 /* Commands */,
 				DA4ABED22876D98D00B996EF /* LocalBackup */,
 				4657490F2B68129B0006046B /* BackupUiUtils.swift */,
@@ -18040,6 +18045,7 @@
 				46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */,
 				DA5A855B26C563A900F274C7 /* OAWorldRegion.mm in Sources */,
 				DAEDAAA12865A0F100CE54D0 /* OAGenerateBackupInfoTask.m in Sources */,
+				C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */,
 				32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */,
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,
 				FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */,

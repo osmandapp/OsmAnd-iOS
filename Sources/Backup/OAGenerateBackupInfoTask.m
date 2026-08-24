@@ -14,6 +14,7 @@
 #import "OABackupDbHelper.h"
 #import "OACollectionSettingsItem.h"
 #import "OABackupHelper.h"
+#import "OAFavoritesBackupMerger.h"
 #import "OAOperationLog.h"
 
 @implementation OAGenerateBackupInfoTask
@@ -162,6 +163,7 @@
                 [info.filesToUpload addObject:localFile];
         }
     }
+    [OAFavoritesBackupMerger prepareMergeUploads:info backupHelper:OABackupHelper.sharedInstance];
     [info createItemCollections];
     
     [_operationLog log:@"=== filesToUpload ==="];

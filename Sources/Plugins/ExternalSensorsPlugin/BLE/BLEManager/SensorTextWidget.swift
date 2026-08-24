@@ -12,21 +12,22 @@ import CoreBluetooth
 @objcMembers
 final class SensorTextWidget: OASimpleWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
-    
+
     private let visualizationMode = "visualization_mode"
-    
+    private let notActualValue = "0"
+
     private(set) var externalDeviceId: String?
-    
+
     private var cachedValue: String?
     private var deviceIdPref: OACommonString?
     private var visualizationModePref: OACommonInteger!
     private var appMode: OAApplicationMode!
     private var plugin: OAExternalSensorsPlugin?
-    
+
     var shouldUseAnyConnectedDevice: Bool {
         deviceIdPref?.get(appMode) == plugin?.getAnyConnectedDeviceId()
     }
-   
+
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
         self.widgetType = widgetType
@@ -40,7 +41,7 @@ final class SensorTextWidget: OASimpleWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         deviceIdPref = registerSensorDevicePref(customId: customId)
         visualizationModePref = registerVisualizationModePref(customId: customId, widgetParams: widgetParams)
-        
+
         if let id = widgetParams?[SensorTextWidget.externalDeviceIdConst] as? String {
             // For a newly created widget with selected device(not 1st)
             externalDeviceId = id
@@ -49,15 +50,15 @@ final class SensorTextWidget: OASimpleWidget {
         }
         updateInfo()
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     @discardableResult
     override func updateInfo() -> Bool {
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
@@ -66,11 +67,11 @@ final class SensorTextWidget: OASimpleWidget {
         updateSensorData(sensor: getCurrentSensor())
         return false
     }
-    
+
     override func isMetricSystemDepended() -> Bool {
         true
     }
-    
+
     override func getSettingsData(_ appMode: OAApplicationMode,
                                   widgetConfigurationParams: [String: Any]?,
                                   isCreate: Bool) -> OATableDataModel? {
@@ -84,7 +85,7 @@ final class SensorTextWidget: OASimpleWidget {
         settingRow.iconTintColor = .iconColorDefault
         settingRow.key = "external_sensor_key"
         settingRow.title = localizedString("external_sensors_source_of_data")
-        
+
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
             applyDeviceId()
         }
@@ -97,13 +98,13 @@ final class SensorTextWidget: OASimpleWidget {
         } else {
             settingRow.descr = localizedString(shouldUseAnyConnectedDevice ? "external_device_any_connected" : "shared_string_none")
         }
-        
+
         let visualizationModeRow = section.createNewRow()
         visualizationModeRow.cellType = OAValueTableViewCell.getIdentifier()
         visualizationModeRow.iconTintColor = .iconColorDefault
         visualizationModeRow.title = localizedString("shared_string_show")
         visualizationModeRow.key = "value_pref"
-        
+
         if let visualizationModePref {
             visualizationModeRow.setObj(visualizationModePref, forKey: "pref")
             if var currentValue = EOAExternalSensorVisualizationMode(rawValue: Int(visualizationModePref.defValue)) {
@@ -122,7 +123,7 @@ final class SensorTextWidget: OASimpleWidget {
                     }
                 }
                 visualizationModeRow.setObj(getModeTitle(currentValue), forKey: "value")
-                
+
                 let outlinedIconName = if let plugin, let widgetType {
                     currentValue == .batteryLevel
                     ? plugin.batteryOutlinedIconName(for: widgetType)
@@ -136,7 +137,7 @@ final class SensorTextWidget: OASimpleWidget {
                 } else {
                     localizedString("sensor_data") + ", " + localizedString("sensor_data_settings_description")
                 }
-                
+
                 visualizationModeRow.setObj(getPossibleValues(mode: currentValue), forKey: "possible_values")
             }
         }
@@ -144,12 +145,27 @@ final class SensorTextWidget: OASimpleWidget {
         return data
     }
     
+    func getFieldType() -> WidgetType {
+        widgetType!
+    }
+
+    func configureDevice(id: String) {
+        externalDeviceId = id
+        saveDeviceId(deviceId: id)
+    }
+
+    func setAnyDevice(use: Bool) {
+        if use, let plugin {
+            deviceIdPref?.set(plugin.getAnyConnectedDeviceId(), mode: appMode)
+        }
+    }
+
     private func changeNextMode() {
         guard let mode = getVisualizationMode() else {
             return
         }
         let nextMode: EOAExternalSensorVisualizationMode
-        
+
         switch mode {
         case .sensorData:
             nextMode = .batteryLevel
@@ -158,17 +174,17 @@ final class SensorTextWidget: OASimpleWidget {
         @unknown default:
             return
         }
-        
+
         visualizationModePref.set(Int32(nextMode.rawValue), mode: appMode)
         updateInfo()
     }
-    
+
     private func reconnectIfNeeded() {
         guard let widgetType else { return }
         guard let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices(excluding: .OBD_VEHICLE_METRICS) else { return }
 
         let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices).filter { $0.deviceType != .OBD_VEHICLE_METRICS }
-        
+
         guard !disconnectedDevices.isEmpty else { return }
 
         let matchingDevices = disconnectedDevices.filter {
@@ -191,7 +207,7 @@ final class SensorTextWidget: OASimpleWidget {
 
     private func getPossibleValues(mode: EOAExternalSensorVisualizationMode) -> [OATableRowData] {
         var rows = [OATableRowData]()
-        
+
         guard let plugin, let widgetType else {
             return rows
         }
@@ -204,14 +220,14 @@ final class SensorTextWidget: OASimpleWidget {
             row.iconName = index == 0
                 ? widgetType.disabledIconName
                 : plugin.batteryOutlinedIconName(for: widgetType)
-            
+
             row.iconTintColor = index == mode.rawValue ? .iconColorActive : .iconColorDisabled
             rows.append(row)
         }
 
         return rows
     }
-    
+
     private func getModeTitle(_ mode: EOAExternalSensorVisualizationMode) -> String {
         switch mode {
         case .sensorData:
@@ -223,33 +239,21 @@ final class SensorTextWidget: OASimpleWidget {
         }
     }
 
-    func getFieldType() -> WidgetType {
-        widgetType!
-    }
-    
-    func configureDevice(id: String) {
-        externalDeviceId = id
-        saveDeviceId(deviceId: id)
-    }
-    
-    func setAnyDevice(use: Bool) {
-        if use, let plugin {
-            deviceIdPref?.set(plugin.getAnyConnectedDeviceId(), mode: appMode)
-        }
-    }
-    
     private func updateSensorData(sensor: Sensor?) {
         guard let widgetType,
               let mode = getVisualizationMode() else {
             setText("-", subtext: nil)
             return
         }
-        
+
         var contentTitle = widgetType.title
         var iconName = widgetType.iconName
-        
+
         switch mode {
-        case .sensorData: break
+        case .sensorData:
+            if sensor?.device.isConnected != true {
+                iconName = widgetType.disconnectedIconName ?? widgetType.iconName
+            }
         case .batteryLevel:
             contentTitle += ", " + localizedString("external_device_details_battery")
             if let plugin {
@@ -261,7 +265,7 @@ final class SensorTextWidget: OASimpleWidget {
             setIcon(iconName)
         }
         setContentTitle(contentTitle.uppercased())
-        
+
         if let sensor {
             let dataList = sensor.getLastSensorDataList(for: widgetType)
             if !sensor.device.isConnected || dataList?.isEmpty ?? false {
@@ -273,14 +277,12 @@ final class SensorTextWidget: OASimpleWidget {
                 field = result.getWidgetField(fieldType: widgetType)
             }
             if let field, let formattedValue = field.getFormattedValue() {
-                if cachedValue != formattedValue.value {
-                    cachedValue = formattedValue.value
-                    print("externalDeviceId: \(String(describing: externalDeviceId)) | value: \(formattedValue.value)")
-                    if formattedValue.value != "0" {
-                        setText(formattedValue.value, subtext: formattedValue.unit)
-                    } else {
-                        setText("-", subtext: nil)
-                    }
+                let isActualData = sensor.hasActualData(for: widgetType)
+                let displayValue = isActualData ? formattedValue.value : notActualValue
+                if cachedValue != displayValue {
+                    cachedValue = displayValue
+                    debugPrint("externalDeviceId: \(String(describing: externalDeviceId)) | value: \(displayValue)")
+                    setText(displayValue, subtext: formattedValue.unit)
                 }
             } else {
                 setText("-", subtext: nil)
@@ -289,20 +291,20 @@ final class SensorTextWidget: OASimpleWidget {
             setText("-", subtext: nil)
         }
     }
-    
+
     private func getDeviceId() -> String? {
         deviceIdPref?.getProfileDefaultValue(appMode) as? String
     }
-    
+
     private func getCurrentSensor() -> Sensor? {
         guard let widgetType else {
             return nil
         }
-        
+
         guard let mode = getVisualizationMode() else {
             return nil
         }
-        
+
         if shouldUseAnyConnectedDevice {
             return getSensorFromConnectedDevice(for: widgetType, mode: mode)
         } else {
@@ -346,11 +348,11 @@ final class SensorTextWidget: OASimpleWidget {
             return nil
         }
     }
-    
+
     private func getPairedDevicesForCurrentWidgetType() -> [Device] {
         DeviceHelper.shared.getPairedDevicesFor(type: widgetType!) ?? []
     }
-    
+
     private func applyDeviceId() {
         guard !shouldUseAnyConnectedDevice else {
             return
@@ -396,7 +398,7 @@ final class SensorTextWidget: OASimpleWidget {
         }
         return nil
     }
-    
+
     private func registerVisualizationModePref(customId: String?,
                                                widgetParams: ([String: Any])? = nil) -> OACommonInteger? {
         var prefId = visualizationMode

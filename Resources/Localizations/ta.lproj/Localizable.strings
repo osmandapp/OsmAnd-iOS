@@ -1,4 +1,6 @@
 "shared_string_milliradians" = "மில்லிரடினஸ்";
+"send_crash_log" = "செயலிழப்பு பதிவை அனுப்பவும்";
+"send_crash_log_descr" = "செயலிழப்புகள் பற்றிய தகவல்கள் மட்டுமே உள்ளன";
 "access_intermediate_arrival_time" = "இடைநிலை வருகை நேரம்";
 "shared_string_previous" = "முன்னே";
 "shared_string_next" = "அடுத்து";

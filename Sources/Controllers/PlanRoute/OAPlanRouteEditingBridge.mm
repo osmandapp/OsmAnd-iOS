@@ -299,6 +299,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [layer updateLayer];
 }
 
++ (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    OAMeasurementToolLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer;
+    if (layer == nil)
+        return;
+    [layer moveMapToCoordinate:coordinate];
+}
+
 - (void)dismiss
 {
     [self invalidateElevationCalculationShouldNotify:NO];

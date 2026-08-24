@@ -9,23 +9,26 @@
 import CoreBluetooth
 
 final class BLEBikeSensor: Sensor {
-    
+    private static let bikeActualDataTimePeriod: TimeInterval = 2
+
     private var oldCharacteristic: CyclingCharacteristic = .zero
-    
+    private var lastWheelRevolutionsAndTime: CyclingCharacteristic.WheelRevolutionAndTime?
+    private var lastCrankRevolutionsAndTime: CyclingCharacteristic.WheelRevolutionAndTime?
+
     // BikeSpeedDistanceData
     private var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
     private var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
     private var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
-    
+
     // BikeCadenceData
     private var gearRatio: Double = 1
     private var cadence: Int = 0
-    
+
     var lastBikeCadenceData: BikeCadenceData?
     var lastBikeSpeedDistanceData: BikeSpeedDistanceData?
     // NOTE: wheelCircumference = wheelSize * pi
     var wheelSize: Double = WheelDeviceSettings.DEFAULT_WHEEL_CIRCUMFERENCE / 1000
-    
+
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         if widgetType == .bicycleCadence {
             return [lastBikeCadenceData].compactMap { $0 }
@@ -34,11 +37,11 @@ final class BLEBikeSensor: Sensor {
         }
         return nil
     }
-    
+
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
-    
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
@@ -50,25 +53,52 @@ final class BLEBikeSensor: Sensor {
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
-    
+
     private func decodeSpeedCharacteristic(data: Data, result: (Result<Void, Error>) -> Void) throws {
         let characteristic = try CyclingCharacteristic(data: data)
+
+        updateActualDataTime(
+            currentValue: characteristic.wheelRevolutionsAndTime,
+            previousValue: lastWheelRevolutionsAndTime,
+            widgetTypes: [.bicycleSpeed, .bicycleDistance]
+        )
+        lastWheelRevolutionsAndTime = characteristic.wheelRevolutionsAndTime ?? lastWheelRevolutionsAndTime
+
+        updateActualDataTime(
+            currentValue: characteristic.crankRevolutionsAndTime,
+            previousValue: lastCrankRevolutionsAndTime,
+            widgetTypes: [.bicycleCadence]
+        )
+        lastCrankRevolutionsAndTime = characteristic.crankRevolutionsAndTime ?? lastCrankRevolutionsAndTime
+
         characteristic.travelDistance(with: wheelSize)
             .flatMap { totalTravelDistance = $0; return updateBikeSpeedDistanceData() }
         characteristic.distance(oldCharacteristic, wheelCircumference: wheelSize)
             .flatMap { travelDistance = travelDistance + $0; return updateBikeSpeedDistanceData() }
         characteristic.speed(oldCharacteristic, wheelCircumference: wheelSize)
             .flatMap { speed = $0; return updateBikeSpeedDistanceData() }
-        
+
         characteristic.gearRatio(oldCharacteristic)
             .flatMap { gearRatio = $0; return updateBikeCadenceData() }
         characteristic.cadence(oldCharacteristic)
             .flatMap { cadence = $0; return updateBikeCadenceData() }
-        
+
         oldCharacteristic = characteristic
         result(.success)
     }
-    
+
+    private func updateActualDataTime(currentValue: CyclingCharacteristic.WheelRevolutionAndTime?,
+                                      previousValue: CyclingCharacteristic.WheelRevolutionAndTime?,
+                                      widgetTypes: [WidgetType]) {
+        guard let currentValue else { return }
+
+        if previousValue == nil
+            || previousValue?.revolution != currentValue.revolution
+            || previousValue?.time != currentValue.time {
+            widgetTypes.forEach { markActualData(for: $0) }
+        }
+    }
+
     private func updateBikeSpeedDistanceData() {
         lastBikeCadenceData = nil
         lastBikeSpeedDistanceData = BikeSpeedDistanceData(timestamp: Date.now.timeIntervalSince1970,
@@ -77,7 +107,7 @@ final class BLEBikeSensor: Sensor {
                                                           totalTravelDistance: totalTravelDistance)
         debugPrint(lastBikeSpeedDistanceData?.description as Any)
     }
-    
+
     private func updateBikeCadenceData() {
         lastBikeSpeedDistanceData = nil
         lastBikeCadenceData = BikeCadenceData(timestamp: Date.now.timeIntervalSince1970,
@@ -116,6 +146,10 @@ final class BLEBikeSensor: Sensor {
             debugPrint("BLE failed writeSensorDataToJson: speed - \(speed.value), cadence - \(lastBikeCadenceData?.cadence as Any), travelDistance - \(lastBikeSpeedDistanceData?.travelDistance.value as Any) | error: \(error.localizedDescription)")
         }
     }
+
+    override func actualDataTimePeriod(for widgetType: WidgetType) -> TimeInterval {
+        Self.bikeActualDataTimePeriod
+    }
 }
 
 extension BLEBikeSensor {
@@ -123,7 +157,7 @@ extension BLEBikeSensor {
         let timestamp: TimeInterval
         let gearRatio: Double
         let cadence: Int
-        
+
         var widgetFields: [SensorWidgetDataField]? {
             [SensorWidgetDataField(fieldType: .bicycleCadence,
                                    nameId: localizedString("external_device_characteristic_cadence"),
@@ -131,33 +165,33 @@ extension BLEBikeSensor {
                                    numberValue: nil,
                                    stringValue: String(cadence))]
         }
-        
+
         var description: String {
             "BikeCadenceData { timestamp=\(timestamp), gearRatio=\(gearRatio), cadence=\(cadence) }"
         }
-        
+
         init(timestamp: TimeInterval, gearRatio: Double, cadence: Int) {
             self.timestamp = timestamp
             self.gearRatio = gearRatio
             self.cadence = cadence
         }
-        
+
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
             widgetFields?.first
         }
     }
-    
+
     final class BikeSpeedDistanceData: SensorData {
         let timestamp: TimeInterval
-        
+
         private(set) var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
         private(set) var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
         private(set) var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
-        
+
         var description: String {
             "BikeSpeedDistanceData { timestamp=\(timestamp), speed=\(speed.value), travelDistance=\(travelDistance.value), totalTravelDistance=\(totalTravelDistance.value) }"
         }
-        
+
         var widgetFields: [SensorWidgetDataField]? {
             [SensorSpeedWidgetDataField(fieldType: .bicycleSpeed,
                                         nameId: localizedString("external_device_characteristic_speed"),
@@ -171,7 +205,7 @@ extension BLEBikeSensor {
                                            stringValue: nil)
             ]
         }
-        
+
         init(timestamp: TimeInterval,
              speed: Measurement<UnitSpeed>,
              travelDistance: Measurement<UnitLength>,
@@ -181,7 +215,7 @@ extension BLEBikeSensor {
             self.travelDistance = travelDistance
             self.totalTravelDistance = totalTravelDistance
         }
-        
+
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
             guard let widgetFields, widgetFields.count > 1 else { return nil }
             if fieldType == .bicycleSpeed {

@@ -181,6 +181,7 @@ struct PlanRouteAnalysisData {
     let maxSpeed: Double?
     let timeInMotion: TimeInterval?
     let hasElevationData: Bool
+    let hasSpeedData: Bool
     let gpxAnalysis: GpxTrackAnalysis?
     let gpxFile: GpxFile?
     let routeStatistics: [OARouteStatistics]

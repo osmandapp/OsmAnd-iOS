@@ -1,4 +1,6 @@
 "shared_string_ok" = "Aceptar";
+"send_crash_log" = "Enviar informe de errores";
+"send_crash_log_descr" = "Contiene sólo datos sobre los cuelgues de la aplicación";
 "shared_string_cancel" = "Cancelar";
 "shared_string_yes" = "Sí";
 "shared_string_save" = "Guardar";

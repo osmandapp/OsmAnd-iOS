@@ -32,6 +32,120 @@
 static OAApplicationMode *DEFAULT_APP_MODE;
 static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
+@interface OAGpxTimeCalculator : NSObject
+
+- (instancetype)initWithInitialTimestamp:(int64_t)initialTimestamp;
+- (void)fillPointsArray:(NSMutableArray<OASWptPt *> *)points
+                segment:(const SHARED_PTR<RouteSegmentResult> &)segment
+        includeEndPoint:(BOOL)includeEndPoint;
+- (void)addPointToArray:(NSMutableArray<OASWptPt *> *)points
+                segment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                  index:(NSInteger)index
+            heightArray:(const std::vector<double> &)heightArray;
+- (int64_t)durationForSegment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                 fromLocation:(const LatLon &)fromLocation
+                   toLocation:(const LatLon &)toLocation;
+- (int64_t)durationForSegment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                 fromLatitude:(double)latitude
+                    longitude:(double)longitude
+                   toLocation:(const LatLon &)toLocation;
+
+@end
+
+@implementation OAGpxTimeCalculator
+{
+    int64_t _timestamp;
+    double _previousLatitude;
+    double _previousLongitude;
+    BOOL _hasPreviousPoint;
+}
+
+- (instancetype)initWithInitialTimestamp:(int64_t)initialTimestamp
+{
+    self = [super init];
+    if (self)
+        _timestamp = initialTimestamp;
+    return self;
+}
+
+- (void)fillPointsArray:(NSMutableArray<OASWptPt *> *)points
+                segment:(const SHARED_PTR<RouteSegmentResult> &)segment
+        includeEndPoint:(BOOL)includeEndPoint
+{
+    NSInteger index = segment->getStartPointIndex();
+    BOOL isForward = segment->isForwardDirection();
+    const auto &heightArray = segment->object->calculateHeightArray();
+    while (index != segment->getEndPointIndex())
+    {
+        [self addPointToArray:points segment:segment index:index heightArray:heightArray];
+        index = isForward ? index + 1 : index - 1;
+    }
+    if (includeEndPoint)
+        [self addPointToArray:points segment:segment index:index heightArray:heightArray];
+}
+
+- (void)addPointToArray:(NSMutableArray<OASWptPt *> *)points
+                segment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                  index:(NSInteger)index
+            heightArray:(const std::vector<double> &)heightArray
+{
+    LatLon location = segment->getPoint((int)index);
+    OASWptPt *point = [[OASWptPt alloc] init];
+    point.lat = location.lat;
+    point.lon = location.lon;
+    if (heightArray.size() > index * 2 + 1)
+        point.ele = heightArray[index * 2 + 1];
+
+    if (_timestamp > 0 && index == segment->getStartPointIndex() && _hasPreviousPoint)
+        _timestamp += [self durationForSegment:segment
+                                  fromLatitude:_previousLatitude
+                                     longitude:_previousLongitude
+                                    toLocation:location];
+
+    if (_timestamp > 0)
+    {
+        point.time = _timestamp;
+        point.speed = segment->segmentSpeed;
+    }
+
+    if (_timestamp > 0 && index != segment->getEndPointIndex())
+    {
+        NSInteger nextIndex = index + (segment->isForwardDirection() ? 1 : -1);
+        LatLon nextLocation = segment->getPoint((int)nextIndex);
+        _timestamp += [self durationForSegment:segment fromLocation:location toLocation:nextLocation];
+        _previousLatitude = nextLocation.lat;
+        _previousLongitude = nextLocation.lon;
+        _hasPreviousPoint = YES;
+    }
+
+    [points addObject:point];
+}
+
+- (int64_t)durationForSegment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                 fromLocation:(const LatLon &)fromLocation
+                   toLocation:(const LatLon &)toLocation
+{
+    return [self durationForSegment:segment
+                       fromLatitude:fromLocation.lat
+                          longitude:fromLocation.lon
+                         toLocation:toLocation];
+}
+
+- (int64_t)durationForSegment:(const SHARED_PTR<RouteSegmentResult> &)segment
+                 fromLatitude:(double)latitude
+                    longitude:(double)longitude
+                   toLocation:(const LatLon &)toLocation
+{
+    float speed = segment->segmentSpeed;
+    double distance = [OAMapUtils getDistance:latitude
+                                         lon1:longitude
+                                         lat2:toLocation.lat
+                                         lon2:toLocation.lon];
+    return distance > 0 && speed > 0 ? (int64_t)(distance / speed * 1000.0) : 0;
+}
+
+@end
+
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 @property (nonatomic, assign) BOOL checkApproximation;
 - (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
@@ -959,6 +1073,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 		return nil;
 	
 	NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
+	int64_t initialTimestamp = originalPoints.count == 0 ? 0 : originalPoints.firstObject.time;
+	OAGpxTimeCalculator *timeCalculator = [[OAGpxTimeCalculator alloc]
+		initWithInitialTimestamp:initialTimestamp];
 	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
 	for (NSInteger i = 0; i < gpxPoints.size(); i++)
 	{
@@ -979,7 +1096,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 		{
 			const auto& seg = segments[k];
 			BOOL includeEndPoint = (duplicatePoint || lastGpxPoint) && k == segments.size() - 1;
-			[self fillPointsArray:points seg:seg includeEndPoint:includeEndPoint];
+			[timeCalculator fillPointsArray:points segment:seg includeEndPoint:includeEndPoint];
 		}
 		if (points.count > 0)
 		{
@@ -1085,36 +1202,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 		}
 	}
 	return YES;
-}
-
-- (void) fillPointsArray:(NSMutableArray<OASWptPt *> *)points
-					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
-		 includeEndPoint:(BOOL)includeEndPoint
-{
-	NSInteger ind = seg->getStartPointIndex();
-	BOOL plus = seg->isForwardDirection();
-	const auto& heightArray = seg->object->calculateHeightArray();
-	while (ind != seg->getEndPointIndex())
-	{
-		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
-		ind = plus ? ind + 1 : ind - 1;
-	}
-	if (includeEndPoint)
-		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
-}
-
-- (void) addPointToArray:(NSMutableArray<OASWptPt *> *)points
-					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
-				   index:(NSInteger)index
-			 heightArray:(const std::vector<double>&)heightArray
-{
-	LatLon l = seg->getPoint((int)index);
-	OASWptPt *pt = [[OASWptPt alloc] init];
-	if (heightArray.size() > index * 2 + 1)
-		pt.ele = heightArray[index * 2 + 1];
-    pt.lat = l.lat;
-    pt.lon = l.lon;
-	[points addObject:pt];
 }
 
 - (BOOL) canSplit:(BOOL)after
@@ -1356,9 +1443,15 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         {
             for (OASWptPt *pt in dataPoints)
             {
-                CLLocation *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude) altitude:pt.ele horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.date];
-                
-                [locations addObject:l];
+                NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0];
+                CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude)
+                                                                     altitude:pt.ele
+                                                           horizontalAccuracy:0
+                                                             verticalAccuracy:0
+                                                                       course:0
+                                                                        speed:pt.speed
+                                                                    timestamp:timestamp];
+                [locations addObject:location];
             }
             [pair.lastObject setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
             route.insert(route.end(), dataSegments.begin(), dataSegments.end());
@@ -1368,7 +1461,13 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     if (locations.count > 0 && route.size() > 0)
     {
         [_before.points[startPointIndex] setTrkPtIndexIndex:0];
-        return [[[OARouteExporter alloc] initWithName:@"" route:route locations:locations routePointIndexes:routePointIndexes points:nil] generateRouteSegment];
+        OARouteExporter *routeExporter = [[OARouteExporter alloc] initWithName:@""
+                                                                        route:route
+                                                                    locations:locations
+                                                            routePointIndexes:routePointIndexes
+                                                                       points:nil
+                                                           preserveTimestamps:YES];
+        return [routeExporter generateRouteSegment];
     }
     else if (endPointIndex - startPointIndex >= 0)
     {

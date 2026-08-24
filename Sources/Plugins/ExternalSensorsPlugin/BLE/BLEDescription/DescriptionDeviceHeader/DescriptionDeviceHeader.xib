@@ -91,19 +91,25 @@
                         <constraint firstAttribute="width" constant="30" id="piU-Jm-fd6"/>
                     </constraints>
                 </activityIndicatorView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NkN-F9-TSx" userLabel="dividerView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NkN-F9-TSx" userLabel="dividerView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="20" y="97.666666666666671" width="453" height="0.3333333333333286"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="uMs-Hq-NxD"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="uMs-Hq-NxD" id="s01-TC-001"/>
+                    </connections>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg5-ru-81P" userLabel="dividerBottomView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg5-ru-81P" userLabel="dividerBottomView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="147.66666666666666" width="473" height="0.33333333333334281"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="7RV-6K-U0a"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="7RV-6K-U0a" id="s02-TC-002"/>
+                    </connections>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

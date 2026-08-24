@@ -1062,18 +1062,17 @@
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
     if ([self isRteGroup:groupName])
-        return [UIColorFromRGB(color_footer_icon_gray) toRGBNumber];
+        return [UIColorFromRGB(color_footer_icon_gray) toARGBNumber];
 
-    UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        groupColor = waypoint.color ?: UIColorFromARGB([waypoint.point getColor]);
+        NSInteger color = [waypoint.point getColor];
+        if (color != 0)
+            return color;
     }
-    if (!groupColor)
-        groupColor = [OADefaultFavorite getDefaultColor];
 
-    return [groupColor toARGBNumber];
+    return [[OADefaultFavorite getDefaultColor] toARGBNumber];
 }
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
@@ -1124,25 +1123,37 @@
 - (void)deleteWaypointsGroup:(NSString *)groupName
            selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints
 {
-    BOOL deleteGroup = selectedWaypoints == nil && ![self isRteGroup:groupName];
+    BOOL canDeleteGroup = ![self isRteGroup:groupName];
     NSMutableArray<NSNumber *> *waypointsIdxToDelete = [NSMutableArray array];
-    NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
+    NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ?: _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in _waypointGroups[groupName])
     {
         if ([waypointsToDelete containsObject:waypoint])
             [waypointsIdxToDelete addObject:@([_waypointGroups[groupName] indexOfObject:waypoint])];
     }
 
-    NSString *path = !self.isCurrentTrack ? [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
-    [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
+    NSString *path = nil;
+    if (!self.isCurrentTrack)
+    {
+        path = self.gpx.path;
+        if (path.length == 0 && self.gpx.gpxFilePath.length > 0)
+            path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+    }
+    if (![self.mapViewController deleteWpts:waypointsToDelete docPath:path])
+    {
+        NSLog(@"[OATrackMenu] Failed to delete waypoints from %@", path);
+        return;
+    }
 
-    NSDictionary *dataToUpdate = @{
+    NSMutableDictionary *dataToUpdate = [@{
             @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
             @"delete_waypoints_idx": waypointsIdxToDelete
-    };
+    } mutableCopy];
 
     [self updateGpxData:YES updateDocument:YES];
-    if (deleteGroup)
+    BOOL isGroupEmpty = _waypointGroups[groupName].count == 0;
+    dataToUpdate[@"delete_empty_group"] = @(isGroupEmpty);
+    if (canDeleteGroup && isGroupEmpty)
     {
         NSString *groupKey = [self isDefaultGroup:groupName] ? @"" : groupName;
         BOOL groupMetadataDeleted = NO;
@@ -2422,7 +2433,6 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -2485,7 +2495,6 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {

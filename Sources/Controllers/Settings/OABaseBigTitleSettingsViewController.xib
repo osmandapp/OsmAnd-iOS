@@ -72,12 +72,15 @@
                                 <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="7rf-5U-gr2"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cu8-8z-YEC" userLabel="Separator View">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cu8-8z-YEC" userLabel="Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="91" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="HGs-j4-hgF"/>
                             </constraints>
+                            <connections>
+                                <outlet property="thicknessConstraint" destination="HGs-j4-hgF" id="s01-TC-001"/>
+                            </connections>
                         </view>
                     </subviews>
                     <color key="backgroundColor" name="viewBg"/>

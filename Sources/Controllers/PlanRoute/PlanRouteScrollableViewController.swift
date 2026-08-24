@@ -54,6 +54,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
     private var pointEditingHeight: CGFloat?
+    private var cachedMapViewportYScale: Double?
     private var approximationHeight: CGFloat?
     private var approximationPreviousSheetState: EOADraggableMenuState?
     private var approximationNavigationController: UINavigationController?
@@ -64,6 +65,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .newRoute: OAUtilities.generateCurrentDateFilename()
         case .editTrack(let fileName): fileName
         }
+    }
+
+    private var currentScreenHeight: CGFloat {
+        guard isViewLoaded, view.bounds.height > 0 else { return OAUtilities.calculateScreenHeight() }
+        return view.bounds.height
     }
 
     init(dataProvider: PlanRouteDataProvider) {
@@ -120,6 +126,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        cachedMapViewportYScale = OARootViewController.instance().mapPanel.mapViewController.viewportYScale
         (view as? OAUserInteractionPassThroughView)?.isScreenClickable = true
         setupSheet()
         setupTopPart()
@@ -187,15 +194,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate { [weak self] _ in
             guard let self else { return }
-            let height = approximationHeight ?? pointEditingHeight ?? self.height(for: sheetState)
+            let height = approximationHeight ?? pointEditingHeight ?? self.height(for: sheetState, screenHeight: size.height)
             sheetHeightConstraint?.constant = height
-            crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)
+            crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height, screenHeight: size.height)
             routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
                 ? -routeTypeButtonBottomInset(for: sheetState)
                 : -(height + 12)
-            updateCrosshairMapCenter(sheetHeight: height)
+            updateCrosshairMapCenter(sheetHeight: height, screenSize: size)
             refreshMapControls()
         }
     }
@@ -220,6 +228,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.bounds.width
     }
 
+    override func shouldIgnoreTopBottomOffsets() -> Bool {
+        true
+    }
+
     override func hide() {
         hide(true, duration: Self.sheetAnimationDuration, onComplete: nil)
     }
@@ -233,6 +245,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
             setMapHudStatusBarHidden(false)
+            restoreMapViewport()
             dataProvider.dismissLayer()
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             removeFromParent()
@@ -266,7 +279,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         updateRouteTypeButton()
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
-        updateCrosshairMapCenter(sheetHeight: pointEditingHeight ?? height(for: sheetState))
+        updateCrosshairMapCenter(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState))
         refreshMapControls()
     }
 
@@ -611,6 +624,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         presentApproximationWarning(force: false)
     }
 
+    @discardableResult
     private func presentApproximationWarning(force: Bool) -> Bool {
         if approximationNavigationController != nil { return true }
         guard (force || dataProvider.shouldShowApproximationWarning),
@@ -682,42 +696,51 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return nil
     }
 
-    private func crosshairCenterY(sheetHeight: CGFloat) -> CGFloat {
-        let screenHeight = OAUtilities.calculateScreenHeight()
-        if sheetHeight <= height(for: .initial) {
-            return screenHeight / 2.0
+    private func crosshairCenterY(sheetHeight: CGFloat, screenHeight: CGFloat? = nil) -> CGFloat {
+        let targetScreenHeight = screenHeight ?? currentScreenHeight
+        if sheetHeight <= height(for: .initial, screenHeight: targetScreenHeight) {
+            return targetScreenHeight / 2.0
         }
         let coveredHeight: CGFloat
         if pointEditingView == nil {
-            coveredHeight = min(sheetHeight, height(for: .expanded))
+            coveredHeight = min(sheetHeight, height(for: .expanded, screenHeight: targetScreenHeight))
         } else {
             coveredHeight = sheetHeight
         }
         let visibleTop = getNavbarHeight()
-        let visibleBottom = screenHeight - coveredHeight
+        let visibleBottom = targetScreenHeight - coveredHeight
         return visibleTop + (visibleBottom - visibleTop) / 2
     }
 
-    private func updateCrosshairMapCenter(sheetHeight: CGFloat) {
-        let centerY = crosshairCenterY(sheetHeight: sheetHeight)
-        let x = view.bounds.midX
-        guard x > 0 else { return }
-        dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: x, y: centerY))
+    private func updateCrosshairMapCenter(sheetHeight: CGFloat, screenSize: CGSize? = nil) {
+        let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
+        let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
+        let centerX = targetScreenSize.width / 2
+        guard centerX > 0, targetScreenSize.height > 0 else { return }
+        let viewportYScale = Double(2 * centerY / targetScreenSize.height)
+        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = viewportYScale
+        dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: centerX, y: centerY))
     }
 
-    private func height(for state: EOADraggableMenuState) -> CGFloat {
-        let screenHeight = OAUtilities.calculateScreenHeight()
+    private func restoreMapViewport() {
+        guard let cachedMapViewportYScale else { return }
+        self.cachedMapViewportYScale = nil
+        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = cachedMapViewportYScale
+    }
+
+    private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {
+        let targetScreenHeight = screenHeight ?? currentScreenHeight
         let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + 8 + segmentControl.intrinsicContentSize.height + 12
             + PlanRouteButtonFactory.bottomButtonHeight + 8 + OAUtilities.getBottomMargin()
         switch state {
         case .initial:
             return collapsed
         case .expanded:
-            return screenHeight / 2
+            return targetScreenHeight / 2
         case .fullScreen:
-            return screenHeight - getNavbarHeight() - Self.fullScreenSheetTopInset
+            return targetScreenHeight - getNavbarHeight() - Self.fullScreenSheetTopInset
         @unknown default:
-            return screenHeight / 2
+            return targetScreenHeight / 2
         }
     }
 
@@ -744,6 +767,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         if animated {
             UIView.animate(withDuration: Self.sheetAnimationDuration, animations: updates)
+            crosshairView.layer.removeAnimation(forKey: "position")
         } else {
             updates()
         }
@@ -919,6 +943,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .reverseRoute:
             dataProvider.reverseRoute()
         case .navigation:
+            restoreMapViewport()
             hide()
             dataProvider.enterNavigation()
         case .clearAllPoints:

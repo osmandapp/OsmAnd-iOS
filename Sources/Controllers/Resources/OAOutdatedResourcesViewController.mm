@@ -71,10 +71,11 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     [self registerCells];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
     
     self.navigationItem.title = OALocalizedString(@"download_tab_updates");
     [self setupDownloadingCellHelper];
@@ -123,7 +124,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 {
     [super viewWillLayoutSubviews];
 
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, [SeparatorAppearance thicknessForView:self.view]);
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -148,7 +149,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+        _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
 }
 
 - (void)registerCells

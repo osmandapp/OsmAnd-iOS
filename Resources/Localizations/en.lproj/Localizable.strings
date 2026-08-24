@@ -1,4 +1,13 @@
 "OsmAnd Maps" = "OsmAnd Maps";
+"send_crash_log" = "Send crash logs";
+"send_crash_log_descr" = "From previous crashes";
+"no_crashes_recorded" = "No crashes recorded";
+"share_crash_log" = "Share crash log";
+"crash_report_prompt_title" = "OsmAnd has encountered an unexpected error.";
+"crash_report_prompt_description" = "Please help us improve the app by sending the crash report. Your crash report will help us identify and fix the issue.";
+"shared_string_send" = "Send";
+"send_current_app_log" = "Send current app log";
+"send_current_app_log_descr" = "Since the app started";
 
 "download_depth_countours" = "Nautical depth contours";
 

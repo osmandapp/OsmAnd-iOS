@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */; };
+		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
+		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
+		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
@@ -3632,6 +3636,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashDiagnosticsManager.swift; sourceTree = "<group>"; };
+		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
+		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
+		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		0309480ECBC201C5E8317E6D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ko; path = ko.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -14590,6 +14598,7 @@
 			isa = PBXGroup;
 			children = (
 				FAF6C89C2AD014C800A3ED94 /* ThemeManager */,
+				C0D3C0082F60000100C0D308 /* CrashDiagnostics */,
 				DA5A80E726C563A600F274C7 /* OALocationServices.h */,
 				DA5A80E826C563A600F274C7 /* OALocationServices.mm */,
 				DA5A80E926C563A600F274C7 /* OALocationSimulation.h */,
@@ -15516,6 +15525,17 @@
 				FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */,
 			);
 			path = AppStartupMonitor;
+			sourceTree = "<group>";
+		};
+		C0D3C0082F60000100C0D308 /* CrashDiagnostics */ = {
+			isa = PBXGroup;
+			children = (
+				C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */,
+				C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */,
+				C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */,
+				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
+			);
+			path = CrashDiagnostics;
 			sourceTree = "<group>";
 		};
 		FAB6243D2E0953580048965E /* Managers */ = {
@@ -17786,6 +17806,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */,
+				C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */,
+				C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */,
+				C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */,
 				321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */,
 				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,

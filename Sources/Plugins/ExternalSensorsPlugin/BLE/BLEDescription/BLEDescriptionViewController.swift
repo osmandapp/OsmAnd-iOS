@@ -26,6 +26,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             device.didDisconnect = { [weak self, weak device] in
                 guard let self, let device else { return }
                 headerView.configure(device: device)
+                generateData()
+                tableView.reloadData()
             }
         }
     }
@@ -83,7 +85,12 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 batteryRow.cellType = OAValueTableViewCell.getIdentifier()
                 batteryRow.key = "battery_row"
                 batteryRow.title = localizedString("external_device_details_battery")
-                batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
+                let batteryLevel = sensor.lastBatteryData.batteryLevel
+                batteryRow.descr = if device.isConnected, batteryLevel != -1 {
+                    NumberFormatter.percentFormatter.string(from: (Double(batteryLevel) / 100.0) as NSNumber) ?? "-"
+                } else {
+                    "-"
+                }
             }
             // Received Data
             if let receivedData = device.getDataFields, !receivedData.isEmpty {
@@ -223,6 +230,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     }
     
     private func actualDataValue(fieldName: String, value: String) -> String {
+        guard device.isConnected else { return "-" }
         guard value != "-",
               let widgetType = widgetTypesByFieldName[fieldName],
               let sensor = device.sensors.first(where: { $0.getSupportedWidgetDataFieldTypes()?.contains(widgetType) == true }),

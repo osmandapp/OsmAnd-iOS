@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "מפות OsmAnd";
+"send_crash_log" = "שליחת יומן קריסה";
+"send_crash_log_descr" = "מכיל מידע על קריסות בלבד";
 "download_depth_countours" = "קווי מתאר של עומק הים";
 "day_short" = "י";
 "week_short" = "שב";
@@ -2096,7 +2098,7 @@
 "download_file" = "הורדת קובץ";
 "map_3d_mode_action" = "מצב תלת־ממד";
 "announcement_time_off_route" = "סטייה ממסלול";
-"report_an_issues" = "דיווח על תקלות";
+"report_an_issues" = "דיווח על בעיה";
 "map_widget_trip_recording_distance" = "מרחק";
 "telegram_chats" = "ערוצי טלגרם";
 "activity_type_motorbike_name" = "אופנוע";
@@ -2295,3 +2297,5 @@
 "dowload_cloud_version" = "הורדת גרסת ענן";
 "reddit" = "רדיט";
 "x" = "X (לשעבר טוויטר)";
+"setup" = "הגדרה";
+"map_widgets" = "וידג׳טים של מפה";

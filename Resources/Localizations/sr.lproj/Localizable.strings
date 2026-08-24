@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "Карте Османда";
+"send_crash_log" = "Пошаљите дневнике рушења програма";
+"send_crash_log_descr" = "Садржи само податке о рушењима програма";
 "download_depth_countours" = "Поморски дубински обриси";
 "week_short" = "Сдмц";
 "weeks_short" = "Сдмца";
@@ -4541,3 +4543,10 @@
 "ais_apply_setting_to_profiles" = "Примени подешавање";
 "ais_apply_to_current_profile" = "Примени на %@";
 "ais_apply_to_all_profiles" = "Примени на све профиле";
+"no_crashes_recorded" = "Нису забележена рушења";
+"share_crash_log" = "Подели дневник рушења";
+"crash_report_prompt_title" = "ОсмАнд је наишао на неочекивану грешку.";
+"crash_report_prompt_description" = "Молимо вас да нам помогнете да побољшамо апликацију тако што ћете нам послати извештај о паду. Ваш извештај о паду ће нам помоћи да идентификујемо и решимо проблем.";
+"shared_string_send" = "Пошаљи";
+"send_current_app_log" = "Пошаљи тренутни дневник апликације";
+"send_current_app_log_descr" = "Од почетка апликације";

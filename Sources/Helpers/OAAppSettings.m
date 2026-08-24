@@ -6342,21 +6342,23 @@ static NSString *kOfflineKey = @"OFFLINE";
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
         
-        _preferredCoordinateFormatIds = [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
-                                                            defValue:@[
-            @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
-        ]] makeProfile];
-        _recentlyAddedCoordinateFormatIds = [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
-                                                                defValue:@[]] makeGlobal];
+        OACommonStringList *preferredCoordinateFormatIds =
+            [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
+                               defValue:@[
+                @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
+            ]] makeProfile];
+        OACommonStringList *recentlyAddedCoordinateFormatIds =
+            [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
+                               defValue:@[]] makeGlobal];
 
-        [_profilePreferences setObject:_preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
-        [_registeredPreferences setObject:_preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
-        [_registeredPreferences setObject:_recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
+        [_profilePreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
 
         _coordinateFormatSettingsStorage =
             [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
-                                                 preferredPreference:_preferredCoordinateFormatIds
-                                                    recentPreference:_recentlyAddedCoordinateFormatIds];
+                                                 preferredPreference:preferredCoordinateFormatIds
+                                                    recentPreference:recentlyAddedCoordinateFormatIds];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];

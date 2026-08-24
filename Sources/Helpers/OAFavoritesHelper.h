@@ -123,6 +123,7 @@
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
 + (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OASWptPt *> *)points
                               defaultCategory:(NSString *)defaultCategory;
++ (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites;
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
 + (void) backup;

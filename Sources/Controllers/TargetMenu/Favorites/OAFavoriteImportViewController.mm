@@ -52,6 +52,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     if ([_url isFileURL])
     {
         _gpxFile = [OAFavoritesHelper loadGpxFile:_url.path];
+        [self resolveDuplicateNames];
         _handled = YES;
     }
 }
@@ -181,6 +182,20 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 }
 
 #pragma mark - Additions
+
+- (void)resolveDuplicateNames
+{
+    for (OASGpxUtilitiesPointsGroup *group in _gpxFile.pointsGroups.allValues)
+    {
+        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:group.points defaultCategory:@""];
+        [OAFavoritesHelper checkDuplicateNames:favorites];
+        [group.points enumerateObjectsUsingBlock:^(OASWptPt *wpt, NSUInteger index, BOOL *stop) {
+            NSString *resolvedName = [favorites[index] getName];
+            if (![wpt.name isEqualToString:resolvedName])
+                wpt.name = resolvedName;
+        }];
+    }
+}
 
 - (OAFavoriteItem *)matchedFavorite:(OAFavoriteItem *)importedFavorite
                          candidates:(NSArray<OAFavoriteItem *> *)candidates
@@ -452,6 +467,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             return;
 
         conflictedItem.name = newName;
+        [strongSelf resolveDuplicateNames];
 
         [strongSelf onRightNavbarButtonPressed];
     }]];

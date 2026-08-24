@@ -33,6 +33,9 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
 + (BOOL)sameAppearance:(OAFavoriteGroup *)first other:(OAFavoriteGroup *)second;
 + (BOOL)sameGroup:(OAFavoriteGroup *)first other:(OAFavoriteGroup *)second;
 + (BOOL)samePoint:(OAFavoriteItem *)first other:(OAFavoriteItem *)second;
++ (BOOL)samePointContent:(OAFavoriteItem *)first other:(OAFavoriteItem *)second;
++ (BOOL)hasRenameOf:(OAFavoriteItem *)basePoint
+                 in:(NSDictionary<NSString *, OAFavoriteItem *> *)additions;
 + (BOOL)sameText:(NSString *)first other:(NSString *)second;
 + (BOOL)sameTime:(NSDate *)first other:(NSDate *)second;
 + (NSString *)normalizedIcon:(NSString *)icon;
@@ -244,6 +247,11 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
     if (!basePoints || !localPoints || !remotePoints)
         return nil;
 
+    NSMutableDictionary<NSString *, OAFavoriteItem *> *localAdditions = localPoints.mutableCopy;
+    NSMutableDictionary<NSString *, OAFavoriteItem *> *remoteAdditions = remotePoints.mutableCopy;
+    [localAdditions removeObjectsForKeys:basePoints.allKeys];
+    [remoteAdditions removeObjectsForKeys:basePoints.allKeys];
+
     NSMutableArray<OAFavoriteItem *> *mergedPoints = [NSMutableArray array];
     for (OAFavoriteItem *basePoint in base.points)
     {
@@ -254,7 +262,12 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
         [remotePoints removeObjectForKey:name];
 
         if (!localPoint && !remotePoint)
+        {
+            if ([self hasRenameOf:basePoint in:localAdditions] ||
+                [self hasRenameOf:basePoint in:remoteAdditions])
+                return nil;
             continue;
+        }
 
         BOOL localUnchanged = [self samePoint:basePoint other:localPoint];
         BOOL remoteUnchanged = [self samePoint:basePoint other:remotePoint];
@@ -322,8 +335,13 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
 
 + (BOOL)samePoint:(OAFavoriteItem *)first other:(OAFavoriteItem *)second
 {
-    if (!second || ![first.getName isEqualToString:second.getName] ||
-        ![first.getCategory isEqualToString:second.getCategory] ||
+    return second && [first.getName isEqualToString:second.getName] &&
+           [self samePointContent:first other:second];
+}
+
++ (BOOL)samePointContent:(OAFavoriteItem *)first other:(OAFavoriteItem *)second
+{
+    if (!second || ![first.getCategory isEqualToString:second.getCategory] ||
         ![self sameText:first.getDescription other:second.getDescription] ||
         ![self sameText:first.getAddress other:second.getAddress] ||
         ![self sameText:first.getAmenityOriginName other:second.getAmenityOriginName] ||
@@ -338,6 +356,17 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
     CLLocation *firstLocation = [[CLLocation alloc] initWithLatitude:first.getLatitude longitude:first.getLongitude];
     CLLocation *secondLocation = [[CLLocation alloc] initWithLatitude:second.getLatitude longitude:second.getLongitude];
     return [firstLocation distanceFromLocation:secondLocation] < 0.1;
+}
+
++ (BOOL)hasRenameOf:(OAFavoriteItem *)basePoint
+                 in:(NSDictionary<NSString *, OAFavoriteItem *> *)additions
+{
+    for (OAFavoriteItem *point in additions.allValues)
+    {
+        if ([self samePointContent:basePoint other:point])
+            return YES;
+    }
+    return NO;
 }
 
 + (BOOL)sameText:(NSString *)first other:(NSString *)second

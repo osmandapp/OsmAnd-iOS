@@ -1777,8 +1777,14 @@ private extension PlanRouteAnalyzeViewController {
     @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {
         let isDoubleTap = (recognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2
         guard recognizer is UIPinchGestureRecognizer || isDoubleTap,
-              recognizer.state == .ended else { return }
+              recognizer.state == .ended,
+              let chart = recognizer.view as? BarLineChartViewBase else { return }
         refreshChartOnMap()
+        DispatchQueue.main.async { [weak self, weak chart] in
+            guard let self, let chart else { return }
+            chart.layoutIfNeeded()
+            self.chartSynchronizer.syncViewPort(from: chart)
+        }
     }
 
     @objc private func onRecalculateTapped() {

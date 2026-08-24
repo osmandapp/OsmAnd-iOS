@@ -782,6 +782,19 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                            analysis:self.analysis
                                             segment:self.segment];
         }
+        if ([recognizer.view isKindOfClass:BarLineChartViewBase.class])
+        {
+            __weak __typeof(self) weakSelf = self;
+            __weak BarLineChartViewBase *weakChart = (BarLineChartViewBase *)recognizer.view;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                BarLineChartViewBase *strongChart = weakChart;
+                if (!strongSelf || !strongChart)
+                    return;
+                [strongChart layoutIfNeeded];
+                [strongSelf->_chartSynchronizer syncViewPortFromChart:strongChart];
+            });
+        }
     }
 }
 

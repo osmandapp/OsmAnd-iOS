@@ -236,18 +236,26 @@ final class AisObjectViewController: OATargetInfoViewController {
 
     private func formatPosition() -> String {
         guard let position = object.position else { return "" }
-        let format = Int(OAAppSettings.sharedManager().settingGeoFormat.get())
-        switch format {
-        case MAP_GEO_UTM_FORMAT:
-            return OALocationConvert.getUTMCoordinateString(position.latitude, lon: position.longitude) ?? ""
-        case MAP_GEO_MGRS_FORMAT:
-            return OALocationConvert.getMgrsCoordinateString(position.latitude, lon: position.longitude) ?? ""
-        case MAP_GEO_OLC_FORMAT:
-            return OALocationConvert.getLocationOlcName(position.latitude, lon: position.longitude) ?? ""
-        default:
-            let latitude = OALocationConvert.convertLatitude(position.latitude, outputType: format, addCardinalDirection: true) ?? ""
-            let longitude = OALocationConvert.convertLongitude(position.longitude, outputType: format, addCardinalDirection: true) ?? ""
+        let lat = position.latitude
+        let lon = position.longitude
+        let formatId = CoordinateFormatBridge.primaryFormatId()
+        
+        switch formatId {
+        case CoordinateFormatIds.builtinUtm:
+            return OALocationConvert.getUTMCoordinateString(lat, lon: lon) ?? ""
+        case CoordinateFormatIds.builtinMgrs:
+            return OALocationConvert.getMgrsCoordinateString(lat, lon: lon) ?? ""
+        case CoordinateFormatIds.builtinOlc:
+            return OALocationConvert.getLocationOlcName(lat, lon: lon) ?? ""
+        case CoordinateFormatIds.builtinDdd,
+            CoordinateFormatIds.builtinDdm,
+            CoordinateFormatIds.builtinDms:
+            let outputType = BuiltInCoordinateFormat.fromId(formatId)?.legacyFormat ?? Int(FORMAT_DEGREES)
+            let latitude = OALocationConvert.convertLatitude(lat, outputType: outputType, addCardinalDirection: true) ?? ""
+            let longitude = OALocationConvert.convertLongitude(lon, outputType: outputType, addCardinalDirection: true) ?? ""
             return "\(latitude), \(longitude)"
+        default:
+            return CoordinateFormatHelper.formatPrimary(lat: lat, lon: lon)
         }
     }
 

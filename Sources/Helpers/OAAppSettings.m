@@ -5479,8 +5479,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
-    int geoFormatId = [[OAAppSettings sharedManager].settingGeoFormat get:mode];
-    return [GridFormatWrapper formatIdForGeoFormat:(int32_t)geoFormatId];
+    return [[OAAppSettings sharedManager].coordinateFormatSettingsStorage getPrimaryId:mode];
 }
 
 @end

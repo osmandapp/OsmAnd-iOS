@@ -42,7 +42,6 @@ static NSString *POINT_TYPE_CUSTOM_POI_FILTER = @"custom_poi_filter";
 
 static const int POINT_LOCATION_URL = 200;
 static const int OSM_LOCATION_URL = 210;
-static const int POINT_LOCATION_LIST_HEADER = 201;
 
 @protocol OALocationPoint;
 
@@ -73,7 +72,6 @@ static const int POINT_LOCATION_LIST_HEADER = 201;
 + (NSString *) getAddressNotFoundStr;
 - (BOOL) isSearchingAddress;
 
-+ (NSDictionary <NSNumber *, NSString *> *) getLocationData:(double) lat lon:(double)lon;
 + (NSString *) formatToHumanString:(NSInteger)format;
 + (NSInteger) coordinatesFormatToFormatterMode:(NSInteger)format;
 

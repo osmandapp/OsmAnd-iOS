@@ -137,7 +137,10 @@ final class RouteChartSynchronizer: NSObject {
     @objc(clearSynchronizedHighlights) func clearSynchronizedHighlights() {
         selectedProgress = nil
         selectedXAxisValue = nil
-        barCharts.allObjects.forEach { $0.highlightValue(nil) }
+        if let primaryChart {
+            clearHighlight(in: primaryChart)
+        }
+        barCharts.allObjects.forEach { clearHighlight(in: $0) }
     }
 
     @objc(reset) func reset() {
@@ -145,11 +148,13 @@ final class RouteChartSynchronizer: NSObject {
         selectedXAxisValue = nil
         visibleProgressRange = nil
         visibleXAxisRange = nil
-        primaryChart?.highlightValue(nil)
+        if let primaryChart {
+            clearHighlight(in: primaryChart)
+        }
         primaryChart = nil
         primaryXAxisType = nil
         barCharts.allObjects.forEach { chart in
-            chart.highlightValue(nil)
+            clearHighlight(in: chart)
             removeSelectionGestureTargets(from: chart)
         }
         barCharts.removeAllObjects()
@@ -157,8 +162,12 @@ final class RouteChartSynchronizer: NSObject {
 
     private func selectPrimaryChart(atX touchX: CGFloat, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atX: touchX, in: sourceChart) else { return }
-        applySelectionToBarCharts()
         applySelectionToPrimaryChart(callDelegate: true)
+    }
+
+    private func clearHighlight(in chart: ChartViewBase) {
+        chart.lastHighlighted = nil
+        chart.highlightValue(nil)
     }
 
     private func installSelectionGestureTargets(in chart: HorizontalBarChartView) {

@@ -651,25 +651,25 @@
         CLLocation *location = destination.point;
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            __strong __typeof(weakSelf) self = weakSelf;
-            if (!self) return;
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf) return;
 
-            NSString *pointName = [self getLocationName:location];
+            NSString *pointName = [strongSelf getLocationName:location];
 
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (self->_pointToNavigate == destination)
+                if (strongSelf->_pointToNavigate == destination)
                 {
                     if (isNameNotValid) {
                         [destination.pointDescription setName:pointName];
                         destination.pointDescription.address = pointName;
-                        [self->_app.data setPointToNavigate:destination];
+                        [strongSelf->_app.data setPointToNavigate:destination];
                     } else {
                         destination.pointDescription.address = pointName;
-                        [self->_app.data backupTargetPoints];
+                        [strongSelf->_app.data backupTargetPoints];
                     }
-                    [self updateRouteAndRefresh:NO];
+                    [strongSelf updateRouteAndRefresh:NO];
                 }
-                self->_isSearchingDestination = NO;
+                strongSelf->_isSearchingDestination = NO;
             });
         });
     }
@@ -682,15 +682,26 @@
     
     if (isNameNotValid || isAddresEmpty)
     {
+        OARTargetPoint *targetPoint = point;
+        CLLocation *location = targetPoint.point;
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:point.point];
-            if (isNameNotValid)
-                [point.pointDescription setName:pointName];
-            
-            point.pointDescription.address = pointName;
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf) return;
+
+            NSString *pointName = [strongSelf getLocationName:location];
             
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateRouteAndRefresh:NO];
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf || targetPoint != point) return;
+                
+                if (isNameNotValid)
+                    [targetPoint.pointDescription setName:pointName];
+                
+                targetPoint.pointDescription.address = pointName;
+                
+                
+                [strongSelf updateRouteAndRefresh:NO];
             });
         });
     }

@@ -128,18 +128,22 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     BOOL updateAppearance = NO;
     BOOL zoomLevelsUpdated = NO;
     BOOL marginFactorUpdated = NO;
+    BOOL forceConfigurationUpdate = NO;
     BOOL show = [_gridSettings isEnabled];
     if (show)
     {
         if (_gridConfiguration == nullptr || !_marksProvider)
         {
+            forceConfigurationUpdate = _gridConfiguration != nullptr;
             _gridConfiguration = std::make_shared<OsmAnd::GridConfiguration>();
             [self initVariablesWithAppMode:appMode];
             updateAppearance = YES;
         }
         else
         {
+            NSString *previousFormatId = _cachedGridFormatId;
             updateAppearance = [self updateVariablesWithAppMode:appMode];
+            forceConfigurationUpdate = ![previousFormatId isEqualToString:_cachedGridFormatId];
             zoomLevelsUpdated = [self updateZoomLevelsWithAppMode:appMode];
             marginFactorUpdated = [self updateLabelsMarginFactor];
         }
@@ -154,7 +158,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     if (_gridConfiguration && (_cachedGridEnabled != show || updated))
     {
         _cachedGridEnabled = show;
-        [self updateGridVisibility:_cachedGridEnabled];
+        [self updateGridVisibility:_cachedGridEnabled force:forceConfigurationUpdate];
     }
 }
 
@@ -368,11 +372,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     return style;
 }
 
-- (void)updateGridVisibility:(BOOL)visible
+- (void)updateGridVisibility:(BOOL)visible force:(BOOL)force
 {
     _gridConfiguration->setPrimaryGrid(visible);
     _gridConfiguration->setSecondaryGrid(visible);
-    self.mapView.renderer->setGridConfiguration(*_gridConfiguration);
+    self.mapView.renderer->setGridConfiguration(*_gridConfiguration, force);
     if (visible)
         self.mapView.renderer->addSymbolsProvider(_marksProvider);
     else

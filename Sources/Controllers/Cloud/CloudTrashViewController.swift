@@ -378,13 +378,15 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     func onFilesDeleteDone(_ message: String, errors: [OARemoteFile: String], deleteAll: Bool) {
-        let hasErrors = !errors.isEmpty
-        if hasErrors || !message.isEmpty {
+        if !errors.isEmpty {
             resetSelectedIndexPath()
-            OAUtilities.showToast(hasErrors ? localizedString("subscribe_email_error") : message,
-                                  details: hasErrors ? errors.values.joined(separator: "\n") : nil,
+            OAUtilities.showToast(localizedString("shared_string_error"),
+                                  details: errors.values.sorted().joined(separator: "\n"),
                                   duration: 4,
                                   in: view)
+        } else if !message.isEmpty {
+            resetSelectedIndexPath()
+            OAUtilities.showToast(message, details: nil, duration: 4, in: view)
         }
         backupHelper?.prepareBackup()
     }

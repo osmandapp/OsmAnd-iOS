@@ -56,6 +56,7 @@ static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/use
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
 static NSCharacterSet* URL_PATH_CHARACTER_SET;
+static const NSUInteger EMPTY_TRASH_CHUNK_SIZE = 50;
 
 
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
@@ -678,6 +679,163 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
     }
 }
 
+- (NSDictionary<OARemoteFile *, NSString *> *) emptyTrashChunk:(NSArray<OARemoteFile *> *)files
+{
+    NSMutableDictionary<OARemoteFile *, NSString *> *errors = [NSMutableDictionary dictionary];
+    NSMutableArray<OARemoteFile *> *requestFiles = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *filesJson = [NSMutableArray array];
+    for (OARemoteFile *file in files)
+    {
+        if (file.name.length == 0 || file.type.length == 0)
+        {
+            errors[file] = @"Invalid Trash item: missing name or type";
+            continue;
+        }
+        [requestFiles addObject:file];
+        [filesJson addObject:@{
+            @"name": file.name,
+            @"type": file.type,
+            @"updatetime": @(file.updatetimems)
+        }];
+    }
+
+    if (requestFiles.count == 0)
+        return errors;
+
+    NSError *jsonError = nil;
+    NSData *bodyData = [NSJSONSerialization dataWithJSONObject:filesJson options:0 error:&jsonError];
+    NSString *body = bodyData ? [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding] : nil;
+    if (jsonError || !body)
+    {
+        for (OARemoteFile *file in requestFiles)
+        {
+            errors[file] = [NSString stringWithFormat:@"%@/%@: Failed to create empty Trash request", file.type, file.name];
+        }
+        return errors;
+    }
+
+    __block NSData *responseData = nil;
+    __block NSHTTPURLResponse *httpResponse = nil;
+    __block NSError *requestError = nil;
+    NSDictionary<NSString *, NSString *> *params = @{
+        @"deviceid": self.getDeviceId,
+        @"accessToken": self.getAccessToken
+    };
+    [OANetworkUtilities sendRequestWithUrl:EMPTY_TRASH_URL
+                                    params:params
+                                      body:body
+                               contentType:@"application/json"
+                                      post:YES
+                                     async:NO
+                                onComplete:^(NSData *data, NSURLResponse *response, NSError *error) {
+        responseData = data;
+        httpResponse = (NSHTTPURLResponse *)response;
+        requestError = error;
+    }];
+
+    NSString *chunkError = nil;
+    NSDictionary *responseJson = nil;
+    if (requestError)
+    {
+        chunkError = requestError.localizedDescription;
+    }
+    else if (!httpResponse || !responseData)
+    {
+        chunkError = @"Empty Trash error: empty response";
+    }
+    else
+    {
+        NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        if (httpResponse.statusCode != 200)
+        {
+            chunkError = responseString.length > 0 ? responseString : @"Empty Trash request failed";
+        }
+        else
+        {
+            NSError *responseError = nil;
+            id json = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&responseError];
+            if (responseError || ![json isKindOfClass:NSDictionary.class]
+                || ![((NSDictionary *)json)[@"status"] isEqualToString:@"ok"])
+            {
+                chunkError = @"Empty Trash error: invalid response";
+            }
+            else
+            {
+                responseJson = json;
+            }
+        }
+    }
+
+    if (chunkError)
+    {
+        for (OARemoteFile *file in requestFiles)
+        {
+            errors[file] = [NSString stringWithFormat:@"%@/%@: %@", file.type, file.name, chunkError];
+        }
+        return errors;
+    }
+
+    id resultsValue = responseJson[@"results"];
+    if (!resultsValue)
+        return errors; // Legacy {"status":"ok"} response means the complete chunk succeeded.
+
+    if (![resultsValue isKindOfClass:NSArray.class])
+    {
+        for (OARemoteFile *file in requestFiles)
+        {
+            errors[file] = [NSString stringWithFormat:@"%@/%@: Empty Trash error: invalid results", file.type, file.name];
+        }
+        return errors;
+    }
+
+    NSMutableIndexSet *matchedFiles = [NSMutableIndexSet indexSet];
+    for (id value in (NSArray *)resultsValue)
+    {
+        if (![value isKindOfClass:NSDictionary.class])
+            continue;
+
+        NSDictionary *result = value;
+        NSString *name = [result[@"name"] isKindOfClass:NSString.class] ? result[@"name"] : nil;
+        NSString *type = [result[@"type"] isKindOfClass:NSString.class] ? result[@"type"] : nil;
+        NSNumber *updatetime = [result[@"updatetime"] isKindOfClass:NSNumber.class] ? result[@"updatetime"] : nil;
+        NSString *status = [result[@"status"] isKindOfClass:NSString.class] ? result[@"status"] : nil;
+        if (!name || !type || !updatetime || !status)
+            continue;
+
+        NSUInteger fileIndex = [requestFiles indexOfObjectPassingTest:^BOOL(OARemoteFile *file, NSUInteger idx, BOOL *stop) {
+            return ![matchedFiles containsIndex:idx]
+                && [file.name isEqualToString:name]
+                && [file.type isEqualToString:type]
+                && file.updatetimems == updatetime.longValue;
+        }];
+        if (fileIndex == NSNotFound)
+            continue;
+
+        [matchedFiles addIndex:fileIndex];
+        OARemoteFile *file = requestFiles[fileIndex];
+        if ([status isEqualToString:@"deleted"] || [status isEqualToString:@"already_missing"])
+            continue;
+
+        NSString *message = [result[@"message"] isKindOfClass:NSString.class] ? result[@"message"] : nil;
+        if (message.length == 0)
+        {
+            if ([status isEqualToString:@"skipped_not_trash"])
+                message = @"The file is no longer in Trash";
+            else if ([status isEqualToString:@"failed"])
+                message = @"Failed to delete the file from Trash";
+            else
+                message = [NSString stringWithFormat:@"Unknown empty Trash result: %@", status];
+        }
+        errors[file] = [NSString stringWithFormat:@"%@/%@: %@", file.type, file.name, message];
+    }
+
+    [requestFiles enumerateObjectsUsingBlock:^(OARemoteFile *file, NSUInteger idx, BOOL *stop) {
+        if (![matchedFiles containsIndex:idx])
+            errors[file] = [NSString stringWithFormat:@"%@/%@: Empty Trash response did not include this file", file.type, file.name];
+    }];
+    return errors;
+}
+
 - (void) emptyTrash:(NSArray<OARemoteFile *> *)deletedFiles listener:(id<OAOnDeleteFilesListener>)listener
 {
     @try
@@ -688,101 +846,43 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
             [_backupListeners addDeleteFilesListener:listener];
 
         [_executor addOperationWithBlock:^{
-            OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"emptyTrash" debug:BACKUP_DEBUG_LOGS];
-            [operationLog startOperation];
+            @try
+            {
+                OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"emptyTrash" debug:BACKUP_DEBUG_LOGS];
+                [operationLog startOperation];
 
-            NSArray<id<OAOnDeleteFilesListener>> *listeners = self->_backupListeners.getDeleteFilesListeners;
-            for (id<OAOnDeleteFilesListener> deleteListener in listeners)
-                [deleteListener onFilesDeleteStarted:files];
+                NSArray<id<OAOnDeleteFilesListener>> *listeners = self->_backupListeners.getDeleteFilesListeners;
+                for (id<OAOnDeleteFilesListener> deleteListener in listeners)
+                    [deleteListener onFilesDeleteStarted:files];
 
-            NSMutableArray<NSDictionary *> *filesJson = [NSMutableArray array];
-            for (OARemoteFile *file in files)
-            {
-                [filesJson addObject:@{
-                    @"name": file.name,
-                    @"type": file.type,
-                    @"updatetime": @(file.updatetimems)
-                }];
-            }
-
-            NSError *jsonError = nil;
-            NSData *bodyData = [NSJSONSerialization dataWithJSONObject:filesJson options:0 error:&jsonError];
-            NSString *body = bodyData ? [[NSString alloc] initWithData:bodyData encoding:NSUTF8StringEncoding] : nil;
-            __block NSData *responseData = nil;
-            __block NSHTTPURLResponse *httpResponse = nil;
-            __block NSError *requestError = nil;
-
-            if (!jsonError && body)
-            {
-                NSDictionary<NSString *, NSString *> *params = @{
-                    @"deviceid": self.getDeviceId,
-                    @"accessToken": self.getAccessToken
-                };
-                [OANetworkUtilities sendRequestWithUrl:EMPTY_TRASH_URL
-                                                params:params
-                                                  body:body
-                                           contentType:@"application/json"
-                                                  post:YES
-                                                 async:NO
-                                            onComplete:^(NSData *data, NSURLResponse *response, NSError *error) {
-                    responseData = data;
-                    httpResponse = (NSHTTPURLResponse *)response;
-                    requestError = error;
-                }];
-            }
-
-            NSInteger errorStatus = STATUS_SERVER_ERROR;
-            NSString *errorMessage = nil;
-            if (jsonError || !body)
-            {
-                errorStatus = STATUS_PARSE_JSON_ERROR;
-                errorMessage = @"Failed to create empty trash request";
-            }
-            else if (requestError)
-            {
-                errorMessage = requestError.localizedDescription;
-            }
-            else if (!httpResponse || !responseData)
-            {
-                errorStatus = STATUS_EMPTY_RESPONSE_ERROR;
-                errorMessage = @"Empty trash error: empty response";
-            }
-            else
-            {
-                NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-                if (httpResponse.statusCode != 200)
+                NSMutableDictionary<OARemoteFile *, NSString *> *errors = [NSMutableDictionary dictionary];
+                for (NSUInteger offset = 0; offset < files.count; offset += EMPTY_TRASH_CHUNK_SIZE)
                 {
-                    errorMessage = responseString.length > 0 ? responseString : @"Empty trash request failed";
+                    NSUInteger chunkSize = MIN(EMPTY_TRASH_CHUNK_SIZE, files.count - offset);
+                    NSArray<OARemoteFile *> *chunk = [files subarrayWithRange:NSMakeRange(offset, chunkSize)];
+                    [errors addEntriesFromDictionary:[self emptyTrashChunk:chunk]];
                 }
-                else
-                {
-                    NSError *responseError = nil;
-                    id responseJson = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&responseError];
-                    if (responseError || ![responseJson isKindOfClass:NSDictionary.class]
-                        || ![((NSDictionary *)responseJson)[@"status"] isEqualToString:@"ok"])
-                    {
-                        errorStatus = STATUS_PARSE_JSON_ERROR;
-                        errorMessage = @"Empty trash error: invalid response";
-                    }
-                }
-            }
 
-            [operationLog finishOperation:[NSString stringWithFormat:@"Files: %lu", (unsigned long)files.count]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSArray<id<OAOnDeleteFilesListener>> *currentListeners = self->_backupListeners.getDeleteFilesListeners;
-                if (errorMessage)
-                {
+                [operationLog finishOperation:[NSString stringWithFormat:@"Files: %lu, errors: %lu",
+                                               (unsigned long)files.count, (unsigned long)errors.count]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSArray<id<OAOnDeleteFilesListener>> *currentListeners = self->_backupListeners.getDeleteFilesListeners;
                     for (id<OAOnDeleteFilesListener> deleteListener in currentListeners)
-                        [deleteListener onFilesDeleteError:errorStatus message:errorMessage];
-                }
-                else
-                {
+                        [deleteListener onFilesDeleteDone:errors];
+                    if (listener != nil)
+                        [self->_backupListeners removeDeleteFilesListener:listener];
+                });
+            }
+            @catch (NSException *e)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSArray<id<OAOnDeleteFilesListener>> *currentListeners = self->_backupListeners.getDeleteFilesListeners;
                     for (id<OAOnDeleteFilesListener> deleteListener in currentListeners)
-                        [deleteListener onFilesDeleteDone:@{}];
-                }
-                if (listener != nil)
-                    [self->_backupListeners removeDeleteFilesListener:listener];
-            });
+                        [deleteListener onFilesDeleteError:STATUS_EXECUTION_ERROR message:@"Execution error while emptying trash"];
+                    if (listener != nil)
+                        [self->_backupListeners removeDeleteFilesListener:listener];
+                });
+            }
         }];
     }
     @catch (NSException *e)

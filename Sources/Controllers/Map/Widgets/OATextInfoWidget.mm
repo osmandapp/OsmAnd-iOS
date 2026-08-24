@@ -637,12 +637,12 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     {
         isVisibleIcon = [_showIconPref get:_appMode];
         _imageView.hidden = !isVisibleIcon;
-        
+
         if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
             self.iconWidgetView.hidden = NO;
         else
             self.iconWidgetView.hidden = !isVisibleIcon;
-        
+
         _contentStackViewSimpleWidget.spacing = 0;
     }
     _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
@@ -1069,6 +1069,11 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
+}
+
+- (void)setShowIconVisible:(BOOL)visible appMode:(OAApplicationMode *)appMode
+{
+    [_showIconPref set:visible mode:appMode];
 }
 
 - (OAApplicationMode *)getAppMode

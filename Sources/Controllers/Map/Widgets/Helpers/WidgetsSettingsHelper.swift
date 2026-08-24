@@ -59,6 +59,37 @@ class WidgetsSettingsHelper: NSObject {
         mapButtonsHelper.copyQuickActions(from: settings.applicationMode.get(), fromAppMode: fromAppMode)
     }
 
+    func applyWidgetsSize(_ size: EOAWidgetSizeStyle, panel: WidgetsPanel) {
+        for widgetInfo in getEnabledWidgetsForPanel(panel) {
+            guard let widget = widgetInfo.widget as? OATextInfoWidget,
+                  let sizePreference = widget.widgetSizePref else {
+                continue
+            }
+            sizePreference.set(size, mode: appMode)
+        }
+    }
+
+    func applyWidgetsIconVisibility(_ visible: Bool, panel: WidgetsPanel) {
+        for widgetInfo in getEnabledWidgetsForPanel(panel) {
+            guard let widget = widgetInfo.widget as? OATextInfoWidget else { continue }
+            widget.setShowIconVisible(visible, appMode: appMode)
+        }
+    }
+
+    private func getEnabledWidgetsForPanel(_ panel: WidgetsPanel) -> [MapWidgetInfo] {
+        let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
+        guard let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode,
+                                                                  filterModes: Int(filter),
+                                                                  panels: [panel]) else {
+            return []
+        }
+        var result = [MapWidgetInfo]()
+        for case let widgetInfo as MapWidgetInfo in widgetInfos {
+            result.append(widgetInfo)
+        }
+        return result
+    }
+
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {
         let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
         let panels = [panel]

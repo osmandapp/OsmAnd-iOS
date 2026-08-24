@@ -347,42 +347,13 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func applySizeMode(_ mode: WidgetPanelSizeMode) {
         guard let sizeStyle = mode.widgetSizeStyle else { return }
-        forEachWidgetPreference(key: "prefSegment") { preference in
-            (preference as? OACommonWidgetSizeStyle)?.set(sizeStyle, mode: appMode)
-        }
+        WidgetsSettingsHelper(appMode: appMode).applyWidgetsSize(sizeStyle, panel: selectedPanel)
     }
 
     private func applyIconMode(_ mode: WidgetPanelIconMode) {
         guard mode != .original else { return }
-        forEachWidgetPreference(key: "pref") { preference in
-            (preference as? OACommonBoolean)?.set(mode == .on, mode: appMode)
-        }
-    }
-
-    private func forEachWidgetPreference(key: String, action: (Any) -> Void) {
-        let filter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
-        let registry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        guard let widgetInfos = registry.getWidgetsForPanel(appMode,
-                                                            filterModes: filter,
-                                                            panels: [selectedPanel]) else {
-            return
-        }
-        for case let widgetInfo as MapWidgetInfo in widgetInfos {
-            let params: [String: Any] = ["widgetSizeStyle": EOAWidgetSizeStyle.medium.rawValue]
-            guard let settingsData = widgetInfo.getSettingsDataForSimpleWidget(appMode,
-                                                                               widgetsPanel: selectedPanel,
-                                                                               params) else {
-                continue
-            }
-            for sectionIndex in 0..<settingsData.sectionCount() {
-                let section = settingsData.sectionData(for: sectionIndex)
-                for rowIndex in 0..<section.rowCount() {
-                    if let preference = section.getRow(rowIndex).obj(forKey: key) {
-                        action(preference)
-                    }
-                }
-            }
-        }
+        WidgetsSettingsHelper(appMode: appMode)
+            .applyWidgetsIconVisibility(mode == .on, panel: selectedPanel)
     }
 
     private func recreateWidgetsAndReload() {

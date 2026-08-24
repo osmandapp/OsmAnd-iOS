@@ -6349,7 +6349,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _recentlyAddedCoordinateFormatIds = [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
                                                                 defValue:@[]] makeGlobal];
 
-        [_profilePreferences setObject:_preferredCoordinateFormatIds forKey:@"preferred_coordinate_format_ids"];
+        [_profilePreferences setObject:_preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
         [_registeredPreferences setObject:_preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
         [_registeredPreferences setObject:_recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
 

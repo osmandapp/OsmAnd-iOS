@@ -1148,7 +1148,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                 };
 
         OAAppSettings *settings = OAAppSettings.sharedManager;
-        BOOL nightMode = settings.nightMode;
+        BOOL nightMode = settings.mapNightMode;
         BOOL showLabels = settings.mapSettingShowPoiLabel.get;
         NSString *lang = settings.settingPrefMapLanguage.get;
         BOOL transliterate = settings.settingMapLanguageTranslit.get;

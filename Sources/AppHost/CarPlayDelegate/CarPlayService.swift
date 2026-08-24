@@ -36,6 +36,7 @@ final class CarPlayService: NSObject {
         if !isMapAppearanceConfigured {
             isMapAppearanceConfigured = true
             applyCarPlayMapAppearance()
+            reloadMapForRenderingContextChange()
         }
         OARoutingHelper.sharedInstance().resumeNavigationAfterCarPlayReconnect()
     }
@@ -51,6 +52,8 @@ final class CarPlayService: NSObject {
         navigationModeProvider.restoreOnDisconnect()
         if !UIApplication.shared.isAnyCarPlaySceneActive, isMapAppearanceConfigured {
             isMapAppearanceConfigured = false
+            OADayNightHelper.instance().resetCarPlayMode()
+            reloadMapForRenderingContextChange()
         }
         if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
             OAQuickSearchHelper.instance().setResourcesForSearchUICore()
@@ -80,6 +83,12 @@ final class CarPlayService: NSObject {
             if let lastContentStyle {
                 applyVehicleAppearance(with: lastContentStyle)
             }
+        }
+    }
+
+    private func reloadMapForRenderingContextChange() {
+        executeOnMainThread {
+            OsmAndApp.swiftInstance().carPlayDayNightModeObservable.notifyEvent()
         }
     }
     

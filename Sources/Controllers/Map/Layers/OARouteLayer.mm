@@ -339,7 +339,7 @@ struct DrawPathData
         NSString *str = [NSString stringWithUTF8String:routeSegment->route->color.c_str()];
         str = str.length == 0 ? type.renderAttr : str;
         OsmAnd::ColorARGB colorARGB;
-        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
+        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.mapNightMode renderAttrName:str];
         CGFloat red, green, blue, alpha;
         if (str.length > 0 && color)
         {
@@ -548,7 +548,7 @@ struct DrawPathData
 
 - (NSInteger)getDefaultColor:(BOOL)forTurnArrows
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].mapNightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
     return colorVal
             ? colorVal.intValue
@@ -989,7 +989,7 @@ struct DrawPathData
     if (!_routeAttributes || !_walkAttributes || !_walkPTAttributes)
         return;
 
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].mapNightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
 
     // Draw public transport route

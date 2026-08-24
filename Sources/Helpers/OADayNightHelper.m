@@ -14,6 +14,8 @@
 #import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 
+static const NSTimeInterval kCarPlayAutoRecalcInterval = 60.0;
+
 @implementation OADayNightHelper
 {
     NSTimeInterval _lastTime;
@@ -25,6 +27,7 @@
     NSTimeInterval _recalcIntervalCarPlay;
     NSNumber *_tempMode;
     NSNumber *_carPlayMode;
+    NSTimer *_carPlayAutoRecalcTimer;
 }
 
 - (instancetype)init
@@ -177,6 +180,47 @@
 - (void)setCarPlayMode:(NSInteger)dayNightMode {
     _carPlayMode = @(dayNightMode);
     [self forceUpdateCarPlay];
+    [self updateCarPlayAutoRecalcTimer];
+}
+
+- (void)resetCarPlayMode
+{
+    _carPlayMode = nil;
+    [self stopCarPlayAutoRecalcTimer];
+}
+
+- (void)updateCarPlayAutoRecalcTimer
+{
+    NSInteger dayNightMode = _carPlayMode
+        ? _carPlayMode.integerValue
+        : [[OAAppSettings sharedManager].carPlayMapAppearanceMode get];
+
+    if (dayNightMode == DayNightModeAuto)
+        [self startCarPlayAutoRecalcTimer];
+    else
+        [self stopCarPlayAutoRecalcTimer];
+}
+
+- (void)startCarPlayAutoRecalcTimer
+{
+    executeOnMainThread(^{
+        if (self->_carPlayAutoRecalcTimer)
+            return;
+        __weak OADayNightHelper *weakSelf = self;
+        self->_carPlayAutoRecalcTimer = [NSTimer scheduledTimerWithTimeInterval:kCarPlayAutoRecalcInterval
+                                                                        repeats:YES
+                                                                          block:^(NSTimer * _Nonnull timer) {
+            [weakSelf forceUpdateCarPlay];
+        }];
+    });
+}
+
+- (void)stopCarPlayAutoRecalcTimer
+{
+    executeOnMainThread(^{
+        [self->_carPlayAutoRecalcTimer invalidate];
+        self->_carPlayAutoRecalcTimer = nil;
+    });
 }
 
 - (SunriseSunset *)getSunriseSunset

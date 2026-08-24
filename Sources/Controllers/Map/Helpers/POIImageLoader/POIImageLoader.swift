@@ -156,11 +156,12 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     }
     
     private func makeIconProcessor(metrics: IconMetrics) -> ImageProcessor {
+        let color: UIColor = OAAppSettings.sharedManager().mapNightMode ? .popularPlaceBgDefault.dark : .popularPlaceBgDefault.light
         let processor = ResizingImageProcessor(referenceSize: metrics.imageTargetSize, mode: .aspectFill)
         |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
         |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
         |> BorderImageProcessor(border: .init(
-            color: .popularPlaceBgDefault.currentMapThemeColor,
+            color: color,
             lineWidth: metrics.border,
             radius: .heightFraction(0.5)))
         |> CircularShadowProcessor(
@@ -173,15 +174,21 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     
     private func placeholderCacheKey(placeholderImageName: String,
                                      metrics: IconMetrics) -> String? {
+        let color: UIColor = OAAppSettings.sharedManager().mapNightMode ? .popularPlacePlaceholderBg.dark : .popularPlacePlaceholderBg.light
         return [
             "poi_placeholder",
             placeholderImageName,
             "scale_\(metrics.textScale)",
-            "icon_\(UIColor.popularPlacePlaceholderBg.currentMapThemeColor.hashValue)"
+            "icon_\(color.hashValue)"
         ].joined(separator: "_")
     }
     
     func createProcessedPlaceholder(with image: UIImage, metrics: IconMetrics, option: KingfisherParsedOptionsInfo) -> UIImage? {
+        let nightMode = OAAppSettings.sharedManager().mapNightMode
+        let placePlaceholderBg: UIColor = nightMode ? .popularPlacePlaceholderBg.dark : .popularPlacePlaceholderBg.light
+        let placePlaceholderIcon: UIColor = nightMode ? .popularPlacePlaceholderIcon.dark : .popularPlacePlaceholderIcon.light
+        let placeBgDefault: UIColor = nightMode ? .popularPlaceBgDefault.dark : .popularPlaceBgDefault.light
+        
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = option.scaleFactor
         format.opaque = false
@@ -189,7 +196,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         let renderer = UIGraphicsImageRenderer(size: metrics.imageTargetSize, format: format)
         
         let baseImage = renderer.image { context in
-            UIColor.popularPlacePlaceholderBg.currentMapThemeColor.setFill()
+            placePlaceholderBg.setFill()
             context.fill(CGRect(origin: .zero, size: metrics.imageTargetSize))
         }
         
@@ -205,13 +212,13 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 y: (metrics.imageTargetSize.height - size) / 2
             )
             
-            UIColor.popularPlacePlaceholderIcon.currentMapThemeColor.setFill()
+            placePlaceholderIcon.setFill()
             tintedImage.draw(in: CGRect(origin: origin, size: CGSize(width: size, height: size)))
         }
         
         let processor = RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
         |> BorderImageProcessor(border: .init(
-            color: .popularPlaceBgDefault.currentMapThemeColor,
+            color: placeBgDefault,
             lineWidth: metrics.border,
             radius: .heightFraction(0.5)))
         |> CircularShadowProcessor(

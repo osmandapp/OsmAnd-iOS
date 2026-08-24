@@ -2631,10 +2631,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            BOOL mapNightMode = UIApplication.sharedApplication.isAnyCarPlaySceneActive
-                ? settings.nightModeCarPlay
-                : settings.nightMode;
-            if (mapNightMode)
+            if (settings.mapNightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2832,9 +2829,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            BOOL mapNightMode = UIApplication.sharedApplication.isAnyCarPlaySceneActive
-                ? settings.nightModeCarPlay
-                : settings.nightMode;
+            BOOL mapNightMode = settings.mapNightMode;
             if (mapNightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];

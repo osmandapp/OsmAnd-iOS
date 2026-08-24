@@ -90,10 +90,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var currentChartDataSignature: String?
     private var trackChartFilePath: String?
     private var trackChartHelper: TrackChartHelper?
-    private weak var dataSource: PlanRouteAnalyzeDataSource?
     private var chartView: ElevationChart?
-    private weak var yAxisButton: UIButton?
-    private weak var xAxisButton: UIButton?
     private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
         let proxy = AnalyzeChartDelegateProxy()
         proxy.onNothingSelected = { [weak self] _ in
@@ -113,6 +110,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         }
         return proxy
     }()
+    private weak var dataSource: PlanRouteAnalyzeDataSource?
+    private weak var yAxisButton: UIButton?
+    private weak var xAxisButton: UIButton?
 
     private var currentState: AnalyzeState {
         cachedState
@@ -287,14 +287,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                             segment: segment)
     }
 
-    private func bindChartGestures(_ chart: ElevationChart) {
-        chart.delegate = chartDelegateProxy
-        chart.gestureRecognizers?.forEach { recognizer in
-            recognizer.addTarget(self, action: #selector(onChartGesture(_:)))
-        }
-    }
-
-    private func bindChartGestures(_ chart: HorizontalBarChartView) {
+    private func bindChartGestures(_ chart: BarLineChartViewBase) {
         chart.delegate = chartDelegateProxy
         chart.gestureRecognizers?.forEach { recognizer in
             recognizer.addTarget(self, action: #selector(onChartGesture(_:)))
@@ -329,13 +322,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private func hideChartLocation() {
         dataSource?.hideChartHighlight()
-    }
-
-    @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {
-        let isDoubleTap = (recognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2
-        guard recognizer is UIPinchGestureRecognizer || isDoubleTap,
-              recognizer.state == .ended else { return }
-        refreshChartOnMap()
     }
 
     private func handleChartViewPortChanged(_ chart: ChartViewBase) {
@@ -1212,11 +1198,14 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 extension PlanRouteAnalyzeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let cell = cell as? AnalyzeCardCell,
-              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) as? HorizontalBarChartView else {
-            return
+        guard let cell = cell as? AnalyzeCardCell else { return }
+        if let chart = cell.cardView.subviews.first(where: { $0 is ElevationChart }) as? ElevationChart {
+            cell.layoutIfNeeded()
+            chartSynchronizer.setPrimaryChart(chart)
+        } else if let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) as? HorizontalBarChartView {
+            cell.layoutIfNeeded()
+            chartSynchronizer.registerBarChart(barChart)
         }
-        chartSynchronizer.registerBarChart(barChart)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1784,6 +1773,13 @@ private extension PlanRouteAnalyzeViewController {
 }
 
 private extension PlanRouteAnalyzeViewController {
+
+    @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {
+        let isDoubleTap = (recognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2
+        guard recognizer is UIPinchGestureRecognizer || isDoubleTap,
+              recognizer.state == .ended else { return }
+        refreshChartOnMap()
+    }
 
     @objc private func onRecalculateTapped() {
         showGetElevationSheet()

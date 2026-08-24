@@ -234,8 +234,11 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
 
     private func hideSearchController() {
+        guard navigationItem.searchController?.isActive == true else {
+            navigationItem.searchController = nil
+            return
+        }
         navigationItem.searchController?.isActive = false
-        navigationItem.searchController = nil
     }
     
     private func setupNavbarTitle(with tab: Tab) {
@@ -486,6 +489,7 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
     
     func willDismissSearchController(_ searchController: UISearchController) {
         isSearchBarAnimating = true
+        navigationItem.searchController = nil
         pageViewController?.delegate = self
         pageViewController?.dataSource = self
         segmentContainerView.transform = CGAffineTransform(translationX: 0, y: -segmentContainerView.bounds.height)

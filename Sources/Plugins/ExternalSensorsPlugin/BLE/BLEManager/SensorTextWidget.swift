@@ -6,27 +6,33 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
 import CoreBluetooth
 
 @objcMembers
 final class SensorTextWidget: OASimpleWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
 
-    private let visualizationMode = "visualization_mode"
-    private let notActualValue = "0"
-
     private(set) var externalDeviceId: String?
-
-    private var cachedValue: String?
-    private var deviceIdPref: OACommonString?
-    private var visualizationModePref: OACommonInteger!
-    private var appMode: OAApplicationMode!
-    private var plugin: OAExternalSensorsPlugin?
 
     var shouldUseAnyConnectedDevice: Bool {
         deviceIdPref?.get(appMode) == plugin?.getAnyConnectedDeviceId()
     }
+
+    private let visualizationMode = "visualization_mode"
+    private let notActualValue = "0"
+
+    private var cachedValue: String?
+    private var cachedSubtext: String?
+    private var deviceIdPref: OACommonString?
+
+    // swiftlint:disable all
+    private var visualizationModePref: OACommonInteger!
+    private var appMode: OAApplicationMode!
+    // swiftlint:enable all
+
+    private var plugin: OAExternalSensorsPlugin?
+    private var sensorDataUpdatedObserver: NSObjectProtocol?
+    private var deviceDisconnectedObserver: NSObjectProtocol?
 
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
@@ -48,6 +54,7 @@ final class SensorTextWidget: OASimpleWidget {
         } else {
             externalDeviceId = getDeviceId()
         }
+        registerObservers()
         updateInfo()
     }
 
@@ -59,8 +66,7 @@ final class SensorTextWidget: OASimpleWidget {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @discardableResult
-    override func updateInfo() -> Bool {
+    @discardableResult override func updateInfo() -> Bool {
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
             applyDeviceId()
         }
@@ -242,7 +248,7 @@ final class SensorTextWidget: OASimpleWidget {
     private func updateSensorData(sensor: Sensor?) {
         guard let widgetType,
               let mode = getVisualizationMode() else {
-            setText("-", subtext: nil)
+            setDisplayText("-", subtext: nil)
             return
         }
 
@@ -269,7 +275,7 @@ final class SensorTextWidget: OASimpleWidget {
         if let sensor {
             let dataList = sensor.getLastSensorDataList(for: widgetType)
             if !sensor.device.isConnected || dataList?.isEmpty ?? false {
-                setText("-", subtext: nil)
+                setDisplayText("-", subtext: nil)
                 return
             }
             var field: SensorWidgetDataField?
@@ -277,19 +283,23 @@ final class SensorTextWidget: OASimpleWidget {
                 field = result.getWidgetField(fieldType: widgetType)
             }
             if let field, let formattedValue = field.getFormattedValue() {
-                let isActualData = sensor.hasActualData(for: widgetType)
+                let isActualData = widgetType == .bicycleDistance || sensor.hasActualData(for: widgetType)
                 let displayValue = isActualData ? formattedValue.value : notActualValue
-                if cachedValue != displayValue {
-                    cachedValue = displayValue
-                    debugPrint("externalDeviceId: \(String(describing: externalDeviceId)) | value: \(displayValue)")
-                    setText(displayValue, subtext: formattedValue.unit)
-                }
+                setDisplayText(displayValue, subtext: formattedValue.unit)
             } else {
-                setText("-", subtext: nil)
+                setDisplayText("-", subtext: nil)
             }
         } else {
-            setText("-", subtext: nil)
+            setDisplayText("-", subtext: nil)
         }
+    }
+
+    private func setDisplayText(_ value: String, subtext: String?) {
+        guard cachedValue != value || cachedSubtext != subtext else { return }
+        cachedValue = value
+        cachedSubtext = subtext
+        debugPrint("externalDeviceId: \(String(describing: externalDeviceId)) | value: \(value)")
+        setText(value, subtext: subtext)
     }
 
     private func getDeviceId() -> String? {
@@ -350,7 +360,8 @@ final class SensorTextWidget: OASimpleWidget {
     }
 
     private func getPairedDevicesForCurrentWidgetType() -> [Device] {
-        DeviceHelper.shared.getPairedDevicesFor(type: widgetType!) ?? []
+        guard let widgetType else { return [] }
+        return DeviceHelper.shared.getPairedDevicesFor(type: widgetType) ?? []
     }
 
     private func applyDeviceId() {
@@ -414,5 +425,41 @@ final class SensorTextWidget: OASimpleWidget {
 
     private func saveDeviceId(deviceId: String) {
         deviceIdPref?.setValueFrom(deviceId, appMode: appMode)
+    }
+
+    private func registerObservers() {
+        if sensorDataUpdatedObserver == nil {
+            sensorDataUpdatedObserver = NotificationCenter.default.addObserver(forName: .deviceSensorDataUpdated,
+                                                                               object: nil,
+                                                                               queue: .main) { [weak self] notification in
+                guard let self,
+                      let device = notification.object as? Device,
+                      shouldUpdate(for: device.id) else { return }
+                updateInfo()
+            }
+        }
+        if deviceDisconnectedObserver == nil {
+            deviceDisconnectedObserver = NotificationCenter.default.addObserver(forName: .deviceDisconnected,
+                                                                                object: nil,
+                                                                                queue: .main) { [weak self] notification in
+                guard let self,
+                      let deviceId = notification.userInfo?[Device.identifier] as? String,
+                      shouldUpdate(for: deviceId) else { return }
+                updateInfo()
+            }
+        }
+    }
+
+    private func shouldUpdate(for deviceId: String) -> Bool {
+        shouldUseAnyConnectedDevice || externalDeviceId == deviceId
+    }
+
+    deinit {
+        if let sensorDataUpdatedObserver {
+            NotificationCenter.default.removeObserver(sensorDataUpdatedObserver)
+        }
+        if let deviceDisconnectedObserver {
+            NotificationCenter.default.removeObserver(deviceDisconnectedObserver)
+        }
     }
 }

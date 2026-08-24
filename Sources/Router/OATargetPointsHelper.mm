@@ -675,32 +675,34 @@
     }
 }
 
-- (void) lookupAddressForIntermediatePoint:(OARTargetPoint *) point
+- (void)lookupAddressForIntermediatePoint:(OARTargetPoint *)point
 {
     BOOL isNameNotValid = point != nil && [point isSearchingAddress];
-    BOOL isAddresEmpty = point != nil && NSStringIsEmpty(point.pointDescription.address) && _intermediatePoints.firstObject == point;
-    
-    if (isNameNotValid || isAddresEmpty)
+    BOOL isAddressEmpty = point != nil && NSStringIsEmpty(point.pointDescription.address) && _intermediatePoints.firstObject == point;
+
+    if (isNameNotValid || isAddressEmpty)
     {
         OARTargetPoint *targetPoint = point;
         CLLocation *location = targetPoint.point;
         __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf) return;
+            if (!strongSelf)
+                return;
 
             NSString *pointName = [strongSelf getLocationName:location];
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
+
+            dispatch_async(dispatch_get_main_queue(), ^{
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf || targetPoint != point) return;
-                
+                if (!strongSelf || strongSelf->_intermediatePoints.firstObject != targetPoint)
+                    return;
+
                 if (isNameNotValid)
                     [targetPoint.pointDescription setName:pointName];
-                
+
                 targetPoint.pointDescription.address = pointName;
-                
-                
+                [strongSelf->_app.data backupTargetPoints];
                 [strongSelf updateRouteAndRefresh:NO];
             });
         });

@@ -1441,7 +1441,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if ([OAUtilities isLandscape] || [OAUtilities isIPad])
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
+        _bottomBarView.backgroundColor =
+            [OAWidgetPanelAppearanceResolver resolveForPanel:OAWidgetsPanel.bottomPanel
+                                                     appMode:_settings.applicationMode.get
+                                                   nightMode:_settings.nightMode].backgroundColor;
+}
+
+- (void)updateWidgetPanelAppearanceColors
+{
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self updateBottomBarViewBackgroundColor];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void) updateTopButtonsLayoutY
@@ -1637,7 +1647,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
+        statusBarColor = [OAWidgetPanelAppearanceResolver resolveForPanel:OAWidgetsPanel.topPanel
+                                                                  appMode:_settings.applicationMode.get
+                                                                nightMode:isNight].backgroundColor;
     if (!statusBarColor)
         statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
     return statusBarColor;

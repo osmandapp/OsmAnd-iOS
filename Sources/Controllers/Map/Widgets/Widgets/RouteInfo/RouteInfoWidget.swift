@@ -65,8 +65,11 @@ final class RouteInfoWidget: OASimpleWidget {
         !hasEnoughWidth && isSmallSize ? 14 : 16
     }
     
+    private var resolvedPrimaryTextColor: UIColor?
+    private var resolvedSecondaryTextColor: UIColor?
+
     private var valueTextColor: UIColor {
-        isNightMode() ? .white : .black
+        resolvedPrimaryTextColor ?? (isNightMode() ? .white : .black)
     }
     
     private var isSmallSize: Bool {
@@ -164,11 +167,13 @@ final class RouteInfoWidget: OASimpleWidget {
     
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
+        resolvedPrimaryTextColor = textState.textColor
+        resolvedSecondaryTextColor = textState.unitColor
         updateTextWitState(textState)
         let valueTextColor = valueTextColor
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
-        secondaryDividerView.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
+        secondaryDividerView.backgroundColor = textState.dividerColor
         buttonArrowImageView.image?.withRenderingMode(.alwaysTemplate)
         buttonArrowImageView.tintColor = isNightMode() ? .iconColorActive.dark : .iconColorActive.light
         navigationButtonView.backgroundColor = isNightMode() ? .buttonBgColorTertiary.dark : .buttonBgColorTertiary.light
@@ -262,7 +267,8 @@ final class RouteInfoWidget: OASimpleWidget {
         guard let destinationInfo, displayValues.count > 2 else { return }
         let size = widgetSizeStyle
         let data = prepareDisplayData(info: destinationInfo)
-        let textColorSecondary: UIColor = isNightMode() ? .textColorSecondary.dark : .textColorSecondary.light
+        let textColorSecondary = resolvedSecondaryTextColor
+            ?? (isNightMode() ? UIColor.textColorSecondary.dark : UIColor.textColorSecondary.light)
         let hasEnoughWidth = hasEnoughWidth
         let valueTextColor = valueTextColor
         let isSmallSize = isSmallSize

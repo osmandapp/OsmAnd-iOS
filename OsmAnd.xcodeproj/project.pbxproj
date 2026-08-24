@@ -235,6 +235,9 @@
 		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
 		2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */; };
 		276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */; };
+		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
+		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
+		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
 		2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */; };
 		2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */; };
 		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
@@ -3904,6 +3907,9 @@
 		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
 		2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlacesSortModeHelper.swift; sourceTree = "<group>"; };
 		276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonAppearanceViewController.swift; sourceTree = "<group>"; };
+		54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsAppearanceViewController.swift; sourceTree = "<group>"; };
+		54A955032F4E950100549501 /* WidgetPanelAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelAppearance.swift; sourceTree = "<group>"; };
+		54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelColorViewController.swift; sourceTree = "<group>"; };
 		2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsParametersViewController.swift; sourceTree = "<group>"; };
 		2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseSettingsParametersViewController.xib; sourceTree = "<group>"; };
 		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
@@ -13875,6 +13881,7 @@
 				DA842ECC2A0B998E0030866E /* WidgetInfoCreator.swift */,
 				DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */,
 				DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */,
+				54A955032F4E950100549501 /* WidgetPanelAppearance.swift */,
 				DA2F790B2A273D39002B9B83 /* WidgetsInitializer.swift */,
 				FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */,
 				DA2EC7B429FBCD1700ECEB37 /* WidgetsPanel.swift */,
@@ -14812,6 +14819,8 @@
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
 				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
+				54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */,
+				54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";
@@ -18113,6 +18122,9 @@
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
 				277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
+				54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */,
+				54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */,
+				54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,

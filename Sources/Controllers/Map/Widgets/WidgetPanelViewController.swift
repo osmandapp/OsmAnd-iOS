@@ -214,6 +214,19 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             updateContainerSize()
         }
     }
+
+    func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        specialPanelController?.applyAppearance(appearance)
+        pageControl.backgroundColor = appearance.backgroundColor
+        pageContainerView.backgroundColor = appearance.backgroundColor
+        for case let page as WidgetPageViewController in pages {
+            page.applyAppearance(appearance)
+        }
+        for widget in widgetPages.flatMap({ $0 }) {
+            widget.backgroundColor = appearance.backgroundColor
+            widget.updatesSeparatorsColor(appearance.dividerColor)
+        }
+    }
     
     // MARK: - Private Functions
     

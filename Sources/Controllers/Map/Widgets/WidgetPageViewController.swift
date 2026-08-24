@@ -138,6 +138,24 @@ final class WidgetPageViewController: UIViewController {
         heightStackViewConstraint?.constant = height
         return (width, height)
     }
+
+    func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        view.backgroundColor = appearance.backgroundColor
+        for arrangedSubview in stackView.arrangedSubviews {
+            if let widget = arrangedSubview as? OABaseWidgetView {
+                widget.backgroundColor = appearance.backgroundColor
+                widget.updatesSeparatorsColor(appearance.dividerColor)
+            } else if let row = arrangedSubview as? UIStackView {
+                row.backgroundColor = appearance.backgroundColor
+                for case let widget as OABaseWidgetView in row.arrangedSubviews {
+                    widget.backgroundColor = appearance.backgroundColor
+                    widget.updatesSeparatorsColor(appearance.dividerColor)
+                }
+            } else {
+                arrangedSubview.backgroundColor = appearance.dividerColor
+            }
+        }
+    }
 }
 
 extension WidgetPageViewController {

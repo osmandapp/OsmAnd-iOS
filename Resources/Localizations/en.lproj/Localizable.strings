@@ -5023,3 +5023,15 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"text_color" = "Text color";
+"secondary_text_color" = "Secondary text color";
+"background_color" = "Background color";
+"widget_height" = "Widget height";
+"row_height" = "Row height";
+"shared_string_transparent" = "Transparent";
+"panel_appearance_original_description" = "\"%1$s\" preserves the individual size and icon for each widget.";
+"copy_from" = "Copy from";
+"custom_widget_colors" = "Custom widget colors";
+"custom_widget_colors_description" = "Improve readability on the go. Unlock full color customization to ensure perfect widget visibility against any map background, day or night.";
+"unlock_custom_colors" = "Unlock Custom Colors";

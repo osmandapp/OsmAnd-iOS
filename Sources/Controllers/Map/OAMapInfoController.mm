@@ -317,13 +317,21 @@
         {
             [widgetInfo.widget updateColors:state];
         }
+        OAApplicationMode *appMode = _settings.applicationMode.get;
         for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
+            OAResolvedWidgetPanelAppearance *appearance =
+                [OAWidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
+            OATextState *panelState = [self calculateTextStateForAppearance:appearance baseState:state];
             for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
             {
-                [self updateColors:state sideWidget:widgetInfo.widget];
+                [widgetInfo.widget updateColors:panelState];
+                [widgetInfo.widget updatesSeparatorsColor:appearance.dividerColor];
+                [self updateColors:panelState sideWidget:widgetInfo.widget];
             }
+            [[self controllerForPanel:panel] applyAppearance:appearance];
         }
+        [_mapHudViewController updateWidgetPanelAppearanceColors];
     }
 }
 
@@ -406,7 +414,12 @@
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
 {
-    view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
+    OAWidgetsPanel *panel = view == _topShadowContainerView ? OAWidgetsPanel.topPanel : OAWidgetsPanel.bottomPanel;
+    OAResolvedWidgetPanelAppearance *appearance =
+        [OAWidgetPanelAppearanceResolver resolveForPanel:panel
+                                                 appMode:_settings.applicationMode.get
+                                               nightMode:_settings.nightMode];
+    view.direction = appearance.transparent ? ShadowPathDirectionClear : direction;
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -806,6 +819,33 @@
     : [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
     
     return ts;
+}
+
+- (OATextState *)calculateTextStateForAppearance:(OAResolvedWidgetPanelAppearance *)appearance
+                                       baseState:(OATextState *)baseState
+{
+    OATextState *state = [[OATextState alloc] init];
+    state.textBold = baseState.textBold;
+    state.night = baseState.night;
+    state.textColor = appearance.primaryTextColor;
+    state.unitColor = appearance.secondaryTextColor;
+    state.titleColor = appearance.secondaryTextColor;
+    state.dividerColor = appearance.dividerColor;
+    state.textOutlineColor = appearance.textOutlineColor;
+    state.textOutlineWidth = appearance.textOutlineWidth;
+    state.leftColor = appearance.backgroundColor;
+    return state;
+}
+
+- (OAWidgetPanelViewController *)controllerForPanel:(OAWidgetsPanel *)panel
+{
+    if (panel == OAWidgetsPanel.leftPanel)
+        return _leftPanelController;
+    if (panel == OAWidgetsPanel.rightPanel)
+        return _rightPanelController;
+    if (panel == OAWidgetsPanel.topPanel)
+        return _topPanelController;
+    return _bottomPanelController;
 }
 
 - (void) updateColors:(OATextState *)state sideWidget:(OABaseWidgetView *)sideWidget

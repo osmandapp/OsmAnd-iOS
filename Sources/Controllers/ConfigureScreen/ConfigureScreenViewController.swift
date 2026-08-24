@@ -23,6 +23,7 @@ protocol MapButtonsDelegate: AnyObject {
 class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
 
     private static let selectedKey = "selected"
+    private static let appearanceRowKey = "appearance"
 
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
@@ -99,12 +100,13 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
                 row.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
             }
         }
-        let transparencyRow = widgetsSection.createNewRow()
-        transparencyRow.title = localizedString("map_widget_transparent")
-        transparencyRow.key = "map_widget_transparent"
-        transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
-        transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: Self.selectedKey)
-        transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        let appearanceRow = widgetsSection.createNewRow()
+        appearanceRow.key = Self.appearanceRowKey
+        appearanceRow.title = localizedString("shared_string_appearance")
+        appearanceRow.icon = UIImage.templateImageNamed("ic_custom_appearance")
+        appearanceRow.iconTintColor = appMode.getProfileColor()
+        appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
+        appearanceRow.accessibilityLabel = appearanceRow.title
         
         let buttonsSection = tableData.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
@@ -116,7 +118,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         customButtonsRow.title = localizedString("custom_buttons")
         customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
         customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .iconColorDefault
-        customButtonsRow.iconName = "ic_custom_quick_action"
+        customButtonsRow.icon = .icCustomQuickAction
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
         customButtonsRow.accessibilityValue = customButtonsRow.descr
@@ -128,7 +130,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         defaultButtonsRow.title = localizedString("default_buttons")
         defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
         defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
-        defaultButtonsRow.iconName = "ic_custom_button_default"
+        defaultButtonsRow.icon = .icCustomButtonDefault
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
         defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
@@ -137,7 +139,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         otherSection.headerText = localizedString("other_location")
         let positionMapRow = otherSection.createNewRow()
         positionMapRow.title = localizedString("position_on_map")
-        positionMapRow.iconName = getLocationPositionIcon()
+        positionMapRow.icon = getLocationPositionIcon()
         positionMapRow.iconTintColor = appMode.getProfileColor()
         positionMapRow.key = "position_on_map"
         positionMapRow.descr = getLocationPositionValue()
@@ -147,7 +149,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
-        distByTapRow.iconName = "ic_action_ruler_line"
+        distByTapRow.icon = .icActionRulerLine
         distByTapRow.iconTintColor = appMode.getProfileColor()
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
@@ -164,10 +166,10 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         speedomenterRow.accessibilityLabel = speedomenterRow.title
         speedomenterRow.accessibilityValue = speedomenterRow.descr
         if settings.showSpeedometer.get() {
-            speedomenterRow.iconName = "widget_speed"
+            speedomenterRow.icon = .widgetSpeed
             speedomenterRow.iconTintColor = nil
         } else {
-            speedomenterRow.iconName = "ic_custom_speedometer_outlined"
+            speedomenterRow.icon = .icCustomSpeedometerOutlined
             speedomenterRow.iconTintColor = .iconColorDefault
         }
     }
@@ -190,18 +192,18 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func getLocationPositionIcon() -> String {
-        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return "" }
+    private func getLocationPositionIcon() -> UIImage? {
+        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return nil }
         switch placement {
         case .auto:
-            return "ic_custom_display_position_automatic"
+            return .icCustomDisplayPositionAutomatic
         case .center:
-            return "ic_custom_display_position_center"
+            return .icCustomDisplayPositionCenter
         case .bottom:
-            return "ic_custom_display_position_bottom"
+            return .icCustomDisplayPositionBottom
         @unknown default:
             debugPrint("Unknown EOAPositionPlacement value: \(placement). Using default icon.")
-            return ""
+            return nil
         }
     }
     
@@ -225,7 +227,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
 extension ConfigureScreenViewController {
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
-        addCell(OASwitchTableViewCell.reuseIdentifier)
     }
     
     fileprivate func applyAccessibility(_ cell: UITableViewCell, _ item: OATableRowData) {
@@ -245,59 +246,20 @@ extension ConfigureScreenViewController {
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.image = item.icon ?? UIImage.templateImageNamed(item.iconName)
                 if item.key == "map_widget_distance_by_tap" {
                     let selected = item.bool(forKey: Self.selectedKey)
                     cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
                 } else {
                     cell.leftIconView.tintColor = iconTintColor
                 }
-            } else if let iconName = item.iconName {
-                cell.leftIconView.image = UIImage(named: iconName)
+            } else {
+                cell.leftIconView.image = item.icon ?? item.iconName.flatMap { UIImage(named: $0) }
             }
-            applyAccessibility(cell, item)
-            return cell
-        } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
-            cell.descriptionVisibility(false)
-            cell.leftIconVisibility(!(item.iconName?.isEmpty ?? true))
-            if !cell.leftIconView.isHidden {
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            }
-
-            let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ?item.iconTintColor : .iconColorDefault
-            cell.titleLabel.text = item.title
-            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-            cell.switchView.isOn = selected
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row
-            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             applyAccessibility(cell, item)
             return cell
         }
         return nil
-    }
-    
-    @objc func onSwitchClick(_ sender: Any) -> Bool {
-        guard let sw = sender as? UISwitch else {
-            return false
-        }
-        
-        let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData.item(for: indexPath)
-        
-        if data.key == "map_widget_transparent" {
-            settings.transparentMapTheme.set(sw.isOn)
-            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
-        }
-        
-        if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
-            UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? self.settings.applicationMode.get().getProfileColor() : .iconColorDefault
-            }
-        }
-        
-        return false
     }
 
     override func onRowSelected(_ indexPath: IndexPath) {
@@ -323,6 +285,8 @@ extension ConfigureScreenViewController {
             let vc = DistanceByTapViewController()
             vc.delegate = self
             show(vc)
+        } else if data.key == Self.appearanceRowKey {
+            show(WidgetsAppearanceViewController(appMode: appMode))
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {

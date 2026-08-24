@@ -43,7 +43,7 @@
 
 + (BOOL)addFavorite:(OAFavoriteItem *)point;
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites;
-+ (NSInteger)addFavoritesSkippingDuplicates:(NSArray<OAFavoriteItem *> *)favorites;
++ (NSInteger)copyToFavorites:(NSArray<OAFavoriteItem *> *)favorites;
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave

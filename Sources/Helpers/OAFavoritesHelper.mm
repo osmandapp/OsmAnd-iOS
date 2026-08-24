@@ -202,7 +202,7 @@ static NSOperationQueue *_favQueue;
     {
         NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
         [self checkDuplicateNames:favorites];
-        if ([self mergeImportedFavorites:favorites pointsGroup:pointsGroup])
+        if ([self mergeFavorites:favorites pointsGroup:pointsGroup])
             favoritesImported = YES;
         for (OAFavoriteItem *favorite in favorites)
         {
@@ -219,23 +219,23 @@ static NSOperationQueue *_favQueue;
     }
 }
 
-+ (void)renameFavorite:(OAFavoriteItem *)favorite
-                atIndex:(NSUInteger)index
-                 toName:(NSString *)newName
-                inIndex:(NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableIndexSet *> *> *)indexesByCategoryAndName
++ (void)setName:(NSString *)name
+    forFavorite:(OAFavoriteItem *)favorite
+        atIndex:(NSUInteger)index
+        inIndex:(NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableIndexSet *> *> *)indexesByCategoryAndName
 {
     NSString *category = [favorite getCategory] ?: @"";
     NSString *oldName = [favorite getName] ?: @"";
-    if ([oldName isEqualToString:newName])
+    if ([oldName isEqualToString:name])
         return;
 
     NSMutableDictionary<NSString *, NSMutableIndexSet *> *indexesByName = indexesByCategoryAndName[category];
     [indexesByName[oldName] removeIndex:index];
-    NSMutableIndexSet *newNameIndexes = indexesByName[newName];
+    NSMutableIndexSet *newNameIndexes = indexesByName[name];
     if (!newNameIndexes)
-        indexesByName[newName] = newNameIndexes = [NSMutableIndexSet indexSet];
+        indexesByName[name] = newNameIndexes = [NSMutableIndexSet indexSet];
     [newNameIndexes addIndex:index];
-    [favorite setName:newName];
+    [favorite setName:name];
 }
 
 + (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites
@@ -271,21 +271,21 @@ static NSOperationQueue *_favQueue;
             if (![point isEqual:favoritePoint])
             {
                 if (number == 1)
-                    [self renameFavorite:point
-                                 atIndex:pointIndex
-                                  toName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
-                                 inIndex:indexesByCategoryAndName];
+                    [self setName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
+                      forFavorite:point
+                          atIndex:pointIndex
+                          inIndex:indexesByCategoryAndName];
                 number++;
-                [self renameFavorite:favoritePoint
-                             atIndex:index
-                              toName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
-                             inIndex:indexesByCategoryAndName];
+                [self setName:[NSString stringWithFormat:@"%@ (%ld)", name, (long)number]
+                  forFavorite:favoritePoint
+                      atIndex:index
+                      inIndex:indexesByCategoryAndName];
             }
         }];
     }];
 }
 
-+ (BOOL)mergeImportedFavorites:(NSArray<OAFavoriteItem *> *)favorites
++ (BOOL)mergeFavorites:(NSArray<OAFavoriteItem *> *)favorites
        pointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup
 {
     BOOL changed = NO;
@@ -443,9 +443,9 @@ static NSOperationQueue *_favQueue;
                   pointsGroup:nil];
 }
 
-+ (NSInteger)addFavoritesSkippingDuplicates:(NSArray<OAFavoriteItem *> *)favorites
++ (NSInteger)copyToFavorites:(NSArray<OAFavoriteItem *> *)favorites
 {
-    NSInteger skippedCount = 0;
+    NSInteger duplicateCount = 0;
     NSMutableArray<OAFavoriteItem *> *favoritesToAdd = [NSMutableArray arrayWithCapacity:favorites.count];
     NSMutableDictionary<NSString *, NSMutableSet<NSString *> *> *namesByCategory = [NSMutableDictionary dictionary];
 
@@ -469,7 +469,7 @@ static NSOperationQueue *_favQueue;
 
         if (name.length > 0 && [names containsObject:name])
         {
-            skippedCount++;
+            duplicateCount++;
             continue;
         }
 
@@ -481,7 +481,7 @@ static NSOperationQueue *_favQueue;
     if (favoritesToAdd.count > 0)
         [self addFavorites:favoritesToAdd];
 
-    return skippedCount;
+    return duplicateCount;
 }
 
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites

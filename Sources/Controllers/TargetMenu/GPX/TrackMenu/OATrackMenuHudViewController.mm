@@ -3207,10 +3207,10 @@
         [favoriteItems addObject:favoriteItem];
     }
     
-    NSInteger skippedCount = [OAFavoritesHelper addFavoritesSkippingDuplicates:favoriteItems];
-    if (skippedCount > 0)
+    NSInteger duplicateCount = [OAFavoritesHelper copyToFavorites:favoriteItems];
+    if (duplicateCount > 0)
     {
-        NSString *message = [NSString stringWithFormat:OALocalizedString(@"msg_favorites_skipped_as_existing"), (int)skippedCount];
+        NSString *message = [NSString stringWithFormat:OALocalizedString(@"msg_favorites_skipped_as_existing"), (int)duplicateCount];
         [OAUtilities showToast:message details:nil duration:4 inView:self.view];
     }
     _editingWaypointsGroupName = nil;

@@ -297,6 +297,19 @@
     return [widgets copy];
 }
 
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                 screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
+{
+    BOOL useSeparateLayouts = [_settings.useSeparateLayouts get:appMode];
+    if (_cachedAppMode == appMode
+        && _cachedScreenLayoutMode == screenLayoutMode
+        && _cachedUseSeparateLayouts == useSeparateLayouts)
+    {
+        return self.getAllWidgets;
+    }
+    return [OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:screenLayoutMode];
+}
+
 - (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
 {
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
@@ -311,11 +324,8 @@
                                appMode:(OAApplicationMode *)appMode
                       screenLayoutMode:(int)screenLayoutMode
 {
-    NSMutableOrderedSet<OAMapWidgetInfo *> *widgetInfos = [self widgetsForPanel:appMode
-                                                                     filterModes:0
-                                                                          panels:OAWidgetsPanel.values
-                                                                screenLayoutMode:screenLayoutMode];
-    for (OAMapWidgetInfo *widgetInfo in widgetInfos)
+    for (OAMapWidgetInfo *widgetInfo in [self widgetsForAppMode:appMode
+                                              screenLayoutMode:(ScreenLayoutMode)screenLayoutMode])
     {
         if (widgetInfo.widgetType == widgetType && !widgetInfo.isCustomWidget)
             return widgetInfo;
@@ -373,18 +383,8 @@
         [includedWidgetTypes addObject:OACenterWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
     }
-    NSMutableArray<OAMapWidgetInfo *> *widgetInfos = [NSMutableArray array];
-    BOOL useSeparateLayouts = [_settings.useSeparateLayouts get:appMode];
-    if (_cachedAppMode == appMode
-        && _cachedScreenLayoutMode == (ScreenLayoutMode)screenLayoutMode
-        && _cachedUseSeparateLayouts == useSeparateLayouts)
-    {
-        [widgetInfos addObjectsFromArray:self.getAllWidgets];
-    }
-    else
-    {
-        [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:(ScreenLayoutMode)screenLayoutMode]];
-    }
+    NSArray<OAMapWidgetInfo *> *widgetInfos = [self widgetsForAppMode:appMode
+                                                     screenLayoutMode:(ScreenLayoutMode)screenLayoutMode];
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {

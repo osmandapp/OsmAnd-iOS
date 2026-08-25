@@ -206,7 +206,7 @@ static const NSTimeInterval kCarPlayAutoRecalcInterval = 60.0;
     executeOnMainThread(^{
         if (self->_carPlayAutoRecalcTimer)
             return;
-        __weak OADayNightHelper *weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         self->_carPlayAutoRecalcTimer = [NSTimer scheduledTimerWithTimeInterval:kCarPlayAutoRecalcInterval
                                                                         repeats:YES
                                                                           block:^(NSTimer * _Nonnull timer) {

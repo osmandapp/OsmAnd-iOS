@@ -87,9 +87,7 @@ final class CarPlayService: NSObject {
     }
 
     private func reloadMapForRenderingContextChange() {
-        executeOnMainThread {
-            OsmAndApp.swiftInstance().carPlayDayNightModeObservable.notifyEvent()
-        }
+        OsmAndApp.swiftInstance().carPlayDayNightModeObservable.notifyEvent()
     }
     
     private func applyVehicleAppearance(with contentStyle: CPContentStyle) {

@@ -43,8 +43,8 @@ enum WidgetPanelSizeMode: String, CaseIterable {
 
 enum WidgetPanelIconMode: String, CaseIterable {
     case original = "ORIGINAL"
-    case on = "ON"
     case off = "OFF"
+    case on = "ON"
 
     var title: String {
         switch self {

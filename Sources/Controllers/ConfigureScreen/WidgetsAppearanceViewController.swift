@@ -6,8 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private enum RowKey: String {
@@ -23,12 +21,19 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         static let previewHeight: CGFloat = 250
         static let previewVerticalPadding: CGFloat = 16
         static let rowHeight: CGFloat = 52
+        static let panelIconNames = [
+            "ic_custom20_screen_side_left",
+            "ic_custom20_screen_side_right",
+            "ic_custom20_screen_side_top",
+            "ic_custom20_screen_side_bottom"
+        ]
     }
 
     private let appMode: OAApplicationMode
     private let panels = WidgetsPanel.values
     private let appearanceSettings: WidgetPanelAppearanceSettings
     private let previewView = WidgetsAppearancePreviewView()
+
     private lazy var previewHeaderView = UIView()
     private var selectedPanel: WidgetsPanel
 
@@ -84,19 +89,10 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     override func createSubview() -> UIView? {
-        let iconNames = [
-            "ic_custom20_screen_side_left",
-            "ic_custom20_screen_side_right",
-            "ic_custom20_screen_side_top",
-            "ic_custom20_screen_side_bottom"
-        ]
-        let icons = zip(iconNames, panels).compactMap { iconName, panel -> UIImage? in
-            guard let image = UIImage.templateImageNamed(iconName) else { return nil }
-            image.accessibilityLabel = panel.title
-            return image
-        }
+        let icons = Constants.panelIconNames.compactMap { UIImage.templateImageNamed($0) }
         let segmentedControl = UISegmentedControl(items: icons)
         segmentedControl.selectedSegmentIndex = panels.firstIndex(of: selectedPanel) ?? 0
+        updatePanelIconColors(segmentedControl)
         segmentedControl.addTarget(self, action: #selector(onPanelChanged(_:)), for: .valueChanged)
         return segmentedControl
     }
@@ -175,13 +171,13 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         case .size:
             let mode = appearanceSettings.sizeMode(for: selectedPanel)
             cell.configure(title: title,
-                           preview: .image(mode.icon, appMode.getProfileColor()),
+                           preview: .image(mode.icon, .iconColorActive),
                            value: mode.title,
                            menu: createSizeMenu())
         case .icon:
             let mode = appearanceSettings.iconMode(for: selectedPanel)
             cell.configure(title: title,
-                           preview: .image(.icCustomInfoFilled, appMode.getProfileColor()),
+                           preview: .image(.icCustomInfoFilled, .iconColorActive),
                            value: mode.title,
                            menu: createIconMenu())
         case .primaryTextColor:
@@ -366,7 +362,10 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func recreateWidgetsAndRefresh(row: RowKey) {
         OARootViewController.instance().mapPanel.recreateControls()
-        refreshRow(row)
+        let rows: [RowKey] = row == .backgroundColor
+            ? [.primaryTextColor, .secondaryTextColor, .backgroundColor]
+            : [row]
+        refreshRows(rows)
         DispatchQueue.main.async { [weak self] in
             self?.reloadPreview()
         }
@@ -381,13 +380,12 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         reloadPreview()
     }
 
-    private func refreshRow(_ key: RowKey) {
-        guard let indexPath = indexPath(for: key),
-              tableView.indexPathsForVisibleRows?.contains(indexPath) == true else {
-            return
-        }
+    private func refreshRows(_ keys: [RowKey]) {
+        let visibleRows = tableView.indexPathsForVisibleRows ?? []
+        let indexPaths = keys.compactMap(indexPath(for:)).filter(visibleRows.contains)
+        guard !indexPaths.isEmpty else { return }
         UIView.performWithoutAnimation {
-            tableView.reloadRows(at: [indexPath], with: .none)
+            tableView.reloadRows(at: indexPaths, with: .none)
             tableView.layoutIfNeeded()
         }
     }
@@ -421,9 +419,31 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     @objc private func onPanelChanged(_ segmentedControl: UISegmentedControl) {
         guard panels.indices.contains(segmentedControl.selectedSegmentIndex) else { return }
         selectedPanel = panels[segmentedControl.selectedSegmentIndex]
+        updatePanelIconColors(segmentedControl)
         navigationItem.title = getTitle()
         navigationItem.rightBarButtonItems = getRightNavbarButtons()
         reloadScreenData()
+    }
+
+    private func updatePanelIconColors(_ segmentedControl: UISegmentedControl) {
+        for index in panels.indices {
+            guard Constants.panelIconNames.indices.contains(index),
+                  let image = UIImage.templateImageNamed(Constants.panelIconNames[index]) else {
+                continue
+            }
+
+            let color = index == segmentedControl.selectedSegmentIndex
+                ? appMode.getProfileColor()
+                : UIColor.iconColorDefault
+
+            guard let color else {
+                continue
+            }
+
+            let tintedImage = image.withTintColor(color, renderingMode: .alwaysOriginal)
+            tintedImage.accessibilityLabel = panels[index].title
+            segmentedControl.setImage(tintedImage, forSegmentAt: index)
+        }
     }
 
     @objc private func showCopyFrom() {
@@ -502,12 +522,22 @@ private final class WidgetsAppearancePreviewView: UIView {
         } else {
             controller = mapInfoController.bottomPanelController
         }
-
         controller.loadViewIfNeeded()
+        let isSidePanel = panel == .leftPanel || panel == .rightPanel
+        let excludedWidgets = controller.widgetPages
+            .flatMap { $0 }
+            .filter { $0 is CoordinatesBaseWidget }
+        let originalVisibility = excludedWidgets.map(\.isHidden)
+        excludedWidgets.forEach { $0.isHidden = true }
+        defer {
+            for (widget, wasHidden) in zip(excludedWidgets, originalVisibility) {
+                widget.isHidden = wasHidden
+            }
+            controller.view.layoutIfNeeded()
+        }
         controller.view.layoutIfNeeded()
         var contentSize = controller.calculateContentSize()
         guard contentSize.height > 0 else { return nil }
-        let isSidePanel = panel == .leftPanel || panel == .rightPanel
         let sourceView: UIView
         var renderOrigin = CGPoint.zero
         if isSidePanel {
@@ -565,6 +595,7 @@ private final class WidgetsAppearancePreviewView: UIView {
         let y = panel == .bottomPanel ? max(0, bounds.height - size.height) : 0
         imageView.frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
         scrollView.contentSize = CGSize(width: bounds.width, height: max(bounds.height, size.height))
+        scrollView.isScrollEnabled = size.height > bounds.height
     }
 }
 
@@ -576,6 +607,8 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     }
 
     private let previewContainer = UIView()
+    private let previewCheckerboardImageView = UIImageView()
+    private let previewColorView = UIView()
     private let previewImageView = UIImageView()
     private let previewLabel = UILabel()
     private let titleLabel = UILabel()
@@ -697,6 +730,10 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
 
         previewContainer.translatesAutoresizingMaskIntoConstraints = false
+        previewCheckerboardImageView.translatesAutoresizingMaskIntoConstraints = false
+        previewCheckerboardImageView.contentMode = .scaleAspectFit
+        previewCheckerboardImageView.image = UIImage(named: "bg_color_chessboard_pattern")
+        previewColorView.translatesAutoresizingMaskIntoConstraints = false
         previewImageView.translatesAutoresizingMaskIntoConstraints = false
         previewImageView.contentMode = .scaleAspectFit
         previewLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -719,6 +756,8 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         valueButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         contentView.addSubview(previewContainer)
+        previewContainer.addSubview(previewCheckerboardImageView)
+        previewContainer.addSubview(previewColorView)
         previewContainer.addSubview(previewImageView)
         previewContainer.addSubview(previewLabel)
         contentView.addSubview(titleLabel)
@@ -731,6 +770,16 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
             previewContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 13),
             previewContainer.widthAnchor.constraint(equalToConstant: 36),
             previewContainer.heightAnchor.constraint(equalToConstant: 36),
+
+            previewCheckerboardImageView.leadingAnchor.constraint(equalTo: previewContainer.leadingAnchor),
+            previewCheckerboardImageView.trailingAnchor.constraint(equalTo: previewContainer.trailingAnchor),
+            previewCheckerboardImageView.topAnchor.constraint(equalTo: previewContainer.topAnchor),
+            previewCheckerboardImageView.bottomAnchor.constraint(equalTo: previewContainer.bottomAnchor),
+
+            previewColorView.leadingAnchor.constraint(equalTo: previewContainer.leadingAnchor),
+            previewColorView.trailingAnchor.constraint(equalTo: previewContainer.trailingAnchor),
+            previewColorView.topAnchor.constraint(equalTo: previewContainer.topAnchor),
+            previewColorView.bottomAnchor.constraint(equalTo: previewContainer.bottomAnchor),
 
             previewImageView.centerXAnchor.constraint(equalTo: previewContainer.centerXAnchor),
             previewImageView.centerYAnchor.constraint(equalTo: previewContainer.centerYAnchor),
@@ -761,9 +810,12 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     }
 
     private func configurePreview(_ preview: Preview) {
+        previewCheckerboardImageView.isHidden = true
+        previewColorView.isHidden = true
         previewImageView.isHidden = true
         previewLabel.isHidden = true
         previewContainer.layer.cornerRadius = 18
+        previewContainer.clipsToBounds = true
         previewContainer.layer.borderWidth = 0
         switch preview {
         case let .image(image, tintColor):
@@ -772,16 +824,23 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
             previewImageView.image = image
             previewImageView.tintColor = tintColor
         case let .text(textColor, backgroundColor):
-            previewContainer.backgroundColor = backgroundColor
+            configureColorPreview(backgroundColor)
             previewContainer.layer.borderWidth = 1
             previewContainer.layer.borderColor = SeparatorAppearance.color.cgColor
             previewImageView.isHidden = false
             previewImageView.image = .icCustomTextPreview
             previewImageView.tintColor = textColor
         case let .color(color):
-            previewContainer.backgroundColor = color
+            configureColorPreview(color)
             previewContainer.layer.borderWidth = 1
             previewContainer.layer.borderColor = SeparatorAppearance.color.cgColor
         }
+    }
+
+    private func configureColorPreview(_ color: UIColor) {
+        previewContainer.backgroundColor = .clear
+        previewCheckerboardImageView.isHidden = color.cgColor.alpha >= 0.999
+        previewColorView.isHidden = false
+        previewColorView.backgroundColor = color
     }
 }

@@ -565,12 +565,10 @@
 {
     [super updateColors:textState];
     UIColor *valueTextColor = self.valueTextColor;
-    UIColor *textColorSecondary = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    UIColor *borderColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
     _distanceLabel.textColor = valueTextColor;
     _exitLabel.textColor = valueTextColor;
-    _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
-    _streetLabel.textColor = self.isNightMode ? textColorSecondary.dark : textColorSecondary.light;
+    _exitLabel.borderColor = textState.dividerColor;
+    _streetLabel.textColor = textState.unitColor;
     [self updateTextWitState:textState];
     [self applyOutlineIfNeededToLabel:_distanceLabel];
     [self applyOutlineIfNeededToLabel:_exitLabel];

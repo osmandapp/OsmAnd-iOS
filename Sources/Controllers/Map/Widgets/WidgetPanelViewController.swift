@@ -217,7 +217,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
 
     func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
         specialPanelController?.applyAppearance(appearance)
-        pageControl.backgroundColor = appearance.backgroundColor
+        setupPageControl()
         pageContainerView.backgroundColor = appearance.backgroundColor
         for case let page as WidgetPageViewController in pages {
             page.applyAppearance(appearance)

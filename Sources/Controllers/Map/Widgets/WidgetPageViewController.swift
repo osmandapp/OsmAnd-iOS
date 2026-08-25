@@ -213,20 +213,16 @@ extension WidgetPageViewController {
                 widget.showRightSeparator(idx != items.count - 1)
             }
         }
-        updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
+        updateHorizontalSeparatorVisibility(for: stackView.subviews)
     }
     
     // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
-    private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
+    private func updateHorizontalSeparatorVisibility(for views: [UIView]) {
         guard views.count >= 2 else { return }
         
         for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
-            if !horizontalSeparatorView.isHidden {
-                // update color for horizontal separator
-                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light
-            }
         }
     }
 }

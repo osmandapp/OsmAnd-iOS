@@ -173,7 +173,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self, let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
                 if !createNew {
-                    pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                    let sizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
+                    let sizeChanged = pref.get(selectedAppMode) != sizeStyle
+                    pref.set(sizeStyle, mode: selectedAppMode)
+                    if sizeChanged {
+                        WidgetPanelAppearanceSettings(appMode: selectedAppMode)
+                            .setSizeMode(.original, for: widgetPanel)
+                    }
                 }
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
@@ -443,7 +449,12 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
         if !createNew {
+            let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
             pref.set(sw.isOn, mode: selectedAppMode)
+            if iconVisibilityChanged, pref.key.hasPrefix("simple_widget_show_icon") {
+                WidgetPanelAppearanceSettings(appMode: selectedAppMode)
+                    .setIconMode(.original, for: widgetPanel)
+            }
         }
         widgetConfigurationParams?[pref.key] = sw.isOn
         

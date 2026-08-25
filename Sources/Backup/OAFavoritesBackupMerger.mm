@@ -20,31 +20,6 @@
 
 static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
 
-@interface OAFavoritesBackupMerger ()
-
-+ (OAFavoriteGroup *)downloadGroup:(OARemoteFile *)remoteFile backupHelper:(OABackupHelper *)backupHelper;
-+ (OAFavoriteGroup *)loadSnapshot:(NSString *)fileName syncTime:(long)syncTime;
-+ (void)saveSnapshot:(OAFavoriteGroup *)group fileName:(NSString *)fileName syncTime:(long)syncTime;
-+ (NSString *)snapshotRoot;
-+ (NSString *)snapshotPath:(NSString *)fileName syncTime:(long)syncTime;
-+ (OAFavoriteGroup *)readGroup:(NSString *)path;
-+ (OAFavoriteGroup *)mergeBase:(OAFavoriteGroup *)base local:(OAFavoriteGroup *)local remote:(OAFavoriteGroup *)remote;
-+ (NSMutableDictionary<NSString *, OAFavoriteItem *> *)pointsByName:(OAFavoriteGroup *)group;
-+ (BOOL)sameAppearance:(OAFavoriteGroup *)first other:(OAFavoriteGroup *)second;
-+ (BOOL)sameGroup:(OAFavoriteGroup *)first other:(OAFavoriteGroup *)second;
-+ (BOOL)samePoint:(OAFavoriteItem *)first other:(OAFavoriteItem *)second;
-+ (BOOL)samePointContent:(OAFavoriteItem *)first other:(OAFavoriteItem *)second;
-+ (BOOL)hasRenameOf:(OAFavoriteItem *)basePoint
-                 in:(NSDictionary<NSString *, OAFavoriteItem *> *)additions;
-+ (BOOL)sameText:(NSString *)first other:(NSString *)second;
-+ (BOOL)sameTime:(NSDate *)first other:(NSDate *)second;
-+ (NSString *)normalizedIcon:(NSString *)icon;
-+ (NSString *)normalizedBackground:(NSString *)background;
-+ (OAFavoriteItem *)copyPoint:(OAFavoriteItem *)point;
-+ (OAFavoriteGroup *)copyGroup:(OAFavoriteGroup *)group;
-
-@end
-
 @interface OAMergedFavoritesSettingsItem : OAFavoritesSettingsItem
 
 - (instancetype)initWithBaseItem:(OAFavoritesSettingsItem *)baseItem

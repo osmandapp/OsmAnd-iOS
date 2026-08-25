@@ -5,6 +5,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OABackupHelper, OABackupInfo, OARemoteFile, OASettingsItem;
 
 @interface OAFavoritesBackupMerger : NSObject
@@ -14,3 +16,5 @@
 + (void)onDownloadSuccess:(OASettingsItem *)item remoteFile:(OARemoteFile *)remoteFile;
 
 @end
+
+NS_ASSUME_NONNULL_END

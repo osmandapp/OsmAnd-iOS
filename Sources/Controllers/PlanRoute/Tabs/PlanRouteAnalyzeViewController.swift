@@ -1780,8 +1780,7 @@ private extension PlanRouteAnalyzeViewController {
               recognizer.state == .ended,
               let chart = recognizer.view as? BarLineChartViewBase else { return }
         refreshChartOnMap()
-        DispatchQueue.main.async { [weak self, weak chart] in
-            guard let self, let chart else { return }
+        DispatchQueue.main.async {
             chart.layoutIfNeeded()
             self.chartSynchronizer.syncViewPort(from: chart)
         }

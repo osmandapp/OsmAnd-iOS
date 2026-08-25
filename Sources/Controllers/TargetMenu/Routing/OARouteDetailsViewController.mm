@@ -784,15 +784,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         }
         if ([recognizer.view isKindOfClass:BarLineChartViewBase.class])
         {
-            __weak __typeof(self) weakSelf = self;
-            __weak BarLineChartViewBase *weakChart = (BarLineChartViewBase *)recognizer.view;
+            BarLineChartViewBase *chart = (BarLineChartViewBase *)recognizer.view;
             dispatch_async(dispatch_get_main_queue(), ^{
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                BarLineChartViewBase *strongChart = weakChart;
-                if (!strongSelf || !strongChart)
-                    return;
-                [strongChart layoutIfNeeded];
-                [strongSelf->_chartSynchronizer syncViewPortFromChart:strongChart];
+                [chart layoutIfNeeded];
+                [self->_chartSynchronizer syncViewPortFromChart:chart];
             });
         }
     }

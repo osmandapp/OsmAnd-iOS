@@ -23,12 +23,6 @@
 #import "OAOsmBugResult.h"
 #import "OARootViewController.h"
 
-@interface OAUploadOsmPointsAsyncTask ()
-
-- (void)uploadPoints:(NSArray<OAOsmPoint *> *)points;
-
-@end
-
 @implementation OAUploadOsmPointsAsyncTask
 {
     OAOsmEditingPlugin *_plugin;

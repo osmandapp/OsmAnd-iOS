@@ -1250,6 +1250,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *osmEditsSortMode;
 
 - (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode;
+- (BOOL)isCompactPanelsLayout;
 - (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 - (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode;
 - (BOOL)isTransparentWidgets;

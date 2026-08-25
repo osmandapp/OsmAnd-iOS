@@ -7139,6 +7139,23 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode
+{
+    ScreenElementsMode screenElementsMode = [_useSeparateLayouts get:appMode]
+        ? ScreenElementsModeIndependent
+        : ScreenElementsModeShared;
+    ScreenLayoutMode screenLayoutMode = [OAUtilities isLandscape]
+        ? ScreenLayoutModeLandscape
+        : ScreenLayoutModePortrait;
+    return [self panelsLayoutMode:screenLayoutMode screenElementsMode:screenElementsMode];
+}
+
+- (BOOL)isCompactPanelsLayout
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self panelsLayoutModeForAppMode:appMode] get:appMode] == PanelsLayoutModeCompact;
+}
+
 - (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
 {
     return (OACommonBoolean *)[self layoutPreference:_transparentMapTheme

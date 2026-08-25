@@ -104,6 +104,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSTimeInterval _lastWidgetsUpdateTime;
     
     BOOL _cachedLocationAvailableState;
+
+    CGFloat _baseBottomBarLeadingConstant;
+    CGFloat _baseBottomBarTrailingConstant;
     
     CGFloat _lastRulerLeftAbs;
     CGFloat _lastExtraTop;
@@ -197,6 +200,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [super viewDidLoad];
     LogStartup(@"viewDidLoad");
+
+    _baseBottomBarLeadingConstant = self.bottomBarLeadingConstraint.constant;
+    _baseBottomBarTrailingConstant = self.bottomBarTrailingConstraint.constant;
+    [self updateBottomBarConstraints];
 
     _mapInfoController = [[OAMapInfoController alloc] initWithHudViewController:self];
 
@@ -427,6 +434,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         OAApplicationMode *appMode = [_settings.applicationMode get];
         if ([_settings.useSeparateLayouts get:appMode])
             [_mapInfoController recreateControls];
+        else
+            [_mapInfoController updateLayout];
+        [self updateBottomBarConstraints];
         [self updateControlsLayout:YES];
         [self updateMapRulerData];
     }];
@@ -437,6 +447,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [super viewSafeAreaInsetsDidChange];
     self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
+    [self updateBottomBarConstraints];
     [_mapHudLayout onContainerSizeChanged];
 }
 
@@ -973,6 +984,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
+    BOOL panelsLayoutChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
+        [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]],
+        _settings.useSeparateLayouts
+    ]]];
     
     BOOL quickActionChanged = [preferenceKeys intersectsSet:[self quickActionPropertyKeys:mapButtonsHelper]];
     BOOL map3DChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:map3DButtonState.visibilityPref buttonState:map3DButtonState]];
@@ -984,7 +999,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
     BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
-    if (!compassChanged && !colorsChanged && !map3DChanged && !quickActionChanged
+    if (!compassChanged && !colorsChanged && !panelsLayoutChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
         && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
         return;
@@ -997,6 +1012,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         }
         if (colorsChanged)
             [self updateColors];
+        if (panelsLayoutChanged)
+            [_mapInfoController updateLayout];
         if (map3DChanged || quickActionChanged)
             [self updateDependentButtons];
         if (configureMapChanged)
@@ -1441,10 +1458,21 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateBottomBarViewBackgroundColor
 {
-    if ([OAUtilities isLandscape] || [OAUtilities isIPad])
+    BOOL useClearBackground = [OAUtilities isLandscape]
+        ? _settings.isCompactPanelsLayout
+        : [OAUtilities isIPad];
+    if (useClearBackground)
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
         _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
+}
+
+- (void)updateBottomBarConstraints
+{
+    BOOL isLandscape = [OAUtilities isLandscape];
+    CGFloat sideMargin = isLandscape ? -[OAUtilities getLeftMargin] : 0.0;
+    self.bottomBarLeadingConstraint.constant = sideMargin + _baseBottomBarLeadingConstant;
+    self.bottomBarTrailingConstraint.constant = sideMargin + _baseBottomBarTrailingConstant;
 }
 
 - (void) updateTopButtonsLayoutY
@@ -1599,7 +1627,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
     else if (!self.contextMenuMode)
     {
-        if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
+        if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && !_settings.isCompactPanelsLayout)
             offset += self.topWidgetsViewHeightConstraint.constant;
         if (isToolbarVisible)
             offset += _toolbarViewController.view.frame.size.height;

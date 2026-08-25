@@ -352,7 +352,7 @@
     }
     else
     {
-        if ([OAUtilities isLandscapeIpadAware])
+        if (_settings.isCompactPanelsLayout)
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
             [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
@@ -463,7 +463,8 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    CGFloat horizontalPanelWidth = _settings.isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = horizontalPanelWidth;
 
     if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
@@ -506,7 +507,7 @@
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
 
-    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = horizontalPanelWidth;
     if (hasBottomWidgets)
     {
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
@@ -547,8 +548,9 @@
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
     }
+
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
-    if ([OAUtilities isLandscapeIpadAware])
+    if (_settings.isCompactPanelsLayout)
     {
         if (hasLeftWidgets)
         {

@@ -12,9 +12,10 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
     private enum Constants {
         static let horizontalInset: CGFloat = 16
         static let topInset: CGFloat = 10
+        static let verticalPadding: CGFloat = 15
+        static let minimumCapsuleHeight: CGFloat = 52
         static let iconSize: CGFloat = 30
         static let iconTitleSpacing: CGFloat = 16
-        static let cornerRadius: CGFloat = 26
     }
 
     private let borderView = UIView()
@@ -30,6 +31,11 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        borderView.layer.cornerRadius = borderView.bounds.height / 2
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateBorderColor()
@@ -43,9 +49,10 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
     private func setupCell() {
         let horizontalInset = Constants.horizontalInset
         let topInset = Constants.topInset
+        let verticalPadding = Constants.verticalPadding
+        let minimumCapsuleHeight = Constants.minimumCapsuleHeight
         let iconSize = Constants.iconSize
         let iconTitleSpacing = Constants.iconTitleSpacing
-        let cornerRadius = Constants.cornerRadius
 
         backgroundColor = .clear
         contentView.backgroundColor = .clear
@@ -54,7 +61,6 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         isAccessibilityElement = true
 
         borderView.layer.borderWidth = 1
-        borderView.layer.cornerRadius = cornerRadius
         updateBorderColor()
 
         iconView.image = .icCustomSegmentsGap
@@ -65,6 +71,8 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .textColorSecondary
         titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
 
         borderView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(borderView)
@@ -78,6 +86,7 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
             borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             borderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumCapsuleHeight),
 
             iconView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: horizontalInset),
             iconView.centerYAnchor.constraint(equalTo: borderView.centerYAnchor),
@@ -85,8 +94,10 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
             iconView.heightAnchor.constraint(equalToConstant: iconSize),
 
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: iconTitleSpacing),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: borderView.trailingAnchor, constant: -horizontalInset),
-            titleLabel.centerYAnchor.constraint(equalTo: borderView.centerYAnchor)
+            titleLabel.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -horizontalInset),
+            titleLabel.centerYAnchor.constraint(equalTo: borderView.centerYAnchor),
+            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: borderView.topAnchor, constant: verticalPadding),
+            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: borderView.bottomAnchor, constant: -verticalPadding)
         ])
     }
 

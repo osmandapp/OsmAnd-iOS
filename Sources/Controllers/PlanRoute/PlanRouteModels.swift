@@ -136,6 +136,7 @@ struct PlanRoutePoint {
     let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
+    let distanceFromStart: Double
     let bearing: Double
     let isStart: Bool
     let isDestination: Bool
@@ -312,6 +313,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
+    func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int])
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)
     func sortDoorToDoor(pointIndexes: [Int])
     func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)

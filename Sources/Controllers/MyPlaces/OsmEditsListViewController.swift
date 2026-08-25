@@ -485,11 +485,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     }
 
     private func updateSortMode(_ sortMode: MyPlacesSortMode) {
-        settings.osmEditsSortMode.set(sortMode.title)
+        settings.osmEditsSortMode.set(sortMode.rawValue)
     }
 
     private func savedSortMode() -> MyPlacesSortMode {
-        MyPlacesSortMode.byTitle(settings.osmEditsSortMode.get())
+        MyPlacesSortMode(rawValue: settings.osmEditsSortMode.get()) ?? MyPlacesSortModeHelper.defaultOsmEditsSortMode()
     }
     
     private func description(point: OAOsmPoint) -> String {

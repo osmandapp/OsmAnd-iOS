@@ -18,9 +18,6 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
 
     var onDismiss: (() -> Void)?
 
-    private var didFinish = false
-    private var isPreparingShare = false
-
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = false
@@ -60,28 +57,31 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
         return label
     }()
 
-    private lazy var cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.titleLabel?.font = .scaledSystemFont(ofSize: 17, maximumSize: 22)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.setTitleColor(.iconColorActive, for: .normal)
-        button.contentEdgeInsets = .zero
-        button.addTarget(self, action: #selector(onCancelTapped), for: .touchUpInside)
-        return button
-    }()
-
     private lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .buttonBgColorPrimary
-        button.layer.cornerRadius = Layout.buttonCornerRadius
-        button.titleLabel?.font = .scaledSystemFont(ofSize: 15, weight: .semibold)
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseForegroundColor = .buttonTextColorPrimary
+        configuration.background.backgroundColor = .iconColorActive
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 16)
+        configuration.cornerStyle = .fixed
+        configuration.background.cornerRadius = Layout.buttonCornerRadius
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .scaledSystemFont(ofSize: 15, weight: .semibold)
+            return outgoing
+        }
+        button.configuration = configuration
+        button.configurationUpdateHandler = { button in
+            button.alpha = button.isEnabled ? 1 : 0.45
+        }
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.contentEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
-        button.setTitleColor(.buttonTextColorPrimary, for: .normal)
         button.addTarget(self, action: #selector(onSendTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+
+    private var didFinish = false
+    private var isPreparingShare = false
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -98,18 +98,19 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
         applyLocalization()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.presentationController?.delegate = self
-    }
-
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         finish()
     }
 
     private func configureNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: localizedString("shared_string_cancel"),
+            style: .plain,
+            target: self,
+            action: #selector(onCancelTapped)
+        )
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -170,10 +171,14 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
 
     private func applyLocalization() {
         title = localizedString("share_crash_log")
-        cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
+
         messageTitleLabel.text = localizedString("crash_report_prompt_title")
         messageLabel.text = localizedString("crash_report_prompt_description")
-        sendButton.setTitle(localizedString("shared_string_send"), for: .normal)
+        setSendButtonTitle(localizedString("shared_string_send"))
+    }
+
+    private func setSendButtonTitle(_ title: String) {
+        sendButton.configuration?.title = title
     }
 
     @objc private func onCancelTapped() {

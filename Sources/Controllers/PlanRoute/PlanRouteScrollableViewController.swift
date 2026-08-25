@@ -80,6 +80,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return view.bounds.height
     }
 
+    var mapViewportBounds: CGRect {
+        let bounds = view.bounds
+        let minY = bounds.minY + getNavbarHeight()
+        let sheetHeight = height(for: sheetState)
+        let maxY = max(minY, bounds.maxY - sheetHeight)
+        return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
+    }
+
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
         sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded
@@ -477,9 +485,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        crosshairView.image = OAAppSettings.sharedManager().nightMode
-            ? .mapRulerCenterNight
-            : .mapRulerCenterDay
+        let nightMode = OAAppSettings.sharedManager().nightMode
+        crosshairView.image = .mapRulerCenter
+        crosshairView.tintColor = nightMode ? .iconColorBlack.dark : .iconColorBlack.light
         crosshairView.isAccessibilityElement = false
     }
 
@@ -502,7 +510,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let bottom = routeTypeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -routeTypeButtonBottomInset(for: sheetState))
         routeTypeButtonBottomConstraint = bottom
         NSLayoutConstraint.activate([
-            routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            routeTypeButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
             bottom
         ])
         routeTypeButton.accessibilityLabel = localizedString("route_between_points")
@@ -789,6 +797,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setState(_ state: EOADraggableMenuState, animated: Bool) {
         sheetState = state
+        routeTypeButton.isHidden = state == .fullScreen
         let height = height(for: state)
         sheetHeightConstraint?.constant = height
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)

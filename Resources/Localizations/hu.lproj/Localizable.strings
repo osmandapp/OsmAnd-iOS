@@ -2618,7 +2618,7 @@
 "help_article_navigation_guidance_map_during_navigation_name" = "Térkép képernyő navigáció közben";
 "shared_string_buttons" = "Gombok";
 "ant_plus_searching_text" = "Érzékelők keresése";
-"ask_question_propose_features" = "Tegyen fel kérdést, javasoljon funkciókat";
+"ask_question_propose_features" = "Tegyen fel kérdéseket, javasoljon funkciókat";
 "enter_new_name" = "Új név megadása";
 "map_widget_sun_position" = "Napszak váltás";
 "map_3d_mode_hint" = "A gomb hosszú érintése lehetővé teszi a gomb pozíciójának megváltoztatását.";
@@ -2646,7 +2646,7 @@
 "true_bearing_widget_desc" = "A valódi észak és az úti cél közötti szög, az Ön tartózkodási helyéről megfigyelve.";
 "map_widget_group_sunrise_sunset" = "Napkelte, napnyugta";
 "shared_string_all_colors" = "Összes szín";
-"report_an_issues" = "Jelentsen be hibát";
+"report_an_issues" = "Jelentsen egy problémát";
 "shared_string_uploading" = "Felöltés folyamatban";
 "osmand_cloud_deleted_account_descr" = "Minden fiók- és egyéb adat törölve lett az OsmAnd Cloudból.";
 "delete_account" = "Fiók törlése";
@@ -4504,3 +4504,10 @@
 "ais_apply_setting_to_profiles" = "Beállítás alkalmazása";
 "ais_apply_to_current_profile" = "Alkalmazás erre: %@";
 "ais_apply_to_all_profiles" = "Alkalmazás az összes profilra";
+"no_crashes_recorded" = "Nincsenek rögzített összeomlások";
+"share_crash_log" = "Összeomlási napló megosztása";
+"crash_report_prompt_title" = "Az OsmAnd váratlan hibába ütközött.";
+"crash_report_prompt_description" = "Segítsen fejleszteni az alkalmazást a hibajelentés elküldésével. A hibajelentése segít azonosítani és javítani a problémát.";
+"shared_string_send" = "Küldés";
+"send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
+"send_current_app_log_descr" = "Alkalmazás indulása óta";

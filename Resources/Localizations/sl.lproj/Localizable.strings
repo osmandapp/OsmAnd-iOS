@@ -165,7 +165,7 @@
 // Shared Strings
 "shared_string_select" = "Izberi";
 "try_again" = "Poskusi znova";
-"wiki_around" = "Bližnja mesta s članki Wikipedije";
+"wiki_around" = "Bližnji priljubljeni kraji";
 "subcategories" = "Podkategorije";
 "selected_categories" = "Izbrane kategorije";
 "sett_lang_trans" = "prečrkovanje";
@@ -695,7 +695,7 @@
 "osm_edit_close_note" = "Zapri OSM opombo";
 "osm_edit_comment_note" = "Komentiraj OSM opombo";
 "osm_note_reopen_title" = "Ponovno odpri opombo OSM";
-"poi_dialog_comment" = "Opomba";
+"poi_dialog_comment" = "Komentar";
 "poi_dialog_reopen" = "Ponovno odpri";
 "osm_notes_online_layer" = "Opombe OSM (zahteva povezavo)";
 "tab_title_basic" = "Osnovno";
@@ -832,7 +832,7 @@
 "quick_action_edit_action" = "Uredi dejanje";
 "quick_action_switch_day_mode" = "Dnevni način";
 "quick_action_add_create_items" = "Ustvari predmete";
-"average_altitude" = "Povprečna nadmorska višina";
+"average_altitude" = "Povprečna višina";
 "quick_action_switch_night_mode" = "Nočni način";
 "mapillary_menu_title_pano" = "Pokaži le 360° slike";
 "wikivoyage_travel_guide_descr" = "Krajevno shranjeni vodniki po najbolj zanimivih krajih sveta, prikazani v programu OsmAnd, tudi na mestih, kjer ni povezave z internetom.";
@@ -856,7 +856,7 @@
 "map_downloaded" = "Zemljevid je prejet";
 "quick_action_add_poi" = "Dodaj točko POI";
 "quick_action_new_action" = "Dodaj dejanje";
-"altitude_range" = "Obseg nadmorske višine";
+"altitude_range" = "Razpon višine";
 "quick_action_start_stop_nav_descr" = "Pritisnite gumb,če želite začeti ali končati navigacijo.";
 "shared_string_restore" = "Obnovi";
 "quick_action_map_underlay" = "Spremeni podlogo zemljevida";
@@ -1137,7 +1137,7 @@
 "rendering_value_translucent_pink_name" = "Prosojna rožnata";
 "rendering_attr_highway_class_road_name" = "Cesta";
 "routing_attr_height_description" = "Navedi dovoljeno višino vozila na poteh.";
-"routing_attr_avoid_ferry_description" = "Načrtovanje poti brez uporabe trajektov";
+"routing_attr_avoid_ferry_description" = "Izogni se trajektom";
 "rendering_value_translucent_lightblue_name" = "Prosojna svetlo modra";
 "routing_attr_allow_advanced_name" = "Dovoli napredne poti";
 "app_mode_taxi" = "Prevoz s taksijem";
@@ -2276,7 +2276,7 @@
 "external_device_characteristic_speed" = "Hitrost";
 "elevation_profile_widget_desc" = "Prikazuje profil nadmorske višine in naklona trenutne poti.";
 "osmand_cloud_delete_account_confirmation" = "Izbrisati račun\?";
-"map_3d_mode_hint" = "Z dolgim dotikom gumba lahko spremeniš položaj gumba.";
+"map_3d_mode_hint" = "Z dolgim dotikom gumba lahko spremenite položaj gumba.";
 "map_widget_trip_recording_duration" = "Trajanje";
 "osmand_cloud_deletion_account_warning" = "Tvoj račun in vsi podatki o računu bodo %@";
 "shared_string_read" = "Preberi";
@@ -2403,8 +2403,8 @@
 "side_marker_eta" = "Predvideni čas prihoda";
 "gps_info_widget_desc" = "Prikazuje število trenutno vidnih in uporabljenih satelitov.";
 "average_speed_widget_desc" = "Prikazuje povprečno hitrost trenutne vožnje.";
-"routing_attr_avoid_cobblestone_name" = "Brez tlakovanih cest";
-"routing_attr_avoid_cobblestone_description" = "Načrtovanje poti brez uporabe tlakovanih cest";
+"routing_attr_avoid_cobblestone_name" = "Izogni se tlakovanim cestam";
+"routing_attr_avoid_cobblestone_description" = "Izogni se tlakovanim cestam";
 "in_case_of_reverse_direction" = "V primeru obratne smeri";
 "display_position_automatic_descr" = "Odvisno od usmerjenosti zemljevida: spodnji del za smer gibanja, sredinski del za vse drugo.";
 "shared_string_class" = "Razred";
@@ -2509,3 +2509,12 @@
 "years_3" = "Tri leta";
 "get_discount_first_few_parts" = "%@ za prvih %@";
 "allow_3d_descr" = "Omogočite to možnost, da omogočite pogled zemljevida v 2,5 D pogledu";
+"plugin_ais_tracker_description" = "Prikazuje položaje AIS in podatke o bližnjih plovilih. Podatki AIS se prejemajo prek omrežja iz zunanjega sprejemnika AIS.";
+"detailed_track_guidance_description" = "OsmAnd bo vašo pot uskladil z bližnjimi cestami, da vam bo zagotovil boljše usmerjanje za vožnjo zavoj za zavojem.";
+"use_nearby_roads" = "Uporabi bližnje ceste";
+"next_turn_information" = "Podatki o naslednjem zavoju";
+"next_turn_information_desc" = "Prikaže smer in ime ulice prihajajočega zavoja.";
+"remaining_fuel" = "Preostalo gorivo";
+"obd_fuel_consumption" = "Poraba goriva";
+"reset_average_value" = "Ponastavi povprečno vrednost";
+"preparing_file" = "Priprava datoteke";

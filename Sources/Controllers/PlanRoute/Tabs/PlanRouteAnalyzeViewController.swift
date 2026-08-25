@@ -132,6 +132,10 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         return []
     }
 
+    private var mapViewportBounds: CGRect? {
+        (parent as? PlanRouteScrollableViewController)?.mapViewportBounds
+    }
+
     init(dataSource: PlanRouteAnalyzeDataSource?) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
@@ -259,8 +263,12 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
             return
         }
         let helper = trackChartHelper(for: gpxFile)
+        let viewportBounds = mapViewportBounds
+        if let viewportBounds {
+            helper.screenBBox = viewportBounds
+        }
         helper.refreshChart(chart,
-                            fitTrack: false,
+                            fitTrack: viewportBounds != nil,
                             forceFit: false,
                             recalculateXAxis: false,
                             analysis: analysis,
@@ -1217,19 +1225,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        switch currentState {
-        case .noData:
-            showGetElevationSheet()
-        case .elevationCalculating, .routeCalculating:
-            break
-        case .hasData:
-            if !hasOverviewData, indexPath.section == 0 {
-                showGetElevationSheet()
-                return
-            }
-            guard indexPath.section >= roadAttributesSectionStart else { return }
-            toggleRoadAttribute(at: indexPath.section - roadAttributesSectionStart)
-        }
+        guard case .hasData = currentState,
+              indexPath.section >= roadAttributesSectionStart else { return }
+        toggleRoadAttribute(at: indexPath.section - roadAttributesSectionStart)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

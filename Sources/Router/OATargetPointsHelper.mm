@@ -711,6 +711,9 @@
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
                 if (!strongSelf)
                     return;
+                
+                if ([strongSelf->_intermediatePoints indexOfObjectIdenticalTo:targetPoint] == NSNotFound)
+                    return;
 
                 if (isNameNotValid)
                     [targetPoint.pointDescription setName:pointName];

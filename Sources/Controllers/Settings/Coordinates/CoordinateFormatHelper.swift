@@ -53,19 +53,9 @@ enum CoordinateFormatHelper {
         let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let work = DispatchWorkItem {
             let results = EpsgCatalogRepository.shared.searchGridFormats(trimmed.isEmpty ? nil : trimmed)
-            let builtIns = CoordinateFormatHelper.resolve(CoordinateFormatIds.allBuiltInFormatIds)
-                .filter { gridFormatProvider.isSupported($0.id) }
-            let merged: [CoordinateFormat]
-            if trimmed.isEmpty {
-                merged = builtIns + results
-            } else {
-                let q = trimmed.lowercased()
-                let filteredBuiltIns = builtIns.filter {
-                    $0.title.lowercased().contains(q) || $0.id.contains(q)
-                }
-                merged = filteredBuiltIns + results
+            DispatchQueue.main.async {
+                completion(results)
             }
-            DispatchQueue.main.async { completion(merged) }
         }
         searchWorkItem = work
         DispatchQueue.global(qos: .userInitiated).async(execute: work)

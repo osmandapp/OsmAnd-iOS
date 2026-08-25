@@ -31,8 +31,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
 
     init(appMode: OAApplicationMode, excludedIds: [String], addMode: AddMode = .preferred) {
         self.addMode = addMode
-        let ids = (addMode == .gridSelection) ? [] : excludedIds
-        self.excludedIds = Set(ids.compactMap { CoordinateFormatIds.normalize($0) })
+        self.excludedIds = Set(excludedIds.compactMap { CoordinateFormatIds.normalize($0) })
         super.init(appMode: appMode)
     }
     

@@ -317,9 +317,15 @@ final class CoordinateFormatSelectorRouter: NSObject {
     @objc static func presentGridAdd(from presenter: UIViewController,
                                      appMode: OAApplicationMode,
                                      onSelected: @escaping (String) -> Void) {
+        
+        let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
+        let provider = CoordinateFormatHelper.gridFormatProvider
+        var excludedIds = storage.preferredIds(appMode) + storage.getRecentIds()
+        excludedIds = provider.filterSupportedIds(excludedIds)
+        
         let addVC = CoordinatesFormatAddViewController(
             appMode: appMode,
-            excludedIds: [],
+            excludedIds: excludedIds,
             addMode: .gridSelection
         )
         addVC.onFormatAdded = { id in

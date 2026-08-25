@@ -36,6 +36,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "OAFavoriteFolderBridgeItem.h"
 #import "OAFavoritePointBridgeItem.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 

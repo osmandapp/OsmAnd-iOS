@@ -82,6 +82,12 @@ final class RouteChartSynchronizer: NSObject {
         chart.lineData?.dataSets
             .compactMap { $0 as? LineChartDataSetProtocol }
             .forEach { $0.highlightColor = .chartSliderLine }
+        if usesDistanceXAxis {
+            barCharts.allObjects.forEach {
+                alignHorizontalAxis(of: $0)
+                $0.notifyDataSetChanged()
+            }
+        }
         applyStoredVisibleRange(to: chart)
         applySelectionToPrimaryChart(callDelegate: false)
         applySelectionToBarCharts()
@@ -104,10 +110,11 @@ final class RouteChartSynchronizer: NSObject {
                 return touchX(in: chart)
             }
             chart.renderer = renderer
-            chart.notifyDataSetChanged()
             barCharts.add(chart)
             installSelectionGestureTargets(in: chart)
         }
+        alignHorizontalAxis(of: chart)
+        chart.notifyDataSetChanged()
         applyStoredVisibleRange(to: chart)
         applySelection(to: chart)
     }
@@ -188,6 +195,16 @@ final class RouteChartSynchronizer: NSObject {
             recognizer.removeTarget(self, action: #selector(onBarChartTap(_:)))
             recognizer.removeTarget(self, action: #selector(onBarChartPan(_:)))
         }
+    }
+
+    private func alignHorizontalAxis(of chart: HorizontalBarChartView) {
+        guard usesDistanceXAxis,
+              let primaryChart,
+              let primaryRange = horizontalRange(for: primaryChart) else { return }
+        chart.leftAxis.axisMinimum = primaryRange.lowerBound
+        chart.leftAxis.axisMaximum = primaryRange.upperBound
+        chart.rightAxis.axisMinimum = primaryRange.lowerBound
+        chart.rightAxis.axisMaximum = primaryRange.upperBound
     }
 
     private func normalizedVisibleRange(in chart: BarLineChartViewBase) -> ClosedRange<Double>? {

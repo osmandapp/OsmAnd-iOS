@@ -13,7 +13,6 @@
 #import "OAInputTableViewCell.h"
 #import "OAMapButtonsHelper.h"
 #import "OASizes.h"
-#import "OAColors.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAEditColorViewController.h"
@@ -236,6 +235,7 @@
     
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
+    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     textField.underline.hidden = YES;
     textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -578,16 +578,18 @@
         if (cell)
         {
             MDCMultilineTextField *textField = cell.inputField;
+            textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             textField.underline.hidden = YES;
             textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             textField.placeholder = item[@"hint"];
+            textField.placeholderLabel.textColor = UIColor.placeholderTextColor;
             [textField.textView setText:item[@"title"]];
             textField.textView.delegate = self;
             textField.layoutDelegate = self;
             [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+            textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
             [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
         }
@@ -872,8 +874,11 @@
     [items setObject:[NSDictionary dictionaryWithDictionary:item] atIndexedSubscript:indexPath.row];
     [_data setObject:[NSArray arrayWithArray:items] forKey:key];
     [self hideTagToolbar];
-    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [cell.textField.textView setText:@""];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+        [((OATextInputFloatingCellWithIcon *)cell).textField.textView setText:@""];
+    else if ([cell isKindOfClass:OAMultilineTextViewCell.class])
+        [((OAMultilineTextViewCell *)cell).inputField.textView setText:@""];
     [self.tableView endUpdates];
 }
 

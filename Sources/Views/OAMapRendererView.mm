@@ -450,6 +450,21 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getState().fixedPixel;
 }
 
+- (CGPoint)mapTargetScreenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI targetScreenPoint = _renderer->getState().fixedPixel;
+    return CGPointMake(targetScreenPoint.x / scale, targetScreenPoint.y / scale);
+}
+
+- (void)setMapTargetScreenPoint:(CGPoint)mapTargetScreenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI screenPoint(static_cast<int32_t>(mapTargetScreenPoint.x * scale),
+                               static_cast<int32_t>(mapTargetScreenPoint.y * scale));
+    _renderer->setMapTarget(screenPoint, self.target31);
+}
+
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
@@ -654,6 +669,14 @@ forcedUpdate:(BOOL)forcedUpdate
 - (BOOL) resetMapTargetPixelCoordinates:(OsmAnd::PointI)screenPoint
 {
     return _renderer->resetMapTargetPixelCoordinates(screenPoint);
+}
+
+- (void)reanchorMapTarget:(CGPoint)screenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI targetScreenPoint(static_cast<int32_t>(screenPoint.x * scale),
+                                     static_cast<int32_t>(screenPoint.y * scale));
+    _renderer->resetMapTargetPixelCoordinates(targetScreenPoint);
 }
 
 - (OsmAnd::AreaI) getVisibleBBox31

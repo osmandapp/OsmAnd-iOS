@@ -21,11 +21,12 @@
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kVerticalMargin 18.
-#define kHorizontalMargin 20.
-#define kApproximateEmptyMenuHeight 250.
-#define kApproximateGpxHeaderHeight 38.
-#define kApproximateGpxCellHeight 70.
+static const CGFloat kVerticalMargin = 18.0;
+static const CGFloat kHorizontalMargin = 20.0;
+static const CGFloat kApproximateEmptyMenuHeight = 250.0;
+static const CGFloat kApproximateGpxHeaderHeight = 38.0;
+static const CGFloat kApproximateGpxCellHeight = 70.0;
+static const NSUInteger kRecentTracksLimit = 5;
 
 @interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
@@ -34,16 +35,6 @@
 @implementation InitialRoutePlanningBottomSheetViewController
 {
     NSArray<NSArray *> *_data;
-}
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        [self generateData];
-    }
-    return self;
 }
 
 - (void)viewDidLoad
@@ -107,14 +98,7 @@
     
     [data addObject:actionSection];
 
-    OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [[db getDataItems] sortedArrayUsingComparator:^NSComparisonResult(OASGpxDataItem *obj1, OASGpxDataItem *obj2) {
-        NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFilePath];
-        NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFilePath];
-        return [time2 compare:time1];
-    }];
-    
-    NSArray *gpxTopList = [gpxList subarrayWithRange:NSMakeRange(0, min(5, (int) gpxList.count))];
+    NSArray<OASGpxDataItem *> *gpxTopList = [[OAGPXDatabase sharedDb] recentlyModifiedItemsWithLimit:kRecentTracksLimit];
 
     if (gpxTopList.count > 0)
     {

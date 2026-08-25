@@ -338,12 +338,11 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     }
     
     private func updateSortMode(_ sortMode: MyPlacesSortMode) {
-        settings.travelGuidesSortMode.set(sortMode.title)
+        settings.travelGuidesSortMode.set(sortMode.rawValue)
     }
     
     private func savedSortMode() -> MyPlacesSortMode {
-        let sortModeTitle = settings.travelGuidesSortMode.get()
-        return MyPlacesSortMode.byTitle(sortModeTitle)
+        MyPlacesSortMode(rawValue: settings.travelGuidesSortMode.get()) ?? MyPlacesSortModeHelper.defaultTravelGuidesSortMode()
     }
     
     private func setupNavbarButtons() {

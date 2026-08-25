@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd Hărți";
+"send_crash_log" = "Trimite jurnalul de eroare";
+"send_crash_log_descr" = "Conține doar informații despre erorile aplicației";
 "shared_string_collapse" = "Colapsează";
 "arrival_distance_descr" = "Cât de repede vrei să se anunțe sosirea\?";
 "shared_string_enabled" = "Activ";
@@ -1415,7 +1417,7 @@
 "import_profile_descr" = "Pentru a importa un profil, atingeți fișierul necesar (*.osf) în orice aplicație și selectați \"Copy to OsmAnd Maps\"";
 "profile_sett_descr" = "Afectează profilul de aplicație selectat";
 "not_available_profile_name" = "Profilul cu acest nume există deja.";
-"preparing_file" = "Pregătirea dosarului";
+"preparing_file" = "Se pregătește fișierul";
 "reading_file" = "Citirea fișierului";
 "rearrange_profiles" = "Rearanjarea profilurilor";
 "will_be_show_while_moving" = "Acesta va fi afișat în timp ce se deplasează";

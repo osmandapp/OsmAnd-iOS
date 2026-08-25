@@ -49,12 +49,15 @@
                                             <constraint firstAttribute="height" constant="73" id="kDV-0D-EIN"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LbS-A2-v0k">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LbS-A2-v0k" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="113" width="328" height="1"/>
                                         <color key="backgroundColor" name="customSeparator"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="Vzq-gu-IWy"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="thicknessConstraint" destination="Vzq-gu-IWy" id="s01-TC-001"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>

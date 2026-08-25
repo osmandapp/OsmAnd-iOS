@@ -1,4 +1,13 @@
 "OsmAnd Maps" = "OsmAnd Maps";
+"send_crash_log" = "Send crash logs";
+"send_crash_log_descr" = "From previous crashes";
+"no_crashes_recorded" = "No crashes recorded";
+"share_crash_log" = "Share crash log";
+"crash_report_prompt_title" = "OsmAnd has encountered an unexpected error.";
+"crash_report_prompt_description" = "Please help us improve the app by sending the crash report. Your crash report will help us identify and fix the issue.";
+"shared_string_send" = "Send";
+"send_current_app_log" = "Send current app log";
+"send_current_app_log_descr" = "Since the app started";
 
 "download_depth_countours" = "Nautical depth contours";
 
@@ -228,12 +237,12 @@
 "setup" = "Setup";
 "gitHub_discussion" = "GitHub Discussion";
 "telegram_chats" = "Telegram chats";
-"report_an_issues" = "Report an issue";
+"report_an_issues" = "Report a problem";
 "open_issue_on_gitHub" = "Open issue on GitHub";
 "about_osmAnd" = "About OsmAnd";
 "osmAnd_team" = "OsmAnd Team";
 "testFlight" = "TestFlight";
-"ask_question_propose_features" = "Ask question, propose features";
+"ask_question_propose_features" = "Ask questions, propose features";
 "detailed_log_file" = "Detailed log file";
 "download_install_beta_version" = "Download and install beta version of OsmAnd";
 "rotate_map_to" = "Map orientation";
@@ -4377,6 +4386,7 @@
 "copy_as_new_folder" = "Copy as new folder";
 "add_to_a_folder" = "Add to a folder";
 "add_to_favorites" = "Add to favorites";
+"msg_favorites_skipped_as_existing" = "Favorite points (%d) were skipped as already existing.";
 "short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";

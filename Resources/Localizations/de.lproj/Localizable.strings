@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd-Karten";
+"send_crash_log" = "Absturzprotokoll senden";
+"send_crash_log_descr" = "Enthält nur Informationen über Abstürze";
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";

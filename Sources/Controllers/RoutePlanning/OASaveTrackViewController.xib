@@ -31,12 +31,15 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lh9-fF-Ev6">
                     <rect key="frame" x="0.0" y="802" width="414" height="94"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gjX-FC-sw6">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gjX-FC-sw6" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="brZ-KL-Gvf"/>
                             </constraints>
+                            <connections>
+                                <outlet property="thicknessConstraint" destination="brZ-KL-Gvf" id="s01-TC-001"/>
+                            </connections>
                         </view>
                     </subviews>
                     <color key="backgroundColor" name="viewBg"/>

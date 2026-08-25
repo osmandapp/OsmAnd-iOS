@@ -1,4 +1,6 @@
 "download_depth_countours" = "Merelliset korkeuskäyrät";
+"send_crash_log" = "Lähetä kaatumisloki";
+"send_crash_log_descr" = "Sisältää ainoastaan tietoa kaatumisista";
 "day_short" = "pv";
 "week_short" = "vko";
 "weeks_short" = "vko";

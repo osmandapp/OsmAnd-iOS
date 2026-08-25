@@ -1,4 +1,6 @@
 "download_depth_countours" = "Maraj profundec-kurboj";
+"send_crash_log" = "Sendi pane-protokolon";
+"send_crash_log_descr" = "Enhavas nur informojn pri paneoj";
 "day" = "tago";
 "days_2_4" = "tagoj";
 "days_5" = "tagoj";
@@ -2345,7 +2347,7 @@
 "street_name_widget_desc" = "Fenestraĵo montranta nomon de la nuna strato kun ⬆sageto aŭ nomon de la sekva strato kun farenda manovro.";
 "shortest_distance_first" = "distanco (kreskante)";
 "quick_action_map_center_widget_descr" = "Butono por montri/kaŝi fenestraĵon de koordinatoj de la map-centro.";
-"external_sensors_plugin_description" = "Aliro al eksteraj sentiloj por legi koran pulson, rapidon de pedalado, rapidon kaj povumon de biciklado. Postulas por ke la aparato estu konektita al kongruaj sentiloj per la sendrata protokolo ANT+.";
+"external_sensors_plugin_description" = "Aliro al eksteraj sentiloj por legi koran pulson, rapidon de pedalado, rapidon kaj povumon de biciklado. Postulas por ke la aparato estu konektita al akordaj sentiloj per la sendrata protokolo ANT+.";
 "ant_plus_bluetooth_off_description" = "Aktivigu Bludenton kaj kupli per ĝi sentilon.";
 "help_article_navigation_routing_train_routing_name" = "Vagonaro";
 "help_article_purchases_ios_name" = "Aĉetoj (iOS)";
@@ -2633,7 +2635,7 @@
 "shared_strings_dimensions" = "Dimensioj";
 "add_smart_folder" = "Nova inteligenta dosierujo";
 "auto_25_chars_route_kr" = "Veturu je dekstre";
-"empty_smart_folder_title" = "Neniu kongrua spuro";
+"empty_smart_folder_title" = "Neniu akorda spuro";
 "detailed_track_guidance" = "Detala gvidado laŭ spuro";
 "shared_string_pause" = "Paŭzigi";
 "change_activity" = "Ŝanĝi aktivecon";

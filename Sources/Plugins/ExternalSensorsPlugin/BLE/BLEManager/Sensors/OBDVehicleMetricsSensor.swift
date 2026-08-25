@@ -20,9 +20,9 @@ final class OBDVehicleMetricsSensor: Sensor {
         case "2AF0".CBUUIDRepresentation, "2AF1".CBUUIDRepresentation, "FFE1".CBUUIDRepresentation:
             processReceivedData(data, result: result)
         case "FFF1".CBUUIDRepresentation:
-            print("for reading")
+            debugPrint("[OBDVehicleMetricsSensor] -> for reading")
         default:
-            debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
+            debugPrint("[OBDVehicleMetricsSensor] -> Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
 
@@ -36,22 +36,32 @@ final class OBDVehicleMetricsSensor: Sensor {
     }
 
     func processReceivedData(_ data: Data, result: @escaping (Result<Void, Error>) -> Void) {
-        NSLog("processReceivedData 1")
+        let previousBufferSize = buffer.count
         buffer.append(data)
+        let loggableChunk = String(decoding: data, as: UTF8.self)
+            .replacingOccurrences(of: "\r", with: "\\r")
+            .replacingOccurrences(of: "\n", with: "\\n")
+        NSLog("[OBDVehicleMetricsSensor] -> processReceivedData received | chunkBytes: \(data.count) | bufferBytes: \(previousBufferSize) -> \(buffer.count) | chunk: \(loggableChunk)")
         
         guard var string = String(data: buffer, encoding: .utf8) else {
+            let bufferHex = buffer.map { String(format: "%02X", $0) }.joined(separator: " ")
+            NSLog("[OBDVehicleMetricsSensor] -> processReceivedData invalid UTF-8 | bufferHex: \(bufferHex) | clearing bufferBytes: \(buffer.count)")
             clearBuffer()
             return
         }
         string = string.replacingOccurrences(of: "\r", with: "")
+        let loggableResponse = string.replacingOccurrences(of: "\n", with: "\\n")
         
         if string.contains(">") {
-            NSLog("processReceivedData 2")
+            let previousResponseSize = stringResponse.utf8.count
+            NSLog("[OBDVehicleMetricsSensor] -> processReceivedData prompt received | response: \(loggableResponse)")
             appendObdResponse(string)
-            NSLog("processReceivedData 3")
+            NSLog("[OBDVehicleMetricsSensor] -> processReceivedData response appended | responseBytes: \(previousResponseSize) -> \(stringResponse.utf8.count)")
             result(.success(()))
-            NSLog("processReceivedData OBD -> Response: \(string)")
             isReadyBufferResponse = true
+            NSLog("[OBDVehicleMetricsSensor] -> processReceivedData completed | isReadyBufferResponse: \(isReadyBufferResponse)")
+        } else {
+            NSLog("[OBDVehicleMetricsSensor] -> processReceivedData waiting for prompt | bufferBytes: \(buffer.count) | response: \(loggableResponse)")
         }
     }
 

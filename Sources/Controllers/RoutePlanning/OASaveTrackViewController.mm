@@ -75,7 +75,8 @@
 
 - (void) viewDidLoad
 {
-        [super viewDidLoad];
+    [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -165,7 +166,7 @@
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    appearance.shadowColor = [SeparatorAppearance color];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]

@@ -71,7 +71,7 @@ final class RouteChartSynchronizer: NSObject {
         primaryXAxisType == .distance
     }
 
-    @objc(setPrimaryChart:) func setPrimaryChart(_ chart: ElevationChart) {
+    func setPrimaryChart(_ chart: ElevationChart) {
         let xAxisType = (chart.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet)?.getDataSetAxisType()
         if primaryXAxisType != nil, primaryXAxisType != xAxisType {
             selectedXAxisValue = nil
@@ -87,7 +87,7 @@ final class RouteChartSynchronizer: NSObject {
         applySelectionToBarCharts()
     }
 
-    @objc(registerBarChart:) func registerBarChart(_ chart: HorizontalBarChartView) {
+    func registerBarChart(_ chart: HorizontalBarChartView) {
         if !barCharts.contains(chart) {
             let maxHighlightDistance = Self.maxHighlightDistance
             chart.maxHighlightDistance = maxHighlightDistance
@@ -112,7 +112,7 @@ final class RouteChartSynchronizer: NSObject {
         applySelection(to: chart)
     }
 
-    @objc(syncHighlight:sourceChart:) func syncHighlight(_ highlight: Highlight, sourceChart: BarLineChartViewBase) {
+    func syncHighlight(_ highlight: Highlight, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atValue: highlight.x, in: sourceChart) else { return }
         applySelectionToBarCharts()
     }
@@ -134,7 +134,7 @@ final class RouteChartSynchronizer: NSObject {
         applySelectionToBarCharts()
     }
 
-    @objc(clearSynchronizedHighlights) func clearSynchronizedHighlights() {
+    func clearSynchronizedHighlights() {
         selectedProgress = nil
         selectedXAxisValue = nil
         if let primaryChart {
@@ -143,7 +143,7 @@ final class RouteChartSynchronizer: NSObject {
         barCharts.allObjects.forEach { clearHighlight(in: $0) }
     }
 
-    @objc(reset) func reset() {
+    func reset() {
         selectedProgress = nil
         selectedXAxisValue = nil
         visibleProgressRange = nil

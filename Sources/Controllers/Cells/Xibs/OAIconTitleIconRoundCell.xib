@@ -36,7 +36,7 @@
                                 <color key="textColor" name="textColorPrimary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Xv-ip-rXT" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Xv-ip-rXT">
                                 <rect key="frame" x="56" y="48" width="232" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="customSeparator"/>

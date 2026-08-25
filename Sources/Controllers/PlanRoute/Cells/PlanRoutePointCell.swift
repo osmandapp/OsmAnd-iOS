@@ -10,8 +10,6 @@ import UIKit
 final class PlanRoutePointCell: UITableViewCell {
 
     private static let horizontalInset: CGFloat = 16
-    private static let minimumHeight: CGFloat = 68
-    private static let verticalInset: CGFloat = 12
     private static let circleSize: CGFloat = 28
     private static let deleteButtonSize: CGFloat = 30
     private static let deleteNumberSpacing: CGFloat = 26
@@ -42,7 +40,7 @@ final class PlanRoutePointCell: UITableViewCell {
                            left: Self.textLeadingInset,
                            bottom: 0,
                            right: Self.horizontalInset)
-        numberLabel.text = "\(point.indexInSegment + 1)"
+        numberLabel.text = "\(point.index + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
         subtitleLabel.text = subtitle(for: point)
@@ -67,7 +65,6 @@ final class PlanRoutePointCell: UITableViewCell {
         numberLabel.font = .scaledSystemFont(ofSize: 13, weight: .semibold)
         numberLabel.textColor = .white
         numberLabel.textAlignment = .center
-        numberLabel.adjustsFontForContentSizeCategory = true
         numberLabel.adjustsFontSizeToFitWidth = true
         numberLabel.minimumScaleFactor = 0.5
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -75,29 +72,17 @@ final class PlanRoutePointCell: UITableViewCell {
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .textColorPrimary
-        titleLabel.numberOfLines = 0
-        titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.lineBreakMode = .byWordWrapping
-        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
+        subtitleLabel.font = .scaledSystemFont(ofSize: 13)
         subtitleLabel.textColor = .textColorSecondary
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.adjustsFontForContentSizeCategory = true
-        subtitleLabel.lineBreakMode = .byWordWrapping
-        subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         let textStack = UIStackView(arrangedSubviews: [subtitleLabel, titleLabel])
         textStack.axis = .vertical
-        textStack.distribution = .fillProportionally
         textStack.spacing = 2
 
         [deleteButton, numberContainer, textStack].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
-
-        let textTopConstraint = textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.verticalInset)
-        let textBottomConstraint = textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.verticalInset)
 
         NSLayoutConstraint.activate([
             deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
@@ -116,9 +101,8 @@ final class PlanRoutePointCell: UITableViewCell {
 
             textStack.leadingAnchor.constraint(equalTo: numberContainer.trailingAnchor, constant: Self.numberTextSpacing),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
-            textTopConstraint,
-            textBottomConstraint,
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
+            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8)
         ])
     }
 
@@ -126,7 +110,7 @@ final class PlanRoutePointCell: UITableViewCell {
         if point.isStart {
             return localizedString("start_point")
         }
-        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromStart)) ?? ""
+        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromPrevious)) ?? ""
         if point.isDestination {
             return "\(distance) • \(localizedString("route_descr_destination"))"
         }

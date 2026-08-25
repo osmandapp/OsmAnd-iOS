@@ -10,7 +10,7 @@ import CoreBluetooth
 final class BatteryData: SensorData {
     var timestamp: TimeInterval = 0
     var batteryLevel: Int = -1
-
+    
     var widgetFields: [SensorWidgetDataField]? {
         [SensorWidgetDataField(fieldType: .battery,
                                nameId: localizedString("map_widget_battery"),
@@ -18,7 +18,7 @@ final class BatteryData: SensorData {
                                numberValue: nil,
                                stringValue: batteryLevel != -1 ? String(batteryLevel) : "-")]
     }
-
+    
     func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
         widgetFields?.first
     }
@@ -26,11 +26,7 @@ final class BatteryData: SensorData {
 
 final class BLEBatterySensor: Sensor {
     private(set) var lastBatteryData = BatteryData()
-
-    override func hasActualData(for widgetType: WidgetType) -> Bool {
-        lastBatteryData.batteryLevel != -1
-    }
-
+    
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_BATTERY.CBUUIDRepresentation:
@@ -43,7 +39,7 @@ final class BLEBatterySensor: Sensor {
         default: break
         }
     }
-
+    
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         [lastBatteryData].compactMap { $0 }
     }

@@ -67,15 +67,12 @@
                             <rect key="frame" x="0.0" y="313" width="414" height="94"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2q-mJ-Ycy" userLabel="Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2q-mJ-Ycy" userLabel="Separator">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                                     <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="q2g-17-0yI"/>
                                     </constraints>
-                                    <connections>
-                                        <outlet property="thicknessConstraint" destination="q2g-17-0yI" id="s01-TC-001"/>
-                                    </connections>
                                 </view>
                                 <tabBar clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
                                     <rect key="frame" x="8" y="1" width="398" height="93"/>

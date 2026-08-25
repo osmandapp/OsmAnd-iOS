@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#define kSeparatorHeight .5
 #define kIconSize 30.
 #define kPrimarySpaceMargin 16.
 #define kSecondarySpaceMargin 12.

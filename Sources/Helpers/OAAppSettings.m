@@ -6391,10 +6391,10 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
 
-        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeValue]];
+        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
         [_globalPreferences setObject:_travelGuidesSortMode forKey:travelGuidesSortModeKey];
         
-        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeValue]];
+        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeTitle]];
                [_globalPreferences setObject:_osmEditsSortMode forKey:osmEditsSortModeKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];

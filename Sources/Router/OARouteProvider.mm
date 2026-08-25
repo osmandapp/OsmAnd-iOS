@@ -56,88 +56,6 @@
 static NSString * const kRouteCalculationOutOfMemoryError = @"Not enough memory to calculate route.";
 static NSString * const kRouteCalculationFailedError = @"Route calculation failed.";
 
-static BOOL OAHasValidExternalTimestamps(OALocationsHolder *locationsHolder)
-{
-    if (locationsHolder.size == 0)
-        return NO;
-
-    int64_t lastTimestamp = 0;
-    for (NSInteger index = 0; index < locationsHolder.size; index++)
-    {
-        int64_t timestamp = [locationsHolder timeAtIndex:index];
-        if (timestamp == 0 || timestamp < lastTimestamp)
-            return NO;
-        lastTimestamp = timestamp;
-    }
-    return YES;
-}
-
-static float OACalculateExternalSpeed(const SHARED_PTR<GpxPoint> &gpxPoint,
-                                      const SHARED_PTR<RouteSegmentResult> &segment,
-                                      OALocationsHolder *locationsHolder)
-{
-    NSInteger startIndex = gpxPoint->ind;
-    NSInteger endIndex = gpxPoint->targetInd;
-    if (endIndex == -1 && startIndex >= 0 && startIndex + 1 < locationsHolder.size)
-        endIndex = startIndex + 1;
-
-    if (startIndex < 0 || endIndex <= 0 || startIndex >= endIndex || endIndex >= locationsHolder.size)
-        return segment->segmentSpeed;
-
-    int64_t duration = [locationsHolder timeAtIndex:endIndex] - [locationsHolder timeAtIndex:startIndex];
-    if (duration <= 0)
-        return segment->segmentSpeed;
-
-    double distance = 0;
-    for (NSInteger index = startIndex; index < endIndex; index++)
-    {
-        distance += getDistance([locationsHolder getLatitude:index],
-                                [locationsHolder getLongitude:index],
-                                [locationsHolder getLatitude:index + 1],
-                                [locationsHolder getLongitude:index + 1]);
-    }
-    return distance > 0 ? (float)(distance / (duration / 1000.0)) : segment->segmentSpeed;
-}
-
-static void OARecalculateTimeAndDistance(const vector<SHARED_PTR<RouteSegmentResult>> &segments)
-{
-    for (const auto &segment : segments)
-    {
-        float speed = segment->segmentSpeed;
-        if (speed == 0)
-            continue;
-
-        BOOL isForward = segment->getStartPointIndex() < segment->getEndPointIndex();
-        double distance = 0;
-        for (NSInteger index = segment->getStartPointIndex(); index != segment->getEndPointIndex();)
-        {
-            NSInteger nextIndex = isForward ? index + 1 : index - 1;
-            distance += measuredDist31(segment->object->getPoint31XTile((int)index),
-                                       segment->object->getPoint31YTile((int)index),
-                                       segment->object->getPoint31XTile((int)nextIndex),
-                                       segment->object->getPoint31YTile((int)nextIndex));
-            index = nextIndex;
-        }
-        segment->segmentTime = (float)(distance / speed);
-        segment->segmentSpeed = speed;
-        segment->distance = (float)distance;
-    }
-}
-
-static void OAApplyExternalTimestamps(const SHARED_PTR<GpxRouteApproximation> &approximation,
-                                      OALocationsHolder *locationsHolder)
-{
-    if (approximation == nullptr || !OAHasValidExternalTimestamps(locationsHolder))
-        return;
-
-    for (const auto &gpxPoint : approximation->finalPoints)
-    {
-        for (const auto &segment : gpxPoint->routeToTarget)
-            segment->segmentSpeed = OACalculateExternalSpeed(gpxPoint, segment, locationsHolder);
-        OARecalculateTimeAndDistance(gpxPoint->routeToTarget);
-    }
-}
-
 static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 {
     const char *what = exception.what();
@@ -1157,12 +1075,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return env.router->generateGpxPoints(gctx, locationsHolder.getLatLonList);
 }
 
-- (SHARED_PTR<GpxRouteApproximation>)calculateGpxApproximation:(OARoutingEnvironment *)env
-                                                         gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
-                                                       points:(std::vector<SHARED_PTR<GpxPoint>> &)points
-                                              locationsHolder:(OALocationsHolder *)locationsHolder
-                                         useExternalTimestamps:(BOOL)useExternalTimestamps
-                                                resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+- (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+                                                           gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+                                                         points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+                                                  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
     if (!env || !env.router || gctx == nullptr || gctx->ctx == nullptr || gctx->ctx->config == nullptr || gctx->ctx->progress == nullptr || points.empty())
     {
@@ -1172,7 +1088,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 
     @synchronized (_nativeRoutingLock) {
         const auto resultAcceptor =
-        [resultMatcher, locationsHolder, useExternalTimestamps]
+        [resultMatcher]
         (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
         {
             if (approximation == nullptr)
@@ -1181,8 +1097,6 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                 return true;
             }
 
-            if (useExternalTimestamps)
-                OAApplyExternalTimestamps(approximation, locationsHolder);
             OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
             [resultMatcher publish:approx];
             return true;

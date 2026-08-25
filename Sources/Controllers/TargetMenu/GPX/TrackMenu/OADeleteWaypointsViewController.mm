@@ -67,6 +67,7 @@
     [super viewDidLoad];
     
     _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate getWaypointsData] : [NSMutableDictionary dictionary];
+
     self.tableView.editing = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
 
@@ -163,16 +164,10 @@
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
-    if (section < 0 || section >= _data.subjects.count)
-        return 0;
-
     if ([_data.subjects[section].key isEqualToString:@"actions_section"] || [_data.subjects[section].key isEqualToString: [NSString stringWithFormat:@"section_waypoints_group_%@", OALocalizedString(@"route_points")]])
         return 0;
 
-    NSInteger rowsCount = _data.subjects[section].subjects.count;
-    if (_data.subjects[section].subjects.firstObject.toggle)
-        return MIN(rowsCount, [self getGpxWptItems:section].count + 1);
-    return rowsCount > 0 ? 1 : 0;
+    return _data.subjects[section].subjects.firstObject.toggle ? _data.subjects[section].subjects.count : 1;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
@@ -294,8 +289,6 @@
     if (indexPath.row > 0)
     {
         OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-        if (!gpxWptItem)
-            return;
         NSString *groupName = gpxWptItem.point.category;
         if (self.trackMenuDelegate)
             groupName = [self.trackMenuDelegate checkGroupName:groupName];
@@ -366,28 +359,20 @@
 
 - (OAGpxWptItem *)getGpxWptItem:(NSInteger)section row:(NSInteger)row
 {
-    NSArray<OAGpxWptItem *> *waypoints = [self getGpxWptItems:section];
-    return row >= 0 && row < waypoints.count ? waypoints[row] : nil;
+    return [self getGpxWptItems:section][row];
 }
 
 - (NSMutableArray<OAGpxWptItem *> *)getGpxWptItems:(NSInteger)section
 {
-    if (section < 0 || section >= _data.subjects.count)
-        return [NSMutableArray array];
-
-    OAGPXTableSectionData *sectionData = _data.subjects[section];
-    NSString *groupName = sectionData.subjects.firstObject.title;
-    if (self.trackMenuDelegate)
-        groupName = [self.trackMenuDelegate checkGroupName:groupName];
-    return groupName.length > 0 && _waypointGroups[groupName]
-    ? _waypointGroups[groupName] : [NSMutableArray array];
+    NSArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
+    ? [self.trackMenuDelegate getWaypointSortedGroups] : [NSArray array];
+    return waypointSortedGroupNames.count > 0
+    ? _waypointGroups[waypointSortedGroupNames[section]] : _waypointGroups[_waypointGroups.allKeys[section]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem *gpxWptItem = [self getGpxWptItem:indexPath.section row:indexPath.row - 1];
-    if (!gpxWptItem)
-        return;
     NSString *groupName = gpxWptItem.point.category;
     if (self.trackMenuDelegate)
         groupName = [self.trackMenuDelegate checkGroupName:groupName];
@@ -424,8 +409,6 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
     
     NSMutableArray<OAGpxWptItem *> *gpxWptItems = [self getGpxWptItems:indexPath.section];
-    if (gpxWptItems.count == 0)
-        return;
     
     NSString *groupName = gpxWptItems.firstObject.point.category;
     if (self.trackMenuDelegate)
@@ -527,19 +510,20 @@
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action)
                       {
+        
         [self unregisterNotificationsAndObservers];
         NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *toDelete = [self.selectedWaypointGroups copy];
-        id<OATrackMenuViewControllerDelegate> trackMenuDelegate = self.trackMenuDelegate;
-        [self.selectedWaypointGroups removeAllObjects];
-
-        UIViewController *controllerToDismiss = self.navigationController ?: self;
-        [controllerToDismiss dismissViewControllerAnimated:YES completion:^{
-            for (NSString *groupName in toDelete)
+        for (NSString *groupName in toDelete)
+        {
+            if (self.trackMenuDelegate)
             {
-                [trackMenuDelegate deleteWaypointsGroup:groupName
-                                       selectedWaypoints:toDelete[groupName]];
+                [self.trackMenuDelegate deleteWaypointsGroup:groupName
+                                           selectedWaypoints:toDelete[groupName]];
             }
-        }];
+            
+        }
+        [self.selectedWaypointGroups removeAllObjects];
+        [self dismissViewController];
     }
     ]];
     

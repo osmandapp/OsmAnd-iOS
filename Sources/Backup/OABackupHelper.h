@@ -57,7 +57,6 @@ static inline BOOL backupDebugLogs()
 + (NSString *) LIST_FILES_URL;
 + (NSString *) DELETE_FILE_VERSION_URL;
 + (NSString *) DELETE_FILE_URL;
-+ (NSString *) EMPTY_TRASH_URL;
 + (NSString *) ACCOUNT_DELETE_URL;
 + (NSString *) SEND_CODE_URL;
 + (NSString *) CHECK_CODE_URL;
@@ -109,7 +108,6 @@ static inline BOOL backupDebugLogs()
 - (void) updateBackupUploadTime;
 
 - (void) deleteFilesSync:(NSArray<OARemoteFile *> *)remoteFiles byVersion:(BOOL)byVersion listener:(id<OAOnDeleteFilesListener>)listener;
-- (void) emptyTrash:(NSArray<OARemoteFile *> *)deletedFiles listener:(id<OAOnDeleteFilesListener>)listener;
 
 - (BOOL) prepareBackup;
 - (void) addPrepareBackupListener:(id<OAOnPrepareBackupListener>)listener;

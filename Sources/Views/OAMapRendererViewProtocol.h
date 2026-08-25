@@ -30,7 +30,6 @@
 @property(nonatomic) float elevationAngle;
 @property(nonatomic) float zoom;
 @property(nonatomic) float flatZoom;
-@property(nonatomic) CGPoint mapTargetScreenPoint;
 @property(nonatomic, readonly) float tileSizeOnScreenInPixels;
 @property(nonatomic, readonly) float tileSizeOnScreenInMeters;
 @property(readonly) OAObservable* stateObservable;
@@ -43,7 +42,6 @@
 @property(readonly) OAObservable* framePreparedObservable;
 
 - (double) normalizeElevationAngle:(double)elevationAngle;
-- (void)reanchorMapTarget:(CGPoint)screenPoint;
 
 // Utilities:
 - (void) dumpResourcesInfo;

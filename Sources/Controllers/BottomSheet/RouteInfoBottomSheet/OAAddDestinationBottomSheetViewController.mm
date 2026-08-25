@@ -349,6 +349,7 @@
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorView.hidden = [item[@"round_bottom"] boolValue];
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

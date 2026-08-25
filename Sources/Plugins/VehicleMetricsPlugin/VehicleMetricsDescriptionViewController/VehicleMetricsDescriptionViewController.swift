@@ -21,7 +21,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     }
     
     static let placeholderTextNA: String = "N/A"
-    private static let estimatedRowHeight: CGFloat = 66
     
     var startBehavior: TableViewStartBehavior = .normal
     
@@ -80,7 +79,6 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = Self.estimatedRowHeight
         
         configureHeader()
         headerView.configure(device: device)
@@ -134,8 +132,9 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             vinRow.title = localizedString("obd_vin")
             
             if let vin = OBDDataComputer.shared.widgets.first(where: { $0.type == .vin }) {
-                vinRow.descr = description(for: vin)
-                vinRow.setObj(vin, forKey: "widgetItem")
+                let vinString = getDescription(for: vin)
+                let trimmedVin = vinString.trimmingCharacters(in: .whitespacesAndNewlines)
+                vinRow.descr = trimmedVin.isEmpty == false ? trimmedVin : Self.placeholderTextNA
             } else {
                 vinRow.descr = Self.placeholderTextNA
             }
@@ -208,9 +207,9 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             cell.separatorInset = .zero
             cell.titleLabel.text = item.title
             let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
-            if sectionKey == Section.receivedData.key || sectionKey == Section.vehicleInfo.key {
+            if sectionKey == Section.receivedData.key {
                 if let widgetItem = item.obj(forKey: "widgetItem") as? OBDDataComputer.OBDComputerWidget {
-                    cell.valueLabel.text = description(for: widgetItem)
+                    cell.valueLabel.text = getDescription(for: widgetItem)
                 } else {
                     cell.valueLabel.text = item.descr
                 }
@@ -262,7 +261,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         OAAppSettings.sharedManager().volumeUnits.get() == .LITRES ? .fuelConsumptionRateLiterKm : .fuelConsumptionRateMPerLiter
     }
     
-    private func description(for widget: OBDDataComputer.OBDComputerWidget) -> String {
+    private func getDescription(for widget: OBDDataComputer.OBDComputerWidget) -> String {
         guard device.isConnected else {
             return Self.placeholderTextNA
         }
@@ -278,14 +277,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
         
         let unit = plugin?.getWidgetUnit(widgetItem.type)
-        let description = (unit?.isEmpty ?? true) ? value : "\(value) \(unit ?? "")"
-
-        if widget.type == .vin {
-            let trimmedDescription = description.trimmingCharacters(in: .whitespacesAndNewlines)
-            return trimmedDescription.isEmpty ? Self.placeholderTextNA : trimmedDescription
-        }
-
-        return description
+        
+        return (unit?.isEmpty ?? true) ? value : "\(value) \(unit ?? "")"
     }
     
     private func updateVisibleReceivedDataCells() {
@@ -300,7 +293,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             let item = tableData.item(for: indexPath)
             
             if let widgetItem = item.obj(forKey: "widgetItem") as? OBDDataComputer.OBDComputerWidget {
-                cell.valueLabel.text = description(for: widgetItem)
+                cell.valueLabel.text = getDescription(for: widgetItem)
             } else {
                 cell.valueLabel.text = item.descr
             }

@@ -93,7 +93,7 @@
                                                             <constraint firstAttribute="height" id="rC8-lJ-R3B"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qL5-Kw-vcy" userLabel="Divider View" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qL5-Kw-vcy" userLabel="Divider View">
                                                         <rect key="frame" x="0.0" y="4" width="1" height="22"/>
                                                         <color key="backgroundColor" name="customSeparator"/>
                                                         <constraints>
@@ -105,9 +105,6 @@
                                                                 <integer key="value" value="2"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <outlet property="thicknessConstraint" destination="lPf-1Y-UTh" id="s01-TC-001"/>
-                                                        </connections>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y4t-aJ-f7R">
                                                         <rect key="frame" x="0.0" y="30" width="1" height="0.0"/>

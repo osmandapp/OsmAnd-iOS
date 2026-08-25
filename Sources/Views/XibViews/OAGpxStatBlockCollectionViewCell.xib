@@ -64,15 +64,12 @@
                             <constraint firstItem="rNa-i9-fZ0" firstAttribute="leading" secondItem="liF-OQ-Ype" secondAttribute="leading" id="zr9-Pi-6JH"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lYe-Cg-mFc" userLabel="Separator" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lYe-Cg-mFc" userLabel="Separator">
                         <rect key="frame" x="92" y="2" width="1" height="36"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="X2W-mT-MVk"/>
                         </constraints>
-                        <connections>
-                            <outlet property="thicknessConstraint" destination="X2W-mT-MVk" id="s01-TC-001"/>
-                        </connections>
                     </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

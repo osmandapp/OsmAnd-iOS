@@ -142,11 +142,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 }
 
 - (void)finishPointEditCancelled:(BOOL)cancelled;
-- (BOOL)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx
-                                           mode:(OAApplicationMode *)mode
-                                     pointIndex:(NSInteger)pointIndex
-                                     wholeRoute:(BOOL)wholeRoute;
-- (BOOL)hasRoutePairForMovingPointInContext:(nullable OAMeasurementEditingContext *)ctx;
 
 @end
 
@@ -171,11 +166,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (BOOL)hasPoints
 {
     return [self editingContext].getPoints.count > 0;
-}
-
-- (BOOL)hasTrailingGap
-{
-    return [self editingContext].getPoints.lastObject.isGap;
 }
 
 - (OASGpxFile *)currentGpxFile
@@ -293,8 +283,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    if (!ctx.getPoints.lastObject.isGap)
-        [self beginRouteCalculationIfNeededForContext:ctx];
+    [self beginRouteCalculationIfNeededForContext:ctx];
     [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:YES]];
     [layer updateLayer];
     if (self.onChange)
@@ -308,14 +297,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     layer.cursorScreenPoint = point;
     [layer updateLayer];
-}
-
-+ (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate
-{
-    OAMeasurementToolLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer;
-    if (layer == nil)
-        return;
-    [layer moveMapToCoordinate:coordinate];
 }
 
 - (void)dismiss
@@ -845,8 +826,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     NSMutableArray<PlanRouteGroupData *> *groups = [NSMutableArray array];
     NSMutableArray<NSNumber *> *currentIndexes = [NSMutableArray array];
-    NSInteger segmentStartIndex = pointIndexes.firstObject.integerValue;
-    NSInteger segmentEndIndex = pointIndexes.lastObject.integerValue;
     NSString *currentKey = nil;
     BOOL hasCurrent = NO;
 
@@ -862,22 +841,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         BOOL isGap = allPoints[index].isGap;
         if (!isGap && ![key isEqualToString:currentKey] && currentIndexes.count > 0)
         {
-            [groups addObject:[self buildGroupWithKey:currentKey
-                                              indexes:currentIndexes
-                                            allPoints:allPoints
-                                    segmentStartIndex:segmentStartIndex
-                                      segmentEndIndex:segmentEndIndex]];
+            [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
             currentIndexes = [NSMutableArray array];
             currentKey = key;
         }
         [currentIndexes addObject:indexNumber];
     }
     if (currentIndexes.count > 0)
-        [groups addObject:[self buildGroupWithKey:currentKey
-                                          indexes:currentIndexes
-                                        allPoints:allPoints
-                                segmentStartIndex:segmentStartIndex
-                                  segmentEndIndex:segmentEndIndex]];
+        [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
 
     NSMutableArray<PlanRouteGroupData *> *mergedGroups = [NSMutableArray array];
     for (PlanRouteGroupData *group in groups)
@@ -919,34 +890,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     BOOL routed = routedCount > 0;
     BOOL multiMode = groups.count > 1;
-    BOOL hasGapAfter = segmentEndIndex + 1 < (NSInteger)allPoints.count && allPoints[segmentEndIndex].isGap;
-    double gapDistance = 0;
-    double gapBearing = 0;
-    if (hasGapAfter)
-    {
-        OASWptPt *gapStart = allPoints[segmentEndIndex];
-        OASWptPt *gapEnd = allPoints[segmentEndIndex + 1];
-        gapDistance = [self distanceFrom:gapStart to:gapEnd];
-        CLLocation *gapStartLocation = [[CLLocation alloc] initWithLatitude:gapStart.lat longitude:gapStart.lon];
-        CLLocation *gapEndLocation = [[CLLocation alloc] initWithLatitude:gapEnd.lat longitude:gapEnd.lon];
-        gapBearing = [OAMapUtils normalizeDegrees360:[gapStartLocation bearingTo:gapEndLocation]];
-    }
     return [[PlanRouteSegmentData alloc] initWithIndex:segmentIndex
                                                   routed:routed
                                                multiMode:multiMode
                                               singleMode:multiMode ? nil : singleMode
                                                 distance:distance
-                                                  groups:groups
-                                             hasGapAfter:hasGapAfter
-                                              gapDistance:gapDistance
-                                               gapBearing:gapBearing];
+                                                  groups:groups];
 }
 
 - (PlanRouteGroupData *)buildGroupWithKey:(NSString *)key
                                     indexes:(NSArray<NSNumber *> *)indexes
                                   allPoints:(NSArray<OASWptPt *> *)allPoints
-                          segmentStartIndex:(NSInteger)segmentStartIndex
-                            segmentEndIndex:(NSInteger)segmentEndIndex
 {
     OAApplicationMode *appMode = nil;
     if (key.length > 0)
@@ -961,10 +915,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     for (NSNumber *indexNumber in indexes)
     {
         NSInteger index = indexNumber.integerValue;
-        NSInteger indexInSegment = index - segmentStartIndex;
         OASWptPt *point = allPoints[index];
-        BOOL isStart = index == segmentStartIndex;
-        BOOL isDestination = index == segmentEndIndex;
+        BOOL isStart = index == 0;
+        BOOL isDestination = index == (NSInteger) allPoints.count - 1;
         double legDistance = 0;
         double bearing = 0;
         if (index > 0)
@@ -979,9 +932,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                 groupDistance += legDistance;
             }
         }
-        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (indexInSegment + 1)];
+        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (index + 1)];
         [points addObject:[[PlanRoutePointData alloc] initWithGlobalIndex:index
-                                                          indexInSegment:indexInSegment
                                                                        name:name
                                                        distanceFromPrevious:legDistance
                                                                     bearing:bearing
@@ -1097,40 +1049,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    [self beginRouteCalculationIfNeededForContext:ctx
-                                             mode:mode
-                                       pointIndex:pointIndex
-                                       wholeRoute:wholeRoute];
-    EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
-    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
-                                                                          appMode:mode
-                                                                   changeRouteType:type
-                                                                        pointIndex:pointIndex]];
-    [layer updateLayer];
-    if (self.onChange)
+    _isCalculatingRoute = mode != OAApplicationMode.DEFAULT;
+    if (_isCalculatingRoute && self.onChange)
         self.onChange();
-}
-
-- (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes
-{
-    OAMeasurementToolLayer *layer = [self layer];
-    OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || pointIndexes.count == 0)
-        return;
-    [self invalidateTerrainElevationGpx];
-    for (NSNumber *indexNumber in pointIndexes)
-    {
-        if ([self beginRouteCalculationIfNeededForContext:ctx
-                                                     mode:mode
-                                               pointIndex:indexNumber.integerValue
-                                               wholeRoute:NO])
-            break;
-    }
-    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
-                                                                          appMode:mode
-                                                                     pointIndexes:pointIndexes]];
+    ctx.appMode = mode;
+    EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
+    [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:type pointIndex:pointIndex]];
     [layer updateLayer];
-    if (self.onChange)
+    if (!_isCalculatingRoute && self.onChange)
         self.onChange();
 }
 
@@ -1257,8 +1183,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self invalidateTerrainElevationGpx];
     if (ctx.originalPointToMove != nil)
     {
-        if ([self hasRoutePairForMovingPointInContext:ctx])
-            [self beginRouteCalculationIfNeededForContext:ctx];
+        [self beginRouteCalculationIfNeededForContext:ctx];
         OASWptPt *newPoint = [layer getMovedPointToApply];
         [ctx.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:layer
                                                                         oldPoint:ctx.originalPointToMove
@@ -1783,49 +1708,24 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
            onComplete:(void (^)(BOOL success))onComplete
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || filePath.length == 0)
-    {
-        if (onComplete) onComplete(NO);
-        return;
-    }
-
-    NSString *trackName = filePath.lastPathComponent.stringByDeletingPathExtension.decomposedStringWithCanonicalMapping;
-    OASGpxFile *currentGpx = [ctx exportGpx:trackName];
+    OASGpxFile *currentGpx = ctx != nil ? [ctx exportGpx:@"tmp_append"] : nil;
     if (currentGpx == nil || currentGpx.tracks.count == 0)
     {
         if (onComplete) onComplete(NO);
         return;
     }
-
-    [self addPoiGroupsFromGpx:ctx.gpxData.gpxFile toGpx:currentGpx];
-    [self addDraftWaypointsToGpx:currentGpx];
-
-    NSString *absPath = [OAUtilities absoluteGpxPathForPath:filePath].stringByStandardizingPath;
+    NSString *absPath = filePath.isAbsolutePath ? filePath : [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
+    NSArray<OASTrack *> *tracksToAppend = [currentGpx.tracks copy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:absPath];
         OASGpxFile *existingGpx = [OASGpxUtilities.shared loadGpxFileFile:file];
         BOOL success = NO;
         if (existingGpx != nil)
         {
-            NSMutableArray<OASTrack *> *mergedTracks = currentGpx.tracks
-                ? [currentGpx.tracks mutableCopy]
-                : [NSMutableArray array];
-            if (existingGpx.tracks.count > 0)
-                [mergedTracks addObjectsFromArray:existingGpx.tracks];
-            currentGpx.tracks = mergedTracks;
-
-            NSMutableArray *mergedRoutes = currentGpx.routes
-                ? [currentGpx.routes mutableCopy]
-                : [NSMutableArray array];
-            if (existingGpx.routes.count > 0)
-                [mergedRoutes addObjectsFromArray:existingGpx.routes];
-            currentGpx.routes = mergedRoutes;
-
-            NSArray<OASWptPt *> *existingPoints = existingGpx.getPointsList;
-            if (existingPoints.count > 0)
-                [currentGpx addPointsCollection:existingPoints];
-
-            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:currentGpx];
+            NSMutableArray *allTracks = existingGpx.tracks ? [existingGpx.tracks mutableCopy] : [NSMutableArray array];
+            [allTracks addObjectsFromArray:tracksToAppend];
+            existingGpx.tracks = allTracks;
+            OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:existingGpx];
             success = exception == nil;
             if (success)
             {
@@ -1837,11 +1737,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (success)
-            {
-                [OASelectedGPXHelper.instance markTrackForReload:absPath];
-                [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
-            }
             if (onComplete) onComplete(success);
         });
     });
@@ -2089,31 +1984,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 // MARK: - Elevation calculation
 
-- (BOOL)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx
-                                           mode:(OAApplicationMode *)mode
-                                     pointIndex:(NSInteger)pointIndex
-                                     wholeRoute:(BOOL)wholeRoute
-{
-    if (ctx == nil)
-        return NO;
-    BOOL hasRoutePair = wholeRoute
-        ? ctx.getPointsCount > 1
-        : pointIndex >= 0 && pointIndex < ctx.getPointsCount - 1 && !ctx.getPoints[pointIndex].isGap;
-    if (!hasRoutePair || mode == OAApplicationMode.DEFAULT)
-        return NO;
-    _isCalculatingRoute = YES;
-    return YES;
-}
-
-- (BOOL)hasRoutePairForMovingPointInContext:(nullable OAMeasurementEditingContext *)ctx
-{
-    if (ctx == nil)
-        return NO;
-    BOOL hasPreviousRoutePair = ctx.getBeforePoints.count > 0 && !ctx.getBeforePoints.lastObject.isGap;
-    BOOL hasNextRoutePair = ctx.getAfterPoints.count > 0 && !ctx.originalPointToMove.isGap;
-    return hasPreviousRoutePair || hasNextRoutePair;
-}
-
 - (BOOL)shouldShowRouteCalculationStateForContext:(nullable OAMeasurementEditingContext *)ctx
 {
     return ctx != nil && ctx.getPointsCount > 0 && ctx.appMode != OAApplicationMode.DEFAULT;
@@ -2124,6 +1994,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (![self shouldShowRouteCalculationStateForContext:ctx] || _isCalculatingRoute)
         return;
     _isCalculatingRoute = YES;
+    if (self.onChange)
+        self.onChange();
 }
 
 - (BOOL)isCalculatingElevation

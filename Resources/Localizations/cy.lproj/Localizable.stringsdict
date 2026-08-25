@@ -12,6 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%ld Ffefrynnau</string>
 			<key>one</key>
 			<string>%ld Ffefryn</string>
 			<key>two</key>
@@ -34,6 +36,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%ld folder</string>
 			<key>one</key>
 			<string>%ld folder</string>
 			<key>two</key>

@@ -8,8 +8,6 @@
 
 // analog in android: PlaceDetailsMenuBuilder.java
 
-import QuartzCore
-
 @objcMembers
 final class PlaceDetailsViewController: OAPOIViewController {
     
@@ -41,14 +39,10 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func viewDidLoad() {
-        NSLog("[ContextMenu] Initial content BEGIN preloaded=%@", detailsObject == nil ? "no" : "yes")
-        let initialContentStartTime = CACurrentMediaTime()
         if detailsObject != nil {
             updateMenuWithDetailedObject()
         }
         super.viewDidLoad()
-        let initialContentDuration = (CACurrentMediaTime() - initialContentStartTime) * 1000.0
-        NSLog("[ContextMenu] Initial content END (%.3f ms)", initialContentDuration)
         if detailsObject == nil {
             resolveDetailedObjectInBackground()
         }
@@ -239,8 +233,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
 
     private func resolveDetailedObjectInBackground() {
         guard let renderedObject else { return }
-        NSLog("[ContextMenu] Background details BEGIN")
-        let loadingStartTime = CACurrentMediaTime()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject)
             DispatchQueue.main.async {
@@ -250,13 +242,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                       let mapPanel = OARootViewController.instance()?.mapPanel,
                       let targetPoint = mapPanel.getCurrentTargetPoint(),
                       (targetPoint.targetObj as AnyObject) === renderedObject
-                else {
-                    let loadingDuration = (CACurrentMediaTime() - loadingStartTime) * 1000.0
-                    NSLog("[ContextMenu] Background details END (%.3f ms) result=discarded", loadingDuration)
-                    return
-                }
-                NSLog("[ContextMenu] Details update BEGIN")
-                let updateStartTime = CACurrentMediaTime()
+                else { return }
                 self.detailsObject = details
                 self.provider.detailsObject = details
                 let amenity = details.syntheticAmenity
@@ -265,10 +251,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 self.rebuildRows()
                 tableView.reloadData()
                 self.delegate?.refreshTargetPointHeader?()
-                let updateDuration = (CACurrentMediaTime() - updateStartTime) * 1000.0
-                NSLog("[ContextMenu] Details update END (%.3f ms)", updateDuration)
-                let loadingDuration = (CACurrentMediaTime() - loadingStartTime) * 1000.0
-                NSLog("[ContextMenu] Background details END (%.3f ms) result=applied", loadingDuration)
             }
         }
     }

@@ -187,7 +187,7 @@
                     continue;
 
                 BOOL visible = NO;
-                NSInteger color = [[OADefaultFavorite getDefaultColor] toARGBNumber];
+                NSInteger color = [[OADefaultFavorite getDefaultColor] toRGBNumber];
 
                 if (self.delegate)
                 {

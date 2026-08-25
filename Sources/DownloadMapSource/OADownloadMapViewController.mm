@@ -192,7 +192,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)
                                                         andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];

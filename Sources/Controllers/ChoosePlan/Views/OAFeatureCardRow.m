@@ -183,7 +183,6 @@
     if ([self isDirectionRTL])
         [self rtlApplication];
     
-    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self.viewBottomSeparator];
     BOOL isRowInclude = _type == EOAFeatureCardRowInclude;
     CGFloat iconMargin = _type == EOAFeatureCardRowSimple || isRowInclude
             ? 0.
@@ -208,14 +207,14 @@
 
     if (!isRowInclude)
     {
-        CGFloat viewBottomSeparatorY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + kTitleVerticalOffset - separatorHeight;
+        CGFloat viewBottomSeparatorY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + kTitleVerticalOffset - kSeparatorHeight;
         if (_type == EOAFeatureCardRowSimple)
         {
             CGRect viewBottomSeparatorFrame = self.viewBottomSeparator.frame;
             viewBottomSeparatorFrame.origin.x = _dividerLeftMargin;
             viewBottomSeparatorFrame.origin.y = viewBottomSeparatorY;
             viewBottomSeparatorFrame.size.width = width;
-            viewBottomSeparatorFrame.size.height = separatorHeight;
+            viewBottomSeparatorFrame.size.height = kSeparatorHeight;
             if (_dividerLeftMargin > 0.)
             {
                 viewBottomSeparatorFrame.origin.x += [OAUtilities getLeftMargin];
@@ -229,7 +228,7 @@
                     kSeparatorLeftInset + [OAUtilities getLeftMargin],
                     viewBottomSeparatorY,
                     width - kSeparatorLeftInset - [OAUtilities getLeftMargin],
-                    separatorHeight
+                    kSeparatorHeight
             );
         }
     }

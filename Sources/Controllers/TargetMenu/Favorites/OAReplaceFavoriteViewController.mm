@@ -110,7 +110,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     [super viewDidLoad];
 
     _sortingMode = EOADistance;
-    self.tableView.separatorColor = [SeparatorAppearance color];
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
 }
 
 #pragma mark - Base UI

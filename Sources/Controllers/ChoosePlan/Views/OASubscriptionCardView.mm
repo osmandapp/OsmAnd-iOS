@@ -175,7 +175,6 @@
     if ([self isDirectionRTL])
         [self rtlApplication];
     
-    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self.viewBottomSeparator];
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleRightMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -261,12 +260,12 @@
 
     self.viewBottomSeparator.frame = CGRectMake(
             0.,
-            self.labelPurchaseDescription.frame.origin.y + self.labelPurchaseDescription.frame.size.height + 13. - separatorHeight,
+            self.labelPurchaseDescription.frame.origin.y + self.labelPurchaseDescription.frame.size.height + 13. - kSeparatorHeight,
             width,
-            separatorHeight
+            kSeparatorHeight
     );
 
-    self.frame = CGRectMake(0., y, width, self.viewBottomSeparator.frame.origin.y + separatorHeight);
+    self.frame = CGRectMake(0., y, width, self.viewBottomSeparator.frame.origin.y + kSeparatorHeight);
     return self.frame.size.height;
 }
 

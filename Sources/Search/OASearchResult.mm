@@ -31,7 +31,6 @@
 #include <OsmAndCore/ICU.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/CollatorStringMatcher.h>
-#include <OsmAndCore/SearchAlgorithms.h>
 
 #define MAX_TYPE_WEIGHT 10.0
 #define HYPHEN "-"
@@ -234,7 +233,7 @@
             searchPhraseName = [OAArabicNormalizer normalize:searchPhraseName] ?: searchPhraseName;
         }
         QString qs = QString::fromNSString(searchPhraseName);
-        searchPhraseNames.append(OsmAnd::SearchAlgorithms::alignChars(qs));
+        searchPhraseNames.append(OsmAnd::CollatorStringMatcher::alignChars(qs));
     }
 
     NSMutableArray<NSString *> *localResultNamesArray;
@@ -251,7 +250,7 @@
     for (NSString *localResultName : localResultNamesArray)
     {
         QString qs = QString::fromNSString(localResultName);
-        localResultNames.append(OsmAnd::SearchAlgorithms::alignChars(qs));
+        localResultNames.append(OsmAnd::CollatorStringMatcher::alignChars(qs));
     }
 
     BOOL wordMatched;

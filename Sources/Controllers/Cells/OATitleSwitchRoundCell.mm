@@ -8,7 +8,6 @@
 
 #import "OATitleSwitchRoundCell.h"
 #import "OAColors.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
@@ -68,7 +67,7 @@ static UIFont *_titleFont;
     _titleView.frame = CGRectMake(kSideMargin, 0, textWidth, height);
     _switchView.frame = CGRectMake(width - _switchView.frame.size.width - kSideMargin, height/2 - _switchView.frame.size.height/2, _switchView.frame.size.width, _switchView.frame.size.height);
     
-    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self];
+    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     self.separatorView.frame = CGRectMake(kSideMargin, height - separatorHeight, width, separatorHeight);
     
     UIRectCorner corners;

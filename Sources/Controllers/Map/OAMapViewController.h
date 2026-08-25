@@ -88,7 +88,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property (nonatomic) int mapPositionX;
 
 @property(readonly) CGFloat displayDensityFactor;
-@property(nonatomic) double viewportYScale;
 
 @property(readonly) OAObservable *framePreparedObservable;
 

@@ -8,7 +8,6 @@
 import UIKit
 
 final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
-    private static let horizontalInset: CGFloat = 16
     private static let buttonSize: CGFloat = 44
 
     private let titleLabel = UILabel()
@@ -25,11 +24,10 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
     }
 
     private static func makeButtonConfiguration() -> UIButton.Configuration {
-        var configuration = UIButton.Configuration.tinted()
+        var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
-        configuration.baseBackgroundColor = .buttonAccentsBlue
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.cornerStyle = .capsule
+        configuration.background.image = .blueCircleFill
         configuration.contentInsets = .zero
         return configuration
     }
@@ -48,7 +46,7 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
-        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
+        subtitleLabel.font = .preferredFont(forTextStyle: .footnote)
         subtitleLabel.textColor = .textColorSecondary
         subtitleLabel.numberOfLines = 0
         subtitleLabel.adjustsFontForContentSizeCategory = true
@@ -66,10 +64,10 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
         }
 
         let constraints = [
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
+            optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             optionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.buttonSize),

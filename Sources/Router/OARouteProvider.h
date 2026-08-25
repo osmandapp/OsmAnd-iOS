@@ -123,12 +123,10 @@ struct RouteSegmentResult;
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
 - (std::vector<std::shared_ptr<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder;
 
-- (std::shared_ptr<GpxRouteApproximation>)calculateGpxApproximation:(OARoutingEnvironment *)env
-                                                              gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
-                                                            points:(std::vector<std::shared_ptr<GpxPoint>> &)points
-                                                   locationsHolder:(OALocationsHolder *)locationsHolder
-                                              useExternalTimestamps:(BOOL)useExternalTimestamps
-                                                     resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+- (std::shared_ptr<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
+														   gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
+														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
+												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 + (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
                                                                  gpxFile:(OASGpxFile *)gpxFile

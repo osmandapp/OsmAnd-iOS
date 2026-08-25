@@ -426,24 +426,19 @@
             if ([dataToUpdate.allKeys containsObject:@"delete_group_name_index"])
             {
                 NSInteger deleteSectionI = [dataToUpdate[@"delete_group_name_index"] integerValue];
-                if (deleteSectionI != NSNotFound && deleteSectionI >= 0 && deleteSectionI < tData.subjects.count)
+                if (deleteSectionI != NSNotFound)
                 {
                     NSMutableArray *cells = tData.subjects[deleteSectionI].subjects;
                     NSArray<NSNumber *> *waypointsIdxToDelete = dataToUpdate[@"delete_waypoints_idx"];
-                    if ([dataToUpdate[@"delete_empty_group"] boolValue])
+                    if (cells.count - 1 == waypointsIdxToDelete.count)
                     {
                         [tData.subjects removeObjectAtIndex:deleteSectionI];
                     }
                     else
                     {
-                        NSArray<NSNumber *> *descendingIndexes = [waypointsIdxToDelete sortedArrayUsingComparator:^NSComparisonResult(NSNumber *index1, NSNumber *index2) {
-                            return [index2 compare:index1];
-                        }];
-                        for (NSNumber *waypointIdToDelete in descendingIndexes)
+                        for (NSNumber *waypointIdToDelete in waypointsIdxToDelete)
                         {
-                            NSInteger cellIndex = waypointIdToDelete.integerValue + 1;
-                            if (cellIndex > 0 && cellIndex < cells.count)
-                                [cells removeObjectAtIndex:cellIndex];
+                            [cells removeObjectAtIndex:waypointIdToDelete.intValue + 1];
                         }
                     }
                 }

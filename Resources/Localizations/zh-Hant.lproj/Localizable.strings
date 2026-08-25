@@ -1,6 +1,4 @@
 "OsmAnd Maps" = "OsmAnd 地圖";
-"send_crash_log" = "傳送應用程式當機紀錄檔";
-"send_crash_log_descr" = "僅包含關於當機的資訊";
 // Shared Strings
 "shared_string_back" = "返回";
 "shared_string_ok" = "確定";

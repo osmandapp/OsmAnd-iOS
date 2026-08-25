@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [super viewDidLoad];
 
     _horizontalLineDesc = [CALayer layer];
-    _horizontalLineDesc.backgroundColor = [[SeparatorAppearance color] CGColor];
+    _horizontalLineDesc.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     [self.detailsView.layer addSublayer:_horizontalLineDesc];
     
     self.priceButton.layer.cornerRadius = 4;
@@ -240,7 +240,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     _descLabel.frame = CGRectMake(15.0, 85.0, w - 30.0, _descLabel.frame.size.height);
     _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 105.0);
 
-    _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, [SeparatorAppearance thicknessForView:self.view]);
+    _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, 0.5);
 }
 
 - (void) updatePurchaseButton

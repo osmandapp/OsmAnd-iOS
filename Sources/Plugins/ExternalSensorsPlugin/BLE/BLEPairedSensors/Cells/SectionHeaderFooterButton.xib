@@ -28,15 +28,12 @@
                         <action selector="onButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="9Oo-O2-Ce9"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-pK-pQb" userLabel="dividerBottomView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-pK-pQb" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="148.66666666666666" width="375" height="0.33333333333334281"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="ubh-OB-dOE"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="ubh-OB-dOE" id="s01-TC-001"/>
-                    </connections>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

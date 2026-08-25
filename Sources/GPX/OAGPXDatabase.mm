@@ -275,11 +275,6 @@
     return [[OASGpxDbHelper shared] getItems];
 }
 
-- (NSArray<OASGpxDataItem *> *)recentlyModifiedItemsWithLimit:(NSUInteger)limit
-{
-    return [[OASGpxDbHelper shared] getRecentlyModifiedItemsLimit:(int32_t)limit];
-}
-
 - (OASGpxDataItem *)getGPXItemByFileName:(NSString *)fileName
 {
     for (OASGpxDataItem *item in [self getDataItems])

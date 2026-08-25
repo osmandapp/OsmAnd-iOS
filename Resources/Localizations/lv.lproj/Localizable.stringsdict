@@ -12,6 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%ld Izlase</string>
 			<key>one</key>
 			<string>%ld Izlase</string>
 			<key>other</key>
@@ -28,6 +30,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%ld folder</string>
 			<key>one</key>
 			<string>%ld folder</string>
 			<key>other</key>

@@ -41,8 +41,6 @@
 
 #define kCheckUpdatesInterval 3600
 
-NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicationUIReadyNotification";
-
 @interface SceneDelegate()
 
 @end

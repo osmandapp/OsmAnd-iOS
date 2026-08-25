@@ -44,15 +44,12 @@
                     <color key="backgroundColor" name="viewBg"/>
                     <color key="separatorColor" name="customSeparator"/>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPB-MS-llO" userLabel="Separator Bottom View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPB-MS-llO" userLabel="Separator Bottom View">
                     <rect key="frame" x="0.0" y="745" width="414" height="1"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="7Tr-g1-3oq"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="7Tr-g1-3oq" id="s01-TC-001"/>
-                    </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jbw-zT-lJ9" userLabel="Bottom Background View">
                     <rect key="frame" x="0.0" y="746" width="414" height="150"/>

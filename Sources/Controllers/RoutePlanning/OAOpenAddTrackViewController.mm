@@ -270,7 +270,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
@@ -313,6 +313,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -355,9 +356,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = [SeparatorAppearance color];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = SeparatorAppearance.thickness;
+            cell.dividerHight = 0.5;
         }
         return cell;
     }
@@ -404,11 +405,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         case EOAAddToATrack:
         {
             OASGpxDataItem* track = item[@"track"];
-            NSString *filePath = nil;
+            NSString *filename = nil;
             if (track)
-                filePath = track.gpxFilePath;
+                filename = track.gpxFileName;
             if (self.delegate)
-                [self.delegate onFileSelected:filePath];
+                [self.delegate onFileSelected:filename];
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
             break;

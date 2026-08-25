@@ -435,13 +435,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
         [favoriteItems addObject:favoriteItem];
     }
-
-    NSInteger duplicateCount = [OAFavoritesHelper copyToFavorites:favoriteItems];
-    if (duplicateCount > 0)
-    {
-        NSString *message = [NSString stringWithFormat:OALocalizedString(@"msg_favorites_skipped_as_existing"), (int)duplicateCount];
-        [OAUtilities showToast:message details:nil duration:4 inView:self.view];
-    }
+    [OAFavoritesHelper addFavorites:favoriteItems];
 }
 
 #pragma mark - UITableViewDataSource
@@ -472,6 +466,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -504,6 +499,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {

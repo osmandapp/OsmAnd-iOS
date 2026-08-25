@@ -570,25 +570,14 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     }
 }
 
-- (BOOL)isPlanRouteVisibleOnMapPanel:(OAMapPanelViewController *)mapPanel
-{
-    return mapPanel.activeTargetType == OATargetRoutePlanning
-        && [mapPanel.scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class];
-}
-
 - (void)setupMap3dModeButtonVisibility
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     Map3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
-    BOOL contextMenuHidesButton = [mapPanel isContextMenuVisible]
-        && ![self isPlanRouteVisibleOnMapPanel:mapPanel];
-    BOOL isPlanRouteFullscreen = [self isPlanRouteVisibleOnMapPanel:mapPanel]
-        && mapPanel.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
         || (map3DMode == Map3DModeVisibilityVisibleIn3DMode
             && ![OAMapViewTrackingUtilities.instance is3DMode])
-        || contextMenuHidesButton
-        || isPlanRouteFullscreen
+        || [mapPanel isContextMenuVisible]
         || [mapPanel isDashboardVisible]
         || [mapPanel gpxModeActive]
         || [mapPanel isRouteInfoVisible]

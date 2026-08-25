@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAAddWaypointViewController">
             <connections>
                 <outlet property="addButton" destination="0eg-CE-LwO" id="v3M-Ma-MvL"/>
+                <outlet property="bottomSeparatorHeight" destination="4rl-D9-Gqy" id="fcP-pG-jvk"/>
                 <outlet property="bottomSeparatorTopConstraint" destination="BoH-Cy-bAq" id="de1-h5-cR6"/>
                 <outlet property="bottomSeparatorView" destination="8rG-dS-Ahj" id="nOY-Ar-j2g"/>
                 <outlet property="bottomToolBarView" destination="yEx-Ka-Mon" id="PIx-4a-6Hf"/>
@@ -71,15 +72,12 @@
                     <rect key="frame" x="0.0" y="800" width="414" height="96"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8rG-dS-Ahj" userLabel="Bottom Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8rG-dS-Ahj" userLabel="Bottom Separator">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.5"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="0.5" id="4rl-D9-Gqy"/>
                             </constraints>
-                            <connections>
-                                <outlet property="thicknessConstraint" destination="4rl-D9-Gqy" id="s01-TC-001"/>
-                            </connections>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDR-tq-HjE" userLabel="Cancel Button">
                             <rect key="frame" x="20" y="9.5" width="179" height="42"/>

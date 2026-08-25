@@ -62,15 +62,12 @@
                                 <constraint firstAttribute="height" constant="42" id="fXG-N5-0aZ"/>
                             </constraints>
                         </stackView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtM-K4-Xk2" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtM-K4-Xk2">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="chv-8A-T1q"/>
                             </constraints>
-                            <connections>
-                                <outlet property="thicknessConstraint" destination="chv-8A-T1q" id="s01-TC-001"/>
-                            </connections>
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="ym8-7j-OuC"/>

@@ -168,7 +168,7 @@ typedef enum
     [_applyView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     _applyView.hidden = YES;
 
-    _tableView.separatorColor = [SeparatorAppearance color];
+    _tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     _tableView.sectionHeaderHeight = 0.001;
     _tableView.sectionFooterHeight = 0.001;
 }

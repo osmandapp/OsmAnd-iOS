@@ -14,6 +14,7 @@
                 <outlet property="backButton" destination="bLs-VM-5BQ" id="0H0-2X-mWc"/>
                 <outlet property="backButtonContainerView" destination="ItH-eF-cbG" id="cBg-eN-AvQ"/>
                 <outlet property="backButtonLeadingConstraint" destination="6by-4y-2aM" id="yR7-Mo-cqD"/>
+                <outlet property="bottomSeparatorHeight" destination="HdQ-Yb-tT0" id="JPq-Wl-yE5"/>
                 <outlet property="contentContainer" destination="Z2i-nm-ocC" id="wN9-3b-8tj"/>
                 <outlet property="doneButton" destination="xxM-tZ-ruc" id="O47-5i-lib"/>
                 <outlet property="doneButtonContainerView" destination="ZCE-pt-ron" id="izl-MN-szy"/>
@@ -76,15 +77,12 @@
                                                 <constraint firstAttribute="width" constant="30" id="jjw-xd-9KV"/>
                                             </constraints>
                                         </imageView>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZz-Dd-qQQ" userLabel="Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZz-Dd-qQQ" userLabel="Separator">
                                             <rect key="frame" x="0.0" y="40.5" width="414" height="0.5"/>
                                             <color key="backgroundColor" name="customSeparator"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="HdQ-Yb-tT0"/>
                                             </constraints>
-                                            <connections>
-                                                <outlet property="thicknessConstraint" destination="HdQ-Yb-tT0" id="s01-TC-001"/>
-                                            </connections>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" name="viewBg"/>

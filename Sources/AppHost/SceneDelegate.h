@@ -12,8 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSNotificationName const OAMainApplicationUIReadyNotification;
-
 @interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

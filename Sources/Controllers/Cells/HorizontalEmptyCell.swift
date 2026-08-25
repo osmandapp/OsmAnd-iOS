@@ -80,7 +80,7 @@ final class HorizontalEmptyCell: UITableViewCell {
     private let trailingContainer = UIView()
     private let iconView = UIImageView()
     private let spinner = UIActivityIndicatorView(style: .medium)
-    private let separatorView = SeparatorView()
+    private let separatorView = UIView()
     private let actionRow = ActionRow()
 
     private var descriptionBottomConstraint: NSLayoutConstraint?
@@ -150,6 +150,8 @@ final class HorizontalEmptyCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
         iconView.isAccessibilityElement = false
         spinner.isAccessibilityElement = false
+        separatorView.backgroundColor = .customSeparator
+
         [titleLabel, descriptionLabel, trailingContainer, separatorView, actionRow].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             cardView.addSubview($0)
@@ -174,6 +176,7 @@ final class HorizontalEmptyCell: UITableViewCell {
             separatorView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: Layout.verticalInset),
             separatorView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Layout.horizontalInset),
             separatorView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Layout.horizontalInset),
+            separatorView.heightAnchor.constraint(equalToConstant: 0.5),
 
             actionRow.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
             actionRow.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),

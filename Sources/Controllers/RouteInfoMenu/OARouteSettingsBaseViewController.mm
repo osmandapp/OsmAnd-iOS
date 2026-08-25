@@ -72,7 +72,6 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
 }
 
 - (void) didReceiveMemoryWarning
@@ -95,7 +94,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [SeparatorAppearance color];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]

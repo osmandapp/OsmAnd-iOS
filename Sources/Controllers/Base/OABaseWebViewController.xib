@@ -46,15 +46,12 @@
                         <wkPreferences key="preferences"/>
                     </wkWebViewConfiguration>
                 </wkWebView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fK1-ba-Shy" userLabel="Separator Bottom View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fK1-ba-Shy" userLabel="Separator Bottom View">
                     <rect key="frame" x="0.0" y="745" width="414" height="1"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="zu5-yl-mHK"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="zu5-yl-mHK" id="s01-TC-002"/>
-                    </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5aW-Eu-S0A" userLabel="Bottom Background View">
                     <rect key="frame" x="0.0" y="746" width="414" height="150"/>

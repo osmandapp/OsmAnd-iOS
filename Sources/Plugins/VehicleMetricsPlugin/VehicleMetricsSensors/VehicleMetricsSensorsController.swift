@@ -46,8 +46,6 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(OATableViewCustomHeaderView.self,
-                           forHeaderFooterViewReuseIdentifier: OATableViewCustomHeaderView.reuseIdentifier)
         view.backgroundColor = .viewBg
         tableView.contentInset.bottom = 64
     }
@@ -172,27 +170,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) ? 36 : .leastNonzeroMagnitude
-    }
-
-    override func getCustomView(forHeader section: Int) -> UIView? {
-        guard let title = getTitleForHeader(section), !title.isEmpty else {
-            return nil
-        }
-
-        let titleFont = UIFont.preferredFont(forTextStyle: .footnote)
-        let headerFont = UIFontMetrics(forTextStyle: .footnote)
-            .scaledFont(for: .systemFont(ofSize: titleFont.pointSize, weight: .semibold))
-        let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: OATableViewCustomHeaderView.reuseIdentifier
-        ) as? OATableViewCustomHeaderView
-        headerView?.label.attributedText = nil
-        headerView?.contentView.backgroundColor = .viewBg
-        headerView?.label.text = title
-        headerView?.label.font = headerFont
-        headerView?.label.textColor = .textColorSecondary
-        headerView?.setYOffset(8)
-        return headerView
+        DeviceHelper.shared.hasPairedDevices(ofType: .OBD_VEHICLE_METRICS) ? 30 : .leastNonzeroMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -220,6 +198,11 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
     }
     
     private func configureSeparator(cell: UITableViewCell) {

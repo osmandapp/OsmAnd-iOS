@@ -14,15 +14,12 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="157"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guc-jW-K1C" userLabel="dividerTopView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guc-jW-K1C" userLabel="dividerTopView">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="0.66666666666666663"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="jzc-gT-FPh"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="jzc-gT-FPh" id="s01-TC-001"/>
-                    </connections>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth is turned off" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2I-6s-jjW">
                     <rect key="frame" x="20" y="20" width="170.33333333333334" height="22"/>
@@ -42,15 +39,12 @@
                     <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view alpha="0.69999998807907104" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jnD-t4-TiZ" userLabel="SeparatorView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view alpha="0.69999998807907104" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jnD-t4-TiZ" userLabel="SeparatorView">
                     <rect key="frame" x="20" y="107" width="373" height="1"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="5My-lt-sqG"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="5My-lt-sqG" id="s02-TC-002"/>
-                    </connections>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2u-50-9tC">
                     <rect key="frame" x="20" y="109" width="107" height="48"/>
@@ -74,15 +68,12 @@
                         <constraint firstAttribute="width" constant="30" id="vfj-Zd-XqF"/>
                     </constraints>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-O7-4Aq" userLabel="dividerBottomView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-O7-4Aq" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="156.66666666666666" width="393" height="0.33333333333334281"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="RHS-8i-Liw"/>
                     </constraints>
-                    <connections>
-                        <outlet property="thicknessConstraint" destination="RHS-8i-Liw" id="s03-TC-003"/>
-                    </connections>
                 </view>
             </subviews>
             <color key="backgroundColor" name="groupBg"/>
@@ -109,6 +100,7 @@
             <connections>
                 <outlet property="descriptionLabel" destination="3dG-e2-OE4" id="3To-Oj-fBx"/>
                 <outlet property="imageView" destination="Lhc-H7-DS9" id="0eS-dP-o74"/>
+                <outlet property="separatorViewHeightConstraint" destination="5My-lt-sqG" id="2xJ-jS-cgz"/>
                 <outlet property="settingsButton" destination="i2u-50-9tC" id="51B-jj-HwY"/>
                 <outlet property="titleLabel" destination="K2I-6s-jjW" id="hNI-Yw-Tpm"/>
             </connections>

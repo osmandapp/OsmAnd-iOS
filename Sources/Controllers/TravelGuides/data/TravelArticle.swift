@@ -24,7 +24,7 @@ class TravelArticle: NSObject {
     var lat: Double = Double.nan
     var lon: Double = Double.nan
     var imageTitle: String?
-    var gpxFile: OAGPXDocumentAdapter?
+    var gpxFile: OAGPXDocumentAdapter?;
     var routeId: String?
     var ref: String?
     var routeSource: String?

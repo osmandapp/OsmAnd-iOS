@@ -18,6 +18,7 @@
 #import "OAContextMenuProvider.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"
 #import "OAMapObject+cpp.h"
@@ -39,7 +40,6 @@
 #import "OAMapSelectionHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
-#import <QuartzCore/QuartzCore.h>
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -421,7 +421,28 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
-    NSString *formattedTargetName = OALocalizedString(@"map_no_address");
+    NSString *addressString = nil;
+    BOOL isAddressFound = NO;
+    NSString *formattedTargetName = nil;
+    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
+    if (!roadTitle || roadTitle.length == 0)
+    {
+        addressString = OALocalizedString(@"map_no_address");
+    }
+    else
+    {
+        addressString = roadTitle;
+        isAddressFound = YES;
+    }
+    
+    if (isAddressFound || addressString)
+    {
+        formattedTargetName = addressString;
+    }
+    else
+    {
+        formattedTargetName = [OAPointDescription getLocationName:latitude lon:longitude sh:NO];
+    }
     
     OAPOIType *poiType = [[OAPOILocationType alloc] init];
     
@@ -443,17 +464,15 @@
     targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
     targetPoint.title = formattedTargetName;
     targetPoint.icon = [poiType icon];
-    targetPoint.titleAddress = nil;
+    targetPoint.titleAddress = roadTitle;
     targetPoint.type = OATargetPOI;
     targetPoint.targetObj = poi;
-    targetPoint.shouldFetchAddress = YES;
 
     return targetPoint;
 }
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    CFTimeInterval selectionStartTime = CACurrentMediaTime();
     MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = result.pointLatLon;
     NSMutableArray<SelectedMapObject *> *selectedObjects = [[result getProcessedObjects] mutableCopy];
@@ -492,21 +511,11 @@
         }
         id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
-        {
-            CFTimeInterval selectionDuration = (CACurrentMediaTime() - selectionStartTime) * 1000.0;
-            NSLog(@"[ContextMenu] Selection END (%.3f ms) result=exclusive_action", selectionDuration);
             return YES;
-        }
     }
     
     if (objectSelectionThreshold < 0)
         selectedObjects = [objectsAvailableForSelection mutableCopy];
-
-    CFTimeInterval selectionDuration = (CACurrentMediaTime() - selectionStartTime) * 1000.0;
-    NSLog(@"[ContextMenu] Selection END (%.3f ms) raw=%lu processed=%lu",
-          selectionDuration,
-          (unsigned long)result.allObjects.count,
-          (unsigned long)selectedObjects.count);
     
     if (selectedObjects.count == 1)
     {
@@ -593,10 +602,6 @@
 
 - (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(id)object selectedObject:(SelectedMapObject *)selectedObject provider:(id<OAContextMenuProvider>)provider touchPointLatLon:(CLLocation *)touchPointLatLon
 {
-    NSLog(@"[ContextMenu] Target point creation BEGIN provider=%@ location=%@",
-          provider ? NSStringFromClass([provider class]) : @"none",
-          latLon ? @"yes" : @"no");
-    CFTimeInterval targetCreationStartTime = CACurrentMediaTime();
     if (!provider || ![provider showMenuAction:object])
     {
         OATargetPoint *targetPoint;
@@ -604,11 +609,6 @@
             targetPoint = [provider getTargetPoint:object touchLocation:touchPointLatLon];
         else
             targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object touchLocation:touchPointLatLon];
-
-        CFTimeInterval targetCreationDuration = (CACurrentMediaTime() - targetCreationStartTime) * 1000.0;
-        NSLog(@"[ContextMenu] Target point creation END (%.3f ms) result=%@",
-              targetCreationDuration,
-              targetPoint ? @"created" : @"not_found");
             
         if (targetPoint)
         {
@@ -617,11 +617,6 @@
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
-    }
-    else
-    {
-        CFTimeInterval targetCreationDuration = (CACurrentMediaTime() - targetCreationStartTime) * 1000.0;
-        NSLog(@"[ContextMenu] Target point creation END (%.3f ms) result=provider_action", targetCreationDuration);
     }
 }
 

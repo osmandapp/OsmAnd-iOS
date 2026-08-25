@@ -28,6 +28,12 @@ final class BluetoothDisableView: UIView {
         }
     }
     
+    @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
+        didSet {
+            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
+        }
+    }
+    
     // MARK: - @IBActions
     @IBAction private func onSettingsButtonAction(_ sender: UIButton) {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString),
@@ -38,3 +44,4 @@ final class BluetoothDisableView: UIView {
         UIApplication.shared.open(settingsURL)
     }
 }
+

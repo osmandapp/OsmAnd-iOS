@@ -9,12 +9,14 @@
 import UIKit
 
 final class PlanRouteTopPartView: UIView {
-    private enum Constants {
-        static let statusIconSize: CGFloat = 30
-        static let horizontalInset: CGFloat = 20
-        static let progressDisplayDelay: TimeInterval = 1
-        static let durationNumberRegex = try? NSRegularExpression(pattern: #"<?\p{Nd}+"#)
-    }
+    private static let statusIconSize: CGFloat = 30
+    private static let horizontalInset: CGFloat = 20
+    private static let progressDisplayDelay: TimeInterval = 1
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
 
     var onTap: (() -> Void)?
 
@@ -43,12 +45,12 @@ final class PlanRouteTopPartView: UIView {
         let uphill = formattedDistance(info.uphill)
         let downhill = formattedDistance(info.downhill)
         let mapCenterDistance = formattedDistance(info.mapCenterDistance)
-        let duration = info.showsTime ? formattedDuration(info.duration) : NSAttributedString(string: "")
+        let duration = info.showsTime ? formattedDuration(info.duration) : ""
         let arrivalTime = info.arrivalTime.map { formattedTime($0) } ?? ""
         let bearing = "\(Int(info.bearing))"
         let signature = [
             totalDistance,
-            duration.string,
+            duration,
             arrivalTime,
             uphill,
             downhill,
@@ -95,8 +97,8 @@ final class PlanRouteTopPartView: UIView {
         textStackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textStackView)
 
-        let horizontalInset = Constants.horizontalInset
-        let statusIconSize = Constants.statusIconSize
+        let horizontalInset = Self.horizontalInset
+        let statusIconSize = Self.statusIconSize
 
         NSLayoutConstraint.activate([
             statusIconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalInset),
@@ -138,17 +140,16 @@ final class PlanRouteTopPartView: UIView {
             progressIndicator.startAnimating()
         }
         progressDisplayWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.progressDisplayDelay, execute: workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.progressDisplayDelay, execute: workItem)
     }
 
     private func makeFirstLine(_ info: PlanRouteInfo,
                                totalDistance: String,
-                               duration: NSAttributedString,
+                               duration: String,
                                arrivalTime: String) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
-        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
-        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        let primary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorPrimary]
+        let secondary: [NSAttributedString.Key: Any] = [.font: bodyFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
         let distanceParts = totalDistance.components(separatedBy: " ")
@@ -160,7 +161,7 @@ final class PlanRouteTopPartView: UIView {
         guard info.showsTime else { return result }
 
         result.append(NSAttributedString(string: "  •  ", attributes: secondary))
-        result.append(duration)
+        result.append(NSAttributedString(string: duration, attributes: secondary))
         if !arrivalTime.isEmpty {
             result.append(NSAttributedString(string: " (\(arrivalTime))", attributes: secondary))
         }
@@ -172,8 +173,7 @@ final class PlanRouteTopPartView: UIView {
                                 mapCenterDistance: String,
                                 bearing: String) -> NSAttributedString {
         let subheadFont = UIFont.preferredFont(forTextStyle: .subheadline)
-        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: subheadFont.pointSize, weight: .regular)
-        let attributes: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        let attributes: [NSAttributedString.Key: Any] = [.font: subheadFont, .foregroundColor: UIColor.textColorSecondary]
 
         let result = NSMutableAttributedString()
         result.append(symbolAttachment("arrow.up.right", font: subheadFont))
@@ -196,24 +196,12 @@ final class PlanRouteTopPartView: UIView {
         OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
     }
 
-    private func formattedDuration(_ duration: TimeInterval) -> NSAttributedString {
-        let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-        let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
-        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
-        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
-        let durationText = OAOsmAndFormatter.getFormattedDuration(duration) ?? ""
-        let result = NSMutableAttributedString(string: durationText, attributes: secondary)
-        guard let durationNumberRegex = Constants.durationNumberRegex else { return result }
-        let fullRange = NSRange(durationText.startIndex..., in: durationText)
-        durationNumberRegex.enumerateMatches(in: durationText, range: fullRange) { match, _, _ in
-            guard let range = match?.range else { return }
-            result.addAttributes(primary, range: range)
-        }
-        return result
+    private func formattedDuration(_ duration: TimeInterval) -> String {
+        OAOsmAndFormatter.getFormattedTimeInterval(duration, shortFormat: true)
     }
 
     private func formattedTime(_ date: Date) -> String {
-        DateFormatter.shortTimeFormatter.string(from: date)
+        Self.timeFormatter.string(from: date)
     }
 
     @objc private func onViewTapped() {

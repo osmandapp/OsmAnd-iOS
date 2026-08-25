@@ -26,15 +26,12 @@
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BtU-Gk-L5K" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BtU-Gk-L5K">
                         <rect key="frame" x="62" y="69" width="352" height="1"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="n6J-rw-bZg"/>
                         </constraints>
-                        <connections>
-                            <outlet property="thicknessConstraint" destination="n6J-rw-bZg" id="s01-TC-001"/>
-                        </connections>
                     </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip.png" translatesAutoresizingMaskIntoConstraints="NO" id="64D-zO-yLt">
                         <rect key="frame" x="20" y="20" width="30" height="30"/>
@@ -136,6 +133,7 @@
                 <outlet property="distanceLabel" destination="foQ-3a-5YH" id="xcB-9Q-J07"/>
                 <outlet property="editButton" destination="09h-1B-NYa" id="9eh-fr-mUq"/>
                 <outlet property="leftIconImageView" destination="64D-zO-yLt" id="zfS-nj-EIJ"/>
+                <outlet property="separatorHeightConstraint" destination="n6J-rw-bZg" id="3O9-oo-Wj2"/>
                 <outlet property="separatorView" destination="BtU-Gk-L5K" id="yd1-da-OeC"/>
                 <outlet property="timeImageView" destination="jmc-x6-8Tp" id="1cY-Dc-KoC"/>
                 <outlet property="timeLabel" destination="3EO-DW-iW9" id="Wdj-Jv-t89"/>

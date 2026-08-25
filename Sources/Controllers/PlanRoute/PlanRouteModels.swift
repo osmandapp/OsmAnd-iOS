@@ -133,10 +133,8 @@ enum PlanRoutePointEditMode: Int {
 
 struct PlanRoutePoint {
     let index: Int
-    let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
-    let distanceFromStart: Double
     let bearing: Double
     let isStart: Bool
     let isDestination: Bool
@@ -149,11 +147,6 @@ struct PlanRouteProfileGroup {
     let points: [PlanRoutePoint]
 }
 
-struct PlanRouteSegmentGap {
-    let distance: Double
-    let bearing: Double
-}
-
 struct PlanRouteSegment {
     let index: Int
     let groups: [PlanRouteProfileGroup]
@@ -161,8 +154,6 @@ struct PlanRouteSegment {
     let multiMode: Bool
     let singleMode: OAApplicationMode?
     let distance: Double
-    let isPendingEmpty: Bool
-    let gapAfter: PlanRouteSegmentGap?
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }
@@ -190,7 +181,6 @@ struct PlanRouteAnalysisData {
     let maxSpeed: Double?
     let timeInMotion: TimeInterval?
     let hasElevationData: Bool
-    let hasSpeedData: Bool
     let gpxAnalysis: GpxTrackAnalysis?
     let gpxFile: GpxFile?
     let routeStatistics: [OARouteStatistics]
@@ -313,7 +303,6 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
-    func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int])
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)
     func sortDoorToDoor(pointIndexes: [Int])
     func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)

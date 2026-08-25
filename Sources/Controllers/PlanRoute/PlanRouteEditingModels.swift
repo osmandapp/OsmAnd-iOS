@@ -11,22 +11,14 @@ import Foundation
 @objcMembers
 final class PlanRoutePointData: NSObject {
     let globalIndex: Int
-    let indexInSegment: Int
     let name: String
     let distanceFromPrevious: Double
     let bearing: Double
     let isStart: Bool
     let isDestination: Bool
     
-    init(globalIndex: Int,
-         indexInSegment: Int,
-         name: String,
-         distanceFromPrevious: Double,
-         bearing: Double,
-         isStart: Bool,
-         isDestination: Bool) {
+    init(globalIndex: Int, name: String, distanceFromPrevious: Double, bearing: Double, isStart: Bool, isDestination: Bool) {
         self.globalIndex = globalIndex
-        self.indexInSegment = indexInSegment
         self.name = name
         self.distanceFromPrevious = distanceFromPrevious
         self.bearing = bearing
@@ -58,27 +50,13 @@ final class PlanRouteSegmentData: NSObject {
     let singleMode: OAApplicationMode?
     let distance: Double
     let groups: [PlanRouteGroupData]
-    let hasGapAfter: Bool
-    let gapDistance: Double
-    let gapBearing: Double
     
-    init(index: Int,
-         routed: Bool,
-         multiMode: Bool,
-         singleMode: OAApplicationMode?,
-         distance: Double,
-         groups: [PlanRouteGroupData],
-         hasGapAfter: Bool,
-         gapDistance: Double,
-         gapBearing: Double) {
+    init(index: Int, routed: Bool, multiMode: Bool, singleMode: OAApplicationMode?, distance: Double, groups: [PlanRouteGroupData]) {
         self.index = index
         self.routed = routed
         self.multiMode = multiMode
         self.singleMode = singleMode
         self.distance = distance
         self.groups = groups
-        self.hasGapAfter = hasGapAfter
-        self.gapDistance = gapDistance
-        self.gapBearing = gapBearing
     }
 }

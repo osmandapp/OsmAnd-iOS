@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *addButton;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;

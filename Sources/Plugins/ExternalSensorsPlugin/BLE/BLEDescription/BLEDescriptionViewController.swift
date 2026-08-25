@@ -13,8 +13,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         case information, receivedData, settings, forgetSensor
     }
     
-    private static let estimatedRowHeight: CGFloat = 66
-
     var device: Device! {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
@@ -26,8 +24,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             device.didDisconnect = { [weak self, weak device] in
                 guard let self, let device else { return }
                 headerView.configure(device: device)
-                generateData()
-                tableView.reloadData()
             }
         }
     }
@@ -37,20 +33,12 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
-
-    private lazy var widgetTypesByFieldName: [String: WidgetType] = [
-        localizedString("external_device_characteristic_speed"): .bicycleSpeed,
-        localizedString("external_device_characteristic_cadence"): .bicycleCadence,
-        localizedString("map_widget_ant_heart_rate"): .heartRate,
-        localizedString("shared_string_temperature"): .temperature
-    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = Self.estimatedRowHeight
 
         configureHeader()
         headerView.configure(device: device)
@@ -85,12 +73,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 batteryRow.cellType = OAValueTableViewCell.getIdentifier()
                 batteryRow.key = "battery_row"
                 batteryRow.title = localizedString("external_device_details_battery")
-                let batteryLevel = sensor.lastBatteryData.batteryLevel
-                batteryRow.descr = if device.isConnected, batteryLevel != -1 {
-                    NumberFormatter.percentFormatter.string(from: (Double(batteryLevel) / 100.0) as NSNumber) ?? "-"
-                } else {
-                    "-"
-                }
+                batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
             }
             // Received Data
             if let receivedData = device.getDataFields, !receivedData.isEmpty {
@@ -103,7 +86,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                         row.cellType = OAValueTableViewCell.getIdentifier()
                         row.key = "row"
                         row.title = dic.key
-                        row.descr = actualDataValue(fieldName: dic.key, value: dic.value)
+                        row.descr = dic.value != "0" ? dic.value : "-"
                     }
                 }
             }
@@ -161,7 +144,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : UITableView.automaticDimension
     }
     
-    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
@@ -195,7 +178,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         return nil
     }
     
-    override func onRowSelected(_ indexPath: IndexPath) {
+    override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if item.key == "forget_sensor_row" {
             showForgetSensorActionSheet()
@@ -227,21 +210,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                                                selector: #selector(deviceRSSIUpdated),
                                                name: .deviceRSSIUpdated,
                                                object: nil)
-    }
-    
-    private func actualDataValue(fieldName: String, value: String) -> String {
-        guard device.isConnected else { return "-" }
-        guard value != "-",
-              let widgetType = widgetTypesByFieldName[fieldName],
-              let sensor = device.sensors.first(where: { $0.getSupportedWidgetDataFieldTypes()?.contains(widgetType) == true }),
-              !sensor.hasActualData(for: widgetType),
-              let dataList = sensor.getLastSensorDataList(for: widgetType),
-              let field = dataList.lazy.compactMap({ $0.getWidgetField(fieldType: widgetType) }).first,
-              let unit = field.getFormattedValue()?.unit,
-              !unit.isEmpty else {
-            return value
-        }
-        return "0 " + unit
     }
     
     @objc private func deviceRSSIUpdated() {

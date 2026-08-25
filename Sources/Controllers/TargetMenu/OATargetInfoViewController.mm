@@ -717,8 +717,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"route_members");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
-                [rows addObject:row];
-                [self updateInfoRows];
+                [self appendInfoRow:row];
             }
         }];
     }
@@ -730,8 +729,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"route_part_of");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
-                [rows addObject:row];
-                [self updateInfoRows];
+                [self appendInfoRow:row];
             }
         }];
         
@@ -740,8 +738,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             {
                 NSString *title = OALocalizedString(@"multipoligon_related");
                 OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_RELATED_ROUTES_ROW_KEY title:title];
-                [rows addObject:row];
-                [self updateInfoRows];
+                [self appendInfoRow:row];
             }
         }];
     }
@@ -781,9 +778,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     OACollapsablePoiView *collapsableView = [[OACollapsablePoiView alloc] init];
     [collapsableView setDataWithTitles:titles amenities:amenities];
-    collapsableView.collapsed = YES;
     row.collapsableView = collapsableView;
-    row.collapsed = YES;
 
     return row;
 }
@@ -878,7 +873,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void) setupTableView
 {
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = [SeparatorAppearance color];
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];

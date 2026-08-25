@@ -39,7 +39,7 @@
     // Configure the view for the selected state
 }
 
-- (void)setTargetPoint:(OATargetPoint *)targetPoint
+-(void)setTargetPoint:(OATargetPoint *)targetPoint
 {
     _targetPoint = targetPoint;
     [self applyTargetPoint];
@@ -126,14 +126,20 @@
         NSString *baseType = targetPoint.ctrlTypeStr;
         __weak __typeof(self) weakSelf = self;
 
-        [targetPoint resolveAddressWithCompletion:^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf || strongSelf.targetPoint != targetPoint)
-                return;
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+            [targetPoint initAddressIfNeeded];
 
-            strongSelf.descriptionView.text = [strongSelf buildTypeDescriptionWithTarget:targetPoint
-                                                                                 baseType:baseType];
-        }];
+            NSString *finalText = [weakSelf buildTypeDescriptionWithTarget:targetPoint
+                                                                  baseType:baseType];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf || strongSelf.targetPoint != targetPoint)
+                    return;
+                
+                strongSelf.descriptionView.text = finalText;
+            });
+        });
         return;
     }
 

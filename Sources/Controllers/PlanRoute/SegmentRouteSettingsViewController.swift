@@ -81,13 +81,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navigationItem.leftBarButtonItem = closeButton
         }
 
-        let checkmarkColor: UIColor
-        if #available(iOS 26.0, *) {
-            checkmarkColor = .white
-        } else {
-            checkmarkColor = .iconColorActive
-        }
-        let checkmarkImage = UIImage.icCheckmarkDefault.withTintColor(checkmarkColor, renderingMode: .alwaysOriginal)
+        let checkmarkImage = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: checkmarkImage,
                                                             style: .done,
                                                             target: self,
@@ -202,12 +196,14 @@ final class SegmentRouteSettingsViewController: UIViewController {
     @objc private func onConfirmTapped() {
         if let fromIndex = applyFromPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            let pointIndexes = group.points.filter { $0.index >= fromIndex }.map(\.index)
-            dataSource?.applyMode(mode, pointIndexes: pointIndexes)
+            for point in group.points where point.index >= fromIndex {
+                dataSource?.applyMode(mode, pointIndex: point.index, wholeRoute: false)
+            }
         } else if let upToIndex = applyUpToPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            let pointIndexes = group.points.filter { $0.index <= upToIndex }.map(\.index)
-            dataSource?.applyMode(mode, pointIndexes: pointIndexes)
+            for point in group.points where point.index <= upToIndex {
+                dataSource?.applyMode(mode, pointIndex: point.index, wholeRoute: false)
+            }
         } else {
             dataSource?.applyModeToContext(selectedMode, context: context)
         }

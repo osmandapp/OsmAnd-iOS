@@ -44,17 +44,16 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
+    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     self.navigationItem.title = OALocalizedString(@"shared_string_details");
 }
 
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, [SeparatorAppearance thicknessForView:self.view]);
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
     self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16.0, 0., 0.);
 }
 
@@ -93,7 +92,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
+        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
 }
 
 -(UIView *) getMiddleView

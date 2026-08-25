@@ -12,7 +12,6 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchCoreFactory.h"
-#import "OsmAnd_Maps-Swift.h"
 
 @interface OAAddressTableViewController ()
 
@@ -36,7 +35,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
 }
 

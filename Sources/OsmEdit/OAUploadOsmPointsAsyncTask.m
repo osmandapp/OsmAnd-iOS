@@ -29,7 +29,6 @@
     OsmAndAppInstance _app;
     
     NSArray<OAOsmPoint *> *_points;
-    NSArray<OAOsmPoint *> *_failedPoints;
     
     NSString *_comment;
     
@@ -46,30 +45,23 @@
         _plugin = plugin;
         _closeChangeSet = closeChangeset;
         _loadAnonymous = anonymous;
-        _points = [points copy];
-        _failedPoints = @[];
+        _points = points;
         _comment = comment;
     }
     return self;
 }
 
-- (void)uploadPoints
+- (void) uploadPoints
 {
-    [self uploadPoints:_points];
-}
-
-- (void)uploadPoints:(NSArray<OAOsmPoint *> *)points
-{
-    NSArray<OAOsmPoint *> *pointsForAttempt = [points copy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSInteger lastIndex = pointsForAttempt.count - 1;
+        NSInteger lastIndex = _points.count - 1;
         NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
-        for (NSInteger i = 0; i < pointsForAttempt.count; i++)
+        for (NSInteger i = 0; i < _points.count; i++)
         {
             if (_interruptUploading)
                 break;
             
-            OAOsmPoint *osmPoint = pointsForAttempt[i];
+            OAOsmPoint *osmPoint = _points[i];
             if (osmPoint.getGroup == EOAGroupPoi)
             {
                 OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
@@ -105,15 +97,12 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self.delegate respondsToSelector:@selector(uploadDidProgress:)])
                 {
-                    float progress = (float)(i + 1) / (float)pointsForAttempt.count;
+                    float progress = (float)(i + 1) / (float)_points.count;
                     [self.delegate uploadDidProgress:progress];
                 }
             });
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!_interruptUploading)
-                _failedPoints = [failedUploads copy];
-
             if ([self.delegate respondsToSelector:@selector(uploadDidCompleteWithSuccess:)])
             {
                 [self.delegate uploadDidCompleteWithSuccess:failedUploads.count == 0];
@@ -121,7 +110,7 @@
             if (!_interruptUploading)
             {
                 if ([self.delegate respondsToSelector:@selector(uploadDidFinishWithFailedPoints:successfulUploads:)])
-                    [self.delegate uploadDidFinishWithFailedPoints:failedUploads successfulUploads:pointsForAttempt.count - failedUploads.count];
+                    [self.delegate uploadDidFinishWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
             }
         });
     });
@@ -132,9 +121,9 @@
     _interruptUploading = interrupted;
 }
 
-- (void)retryFailedPoints
+- (void)retryUpload
 {
-    [self uploadPoints:_failedPoints];
+    [self uploadPoints];
 }
 
 @end

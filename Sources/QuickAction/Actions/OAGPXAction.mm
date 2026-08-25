@@ -55,19 +55,10 @@ static QuickActionType *TYPE;
 {
     CLLocation *latLon = [self getMapLocation];
     NSString *title = self.getParams[kName];
-    BOOL autoFill = ![self.getParams[kDialog] boolValue];
-    if (title.length > 0)
-    {
-        [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:autoFill];
-        return;
-    }
-
-    [OAReverseGeocoder.instance lookupAddressAtLat:latLon.coordinate.latitude
-                                               lon:latLon.coordinate.longitude
-                                          objectId:0
-                                        completion:^(NSString *address) {
-        [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:address autoFill:autoFill];
-    }];
+    if (!title || title.length == 0)
+        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+    
+    [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
 }
 
 - (void) addWaypoint:(double)lat lon:(double)lon title:(NSString *)title autoFill:(BOOL)autoFill

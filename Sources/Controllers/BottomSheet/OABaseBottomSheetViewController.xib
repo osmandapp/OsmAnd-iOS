@@ -104,15 +104,12 @@
                                                 <constraint firstItem="YEg-ba-U1g" firstAttribute="leading" secondItem="jZK-Dd-dDt" secondAttribute="leading" priority="999" constant="16" id="yex-9N-TYP"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2WI-Sn-Wv2" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2WI-Sn-Wv2">
                                             <rect key="frame" x="0.0" y="56" width="414" height="1"/>
                                             <color key="backgroundColor" name="customSeparator"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="5UK-fc-EFD"/>
                                             </constraints>
-                                            <connections>
-                                                <outlet property="thicknessConstraint" destination="5UK-fc-EFD" id="s01-TC-001"/>
-                                            </connections>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" name="viewBg"/>
@@ -190,15 +187,12 @@
                                         <constraint firstAttribute="height" constant="42" id="bzt-qa-mbP"/>
                                     </constraints>
                                 </stackView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1V-eM-Gj6" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1V-eM-Gj6">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                                     <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="Sbp-1h-11a"/>
                                     </constraints>
-                                    <connections>
-                                        <outlet property="thicknessConstraint" destination="Sbp-1h-11a" id="s02-TC-002"/>
-                                    </connections>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" name="viewBg"/>

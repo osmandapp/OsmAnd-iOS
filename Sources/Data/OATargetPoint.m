@@ -30,32 +30,24 @@
     return self;
 }
 
-- (void)resolveAddressWithCompletion:(void (^)(void))completion
+- (void)initAddressIfNeeded
 {
     if (self.addressFound)
-    {
-        if (completion)
-            dispatch_async(dispatch_get_main_queue(), completion);
         return;
-    }
-
-    uint64_t objectId = self.obfId > 0 && self.isValidObfId ? self.obfId : 0;
-    CLLocationCoordinate2D location = self.location;
-    __weak __typeof(self) weakSelf = self;
-    [OAReverseGeocoder.instance lookupAddressAtLat:location.latitude
-                                               lon:location.longitude
-                                          objectId:objectId
-                                        completion:^(NSString *address) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-
-        strongSelf.titleAddress = address;
-        strongSelf.addressFound = address.length > 0;
-
-        if (completion)
-            completion();
-    }];
+    
+    OAReverseGeocoder *geocoder = [OAReverseGeocoder instance];
+    
+    NSString *roadTitle = self.obfId > 0 && [self isValidObfId]
+        ? [geocoder lookupAddressAtLat:_location.latitude
+                                   lon:_location.longitude
+                              objectId:self.obfId]
+        : [geocoder lookupAddressAtLat:_location.latitude
+                                   lon:_location.longitude];
+    
+    BOOL isAddressFound = roadTitle.length > 0;
+    
+    self.titleAddress = roadTitle;
+    self.addressFound = isAddressFound;
 }
 
 - (OAPointDescription *) pointDescription

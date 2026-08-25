@@ -33,7 +33,7 @@
                                 <rect key="frame" x="242" y="9" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qor-vC-51U" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qor-vC-51U">
                                 <rect key="frame" x="16" y="47" width="272" height="1"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="customSeparator"/>

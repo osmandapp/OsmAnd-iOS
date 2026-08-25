@@ -69,7 +69,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
 
     self.navigationItem.title = OALocalizedString(@"shared_string_settings");
     self.tableView.delegate = self;

@@ -1,6 +1,4 @@
 "shared_string_yes" = "Sì";
-"send_crash_log" = "Invia rapporto errori";
-"send_crash_log_descr" = "Contiene solo informazioni sugli arresti anomali";
 "shared_string_save" = "Salva";
 "shared_string_delete" = "Elimina";
 // Rendering categories
@@ -2629,7 +2627,7 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Confini naturali";
 "rendering_attr_OSMMapperAssistantNote_name" = "Etichette Note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Nascondi i confini delle riserve naturali, delle aree protette e dei parchi naturali.";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Una rappresentazione schematica delle icone a bassi livelli di zoom per quei PDI che di solito non sono visualizzati";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a bassi livelli di zoom per quei POI che di solito non vengono visualizzati";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
 "download_wikipedia_data" = "Scarica dati di Wikipedia";
@@ -2658,7 +2656,7 @@
 "announcement_time_descr" = "Le tempistiche degli annunci dei messaggi vocali dipendono dal tipo di messaggio, dalla velocità di navigazione corrente e dalla velocità di navigazione predefinita.";
 "announcement_time_prepare" = "Prepararsi";
 "announcement_time_approach" = "Avvicinamento";
-"announcement_time_passing" = "Al passaggio";
+"announcement_time_passing" = "Passaggio";
 "announcement_time_prepare_long" = "Preparazione lunga";
 "restart_is_required" = "Riavvio richiesto per applicare il cambiamento.";
 "free_downloads" = "Download gratuiti";
@@ -3808,12 +3806,12 @@
 "max_axle_load_description" = "Fornisci il carico massimo per asse del tuo veicolo per evitare strade e ponti con limiti di peso.";
 "rendering_attr_hideContours_name" = "Isobate";
 "rendering_attr_hideContours_description" = "Nascondi isobate";
-"rendering_attr_hideFairways_name" = "Percorsi navigabili";
+"rendering_attr_hideFairways_name" = "Percorso navigabile";
 "rendering_attr_hideFairways_description" = "Nascondi i percorsi navigabili";
-"rendering_attr_hideLightSectors_name" = "Settori di luce";
-"rendering_attr_hideLightSectors_description" = "Nascondi i settori di luce";
-"rendering_attr_hideLightSectorSources_name" = "Fonti dei settori luce";
-"rendering_attr_hideLightSectorSources_description" = "Nascondi le fonti dei settori di luce";
+"rendering_attr_hideLightSectors_name" = "Settori luce";
+"rendering_attr_hideLightSectors_description" = "Nascondi settori luce";
+"rendering_attr_hideLightSectorSources_name" = "Sorgenti settori luce";
+"rendering_attr_hideLightSectorSources_description" = "Nascondi i sorgenti settori luce";
 "rendering_attr_hideMinorContours_name" = "Curve batimetriche minori";
 "rendering_attr_hideMinorContours_description" = "Nascondi le curve batimetriche minori";
 "rendering_attr_hideNoLNAM_name" = "Boe OSM (alcune)";
@@ -4269,8 +4267,11 @@
 "shared_string_pinned" = "Fissato";
 "delete_track_confirmation_title" = "Eliminare \"%@\"?";
 "tracks_delete_confirmation_message" = "Questa azione non può essere annullata.";
+"favorites_delete_confirmation_title" = "Eliminare %ld preferiti?";
 "items_delete_confirmation_title" = "Eliminare %ld elementi?";
+"folders_delete_confirmation_title" = "Eliminare %ld cartelle?";
 "favorites_delete_confirmation_message" = "Questa azione non può essere annullata.";
+"mixed_delete_confirmation_message" = "Verranno eliminate %ld cartelle e %ld punti. Questa azione non può essere annullata.";
 "delete_favorite_confirmation_title" = "Eliminare \"%@\"?";
 "choose_color" = "Scegli colore";
 "select_map_orientation" = "Seleziona orientamento mappa";

@@ -68,6 +68,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     }
 
     func updateMapTheme() {
+        titleLabel.textColor = UIColor.textColorPrimary.currentMapThemeColor
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
@@ -78,7 +79,6 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         setupBackgroundView()
 
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
-        titleLabel.textColor = .white
         updateMapTheme()
         titleLabel.textAlignment = .natural
         titleLabel.adjustsFontForContentSizeCategory = true

@@ -646,11 +646,11 @@
         if (cell)
         {
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [SeparatorAppearance color];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
-            cell.dividerHight = SeparatorAppearance.thickness;
+            cell.dividerHight = 0.5;
         }
         return cell;
     }
@@ -679,7 +679,7 @@
     NSDictionary *item = [self getItem:indexPath];
     
     if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     return UITableViewAutomaticDimension;
 }
 

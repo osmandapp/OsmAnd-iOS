@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString* symbolGroupId;
 @property (nonatomic, assign) BOOL shouldFetchAddress;
 
-- (void)resolveAddressWithCompletion:(void (^)(void))completion;
+- (void)initAddressIfNeeded;
 - (BOOL)isValidObfId;
 
 @end

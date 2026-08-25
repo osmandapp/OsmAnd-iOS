@@ -33,7 +33,7 @@
                                 <rect key="frame" x="223" y="8.5" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </switch>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TEA-rm-6nk" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TEA-rm-6nk">
                                 <rect key="frame" x="16" y="47" width="272" height="1"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="customSeparator"/>

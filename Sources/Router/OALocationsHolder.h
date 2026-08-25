@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (double) getLatitude:(NSInteger)index;
 - (double) getLongitude:(NSInteger)index;
-- (int64_t)timeAtIndex:(NSInteger)index;
 
 - (std::vector<std::pair<double, double>>) getLatLonList;
 - (NSArray<OASWptPt *> *)getWptPtList;

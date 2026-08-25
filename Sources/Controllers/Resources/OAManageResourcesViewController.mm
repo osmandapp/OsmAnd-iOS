@@ -290,10 +290,9 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
+    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     
     if (self.region != _app.worldRegion)
         self.navigationItem.title = self.region.name;
@@ -457,7 +456,7 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, [SeparatorAppearance thicknessForView:self.view]);
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 - (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -467,7 +466,7 @@ static BOOL _repositoryUpdated = NO;
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
         [_subscribeEmailView updateColorForCALayer];
-        _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
+        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
         [self.tableView reloadData];
     }
 }

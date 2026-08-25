@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
+    
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
     _panGesture.maximumNumberOfTouches = 1;
     _panGesture.minimumNumberOfTouches = 1;

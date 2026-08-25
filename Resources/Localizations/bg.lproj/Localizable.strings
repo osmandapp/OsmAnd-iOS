@@ -1,6 +1,4 @@
 "get_discount_second_part" = "После %@";
-"send_crash_log" = "Изпратете дневник за сривове";
-"send_crash_log_descr" = "Съдържа само информация за срива";
 "shared_string_milliradians" = "Милирадиани";
 "access_intermediate_arrival_time" = "Време на пристигане в междинна точка";
 "map_widget_intermediate_time" = "Време до междинна точка";

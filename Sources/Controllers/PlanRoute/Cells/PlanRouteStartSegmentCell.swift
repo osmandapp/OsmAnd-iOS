@@ -9,8 +9,6 @@ import UIKit
 
 final class PlanRouteStartSegmentCell: UITableViewCell {
 
-    private static let minimumHeight: CGFloat = 50
-
     private let titleLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,9 +30,6 @@ final class PlanRouteStartSegmentCell: UITableViewCell {
         accessibilityTraits = .button
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .iconColorActive
-        titleLabel.numberOfLines = 0
-        titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
 
@@ -42,8 +37,7 @@ final class PlanRouteStartSegmentCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14)
         ])
     }
 }

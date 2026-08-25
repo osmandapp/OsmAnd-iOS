@@ -321,9 +321,9 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = [SeparatorAppearance color];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = SeparatorAppearance.thickness;
+            cell.dividerHight = 1.0 / [UIScreen mainScreen].scale;
         }
         return cell;
     }
@@ -358,7 +358,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return SeparatorAppearance.thickness;
+        return 1.0 / [UIScreen mainScreen].scale;
     }
     return UITableViewAutomaticDimension;
 }

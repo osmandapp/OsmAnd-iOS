@@ -84,15 +84,12 @@
                                         <constraint firstAttribute="trailing" secondItem="5eD-Zd-Fk1" secondAttribute="trailing" constant="16" id="wlx-uh-e07"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0YQ-hO-f8m" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0YQ-hO-f8m">
                                     <rect key="frame" x="0.0" y="56" width="414" height="1"/>
                                     <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="rGP-D6-kNy"/>
                                     </constraints>
-                                    <connections>
-                                        <outlet property="thicknessConstraint" destination="rGP-D6-kNy" id="s01-TC-001"/>
-                                    </connections>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" name="viewBg"/>

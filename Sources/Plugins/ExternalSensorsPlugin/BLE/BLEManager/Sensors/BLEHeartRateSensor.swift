@@ -8,11 +8,11 @@
 import CoreBluetooth
 
 final class BLEHeartRateSensor: Sensor {
+    
     final class HeartRateData: SensorData {
         var heartRate: Int = 0
         var bodyPart: BodyPart = .other
-        var measurementData: Data?
-
+        
         var widgetFields: [SensorWidgetDataField]? {
             return [SensorWidgetDataField(fieldType: .heartRate,
                                           nameId: localizedString("map_widget_ant_heart_rate"),
@@ -20,12 +20,12 @@ final class BLEHeartRateSensor: Sensor {
                                           numberValue: nil,
                                           stringValue: String(heartRate))]
         }
-
+        
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
             widgetFields?.first
         }
     }
-
+    
     enum BodyPart: Int {
         case other
         case chest
@@ -34,7 +34,7 @@ final class BLEHeartRateSensor: Sensor {
         case hand
         case earLobe
         case foot
-
+        
         var description: String {
             switch self {
             case .other:
@@ -54,17 +54,16 @@ final class BLEHeartRateSensor: Sensor {
             }
         }
     }
-
+    
     private(set) var lastHeartRateData: HeartRateData?
-
+    
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_HEART_RATE_MEASUREMENT.CBUUIDRepresentation:
+            let heartRate = heartRate(from: characteristic)
             if lastHeartRateData == nil {
                 lastHeartRateData = HeartRateData()
             }
-            updateActualDataTime(from: characteristic)
-            let heartRate = heartRate(from: characteristic)
             if let lastHeartRateData {
                 if lastHeartRateData.heartRate != heartRate {
                     lastHeartRateData.heartRate = heartRate
@@ -84,11 +83,11 @@ final class BLEHeartRateSensor: Sensor {
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
-
+    
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.heartRate]
     }
-
+    
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         guard widgetType == .heartRate else { return nil }
         return [lastHeartRateData].compactMap { $0 }
@@ -108,28 +107,11 @@ final class BLEHeartRateSensor: Sensor {
 
 // MARK: Parser
 extension BLEHeartRateSensor {
-
-    private func updateActualDataTime(from characteristic: CBCharacteristic) {
-        guard let data = characteristic.value else { return }
-        if sensorContactStatus(from: data) == 2 {
-            resetActualData(for: .heartRate)
-            return
-        }
-        if lastHeartRateData?.measurementData != data {
-            markActualData(for: .heartRate)
-            lastHeartRateData?.measurementData = data
-        }
-    }
-
-    private func sensorContactStatus(from data: Data) -> UInt8? {
-        guard let flag = data.first else { return nil }
-        return (flag >> 1) & 0x03
-    }
-
+    
     private func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
         let byteArray = [UInt8](characteristicData)
-
+        
         // The heart rate mesurement is in the 2nd, or in the 2nd and 3rd bytes, i.e. one one or in two bytes
         // The first byte of the first bit specifies the length of the heart rate data, 0 == 1 byte, 1 == 2 bytes
         let firstBitValue = byteArray[0] & 0x01
@@ -141,7 +123,7 @@ extension BLEHeartRateSensor {
             return (Int(byteArray[1]) << 8) + Int(byteArray[2])
         }
     }
-
+    
     private func bodyLocation(from characteristic: CBCharacteristic) -> BodyPart {
         guard let characteristicData = characteristic.value,
               let byte = characteristicData.first else { return .other }

@@ -70,7 +70,7 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.separatorColor = SeparatorAppearance.color
+        tableView.separatorColor = .customSeparator
         tableView.tintColor = .iconColorActive
         tableView.keyboardDismissMode = .onDrag
     }

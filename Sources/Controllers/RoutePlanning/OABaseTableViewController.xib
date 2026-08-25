@@ -35,15 +35,12 @@
                             <nil key="highlightedColor"/>
                             <size key="shadowOffset" width="0.0" height="0.0"/>
                         </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kiz-Fv-xhW" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kiz-Fv-xhW">
                             <rect key="frame" x="0.0" y="55" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="SxM-yt-DGX"/>
                             </constraints>
-                            <connections>
-                                <outlet property="thicknessConstraint" destination="SxM-yt-DGX" id="s01-TC-001"/>
-                            </connections>
                         </view>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjJ-8f-vqm">
                             <rect key="frame" x="356" y="13" width="42" height="31"/>

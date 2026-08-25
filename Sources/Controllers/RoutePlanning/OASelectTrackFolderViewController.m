@@ -88,7 +88,7 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorColor = [SeparatorAppearance color];
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 

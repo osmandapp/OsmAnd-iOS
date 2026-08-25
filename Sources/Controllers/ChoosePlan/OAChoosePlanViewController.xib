@@ -59,7 +59,7 @@
                                 <action selector="helpButtonClicked:" destination="-1" eventType="touchUpInside" id="bVp-dD-mi9"/>
                             </connections>
                         </button>
-                        <view userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aOE-Up-0pn" userLabel="Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aOE-Up-0pn" userLabel="Separator View">
                             <rect key="frame" x="0.0" y="98" width="414" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" name="customSeparator"/>

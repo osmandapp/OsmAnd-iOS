@@ -42,15 +42,13 @@
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OB2-mf-epf">
                     <rect key="frame" x="0.0" y="804" width="414" height="92"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zxh-vE-99x" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zxh-vE-99x">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="uy8-3a-0Ya"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="ws0-eQ-wOg"/>
                             </constraints>
-                            <connections>
-                                <outlet property="thicknessConstraint" destination="uy8-3a-0Ya" id="s01-TC-001"/>
-                            </connections>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVS-be-wRN">
                             <rect key="frame" x="20" y="10" width="374" height="42"/>

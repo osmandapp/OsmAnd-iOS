@@ -26,9 +26,9 @@
 
 - (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment;
 
-- (void)uploadPoints;
+- (void) uploadPoints;
 
-- (void)retryFailedPoints;
+- (void) retryUpload;
 
 - (void) setInterrupted:(BOOL)interrupted;
 

@@ -348,9 +348,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         } else if item.cellType == OADividerCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OADividerCell.reuseIdentifier, for: indexPath) as! OADividerCell
             cell.backgroundColor = .clear
-            cell.dividerColor = SeparatorAppearance.color
+            cell.dividerColor = .customSeparator
             cell.dividerInsets = UIEdgeInsets.zero
-            cell.dividerHight = SeparatorAppearance.thickness
+            cell.dividerHight = 1.0 / UIScreen.main.scale
             return cell
         } else if item.cellType == OAFoldersCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAFoldersCell.reuseIdentifier, for: indexPath) as! OAFoldersCell
@@ -406,7 +406,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
         if item.cellType == OADividerCell.reuseIdentifier {
-            return SeparatorAppearance.thickness
+            return 1.0 / UIScreen.main.scale
         } else if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
             return 52
         }

@@ -76,15 +76,10 @@
                     <rect key="frame" x="0.0" y="836" width="414" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="olN-PV-UVk" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="olN-PV-UVk">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" name="customSeparator"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="DmS-hT-001"/>
-                            </constraints>
-                            <connections>
-                                <outlet property="thicknessConstraint" destination="DmS-hT-001" id="DmS-oC-001"/>
-                            </connections>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Il-WM-9Fy">
                             <rect key="frame" x="16" y="9" width="183" height="42"/>
@@ -112,11 +107,6 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="groupBg"/>
-                    <constraints>
-                        <constraint firstItem="olN-PV-UVk" firstAttribute="leading" secondItem="w85-oe-bd8" secondAttribute="leading" id="DmS-lD-001"/>
-                        <constraint firstItem="olN-PV-UVk" firstAttribute="top" secondItem="w85-oe-bd8" secondAttribute="top" id="DmS-tP-001"/>
-                        <constraint firstAttribute="trailing" secondItem="olN-PV-UVk" secondAttribute="trailing" id="DmS-tR-001"/>
-                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" name="groupBg"/>

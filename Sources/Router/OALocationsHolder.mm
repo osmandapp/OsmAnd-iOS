@@ -110,13 +110,6 @@
 	return 0;
 }
 
-- (int64_t)timeAtIndex:(NSInteger)index
-{
-	if (_locationType == LOCATION_TYPE_WPTPT && index >= 0 && index < _wptPtList.count)
-		return _wptPtList[index].time;
-	return 0;
-}
-
 - (NSArray *) getList:(NSInteger)locationType
 {
 	NSMutableArray *res = [NSMutableArray array];

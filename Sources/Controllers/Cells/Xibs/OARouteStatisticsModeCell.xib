@@ -27,15 +27,12 @@
                                     <color key="titleColor" name="textColorActive"/>
                                 </state>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UWC-ay-0Co" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UWC-ay-0Co">
                                 <rect key="frame" x="143.5" y="0.0" width="1" height="36"/>
                                 <color key="backgroundColor" name="customSeparator"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="1" id="VzZ-rt-QsX"/>
                                 </constraints>
-                                <connections>
-                                    <outlet property="thicknessConstraint" destination="VzZ-rt-QsX" id="s01-TC-001"/>
-                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJH-ak-zSC">
                                 <rect key="frame" x="110.5" y="3" width="30" height="30"/>

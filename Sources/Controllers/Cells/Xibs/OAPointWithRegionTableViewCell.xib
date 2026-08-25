@@ -132,16 +132,13 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s6l-uf-EZG">
                                 <rect key="frame" x="374" y="0.0" width="56" height="66"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gab-I3-aZY" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gab-I3-aZY">
                                         <rect key="frame" x="0.0" y="22.5" width="1" height="21"/>
                                         <color key="backgroundColor" name="customSeparator"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="1" id="Oak-YZ-28B"/>
                                             <constraint firstAttribute="height" constant="21" id="pRg-Yf-A6K"/>
                                         </constraints>
-                                        <connections>
-                                            <outlet property="thicknessConstraint" destination="Oak-YZ-28B" id="s01-TC-001"/>
-                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gnv-7l-zBi">
                                         <rect key="frame" x="8" y="0.0" width="48" height="66"/>

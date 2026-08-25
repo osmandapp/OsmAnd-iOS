@@ -278,7 +278,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
         [self generateData];
         [self.tableView reloadData];
         _uploadTask.delegate = self;
-        [_uploadTask retryFailedPoints];
+        [_uploadTask retryUpload];
     }
     else
     {

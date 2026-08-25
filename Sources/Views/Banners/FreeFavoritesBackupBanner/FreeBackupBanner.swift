@@ -33,6 +33,12 @@ final class FreeBackupBanner: UIView {
         }
     }
     
+    @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
+        didSet {
+            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
+        }
+    }
+    
     var didCloseButtonAction: (() -> Void)?
     var didOsmAndCloudButtonAction: (() -> Void)?
     var defaultFrameHeight = 100

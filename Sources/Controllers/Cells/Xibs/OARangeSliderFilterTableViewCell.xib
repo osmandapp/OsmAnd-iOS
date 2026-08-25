@@ -74,25 +74,19 @@
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="98o-LP-9NV" userLabel="Vertical Divider" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="98o-LP-9NV" userLabel="Vertical Divider">
                         <rect key="frame" x="187" y="0.0" width="1" height="42"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="1zF-Zp-bT8"/>
                         </constraints>
-                        <connections>
-                            <outlet property="thicknessConstraint" destination="1zF-Zp-bT8" id="s01-TC-001"/>
-                        </connections>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1b-20-NsX" userLabel="Horizont Divider" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d1b-20-NsX" userLabel="Horizont Divider">
                         <rect key="frame" x="0.0" y="42" width="375" height="1"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="a23-lW-Kei"/>
                         </constraints>
-                        <connections>
-                            <outlet property="thicknessConstraint" destination="a23-lW-Kei" id="s02-TC-002"/>
-                        </connections>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="feN-Gu-6uj" customClass="OARangeSlider">
                         <rect key="frame" x="20" y="59" width="335" height="28"/>

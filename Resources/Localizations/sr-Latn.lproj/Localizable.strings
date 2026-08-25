@@ -1,6 +1,4 @@
 "OsmAnd Maps" = "OsmAnd mape";
-"send_crash_log" = "Pošalji logove o padovima aplikacije";
-"send_crash_log_descr" = "Sadrži samo podatke o rušenjima programa";
 "download_depth_countours" = "Pomorske izobate";
 "week_short" = "Ned.";
 "weeks_short" = "Ned.";
@@ -2949,12 +2947,12 @@
 "shared_string_cancelled" = "Otkazano";
 "shared_string_delete_data" = "Obriši podatke";
 "toggle_wind" = "Prikaži/sakrij - sloj vetra";
-"report_an_issues" = "Prijavi problem";
+"report_an_issues" = "Prijavi grešku";
 "open_issue_on_gitHub" = "Otvori grešku na GitHubu";
 "about_osmAnd" = "O aplikaciji";
 "osmAnd_team" = "OsmAnd Tim";
 "testFlight" = "TestLet";
-"ask_question_propose_features" = "Postavljajte pitanja, predlažite karakteristike";
+"ask_question_propose_features" = "Postavi pitanje, predloži nove mogućnosti";
 "detailed_log_file" = "Fajl detaljnog dnevnika";
 "download_install_beta_version" = "Preuzmite i instalirajte beta verziju OsmAnda";
 "animate_my_location_descr" = "Glatka tranzicija lokacije na mapi tokom navigacije";
@@ -4471,8 +4469,11 @@
 "no_search_results" = "Nema rezultata";
 "favorite_search_empty_state_description" = "Prilagodite pretragu ili filtere da biste videli da li to pomaže";
 "favorites_empty_folder_description" = "Ova folder još uvek nema tačaka.";
+"favorites_delete_confirmation_title" = "Obrišite %ld omiljenih?";
 "items_delete_confirmation_title" = "Obrisati %ld stavke?";
+"folders_delete_confirmation_title" = "Obrisati %ld foldera?";
 "favorites_delete_confirmation_message" = "Ova radnja se ne može poništiti.";
+"mixed_delete_confirmation_message" = "Ovim će se obrisati %ld foldera i %ld tačaka. Ova radnja se ne može poništiti.";
 "empty_state_favourites" = "Dodaj omiljene";
 "empty_state_favourites_desc" = "Uvezite omiljene stavke ili ih dodajte obeležavanjem tačaka na mapi.";
 "tracks_empty_folder" = "Prazan folder";
@@ -4541,10 +4542,3 @@
 "ais_apply_setting_to_profiles" = "Primeni podešavanje";
 "ais_apply_to_current_profile" = "Primeni na %@";
 "ais_apply_to_all_profiles" = "Primeni na sve profile";
-"no_crashes_recorded" = "Nisu zabeležena rušenja";
-"share_crash_log" = "Podeli dnevnik rušenja";
-"crash_report_prompt_title" = "OsmAnd je naišao na neočekivanu grešku.";
-"crash_report_prompt_description" = "Molimo vas da nam pomognete da poboljšamo aplikaciju tako što ćete nam poslati izveštaj o padu. Vaš izveštaj o padu će nam pomoći da identifikujemo i rešimo problem.";
-"shared_string_send" = "Pošalji";
-"send_current_app_log" = "Pošalji trenutni dnevnik aplikacije";
-"send_current_app_log_descr" = "Od početka aplikacije";

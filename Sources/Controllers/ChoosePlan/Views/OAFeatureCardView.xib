@@ -47,7 +47,7 @@
                     <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" id="T7R-0x-m15" userLabel="Header Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" id="T7R-0x-m15" userLabel="Header Separator View">
                     <rect key="frame" x="0.0" y="191.5" width="414" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="customSeparator"/>
@@ -62,7 +62,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="groupBg"/>
                 </view>
-                <view contentMode="scaleToFill" id="Ikl-Su-SFp" userLabel="Bottom Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" id="Ikl-Su-SFp" userLabel="Bottom Separator View">
                     <rect key="frame" x="0.0" y="556.5" width="414" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="customSeparator"/>

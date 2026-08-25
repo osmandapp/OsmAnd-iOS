@@ -109,7 +109,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    self.tableView.separatorColor = [SeparatorAppearance color];
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
@@ -126,7 +126,7 @@
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [SeparatorAppearance color];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]

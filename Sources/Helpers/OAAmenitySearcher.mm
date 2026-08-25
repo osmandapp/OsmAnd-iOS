@@ -35,12 +35,10 @@
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
-#import <QuartzCore/QuartzCore.h>
 
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
-#include <OsmAndCore/Data/ObfInfo.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/Road.h>
@@ -333,16 +331,10 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         ? AMENITY_SEARCH_RADIUS_FOR_RELATION
         : AMENITY_SEARCH_RADIUS;
 
-    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan BEGIN radius=%ld", (long)radius);
-    CFTimeInterval searchStartTime = CACurrentMediaTime();
     NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
                                                      searchLatLon:latLon
                                                            radius:radius
                                                     includeTravel:YES];
-    CFTimeInterval searchDuration = (CACurrentMediaTime() - searchStartTime) * 1000.0;
-    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan END (%.3f ms) candidates=%lu",
-          searchDuration,
-          (unsigned long)amenities.count);
 
     NSMutableArray<OAPOI *> *filtered = [self filterAmenities:amenities request:request];
 
@@ -746,6 +738,17 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     result.append(baseMaps);
     result.append(travelMaps);
     return result;
+}
+
++ (NSArray<NSString *> *) getAmenityRepositoriesNames:(BOOL)includeTravel
+{
+    NSMutableArray<NSString *> *filePaths = [NSMutableArray new];
+    const auto files = [self getAmenityRepositories:includeTravel];
+    for (const auto file : files)
+    {
+        [filePaths addObject:file->filePath.toNSString()];
+    }
+    return filePaths;
 }
 
 + (BOOL) isWorldMap:(NSString *)obfFilePath
@@ -1602,11 +1605,10 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
-    const auto repositories = [self getAmenityRepositories:includeTravel];
+    NSArray<NSString *> *repos = [self getAmenityRepositoriesNames:includeTravel];
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     
-    const BOOL shouldFilterRepositories = bbox31.width() != 0 && bbox31.height() != 0;
-    if (shouldFilterRepositories)
+    if (bbox31.width() != 0 && bbox31.height() != 0)
     {
         searchCriteria->bbox31 = bbox31;
     }
@@ -1620,18 +1622,16 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     if (!isEmpty || additionalFilter)
     {
         NSMutableSet<NSNumber *> *allIds = [NSMutableSet set]; // live updates filter
-        for (const auto& repository : repositories)
+        for (NSString *repoName in repos)
         {
             if (matcher && matcher.isCancelled)
             {
                 break;
             }
-            if (shouldFilterRepositories && repository->obfInfo && !repository->obfInfo->containsPOIFor(bbox31))
-                continue;
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
-            search->performTravelGuidesSearch(repository->filePath, *searchCriteria,
+            search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto am = OAGetAmenityFromSearchResult(resultEntry);

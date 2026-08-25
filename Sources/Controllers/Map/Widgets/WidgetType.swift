@@ -25,7 +25,6 @@ class WidgetType: NSObject {
     let descr: String
     let iconName: String
     let disabledIconName: String?
-    let disconnectedIconName: String?
     let docsUrl: String?
     let group: WidgetGroup?
     let verticalGroup: WidgetGroup?
@@ -41,14 +40,13 @@ class WidgetType: NSObject {
         return true
     }
 
-    private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, disconnectedIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, verticalGroup: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
+    private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, verticalGroup: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
         self.id = id
         self.title = title
         self.descr = descr
         self.iconName = iconName
         self.disabledIconName = disabledIconName
-        self.disconnectedIconName = disconnectedIconName
         self.docsUrl = docsUrl
         self.group = group
         self.verticalGroup = verticalGroup
@@ -86,7 +84,7 @@ class WidgetType: NSObject {
     }
     
     func isOBDWidget() -> Bool {
-        getGroup() == .vehicleMetrics
+        getGroup() == .vehicleMetrics;
     }
 
     func getSecondaryDescription() -> String? {
@@ -289,15 +287,15 @@ extension WidgetType {
     static let elevationProfile = WidgetType(ordinal: 47, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), iconName: "widget_route_elevation", defaultPanel: .bottomPanel)
     
     // External sensors
-    static let heartRate = WidgetType(ordinal: 48, id: "ant_heart_rate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), iconName: "widget_sensor_heart_rate", disabledIconName: "ic_custom_sensor_heart_rate_outlined", disconnectedIconName: "widget_sensor_heart_rate_disconnected", group: .externalSensors, defaultPanel: .rightPanel)
+    static let heartRate = WidgetType(ordinal: 48, id: "ant_heart_rate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), iconName: "widget_sensor_heart_rate", disabledIconName: "ic_custom_sensor_heart_rate_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleCadence = WidgetType(ordinal: 49, id: "ant_bicycle_cadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), iconName: "widget_sensor_cadence", disabledIconName: "ic_custom_sensor_cadence_outlined", disconnectedIconName: "widget_sensor_cadence_disconnected", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleCadence = WidgetType(ordinal: 49, id: "ant_bicycle_cadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), iconName: "widget_sensor_cadence", disabledIconName: "ic_custom_sensor_cadence_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleDistance = WidgetType(ordinal: 50, id: "ant_bicycle_distance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), iconName: "widget_sensor_distance", disabledIconName: "ic_custom_sensor_distance_outlined", disconnectedIconName: "widget_sensor_distance_disconnected", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleDistance = WidgetType(ordinal: 50, id: "ant_bicycle_distance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), iconName: "widget_sensor_distance", disabledIconName: "ic_custom_sensor_distance_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleSpeed = WidgetType(ordinal: 51, id: "ant_bicycle_speed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", disabledIconName: "ic_custom_sensor_speed_outlined", disconnectedIconName: "widget_sensor_speed_disconnected", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleSpeed = WidgetType(ordinal: 51, id: "ant_bicycle_speed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", disabledIconName: "ic_custom_sensor_speed_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let temperature = WidgetType(ordinal: 52, id: "temperature_sensor", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_sensor_temperature", disabledIconName: "ic_custom_sensor_thermometer", disconnectedIconName: "widget_sensor_temperature_disconnected", group: .externalSensors, defaultPanel: .rightPanel)
+    static let temperature = WidgetType(ordinal: 52, id: "temperature_sensor", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_sensor_temperature", disabledIconName: "ic_custom_sensor_thermometer", group: .externalSensors, defaultPanel: .rightPanel)
         
     static let glideTarget = WidgetType(ordinal: 53, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
     static let glideAverage = WidgetType(ordinal: 54, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)

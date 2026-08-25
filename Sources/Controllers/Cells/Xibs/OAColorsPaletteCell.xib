@@ -141,15 +141,12 @@
                                                     <constraint firstAttribute="width" id="yPT-QH-hVa"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1"/>
                                                 <color key="backgroundColor" name="customSeparator"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
                                                 </constraints>
-                                                <connections>
-                                                    <outlet property="thicknessConstraint" destination="Ezj-p8-v0I" id="s01-TC-001"/>
-                                                </connections>
                                             </view>
                                         </subviews>
                                     </stackView>
@@ -247,6 +244,7 @@
                 <outlet property="descriptionLabel" destination="rBH-IE-unp" id="KcM-Qn-QZY"/>
                 <outlet property="descriptionLabelStackView" destination="2ic-q2-80C" id="Xpy-vB-PDi"/>
                 <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
+                <outlet property="separatorHeight" destination="Ezj-p8-v0I" id="J4e-1M-9qa"/>
                 <outlet property="separatorOffsetViewWidth" destination="yPT-QH-hVa" id="yjB-o9-RFo"/>
                 <outlet property="topButton" destination="ND9-vB-K4j" id="2Zh-g8-I35"/>
                 <outlet property="topLabel" destination="64G-5F-WnM" id="gCI-qs-SCW"/>

@@ -50,7 +50,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="groupBg"/>
                 </view>
-                <view contentMode="scaleToFill" id="vag-0U-zs5" userLabel="Bottom Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                <view contentMode="scaleToFill" id="vag-0U-zs5" userLabel="Bottom Separator View">
                     <rect key="frame" x="0.0" y="480.5" width="414" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" name="customSeparator"/>

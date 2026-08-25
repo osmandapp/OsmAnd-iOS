@@ -101,7 +101,7 @@ static UIFont *_titleFont;
     iconFrame.origin.y = _contentContainer.frame.size.height / 2 - iconFrame.size.height / 2;
     self.iconView.frame = iconFrame;
     
-    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self];
+    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     self.separatorView.frame = CGRectMake(cellMargin, height - separatorHeight, width - cellMargin, separatorHeight);
     
     UIRectCorner corners;

@@ -100,15 +100,12 @@
                             <constraint firstAttribute="trailing" secondItem="NKc-Ip-ofc" secondAttribute="trailing" id="iUu-5S-EA8"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azg-8w-bDb" userLabel="Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azg-8w-bDb" userLabel="Separator View">
                         <rect key="frame" x="20" y="65" width="374" height="0.5"/>
                         <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="0.5" id="YGL-31-0vg"/>
                         </constraints>
-                        <connections>
-                            <outlet property="thicknessConstraint" destination="YGL-31-0vg" id="s01-TC-001"/>
-                        </connections>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UI4-2F-Wcq" userLabel="Bottom Left View">
                         <rect key="frame" x="20" y="76.5" width="177" height="44"/>

@@ -11,28 +11,27 @@ import WebKit
 import JavaScriptCore
 import OsmAndShared
 
-protocol TravelArticleDialogProtocol: AnyObject {
+protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
     func moveToAnchor(link: String, title: String)
     func openArticleByTitle(title: String, newSelectedLang: String)
     func openArticleById(newArticleId: TravelArticleIdentifier, newSelectedLang: String)
 }
 
-@objcMembers
 @objc(OATravelArticleDialogViewController)
+@objcMembers
 final class TravelArticleDialogViewController: OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate {
     
-    static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
+    static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
     let PREFIX_GEO = "geo:"
-    let PAGE_PREFIX_HTTP = "http://" // swiftlint:disable:this force_https
+    let PAGE_PREFIX_HTTP = "http://"
     let PAGE_PREFIX_HTTPS = "https://"
     let WIKIVOYAGE_DOMAIN = ".wikivoyage.org/wiki/"
     let WIKI_DOMAIN = ".wikipedia.org/wiki/"
     let PAGE_PREFIX_FILE = "file://"
     let blankUrl = "about:blank"
     
-    // swiftlint:disable force_https
     let HEADER_INNER = """
     <html><head>\n
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n
@@ -42,7 +41,6 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     </style>\n
     </head>
     """
-    // swiftlint:enable force_https
     
     let FOOTER_INNER = """
     <script>var coll = document.getElementsByTagName("H2");
@@ -146,23 +144,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         setupBottomButtonsView()
     }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-
-        guard let bottomView, let bottomStackView, let bookmarkButton else { return }
-        let stackHeight = 30.0 + 16.0
-        let bottomViewHeight = stackHeight + OAUtilities.getBottomMargin()
-        let sideOffset = OAUtilities.getLeftMargin() + 16.0
-
-        bottomView.frame = CGRect(x: 0, y: view.frame.height - bottomViewHeight, width: view.frame.width, height: bottomViewHeight)
-        bottomStackView.frame = CGRect(x: sideOffset, y: 0, width: bottomView.frame.width - 2 * sideOffset, height: stackHeight)
-
-        // Place image on bookmarkButton after text
-        bookmarkButton.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        bookmarkButton.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-    }
-
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection),
@@ -171,14 +153,6 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
-    override func updateAppearance() {
-        super.updateAppearance()
-        populateArticle()
-        if let bottomView {
-            bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
-        }
-    }
-
     func setupBottomButtonsView() {
         bottomView = UIView()
         guard let bottomView else { return }
@@ -222,12 +196,36 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         bottomStackView.addArrangedSubview(bookmarkButton)
         updateBookmarkButton()
     }
-
+    
+    override func updateAppearance() {
+        super.updateAppearance()
+        populateArticle()
+        if let bottomView {
+            bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
+        }
+    }
+    
     func updateBookmarkButton() {
         guard let article, let bookmarkButton else { return }
         let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
         let iconName = isSaved ? "ic_navbar_bookmark" : "ic_navbar_bookmark_outlined"
         bookmarkButton.setImage(UIImage(named: iconName), for: .normal)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        guard let bottomView, let bottomStackView, let bookmarkButton else { return }
+        let stackHeight = 30.0 + 16.0
+        let bottomViewHeight = stackHeight + OAUtilities.getBottomMargin()
+        let sideOffset = OAUtilities.getLeftMargin() + 16.0
+        
+        bottomView.frame = CGRect(x: 0, y: view.frame.height - bottomViewHeight, width: view.frame.width, height: bottomViewHeight)
+        bottomStackView.frame = CGRect(x: sideOffset, y: 0, width: bottomView.frame.width - 2 * sideOffset, height: stackHeight)
+        
+        // Place image on bookmarkButton after text
+        bookmarkButton.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        bookmarkButton.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
     }
     
     override func getTitle() -> String {
@@ -332,16 +330,11 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
     @objc private func onPointsButtonClicked() {
         guard let article else { return }
-        if let gpx, !gpx.file.exists() {
-            self.gpx = nil
-        }
         let file = TravelObfHelper.shared.createGpxFile(article: article)
         if gpx == nil {
             gpx = OATravelGuidesHelper.buildGpx(file, title: article.title, document: article.gpxFile)
         }
-        if let documentAdapter = article.gpxFile {
-            OATravelGuidesHelper.showGpx(file, documentAdapter: documentAdapter)
-        }
+        OAAppSettings.sharedManager().showGpx([file], update: true)
         if let gpx, let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
             let trackItem = TrackItem(file: gpx.file)
@@ -369,11 +362,10 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         guard let article else { return }
         guard let articleTitle = article.title else { return }
         guard let title = articleTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        let lang = selectedLang.flatMap { $0.isEmpty ? nil : $0 } ?? "en"
-        let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang
-        guard let url = URL(string: articleUrl) else { return }
+        let lang = selectedLang == "" ? "en" : selectedLang
+        let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang!
         
-        let items = [url]
+        let items = [URL(string: articleUrl)!]
         showActivity(items, sourceView: view, barButtonItem: navigationItem.rightBarButtonItem)
     }
     
@@ -388,7 +380,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     
     // MARK: Data
 
-    override func getContent() -> String {
+    override func getContent() -> String! {
         cachedHtml
     }
     
@@ -397,8 +389,8 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         guard let articleId else { return }
         
         langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId)
-        if selectedLang == nil, let firstLang = langs?.first {
-            selectedLang = firstLang
+        if selectedLang == nil && langs != nil && !langs!.isEmpty {
+            selectedLang = langs![0]
         }
         
         guard let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: selectedLang, readGpx: true, callback: self) else { return }
@@ -497,22 +489,23 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     }
     
     func updateTrackButton(processing: Bool, gpxFile: OAGPXDocumentAdapter?) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, let bottomStackView, let pointsButton else { return }
-            if processing {
-                bottomStackView.addSpinner(inCenterOfCurrentView: true)
-                pointsButton.setTitle("", for: .normal)
-                pointsButton.setImage(nil, for: .normal)
-                pointsButton.isEnabled = false
-            } else {
-                pointsButton.setTitle("", for: .normal)
-                pointsButton.isEnabled = false
-                if let gpxFile, gpxFile.pointsCount() > 0 {
-                    let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
-                    pointsButton.setTitle(title, for: .normal)
-                    pointsButton.isEnabled = true
+        DispatchQueue.main.async {
+            if self.bottomStackView != nil && self.pointsButton != nil {
+                if processing {
+                    self.bottomStackView?.addSpinner(inCenterOfCurrentView: true)
+                    self.pointsButton?.setTitle("", for: .normal)
+                    self.pointsButton?.setImage(nil, for: .normal)
+                    self.pointsButton?.isEnabled = false
+                } else {
+                    self.pointsButton?.setTitle("", for: .normal)
+                    self.pointsButton?.isEnabled = false
+                    if let gpxFile, gpxFile.pointsCount() > 0 {
+                        let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
+                        self.pointsButton?.setTitle(title , for: .normal)
+                        self.pointsButton?.isEnabled = true
+                    }
+                    self.bottomStackView!.removeSpinner()
                 }
-                bottomStackView.removeSpinner()
             }
         }
     }
@@ -535,9 +528,9 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         } else if newUrl.contains(WIKIVOYAGE_DOMAIN) && isWebPage {
             TravelGuidesUtils.processWikivoyageDomain(url: newUrl, delegate: self)
             decisionHandler(.cancel)
-        } else if newUrl.contains(WIKI_DOMAIN) && isWebPage, let article {
+        } else if newUrl.contains(WIKI_DOMAIN) && isWebPage && article != nil {
             self.webView.addSpinner()
-            let defaultCoordinates = CLLocation(latitude: article.lat, longitude: article.lon)
+            let defaultCoordinates = CLLocation(latitude: article!.lat, longitude: article!.lon)
             TravelGuidesUtils.processWikipediaDomain(defaultLocation: defaultCoordinates, url: newUrl, delegate: self)
             decisionHandler(.cancel)
         } else if isWebPage {
@@ -551,7 +544,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
-    override func getImagesDownloadMode() -> OADownloadMode? {
+    override func getImagesDownloadMode() -> OADownloadMode! {
         OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode
     }
     
@@ -592,15 +585,15 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     
     // MARK: OAWikiLanguagesWebDelegate
     
-    func onLocaleSelected(_ locale: String?) {
-        guard let articleId, let locale else { return }
-        let vc = TravelArticleDialogViewController(articleId: articleId, lang: locale)
-        vc.delegate = delegate
-        show(vc)
+    func onLocaleSelected(_ locale: String!) {
+        if let articleId {
+            let vc = TravelArticleDialogViewController(articleId: articleId, lang: locale)
+            vc.delegate = delegate
+            show(vc)
+        }
     }
     
-    func showLocalesVC(_ vc: UIViewController?) {
-        guard let vc else { return }
+    func showLocalesVC(_ vc: UIViewController!) {
         showModalViewController(vc)
     }
     

@@ -7,7 +7,6 @@
 //
 
 #import "OAPlanningPopupBaseViewController.h"
-#import "OsmAnd_Maps-Swift.h"
 
 @interface OAPlanningPopupBaseViewController ()
 
@@ -22,7 +21,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
     self.leftButton.layer.cornerRadius = 9.;
     self.rightButton.layer.cornerRadius = 9.;
     self.view.layer.cornerRadius = 9.;

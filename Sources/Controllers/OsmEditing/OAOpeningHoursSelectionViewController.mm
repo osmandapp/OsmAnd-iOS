@@ -75,7 +75,6 @@ static const NSInteger timeSectionIndex = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorColor = [SeparatorAppearance color];
     [self setupView];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];

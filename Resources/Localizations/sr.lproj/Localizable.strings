@@ -1,6 +1,4 @@
 "OsmAnd Maps" = "Карте Османда";
-"send_crash_log" = "Пошаљите дневнике рушења програма";
-"send_crash_log_descr" = "Садржи само податке о рушењима програма";
 "download_depth_countours" = "Поморски дубински обриси";
 "week_short" = "Сдмц";
 "weeks_short" = "Сдмца";
@@ -2613,7 +2611,7 @@
 "help_article_map_legend_ski_map_name" = "Стил Скијашке мапе";
 "help_article_map_interact_with_map_name" = "Међудејство са мапом";
 "help_article_map_map_context_menu_name" = "Приручни мени мапе";
-"ask_question_propose_features" = "Постављајте питања, предлажите карактеристике";
+"ask_question_propose_features" = "Упитајте, предложите нове могућности";
 "second_marker_widget_desc" = "Можете подесити справицу да приказује растојање или процењено преостало време доласка на другој ознаци карте.";
 "coordinates_widget_current_location_desc" = "Приказује земљописне координате тренутног земаљског положаја";
 "true_bearing_widget_desc" = "Угао између правог Севера и циљане тачке гледано са Вашег положаја.";
@@ -2636,7 +2634,7 @@
 "troubleshooting" = "Решавање проблема";
 "gitHub_discussion" = "Разговор на Гитхубу";
 "telegram_chats" = "Ћаскања Телеграмом";
-"report_an_issues" = "Пријави проблем";
+"report_an_issues" = "Пријави грешку";
 "about_osmAnd" = "О ОсмАнду";
 "osmAnd_team" = "OsmAnd Тим";
 "testFlight" = "ТестЛет";
@@ -4473,8 +4471,11 @@
 "no_search_results" = "Нема резултата";
 "favorite_search_empty_state_description" = "Прилагодите претрагу или филтере да бисте видели да ли то помаже";
 "favorites_empty_folder_description" = "Ова фолдер још увек нема тачака.";
+"favorites_delete_confirmation_title" = "Обришите %ld омиљених?";
 "items_delete_confirmation_title" = "Обрисати %ld ставке?";
+"folders_delete_confirmation_title" = "Обрисати %ld фолдера?";
 "favorites_delete_confirmation_message" = "Ова радња се не може поништити.";
+"mixed_delete_confirmation_message" = "Овим ће се обрисати %ld фолдера и %ld тачака. Ова радња се не може поништити.";
 "empty_state_favourites" = "Додај омиљене";
 "empty_state_favourites_desc" = "Увезите омиљене ставке или их додајте обележавањем тачака на мапи.";
 "tracks_empty_folder" = "Празан фолдер";
@@ -4543,10 +4544,3 @@
 "ais_apply_setting_to_profiles" = "Примени подешавање";
 "ais_apply_to_current_profile" = "Примени на %@";
 "ais_apply_to_all_profiles" = "Примени на све профиле";
-"no_crashes_recorded" = "Нису забележена рушења";
-"share_crash_log" = "Подели дневник рушења";
-"crash_report_prompt_title" = "ОсмАнд је наишао на неочекивану грешку.";
-"crash_report_prompt_description" = "Молимо вас да нам помогнете да побољшамо апликацију тако што ћете нам послати извештај о паду. Ваш извештај о паду ће нам помоћи да идентификујемо и решимо проблем.";
-"shared_string_send" = "Пошаљи";
-"send_current_app_log" = "Пошаљи тренутни дневник апликације";
-"send_current_app_log_descr" = "Од почетка апликације";

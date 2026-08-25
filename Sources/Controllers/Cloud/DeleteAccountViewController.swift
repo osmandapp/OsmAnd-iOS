@@ -227,9 +227,9 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
         } else if item.cellType == OADividerCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OADividerCell.reuseIdentifier, for: indexPath) as! OADividerCell
             cell.backgroundColor = .clear
-            cell.dividerColor = SeparatorAppearance.color
+            cell.dividerColor = .customSeparator
             cell.dividerInsets = UIEdgeInsets.zero
-            cell.dividerHight = SeparatorAppearance.thickness
+            cell.dividerHight = 1.0 / UIScreen.main.scale
             return cell
         } else if item.cellType == OADownloadProgressBarCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OADownloadProgressBarCell.reuseIdentifier, for: indexPath) as! OADownloadProgressBarCell
@@ -253,7 +253,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = tableData.item(for: indexPath)
         if item.cellType == OADividerCell.reuseIdentifier {
-            return SeparatorAppearance.thickness
+            return 1.0 / UIScreen.main.scale
         } else {
             return UITableView.automaticDimension
         }

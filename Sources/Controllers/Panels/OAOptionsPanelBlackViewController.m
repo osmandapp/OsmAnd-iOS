@@ -246,7 +246,7 @@
     CGFloat divX = ([self.scrollView isDirectionRTL]) ? 0 : 60.0;
     CGFloat divY = 49.5;
     CGFloat divW = width - 60;
-    CGFloat divH = [SeparatorAppearance thicknessForView:self.view];
+    CGFloat divH = 0.5;
     
     for (CALayer *item in _menuButtonDivArray)
     {
@@ -266,7 +266,7 @@
 
 - (void)applyingAppTheme
 {
-    UIColor *divColor = [SeparatorAppearance color];
+    UIColor *divColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     for (CALayer *item in _menuButtonDivArray) {
         item.backgroundColor = divColor.CGColor;
     }

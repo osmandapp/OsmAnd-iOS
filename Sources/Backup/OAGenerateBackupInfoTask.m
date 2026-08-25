@@ -22,7 +22,7 @@
     NSDictionary<NSString *, OALocalFile *> *_localFiles;
     NSDictionary<NSString *, OALocalFile *> *_localFilesWithDecomposedNames;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
-    NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFilesWithDecomposedNames;
+    NSDictionary<NSString *, OARemoteFile *> *_remoteFilesWithDecomposedNames;
     NSDictionary<NSString *, OARemoteFile *> *_deletedRemoteFiles;
     void (^_onComplete)(OABackupInfo *backupInfo, NSString *error);
     
@@ -46,13 +46,18 @@
         }
         _localFilesWithDecomposedNames = decomposedLocalFiles;
         _uniqueRemoteFiles = uniqueRemoteFiles;
-        NSMutableDictionary<NSString *, OARemoteFile *>* localMap = [NSMutableDictionary dictionaryWithCapacity:_uniqueRemoteFiles.count];
+        NSMutableDictionary<NSString *, OARemoteFile *>* localMap = [NSMutableDictionary dictionaryWithCapacity:_uniqueRemoteFiles.count + deletedRemoteFiles.count];
         for (NSString *originalKey in _uniqueRemoteFiles)
         {
             NSString *decomposedKey = [originalKey decomposedStringWithCanonicalMapping];
             localMap[decomposedKey] = _uniqueRemoteFiles[originalKey];
         }
-        _uniqueRemoteFilesWithDecomposedNames = localMap;
+        for (NSString *originalKey in deletedRemoteFiles)
+        {
+            NSString *decomposedKey = [originalKey decomposedStringWithCanonicalMapping];
+            localMap[decomposedKey] = deletedRemoteFiles[originalKey];
+        }
+        _remoteFilesWithDecomposedNames = localMap;
         _deletedRemoteFiles = deletedRemoteFiles;
         _onComplete = onComplete;
         _operationLog = [[OAOperationLog alloc] initWithOperationName:@"generateBackupInfo" debug:BACKUP_DEBUG_LOGS logThreshold:0.2];
@@ -154,7 +159,7 @@
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
         NSString *localKeyNfd = localFile.getTypeFileName.decomposedStringWithCanonicalMapping;
-        BOOL hasRemoteFile = _uniqueRemoteFilesWithDecomposedNames[localKeyNfd] != nil;
+        BOOL hasRemoteFile = _remoteFilesWithDecomposedNames[localKeyNfd] != nil;
         BOOL fileToDelete = [info.localFilesToDelete containsObject:localFile];
         if (!hasRemoteFile && !fileToDelete)
         {

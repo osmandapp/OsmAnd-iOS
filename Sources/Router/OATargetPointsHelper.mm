@@ -42,9 +42,10 @@
     BOOL _isSearchingHome;
     BOOL _isSearchingWork;
     BOOL _isSearchingStart;
-    BOOL _isSearchingDestination;
     BOOL _isSearchingMyLocation;
     dispatch_queue_t _locationQueue;
+    
+    OARTargetPoint *_destinationLookupPoint;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -642,37 +643,50 @@
 - (void)lookupAddressForDestinationPoint
 {
     OARTargetPoint *destination = _pointToNavigate;
-    BOOL isNameNotValid = destination != nil && [destination isSearchingAddress];
-    BOOL isAddressEmpty = destination != nil && NSStringIsEmpty(destination.pointDescription.address);
-
-    if ((isNameNotValid || isAddressEmpty) && !_isSearchingDestination)
+    
+    if (!destination)
     {
-        _isSearchingDestination = YES;
-        CLLocation *location = destination.point;
-        __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf) return;
-
-            NSString *pointName = [strongSelf getLocationName:location];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (strongSelf->_pointToNavigate == destination)
-                {
-                    if (isNameNotValid) {
-                        [destination.pointDescription setName:pointName];
-                        destination.pointDescription.address = pointName;
-                        [strongSelf->_app.data setPointToNavigate:destination];
-                    } else {
-                        destination.pointDescription.address = pointName;
-                        [strongSelf->_app.data backupTargetPoints];
-                    }
-                    [strongSelf updateRouteAndRefresh:NO];
-                }
-                strongSelf->_isSearchingDestination = NO;
-            });
-        });
+        _destinationLookupPoint = nil;
+        return;
     }
+    
+    if (![destination isSearchingAddress] && !NSStringIsEmpty(destination.pointDescription.address))
+        return;
+    
+    if (_destinationLookupPoint == destination)
+        return;
+    
+    _destinationLookupPoint = destination;
+    CLLocation *location = destination.point;
+    BOOL isNameNotValid = [destination isSearchingAddress];
+    
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) return;
+        
+        NSString *pointName = [strongSelf getLocationName:location];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (strongSelf->_destinationLookupPoint != destination)
+                return;
+            
+            strongSelf->_destinationLookupPoint = nil;
+            
+            if (strongSelf->_pointToNavigate != destination)
+                return;
+            
+            if (isNameNotValid) {
+                [destination.pointDescription setName:pointName];
+                destination.pointDescription.address = pointName;
+                [strongSelf->_app.data setPointToNavigate:destination];
+            } else {
+                destination.pointDescription.address = pointName;
+                [strongSelf->_app.data backupTargetPoints];
+            }
+            [strongSelf updateRouteAndRefresh:NO];
+        });
+    });
 }
 
 - (void)lookupAddressForIntermediatePoint:(OARTargetPoint *)point
@@ -695,7 +709,7 @@
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf || strongSelf->_intermediatePoints.firstObject != targetPoint)
+                if (!strongSelf)
                     return;
 
                 if (isNameNotValid)

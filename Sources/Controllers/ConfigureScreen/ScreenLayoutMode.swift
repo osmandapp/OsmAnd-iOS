@@ -25,4 +25,22 @@ enum ScreenLayoutMode: Int32, CaseIterable {
     var isPortrait: Bool {
         self == .portrait
     }
+
+    var key: String {
+        switch self {
+        case .portrait: "portrait"
+        case .landscape: "landscape"
+        }
+    }
+}
+
+@objcMembers
+final class ScreenLayoutModeWrapper: NSObject {
+    static func key(for mode: ScreenLayoutMode) -> String {
+        mode.key
+    }
+
+    static func allValues() -> [NSNumber] {
+        ScreenLayoutMode.allCases.map { NSNumber(value: $0.rawValue) }
+    }
 }

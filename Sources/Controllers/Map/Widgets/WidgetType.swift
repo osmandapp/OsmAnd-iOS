@@ -134,12 +134,10 @@ class WidgetType: NSObject {
         defaultPanel.getOriginalWidgetOrder(widgetId: id)
     }
 
-    func getPanel() -> WidgetsPanel {
-        getPanel(id, appMode: OAAppSettings.sharedManager().applicationMode.get())
-    }
-
-    func getPanel(_ widgetId: String, appMode: OAApplicationMode) -> WidgetsPanel {
-        if let widgetsPanel = Self.findWidgetPanel(widgetId: widgetId, mode: appMode) {
+    func panel(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel {
+        if let widgetsPanel = Self.findWidgetPanel(widgetId: widgetId,
+                                                  mode: appMode,
+                                                  screenLayoutMode: screenLayoutMode) {
             return widgetsPanel
         }
         return defaultPanel
@@ -153,25 +151,27 @@ class WidgetType: NSObject {
         }
     }
 
-    static func findWidgetPanel(widgetId: String, mode: OAApplicationMode? = nil) -> WidgetsPanel? {
+    static func findWidgetPanel(widgetId: String,
+                                mode: OAApplicationMode? = nil,
+                                screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel? {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         let appMode: OAApplicationMode = mode ?? settings.applicationMode.get()
         var setPanels: [WidgetsPanel] = []
         var unsetPanels: [WidgetsPanel] = []
 
         for panel in [WidgetsPanel.leftPanel, WidgetsPanel.topPanel, WidgetsPanel.rightPanel, WidgetsPanel.bottomPanel] {
-            if panel.getOrderPreference().isSet(for: appMode) {
+            if panel.orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode).isSet(for: appMode) {
                 setPanels.append(panel)
             } else {
                 unsetPanels.append(panel)
             }
         }
 
-        for panel in setPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+        for panel in setPanels where panel.contains(widgetId: widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) {
             return panel
         }
 
-        for panel in unsetPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+        for panel in unsetPanels where panel.contains(widgetId: widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) {
             return panel
         }
 

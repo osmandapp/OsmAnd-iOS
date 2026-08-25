@@ -379,12 +379,11 @@
     CGRect frame;
     CGFloat left = self.frame.origin.x;
     CGFloat top = self.frame.origin.y;
-    CGFloat w = OAUtilities.calculateScreenWidth;
+    CGFloat w = self.bounds.size.width;
     if (!OAUtilities.isLandscape)
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            w = kInfoViewLandscapeWidthPad;
             _singleLineMode = YES;
             CGFloat h = 50.0;
             frame = CGRectMake(left, top, w, h);
@@ -417,7 +416,6 @@
     }
     else
     {
-        w = kInfoViewLandscapeWidthPad;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             _singleLineMode = YES;
@@ -446,6 +444,12 @@
 
     self.frame = frame;
 
+    [self updateLayout];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
     [self updateLayout];
 }
 

@@ -140,16 +140,25 @@
 
 - (void) copySettings:(OAApplicationMode *)appMode customId:(NSString *)customId
 {
-    OAWidgetState *widgetState = [self getWidgetState];
+    OAWidgetState *widgetState = [self storedWidgetState];
     if (widgetState)
         [widgetState copyPrefs:appMode customId:customId];
 }
 
-- (OAWidgetState *)getWidgetState {
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    OAWidgetState *widgetState = [self storedWidgetState];
+    if (widgetState)
+        [widgetState copyPrefsFromMode:fromAppMode appMode:appMode customId:customId];
+}
+
+- (OAWidgetState *)storedWidgetState {
     return nil;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     return nil;
 }

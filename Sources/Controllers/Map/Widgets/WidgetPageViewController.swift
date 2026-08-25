@@ -102,6 +102,10 @@ final class WidgetPageViewController: UIViewController {
             height = fittingSize.height
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
+            let maxSidePanelWidth = OARootViewController.instance().mapPanel.hasTopWidget()
+                && OAAppSettings.sharedManager().isCompactPanelsLayout()
+                ? 120
+                : UIScreen.main.bounds.width * 0.45
             for widget in widgetViews {
                 if widget.isSimpleLayout {
                     // This block calculates sizes for side-panel medium and large layout widgets
@@ -111,7 +115,7 @@ final class WidgetPageViewController: UIViewController {
                     }
                     let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                     height += fittingSize.height
-                    width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))
+                    width = max(width, min(fittingSize.width, maxSidePanelWidth))
                 } else {
                     // This block calculates sizes for side-panel small/default layout widgets
                     widget.translatesAutoresizingMaskIntoConstraints = false

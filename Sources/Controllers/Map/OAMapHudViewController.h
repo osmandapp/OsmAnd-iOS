@@ -49,6 +49,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomBarLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomBarTrailingConstraint;
 
 @property (weak, nonatomic) IBOutlet OAHudButton *mapSettingsButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *searchButton;

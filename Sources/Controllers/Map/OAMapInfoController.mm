@@ -100,7 +100,7 @@
                    containerView:(ShadowPathView *)containerView
                              top:(BOOL)top
 {
-    if ([_settings.transparentMapTheme get])
+    if (_settings.isTransparentWidgets)
         containerView.direction = ShadowPathDirectionClear;
     else
         containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
@@ -305,7 +305,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     
@@ -319,7 +319,7 @@
         }
         for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
-            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
+            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
                 [self updateColors:state sideWidget:widgetInfo.widget];
             }
@@ -352,7 +352,7 @@
     }
     else
     {
-        if ([OAUtilities isLandscapeIpadAware])
+        if (_settings.isCompactPanelsLayout)
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
             [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
@@ -406,7 +406,7 @@
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
 {
-    view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
+    view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -463,7 +463,8 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    CGFloat horizontalPanelWidth = _settings.isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = horizontalPanelWidth;
 
     if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
@@ -506,7 +507,7 @@
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
 
-    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = horizontalPanelWidth;
     if (hasBottomWidgets)
     {
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
@@ -547,8 +548,9 @@
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
     }
+
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
-    if ([OAUtilities isLandscapeIpadAware])
+    if (_settings.isCompactPanelsLayout)
     {
         if (hasLeftWidgets)
         {
@@ -774,7 +776,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];

@@ -79,7 +79,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         widgetState.customId ?? widgetType?.id
     }
     
-    override func getWidgetState() -> OAWidgetState {
+    override func storedWidgetState() -> OAWidgetState {
         return widgetState
     }
     

@@ -89,5 +89,29 @@
 			<string>%ld Pwyntiau</string>
 		</dict>
 	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld stop</string>
+			<key>one</key>
+			<string>%ld stop</string>
+			<key>two</key>
+			<string>%ld stop</string>
+			<key>few</key>
+			<string>%ld stop</string>
+			<key>many</key>
+			<string>%ld stop</string>
+			<key>other</key>
+			<string>%ld stop</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -8,6 +8,8 @@
 
 #import "OASearchAlgorithms.h"
 
+#include <OsmAndCore/SearchAlgorithms.h>
+
 @implementation OASearchAlgorithms
 
 + (NSString *)removeApostrophes:(NSString *)s
@@ -98,6 +100,11 @@
     }
 
     return [result copy];
+}
+
++ (NSString *)alignChars:(NSString *)fullText
+{
+    return OsmAnd::SearchAlgorithms::alignChars(QString::fromNSString(fullText)).toNSString();
 }
 
 @end

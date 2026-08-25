@@ -635,7 +635,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
         chart.dragYEnabled = false
         chartView = chart
-        chartSynchronizer.setPrimaryChart(chart)
         bindChartGestures(chart)
 
         let recalcSeparator = SeparatorView()
@@ -674,6 +673,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcBtn.heightAnchor.constraint(equalToConstant: 50)
         ])
 
+        cell.layoutIfNeeded()
+        chartSynchronizer.setPrimaryChart(chart)
         return cell
     }
 
@@ -869,7 +870,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.drawGridLinesEnabled = true
         rightAxis.gridColor = .chartAxisGridLine
         rightAxis.labelTextColor = .textColorSecondary
-        chartSynchronizer.registerBarChart(barChart)
         bindChartGestures(barChart)
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
@@ -883,6 +883,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             barChart.heightAnchor.constraint(equalToConstant: 54)
         ])
 
+        cell.layoutIfNeeded()
+        chartSynchronizer.registerBarChart(barChart)
         return cell
     }
 
@@ -1196,17 +1198,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension PlanRouteAnalyzeViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let cell = cell as? AnalyzeCardCell else { return }
-        if let chart = cell.cardView.subviews.first(where: { $0 is ElevationChart }) as? ElevationChart {
-            cell.layoutIfNeeded()
-            chartSynchronizer.setPrimaryChart(chart)
-        } else if let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) as? HorizontalBarChartView {
-            cell.layoutIfNeeded()
-            chartSynchronizer.registerBarChart(barChart)
-        }
-    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)

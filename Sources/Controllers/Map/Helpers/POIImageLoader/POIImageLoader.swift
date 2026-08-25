@@ -156,7 +156,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     }
     
     private func makeIconProcessor(metrics: IconMetrics) -> ImageProcessor {
-        let color: UIColor = OAAppSettings.sharedManager().mapNightMode ? .popularPlaceBgDefault.dark : .popularPlaceBgDefault.light
+        let color: UIColor = OAAppSettings.sharedManager().activeMapNightMode ? .popularPlaceBgDefault.dark : .popularPlaceBgDefault.light
         let processor = ResizingImageProcessor(referenceSize: metrics.imageTargetSize, mode: .aspectFill)
         |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
         |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
@@ -174,7 +174,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     
     private func placeholderCacheKey(placeholderImageName: String,
                                      metrics: IconMetrics) -> String? {
-        let color: UIColor = OAAppSettings.sharedManager().mapNightMode ? .popularPlacePlaceholderBg.dark : .popularPlacePlaceholderBg.light
+        let color: UIColor = OAAppSettings.sharedManager().activeMapNightMode ? .popularPlacePlaceholderBg.dark : .popularPlacePlaceholderBg.light
         return [
             "poi_placeholder",
             placeholderImageName,
@@ -184,7 +184,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     }
     
     func createProcessedPlaceholder(with image: UIImage, metrics: IconMetrics, option: KingfisherParsedOptionsInfo) -> UIImage? {
-        let nightMode = OAAppSettings.sharedManager().mapNightMode
+        let nightMode = OAAppSettings.sharedManager().activeMapNightMode
         let placePlaceholderBg: UIColor = nightMode ? .popularPlacePlaceholderBg.dark : .popularPlacePlaceholderBg.light
         let placePlaceholderIcon: UIColor = nightMode ? .popularPlacePlaceholderIcon.dark : .popularPlacePlaceholderIcon.light
         let placeBgDefault: UIColor = nightMode ? .popularPlaceBgDefault.dark : .popularPlaceBgDefault.light

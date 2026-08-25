@@ -61,7 +61,7 @@
 
 - (void) initLayer
 {
-    _nightMode = OAAppSettings.sharedManager.mapNightMode;
+    _nightMode = OAAppSettings.sharedManager.activeMapNightMode;
 }
 
 - (void) deinitLayer
@@ -79,7 +79,7 @@
         self.invalidated = YES;
         return NO;
     }
-    _nightMode = OAAppSettings.sharedManager.mapNightMode;
+    _nightMode = OAAppSettings.sharedManager.activeMapNightMode;
     self.invalidated = NO;
     return YES;
 }

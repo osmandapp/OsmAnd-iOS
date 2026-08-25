@@ -811,7 +811,7 @@ typedef enum {
 
 - (void) updateMode:(OAMarkerCollection *)c
 {
-    c.mode = [OAAppSettings sharedManager].mapNightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
+    c.mode = [OAAppSettings sharedManager].activeMapNightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
 - (void)updatePreviewLocation:(BOOL)showBearing newLocation:(CLLocation *)newLocation

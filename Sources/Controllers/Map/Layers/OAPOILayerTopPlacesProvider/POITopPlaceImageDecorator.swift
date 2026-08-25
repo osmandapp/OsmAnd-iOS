@@ -26,7 +26,7 @@ final class POITopPlaceImageDecorator: NSObject {
             
             image.draw(at: .zero)
             ctx.setShadow(offset: .zero, blur: 0, color: nil)
-            ctx.setStrokeColor((OAAppSettings.sharedManager().mapNightMode
+            ctx.setStrokeColor((OAAppSettings.sharedManager().activeMapNightMode
                                 ? UIColor.popularPlaceSelectedStroke.dark
                                 : UIColor.popularPlaceSelectedStroke.light).cgColor)
             

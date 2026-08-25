@@ -799,7 +799,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         return;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
     id<OASnapToRoadProgressDelegate> progressDelegate = self.progressDelegate;
-    if (progressDelegate != nil && !routingHelper.isRouteBeingCalculated)
+    BOOL canStartCalculation = !routingHelper.isRouteBeingCalculated
+        || (_calculationProgress != nullptr && _calculationProgress->isCancelled());
+    if (progressDelegate != nil && canStartCalculation)
     {
         OARouteCalculationParams *params = [self getParams:YES];
         if (params != nil)
@@ -1480,9 +1482,17 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 #pragma mark OARouteCalculationProgressCallback
 
-- (void)finish {
+- (void)finish
+{
     _calculatedPairs = 0;
     _pointsToCalculateSize = 0;
+    NSArray<OASWptPt *> *pair = _currentPair;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf != nil && pair != nil && strongSelf->_currentPair == pair)
+            [strongSelf cancelSnapToRoad];
+    });
 }
 
 - (void)requestPrivateAccessRouting
@@ -1551,7 +1561,15 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
     NSArray<OASWptPt *> *pair = _currentPair;
     if (![self isCurrentRouteCalculationForPair:pair route:route start:start end:end])
+    {
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf != nil && pair != nil && strongSelf->_currentPair == pair)
+                [strongSelf cancelSnapToRoad];
+        });
         return;
+    }
 
     NSArray<CLLocation *> *locations = route.getRouteLocations;
     NSMutableArray<OASWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];
@@ -1580,7 +1598,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (![strongSelf isCurrentRouteCalculationForPair:pair route:route start:start end:end])
+        {
+            if (strongSelf != nil && pair != nil && strongSelf->_currentPair == pair)
+                [strongSelf cancelSnapToRoad];
             return;
+        }
 
         strongSelf->_calculatedPairs++;
         [strongSelf updateProgress:0];

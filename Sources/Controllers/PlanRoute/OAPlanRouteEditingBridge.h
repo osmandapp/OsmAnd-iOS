@@ -46,6 +46,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, weak, nullable) UIViewController *presenterViewController;
 
 @property (nonatomic, readonly) BOOL hasPoints;
+@property (nonatomic, readonly) BOOL hasTrailingGap;
 @property (nonatomic, readonly, nullable) OASGpxFile *currentGpxFile;
 @property (nonatomic, readonly, nullable) OASGpxFile *exportedGpxFile;
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
@@ -105,6 +106,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
+- (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes;
 - (void)refreshRouteForMode:(OAApplicationMode *)mode;
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)selectPointAtIndex:(NSInteger)index;

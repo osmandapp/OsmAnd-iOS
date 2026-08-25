@@ -20,10 +20,12 @@ final class OACrashReportPromptCoordinator: NSObject {
 
     private let userDefaults: UserDefaults
     private let readyMainApplicationScenes = NSHashTable<UIScene>.weakObjects()
+
     private var isStarted = false
+    private var presentationRetryWorkItem: DispatchWorkItem?
+
     private weak var mainApplicationScene: UIScene?
     private weak var presentedPrompt: OACrashReportPromptViewController?
-    private var presentationRetryWorkItem: DispatchWorkItem?
 
     private override init() {
         userDefaults = .standard
@@ -54,32 +56,6 @@ final class OACrashReportPromptCoordinator: NSObject {
                 object: nil
             )
             self.requestPresentation()
-        }
-    }
-
-    @objc private func onCrashReportsDidChange(_ notification: Notification) {
-        requestPresentation()
-    }
-
-    @objc private func onSceneDidActivate(_ notification: Notification) {
-        guard let scene = notification.object as? UIScene,
-              readyMainApplicationScenes.contains(scene),
-              mainApplicationWindow(for: scene) != nil else {
-            return
-        }
-        mainApplicationScene = scene
-        requestPresentation()
-    }
-
-    @objc private func onMainApplicationUIReady(_ notification: Notification) {
-        guard let scene = notification.object as? UIScene else { return }
-        readyMainApplicationScenes.add(scene)
-        mainApplicationScene = scene
-        // The first-launch controller can be pushed immediately after the root
-        // is installed. Defer presentation until all synchronous launch-state
-        // observers have completed their UI updates.
-        DispatchQueue.main.async { [weak self] in
-            self?.requestPresentation()
         }
     }
 
@@ -143,8 +119,12 @@ final class OACrashReportPromptCoordinator: NSObject {
 
         let navigationController = UINavigationController(rootViewController: prompt)
         navigationController.modalPresentationStyle = .pageSheet
+        navigationController.presentationController?.delegate = prompt
         if let sheet = navigationController.sheetPresentationController {
-            if #available(iOS 16.0, *) {
+            if UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
+                sheet.detents = [.large()]
+                sheet.selectedDetentIdentifier = .large
+            } else if #available(iOS 16.0, *) {
                 let identifier = UISheetPresentationController.Detent.Identifier(
                     "crashReportPrompt"
                 )
@@ -234,5 +214,31 @@ final class OACrashReportPromptCoordinator: NSObject {
             return topViewController(from: tabBarController.selectedViewController)
         }
         return viewController
+    }
+
+    @objc private func onCrashReportsDidChange(_ notification: Notification) {
+        requestPresentation()
+    }
+
+    @objc private func onSceneDidActivate(_ notification: Notification) {
+        guard let scene = notification.object as? UIScene,
+              readyMainApplicationScenes.contains(scene),
+              mainApplicationWindow(for: scene) != nil else {
+            return
+        }
+        mainApplicationScene = scene
+        requestPresentation()
+    }
+
+    @objc private func onMainApplicationUIReady(_ notification: Notification) {
+        guard let scene = notification.object as? UIScene else { return }
+        readyMainApplicationScenes.add(scene)
+        mainApplicationScene = scene
+        // The first-launch controller can be pushed immediately after the root
+        // is installed. Defer presentation until all synchronous launch-state
+        // observers have completed their UI updates.
+        DispatchQueue.main.async { [weak self] in
+            self?.requestPresentation()
+        }
     }
 }

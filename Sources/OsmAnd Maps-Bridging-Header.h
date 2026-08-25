@@ -291,6 +291,7 @@
 #import "OAGpxWptItem.h"
 
 // Views
+#import "OAMapRendererViewProtocol.h"
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"

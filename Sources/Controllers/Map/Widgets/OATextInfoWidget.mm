@@ -130,7 +130,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
     [self initSeparatorsView];
     [self showBottomSeparator:NO];
-    [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
+    [self updatesSeparatorsColor:[SeparatorAppearance color]];
 
     UIStackView *verticalStackView = [UIStackView new];
     verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -596,7 +596,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     [self resetOutlineForLabel:self.valueLabel];
     self.unitLabel.text = _subtext;
     [self resetOutlineForLabel:self.unitLabel];
-    [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
+    [self updatesSeparatorsColor:[SeparatorAppearance color]];
 }
 
 - (void)configureSimpleLayout

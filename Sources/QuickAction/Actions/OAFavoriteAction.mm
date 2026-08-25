@@ -53,12 +53,20 @@ static QuickActionType *TYPE;
 {
     CLLocation *latLon = [self getMapLocation];
     NSString *title = self.getParams[kName];
-    if (!title || title.length == 0)
-        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
-    if (!title || title.length == 0)
-        title = OALocalizedString(@"favorite");
-    
-    [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
+    BOOL autoFill = ![self.getParams[kDialog] boolValue];
+    if (title.length > 0)
+    {
+        [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:autoFill];
+        return;
+    }
+
+    [OAReverseGeocoder.instance lookupAddressAtLat:latLon.coordinate.latitude
+                                               lon:latLon.coordinate.longitude
+                                          objectId:0
+                                        completion:^(NSString *address) {
+        NSString *resolvedTitle = address.length > 0 ? address : OALocalizedString(@"favorite");
+        [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:resolvedTitle autoFill:autoFill];
+    }];
 }
 
 - (void)addFavoriteWithDialog:(double)lat lon:(double)lon title:(NSString *)title

@@ -774,6 +774,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
     OAPOIUIFilter *_poiUiFilter;
     OAPOIUIFilter *_wikiUiFilter;
+    NSString *_poiNameFilterQuery;
     OAAmenityExtendedNameFilter *_poiUiNameFilter;
     OAAmenityExtendedNameFilter *_wikiUiNameFilter;
     NSString *_poiCategoryName;
@@ -1031,6 +1032,16 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             && [filters.allObjects.firstObject.name isEqualToString:OALocalizedString(@"poi_filter_by_name")]
             && !filters.allObjects.firstObject.filterByName;
 
+    _poiNameFilterQuery = nil;
+    for (OAPOIUIFilter *filter in filters)
+    {
+        if ([filter.filterId isEqualToString:BY_NAME_FILTER_ID] && filter.filterByName.length > 0)
+        {
+            _poiNameFilterQuery = filter.filterByName;
+            break;
+        }
+    }
+
     _poiUiFilter = noValidByName ? nil : [_filtersHelper combineSelectedFilters:filters];
     if (noValidByName)
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
@@ -1047,6 +1058,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
     OAPOIUIFilter *poiUiFilter = _poiUiFilter;
     OAPOIUIFilter *wikiUiFilter = _wikiUiFilter;
+    NSString *poiNameFilterQuery = _poiNameFilterQuery;
     __block CGFloat displayDensityFactorSnapshot = UIScreen.mainScreen.scale;
     __block unsigned int rasterTileSizeSnapshot = 0;
     [self.mapViewController runWithRenderSync:^{
@@ -1163,14 +1175,17 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         }
 
         const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
+        const QString amenityNameFilter = !isWiki && poiNameFilterQuery.length > 0
+                ? QString::fromNSString(poiNameFilterQuery)
+                : QString();
         std::shared_ptr<OsmAnd::AmenitySymbolsProvider> symbolsProvider;
         if (categoriesFilter.count() > 0 || wikiOnlineAmenitiesController)
         {
-            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
+            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider, amenityNameFilter));
         }
         else
         {
-            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
+            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider, amenityNameFilter));
         }
 
         if (isWiki)

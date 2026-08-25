@@ -20,6 +20,7 @@
 #import "OAProducts.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
+#import <QuartzCore/QuartzCore.h>
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -1499,6 +1500,10 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
 
+    NSLog(@"[ContextMenu] Target setup BEGIN targetType=%ld object=%@",
+          (long)targetPoint.type,
+          targetPoint.targetObj ? NSStringFromClass([targetPoint.targetObj class]) : @"none");
+    CFTimeInterval targetSetupStartTime = CACurrentMediaTime();
     _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1510,6 +1515,8 @@ typedef enum
         [self goToTargetPointMapillary];
         [self hideMultiMenuIfNeeded];
         [self setNeedsStatusBarAppearanceUpdate];
+        CFTimeInterval targetSetupDuration = (CACurrentMediaTime() - targetSetupStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Target setup END (%.3f ms) result=mapillary", targetSetupDuration);
         return;
     }
     else if (targetPoint.type == OATargetMapDownload)
@@ -1542,6 +1549,10 @@ typedef enum
     }
 
     [self setSelectedObject:targetPoint];
+    CFTimeInterval targetSetupDuration = (CACurrentMediaTime() - targetSetupStartTime) * 1000.0;
+    NSLog(@"[ContextMenu] Target setup END (%.3f ms) result=ready targetType=%ld",
+          targetSetupDuration,
+          (long)targetPoint.type);
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
@@ -2486,6 +2497,8 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete afterComplete:(void (^)(void))afterComplete
 {
+    NSLog(@"[ContextMenu] Presentation BEGIN targetType=%ld", (long)_targetMenuView.targetPoint.type);
+    CFTimeInterval openingStartTime = CACurrentMediaTime();
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
@@ -2500,6 +2513,8 @@ typedef enum
         _activeTargetActive = NO;
         BOOL activeTargetChildPushed = _activeTargetChildPushed;
         _activeTargetChildPushed = NO;
+        CFTimeInterval presentationDuration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=restarting_after_active_target", presentationDuration);
         
         [self hideTargetPointMenu:.1 onComplete:^{
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
@@ -2517,7 +2532,9 @@ typedef enum
         [self saveMapStateNoRestore];
     
     _mapStateSaved = saveMapState;
-    
+
+    NSLog(@"[ContextMenu] View preparation BEGIN");
+    CFTimeInterval preparationStartTime = CACurrentMediaTime();
     OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
@@ -2617,6 +2634,10 @@ typedef enum
         [self.targetMenuView setCustomViewController:controller needFullMenu:NO];
         [self.targetMenuView prepareNoInit];
     }
+    CFTimeInterval preparationDuration = (CACurrentMediaTime() - preparationStartTime) * 1000.0;
+    NSLog(@"[ContextMenu] View preparation END (%.3f ms) controller=%@",
+          preparationDuration,
+          controller ? NSStringFromClass([controller class]) : @"none");
     
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -2629,6 +2650,8 @@ typedef enum
     if (_targetMenuView.targetPoint.minimized)
     {
         _targetMenuView.targetPoint.minimized = NO;
+        CFTimeInterval presentationDuration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=minimized", presentationDuration);
         if (onComplete)
             onComplete();
         
@@ -2643,6 +2666,8 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController updateDependentButtonsVisibility];
     [self.targetMenuView show:YES onComplete:^{
+        CFTimeInterval duration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=shown", duration);
         self.sidePanelController.recognizesPanGesture = NO;
         if (afterComplete)
             afterComplete();

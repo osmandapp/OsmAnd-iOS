@@ -4482,3 +4482,9 @@
 "calculating_elevation_nearby_roads_description" = "Ajustando a trilha às estradas próximas para obter dados de altitude.";
 "calculating_elevation_terrain_maps_description" = "Recuperação de dados de altitude a partir de mapas topográficos.";
 "recalculate_elevation" = "Recalcular a elevação";
+"crash_report_prompt_title" = "O OsmAnd encontrou um erro inesperado.";
+"crash_report_prompt_description" = "Por favor, ajude-nos a melhorar o aplicativo enviando o relatório de falha. Seu relatório de falha nos ajudará a identificar e corrigir o problema.";
+"send_current_app_log" = "Enviar o registro atual do aplicativo";
+"send_current_app_log_descr" = "Desde que o aplicativo foi iniciado";
+"plan_route_change_for_whole_segment" = "Alteração para todo o segmento";
+"plan_route_change_for_whole_track" = "Alteração para toda a trilha";

@@ -211,14 +211,32 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         let item = tableData.item(for: indexPath)
         guard item.key == RowKey.reset.rawValue else { return }
         tableView.deselectRow(at: indexPath, animated: true)
-        appearanceSettings.reset(panel: selectedPanel)
-        recreateWidgetsAndReload()
+        showResetConfirmation()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         traitCollection.preferredContentSizeCategory.isAccessibilityCategory
             ? UITableView.automaticDimension
             : Constants.rowHeight
+    }
+
+    private func resetSelectedPanel() {
+        appearanceSettings.reset(panel: selectedPanel)
+        recreateWidgetsAndReload()
+    }
+
+    private func showResetConfirmation() {
+        let message = String(format: localizedString("reset_all_appearance_settings_for_panel"),
+                             selectedPanel.title)
+        let alert = UIAlertController(title: localizedString("reset_to_default"),
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_reset"),
+                                      style: .destructive) { _ in
+            self.resetSelectedPanel()
+        })
+        present(alert, animated: true)
     }
 
     private func addRow(to section: OATableSectionData, key: RowKey, title: String) {
@@ -602,8 +620,18 @@ private final class WidgetsAppearancePreviewView: UIView {
             .flatMap { $0 }
             .filter { $0 is CoordinatesBaseWidget }
         let originalVisibility = excludedWidgets.map(\.isHidden)
+        let originalPanelBounds = controller.view.bounds
+        let originalPageControlVisibility = controller.pageControl.isHidden
+        let originalPageControlHeight = controller.pageControlHeightConstraint.constant
+        let originalContainerCornerRadius = controller.pageContainerView.layer.cornerRadius
+        let originalContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
         excludedWidgets.forEach { $0.isHidden = true }
         defer {
+            controller.view.bounds = originalPanelBounds
+            controller.pageControl.isHidden = originalPageControlVisibility
+            controller.pageControlHeightConstraint.constant = originalPageControlHeight
+            controller.pageContainerView.layer.cornerRadius = originalContainerCornerRadius
+            controller.pageContainerView.layer.maskedCorners = originalContainerMaskedCorners
             for (widget, wasHidden) in zip(excludedWidgets, originalVisibility) {
                 widget.isHidden = wasHidden
             }
@@ -618,7 +646,15 @@ private final class WidgetsAppearancePreviewView: UIView {
             guard contentSize.width > 0 else { return nil }
             let borderInsets = controller.view.layer.borderWidth * 2
             contentSize.width += borderInsets
-            contentSize.height += controller.pageControlHeightConstraint.constant + borderInsets
+            contentSize.height += borderInsets
+            controller.pageControl.isHidden = true
+            controller.pageControlHeightConstraint.constant = 0
+            controller.pageContainerView.layer.cornerRadius = 5
+            controller.pageContainerView.layer.maskedCorners = controller.view.layer.maskedCorners
+            var previewBounds = controller.view.bounds
+            previewBounds.size = contentSize
+            controller.view.bounds = previewBounds
+            controller.view.layoutIfNeeded()
             sourceView = controller.view
         } else {
             let availableWidth = bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width
@@ -626,7 +662,9 @@ private final class WidgetsAppearancePreviewView: UIView {
             contentSize.width = min(panelWidth, availableWidth)
             sourceView = controller.currentActiveController?.view ?? controller.pageContainerView
         }
-        sourceView.layoutIfNeeded()
+        if !isSidePanel {
+            sourceView.layoutIfNeeded()
+        }
         if !isSidePanel {
             guard let widgetsFrame = visibleWidgetsFrame(controller: controller, in: sourceView) else {
                 return nil

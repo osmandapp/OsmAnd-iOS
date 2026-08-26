@@ -4256,6 +4256,7 @@
 "map_widget_altitude_map_center_desc" = "Shows the elevation above sea level of the current map center.";
 
 "reset_all_settings_desc" = "Reset all settings to default?";
+"reset_all_appearance_settings_for_panel" = "Reset all appearance settings for %@?";
 "no_widgets_here_yet" = "No widgets here yet";
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
 "click_on_widget" = "Click on widget";

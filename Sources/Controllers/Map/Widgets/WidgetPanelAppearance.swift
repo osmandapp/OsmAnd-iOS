@@ -377,11 +377,7 @@ final class WidgetPanelAppearanceSettings {
                                                                           panel: panel,
                                                                           nightMode: nightMode)
         case .automatic:
-            primaryTextColor = transparent
-                ? WidgetPanelAppearanceSettings.defaultColor(for: .primaryText,
-                                                             panel: panel,
-                                                             nightMode: nightMode)
-                : accents.primary
+            primaryTextColor = accents.primary
         case .custom:
             primaryTextColor = settings.color(for: .primaryText, panel: panel, nightMode: nightMode)
         }
@@ -393,20 +389,12 @@ final class WidgetPanelAppearanceSettings {
                                                                             panel: panel,
                                                                             nightMode: nightMode)
         case .automatic:
-            secondaryTextColor = transparent
-                ? WidgetPanelAppearanceSettings.defaultColor(for: .secondaryText,
-                                                             panel: panel,
-                                                             nightMode: nightMode)
-                : accents.secondary
+            secondaryTextColor = accents.secondary
         case .custom:
             secondaryTextColor = settings.color(for: .secondaryText, panel: panel, nightMode: nightMode)
         }
 
-        let dividerColor = transparent
-            ? WidgetPanelAppearanceSettings.defaultColor(for: .secondaryText,
-                                                         panel: panel,
-                                                         nightMode: nightMode).withAlphaComponent(0.2)
-            : accents.divider
+        let dividerColor = accents.divider
         let opaqueBackground = backgroundColor.cgColor.alpha >= 0.999
         let textOutlineColor: UIColor = isLight(primaryTextColor) ? .black : .white
         return ResolvedWidgetPanelAppearance(primaryTextColor: primaryTextColor,
@@ -421,23 +409,27 @@ final class WidgetPanelAppearanceSettings {
     private static func dynamicAccents(for backgroundColor: UIColor) -> (primary: UIColor,
                                                                           secondary: UIColor,
                                                                           divider: UIColor) {
-        let useWhite = !isLight(backgroundColor)
+        let useWhite = relativeLuminance(of: backgroundColor) < 0.5
         let primary: UIColor = useWhite ? .white : .black
-        return (primary, primary.withAlphaComponent(0.6), primary.withAlphaComponent(useWhite ? 0.2 : 0.1))
+        return (primary, primary.withAlphaComponent(0.6), primary.withAlphaComponent(0.2))
     }
 
     private static func isLight(_ color: UIColor) -> Bool {
+        relativeLuminance(of: color) >= 0.5
+    }
+
+    private static func relativeLuminance(of color: UIColor) -> CGFloat {
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
-        
-        guard color.getRed(&red, green: &green, blue: &blue, alpha: nil) else { return false }
-        
+
+        guard color.getRed(&red, green: &green, blue: &blue, alpha: nil) else { return 0 }
+
         func linear(_ component: CGFloat) -> CGFloat {
             component <= 0.03928 ? component / 12.92 : pow((component + 0.055) / 1.055, 2.4)
         }
-        
-        return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue) > 0.5
+
+        return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue)
     }
 }
 

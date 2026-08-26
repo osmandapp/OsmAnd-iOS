@@ -26,10 +26,12 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         static let floatingButtonSize: CGFloat = 48
         static let floatingButtonInset: CGFloat = 16
         static let applyButtonHeight: CGFloat = 44
+        static let paletteVerticalInset: CGFloat = 6
     }
 
-    weak var delegate: WidgetPanelColorViewControllerDelegate?
     var navControllerHistory: [UIViewController] = []
+
+    weak var delegate: WidgetPanelColorViewControllerDelegate?
 
     private let panel: WidgetsPanel
     private let target: WidgetPanelColorTarget
@@ -38,11 +40,10 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private let mapPanel: OAMapPanelViewController = OARootViewController.instance().mapPanel
 
     private let closeButton = UIButton(type: .system)
-    private let resetButton = UIButton(type: .system)
     private let navigationTitleLabel = UILabel()
     private let titleLabel = UILabel()
     private let applyButton = UIButton(type: .system)
-    
+
     private let initialDayColor: UIColor
     private let initialNightColor: UIColor
     private let initialTextMode: WidgetPanelTextColorMode?
@@ -55,14 +56,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private var isNightColorMode: Bool
     private var isApplied = false
     private var didRestoreNavigation = false
-
-    private var isColorSelectionAvailable: Bool {
-        target != .background || OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
-    }
-
-    private var currentColorItem: PaletteItemSolid? {
-        isNightColorMode ? currentNightColorItem : currentDayColorItem
-    }
+    private var hiddenMapControlStates: [(view: UIView, wasHidden: Bool)] = []
 
     override var initialMenuHeight: CGFloat {
         if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
@@ -78,6 +72,18 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     override var useGestureRecognizer: Bool {
         false
+    }
+
+    override func isLeftSidePresentation() -> Bool {
+        false
+    }
+
+    private var isColorSelectionAvailable: Bool {
+        target != .background || OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
+    }
+
+    private var currentColorItem: PaletteItemSolid? {
+        isNightColorMode ? currentNightColorItem : currentDayColorItem
     }
 
     init(appMode: OAApplicationMode,
@@ -128,6 +134,11 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                                                object: nil)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        hideMapControls()
+        super.viewWillAppear(animated)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         applyMapTheme()
@@ -139,6 +150,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard !didRestoreNavigation, isMovingFromParent || isBeingDismissed else { return }
+        restoreMapControls()
         OADayNightHelper.instance().resetTempMode()
         restoreDraftIfNeeded()
     }
@@ -217,12 +229,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                                 image: .icNavbarClose,
                                 accessibilityLabel: localizedString("shared_string_close"),
                                 action: #selector(onCloseButtonPressed))
-        configureFloatingButton(resetButton,
-                                image: UIImage.templateImageNamed("ic_navbar_reset"),
-                                accessibilityLabel: localizedString("reset_to_default"),
-                                action: #selector(onResetButtonPressed))
         view.addSubview(closeButton)
-        view.addSubview(resetButton)
         navigationTitleLabel.font = .preferredFont(forTextStyle: .headline)
         navigationTitleLabel.adjustsFontForContentSizeCategory = true
         navigationTitleLabel.text = panel.title
@@ -252,6 +259,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         applyButton.titleLabel?.adjustsFontForContentSizeCategory = true
         applyButton.backgroundColor = .buttonBgColorPrimary
         applyButton.setTitleColor(.buttonTextColorPrimary, for: .normal)
+        applyButton.setTitleColor(.textColorSecondary, for: .disabled)
         applyButton.layer.cornerRadius = 10
         applyButton.accessibilityTraits = .button
         applyButton.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
@@ -266,40 +274,35 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func updateApplyButtonAvailability() {
-        applyButton.isEnabled = isColorSelectionAvailable
-        applyButton.alpha = isColorSelectionAvailable ? 1 : 0
-        toolBarView.isHidden = !isColorSelectionAvailable
-        resetButton.isEnabled = isColorSelectionAvailable
-        resetButton.accessibilityValue = isColorSelectionAvailable ? nil : localizedString("shared_string_unavailable")
+        let isAvailable = isColorSelectionAvailable
+        applyButton.isEnabled = isAvailable
+        applyButton.backgroundColor = isAvailable ? .buttonBgColorPrimary : .buttonBgColorDisabled
+        applyButton.alpha = 1
+        toolBarView.isHidden = false
     }
 
     private func updateFloatingButtonsBlur() {
         let isLightTheme = ThemeManager.shared.isLightTheme()
         closeButton.addBlurEffect(isLightTheme, cornerRadius: Constants.floatingButtonSize / 2, padding: 0)
-        resetButton.addBlurEffect(isLightTheme, cornerRadius: Constants.floatingButtonSize / 2, padding: 0)
     }
 
     private func layoutFloatingButtons() {
         let top = view.safeAreaInsets.top + 8
         let left = view.safeAreaInsets.left + Constants.floatingButtonInset
-        let right = view.bounds.width - view.safeAreaInsets.right - Constants.floatingButtonInset
+        let reservedTrailingButtonOrigin = view.bounds.width - view.safeAreaInsets.right - Constants.floatingButtonInset
             - Constants.floatingButtonSize
         closeButton.frame = CGRect(x: left,
                                    y: top,
                                    width: Constants.floatingButtonSize,
                                    height: Constants.floatingButtonSize)
-        resetButton.frame = CGRect(x: right,
-                                   y: top,
-                                   width: Constants.floatingButtonSize,
-                                   height: Constants.floatingButtonSize)
         navigationTitleLabel.frame = CGRect(x: closeButton.frame.maxX + 12,
                                             y: top,
-                                            width: max(0, resetButton.frame.minX - closeButton.frame.maxX - 24),
+                                            width: max(0, reservedTrailingButtonOrigin - closeButton.frame.maxX - 24),
                                             height: Constants.floatingButtonSize)
     }
 
     private func applySheetCornerRadius() {
-        guard !isLandscape() else {
+        guard !isLeftSidePresentation() else {
             scrollableView.layer.mask = nil
             return
         }
@@ -337,6 +340,37 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         mapInfoController.rightPanelController.view.isHidden = panel != .rightPanel
         mapInfoController.topPanelController.view.isHidden = panel != .topPanel
         mapInfoController.bottomPanelController.view.isHidden = panel != .bottomPanel
+    }
+
+    private func hideMapControls() {
+        guard hiddenMapControlStates.isEmpty,
+              let hudViewController = mapPanel.hudViewController else { return }
+        let controls = mapButtons(in: hudViewController.view)
+        hiddenMapControlStates = controls.map { view in
+            (view: view, wasHidden: view.isHidden)
+        }
+        hiddenMapControlStates.forEach { $0.view.isHidden = true }
+    }
+
+    private func mapButtons(in rootView: UIView) -> [OAHudButton] {
+        var result: [OAHudButton] = []
+        func collect(from view: UIView) {
+            if let button = view as? OAHudButton {
+                result.append(button)
+                return
+            }
+            view.subviews.forEach { collect(from: $0) }
+        }
+        collect(from: rootView)
+        return result
+    }
+
+    private func restoreMapControls() {
+        guard !hiddenMapControlStates.isEmpty else { return }
+        hiddenMapControlStates.forEach { $0.view.isHidden = $0.wasHidden }
+        hiddenMapControlStates.removeAll()
+        mapPanel.hudViewController?.updateControlsLayout(false)
+        mapPanel.hudViewController?.updateDependentButtonsVisibility()
     }
 
     private func setCustomMode() {
@@ -377,6 +411,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         hide(true, duration: 0.2) { [weak self] in
             guard let self else { return }
             self.mapPanel.hideScrollableHudViewController()
+            self.restoreMapControls()
             if let navigationController = OARootViewController.instance().navigationController,
                !self.navControllerHistory.isEmpty {
                 navigationController.setViewControllers(self.navControllerHistory, animated: true)
@@ -409,18 +444,6 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     @objc private func onCloseButtonPressed() {
         closeScreen(keepingChanges: false)
-    }
-
-    @objc private func onResetButtonPressed() {
-        guard isColorSelectionAvailable else { return }
-        currentDayColorItem = colorItem(for: WidgetPanelAppearanceSettings.defaultColor(for: target,
-                                                                                        panel: panel,
-                                                                                        nightMode: false))
-        currentNightColorItem = colorItem(for: WidgetPanelAppearanceSettings.defaultColor(for: target,
-                                                                                          panel: panel,
-                                                                                          nightMode: true))
-        applyDraftAndRefreshWidgets()
-        tableView.reloadData()
     }
 
     @objc private func onApplyButtonPressed() {
@@ -468,7 +491,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                                                      for: indexPath) as? WidgetPanelColorUnavailableCell
             cell?.configure(action: { [weak self] in
                 guard let navigationController = OARootViewController.instance().navigationController else { return }
-                OAChoosePlanHelper.showChoosePlanScreen(with: nil as OAFeature?,
+                OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.unlimited_MAP_DOWNLOADS(),
                                                         navController: navigationController)
                 self?.view.accessibilityViewIsModal = false
             })
@@ -503,6 +526,11 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 return UITableViewCell()
             }
             cell.backgroundColor = .groupBg
+            // Keep the 48 pt selection ring inside the 60 pt row. The shared
+            // cell uses a 9 pt bottom spacer by default, which leaves only
+            // 45 pt for the collection view and clips the ring vertically.
+            cell.configureTopOffset(Constants.paletteVerticalInset)
+            cell.configureBottomOffset(Constants.paletteVerticalInset)
             cell.rightActionButtonVisibility(true)
             cell.rightActionButton.setImage(.icCustomAdd, for: .normal)
             cell.rightActionButton.tintColor = .iconColorActive
@@ -519,6 +547,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 }
             }
             cell.setCollectionHandler(handler)
+            configurePaletteInsets(for: cell.collectionView)
             return cell
         case .allColors:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier,
@@ -568,6 +597,16 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
             controller.hostColorHandler = colorHandler
         }
         showMediumToLargeSheetViewController(controller)
+    }
+
+    private func configurePaletteInsets(for collectionView: UICollectionView) {
+        DispatchQueue.main.async { [weak collectionView] in
+            guard let collectionView,
+                  let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+            collectionView.contentInset = .zero
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            layout.invalidateLayout()
+        }
     }
 }
 
@@ -657,9 +696,11 @@ private extension WidgetPanelColorTarget {
 
 private final class WidgetPanelColorUnavailableCell: UITableViewCell {
 
+    private let topSeparatorView = UIView()
     private let iconView = UIImageView(image: .icCustomWidgetColored)
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
+    private let actionSeparatorView = UIView()
     private let actionButton = UIButton(type: .system)
     private var action: (() -> Void)?
 
@@ -680,6 +721,9 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .groupBg
 
+        topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
+        topSeparatorView.backgroundColor = SeparatorAppearance.color
+
         iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.contentMode = .scaleAspectFit
         iconView.isAccessibilityElement = false
@@ -690,7 +734,8 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .center
+        titleLabel.textAlignment = .natural
+        titleLabel.accessibilityTraits = .header
 
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.text = localizedString("custom_widget_colors_description")
@@ -698,35 +743,54 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
         descriptionLabel.font = .preferredFont(forTextStyle: .footnote)
         descriptionLabel.adjustsFontForContentSizeCategory = true
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.textAlignment = .center
+        descriptionLabel.textAlignment = .natural
+
+        actionSeparatorView.translatesAutoresizingMaskIntoConstraints = false
+        actionSeparatorView.backgroundColor = SeparatorAppearance.color
 
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         actionButton.setTitle(localizedString("unlock_custom_colors"), for: .normal)
         actionButton.setTitleColor(.textColorActive, for: .normal)
-        actionButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        actionButton.contentHorizontalAlignment = .leading
+        actionButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
         actionButton.titleLabel?.adjustsFontForContentSizeCategory = true
         actionButton.addTarget(self, action: #selector(onActionPressed), for: .touchUpInside)
 
+        contentView.addSubview(topSeparatorView)
         contentView.addSubview(iconView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(actionSeparatorView)
         contentView.addSubview(actionButton)
         NSLayoutConstraint.activate([
-            iconView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            iconView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 72),
-            iconView.heightAnchor.constraint(equalToConstant: 72),
-            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            actionButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            topSeparatorView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topSeparatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            topSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            topSeparatorView.heightAnchor.constraint(equalToConstant: 1),
+
+            titleLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: iconView.leadingAnchor, constant: -16),
+
+            iconView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            iconView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.heightAnchor.constraint(equalToConstant: 24),
+
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            actionSeparatorView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
+            actionSeparatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            actionSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            actionSeparatorView.heightAnchor.constraint(equalToConstant: 1),
+
+            actionButton.topAnchor.constraint(equalTo: actionSeparatorView.bottomAnchor),
             actionButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             actionButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+            actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 52)
         ])
 
         isAccessibilityElement = false

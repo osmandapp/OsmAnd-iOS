@@ -38,6 +38,10 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         didSet { saveButton.isEnabled = isSaveButtonEnabled }
     }
 
+    var showsGradient = true {
+        didSet { updateBackgroundLayers() }
+    }
+
     private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
@@ -68,6 +72,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     }
 
     func updateMapTheme() {
+        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
@@ -134,9 +139,11 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 
     private func updateBackgroundLayers() {
         let isCompactLayout = traitCollection.verticalSizeClass == .compact
-        backgroundContainerView.isHidden = isCompactLayout
+        let isBackgroundHidden = isCompactLayout || !showsGradient
+        backgroundContainerView.isHidden = isBackgroundHidden
+        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
 
-        guard !isCompactLayout else { return }
+        guard !isBackgroundHidden else { return }
         backgroundMaskLayer.frame = backgroundContainerView.bounds
         backgroundMaskLayer.colors = [
             UIColor.black.withAlphaComponent(Self.backgroundFirstAlpha).cgColor,
@@ -171,19 +178,44 @@ final class PlanRouteBottomToolbarView: UIView {
         didSet { redoButton.isEnabled = isRedoEnabled }
     }
 
-    private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomUndo)
-    private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomRedo)
+    private let undoButton: UIButton
+    private let redoButton: UIButton
+    private let addPoiButton: UIButton
+    private let routeButton: UIButton
+    private let passesTouchesOutsideButtons: Bool
 
-    private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
-    private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .icCustomAdd, imagePlacement: .trailing)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(useMapStyle: Bool) {
+        passesTouchesOutsideButtons = useMapStyle
+        if useMapStyle {
+            let buttonHeight = PlanRouteButtonFactory.toolbarButtonSize
+            undoButton = PlanRouteButtonFactory.iconButton(image: .icCustomUndo)
+            redoButton = PlanRouteButtonFactory.iconButton(image: .icCustomRedo)
+            addPoiButton = PlanRouteButtonFactory.labeledButton(title: localizedString("poi"),
+                                                                image: .icCustomAdd,
+                                                                height: buttonHeight)
+            routeButton = PlanRouteButtonFactory.labeledButton(title: localizedString("layer_route"),
+                                                                image: .icCustomAdd,
+                                                                imagePlacement: .trailing,
+                                                                height: buttonHeight)
+        } else {
+            undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomUndo)
+            redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomRedo)
+            addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
+            routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"),
+                                                                             image: .icCustomAdd,
+                                                                             imagePlacement: .trailing)
+        }
+        super.init(frame: .zero)
         setupView()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hitView = super.hitTest(point, with: event)
+        return passesTouchesOutsideButtons && hitView === self ? nil : hitView
     }
 
     private func setupView() {

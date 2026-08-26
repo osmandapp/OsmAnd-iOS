@@ -11,8 +11,8 @@ import UIKit
 extension UIColor {
     @objc var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
     @objc var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
-    @objc var currentMapThemeColor: UIColor { OAAppSettings.sharedManager().nightMode ? dark : light }
+    @objc var currentMapThemeColor: UIColor { OAAppSettings.sharedManager().isAppMapNightMode ? dark : light }
     @objc var activeMapThemeColor: UIColor {
-        OAAppSettings.sharedManager().activeMapNightMode ? dark : light
+        OAAppSettings.sharedManager().isCurrentMapNightMode ? dark : light
     }
 }

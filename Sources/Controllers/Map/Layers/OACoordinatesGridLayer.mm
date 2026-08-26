@@ -172,7 +172,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _cachedTextScale = [_gridSettings getTextScaleForAppMode:appMode];
     _cachedGridEnabled = [_gridSettings isEnabled];
     _cachedZoomLimits = [_gridSettings getZoomLevelsWithRestrictionsForAppMode:appMode];
-    _cachedNightMode = _settings.activeMapNightMode;
+    _cachedNightMode = _settings.isCurrentMapNightMode;
 }
 
 - (BOOL)updateVariablesWithAppMode:(OAApplicationMode *)appMode
@@ -213,7 +213,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
         updated = YES;
     }
     
-    BOOL newNightMode = _settings.activeMapNightMode;
+    BOOL newNightMode = _settings.isCurrentMapNightMode;
     if (_cachedNightMode != newNightMode)
     {
         _cachedNightMode = newNightMode;

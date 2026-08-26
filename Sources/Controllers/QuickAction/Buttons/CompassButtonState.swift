@@ -51,7 +51,7 @@ final class CompassButtonState: MapButtonState {
     
     override func defaultPreviewIconName() -> String {
         let settings = OAAppSettings.sharedManager()
-        return CompassModeWrapper.iconName(forValue: Int(settings.rotateMap.get()), isLightMode: !settings.nightMode)
+        return CompassModeWrapper.iconName(forValue: Int(settings.rotateMap.get()), isLightMode: !settings.isAppMapNightMode)
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

@@ -23,5 +23,8 @@ typedef NS_ENUM(NSInteger, EOAChangeRouteType)
 @interface OAChangeRouteModeCommand : OAMeasurementModeCommand
 
 - (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer appMode:(OAApplicationMode *)appMode changeRouteType:(EOAChangeRouteType)changeRouteType pointIndex:(NSInteger)pointIndex;
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
+                      appMode:(OAApplicationMode *)appMode
+                 pointIndexes:(NSArray<NSNumber *> *)pointIndexes;
 
 @end

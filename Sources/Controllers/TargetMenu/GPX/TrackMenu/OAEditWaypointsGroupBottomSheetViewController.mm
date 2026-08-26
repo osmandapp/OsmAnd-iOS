@@ -435,7 +435,13 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
         [favoriteItems addObject:favoriteItem];
     }
-    [OAFavoritesHelper addFavorites:favoriteItems];
+
+    NSInteger duplicateCount = [OAFavoritesHelper copyToFavorites:favoriteItems];
+    if (duplicateCount > 0)
+    {
+        NSString *message = [NSString stringWithFormat:OALocalizedString(@"msg_favorites_skipped_as_existing"), (int)duplicateCount];
+        [OAUtilities showToast:message details:nil duration:4 inView:self.view];
+    }
 }
 
 #pragma mark - UITableViewDataSource

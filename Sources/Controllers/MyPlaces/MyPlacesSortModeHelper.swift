@@ -6,10 +6,10 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@objc enum MyPlacesSortMode: Int, CaseIterable {
-    case lastModified
-    case nameAZ
-    case nameZA
+enum MyPlacesSortMode: String, CaseIterable {
+    case lastModified = "LAST_MODIFIED"
+    case nameAZ = "NAME_ASCENDING"
+    case nameZA = "NAME_DESCENDING"
     
     var title: String {
         switch self {
@@ -26,10 +26,6 @@
         case .nameZA: return .icCustomSortNameDescending
         }
     }
-    
-    static func byTitle(_ title: String) -> MyPlacesSortMode {
-        MyPlacesSortMode.allCases.first(where: { $0.title == title }) ?? .lastModified
-    }
 }
 
 @objcMembers
@@ -38,16 +34,16 @@ final class MyPlacesSortModeHelper: NSObject {
         .lastModified
     }
     
-    static func defaultTravelGuidesSortModeTitle() -> String {
-        title(for: defaultTravelGuidesSortMode())
+    static func defaultTravelGuidesSortModeValue() -> String {
+        defaultTravelGuidesSortMode().rawValue
     }
     
     static func defaultOsmEditsSortMode() -> MyPlacesSortMode {
         .nameAZ
     }
     
-    static func defaultOsmEditsSortModeTitle() -> String {
-        title(for: defaultOsmEditsSortMode())
+    static func defaultOsmEditsSortModeValue() -> String {
+        defaultOsmEditsSortMode().rawValue
     }
     
     static func sortTravelGuidesWithMode(_ travelGuides: [TravelArticle], mode: MyPlacesSortMode) -> [TravelArticle] {
@@ -64,9 +60,5 @@ final class MyPlacesSortModeHelper: NSObject {
         case .nameZA: osmEdits.sorted { ($0.getName()).localizedCaseInsensitiveCompare($1.getName()) == .orderedDescending }
         default: []
         }
-    }
-    
-    private static func title(for mode: MyPlacesSortMode) -> String {
-        mode.title
     }
 }

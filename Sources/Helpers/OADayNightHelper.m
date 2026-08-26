@@ -207,11 +207,13 @@ static const NSTimeInterval kCarPlayAutoRecalcInterval = 60.0;
         if (self->_carPlayAutoRecalcTimer)
             return;
         __weak __typeof(self) weakSelf = self;
-        self->_carPlayAutoRecalcTimer = [NSTimer scheduledTimerWithTimeInterval:kCarPlayAutoRecalcInterval
-                                                                        repeats:YES
-                                                                          block:^(NSTimer * _Nonnull timer) {
+        NSTimer *timer = [NSTimer timerWithTimeInterval:kCarPlayAutoRecalcInterval
+                                               repeats:YES
+                                                 block:^(NSTimer * _Nonnull timer) {
             [weakSelf forceUpdateCarPlay];
         }];
+        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+        self->_carPlayAutoRecalcTimer = timer;
     });
 }
 

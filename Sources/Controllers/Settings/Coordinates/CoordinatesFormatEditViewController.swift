@@ -63,7 +63,6 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let image = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
         let button = UIBarButtonItem(image: .icCheckmarkDefault, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
         button.accessibilityLabel = localizedString("shared_string_apply")
         button.isEnabled = isEditChanged

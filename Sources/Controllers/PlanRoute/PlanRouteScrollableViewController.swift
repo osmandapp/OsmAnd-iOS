@@ -24,9 +24,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let sidePanelVerticalInset: CGFloat = 16
     private static let sidePanelTopContentInset: CGFloat = 8
     private static let mapControlsSpacing: CGFloat = 16
-    private static let phoneMapControlsTrailingInset: CGFloat = 64
-    private static let phoneNotchMapControlsTrailingInset: CGFloat = 12
-    private static let mapToolbarMinimumWidthForTrailingInset: CGFloat = 320
+    private static let mapToolbarSafeAreaBottomInset: CGFloat = 16
+    private static let phoneSidePanelTopInset: CGFloat = 20
+    private static let phoneMapToolbarBottomInset: CGFloat = 20
+    private static let phoneMapToolbarHorizontalInset: CGFloat = 20
 
     private let dataProvider: PlanRouteDataProvider
 
@@ -50,24 +51,24 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var sheetState: EOADraggableMenuState
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
-    private var sheetLeadingConstraint: NSLayoutConstraint?
+    private var sheetLeftConstraint: NSLayoutConstraint?
     private var sheetTopConstraint: NSLayoutConstraint?
     private var sheetBottomConstraint: NSLayoutConstraint?
     private var bottomSheetConstraints: [NSLayoutConstraint] = []
     private var sidePanelConstraints: [NSLayoutConstraint] = []
     private var mapToolbarConstraints: [NSLayoutConstraint] = []
-    private var mapToolbarTrailingConstraint: NSLayoutConstraint?
+    private var mapToolbarBottomConstraint: NSLayoutConstraint?
     private var topPartGrabberConstraint: NSLayoutConstraint?
     private var topPartSheetConstraint: NSLayoutConstraint?
-    private var topToolbarBottomSheetLeadingConstraint: NSLayoutConstraint?
-    private var topToolbarSidePanelLeadingConstraint: NSLayoutConstraint?
+    private var topToolbarBottomSheetLeftConstraint: NSLayoutConstraint?
+    private var topToolbarSidePanelLeftConstraint: NSLayoutConstraint?
     private var crosshairCenterXConstraint: NSLayoutConstraint?
     private var crosshairCenterYConstraint: NSLayoutConstraint?
     private var dayNightObserver: OAAutoObserverProxy?
     private var routeTypeButtonBottomConstraint: NSLayoutConstraint?
     private var routeTypeButtonSidePanelBottomConstraint: NSLayoutConstraint?
-    private var routeTypeButtonBottomSheetLeadingConstraint: NSLayoutConstraint?
-    private var routeTypeButtonSidePanelLeadingConstraint: NSLayoutConstraint?
+    private var routeTypeButtonBottomSheetLeftConstraint: NSLayoutConstraint?
+    private var routeTypeButtonSidePanelLeftConstraint: NSLayoutConstraint?
     private var sheetPanRecognizer: UIPanGestureRecognizer?
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
@@ -131,19 +132,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return view.bounds.height
     }
 
-    private var sidePanelLeadingInset: CGFloat {
+    private var sidePanelLeftInset: CGFloat {
         let horizontalInset = Self.sidePanelHorizontalInset
         return max(horizontalInset, view.safeAreaInsets.left)
     }
 
     private var sidePanelMapInset: CGFloat {
         let panelWidth = Self.sidePanelWidth
-        return sidePanelLeadingInset + panelWidth
-    }
-
-    private var sidePanelMapControlsReservedHeight: CGFloat {
-        let toolbarButtonSize = PlanRouteButtonFactory.toolbarButtonSize
-        return toolbarButtonSize + 8 + OAUtilities.getBottomMargin()
+        return sidePanelLeftInset + panelWidth
     }
 
     private var isApproximationChildVisible: Bool {
@@ -313,14 +309,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     override func getViewHeight() -> CGFloat {
         if usesSidePanelLayout {
-            return OAUtilities.isIPad() ? sidePanelMapControlsReservedHeight : 0
+            let size = transitionTargetSize ?? view.bounds.size
+            return sidePanelMapControlsReservedHeight(for: size)
         }
         return approximationHeight ?? pointEditingHeight ?? mapControlsReservedHeight(for: sheetState)
     }
 
     override func getViewHeight(_ state: EOADraggableMenuState) -> CGFloat {
         if usesSidePanelLayout {
-            return OAUtilities.isIPad() ? sidePanelMapControlsReservedHeight : 0
+            let size = transitionTargetSize ?? view.bounds.size
+            return sidePanelMapControlsReservedHeight(for: size)
         }
         return approximationHeight ?? pointEditingHeight ?? mapControlsReservedHeight(for: state)
     }
@@ -457,15 +455,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         ]
         NSLayoutConstraint.activate(bottomSheetConstraints)
 
-        let leadingConstraint = sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let leftConstraint = sheetView.leftAnchor.constraint(equalTo: view.leftAnchor)
         let topConstraint = sheetView.topAnchor.constraint(equalTo: view.topAnchor)
         let bottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         let panelWidth = Self.sidePanelWidth
         let widthConstraint = sheetView.widthAnchor.constraint(equalToConstant: panelWidth)
-        sheetLeadingConstraint = leadingConstraint
+        sheetLeftConstraint = leftConstraint
         sheetTopConstraint = topConstraint
         sheetBottomConstraint = bottomConstraint
-        sidePanelConstraints = [leadingConstraint, topConstraint, bottomConstraint, widthConstraint]
+        sidePanelConstraints = [leftConstraint, topConstraint, bottomConstraint, widthConstraint]
 
         grabberView.backgroundColor = .iconColorTertiary
         grabberView.layer.cornerRadius = 2.5
@@ -560,12 +558,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
         mapToolbar.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(mapToolbar, belowSubview: sheetView)
-        let trailingConstraint = mapToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        mapToolbarTrailingConstraint = trailingConstraint
+        let rightConstraint = mapToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
+        let bottomConstraint = mapToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        mapToolbarBottomConstraint = bottomConstraint
         mapToolbarConstraints = [
-            mapToolbar.leadingAnchor.constraint(equalTo: sheetView.trailingAnchor),
-            trailingConstraint,
-            mapToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            mapToolbar.leftAnchor.constraint(equalTo: sheetView.rightAnchor),
+            rightConstraint,
+            bottomConstraint,
             mapToolbar.heightAnchor.constraint(equalToConstant: PlanRouteButtonFactory.toolbarButtonSize)
         ]
         mapToolbar.isHidden = true
@@ -599,14 +598,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         topToolbar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topToolbar)
-        let bottomSheetLeadingConstraint = topToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let sidePanelLeadingConstraint = topToolbar.leadingAnchor.constraint(equalTo: sheetView.trailingAnchor)
-        topToolbarBottomSheetLeadingConstraint = bottomSheetLeadingConstraint
-        topToolbarSidePanelLeadingConstraint = sidePanelLeadingConstraint
+        let bottomSheetLeftConstraint = topToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
+        let sidePanelLeftConstraint = topToolbar.leftAnchor.constraint(equalTo: sheetView.rightAnchor)
+        topToolbarBottomSheetLeftConstraint = bottomSheetLeftConstraint
+        topToolbarSidePanelLeftConstraint = sidePanelLeftConstraint
         NSLayoutConstraint.activate([
             topToolbar.topAnchor.constraint(equalTo: view.topAnchor),
-            bottomSheetLeadingConstraint,
-            topToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            bottomSheetLeftConstraint,
+            topToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             topToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: PlanRouteTopToolbarView.contentHeight)
         ])
     }
@@ -628,11 +627,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             NSLayoutConstraint.activate(mapToolbarConstraints)
             topPartGrabberConstraint?.isActive = false
             topPartSheetConstraint?.isActive = true
-            topToolbarBottomSheetLeadingConstraint?.isActive = false
-            topToolbarSidePanelLeadingConstraint?.isActive = true
-            routeTypeButtonBottomSheetLeadingConstraint?.isActive = false
+            topToolbarBottomSheetLeftConstraint?.isActive = false
+            topToolbarSidePanelLeftConstraint?.isActive = true
+            routeTypeButtonBottomSheetLeftConstraint?.isActive = false
             routeTypeButtonBottomConstraint?.isActive = false
-            routeTypeButtonSidePanelLeadingConstraint?.isActive = true
+            routeTypeButtonSidePanelLeftConstraint?.isActive = true
             routeTypeButtonSidePanelBottomConstraint?.isActive = true
         } else {
             NSLayoutConstraint.deactivate(sidePanelConstraints)
@@ -640,21 +639,25 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             NSLayoutConstraint.activate(bottomSheetConstraints)
             topPartSheetConstraint?.isActive = false
             topPartGrabberConstraint?.isActive = true
-            topToolbarSidePanelLeadingConstraint?.isActive = false
-            topToolbarBottomSheetLeadingConstraint?.isActive = true
-            routeTypeButtonSidePanelLeadingConstraint?.isActive = false
+            topToolbarSidePanelLeftConstraint?.isActive = false
+            topToolbarBottomSheetLeftConstraint?.isActive = true
+            routeTypeButtonSidePanelLeftConstraint?.isActive = false
             routeTypeButtonSidePanelBottomConstraint?.isActive = false
-            routeTypeButtonBottomSheetLeadingConstraint?.isActive = true
+            routeTypeButtonBottomSheetLeftConstraint?.isActive = true
             routeTypeButtonBottomConstraint?.isActive = true
         }
 
-        let panelTopInset = sidePanelLayout ? sidePanelTopInset() : 0
+        let panelTopInset = sidePanelLayout ? sidePanelTopInset(for: size) : 0
         let panelBottomInset = sidePanelLayout ? sidePanelBottomInset(for: size) : 0
-        sheetLeadingConstraint?.constant = sidePanelLeadingInset
+        sheetLeftConstraint?.constant = sidePanelLeftInset
         sheetTopConstraint?.constant = panelTopInset
         sheetBottomConstraint?.constant = -panelBottomInset
-        mapToolbarTrailingConstraint?.constant = -mapToolbarTrailingInset(for: size)
-        sheetView.layer.maskedCorners = sidePanelLayout
+        mapToolbarBottomConstraint?.constant = -mapToolbarBottomInset(for: size)
+        mapToolbar.leadingContentInset = isPhoneLandscape(size)
+            ? Self.phoneMapToolbarHorizontalInset
+            : Self.sidePanelHorizontalInset
+        let showsBottomCorners = sidePanelLayout && !isPhoneLandscape(size)
+        sheetView.layer.maskedCorners = showsBottomCorners
             ? [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             : [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         grabberView.isHidden = sidePanelLayout || isApproximationChildVisible
@@ -666,8 +669,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
         let centerX = mapCenterX(for: size)
         let mapInset = sidePanelLayout ? sidePanelMapInset : 0
-        let mapControlsReservedHeight = sidePanelLayout && OAUtilities.isIPad()
-            ? sidePanelMapControlsReservedHeight
+        let mapControlsReservedHeight = sidePanelLayout
+            ? sidePanelMapControlsReservedHeight(for: size)
             : 0
         let layoutGeometryChanged = abs(lastMapCenterX - centerX) > 0.5
             || abs(lastSidePanelMapInset - mapInset) > 0.5
@@ -686,7 +689,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac() || size.width > size.height
     }
 
-    private func sidePanelTopInset() -> CGFloat {
+    private func sidePanelTopInset(for size: CGSize) -> CGFloat {
+        if isPhoneLandscape(size) {
+            return max(Self.phoneSidePanelTopInset, view.safeAreaInsets.top)
+        }
         let topPadding = Self.sidePanelTopPadding
         return view.safeAreaInsets.top + topPadding
     }
@@ -697,18 +703,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return max(verticalInset, view.safeAreaInsets.bottom)
     }
 
-    private func mapToolbarTrailingInset(for size: CGSize) -> CGFloat {
-        let minimumWidth = Self.mapToolbarMinimumWidthForTrailingInset
-        let phoneTrailingInset = Self.phoneMapControlsTrailingInset
-        let phoneNotchTrailingInset = Self.phoneNotchMapControlsTrailingInset
-        let visibleMapWidth = size.width - sidePanelMapInset - view.safeAreaInsets.right
-        guard visibleMapWidth >= minimumWidth else { return 0 }
-        if OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac() {
-            return 0
+    private func mapToolbarBottomInset(for size: CGSize) -> CGFloat {
+        if isPhoneLandscape(size) {
+            return Self.phoneMapToolbarBottomInset
         }
-        return view.safeAreaInsets.right > 0
-            ? phoneNotchTrailingInset
-            : phoneTrailingInset
+        return view.safeAreaInsets.bottom + Self.mapToolbarSafeAreaBottomInset
+    }
+
+    private func sidePanelMapControlsReservedHeight(for size: CGSize) -> CGFloat {
+        PlanRouteButtonFactory.toolbarButtonSize + mapToolbarBottomInset(for: size)
     }
 
     private func isPhoneLandscape(_ size: CGSize) -> Bool {
@@ -761,14 +764,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.insertSubview(routeTypeButton, belowSubview: sheetView)
         let bottom = routeTypeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -routeTypeButtonBottomInset(for: sheetState))
         let sidePanelBottom = routeTypeButton.bottomAnchor.constraint(equalTo: mapToolbar.topAnchor, constant: -mapControlsSpacing)
-        let bottomSheetLeading = routeTypeButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16)
-        let sidePanelLeading = routeTypeButton.leadingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: mapControlsSpacing)
+        let bottomSheetLeft = routeTypeButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16)
+        let sidePanelLeft = routeTypeButton.leftAnchor.constraint(equalTo: sheetView.rightAnchor, constant: mapControlsSpacing)
         routeTypeButtonBottomConstraint = bottom
         routeTypeButtonSidePanelBottomConstraint = sidePanelBottom
-        routeTypeButtonBottomSheetLeadingConstraint = bottomSheetLeading
-        routeTypeButtonSidePanelLeadingConstraint = sidePanelLeading
+        routeTypeButtonBottomSheetLeftConstraint = bottomSheetLeft
+        routeTypeButtonSidePanelLeftConstraint = sidePanelLeft
         NSLayoutConstraint.activate([
-            bottomSheetLeading,
+            bottomSheetLeft,
             bottom
         ])
         routeTypeButton.accessibilityLabel = localizedString("route_between_points")

@@ -162,13 +162,19 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 }
 
 final class PlanRouteBottomToolbarView: UIView {
-    private static let edgeInset: CGFloat = 16
+    private static let defaultHorizontalContentInset: CGFloat = 16
     private static let buttonSpacing: CGFloat = 8
 
     var onAddPoi: (() -> Void)?
     var onUndo: (() -> Void)?
     var onRedo: (() -> Void)?
     var onAddRoutePoint: (() -> Void)?
+
+    var leadingContentInset = PlanRouteBottomToolbarView.defaultHorizontalContentInset {
+        didSet {
+            addPoiLeadingConstraint?.constant = leadingContentInset
+        }
+    }
 
     var isUndoEnabled = false {
         didSet { undoButton.isEnabled = isUndoEnabled }
@@ -183,6 +189,7 @@ final class PlanRouteBottomToolbarView: UIView {
     private let addPoiButton: UIButton
     private let routeButton: UIButton
     private let passesTouchesOutsideButtons: Bool
+    private var addPoiLeadingConstraint: NSLayoutConstraint?
 
     init(useMapStyle: Bool) {
         passesTouchesOutsideButtons = useMapStyle
@@ -238,13 +245,16 @@ final class PlanRouteBottomToolbarView: UIView {
             $0.titleLabel?.lineBreakMode = .byTruncatingTail
         }
 
-        let inset = Self.edgeInset
+        let leadingConstraint = addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingContentInset)
+        let trailingConstraint = routeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                                       constant: -Self.defaultHorizontalContentInset)
+        addPoiLeadingConstraint = leadingConstraint
         NSLayoutConstraint.activate([
-            addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
+            leadingConstraint,
             addPoiButton.topAnchor.constraint(equalTo: topAnchor),
             addPoiButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 
-            routeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            trailingConstraint,
             routeButton.centerYAnchor.constraint(equalTo: addPoiButton.centerYAnchor),
             routeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 

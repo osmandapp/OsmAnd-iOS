@@ -1068,10 +1068,10 @@ final class StarView: UIView {
         }
         stroke(path, color: .mapLineHorizon, width: 1.2, in: context)
 
-        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("north_abbreviation"), azimuth: 0, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("east_abbreviation"), azimuth: 90, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("south_abbreviation"), azimuth: 180, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("west_abbreviation"), azimuth: 270, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
     }
 
     private func drawAzimuthalGrid(in context: CGContext) {

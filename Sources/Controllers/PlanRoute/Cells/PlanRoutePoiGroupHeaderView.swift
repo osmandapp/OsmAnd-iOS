@@ -25,10 +25,11 @@ final class PlanRoutePoiGroupHeaderView: UITableViewHeaderFooterView {
     }
 
     private static func makeButtonConfiguration() -> UIButton.Configuration {
-        var configuration = UIButton.Configuration.plain()
+        var configuration = UIButton.Configuration.tinted()
         configuration.image = UIImage(systemName: "ellipsis")
+        configuration.baseBackgroundColor = .buttonAccentsBlue
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.background.image = .blueCircleFill
+        configuration.cornerStyle = .capsule
         configuration.contentInsets = .zero
         return configuration
     }

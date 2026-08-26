@@ -4373,6 +4373,7 @@
 "copy_as_new_folder" = "Copy as new folder";
 "add_to_a_folder" = "Add to a folder";
 "add_to_favorites" = "Add to favorites";
+"msg_favorites_skipped_as_existing" = "Favorite points (%d) were skipped as already existing.";
 "short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
@@ -5032,3 +5033,5 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"carplay_trip_via_point" = "Via %@";

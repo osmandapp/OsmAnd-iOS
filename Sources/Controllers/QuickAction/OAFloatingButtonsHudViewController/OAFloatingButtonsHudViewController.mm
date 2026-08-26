@@ -582,10 +582,13 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     Map3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
     BOOL contextMenuHidesButton = [mapPanel isContextMenuVisible]
         && ![self isPlanRouteVisibleOnMapPanel:mapPanel];
+    BOOL isPlanRouteFullscreen = [self isPlanRouteVisibleOnMapPanel:mapPanel]
+        && mapPanel.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
         || (map3DMode == Map3DModeVisibilityVisibleIn3DMode
             && ![OAMapViewTrackingUtilities.instance is3DMode])
         || contextMenuHidesButton
+        || isPlanRouteFullscreen
         || [mapPanel isDashboardVisible]
         || [mapPanel gpxModeActive]
         || [mapPanel isRouteInfoVisible]

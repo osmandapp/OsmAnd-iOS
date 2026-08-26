@@ -156,7 +156,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     }
     
     private func makeIconProcessor(metrics: IconMetrics) -> ImageProcessor {
-        let color: UIColor = .popularPlaceBgDefault.activeMapThemeColor
+        let color: UIColor = .popularPlaceBgDefault.currentMapThemeColor
         let processor = ResizingImageProcessor(referenceSize: metrics.imageTargetSize, mode: .aspectFill)
         |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
         |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
@@ -174,7 +174,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     
     private func placeholderCacheKey(placeholderImageName: String,
                                      metrics: IconMetrics) -> String? {
-        let color: UIColor = .popularPlacePlaceholderBg.activeMapThemeColor
+        let color: UIColor = .popularPlacePlaceholderBg.currentMapThemeColor
         return [
             "poi_placeholder",
             placeholderImageName,
@@ -184,9 +184,9 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     }
     
     func createProcessedPlaceholder(with image: UIImage, metrics: IconMetrics, option: KingfisherParsedOptionsInfo) -> UIImage? {
-        let placePlaceholderBg: UIColor = .popularPlacePlaceholderBg.activeMapThemeColor
-        let placePlaceholderIcon: UIColor = .popularPlacePlaceholderIcon.activeMapThemeColor
-        let placeBgDefault: UIColor = .popularPlaceBgDefault.activeMapThemeColor
+        let placePlaceholderBg: UIColor = .popularPlacePlaceholderBg.currentMapThemeColor
+        let placePlaceholderIcon: UIColor = .popularPlacePlaceholderIcon.currentMapThemeColor
+        let placeBgDefault: UIColor = .popularPlaceBgDefault.currentMapThemeColor
         
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = option.scaleFactor

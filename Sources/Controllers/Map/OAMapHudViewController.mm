@@ -1441,7 +1441,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if ([OAUtilities isLandscape] || [OAUtilities isIPad])
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
+        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
 }
 
 - (void) updateTopButtonsLayoutY

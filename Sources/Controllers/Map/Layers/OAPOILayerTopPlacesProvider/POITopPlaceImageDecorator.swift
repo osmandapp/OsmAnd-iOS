@@ -26,7 +26,7 @@ final class POITopPlaceImageDecorator: NSObject {
             
             image.draw(at: .zero)
             ctx.setShadow(offset: .zero, blur: 0, color: nil)
-            ctx.setStrokeColor(UIColor.popularPlaceSelectedStroke.activeMapThemeColor.cgColor)
+            ctx.setStrokeColor(UIColor.popularPlaceSelectedStroke.currentMapThemeColor.cgColor)
             
             let purpleLineWidth = 2 * metrics.textScale
             ctx.setLineWidth(purpleLineWidth)

@@ -47,7 +47,7 @@
     switch (_themeColor)
     {
         case EOATurnDrawableThemeColorMap:
-            return color.currentMapThemeColor;
+            return color.appMapThemeColor;
         case EOATurnDrawableThemeColorLight:
             return color.light;
         case EOATurnDrawableThemeColorDark:

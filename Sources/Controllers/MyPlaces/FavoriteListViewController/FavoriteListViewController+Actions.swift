@@ -298,9 +298,7 @@ extension FavoriteListViewController {
     @objc func searchSelectButtonPressed() {
         isCancellingSearch = true
         selectButtonPressed()
-        DispatchQueue.main.async {
-            self.isCancellingSearch = false
-        }
+        isCancellingSearch = false
     }
 
     @objc func cancelButtonPressed() {

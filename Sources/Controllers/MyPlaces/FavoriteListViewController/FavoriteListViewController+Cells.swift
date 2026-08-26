@@ -60,8 +60,9 @@ extension FavoriteListViewController {
             cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
-            cell.alignSeparatorToPrimaryText()
             updateVisibleSelectionState(at: indexPath)
+            cell.setNeedsLayout()
+            cell.layoutIfNeeded()
         }
     }
 

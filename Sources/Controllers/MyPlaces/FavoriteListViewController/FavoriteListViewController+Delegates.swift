@@ -146,9 +146,7 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         configureToolbar()
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
-        DispatchQueue.main.async {
-            self.isCancellingSearch = false
-        }
+        isCancellingSearch = false
     }
 
     func presentSearchController(_ searchController: UISearchController) {

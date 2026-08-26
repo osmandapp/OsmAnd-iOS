@@ -97,7 +97,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard !isSearchBarAnimating else { return }
+        guard !isSearchBarAnimating, searchController?.isActive != true else { return }
         segmentContainerTopConstraint.constant = view.safeAreaInsets.top
         updateContentSafeAreaInsets(segmentIsVisible: !segmentContainerView.isHidden && searchController?.isActive != true)
     }
@@ -128,7 +128,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        guard !isSearchBarAnimating else { return }
+        guard !isSearchBarAnimating, searchController?.isActive != true else { return }
         segmentContainerTopConstraint.constant = view.safeAreaInsets.top
         UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
             self.view.layoutIfNeeded()
@@ -219,7 +219,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         definesPresentationContext = true
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.largeTitleDisplayMode = .never
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         updateSearchController()
@@ -505,6 +505,8 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
     
     func didDismissSearchController(_ searchController: UISearchController) {
         isSearchBarAnimating = false
+        segmentContainerTopConstraint.constant = view.safeAreaInsets.top
+        view.layoutIfNeeded()
         if navigationItem.searchController === searchController {
             navigationItem.searchController = nil
         }

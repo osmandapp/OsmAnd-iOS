@@ -12,13 +12,17 @@ import Foundation
 @objcMembers
 class WidgetsSettingsHelper: NSObject {
 
+    var isApplyingSettings: Bool {
+        applyingSettingsCount > 0
+    }
+    
     private let widgetRegistry: OAMapWidgetRegistry
     private let widgetsFactory: MapWidgetsFactory
-
-    private let appMode: OAApplicationMode
+    private var applyingSettingsCount = 0
+    private var appMode: OAApplicationMode
+    private var layoutMode: ScreenLayoutMode
     private let settings: OAAppSettings
     private let mapButtonsHelper: OAMapButtonsHelper
-    private let layoutMode: ScreenLayoutMode
 
     init(appMode: OAApplicationMode, layoutMode: ScreenLayoutMode) {
         self.appMode = appMode
@@ -29,125 +33,160 @@ class WidgetsSettingsHelper: NSObject {
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
+    func setAppMode(_ appMode: OAApplicationMode) {
+        self.appMode = appMode
+    }
+
+    func setLayoutMode(_ layoutMode: ScreenLayoutMode) {
+        self.layoutMode = layoutMode
+    }
+
     func resetConfigureScreenSettings() {
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
-        let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                               filterModes: Int(kWidgetModeMatchingPanels),
-                                                               panels: WidgetsPanel.values,
-                                                               screenLayoutMode: layoutMode.rawValue)
-        for widgetInfo in allWidgetInfos! {
-            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo as? MapWidgetInfo, enabled: nil, recreateControls: false)
-        }
-        resetWidgetPreferences(screenElementsMode)
+        applyingSettingsCount += 1
+        defer { applyingSettingsCount -= 1 }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
+            let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                        filterModes: Int(kWidgetModeMatchingPanels),
+                                                        panels: WidgetsPanel.values,
+                                                        screenLayoutMode: layoutMode.rawValue)
+            for widgetInfo in allWidgetInfos! {
+                widgetRegistry.enableDisableWidget(for: appMode,
+                                                   widgetInfo: widgetInfo as? MapWidgetInfo,
+                                                   enabled: nil,
+                                                   recreateControls: false)
+            }
+            resetWidgetPreferences(screenElementsMode)
 
-        ScreenElementsMode.allCases.forEach {
-            settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
-        }
-        settings.useSeparateLayouts.resetMode(toDefault: appMode)
-        settings.transparentWidgets(layoutMode.rawValue,
-                                    screenElementsMode: screenElementsMode.rawValue).resetMode(toDefault: appMode)
-        settings.showDistanceRuler.resetMode(toDefault: appMode)
-        settings.distanceByTapTextSize.resetMode(toDefault: appMode)
-        settings.positionPlacementOnMap.resetMode(toDefault: appMode)
-        settings.showSpeedometer.resetMode(toDefault: appMode)
-        settings.speedometerSize.resetMode(toDefault: appMode)
-        settings.showSpeedLimitWarning.resetMode(toDefault: appMode)
+            ScreenElementsMode.allCases.forEach {
+                settings.panelsLayoutMode(layoutMode.rawValue,
+                                          screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
+            }
+            settings.useSeparateLayouts.resetMode(toDefault: appMode)
+            settings.transparentWidgets(layoutMode.rawValue,
+                                        screenElementsMode: screenElementsMode.rawValue).resetMode(toDefault: appMode)
+            settings.showDistanceRuler.resetMode(toDefault: appMode)
+            settings.distanceByTapTextSize.resetMode(toDefault: appMode)
+            settings.positionPlacementOnMap.resetMode(toDefault: appMode)
+            settings.showSpeedometer.resetMode(toDefault: appMode)
+            settings.speedometerSize.resetMode(toDefault: appMode)
+            settings.showSpeedLimitWarning.resetMode(toDefault: appMode)
 
-        for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
-            buttonState.resetForMode(appMode)
+            for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
+                buttonState.resetForMode(appMode)
+            }
+            mapButtonsHelper.resetQuickActions(for: appMode)
+            mapButtonsHelper.getDefaultSizePref().resetMode(toDefault: appMode)
+            mapButtonsHelper.getDefaultOpacityPref().resetMode(toDefault: appMode)
+            mapButtonsHelper.getDefaultCornerRadiusPref().resetMode(toDefault: appMode)
+            mapButtonsHelper.getDefaultGlassStylePref().resetMode(toDefault: appMode)
         }
-        mapButtonsHelper.resetQuickActions(for: appMode)
-        mapButtonsHelper.getDefaultSizePref().resetMode(toDefault: appMode)
-        mapButtonsHelper.getDefaultOpacityPref().resetMode(toDefault: appMode)
-        mapButtonsHelper.getDefaultCornerRadiusPref().resetMode(toDefault: appMode)
-        mapButtonsHelper.getDefaultGlassStylePref().resetMode(toDefault: appMode)
     }
 
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
-        let sourceScreenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(fromAppMode))
-        copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
-        copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
+        applyingSettingsCount += 1
+        defer { applyingSettingsCount -= 1 }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let sourceScreenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(fromAppMode))
+            copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
+            copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
 
-        let otherScreenElementsMode: ScreenElementsMode = sourceScreenElementsMode == .shared ? .independent : .shared
-        settings.useSeparateLayouts.set(otherScreenElementsMode.usesSeparateLayouts, mode: appMode)
-        copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
-        settings.useSeparateLayouts.set(sourceScreenElementsMode.usesSeparateLayouts, mode: appMode)
+            let otherScreenElementsMode: ScreenElementsMode = sourceScreenElementsMode == .shared ? .independent : .shared
+            settings.useSeparateLayouts.set(otherScreenElementsMode.usesSeparateLayouts, mode: appMode)
+            copyWidgetsForAllPanels(fromAppMode: fromAppMode, widgetParams: widgetParams)
+            settings.useSeparateLayouts.set(sourceScreenElementsMode.usesSeparateLayouts, mode: appMode)
 
-        ScreenElementsMode.allCases.forEach {
-            copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue, screenElementsMode: $0.rawValue), fromAppMode: fromAppMode)
-            copyPrefFromAppMode(pref: settings.transparentWidgets(layoutMode.rawValue,
-                                                                  screenElementsMode: $0.rawValue),
-                                fromAppMode: fromAppMode)
+            ScreenElementsMode.allCases.forEach {
+                copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue,
+                                                                   screenElementsMode: $0.rawValue),
+                                    fromAppMode: fromAppMode)
+                copyPrefFromAppMode(pref: settings.transparentWidgets(layoutMode.rawValue,
+                                                                      screenElementsMode: $0.rawValue),
+                                    fromAppMode: fromAppMode)
+            }
+            copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.positionPlacementOnMap, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.showSpeedometer, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.speedometerSize, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: settings.showSpeedLimitWarning, fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultSizePref(), fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultOpacityPref(), fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultCornerRadiusPref(), fromAppMode: fromAppMode)
+            copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultGlassStylePref(), fromAppMode: fromAppMode)
+
+            for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
+                buttonState.copyForMode(from: fromAppMode, to: appMode)
+            }
+            mapButtonsHelper.copyQuickActions(from: appMode, fromAppMode: fromAppMode)
         }
-        copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.positionPlacementOnMap, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.showSpeedometer, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.speedometerSize, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.showSpeedLimitWarning, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultSizePref(), fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultOpacityPref(), fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultCornerRadiusPref(), fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: mapButtonsHelper.getDefaultGlassStylePref(), fromAppMode: fromAppMode)
-
-        for buttonState in mapButtonsHelper.getDefaultButtonsStates() {
-            buttonState.copyForMode(from: fromAppMode, to: appMode)
-        }
-        mapButtonsHelper.copyQuickActions(from: appMode, fromAppMode: fromAppMode)
     }
 
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode,
                              fromLayoutMode: ScreenLayoutMode? = nil,
                              panel: WidgetsPanel,
                              widgetParams: [String: Any]? = nil) {
-        let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
-        let panels = [panel]
-        let sourceLayoutMode = fromLayoutMode ?? layoutMode
-        let widgetInfosToCopy = widgetRegistry.widgets(forPanel: fromAppMode,
-                                                                  filterModes: Int(filter),
-                                                                  panels: panels,
-                                                                  screenLayoutMode: sourceLayoutMode.rawValue)
+        applyingSettingsCount += 1
+        defer { applyingSettingsCount -= 1 }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
+            let panels = [panel]
+            let sourceLayoutMode = fromLayoutMode ?? layoutMode
+            let widgetInfosToCopy = widgetRegistry.widgets(forPanel: fromAppMode,
+                                                           filterModes: Int(filter),
+                                                           panels: panels,
+                                                           screenLayoutMode: sourceLayoutMode.rawValue)
 
-        var previousPage = -1
-        var newPagedOrder = [[String]]()
-        let defaultWidgetInfos = getDefaultWidgetInfos(panel: panel)
+            var previousPage = -1
+            var newPagedOrder = [[String]]()
+            let defaultWidgetInfos = getDefaultWidgetInfos(panel: panel)
 
-        for widgetInfoToCopy in widgetInfosToCopy! {
-            guard let info = widgetInfoToCopy as? MapWidgetInfo, WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: info.key, appMode: appMode) else {
-                continue
-            }
-
-            let widgetTypeToCopy = info.widget.widgetType
-            let duplicateNotPossible = widgetTypeToCopy == nil
-            let defaultWidgetId = WidgetType.getDefaultWidgetId(info.key)
-            let defaultWidgetInfo = getWidgetInfoById(widgetId: defaultWidgetId, widgetInfos: defaultWidgetInfos)
-
-            if let defaultWidgetInfo = defaultWidgetInfo {
-                let widgetIdToAdd: String
-                let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode)
-                let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
-                if duplicateNotPossible || (disabled && !inAnotherPanel) {
-                    widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: defaultWidgetInfo, enabled:NSNumber(value: true), recreateControls: false)
-                    widgetIdToAdd = defaultWidgetInfo.key
-                } else {
-                    let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!, panel: panel, widgetParams: widgetParams)
-                    widgetIdToAdd = duplicateWidgetInfo != nil ? duplicateWidgetInfo!.key : ""
+            for widgetInfoToCopy in widgetInfosToCopy! {
+                guard let info = widgetInfoToCopy as? MapWidgetInfo,
+                      WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: info.key, appMode: appMode) else {
+                    continue
                 }
 
-                if !widgetIdToAdd.isEmpty {
-                    let customId = widgetIdToAdd == defaultWidgetInfo.key ? nil : widgetIdToAdd
-                    info.widget.copySettings(from: fromAppMode,
-                                             appMode: appMode,
-                                             customId: customId)
-                    if previousPage != info.pageIndex || newPagedOrder.isEmpty {
-                        previousPage = info.pageIndex
-                        newPagedOrder.append([String]())
+                let widgetTypeToCopy = info.widget.widgetType
+                let duplicateNotPossible = widgetTypeToCopy == nil
+                let defaultWidgetId = WidgetType.getDefaultWidgetId(info.key)
+                let defaultWidgetInfo = getWidgetInfoById(widgetId: defaultWidgetId,
+                                                          widgetInfos: defaultWidgetInfos)
+
+                if let defaultWidgetInfo = defaultWidgetInfo {
+                    let widgetIdToAdd: String
+                    let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode)
+                    let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
+                    if duplicateNotPossible || (disabled && !inAnotherPanel) {
+                        widgetRegistry.enableDisableWidget(for: appMode,
+                                                           widgetInfo: defaultWidgetInfo,
+                                                           enabled: NSNumber(value: true),
+                                                           recreateControls: false)
+                        widgetIdToAdd = defaultWidgetInfo.key
+                    } else {
+                        let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!,
+                                                                            panel: panel,
+                                                                            widgetParams: widgetParams)
+                        widgetIdToAdd = duplicateWidgetInfo != nil ? duplicateWidgetInfo!.key : ""
                     }
-                    newPagedOrder[newPagedOrder.count - 1].append(widgetIdToAdd)
+
+                    if !widgetIdToAdd.isEmpty {
+                        let customId = widgetIdToAdd == defaultWidgetInfo.key ? nil : widgetIdToAdd
+                        info.widget.copySettings(from: fromAppMode,
+                                                 appMode: appMode,
+                                                 customId: customId)
+                        if previousPage != info.pageIndex || newPagedOrder.isEmpty {
+                            previousPage = info.pageIndex
+                            newPagedOrder.append([String]())
+                        }
+                        newPagedOrder[newPagedOrder.count - 1].append(widgetIdToAdd)
+                    }
                 }
             }
+            panel.updateWidgetsOrder(pagedOrder: newPagedOrder,
+                                     appMode: appMode,
+                                     screenLayoutMode: layoutMode)
         }
-        panel.updateWidgetsOrder(pagedOrder: newPagedOrder, appMode: appMode, screenLayoutMode: layoutMode)
     }
 
     func getWidgetsPagedOrder(fromAppMode: OAApplicationMode, panel: WidgetsPanel, filter: Int) -> [[String]] {
@@ -214,22 +253,37 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func resetWidgetsForPanel(panel: WidgetsPanel) {
-        let panels = [panel]
-        let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                            filterModes: Int(kWidgetModeMatchingPanels),
-                                                            panels: panels,
-                                                            screenLayoutMode: layoutMode.rawValue)
-        for widgetInfo in widgetInfos! {
-            guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
-            if WidgetType.isOriginalWidget(widgetInfo.key) && WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: widgetInfo.key, appMode: appMode) {
-                widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: true, recreateControls: false)
-            } else {
-                // Disable "false" (not reset "nil"), because visible by default widget should be disabled in non-default panel
-                let enabled: NSNumber? = isOriginalWidgetOnAnotherPanel(widgetInfo: widgetInfo) ? NSNumber(value: false) : nil
-                widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: enabled, recreateControls: false)
+        applyingSettingsCount += 1
+        defer { applyingSettingsCount -= 1 }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let panels = [panel]
+            let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                     filterModes: Int(kWidgetModeMatchingPanels),
+                                                     panels: panels,
+                                                     screenLayoutMode: layoutMode.rawValue)
+            for widgetInfo in widgetInfos! {
+                guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
+                if WidgetType.isOriginalWidget(widgetInfo.key)
+                    && WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: widgetInfo.key,
+                                                                          appMode: appMode) {
+                    widgetRegistry.enableDisableWidget(for: appMode,
+                                                       widgetInfo: widgetInfo,
+                                                       enabled: true,
+                                                       recreateControls: false)
+                } else {
+                    // Disable "false" (not reset "nil"), because visible by default widget should be disabled in non-default panel
+                    let enabled: NSNumber? = isOriginalWidgetOnAnotherPanel(widgetInfo: widgetInfo)
+                        ? NSNumber(value: false)
+                        : nil
+                    widgetRegistry.enableDisableWidget(for: appMode,
+                                                       widgetInfo: widgetInfo,
+                                                       enabled: enabled,
+                                                       recreateControls: false)
+                }
             }
+            panel.orderPreference(screenLayoutMode: layoutMode,
+                                  appMode: appMode).resetMode(toDefault: appMode)
         }
-        panel.orderPreference(screenLayoutMode: layoutMode, appMode: appMode).resetMode(toDefault: appMode)
     }
 
     private func isOriginalWidgetOnAnotherPanel(widgetInfo: MapWidgetInfo) -> Bool {

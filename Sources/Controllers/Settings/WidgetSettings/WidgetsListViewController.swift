@@ -245,7 +245,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onWidgetStateChanged() {
-        if !editMode {
+        if !editMode && !widgetsSettingsHelper.isApplyingSettings {
             updateUIAnimated(nil)
         }
     }

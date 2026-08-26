@@ -30,6 +30,8 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     private var mapButtonsHelper: OAMapButtonsHelper!
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: appMode,
+                                                                  layoutMode: screenLayoutMode)
     private var screenLayoutMode: ScreenLayoutMode = .defaultMode
     private var screenElementsMode: ScreenElementsMode = .defaultMode
 
@@ -54,6 +56,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
 
     override func getTitle() -> String {
         localizedString("layer_map_appearance")
+    }
+
+    override func refreshOnAppear() -> Bool {
+        true
     }
 
     override func createSubview() -> UIView {
@@ -260,6 +266,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         settings.setApplicationModePref(appMode)
         self.appMode = appMode
+        widgetsSettingsHelper.setAppMode(appMode)
         updateScreenElementsMode()
         updateUIAnimated(nil)
     }
@@ -305,8 +312,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let self else { return }
-            let helper = WidgetsSettingsHelper(appMode: appMode, layoutMode: screenLayoutMode)
-            helper.resetConfigureScreenSettings()
+            widgetsSettingsHelper.resetConfigureScreenSettings()
             applyConfigureScreenSettings()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -336,6 +342,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         guard let mode = ScreenLayoutMode(rawValue: Int32(segmentedControl.selectedSegmentIndex)),
               mode != screenLayoutMode else { return }
         screenLayoutMode = mode
+        widgetsSettingsHelper.setLayoutMode(mode)
         reloadDataWith(animated: true, completion: nil)
     }
 }
@@ -492,6 +499,10 @@ extension ConfigureScreenViewController {
     // MARK: WidgetStateDelegate
 
     @objc func onWidgetStateChanged() {
+        guard !widgetsSettingsHelper.isApplyingSettings,
+              navigationController == nil || navigationController?.topViewController === self else {
+            return
+        }
         reloadDataWith(animated: true, completion: nil)
     }
 
@@ -521,9 +532,8 @@ extension ConfigureScreenViewController: OACopyProfileBottomSheetDelegate {
 
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        let helper = WidgetsSettingsHelper(appMode: appMode, layoutMode: screenLayoutMode)
-        helper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
-                                           widgetParams: ["selectedAppMode": appMode])
+        widgetsSettingsHelper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
+                                                          widgetParams: ["selectedAppMode": appMode])
         applyConfigureScreenSettings()
     }
 }

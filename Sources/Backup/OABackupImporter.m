@@ -8,6 +8,7 @@
 
 #import "OABackupImporter.h"
 #import "OABackupHelper.h"
+#import "OAFavoritesBackupMerger.h"
 #import "OABackupListeners.h"
 #import "OABackupDbHelper.h"
 #import "OAPrepareBackupResult.h"
@@ -297,6 +298,7 @@
 
                 [self updateFileMd5Digest:remoteFile item:item];
                 [self updateFileUploadTime:remoteFile item:item];
+                [OAFavoritesBackupMerger onDownloadSuccess:item remoteFile:remoteFile];
             }
             if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
                 [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];

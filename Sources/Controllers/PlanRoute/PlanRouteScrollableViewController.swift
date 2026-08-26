@@ -40,7 +40,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private let tabs = PlanRouteTab.allCases
     private let routeTypeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomQuestionmark)
-    private var sheetState: EOADraggableMenuState = .expanded
+    private var sheetState: EOADraggableMenuState
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
     private var crosshairCenterYConstraint: NSLayoutConstraint?
@@ -54,6 +54,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
     private var pointEditingHeight: CGFloat?
+    private var cachedMapTargetScreenPointRatio: CGPoint?
     private var cachedMapViewportYScale: Double?
     private var approximationHeight: CGFloat?
     private var approximationPreviousSheetState: EOADraggableMenuState?
@@ -62,9 +63,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private var suggestedFileName: String {
         switch dataProvider.mode {
-        case .newRoute: OAUtilities.generateCurrentDateFilename()
+        case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())
         case .editTrack(let fileName): fileName
         }
+    }
+
+    private var suggestedFilePath: String? {
+        guard case .editTrack(let fileName) = dataProvider.mode,
+              let gpxFileName = (fileName as NSString).appendingPathExtension("gpx") else { return nil }
+        guard let folder = dataProvider.editTrackFolder, !folder.isEmpty else { return gpxFileName }
+        return (folder as NSString).appendingPathComponent(gpxFileName)
     }
 
     private var currentScreenHeight: CGFloat {
@@ -72,8 +80,17 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return view.bounds.height
     }
 
+    var mapViewportBounds: CGRect {
+        let bounds = view.bounds
+        let minY = bounds.minY + getNavbarHeight()
+        let sheetHeight = height(for: sheetState)
+        let maxY = max(minY, bounds.maxY - sheetHeight)
+        return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
+    }
+
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
+        sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -126,7 +143,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cachedMapViewportYScale = OARootViewController.instance().mapPanel.mapViewController.viewportYScale
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewSize = mapViewController.view.bounds.size
+        if let mapTargetScreenPoint = mapViewController.mapRendererView?.mapTargetScreenPoint,
+           mapViewSize.width > 0,
+           mapViewSize.height > 0 {
+            cachedMapTargetScreenPointRatio = CGPoint(x: mapTargetScreenPoint.x / mapViewSize.width,
+                                                      y: mapTargetScreenPoint.y / mapViewSize.height)
+        }
+        cachedMapViewportYScale = mapViewController.viewportYScale
         (view as? OAUserInteractionPassThroughView)?.isScreenClickable = true
         setupSheet()
         setupTopPart()
@@ -173,7 +198,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
             ? -routeTypeButtonBottomInset(for: sheetState)
             : -(height + 12)
-        updateCrosshairMapCenter(sheetHeight: height)
+        updateCrosshair(sheetHeight: height, preserveMapPosition: true)
         if animated {
             sheetView.transform = CGAffineTransform(translationX: 0, y: height)
             UIView.animate(withDuration: Self.sheetAnimationDuration) {
@@ -203,7 +228,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
                 ? -routeTypeButtonBottomInset(for: sheetState)
                 : -(height + 12)
-            updateCrosshairMapCenter(sheetHeight: height, screenSize: size)
+            updateCrosshair(sheetHeight: height, screenSize: size)
             refreshMapControls()
         }
     }
@@ -279,7 +304,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         updateRouteTypeButton()
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
-        updateCrosshairMapCenter(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState))
+        updateCrosshair(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState),
+                        preserveMapPosition: true)
         refreshMapControls()
     }
 
@@ -459,9 +485,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        crosshairView.image = OAAppSettings.sharedManager().nightMode
-            ? .mapRulerCenterNight
-            : .mapRulerCenterDay
+        let nightMode = OAAppSettings.sharedManager().nightMode
+        crosshairView.image = .mapRulerCenter
+        crosshairView.tintColor = nightMode ? .iconColorBlack.dark : .iconColorBlack.light
         crosshairView.isAccessibilityElement = false
     }
 
@@ -484,7 +510,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let bottom = routeTypeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -routeTypeButtonBottomInset(for: sheetState))
         routeTypeButtonBottomConstraint = bottom
         NSLayoutConstraint.activate([
-            routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            routeTypeButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
             bottom
         ])
         routeTypeButton.accessibilityLabel = localizedString("route_between_points")
@@ -577,7 +603,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetHeightConstraint?.constant = targetHeight
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: targetHeight)
         routeTypeButtonBottomConstraint?.constant = -(targetHeight + 12)
-        updateCrosshairMapCenter(sheetHeight: targetHeight)
+        updateCrosshair(sheetHeight: targetHeight)
         view.layoutIfNeeded()
         refreshMapControls()
     }
@@ -667,7 +693,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let targetHeight = min(popupViewController.initialHeight(), height(for: .fullScreen))
         approximationHeight = targetHeight
         sheetHeightConstraint?.constant = targetHeight
-        updateCrosshairMapCenter(sheetHeight: targetHeight)
+        updateCrosshair(sheetHeight: targetHeight)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()
@@ -712,20 +738,37 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return visibleTop + (visibleBottom - visibleTop) / 2
     }
 
-    private func updateCrosshairMapCenter(sheetHeight: CGFloat, screenSize: CGSize? = nil) {
+    private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
         let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
         let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
         let centerX = targetScreenSize.width / 2
         guard centerX > 0, targetScreenSize.height > 0 else { return }
-        let viewportYScale = Double(2 * centerY / targetScreenSize.height)
-        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = viewportYScale
-        dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: centerX, y: centerY))
+        let screenPoint = CGPoint(x: centerX, y: centerY)
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        if preserveMapPosition {
+            mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
+        } else {
+            mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
+            mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint
+        }
+        dataProvider.setCrosshairPosition(screenPoint: screenPoint)
     }
 
     private func restoreMapViewport() {
-        guard let cachedMapViewportYScale else { return }
-        self.cachedMapViewportYScale = nil
-        OARootViewController.instance().mapPanel.mapViewController.viewportYScale = cachedMapViewportYScale
+        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewSize = mapViewController.view.bounds.size
+        if let cachedMapTargetScreenPointRatio,
+           mapViewSize.width > 0,
+           mapViewSize.height > 0 {
+            self.cachedMapTargetScreenPointRatio = nil
+            let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
+                                               y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
+            mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if let cachedMapViewportYScale {
+            self.cachedMapViewportYScale = nil
+            mapViewController.viewportYScale = cachedMapViewportYScale
+        }
     }
 
     private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {
@@ -754,11 +797,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setState(_ state: EOADraggableMenuState, animated: Bool) {
         sheetState = state
+        routeTypeButton.isHidden = state == .fullScreen
         let height = height(for: state)
         sheetHeightConstraint?.constant = height
         crosshairCenterYConstraint?.constant = crosshairCenterY(sheetHeight: height)
         routeTypeButtonBottomConstraint?.constant = -routeTypeButtonBottomInset(for: state)
-        updateCrosshairMapCenter(sheetHeight: height)
+        updateCrosshair(sheetHeight: height)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()
@@ -892,23 +936,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func handleSave() {
         guard ensurePointsForSaving() else { return }
+        let fileName: String
+        let folder: String?
         switch dataProvider.mode {
         case .newRoute:
-            presentSaveDialog(duplicate: false)
-        case .editTrack(let fileName):
-            dataProvider.saveAs(fileName: fileName, folder: dataProvider.editTrackFolder, showOnMap: true) { [weak self] success, _ in
-                guard let self else { return }
-                if success {
-                    let message = String(format: localizedString("gpx_saved_successfully"), fileName)
-                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
-                    hide(true, duration: Self.sheetAnimationDuration) {
-                        OARootViewController.instance().present(alert, animated: true)
-                    }
-                } else {
-                    showSaveError()
-                }
-            }
+            fileName = suggestedFileName
+            folder = nil
+        case .editTrack(let existingFileName):
+            fileName = existingFileName
+            folder = dataProvider.editTrackFolder
+        }
+        dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true) { [weak self] success, filePath in
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
     }
 
@@ -932,11 +971,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         switch action {
         case .saveAs:
             guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: false)
+            presentSaveDialog(saveAsCopy: false)
         case .saveAsCopy:
             guard ensurePointsForSaving() else { return }
-            presentSaveDialog(duplicate: true)
+            presentSaveDialog(saveAsCopy: true)
         case .appendToExistingTrack:
+            guard ensurePointsForSaving() else { return }
             presentAppendToTrack()
         case .changeSegmentOrder:
             presentSegmentReorder()
@@ -963,12 +1003,59 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return true
     }
 
-    private func presentSaveDialog(duplicate: Bool) {
-        isPendingSaveAsCopy = duplicate
+    private func presentSaveDialog(saveAsCopy: Bool) {
+        isPendingSaveAsCopy = saveAsCopy
         pendingSegmentPointIndexes = nil
-        guard let vc = OASaveTrackViewController(fileName: suggestedFileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        let fileName = saveAsCopy ? uniqueCopyFileName(for: suggestedFileName) : suggestedFileName
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func uniqueCopyFileName(for fileName: String) -> String {
+        let suffixPattern = #"_\((\d+)\)$"#
+        var baseName = fileName
+        var index = 2
+        if let suffixRange = fileName.range(of: suffixPattern, options: .regularExpression) {
+            let suffix = fileName[suffixRange]
+            let number = suffix.dropFirst(2).dropLast()
+            if let suffixNumber = Int(number), suffixNumber < Int.max {
+                baseName = String(fileName[..<suffixRange.lowerBound])
+                index = max(index, suffixNumber + 1)
+            }
+        }
+
+        var gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        if let folder = dataProvider.editTrackFolder, !folder.isEmpty {
+            gpxDirectory.appendPathComponent(folder, isDirectory: true)
+        }
+        let fileManager = FileManager.default
+        for _ in 0..<100_000 {
+            let candidate = "\(baseName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+            guard index < Int.max else { break }
+            index += 1
+        }
+        return "\(baseName)_\(UUID().uuidString)"
+    }
+
+    private func uniqueFileName(for fileName: String) -> String {
+        let gpxDirectory = URL(fileURLWithPath: OsmAndApp.swiftInstance().gpxPath)
+        let fileManager = FileManager.default
+        let initialFile = gpxDirectory.appendingPathComponent(fileName).appendingPathExtension("gpx")
+        guard fileManager.fileExists(atPath: initialFile.path) else { return fileName }
+
+        for index in 2..<100_000 {
+            let candidate = "\(fileName)_(\(index))"
+            let candidateFile = gpxDirectory.appendingPathComponent(candidate).appendingPathExtension("gpx")
+            if !fileManager.fileExists(atPath: candidateFile.path) {
+                return candidate
+            }
+        }
+        return fileName
     }
 
     private func presentSegmentSaveDialog(pointIndexes: [Int]) {
@@ -996,6 +1083,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(alert, animated: true)
     }
 
+    private func handleSaveResult(success: Bool, filePath: String?, fallbackFileName: String) {
+        guard success else {
+            showSaveError()
+            return
+        }
+        let path = filePath ?? fallbackFileName
+        hide(true, duration: Self.sheetAnimationDuration) {
+            let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
+            bottomSheet?.present(in: OARootViewController.instance())
+        }
+    }
+
     private func showSaveError() {
         let alert = UIAlertController(title: localizedString("gpx_export_failed"),
                                       message: nil,
@@ -1007,7 +1106,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @objc private func onRouteTypeButtonTapped() {
         guard !presentApproximationWarningIfNeeded() else { return }
         let segments = dataProvider.routeSegments
-        let isComplex = segments.count > 1 || (segments.count == 1 && segments[0].multiMode)
+        let isComplex = dataProvider.pendingEmptySegmentIndex != nil
+            || segments.count > 1
+            || (segments.count == 1 && segments[0].multiMode)
         if isComplex {
             presentRouteBetweenPoints()
         } else {
@@ -1102,16 +1203,7 @@ extension PlanRouteScrollableViewController: OAInfoBottomViewDelegate {
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
         let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
-            guard let self else { return }
-            if success {
-                let path = filePath ?? fileName
-                hide(true, duration: Self.sheetAnimationDuration) {
-                    let bottomSheet = OASaveTrackBottomSheetViewController(fileName: path)
-                    bottomSheet?.present(in: OARootViewController.instance())
-                }
-            } else {
-                showSaveError()
-            }
+            self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
         if let pointIndexes = pendingSegmentPointIndexes {
             pendingSegmentPointIndexes = nil
@@ -1129,7 +1221,15 @@ extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
         dataProvider.appendToTrack(filePath: gpxFilePath) { [weak self] success in
             guard let self else { return }
-            if !success { showSaveError() }
+            guard success else {
+                showSaveError()
+                return
+            }
+            let absolutePath = OAUtilities.absoluteGpxPath(forPath: gpxFilePath)
+            hide(true, duration: Self.sheetAnimationDuration) {
+                let bottomSheet = OASaveTrackBottomSheetViewController(fileName: absolutePath)
+                bottomSheet?.present(in: OARootViewController.instance())
+            }
         }
     }
 }

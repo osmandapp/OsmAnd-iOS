@@ -404,11 +404,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         case EOAAddToATrack:
         {
             OASGpxDataItem* track = item[@"track"];
-            NSString *filename = nil;
+            NSString *filePath = nil;
             if (track)
-                filename = track.gpxFileName;
+                filePath = track.gpxFilePath;
             if (self.delegate)
-                [self.delegate onFileSelected:filename];
+                [self.delegate onFileSelected:filePath];
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
             break;

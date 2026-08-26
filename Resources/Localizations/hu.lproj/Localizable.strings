@@ -1397,7 +1397,7 @@
 "extra_maps_menu_group" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
-"plan_route_split_before" = "Elvágás ez előtt:";
+"plan_route_split_before" = "Elvágás előtte";
 "shared_string_import" = "Importálás";
 "icon_group_transport" = "Közlekedés";
 "transport" = "Tömegközlekedés";
@@ -1407,7 +1407,7 @@
 "shared_string_circle" = "Kör";
 "segments_count" = "%d szakasz";
 "replace_favorite_confirmation" = "Lecseréli ezt a kedvencet: %@?";
-"plan_route_split_after" = "Elvágás ez után:";
+"plan_route_split_after" = "Elvágás utána";
 "update_frequency" = "Frissítés gyakorisága";
 "shared_string_enable" = "Engedélyezés";
 "searching_gps" = "Műholdak keresése";

@@ -13,10 +13,10 @@
 
 @interface OARegionPriorityProvider : NSObject
 
-- (instancetype)initWithPhrase:(OASearchPhrase *)phrase;
++ (instancetype)sharedInstanceWithPhrase:(OASearchPhrase *)phrase;
 
-- (NSArray<NSString *> *)getOfflineIndexes;
-- (NSArray<NSString *> *)getOfflineIndexesWithMinRadius:(int)minRadius maxRadius:(int)maxRadius;
+- (NSArray<NSString *> *)getOfflineIndexes:(OASearchPhrase *)phrase;
+- (NSArray<NSString *> *)getOfflineIndexesWithMinRadius:(int)minRadius maxRadius:(int)maxRadius phrase:(OASearchPhrase *)phrase;
 - (int)getRegionWeight:(NSString *)resourceId;
 
 @end

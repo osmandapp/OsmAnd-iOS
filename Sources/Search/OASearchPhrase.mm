@@ -239,7 +239,7 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
         _unknownWordsMatcher = [NSMutableArray new];
         if (settings != nil)
         {
-            _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
+            _regionPriorityProvider = [OARegionPriorityProvider sharedInstanceWithPhrase:self];
         }
         _acceptPrivate = NO;
     }
@@ -581,7 +581,7 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
     NSArray<NSString *> *list;
     if (_regionPriorityProvider)
     {
-        list = [_regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters];
+        list = [_regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters phrase:self];
     }
     else
     {
@@ -597,7 +597,7 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
     NSArray<NSString *> *list;
     if (_regionPriorityProvider)
     {
-        list = [_regionPriorityProvider getOfflineIndexes];
+        list = [_regionPriorityProvider getOfflineIndexes:self];
     }
     else
     {

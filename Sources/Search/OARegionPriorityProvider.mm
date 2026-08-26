@@ -12,30 +12,87 @@
 
 static const int BBOX_STEP = 50000; // 50 km
 static const int BBOX_MAX = 50000 * 20; // 1000 km
+static const double LOCATION_SHIFT_THRESHOLD_METERS = 30000.0; // 30 km
 
 @implementation OARegionPriorityProvider
 {
     NSMutableDictionary<NSNumber *, NSMutableArray<NSString *> *> *_priorityMap;
     NSDictionary<NSString *, NSNumber *> *_regionsPriority;
-    CLLocation * _searchLocation;
+    CLLocation *_searchLocation;
+    NSInteger _lastIndexesCount;
 }
 
-- (instancetype) initWithPhrase:(OASearchPhrase *)phrase
++ (instancetype)sharedInstanceWithPhrase:(OASearchPhrase *)phrase
+{
+    static OARegionPriorityProvider *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[OARegionPriorityProvider alloc] initInternal];
+    });
+
+    [sharedInstance checkAndUpdate:phrase];
+    return sharedInstance;
+}
+
+- (instancetype)initInternal
 {
     self = [super init];
     if (self)
     {
         _priorityMap = [NSMutableDictionary dictionary];
-        if (phrase && phrase.getSettings)
-        {
-            _searchLocation = [phrase.getSettings getOriginalLocation];
-            [self initPriorityMap:phrase];
-        }
+        _lastIndexesCount = -1;
     }
     return self;
 }
 
-- (void) initPriorityMap:(OASearchPhrase *)phrase
+- (instancetype)init
+{
+    @throw [NSException exceptionWithName:@"SingletonException"
+                                   reason:@"Use +[OARegionPriorityProvider sharedInstanceWithPhrase:]"
+                                 userInfo:nil];
+}
+
+- (void)checkAndUpdate:(OASearchPhrase *)phrase
+{
+    if (!phrase || ![phrase getSettings])
+    {
+        return;
+    }
+
+    @synchronized(self)
+    {
+        CLLocation *newLocation = [[phrase getSettings] getOriginalLocation];
+        NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes];
+        NSInteger cnt = offlineIndexes ? offlineIndexes.count : 0;
+
+        if ([self shouldReinitializeWithLocation:newLocation count:cnt])
+        {
+            _searchLocation = newLocation ? newLocation : _searchLocation;
+            _lastIndexesCount = cnt;
+            [_priorityMap removeAllObjects];
+            _regionsPriority = nil;
+            [self initPriorityMap:phrase];
+        }
+    }
+}
+
+- (BOOL)shouldReinitializeWithLocation:(CLLocation *)newLocation count:(NSInteger)cnt
+{
+    if (_searchLocation == nil || _lastIndexesCount != cnt)
+    {
+        return YES;
+    }
+
+    if (newLocation != nil)
+    {
+        CLLocationDistance distance = [_searchLocation distanceFromLocation:newLocation];
+        return distance >= LOCATION_SHIFT_THRESHOLD_METERS;
+    }
+
+    return NO;
+}
+
+- (void)initPriorityMap:(OASearchPhrase *)phrase
 {
     if (_searchLocation == nil)
     {
@@ -97,8 +154,9 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     _regionsPriority = [tmpPriority copy];
 }
 
-- (NSArray<NSString *> *) getOfflineIndexes
+- (NSArray<NSString *> *) getOfflineIndexes:(OASearchPhrase *)phrase
 {
+    [self checkAndUpdate:phrase];
     [self initRegionsPriority];
     NSMutableArray *result = [NSMutableArray array];
     NSArray *sortedKeys = [[_priorityMap allKeys] sortedArrayUsingSelector:@selector(compare:)];
@@ -115,8 +173,9 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     return result;
 }
 
-- (NSArray<NSString *> *) getOfflineIndexesWithMinRadius:(int)minRadius maxRadius:(int)maxRadius
+- (NSArray<NSString *> *) getOfflineIndexesWithMinRadius:(int)minRadius maxRadius:(int)maxRadius phrase:(OASearchPhrase *)phrase
 {
+    [self checkAndUpdate:phrase];
     NSMutableArray<NSString *> *result = [NSMutableArray array];
     int minPriority = (int)floor((double)minRadius / BBOX_STEP);
     int maxPriority = (int)ceil((double)maxRadius / BBOX_STEP);
@@ -145,7 +204,11 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
         return 0;
     }
     [self initRegionsPriority];
-    NSNumber *priority = _regionsPriority[[resourceId lowerCase]];
+    if (_regionsPriority == nil)
+    {
+        return 0;
+    }
+    NSNumber *priority = _regionsPriority[[resourceId lowercaseString]];
     return priority ? [priority intValue] : 0;
 }
 

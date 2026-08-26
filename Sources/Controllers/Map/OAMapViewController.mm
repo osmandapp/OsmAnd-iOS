@@ -704,6 +704,7 @@ static char kMapSourceUpdateQueueKey;
     if (self.mapViewLoaded)
     {
         self.mapViewLoaded = NO;
+        [_mapLayers destroyLayers];
         [_mapView suspendSymbolsUpdate];
         [_mapView releaseContext:YES];
         [_mapView removeFromSuperview];

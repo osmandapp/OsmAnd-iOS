@@ -17,6 +17,8 @@
     NSArray<OASWptPt *> *_points;
     NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
     NSInteger _pointPosition;
+    NSInteger _splitPointPosition;
+    NSString *_pointProfileType;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after
@@ -32,6 +34,7 @@
             _after = YES;
             _pointPosition = (NSInteger) [editingCtx getPoints].count - 1;
         }
+        _splitPointPosition = _after ? _pointPosition : _pointPosition - 1;
     }
     return self;
 }
@@ -45,8 +48,12 @@
 - (void) executeCommand
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
-    _points = [NSArray arrayWithArray:editingCtx.getPoints];
-    _roadSegmentData = editingCtx.roadSegmentData;
+    _points = [editingCtx.getPoints copy];
+    _roadSegmentData = [editingCtx.roadSegmentData mutableCopy];
+    _splitPointPosition = _after ? _pointPosition : _pointPosition - 1;
+    _pointProfileType = _splitPointPosition >= 0 && _splitPointPosition < (NSInteger)_points.count
+        ? [_points[_splitPointPosition].getProfileType copy]
+        : nil;
     [editingCtx splitPoints:_pointPosition after:_after];
     [self refreshMap];
 }
@@ -55,7 +62,15 @@
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
     [editingCtx clearSegments];
-    [editingCtx setRoadSegmentData:_roadSegmentData];
+    if (_splitPointPosition >= 0 && _splitPointPosition < (NSInteger)_points.count)
+    {
+        OASWptPt *splitPoint = _points[_splitPointPosition];
+        if (_pointProfileType != nil)
+            [splitPoint setProfileTypeProfileType:_pointProfileType];
+        else
+            [splitPoint removeProfileType];
+    }
+    [editingCtx setRoadSegmentData:[_roadSegmentData mutableCopy]];
     [editingCtx addPoints:_points];
     [self refreshMap];
 }

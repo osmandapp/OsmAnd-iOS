@@ -11,6 +11,7 @@ import UIKit
 extension Notification.Name {
     static let deviceRSSIUpdated = Notification.Name("DeviceRSSIUpdated")
     static let deviceDisconnected = Notification.Name("DeviceDisconnected")
+    static let deviceSensorDataUpdated = Notification.Name("DeviceSensorDataUpdated")
 }
 
 enum DeviceState: Int {
@@ -206,9 +207,9 @@ class Device: NSObject {
             return
         }
         update(with: characteristic) { [weak self] result in
-            if case .success = result {
-                self?.didChangeCharacteristic?()
-            }
+            guard case .success = result, let self else { return }
+            NotificationCenter.default.post(name: .deviceSensorDataUpdated, object: self)
+            didChangeCharacteristic?()
         }
     }
 

@@ -41,16 +41,6 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         super.viewDidLayoutSubviews()
         relayoutTableHeaderViewIfNeeded()
     }
-    
-    // MARK: - Bottom buttons
-    
-    override func getTopButtonTitle() -> String {
-        ""
-    }
-    
-    override func getBottomButtonTitle() -> String {
-        ""
-    }
 
     // MARK: - NavBar
     
@@ -74,7 +64,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
 
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         let image = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
-        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
+        let button = UIBarButtonItem(image: .icCheckmarkDefault, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
         button.accessibilityLabel = localizedString("shared_string_apply")
         button.isEnabled = isEditChanged
         applyButton = button
@@ -223,8 +213,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     private func relayoutTableHeaderViewIfNeeded() {
         guard let header = tableView.tableHeaderView else { return }
         let width = tableView.bounds.width
-        CoordinateFormatHelper.relayoutHeader(header, width: width)
-        header.frame.size.width = width
+        guard CoordinateFormatHelper.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
         tableView.tableHeaderView = header
     }
     
@@ -239,8 +228,8 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         alert.addAction(UIAlertAction(
             title: localizedString("shared_string_discard"),
             style: .destructive
-        ) { [weak self] _ in
-            self?.dismiss()
+        ) { _ in
+            self.dismiss()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)

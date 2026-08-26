@@ -73,17 +73,21 @@ enum CoordinateFormatHelper {
             label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -bottom)
         ])
 
-        relayoutHeader(header, width: width)
+        relayoutTableHeaderViewIfNeeded(header, width: width)
         return header
     }
 
-    static func relayoutHeader(_ header: UIView, width: CGFloat) {
+    @discardableResult static func relayoutTableHeaderViewIfNeeded(_ header: UIView, width: CGFloat) -> Bool {
         let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
         let height = header.systemLayoutSizeFitting(
             target,
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         ).height
+        guard abs(header.frame.height - height) > 0.5 || abs(header.frame.width - width) > 0.5 else {
+            return false
+        }
         header.frame.size = CGSize(width: width, height: height)
+        return true
     }
 }

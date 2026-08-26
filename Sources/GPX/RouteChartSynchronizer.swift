@@ -82,9 +82,10 @@ final class RouteChartSynchronizer: NSObject {
         chart.lineData?.dataSets
             .compactMap { $0 as? LineChartDataSetProtocol }
             .forEach { $0.highlightColor = .chartSliderLine }
-        if usesDistanceXAxis {
+        chart.notifyDataSetChanged()
+        if primaryXAxisType != nil {
             barCharts.allObjects.forEach {
-                alignHorizontalAxis(of: $0)
+                updateHorizontalAxis(of: $0)
                 $0.notifyDataSetChanged()
             }
         }
@@ -113,7 +114,7 @@ final class RouteChartSynchronizer: NSObject {
             barCharts.add(chart)
             installSelectionGestureTargets(in: chart)
         }
-        alignHorizontalAxis(of: chart)
+        updateHorizontalAxis(of: chart)
         chart.notifyDataSetChanged()
         applyStoredVisibleRange(to: chart)
         applySelection(to: chart)
@@ -197,14 +198,35 @@ final class RouteChartSynchronizer: NSObject {
         }
     }
 
-    private func alignHorizontalAxis(of chart: HorizontalBarChartView) {
-        guard usesDistanceXAxis,
-              let primaryChart,
-              let primaryRange = horizontalRange(for: primaryChart) else { return }
-        chart.leftAxis.axisMinimum = primaryRange.lowerBound
-        chart.leftAxis.axisMaximum = primaryRange.upperBound
-        chart.rightAxis.axisMinimum = primaryRange.lowerBound
-        chart.rightAxis.axisMaximum = primaryRange.upperBound
+    private func updateHorizontalAxis(of chart: HorizontalBarChartView) {
+        guard primaryXAxisType != nil else { return }
+        if usesDistanceXAxis,
+           let primaryChart,
+           let primaryRange = horizontalRange(for: primaryChart) {
+            setHorizontalAxisRange(primaryRange, of: chart)
+        } else if let dataRange = horizontalDataRange(for: chart) {
+            setHorizontalAxisRange(dataRange, of: chart)
+        } else {
+            chart.leftAxis.resetCustomAxisMin()
+            chart.leftAxis.resetCustomAxisMax()
+            chart.rightAxis.resetCustomAxisMin()
+            chart.rightAxis.resetCustomAxisMax()
+        }
+    }
+
+    private func setHorizontalAxisRange(_ range: ClosedRange<Double>, of chart: HorizontalBarChartView) {
+        chart.leftAxis.axisMinimum = range.lowerBound
+        chart.leftAxis.axisMaximum = range.upperBound
+        chart.rightAxis.axisMinimum = range.lowerBound
+        chart.rightAxis.axisMaximum = range.upperBound
+    }
+
+    private func horizontalDataRange(for chart: HorizontalBarChartView) -> ClosedRange<Double>? {
+        guard let dataSet = chart.barData?.dataSets.first,
+              let entry = dataSet.entryForIndex(0) as? BarChartDataEntry else { return nil }
+        let upperBound = entry.positiveSum
+        guard upperBound.isFinite, upperBound > 0 else { return nil }
+        return 0...upperBound
     }
 
     private func normalizedVisibleRange(in chart: BarLineChartViewBase) -> ClosedRange<Double>? {

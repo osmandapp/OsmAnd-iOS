@@ -682,8 +682,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcBtn.heightAnchor.constraint(equalToConstant: 50)
         ])
 
-        cell.layoutIfNeeded()
-        chartSynchronizer.setPrimaryChart(chart)
+        cell.chartView = chart
         return cell
     }
 
@@ -892,8 +891,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             barChart.heightAnchor.constraint(equalToConstant: 54)
         ])
 
-        cell.layoutIfNeeded()
-        chartSynchronizer.registerBarChart(barChart)
+        cell.chartView = barChart
         return cell
     }
 
@@ -1207,6 +1205,16 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension PlanRouteAnalyzeViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
+        cell.layoutIfNeeded()
+        if let primaryChart = chart as? ElevationChart {
+            chartSynchronizer.setPrimaryChart(primaryChart)
+        } else if let barChart = chart as? HorizontalBarChartView {
+            chartSynchronizer.registerBarChart(barChart)
+        }
+    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)

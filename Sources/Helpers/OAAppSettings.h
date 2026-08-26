@@ -997,8 +997,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
-@property (nonatomic) OACommonStringList *preferredCoordinateFormatIds;
-@property (nonatomic) OACommonStringList *recentlyAddedCoordinateFormatIds;
 @property (nonatomic, readonly) CoordinateFormatSettingsStorage *coordinateFormatSettingsStorage;
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;

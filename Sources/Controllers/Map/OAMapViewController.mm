@@ -815,6 +815,16 @@ static char kMapSourceUpdateQueueKey;
     [self setViewportScaleY:y];
 }
 
+- (double)viewportYScale
+{
+    return _mapView.viewportYScale;
+}
+
+- (void)setViewportYScale:(double)viewportYScale
+{
+    [self setViewportScaleY:viewportYScale];
+}
+
 - (void)setViewportScaleX:(double)x
 {
     if (_mapView.viewportXScale != x && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
@@ -4066,6 +4076,7 @@ static char kMapSourceUpdateQueueKey;
         dispatch_async(dispatch_get_main_queue(), ^{
             [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         });
+        return YES;
     }
 
     BOOL found = NO;

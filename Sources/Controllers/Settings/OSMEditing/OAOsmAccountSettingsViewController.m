@@ -170,14 +170,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [SeparatorAppearance color];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
             BOOL isErrorEmptyCell = [item[@"key"] isEqualToString:@"empty_cell"];
             cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerHight = isErrorEmptyCell ? 30. : (1. / [UIScreen mainScreen].scale);
+            cell.dividerHight = isErrorEmptyCell ? 30. : SeparatorAppearance.thickness;
             cell.dividerInsets = UIEdgeInsetsMake(0., isErrorEmptyCell ? CGFLOAT_MAX : [item[@"left_inset"] floatValue], 0., 0.);
         }
         outCell = cell;
@@ -225,7 +225,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return [item[@"key"] isEqualToString:@"empty_cell"] ? 30. : (1. / [UIScreen mainScreen].scale);
+        return [item[@"key"] isEqualToString:@"empty_cell"] ? 30. : SeparatorAppearance.thickness;
     }
     else if (estimated)
     {

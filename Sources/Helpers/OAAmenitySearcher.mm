@@ -35,6 +35,7 @@
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 #include <OsmAndCore/CommonTypes.h>
@@ -331,10 +332,16 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         ? AMENITY_SEARCH_RADIUS_FOR_RELATION
         : AMENITY_SEARCH_RADIUS;
 
+    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan BEGIN radius=%ld", (long)radius);
+    CFTimeInterval searchStartTime = CACurrentMediaTime();
     NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
                                                      searchLatLon:latLon
                                                            radius:radius
                                                     includeTravel:YES];
+    CFTimeInterval searchDuration = (CACurrentMediaTime() - searchStartTime) * 1000.0;
+    NSLog(@"[ContextMenu][AmenitySearch] Nearby POI scan END (%.3f ms) candidates=%lu",
+          searchDuration,
+          (unsigned long)amenities.count);
 
     NSMutableArray<OAPOI *> *filtered = [self filterAmenities:amenities request:request];
 

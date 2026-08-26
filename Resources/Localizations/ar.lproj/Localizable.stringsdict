@@ -12,8 +12,6 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>zero</key>
-			<string>%ld مفضلات</string>
 			<key>one</key>
 			<string>%ld مفضلة</string>
 			<key>two</key>
@@ -36,8 +34,6 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>zero</key>
-			<string>%ld مجلدات</string>
 			<key>one</key>
 			<string>%ld مجلد</string>
 			<key>two</key>

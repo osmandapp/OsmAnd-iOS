@@ -94,6 +94,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     [self setupDownloadingCellHelper];
     
     self.enableButton.layer.cornerRadius = 9.;

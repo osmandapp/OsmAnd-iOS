@@ -44,6 +44,7 @@
 #import "OAPluginsHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kMargin = 16.0;
 static const CGFloat kButtonsViewHeight = 44.0;
@@ -230,7 +231,7 @@ static const NSInteger _buttonsCount = 4;
     self.buttonShadow.hidden = YES;
 
     _horizontalRouteLine = [CALayer layer];
-    _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -253,7 +254,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+        _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
         [self setupControlButton:self.controlButtonLeft];
         [self setupControlButton:self.controlButtonRight];
         [self setupControlButton:self.controlButtonDownload];
@@ -866,7 +867,9 @@ static const NSInteger _buttonsCount = 4;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-    
+
+    NSLog(@"[ContextMenu] Show animation BEGIN animated=%@", animated ? @"yes" : @"no");
+    CFTimeInterval animationStartTime = CACurrentMediaTime();
     if (animated)
     {
         CGRect frame = self.frame;
@@ -892,6 +895,10 @@ static const NSInteger _buttonsCount = 4;
             self.frame = frame;
             
         } completion:^(BOOL finished) {
+            CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=%@",
+                  animationDuration,
+                  finished ? @"finished" : @"interrupted");
             if (onComplete)
                 onComplete();
             
@@ -908,7 +915,9 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         
         self.frame = frame;
-        
+        CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=finished", animationDuration);
+
         if (onComplete)
             onComplete();
 
@@ -1440,7 +1449,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _horizontalRouteLine.hidden = NO;
-        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, [SeparatorAppearance thicknessForView:self]);
     }
     
     if (self.customController && [self.customController hasBottomToolbar])
@@ -2787,6 +2796,8 @@ static const NSInteger _buttonsCount = 4;
         return;
 
     _addressLookupTarget = targetPoint;
+    NSLog(@"[ContextMenu] Address resolution BEGIN");
+    CFTimeInterval addressStartTime = CACurrentMediaTime();
 
     __weak __typeof(self) weakSelf = self;
 
@@ -2801,11 +2812,24 @@ static const NSInteger _buttonsCount = 4;
 
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf)
+            {
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=view_released", addressDuration);
                 return;
+            }
 
             strongSelf->_addressLookupTarget = nil;
             if (strongSelf.targetPoint == targetPoint)
+            {
                 [strongSelf updateTargetPointAddress];
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=applied", addressDuration);
+            }
+            else
+            {
+                CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+                NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=target_changed", addressDuration);
+            }
 
             [strongSelf fetchAddressIfNeededAsync];
         });

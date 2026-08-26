@@ -23,7 +23,6 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kMargin 16.
-#define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
 
 static const CGFloat kDefaultBarButtonWidth = 44.0;
@@ -191,8 +190,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
                                              icon:@"ic_custom_online"
                                      aboveSubview:self.buttonRestore];
 
-        _viewIncludesSeparator = [[UIView alloc] init];
-        _viewIncludesSeparator.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+        _viewIncludesSeparator = [[SeparatorView alloc] init];
         [self.scrollView insertSubview:_viewIncludesSeparator belowSubview:self.buttonRestore];
 
         _labelIncludes = [[UILabel alloc] init];
@@ -326,6 +324,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         extraNavigationBarHeight = [OAUtilities getTopMargin];
 
     navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
+    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self.viewNavigationSeparator];
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);
     [self.view bringSubviewToFront:self.viewNavigationBar];
@@ -367,9 +366,9 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
     self.viewNavigationSeparator.frame = CGRectMake(
             0,
-            navigationBarHeight - kSeparatorHeight,
+            navigationBarHeight - separatorHeight,
             self.view.frame.size.width,
-            kSeparatorHeight
+            separatorHeight
     );
 
     [self updateScrollViewContainerSize];
@@ -441,11 +440,12 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     }
     else if (_type == EOAChooseSubscription)
     {
+        CGFloat separatorHeight = [SeparatorAppearance thicknessForView:_viewIncludesSeparator];
         _viewIncludesSeparator.frame = CGRectMake(
                 0.,
                 self.buttonRestore.frame.origin.y + self.buttonRestore.frame.size.height + 20.,
                 self.view.frame.size.width,
-                kSeparatorHeight
+                separatorHeight
         );
 
         CGSize includesSize = [OAUtilities calculateTextBounds:_labelIncludes.text
@@ -454,7 +454,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         CGFloat includesVerticalOffset = includesSize.height > kMinRowHeight ? 9. : (kMinRowHeight - includesSize.height) / 2;
         _labelIncludes.frame = CGRectMake(
                 20. + [OAUtilities getLeftMargin],
-                _viewIncludesSeparator.frame.origin.y + kSeparatorHeight,
+                _viewIncludesSeparator.frame.origin.y + separatorHeight,
                 self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
                 includesSize.height + includesVerticalOffset * 2
         );

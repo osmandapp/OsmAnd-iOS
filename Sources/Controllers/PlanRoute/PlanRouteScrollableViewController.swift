@@ -29,6 +29,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let phoneMapToolbarBottomInset: CGFloat = 20
     private static let phoneMapToolbarHorizontalInset: CGFloat = 20
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+
     private let dataProvider: PlanRouteDataProvider
 
     private let sheetView = UIView()
@@ -104,13 +108,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let sheetHeight = height(for: sheetState)
         let maxY = max(minY, bounds.maxY - sheetHeight)
         return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        if usesSidePanelLayout {
-            return OAAppSettings.sharedManager().nightMode ? .lightContent : .darkContent
-        }
-        return .lightContent
     }
 
     private var suggestedFileName: String {
@@ -328,7 +325,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func getToolbarHeight() -> CGFloat {
-        usesSidePanelLayout ? 0 : Self.bottomToolbarReservedHeight
+        let bottomToolbarReservedHeight = Self.bottomToolbarReservedHeight
+        return usesSidePanelLayout ? 0 : bottomToolbarReservedHeight
     }
 
     override func getLandscapeViewWidth() -> CGFloat {
@@ -618,6 +616,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     @discardableResult
     private func applyLayoutMode(for size: CGSize) -> Bool {
+        let phoneMapToolbarHorizontalInset = Self.phoneMapToolbarHorizontalInset
+        let sidePanelHorizontalInset = Self.sidePanelHorizontalInset
         let sidePanelLayout = shouldUseSidePanelLayout(for: size)
         usesSidePanelLayout = sidePanelLayout
 
@@ -654,8 +654,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetBottomConstraint?.constant = -panelBottomInset
         mapToolbarBottomConstraint?.constant = -mapToolbarBottomInset(for: size)
         mapToolbar.leadingContentInset = isPhoneLandscape(size)
-            ? Self.phoneMapToolbarHorizontalInset
-            : Self.sidePanelHorizontalInset
+            ? phoneMapToolbarHorizontalInset
+            : sidePanelHorizontalInset
         let showsBottomCorners = sidePanelLayout && !isPhoneLandscape(size)
         sheetView.layer.maskedCorners = showsBottomCorners
             ? [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -690,10 +690,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func sidePanelTopInset(for size: CGSize) -> CGFloat {
-        if isPhoneLandscape(size) {
-            return max(Self.phoneSidePanelTopInset, view.safeAreaInsets.top)
-        }
+        let phoneSidePanelTopInset = Self.phoneSidePanelTopInset
         let topPadding = Self.sidePanelTopPadding
+        if isPhoneLandscape(size) {
+            return max(phoneSidePanelTopInset, view.safeAreaInsets.top)
+        }
         return view.safeAreaInsets.top + topPadding
     }
 
@@ -704,10 +705,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func mapToolbarBottomInset(for size: CGSize) -> CGFloat {
+        let phoneMapToolbarBottomInset = Self.phoneMapToolbarBottomInset
+        let safeAreaBottomInset = Self.mapToolbarSafeAreaBottomInset
         if isPhoneLandscape(size) {
-            return Self.phoneMapToolbarBottomInset
+            return phoneMapToolbarBottomInset
         }
-        return view.safeAreaInsets.bottom + Self.mapToolbarSafeAreaBottomInset
+        return view.safeAreaInsets.bottom + safeAreaBottomInset
     }
 
     private func sidePanelMapControlsReservedHeight(for size: CGSize) -> CGFloat {

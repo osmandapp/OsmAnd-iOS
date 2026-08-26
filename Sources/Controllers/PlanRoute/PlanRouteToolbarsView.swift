@@ -226,6 +226,7 @@ final class PlanRouteBottomToolbarView: UIView {
     }
 
     private func setupView() {
+        let defaultHorizontalContentInset = Self.defaultHorizontalContentInset
         backgroundColor = .clear
 
         let centerStack = UIStackView(arrangedSubviews: [undoButton, redoButton])
@@ -247,7 +248,7 @@ final class PlanRouteBottomToolbarView: UIView {
 
         let leadingConstraint = addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingContentInset)
         let trailingConstraint = routeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                                       constant: -Self.defaultHorizontalContentInset)
+                                                                       constant: -defaultHorizontalContentInset)
         addPoiLeadingConstraint = leadingConstraint
         NSLayoutConstraint.activate([
             leadingConstraint,

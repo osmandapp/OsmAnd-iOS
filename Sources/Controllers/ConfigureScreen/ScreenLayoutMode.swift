@@ -11,7 +11,11 @@ enum ScreenLayoutMode: Int32, CaseIterable {
     case portrait
     case landscape
 
-    static let defaultMode: ScreenLayoutMode = .portrait
+    static func `default`(forAppMode appMode: OAApplicationMode) -> ScreenLayoutMode {
+        OAAppSettings.sharedManager().useSeparateLayouts.get(appMode) && OAUtilities.isLandscape()
+            ? .landscape
+            : .portrait
+    }
     
     var title: String {
         switch self {
@@ -36,6 +40,10 @@ enum ScreenLayoutMode: Int32, CaseIterable {
 
 @objcMembers
 final class ScreenLayoutModeWrapper: NSObject {
+    static func `default`(forAppMode appMode: OAApplicationMode) -> ScreenLayoutMode {
+        ScreenLayoutMode.default(forAppMode: appMode)
+    }
+
     static func key(for mode: ScreenLayoutMode) -> String {
         mode.key
     }

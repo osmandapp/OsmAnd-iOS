@@ -58,7 +58,7 @@
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
 
-    ScreenLayoutMode screenLayoutMode = [self defaultScreenLayoutMode];
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:mode];
     NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self pagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels) screenLayoutMode:screenLayoutMode];
     if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
     {
@@ -337,7 +337,10 @@
                                                                panel:(OAWidgetsPanel *)panel
                                                          filterModes:(NSInteger)filterModes
 {
-    return [self pagedWidgetsForPanel:appMode panel:panel filterModes:filterModes screenLayoutMode:[self defaultScreenLayoutMode]];
+    return [self pagedWidgetsForPanel:appMode
+                                panel:panel
+                          filterModes:filterModes
+                     screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:appMode]];
 }
 
 - (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
@@ -364,7 +367,10 @@
                                                 filterModes:(NSInteger) filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
 {
-    return [self widgetsForPanel:appMode filterModes:filterModes panels:panels screenLayoutMode:[self defaultScreenLayoutMode]];
+    return [self widgetsForPanel:appMode
+                    filterModes:filterModes
+                         panels:panels
+               screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:appMode]];
 }
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
@@ -430,7 +436,7 @@
 - (void) registerAllControls
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;
-    ScreenLayoutMode screenLayoutMode = [self defaultScreenLayoutMode];
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
     NSArray<OAMapWidgetInfo *> *infos = [OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:screenLayoutMode];
     [self reorderWidgets:infos];
     _cachedAppMode = appMode;
@@ -441,13 +447,6 @@
     {
         [self notifyWidgetRegistered:widgetInfo];
     }
-}
-
-- (ScreenLayoutMode)defaultScreenLayoutMode
-{
-    OAApplicationMode *appMode = _settings.applicationMode.get;
-    BOOL useSeparateLayouts = [_settings.useSeparateLayouts get:appMode];
-    return useSeparateLayouts && [OAUtilities isLandscape] ? ScreenLayoutModeLandscape : ScreenLayoutModePortrait;
 }
 
 @end

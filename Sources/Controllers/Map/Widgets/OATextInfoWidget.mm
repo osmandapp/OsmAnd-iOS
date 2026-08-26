@@ -1061,8 +1061,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         prefId = [prefId stringByAppendingString:customId];
 
     OAApplicationMode *appMode = [self getAppMode];
-    BOOL useSeparateLayouts = [[[OAAppSettings sharedManager] useSeparateLayouts] get:appMode];
-    ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape] ? ScreenLayoutModeLandscape : ScreenLayoutModePortrait;
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
     NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
     OAWidgetsPanel *storedPanel = [self.widgetType panel:widgetId
                                                 appMode:appMode

@@ -7168,9 +7168,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 {
     BOOL useSeparateLayouts = [_useSeparateLayouts get:appMode];
     ScreenElementsMode screenElementsMode = useSeparateLayouts ? ScreenElementsModeIndependent : ScreenElementsModeShared;
-    ScreenLayoutMode screenLayoutMode = useSeparateLayouts && [OAUtilities isLandscape]
-        ? ScreenLayoutModeLandscape
-        : ScreenLayoutModePortrait;
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
     return [self transparentWidgets:screenLayoutMode screenElementsMode:screenElementsMode];
 }
 

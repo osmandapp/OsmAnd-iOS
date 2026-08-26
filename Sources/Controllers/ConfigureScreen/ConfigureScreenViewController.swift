@@ -32,7 +32,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private var mapButtonsHelper: OAMapButtonsHelper!
     private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: appMode,
                                                                   layoutMode: screenLayoutMode)
-    private var screenLayoutMode: ScreenLayoutMode = .defaultMode
+    private var screenLayoutMode: ScreenLayoutMode = .portrait
     private var screenElementsMode: ScreenElementsMode = .defaultMode
 
     private var isSharedLandscapeLayout: Bool {
@@ -44,6 +44,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
+        screenLayoutMode = .default(forAppMode: appMode)
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
         updateScreenElementsMode()
     }
@@ -266,7 +267,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         settings.setApplicationModePref(appMode)
         self.appMode = appMode
-        widgetsSettingsHelper.setAppMode(appMode)
+        widgetsSettingsHelper.updateAppMode(appMode)
         updateScreenElementsMode()
         updateUIAnimated(nil)
     }
@@ -342,7 +343,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         guard let mode = ScreenLayoutMode(rawValue: Int32(segmentedControl.selectedSegmentIndex)),
               mode != screenLayoutMode else { return }
         screenLayoutMode = mode
-        widgetsSettingsHelper.setLayoutMode(mode)
+        widgetsSettingsHelper.updateLayoutMode(mode)
         reloadDataWith(animated: true, completion: nil)
     }
 }

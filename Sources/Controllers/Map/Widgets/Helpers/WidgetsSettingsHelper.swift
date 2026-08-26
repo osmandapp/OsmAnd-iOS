@@ -33,11 +33,11 @@ class WidgetsSettingsHelper: NSObject {
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
-    func setAppMode(_ appMode: OAApplicationMode) {
+    func updateAppMode(_ appMode: OAApplicationMode) {
         self.appMode = appMode
     }
 
-    func setLayoutMode(_ layoutMode: ScreenLayoutMode) {
+    func updateLayoutMode(_ layoutMode: ScreenLayoutMode) {
         self.layoutMode = layoutMode
     }
 

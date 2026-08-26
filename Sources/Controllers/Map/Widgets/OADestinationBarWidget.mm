@@ -380,66 +380,41 @@
     CGFloat left = self.frame.origin.x;
     CGFloat top = self.frame.origin.y;
     CGFloat w = self.bounds.size.width;
-    if (!OAUtilities.isLandscape)
+    BOOL isPortrait = !OAUtilities.isLandscape;
+    BOOL isCompactPortrait = isPortrait && _settings.isCompactPanelsLayout;
+    BOOL useMultipleRows = isCompactPortrait
+        ? _destinationCells.count > 1
+        : isPortrait && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad;
+    if (useMultipleRows)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            _singleLineMode = YES;
-            CGFloat h = 50.0;
-            frame = CGRectMake(left, top, w, h);
+        _singleLineMode = NO;
+        CGFloat h = 0.0;
 
-            if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+        if (_destinationCells.count > 0)
+            h = 50.0 + 35.0 * (_destinationCells.count - 1.0);
 
-            for (OADestinationCell *cell in _destinationCells)
-                cell.contentView.hidden = YES;
-        }
-        else
-        {
-            _singleLineMode = NO;
-            CGFloat h = 0.0;
+        if (h < 0.0)
+            h = 0.0;
 
-            if (_destinationCells.count > 0)
-                h = 50.0 + 35.0 * (_destinationCells.count - 1.0);
+        frame = CGRectMake(left, top, w, h);
 
-            if (h < 0.0)
-                h = 0.0;
+        if (_multiCell)
+            _multiCell.contentView.hidden = YES;
 
-            frame = CGRectMake(left, top, w, h);
-
-            if (_multiCell)
-                _multiCell.contentView.hidden = YES;
-
-            for (OADestinationCell *cell in _destinationCells)
-                cell.contentView.hidden = NO;
-        }
+        for (OADestinationCell *cell in _destinationCells)
+            cell.contentView.hidden = NO;
     }
     else
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            _singleLineMode = YES;
-            CGFloat h = 50.0;
-            frame = CGRectMake(left, top, w, h);
+        _singleLineMode = YES;
+        CGFloat h = 50.0;
+        frame = CGRectMake(left, top, w, h);
 
-            if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+        if (_multiCell)
+            _multiCell.contentView.hidden = NO;
 
-            for (OADestinationCell *cell in _destinationCells)
-                cell.contentView.hidden = YES;
-        }
-        else
-        {
-            _singleLineMode = YES;
-            CGFloat h = 50.0;
-            frame = CGRectMake(left, top, w, h);
-
-            if (_multiCell)
-                _multiCell.contentView.hidden = NO;
-
-            for (OADestinationCell *cell in _destinationCells)
-                cell.contentView.hidden = YES;
-        }
+        for (OADestinationCell *cell in _destinationCells)
+            cell.contentView.hidden = YES;
     }
 
     self.frame = frame;
@@ -463,7 +438,7 @@
         {
             CGRect frame = CGRectMake(0.0, 0.0, width, 50.0);
             [_multiCell updateLayout:frame];
-            CGFloat cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
+            CGFloat cornerRadius = [OAUtilities isLandscape] || _settings.isCompactPanelsLayout ? 3 : 0;
             [OAUtilities setMaskTo:_multiCell.contentView byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight radius:cornerRadius];
 
             self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;

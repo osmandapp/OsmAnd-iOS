@@ -431,11 +431,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         [_mapInfoController viewWillTransition:size];
         [self resetToDefaultRulerLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        OAApplicationMode *appMode = [_settings.applicationMode get];
-        if ([_settings.useSeparateLayouts get:appMode])
-            [_mapInfoController recreateControls];
-        else
-            [_mapInfoController updateLayout];
+        [_mapInfoController recreateControls];
         [self updateBottomBarConstraints];
         [self updateControlsLayout:YES];
         [self updateMapRulerData];
@@ -984,8 +980,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
-    BOOL panelsLayoutChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
-        [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]],
+    BOOL panelsLayoutModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
+        [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]]
+    ]]];
+    BOOL screenElementsModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
         _settings.useSeparateLayouts
     ]]];
     
@@ -999,7 +997,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
     BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
-    if (!compassChanged && !colorsChanged && !panelsLayoutChanged && !map3DChanged && !quickActionChanged
+    if (!compassChanged && !colorsChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
         && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
         return;
@@ -1012,7 +1010,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         }
         if (colorsChanged)
             [self updateColors];
-        if (panelsLayoutChanged)
+        if (panelsLayoutModeChanged)
+            [_mapInfoController recreateControls];
+        else if (screenElementsModeChanged)
             [_mapInfoController updateLayout];
         if (map3DChanged || quickActionChanged)
             [self updateDependentButtons];
@@ -1458,9 +1458,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateBottomBarViewBackgroundColor
 {
-    BOOL useClearBackground = [OAUtilities isLandscape]
-        ? _settings.isCompactPanelsLayout
-        : [OAUtilities isIPad];
+    BOOL useClearBackground = _settings.isCompactPanelsLayout
+        || (![OAUtilities isLandscape] && [OAUtilities isIPad]);
     if (useClearBackground)
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else

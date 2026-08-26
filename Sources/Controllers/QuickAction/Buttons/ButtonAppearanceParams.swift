@@ -8,6 +8,9 @@
 
 @objcMembers
 final class ButtonAppearanceParams: NSObject, NSCopying {
+    static let bigSize: Int32 = 48
+    static let smallSize: Int32 = 40
+
     var iconName: String?
     var size: Int32
     var opacity: Double

@@ -430,10 +430,13 @@ final class WidgetPanelAppearanceSettings {
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
+        
         guard color.getRed(&red, green: &green, blue: &blue, alpha: nil) else { return false }
+        
         func linear(_ component: CGFloat) -> CGFloat {
             component <= 0.03928 ? component / 12.92 : pow((component + 0.055) / 1.055, 2.4)
         }
+        
         return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue) > 0.5
     }
 }

@@ -77,31 +77,32 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        guard let button = createRightNavbarButton(nil,
-                                                   iconName: "ic_custom_overflow_menu_stroke",
-                                                   action: #selector(showCopyFrom),
-                                                   menu: createCopyFromMenu()) else {
-            return []
-        }
-        button.tintColor = .iconColorBlack
+        let button = UIBarButtonItem(
+            image: UIImage(resource: .icCustomOverflowMenuStroke),
+            style: .plain,
+            target: self,
+            action: #selector(showCopyFrom)
+        )
+
+        button.tintColor = navbarButtonsTintColor()
         button.accessibilityLabel = localizedString("shared_string_options")
+
         return [button]
     }
 
     override func createSubview() -> UIView? {
-        let icons = Constants.panelIconNames.compactMap { UIImage.templateImageNamed($0) }
+        let icons = zip(Constants.panelIconNames, panels).compactMap { iconName, panel -> UIImage? in
+            guard let image = UIImage(named: iconName) else { return nil }
+            image.accessibilityLabel = panel.title
+            return image
+        }
         let segmentedControl = UISegmentedControl(items: icons)
         segmentedControl.selectedSegmentIndex = panels.firstIndex(of: selectedPanel) ?? 0
-        updatePanelIconColors(segmentedControl)
         segmentedControl.addTarget(self, action: #selector(onPanelChanged(_:)), for: .valueChanged)
         return segmentedControl
     }
 
     override func isNavbarSeparatorVisible() -> Bool {
-        false
-    }
-
-    override func shouldShowSubviewSeparator() -> Bool {
         false
     }
 
@@ -321,24 +322,8 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         controller.delegate = self
         controller.navControllerHistory = navigationController.saveCurrentStateForScrollableHud()
         OARootViewController.instance().mapPanel.showScrollableHudViewController(controller)
-        navigationController.popToViewController(OARootViewController.instance(), animated: false)
-    }
-
-    private func createCopyFromMenu() -> UIMenu {
-        let profileAction = UIAction(title: localizedString("copy_from_other_profile"),
-                                     image: .icCustomCopy) { [weak self] _ in
-            self?.showCopyFromProfile()
-        }
-        let panelActions = panels.filter { $0 != selectedPanel }.map { panel in
-            UIAction(title: panel.title,
-                     image: UIImage.templateImageNamed(panel.iconName)) { [weak self] _ in
-                guard let self else { return }
-                appearanceSettings.copy(from: panel, to: selectedPanel)
-                applyCopiedParameters()
-            }
-        }
-        let panelsMenu = UIMenu(options: .displayInline, children: panelActions)
-        return UIMenu(title: localizedString("copy_from"), children: [profileAction, panelsMenu])
+        // FIXME: 
+      //  navigationController.popToViewController(OARootViewController.instance(), animated: false)
     }
 
     private func applySizeMode(_ mode: WidgetPanelSizeMode) {
@@ -419,35 +404,124 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     @objc private func onPanelChanged(_ segmentedControl: UISegmentedControl) {
         guard panels.indices.contains(segmentedControl.selectedSegmentIndex) else { return }
         selectedPanel = panels[segmentedControl.selectedSegmentIndex]
-        updatePanelIconColors(segmentedControl)
         navigationItem.title = getTitle()
         navigationItem.rightBarButtonItems = getRightNavbarButtons()
         reloadScreenData()
     }
 
-    private func updatePanelIconColors(_ segmentedControl: UISegmentedControl) {
-        for index in panels.indices {
-            guard Constants.panelIconNames.indices.contains(index),
-                  let image = UIImage.templateImageNamed(Constants.panelIconNames[index]) else {
-                continue
-            }
+    @objc private func showCopyFrom() {
+        let controller = WidgetsAppearanceCopyFromBottomSheetViewController(panels: panels,
+                                                                            selectedPanel: selectedPanel)
+        controller.onSelectProfile = { [weak self] in
+            self?.showCopyFromProfile()
+        }
+        controller.onSelectPanel = { [weak self] sourcePanel in
+            guard let self else { return }
+            appearanceSettings.copy(from: sourcePanel, to: selectedPanel)
+            applyCopiedParameters()
+        }
+        showMediumSheetViewController(viewController: controller, isLargeAvailable: false)
+    }
+}
 
-            let color = index == segmentedControl.selectedSegmentIndex
-                ? appMode.getProfileColor()
-                : UIColor.iconColorDefault
+private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNavbarSubviewViewController {
+    private enum RowKey: String {
+        case profile
+        case panel
+    }
 
-            guard let color else {
-                continue
-            }
+    var onSelectProfile: (() -> Void)?
+    var onSelectPanel: ((WidgetsPanel) -> Void)?
 
-            let tintedImage = image.withTintColor(color, renderingMode: .alwaysOriginal)
-            tintedImage.accessibilityLabel = panels[index].title
-            segmentedControl.setImage(tintedImage, forSegmentAt: index)
+    private let panels: [WidgetsPanel]
+    private let selectedPanel: WidgetsPanel
+
+    init(panels: [WidgetsPanel], selectedPanel: WidgetsPanel) {
+        self.panels = panels
+        self.selectedPanel = selectedPanel
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        nil
+    }
+
+    override func getTitle() -> String {
+        localizedString("shared_string_copy_from")
+    }
+
+    override func systemLeftBarButtonItem() -> UIBarButtonItem? {
+        let button = UIBarButtonItem(barButtonSystemItem: .close,
+                                     target: self,
+                                     action: #selector(onClosePressed))
+        button.accessibilityLabel = localizedString("shared_string_close")
+        return button
+    }
+
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+
+    override func generateData() {
+        tableData.clearAllData()
+
+        let profileSection = tableData.createNewSection()
+        let profileRow = profileSection.createNewRow()
+        profileRow.key = RowKey.profile.rawValue
+        profileRow.title = localizedString("copy_from_other_profile")
+        profileRow.icon = .icCustomCopy
+        profileRow.accessibilityLabel = profileRow.title
+
+        let panelsSection = tableData.createNewSection()
+        for panel in panels where panel != selectedPanel {
+            let row = panelsSection.createNewRow()
+            row.key = RowKey.panel.rawValue
+            row.title = panel.title
+            row.iconName = panel.iconName
+            row.setObj(panel, forKey: RowKey.panel.rawValue)
+            row.accessibilityLabel = row.title
         }
     }
 
-    @objc private func showCopyFrom() {
-        showCopyFromProfile()
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier,
+                                                       for: indexPath) as? OASimpleTableViewCell else {
+            return nil
+        }
+        let item = tableData.item(for: indexPath)
+        cell.descriptionVisibility(false)
+        cell.titleLabel.text = item.title
+        cell.leftIconView.image = item.icon ?? UIImage.templateImageNamed(item.iconName)
+        cell.leftIconView.tintColor = .iconColorActive
+        cell.accessibilityLabel = item.accessibilityLabel
+        cell.accessibilityTraits = .button
+        return cell
+    }
+
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        let action: (() -> Void)?
+        if item.key == RowKey.profile.rawValue {
+            action = onSelectProfile
+        } else if let panel = item.obj(forKey: RowKey.panel.rawValue) as? WidgetsPanel,
+                  let onSelectPanel {
+            action = { onSelectPanel(panel) }
+        } else {
+            action = nil
+        }
+        dismiss(animated: true, completion: action)
+    }
+
+    @objc private func onClosePressed() {
+        dismiss(animated: true)
     }
 }
 
@@ -474,7 +548,7 @@ private final class WidgetsAppearancePreviewView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor(red: 92 / 255, green: 195 / 255, blue: 229 / 255, alpha: 1)
+        backgroundColor = .mapStyleWater
         clipsToBounds = true
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -553,7 +627,10 @@ private final class WidgetsAppearancePreviewView: UIView {
             sourceView = controller.currentActiveController?.view ?? controller.pageContainerView
         }
         sourceView.layoutIfNeeded()
-        if !isSidePanel, let widgetsFrame = visibleWidgetsFrame(controller: controller, in: sourceView) {
+        if !isSidePanel {
+            guard let widgetsFrame = visibleWidgetsFrame(controller: controller, in: sourceView) else {
+                return nil
+            }
             contentSize = widgetsFrame.size
             renderOrigin = widgetsFrame.origin
         }
@@ -727,7 +804,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     private func setupViews() {
         backgroundColor = .groupBg
         preservesSuperviewLayoutMargins = false
-        separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
+        separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
 
         previewContainer.translatesAutoresizingMaskIntoConstraints = false
         previewCheckerboardImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -826,14 +903,14 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         case let .text(textColor, backgroundColor):
             configureColorPreview(backgroundColor)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = SeparatorAppearance.color.cgColor
+            previewContainer.layer.borderColor = UIColor.iconColorDefault.cgColor
             previewImageView.isHidden = false
             previewImageView.image = .icCustomTextPreview
             previewImageView.tintColor = textColor
         case let .color(color):
             configureColorPreview(color)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = SeparatorAppearance.color.cgColor
+            previewContainer.layer.borderColor = UIColor.iconColorDefault.cgColor
         }
     }
 

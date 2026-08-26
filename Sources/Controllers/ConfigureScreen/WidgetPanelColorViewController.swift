@@ -42,14 +42,16 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private let navigationTitleLabel = UILabel()
     private let titleLabel = UILabel()
     private let applyButton = UIButton(type: .system)
-
-    private var sortedColorItems: [PaletteItemSolid] = []
-    private var currentDayColorItem: PaletteItemSolid?
-    private var currentNightColorItem: PaletteItemSolid?
+    
     private let initialDayColor: UIColor
     private let initialNightColor: UIColor
     private let initialTextMode: WidgetPanelTextColorMode?
     private let initialBackgroundMode: WidgetPanelBackgroundMode?
+
+    private var sortedColorItems: [PaletteItemSolid] = []
+    private var currentDayColorItem: PaletteItemSolid?
+    private var currentNightColorItem: PaletteItemSolid?
+
     private var isNightColorMode: Bool
     private var isApplied = false
     private var didRestoreNavigation = false

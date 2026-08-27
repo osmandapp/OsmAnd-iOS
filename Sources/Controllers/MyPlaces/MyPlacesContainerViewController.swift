@@ -130,9 +130,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewSafeAreaInsetsDidChange()
         guard !isSearchBarAnimating, searchController?.isActive != true else { return }
         segmentContainerTopConstraint.constant = view.safeAreaInsets.top
-        UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
-            self.view.layoutIfNeeded()
-        }
+        view.layoutIfNeeded()
     }
     
     func switchToWithSegmentControl(tab: Tab) {

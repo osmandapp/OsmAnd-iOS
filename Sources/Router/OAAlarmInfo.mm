@@ -9,6 +9,7 @@
 #import "OAAlarmInfo.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
+#import "OASharedRouteDetailsProvider.h"
 
 #include <routeTypeRule.h>
 
@@ -37,71 +38,21 @@
 
 + (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond
 {
-    OAAlarmInfo *info = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_LIMIT locationIndex:0];
-    info.coordinate = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude);
-    info.intValue = speed;
-    info.floatValue = speedMetersPerSecond;
-    return info;
+    return [OASharedRouteDetailsProvider createSpeedLimit:speed
+                                                 latitude:coordinate.latitude
+                                                longitude:coordinate.longitude
+                                     speedMetersPerSecond:speedMetersPerSecond];
 }
 
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate
 {
-    OAAlarmInfo *alarmInfo = nil;
-    if ("highway" == ruleType.getTag())
-    {
-        if ("speed_camera" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_CAMERA locationIndex:locInd];
-        }
-        else if ("stop" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_STOP locationIndex:locInd];
-        }
-    }
-    else if ("enforcement" == ruleType.getTag())
-    {
-        if ("traffic_signals" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RED_LIGHT_CAMERA locationIndex:locInd];
-        }
-    }
-    else if ("barrier" == ruleType.getTag())
-    {
-        if ("toll_booth" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TOLL_BOOTH locationIndex:locInd];
-        }
-        else if ("border_control" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_BORDER_CONTROL locationIndex:locInd];
-        }
-    }
-    else if ("traffic_calming" == ruleType.getTag())
-    {
-        const auto& v = ruleType.getValue();
-        bool isIslandType = (v == "island") || (v == "choked_island") || (v == "painted_island");
-        if (!isIslandType)
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAFFIC_CALMING locationIndex:locInd];
-        }
-    }
-    else if ("hazard" == (ruleType.getTag()))
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_HAZARD locationIndex:locInd];
-    }
-    else if ("railway" == (ruleType.getTag()) && "level_crossing" == ruleType.getValue())
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RAILWAY locationIndex:locInd];
-    }
-    else if ("crossing" == (ruleType.getTag()) && "uncontrolled" == ruleType.getValue())
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_PEDESTRIAN locationIndex:locInd];
-    }
-    if (alarmInfo)
-    {
-        alarmInfo.coordinate = coordinate;
-    }
-    return alarmInfo;
+    NSString *tag = [NSString stringWithUTF8String:ruleType.getTag().c_str()];
+    NSString *value = [NSString stringWithUTF8String:ruleType.getValue().c_str()];
+    return [OASharedRouteDetailsProvider createAlarmInfoWithTag:tag
+                                                         value:value
+                                                 locationIndex:locInd
+                                                      latitude:coordinate.latitude
+                                                     longitude:coordinate.longitude];
 }
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance

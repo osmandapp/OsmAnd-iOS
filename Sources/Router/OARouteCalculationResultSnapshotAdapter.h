@@ -14,6 +14,7 @@ struct RouteSegmentResult;
 @class OAAlarmInfo;
 @class OARouteDirectionInfo;
 @class OASRouteDetailsSnapshot;
+@class OASRouteEvent;
 @class OASRouteManeuver;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Copies one legacy iOS direction into the shared Android-compatible maneuver contract. */
 + (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction;
+
+/** Copies one legacy iOS alarm into the shared Android-compatible route-event contract. */
++ (nullable OASRouteEvent *)copyEvent:(OAAlarmInfo *)alarm;
+
+/** Copies one shared route event back to the existing iOS alarm model. */
++ (nullable OAAlarmInfo *)copyAlarmInfo:(OASRouteEvent *)event;
 
 + (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
                                       directions:(NSArray<OARouteDirectionInfo *> *)directions

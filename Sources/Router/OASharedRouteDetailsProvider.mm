@@ -7,6 +7,8 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+#import "OAAlarmInfo.h"
+#import "OALocationPointWrapper.h"
 #import "OARouteCalculationResult.h"
 #import "OARouteCalculationResultSnapshotAdapter.h"
 #import "OARouteDirectionInfo.h"
@@ -100,6 +102,87 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
 
     NSUInteger index = [sharedLocations indexOfObjectIdenticalTo:location];
     return index == NSNotFound ? nil : locations[index];
+}
+
++ (OAAlarmInfo *)createSpeedLimit:(int)speed
+                         latitude:(double)latitude
+                        longitude:(double)longitude
+             speedMetersPerSecond:(float)speedMetersPerSecond
+{
+    OASKLatLon *location = [[OASKLatLon alloc] initWithLatitude:latitude longitude:longitude];
+    OASRouteEvent *event = [OASRouteEventBackend.shared createSpeedLimitSpeed:speed
+                                                                     location:location
+                                                  speedMetersPerSecond:speedMetersPerSecond];
+    return [OARouteCalculationResultSnapshotAdapter copyAlarmInfo:event];
+}
+
++ (OAAlarmInfo *)createAlarmInfoWithTag:(NSString * _Nullable)tag
+                                   value:(NSString * _Nullable)value
+                           locationIndex:(int)locationIndex
+                                latitude:(double)latitude
+                               longitude:(double)longitude
+{
+    OASKLatLon *location = [[OASKLatLon alloc] initWithLatitude:latitude longitude:longitude];
+    OASRouteEvent *event = [OASRouteEventBackend.shared createFromRouteTagTag:tag
+                                                                        value:value
+                                                                locationIndex:locationIndex
+                                                                     location:location];
+    return event ? [OARouteCalculationResultSnapshotAdapter copyAlarmInfo:event] : nil;
+}
+
++ (NSArray<OALocationPointWrapper *> *)selectAlarmWrappersForRoute:(OARouteCalculationResult *)route
+                                             routingAlarmsEnabled:(BOOL)routingAlarmsEnabled
+                                                       showCameras:(BOOL)showCameras
+                                                speakSpeedCameras:(BOOL)speakSpeedCameras
+                                                       showTunnels:(BOOL)showTunnels
+                                                      speakTunnels:(BOOL)speakTunnels
+                                                    showPedestrian:(BOOL)showPedestrian
+                                                   speakPedestrian:(BOOL)speakPedestrian
+                                              showTrafficWarnings:(BOOL)showTrafficWarnings
+                                             speakTrafficWarnings:(BOOL)speakTrafficWarnings
+{
+    NSMutableArray<OASRouteEvent *> *events = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
+    NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
+    for (OAAlarmInfo *alarm in route.alarmInfo)
+    {
+        OASRouteEvent *event = [OARouteCalculationResultSnapshotAdapter copyEvent:alarm];
+        if (event)
+        {
+            [events addObject:event];
+            [alarms addObject:alarm];
+        }
+    }
+
+    OASRouteEventSelectionOptions *options = [[OASRouteEventSelectionOptions alloc]
+        initWithRoutingAlarmsEnabled:routingAlarmsEnabled
+                         showCameras:showCameras
+                   speakSpeedCameras:speakSpeedCameras
+                         showTunnels:showTunnels
+                        speakTunnels:speakTunnels
+                      showPedestrian:showPedestrian
+                     speakPedestrian:speakPedestrian
+                showTrafficWarnings:showTrafficWarnings
+               speakTrafficWarnings:speakTrafficWarnings];
+    NSArray<OASRouteEventSelection *> *selections = [OASRouteEventBackend.shared
+        selectEvents:events
+        options:options];
+    NSMutableArray<OALocationPointWrapper *> *result = [NSMutableArray arrayWithCapacity:selections.count];
+    for (OASRouteEventSelection *selection in selections)
+    {
+        NSUInteger index = [events indexOfObjectIdenticalTo:selection.event];
+        if (index == NSNotFound)
+            continue;
+        OAAlarmInfo *alarm = alarms[index];
+        OALocationPointWrapper *wrapper = [[OALocationPointWrapper alloc]
+            initWithRouteCalculationResult:route
+            type:LPW_ALARMS
+            point:alarm
+            deviationDistance:0
+            routeIndex:alarm.locationIndex];
+        wrapper.announce = selection.announce;
+        [result addObject:wrapper];
+    }
+    return [result copy];
 }
 
 @end

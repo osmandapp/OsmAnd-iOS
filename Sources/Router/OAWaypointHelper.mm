@@ -28,6 +28,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARouteDirectionInfo.h"
+#import "OASharedRouteDetailsProvider.h"
 
 #include <binaryRead.h>
 
@@ -89,11 +90,6 @@
     return _array;
 }
 
-+ (double) DISTANCE_IGNORE_DOUBLE_SPEEDCAMS
-{
-    return 150.0;
-}
-   
 - (instancetype) init
 {
     self = [super init];
@@ -674,36 +670,17 @@
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (![settings.showScreenAlerts get:mode])
-        return;
-
-    OAAlarmInfo *prevSpeedCam = nil;
-    for (OAAlarmInfo *i in route.alarmInfo)
-    {
-        if (i.type == AIT_SPEED_CAMERA || i.type == AIT_RED_LIGHT_CAMERA)
-        {
-            if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
-            {
-                OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                // ignore double speed cams
-                if (!prevSpeedCam || [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] >= [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
-                {
-                    [lw setAnnounce:[settings.speakCameras get:mode]];
-                    [array addObject:lw];
-                    prevSpeedCam = i;
-                }
-            }
-        }
-        else
-        {
-            if ([settings.showTrafficWarnings get:mode] || [settings.speakTrafficWarnings get:mode])
-            {
-                OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                [lw setAnnounce:[settings.speakTrafficWarnings get:mode]];
-                [array addObject:lw];
-            }
-        }
-    }
+    [array addObjectsFromArray:[OASharedRouteDetailsProvider
+        selectAlarmWrappersForRoute:route
+        routingAlarmsEnabled:[settings.showScreenAlerts get:mode]
+        showCameras:[settings.showCameras get:mode]
+        speakSpeedCameras:[settings.speakCameras get:mode]
+        showTunnels:[settings.showTunnels get:mode]
+        speakTunnels:[settings.speakTunnels get:mode]
+        showPedestrian:[settings.showPedestrian get:mode]
+        speakPedestrian:[settings.speakPedestrian get:mode]
+        showTrafficWarnings:[settings.showTrafficWarnings get:mode]
+        speakTrafficWarnings:[settings.speakTrafficWarnings get:mode]]];
 }
 
 - (void) calculatePoi:(OARouteCalculationResult *)route locationPoints:(NSMutableArray<OALocationPointWrapper *> *)locationPoints announcePOI:(BOOL)announcePOI
@@ -772,7 +749,6 @@
             if (route.appMode)
             {
                 [self calculateAlarms:route array:array mode:_appMode];
-                [self sortList:array];
             }
         }
         if (type == LPW_WAYPOINTS || all)

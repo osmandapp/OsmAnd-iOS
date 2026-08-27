@@ -35,7 +35,6 @@ final class AstroVisibilityCardController {
     private var graphObserverLon = Double.nan
     private var graphObserverHeight = Double.nan
     private var computeWorkItem: DispatchWorkItem?
-    private var locationWorkItem: DispatchWorkItem?
     private lazy var titleDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("EEEEMMMMd")
@@ -65,6 +64,7 @@ final class AstroVisibilityCardController {
             culminationTime = nil
             setTime = nil
             locationText = ""
+            lastLocationKey = nil
             culminationColor = .clear
             graphSnapshot = nil
             graphObjectId = nil
@@ -100,8 +100,6 @@ final class AstroVisibilityCardController {
             locationText = formatCoordinates(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             onDataChanged?()
             requestLocationText(location: location, key: locationKey)
-        } else if locationText.isEmpty, locationWorkItem == nil {
-            requestLocationText(location: location, key: locationKey)
         }
     }
 
@@ -123,8 +121,6 @@ final class AstroVisibilityCardController {
     func cancelPendingWork() {
         computeWorkItem?.cancel()
         computeWorkItem = nil
-        locationWorkItem?.cancel()
-        locationWorkItem = nil
     }
 
     private func maybeRecomputeGraph(skyObject: SkyObject,
@@ -226,47 +222,49 @@ final class AstroVisibilityCardController {
     }
 
     private func requestLocationText(location: CLLocation, key: String) {
-        locationWorkItem?.cancel()
-        let mapPanel = OARootViewController.instance()?.mapPanel
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self else {
+        let coordinate = location.coordinate
+        let formattedCoordinate = formatCoordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        OAReverseGeocoder.instance().lookupAddress(
+            atLat: coordinate.latitude,
+            lon: coordinate.longitude,
+            objectId: 0
+        ) { [weak self] address in
+            guard let self, self.lastLocationKey == key else {
                 return
             }
-            let resolved = self.resolveLocationText(for: location, mapPanel: mapPanel)
-            DispatchQueue.main.async { [weak self] in
-                guard let self,
-                      !(self.locationWorkItem?.isCancelled ?? true),
-                      self.lastLocationKey == key else {
+            
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self else {
                     return
                 }
-                let changed = self.locationText != resolved
-                self.locationText = resolved
-                self.locationWorkItem = nil
-                if changed {
-                    self.onDataChanged?()
+                
+                let resolved: String
+                
+                if let city = self.extractCity(address) {
+                    resolved = city
+                } else if let city = OAGPXUIHelper.searchNearestCity(coordinate),
+                          let name = city.name?.trimmingCharacters(in: .whitespacesAndNewlines),
+                          !name.isEmpty {
+                    resolved = self.formatNearbyCity(city, from: location)
+                } else {
+                    resolved = formattedCoordinate
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self, self.lastLocationKey == key else {
+                        return
+                    }
+                    
+                    let changed = self.locationText != resolved
+                    self.locationText = resolved
+                    
+                    if changed {
+                        self.onDataChanged?()
+                    }
                 }
             }
         }
-        locationWorkItem = workItem
-        DispatchQueue.global(qos: .userInitiated).async(execute: workItem)
-    }
-    
-    private func resolveLocationText(for location: CLLocation, mapPanel: OAMapPanelViewController?) -> String {
-        let coordinate = location.coordinate
-        let coords = formatCoordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
-
-        let address = mapPanel?.findRoadName(byLat: coordinate.latitude, lon: coordinate.longitude)
-        if let city = extractCity(address) {
-            return city
-        }
-        
-        if let city = OAGPXUIHelper.searchNearestCity(coordinate),
-           let name = city.name?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !name.isEmpty {
-            return formatNearbyCity(city, from: location)
-        }
-
-        return coords
     }
     
     private func formatNearbyCity(_ city: OAPOI, from location: CLLocation) -> String {

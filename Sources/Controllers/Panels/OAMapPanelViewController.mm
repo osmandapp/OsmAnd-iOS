@@ -1822,11 +1822,6 @@ typedef enum
     _targetZoom = 0.0;
 }
 
-- (NSString *) findRoadNameByLat:(double)lat lon:(double)lon
-{
-    return [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
-}
-
 - (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
 {
     UIViewController *top = self.rootViewController.navigationController.topViewController;

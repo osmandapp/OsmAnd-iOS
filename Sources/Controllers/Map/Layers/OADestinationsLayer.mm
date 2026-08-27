@@ -738,8 +738,9 @@
         if (!strongSelf || address.length == 0)
             return;
 
-        if (![strongSelf.app.data.destinations containsObject:destCopy])
+        if ([strongSelf.app.data.destinations indexOfObjectIdenticalTo:destCopy] == NSNotFound)
             return;
+        
         if (![OAUtilities doublesEqualUpToDigits:5 source:destCopy.latitude destination:position.latitude] ||
             ![OAUtilities doublesEqualUpToDigits:5 source:destCopy.longitude destination:position.longitude])
             return;

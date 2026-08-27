@@ -138,7 +138,7 @@ final class RouteChartSynchronizer: NSObject {
             visibleProgressRange = visibleRange
             targetCharts.forEach { applyNormalizedVisibleRange(visibleRange, to: $0) }
         }
-        applySelectionToPrimaryChart(callDelegate: false)
+        applySelectionToPrimaryChart(callDelegate: true)
         applySelectionToBarCharts()
     }
 

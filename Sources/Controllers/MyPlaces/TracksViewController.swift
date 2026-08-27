@@ -750,33 +750,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 menuActions.append(contentsOf: [addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
             }
         } else {
-            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
-                self?.onNavbarShowOnMapButtonClicked()
-            }
-            let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined) { [weak self] _ in
-                self?.onNavbarExportButtonClicked()
-            }
-            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
-                self?.onNavbarUploadToOsmButtonClicked()
-            }
-            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
-                self?.onNavbarMoveButtonClicked()
-            }
-            let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
-                self?.onNavbarChangeAppearanceButtonClicked()
-            }
-            let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined) { [weak self] _ in
-                self?.onNavbarChangeActivityButtonClicked()
-            }
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-                self?.onNavbarDeleteButtonClicked()
-            }
-            
-            let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, exportAction, uploadToOsmAction])
-            let moveItemsActions = UIMenu(title: "", options: .displayInline, children: [moveAction])
-            let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction, changeActivityAction])
-            let deleteItemsActions = UIMenu(title: "", options: .displayInline, children: [deleteAction])
-            menuActions.append(contentsOf: [mapTrackOptionsActions, moveItemsActions, changeAppearanceItemsActions, deleteItemsActions])
+            return
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
@@ -954,9 +928,71 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func configureToolbar() {
+        if tableView.isEditing {
+            configureSelectionNavigationButton()
+            configureSelectionToolbar()
+            return
+        }
+
         let title = localizedString(isSearchActive ? "shared_string_select" : (areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all"))
         let action = isSearchActive ? #selector(onSelectToolbarButtonClicked) : #selector(onSelectDeselectAllButtonClicked)
         configureToolbar(withTitle: title, action: action)
+    }
+
+    private func shouldHideSearchToolbar() -> Bool {
+        !tableView.isEditing && (!isSearchActive || (baseFiltersResult?.count ?? 0) == 0)
+    }
+
+    private func updateSearchToolbarVisibility() {
+        guard !isEditFilterActive else { return }
+        configureToolbar()
+        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
+    }
+
+    private func configureSelectionNavigationButton() {
+        let title = localizedString(areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
+        let selectAllButton = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(onSelectDeselectAllButtonClicked))
+        selectAllButton.accessibilityLabel = title
+        navigationController?.navigationBar.topItem?.rightBarButtonItems = [selectAllButton]
+        navigationItem.rightBarButtonItems = [selectAllButton]
+    }
+
+    private func configureSelectionToolbar() {
+        let isSelected = hasSelectedItems()
+        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let exportButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(onNavbarExportButtonClicked))
+        let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(onNavbarMoveButtonClicked))
+        let actionsButton = UIBarButtonItem(image: .icCustomOverflowMenuStroke, menu: makeSelectionToolbarMenu())
+        let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(onNavbarDeleteButtonClicked))
+        deleteButton.tintColor = .iconColorDisruptive
+        let items = [exportButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
+        items.forEach { $0.isEnabled = isSelected }
+        if isRootFolder {
+            myPlacesDelegate?.updateToolbar(with: items)
+        } else {
+            toolbarItems = items
+        }
+    }
+
+    private func makeSelectionToolbarMenu() -> UIMenu {
+        let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
+            self?.onNavbarShowOnMapButtonClicked()
+        }
+        let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
+            self?.onNavbarUploadToOsmButtonClicked()
+        }
+        let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
+            self?.onNavbarChangeAppearanceButtonClicked()
+        }
+        let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined) { [weak self] _ in
+            self?.onNavbarChangeActivityButtonClicked()
+        }
+
+        let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [uploadToOsmAction, showOnMapAction])
+        let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeActivityAction, changeAppearanceAction])
+        return UIMenu(title: "", children: [changeAppearanceItemsActions, mapTrackOptionsActions])
     }
     
     private func configureToolbarForeSmartFolders() {
@@ -967,8 +1003,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func configureToolbar(withTitle title: String, action: Selector) {
         let selectDeselectButton = UIBarButtonItem(title: title, style: .plain, target: self, action: action)
-        let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.iconColorActive]
-        selectDeselectButton.setTitleTextAttributes(attributes, for: .normal)
         let items = [selectDeselectButton]
         if !isRootFolder {
             toolbarItems = items
@@ -1370,7 +1404,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let totalTracksToDelete = selectedTracks.count + tracksInSelectedFolders
             let tracksMessagePart = String(format: localizedString("folder_tracks_count"), totalTracksToDelete)
             let message = localizedString("delete_tracks_bottom_sheet_description_regular_part") + tracksMessagePart + "?"
-            let alert = UIAlertController(title: localizedString("delete_tracks_bottom_sheet_title"), message: message, preferredStyle: .actionSheet)
+            let alert = UIAlertController(title: localizedString("delete_tracks_bottom_sheet_title"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
                 guard let self else { return }
                 for folderName in self.selectedFolders {
@@ -1390,9 +1424,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 onNavbarCancelButtonClicked()
             })
             alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-            let popPresenter = alert.popoverPresentationController
-            popPresenter?.barButtonItem = navigationItem.rightBarButtonItem
-            popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
             present(alert, animated: true)
         }
     }
@@ -2709,6 +2740,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 self.generateData()
                 self.tableView.reloadData()
                 self.updateFilterButton()
+                self.updateSearchToolbarVisibility()
             }
         }
     }
@@ -2740,8 +2772,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if !isFiltersInitialized && (searchController.searchBar.searchTextField.text?.isEmpty ?? true) {
                 isSearchActive = true
                 isNameFiltered = false
-                navigationController?.setToolbarHidden(false, animated: true)
-                configureToolbar()
                 baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
                 baseFilters?.addFiltersChangedListener(self)
                 TracksSearchFilter.setRootFolder(rootFolder)
@@ -2765,6 +2795,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if !isSelectionModeInSearch || !tableView.isEditing {
             updateData()
         }
+        updateSearchToolbarVisibility()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

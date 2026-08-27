@@ -57,12 +57,14 @@ extension FavoriteListViewController {
             if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
-            cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
+            var content = favoriteContentConfiguration(for: favorite)
+            content.primaryTextLayoutGuideHandler = { [weak cell] layoutGuide in
+                cell?.setPrimaryTextLayoutGuide(layoutGuide)
+            }
+            cell.contentConfiguration = content
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
             updateVisibleSelectionState(at: indexPath)
-            cell.setNeedsLayout()
-            cell.layoutIfNeeded()
         }
     }
 

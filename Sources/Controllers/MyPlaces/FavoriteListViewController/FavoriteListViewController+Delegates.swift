@@ -113,6 +113,10 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
 
     func searchResults(for searchController: UISearchController) {
         guard !isCancellingSearch else { return }
+        if lastAppliedSearchState == nil, isSearchActive, !searchController.isActive {
+            return
+        }
+
         let searchState = (isActive: searchController.isActive, text: searchController.searchBar.searchTextField.text ?? "")
         if let lastAppliedSearchState, lastAppliedSearchState.isActive == searchState.isActive, lastAppliedSearchState.text == searchState.text {
             return
@@ -146,6 +150,7 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         configureToolbar()
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
+        lastAppliedSearchState = (isActive: false, text: searchBar.searchTextField.text ?? "")
         isCancellingSearch = false
     }
 

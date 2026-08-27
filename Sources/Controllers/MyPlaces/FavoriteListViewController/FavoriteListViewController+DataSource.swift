@@ -369,7 +369,7 @@ extension FavoriteListViewController {
 
     private func patchItems(in snapshot: inout Snapshot, with newSnapshot: Snapshot) {
         let sections = newSnapshot.sectionIdentifiers.filter { snapshot.sectionIdentifiers.contains($0) && !$0.isFolder }
-        if isSearchResultsMode {
+        if isSearchResultsMode || isCancellingSearch {
             let currentItems = sections.flatMap { snapshot.itemIdentifiers(inSection: $0) }
             if !currentItems.isEmpty {
                 snapshot.deleteItems(currentItems)

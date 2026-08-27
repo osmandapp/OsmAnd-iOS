@@ -144,7 +144,10 @@ NSArray<OASRouteSegment *> *OACopySegments(
                 routePointCount:routePointCount
                 routePointStartIndexOut:&routePointStartIndex
                 routePointEndIndexOut:&routePointEndIndex];
-            [result addObject:OACopySegment(segment, routePointStartIndex, routePointEndIndex)];
+            [result addObject:[OARouteCalculationResultSnapshotAdapter
+                copySegment:segment
+                routePointStartIndex:routePointStartIndex
+                routePointEndIndex:routePointEndIndex]];
         }
         runStart = runEnd;
     }
@@ -351,6 +354,13 @@ NSArray<OASInt *> *OACopyIntermediateRoutePointOffsets(
 } // namespace
 
 @implementation OARouteCalculationResultSnapshotAdapter
+
++ (OASRouteSegment *)copySegment:(const std::shared_ptr<RouteSegmentResult> &)segment
+            routePointStartIndex:(int)routePointStartIndex
+              routePointEndIndex:(int)routePointEndIndex
+{
+    return OACopySegment(segment, routePointStartIndex, routePointEndIndex);
+}
 
 + (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction
 {

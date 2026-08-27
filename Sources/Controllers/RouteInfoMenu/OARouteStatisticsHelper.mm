@@ -18,11 +18,15 @@
 #import "OAApplicationMode.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
+#import "OARouteCalculationResultSnapshotAdapter.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
+
+#include <cstdint>
 
 
 #define H_STEP 5.0
@@ -38,6 +42,56 @@
 
 static NSArray<NSNumber *> *_boundariesArray;
 static NSArray<NSString *> *_boundariesClass;
+
+static OARouteSegmentAttribute *OACopyRouteStatisticElement(OASRouteStatisticElement *element)
+{
+    OARouteSegmentAttribute *attribute = [[OARouteSegmentAttribute alloc]
+        initWithPropertyName:element.propertyName
+        color:element.color
+        slopeIndex:-1
+        boundariesClass:@[]];
+    attribute.userPropertyName = element.userPropertyName;
+    [attribute incrementDistanceBy:element.distanceMeters];
+    return attribute;
+}
+
+static NSArray<OARouteSegmentAttribute *> *OACopyRouteStatisticElements(
+    NSArray<OASRouteStatisticElement *> *elements)
+{
+    NSMutableArray<OARouteSegmentAttribute *> *result = [NSMutableArray arrayWithCapacity:elements.count];
+    for (OASRouteStatisticElement *element in elements)
+        [result addObject:OACopyRouteStatisticElement(element)];
+    return [result copy];
+}
+
+static NSArray<OARouteStatistics *> *OACopyRouteStatistics(NSArray<OASRouteStatistic *> *statistics)
+{
+    NSMutableArray<OARouteStatistics *> *result = [NSMutableArray arrayWithCapacity:statistics.count];
+    for (OASRouteStatistic *statistic in statistics)
+    {
+        NSArray<OARouteSegmentAttribute *> *elements = OACopyRouteStatisticElements(statistic.elements);
+        MutableOrderedDictionary<NSString *, OARouteSegmentAttribute *> *partition =
+            [[MutableOrderedDictionary alloc] init];
+        for (OASRouteStatisticElement *element in statistic.partition)
+        {
+            OARouteSegmentAttribute *attribute = OACopyRouteStatisticElement(element);
+            [partition setObject:attribute forKey:attribute.getUserPropertyName];
+        }
+        [result addObject:[[OARouteStatistics alloc]
+            initWithName:statistic.name
+            elements:elements
+            partition:partition
+            totalDistance:statistic.totalDistanceMeters]];
+    }
+    return [result copy];
+}
+
+static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *> * _Nullable attributes)
+{
+    NSString *name = attributes.allKeys.firstObject;
+    NSNumber *color = name ? attributes[name] : nil;
+    return name == nil || ([name isEqualToString:kUndefinedAttr] && color.unsignedIntValue == UINT32_MAX);
+}
 
 @implementation OARouteSegmentWithIncline
 
@@ -115,22 +169,31 @@ static NSArray<NSString *> *_boundariesClass;
 
 + (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames
 {
-    NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
-    
     const auto& defaultPresentationEnv = OsmAndApp.instance.defaultRenderer;
-    
-    // "steepnessColor", "surfaceColor", "roadClassColor", "smoothnessColor"
-    // steepness=-19_-16
-    NSMutableArray<OARouteStatistics *> *result = [NSMutableArray new];
-    for(NSString *attributeName in attributeNames)
+    OARouteStatisticsComputer *statisticsComputer =
+        [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:defaultPresentationEnv];
+    return [self calculateRouteStatistic:route
+                          attributeNames:attributeNames
+                      statisticsComputer:statisticsComputer];
+}
+
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
+                                            attributeNames:(NSArray<NSString *> *)attributeNames
+                                        statisticsComputer:(OARouteStatisticsComputer *)statisticsComputer
+{
+    NSMutableArray<OASRouteSegment *> *sharedRoute = [NSMutableArray arrayWithCapacity:route.size()];
+    for (size_t index = 0; index < route.size(); index++)
     {
-        OARouteStatisticsComputer *statisticsComputer =
-                [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:defaultPresentationEnv];
-        OARouteStatistics *routeStatistics = [statisticsComputer computeStatistic:routeSegmentWithInclines attribute:attributeName];
-        if (routeStatistics.partition.count != 0 && (routeStatistics.partition.count != 1 || !routeStatistics.partition[kUndefinedAttr]))
-            [result addObject:routeStatistics];
+        [sharedRoute addObject:[OARouteCalculationResultSnapshotAdapter
+            copySegment:route[index]
+            routePointStartIndex:(int) index
+            routePointEndIndex:(int) index]];
     }
-    return result;
+    NSArray<OASRouteStatistic *> *statistics = [OASRouteStatisticsCalculator.shared
+        calculateRoute:[sharedRoute copy]
+        attributeNames:attributeNames
+        classifier:(id<OASRouteAttributeClassifier>) statisticsComputer];
+    return OACopyRouteStatistics(statistics);
 }
 
 + (NSArray<OARouteSegmentWithIncline *> *) calculateInclineRouteSegments:(vector<SHARED_PTR<RouteSegmentResult> >) route
@@ -317,10 +380,16 @@ static NSArray<NSString *> *_boundariesClass;
 
 @end
 
+@interface OARouteStatisticsComputer () <OASRouteAttributeClassifier>
+
+@end
+
 @implementation OARouteStatisticsComputer
 {
     OAMapViewController *_mapViewController;
     std::shared_ptr<OsmAnd::MapPresentationEnvironment> _defaultPresentationEnvironment;
+    OARouteStatisticsRenderingLookup _currentRendererLookup;
+    OARouteStatisticsRenderingLookup _defaultRendererLookup;
 }
 
 - (instancetype)initWithPresentationEnvironment:(std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultPresentationEnv
@@ -331,6 +400,55 @@ static NSArray<NSString *> *_boundariesClass;
         _defaultPresentationEnvironment = defaultPresentationEnv;
     }
     return self;
+}
+
+- (instancetype)initWithCurrentRendererLookup:(OARouteStatisticsRenderingLookup)currentRendererLookup
+                        defaultRendererLookup:(OARouteStatisticsRenderingLookup)defaultRendererLookup
+{
+    self = [super init];
+    if (self)
+    {
+        _currentRendererLookup = [currentRendererLookup copy];
+        _defaultRendererLookup = [defaultRendererLookup copy];
+    }
+    return self;
+}
+
+- (OASRouteAttributeClassification * _Nullable)classifyRequest:(OASRouteAttributeClassificationRequest *)request
+{
+    NSMutableDictionary<NSString *, NSString *> *settings = [NSMutableDictionary new];
+    if (request.mainTag && request.mainValue)
+    {
+        settings[@"tag"] = request.mainTag;
+        settings[@"value"] = request.mainValue;
+    }
+    settings[@"additional"] = request.additional;
+
+    NSDictionary<NSString *, NSNumber *> *renderingAttributes = _currentRendererLookup
+        ? _currentRendererLookup(request.attributeName, settings)
+        : [_mapViewController getRoadRenderingAttributes:request.attributeName additionalSettings:settings];
+    if (OAIsUndefinedRenderingAttribute(renderingAttributes))
+    {
+        if (_defaultRendererLookup)
+        {
+            renderingAttributes = _defaultRendererLookup(request.attributeName, settings);
+        }
+        else if (_defaultPresentationEnvironment)
+        {
+            const auto &defaultAttribute = _defaultPresentationEnvironment->getRoadRenderingAttributes(
+                QString::fromNSString(request.attributeName),
+                [OANativeUtilities dictionaryToQHash:settings]);
+            uint32_t color = defaultAttribute.second == 0 ? UINT32_MAX : defaultAttribute.second;
+            renderingAttributes = @{defaultAttribute.first.toNSString() : @(color)};
+        }
+    }
+    if (OAIsUndefinedRenderingAttribute(renderingAttributes))
+        return nil;
+
+    NSString *name = renderingAttributes.allKeys.firstObject;
+    return [[OASRouteAttributeClassification alloc]
+        initWithPropertyName:name
+        color:(int32_t) renderingAttributes[name].intValue];
 }
 
 - (OARouteStatistics *) computeStatistic:(NSArray<OARouteSegmentWithIncline *> *) route attribute:(NSString *) attribute

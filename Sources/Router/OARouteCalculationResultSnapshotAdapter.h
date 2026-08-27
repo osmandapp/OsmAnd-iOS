@@ -16,6 +16,7 @@ struct RouteSegmentResult;
 @class OASRouteDetailsSnapshot;
 @class OASRouteEvent;
 @class OASRouteManeuver;
+@class OASRouteSegment;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Copies one shared route event back to the existing iOS alarm model. */
 + (nullable OAAlarmInfo *)copyAlarmInfo:(OASRouteEvent *)event;
+
+/** Copies one native route segment into the shared route-details contract. */
++ (OASRouteSegment *)copySegment:(const std::shared_ptr<RouteSegmentResult> &)segment
+            routePointStartIndex:(int)routePointStartIndex
+              routePointEndIndex:(int)routePointEndIndex;
 
 + (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
                                       directions:(NSArray<OARouteDirectionInfo *> *)directions

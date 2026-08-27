@@ -21,12 +21,19 @@
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
 #import "CLLocation+Extension.h"
+#import "OARouteCalculationResultSnapshotAdapter.h"
 
 #include <routeSegmentResult.h>
 
 #define distanceClosestToIntermediate 3000.0
 #define distanceThresholdToIntermediate 25
 #define distanceThresholdToIntroduceFirstAndLastPoints 15
+
+@interface OARouteCalculationResult ()
+
+- (void)cacheRouteDetailsSnapshotWithRouteProvider:(nullable NSNumber *)routeProvider;
+
+@end
 
 @implementation OANextDirectionInfo
 
@@ -88,6 +95,7 @@
         _directions = [NSMutableArray array];
         _alarmInfo = [NSMutableArray array];
         _initialCalculation = NO;
+        [self cacheRouteDetailsSnapshotWithRouteProvider:nil];
     }
     return self;
 }
@@ -1629,6 +1637,7 @@
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
         
         _initialCalculation = params.initialCalculation;
+        [self cacheRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
     }
     return self;
 }
@@ -1670,8 +1679,27 @@
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
         
         _initialCalculation = initialCalculation;
+        [self cacheRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
     }
     return self;
+}
+
+- (void)cacheRouteDetailsSnapshotWithRouteProvider:(NSNumber * _Nullable)routeProvider
+{
+    _routeDetailsSnapshot = [OARouteCalculationResultSnapshotAdapter
+        createWithLocations:_locations
+        directions:_directions
+        segments:_segments
+        alarms:_alarmInfo
+        listDistance:_listDistance
+        intermediateDirectionIndexes:_intermediatePoints
+        profileId:[_appMode.stringKey copy]
+        routeProvider:routeProvider
+        routingTime:_routingTime
+        initialCalculation:_initialCalculation
+        currentRoutePointIndex:_currentRoute
+        currentDirectionIndex:_currentDirectionInfo
+        nextIntermediateIndex:_nextIntermediate];
 }
     
 @end

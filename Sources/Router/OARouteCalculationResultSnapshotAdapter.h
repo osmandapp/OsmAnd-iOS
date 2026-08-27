@@ -1,0 +1,48 @@
+//
+//  OARouteCalculationResultSnapshotAdapter.h
+//  OsmAnd Maps
+//
+
+#import <Foundation/Foundation.h>
+
+#include <memory>
+#include <vector>
+
+struct RouteSegmentResult;
+
+@class CLLocation;
+@class OAAlarmInfo;
+@class OARouteDirectionInfo;
+@class OASRouteDetailsSnapshot;
+
+NS_ASSUME_NONNULL_BEGIN
+
+/** Eager iOS copier from legacy route result values to the shared route-details contract. */
+@interface OARouteCalculationResultSnapshotAdapter : NSObject
+
++ (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
+                                      directions:(NSArray<OARouteDirectionInfo *> *)directions
+                                         segments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments
+                                            alarms:(NSArray<OAAlarmInfo *> *)alarms
+                                      listDistance:(NSArray<NSNumber *> *)listDistance
+                      intermediateDirectionIndexes:(NSArray<NSNumber *> *)intermediateDirectionIndexes
+                                         profileId:(nullable NSString *)profileId
+                                     routeProvider:(nullable NSNumber *)routeProvider
+                                       routingTime:(float)routingTime
+                                initialCalculation:(BOOL)initialCalculation
+                            currentRoutePointIndex:(int)currentRoutePointIndex
+                             currentDirectionIndex:(int)currentDirectionIndex
+                             nextIntermediateIndex:(int)nextIntermediateIndex;
+
+/** Converts the point-aligned legacy segment run to the shared inclusive route-point range. */
++ (void)routePointRangeWithNativeStartPointIndex:(int)nativeStartPointIndex
+                             nativeEndPointIndex:(int)nativeEndPointIndex
+                                        runStart:(int)runStart
+                                          runEnd:(int)runEnd
+                                 routePointCount:(int)routePointCount
+                         routePointStartIndexOut:(int *)routePointStartIndexOut
+                           routePointEndIndexOut:(int *)routePointEndIndexOut;
+
+@end
+
+NS_ASSUME_NONNULL_END

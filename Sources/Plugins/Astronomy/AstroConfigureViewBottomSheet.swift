@@ -738,12 +738,12 @@ private final class AstroActionCard: UIControl {
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(greaterThanOrEqualToConstant: 75),
-            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 9),
+            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 11),
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 5),
+            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 3),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 3),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -9),

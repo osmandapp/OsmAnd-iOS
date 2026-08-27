@@ -170,33 +170,36 @@ OASRouteExitInfo * _Nullable OACopyExitInfo(OAExitInfo * _Nullable exitInfo)
                                   exitStreetName:[exitInfo.exitStreetName copy]];
 }
 
+OASRouteManeuver *OACopyManeuver(OARouteDirectionInfo *direction)
+{
+    const std::shared_ptr<TurnType> &turn = direction.turnType;
+    return [[OASRouteManeuver alloc]
+        initWithTurnTypeValue:turn ? turn->getValue() : 0
+             routePointOffset:direction.routePointOffset
+          routeEndPointOffset:direction.routeEndPointOffset
+                distanceMeters:direction.distance
+            expectedTimeSeconds:(int) [direction getExpectedTime]
+           afterLeftTimeSeconds:(int) direction.afterLeftTime
+  averageSpeedMetersPerSecond:direction.averageSpeed
+             turnAngleDegrees:turn ? turn->getTurnAngle() : 0
+                    exitNumber:turn ? turn->getExitOut() : 0
+                          lanes:OACopyLanes(turn)
+                   skipToSpeak:turn ? turn->isSkipToSpeak() : NO
+              possibleLeftTurn:turn ? turn->isPossibleLeftTurn() : NO
+             possibleRightTurn:turn ? turn->isPossibleRightTurn() : NO
+                otherTurnAngles:nil
+                    streetName:[direction.streetName copy]
+                           ref:[direction.ref copy]
+               destinationName:[direction.destinationName copy]
+                destinationRef:[direction.destinationRef copy]
+                      exitInfo:OACopyExitInfo(direction.exitInfo)];
+}
+
 NSArray<OASRouteManeuver *> *OACopyManeuvers(NSArray<OARouteDirectionInfo *> *directions)
 {
     NSMutableArray<OASRouteManeuver *> *result = [NSMutableArray arrayWithCapacity:directions.count];
     for (OARouteDirectionInfo *direction in directions)
-    {
-        const std::shared_ptr<TurnType> &turn = direction.turnType;
-        [result addObject:[[OASRouteManeuver alloc]
-            initWithTurnTypeValue:turn ? turn->getValue() : 0
-                 routePointOffset:direction.routePointOffset
-              routeEndPointOffset:direction.routeEndPointOffset
-                    distanceMeters:direction.distance
-                expectedTimeSeconds:(int) [direction getExpectedTime]
-               afterLeftTimeSeconds:(int) direction.afterLeftTime
-      averageSpeedMetersPerSecond:direction.averageSpeed
-                 turnAngleDegrees:turn ? turn->getTurnAngle() : 0
-                        exitNumber:turn ? turn->getExitOut() : 0
-                              lanes:OACopyLanes(turn)
-                       skipToSpeak:turn ? turn->isSkipToSpeak() : NO
-                  possibleLeftTurn:turn ? turn->isPossibleLeftTurn() : NO
-                 possibleRightTurn:turn ? turn->isPossibleRightTurn() : NO
-                    otherTurnAngles:nil
-                        streetName:[direction.streetName copy]
-                               ref:[direction.ref copy]
-                   destinationName:[direction.destinationName copy]
-                    destinationRef:[direction.destinationRef copy]
-                          exitInfo:OACopyExitInfo(direction.exitInfo)]];
-    }
+        [result addObject:OACopyManeuver(direction)];
     return [result copy];
 }
 
@@ -292,6 +295,11 @@ NSArray<OASInt *> *OACopyIntermediateRoutePointOffsets(
 } // namespace
 
 @implementation OARouteCalculationResultSnapshotAdapter
+
++ (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction
+{
+    return OACopyManeuver(direction);
+}
 
 + (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
                                       directions:(NSArray<OARouteDirectionInfo *> *)directions

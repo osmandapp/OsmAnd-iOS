@@ -14,11 +14,15 @@ struct RouteSegmentResult;
 @class OAAlarmInfo;
 @class OARouteDirectionInfo;
 @class OASRouteDetailsSnapshot;
+@class OASRouteManeuver;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /** Eager iOS copier from legacy route result values to the shared route-details contract. */
 @interface OARouteCalculationResultSnapshotAdapter : NSObject
+
+/** Copies one legacy iOS direction into the shared Android-compatible maneuver contract. */
++ (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction;
 
 + (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
                                       directions:(NSArray<OARouteDirectionInfo *> *)directions

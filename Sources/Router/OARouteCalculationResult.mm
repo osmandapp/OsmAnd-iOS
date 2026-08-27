@@ -22,6 +22,7 @@
 #import "OAMapUtils.h"
 #import "CLLocation+Extension.h"
 #import "OARouteCalculationResultSnapshotAdapter.h"
+#import "OASharedRouteDetailsProvider.h"
 
 #include <routeSegmentResult.h>
 
@@ -448,18 +449,10 @@
 
 - (CLLocation *) getRouteLocationByDistance:(int)meters
 {
-        int increase = meters > 0 ? 1 : -1;
-        for (int i = increase; _currentRoute < _locations.count && _currentRoute + i >= 0 && _currentRoute + i < _locations.count; i = i + increase)
-        {
-            CLLocation *loc = _locations[_currentRoute + i];
-            CLLocation *curloc = _locations[_currentRoute];
-            double dist = [OAMapUtils getDistance:curloc.coordinate second:loc.coordinate];
-            if (dist >= abs(meters)) {
-                return loc;
-            }
-        }
-        return nil;
-    }
+    return [OASharedRouteDetailsProvider getRouteLocationByDistance:_locations
+                                            currentRoutePointIndex:_currentRoute
+                                                   distanceMeters:meters];
+}
 
 - (BOOL) directionsAvailable
 {
@@ -1198,15 +1191,7 @@
  */
 + (void) updateListDistanceTime:(NSMutableArray<NSNumber *> *)listDistance locations:(NSArray<CLLocation *> *)locations
 {
-    if (listDistance.count > 0)
-    {
-        listDistance[locations.count - 1] = @0;
-        for (int i = (int)locations.count - 1; i > 0; i--)
-        {
-            listDistance[i - 1] = @((int) round([locations[i - 1] distanceFromLocation:locations[i]]));
-            listDistance[i - 1] = @(listDistance[i - 1].intValue + listDistance[i].intValue);
-        }
-    }
+    [listDistance setArray:[OASharedRouteDetailsProvider calculateDistancesToFinish:locations]];
 }
 
 /**
@@ -1215,16 +1200,8 @@
  */
 + (void) updateDirectionsTime:(NSMutableArray<OARouteDirectionInfo *> *)directions listDistance:(NSMutableArray<NSNumber *> *)listDistance
 {
-    long sum = 0;
-    for (int i = (int)directions.count - 1; i >= 0; i--)
-    {
-        directions[i].afterLeftTime = sum;
-        directions[i].distance = listDistance[directions[i].routePointOffset].intValue;
-        if (i < directions.count - 1) {
-            directions[i].distance -= listDistance[directions[i + 1].routePointOffset].intValue;
-        }
-        sum += [directions[i] getExpectedTime];
-    }
+    [OASharedRouteDetailsProvider updateDirectionDistancesAndTimes:directions
+                                             distanceToFinishMeters:listDistance];
 }
 
 + (double) getDistanceToLocation:(NSArray<CLLocation *> *)locations p:(CLLocation *)p currentLocation:(int)currentLocation

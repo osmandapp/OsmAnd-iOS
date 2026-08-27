@@ -259,11 +259,12 @@ final class RouteChartSynchronizer: NSObject {
         guard scale.isFinite else { return }
 
         let handler = chart.viewPortHandler
-        handler.refresh(newMatrix: handler.fitScreen(), chart: chart, invalidate: false)
-        handler.refresh(newMatrix: handler.zoom(scaleX: scale, scaleY: 1), chart: chart, invalidate: false)
+        var matrix = handler.touchMatrix
+        matrix.a = scale
+        handler.refresh(newMatrix: matrix, chart: chart, invalidate: false)
         let startPoint = chart.pixelForValues(x: visibleRange.lowerBound, y: 0, axis: .left)
         let translation = handler.contentLeft - startPoint.x
-        let matrix = handler.touchMatrix.concatenating(CGAffineTransform(translationX: translation, y: 0))
+        matrix = handler.touchMatrix.concatenating(CGAffineTransform(translationX: translation, y: 0))
         handler.refresh(newMatrix: matrix, chart: chart, invalidate: true)
     }
 

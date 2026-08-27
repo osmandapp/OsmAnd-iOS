@@ -26,20 +26,21 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         editableIds != formatStorage.preferredIds(appMode)
     }
 
-    override func postInit() {
-        super.postInit()
-        editableIds = formatStorage.preferredIds(appMode)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.sectionHeaderTopPadding = 0
         tableView.setEditing(true, animated: false)
+        tableView.allowsSelectionDuringEditing = true
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         relayoutTableHeaderViewIfNeeded()
+    }
+    
+    override func postInit() {
+        super.postInit()
+        editableIds = formatStorage.preferredIds(appMode)
     }
 
     // MARK: - NavBar
@@ -63,7 +64,8 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let button = UIBarButtonItem(image: .icCheckmarkDefault, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
+        let image = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
+        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
         button.accessibilityLabel = localizedString("shared_string_apply")
         button.isEnabled = isEditChanged
         applyButton = button
@@ -88,8 +90,17 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         true
     }
     
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        section == 1 ? 8 : UITableView.automaticDimension
+    }
+    
+    override func getCustomHeight(forFooter section: Int) -> CGFloat {
+        if section == 0 { return 8 }
+        return 0.01
+    }
+    
     override func setupTableHeaderView() {
-        tableView.tableHeaderView = CoordinateFormatHelper.makeDescriptionHeader(width: view.bounds.width)
+        tableView.tableHeaderView = CoordinateFormatTableHeader.makeDescriptionHeader(width: view.bounds.width)
     }
 
     override func generateData() {
@@ -127,50 +138,64 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(!isAddRow && !(item.descr ?? "").isEmpty)
         cell.titleLabel.text = item.title
-        cell.titleLabel.textColor = isAddRow ? .iconColorActive : .textColorPrimary
+        cell.titleLabel.textColor = isAddRow ? .textColorActive : .textColorPrimary
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-        cell.delegate = self
+        cell.descriptionLabel.numberOfLines = 1
 
         if isAddRow {
-            cell.leftEditButtonVisibility(false)
             cell.isAccessibilityElement = true
             cell.accessibilityLabel = item.title
             cell.accessibilityTraits = .button
         } else {
-            let canRemove = editableIds.count > 1
-            cell.leftEditButtonVisibility(true)
-            cell.leftEditButton.isUserInteractionEnabled = false
-            cell.leftEditButton.setImage(.icCustomDelete, for: .normal)
-            cell.leftEditButton.alpha = canRemove ? 1 : 0.35
-            cell.leftEditButton.tag = indexPath.row
-            cell.leftEditButton.accessibilityLabel = localizedString("shared_string_remove")
             cell.isAccessibilityElement = true
             cell.accessibilityLabel = item.title
             cell.accessibilityValue = item.descr
             cell.accessibilityTraits = .staticText
             cell.accessibilityHint = localizedString("shared_string_move")
         }
-
-        cell.setCustomLeftSeparatorInset(true)
+        
         return cell
     }
 
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath?) {
+        guard let indexPath else { return }
         tableView.deselectRow(at: indexPath, animated: true)
         guard tableData.item(for: indexPath).key == Self.addRowKey else { return }
         onAddAction()
     }
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView,
+                            canEditRowAt indexPath: IndexPath) -> Bool {
         indexPath.section == Self.formatsSection
     }
 
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView,
+                            canMoveRowAt indexPath: IndexPath) -> Bool {
         indexPath.section == Self.formatsSection
     }
+    
+    override func tableView(_ tableView: UITableView,
+                            editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard indexPath.section == Self.formatsSection else { return .none }
+        return editableIds.count > 1 ? .delete : .none
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        indexPath.section == Self.formatsSection
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete, indexPath.section == Self.formatsSection else { return }
+        removeItem(at: indexPath.row)
+    }
 
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            moveRowAt sourceIndexPath: IndexPath,
+                            to destinationIndexPath: IndexPath) {
         guard sourceIndexPath.section == Self.formatsSection,
               destinationIndexPath.section == Self.formatsSection,
               sourceIndexPath.row != destinationIndexPath.row,
@@ -181,22 +206,12 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         reloadDraft(animated: false)
     }
 
-    override func tableView(
-        _ tableView: UITableView,
-        targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
-        toProposedIndexPath proposedDestinationIndexPath: IndexPath
-    ) -> IndexPath {
+    override func tableView(_ tableView: UITableView,
+                            targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+                            toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         proposedDestinationIndexPath.section == Self.formatsSection
             ? proposedDestinationIndexPath
             : IndexPath(row: max(editableIds.count - 1, 0), section: Self.formatsSection)
-    }
-
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        .none
-    }
-
-    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        false
     }
 
     private func reloadDraft(animated: Bool) {
@@ -212,7 +227,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     private func relayoutTableHeaderViewIfNeeded() {
         guard let header = tableView.tableHeaderView else { return }
         let width = tableView.bounds.width
-        guard CoordinateFormatHelper.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
+        guard CoordinateFormatTableHeader.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
         tableView.tableHeaderView = header
     }
     
@@ -268,11 +283,5 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
 
     @objc private func onAddAction() {
         // Add format screen is not implemented yet.
-    }
-}
-
-extension CoordinatesFormatEditViewController: OATableViewCellDelegate {
-    func onLeftEditButtonPressed(_ tag: Int) {
-        removeItem(at: tag)
     }
 }

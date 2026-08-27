@@ -86,7 +86,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     }
     
     override func setupTableHeaderView() {
-        tableView.tableHeaderView = CoordinateFormatHelper.makeDescriptionHeader(width: view.bounds.width)
+        tableView.tableHeaderView = CoordinateFormatTableHeader.makeDescriptionHeader(width: view.bounds.width)
     }
     
     override func hideFirstHeader() -> Bool {
@@ -154,7 +154,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     private func relayoutTableHeaderViewIfNeeded() {
         guard let header = tableView.tableHeaderView else { return }
         let width = tableView.bounds.width
-        guard CoordinateFormatHelper.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
+        guard CoordinateFormatTableHeader.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
         tableView.tableHeaderView = header
     }
     

@@ -26,12 +26,6 @@ typedef NSDictionary<NSString *, NSNumber *> * _Nullable (^OARouteStatisticsRend
 @interface OARouteSegmentWithIncline : NSObject
 
 @property (nonatomic) std::shared_ptr<RouteDataObject> obj;
-@property (nonatomic) float dist;
-@property (nonatomic) float h;
-@property (nonatomic) NSMutableArray<NSNumber *> *interpolatedHeightByStep;
-@property (nonatomic) NSMutableArray<NSNumber *> *slopeByStep;
-@property (nonatomic) NSMutableArray<NSString *> *slopeClassUserString;
-@property (nonatomic) NSMutableArray<NSNumber *> *slopeClass;
 
 @end
 
@@ -53,8 +47,6 @@ typedef NSDictionary<NSString *, NSNumber *> * _Nullable (^OARouteStatisticsRend
 /** Testable renderer boundary with the same current/default fallback as production. */
 - (instancetype)initWithCurrentRendererLookup:(OARouteStatisticsRenderingLookup)currentRendererLookup
                         defaultRendererLookup:(OARouteStatisticsRenderingLookup)defaultRendererLookup;
-
-- (OARouteStatistics *) computeStatistic:(NSArray<OARouteSegmentWithIncline *> *) route attribute:(NSString *) attribute;
 
 - (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
 

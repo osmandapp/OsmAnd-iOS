@@ -3129,6 +3129,7 @@
 		C1D900022F71000100D90002 /* OASharedRouteDetailsProviderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */; };
 		C1DA00012F72000100DA0001 /* OASharedRouteEventBackendCompatibilityTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1DA00022F72000100DA0002 /* OASharedRouteEventBackendCompatibilityTest.mm */; };
 		C1DB00012F73000100DB0001 /* OASharedRouteStatisticsCompatibilityTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */; };
+		C1DC00012F74000100DC0001 /* OASharedRouteDetailsCrossPlatformParityTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1DC00022F74000100DC0002 /* OASharedRouteDetailsCrossPlatformParityTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
 		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
@@ -8093,6 +8094,7 @@
 		C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteDetailsProviderTest.mm; sourceTree = "<group>"; };
 		C1DA00022F72000100DA0002 /* OASharedRouteEventBackendCompatibilityTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteEventBackendCompatibilityTest.mm; sourceTree = "<group>"; };
 		C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteStatisticsCompatibilityTest.mm; sourceTree = "<group>"; };
+		C1DC00022F74000100DC0002 /* OASharedRouteDetailsCrossPlatformParityTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteDetailsCrossPlatformParityTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
 		DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Concurrent.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Concurrent.a"; sourceTree = "<group>"; };
@@ -14757,6 +14759,7 @@
 				C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */,
 				C1DA00022F72000100DA0002 /* OASharedRouteEventBackendCompatibilityTest.mm */,
 				C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */,
+				C1DC00022F74000100DC0002 /* OASharedRouteDetailsCrossPlatformParityTest.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -19539,6 +19542,7 @@
 				C1D900022F71000100D90002 /* OASharedRouteDetailsProviderTest.mm in Sources */,
 				C1DA00012F72000100DA0001 /* OASharedRouteEventBackendCompatibilityTest.mm in Sources */,
 				C1DB00012F73000100DB0001 /* OASharedRouteStatisticsCompatibilityTest.mm in Sources */,
+				C1DC00012F74000100DC0001 /* OASharedRouteDetailsCrossPlatformParityTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,

@@ -5033,3 +5033,6 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"coordinate_format_description" = "Preferred formats for quick access from context menu and search.";
+"coordinate_format_primary" = "Primary";

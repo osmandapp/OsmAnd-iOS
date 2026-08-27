@@ -172,6 +172,9 @@ static NSString * const courseIconSizeKey = @"courseIconSizeKey";
 
 static NSString * const rendererKey = @"renderer";
 
+static NSString * const preferredCoordinateFormatIdsKey = @"preferred_coordinate_format_ids";
+static NSString * const recentlyAddedCoordinateFormatIdsKey = @"recently_added_coordinate_format_ids";
+
 // navigation settings
 static NSString * const useFastRecalculationKey = @"useFastRecalculation";
 static NSString * const forcePrivateAccessRoutingAskedKey = @"forcePrivateAccessRoutingAsked";
@@ -6338,6 +6341,24 @@ static NSString *kOfflineKey = @"OFFLINE";
         _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
+        
+        OACommonStringList *preferredCoordinateFormatIds =
+            [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
+                               defValue:@[
+                @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
+            ]] makeProfile];
+        OACommonStringList *recentlyAddedCoordinateFormatIds =
+            [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
+                               defValue:@[]] makeGlobal];
+
+        [_profilePreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
+
+        _coordinateFormatSettingsStorage =
+            [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
+                                                 preferredPreference:preferredCoordinateFormatIds
+                                                    recentPreference:recentlyAddedCoordinateFormatIds];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];

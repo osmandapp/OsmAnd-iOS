@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
+@class CoordinateFormatSettingsStorage;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
@@ -996,6 +997,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
+@property (nonatomic, readonly) CoordinateFormatSettingsStorage *coordinateFormatSettingsStorage;
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;

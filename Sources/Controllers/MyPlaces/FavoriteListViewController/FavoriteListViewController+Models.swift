@@ -185,10 +185,22 @@ struct FavoriteFolderStats: Hashable {
 
 final class FavoriteListCell: UICollectionViewListCell {
     private static let rowHeight: CGFloat = 68.0
+    private var separatorConstraint: NSLayoutConstraint?
+    private weak var primaryTextLayoutGuide: UILayoutGuide?
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
         attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
         return attributes
+    }
+
+    func setPrimaryTextLayoutGuide(_ layoutGuide: UILayoutGuide?) {
+        guard primaryTextLayoutGuide !== layoutGuide else { return }
+        separatorConstraint?.isActive = false
+        separatorConstraint = nil
+        primaryTextLayoutGuide = layoutGuide
+        guard let layoutGuide else { return }
+        separatorConstraint = separatorLayoutGuide.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor)
+        separatorConstraint?.isActive = true
     }
 }

@@ -91,6 +91,7 @@ struct PointContentConfiguration: UIContentConfiguration {
     let isVisible: Bool
 
     var secondaryContent: PointSecondaryContent?
+    var primaryTextLayoutGuideHandler: ((UILayoutGuide?) -> Void)?
 
     init(icon: UIImage?, title: String, isVisible: Bool = true, secondaryContent: PointSecondaryContent?) {
         self.icon = icon
@@ -128,6 +129,8 @@ private final class PointRowContentView: UIView, UIContentView {
             }
         }
     }
+    
+    var primaryTextLayoutGuide: UILayoutGuide? { rowContentView.textLayoutGuide }
 
     private let rowContentView = UIListContentView(configuration: .cell())
 
@@ -142,6 +145,11 @@ private final class PointRowContentView: UIView, UIContentView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        appliedConfiguration.primaryTextLayoutGuideHandler?(superview == nil ? nil : primaryTextLayoutGuide)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

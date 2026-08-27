@@ -73,7 +73,13 @@ extension FavoriteListViewController {
     }
 
     func setEditing(_ isEditing: Bool) {
+        let shouldHideSearch = isEditing && isSearchActive
         let shouldResetSearchSelection = !isEditing && isSelectionModeInSearch
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
         if !isEditing {
             collectionView.indexPathsForSelectedItems?.forEach { collectionView.deselectItem(at: $0, animated: false) }
             isSelectionModeInSearch = false
@@ -85,14 +91,17 @@ extension FavoriteListViewController {
         }
 
         collectionView.isEditing = isEditing
-        collectionView.reloadData()
-        myPlacesDelegate?.updateEditMode(isEditing)
-        configureNavigation()
-        navigationController?.setToolbarHidden(!isEditing, animated: true)
-        if shouldResetSearchSelection {
+        if shouldHideSearch {
+            hideSearchController()
+        } else if shouldResetSearchSelection {
             clearSearchControllerText()
             applySnapshot(animatingDifferences: false)
         }
+
+        navigationController?.setToolbarHidden(!isEditing, animated: true)
+        myPlacesDelegate?.updateEditMode(isEditing)
+        configureNavigation()
+        configureToolbar()
     }
 
     func showRenameAlert(for folder: FavoriteFolderRow) {
@@ -255,6 +264,7 @@ extension FavoriteListViewController {
     }
 
     func hideSearchController() {
+        cachedSearchFavoriteItems = nil
         if isRootFolder {
             let searchController = navigationController?.navigationBar.topItem?.searchController
             searchController?.isActive = false
@@ -276,6 +286,8 @@ extension FavoriteListViewController {
     }
 
     @objc func searchButtonPressed(_ sender: Any) {
+        lastAppliedSearchState = nil
+        cachedSearchFavoriteItems = nil
         isSearchActive = true
         showSearchController()
         configureNavigationButtons()
@@ -284,16 +296,13 @@ extension FavoriteListViewController {
     }
 
     @objc func searchSelectButtonPressed() {
-        isSelectionModeInSearch = true
-        isSearchActive = false
-        hideSearchController()
-
+        isCancellingSearch = true
         selectButtonPressed()
+        isCancellingSearch = false
     }
 
     @objc func cancelButtonPressed() {
         setEditing(false)
-        configureToolbar()
     }
 
     @objc func selectAllButtonPressed() {
@@ -309,6 +318,7 @@ extension FavoriteListViewController {
 
     @objc func favoriteDataDidChange() {
         DispatchQueue.main.async { [weak self] in
+            self?.cachedSearchFavoriteItems = nil
             self?.applySnapshot(animatingDifferences: true)
         }
     }

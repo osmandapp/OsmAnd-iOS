@@ -1995,6 +1995,8 @@
 "osm_edits_notes" = "Notes";
 "osm_poi_id_label" = "POI id:";
 "osm_edits_title" = "OSM Edits";
+"osm_edits_empty_state_title" = "No pending map edits";
+"osm_edits_empty_state_description" = "Changes you make in OsmAnd will appear here before they’re uploaded to OpenStreetMap";
 "osm_edits_edits_label" = "Edits";
 "upload_to_osm" = "Upload modifications to OSM";
 "osm_edit_show_on_map" = "Show modification on the map";

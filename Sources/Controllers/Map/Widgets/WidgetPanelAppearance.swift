@@ -2,7 +2,7 @@
 //  WidgetPanelAppearance.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 14.08.2026.
+//  Created by Oleksandr Panchenko on 27.08.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
@@ -25,9 +25,9 @@ enum WidgetPanelSizeMode: String, CaseIterable {
 
     var icon: UIImage {
         switch self {
-        case .original, .medium: .icCustom20HeightM
-        case .small: .icCustom20HeightS
-        case .large: .icCustom20HeightL
+        case .original, .medium: .icCustomRowHeightM
+        case .small: .icCustomRowHeightS
+        case .large: .icCustomRowHeightL
         }
     }
 

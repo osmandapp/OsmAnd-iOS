@@ -41,6 +41,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     var widgetPages: [[OABaseWidgetView]] = []
     var specialPanelController: WidgetPanelViewController?
     var currentActiveController: UIViewController?
+    @nonobjc var onCurrentPageChanged: (() -> Void)?
     
     var pageViewController: UIPageViewController! {
         didSet {
@@ -280,11 +281,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         guard UIApplication.shared.mainScene != nil else { return }
         let contentSize = calculateContentSize()
         let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
-        if self == mapHudViewController?.mapInfoController?.leftPanelController {
+        let isHostedInMapHud = parent === mapHudViewController
+        if isHostedInMapHud, self == mapHudViewController?.mapInfoController?.leftPanelController {
             mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width
-        } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
+        } else if isHostedInMapHud, self == mapHudViewController?.mapInfoController?.rightPanelController {
             mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width
-        } else if self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
+        } else if isHostedInMapHud, self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
             mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width
             mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height
         }
@@ -317,7 +319,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         let selectedPage = pageControl.currentPage
         pageViewController.setViewControllers([pages[selectedPage]], direction: selectedPage > currentIndex ? .forward : .reverse, animated: true) { [weak self] _ in
             DispatchQueue.main.async {
-                self?.updateContainerSize()
+                guard let self else { return }
+                self.updateContainerSize()
+                self.onCurrentPageChanged?()
             }
         }
     }
@@ -388,6 +392,7 @@ extension WidgetPanelViewController: UIScrollViewDelegate {
         if let index = pages.firstIndex(of: visibleVC) {
             pageControl.currentPage = index
             updateContainerSize()
+            onCurrentPageChanged?()
             OARootViewController.instance().mapPanel?.hudViewController?.mapHudLayout.updateButtons()
         }
     }

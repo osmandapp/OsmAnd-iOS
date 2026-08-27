@@ -2,7 +2,7 @@
 //  WidgetsAppearanceViewController.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 14.08.2026.
+//  Created by Oleksandr Panchenko on 27.08.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
@@ -32,7 +32,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     private let appMode: OAApplicationMode
     private let panels = WidgetsPanel.values
     private let appearanceSettings: WidgetPanelAppearanceSettings
-    private let previewView = WidgetsAppearancePreviewView()
+    private let previewView = WidgetPanelPreviewView()
 
     private lazy var previewHeaderView = UIView()
     private var selectedPanel: WidgetsPanel
@@ -60,6 +60,11 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         reloadPreview()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        previewView.releaseHostedWidgets()
     }
 
     override func viewDidLayoutSubviews() {
@@ -404,7 +409,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     private func reloadPreview() {
-        previewView.configure(panel: selectedPanel)
+        previewView.configure(panel: selectedPanel, parentViewController: self)
     }
 
     private func applyCopiedParameters() {
@@ -559,10 +564,41 @@ extension WidgetsAppearanceViewController: WidgetPanelColorViewControllerDelegat
     }
 }
 
-private final class WidgetsAppearancePreviewView: UIView {
+final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private let scrollView = UIScrollView()
-    private let imageView = UIImageView()
+    private let contentView = UIView()
     private var panel: WidgetsPanel = .leftPanel
+    private var hostedState: HostedPanelState?
+    private var panelSizeUpdateGeneration = 0
+    private var isMeasuringPanelSize = false
+
+    private struct HostedPanelState {
+        let controller: WidgetPanelViewController
+        let originalParent: UIViewController?
+        let originalDelegate: WidgetPanelDelegate?
+        let originalCurrentPageChangedHandler: (() -> Void)?
+        let view: UIView
+        let originalSuperview: UIView?
+        let originalContainerSize: CGSize
+        let originalSuperviewConstraints: [NSLayoutConstraint]
+        let originalIndex: Int?
+        let frame: CGRect
+        let bounds: CGRect
+        let transform: CGAffineTransform
+        let isHidden: Bool
+        let alpha: CGFloat
+        let isUserInteractionEnabled: Bool
+        let translatesAutoresizingMaskIntoConstraints: Bool
+        let pageControlHidden: Bool
+        let pageControlHeight: CGFloat
+        let pageContainerCornerRadius: CGFloat
+        let pageContainerMaskedCorners: CACornerMask
+        let pageContainerSizeConstraints: [(constraint: NSLayoutConstraint, constant: CGFloat)]
+        var previewContentSize: CGSize
+        let excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
+        let disabledLongPressRecognizers: [UILongPressGestureRecognizer]
+        let removedButtonMenus: [(button: UIButton, menu: UIMenu?)]
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -573,10 +609,10 @@ private final class WidgetsAppearancePreviewView: UIView {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceVertical = false
+        scrollView.delaysContentTouches = false
         addSubview(scrollView)
+        scrollView.addSubview(contentView)
 
-        imageView.contentMode = .topLeft
-        scrollView.addSubview(imageView)
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -591,18 +627,67 @@ private final class WidgetsAppearancePreviewView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        layoutSnapshot()
+        layoutHostedPanel()
     }
 
-    func configure(panel: WidgetsPanel) {
+    func configure(panel: WidgetsPanel, parentViewController: UIViewController) {
+        releaseHostedWidgets()
         self.panel = panel
-        imageView.image = makePanelSnapshot(panel)
+        hostWidgets(for: panel, parentViewController: parentViewController)
         setNeedsLayout()
     }
 
-    private func makePanelSnapshot(_ panel: WidgetsPanel) -> UIImage? {
+    func releaseHostedWidgets() {
+        guard let state = hostedState else { return }
+        panelSizeUpdateGeneration += 1
+        state.controller.delegate = nil
+        state.controller.onCurrentPageChanged = state.originalCurrentPageChangedHandler
+        state.disabledLongPressRecognizers.forEach { $0.isEnabled = true }
+        state.removedButtonMenus.forEach { $0.button.menu = $0.menu }
+        state.controller.view.bounds = state.bounds
+        state.controller.view.frame = state.frame
+        state.controller.view.transform = state.transform
+        state.controller.view.isHidden = state.isHidden
+        state.controller.view.alpha = state.alpha
+        state.controller.view.isUserInteractionEnabled = state.isUserInteractionEnabled
+        state.controller.view.translatesAutoresizingMaskIntoConstraints = state.translatesAutoresizingMaskIntoConstraints
+        state.controller.pageControl.isHidden = state.pageControlHidden
+        state.controller.pageControlHeightConstraint.constant = state.pageControlHeight
+        state.controller.pageContainerView.layer.cornerRadius = state.pageContainerCornerRadius
+        state.controller.pageContainerView.layer.maskedCorners = state.pageContainerMaskedCorners
+        state.pageContainerSizeConstraints.forEach { $0.constraint.constant = $0.constant }
+        state.excludedWidgets.forEach { $0.widget.isHidden = $0.isHidden }
+
+        state.controller.willMove(toParent: nil)
+        state.controller.view.removeFromSuperview()
+        state.controller.removeFromParent()
+        if let originalParent = state.originalParent {
+            originalParent.addChild(state.controller)
+        }
+        if let originalSuperview = state.originalSuperview {
+            if let originalIndex = state.originalIndex, originalIndex <= originalSuperview.subviews.count {
+                originalSuperview.insertSubview(state.view, at: originalIndex)
+            } else {
+                originalSuperview.addSubview(state.view)
+            }
+            NSLayoutConstraint.activate(state.originalSuperviewConstraints)
+            originalSuperview.setNeedsLayout()
+        }
+        if let originalParent = state.originalParent {
+            state.controller.didMove(toParent: originalParent)
+        }
+        state.controller.view.layoutIfNeeded()
+        state.controller.delegate = state.originalDelegate
+        hostedState = nil
+        if let hudViewController = state.originalParent as? OAMapHudViewController {
+            hudViewController.updateControlsLayout(false)
+            hudViewController.updateDependentButtonsVisibility()
+        }
+    }
+
+    private func hostWidgets(for panel: WidgetsPanel, parentViewController: UIViewController) {
         guard let mapInfoController = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController else {
-            return nil
+            return
         }
         let controller: WidgetPanelViewController
         if panel == .leftPanel {
@@ -615,90 +700,231 @@ private final class WidgetsAppearancePreviewView: UIView {
             controller = mapInfoController.bottomPanelController
         }
         controller.loadViewIfNeeded()
-        let isSidePanel = panel == .leftPanel || panel == .rightPanel
+        UIView.performWithoutAnimation {
+            controller.updateWidgetSizes()
+            controller.view.superview?.superview?.layoutIfNeeded()
+            controller.view.superview?.layoutIfNeeded()
+            controller.view.layoutIfNeeded()
+        }
+        controller.view.layer.removeAllAnimations()
+        controller.pageContainerView.layer.removeAllAnimations()
         let excludedWidgets = controller.widgetPages
             .flatMap { $0 }
             .filter { $0 is CoordinatesBaseWidget }
-        let originalVisibility = excludedWidgets.map(\.isHidden)
-        let originalPanelBounds = controller.view.bounds
-        let originalPageControlVisibility = controller.pageControl.isHidden
+            .map { (widget: $0, isHidden: $0.isHidden) }
+        let disabledLongPressRecognizers = disableLongPressRecognizers(in: controller.view)
+        let removedButtonMenus = removeButtonMenus(in: controller.view)
+        let originalSuperview = controller.view.superview
+        let originalSuperviewConstraints = originalSuperview?.constraints.filter {
+            $0.firstItem === controller.view || $0.secondItem === controller.view
+        } ?? []
+        let originalIndex = originalSuperview?.subviews.firstIndex(of: controller.view)
+        let originalParent = controller.parent
+        let originalDelegate = controller.delegate
+        let originalCurrentPageChangedHandler = controller.onCurrentPageChanged
+        var originalContainerSize = originalSuperview?.bounds.size ?? controller.view.bounds.size
+        if originalContainerSize.width <= 0 {
+            originalContainerSize.width = controller.view.bounds.width
+        }
+        if originalContainerSize.height <= 0 {
+            originalContainerSize.height = controller.view.bounds.height
+        }
+        let originalFrame = controller.view.frame
+        let originalBounds = controller.view.bounds
+        let originalTransform = controller.view.transform
+        let originalIsHidden = controller.view.isHidden
+        let originalAlpha = controller.view.alpha
+        let originalIsUserInteractionEnabled = controller.view.isUserInteractionEnabled
+        let originalTranslatesAutoresizingMaskIntoConstraints = controller.view.translatesAutoresizingMaskIntoConstraints
+        let originalPageControlHidden = controller.pageControl.isHidden
         let originalPageControlHeight = controller.pageControlHeightConstraint.constant
-        let originalContainerCornerRadius = controller.pageContainerView.layer.cornerRadius
-        let originalContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
-        excludedWidgets.forEach { $0.isHidden = true }
-        defer {
-            controller.view.bounds = originalPanelBounds
-            controller.pageControl.isHidden = originalPageControlVisibility
-            controller.pageControlHeightConstraint.constant = originalPageControlHeight
-            controller.pageContainerView.layer.cornerRadius = originalContainerCornerRadius
-            controller.pageContainerView.layer.maskedCorners = originalContainerMaskedCorners
-            for (widget, wasHidden) in zip(excludedWidgets, originalVisibility) {
-                widget.isHidden = wasHidden
-            }
-            controller.view.layoutIfNeeded()
-        }
-        controller.view.layoutIfNeeded()
-        var contentSize = controller.calculateContentSize()
-        guard contentSize.height > 0 else { return nil }
-        let sourceView: UIView
-        var renderOrigin = CGPoint.zero
-        if isSidePanel {
-            guard contentSize.width > 0 else { return nil }
-            let borderInsets = controller.view.layer.borderWidth * 2
-            contentSize.width += borderInsets
-            contentSize.height += borderInsets
-            controller.pageControl.isHidden = true
-            controller.pageControlHeightConstraint.constant = 0
-            controller.pageContainerView.layer.cornerRadius = 5
-            controller.pageContainerView.layer.maskedCorners = controller.view.layer.maskedCorners
-            var previewBounds = controller.view.bounds
-            previewBounds.size = contentSize
-            controller.view.bounds = previewBounds
-            controller.view.layoutIfNeeded()
-            sourceView = controller.view
-        } else {
-            let availableWidth = bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width
-            let panelWidth = controller.view.bounds.width > 0 ? controller.view.bounds.width : availableWidth
-            contentSize.width = min(panelWidth, availableWidth)
-            sourceView = controller.currentActiveController?.view ?? controller.pageContainerView
-        }
-        if !isSidePanel {
-            sourceView.layoutIfNeeded()
-        }
-        if !isSidePanel {
-            guard let widgetsFrame = visibleWidgetsFrame(controller: controller, in: sourceView) else {
+        let originalPageContainerCornerRadius = controller.pageContainerView.layer.cornerRadius
+        let originalPageContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
+        let pageContainerSizeConstraints = controller.pageContainerView.constraints.compactMap { constraint -> (constraint: NSLayoutConstraint, constant: CGFloat)? in
+            guard constraint.firstItem === controller.pageContainerView else { return nil }
+            switch constraint.firstAttribute {
+            case .width, .height:
+                return (constraint, constraint.constant)
+            default:
                 return nil
             }
-            contentSize = widgetsFrame.size
-            renderOrigin = widgetsFrame.origin
         }
-
-        let format = UIGraphicsImageRendererFormat(for: sourceView.traitCollection)
-        format.opaque = false
-        return UIGraphicsImageRenderer(size: contentSize, format: format).image { context in
-            context.cgContext.translateBy(x: -renderOrigin.x, y: -renderOrigin.y)
-            sourceView.layer.render(in: context.cgContext)
+        controller.delegate = nil
+        excludedWidgets.forEach { $0.widget.isHidden = true }
+        controller.view.layoutIfNeeded()
+        let panelContentSize = controller.calculateContentSize()
+        updatePageContainerSize(panelContentSize, for: controller)
+        let previewContentSize = previewSize(for: panelContentSize,
+                                             controller: controller,
+                                             originalContainerSize: originalContainerSize)
+        var previewBounds = controller.view.bounds
+        previewBounds.size = previewContentSize
+        controller.view.bounds = previewBounds
+        controller.view.layoutIfNeeded()
+        let state = HostedPanelState(controller: controller,
+                                     originalParent: originalParent,
+                                     originalDelegate: originalDelegate,
+                                     originalCurrentPageChangedHandler: originalCurrentPageChangedHandler,
+                                     view: controller.view,
+                                     originalSuperview: originalSuperview,
+                                     originalContainerSize: originalContainerSize,
+                                     originalSuperviewConstraints: originalSuperviewConstraints,
+                                     originalIndex: originalIndex,
+                                     frame: originalFrame,
+                                     bounds: originalBounds,
+                                     transform: originalTransform,
+                                     isHidden: originalIsHidden,
+                                     alpha: originalAlpha,
+                                     isUserInteractionEnabled: originalIsUserInteractionEnabled,
+                                     translatesAutoresizingMaskIntoConstraints: originalTranslatesAutoresizingMaskIntoConstraints,
+                                     pageControlHidden: originalPageControlHidden,
+                                     pageControlHeight: originalPageControlHeight,
+                                     pageContainerCornerRadius: originalPageContainerCornerRadius,
+                                     pageContainerMaskedCorners: originalPageContainerMaskedCorners,
+                                     pageContainerSizeConstraints: pageContainerSizeConstraints,
+                                     previewContentSize: previewContentSize,
+                                     excludedWidgets: excludedWidgets,
+                                     disabledLongPressRecognizers: disabledLongPressRecognizers,
+                                     removedButtonMenus: removedButtonMenus)
+        hostedState = state
+        controller.willMove(toParent: nil)
+        NSLayoutConstraint.deactivate(originalSuperviewConstraints)
+        controller.view.removeFromSuperview()
+        controller.removeFromParent()
+        parentViewController.addChild(controller)
+        contentView.addSubview(controller.view)
+        controller.didMove(toParent: parentViewController)
+        controller.delegate = self
+        controller.onCurrentPageChanged = { [weak self] in
+            self?.updateHostedPanelSize()
+        }
+        controller.view.isHidden = false
+        controller.view.alpha = 1
+        controller.view.isUserInteractionEnabled = true
+        controller.view.translatesAutoresizingMaskIntoConstraints = true
+        UIView.performWithoutAnimation {
+            layoutHostedPanel()
+            layoutIfNeeded()
         }
     }
 
-    private func visibleWidgetsFrame(controller: WidgetPanelViewController, in sourceView: UIView) -> CGRect? {
-        var result: CGRect?
-        for widget in controller.widgetPages.flatMap({ $0 }) where !widget.isHidden {
-            let frame = widget.convert(widget.bounds, to: sourceView)
-            guard frame.width > 0, frame.height > 0 else { continue }
-            result = result?.union(frame) ?? frame
+    private func hostedPanelContentSize() -> CGSize {
+        guard let state = hostedState else { return .zero }
+        return state.previewContentSize
+    }
+
+    private func updatePageContainerSize(_ size: CGSize, for controller: WidgetPanelViewController) {
+        for constraint in controller.pageContainerView.constraints where constraint.firstItem === controller.pageContainerView {
+            switch constraint.firstAttribute {
+            case .height:
+                constraint.constant = size.height
+            case .width:
+                constraint.constant = size.width
+            default:
+                break
+            }
+        }
+    }
+
+    private func previewSize(for panelContentSize: CGSize,
+                             controller: WidgetPanelViewController,
+                             originalContainerSize: CGSize) -> CGSize {
+        var result = panelContentSize
+        if panel == .leftPanel || panel == .rightPanel {
+            let borderInsets = controller.view.layer.borderWidth * 2
+            let pageControlHeight = controller.pageControl.isHidden
+                ? 0
+                : controller.pageControlHeightConstraint.constant
+            result.width = originalContainerSize.width > 0
+                ? originalContainerSize.width
+                : result.width + borderInsets
+            result.height += pageControlHeight + borderInsets
+        } else {
+            result.width = originalContainerSize.width > 0
+                ? originalContainerSize.width
+                : bounds.width
         }
         return result
     }
 
-    private func layoutSnapshot() {
-        guard let image = imageView.image else {
-            imageView.frame = .zero
+    func onPanelSizeChanged() {
+        guard !isMeasuringPanelSize else { return }
+        schedulePanelSizeUpdate()
+    }
+
+    private func schedulePanelSizeUpdate() {
+        guard hostedState != nil else { return }
+        panelSizeUpdateGeneration += 1
+        let generation = panelSizeUpdateGeneration
+        DispatchQueue.main.async { [weak self] in
+            guard let self, generation == self.panelSizeUpdateGeneration else { return }
+            self.updateHostedPanelSize()
+        }
+    }
+
+    private func updateHostedPanelSize() {
+        guard !isMeasuringPanelSize, var state = hostedState else { return }
+        panelSizeUpdateGeneration += 1
+        isMeasuringPanelSize = true
+        let panelContentSize = state.controller.calculateContentSize()
+        state.controller.pageControl.isHidden = state.pageControlHidden
+        state.controller.pageControlHeightConstraint.constant = state.pageControlHeight
+        updatePageContainerSize(panelContentSize, for: state.controller)
+        let newSize = previewSize(for: panelContentSize,
+                                  controller: state.controller,
+                                  originalContainerSize: state.originalContainerSize)
+        state.previewContentSize = newSize
+        hostedState = state
+        UIView.performWithoutAnimation {
+            layoutHostedPanel()
+        }
+        isMeasuringPanelSize = false
+    }
+
+    private func disableLongPressRecognizers(in rootView: UIView) -> [UILongPressGestureRecognizer] {
+        var result: [UILongPressGestureRecognizer] = []
+        func collect(from view: UIView) {
+            for case let recognizer as UILongPressGestureRecognizer in view.gestureRecognizers ?? [] where recognizer.isEnabled {
+                recognizer.isEnabled = false
+                result.append(recognizer)
+            }
+            view.subviews.forEach { collect(from: $0) }
+        }
+        collect(from: rootView)
+        return result
+    }
+
+    private func removeButtonMenus(in rootView: UIView) -> [(button: UIButton, menu: UIMenu?)] {
+        var result: [(button: UIButton, menu: UIMenu?)] = []
+        func collect(from view: UIView) {
+            if let button = view as? UIButton, button.menu != nil {
+                result.append((button, button.menu))
+                button.menu = nil
+            }
+            view.subviews.forEach { collect(from: $0) }
+        }
+        collect(from: rootView)
+        return result
+    }
+
+    private func layoutHostedPanel() {
+        guard let state = hostedState else {
+            contentView.frame = .zero
             scrollView.contentSize = bounds.size
             return
         }
-        let scale = min(1, bounds.width / image.size.width)
-        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let contentSize = hostedPanelContentSize()
+        guard contentSize.width > 0, contentSize.height > 0 else {
+            contentView.frame = .zero
+            scrollView.contentSize = bounds.size
+            return
+        }
+        state.view.transform = .identity
+        state.view.frame = CGRect(origin: .zero, size: contentSize)
+        state.view.setNeedsLayout()
+        state.view.layoutIfNeeded()
+        let scale = min(1, bounds.width / contentSize.width)
+        let size = CGSize(width: contentSize.width * scale, height: contentSize.height * scale)
         let x: CGFloat
         if panel == .rightPanel {
             x = bounds.width - size.width
@@ -708,9 +934,16 @@ private final class WidgetsAppearancePreviewView: UIView {
             x = 0
         }
         let y = panel == .bottomPanel ? max(0, bounds.height - size.height) : 0
-        imageView.frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
+        contentView.transform = .identity
+        contentView.bounds = CGRect(origin: .zero, size: contentSize)
+        contentView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        contentView.frame.origin = CGPoint(x: x, y: y)
         scrollView.contentSize = CGSize(width: bounds.width, height: max(bounds.height, size.height))
         scrollView.isScrollEnabled = size.height > bounds.height
+    }
+
+    deinit {
+        releaseHostedWidgets()
     }
 }
 

@@ -1812,17 +1812,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
         {
             self.mapInfoController.topPanelController.view.alpha = !isTopPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.middleWidgetsView showShadow:self.mapInfoController.topPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
         {
             self.mapInfoController.leftPanelController.view.alpha = isWeatherToolbarVisible || !isLeftPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.leftWidgetsView showShadow:self.mapInfoController.leftPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
         {
             self.mapInfoController.rightPanelController.view.alpha = isWeatherToolbarVisible ? 1. : !isRightPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.rightWidgetsView showShadow:self.mapInfoController.rightPanelController.view.alpha == 1.];
@@ -1842,11 +1842,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _searchButton.userInteractionEnabled = _searchButton.alpha > 0.;
         _downloadView.userInteractionEnabled = _downloadView.alpha > 0.;
 
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
             self.mapInfoController.topPanelController.view.userInteractionEnabled = self.mapInfoController.topPanelController.view.alpha > 0.;
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
             self.mapInfoController.leftPanelController.view.userInteractionEnabled = self.mapInfoController.leftPanelController.view.alpha > 0.;
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
             self.mapInfoController.rightPanelController.view.userInteractionEnabled = self.mapInfoController.rightPanelController.view.alpha > 0.;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.;
@@ -1902,7 +1902,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
     };
@@ -1916,7 +1916,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _mapModeButton.userInteractionEnabled = _mapModeButton.alpha > 0.;
         _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.userInteractionEnabled = self.mapInfoController.bottomPanelController.view.alpha > 0.;
 
     };

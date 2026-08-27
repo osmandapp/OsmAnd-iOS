@@ -2,7 +2,7 @@
 //  WidgetPanelColorViewController.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 14.08.2026.
+//  Created by Oleksandr Panchenko on 27.08.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
@@ -27,6 +27,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         static let floatingButtonInset: CGFloat = 16
         static let applyButtonHeight: CGFloat = 44
         static let paletteVerticalInset: CGFloat = 6
+        static let navigationContentHeight: CGFloat = 70
+        static let navigationBackgroundFirstAlpha: CGFloat = 0.7
+        static let navigationBackgroundSecondAlpha: CGFloat = 0.55
     }
 
     var navControllerHistory: [UIViewController] = []
@@ -41,6 +44,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     private let closeButton = UIButton(type: .system)
     private let navigationTitleLabel = UILabel()
+    private let navigationBackgroundView = UIView()
+    private let navigationBackgroundMaskLayer = CAGradientLayer()
+    private let previewView = WidgetPanelPreviewView()
     private let titleLabel = UILabel()
     private let applyButton = UIButton(type: .system)
 
@@ -120,6 +126,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         super.viewDidLoad()
         configureTableView()
         configureSheetHeader()
+        configureNavigationBackground()
+        configurePreview()
         configureFloatingButtons()
         configureApplyButton()
         applyDraftAndRefreshWidgets()
@@ -143,12 +151,13 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         super.viewDidAppear(animated)
         applyMapTheme()
         DispatchQueue.main.async { [weak self] in
-            self?.applyPreviewPanelVisibility()
+            self?.reloadPreview()
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        previewView.releaseHostedWidgets()
         guard !didRestoreNavigation, isMovingFromParent || isBeingDismissed else { return }
         restoreMapControls()
         OADayNightHelper.instance().resetTempMode()
@@ -171,6 +180,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         super.doAdditionalLayout()
         applySheetCornerRadius()
         layoutFloatingButtons()
+        layoutNavigationBackground()
+        layoutPreview()
     }
 
     override func hide() {
@@ -224,6 +235,20 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         ])
     }
 
+    private func configureNavigationBackground() {
+        navigationBackgroundView.backgroundColor = .black
+        navigationBackgroundView.isUserInteractionEnabled = false
+        navigationBackgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        navigationBackgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        navigationBackgroundView.layer.mask = navigationBackgroundMaskLayer
+        view.insertSubview(navigationBackgroundView, belowSubview: scrollableView)
+    }
+
+    private func configurePreview() {
+        previewView.backgroundColor = .clear
+        view.insertSubview(previewView, belowSubview: scrollableView)
+    }
+
     private func configureFloatingButtons() {
         configureFloatingButton(closeButton,
                                 image: .icNavbarClose,
@@ -233,7 +258,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         navigationTitleLabel.font = .preferredFont(forTextStyle: .headline)
         navigationTitleLabel.adjustsFontForContentSizeCategory = true
         navigationTitleLabel.text = panel.title
-        navigationTitleLabel.textColor = .textColorPrimary
+        navigationTitleLabel.textColor = .white
         navigationTitleLabel.textAlignment = .center
         navigationTitleLabel.accessibilityTraits = .header
         view.addSubview(navigationTitleLabel)
@@ -301,6 +326,30 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                                             height: Constants.floatingButtonSize)
     }
 
+    private func layoutNavigationBackground() {
+        let isCompactLayout = traitCollection.verticalSizeClass == .compact
+        navigationBackgroundView.isHidden = isCompactLayout
+        guard !isCompactLayout else { return }
+        navigationBackgroundView.frame = CGRect(x: 0,
+                                                y: 0,
+                                                width: view.bounds.width,
+                                                height: view.safeAreaInsets.top + Constants.navigationContentHeight)
+        navigationBackgroundMaskLayer.frame = navigationBackgroundView.bounds
+        navigationBackgroundMaskLayer.colors = [
+            UIColor.black.withAlphaComponent(Constants.navigationBackgroundFirstAlpha).cgColor,
+            UIColor.black.withAlphaComponent(Constants.navigationBackgroundSecondAlpha).cgColor,
+            UIColor.clear.cgColor
+        ]
+    }
+
+    private func layoutPreview() {
+        let top = view.safeAreaInsets.top + Constants.navigationContentHeight
+        previewView.frame = CGRect(x: 0,
+                                   y: top,
+                                   width: view.bounds.width,
+                                   height: max(0, scrollableView.frame.minY - top))
+    }
+
     private func applySheetCornerRadius() {
         guard !isLeftSidePresentation() else {
             scrollableView.layer.mask = nil
@@ -321,6 +370,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func applyDraftAndRefreshWidgets() {
+        previewView.releaseHostedWidgets()
         applyPreviewPanelVisibility()
         guard isColorSelectionAvailable,
               let dayColor = currentDayColorItem.map({ UIColor(argb: Int($0.colorInt)) }),
@@ -332,6 +382,17 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         setCustomMode()
         mapPanel.recreateControls()
         applyPreviewPanelVisibility()
+        reloadPreviewIfVisible()
+    }
+
+    private func reloadPreview() {
+        applyPreviewPanelVisibility()
+        previewView.configure(panel: panel, parentViewController: self)
+    }
+
+    private func reloadPreviewIfVisible() {
+        guard viewIfLoaded?.window != nil else { return }
+        reloadPreview()
     }
 
     private func applyPreviewPanelVisibility() {
@@ -386,6 +447,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     private func restoreDraftIfNeeded() {
         guard !isApplied else { return }
+        previewView.releaseHostedWidgets()
         appearanceSettings.setColor(initialDayColor, for: target, panel: panel, nightMode: false)
         appearanceSettings.setColor(initialNightColor, for: target, panel: panel, nightMode: true)
         if let initialTextMode {
@@ -402,6 +464,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         guard !didRestoreNavigation else { return }
         didRestoreNavigation = true
         isApplied = keepingChanges
+        previewView.releaseHostedWidgets()
         OADayNightHelper.instance().resetTempMode()
         if !keepingChanges {
             restoreDraftIfNeeded()
@@ -515,8 +578,9 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 guard let self else { return }
                 self.isNightColorMode = index == 1
                 self.applyMapTheme()
+                self.previewView.releaseHostedWidgets()
                 self.mapPanel.recreateControls()
-                self.applyPreviewPanelVisibility()
+                self.reloadPreview()
                 self.tableView.reloadRows(at: [IndexPath(row: Row.palette.rawValue, section: 0)], with: .none)
             }
             return cell

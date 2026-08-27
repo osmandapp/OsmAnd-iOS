@@ -69,5 +69,25 @@
 			<string>%ld נקודות</string>
 		</dict>
 	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld תחנה</string>
+			<key>two</key>
+			<string>%ld תחנות</string>
+			<key>many</key>
+			<string>%ld תחנות</string>
+			<key>other</key>
+			<string>%ld תחנות</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

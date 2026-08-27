@@ -77,5 +77,25 @@
 			<string>%ld bodu</string>
 		</dict>
 	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Přes %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld zastávka</string>
+			<key>few</key>
+			<string>%ld zastávky</string>
+			<key>many</key>
+			<string>%ld zastávky</string>
+			<key>other</key>
+			<string>%ld zastávek</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

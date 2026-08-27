@@ -1585,7 +1585,7 @@
 - (void) setPointToNavigate:(OARTargetPoint *)pointToNavigate
 {
     _pointToNavigate = pointToNavigate;
-    if (pointToNavigate && pointToNavigate.pointDescription && [[OAAppSettings sharedManager].navigationHistory get])
+    if (pointToNavigate && pointToNavigate.pointDescription && !pointToNavigate.isSearchingAddress && [[OAAppSettings sharedManager].navigationHistory get])
     {
         OAHistoryItem *h = [[OAHistoryItem alloc] init];
         h.name = pointToNavigate.pointDescription.name;

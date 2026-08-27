@@ -120,6 +120,11 @@ final class RouteChartSynchronizer: NSObject {
         applySelection(to: chart)
     }
 
+    func unregisterBarChart(_ chart: HorizontalBarChartView) {
+        removeSelectionGestureTargets(from: chart)
+        barCharts.remove(chart)
+    }
+
     func syncHighlight(_ highlight: Highlight, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atValue: highlight.x, in: sourceChart) else { return }
         applySelectionToBarCharts()

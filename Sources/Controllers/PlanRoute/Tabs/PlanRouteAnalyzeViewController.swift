@@ -1216,6 +1216,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
         }
     }
 
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let barChart = (cell as? AnalyzeCardCell)?.chartView as? HorizontalBarChartView else { return }
+        chartSynchronizer.unregisterBarChart(barChart)
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard case .hasData = currentState,

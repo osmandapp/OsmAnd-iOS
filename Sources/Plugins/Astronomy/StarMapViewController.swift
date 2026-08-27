@@ -1535,7 +1535,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             syncControlUI()
         }
         if enabled {
-            arModeHelper.toggleArMode(enable: true)
+            guard arModeHelper.toggleArMode(enable: true) else { return }
             compassState = .compass
         } else {
             arModeHelper.toggleArMode(enable: false)

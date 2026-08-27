@@ -368,13 +368,26 @@ extension FavoriteListViewController {
     }
 
     private func patchItems(in snapshot: inout Snapshot, with newSnapshot: Snapshot) {
-        newSnapshot.sectionIdentifiers
-            .filter { snapshot.sectionIdentifiers.contains($0) && !$0.isFolder }
-            .forEach { patchItems(in: $0, snapshot: &snapshot, with: newSnapshot) }
+        let sections = newSnapshot.sectionIdentifiers.filter { snapshot.sectionIdentifiers.contains($0) && !$0.isFolder }
+        if isSearchResultsMode {
+            let currentItems = sections.flatMap { snapshot.itemIdentifiers(inSection: $0) }
+            if !currentItems.isEmpty {
+                snapshot.deleteItems(currentItems)
+            }
+            sections.forEach { snapshot.appendItems(newSnapshot.itemIdentifiers(inSection: $0), toSection: $0) }
+            return
+        }
+
+        sections.forEach { patchItems(in: $0, snapshot: &snapshot, with: newSnapshot) }
     }
 
     private func patchItems(in section: FavoriteListSection, snapshot: inout Snapshot, with newSnapshot: Snapshot) {
         let targetItems = newSnapshot.itemIdentifiers(inSection: section)
+        if snapshot.itemIdentifiers(inSection: section).isEmpty {
+            snapshot.appendItems(targetItems, toSection: section)
+            return
+        }
+
         let targetIdentifiers = Set(targetItems.map(\.patchIdentifier))
         var itemsByIdentifier = Dictionary(uniqueKeysWithValues: snapshot.itemIdentifiers(inSection: section).map { ($0.patchIdentifier, $0) })
         let itemsToDelete = snapshot.itemIdentifiers(inSection: section).filter { !targetIdentifiers.contains($0.patchIdentifier) }

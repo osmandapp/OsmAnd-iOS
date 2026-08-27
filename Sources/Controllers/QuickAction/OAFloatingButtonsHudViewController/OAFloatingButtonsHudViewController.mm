@@ -395,7 +395,11 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)setupButtonRotation:(OAHudButton *)button
 {
     if ([self isMapOrientationButton:button])
+    {
+        button.imageView.contentMode = UIViewContentModeCenter;
+        button.imageView.clipsToBounds = NO;
         [self configMapOrientationButtonIfExists];
+    }
 }
 
 - (void)restorePinPosition

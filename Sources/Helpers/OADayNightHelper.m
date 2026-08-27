@@ -211,7 +211,8 @@ static const NSTimeInterval kCarPlayAutoRecalcInterval = 60.0;
                                                 repeats:YES
                                                   block:^(NSTimer * _Nonnull timer) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf) {
+            if (!strongSelf)
+            {
                 [timer invalidate];
                 return;
             }

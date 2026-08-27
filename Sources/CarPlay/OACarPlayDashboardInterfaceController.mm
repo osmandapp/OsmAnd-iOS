@@ -351,6 +351,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             destinationSubtitle = nil;
     }
     
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 260400
     if (@available(iOS 26.4, *)) {
         CPLocationCoordinate3D startPoint = {
             .latitude = startCoord.latitude,
@@ -385,7 +386,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         _currentTrip = [[CPTrip alloc] initWithOriginWaypoint:origin
                                           destinationWaypoint:destination
                                                  routeChoices:@[routeChoice]];
-    } else {
+    }
+    else
+#endif
+    {
         
         NSMutableDictionary<NSString *, NSString *> *addressDict = [NSMutableDictionary dictionary];
         

@@ -378,6 +378,22 @@
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
                                            screenLayoutMode:(int)screenLayoutMode
 {
+    ScreenElementsMode screenElementsMode = [_settings.useSeparateLayouts get:appMode]
+        ? ScreenElementsModeIndependent
+        : ScreenElementsModeShared;
+    return [self widgetsForPanel:appMode
+                    filterModes:filterModes
+                         panels:panels
+               screenLayoutMode:screenLayoutMode
+             screenElementsMode:screenElementsMode];
+}
+
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
+                                           screenLayoutMode:(int)screenLayoutMode
+                                         screenElementsMode:(int)screenElementsMode
+{
     NSMutableArray<Class> *includedWidgetTypes = [NSMutableArray array];
     if ([panels containsObject:OAWidgetsPanel.leftPanel] || [panels containsObject:OAWidgetsPanel.rightPanel])
     {
@@ -389,8 +405,14 @@
         [includedWidgetTypes addObject:OACenterWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
     }
-    NSArray<OAMapWidgetInfo *> *widgetInfos = [self widgetsForAppMode:appMode
-                                                     screenLayoutMode:(ScreenLayoutMode)screenLayoutMode];
+    ScreenElementsMode currentScreenElementsMode = [_settings.useSeparateLayouts get:appMode]
+        ? ScreenElementsModeIndependent
+        : ScreenElementsModeShared;
+    NSArray<OAMapWidgetInfo *> *widgetInfos = (ScreenElementsMode)screenElementsMode == currentScreenElementsMode
+        ? [self widgetsForAppMode:appMode screenLayoutMode:(ScreenLayoutMode)screenLayoutMode]
+        : [OAWidgetsInitializer createAllControlsWithAppMode:appMode
+                                           screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
+                                         screenElementsMode:(ScreenElementsMode)screenElementsMode];
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
@@ -402,8 +424,8 @@
             BOOL defaultMode = (filterModes & kWidgetModeDefault) == kWidgetModeDefault;
             BOOL matchingPanelsMode = (filterModes & kWidgetModeMatchingPanels) == kWidgetModeMatchingPanels;
 
-            BOOL passDisabled = !disabledMode || ![widget isEnabledForAppMode:appMode];
-            BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode];
+            BOOL passDisabled = !disabledMode || ![widget isEnabledForAppMode:appMode screenElementsMode:(ScreenElementsMode)screenElementsMode];
+            BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode screenElementsMode:(ScreenElementsMode)screenElementsMode];
             BOOL passAvailable = !availableMode || [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widget.key appMode:appMode];
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
             BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:widget.widgetPanel];

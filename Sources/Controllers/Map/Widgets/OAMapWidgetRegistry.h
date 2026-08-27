@@ -42,6 +42,11 @@
                                                 filterModes:(NSInteger)filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
                                            screenLayoutMode:(int)screenLayoutMode;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
+                                           screenLayoutMode:(int)screenLayoutMode
+                                         screenElementsMode:(int)screenElementsMode;
 
 - (void) enableDisableWidgetForMode:(OAApplicationMode *)appMode
                          widgetInfo:(OAMapWidgetInfo *)widgetInfo

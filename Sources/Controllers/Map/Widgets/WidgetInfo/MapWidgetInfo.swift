@@ -223,7 +223,12 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
-        let widgetsVisibility = getWidgetsVisibility(appMode)
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
+        return isEnabledForAppMode(appMode, screenElementsMode: screenElementsMode)
+    }
+
+    func isEnabledForAppMode(_ appMode: OAApplicationMode, screenElementsMode: ScreenElementsMode) -> Bool {
+        let widgetsVisibility = widgetsVisibility(appMode, screenElementsMode: screenElementsMode)
         if widgetsVisibility.contains(key) || widgetsVisibility.contains(COLLAPSED_PREFIX + key) {
             return true
         } else if widgetsVisibility.contains(HIDE_PREFIX + key) {
@@ -245,7 +250,12 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
-        var widgetsVisibility: [String] = getWidgetsVisibility(appMode)
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
+        enableDisable(appMode: appMode, enabled: enabled, screenElementsMode: screenElementsMode)
+    }
+
+    func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?, screenElementsMode: ScreenElementsMode) {
+        var widgetsVisibility = widgetsVisibility(appMode, screenElementsMode: screenElementsMode)
         widgetsVisibility.removeAll(where: { $0 == key })
         widgetsVisibility.removeAll(where: { $0 == COLLAPSED_PREFIX + key })
         widgetsVisibility.removeAll(where: { $0 == HIDE_PREFIX + key })
@@ -263,21 +273,20 @@ class MapWidgetInfo: NSObject, Comparable {
             newVisibilityString.removeLast()
         }
 
-        visibilityPreference(appMode).set(newVisibilityString, mode: appMode)
+        visibilityPreference(screenElementsMode).set(newVisibilityString, mode: appMode)
 
         if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode), (enabled == nil || !enabled!.boolValue) {
             settingsPref.resetMode(toDefault: appMode)
         }
     }
     
-    private func getWidgetsVisibility(_ appMode: OAApplicationMode) -> [String] {
-        let widgetsVisibilityString = visibilityPreference(appMode).get(appMode)
+    private func widgetsVisibility(_ appMode: OAApplicationMode, screenElementsMode: ScreenElementsMode) -> [String] {
+        let widgetsVisibilityString = visibilityPreference(screenElementsMode).get(appMode)
         return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
     }
     
-    private func visibilityPreference(_ appMode: OAApplicationMode) -> OACommonString {
+    private func visibilityPreference(_ screenElementsMode: ScreenElementsMode) -> OACommonString {
         let settings = OAAppSettings.sharedManager()
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
         return settings.mapInfoControls(screenLayoutMode.rawValue,
                                         screenElementsMode: screenElementsMode.rawValue)
     }

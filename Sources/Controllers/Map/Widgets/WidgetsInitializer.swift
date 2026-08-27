@@ -19,13 +19,17 @@ protocol WidgetRegistrationDelegate {
 class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     private let appMode: OAApplicationMode
     let screenLayoutMode: ScreenLayoutMode
+    private let screenElementsMode: ScreenElementsMode
     private let factory: MapWidgetsFactory
     private let creator: WidgetInfoCreator
     private var mapWidgetsCache: [MapWidgetInfo] = []
     
-    private init(_ appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
+    private init(_ appMode: OAApplicationMode,
+                 screenLayoutMode: ScreenLayoutMode,
+                 screenElementsMode: ScreenElementsMode) {
         self.appMode = appMode
         self.screenLayoutMode = screenLayoutMode
+        self.screenElementsMode = screenElementsMode
         self.factory = MapWidgetsFactory()
         self.creator = WidgetInfoCreator(appMode: appMode, screenLayoutMode: screenLayoutMode)
     }
@@ -35,6 +39,11 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         OAPluginsHelper.createMapWidgets(self, appMode: appMode, widgetParams: nil)
 //        app.getAidlApi().createWidgetControls(mapActivity, mapWidgetsCache, appMode)
         createCustomWidgets()
+        let useSeparateLayouts = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+        let currentScreenElementsMode = ScreenElementsMode(usesSeparateLayouts: useSeparateLayouts)
+        if screenElementsMode != currentScreenElementsMode {
+            applyStoredLayoutData()
+        }
         return mapWidgetsCache
     }
     
@@ -123,15 +132,53 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     }
 
     static func createAllControls(appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> [MapWidgetInfo] {
-        let initializer = WidgetsInitializer(appMode, screenLayoutMode: screenLayoutMode)
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
+        return createAllControls(appMode: appMode,
+                                 screenLayoutMode: screenLayoutMode,
+                                 screenElementsMode: screenElementsMode)
+    }
+
+    static func createAllControls(appMode: OAApplicationMode,
+                                  screenLayoutMode: ScreenLayoutMode,
+                                  screenElementsMode: ScreenElementsMode) -> [MapWidgetInfo] {
+        let initializer = WidgetsInitializer(appMode,
+                                             screenLayoutMode: screenLayoutMode,
+                                             screenElementsMode: screenElementsMode)
         return initializer.createAllControls()
     }
 
     private func customWidgetKeysPreference() -> OACommonStringList {
         let settings = OAAppSettings.sharedManager()
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
         return settings.customWidgetKeys(screenLayoutMode.rawValue,
                                          screenElementsMode: screenElementsMode.rawValue)
+    }
+
+    private func applyStoredLayoutData() {
+        for widgetInfo in mapWidgetsCache {
+            let panel: WidgetsPanel
+            if let widgetType = widgetInfo.widget.widgetType {
+                panel = widgetType.panel(widgetInfo.key,
+                                         appMode: appMode,
+                                         screenLayoutMode: screenLayoutMode,
+                                         screenElementsMode: screenElementsMode)
+            } else {
+                panel = WidgetsPanel.values.first {
+                    $0.contains(widgetId: widgetInfo.key,
+                                appMode: appMode,
+                                screenLayoutMode: screenLayoutMode,
+                                screenElementsMode: screenElementsMode)
+                } ?? widgetInfo.widgetPanel
+            }
+            widgetInfo.widgetPanel = panel
+            widgetInfo.pageIndex = panel.widgetPage(widgetInfo.key,
+                                                    appMode: appMode,
+                                                    screenLayoutMode: screenLayoutMode,
+                                                    screenElementsMode: screenElementsMode)
+            widgetInfo.priority = panel.widgetOrder(widgetInfo.key,
+                                                    appMode: appMode,
+                                                    screenLayoutMode: screenLayoutMode,
+                                                    screenElementsMode: screenElementsMode)
+        }
     }
     
     // MARK: WidgetRegistrationDelegate

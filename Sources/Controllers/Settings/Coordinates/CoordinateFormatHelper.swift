@@ -37,9 +37,8 @@ enum CoordinateFormatHelper {
     static func exampleString(_ format: CoordinateFormat) -> String {
         guard let legacy = format.legacyFormat else { return "—" }
         let location = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation
-                        ?? OARootViewController.instance().mapPanel.mapViewController.getMapLocation()
-        let lat = location.coordinate.latitude
-        let lon = location.coordinate.longitude
+        let lat = location?.coordinate.latitude ?? exampleLat
+        let lon = location?.coordinate.longitude ?? exampleLon
         return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy) ?? "—"
     }
 }

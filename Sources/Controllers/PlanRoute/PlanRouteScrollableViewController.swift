@@ -349,10 +349,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
-        restoreMapViewport()
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
             setMapHudStatusBarHidden(false)
+            restoreMapViewport()
             dataProvider.dismissLayer()
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             removeFromParent()

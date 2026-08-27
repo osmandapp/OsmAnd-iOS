@@ -226,8 +226,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private func showSearchController() {
         searchController?.searchBar.alpha = 0
         navigationItem.searchController = searchController
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.navigationItem.searchController?.isActive = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            UIView.performWithoutAnimation {
+                self.navigationItem.searchController?.isActive = true
+            }
         }
     }
 
@@ -490,14 +492,19 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
         navigationItem.searchController = nil
         pageViewController?.delegate = self
         pageViewController?.dataSource = self
-        segmentContainerView.transform = CGAffineTransform(translationX: 0, y: -segmentContainerView.bounds.height)
+        segmentContainerView.transform = .identity
+        // Match Astronomy's segment reveal; here the segment overlays the content instead of sharing a stack view with it.
+        segmentContainerView.clipsToBounds = true
+        segmentControl.transform = CGAffineTransform(translationX: 0, y: -segmentControl.bounds.height)
         segmentContainerView.isHidden = false
-        UIView.animate(withDuration: 0.4, delay: 0, options: [.beginFromCurrentState]) {
+        UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: [.beginFromCurrentState]) {
             searchController.searchBar.alpha = 0
-            self.segmentContainerView.transform = .identity
+            self.segmentControl.transform = .identity
             self.segmentContainerView.alpha = 1
             self.updateContentSafeAreaInsets(segmentIsVisible: true)
             self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.segmentContainerView.clipsToBounds = false
         }
     }
     

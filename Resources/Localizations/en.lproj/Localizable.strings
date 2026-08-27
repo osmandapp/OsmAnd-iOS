@@ -5046,3 +5046,4 @@
 "custom_widget_colors" = "Custom widget colors";
 "custom_widget_colors_description" = "Improve readability on the go. Unlock full color customization to ensure perfect widget visibility against any map background, day or night.";
 "unlock_custom_colors" = "Unlock Custom Colors";
+"carplay_trip_via_point" = "Via %@";

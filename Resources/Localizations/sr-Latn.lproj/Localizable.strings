@@ -4548,3 +4548,4 @@
 "shared_string_send" = "Pošalji";
 "send_current_app_log" = "Pošalji trenutni dnevnik aplikacije";
 "send_current_app_log_descr" = "Od početka aplikacije";
+"msg_favorites_skipped_as_existing" = "Omiljene tačke (%d) su preskočene kao već postojeće.";

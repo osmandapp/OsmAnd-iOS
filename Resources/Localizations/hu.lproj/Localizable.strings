@@ -4511,3 +4511,4 @@
 "shared_string_send" = "Küldés";
 "send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
 "send_current_app_log_descr" = "Alkalmazás indulása óta";
+"msg_favorites_skipped_as_existing" = "A kedvenc pontok (%d) ki lettek hagyva, mivel azok már léteznek.";

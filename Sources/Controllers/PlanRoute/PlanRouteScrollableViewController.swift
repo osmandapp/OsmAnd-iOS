@@ -90,6 +90,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var approximationPreviousSheetState: EOADraggableMenuState?
     private var approximationNavigationController: UINavigationController?
     private var usesSidePanelLayout = false
+    private var hasAppliedSidePanelViewportXScale = false
     private var lastMapCenterX: CGFloat = 0
     private var lastSidePanelMapInset: CGFloat = 0
     private var lastSidePanelTopInset: CGFloat = 0
@@ -1024,7 +1025,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         crosshairCenterXConstraint?.constant = centerX
         crosshairCenterYConstraint?.constant = centerY
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
-        mapViewController.viewportXScale = Double(2 * centerX / targetScreenSize.width)
+        if usesSidePanelLayout {
+            mapViewController.viewportXScale = Double(2 * centerX / targetScreenSize.width)
+            hasAppliedSidePanelViewportXScale = true
+        } else if hasAppliedSidePanelViewportXScale, let cachedMapViewportXScale {
+            mapViewController.viewportXScale = cachedMapViewportXScale
+            hasAppliedSidePanelViewportXScale = false
+        }
         mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
         if preserveMapPosition {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
@@ -1037,6 +1044,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func restoreMapViewport() {
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
         let mapViewSize = mapViewController.view.bounds.size
+        hasAppliedSidePanelViewportXScale = false
         if let cachedMapPositionX {
             self.cachedMapPositionX = nil
             mapViewController.mapPositionX = cachedMapPositionX

@@ -43,7 +43,6 @@
     BOOL _isSearchingWork;
     BOOL _isSearchingStart;
     BOOL _isSearchingMyLocation;
-    dispatch_queue_t _locationQueue;
     
     OARTargetPoint *_destinationLookupPoint;
 }
@@ -68,7 +67,7 @@
         _settings = [OAAppSettings sharedManager];
         _listeners = [NSMutableArray array];
         _routingHelper = [OARoutingHelper sharedInstance];
-        _locationQueue = dispatch_queue_create("com.osmand.targetpoints.location", DISPATCH_QUEUE_SERIAL);
+        
         [self readFromSettings];
     }
     return self;
@@ -554,90 +553,107 @@
     [self lookupAddressForWorkPoint];
 }
 
-- (void) lookupAddressForHomePoint
+- (void)lookupAddressForHomePoint
 {
     OARTargetPoint *homePoint = [self getHomePoint];
-    if (homePoint != nil && [homePoint isSearchingAddress] && !_isSearchingHome)
-    {
-        _isSearchingHome = YES;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:homePoint.point];
-            [homePoint.pointDescription setName:pointName];
-            [OAFavoritesHelper setSpecialPoint:[OASpecialPointType HOME] lat:homePoint.getLatitude lon:homePoint.getLongitude address:pointName];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
-                _isSearchingHome = NO;
-            });
-        });
-    }
+    if (homePoint == nil || ![homePoint isSearchingAddress] || _isSearchingHome)
+        return;
+    
+    _isSearchingHome = YES;
+    
+    __weak __typeof(self) weakSelf = self;
+    [self getLocationName:homePoint.point completion:^(NSString *pointName) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf)
+            return;
+        
+        [homePoint.pointDescription setName:pointName];
+        [OAFavoritesHelper setSpecialPoint:[OASpecialPointType HOME]
+                                       lat:homePoint.getLatitude
+                                       lon:homePoint.getLongitude
+                                   address:pointName];
+        [strongSelf updateListeners:NO];
+        strongSelf->_isSearchingHome = NO;
+    }];
 }
 
-- (void) lookupAddressForWorkPoint
+- (void)lookupAddressForWorkPoint
 {
     OARTargetPoint *workPoint = [self getWorkPoint];
-    if (workPoint != nil && [workPoint isSearchingAddress] && !_isSearchingWork)
-    {
-        _isSearchingWork = YES;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:workPoint.point];
-            [workPoint.pointDescription setName:pointName];
-            [OAFavoritesHelper setSpecialPoint:[OASpecialPointType WORK] lat:workPoint.getLatitude lon:workPoint.getLongitude address:pointName];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
-                _isSearchingWork = NO;
-            });
-        });
-    }
+    if (workPoint == nil || ![workPoint isSearchingAddress] || _isSearchingWork)
+        return;
+    
+    _isSearchingWork = YES;
+    
+    __weak __typeof(self) weakSelf = self;
+    [self getLocationName:workPoint.point completion:^(NSString *pointName) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf)
+            return;
+        
+        [workPoint.pointDescription setName:pointName];
+        [OAFavoritesHelper setSpecialPoint:[OASpecialPointType WORK]
+                                       lat:workPoint.getLatitude
+                                       lon:workPoint.getLongitude
+                                   address:pointName];
+        [strongSelf updateListeners:NO];
+        strongSelf->_isSearchingWork = NO;
+    }];
 }
 
-- (void) lookupAddressForStartPoint
+- (void)lookupAddressForStartPoint
 {
-    if (_pointToStart != nil && [_pointToStart isSearchingAddress] && !_isSearchingStart)
-    {
-        _isSearchingStart = YES;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:_pointToStart.point];
-            [_pointToStart.pointDescription setName:pointName];
-            [_app.data setPointToStart:_pointToStart];
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateRouteAndRefresh:NO];
-                _isSearchingStart = NO;
-            });
-        });
-    }
+    if (_pointToStart == nil || ![_pointToStart isSearchingAddress] || _isSearchingStart)
+        return;
+    
+    _isSearchingStart = YES;
+    OARTargetPoint *startPoint = _pointToStart;
+    
+    __weak __typeof(self) weakSelf = self;
+    [self getLocationName:startPoint.point completion:^(NSString *pointName) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf)
+            return;
+        
+        if (strongSelf->_pointToStart != startPoint)
+        {
+            strongSelf->_isSearchingStart = NO;
+            return;
+        }
+        [startPoint.pointDescription setName:pointName];
+        [strongSelf->_app.data setPointToStart:startPoint];
+        [strongSelf updateRouteAndRefresh:NO];
+        strongSelf->_isSearchingStart = NO;
+    }];
 }
 
 - (void)lookupAddressForMyLocationPoint
 {
-    if (_myLocationToStart != nil && [_myLocationToStart isSearchingAddress] && !_isSearchingMyLocation)
-    {
-        _isSearchingMyLocation = YES;
+    if (_myLocationToStart == nil || ![_myLocationToStart isSearchingAddress] || _isSearchingMyLocation)
+        return;
+    
+    _isSearchingMyLocation = YES;
+    OARTargetPoint *localMyStart = _myLocationToStart;
+    CLLocation *localPoint = localMyStart.point;
+    
+    __weak __typeof(self) weakSelf = self;
+    [self getLocationName:localPoint completion:^(NSString *pointName) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
         
-        // Capture locals to avoid racing on ivars in background work
-        __block OARTargetPoint *const localMyStart = _myLocationToStart;
-        __block CLLocation     *const localPoint   = localMyStart.point;
+        if (!strongSelf)
+            return;
         
-        __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            __strong __typeof(weakSelf) self = weakSelf;
-            if (!self)
-                return;
-            
-            // Pure computation only — no shared-state touches here
-            NSString *pointName = [self getLocationName:localPoint];
-            
-            // Write back on main, re-validate the target before touching it
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self->_myLocationToStart == localMyStart)
-                {
-                    [localMyStart.pointDescription setName:pointName ?: @""];
-                    [self->_app.data setMyLocationToStart:localMyStart];
-                    [self updateRouteAndRefresh:NO];
-                }
-                self->_isSearchingMyLocation = NO;
-            });
-        });
-    }
+        if (strongSelf->_myLocationToStart == localMyStart)
+        {
+            [localMyStart.pointDescription setName:pointName ?: @""];
+            [strongSelf->_app.data setMyLocationToStart:localMyStart];
+            [strongSelf updateRouteAndRefresh:NO];
+        }
+        strongSelf->_isSearchingMyLocation = NO;
+    }];
 }
 
 - (void)lookupAddressForDestinationPoint
@@ -661,101 +677,85 @@
     BOOL isNameNotValid = [destination isSearchingAddress];
     
     __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self getLocationName:location completion:^(NSString *pointName) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf) return;
         
-        NSString *pointName = [strongSelf getLocationName:location];
+        if (!strongSelf)
+            return;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (strongSelf->_destinationLookupPoint != destination)
-                return;
-            
-            strongSelf->_destinationLookupPoint = nil;
-            
-            if (strongSelf->_pointToNavigate != destination)
-                return;
-            
-            if (isNameNotValid) {
-                [destination.pointDescription setName:pointName];
-                destination.pointDescription.address = pointName;
-                [strongSelf->_app.data setPointToNavigate:destination];
-            } else {
-                destination.pointDescription.address = pointName;
-                [strongSelf->_app.data backupTargetPoints];
-            }
-            [strongSelf updateRouteAndRefresh:NO];
-        });
-    });
+        if (strongSelf->_destinationLookupPoint != destination)
+            return;
+        
+        strongSelf->_destinationLookupPoint = nil;
+        
+        if (strongSelf->_pointToNavigate != destination)
+            return;
+        
+        if (isNameNotValid)
+        {
+            [destination.pointDescription setName:pointName];
+            destination.pointDescription.address = pointName;
+            [strongSelf->_app.data setPointToNavigate:destination];
+        }
+        else
+        {
+            destination.pointDescription.address = pointName;
+            [strongSelf->_app.data backupTargetPoints];
+        }
+        [strongSelf updateRouteAndRefresh:NO];
+    }];
 }
 
 - (void)lookupAddressForIntermediatePoint:(OARTargetPoint *)point
 {
     BOOL isNameNotValid = point != nil && [point isSearchingAddress];
     BOOL isAddressEmpty = point != nil && NSStringIsEmpty(point.pointDescription.address) && _intermediatePoints.firstObject == point;
-
-    if (isNameNotValid || isAddressEmpty)
-    {
-        OARTargetPoint *targetPoint = point;
-        CLLocation *location = targetPoint.point;
-        __weak __typeof(self) weakSelf = self;
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-
-            NSString *pointName = [strongSelf getLocationName:location];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf)
-                    return;
-                
-                if ([strongSelf->_intermediatePoints indexOfObjectIdenticalTo:targetPoint] == NSNotFound)
-                    return;
-
-                if (isNameNotValid)
-                    [targetPoint.pointDescription setName:pointName];
-
-                targetPoint.pointDescription.address = pointName;
-                [strongSelf->_app.data backupTargetPoints];
-                [strongSelf updateRouteAndRefresh:NO];
-            });
-        });
-    }
+    
+    if (!isNameNotValid && !isAddressEmpty)
+        return;
+    
+    OARTargetPoint *targetPoint = point;
+    CLLocation *location = targetPoint.point;
+    
+    __weak __typeof(self) weakSelf = self;
+    [self getLocationName:location completion:^(NSString *pointName) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (!strongSelf)
+            return;
+        
+        if ([strongSelf->_intermediatePoints indexOfObjectIdenticalTo:targetPoint] == NSNotFound)
+            return;
+        
+        if (isNameNotValid)
+            [targetPoint.pointDescription setName:pointName];
+        
+        targetPoint.pointDescription.address = pointName;
+        [strongSelf->_app.data backupTargetPoints];
+        [strongSelf updateRouteAndRefresh:NO];
+    }];
 }
 
-- (NSString *)getLocationName:(CLLocation *)location
+- (void)getLocationName:(CLLocation *)location completion:(void (^)(NSString *name))completion
 {
-    __block NSString *formattedTargetName = nil;
+    if (!completion)
+        return;
     
-    dispatch_sync(_locationQueue, ^{
-        NSString *addressString = nil;
-        BOOL isAddressFound = NO;
-        NSString *roadTitle = nil;
-        if (location && CLLocationCoordinate2DIsValid(location.coordinate))
-            roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-        if (!roadTitle || roadTitle.length == 0)
-        {
-            addressString = OALocalizedString(@"map_no_address");
-        }
+    if (!location || !CLLocationCoordinate2DIsValid(location.coordinate))
+    {
+        completion(OALocalizedString(@"map_no_address"));
+        return;
+    }
+    
+    [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude
+                                                 lon:location.coordinate.longitude
+                                            objectId:0
+                                          completion:^(NSString *address) {
+        if (address.length > 0)
+            completion(address);
         else
-        {
-            addressString = roadTitle;
-            isAddressFound = YES;
-        }
-        
-        if (isAddressFound || addressString)
-        {
-            formattedTargetName = addressString;
-        }
-        else
-        {
-            formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
-        }
-    });
-    return formattedTargetName;
+            completion(OALocalizedString(@"map_no_address"));
+    }];
 }
 
 - (BOOL) hasTooLongDistanceToNavigate

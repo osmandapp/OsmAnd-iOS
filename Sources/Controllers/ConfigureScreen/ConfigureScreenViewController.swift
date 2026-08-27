@@ -65,9 +65,18 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
 
     override func createSubview() -> UIView {
         let segmentedControl = UISegmentedControl(items: ScreenLayoutMode.allCases.map { $0.title })
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.scaledSystemFont(ofSize: 15, weight: .medium)
+        ]
+        segmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
         segmentedControl.selectedSegmentIndex = Int(screenLayoutMode.rawValue)
         segmentedControl.addTarget(self, action: #selector(onLayoutModeChanged(_:)), for: .valueChanged)
         return segmentedControl
+    }
+
+    override func onContentSizeChanged(_ notification: Notification) {
+        super.onContentSizeChanged(notification)
+        updateSubview(true)
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {

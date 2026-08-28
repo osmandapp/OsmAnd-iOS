@@ -325,7 +325,7 @@ final class WidgetPanelAppearanceSettings {
     }
 }
 
-@objc(OAResolvedWidgetPanelAppearance) final class ResolvedWidgetPanelAppearance: NSObject {
+final class ResolvedWidgetPanelAppearance: NSObject {
     @objc let primaryTextColor: UIColor
     @objc let secondaryTextColor: UIColor
     @objc let backgroundColor: UIColor
@@ -351,7 +351,7 @@ final class WidgetPanelAppearanceSettings {
     }
 }
 
-@objc(OAWidgetPanelAppearanceResolver) final class WidgetPanelAppearanceResolver: NSObject {
+final class WidgetPanelAppearanceResolver: NSObject {
     @objc(resolveForPanel:appMode:nightMode:) static func resolve(
         panel: WidgetsPanel,
         appMode: OAApplicationMode,

@@ -320,8 +320,8 @@
         OAApplicationMode *appMode = _settings.applicationMode.get;
         for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
-            OAResolvedWidgetPanelAppearance *appearance =
-                [OAWidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
+            ResolvedWidgetPanelAppearance *appearance =
+                [WidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
             OATextState *panelState = [self calculateTextStateForAppearance:appearance baseState:state];
             for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
             {
@@ -415,10 +415,10 @@
                direction:(ShadowPathDirection)direction
 {
     OAWidgetsPanel *panel = view == _topShadowContainerView ? OAWidgetsPanel.topPanel : OAWidgetsPanel.bottomPanel;
-    OAResolvedWidgetPanelAppearance *appearance =
-        [OAWidgetPanelAppearanceResolver resolveForPanel:panel
-                                                 appMode:_settings.applicationMode.get
-                                               nightMode:_settings.nightMode];
+    ResolvedWidgetPanelAppearance *appearance =
+        [WidgetPanelAppearanceResolver resolveForPanel:panel
+                                               appMode:_settings.applicationMode.get
+                                             nightMode:_settings.nightMode];
     view.direction = appearance.transparent ? ShadowPathDirectionClear : direction;
 }
 
@@ -821,7 +821,7 @@
     return ts;
 }
 
-- (OATextState *)calculateTextStateForAppearance:(OAResolvedWidgetPanelAppearance *)appearance
+- (OATextState *)calculateTextStateForAppearance:(ResolvedWidgetPanelAppearance *)appearance
                                        baseState:(OATextState *)baseState
 {
     OATextState *state = [[OATextState alloc] init];

@@ -183,7 +183,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         case .icon:
             let mode = appearanceSettings.iconMode(for: selectedPanel)
             cell.configure(title: title,
-                           preview: .image(.icCustomInfoFilled, .iconColorActive),
+                           preview: .image(.icCustomInfo, .iconColorActive),
                            value: mode.title,
                            menu: createIconMenu())
         case .primaryTextColor:

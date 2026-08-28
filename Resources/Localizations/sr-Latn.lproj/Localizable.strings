@@ -4549,3 +4549,6 @@
 "send_current_app_log" = "Pošalji trenutni dnevnik aplikacije";
 "send_current_app_log_descr" = "Od početka aplikacije";
 "msg_favorites_skipped_as_existing" = "Omiljene tačke (%d) su preskočene kao već postojeće.";
+"osm_edits_empty_state_title" = "Nema izmena mape na čekanju";
+"osm_edits_empty_state_description" = "Promene koje napravite u OsmAndu će se pojaviti ovde pre nego što se otpreme na OpenStreetMap";
+"carplay_trip_via_point" = "Preko %@";

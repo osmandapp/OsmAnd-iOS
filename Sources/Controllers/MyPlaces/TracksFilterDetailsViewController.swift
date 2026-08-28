@@ -353,7 +353,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                         filteredTracks.contains(where: { $0.path == trackItem.path })
                     }.count
                     let totalTracksCount = folderTracks.count
-                    allFoldersRow.descr = "\(matchingTracksCount)/\(totalTracksCount)"
+                    allFoldersRow.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
                 }
             }
             
@@ -370,7 +370,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                         filteredTracks.contains(where: { $0.path == trackItem.path })
                     }.count
                     let totalTracksCount = folderTracks.count
-                    row.descr = "\(matchingTracksCount)/\(totalTracksCount)"
+                    row.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
                 }
                 
                 if !isRootFolder {
@@ -560,7 +560,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         let row = section.createNewRow()
         row.cellType = OAValueTableViewCell.reuseIdentifier
         row.key = itemName
-        row.descr = "\(listFilterType?.getTracksCountForItem(itemName: itemName) ?? 0)"
+        row.descr = NumberFormatter.localizedCount(listFilterType?.getTracksCountForItem(itemName: itemName) ?? 0)
         switch filterType {
         case .activity:
             let activity = RouteActivityHelper.shared.findRouteActivity(id: itemName)

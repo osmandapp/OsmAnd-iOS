@@ -557,7 +557,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     private func applyExistingTracksTitle() -> String {
-        String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("apply_to_existing"), "(\(tracks.count))")
+        String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("apply_to_existing"), "(\(NumberFormatter.localizedCount(tracks.count)))")
     }
     
     private func dismissAndRefreshMap() {

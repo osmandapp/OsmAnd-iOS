@@ -137,7 +137,7 @@ protocol SortableFolder {
     
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
         let tracksCount = folder.totalTracksCount
-        let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
+        let basicDescription = String(format: localizedString("folder_tracks_count"), NumberFormatter.localizedCount(tracksCount))
         let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))
         if !lastModifiedString.isEmpty {
             return "\(lastModifiedString) • \(basicDescription)"
@@ -152,7 +152,7 @@ protocol SortableFolder {
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")
         let duration = track.getAnalysis()?.getDurationInSeconds() ?? 0
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(duration), shortFormat: true) ?? localizedString("shared_string_not_available")
-        let waypointCount = "\(track.wptPoints)"
+        let waypointCount = NumberFormatter.localizedCount(track.wptPoints)
         let fullString = NSMutableAttributedString()
         let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
         let detailsText = "\(distance) • \(time) • \(waypointCount)"

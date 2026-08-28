@@ -440,7 +440,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
             } else {
                 let totalSelectedPoints = selectionManager.selectedItems.count
                 let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
-                title = "\(totalSelectedPoints) \(itemText)"
+                title = "\(NumberFormatter.localizedCount(totalSelectedPoints)) \(itemText)"
             }
         } else {
             title = localizedString("osm_edits_title")
@@ -523,10 +523,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     
     private func delete(_ point: OAOsmPoint) {
         let count = 1
-        let message = String(format: localizedString("osm_edits_delete_item_confirmation"), count)
+        let formattedCount = NumberFormatter.localizedCount(count)
+        let message = String(format: localizedString("osm_edits_delete_item_confirmation"), formattedCount)
         let attributedString = NSMutableAttributedString(string: message)
 
-        if let range = message.range(of: "\(count)") {
+        if let range = message.range(of: formattedCount) {
             let nsRange = NSRange(range, in: message)
             attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
         }
@@ -676,10 +677,12 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         let selectedPoints = Array(selectionManager.selectedItems)
         if !selectedPoints.isEmpty {
             let count = selectedPoints.count
-            let message = String(format: localizedString("osm_edits_delete_items_confirmation"), count)
+            let formattedCount = NumberFormatter.localizedCount(count)
+            let messageKey = count == 1 ? "osm_edits_delete_item_confirmation" : "osm_edits_delete_items_confirmation"
+            let message = String(format: localizedString(messageKey), formattedCount)
             let attributedString = NSMutableAttributedString(string: message)
 
-            if let range = message.range(of: "\(count)") {
+            if let range = message.range(of: formattedCount) {
                 let nsRange = NSRange(range, in: message)
                 attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
             }

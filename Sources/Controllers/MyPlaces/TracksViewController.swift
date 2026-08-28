@@ -446,7 +446,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                         visibleTracksFolderRow.title = localizedString("tracks_on_map")
                         visibleTracksFolderRow.iconName = "ic_custom_map_pin"
                         visibleTracksFolderRow.setObj(UIColor.iconColorActive, forKey: colorKey)
-                        visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), settings.mapSettingVisibleGpx.get().count)
+                        visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), NumberFormatter.localizedCount(settings.mapSettingVisibleGpx.get().count))
                     }
                 }
                 
@@ -521,7 +521,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func formattedTracksCount(_ count: Int) -> String {
-        count == 1 ? localizedString("folder_one_track") : String(format: localizedString("folder_tracks_count"), count)
+        count == 1 ? localizedString("folder_one_track") : String(format: localizedString("folder_tracks_count"), NumberFormatter.localizedCount(count))
     }
 
     fileprivate func createRowFor(folder: SortableFolder, section: OATableSectionData) {
@@ -675,9 +675,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 
                 let totalTracks = totalSelectedTracks + tracksInSelectedFolders
                 let itemText = localizedString("shared_string_item").lowercased()
-                title = "\(totalSelectedItems) \(itemText)"
+                title = "\(NumberFormatter.localizedCount(totalSelectedItems)) \(itemText)"
                 if totalTracks > 0 {
-                    title += " (\(String(format: localizedString("folder_tracks_count"), totalTracks)))"
+                    title += " (\(formattedTracksCount(totalTracks)))"
                 }
             }
         } else if isRootFolder {
@@ -805,7 +805,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         var baseTitle = localizedString("filter_current_poiButton")
         var baseIcon: UIImage = .icCustomFilter
         if let count = isEditFilterActive ? smartFolder.filters?.count : baseFilters?.getAppliedFiltersCount(), count > 0 {
-            baseTitle += " (\(count))"
+            baseTitle += " (\(NumberFormatter.localizedCount(count)))"
             baseIcon = .icCustomFilterFilled
         }
         
@@ -909,7 +909,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let totalTime = folderAnalysis.timeSpan
         let totalSizeBytes = folderAnalysis.fileSize
         
-        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(folderAnalysis.tracksCount)"
+        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(NumberFormatter.localizedCount(folderAnalysis.tracksCount))"
         if let distance = OAOsmAndFormatter.getFormattedDistance(totalDistance) {
             statistics += ", \(localizedString("shared_string_distance").lowercased()) – \(distance)"
         }
@@ -1403,7 +1403,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
             
             let totalTracksToDelete = selectedTracks.count + tracksInSelectedFolders
-            let tracksMessagePart = String(format: localizedString("folder_tracks_count"), totalTracksToDelete)
+            let tracksMessagePart = formattedTracksCount(totalTracksToDelete)
             let message = localizedString("delete_tracks_bottom_sheet_description_regular_part") + tracksMessagePart + "?"
             let alert = UIAlertController(title: localizedString("delete_tracks_bottom_sheet_title"), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
@@ -1599,7 +1599,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func onFolderDeleteButtonClicked(folderName: String, tracksCount: Int) {
-        let message = String(format: localizedString("remove_folder_with_files_descr"), arguments: [folderName, tracksCount])
+        let message = String(format: localizedString("remove_folder_with_files_descr"), arguments: [folderName, NumberFormatter.localizedCount(tracksCount)])
         let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
             self?.deleteFolder(folderName)

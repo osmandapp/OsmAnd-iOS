@@ -139,7 +139,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     }
     
     override func getBottomButtonTitle() -> String? {
-        localizedString("shared_string_show") + " (\(baseFilters.getFilteredTrackItems().count))"
+        localizedString("shared_string_show") + " (\(NumberFormatter.localizedCount(baseFilters.getFilteredTrackItems().count)))"
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {

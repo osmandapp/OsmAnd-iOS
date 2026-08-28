@@ -232,7 +232,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     // MARK: - Bottom buttons
 
     override func getTopButtonTitle() -> String? {
-        "\(localizedString("shared_string_import")) \(selection.selectedItems.count)/\(trackItems.count)"
+        "\(localizedString("shared_string_import")) \(NumberFormatter.localizedCount(selection.selectedItems.count))/\(NumberFormatter.localizedCount(trackItems.count))"
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -276,7 +276,7 @@ private extension ImportTracksViewController {
         headerRow.cellType = OASimpleTableViewCell.reuseIdentifier
         headerRow.key = RowKey.trackHeader.rawValue
         headerRow.title = item.name
-        let positionText = String(format: localizedString("ltr_or_rtl_combine_via_of"), item.index + 1, trackItems.count)
+        let positionText = String(format: localizedString("ltr_or_rtl_combine_via_of"), NumberFormatter.localizedCount(item.index + 1), NumberFormatter.localizedCount(trackItems.count))
         headerRow.descr = String(
             format: localizedString("ltr_or_rtl_combine_via_space"),
             localizedString("shared_string_gpx_track"),
@@ -405,7 +405,7 @@ private extension ImportTracksViewController {
         hideSeparator(for: cell, true)
 
         if item.key == RowKey.trackWaypoints.rawValue, let trackItem = item.obj(forKey: RowObjKey.importTrackItem.rawValue) as? ImportTrackItem {
-            cell.valueLabel.text = "\(trackItem.selectedPoints.count)/\(allPointsCount)"
+            cell.valueLabel.text = "\(NumberFormatter.localizedCount(trackItem.selectedPoints.count))/\(NumberFormatter.localizedCount(allPointsCount))"
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
         }
@@ -570,9 +570,10 @@ private extension ImportTracksViewController {
     }
 
     func makeImportTracksDescription(tracksCount: Int) -> NSAttributedString {
+        let formattedTracksCount = NumberFormatter.localizedCount(tracksCount)
         let text = tracksCount == 1
-            ? String(format: localizedString("import_tracks_descr_one"), fileName)
-            : String(format: localizedString("import_tracks_descr_other"), fileName, tracksCount)
+            ? String(format: localizedString("import_tracks_descr_one"), fileName, formattedTracksCount)
+            : String(format: localizedString("import_tracks_descr_other"), fileName, formattedTracksCount)
 
         let result = NSMutableAttributedString(
             string: text,

@@ -2672,7 +2672,7 @@
 "history_preferences_descr" = "Du kan deaktivere logning af historik individuelt for hver historiktype.";
 "history_actions_footer_text" = "Du kan eksportere historik til en fil. Du kan slette alle historikposter, der er registreret indtil nu.";
 "navigation_history" = "Navigationshistorik";
-"ltr_or_rtl_combine_via_of" = "%ld af %ld";
+"ltr_or_rtl_combine_via_of" = "%@ af %@";
 "delete_history_items" = "Slet %@ historikelement(er)?";
 "confirm_history_item_delete" = "Er du sikker på, at du vil slette (%ld) historikelementer?";
 "search_favorites" = "Søg i Favoritter";
@@ -3130,7 +3130,7 @@
 "shared_string_not_available" = "Ikke tilgængelig";
 "help_article_plugins_custom_name" = "Brugerdefineret pakke";
 "shared_string_hide_from_map" = "Skjul på kort";
-"folder_tracks_count" = "%d spor";
+"folder_tracks_count" = "%@ spor";
 "shared_string_open_track" = "Åbn spor";
 "my_places_no_tracks_title_root" = "Du har ingen sporfiler";
 "my_places_no_tracks_title" = "Tom mappe";
@@ -3141,7 +3141,7 @@
 "my_places_no_tracks_descr_root" = "Du kan importere, oprette eller optage sporfiler ved hjælp af OsmAnd.";
 "my_places_no_tracks_descr" = "Denne mappe har ikke nogen spor endnu.";
 "delete_folder" = "Slet mappe";
-"remove_folder_with_files_descr" = "Er du sikker på, at du vil fjerne \"%@\" mappe og alle %d spor?";
+"remove_folder_with_files_descr" = "Er du sikker på, at du vil fjerne \"%@\" mappe og alle %@ spor?";
 "new_track" = "Nyt spor";
 "start_recording" = "Start optagelse";
 "not_recorded" = "Ikke optaget";
@@ -4091,8 +4091,8 @@
 "dismiss_changes_descr" = "Alle ændringer vil blive afvist.";
 "gpx_logging_no_data" = "Ingen data";
 "delete_changes" = "Slet ændringer";
-"osm_edits_delete_item_confirmation" = "Er du sikker på, at du vil slette %ld redigering?";
-"osm_edits_delete_items_confirmation" = "Er du sikker på, at du vil slette %ld redigeringer?";
+"osm_edits_delete_item_confirmation" = "Er du sikker på, at du vil slette %@ redigering?";
+"osm_edits_delete_items_confirmation" = "Er du sikker på, at du vil slette %@ redigeringer?";
 "show_touches" = "Vis berøringer";
 "shared_string_url" = "URL";
 "folder_one_track" = "1 spor";
@@ -4276,8 +4276,8 @@
 "shared_string_play" = "Afspil";
 "import_tracks_cancel_title" = "Annuller import?";
 "import_tracks_cancel_descr" = "Hvis du lukker nu, bliver dine valgte spor ikke importeret.";
-"import_tracks_descr_one" = "Filen %@ indeholder 1 separat spor. Vælg det spor, du vil importere.";
-"import_tracks_descr_other" = "Filen %@ indeholder %d separate spor. Vælg det spor, du vil importere.";
+"import_tracks_descr_one" = "Filen %1$@ indeholder %2$@ separat spor. Vælg det spor, du vil importere.";
+"import_tracks_descr_other" = "Filen %@ indeholder %@ separate spor. Vælg det spor, du vil importere.";
 "import_as_one_track" = "Importer som ét spor";
 "import_tracks_folders_footer" = "Vælg en modtagermappe for de importerede spor.";
 "error_reading_gpx" = "Kunne ikke læse GPX-data.";
@@ -4472,7 +4472,7 @@
 "no_search_results" = "Ingen resultater";
 "favorite_search_empty_state_description" = "Juster din søgning eller filtre for at se, om det hjælper";
 "favorites_empty_folder_description" = "Denne mappe har endnu ingen punkter.";
-"items_delete_confirmation_title" = "Slet %ld elementer?";
+"items_delete_confirmation_title" = "Slet %@ elementer?";
 "favorites_delete_confirmation_message" = "Denne handling kan ikke fortrydes.";
 "empty_state_favourites" = "Tilføj favoritter";
 "empty_state_favourites_desc" = "Importer favoritter, eller tilføj dem ved at markere punkter på kortet.";

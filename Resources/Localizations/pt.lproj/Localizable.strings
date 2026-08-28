@@ -2722,7 +2722,7 @@
 "search_history_disabled" = "O histórico das pesquisas está desativado";
 "enable_search_history" = "Pode ativar o histórico das pesquisas em Configurações";
 "last_seven_days" = "Últimos 7 dias";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "confirm_history_item_delete" = "Quer mesmo eliminar (%ld) itens do histórico?";
 "free_downloads" = "Descarregamentos gratuitos";
 "restart_is_required" = "Reinicie a aplicação manualmente para aplicar todas as alterações.";
@@ -3206,7 +3206,7 @@
 "osmand_cloud_delete_account_descr" = "Quer mesmo eliminar a conta OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "Eliminar a conta?";
 "osmand_cloud_deletion_account_warning" = "A sua conta e todos os detalhes da conta serão %@";
-"folder_tracks_count" = "%d trilhos";
+"folder_tracks_count" = "%@ trilhos";
 "shared_string_open_track" = "Abrir trilho";
 "osmand_cloud_deletion_subscriptions_warning" = "Isto não cancelará a sua subscrição do OsmAnd Pro.";
 "shared_string_deleting" = "A eliminar";
@@ -3216,7 +3216,7 @@
 "my_places_no_tracks_descr_root" = "Pode importar, criar ou gravar ficheiros de trilhos usando o OsmAnd.";
 "my_places_no_tracks_title" = "Pasta vazia";
 "my_places_no_tracks_descr" = "Esta pasta ainda não tem nenhum trilho.";
-"remove_folder_with_files_descr" = "Quer mesmo remover a pasta \"%@\" e todos os %d trilhos?";
+"remove_folder_with_files_descr" = "Quer mesmo remover a pasta \"%@\" e todos os %@ trilhos?";
 "new_track" = "Novo trilho";
 "not_recorded" = "Não gravado";
 "start_recording" = "Iniciar gravação";

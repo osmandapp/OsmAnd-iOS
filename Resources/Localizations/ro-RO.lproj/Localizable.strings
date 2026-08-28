@@ -2692,7 +2692,7 @@
 "map_widget_camera_distance" = "Elevație cameră";
 "map_widget_zoom_level" = "Nivel de zoom";
 "map_widget_target_distance" = "Distanța de la cameră la țintă";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "dont_download" = "Nu descărcați";
 "over_wifi_only" = "Numai prin Wi-Fi";
 "over_any_network" = "Prin orice rețea";
@@ -3076,7 +3076,7 @@
 "shared_string_hide_from_map" = "Ascunde de pe hartă";
 "shared_string_open_track" = "Deschide traseu";
 "there_are_no_connected_sensors_of_this_type" = "Nu există senzori de acest tip conectați";
-"folder_tracks_count" = "%d înregistrări";
+"folder_tracks_count" = "%@ înregistrări";
 "map_widget_ant_heart_rate" = "Puls";
 "map_widget_ant_bicycle_cadence_desc" = "Afișați viteza la care pedalează utilizatorul";
 "map_widget_ant_bicycle_speed" = "Viteza bicicletei";
@@ -3182,7 +3182,7 @@
 "osmand_cloud_deletion_subscriptions_warning" = "Acesta nu vă va anula abonamentul OsmAnd Pro.";
 "osmand_cloud_deleting_account_descr" = "În câteva momente, toate datele și contul dumneavoastră vor fi șterse din OsmAnd Cloud. \n \nToate datele de pe dispozitiv rămân neatinse.";
 "osmand_cloud_deleted_account_descr" = "Contul și toate datele au fost șterse din OsmAnd Cloud.";
-"remove_folder_with_files_descr" = "Sunteți sigur că doriți să eliminați folderul \"%@\" și toate cele %d trasee?";
+"remove_folder_with_files_descr" = "Sunteți sigur că doriți să eliminați folderul \"%@\" și toate cele %@ trasee?";
 "trash_is_empty_banner_desc" = "Fișierele eliminate din OsmAnd Cloud vor fi disponibile aici timp de %@ zile.";
 "complex_widget_alert" = "Widgetul %@ poate fi plasat numai pe propriul rând.";
 "osmand_cloud_deletion_account_warning" = "Contul dumneavoastră și toate detaliile contului vor fi %@";

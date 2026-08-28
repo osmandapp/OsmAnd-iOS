@@ -2704,7 +2704,7 @@
 "map_markers_history" = "Historial de los marcadores del mapa";
 "last_seven_days" = "Últimos 7 días";
 "navigation_history" = "Historial de navegación";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "exit_number" = "Número de salida";
 "announce_when_exceeded" = "Anunciar al excederse";
 "restart_is_required" = "Reinicia para aplicar los cambios.";
@@ -3199,7 +3199,7 @@
 "distance_during_navigation_footer" = "Elige cómo se muestra la información de distancia en los widgets de navegación (distancia al punto, próximo giro, carriles).\n\nElige «Preciso» para números exactos, o «Redondear» para facilitar la legibilidad.";
 "shared_string_open_track" = "Abrir traza";
 "my_places_no_tracks_descr" = "Esta carpeta no tiene trazas aún.";
-"remove_folder_with_files_descr" = "¿Quitar la carpeta «%@» y todas sus %d trazas?";
+"remove_folder_with_files_descr" = "¿Quitar la carpeta «%@» y todas sus %@ trazas?";
 "not_recorded" = "No grabado";
 "start_recording" = "Iniciar grabación";
 "recorded_track" = "Traza grabada";
@@ -3220,7 +3220,7 @@
 "time_to_navigation_point_widget_settings_desc" = "Pulsa el widget para cambiar de modo.";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar la cuenta?";
 "help_article_plugins_custom_name" = "Paquete personalizado";
-"folder_tracks_count" = "%d trazas";
+"folder_tracks_count" = "%@ trazas";
 "my_places_no_tracks_title" = "Carpeta vacía";
 "new_track" = "Nueva traza";
 "action_cant_be_undone" = "Esta acción no puede deshacerse.";

@@ -1665,7 +1665,7 @@
 "delete_folder" = "கோப்புறையை நீக்கு";
 "root_folder" = "ரூட் கோப்புறை";
 "all_folders" = "அனைத்து கோப்புறைகளும்";
-"remove_folder_with_files_descr" = "\" %@\" கோப்புறை மற்றும் அனைத்து %d தடங்களையும் அகற்ற விரும்புகிறீர்களா?";
+"remove_folder_with_files_descr" = "\" %@\" கோப்புறை மற்றும் அனைத்து %@ தடங்களையும் அகற்ற விரும்புகிறீர்களா?";
 "new_track" = "புதிய பாடல்";
 "not_recorded" = "பதிவு செய்யப்படவில்லை";
 "start_recording" = "பதிவு செய்யத் தொடங்குங்கள்";
@@ -2509,7 +2509,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_or" = "%@ அல்லது %@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"ltr_or_rtl_combine_via_of" = "%ld / %ld";
+"ltr_or_rtl_combine_via_of" = "%@ / %@";
 "listed_exist" = "பட்டியலிடப்பட்ட %@, ஏற்கனவே OSMand இல் உள்ளது.";
 "profile_settings" = "சுயவிவர குறிப்பிட்ட அமைப்புகள்";
 "select_map_icon" = "ஓய்வில் ஐகானை நிலைநிறுத்துங்கள்";
@@ -2932,7 +2932,7 @@
 "feedback" = "கருத்து";
 "select_tracks" = "தடங்களைத் தேர்ந்தெடுக்கவும்";
 "selected_tracks_count" = "தடங்கள் - %d";
-"folder_tracks_count" = "%d தடங்கள்";
+"folder_tracks_count" = "%@ தடங்கள்";
 "osm_upload_failed_title" = "பதிவேற்றம் தோல்வியடைந்தது";
 "osm_upload_no_internet" = "உங்கள் இணைய இணைப்பை சரிபார்த்து மீண்டும் முயற்சிக்கவும்.";
 "osm_succsessful_uploads" = "செய்";

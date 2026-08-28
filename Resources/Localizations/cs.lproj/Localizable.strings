@@ -2685,7 +2685,7 @@
 "delete_history_items" = "Smazat %@ položek historie?";
 "history_preferences_descr" = "Protokolování historie můžete zakázat pro každý typ historie zvlášť.";
 "history_actions_footer_text" = "Historii můžete exportovat do souboru. Všechny dosud zaznamenané záznamy historie můžete vymazat.";
-"ltr_or_rtl_combine_via_of" = "%ld z %ld";
+"ltr_or_rtl_combine_via_of" = "%@ z %@";
 "confirm_history_item_delete" = "Opravdu chcete odstranit (%ld) položek historie?";
 "map_markers_history" = "Historie mapových značek";
 "history_clear_alert_title" = "Odstranit celou historii";
@@ -3178,7 +3178,7 @@
 "distance_during_navigation" = "Vzdálenost během navigace";
 "shared_string_precise" = "Přesná";
 "shared_string_round_up" = "Zaokrouhlená";
-"folder_tracks_count" = "%d stop";
+"folder_tracks_count" = "%@ stop";
 "cleared_travel_search_history" = "Historie smazána";
 "images" = "Obrázky";
 "no_travel_guides_data_title" = "Nemáte žádná cestovní data";
@@ -3188,7 +3188,7 @@
 "clear_history" = "Smazat historii";
 "clear_travel_search_history" = "Smazat historii hledání?";
 "upload_to_osm_short" = "Nahrát do OSM";
-"remove_folder_with_files_descr" = "Opravdu chcete smazat složku \"%@\" a všech %d stop?";
+"remove_folder_with_files_descr" = "Opravdu chcete smazat složku \"%@\" a všech %@ stop?";
 "my_places_no_tracks_descr" = "V této složce nejsou žádné soubory stop.";
 "help_article_plugins_custom_name" = "Vlastní balíček";
 "osmAnd_team" = "Tým OsmAnd";
@@ -4113,8 +4113,8 @@
 "shared_string_beta" = "Beta";
 "folder_one_track" = "1 stopa";
 "delete_changes" = "smazat změny";
-"osm_edits_delete_item_confirmation" = "Opravdu chcete smazat %ld úpravu?";
-"osm_edits_delete_items_confirmation" = "Přejete si skutečně odstranit %ld úpravy?";
+"osm_edits_delete_item_confirmation" = "Opravdu chcete smazat %@ úpravu?";
+"osm_edits_delete_items_confirmation" = "Přejete si skutečně odstranit %@ úpravy?";
 "ios_release_5_4" = "• Přidán typ vizualizace „Terénní stíny“\n• Zcela přepracováno uživatelské rozhraní „Moje místa“ s přidáním podsložek pro Oblíbené a pohodlnějších akcí\n• Přidána podpora pro mapy pouze pro silnice\n• Rozšířené přizpůsobení profilu přidáním podpory pro všechny ikony POI\n• Přidáno nastavení šířky jízdního kola pro vyhnutí se úzkým cyklostezkám\n• Přidán widget napětí adaptéru OBD-II\n• Vylepšený výkon pro správu velkého počtu oblíbených položek\n• Přidána možnost „Pozastavit mluvený zvuk“ pro pozastavení podcastů nebo audioknih během navigačních pokynů\n";
 "default_appearance_description" = "Tato nastavení platí pro všechny nově přidané skladby do této složky.";
 "change_default_tracks_appearance_confirmation" = "Použít změny na existující skladby ve složce nebo pouze na nové?";
@@ -4403,7 +4403,7 @@
 "no_search_results" = "Žádné výsledky";
 "favorite_search_empty_state_description" = "Upravte hledání nebo filtry, abyste zjistili, zda to pomáhá";
 "favorites_empty_folder_description" = "Tato složka ještě nemá žádné body.";
-"items_delete_confirmation_title" = "Odstranit %ld položky?";
+"items_delete_confirmation_title" = "Odstranit %@ položky?";
 "favorites_delete_confirmation_message" = "Tuto akci nelze vrátit zpět.";
 "show_all_tracks_on_the_map" = "Zobrazit všechny stopy na mapě";
 "empty_state_favourites" = "Přidejte Oblíbené";

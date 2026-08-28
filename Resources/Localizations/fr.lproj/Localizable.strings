@@ -2644,7 +2644,7 @@
 "search_favorites" = "Rechercher dans les favoris";
 "history_preferences_descr" = "Vous pouvez désactiver l\'historique unitairement pour chaque type d\'historique.";
 "history_actions_footer_text" = "Vous pouvez exporter l'historique dans un fichier. Vous pouvez supprimer toutes les entrées de l'historique enregistrées jusqu'à présent.";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "announcement_time_prepare_long" = "Préparation longue";
 "announcement_time_prepare" = "Préparation";
 "announcement_time_approach" = "Approche";
@@ -3101,7 +3101,7 @@
 "track_sort_za" = "Nom Z ‐ A";
 "shared_string_not_available" = "Non Disponible";
 "shared_string_hide_from_map" = "Masquer de la carte";
-"folder_tracks_count" = "%d trace";
+"folder_tracks_count" = "%@ trace";
 "action_cant_be_undone" = "Cette action ne peut être annulée.";
 "manage_subscriptions" = "Gérer les abonnements.";
 "deleting_complete" = "Suppression terminée";
@@ -3110,7 +3110,7 @@
 "shared_string_open_track" = "Ouvrir trace";
 "my_places_no_tracks_descr" = "Ce dossier ce contient pas encore de traces.";
 "delete_folder" = "Supprimer dossier";
-"remove_folder_with_files_descr" = "Êtes‐vous sûr de vouloir supprimer le dossier \"%@\" et les %d traces ?";
+"remove_folder_with_files_descr" = "Êtes‐vous sûr de vouloir supprimer le dossier \"%@\" et les %@ traces ?";
 "new_track" = "Nouvelle trace";
 "not_recorded" = "Non enregistré";
 "permanent_delete_warning" = "%@ sera définitivement supprimé. Êtes-vous sûr ?";
@@ -4090,8 +4090,8 @@
 "gpx_logging_no_data" = "Aucune donnée";
 "show_touches" = "Afficher les détails";
 "delete_changes" = "Supprimer les modifications";
-"osm_edits_delete_item_confirmation" = "Êtes-vous sûr de vouloir supprimer la modification %ld ?";
-"osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %ld modifications ?";
+"osm_edits_delete_item_confirmation" = "Êtes-vous sûr de vouloir supprimer la modification %@ ?";
+"osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %@ modifications ?";
 "shared_string_url" = "URL";
 "folder_one_track" = "1 trace";
 "ios_release_5_4" = "• Ajout du type de visualisation « Ombres du terrain »\n• Refonte complète de l'interface utilisateur « Mes lieux », avec l'ajout de sous-dossiers pour les favoris et des actions plus pratiques\n• Ajout de la prise en charge des cartes routières uniquement\n• Extension des options de personnalisation du profil grâce à la prise en charge de toutes les icônes de points d'intérêt\n• Ajout d'un paramètre de largeur de vélo pour éviter les pistes cyclables étroites\n• Ajout d'un widget de tension pour l'adaptateur OBD-II\n• Amélioration des performances pour la gestion d'un grand nombre de favoris\n• Ajout de l'option « Mettre en pause l'audio » pour interrompre les podcasts ou les livres audio pendant les instructions de navigation\n";
@@ -4259,7 +4259,7 @@
 "no_search_results" = "Aucun résultat";
 "favorite_search_empty_state_description" = "Modifiez votre recherche ou vos filtres pour voir si cela vous aide";
 "favorites_empty_folder_description" = "Ce dossier ne comporte encore aucun point.";
-"items_delete_confirmation_title" = "Supprimer %ld éléments ?";
+"items_delete_confirmation_title" = "Supprimer %@ éléments ?";
 "favorites_delete_confirmation_message" = "Cette action ne peut pas être annulée.";
 "empty_state_favourites" = "Ajouter aux favoris";
 "empty_state_favourites_desc" = "Importez vos favoris ou ajoutez-les en marquant des points sur la carte.";
@@ -4526,8 +4526,8 @@
 "astro_directions" = "Directions";
 "astro_reference_lines" = "Lignes de référence";
 "import_tracks_cancel_descr" = "Si vous fermez maintenant, vos sélections de morceaux ne seront pas importées.";
-"import_tracks_descr_one" = "Le fichier %@ contient 1 piste. Sélectionnez celle que vous souhaitez importer.";
-"import_tracks_descr_other" = "Le fichier %@ contient %d pistes distinctes. Sélectionnez celles que vous souhaitez importer.";
+"import_tracks_descr_one" = "Le fichier %1$@ contient %2$@ piste. Sélectionnez celle que vous souhaitez importer.";
+"import_tracks_descr_other" = "Le fichier %@ contient %@ pistes distinctes. Sélectionnez celles que vous souhaitez importer.";
 "selected_waypoints_exit_descr" = "Vos sélections de points de passage ne seront pas enregistrées si vous fermez maintenant";
 "auto_select_nearest_points" = "Sélection automatique des points les plus proches";
 "auto_select_nearest_footer" = "Rechercher et sélectionner automatiquement les points de passage les plus proches de cet itinéraire.";

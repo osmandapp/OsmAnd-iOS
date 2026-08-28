@@ -2380,7 +2380,7 @@
 "res_online_name_descr" = "Παροχή ονόματος για την διαδικτυακή πηγή";
 "menu_my_trips" = "Τα ίχνη μου";
 "selected_tracks_count" = "Ίχνη - %d";
-"folder_tracks_count" = "%d ίχνη";
+"folder_tracks_count" = "%@ ίχνη";
 "osm_failed_uploads" = "Απέτυχε";
 "precipitation_show" = "Εμφάνιση υετού";
 "show_terrain" = "Εμφάνιση εδάφους";
@@ -2906,7 +2906,7 @@
 "export_profile_select_descr" = "Επιλέξτε τα δεδομένα για εξαγωγή.";
 "selected_of" = "Επιλέχθηκαν - %d/%d";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"ltr_or_rtl_combine_via_of" = "%ld από %ld";
+"ltr_or_rtl_combine_via_of" = "%@ από %@";
 "ltr_or_rtl_combine_via_per" = "%@ ανά %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "shared_string_rearrange" = "Αναδιάταξη";
@@ -3004,7 +3004,7 @@
 "delete_all_items_desc" = "Είστε βέβαιοι ότι θέλετε να διαγράψετε μόνιμα όλα τα αντικείμενα στον Κάδο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "recorded_track" = "Καταγεγραμμένο ίχνος";
 "not_recorded" = "Όχι καταγεγραμμένο";
-"remove_folder_with_files_descr" = "Είστε βέβαιοι ότι θέλετε να αφαιρέσε τον φάκελο \"%@\" και όλα τα %d ίχνη;";
+"remove_folder_with_files_descr" = "Είστε βέβαιοι ότι θέλετε να αφαιρέσε τον φάκελο \"%@\" και όλα τα %@ ίχνη;";
 "my_places_no_tracks_descr" = "Αυτός ο φάκελος δεν έχει ακόμη κανένα ίχνος.";
 "apply_only_to_new_points" = "Εφαρμογή μόνο στα νέα σημεία";
 "apply_to_existing" = "Εφαρμογή στα υπάρχοντα";
@@ -3845,8 +3845,8 @@
 "selected_waypoints_exit_descr" = "Τα επιλεγμένα σημεία δεν θα αποθηκευτούν εάν κλείσετε τώρα";
 "auto_select_nearest_footer" = "Αυτόματη εύρεση και επιλογή των κοντινότερων στο ίχνος σημείων.";
 "import_tracks_folders_footer" = "Επιλογή φακέλου προορισμού για τα εισαγόμενα ίχνη.";
-"import_tracks_descr_one" = "Το αρχείο %@ περιέχει 1 ξεχωριστό ίχνος. Επιλέξτε αυτό που θέλετε να εισάγετε.";
-"import_tracks_descr_other" = "Το αρχείο %@ περιέχει %d ξεχωριστά ίχνη. Επιλέξτε αυτά που θέλετε να εισάγετε.";
+"import_tracks_descr_one" = "Το αρχείο %1$@ περιέχει %2$@ ξεχωριστό ίχνος. Επιλέξτε αυτό που θέλετε να εισάγετε.";
+"import_tracks_descr_other" = "Το αρχείο %@ περιέχει %@ ξεχωριστά ίχνη. Επιλέξτε αυτά που θέλετε να εισάγετε.";
 "astro_go_to_map" = "Μετάβαση στον χάρτη";
 "astro_my_data_no_favorites_title" = "Τίποτα εδώ";
 "astro_my_data_no_favorites_description" = "Μπορείτε να προσθέσετε αντικείμενα στα αγαπημένα σας από το μενού περιβάλλοντος τους";
@@ -4010,8 +4010,8 @@
 "ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
 "folder_one_track" = "1 ίχνος";
 "delete_changes" = "Διαγραφή αλλαγών";
-"osm_edits_delete_item_confirmation" = "Σίγουρα θέλετε να διαγράψετε %ld αλλαγή;";
-"osm_edits_delete_items_confirmation" = "Σίγουρα θέλετε να διαγράψετε %ld αλλαγές;";
+"osm_edits_delete_item_confirmation" = "Σίγουρα θέλετε να διαγράψετε %@ αλλαγή;";
+"osm_edits_delete_items_confirmation" = "Σίγουρα θέλετε να διαγράψετε %@ αλλαγές;";
 "enable_msaa_carplay" = "Ενεργοποίηση MSAA για CarPlay";
 "poi_mobile" = "Κινητό";
 "poi_cuisine" = "Κουζίνα";
@@ -4132,7 +4132,7 @@
 "favorite_search_empty_state_description" = "Προσαρμόστε την αναζήτησή σας ή τα φίλτρα σας για να δείτε μήπως σας βοηθήσει";
 "favorites_empty_folder_description" = "Αυτός ο φάκελος δεν έχει ακόμη κανένα σημείο.";
 "tracks_empty_folder_description" = "Αυτός ο φάκελος δεν έχει ακόμη κανένα σημείο.";
-"items_delete_confirmation_title" = "Διαγραφή %ld αντικειμένων;";
+"items_delete_confirmation_title" = "Διαγραφή %@ αντικειμένων;";
 "favorites_delete_confirmation_message" = "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "empty_state_favourites" = "Προσθήκη αγαπημένων";
 "empty_state_favourites_desc" = "Εισαγωγή αγαπημένων, ή προσθήκη τους μέσω σημείων επισήμανσης στον χάρτη.";

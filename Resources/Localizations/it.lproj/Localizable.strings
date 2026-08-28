@@ -2664,7 +2664,7 @@
 "free_downloads" = "Download gratuiti";
 "restart_is_required_title" = "Riavvio richiesto";
 "navigation_history" = "Cronologia navigazione";
-"ltr_or_rtl_combine_via_of" = "%ld di %ld";
+"ltr_or_rtl_combine_via_of" = "%@ di %@";
 "history_actions_footer_text" = "Puoi esportare la cronologia in un file. Puoi eliminare tutti gli elementi della cronologia registrati fino ad ora.";
 "history_clear_alert_message" = "Sei sicuro di voler eliminare tutti gli elementi della cronologia?";
 "history_preferences_descr" = "Puoi disattivare la registrazione della cronologia individualmente per ogni tipo di cronologia.";
@@ -3131,12 +3131,12 @@
 "cloud_item_restored" = "%@ è ripristinato nel Cloud.";
 "shared_string_not_available" = "Non disponibile";
 "shared_string_hide_from_map" = "Nascondi dalla mappa";
-"folder_tracks_count" = "%d tracce";
+"folder_tracks_count" = "%@ tracce";
 "shared_string_open_track" = "Apri la traccia";
 "enter_new_name" = "Inserisci il nuovo nome";
 "my_places_no_tracks_title" = "Cartella vuota";
 "delete_folder" = "Elimina la cartella";
-"remove_folder_with_files_descr" = "Sei sicuro di voler rimuovere la cartella \"%@\" e tutte le tracce %d?";
+"remove_folder_with_files_descr" = "Sei sicuro di voler rimuovere la cartella \"%@\" e tutte le tracce %@?";
 "new_track" = "Nuova traccia";
 "start_recording" = "Inizia registrazione";
 "recorded_track" = "Traccia registrata";
@@ -4269,7 +4269,7 @@
 "shared_string_pinned" = "Fissato";
 "delete_track_confirmation_title" = "Eliminare \"%@\"?";
 "tracks_delete_confirmation_message" = "Questa azione non può essere annullata.";
-"items_delete_confirmation_title" = "Eliminare %ld elementi?";
+"items_delete_confirmation_title" = "Eliminare %@ elementi?";
 "favorites_delete_confirmation_message" = "Questa azione non può essere annullata.";
 "delete_favorite_confirmation_title" = "Eliminare \"%@\"?";
 "choose_color" = "Scegli colore";
@@ -4278,8 +4278,8 @@
 "icon_size" = "Dimensione icona";
 "folder_one_track" = "1 traccia";
 "delete_changes" = "Elimina modifiche";
-"osm_edits_delete_item_confirmation" = "Eliminare %ld modifica?";
-"osm_edits_delete_items_confirmation" = "Eliminare %ld modifiche?";
+"osm_edits_delete_item_confirmation" = "Eliminare %@ modifica?";
+"osm_edits_delete_items_confirmation" = "Eliminare %@ modifiche?";
 "enable_msaa_carplay" = "Abilita MSAA per CarPlay";
 "show_touches" = "Mostra tocchi";
 "poi_mobile" = "Telefonia";
@@ -4318,8 +4318,8 @@
 "map_variant_replace_with_standard" = "Sostituisci con Standard";
 "shared_string_kts" = "nd";
 "import_tracks_cancel_title" = "Annullare l'importazione?";
-"import_tracks_descr_one" = "Il file %@ contiene 1 traccia separata. Seleziona quella da importare.";
-"import_tracks_descr_other" = "Il file %@ contiene %d tracce separate. Seleziona quelle da importare.";
+"import_tracks_descr_one" = "Il file %1$@ contiene %2$@ traccia separata. Seleziona quella da importare.";
+"import_tracks_descr_other" = "Il file %@ contiene %@ tracce separate. Seleziona quelle da importare.";
 "import_tracks_folders_footer" = "Seleziona una cartella di destinazione per le tracce importate.";
 "auto_select_nearest_points" = "Selezione automatica punti più vicini";
 "auto_select_nearest_footer" = "Trova e seleziona automaticamente le tappe più vicine a questa traccia.";

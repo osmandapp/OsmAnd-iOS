@@ -2990,7 +2990,7 @@
 "shared_string_keep_active" = "البقاء نشطا";
 "angular_measeurement_descr" = "تغيير قياس زاوية السمت.";
 "announcement_time_title" = "وقت الإشعار";
-"ltr_or_rtl_combine_via_of" = "%ld من %ld";
+"ltr_or_rtl_combine_via_of" = "%@ من %@";
 "rendering_attr_alpineHiking_name" = "تصنيف الصعوبات";
 "visible_in_3d_mode" = "مرئي في الوضع ثلاثي الأبعاد";
 "speed_cameras_alert" = "يحظر القانون تنبيهات كاميرات السرعة في بعض البلدان.";
@@ -3418,7 +3418,7 @@
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "shared_string_deleting_complete" = "اكتمل الحذف";
 "shared_string_hide_from_map" = "إخفاء من الخريطة";
-"folder_tracks_count" = "%d المسارات";
+"folder_tracks_count" = "%@ المسارات";
 "download_persian_voice_alert_descr_macos" = "الإعدادات -> إمكانية الوصول -> المحتوى المنطوق -> صوت النظام -> إدارة الأصوات -> الفارسية -> داريوش";
 "detailed_track_guidance_description" = "سيقوم تطبيق أوسماند بمطابقة مسارك مع الطرق القريبة للحصول على إرشادات محسّنة خطوة بخطوة.";
 "help_article_map_routes_name" = "المسارات الرياضية";

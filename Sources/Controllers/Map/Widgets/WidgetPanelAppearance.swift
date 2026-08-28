@@ -369,15 +369,22 @@ final class WidgetPanelAppearanceSettings {
             backgroundColor = settings.color(for: .background, panel: panel, nightMode: nightMode)
         }
 
-        let accents = dynamicAccents(for: backgroundColor)
+        let style: UIUserInterfaceStyle = nightMode ? .dark : .light
+        let traitCollection = UITraitCollection(userInterfaceStyle: style)
+        let defaultPrimaryTextColor = WidgetPanelAppearanceSettings.defaultColor(for: .primaryText,
+                                                                                  panel: panel,
+                                                                                  nightMode: nightMode)
+        let defaultSecondaryTextColor = WidgetPanelAppearanceSettings.defaultColor(for: .secondaryText,
+                                                                                    panel: panel,
+                                                                                    nightMode: nightMode)
+        let defaultDividerColor = UIColor.widgetSeparator.resolvedColor(with: traitCollection)
+        let accents = transparent ? nil : dynamicAccents(for: backgroundColor)
         let primaryTextColor: UIColor
         switch settings.primaryTextColorMode(for: panel) {
         case .default:
-            primaryTextColor = WidgetPanelAppearanceSettings.defaultColor(for: .primaryText,
-                                                                          panel: panel,
-                                                                          nightMode: nightMode)
+            primaryTextColor = defaultPrimaryTextColor
         case .automatic:
-            primaryTextColor = accents.primary
+            primaryTextColor = accents?.primary ?? defaultPrimaryTextColor
         case .custom:
             primaryTextColor = settings.color(for: .primaryText, panel: panel, nightMode: nightMode)
         }
@@ -385,16 +392,14 @@ final class WidgetPanelAppearanceSettings {
         let secondaryTextColor: UIColor
         switch settings.secondaryTextColorMode(for: panel) {
         case .default:
-            secondaryTextColor = WidgetPanelAppearanceSettings.defaultColor(for: .secondaryText,
-                                                                            panel: panel,
-                                                                            nightMode: nightMode)
+            secondaryTextColor = defaultSecondaryTextColor
         case .automatic:
-            secondaryTextColor = accents.secondary
+            secondaryTextColor = accents?.secondary ?? defaultSecondaryTextColor
         case .custom:
             secondaryTextColor = settings.color(for: .secondaryText, panel: panel, nightMode: nightMode)
         }
 
-        let dividerColor = accents.divider
+        let dividerColor = accents?.divider ?? defaultDividerColor
         let opaqueBackground = backgroundColor.cgColor.alpha >= 0.999
         let textOutlineColor: UIColor = isLight(primaryTextColor) ? .black : .white
         return ResolvedWidgetPanelAppearance(primaryTextColor: primaryTextColor,

@@ -610,6 +610,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.alwaysBounceVertical = false
         scrollView.delaysContentTouches = false
+        contentView.clipsToBounds = true
         addSubview(scrollView)
         scrollView.addSubview(contentView)
 
@@ -829,6 +830,8 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private func previewSize(for panelContentSize: CGSize,
                              controller: WidgetPanelViewController,
                              originalContainerSize: CGSize) -> CGSize {
+        guard controller.hasWidgets() else { return .zero }
+
         var result = panelContentSize
         if panel == .leftPanel || panel == .rightPanel {
             let borderInsets = controller.view.layer.borderWidth * 2
@@ -915,10 +918,13 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         }
         let contentSize = hostedPanelContentSize()
         guard contentSize.width > 0, contentSize.height > 0 else {
+            state.view.isHidden = true
             contentView.frame = .zero
             scrollView.contentSize = bounds.size
+            scrollView.isScrollEnabled = false
             return
         }
+        state.view.isHidden = false
         state.view.transform = .identity
         state.view.frame = CGRect(origin: .zero, size: contentSize)
         state.view.setNeedsLayout()

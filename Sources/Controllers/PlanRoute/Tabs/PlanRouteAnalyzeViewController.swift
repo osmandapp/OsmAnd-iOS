@@ -293,11 +293,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                             segment: segment)
     }
 
-    private func bindChartGestures(_ chart: BarLineChartViewBase) {
+    private func bindChartDelegate(_ chart: BarLineChartViewBase) {
         chart.delegate = chartDelegateProxy
-        chart.gestureRecognizers?.forEach { recognizer in
-            recognizer.addTarget(self, action: #selector(onChartGesture(_:)))
-        }
     }
 
     private func chartSegment(for analysis: GpxTrackAnalysis, gpxFile: GpxFile) -> TrkSegment? {
@@ -641,7 +638,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
         chart.dragYEnabled = false
         chartView = chart
-        bindChartGestures(chart)
+        bindChartDelegate(chart)
 
         let recalcSeparator = SeparatorView()
         recalcSeparator.translatesAutoresizingMaskIntoConstraints = false
@@ -875,7 +872,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.drawGridLinesEnabled = true
         rightAxis.gridColor = .chartAxisGridLine
         rightAxis.labelTextColor = .textColorSecondary
-        bindChartGestures(barChart)
+        bindChartDelegate(barChart)
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
         card.addSubview(barChart)
@@ -1782,17 +1779,6 @@ private extension PlanRouteAnalyzeViewController {
 }
 
 private extension PlanRouteAnalyzeViewController {
-
-    @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {
-        let isDoubleTap = (recognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2
-        guard recognizer is UIPinchGestureRecognizer || isDoubleTap,
-              recognizer.state == .ended,
-              let chart = recognizer.view as? BarLineChartViewBase else { return }
-        DispatchQueue.main.async {
-            chart.layoutIfNeeded()
-            self.chartSynchronizer.syncViewPort(from: chart)
-        }
-    }
 
     @objc private func onRecalculateTapped() {
         showGetElevationSheet()

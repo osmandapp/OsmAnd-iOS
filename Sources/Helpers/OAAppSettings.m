@@ -7845,9 +7845,21 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
-- (BOOL) nightMode
+- (BOOL)isAppMapNightMode
 {
     return [_dayNightHelper isNightMode];
+}
+
+- (BOOL)isCarPlayMapNightMode
+{
+    return [_dayNightHelper isNightModeCarPlay];
+}
+
+- (BOOL)isCurrentMapNightMode
+{
+    return UIApplication.sharedApplication.isAnyCarPlaySceneActive
+        ? self.isCarPlayMapNightMode
+        : self.isAppMapNightMode;
 }
 
 - (void) fetchImpassableRoads

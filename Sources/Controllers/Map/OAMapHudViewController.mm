@@ -1347,7 +1347,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
     else
-        return _settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+        return _settings.isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
 }
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController
@@ -1441,7 +1441,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if ([OAUtilities isLandscape] || [OAUtilities isIPad])
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
+        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
 }
 
 - (void) updateTopButtonsLayoutY
@@ -1625,7 +1625,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (UIColor *) getStatusBarBackgroundColor
 {
-    BOOL isNight = _settings.nightMode;
+    BOOL isNight = _settings.isAppMapNightMode;
     BOOL transparent = [_settings.transparentMapTheme get];
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])

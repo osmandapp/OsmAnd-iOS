@@ -4512,3 +4512,6 @@
 "send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
 "send_current_app_log_descr" = "Alkalmazás indulása óta";
 "msg_favorites_skipped_as_existing" = "A kedvenc pontok (%d) ki lettek hagyva, mivel azok már léteznek.";
+"osm_edits_empty_state_title" = "Nincsenek függőben lévő térképszerkesztések";
+"osm_edits_empty_state_description" = "Az OsmAnd-ban végzett módosításai itt fognak megjelenni, mielőtt feltöltené azokat az OpenStreetMap-re";
+"carplay_trip_via_point" = "Ezen keresztül: %@";

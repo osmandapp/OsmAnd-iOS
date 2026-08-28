@@ -88,6 +88,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     int _calculationProgress;
 
     CPMapButton *_3DModeMapButton;
+    CPMapButton *_centerMapButton;
+    CPMapButton *_zoomInMapButton;
+    CPMapButton *_zoomOutMapButton;
     BOOL _wasIn3DBeforePreview;
 
     OAAutoObserverProxy *_locationUpdateObserver;
@@ -156,7 +159,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings], [self createBarButton:EOACarPlayButtonTypeDirections]];
 
     _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D];
-    _mapTemplate.mapButtons = @[_3DModeMapButton, [self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
+    _centerMapButton = [self createMapButton:EOACarPlayButtonTypeCenterMap];
+    _zoomInMapButton = [self createMapButton:EOACarPlayButtonTypeZoomIn];
+    _zoomOutMapButton = [self createMapButton:EOACarPlayButtonTypeZoomOut];
+    _mapTemplate.mapButtons = @[_3DModeMapButton, _centerMapButton, _zoomInMapButton, _zoomOutMapButton];
     [self onMap3dModeUpdated];
 }
 
@@ -478,22 +484,31 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     UIImage *image = nil;
     if (@available(iOS 26.0, *))
     {
+        NSString *imageName = nil;
         switch (type)
         {
             case EOACarPlayButtonTypeZoomIn:
-                image = [UIImage templateImageNamed:ACImageNameIcCarplayMapZoomIn];
+                imageName = ACImageNameIcCarplayMapZoomIn;
                 break;
             case EOACarPlayButtonTypeZoomOut:
-                image = [UIImage templateImageNamed:ACImageNameIcCarplayMapZoomOut];
+                imageName = ACImageNameIcCarplayMapZoomOut;
                 break;
             case EOACarPlayButtonTypeCenterMap:
-                image = [UIImage templateImageNamed:ACImageNameIcCarplayMapLocationPosition];
+                imageName = ACImageNameIcCarplayMapLocationPosition;
                 break;
             case EOACarPlayButtonType3D:
-                image = [UIImage templateImageNamed:[OAMapViewTrackingUtilities.instance is3DMode] ? ACImageNameIcCarplayMap2D : ACImageNameIcCarplayMap3D];
+                imageName = [OAMapViewTrackingUtilities.instance is3DMode] ? ACImageNameIcCarplayMap2D : ACImageNameIcCarplayMap3D;
                 break;
             default:
                 break;
+        }
+        if (imageName)
+        {
+            UITraitCollection *traitCollection = self.interfaceController.carTraitCollection;
+            image = [UIImage imageNamed:imageName
+                               inBundle:NSBundle.mainBundle
+          compatibleWithTraitCollection:traitCollection];
+            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
     }
     else
@@ -518,6 +533,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
     mapButton.image = image;
     mapButton.focusedImage = image;
+}
+
+- (void)updateMapButtonsForCurrentStyle
+{
+    [self updateMapButton:_3DModeMapButton forType:EOACarPlayButtonType3D];
+    [self updateMapButton:_centerMapButton forType:EOACarPlayButtonTypeCenterMap];
+    [self updateMapButton:_zoomInMapButton forType:EOACarPlayButtonTypeZoomIn];
+    [self updateMapButton:_zoomOutMapButton forType:EOACarPlayButtonTypeZoomOut];
 }
 
 - (void)onMap3dModeUpdated
@@ -783,7 +806,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void)mapTemplateDidShowPanningInterface:(CPMapTemplate *)mapTemplate
 {
     _mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDismiss]];
-    _mapTemplate.mapButtons = @[[self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
+    _zoomInMapButton = [self createMapButton:EOACarPlayButtonTypeZoomIn];
+    _zoomOutMapButton = [self createMapButton:EOACarPlayButtonTypeZoomOut];
+    _mapTemplate.mapButtons = @[_zoomInMapButton, _zoomOutMapButton];
     _mapTemplate.leadingNavigationBarButtons = @[];
 }
 
@@ -1393,6 +1418,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     NSLog(@"onUpdateMapTemplateStyle: %d (%@)", int(style), isDarkStyle ? @"dark" : @"light");
     _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
     _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
+    if (@available(iOS 26.0, *))
+        [self updateMapButtonsForCurrentStyle];
 }
 
 @end

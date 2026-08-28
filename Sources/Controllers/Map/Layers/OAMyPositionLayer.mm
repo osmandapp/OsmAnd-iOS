@@ -679,6 +679,12 @@ typedef enum {
         _courseIconScaleFactor = courseIconScaleFactor;
         [self refreshMarkersCollection];
     }
+    else
+    {
+        [self updateMode];
+        if (_previewMarker)
+            [self updateMode:_previewMarker];
+    }
 
     return YES;
 }

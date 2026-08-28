@@ -6190,7 +6190,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_favoriteSortModes forKey:favoriteSortModesKey];
 
-        _favoriteCollapsedSections = [[[OACommonStringList withKey:favoriteCollapsedSectionsKey defValue:@[]] makeGlobal] makeShared];
+        _favoriteCollapsedSections = [[OACommonStringList withKey:favoriteCollapsedSectionsKey defValue:@[]] makeGlobal];
         [_globalPreferences setObject:_favoriteCollapsedSections forKey:favoriteCollapsedSectionsKey];
 
         _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];

@@ -13,6 +13,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateSearchEnabling(_ isEnabled: Bool)
     func updateTitle(_ title: String, hideSubtitle: Bool)
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
+    func updateRightBarButtonItems(_ items: [UIBarButtonItem]?)
     func updateToolbar(with items: [UIBarButtonItem]?)
     func updateContentScrollView(_ scrollView: UIScrollView)
 }
@@ -405,6 +406,10 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         setupNavbarTitle(title, subtitle: subtitle, hideSubtitle: hideSubtitle)
     }
+
+    func updateRightBarButtonItems(_ items: [UIBarButtonItem]?) {
+        navigationItem.rightBarButtonItems = items
+    }
     
     func updateToolbar(with items: [UIBarButtonItem]?) {
         toolbarItems = items
@@ -493,7 +498,6 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
         pageViewController?.delegate = self
         pageViewController?.dataSource = self
         segmentContainerView.transform = .identity
-        // Match Astronomy's segment reveal; here the segment overlays the content instead of sharing a stack view with it.
         segmentContainerView.clipsToBounds = true
         segmentControl.transform = CGAffineTransform(translationX: 0, y: -segmentControl.bounds.height)
         segmentContainerView.isHidden = false

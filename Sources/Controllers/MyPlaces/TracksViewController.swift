@@ -953,8 +953,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let title = localizedString(areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
         let selectAllButton = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(onSelectDeselectAllButtonClicked))
         selectAllButton.accessibilityLabel = title
-        navigationController?.navigationBar.topItem?.rightBarButtonItems = [selectAllButton]
-        navigationItem.rightBarButtonItems = [selectAllButton]
+        if isRootFolder {
+            myPlacesDelegate?.updateRightBarButtonItems([selectAllButton])
+        } else {
+            navigationItem.rightBarButtonItems = [selectAllButton]
+        }
     }
 
     private func configureSelectionToolbar() {
@@ -968,7 +971,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(onNavbarDeleteButtonClicked))
         deleteButton.tintColor = .iconColorDisruptive
         let items = [exportButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
-        items.forEach { $0.isEnabled = isSelected }
+        [exportButton, moveButton, actionsButton, deleteButton].forEach { $0.isEnabled = isSelected }
         if isRootFolder {
             myPlacesDelegate?.updateToolbar(with: items)
         } else {
@@ -990,9 +993,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             self?.onNavbarChangeActivityButtonClicked()
         }
 
-        let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [uploadToOsmAction, showOnMapAction])
-        let changeAppearanceItemsActions = UIMenu(title: "", options: .displayInline, children: [changeActivityAction, changeAppearanceAction])
-        return UIMenu(title: "", children: [changeAppearanceItemsActions, mapTrackOptionsActions])
+        return UIMenu.composedMenu(from: [[changeActivityAction, changeAppearanceAction], [uploadToOsmAction, showOnMapAction]])
     }
     
     private func configureToolbarForeSmartFolders() {

@@ -704,6 +704,7 @@ static char kMapSourceUpdateQueueKey;
     if (self.mapViewLoaded)
     {
         self.mapViewLoaded = NO;
+        [_mapLayers destroyLayers];
         [_mapView suspendSymbolsUpdate];
         [_mapView releaseContext:YES];
         [_mapView removeFromSuperview];
@@ -813,6 +814,16 @@ static char kMapSourceUpdateQueueKey;
 {
     [self setViewportScaleX:x];
     [self setViewportScaleY:y];
+}
+
+- (double)viewportYScale
+{
+    return _mapView.viewportYScale;
+}
+
+- (void)setViewportYScale:(double)viewportYScale
+{
+    [self setViewportScaleY:viewportYScale];
 }
 
 - (void)setViewportScaleX:(double)x
@@ -4066,6 +4077,7 @@ static char kMapSourceUpdateQueueKey;
         dispatch_async(dispatch_get_main_queue(), ^{
             [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         });
+        return YES;
     }
 
     BOOL found = NO;

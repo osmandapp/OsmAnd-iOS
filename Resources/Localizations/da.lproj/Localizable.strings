@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd kort";
+"send_crash_log" = "Send logfiler om app-nedbrud";
+"send_crash_log_descr" = "Fra forrige nedbrud";
 // Shared Strings
 "shared_string_back" = "Tilbage";
 "shared_string_cancel" = "Annuller";
@@ -242,7 +244,7 @@
 "add_parking_short" = "Tilføj parkering";
 "pickup_car" = "Hent bilen";
 "pickup_car_at" = "Hent bilen på";
-"parking_place_limited" = "Tidsbegrænset parkering til";
+"parking_place_limited" = "Parkering tidsbegrænset til";
 "cannot_add_marker" = "Kan ikke tilføje parkering";
 "cannot_add_marker_desc" = "Fjern i det mindste en retning, og prøv igen";
 "cannot_add_destination" = "Kan ikke tilføje retning";
@@ -4470,11 +4472,8 @@
 "no_search_results" = "Ingen resultater";
 "favorite_search_empty_state_description" = "Juster din søgning eller filtre for at se, om det hjælper";
 "favorites_empty_folder_description" = "Denne mappe har endnu ingen punkter.";
-"favorites_delete_confirmation_title" = "Slet %ld favoritter?";
 "items_delete_confirmation_title" = "Slet %ld elementer?";
-"folders_delete_confirmation_title" = "Slet %ld mapper?";
 "favorites_delete_confirmation_message" = "Denne handling kan ikke fortrydes.";
-"mixed_delete_confirmation_message" = "Dette vil slette %ld mapper og %ld punkter. Denne handling kan ikke fortrydes.";
 "empty_state_favourites" = "Tilføj favoritter";
 "empty_state_favourites_desc" = "Importer favoritter, eller tilføj dem ved at markere punkter på kortet.";
 "tracks_empty_folder" = "Tom mappe";
@@ -4542,3 +4541,10 @@
 "ais_apply_setting_to_profiles" = "Anvend indstilling";
 "ais_apply_to_current_profile" = "Anvend på %@";
 "ais_apply_to_all_profiles" = "Anvend på alle profiler";
+"no_crashes_recorded" = "Ingen nedbrud registreret";
+"share_crash_log" = "Del nedbrudsrapport";
+"crash_report_prompt_title" = "OsmAnd er stødt på en uventet fejl.";
+"crash_report_prompt_description" = "Hjælp os gerne med at forbedre appen ved at sende nedbrudsrapporten. Din nedbrudsrapport vil hjælpe os med at finde og løse problemet.";
+"shared_string_send" = "Send";
+"send_current_app_log" = "Send nuværende app-log";
+"send_current_app_log_descr" = "Siden appen startede";

@@ -144,6 +144,7 @@
 #import "OADestinationBarWidget.h"
 #import "OADownloadMapWidget.h"
 #import "MBProgressHUD.h"
+#import "OATableViewCustomHeaderView.h"
 
 // Plugins
 #import "OAPlugin.h"
@@ -291,6 +292,7 @@
 #import "OAGpxWptItem.h"
 
 // Views
+#import "OAMapRendererViewProtocol.h"
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
 #import "OAHudButton.h"

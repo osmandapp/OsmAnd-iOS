@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd Haritalar";
+"send_crash_log" = "Çökme günlük kaydı gönder";
+"send_crash_log_descr" = "Yalnızca çökmelerle ilgili bilgileri içerir";
 // Shared Strings
 "shared_string_back" = "Geri";
 "shared_string_ok" = "Tamam";

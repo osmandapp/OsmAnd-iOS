@@ -6195,10 +6195,10 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
 
-        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
+        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeValue]];
         [_globalPreferences setObject:_travelGuidesSortMode forKey:travelGuidesSortModeKey];
         
-        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeTitle]];
+        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeValue]];
                [_globalPreferences setObject:_osmEditsSortMode forKey:osmEditsSortModeKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
@@ -6342,21 +6342,23 @@ static NSString *kOfflineKey = @"OFFLINE";
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
         
-        _preferredCoordinateFormatIds = [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
-                                                            defValue:@[
-            @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
-        ]] makeProfile];
-        _recentlyAddedCoordinateFormatIds = [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
-                                                                defValue:@[]] makeGlobal];
+        OACommonStringList *preferredCoordinateFormatIds =
+            [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
+                               defValue:@[
+                @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
+            ]] makeProfile];
+        OACommonStringList *recentlyAddedCoordinateFormatIds =
+            [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
+                               defValue:@[]] makeGlobal];
 
-        [_profilePreferences setObject:_preferredCoordinateFormatIds forKey:@"preferred_coordinate_format_ids"];
-        [_registeredPreferences setObject:_preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
-        [_registeredPreferences setObject:_recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
+        [_profilePreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
 
         _coordinateFormatSettingsStorage =
             [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
-                                                 preferredPreference:_preferredCoordinateFormatIds
-                                                    recentPreference:_recentlyAddedCoordinateFormatIds];
+                                                 preferredPreference:preferredCoordinateFormatIds
+                                                    recentPreference:recentlyAddedCoordinateFormatIds];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];

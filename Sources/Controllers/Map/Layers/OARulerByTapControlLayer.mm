@@ -50,6 +50,8 @@ const static int kDoubleTouchCount = 2;
 
 @property (nonatomic, weak) id<OALineDrawingDelegate> lineDrawingDelegate;
 
+- (void)cancelPreviousHideTouchRuler;
+
 @end
 
 @interface OARulerByTapControlLayer() <UIGestureRecognizerDelegate, OALineDrawingDelegate>
@@ -103,6 +105,9 @@ const static int kDoubleTouchCount = 2;
 
 - (void) deinitLayer
 {
+    [_rulerByTapView cancelPreviousHideTouchRuler];
+    _rulerByTapView.lineDrawingDelegate = nil;
+    [_rulerByTapView removeFromSuperview];
     [super deinitLayer];
 }
 

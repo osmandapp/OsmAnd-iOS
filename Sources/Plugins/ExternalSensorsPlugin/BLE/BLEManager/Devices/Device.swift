@@ -11,11 +11,12 @@ import UIKit
 extension Notification.Name {
     static let deviceRSSIUpdated = Notification.Name("DeviceRSSIUpdated")
     static let deviceDisconnected = Notification.Name("DeviceDisconnected")
+    static let deviceSensorDataUpdated = Notification.Name("DeviceSensorDataUpdated")
 }
 
 enum DeviceState: Int {
     case disconnected, connecting, connected, disconnecting
-    
+
     var description: String {
         switch self {
         case .disconnected: return localizedString("external_device_status_disconnect")
@@ -31,9 +32,9 @@ enum DeviceState: Int {
 class Device: NSObject {
     // swiftlint:disable all
     static let identifier = "identifier"
-    
+
     class var getServiceUUID: String { "" }
-    
+
     var deviceType: DeviceType!
     var rssi = -1
     var deviceName: String = ""
@@ -41,60 +42,60 @@ class Device: NSObject {
     var didDisconnect: (() -> Void)?
     var isSelected = false
     var isSimulator = false
-    
+
     var sensors = [Sensor]()
     var sections = [String: Any]()
-    
+
     var deviceServiceName: String {
         ""
     }
-    
+
     var id: String {
         peripheral.identifier.uuidString
     }
-    
+
     var isConnected: Bool {
         peripheral.state == .connected
     }
-    
+
     var isConnecting: Bool {
         peripheral.state == .connecting
     }
-    
+
     var isDisconnected: Bool {
         peripheral.state == .disconnected
     }
-    
+
     var state: DeviceState {
         DeviceState(rawValue: peripheral.state.rawValue) ?? .disconnected
     }
-    
+
     var getServiceConnectedImage: UIImage? {
         nil
     }
-    
+
     var getServiceDisconnectedImage: UIImage? {
         nil
     }
-    
+
     var getDataFields: [[String: String]]? {
         nil
     }
-    
+
     var getSettingsFields: [String: Any]? {
         nil
     }
-    
+
     private(set) var peripheral: Peripheral!
-    
+
     private var RSSIUpdateTimer: Timer?
     private var characteristicObserver: NSObjectProtocol?
     private var disconnectedObserver: NSObjectProtocol?
-    
+
     // swiftlint:enable all
-    
+
     // MARK: - Initializer
-    
+
     init(deviceType: DeviceType!,
          rssi: Int = 1,
          deviceName: String = "",
@@ -108,24 +109,24 @@ class Device: NSObject {
         self.RSSIUpdateTimer = RSSIUpdateTimer
         self.sensors = [BLEBatterySensor(device: self, sensorId: "battery_level")]
     }
-    
+
     func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         return nil
     }
-    
+
     func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
-    
+
     func configure() {}
-    
+
     func addObservers() {
         removeObservers()
-        
+
         characteristicObserver = NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                                         object: peripheral,
                                                                         queue: nil) { [weak self] notification in
             self?.peripheralCharacteristicValueUpdate(notification: notification as NSNotification)
         }
-        
+
         disconnectedObserver = NotificationCenter.default.addObserver(forName: Peripheral.PeripheralDisconnected,
                                                                       object: peripheral,
                                                                       queue: nil) { [weak self] notification in
@@ -137,7 +138,7 @@ class Device: NSObject {
             }
         }
     }
-    
+
     /*
      Printing description of advertisementData:
      ▿ 6 elements
@@ -162,15 +163,17 @@ class Device: NSObject {
      - 0 : Device Information
      - 1 : Heart Rate
      */
-    
+
     func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         for sensor in sensors {
-            if let widgetTypes = sensor.getSupportedWidgetDataFieldTypes(), widgetTypes.contains(widgetDataFieldType) {
+            if let widgetTypes = sensor.getSupportedWidgetDataFieldTypes(),
+               widgetTypes.contains(widgetDataFieldType),
+               sensor.hasActualData(for: widgetDataFieldType) {
                 sensor.writeSensorDataToJson(json: json, widgetDataFieldType: widgetDataFieldType)
             }
         }
     }
-    
+
     func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
                                  ofServiceWithUUID serviceUUID: CBUUIDConvertible,
                                  completion: @escaping CharacteristicRequestCallback) {
@@ -178,11 +181,11 @@ class Device: NSObject {
                                            ofServiceWithUUID: serviceUUID,
                                            completion: completion)
     }
-    
+
     func disconnect(completion: @escaping DisconnectPeripheralCallback) {
         peripheral.disconnect(completion: completion)
     }
-    
+
     func didDisconnectDevice() {
         debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
         NotificationCenter.default.post(name: .deviceDisconnected,
@@ -190,11 +193,11 @@ class Device: NSObject {
                                         userInfo: [Self.identifier: self.id])
         didDisconnect?()
     }
-    
+
     func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
         peripheral.connect(withTimeout: timeout, completion: completion)
     }
-    
+
     private func peripheralCharacteristicValueUpdate(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               notification.userInfo?["error"] as? SBError == nil else {
@@ -204,12 +207,12 @@ class Device: NSObject {
             return
         }
         update(with: characteristic) { [weak self] result in
-            if case .success = result {
-                self?.didChangeCharacteristic?()
-            }
+            guard case .success = result, let self else { return }
+            NotificationCenter.default.post(name: .deviceSensorDataUpdated, object: self)
+            didChangeCharacteristic?()
         }
     }
-    
+
     private func removeObservers() {
         if let obs = characteristicObserver {
             NotificationCenter.default.removeObserver(obs)
@@ -220,24 +223,24 @@ class Device: NSObject {
             disconnectedObserver = nil
         }
     }
-    
+
     deinit {
         removeObservers()
     }
 }
 
 extension Device {
-    
+
     func setPeripheral(peripheral: Peripheral) {
         self.peripheral = peripheral
     }
-    
+
     func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
                           completion: @escaping ServiceRequestCallback) {
         peripheral.discoverServices(withUUIDs: serviceUUIDs,
                                     completion: completion)
     }
-    
+
     func setNotifyValue(toEnabled enabled: Bool,
                         ofCharac charac: CBCharacteristic,
                         completion: @escaping UpdateNotificationStateCallback) {
@@ -246,7 +249,7 @@ extension Device {
                                   ofServiceWithUUID: charac.service!,
                                   completion: completion)
     }
-    
+
     func writeValue(ofDescriptorWithUUID descriptorUUID: CBUUIDConvertible,
                     fromCharacWithUUID characUUID: CBUUIDConvertible,
                     ofServiceWithUUID serviceUUID: CBUUIDConvertible,
@@ -271,12 +274,12 @@ extension Device {
             readRSSI()
         })
     }
-    
+
     func disableRSSI() {
         RSSIUpdateTimer?.invalidate()
         RSSIUpdateTimer = nil
     }
-    
+
     private func readRSSI() {
         peripheral.readRSSI { [weak self] result in
             guard let self else { return }

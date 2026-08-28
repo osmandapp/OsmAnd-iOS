@@ -71,51 +71,6 @@ enum CoordinateFormatHelper {
         return format(coordFormat, lat: lat, lon: lon)
     }
 
-    static func makeDescriptionHeader(width: CGFloat) -> UIView {
-        let horizontalInset: CGFloat = 36 + OAUtilities.getLeftMargin()
-        let top: CGFloat = 12
-        let bottom: CGFloat = 8
-
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-
-        let text = localizedString("coordinate_format_description")
-        let attr = NSAttributedString(
-            string: text,
-            attributes: [
-                .font: UIFont.preferredFont(forTextStyle: .footnote),
-                .foregroundColor: UIColor.textColorSecondary
-            ]
-        )
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.attributedText = attr
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .natural
-        label.adjustsFontForContentSizeCategory = true
-        header.addSubview(label)
-
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: horizontalInset),
-            label.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -horizontalInset),
-            label.topAnchor.constraint(equalTo: header.topAnchor, constant: top),
-            label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -bottom)
-        ])
-
-        relayoutHeader(header, width: width)
-        return header
-    }
-
-    static func relayoutHeader(_ header: UIView, width: CGFloat) {
-        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let height = header.systemLayoutSizeFitting(
-            target,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-        header.frame.size = CGSize(width: width, height: height)
-    }
-
     static func format(_ format: CoordinateFormat, lat: Double, lon: Double) -> String {
         if format.type == .builtIn, let legacy = format.legacyFormat {
             return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy)

@@ -8,6 +8,7 @@
 
 #import "OABaseTableViewController.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseTableViewController()
 
@@ -26,6 +27,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
 }
 
 - (void) applyLocalization

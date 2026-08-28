@@ -72,6 +72,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [_avoidRoads addListener:self];
     
@@ -92,7 +93,7 @@
     _eleDownImageView.tintColor = eleTint;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
-    bottomDividerFrame.size.height = 0.5;
+    bottomDividerFrame.size.height = [SeparatorAppearance thicknessForView:self.bottomToolBarDividerView];
     _bottomToolBarDividerView.frame = bottomDividerFrame;
 }
 

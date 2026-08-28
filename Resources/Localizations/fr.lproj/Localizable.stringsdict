@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Supprimer %#@favorites@?</string>
+		<string>Supprimer %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +13,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Favori</string>
+			<string>%2$@ Favori</string>
 			<key>many</key>
-			<string>%ld Favoris</string>
+			<string>%2$@ Favoris</string>
 			<key>other</key>
-			<string>%ld Favoris</string>
+			<string>%2$@ Favoris</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Supprimer %#@folders@?</string>
+		<string>Supprimer %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Dossier</string>
+			<string>%2$@ Dossier</string>
 			<key>many</key>
-			<string>%ld dossiers</string>
+			<string>%2$@ dossiers</string>
 			<key>other</key>
-			<string>%ld dossiers</string>
+			<string>%2$@ dossiers</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Supprimer %#@folders@ et %#@points@. Cette action ne peut pas être annulée.</string>
+		<string>Supprimer %1$#@folders@ et %3$#@points@. Cette action ne peut pas être annulée.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Dossier</string>
+			<string>%2$@ Dossier</string>
 			<key>many</key>
-			<string>%ld dossiers</string>
+			<string>%2$@ dossiers</string>
 			<key>other</key>
-			<string>%ld dossiers</string>
+			<string>%2$@ dossiers</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +62,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Point</string>
+			<string>%4$@ Point</string>
 			<key>many</key>
-			<string>%ld Points</string>
+			<string>%4$@ Points</string>
 			<key>other</key>
-			<string>%ld Points</string>
+			<string>%4$@ Points</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Выдаліць %#@favorites@?</string>
+		<string>Выдаліць %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +13,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld абраную кропку</string>
+			<string>%2$@ абраную кропку</string>
 			<key>few</key>
-			<string>%ld абраныя кропкі</string>
+			<string>%2$@ абраныя кропкі</string>
 			<key>many</key>
-			<string>%ld абраных кропак</string>
+			<string>%2$@ абраных кропак</string>
 			<key>other</key>
-			<string>%ld абраных кропак</string>
+			<string>%2$@ абраных кропак</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Выдаліць %#@folders@?</string>
+		<string>Выдаліць %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld папку</string>
+			<string>%2$@ папку</string>
 			<key>few</key>
-			<string>%ld папкі</string>
+			<string>%2$@ папкі</string>
 			<key>many</key>
-			<string>%ld папак</string>
+			<string>%2$@ папак</string>
 			<key>other</key>
-			<string>%ld папак</string>
+			<string>%2$@ папак</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Выдаліць %#@folders@ і %#@points@. Гэта дзеянне нельга скасаваць.</string>
+		<string>Выдаліць %1$#@folders@ і %3$#@points@. Гэта дзеянне нельга скасаваць.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +53,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld папку</string>
+			<string>%2$@ папку</string>
 			<key>few</key>
-			<string>%ld папкі</string>
+			<string>%2$@ папкі</string>
 			<key>many</key>
-			<string>%ld папак</string>
+			<string>%2$@ папак</string>
 			<key>other</key>
-			<string>%ld папак</string>
+			<string>%2$@ папак</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +68,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld кропку</string>
+			<string>%4$@ кропку</string>
 			<key>few</key>
-			<string>%ld кропкі</string>
+			<string>%4$@ кропкі</string>
 			<key>many</key>
-			<string>%ld кропак</string>
+			<string>%4$@ кропак</string>
 			<key>other</key>
-			<string>%ld кропак</string>
+			<string>%4$@ кропак</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

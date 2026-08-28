@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>काढून टाका %#@favorites@?</string>
+		<string>काढून टाका %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +13,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld आवडते ठिकाण</string>
+			<string>%2$@ आवडते ठिकाण</string>
 			<key>other</key>
-			<string>%ld आवडती ठिकाणे</string>
+			<string>%2$@ आवडती ठिकाणे</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>काढून टाका %#@folders@?</string>
+		<string>काढून टाका %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>काढून टाका %#@folders@ व %#@points@. This action cannot be undone.</string>
+		<string>काढून टाका %1$#@folders@ व %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +56,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld बिंदू</string>
+			<string>%4$@ बिंदू</string>
 			<key>other</key>
-			<string>%ld बिंदू</string>
+			<string>%4$@ बिंदू</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

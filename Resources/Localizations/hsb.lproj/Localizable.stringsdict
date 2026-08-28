@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@favorites@?</string>
+		<string>Wotstronić %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +13,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Faworit</string>
+			<string>%2$@ Faworit</string>
 			<key>two</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 			<key>few</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 			<key>other</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@folders@?</string>
+		<string>Wotstronić %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>few</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>other</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@folders@ a %#@points@. This action cannot be undone.</string>
+		<string>Wotstronić %1$#@folders@ a %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +53,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>few</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>other</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +68,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>two</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>few</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>other</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

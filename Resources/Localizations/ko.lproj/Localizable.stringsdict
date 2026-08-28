@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>삭제 %#@favorites@?</string>
+		<string>삭제 %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,13 +13,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>%ld 즐겨찾기</string>
+			<string>%2$@ 즐겨찾기</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>삭제 %#@folders@?</string>
+		<string>삭제 %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -27,13 +27,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>%ld 폴더</string>
+			<string>%2$@ 폴더</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>삭제 %#@folders@ 그리고 %#@points@. 이 작업은 취소할 수 없습니다.</string>
+		<string>삭제 %1$#@folders@ 그리고 %3$#@points@. 이 작업은 취소할 수 없습니다.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -41,7 +41,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>%ld 폴더</string>
+			<string>%2$@ 폴더</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -50,7 +50,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>%ld 장소</string>
+			<string>%4$@ 장소</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

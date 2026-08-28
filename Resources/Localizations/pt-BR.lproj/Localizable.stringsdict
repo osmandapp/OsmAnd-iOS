@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Apagar %#@favorites@?</string>
+		<string>Apagar %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +13,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Favorito</string>
+			<string>%2$@ Favorito</string>
 			<key>many</key>
-			<string>%ld Favoritos</string>
+			<string>%2$@ Favoritos</string>
 			<key>other</key>
-			<string>%ld Favoritos</string>
+			<string>%2$@ Favoritos</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Apagar %#@folders@?</string>
+		<string>Apagar %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Pasta</string>
+			<string>%2$@ Pasta</string>
 			<key>many</key>
-			<string>%ld pastas</string>
+			<string>%2$@ pastas</string>
 			<key>other</key>
-			<string>%ld pastas</string>
+			<string>%2$@ pastas</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Apagar %#@folders@ e %#@points@. Essa ação não pode ser revertida.</string>
+		<string>Apagar %1$#@folders@ e %3$#@points@. Essa ação não pode ser revertida.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Pasta</string>
+			<string>%2$@ Pasta</string>
 			<key>many</key>
-			<string>%ld pastas</string>
+			<string>%2$@ pastas</string>
 			<key>other</key>
-			<string>%ld pastas</string>
+			<string>%2$@ pastas</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +62,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Ponto</string>
+			<string>%4$@ Ponto</string>
 			<key>many</key>
-			<string>%ld Pontos</string>
+			<string>%4$@ Pontos</string>
 			<key>other</key>
-			<string>%ld Pontos</string>
+			<string>%4$@ Pontos</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

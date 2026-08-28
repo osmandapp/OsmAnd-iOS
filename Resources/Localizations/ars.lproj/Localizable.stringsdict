@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@favorites@?</string>
+		<string>حذف %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,21 +13,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 			<key>two</key>
-			<string>%ld مفضلتان</string>
+			<string>%2$@ مفضلتان</string>
 			<key>few</key>
-			<string>%ld مفضلات</string>
+			<string>%2$@ مفضلات</string>
 			<key>many</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 			<key>other</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@folders@?</string>
+		<string>حذف %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -35,21 +35,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 			<key>two</key>
-			<string>%ld مجلدان</string>
+			<string>%2$@ مجلدان</string>
 			<key>few</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>many</key>
-			<string>%ld مجلدا</string>
+			<string>%2$@ مجلدا</string>
 			<key>other</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@folders@ و %#@points@. لا يمكن التراجع عن هذا الإجراء.</string>
+		<string>حذف %1$#@folders@ و %3$#@points@. لا يمكن التراجع عن هذا الإجراء.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -57,17 +57,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>one</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 			<key>two</key>
-			<string>%ld مجلدان</string>
+			<string>%2$@ مجلدان</string>
 			<key>few</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>many</key>
-			<string>%ld مجلدا</string>
+			<string>%2$@ مجلدا</string>
 			<key>other</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -76,17 +76,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld نقاط</string>
+			<string>%4$@ نقاط</string>
 			<key>one</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
 			<key>two</key>
-			<string>%ld نقطتان</string>
+			<string>%4$@ نقطتان</string>
 			<key>few</key>
-			<string>%ld نقاط</string>
+			<string>%4$@ نقاط</string>
 			<key>many</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
 			<key>other</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

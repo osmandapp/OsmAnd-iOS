@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Eyða %#@favorites@?</string>
+		<string>Eyða %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +13,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Eftirlæti</string>
+			<string>%2$@ Eftirlæti</string>
 			<key>other</key>
-			<string>%ld Eftirlæti</string>
+			<string>%2$@ Eftirlæti</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Eyða %#@folders@?</string>
+		<string>Eyða %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Mappa</string>
+			<string>%2$@ Mappa</string>
 			<key>other</key>
-			<string>%ld möppur</string>
+			<string>%2$@ möppur</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Eyða %#@folders@ og %#@points@. Það er ekki hægt að afturkalla við þessa aðgerð.</string>
+		<string>Eyða %1$#@folders@ og %3$#@points@. Það er ekki hægt að afturkalla við þessa aðgerð.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Mappa</string>
+			<string>%2$@ Mappa</string>
 			<key>other</key>
-			<string>%ld möppur</string>
+			<string>%2$@ möppur</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +56,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punktur</string>
+			<string>%4$@ Punktur</string>
 			<key>other</key>
-			<string>%ld Punktar</string>
+			<string>%4$@ Punktar</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

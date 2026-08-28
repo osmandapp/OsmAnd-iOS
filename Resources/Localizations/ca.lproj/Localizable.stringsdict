@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Suprimeix %#@favorites@?</string>
+		<string>Suprimeix %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +13,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Preferida</string>
+			<string>%2$@ Preferida</string>
 			<key>many</key>
-			<string>%ld Preferits</string>
+			<string>%2$@ Preferits</string>
 			<key>other</key>
-			<string>%ld Preferits</string>
+			<string>%2$@ Preferits</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Suprimeix %#@folders@?</string>
+		<string>Suprimeix %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Carpeta</string>
+			<string>%2$@ Carpeta</string>
 			<key>many</key>
-			<string>%ld carpetes</string>
+			<string>%2$@ carpetes</string>
 			<key>other</key>
-			<string>%ld carpetes</string>
+			<string>%2$@ carpetes</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Suprimeix %#@folders@ i %#@points@. Aquesta acció no es pot desfer.</string>
+		<string>Suprimeix %1$#@folders@ i %3$#@points@. Aquesta acció no es pot desfer.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Carpeta</string>
+			<string>%2$@ Carpeta</string>
 			<key>many</key>
-			<string>%ld carpetes</string>
+			<string>%2$@ carpetes</string>
 			<key>other</key>
-			<string>%ld carpetes</string>
+			<string>%2$@ carpetes</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +62,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punt</string>
+			<string>%4$@ Punt</string>
 			<key>many</key>
-			<string>%ld Punts</string>
+			<string>%4$@ Punts</string>
 			<key>other</key>
-			<string>%ld Punts</string>
+			<string>%4$@ Punts</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@favorites@?</string>
+		<string>Delete %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +13,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld omiljenu</string>
+			<string>%2$@ omiljenu</string>
 			<key>few</key>
-			<string>%ld omiljene</string>
+			<string>%2$@ omiljene</string>
 			<key>other</key>
-			<string>%ld omiljenih</string>
+			<string>%2$@ omiljenih</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@folders@?</string>
+		<string>Delete %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 			<key>other</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@folders@ and %#@points@. This action cannot be undone.</string>
+		<string>Delete %1$#@folders@ and %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 			<key>other</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +62,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld tačku</string>
+			<string>%4$@ tačku</string>
 			<key>few</key>
-			<string>%ld tačke</string>
+			<string>%4$@ tačke</string>
 			<key>other</key>
-			<string>%ld tačaka</string>
+			<string>%4$@ tačaka</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

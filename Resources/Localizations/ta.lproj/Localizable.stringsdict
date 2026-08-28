@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@favorites@?</string>
+		<string>அழி %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +13,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld பிடித்தவை</string>
+			<string>%2$@ பிடித்தவை</string>
 			<key>other</key>
-			<string>%ld பிடித்தவைகள்</string>
+			<string>%2$@ பிடித்தவைகள்</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@folders@?</string>
+		<string>அழி %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld கோப்புறை</string>
+			<string>%2$@ கோப்புறை</string>
 			<key>other</key>
-			<string>%ld கோப்புறைகளும்</string>
+			<string>%2$@ கோப்புறைகளும்</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@folders@ மற்றும் %#@points@. இந்த செயலை செயல்தவிர்க்க முடியாது.</string>
+		<string>அழி %1$#@folders@ மற்றும் %3$#@points@. இந்த செயலை செயல்தவிர்க்க முடியாது.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld கோப்புறை</string>
+			<string>%2$@ கோப்புறை</string>
 			<key>other</key>
-			<string>%ld கோப்புறைகளும்</string>
+			<string>%2$@ கோப்புறைகளும்</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +56,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld புள்ளி</string>
+			<string>%4$@ புள்ளி</string>
 			<key>other</key>
-			<string>%ld பிரிவகம்</string>
+			<string>%4$@ பிரிவகம்</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

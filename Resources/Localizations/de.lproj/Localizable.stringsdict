@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Löschen %#@favorites@?</string>
+		<string>Löschen %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +13,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Favorit</string>
+			<string>%2$@ Favorit</string>
 			<key>other</key>
-			<string>%ld Favoriten</string>
+			<string>%2$@ Favoriten</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Löschen %#@folders@?</string>
+		<string>Löschen %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Verzeichnis</string>
+			<string>%2$@ Verzeichnis</string>
 			<key>other</key>
-			<string>%ld Verzeichnisse</string>
+			<string>%2$@ Verzeichnisse</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Löschen %#@folders@ und %#@points@. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+		<string>Löschen %1$#@folders@ und %3$#@points@. Diese Aktion kann nicht rückgängig gemacht werden.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Verzeichnis</string>
+			<string>%2$@ Verzeichnis</string>
 			<key>other</key>
-			<string>%ld Verzeichnisse</string>
+			<string>%2$@ Verzeichnisse</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +56,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punkt</string>
+			<string>%4$@ Punkt</string>
 			<key>other</key>
-			<string>%ld Punkte</string>
+			<string>%4$@ Punkte</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

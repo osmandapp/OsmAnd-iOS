@@ -5,7 +5,7 @@
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@favorites@?</string>
+		<string>Odstrániť %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +13,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld obľúbenú položku</string>
+			<string>%2$@ obľúbenú položku</string>
 			<key>few</key>
-			<string>%ld obľúbené položky</string>
+			<string>%2$@ obľúbené položky</string>
 			<key>many</key>
-			<string>%ld obľúbených položiek</string>
+			<string>%2$@ obľúbených položiek</string>
 			<key>other</key>
-			<string>%ld obľúbenej položky</string>
+			<string>%2$@ obľúbenej položky</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@folders@?</string>
+		<string>Odstrániť %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld priečinok</string>
+			<string>%2$@ priečinok</string>
 			<key>few</key>
-			<string>%ld priečinky</string>
+			<string>%2$@ priečinky</string>
 			<key>many</key>
-			<string>%ld priečinkov</string>
+			<string>%2$@ priečinkov</string>
 			<key>other</key>
-			<string>%ld priečinka</string>
+			<string>%2$@ priečinka</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@folders@ a %#@points@. Táto akcia sa nedá odvolať.</string>
+		<string>Odstrániť %1$#@folders@ a %3$#@points@. Táto akcia sa nedá odvolať.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +53,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld priečinok</string>
+			<string>%2$@ priečinok</string>
 			<key>few</key>
-			<string>%ld priečinky</string>
+			<string>%2$@ priečinky</string>
 			<key>many</key>
-			<string>%ld priečinkov</string>
+			<string>%2$@ priečinkov</string>
 			<key>other</key>
-			<string>%ld priečinka</string>
+			<string>%2$@ priečinka</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +68,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld bod</string>
+			<string>%4$@ bod</string>
 			<key>few</key>
-			<string>%ld body</string>
+			<string>%4$@ body</string>
 			<key>many</key>
-			<string>%ld bodov</string>
+			<string>%4$@ bodov</string>
 			<key>other</key>
-			<string>%ld bodu</string>
+			<string>%4$@ bodu</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>

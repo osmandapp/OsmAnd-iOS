@@ -38,6 +38,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) addWaypoint;
 
 - (void) requestHeaderOnlyMode;
+- (void)requestHeaderOnlyModeAnimated:(BOOL)animated;
 - (void) requestFullScreenMode;
 - (void) requestFullMode;
 

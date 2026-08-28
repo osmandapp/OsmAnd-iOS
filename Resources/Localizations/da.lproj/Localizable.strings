@@ -4549,3 +4549,6 @@
 "send_current_app_log" = "Send nuværende app-log";
 "send_current_app_log_descr" = "Siden appen startede";
 "msg_favorites_skipped_as_existing" = "Favoritpunkter (%d) blev sprunget over som allerede eksisterende.";
+"osm_edits_empty_state_title" = "Ingen ventende kortredigeringer";
+"osm_edits_empty_state_description" = "De ændringer, du foretager i OsmAnd, vises her, inden de uploades til OpenStreetMap";
+"carplay_trip_via_point" = "Via %@";

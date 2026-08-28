@@ -190,8 +190,13 @@ final class FavoriteListCell: UICollectionViewListCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        let targetSize = CGSize(width: contentView.bounds.width, height: UIView.layoutFittingCompressedSize.height)
-        let contentHeight = primaryTextLayoutGuide?.owningView?.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height ?? 0
+        guard let textContentView = primaryTextLayoutGuide?.owningView, textContentView.bounds.width > 0 else {
+            attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
+            return attributes
+        }
+
+        let targetSize = CGSize(width: textContentView.bounds.width, height: UIView.layoutFittingCompressedSize.height)
+        let contentHeight = textContentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         attributes.frame.size.height = ceil(max(Self.rowHeight, max(attributes.frame.height, contentHeight)))
         return attributes
     }

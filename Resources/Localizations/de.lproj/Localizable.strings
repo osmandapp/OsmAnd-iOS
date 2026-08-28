@@ -4126,3 +4126,9 @@
 "gpx_logging_no_data" = "Keine Daten";
 "share_link" = "Link teilen";
 "share_as_file" = "Als Datei teilen";
+"no_crashes_recorded" = "Keine Abstürze erfasst";
+"share_crash_log" = "Absturzprotokoll teilen";
+"shared_string_send" = "Senden";
+"send_current_app_log" = "Derzeitiges App-Protokoll senden";
+"send_current_app_log_descr" = "Seit App-Start";
+"no_search_results" = "Keine Ergebnisse";

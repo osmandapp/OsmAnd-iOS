@@ -1264,7 +1264,7 @@
 "osm_confirm_upload" = "Caricare le modifiche?";
 "edit_osm_note" = "Modifica Nota OSM";
 "modify_poi" = "Modifica le informazioni del PDI";
-"osm_editing_plugin_name" = "Modifiche OSM";
+"osm_editing_plugin_name" = "Modifica di OpenStreetMap";
 "product_desc_osm_editing" = "Trasforma il tuo telefono cellulare in uno strumento di mappatura";
 "poi_category_and_type" = "Categorie e tipi PDI";
 "poi_select_category" = "Seleziona categoria";
@@ -3534,7 +3534,7 @@
 "download_tab_conflicts" = "Non risolto";
 "simulate_location_movement_speed_x3" = "x3";
 "weather_temperature_celsius" = "Celsius";
-"feedback" = "Feedback";
+"feedback" = "Riscontro";
 "km" = "km";
 "int_hour" = "h";
 "empty_smart_folder_descr" = "Tutte le tracce corrispondenti appariranno automaticamente qui.";

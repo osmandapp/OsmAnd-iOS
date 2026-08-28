@@ -4548,3 +4548,4 @@
 "shared_string_send" = "Send";
 "send_current_app_log" = "Send nuværende app-log";
 "send_current_app_log_descr" = "Siden appen startede";
+"msg_favorites_skipped_as_existing" = "Favoritpunkter (%d) blev sprunget over som allerede eksisterende.";

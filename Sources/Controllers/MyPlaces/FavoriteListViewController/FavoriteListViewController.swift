@@ -340,6 +340,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
             guard let self else { return nil }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            configuration.backgroundColor = .clear
             let section = self.layoutSections.indices.contains(sectionIndex) ? self.layoutSections[sectionIndex] : nil
             if section == .sortHeader {
                 return self.sortHeaderLayoutSection()

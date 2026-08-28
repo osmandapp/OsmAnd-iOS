@@ -13,6 +13,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateSearchEnabling(_ isEnabled: Bool)
     func updateTitle(_ title: String, hideSubtitle: Bool)
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
+    func updateRightBarButtonItems(_ items: [UIBarButtonItem]?)
     func updateToolbar(with items: [UIBarButtonItem]?)
     func updateContentScrollView(_ scrollView: UIScrollView)
 }
@@ -130,9 +131,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewSafeAreaInsetsDidChange()
         guard !isSearchBarAnimating, searchController?.isActive != true else { return }
         segmentContainerTopConstraint.constant = view.safeAreaInsets.top
-        UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState]) {
-            self.view.layoutIfNeeded()
-        }
+        view.layoutIfNeeded()
     }
     
     func switchToWithSegmentControl(tab: Tab) {
@@ -228,8 +227,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private func showSearchController() {
         searchController?.searchBar.alpha = 0
         navigationItem.searchController = searchController
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.navigationItem.searchController?.isActive = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            UIView.performWithoutAnimation {
+                self.navigationItem.searchController?.isActive = true
+            }
         }
     }
 
@@ -405,6 +406,10 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         setupNavbarTitle(title, subtitle: subtitle, hideSubtitle: hideSubtitle)
     }
+
+    func updateRightBarButtonItems(_ items: [UIBarButtonItem]?) {
+        navigationItem.rightBarButtonItems = items
+    }
     
     func updateToolbar(with items: [UIBarButtonItem]?) {
         toolbarItems = items
@@ -492,14 +497,18 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
         navigationItem.searchController = nil
         pageViewController?.delegate = self
         pageViewController?.dataSource = self
-        segmentContainerView.transform = CGAffineTransform(translationX: 0, y: -segmentContainerView.bounds.height)
+        segmentContainerView.transform = .identity
+        segmentContainerView.clipsToBounds = true
+        segmentControl.transform = CGAffineTransform(translationX: 0, y: -segmentControl.bounds.height)
         segmentContainerView.isHidden = false
-        UIView.animate(withDuration: 0.4, delay: 0, options: [.beginFromCurrentState]) {
+        UIView.animate(withDuration: searchAnimationDuration, delay: 0, options: [.beginFromCurrentState]) {
             searchController.searchBar.alpha = 0
-            self.segmentContainerView.transform = .identity
+            self.segmentControl.transform = .identity
             self.segmentContainerView.alpha = 1
             self.updateContentSafeAreaInsets(segmentIsVisible: true)
             self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.segmentContainerView.clipsToBounds = false
         }
     }
     

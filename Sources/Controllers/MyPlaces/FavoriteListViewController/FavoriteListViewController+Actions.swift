@@ -132,8 +132,9 @@ extension FavoriteListViewController {
     }
 
     func showDeleteAlert(for folder: FavoriteFolderRow) {
-        let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
-        let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
+        let title = deleteConfirmationTitle(for: [folder.bridgeItem])
+        let message = deleteConfirmationMessage(for: [folder.bridgeItem])
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
             guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
             self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])

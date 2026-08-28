@@ -1233,6 +1233,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonStringList *tracksSortModes;
 @property (nonatomic) OACommonString *searchTracksSortModes;
 @property (nonatomic) OACommonStringList *favoriteSortModes;
+@property (nonatomic) OACommonStringList *favoriteCollapsedSections;
 @property (nonatomic) OACommonString *searchFavoriteSortMode;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
 @property (nonatomic) OACommonString *osmEditsSortMode;

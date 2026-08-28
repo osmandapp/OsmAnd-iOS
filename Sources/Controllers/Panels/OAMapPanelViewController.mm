@@ -2211,10 +2211,36 @@ typedef enum
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
 {
+    BOOL needsAddress = descr.length == 0 || [descr isEqualToString:OALocalizedString(@"map_no_address")];
+    if (needsAddress)
+        descr = [OAPointDescription getLocationNamePlain:lat lon:lon];
+    
     OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
     [_mapViewController hideContextPinMarker];
     [_destinationsHelper addDestinationWithNewColor:destination];
     [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
+    
+    if (needsAddress)
+        [self resolveAddressAndUpdateMarker:destination];
+}
+
+- (void)resolveAddressAndUpdateMarker:(OADestination *)destination
+{
+    __weak __typeof(self) weakSelf = self;
+    [[OAReverseGeocoder instance] lookupAddressAtLat:destination.latitude
+                                                 lon:destination.longitude
+                                            objectId:0
+                                          completion:^(NSString *address) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || address.length == 0)
+            return;
+        if ([strongSelf->_app.data.destinations indexOfObjectIdenticalTo:destination] == NSNotFound)
+            return;
+
+        OADestination *updated = [destination copy];
+        updated.desc = address;
+        [strongSelf->_destinationsHelper replaceDestination:destination withDestination:updated];
+    }];
 }
 
 - (void) targetPointDirection
@@ -2251,13 +2277,21 @@ typedef enum
     }
     else if (self.targetMenuView.targetPoint.type != OATargetParking)
     {
-        OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
+        NSString *descr = _formattedTargetName;
+        BOOL needsAddress = descr.length == 0 || [descr isEqualToString:OALocalizedString(@"map_no_address")];
+        if (needsAddress)
+            descr = [OAPointDescription getLocationNamePlain:_targetLatitude lon:_targetLongitude];
+        
+        OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:_targetLatitude longitude:_targetLongitude];
 
         UIColor *color = [_destinationsHelper addDestinationWithNewColor:destination];
         if (color)
         {
             [_mapViewController hideContextPinMarker];
             [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
+            
+            if (needsAddress)
+                [self resolveAddressAndUpdateMarker:destination];
         }
         else
         {

@@ -42,16 +42,6 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         super.viewWillAppear(animated)
         setupSearchController()
     }
-    
-    // MARK: - Bottom buttons
-    
-    override func getTopButtonTitle() -> String {
-        ""
-    }
-    
-    override func getBottomButtonTitle() -> String {
-        ""
-    }
 
     // MARK: - NavBar
 

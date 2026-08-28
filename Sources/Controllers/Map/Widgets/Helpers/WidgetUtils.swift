@@ -91,11 +91,11 @@ final class WidgetUtils: NSObject {
         let newWidgetsList = NSMutableArray()
         let widgetsFactory = MapWidgetsFactory()
         if !enabledWidgets.isEmpty {
-            let visibleInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                                 filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
-                                                                 panels: [panel],
-                                                                 screenLayoutMode: screenLayoutMode.rawValue)?.array as? [MapWidgetInfo] ?? []
-            let currentWidgetIds = NSMutableArray(array: visibleInfos.map(\.key))
+            let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                     filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                     panels: [panel],
+                                                     screenLayoutMode: screenLayoutMode.rawValue)?.array as? [MapWidgetInfo] ?? []
+            let currentWidgetIds = NSMutableArray(array: widgetInfos.map(\.key))
             var widgetParamsArrayLocal = widgetParamsArray
             for widgetInfoId in enabledWidgets {
                 if !currentWidgetIds.contains(widgetInfoId) {
@@ -119,7 +119,7 @@ final class WidgetUtils: NSObject {
                         currentWidgetIds.remove(widgetInfoId)
                     }
                 } else {
-                    if let mapWidgetInfo = visibleInfos.first(where: { $0.key == widgetInfoId }) {
+                    if let mapWidgetInfo = widgetInfos.first(where: { $0.key == widgetInfoId }) {
                         newWidgetsList.add(mapWidgetInfo)
                         currentWidgetIds.remove(widgetInfoId)
                     }

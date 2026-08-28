@@ -53,7 +53,7 @@
 #import "OsmAndSharedWrapper.h"
 
 #define kWidgetsTopPadding 10.0
-#define kCompactPortraitPanelWidthRatio 0.5
+static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 @implementation OATextState
 @end

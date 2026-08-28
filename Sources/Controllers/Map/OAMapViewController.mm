@@ -4500,24 +4500,35 @@ static char kMapSourceUpdateQueueKey;
                                             endPos:endPos
                                           analysis:analysis
                                            segment:segment];
-    if (rect.left != 0 && rect.right != 0)
-    {
-        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        CGPoint mapPoint;
-        [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+    [self fitTrackOnMapWithRect:rect
+                       location:location
+                       forceFit:forceFit
+               trackChartHelper:trackChartHelper];
+}
 
-        if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
-        {
-            [trackChartHelper.delegate centerMapOnBBox:rect];
-        }
-        else if (CLLocationCoordinate2DIsValid(location)
-                 && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
-        {
-            if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
-                [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
-            [self goToPosition:[OANativeUtilities convertFromPointI:point]
-                      animated:YES];
-        }
+- (void)fitTrackOnMapWithRect:(OASKQuadRect *)rect
+                     location:(CLLocationCoordinate2D)location
+                     forceFit:(BOOL)forceFit
+             trackChartHelper:(TrackChartHelper *)trackChartHelper
+{
+    if (rect.left == 0 || rect.right == 0)
+        return;
+
+    auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+    CGPoint mapPoint;
+    [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+    if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
+    {
+        [trackChartHelper.delegate centerMapOnBBox:rect];
+    }
+    else if (CLLocationCoordinate2DIsValid(location)
+             && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
+    {
+        if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
+            [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
+        [self goToPosition:[OANativeUtilities convertFromPointI:point]
+                  animated:YES];
     }
 }
 

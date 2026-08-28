@@ -91,7 +91,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var currentChartDataSignature: String?
     private var trackChartFilePath: String?
     private var trackChartHelper: TrackChartHelper?
-    private var chartView: ElevationChart?
     private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
         let proxy = AnalyzeChartDelegateProxy()
         proxy.onNothingSelected = { [weak self] _ in
@@ -101,7 +100,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         proxy.onValueSelected = { [weak self] chart, highlight in
             guard let self, let chartView, chart === chartView else { return }
             chartSynchronizer.syncHighlight(highlight, sourceChart: chartView)
-            refreshChartOnMap()
         }
         proxy.onTranslated = { [weak self] chart in
             self?.handleChartViewPortChanged(chart)
@@ -112,6 +110,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         return proxy
     }()
     private weak var dataSource: PlanRouteAnalyzeDataSource?
+    private weak var chartView: ElevationChart?
     private weak var yAxisButton: UIButton?
     private weak var xAxisButton: UIButton?
 
@@ -158,6 +157,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        chartSynchronizer.onChartStateChanged = { [weak self] state in
+            self?.refreshChartOnMap(state)
+        }
         setupTableView()
         reloadData()
     }
@@ -270,14 +272,10 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                                      axisType: selectedXAxisType,
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
         chartSynchronizer.setPrimaryChart(chart)
-        if !chart.highlighted.isEmpty {
-            refreshChartOnMap()
-        }
     }
 
-    private func refreshChartOnMap() {
-        guard let chart = chartView,
-              let data = dataSource?.analysisData,
+    private func refreshChartOnMap(_ state: TrackChartState) {
+        guard let data = dataSource?.analysisData,
               let analysis = data.gpxAnalysis,
               let gpxFile = data.gpxFile,
               let segment = chartSegment(for: analysis, gpxFile: gpxFile) else {
@@ -288,10 +286,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         if let viewportBounds {
             helper.screenBBox = viewportBounds
         }
-        helper.refreshChart(chart,
+        helper.refreshChart(state,
                             fitTrack: viewportBounds != nil,
                             forceFit: false,
-                            recalculateXAxis: false,
                             analysis: analysis,
                             segment: segment)
     }
@@ -1210,6 +1207,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
         guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
         cell.layoutIfNeeded()
         if let primaryChart = chart as? ElevationChart {
+            chartView = primaryChart
             chartSynchronizer.setPrimaryChart(primaryChart)
         } else if let barChart = chart as? HorizontalBarChartView {
             chartSynchronizer.registerBarChart(barChart)
@@ -1217,8 +1215,15 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let barChart = (cell as? AnalyzeCardCell)?.chartView as? HorizontalBarChartView else { return }
-        chartSynchronizer.unregisterBarChart(barChart)
+        guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
+        if let primaryChart = chart as? ElevationChart {
+            chartSynchronizer.unregisterPrimaryChart(primaryChart)
+            if chartView === primaryChart {
+                chartView = nil
+            }
+        } else if let barChart = chart as? HorizontalBarChartView {
+            chartSynchronizer.unregisterBarChart(barChart)
+        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1783,7 +1788,6 @@ private extension PlanRouteAnalyzeViewController {
         guard recognizer is UIPinchGestureRecognizer || isDoubleTap,
               recognizer.state == .ended,
               let chart = recognizer.view as? BarLineChartViewBase else { return }
-        refreshChartOnMap()
         DispatchQueue.main.async {
             chart.layoutIfNeeded()
             self.chartSynchronizer.syncViewPort(from: chart)

@@ -52,9 +52,13 @@ private final class RouteStatisticsYAxisRenderer: YAxisRendererHorizontalBarChar
 final class RouteChartSynchronizer: NSObject {
     private static let maxHighlightDistance: CGFloat = 10_000
 
+    @nonobjc var onChartStateChanged: ((TrackChartState) -> Void)?
+
     private let barCharts = NSHashTable<HorizontalBarChartView>.weakObjects()
     private weak var primaryChart: ElevationChart?
     private var primaryXAxisType: GPXDataSetAxisType?
+    private var primaryXAxisRange: ClosedRange<Double>?
+    private var primaryXAxisDivisor: Double?
     private var selectedProgress: Double?
     private var selectedXAxisValue: Double?
     private var visibleProgressRange: ClosedRange<Double>?
@@ -71,13 +75,41 @@ final class RouteChartSynchronizer: NSObject {
         primaryXAxisType == .distance
     }
 
+    private var currentTrackChartState: TrackChartState? {
+        guard let selectedProgress,
+              let primaryXAxisType,
+              let primaryXAxisRange,
+              let primaryXAxisDivisor else { return nil }
+        let selectedX: Double
+        if usesDistanceXAxis, let selectedXAxisValue {
+            selectedX = selectedXAxisValue
+        } else {
+            selectedX = value(for: selectedProgress, in: primaryXAxisRange)
+        }
+        let visibleRange: ClosedRange<Double>
+        if usesDistanceXAxis, let visibleXAxisRange {
+            visibleRange = visibleXAxisRange
+        } else if let visibleProgressRange {
+            visibleRange = valueRange(for: visibleProgressRange, in: primaryXAxisRange)
+        } else {
+            visibleRange = primaryXAxisRange
+        }
+        return TrackChartState(selectedX: selectedX,
+                               visibleXRange: visibleRange,
+                               axisType: primaryXAxisType,
+                               axisDivisor: primaryXAxisDivisor)
+    }
+
     func setPrimaryChart(_ chart: ElevationChart) {
-        let xAxisType = (chart.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet)?.getDataSetAxisType()
+        let dataSet = chart.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet
+        let xAxisType = dataSet?.getDataSetAxisType()
         if primaryXAxisType != nil, primaryXAxisType != xAxisType {
             selectedXAxisValue = nil
             visibleXAxisRange = nil
         }
         primaryXAxisType = xAxisType
+        primaryXAxisRange = horizontalRange(for: chart)
+        primaryXAxisDivisor = dataSet?.getDivX()
         primaryChart = chart
         chart.lineData?.dataSets
             .compactMap { $0 as? LineChartDataSetProtocol }
@@ -90,8 +122,15 @@ final class RouteChartSynchronizer: NSObject {
             }
         }
         applyStoredVisibleRange(to: chart)
+        adjustSelectionToVisibleRange()
         applySelectionToPrimaryChart(callDelegate: false)
         applySelectionToBarCharts()
+        notifyStateChanged()
+    }
+
+    func unregisterPrimaryChart(_ chart: ElevationChart) {
+        guard primaryChart === chart else { return }
+        primaryChart = nil
     }
 
     func registerBarChart(_ chart: HorizontalBarChartView) {
@@ -128,6 +167,7 @@ final class RouteChartSynchronizer: NSObject {
     func syncHighlight(_ highlight: Highlight, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atValue: highlight.x, in: sourceChart) else { return }
         applySelectionToBarCharts()
+        notifyStateChanged()
     }
 
     @objc(syncViewPortFromChart:) func syncViewPort(from sourceChart: BarLineChartViewBase) {
@@ -143,8 +183,11 @@ final class RouteChartSynchronizer: NSObject {
             visibleProgressRange = visibleRange
             targetCharts.forEach { applyNormalizedVisibleRange(visibleRange, to: $0) }
         }
-        applySelectionToPrimaryChart(callDelegate: true)
+        adjustSelectionToVisibleRange()
         applySelectionToBarCharts()
+        if !applySelectionToPrimaryChart(callDelegate: true) {
+            notifyStateChanged()
+        }
     }
 
     func clearSynchronizedHighlights() {
@@ -166,6 +209,8 @@ final class RouteChartSynchronizer: NSObject {
         }
         primaryChart = nil
         primaryXAxisType = nil
+        primaryXAxisRange = nil
+        primaryXAxisDivisor = nil
         barCharts.allObjects.forEach { chart in
             clearHighlight(in: chart)
             removeSelectionGestureTargets(from: chart)
@@ -175,7 +220,10 @@ final class RouteChartSynchronizer: NSObject {
 
     private func selectPrimaryChart(atX touchX: CGFloat, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atX: touchX, in: sourceChart) else { return }
-        applySelectionToPrimaryChart(callDelegate: true)
+        applySelectionToBarCharts()
+        if !applySelectionToPrimaryChart(callDelegate: true) {
+            notifyStateChanged()
+        }
     }
 
     private func clearHighlight(in chart: ChartViewBase) {
@@ -206,9 +254,8 @@ final class RouteChartSynchronizer: NSObject {
     private func updateHorizontalAxis(of chart: HorizontalBarChartView) {
         guard primaryXAxisType != nil else { return }
         if usesDistanceXAxis,
-           let primaryChart,
-           let primaryRange = horizontalRange(for: primaryChart) {
-            setHorizontalAxisRange(primaryRange, of: chart)
+           let primaryXAxisRange {
+            setHorizontalAxisRange(primaryXAxisRange, of: chart)
         } else if let dataRange = horizontalDataRange(for: chart) {
             setHorizontalAxisRange(dataRange, of: chart)
         } else {
@@ -276,15 +323,17 @@ final class RouteChartSynchronizer: NSObject {
         }
     }
 
-    private func applySelectionToPrimaryChart(callDelegate: Bool) {
+    @discardableResult
+    private func applySelectionToPrimaryChart(callDelegate: Bool) -> Bool {
         guard let primaryChart,
               let touchX = touchX(in: primaryChart),
               let highlight = primaryChart.getHighlightByTouchPoint(CGPoint(x: touchX, y: 0)) else {
-            return
+            return false
         }
-        guard updateSelection(atValue: highlight.x, in: primaryChart) else { return }
+        guard updateSelection(atValue: highlight.x, in: primaryChart) else { return false }
         primaryChart.lastHighlighted = highlight
         primaryChart.highlightValue(highlight, callDelegate: callDelegate)
+        return true
     }
 
     private func applySelectionToBarCharts() {
@@ -313,6 +362,24 @@ final class RouteChartSynchronizer: NSObject {
         selectedProgress = normalizedProgress(for: value, range: axisRange)
         selectedXAxisValue = usesDistanceXAxis ? value : nil
         return true
+    }
+
+    private func adjustSelectionToVisibleRange() {
+        guard let state = currentTrackChartState else { return }
+        let visibleRange = state.visibleXRange
+        guard visibleRange.lowerBound != 0, visibleRange.upperBound != 0 else { return }
+        let inset = (visibleRange.upperBound - visibleRange.lowerBound) * 0.1
+        let adjustedX: Double
+        if state.selectedX < visibleRange.lowerBound {
+            adjustedX = visibleRange.lowerBound + inset
+        } else if state.selectedX > visibleRange.upperBound {
+            adjustedX = visibleRange.upperBound - inset
+        } else {
+            return
+        }
+        guard let primaryXAxisRange else { return }
+        selectedProgress = normalizedProgress(for: adjustedX, range: primaryXAxisRange)
+        selectedXAxisValue = usesDistanceXAxis ? adjustedX : nil
     }
 
     private func visibleRange(in chart: BarLineChartViewBase) -> ClosedRange<Double>? {
@@ -361,6 +428,20 @@ final class RouteChartSynchronizer: NSObject {
     private func normalizedProgress(for value: Double, range: ClosedRange<Double>) -> Double {
         let progress = (value - range.lowerBound) / (range.upperBound - range.lowerBound)
         return min(max(progress, 0), 1)
+    }
+
+    private func value(for progress: Double, in range: ClosedRange<Double>) -> Double {
+        range.lowerBound + progress * (range.upperBound - range.lowerBound)
+    }
+
+    private func valueRange(for progressRange: ClosedRange<Double>,
+                            in range: ClosedRange<Double>) -> ClosedRange<Double> {
+        value(for: progressRange.lowerBound, in: range)...value(for: progressRange.upperBound, in: range)
+    }
+
+    private func notifyStateChanged() {
+        guard let state = currentTrackChartState else { return }
+        onChartStateChanged?(state)
     }
 
     @objc private func onBarChartTap(_ recognizer: UITapGestureRecognizer) {

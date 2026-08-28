@@ -17,6 +17,13 @@ import DGCharts
     func showCurrentStatisticsLocation(_ trackChartPoints: TrackChartPoints)
 }
 
+struct TrackChartState {
+    let selectedX: Double
+    let visibleXRange: ClosedRange<Double>
+    let axisType: GPXDataSetAxisType
+    let axisDivisor: Double
+}
+
 @objcMembers
 final class TrackChartPoints: NSObject {
     var xAxisPoints = [CLLocation]()
@@ -209,6 +216,40 @@ final class TrackChartHelper: NSObject {
         }
     }
 
+    @nonobjc func refreshChart(_ state: TrackChartState,
+                               fitTrack: Bool,
+                               forceFit: Bool,
+                               analysis: GpxTrackAnalysis,
+                               segment: TrkSegment) {
+        guard let gpxDoc else { return }
+        prepareTrackChartPoints(analysis: analysis, segment: segment, gpxDoc: gpxDoc)
+        chartHighlightPos = adjustedHighlightPosition(state.selectedX, visibleRange: state.visibleXRange)
+        let location = location(at: chartHighlightPos,
+                                axisType: state.axisType,
+                                axisDivisor: state.axisDivisor,
+                                segment: segment)
+        if let location {
+            trackChartPoints?.highlightedPoint = location.coordinate
+        }
+        if let trackChartPoints {
+            delegate?.showCurrentHighlitedLocation(trackChartPoints)
+        }
+
+        if let location, fitTrack {
+            let rect = rect(startPos: state.visibleXRange.lowerBound,
+                            endPos: state.visibleXRange.upperBound,
+                            axisType: state.axisType,
+                            axisDivisor: state.axisDivisor,
+                            analysis: analysis,
+                            segment: segment)
+            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+            mapViewController.fitTrack(rect: rect,
+                                       location: location.coordinate,
+                                       forceFit: forceFit,
+                                       trackChartHelper: self)
+        }
+    }
+
     func getXAxisPoints(_ chart: LineChartView,
                         analysis: GpxTrackAnalysis,
                         segment: TrkSegment?) -> [CLLocation] {
@@ -240,20 +281,39 @@ final class TrackChartHelper: NSObject {
                  endPos: Float,
                  analysis: GpxTrackAnalysis,
                  segment: TrkSegment?) -> KQuadRect {
-        var left: Double = 0, right: Double = 0
-        var top: Double = 0, bottom: Double = 0
-
         guard let segment,
               let lineData = chart.lineData,
               !lineData.dataSets.isEmpty,
               let dataSet = lineData.dataSets.first else {
-            return KQuadRect(left: left, top: top, right: right, bottom: bottom)
+            return KQuadRect(left: 0, top: 0, right: 0, bottom: 0)
+        }
+        return rect(startPos: Double(startPos),
+                    endPos: Double(endPos),
+                    axisType: GpxUIHelper.getDataSetAxisType(dataSet: dataSet),
+                    axisDivisor: dataSet.getDivX(),
+                    analysis: analysis,
+                    segment: segment)
+    }
+
+    func updateTrackChartPoints(invalidate: Bool) {
+        if trackChartPoints == nil {
+            trackChartPoints = TrackChartPoints()
         }
 
-        let axisType = GpxUIHelper.getDataSetAxisType(dataSet: dataSet)
+        trackChartPoints?.axisPointsInvalidated = invalidate
+    }
+
+    private func rect(startPos: Double,
+                      endPos: Double,
+                      axisType: GPXDataSetAxisType,
+                      axisDivisor: Double,
+                      analysis: GpxTrackAnalysis,
+                      segment: TrkSegment) -> KQuadRect {
+        var left: Double = 0, right: Double = 0
+        var top: Double = 0, bottom: Double = 0
         if axisType == .time || axisType == .timeOfDay {
-            let startTime = startPos * 1000
-            let endTime = endPos * 1000
+            let startTime = Float(startPos * 1000)
+            let endTime = Float(endPos * 1000)
             for point in segment.points {
                 if let p = point as? WptPt {
                     if Float(p.time - analysis.startTime) >= startTime,
@@ -273,8 +333,8 @@ final class TrackChartHelper: NSObject {
                 }
             }
         } else {
-            let startDistance = Double(startPos) * dataSet.getDivX()
-            let endDistance = Double(endPos) * dataSet.getDivX()
+            let startDistance = startPos * axisDivisor
+            let endDistance = endPos * axisDivisor
             var previousSplitDistance: Double = 0
             for i in 0..<segment.points.count {
                 if let currentPoint = segment.points[i] as? WptPt {
@@ -303,14 +363,6 @@ final class TrackChartHelper: NSObject {
         }
         return KQuadRect(left: left, top: top, right: right, bottom: bottom)
     }
-    
-    func updateTrackChartPoints(invalidate: Bool) {
-        if trackChartPoints == nil {
-            trackChartPoints = TrackChartPoints()
-        }
-
-        trackChartPoints?.axisPointsInvalidated = invalidate
-    }
 
     private func getLocationAtPos(_ chart: LineChartView,
                                   pos: Double,
@@ -323,5 +375,44 @@ final class TrackChartHelper: NSObject {
                                          segment: segment,
                                          pos: Float(pos),
                                          joinSegments: gpx?.joinSegments ?? false)
+    }
+
+    private func location(at position: Double,
+                          axisType: GPXDataSetAxisType,
+                          axisDivisor: Double,
+                          segment: TrkSegment) -> CLLocation? {
+        guard let gpxDoc else { return nil }
+        let gpx = OAGPXDatabase.sharedDb().getGPXItem(gpxDoc.path)
+        return GpxUtils.location(at: Float(position),
+                                 axisType: axisType,
+                                 axisDivisor: axisDivisor,
+                                 gpxFile: gpxDoc,
+                                 segment: segment,
+                                 joinSegments: gpx?.joinSegments ?? false)
+    }
+
+    private func prepareTrackChartPoints(analysis: GpxTrackAnalysis,
+                                         segment: TrkSegment,
+                                         gpxDoc: GpxFile) {
+        guard trackChartPoints == nil else { return }
+        let points = TrackChartPoints()
+        points.segmentColor = segment.getColor(defColor: 0)?.intValue ?? 0
+        points.gpx = gpxDoc
+        points.start = analysis.locationStart?.position ?? kCLLocationCoordinate2DInvalid
+        points.end = analysis.locationEnd?.position ?? kCLLocationCoordinate2DInvalid
+        trackChartPoints = points
+    }
+
+    private func adjustedHighlightPosition(_ position: Double,
+                                           visibleRange: ClosedRange<Double>) -> Double {
+        guard visibleRange.lowerBound != 0, visibleRange.upperBound != 0 else { return position }
+        let inset = (visibleRange.upperBound - visibleRange.lowerBound) * 0.1
+        if position < visibleRange.lowerBound {
+            return visibleRange.lowerBound + inset
+        }
+        if position > visibleRange.upperBound {
+            return visibleRange.upperBound - inset
+        }
+        return position
     }
 }

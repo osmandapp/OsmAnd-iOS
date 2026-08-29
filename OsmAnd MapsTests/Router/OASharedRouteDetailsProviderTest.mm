@@ -54,6 +54,18 @@
     XCTAssertEqual(directions[0].afterLeftTime, 45);
     XCTAssertEqual(directions[1].afterLeftTime, 18);
     XCTAssertEqual(directions[2].afterLeftTime, 0);
+
+    NSArray<OASRouteCumulativeInfo *> *cumulativeInfoByPosition =
+        [OASharedRouteDetailsProvider getCumulativeInfoByPosition:directions];
+    XCTAssertEqual(cumulativeInfoByPosition.count, directions.count + 1);
+    XCTAssertEqual(cumulativeInfoByPosition[0].distanceMeters, 0);
+    XCTAssertEqual(cumulativeInfoByPosition[0].timeSeconds, 0);
+    XCTAssertEqual(cumulativeInfoByPosition[1].distanceMeters, 325);
+    XCTAssertEqual(cumulativeInfoByPosition[1].timeSeconds, 27);
+    XCTAssertEqual(cumulativeInfoByPosition[2].distanceMeters, 450);
+    XCTAssertEqual(cumulativeInfoByPosition[2].timeSeconds, 45);
+    XCTAssertEqual(cumulativeInfoByPosition[3].distanceMeters, 0);
+    XCTAssertEqual(cumulativeInfoByPosition[3].timeSeconds, 0);
 }
 
 - (void)testSignedDistanceLookupReturnsOriginalLocationInstances

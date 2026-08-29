@@ -176,9 +176,8 @@ NSString *OAFormatRouteEventDistance(OASRouteDetailsSnapshot *snapshot, OASRoute
     return start;
 }
 
-NSString *OAFormatRouteAlertsDebug(OARouteCalculationResult *route)
+NSString *OAFormatRouteAlertsDebug(OARouteCalculationResult *route, OASRouteDetailsSnapshot *snapshot)
 {
-    OASRouteDetailsSnapshot *snapshot = route.routeDetailsSnapshot;
     if (snapshot.events.count == 0)
         return @"No alerts/warnings found along the route.";
 
@@ -262,7 +261,7 @@ void OALogRouteAlerts(OARouteCalculationResult *route)
         return;
     NSLog(@"OARoutingHelper Route alerts/warnings: %lu\n%@",
           (unsigned long) snapshot.events.count,
-          OAFormatRouteAlertsDebug(route));
+          OAFormatRouteAlertsDebug(route, snapshot));
 }
 
 } // namespace

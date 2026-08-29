@@ -105,8 +105,8 @@
     XCTAssertEqual(snapshot.segments[0].routeTypes.count, 2);
     XCTAssertEqualObjects(snapshot.segments[0].routeTypes[0].tag, @"highway");
     XCTAssertEqualObjects(snapshot.segments[0].routeTypes[1].tag, @"surface");
-    XCTAssertEqual(snapshot.segments[0].heightValues.count, 4);
-    XCTAssertEqualWithAccuracy(snapshot.segments[0].heightValues[3].floatValue, 20, 0.001);
+    XCTAssertEqual(snapshot.segments[0].heightValues.size, 4);
+    XCTAssertEqualWithAccuracy([snapshot.segments[0].heightValues getIndex:3], 20, 0.001);
 
     XCTAssertEqual(snapshot.maneuvers.count, 1);
     OASRouteManeuver *maneuver = snapshot.maneuvers.firstObject;

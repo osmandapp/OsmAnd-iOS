@@ -37,6 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
             routePointStartIndex:(int)routePointStartIndex
               routePointEndIndex:(int)routePointEndIndex;
 
+/** Copies only the native segment fields consumed by shared route statistics. */
++ (OASRouteSegment *)copyStatisticsSegment:(const std::shared_ptr<RouteSegmentResult> &)segment
+                             syntheticIndex:(int)syntheticIndex;
+
 + (OASRouteDetailsSnapshot *)createWithLocations:(NSArray<CLLocation *> *)locations
                                       directions:(NSArray<OARouteDirectionInfo *> *)directions
                                          segments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments

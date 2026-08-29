@@ -75,13 +75,13 @@ NSArray<OASRouteTypeAttribute *> *OACopyRouteTypes(const std::shared_ptr<RouteDa
     return [routeTypes copy];
 }
 
-NSArray<OASFloat *> *OACopyHeightValues(const std::shared_ptr<RouteSegmentResult> &segment)
+OASKotlinFloatArray *OACopyHeightValues(const std::shared_ptr<RouteSegmentResult> &segment)
 {
     const std::vector<double> heightValues = segment->getHeightValues();
-    NSMutableArray<OASFloat *> *result = [NSMutableArray arrayWithCapacity:heightValues.size()];
-    for (double value : heightValues)
-        [result addObject:[OASFloat numberWithFloat:(float) value]];
-    return [result copy];
+    OASKotlinFloatArray *result = [OASKotlinFloatArray arrayWithSize:(int32_t) heightValues.size()];
+    for (NSUInteger index = 0; index < heightValues.size(); index++)
+        [result setIndex:(int32_t) index value:(float) heightValues[index]];
+    return result;
 }
 
 OASRouteSegment *OACopySegment(const std::shared_ptr<RouteSegmentResult> &segment,
@@ -111,6 +111,34 @@ OASRouteSegment *OACopySegment(const std::shared_ptr<RouteSegmentResult> &segmen
                    oneWayDirection:road->getOneway()
                         roundabout:road->roundabout()
                             tunnel:road->tunnel()
+                        routeTypes:OACopyRouteTypes(road)
+                      heightValues:OACopyHeightValues(segment)];
+}
+
+OASRouteSegment *OACopyStatisticsSegment(const std::shared_ptr<RouteSegmentResult> &segment,
+                                         int syntheticIndex)
+{
+    const std::shared_ptr<RouteDataObject> &road = segment->object;
+    return [[OASRouteSegment alloc]
+        initWithRoutePointStartIndex:syntheticIndex
+             routePointEndIndex:syntheticIndex
+            nativeStartPointIndex:segment->getStartPointIndex()
+              nativeEndPointIndex:segment->getEndPointIndex()
+                   distanceMeters:segment->distance
+                segmentTimeSeconds:0
+     segmentSpeedMetersPerSecond:0
+                            roadId:road->getId()
+                           forward:segment->isForwardDirection()
+                          roadName:nil
+                               ref:nil
+                   destinationName:nil
+                    destinationRef:nil
+                           highway:nil
+      maximumSpeedMetersPerSecond:0
+                             lanes:-1
+                   oneWayDirection:0
+                        roundabout:NO
+                            tunnel:NO
                         routeTypes:OACopyRouteTypes(road)
                       heightValues:OACopyHeightValues(segment)];
 }
@@ -277,6 +305,12 @@ NSArray<OASInt *> *OACopyIntermediateRoutePointOffsets(
               routePointEndIndex:(int)routePointEndIndex
 {
     return OACopySegment(segment, routePointStartIndex, routePointEndIndex);
+}
+
++ (OASRouteSegment *)copyStatisticsSegment:(const std::shared_ptr<RouteSegmentResult> &)segment
+                             syntheticIndex:(int)syntheticIndex
+{
+    return OACopyStatisticsSegment(segment, syntheticIndex);
 }
 
 + (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction

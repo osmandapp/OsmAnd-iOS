@@ -145,12 +145,11 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
     for (size_t index = 0; index < route.size(); index++)
     {
         [sharedRoute addObject:[OARouteCalculationResultSnapshotAdapter
-            copySegment:route[index]
-            routePointStartIndex:(int) index
-            routePointEndIndex:(int) index]];
+            copyStatisticsSegment:route[index]
+            syntheticIndex:(int) index]];
     }
     return [OASRouteStatisticsCalculator.shared
-        calculateRoute:[sharedRoute copy]
+        calculateRoute:sharedRoute
         attributeNames:attributeNames
         classifier:(id<OASRouteAttributeClassifier>) statisticsComputer];
 }

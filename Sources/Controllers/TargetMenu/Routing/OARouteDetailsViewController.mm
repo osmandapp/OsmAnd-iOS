@@ -122,17 +122,25 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
     
     NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
+    NSArray<OASRouteCumulativeInfo *> *cumulativeInfoByPosition =
+        [OASharedRouteDetailsProvider getCumulativeInfoByPosition:routeDirections];
     for (NSInteger i = 0; i < routeDirections.count; i++)
     {
         OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        UITableViewCell *cell = [self getRouteDirectionCell:i
+                                                     model:routeDirectionInfo
+                                            directionsInfo:routeDirections
+                                            cumulativeInfo:cumulativeInfoByPosition[i + 1]];
         [cells addObject:cell];
     }
 
     [_instructionsTabData setObject:cells forKey:@(section++)];
 }
 
-- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex
+                                      model:(OARouteDirectionInfo *)model
+                             directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+                             cumulativeInfo:(OASRouteCumulativeInfo *)cumulativeInfo
 {
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -174,9 +182,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         [cell setTopLeftLabelWithText:segmentDistanceLabelText];
         [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
         
-        OASRouteCumulativeInfo *cumulativeInfo = [OASharedRouteDetailsProvider
-            getCumulativeInfoBeforePosition:directionInfoIndex + 1
-            directions:directionsInfo];
         NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distanceMeters withParams:[OsmAndFormatterParams useLowerBounds]];
         NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.timeSeconds shortFormat:YES];
         [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];

@@ -30,7 +30,7 @@
 
 @interface OARouteCalculationResult ()
 
-- (void)cacheRouteDetailsSnapshotWithRouteProvider:(nullable NSNumber *)routeProvider;
+- (void)prepareRouteDetailsSnapshotWithRouteProvider:(nullable NSNumber *)routeProvider;
 
 @end
 
@@ -46,6 +46,11 @@
     std::vector<std::shared_ptr<RouteSegmentResult>> _segments;
     NSMutableArray<NSNumber *> *_listDistance;
     NSMutableArray<NSNumber *> *_intermediatePoints;
+    OASRouteDetailsSnapshot *_routeDetailsSnapshot;
+    NSNumber *_routeDetailsSnapshotRouteProvider;
+    int _snapshotCurrentRoutePointIndex;
+    int _snapshotCurrentDirectionIndex;
+    int _snapshotNextIntermediateIndex;
     
     int _cacheCurrentTextDirectionInfo;
     NSMutableArray<OARouteDirectionInfo *> *_cacheAgreggatedDirections;
@@ -94,7 +99,7 @@
         _directions = [NSMutableArray array];
         _alarmInfo = [NSMutableArray array];
         _initialCalculation = NO;
-        [self cacheRouteDetailsSnapshotWithRouteProvider:nil];
+        [self prepareRouteDetailsSnapshotWithRouteProvider:nil];
     }
     return self;
 }
@@ -1189,7 +1194,7 @@
  */
 + (void) updateListDistanceTime:(NSMutableArray<NSNumber *> *)listDistance locations:(NSArray<CLLocation *> *)locations
 {
-    [listDistance setArray:[OASharedRouteDetailsProvider calculateDistancesToFinish:locations]];
+    [OASharedRouteDetailsProvider calculateDistancesToFinish:locations result:listDistance];
 }
 
 /**
@@ -1551,7 +1556,7 @@
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
         
         _initialCalculation = params.initialCalculation;
-        [self cacheRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
+        [self prepareRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
     }
     return self;
 }
@@ -1596,27 +1601,42 @@
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
         
         _initialCalculation = initialCalculation;
-        [self cacheRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
+        [self prepareRouteDetailsSnapshotWithRouteProvider:@(_routeProvider)];
     }
     return self;
 }
 
-- (void)cacheRouteDetailsSnapshotWithRouteProvider:(NSNumber * _Nullable)routeProvider
+- (void)prepareRouteDetailsSnapshotWithRouteProvider:(NSNumber * _Nullable)routeProvider
 {
-    _routeDetailsSnapshot = [OARouteCalculationResultSnapshotAdapter
-        createWithLocations:_locations
-        directions:_directions
-        segments:_segments
-        alarms:_alarmInfo
-        listDistance:_listDistance
-        intermediateDirectionIndexes:_intermediatePoints
-        profileId:[_appMode.stringKey copy]
-        routeProvider:routeProvider
-        routingTime:_routingTime
-        initialCalculation:_initialCalculation
-        currentRoutePointIndex:_currentRoute
-        currentDirectionIndex:_currentDirectionInfo
-        nextIntermediateIndex:_nextIntermediate];
+    _routeDetailsSnapshotRouteProvider = [routeProvider copy];
+    _snapshotCurrentRoutePointIndex = _currentRoute;
+    _snapshotCurrentDirectionIndex = _currentDirectionInfo;
+    _snapshotNextIntermediateIndex = _nextIntermediate;
+}
+
+- (OASRouteDetailsSnapshot *)routeDetailsSnapshot
+{
+    @synchronized (self)
+    {
+        if (!_routeDetailsSnapshot)
+        {
+            _routeDetailsSnapshot = [OARouteCalculationResultSnapshotAdapter
+                createWithLocations:_locations
+                directions:_directions
+                segments:_segments
+                alarms:_alarmInfo
+                listDistance:_listDistance
+                intermediateDirectionIndexes:_intermediatePoints
+                profileId:[_appMode.stringKey copy]
+                routeProvider:_routeDetailsSnapshotRouteProvider
+                routingTime:_routingTime
+                initialCalculation:_initialCalculation
+                currentRoutePointIndex:_snapshotCurrentRoutePointIndex
+                currentDirectionIndex:_snapshotCurrentDirectionIndex
+                nextIntermediateIndex:_snapshotNextIntermediateIndex];
+        }
+        return _routeDetailsSnapshot;
+    }
 }
     
 @end

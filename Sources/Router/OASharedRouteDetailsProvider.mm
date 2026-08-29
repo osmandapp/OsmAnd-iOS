@@ -18,23 +18,12 @@
 namespace
 {
 
-NSArray<OASKLatLon *> *OACopySharedLocations(NSArray<CLLocation *> *locations)
+OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
 {
-    NSMutableArray<OASKLatLon *> *result = [NSMutableArray arrayWithCapacity:locations.count];
-    for (CLLocation *location in locations)
-    {
-        [result addObject:[[OASKLatLon alloc] initWithLatitude:location.coordinate.latitude
-                                                    longitude:location.coordinate.longitude]];
-    }
-    return [result copy];
-}
-
-NSArray<OASInt *> *OACopySharedDistances(NSArray<NSNumber *> *distances)
-{
-    NSMutableArray<OASInt *> *result = [NSMutableArray arrayWithCapacity:distances.count];
-    for (NSNumber *distance in distances)
-        [result addObject:[OASInt numberWithInt:distance.intValue]];
-    return [result copy];
+    OASKotlinIntArray *result = [OASKotlinIntArray arrayWithSize:(int32_t) distances.count];
+    for (NSUInteger index = 0; index < distances.count; index++)
+        [result setIndex:(int32_t) index value:distances[index].intValue];
+    return result;
 }
 
 NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo *> *directions)
@@ -44,31 +33,111 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
     {
         [result addObject:[OARouteCalculationResultSnapshotAdapter copyManeuver:direction]];
     }
-    return [result copy];
+    return result;
 }
 
 } // namespace
+
+@interface OALocationAccessor : NSObject <OASILocationAccessor>
+
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations;
+
+@end
+
+@implementation OALocationAccessor
+{
+    NSArray<CLLocation *> *_locations;
+}
+
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations
+{
+    self = [super init];
+    if (self)
+        _locations = locations;
+    return self;
+}
+
+- (int32_t)getLocationsCount
+{
+    return (int32_t) _locations.count;
+}
+
+- (double)getLatitudeIndex:(int32_t)index
+{
+    return _locations[index].coordinate.latitude;
+}
+
+- (double)getLongitudeIndex:(int32_t)index
+{
+    return _locations[index].coordinate.longitude;
+}
+
+@end
+
+@interface OAManeuverMetricsAccessor : NSObject <OASIManeuverMetricsAccessor>
+
+- (instancetype)initWithDirections:(NSArray<OARouteDirectionInfo *> *)directions;
+
+@end
+
+@implementation OAManeuverMetricsAccessor
+{
+    NSArray<OARouteDirectionInfo *> *_directions;
+}
+
+- (instancetype)initWithDirections:(NSArray<OARouteDirectionInfo *> *)directions
+{
+    self = [super init];
+    if (self)
+        _directions = directions;
+    return self;
+}
+
+- (int32_t)getManeuversCount
+{
+    return (int32_t) _directions.count;
+}
+
+- (int32_t)getDistanceMetersIndex:(int32_t)index
+{
+    return _directions[index].distance;
+}
+
+- (int32_t)getExpectedTimeSecondsIndex:(int32_t)index
+{
+    return (int32_t) [_directions[index] getExpectedTime];
+}
+
+@end
 
 @implementation OASharedRouteDetailsProvider
 
 + (NSArray<NSNumber *> *)calculateDistancesToFinish:(NSArray<CLLocation *> *)locations
 {
-    OASRouteGeometryCalculation *geometry = [OASRouteGeometryCalculator.shared
-        calculateLocations:OACopySharedLocations(locations)];
-    NSMutableArray<NSNumber *> *result = [NSMutableArray arrayWithCapacity:geometry.distanceToFinishMeters.count];
-    for (OASInt *distance in geometry.distanceToFinishMeters)
-        [result addObject:@(distance.intValue)];
+    NSMutableArray<NSNumber *> *result = [NSMutableArray arrayWithCapacity:locations.count];
+    [self calculateDistancesToFinish:locations result:result];
     return [result copy];
+}
+
++ (void)calculateDistancesToFinish:(NSArray<CLLocation *> *)locations
+                              result:(NSMutableArray<NSNumber *> *)result
+{
+    OASKotlinIntArray *distances = [OASKotlinIntArray arrayWithSize:(int32_t) locations.count];
+    [OASRouteGeometryCalculator.shared
+        calculateIntoAccessor:[[OALocationAccessor alloc] initWithLocations:locations]
+        distanceToFinishMeters:distances];
+    [result removeAllObjects];
+    for (int32_t index = 0; index < distances.size; index++)
+        [result addObject:@([distances getIndex:index])];
 }
 
 + (void)updateDirectionDistancesAndTimes:(NSArray<OARouteDirectionInfo *> *)directions
                   distanceToFinishMeters:(NSArray<NSNumber *> *)distanceToFinishMeters
 {
-    OASRouteGeometryCalculation *geometry = [[OASRouteGeometryCalculation alloc]
-        initWithDistanceToFinishMeters:OACopySharedDistances(distanceToFinishMeters)];
+    OASKotlinIntArray *sharedDistances = OACopySharedDistances(distanceToFinishMeters);
     NSArray<OASRouteManeuver *> *updated = [OASRouteManeuverCalculator.shared
         updateDistancesAndTimesManeuvers:OACopySharedManeuvers(directions)
-        geometry:geometry];
+        distanceToFinishMeters:sharedDistances];
     NSUInteger count = MIN(directions.count, updated.count);
     for (NSUInteger index = 0; index < count; index++)
     {
@@ -79,12 +148,11 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
     }
 }
 
-+ (OASRouteCumulativeInfo *)getCumulativeInfoBeforePosition:(NSInteger)position
-                                                 directions:(NSArray<OARouteDirectionInfo *> *)directions
++ (NSArray<OASRouteCumulativeInfo *> *)getCumulativeInfoByPosition:(NSArray<OARouteDirectionInfo *> *)directions
 {
     return [OASRouteManeuverCalculator.shared
-        cumulativeInfoBeforePosition:(int32_t) position
-        maneuvers:OACopySharedManeuvers(directions)];
+        cumulativeInfoByPositionAccessor:
+            [[OAManeuverMetricsAccessor alloc] initWithDirections:directions]];
 }
 
 + (void)calculateIntermediateIndexesForLocations:(NSArray<CLLocation *> *)locations
@@ -94,9 +162,10 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
 {
     NSArray<OASRouteManeuver *> *originalManeuvers = OACopySharedManeuvers(directions);
     OASRouteIntermediateCalculation *calculation = [OASRouteManeuverCalculator.shared
-        calculateIntermediateIndexesLocations:OACopySharedLocations(locations)
+        calculateIntermediateIndexesFromAccessorsRouteLocations:
+            [[OALocationAccessor alloc] initWithLocations:locations]
         maneuvers:originalManeuvers
-        intermediates:OACopySharedLocations(intermediates)];
+        intermediateLocations:[[OALocationAccessor alloc] initWithLocations:intermediates]];
     NSMutableArray<OARouteDirectionInfo *> *updatedDirections =
         [NSMutableArray arrayWithCapacity:calculation.maneuvers.count];
     NSUInteger originalIndex = 0;
@@ -124,24 +193,20 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
         }
     }
     [directions setArray:updatedDirections];
-    for (NSUInteger index = 0; index < calculation.intermediateDirectionIndices.count; index++)
-        intermediatePoints[index] = @(calculation.intermediateDirectionIndices[index].intValue);
+    OASKotlinIntArray *intermediateDirectionIndices = calculation.intermediateDirectionIndices;
+    for (int32_t index = 0; index < intermediateDirectionIndices.size; index++)
+        intermediatePoints[index] = @([intermediateDirectionIndices getIndex:index]);
 }
 
 + (CLLocation *)getRouteLocationByDistance:(NSArray<CLLocation *> *)locations
                     currentRoutePointIndex:(int)currentRoutePointIndex
                            distanceMeters:(int)distanceMeters
 {
-    NSArray<OASKLatLon *> *sharedLocations = OACopySharedLocations(locations);
-    OASKLatLon *location = [OASRouteGeometryCalculator.shared
-        locationByDistanceLocations:sharedLocations
+    int32_t index = [OASRouteGeometryCalculator.shared
+        locationIndexByDistanceAccessor:[[OALocationAccessor alloc] initWithLocations:locations]
         currentRoutePointIndex:currentRoutePointIndex
         distanceMeters:distanceMeters];
-    if (!location)
-        return nil;
-
-    NSUInteger index = [sharedLocations indexOfObjectIdenticalTo:location];
-    return index == NSNotFound ? nil : locations[index];
+    return index >= 0 ? locations[index] : nil;
 }
 
 + (OAAlarmInfo *)createSpeedLimit:(int)speed
@@ -182,14 +247,17 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
                                              speakTrafficWarnings:(BOOL)speakTrafficWarnings
 {
     NSMutableArray<OASRouteEvent *> *events = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
-    NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
+    NSMapTable<OASRouteEvent *, OAAlarmInfo *> *alarmsByEvent = [[NSMapTable alloc]
+        initWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
+        valueOptions:NSPointerFunctionsStrongMemory
+        capacity:route.alarmInfo.count];
     for (OAAlarmInfo *alarm in route.alarmInfo)
     {
         OASRouteEvent *event = [OARouteCalculationResultSnapshotAdapter copyEvent:alarm];
         if (event)
         {
             [events addObject:event];
-            [alarms addObject:alarm];
+            [alarmsByEvent setObject:alarm forKey:event];
         }
     }
 
@@ -209,10 +277,9 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
     NSMutableArray<OALocationPointWrapper *> *result = [NSMutableArray arrayWithCapacity:selections.count];
     for (OASRouteEventSelection *selection in selections)
     {
-        NSUInteger index = [events indexOfObjectIdenticalTo:selection.event];
-        if (index == NSNotFound)
+        OAAlarmInfo *alarm = [alarmsByEvent objectForKey:selection.event];
+        if (!alarm)
             continue;
-        OAAlarmInfo *alarm = alarms[index];
         OALocationPointWrapper *wrapper = [[OALocationPointWrapper alloc]
             initWithRouteCalculationResult:route
             type:LPW_ALARMS

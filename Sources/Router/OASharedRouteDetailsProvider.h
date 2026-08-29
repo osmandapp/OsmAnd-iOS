@@ -19,11 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<NSNumber *> *)calculateDistancesToFinish:(NSArray<CLLocation *> *)locations;
 
++ (void)calculateDistancesToFinish:(NSArray<CLLocation *> *)locations
+                              result:(NSMutableArray<NSNumber *> *)result;
+
 + (void)updateDirectionDistancesAndTimes:(NSArray<OARouteDirectionInfo *> *)directions
                   distanceToFinishMeters:(NSArray<NSNumber *> *)distanceToFinishMeters;
 
-+ (OASRouteCumulativeInfo *)getCumulativeInfoBeforePosition:(NSInteger)position
-                                                 directions:(NSArray<OARouteDirectionInfo *> *)directions;
++ (NSArray<OASRouteCumulativeInfo *> *)getCumulativeInfoByPosition:(NSArray<OARouteDirectionInfo *> *)directions;
 
 + (void)calculateIntermediateIndexesForLocations:(NSArray<CLLocation *> *)locations
                                      intermediates:(nullable NSArray<CLLocation *> *)intermediates

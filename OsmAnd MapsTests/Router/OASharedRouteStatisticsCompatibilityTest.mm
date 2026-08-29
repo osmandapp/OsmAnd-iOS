@@ -5,7 +5,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import "OARouteStatistics.h"
 #import "OARouteStatisticsHelper.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -91,13 +90,13 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
             return OAUndefinedRenderingAttribute();
         }];
 
-    NSArray<OARouteStatistics *> *result = [OARouteStatisticsHelper
+    NSArray<OASRouteStatistic *> *result = [OARouteStatisticsHelper
         calculateRouteStatistic:route
         attributeNames:@[@"routeInfo_test", @"routeInfo_test", @"routeInfo_missing"]
         statisticsComputer:computer];
 
     XCTAssertEqual(result.count, 2);
-    OARouteStatistics *statistic = result.firstObject;
+    OASRouteStatistic *statistic = result.firstObject;
     XCTAssertEqualObjects(statistic.name, @"test");
     XCTAssertEqual(statistic.elements.count, 3);
     [self assertAttribute:statistic.elements[0] name:@"z" userName:@"z" color:30 distance:5];
@@ -107,15 +106,17 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
                  userName:kUndefinedAttr
                     color:0
                  distance:2];
-    XCTAssertEqualObjects(statistic.partition.allKeys, (@[@"a", @"z", kUndefinedAttr]));
-    [self assertAttribute:statistic.partition[@"a"] name:@"a" userName:@"a" color:20 distance:5];
-    [self assertAttribute:statistic.partition[@"z"] name:@"z" userName:@"z" color:30 distance:5];
-    [self assertAttribute:statistic.partition[kUndefinedAttr]
+    XCTAssertEqualObjects(
+        [statistic.partition valueForKey:@"userPropertyName"],
+        (@[@"a", @"z", kUndefinedAttr]));
+    [self assertAttribute:statistic.partition[0] name:@"a" userName:@"a" color:20 distance:5];
+    [self assertAttribute:statistic.partition[1] name:@"z" userName:@"z" color:30 distance:5];
+    [self assertAttribute:statistic.partition[2]
                      name:kUndefinedAttr
                  userName:kUndefinedAttr
                     color:0
                  distance:2];
-    XCTAssertEqualWithAccuracy(statistic.totalDistance, 12, 0.001);
+    XCTAssertEqualWithAccuracy(statistic.totalDistanceMeters, 12, 0.001);
     XCTAssertEqualObjects(result[0].name, result[1].name);
     XCTAssertEqual(result[0].elements.count, result[1].elements.count);
 }
@@ -143,7 +144,7 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
         OAMakeRouteSegment(7, {{"highway", "primary"}, {"surface", "asphalt"}}),
     };
 
-    NSArray<OARouteStatistics *> *result = [OARouteStatisticsHelper
+    NSArray<OASRouteStatistic *> *result = [OARouteStatisticsHelper
         calculateRouteStatistic:route
         attributeNames:@[@"routeInfo_roadClass"]
         statisticsComputer:computer];
@@ -177,7 +178,7 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
         OAMakeRouteSegment(110, {}, {0, 0, 110, 44}),
     };
 
-    NSArray<OARouteStatistics *> *result = [OARouteStatisticsHelper
+    NSArray<OASRouteStatistic *> *result = [OARouteStatisticsHelper
         calculateRouteStatistic:route
         attributeNames:@[@"routeInfo_steepness"]
         statisticsComputer:computer];
@@ -187,7 +188,7 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
         @"steepness=20_100;",
         @"steepness=-3_0;",
     ]));
-    OARouteStatistics *statistic = result.firstObject;
+    OASRouteStatistic *statistic = result.firstObject;
     XCTAssertEqualObjects(statistic.name, @"steepness");
     XCTAssertEqual(statistic.elements.count, 3);
     [self assertAttribute:statistic.elements[0]
@@ -205,20 +206,22 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
                  userName:@"-4% .. 0%"
                     color:0
                  distance:50];
-    XCTAssertEqualObjects(statistic.partition.allKeys, (@[@"-4% .. 0%", @"20% .. 40%"]));
-    XCTAssertEqualWithAccuracy(statistic.totalDistance, 110, 0.001);
+    XCTAssertEqualObjects(
+        [statistic.partition valueForKey:@"userPropertyName"],
+        (@[@"-4% .. 0%", @"20% .. 40%"]));
+    XCTAssertEqualWithAccuracy(statistic.totalDistanceMeters, 110, 0.001);
 }
 
-- (void)assertAttribute:(OARouteSegmentAttribute *)attribute
+- (void)assertAttribute:(OASRouteStatisticElement *)attribute
                    name:(NSString *)name
                userName:(NSString *)userName
                   color:(NSInteger)color
                distance:(float)distance
 {
     XCTAssertEqualObjects(attribute.propertyName, name);
-    XCTAssertEqualObjects(attribute.getUserPropertyName, userName);
+    XCTAssertEqualObjects(attribute.userPropertyName, userName);
     XCTAssertEqual(attribute.color, color);
-    XCTAssertEqualWithAccuracy(attribute.distance, distance, 0.001);
+    XCTAssertEqualWithAccuracy(attribute.distanceMeters, distance, 0.001);
 }
 
 @end

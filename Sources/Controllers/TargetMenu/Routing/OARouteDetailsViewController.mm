@@ -20,7 +20,6 @@
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"
@@ -356,9 +355,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     const auto& originalRoute = self.routingHelper.getRoute.getOriginalRoute;
     if (!originalRoute.empty())
     {
-        NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
+        NSArray<OASRouteStatistic *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
         
-        for (OARouteStatistics *stat in routeInfo)
+        for (OASRouteStatistic *stat in routeInfo)
         {
             OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
             cell.detailsButton.tag = section;
@@ -382,11 +381,17 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             
             OARouteInfoLegendCell *legend = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
             
-            for (NSString *key in stat.partition)
+            for (OASRouteStatisticElement *segment in stat.partition)
             {
-                OARouteSegmentAttribute *segment = stat.partition[key];
-                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] && ![segment.getUserPropertyName isEqualToString:kUndefinedAttr] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
-                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[OAOsmAndFormatter getFormattedDistance:segment.distance]];
+                NSString *propertyName = segment.userPropertyName;
+                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"]
+                    && ![propertyName isEqualToString:kUndefinedAttr]
+                    ? propertyName
+                    : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", propertyName]);
+                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc]
+                    initWithTitle:title
+                    color:UIColorFromARGB(segment.color)
+                    distance:[OAOsmAndFormatter getFormattedDistance:segment.distanceMeters]];
                 [legend.legendStackView addArrangedSubview:item];
             }
             [dataArr setObject:@[cell, legend] forKey:@(section++)];

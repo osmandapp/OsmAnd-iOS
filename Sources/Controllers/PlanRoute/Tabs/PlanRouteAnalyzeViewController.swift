@@ -77,8 +77,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var cachedHasOverviewData = false
     private var cachedHasElevationData = false
     private var cachedHasSpeedData = false
-    private var cachedRoadAttributeStatistics: [OARouteStatistics] = []
-    private var cachedSyntheticSteepness: OARouteStatistics?
+    private var cachedRoadAttributeStatistics: [RouteStatistic] = []
+    private var cachedSyntheticSteepness: RouteStatistic?
     private var cachedSyntheticSteepnessSignature: Double = -1
     private var pendingSteepnessSignature: Double = -1
     private var lastRenderState: AnalyzeRenderState?
@@ -379,7 +379,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func resolveState(isRouteCalculating: Bool,
                               isElevationCalculating: Bool,
                               hasOverviewData: Bool,
-                              roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
+                              roadAttributeStatistics: [RouteStatistic]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
         if isElevationCalculating {
             return hasOverviewData || !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
@@ -463,10 +463,13 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         ].joined(separator: "|")
     }
 
-    private func roadAttributeSignature(for stat: OARouteStatistics) -> String {
+    private func roadAttributeSignature(for stat: RouteStatistic) -> String {
+        let partitionByName = stat.partition.reduce(into: [String: RouteStatisticElement]()) {
+            $0[$1.userPropertyName] = $1
+        }
         let elementsSignature = stat.elements.enumerated().map { index, element in
-            let propertyName = element.getUserPropertyName() ?? element.propertyName ?? ""
-            let distance = stat.partition[propertyName]?.distance ?? element.distance
+            let propertyName = element.userPropertyName
+            let distance = partitionByName[propertyName]?.distanceMeters ?? element.distanceMeters
             return [
                 String(index),
                 propertyName,
@@ -474,7 +477,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                 String(element.color)
             ].joined(separator: ":")
         }.joined(separator: ";")
-        return "\(stat.name ?? "")|\(elementsSignature)"
+        return "\(stat.name)|\(elementsSignature)"
     }
 
     private func applyRenderState(_ renderState: AnalyzeRenderState) {
@@ -925,7 +928,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         ])
     }
 
-    private func makeCompactRoadAttrLegend(stat: OARouteStatistics) -> UIView {
+    private func makeCompactRoadAttrLegend(stat: RouteStatistic) -> UIView {
         let items = routeAttributeLegendItems(for: stat)
         let container = UIView()
         let stack = UIStackView()
@@ -960,7 +963,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return container
     }
 
-    private func makeExpandedRoadAttrLegend(stat: OARouteStatistics) -> UIView {
+    private func makeExpandedRoadAttrLegend(stat: RouteStatistic) -> UIView {
         let items = routeAttributeLegendItems(for: stat)
         let container = UIView()
         let stack = UIStackView()
@@ -1299,7 +1302,7 @@ private extension PlanRouteAnalyzeViewController {
         hasOverviewData ? Self.roadAttributesBase : 1
     }
 
-    var roadAttributeStatistics: [OARouteStatistics] {
+    var roadAttributeStatistics: [RouteStatistic] {
         cachedRoadAttributeStatistics
     }
 
@@ -1332,7 +1335,7 @@ private extension PlanRouteAnalyzeViewController {
         }
     }
 
-    private func buildRoadAttributeStatistics(from analysisData: PlanRouteAnalysisData?) -> [OARouteStatistics] {
+    private func buildRoadAttributeStatistics(from analysisData: PlanRouteAnalysisData?) -> [RouteStatistic] {
         guard let analysisData else {
             guard let fallback = buildImmediateTerrainFallbackSteepnessStatistics() else { return [] }
             return Self.routeAttributeNames.compactMap { $0 == Self.steepnessAttributeName ? fallback : nil }
@@ -1340,7 +1343,7 @@ private extension PlanRouteAnalyzeViewController {
         guard isRoadAttributeDataAvailable(analysisData) else { return [] }
         let routeStatistics = analysisData.routeStatistics
         let groupedStatistics = Dictionary(grouping: routeStatistics) { $0.name }
-        let syntheticSteepness: OARouteStatistics?
+        let syntheticSteepness: RouteStatistic?
         if groupedStatistics[Self.steepnessAttributeName]?.first == nil {
             let sig = Double(analysisData.gpxAnalysis?.totalDistance ?? 0)
             if cachedSyntheticSteepnessSignature == sig {
@@ -1363,39 +1366,42 @@ private extension PlanRouteAnalyzeViewController {
         hasCompletedElevationCalculation || allowsTerrainFallbackSteepness || !analysisData.routeStatistics.isEmpty
     }
 
-    private func buildImmediateTerrainFallbackSteepnessStatistics() -> OARouteStatistics? {
+    private func buildImmediateTerrainFallbackSteepnessStatistics() -> RouteStatistic? {
         guard allowsTerrainFallbackSteepness, !hasOverviewData else { return nil }
         let totalDistance = dataSource?.routeInfo.totalDistance ?? 0
         return buildFlatSteepnessStatistics(totalDistance: totalDistance)
     }
 
-    private func roadAttributeStatistic(for section: Int) -> OARouteStatistics? {
+    private func roadAttributeStatistic(for section: Int) -> RouteStatistic? {
         let statIndex = section - roadAttributesSectionStart
         guard statIndex >= 0, statIndex < roadAttributeStatistics.count else { return nil }
         return roadAttributeStatistics[statIndex]
     }
 
-    private func roadAttributeTitle(for stat: OARouteStatistics) -> String {
+    private func roadAttributeTitle(for stat: RouteStatistic) -> String {
         if stat.name == Self.roadClassAttributeName {
             return localizedString("routeInfo_road_types_name")
         }
         return OAUtilities.getLocalizedRouteInfoProperty(stat.name)
     }
 
-    private func routeAttributeLegendItems(for stat: OARouteStatistics) -> [RoadAttributeLegendItem] {
+    private func routeAttributeLegendItems(for stat: RouteStatistic) -> [RoadAttributeLegendItem] {
+        let partitionByName = stat.partition.reduce(into: [String: RouteStatisticElement]()) {
+            $0[$1.userPropertyName] = $1
+        }
         var seen = Set<String>()
         return stat.elements.compactMap { element in
-            let key = element.getUserPropertyName() ?? element.propertyName ?? ""
-            guard seen.insert(key).inserted, let segment = stat.partition[key] else { return nil }
+            let key = element.userPropertyName
+            guard seen.insert(key).inserted, let segment = partitionByName[key] else { return nil }
             let title = localizedLegendTitle(for: segment, statName: stat.name)
-            let distance = OAOsmAndFormatter.getFormattedDistance(segment.distance) ?? ""
-            let color = UIColor(argbValue: UInt32(truncatingIfNeeded: segment.color))
+            let distance = OAOsmAndFormatter.getFormattedDistance(segment.distanceMeters) ?? ""
+            let color = UIColor(argbValue: UInt32(bitPattern: segment.color))
             return RoadAttributeLegendItem(title: title, color: color, distance: distance)
         }
     }
 
-    private func localizedLegendTitle(for segment: OARouteSegmentAttribute, statName: String) -> String {
-        let propertyName = segment.getUserPropertyName() ?? segment.propertyName ?? ""
+    private func localizedLegendTitle(for segment: RouteStatisticElement, statName: String) -> String {
+        let propertyName = segment.userPropertyName
         if statName == Self.steepnessAttributeName, propertyName != "undefined" {
             return propertyName
         }
@@ -1514,7 +1520,7 @@ private extension PlanRouteAnalyzeViewController {
     private func buildSyntheticSteepnessStatistics(
         from analysis: GpxTrackAnalysis?,
         renderingCache: [String: (propertyName: String, color: Int)]? = nil
-    ) -> OARouteStatistics? {
+    ) -> RouteStatistic? {
         guard let analysis else { return nil }
         let totalDistance = Double(analysis.totalDistance)
         guard totalDistance > 0 else { return nil }
@@ -1572,8 +1578,9 @@ private extension PlanRouteAnalyzeViewController {
         )
         guard !syntheticSegments.isEmpty else { return nil }
 
-        var elements = [OARouteSegmentAttribute]()
-        var partition = [String: OARouteSegmentAttribute]()
+        var elements = [RouteStatisticElement]()
+        var partition = [String: RouteStatisticElement]()
+        var partitionOrder = [String]()
 
         for segment in syntheticSegments {
             let title = classTitles[segment.classIndex]
@@ -1581,47 +1588,44 @@ private extension PlanRouteAnalyzeViewController {
             let rendering = renderingCache?[boundaryClass] ?? steepnessRendering(for: boundaryClass)
             let propertyName = rendering?.propertyName ?? boundaryClass
             let color = rendering?.color ?? Int(UIColor.lightGray.toARGBNumber())
-            guard let attribute = OARouteSegmentAttribute(
+            let attribute = RouteStatisticElement(
                 propertyName: propertyName,
-                color: color,
-                slopeIndex: segment.classIndex,
-                boundariesClass: Self.steepnessBoundaryClasses
-            ) else {
-                continue
-            }
-            attribute.distance = Float(segment.distance)
-            attribute.userPropertyName = title
+                userPropertyName: title,
+                color: Int32(truncatingIfNeeded: color),
+                distanceMeters: Float(segment.distance)
+            )
             elements.append(attribute)
 
             if let existing = partition[title] {
-                existing.distance += Float(segment.distance)
+                partition[title] = RouteStatisticElement(
+                    propertyName: existing.propertyName,
+                    userPropertyName: existing.userPropertyName,
+                    color: existing.color,
+                    distanceMeters: existing.distanceMeters + Float(segment.distance)
+                )
             } else {
-                guard let aggregated = OARouteSegmentAttribute(segmentAttribute: attribute) else {
-                    continue
-                }
-                aggregated.distance = Float(segment.distance)
-                aggregated.userPropertyName = title
-                partition[title] = aggregated
+                partition[title] = attribute
+                partitionOrder.append(title)
             }
         }
 
         guard !elements.isEmpty else { return nil }
-        return OARouteStatistics(
+        return RouteStatistic(
             name: Self.steepnessAttributeName,
             elements: elements,
-            partition: partition,
-            totalDistance: Float(totalDistance)
+            partition: partitionOrder.compactMap { partition[$0] },
+            totalDistanceMeters: Float(totalDistance)
         )
     }
 
-    private func buildFallbackSteepnessStatistics(from analysisData: PlanRouteAnalysisData) -> OARouteStatistics? {
+    private func buildFallbackSteepnessStatistics(from analysisData: PlanRouteAnalysisData) -> RouteStatistic? {
         guard hasCompletedElevationCalculation || allowsTerrainFallbackSteepness, !hasOverviewData else { return nil }
 
         let totalDistance = max(Double(analysisData.gpxAnalysis?.totalDistance ?? 0), dataSource?.routeInfo.totalDistance ?? 0)
         return buildFlatSteepnessStatistics(totalDistance: totalDistance)
     }
 
-    private func buildFlatSteepnessStatistics(totalDistance: Double) -> OARouteStatistics? {
+    private func buildFlatSteepnessStatistics(totalDistance: Double) -> RouteStatistic? {
         guard totalDistance > 0 else { return nil }
 
         let classIndex = steepnessClassIndex(for: 0)
@@ -1632,27 +1636,18 @@ private extension PlanRouteAnalyzeViewController {
         let propertyName = rendering?.propertyName ?? boundaryClass
         let color = rendering?.color ?? Int(UIColor.lightGray.toARGBNumber())
 
-        guard let attribute = OARouteSegmentAttribute(
+        let attribute = RouteStatisticElement(
             propertyName: propertyName,
-            color: color,
-            slopeIndex: classIndex,
-            boundariesClass: Self.steepnessBoundaryClasses
-        ) else {
-            return nil
-        }
+            userPropertyName: title,
+            color: Int32(truncatingIfNeeded: color),
+            distanceMeters: Float(totalDistance)
+        )
 
-        attribute.distance = Float(totalDistance)
-        attribute.userPropertyName = title
-
-        guard let aggregated = OARouteSegmentAttribute(segmentAttribute: attribute) else { return nil }
-        aggregated.distance = Float(totalDistance)
-        aggregated.userPropertyName = title
-
-        return OARouteStatistics(
+        return RouteStatistic(
             name: Self.steepnessAttributeName,
             elements: [attribute],
-            partition: [title: aggregated],
-            totalDistance: Float(totalDistance)
+            partition: [attribute],
+            totalDistanceMeters: Float(totalDistance)
         )
     }
 

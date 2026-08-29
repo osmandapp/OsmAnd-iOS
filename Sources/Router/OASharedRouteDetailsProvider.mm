@@ -50,16 +50,6 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
 
 @implementation OASharedRouteDetailsProvider
 
-+ (OASRouteDetailsSnapshot *)getSnapshot:(OARouteCalculationResult *)route
-{
-    return route.routeDetailsSnapshot;
-}
-
-+ (OASRouteSummary *)getSummary:(OARouteCalculationResult *)route
-{
-    return route.routeDetailsSnapshot.summary;
-}
-
 + (NSArray<NSNumber *> *)calculateDistancesToFinish:(NSArray<CLLocation *> *)locations
 {
     OASRouteGeometryCalculation *geometry = [OASRouteGeometryCalculator.shared

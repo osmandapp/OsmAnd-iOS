@@ -2597,7 +2597,7 @@
 		DA5A836326C563A800F274C7 /* OAHomeWorkCollectionViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3626C563A300F274C7 /* OAHomeWorkCollectionViewCell.mm */; };
 		DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */; };
 		DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */; };
-		DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */; };
+		DA5A836626C563A800F274C7 /* OARouteSegmentAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */; };
 		DA5A836726C563A800F274C7 /* OARoutingSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */; };
 		DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */; };
 		DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */; };
@@ -7187,7 +7187,7 @@
 		DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACompoundViewController.m; sourceTree = "<group>"; };
 		DA5A7D3926C563A300F274C7 /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARootViewController.h; sourceTree = "<group>"; };
 		DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppModeView.mm; sourceTree = "<group>"; };
-		DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARouteStatistics.m; sourceTree = "<group>"; };
+		DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARouteSegmentAttribute.m; sourceTree = "<group>"; };
 		DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutingSettingsCell.xib; sourceTree = "<group>"; };
 		DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteAvoidTransportSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteSettingsViewController.mm; sourceTree = "<group>"; };
@@ -7203,7 +7203,7 @@
 		DA5A7D4926C563A300F274C7 /* OARouteSegmentShieldView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteSegmentShieldView.xib; sourceTree = "<group>"; };
 		DA5A7D4A26C563A300F274C7 /* OARoutingTargetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingTargetCell.m; sourceTree = "<group>"; };
 		DA5A7D4B26C563A300F274C7 /* OARoutingInfoCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingInfoCell.mm; sourceTree = "<group>"; };
-		DA5A7D4C26C563A300F274C7 /* OARouteStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteStatistics.h; sourceTree = "<group>"; };
+		DA5A7D4C26C563A300F274C7 /* OARouteSegmentAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSegmentAttribute.h; sourceTree = "<group>"; };
 		DA5A7D4D26C563A300F274C7 /* OAAppModeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppModeView.h; sourceTree = "<group>"; };
 		DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingInfoCell.h; sourceTree = "<group>"; };
 		DA5A7D4F26C563A300F274C7 /* OARoutingSettingsCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingSettingsCell.mm; sourceTree = "<group>"; };
@@ -13151,8 +13151,8 @@
 				DA5A7D5B26C563A300F274C7 /* OARouteSettingsParameterController.mm */,
 				DA5A7D5226C563A300F274C7 /* OARouteSettingsViewController.h */,
 				DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */,
-				DA5A7D4C26C563A300F274C7 /* OARouteStatistics.h */,
-				DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */,
+				DA5A7D4C26C563A300F274C7 /* OARouteSegmentAttribute.h */,
+				DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */,
 				DA5A7D4626C563A300F274C7 /* OARouteStatisticsHelper.h */,
 				DA5A7D4226C563A300F274C7 /* OARouteStatisticsHelper.mm */,
 				DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */,
@@ -18114,7 +18114,7 @@
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
-				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
+				DA5A836626C563A800F274C7 /* OARouteSegmentAttribute.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
 				2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */,
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,

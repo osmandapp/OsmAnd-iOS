@@ -11,9 +11,8 @@
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OrderedDictionary.h"
 #import "OsmAndApp.h"
-#import "OARouteStatistics.h"
+#import "OARouteSegmentAttribute.h"
 #import "OANativeUtilities.h"
 #import "OAApplicationMode.h"
 #import "OAMapSource.h"
@@ -68,49 +67,6 @@ static NSArray<NSString *> *OARouteSlopeBoundaryClasses(void)
     return boundariesClass;
 }
 
-static OARouteSegmentAttribute *OACopyRouteStatisticElement(OASRouteStatisticElement *element)
-{
-    OARouteSegmentAttribute *attribute = [[OARouteSegmentAttribute alloc]
-        initWithPropertyName:element.propertyName
-        color:element.color
-        slopeIndex:-1
-        boundariesClass:@[]];
-    attribute.userPropertyName = element.userPropertyName;
-    [attribute incrementDistanceBy:element.distanceMeters];
-    return attribute;
-}
-
-static NSArray<OARouteSegmentAttribute *> *OACopyRouteStatisticElements(
-    NSArray<OASRouteStatisticElement *> *elements)
-{
-    NSMutableArray<OARouteSegmentAttribute *> *result = [NSMutableArray arrayWithCapacity:elements.count];
-    for (OASRouteStatisticElement *element in elements)
-        [result addObject:OACopyRouteStatisticElement(element)];
-    return [result copy];
-}
-
-static NSArray<OARouteStatistics *> *OACopyRouteStatistics(NSArray<OASRouteStatistic *> *statistics)
-{
-    NSMutableArray<OARouteStatistics *> *result = [NSMutableArray arrayWithCapacity:statistics.count];
-    for (OASRouteStatistic *statistic in statistics)
-    {
-        NSArray<OARouteSegmentAttribute *> *elements = OACopyRouteStatisticElements(statistic.elements);
-        MutableOrderedDictionary<NSString *, OARouteSegmentAttribute *> *partition =
-            [[MutableOrderedDictionary alloc] init];
-        for (OASRouteStatisticElement *element in statistic.partition)
-        {
-            OARouteSegmentAttribute *attribute = OACopyRouteStatisticElement(element);
-            [partition setObject:attribute forKey:attribute.getUserPropertyName];
-        }
-        [result addObject:[[OARouteStatistics alloc]
-            initWithName:statistic.name
-            elements:elements
-            partition:partition
-            totalDistance:statistic.totalDistanceMeters]];
-    }
-    return [result copy];
-}
-
 static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *> * _Nullable attributes)
 {
     NSString *name = attributes.allKeys.firstObject;
@@ -143,7 +99,7 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
     }
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
 {
     NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -172,7 +128,7 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
     return [self calculateRouteStatistic:route attributeNames:attributeNames];
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames
 {
     const auto& defaultPresentationEnv = OsmAndApp.instance.defaultRenderer;
     OARouteStatisticsComputer *statisticsComputer =
@@ -182,7 +138,7 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
                       statisticsComputer:statisticsComputer];
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
                                             attributeNames:(NSArray<NSString *> *)attributeNames
                                         statisticsComputer:(OARouteStatisticsComputer *)statisticsComputer
 {
@@ -194,11 +150,10 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
             routePointStartIndex:(int) index
             routePointEndIndex:(int) index]];
     }
-    NSArray<OASRouteStatistic *> *statistics = [OASRouteStatisticsCalculator.shared
+    return [OASRouteStatisticsCalculator.shared
         calculateRoute:[sharedRoute copy]
         attributeNames:attributeNames
         classifier:(id<OASRouteAttributeClassifier>) statisticsComputer];
-    return OACopyRouteStatistics(statistics);
 }
 
 + (NSArray<NSString *> *) getRouteStatisticAttrsNames:(BOOL)excludeSteepness

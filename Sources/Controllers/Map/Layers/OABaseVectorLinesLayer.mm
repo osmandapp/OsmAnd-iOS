@@ -14,7 +14,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteImporter.h"
-#import "OARouteStatistics.h"
+#import "OARouteSegmentAttribute.h"
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 

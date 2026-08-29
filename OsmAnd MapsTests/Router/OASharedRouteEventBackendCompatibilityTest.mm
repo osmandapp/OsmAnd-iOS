@@ -190,6 +190,19 @@
         XCTAssertEqual(wrapper.type, LPW_ALARMS);
         XCTAssertEqual(wrapper.routeIndex, ((OAAlarmInfo *) wrapper.point).locationIndex);
     }
+
+    NSArray<OALocationPointWrapper *> *disabledResult = [OASharedRouteDetailsProvider
+        selectAlarmWrappersForRoute:route
+        routingAlarmsEnabled:NO
+        showCameras:YES
+        speakSpeedCameras:YES
+        showTunnels:YES
+        speakTunnels:YES
+        showPedestrian:YES
+        speakPedestrian:YES
+        showTrafficWarnings:YES
+        speakTrafficWarnings:YES];
+    XCTAssertEqual(disabledResult.count, 0);
 }
 
 - (void)testSuppressesAndroidCameraAndRailwayDuplicates
@@ -220,26 +233,6 @@
     XCTAssertEqual(result[1].point, camera3);
     XCTAssertEqual(result[2].point, railway1);
     XCTAssertEqual(result[3].point, railway3);
-}
-
-- (void)testDisabledRoutingAlarmsReturnNoWrappers
-{
-    OARouteCalculationResult *route = [[OARouteCalculationResult alloc] initWithErrorMessage:@"error"];
-    [route.alarmInfo addObject:[self alarmWithType:AIT_SPEED_CAMERA index:1 latitude:0 longitude:0]];
-
-    NSArray<OALocationPointWrapper *> *result = [OASharedRouteDetailsProvider
-        selectAlarmWrappersForRoute:route
-        routingAlarmsEnabled:NO
-        showCameras:YES
-        speakSpeedCameras:YES
-        showTunnels:YES
-        speakTunnels:YES
-        showPedestrian:YES
-        speakPedestrian:YES
-        showTrafficWarnings:YES
-        speakTrafficWarnings:YES];
-
-    XCTAssertEqual(result.count, 0);
 }
 
 - (OAAlarmInfo *)alarmWithType:(EOAAlarmInfoType)type

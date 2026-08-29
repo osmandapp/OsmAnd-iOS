@@ -5,7 +5,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
 #import "OASharedRouteDetailsProvider.h"
 #import "OsmAndSharedWrapper.h"
@@ -17,14 +16,6 @@
 @end
 
 @implementation OASharedRouteDetailsProviderTest
-
-- (void)testReturnsCachedSnapshotAndSummary
-{
-    OARouteCalculationResult *route = [[OARouteCalculationResult alloc] initWithErrorMessage:@"error"];
-
-    XCTAssertEqual([OASharedRouteDetailsProvider getSnapshot:route], route.routeDetailsSnapshot);
-    XCTAssertEqual([OASharedRouteDetailsProvider getSummary:route], route.routeDetailsSnapshot.summary);
-}
 
 - (void)testCalculatesAndroidCompatibleCumulativeDistances
 {

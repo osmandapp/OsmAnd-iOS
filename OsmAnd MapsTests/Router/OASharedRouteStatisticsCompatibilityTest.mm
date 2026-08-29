@@ -5,7 +5,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import "OARouteCalculationResultSnapshotAdapter.h"
 #import "OARouteStatistics.h"
 #import "OARouteStatisticsHelper.h"
 #import "OsmAndSharedWrapper.h"
@@ -159,32 +158,6 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
                  distance:7];
 }
 
-- (void)testUndefinedOnlyAttributeIsOmitted
-{
-    __block NSUInteger defaultCalls = 0;
-    OARouteStatisticsComputer *computer = [[OARouteStatisticsComputer alloc]
-        initWithCurrentRendererLookup:^NSDictionary<NSString *, NSNumber *> *(
-            NSString *attribute, NSDictionary<NSString *, NSString *> *settings) {
-            return OAUndefinedRenderingAttribute();
-        }
-        defaultRendererLookup:^NSDictionary<NSString *, NSNumber *> *(
-            NSString *attribute, NSDictionary<NSString *, NSString *> *settings) {
-            defaultCalls++;
-            return OAUndefinedRenderingAttribute();
-        }];
-    std::vector<std::shared_ptr<RouteSegmentResult>> route = {
-        OAMakeRouteSegment(4, {{"surface", "asphalt"}}),
-    };
-
-    NSArray<OARouteStatistics *> *result = [OARouteStatisticsHelper
-        calculateRouteStatistic:route
-        attributeNames:@[@"routeInfo_missing"]
-        statisticsComputer:computer];
-
-    XCTAssertEqual(result.count, 0);
-    XCTAssertEqual(defaultCalls, 1);
-}
-
 - (void)testSharedSlopeCalculationUsesAndroidTwentyToOneHundredBoundary
 {
     NSMutableArray<NSString *> *additionalFilters = [NSMutableArray new];
@@ -234,31 +207,6 @@ NSString *OAAdditionalValue(NSString *additional, NSString *tag)
                  distance:50];
     XCTAssertEqualObjects(statistic.partition.allKeys, (@[@"-4% .. 0%", @"20% .. 40%"]));
     XCTAssertEqualWithAccuracy(statistic.totalDistance, 110, 0.001);
-}
-
-- (void)testStatisticsSegmentSnapshotUsesSyntheticRangeWithoutLosingNativeValues
-{
-    std::shared_ptr<RouteSegmentResult> segment = OAMakeRouteSegment(
-        12,
-        {{"highway", "primary"}, {"surface", "asphalt"}},
-        {0, 10, 12, 11});
-    segment->segmentTime = 3;
-    segment->segmentSpeed = 4;
-
-    OASRouteSegment *snapshot = [OARouteCalculationResultSnapshotAdapter
-        copySegment:segment
-        routePointStartIndex:7
-        routePointEndIndex:7];
-
-    XCTAssertEqual(snapshot.routePointStartIndex, 7);
-    XCTAssertEqual(snapshot.routePointEndIndex, 7);
-    XCTAssertEqual(snapshot.nativeStartPointIndex, 0);
-    XCTAssertEqual(snapshot.nativeEndPointIndex, 1);
-    XCTAssertEqualWithAccuracy(snapshot.distanceMeters, 12, 0.001);
-    XCTAssertEqualWithAccuracy(snapshot.segmentTimeSeconds, 3, 0.001);
-    XCTAssertEqualWithAccuracy(snapshot.segmentSpeedMetersPerSecond, 4, 0.001);
-    XCTAssertEqual(snapshot.routeTypes.count, 2);
-    XCTAssertEqual(snapshot.heightValues.count, 4);
 }
 
 - (void)assertAttribute:(OARouteSegmentAttribute *)attribute

@@ -104,21 +104,9 @@ static int OALegacyAlarmTypeValue(OASRouteEventType *type)
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance
 {
-    if (distance > 1500)
-        return INT_MAX;
-    
-    // 1 level of priorities
-    if (time < 6 || distance < 75 || OARouteEventTypeEquals(self.type, OASRouteEventType.speedLimit))
-        return [self.class getPriority:self.type];
-
-    if ([self isTrafficCamera] && (time < 15 || distance < 150))
-        return [self.class getPriority:self.type];
-
-    // 2nd level
-    if (time < 7 || distance < 100)
-        return [self.class getPriority:self.type] + [self.class getPriority:OASRouteEventType.maximum];
-    
-    return INT_MAX;
+    return [OASRouteEventHelper.shared updateDistanceAndGetPriorityType:self.type
+                                                            timeSeconds:time
+                                                          distanceMeters:distance];
 }
 
 + (int) getPriority:(OASRouteEventType *)type

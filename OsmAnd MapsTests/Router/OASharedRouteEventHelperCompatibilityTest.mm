@@ -1,5 +1,5 @@
 //
-//  OASharedRouteEventBackendCompatibilityTest.mm
+//  OASharedRouteEventHelperCompatibilityTest.mm
 //  OsmAnd MapsTests
 //
 
@@ -13,14 +13,15 @@
 #import "OsmAndSharedWrapper.h"
 
 #include <binaryRead.h>
+#include <climits>
 
-@interface OASharedRouteEventBackendCompatibilityTest : XCTestCase
+@interface OASharedRouteEventHelperCompatibilityTest : XCTestCase
 
 @end
 
-@implementation OASharedRouteEventBackendCompatibilityTest
+@implementation OASharedRouteEventHelperCompatibilityTest
 
-- (void)testAllAlarmTypesRoundTripWithoutChangingBackendValues
+- (void)testAllAlarmTypesRoundTripWithoutChangingSharedValues
 {
     for (OASRouteEventType *type in OASRouteEventType.entries)
     {
@@ -136,7 +137,7 @@
     XCTAssertEqual(legacyEntryPoint.locationIndex, 3);
 }
 
-- (void)testCreatesSpeedLimitThroughSharedBackend
+- (void)testCreatesSpeedLimitThroughSharedHelper
 {
     OAAlarmInfo *alarm = [OAAlarmInfo createSpeedLimit:50
                                            coordinate:CLLocationCoordinate2DMake(1.25, -2.5)
@@ -149,6 +150,20 @@
     XCTAssertEqualWithAccuracy(alarm.floatValue, 13.9f, 0.001f);
     XCTAssertEqualWithAccuracy(alarm.coordinate.latitude, 1.25, 0.000001);
     XCTAssertEqualWithAccuracy(alarm.coordinate.longitude, -2.5, 0.000001);
+}
+
+- (void)testTollBoothPriorityUsesSharedAndroidThresholds
+{
+    OAAlarmInfo *alarm = [self alarmWithType:OASRouteEventType.tollBooth
+                                       index:0
+                                    latitude:0
+                                   longitude:0];
+
+    XCTAssertEqual([alarm updateDistanceAndGetPriority:29.9f distance:1000],
+                   OASRouteEventType.tollBooth.androidPriority);
+    XCTAssertEqual([alarm updateDistanceAndGetPriority:100 distance:499],
+                   OASRouteEventType.tollBooth.androidPriority);
+    XCTAssertEqual([alarm updateDistanceAndGetPriority:30 distance:500], INT_MAX);
 }
 
 - (void)testSelectsAndOrdersAlarmsUsingAndroidSettings

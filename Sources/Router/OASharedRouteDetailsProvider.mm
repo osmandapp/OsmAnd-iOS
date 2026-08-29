@@ -230,7 +230,7 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
              speedMetersPerSecond:(float)speedMetersPerSecond
 {
     OASKLatLon *location = [[OASKLatLon alloc] initWithLatitude:latitude longitude:longitude];
-    OASRouteEvent *event = [OASRouteEventBackend.shared createSpeedLimitSpeed:speed
+    OASRouteEvent *event = [OASRouteEventHelper.shared createSpeedLimitSpeed:speed
                                                                      location:location
                                                   speedMetersPerSecond:speedMetersPerSecond];
     return [OARouteCalculationResultSnapshotAdapter copyAlarmInfo:event];
@@ -243,7 +243,7 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
                                longitude:(double)longitude
 {
     OASKLatLon *location = [[OASKLatLon alloc] initWithLatitude:latitude longitude:longitude];
-    OASRouteEvent *event = [OASRouteEventBackend.shared createFromRouteTagTag:tag
+    OASRouteEvent *event = [OASRouteEventHelper.shared createFromRouteTagTag:tag
                                                                         value:value
                                                                 locationIndex:locationIndex
                                                                      location:location];
@@ -261,6 +261,9 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
                                               showTrafficWarnings:(BOOL)showTrafficWarnings
                                              speakTrafficWarnings:(BOOL)speakTrafficWarnings
 {
+    if (!routingAlarmsEnabled || route.alarmInfo.count == 0)
+        return @[];
+
     NSMutableArray<OASRouteEvent *> *events = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
     NSMapTable<OASRouteEvent *, OAAlarmInfo *> *alarmsByEvent = [[NSMapTable alloc]
         initWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
@@ -286,7 +289,7 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
                      speakPedestrian:speakPedestrian
                 showTrafficWarnings:showTrafficWarnings
                speakTrafficWarnings:speakTrafficWarnings];
-    NSArray<OASRouteEventSelection *> *selections = [OASRouteEventBackend.shared
+    NSArray<OASRouteEventSelection *> *selections = [OASRouteEventHelper.shared
         selectEvents:events
         options:options];
     NSMutableArray<OALocationPointWrapper *> *result = [NSMutableArray arrayWithCapacity:selections.count];

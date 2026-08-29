@@ -18,16 +18,14 @@
 #import "OAUtilities.h"
 #import "OAApplicationMode.h"
 #import "QuadRect.h"
-#import "OAExitInfo.h"
 #import "OAMapUtils.h"
 #import "CLLocation+Extension.h"
 #import "OARouteCalculationResultSnapshotAdapter.h"
 #import "OASharedRouteDetailsProvider.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
-#define distanceClosestToIntermediate 3000.0
-#define distanceThresholdToIntermediate 25
 #define distanceThresholdToIntroduceFirstAndLastPoints 15
 
 @interface OARouteCalculationResult ()
@@ -1204,71 +1202,6 @@
                                              distanceToFinishMeters:listDistance];
 }
 
-+ (double) getDistanceToLocation:(NSArray<CLLocation *> *)locations p:(CLLocation *)p currentLocation:(int)currentLocation
-{
-    return [p distanceFromLocation:[[CLLocation alloc] initWithLatitude:locations[currentLocation].coordinate.latitude longitude:locations[currentLocation].coordinate.longitude]];
-}
-
-+ (void) calculateIntermediateIndexes:(NSArray<CLLocation *> *)locations intermediates:(NSArray<CLLocation *> *)intermediates localDirections:(NSMutableArray<OARouteDirectionInfo *> *)localDirections intermediatePoints:(NSMutableArray<NSNumber *> *)intermediatePoints
-{
-    if (intermediates && localDirections)
-    {
-        NSMutableArray<NSNumber *> *interLocations = [NSMutableArray arrayWithObject:@(0) count:intermediates.count];
-        
-        for (int currentIntermediate = 0; currentIntermediate < intermediates.count; currentIntermediate++)
-        {
-            double setDistance = distanceClosestToIntermediate;
-            CLLocation *currentIntermediatePoint = intermediates[currentIntermediate];
-            NSNumber *prevLocation = currentIntermediate == 0 ? 0 : interLocations[currentIntermediate - 1];
-            for (int currentLocation = prevLocation.intValue; currentLocation < locations.count; currentLocation++)
-            {
-                double currentDistance = [self getDistanceToLocation:locations p:currentIntermediatePoint currentLocation:currentLocation];
-                if (currentDistance < setDistance)
-                {
-                    interLocations[currentIntermediate] = [NSNumber numberWithInt:currentLocation];
-                    setDistance = currentDistance;
-                }
-                else if (currentDistance > distanceThresholdToIntermediate && setDistance < distanceThresholdToIntermediate)
-                {
-                    // finish search
-                    break;
-                }
-            }
-            if (setDistance == distanceClosestToIntermediate)
-            {
-                return;
-            }
-        }
-        
-        int currentDirection = 0;
-        int currentIntermediate = 0;
-        while (currentIntermediate < intermediates.count && currentDirection < localDirections.count)
-        {
-            int locationIndex = localDirections[currentDirection].routePointOffset;
-            if (locationIndex >= interLocations[currentIntermediate].intValue)
-            {
-                // split directions
-                if (locationIndex > interLocations[currentIntermediate].intValue && [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate] currentLocation:locationIndex] > 50)
-                {
-                    OARouteDirectionInfo *toSplit = localDirections[currentDirection];
-                    // intermediate point should split using average speed from its actual (previous) segment
-                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[MAX(0, currentDirection - 1)].averageSpeed turnType:TurnType::ptrStraight()];
-                    info.ref = toSplit.ref;
-                    info.streetName = toSplit.streetName;
-                    info.routeDataObject = toSplit.routeDataObject;
-                    info.destinationName = toSplit.destinationName;
-                    info.routePointOffset = interLocations[currentIntermediate].intValue;
-                    info.descriptionRoute = OALocalizedString(@"route_head");
-                    [localDirections insertObject:info atIndex:currentDirection];
-                }
-                intermediatePoints[currentIntermediate] = @(currentDirection);
-                currentIntermediate++;
-            }
-            currentDirection ++;
-        }
-    }
-}
-
 + (void) attachAlarmInfo:(NSMutableArray<OAAlarmInfo *> *)alarms res:(std::shared_ptr<RouteSegmentResult>)res intId:(int)intId locInd:(int)locInd
 {
     if (res == nullptr || res->object == nullptr || res->object->pointTypes.size() == 0 || res->object->pointTypes.size() <= intId)
@@ -1485,13 +1418,14 @@
                 
                 if (s->hasExitInfo())
                 {
-                    OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
                     actualExitRef = currentExitRef;
-                    exitInfo.ref = currentExitRef;
                     actualExitName = currentExitName;
-                    exitInfo.exitStreetName = currentExitName;
+                    OASRouteExitInfo *exitInfo = [[OASRouteExitInfo alloc]
+                        initWithRef:currentExitRef
+                        exitStreetName:currentExitName];
                     info.exitInfo = exitInfo;
-                    if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
+                    if ((exitInfo.ref != nil || exitInfo.exitStreetName != nil)
+                        && info.destinationRef == nil && routeInd > 0)
                     {
                         // set ref and road name (or shield icon) from previous segment because exit point is not consist of highway ref
                         std::shared_ptr<RouteSegmentResult> previous;
@@ -1604,7 +1538,10 @@
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _alarmInfo = [NSMutableArray array];
         _simulatedLocations = [NSMutableArray array];
-        [self.class calculateIntermediateIndexes:_locations intermediates:params.intermediates localDirections:localDirections intermediatePoints:_intermediatePoints];
+        [OASharedRouteDetailsProvider calculateIntermediateIndexesForLocations:_locations
+                                                                  intermediates:params.intermediates
+                                                                     directions:localDirections
+                                                             intermediatePoints:_intermediatePoints];
         _directions = localDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
@@ -1641,7 +1578,10 @@
         _segments = segments;
         _simulatedLocations = [NSMutableArray array];
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
-        [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];
+        [OASharedRouteDetailsProvider calculateIntermediateIndexesForLocations:_locations
+                                                                  intermediates:intermediates
+                                                                     directions:computeDirections
+                                                             intermediatePoints:_intermediatePoints];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _appMode = mode;
         

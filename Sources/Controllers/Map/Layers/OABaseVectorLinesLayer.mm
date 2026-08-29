@@ -14,7 +14,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteImporter.h"
-#import "OARouteSegmentAttribute.h"
+#import "OsmAndSharedWrapper.h"
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -249,7 +249,7 @@
         const auto& segment = segs[i];
         OARouteSegmentWithIncline *routeSeg = [[OARouteSegmentWithIncline alloc] init];
         routeSeg.obj = segment->object;
-        OARouteSegmentAttribute *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
+        OASRouteAttributeClassification *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
         OsmAnd::ColorARGB color((int)attribute.color);
 //        color = color == 0 ? RouteColorize.LIGHT_GREY : color;
 

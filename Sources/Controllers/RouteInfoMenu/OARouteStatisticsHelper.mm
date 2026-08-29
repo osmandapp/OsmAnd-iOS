@@ -12,7 +12,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OsmAndApp.h"
-#import "OARouteSegmentAttribute.h"
 #import "OANativeUtilities.h"
 #import "OAApplicationMode.h"
 #import "OAMapSource.h"
@@ -260,7 +259,7 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
         color:(int32_t) renderingAttributes[name].intValue];
 }
 
-- (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment
+- (OASRouteAttributeClassification *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment
 {
     NSDictionary<NSString *, NSString *> *settings = [self getRenderingParamsForAttribute:attribute segment:segment slopeClass:slopeClass];
     NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:attribute additionalSettings:settings];
@@ -274,11 +273,9 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
         color = defaultPair.second == 0 ? 0xFFFFFFFF : @(defaultPair.second).integerValue;
     }
     
-    return [[OARouteSegmentAttribute alloc]
-        initWithPropertyName:name
-        color:color
-        slopeIndex:slopeClass
-        boundariesClass:OARouteSlopeBoundaryClasses()];
+    return [[OASRouteAttributeClassification alloc]
+        initWithPropertyName:name ?: kUndefinedAttr
+        color:(int32_t) color];
 }
 
 - (NSDictionary<NSString *, NSString *> *) getRenderingParamsForAttribute:(NSString *) attribute

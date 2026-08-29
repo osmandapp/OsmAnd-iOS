@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
-@class OARouteSegmentAttribute, OARouteStatisticsComputer, OASRouteStatistic;
+@class OARouteStatisticsComputer, OASRouteAttributeClassification, OASRouteStatistic;
 
 typedef NSDictionary<NSString *, NSNumber *> * _Nullable (^OARouteStatisticsRenderingLookup)(
     NSString *attribute,
@@ -48,7 +48,7 @@ typedef NSDictionary<NSString *, NSNumber *> * _Nullable (^OARouteStatisticsRend
 - (instancetype)initWithCurrentRendererLookup:(OARouteStatisticsRenderingLookup)currentRendererLookup
                         defaultRendererLookup:(OARouteStatisticsRenderingLookup)defaultRendererLookup;
 
-- (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
+- (OASRouteAttributeClassification *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
 
 @end
 

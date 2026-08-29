@@ -2597,7 +2597,6 @@
 		DA5A836326C563A800F274C7 /* OAHomeWorkCollectionViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3626C563A300F274C7 /* OAHomeWorkCollectionViewCell.mm */; };
 		DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */; };
 		DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */; };
-		DA5A836626C563A800F274C7 /* OARouteSegmentAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */; };
 		DA5A836726C563A800F274C7 /* OARoutingSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */; };
 		DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */; };
 		DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */; };
@@ -3011,7 +3010,6 @@
 		C1D800012F70000100D80001 /* OARouteCalculationResultSnapshotAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D800042F70000100D80004 /* OARouteCalculationResultSnapshotAdapter.mm */; };
 		C1D900012F71000100D90001 /* OASharedRouteDetailsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D900042F71000100D90004 /* OASharedRouteDetailsProvider.mm */; };
 		DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */; };
-		DA5A856526C563A900F274C7 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810526C563A600F274C7 /* OAExitInfo.m */; };
 		DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810626C563A600F274C7 /* OALocationsHolder.mm */; };
 		DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */; };
 		DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810E26C563A600F274C7 /* OATransportRoutingHelper.mm */; };
@@ -7187,7 +7185,6 @@
 		DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACompoundViewController.m; sourceTree = "<group>"; };
 		DA5A7D3926C563A300F274C7 /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARootViewController.h; sourceTree = "<group>"; };
 		DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppModeView.mm; sourceTree = "<group>"; };
-		DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARouteSegmentAttribute.m; sourceTree = "<group>"; };
 		DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutingSettingsCell.xib; sourceTree = "<group>"; };
 		DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteAvoidTransportSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteSettingsViewController.mm; sourceTree = "<group>"; };
@@ -7203,7 +7200,6 @@
 		DA5A7D4926C563A300F274C7 /* OARouteSegmentShieldView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteSegmentShieldView.xib; sourceTree = "<group>"; };
 		DA5A7D4A26C563A300F274C7 /* OARoutingTargetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingTargetCell.m; sourceTree = "<group>"; };
 		DA5A7D4B26C563A300F274C7 /* OARoutingInfoCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingInfoCell.mm; sourceTree = "<group>"; };
-		DA5A7D4C26C563A300F274C7 /* OARouteSegmentAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSegmentAttribute.h; sourceTree = "<group>"; };
 		DA5A7D4D26C563A300F274C7 /* OAAppModeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppModeView.h; sourceTree = "<group>"; };
 		DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingInfoCell.h; sourceTree = "<group>"; };
 		DA5A7D4F26C563A300F274C7 /* OARoutingSettingsCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingSettingsCell.mm; sourceTree = "<group>"; };
@@ -7924,7 +7920,6 @@
 		DA5A80F526C563A600F274C7 /* OARouteProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteProvider.h; sourceTree = "<group>"; };
 		DA5A80F626C563A600F274C7 /* OARoutingHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingHelper.mm; sourceTree = "<group>"; };
 		DA5A80F726C563A600F274C7 /* OARouteDirectionInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteDirectionInfo.mm; sourceTree = "<group>"; };
-		DA5A80F826C563A600F274C7 /* OAExitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
 		DA5A80F926C563A600F274C7 /* OAWaypointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointHelper.h; sourceTree = "<group>"; };
 		DA5A80FA26C563A600F274C7 /* OATransportRouteCalculationParams.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportRouteCalculationParams.mm; sourceTree = "<group>"; };
 		DA5A80FB26C563A600F274C7 /* OARouteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteImporter.h; sourceTree = "<group>"; };
@@ -7941,7 +7936,6 @@
 		C1D900042F71000100D90004 /* OASharedRouteDetailsProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteDetailsProvider.mm; sourceTree = "<group>"; };
 		DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximator.mm; sourceTree = "<group>"; };
 		DA5A810426C563A600F274C7 /* OAGpxApproximator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximator.h; sourceTree = "<group>"; };
-		DA5A810526C563A600F274C7 /* OAExitInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
 		DA5A810626C563A600F274C7 /* OALocationsHolder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALocationsHolder.mm; sourceTree = "<group>"; };
 		DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityLocationPoint.mm; sourceTree = "<group>"; };
 		DA5A810826C563A600F274C7 /* OATargetPointsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetPointsHelper.h; sourceTree = "<group>"; };
@@ -13151,8 +13145,6 @@
 				DA5A7D5B26C563A300F274C7 /* OARouteSettingsParameterController.mm */,
 				DA5A7D5226C563A300F274C7 /* OARouteSettingsViewController.h */,
 				DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */,
-				DA5A7D4C26C563A300F274C7 /* OARouteSegmentAttribute.h */,
-				DA5A7D3C26C563A300F274C7 /* OARouteSegmentAttribute.m */,
 				DA5A7D4626C563A300F274C7 /* OARouteStatisticsHelper.h */,
 				DA5A7D4226C563A300F274C7 /* OARouteStatisticsHelper.mm */,
 				DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */,
@@ -14646,8 +14638,6 @@
 				DA5A811E26C563A600F274C7 /* OAAlarmInfo.mm */,
 				DA5A811826C563A600F274C7 /* OAAmenityLocationPoint.h */,
 				DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */,
-				DA5A80F826C563A600F274C7 /* OAExitInfo.h */,
-				DA5A810526C563A600F274C7 /* OAExitInfo.m */,
 				DA5A810426C563A600F274C7 /* OAGpxApproximator.h */,
 				DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */,
 				C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */,
@@ -18096,7 +18086,6 @@
 				FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */,
 				DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */,
 				DA5A834B26C563A800F274C7 /* OATitleDescrDraggableCell.m in Sources */,
-				DA5A856526C563A900F274C7 /* OAExitInfo.m in Sources */,
 				DA5A83E926C563A800F274C7 /* OAWikiMenuViewController.m in Sources */,
 				DA4ABF192876DA6800B996EF /* OAQuickActionsSettingsItem.mm in Sources */,
 				2745FEF72F3A1207004F6AB4 /* PreviewImageView.swift in Sources */,
@@ -18114,7 +18103,6 @@
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
-				DA5A836626C563A800F274C7 /* OARouteSegmentAttribute.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
 				2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */,
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,

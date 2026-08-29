@@ -10,6 +10,7 @@
 @class OALocationPointWrapper;
 @class OARouteCalculationResult;
 @class OARouteDirectionInfo;
+@class OASRouteCumulativeInfo;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)updateDirectionDistancesAndTimes:(NSArray<OARouteDirectionInfo *> *)directions
                   distanceToFinishMeters:(NSArray<NSNumber *> *)distanceToFinishMeters;
+
++ (OASRouteCumulativeInfo *)getCumulativeInfoBeforePosition:(NSInteger)position
+                                                 directions:(NSArray<OARouteDirectionInfo *> *)directions;
+
++ (void)calculateIntermediateIndexesForLocations:(NSArray<CLLocation *> *)locations
+                                     intermediates:(nullable NSArray<CLLocation *> *)intermediates
+                                        directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
+                                intermediatePoints:(NSMutableArray<NSNumber *> *)intermediatePoints;
 
 + (nullable CLLocation *)getRouteLocationByDistance:(NSArray<CLLocation *> *)locations
                              currentRoutePointIndex:(int)currentRoutePointIndex

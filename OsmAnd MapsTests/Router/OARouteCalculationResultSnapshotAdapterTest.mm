@@ -7,7 +7,6 @@
 
 #import "OAAlarmInfo.h"
 #import "OAAppSettings.h"
-#import "OAExitInfo.h"
 #import "OALocationSimulation.h"
 #import "OARouteCalculationResult.h"
 #import "OARouteCalculationResultSnapshotAdapter.h"
@@ -50,9 +49,7 @@
     direction.ref = @"A1";
     direction.destinationName = @"Center";
     direction.destinationRef = @"B2";
-    direction.exitInfo = [[OAExitInfo alloc] init];
-    direction.exitInfo.ref = @"7";
-    direction.exitInfo.exitStreetName = @"Exit road";
+    direction.exitInfo = [[OASRouteExitInfo alloc] initWithRef:@"7" exitStreetName:@"Exit road"];
 
     OAAlarmInfo *alarm = [[OAAlarmInfo alloc] initWithType:AIT_TUNNEL locationIndex:1];
     alarm.coordinate = CLLocationCoordinate2DMake(51.55, -0.15);

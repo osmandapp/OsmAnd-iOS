@@ -8,6 +8,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import "OAAlarmInfo.h"
+#import "Localization.h"
 #import "OALocationPointWrapper.h"
 #import "OARouteCalculationResult.h"
 #import "OARouteCalculationResultSnapshotAdapter.h"
@@ -76,6 +77,55 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
         direction.distance = maneuver.distanceMeters;
         direction.afterLeftTime = maneuver.afterLeftTimeSeconds;
     }
+}
+
++ (OASRouteCumulativeInfo *)getCumulativeInfoBeforePosition:(NSInteger)position
+                                                 directions:(NSArray<OARouteDirectionInfo *> *)directions
+{
+    return [OASRouteManeuverCalculator.shared
+        cumulativeInfoBeforePosition:(int32_t) position
+        maneuvers:OACopySharedManeuvers(directions)];
+}
+
++ (void)calculateIntermediateIndexesForLocations:(NSArray<CLLocation *> *)locations
+                                     intermediates:(NSArray<CLLocation *> * _Nullable)intermediates
+                                        directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
+                                intermediatePoints:(NSMutableArray<NSNumber *> *)intermediatePoints
+{
+    NSArray<OASRouteManeuver *> *originalManeuvers = OACopySharedManeuvers(directions);
+    OASRouteIntermediateCalculation *calculation = [OASRouteManeuverCalculator.shared
+        calculateIntermediateIndexesLocations:OACopySharedLocations(locations)
+        maneuvers:originalManeuvers
+        intermediates:OACopySharedLocations(intermediates)];
+    NSMutableArray<OARouteDirectionInfo *> *updatedDirections =
+        [NSMutableArray arrayWithCapacity:calculation.maneuvers.count];
+    NSUInteger originalIndex = 0;
+    for (OASRouteManeuver *maneuver in calculation.maneuvers)
+    {
+        if (originalIndex < originalManeuvers.count
+            && maneuver.routePointOffset == originalManeuvers[originalIndex].routePointOffset)
+        {
+            [updatedDirections addObject:directions[originalIndex]];
+            originalIndex++;
+        }
+        else
+        {
+            OARouteDirectionInfo *toSplit = directions[originalIndex];
+            OARouteDirectionInfo *direction = [[OARouteDirectionInfo alloc]
+                initWithAverageSpeed:maneuver.averageSpeedMetersPerSecond
+                turnType:TurnType::ptrStraight()];
+            direction.ref = maneuver.ref;
+            direction.streetName = maneuver.streetName;
+            direction.routeDataObject = toSplit.routeDataObject;
+            direction.destinationName = maneuver.destinationName;
+            direction.routePointOffset = maneuver.routePointOffset;
+            [direction setDescriptionRoute:OALocalizedString(@"route_head")];
+            [updatedDirections addObject:direction];
+        }
+    }
+    [directions setArray:updatedDirections];
+    for (NSUInteger index = 0; index < calculation.intermediateDirectionIndices.count; index++)
+        intermediatePoints[index] = @(calculation.intermediateDirectionIndices[index].intValue);
 }
 
 + (CLLocation *)getRouteLocationByDistance:(NSArray<CLLocation *> *)locations

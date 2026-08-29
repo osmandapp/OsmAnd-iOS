@@ -19,7 +19,6 @@
 #import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
-#import "OAExitInfo.h"
 #import "OAApplicationMode.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
@@ -308,7 +307,7 @@ std::string preferredLanguage;
     if (play != nil) {
         NSString *tParam = [self getTurnType:next.turnType];
         BOOL isPlay = YES;
-        OAExitInfo *exitInfo = next.exitInfo;
+        OASRouteExitInfo *exitInfo = next.exitInfo;
         if (tParam != nil) {
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
@@ -408,7 +407,7 @@ std::string preferredLanguage;
 {
     OACommandBuilder *p = [self getNewCommandPlayerToPlay];
     NSString *tParam = [self getTurnType:next.turnType];
-    OAExitInfo *exitInfo = next.exitInfo;
+    OASRouteExitInfo *exitInfo = next.exitInfo;
     if (p)
     {
         //        notifyOnVoiceMessage();
@@ -437,7 +436,7 @@ std::string preferredLanguage;
     if (play != nil)
     {
         NSString *tParam = [self getTurnType:nextInfo.turnType];
-        OAExitInfo *exitInfo = nextInfo.exitInfo;
+        OASRouteExitInfo *exitInfo = nextInfo.exitInfo;
         BOOL isplay = YES;
         if (tParam != nil) {
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
@@ -699,7 +698,7 @@ std::string preferredLanguage;
     }
 }
 
-- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo
+- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OASRouteExitInfo *)exitInfo
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
     if (!exitInfo || ![_settings.speakStreetNames get])

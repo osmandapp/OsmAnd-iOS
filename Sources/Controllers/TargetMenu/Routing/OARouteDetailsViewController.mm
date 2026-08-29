@@ -31,6 +31,7 @@
 #import "OAEmissionHelper.h"
 #import "OASegmentTableViewCell.h"
 #import "OARouteDirectionInfo.h"
+#import "OASharedRouteDetailsProvider.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
@@ -51,32 +52,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     EOAOARouteDetailsViewControllerModeInstructions = 0,
     EOAOARouteDetailsViewControllerModeAnalysis
 };
-
-@implementation OACumulativeInfo
-
-+ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
-{
-    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
-    if (position >= routeDirections.count)
-        return cumulativeInfo;
-    
-    for (int i = 0; i < position; i++)
-    {
-        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
-        cumulativeInfo.distance += routeDirectionInfo.distance;
-    }
-    return cumulativeInfo;
-}
-
-+ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
-{
-    long timeInSeconds = [model getExpectedTime];
-    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
-}
-
-@end
-
 
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate, OAEmissionHelperListener>
 
@@ -199,9 +174,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         [cell setTopLeftLabelWithText:segmentDistanceLabelText];
         [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
         
-        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
-        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance withParams:[OsmAndFormatterParams useLowerBounds]];
-        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        OASRouteCumulativeInfo *cumulativeInfo = [OASharedRouteDetailsProvider
+            getCumulativeInfoBeforePosition:directionInfoIndex + 1
+            directions:directionsInfo];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distanceMeters withParams:[OsmAndFormatterParams useLowerBounds]];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.timeSeconds shortFormat:YES];
         [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }
     else

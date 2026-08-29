@@ -9,7 +9,6 @@
 
 #import "OAAlarmInfo.h"
 #import "OAAppSettings.h"
-#import "OAExitInfo.h"
 #import "OALocationSimulation.h"
 #import "OARouteDirectionInfo.h"
 #import "OsmAndSharedWrapper.h"
@@ -165,14 +164,6 @@ NSArray<OASInt *> * _Nullable OACopyLanes(const std::shared_ptr<TurnType> &turn)
     return [lanes copy];
 }
 
-OASRouteExitInfo * _Nullable OACopyExitInfo(OAExitInfo * _Nullable exitInfo)
-{
-    if (!exitInfo)
-        return nil;
-    return [[OASRouteExitInfo alloc] initWithRef:[exitInfo.ref copy]
-                                  exitStreetName:[exitInfo.exitStreetName copy]];
-}
-
 OASRouteManeuver *OACopyManeuver(OARouteDirectionInfo *direction)
 {
     const std::shared_ptr<TurnType> &turn = direction.turnType;
@@ -195,7 +186,7 @@ OASRouteManeuver *OACopyManeuver(OARouteDirectionInfo *direction)
                            ref:[direction.ref copy]
                destinationName:[direction.destinationName copy]
                 destinationRef:[direction.destinationRef copy]
-                      exitInfo:OACopyExitInfo(direction.exitInfo)];
+                      exitInfo:direction.exitInfo];
 }
 
 NSArray<OASRouteManeuver *> *OACopyManeuvers(NSArray<OARouteDirectionInfo *> *directions)

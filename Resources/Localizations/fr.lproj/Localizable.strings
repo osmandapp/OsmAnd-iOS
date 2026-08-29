@@ -4546,3 +4546,7 @@
 "shared_string_send" = "Envoyer";
 "send_current_app_log" = "Envoyer le journal actuel de l'application";
 "send_current_app_log_descr" = "Depuis le lancement de l'application";
+"osm_edits_empty_state_title" = "Aucune modification de carte en attente";
+"osm_edits_empty_state_description" = "Les modifications que vous effectuez dans OsmAnd s'afficheront ici avant d'être transférées vers OpenStreetMap";
+"msg_favorites_skipped_as_existing" = "Les points favoris (%d) ont été ignorés car ils existaient déjà.";
+"carplay_trip_via_point" = "Via %@";

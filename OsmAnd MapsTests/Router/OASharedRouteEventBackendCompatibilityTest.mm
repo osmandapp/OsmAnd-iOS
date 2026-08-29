@@ -22,9 +22,9 @@
 
 - (void)testAllAlarmTypesRoundTripWithoutChangingBackendValues
 {
-    for (NSInteger type = AIT_SPEED_CAMERA; type <= AIT_RED_LIGHT_CAMERA; type++)
+    for (OASRouteEventType *type in OASRouteEventType.entries)
     {
-        OAAlarmInfo *source = [self alarmWithType:(EOAAlarmInfoType) type
+        OAAlarmInfo *source = [self alarmWithType:type
                                            index:7
                                         latitude:51.5
                                        longitude:-0.1];
@@ -37,7 +37,7 @@
 
         XCTAssertNotNil(event);
         XCTAssertNotNil(result);
-        XCTAssertEqual(result.type, source.type);
+        XCTAssertEqualObjects(result.type, source.type);
         XCTAssertEqual(result.locationIndex, 7);
         XCTAssertEqual(result.lastLocationIndex, 9);
         XCTAssertEqual(result.intValue, 12);
@@ -50,15 +50,15 @@
 - (void)testCreatesAndroidCompatibleEventsFromRouteTags
 {
     NSArray<NSDictionary<NSString *, id> *> *cases = @[
-        @{@"tag": @"highway", @"value": @"speed_camera", @"type": @(AIT_SPEED_CAMERA)},
-        @{@"tag": @"highway", @"value": @"stop", @"type": @(AIT_STOP)},
-        @{@"tag": @"enforcement", @"value": @"traffic_signals", @"type": @(AIT_RED_LIGHT_CAMERA)},
-        @{@"tag": @"barrier", @"value": @"toll_booth", @"type": @(AIT_TOLL_BOOTH)},
-        @{@"tag": @"barrier", @"value": @"border_control", @"type": @(AIT_BORDER_CONTROL)},
-        @{@"tag": @"traffic_calming", @"value": @"bump", @"type": @(AIT_TRAFFIC_CALMING)},
-        @{@"tag": @"hazard", @"value": @"falling_rocks", @"type": @(AIT_HAZARD)},
-        @{@"tag": @"railway", @"value": @"level_crossing", @"type": @(AIT_RAILWAY)},
-        @{@"tag": @"crossing", @"value": @"uncontrolled", @"type": @(AIT_PEDESTRIAN)},
+        @{@"tag": @"highway", @"value": @"speed_camera", @"type": OASRouteEventType.speedCamera},
+        @{@"tag": @"highway", @"value": @"stop", @"type": OASRouteEventType.stop},
+        @{@"tag": @"enforcement", @"value": @"traffic_signals", @"type": OASRouteEventType.redLightCamera},
+        @{@"tag": @"barrier", @"value": @"toll_booth", @"type": OASRouteEventType.tollBooth},
+        @{@"tag": @"barrier", @"value": @"border_control", @"type": OASRouteEventType.borderControl},
+        @{@"tag": @"traffic_calming", @"value": @"bump", @"type": OASRouteEventType.trafficCalming},
+        @{@"tag": @"hazard", @"value": @"falling_rocks", @"type": OASRouteEventType.hazard},
+        @{@"tag": @"railway", @"value": @"level_crossing", @"type": OASRouteEventType.railway},
+        @{@"tag": @"crossing", @"value": @"uncontrolled", @"type": OASRouteEventType.pedestrian},
     ];
 
     for (NSDictionary<NSString *, id> *testCase in cases)
@@ -71,7 +71,7 @@
             longitude:-0.1];
 
         XCTAssertNotNil(alarm);
-        XCTAssertEqual(alarm.type, [testCase[@"type"] integerValue]);
+        XCTAssertEqualObjects(alarm.type, testCase[@"type"]);
         XCTAssertEqual(alarm.locationIndex, 7);
         XCTAssertEqual(alarm.lastLocationIndex, -1);
         XCTAssertEqualWithAccuracy(alarm.coordinate.latitude, 51.5, 0.000001);
@@ -113,26 +113,26 @@
                                                         locationIndex:0
                                                              latitude:0
                                                             longitude:0]);
-    XCTAssertEqual(
+    XCTAssertEqualObjects(
         [OASharedRouteDetailsProvider createAlarmInfoWithTag:@"traffic_calming"
                                                        value:nil
                                                locationIndex:0
                                                     latitude:0
                                                    longitude:0].type,
-        AIT_TRAFFIC_CALMING);
-    XCTAssertEqual(
+        OASRouteEventType.trafficCalming);
+    XCTAssertEqualObjects(
         [OASharedRouteDetailsProvider createAlarmInfoWithTag:@"hazard"
                                                        value:nil
                                                locationIndex:0
                                                     latitude:0
                                                    longitude:0].type,
-        AIT_HAZARD);
+        OASRouteEventType.hazard);
 
     RouteTypeRule stopRule("highway", "stop");
     OAAlarmInfo *legacyEntryPoint = [OAAlarmInfo createAlarmInfo:stopRule
                                                           locInd:3
                                                       coordinate:CLLocationCoordinate2DMake(1, 2)];
-    XCTAssertEqual(legacyEntryPoint.type, AIT_STOP);
+    XCTAssertEqualObjects(legacyEntryPoint.type, OASRouteEventType.stop);
     XCTAssertEqual(legacyEntryPoint.locationIndex, 3);
 }
 
@@ -142,7 +142,7 @@
                                            coordinate:CLLocationCoordinate2DMake(1.25, -2.5)
                                  speedMetersPerSecond:13.9f];
 
-    XCTAssertEqual(alarm.type, AIT_SPEED_LIMIT);
+    XCTAssertEqualObjects(alarm.type, OASRouteEventType.speedLimit);
     XCTAssertEqual(alarm.locationIndex, 0);
     XCTAssertEqual(alarm.lastLocationIndex, -1);
     XCTAssertEqual(alarm.intValue, 50);
@@ -154,11 +154,11 @@
 - (void)testSelectsAndOrdersAlarmsUsingAndroidSettings
 {
     OARouteCalculationResult *route = [[OARouteCalculationResult alloc] initWithErrorMessage:@"error"];
-    OAAlarmInfo *stop = [self alarmWithType:AIT_STOP index:4 latitude:0 longitude:0.04];
-    OAAlarmInfo *tunnel = [self alarmWithType:AIT_TUNNEL index:3 latitude:0 longitude:0.03];
-    OAAlarmInfo *pedestrian = [self alarmWithType:AIT_PEDESTRIAN index:2 latitude:0 longitude:0.02];
-    OAAlarmInfo *camera = [self alarmWithType:AIT_SPEED_CAMERA index:1 latitude:0 longitude:0.01];
-    OAAlarmInfo *hazard = [self alarmWithType:AIT_HAZARD index:4 latitude:0 longitude:0.05];
+    OAAlarmInfo *stop = [self alarmWithType:OASRouteEventType.stop index:4 latitude:0 longitude:0.04];
+    OAAlarmInfo *tunnel = [self alarmWithType:OASRouteEventType.tunnel index:3 latitude:0 longitude:0.03];
+    OAAlarmInfo *pedestrian = [self alarmWithType:OASRouteEventType.pedestrian index:2 latitude:0 longitude:0.02];
+    OAAlarmInfo *camera = [self alarmWithType:OASRouteEventType.speedCamera index:1 latitude:0 longitude:0.01];
+    OAAlarmInfo *hazard = [self alarmWithType:OASRouteEventType.hazard index:4 latitude:0 longitude:0.05];
     [route.alarmInfo addObjectsFromArray:@[stop, tunnel, pedestrian, camera, hazard]];
 
     NSArray<OALocationPointWrapper *> *result = [OASharedRouteDetailsProvider
@@ -208,12 +208,12 @@
 - (void)testSuppressesAndroidCameraAndRailwayDuplicates
 {
     OARouteCalculationResult *route = [[OARouteCalculationResult alloc] initWithErrorMessage:@"error"];
-    OAAlarmInfo *camera1 = [self alarmWithType:AIT_SPEED_CAMERA index:1 latitude:0 longitude:0];
-    OAAlarmInfo *camera2 = [self alarmWithType:AIT_RED_LIGHT_CAMERA index:2 latitude:0 longitude:0.001];
-    OAAlarmInfo *camera3 = [self alarmWithType:AIT_SPEED_CAMERA index:3 latitude:0 longitude:0.002];
-    OAAlarmInfo *railway1 = [self alarmWithType:AIT_RAILWAY index:4 latitude:0 longitude:0.0100];
-    OAAlarmInfo *railway2 = [self alarmWithType:AIT_RAILWAY index:5 latitude:0 longitude:0.0102];
-    OAAlarmInfo *railway3 = [self alarmWithType:AIT_RAILWAY index:6 latitude:0 longitude:0.0105];
+    OAAlarmInfo *camera1 = [self alarmWithType:OASRouteEventType.speedCamera index:1 latitude:0 longitude:0];
+    OAAlarmInfo *camera2 = [self alarmWithType:OASRouteEventType.redLightCamera index:2 latitude:0 longitude:0.001];
+    OAAlarmInfo *camera3 = [self alarmWithType:OASRouteEventType.speedCamera index:3 latitude:0 longitude:0.002];
+    OAAlarmInfo *railway1 = [self alarmWithType:OASRouteEventType.railway index:4 latitude:0 longitude:0.0100];
+    OAAlarmInfo *railway2 = [self alarmWithType:OASRouteEventType.railway index:5 latitude:0 longitude:0.0102];
+    OAAlarmInfo *railway3 = [self alarmWithType:OASRouteEventType.railway index:6 latitude:0 longitude:0.0105];
     [route.alarmInfo addObjectsFromArray:@[camera1, camera2, camera3, railway1, railway2, railway3]];
 
     NSArray<OALocationPointWrapper *> *result = [OASharedRouteDetailsProvider
@@ -235,7 +235,7 @@
     XCTAssertEqual(result[3].point, railway3);
 }
 
-- (OAAlarmInfo *)alarmWithType:(EOAAlarmInfoType)type
+- (OAAlarmInfo *)alarmWithType:(OASRouteEventType *)type
                          index:(int)index
                       latitude:(double)latitude
                      longitude:(double)longitude

@@ -197,82 +197,11 @@ NSArray<OASRouteManeuver *> *OACopyManeuvers(NSArray<OARouteDirectionInfo *> *di
     return [result copy];
 }
 
-OASRouteEventType * _Nullable OASharedEventType(EOAAlarmInfoType type)
-{
-    switch (type)
-    {
-        case AIT_SPEED_CAMERA:
-            return OASRouteEventType.speedCamera;
-        case AIT_SPEED_LIMIT:
-            return OASRouteEventType.speedLimit;
-        case AIT_BORDER_CONTROL:
-            return OASRouteEventType.borderControl;
-        case AIT_RAILWAY:
-            return OASRouteEventType.railway;
-        case AIT_TRAFFIC_CALMING:
-            return OASRouteEventType.trafficCalming;
-        case AIT_TOLL_BOOTH:
-            return OASRouteEventType.tollBooth;
-        case AIT_STOP:
-            return OASRouteEventType.stop;
-        case AIT_PEDESTRIAN:
-            return OASRouteEventType.pedestrian;
-        case AIT_TUNNEL:
-            return OASRouteEventType.tunnel;
-        case AIT_HAZARD:
-            return OASRouteEventType.hazard;
-        case AIT_MAXIMUM:
-            return OASRouteEventType.maximum;
-        case AIT_RED_LIGHT_CAMERA:
-            return OASRouteEventType.redLightCamera;
-    }
-    return nil;
-}
-
-BOOL OASRouteEventTypeEquals(OASRouteEventType *type, OASRouteEventType *expected)
-{
-    return type == expected || [type isEqual:expected];
-}
-
-BOOL OAAlarmTypeFromShared(OASRouteEventType *type, EOAAlarmInfoType *alarmType)
-{
-    if (OASRouteEventTypeEquals(type, OASRouteEventType.speedCamera))
-        *alarmType = AIT_SPEED_CAMERA;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.speedLimit))
-        *alarmType = AIT_SPEED_LIMIT;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.borderControl))
-        *alarmType = AIT_BORDER_CONTROL;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.railway))
-        *alarmType = AIT_RAILWAY;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.trafficCalming))
-        *alarmType = AIT_TRAFFIC_CALMING;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.tollBooth))
-        *alarmType = AIT_TOLL_BOOTH;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.stop))
-        *alarmType = AIT_STOP;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.pedestrian))
-        *alarmType = AIT_PEDESTRIAN;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.tunnel))
-        *alarmType = AIT_TUNNEL;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.hazard))
-        *alarmType = AIT_HAZARD;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.maximum))
-        *alarmType = AIT_MAXIMUM;
-    else if (OASRouteEventTypeEquals(type, OASRouteEventType.redLightCamera))
-        *alarmType = AIT_RED_LIGHT_CAMERA;
-    else
-        return NO;
-    return YES;
-}
-
 OASRouteEvent * _Nullable OACopyEvent(OAAlarmInfo *alarm)
 {
-    OASRouteEventType *type = OASharedEventType(alarm.type);
-    if (!type)
-        return nil;
     OASKLatLon *location = [[OASKLatLon alloc] initWithLatitude:alarm.coordinate.latitude
                                                      longitude:alarm.coordinate.longitude];
-    return [[OASRouteEvent alloc] initWithType:type
+    return [[OASRouteEvent alloc] initWithType:alarm.type
                                      location:location
                                 locationIndex:alarm.locationIndex
                             lastLocationIndex:alarm.lastLocationIndex
@@ -282,10 +211,7 @@ OASRouteEvent * _Nullable OACopyEvent(OAAlarmInfo *alarm)
 
 OAAlarmInfo * _Nullable OACopyAlarmInfo(OASRouteEvent *event)
 {
-    EOAAlarmInfoType type;
-    if (!OAAlarmTypeFromShared(event.type, &type))
-        return nil;
-    OAAlarmInfo *alarm = [[OAAlarmInfo alloc] initWithType:type locationIndex:event.locationIndex];
+    OAAlarmInfo *alarm = [[OAAlarmInfo alloc] initWithType:event.type locationIndex:event.locationIndex];
     alarm.coordinate = CLLocationCoordinate2DMake(event.location.latitude, event.location.longitude);
     alarm.lastLocationIndex = event.lastLocationIndex;
     alarm.intValue = event.intValue;

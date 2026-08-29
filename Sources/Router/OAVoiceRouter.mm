@@ -824,18 +824,20 @@ std::string preferredLanguage;
 
 - (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
 {
-    EOAAlarmInfoType type = info.type;
-    if (type == AIT_SPEED_LIMIT)
+    OASRouteEventType *type = info.type;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedLimit))
     {
         [self announceSpeedAlarm:info.intValue speed:speed];
     }
     else
     {
         BOOL speakTrafficWarnings = [_settings.speakTrafficWarnings get];
-        BOOL speakTunnels = type == AIT_TUNNEL && [_settings.speakTunnels get];
-        BOOL speakPedestrian = type == AIT_PEDESTRIAN && [_settings.speakPedestrian get];
-        BOOL speakSpeedCamera = (type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA) && [_settings.speakCameras get];
-        BOOL speakPrefType = type == AIT_TUNNEL || type == AIT_PEDESTRIAN || type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA;
+        BOOL speakTunnels = OARouteEventTypeEquals(type, OASRouteEventType.tunnel) && [_settings.speakTunnels get];
+        BOOL speakPedestrian = OARouteEventTypeEquals(type, OASRouteEventType.pedestrian) && [_settings.speakPedestrian get];
+        BOOL speakSpeedCamera = [info isTrafficCamera] && [_settings.speakCameras get];
+        BOOL speakPrefType = OARouteEventTypeEquals(type, OASRouteEventType.tunnel)
+            || OARouteEventTypeEquals(type, OASRouteEventType.pedestrian)
+            || [info isTrafficCamera];
 
         if (speakSpeedCamera || speakPedestrian || speakTunnels || (speakTrafficWarnings && !speakPrefType))
         {
@@ -845,7 +847,7 @@ std::string preferredLanguage;
                 [[p attention:typeName] play];
 
             // See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
-            if (type == AIT_TOLL_BOOTH)
+            if (OARouteEventTypeEquals(type, OASRouteEventType.tollBooth))
                 suppressDest = false;
         }
     }

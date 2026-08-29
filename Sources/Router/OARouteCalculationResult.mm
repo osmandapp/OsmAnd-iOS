@@ -1222,7 +1222,7 @@
             if (info) {
                 BOOL forward = res->isForwardDirection();
                 BOOL directionApplicable = res->object->isDirectionApplicable(forward, intId,
-                        info.type == AIT_STOP ? res->getStartPointIndex() : -1, res->getEndPointIndex());
+                        OARouteEventTypeEquals(info.type, OASRouteEventType.stop) ? res->getStartPointIndex() : -1, res->getEndPointIndex());
                 if (!directionApplicable) {
                     continue;
                 }
@@ -1313,7 +1313,7 @@
             {
                 auto lat = get31LatitudeY(s->object->pointsY[i]);
                 auto lon = get31LongitudeX(s->object->pointsX[i]);
-                tunnelAlarm = [[OAAlarmInfo alloc] initWithType:AIT_TUNNEL locationIndex:prevLocationSize];
+                tunnelAlarm = [[OAAlarmInfo alloc] initWithType:OASRouteEventType.tunnel locationIndex:prevLocationSize];
                 tunnelAlarm.coordinate = CLLocationCoordinate2DMake(lat, lon);
                 tunnelAlarm.floatValue = s->distance;
                 [alarms addObject:tunnelAlarm];

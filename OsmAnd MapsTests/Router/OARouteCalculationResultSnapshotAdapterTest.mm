@@ -51,7 +51,7 @@
     direction.destinationRef = @"B2";
     direction.exitInfo = [[OASRouteExitInfo alloc] initWithRef:@"7" exitStreetName:@"Exit road"];
 
-    OAAlarmInfo *alarm = [[OAAlarmInfo alloc] initWithType:AIT_TUNNEL locationIndex:1];
+    OAAlarmInfo *alarm = [[OAAlarmInfo alloc] initWithType:OASRouteEventType.tunnel locationIndex:1];
     alarm.coordinate = CLLocationCoordinate2DMake(51.55, -0.15);
     alarm.lastLocationIndex = 2;
     alarm.intValue = 7;

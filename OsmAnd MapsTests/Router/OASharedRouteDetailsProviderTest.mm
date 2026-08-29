@@ -5,6 +5,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
 #import "OASharedRouteDetailsProvider.h"
 #import "OsmAndSharedWrapper.h"
@@ -54,6 +55,13 @@
     XCTAssertEqual(directions[0].afterLeftTime, 45);
     XCTAssertEqual(directions[1].afterLeftTime, 18);
     XCTAssertEqual(directions[2].afterLeftTime, 0);
+
+    OARouteCalculationResult *route = [[OARouteCalculationResult alloc] initWithErrorMessage:nil];
+    [route setValue:[directions mutableCopy] forKey:@"directions"];
+    [route setValue:[@[@450, @300, @125, @0] mutableCopy] forKey:@"listDistance"];
+    [route setValue:[@[[[CLLocation alloc] initWithLatitude:0 longitude:0]] mutableCopy]
+              forKey:@"locations"];
+    XCTAssertEqual([route getLeftTime:nil], 45);
 
     NSArray<OASRouteCumulativeInfo *> *cumulativeInfoByPosition =
         [OASharedRouteDetailsProvider getCumulativeInfoByPosition:directions];

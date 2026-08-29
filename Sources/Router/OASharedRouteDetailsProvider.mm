@@ -26,16 +26,6 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
     return result;
 }
 
-NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo *> *directions)
-{
-    NSMutableArray<OASRouteManeuver *> *result = [NSMutableArray arrayWithCapacity:directions.count];
-    for (OARouteDirectionInfo *direction in directions)
-    {
-        [result addObject:[OARouteCalculationResultSnapshotAdapter copyManeuver:direction]];
-    }
-    return result;
-}
-
 } // namespace
 
 @interface OALocationAccessor : NSObject <OASILocationAccessor>
@@ -70,6 +60,42 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
 - (double)getLongitudeIndex:(int32_t)index
 {
     return _locations[index].coordinate.longitude;
+}
+
+@end
+
+@interface OAManeuverAccessor : NSObject <OASIManeuverAccessor>
+
+- (instancetype)initWithDirections:(NSArray<OARouteDirectionInfo *> *)directions;
+
+@end
+
+@implementation OAManeuverAccessor
+{
+    NSArray<OARouteDirectionInfo *> *_directions;
+}
+
+- (instancetype)initWithDirections:(NSArray<OARouteDirectionInfo *> *)directions
+{
+    self = [super init];
+    if (self)
+        _directions = directions;
+    return self;
+}
+
+- (int32_t)getManeuversCount
+{
+    return (int32_t) _directions.count;
+}
+
+- (int32_t)getRoutePointOffsetIndex:(int32_t)index
+{
+    return _directions[index].routePointOffset;
+}
+
+- (float)getAverageSpeedMetersPerSecondIndex:(int32_t)index
+{
+    return _directions[index].averageSpeed;
 }
 
 @end
@@ -135,16 +161,15 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
                   distanceToFinishMeters:(NSArray<NSNumber *> *)distanceToFinishMeters
 {
     OASKotlinIntArray *sharedDistances = OACopySharedDistances(distanceToFinishMeters);
-    NSArray<OASRouteManeuver *> *updated = [OASRouteManeuverCalculator.shared
-        updateDistancesAndTimesManeuvers:OACopySharedManeuvers(directions)
+    OASRouteManeuverUpdate *update = [OASRouteManeuverCalculator.shared
+        calculateDistanceAndTimeUpdatesAccessor:
+            [[OAManeuverAccessor alloc] initWithDirections:directions]
         distanceToFinishMeters:sharedDistances];
-    NSUInteger count = MIN(directions.count, updated.count);
-    for (NSUInteger index = 0; index < count; index++)
+    for (NSUInteger index = 0; index < directions.count; index++)
     {
         OARouteDirectionInfo *direction = directions[index];
-        OASRouteManeuver *maneuver = updated[index];
-        direction.distance = maneuver.distanceMeters;
-        direction.afterLeftTime = maneuver.afterLeftTimeSeconds;
+        direction.distance = [update.distanceMeters getIndex:(int32_t) index];
+        direction.afterLeftTime = [update.afterLeftTimeSeconds getIndex:(int32_t) index];
     }
 }
 
@@ -160,39 +185,29 @@ NSArray<OASRouteManeuver *> *OACopySharedManeuvers(NSArray<OARouteDirectionInfo 
                                         directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
                                 intermediatePoints:(NSMutableArray<NSNumber *> *)intermediatePoints
 {
-    NSArray<OASRouteManeuver *> *originalManeuvers = OACopySharedManeuvers(directions);
+    if (intermediates.count == 0)
+        return;
+
     OASRouteIntermediateCalculation *calculation = [OASRouteManeuverCalculator.shared
         calculateIntermediateIndexesFromAccessorsRouteLocations:
             [[OALocationAccessor alloc] initWithLocations:locations]
-        maneuvers:originalManeuvers
+        maneuvers:[[OAManeuverAccessor alloc] initWithDirections:directions]
         intermediateLocations:[[OALocationAccessor alloc] initWithLocations:intermediates]];
-    NSMutableArray<OARouteDirectionInfo *> *updatedDirections =
-        [NSMutableArray arrayWithCapacity:calculation.maneuvers.count];
-    NSUInteger originalIndex = 0;
-    for (OASRouteManeuver *maneuver in calculation.maneuvers)
+    for (OASRouteIntermediateInsertion *insertion in calculation.insertions)
     {
-        if (originalIndex < originalManeuvers.count
-            && maneuver.routePointOffset == originalManeuvers[originalIndex].routePointOffset)
-        {
-            [updatedDirections addObject:directions[originalIndex]];
-            originalIndex++;
-        }
-        else
-        {
-            OARouteDirectionInfo *toSplit = directions[originalIndex];
-            OARouteDirectionInfo *direction = [[OARouteDirectionInfo alloc]
-                initWithAverageSpeed:maneuver.averageSpeedMetersPerSecond
-                turnType:TurnType::ptrStraight()];
-            direction.ref = maneuver.ref;
-            direction.streetName = maneuver.streetName;
-            direction.routeDataObject = toSplit.routeDataObject;
-            direction.destinationName = maneuver.destinationName;
-            direction.routePointOffset = maneuver.routePointOffset;
-            [direction setDescriptionRoute:OALocalizedString(@"route_head")];
-            [updatedDirections addObject:direction];
-        }
+        NSUInteger directionIndex = (NSUInteger) insertion.directionIndex;
+        OARouteDirectionInfo *toSplit = directions[directionIndex];
+        OARouteDirectionInfo *direction = [[OARouteDirectionInfo alloc]
+            initWithAverageSpeed:insertion.averageSpeedMetersPerSecond
+            turnType:TurnType::ptrStraight()];
+        direction.ref = toSplit.ref;
+        direction.streetName = toSplit.streetName;
+        direction.routeDataObject = toSplit.routeDataObject;
+        direction.destinationName = toSplit.destinationName;
+        direction.routePointOffset = insertion.routePointOffset;
+        [direction setDescriptionRoute:OALocalizedString(@"route_head")];
+        [directions insertObject:direction atIndex:directionIndex];
     }
-    [directions setArray:updatedDirections];
     OASKotlinIntArray *intermediateDirectionIndices = calculation.intermediateDirectionIndices;
     for (int32_t index = 0; index < intermediateDirectionIndices.size; index++)
         intermediatePoints[index] = @([intermediateDirectionIndices getIndex:index]);

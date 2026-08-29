@@ -28,7 +28,7 @@
 @property (nonatomic) float averageSpeed;
 
 // calculated vars
-// after action (excluding expectedTime)
+// time from this action to route finish, including expectedTime
 @property (nonatomic) long afterLeftTime;
 // distance after action (for i.e. after turn to next turn)
 @property (nonatomic) int distance;

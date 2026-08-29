@@ -542,14 +542,14 @@ private extension PlanRouteAnalyzeViewController {
     static let compactLegendMinimumContrastRatio: CGFloat = 1.5
     static let expandedLegendFadeDelay: TimeInterval = 0.08
     static let expandedLegendFadeDuration: TimeInterval = 0.17
-    static let steepnessAttributeName = "routeInfo_steepness"
-    static let roadClassAttributeName = "routeInfo_roadClass"
+    static let steepnessAttributeName = "steepness"
+    static let roadClassAttributeName = "roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
     static let routeAttributeNames = [
         roadClassAttributeName,
         steepnessAttributeName,
-        "routeInfo_surface",
-        "routeInfo_smoothness"
+        "surface",
+        "smoothness"
     ]
     static let minIncline = -101
     static let minDividedIncline = -20

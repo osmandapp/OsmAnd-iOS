@@ -633,10 +633,7 @@
     {
         OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
         int distanceToNextTurn = [self getListDistance:_currentRoute];
-        if (_currentDirectionInfo + 1 < _directions.count)
-        {
-            distanceToNextTurn -= [self getListDistance:_directions[_currentDirectionInfo + 1].routePointOffset];
-        }
+        distanceToNextTurn -= [self getListDistance:current.routePointOffset];
         CLLocation *l = _locations[_currentRoute];
         if (fromLoc)
         {

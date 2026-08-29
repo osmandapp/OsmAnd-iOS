@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             for (OASRouteStatisticElement *segment in stat.partition)
             {
                 NSString *propertyName = segment.userPropertyName;
-                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"]
+                NSString *title = [stat.name isEqualToString:@"steepness"]
                     && ![propertyName isEqualToString:kUndefinedAttr]
                     ? propertyName
                     : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", propertyName]);

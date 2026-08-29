@@ -25,6 +25,8 @@ FOUNDATION_EXPORT BOOL OARouteEventTypeEquals(OASRouteEventType *type, OASRouteE
 @property (nonatomic) int intValue;
 @property (nonatomic) float floatValue;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
+@property (nonatomic, copy, readonly) NSString *sourceTag;
+@property (nonatomic, copy, readonly) NSString *sourceValue;
 
 - (instancetype) initWithType:(OASRouteEventType *)type locationIndex:(int)locationIndex;
 

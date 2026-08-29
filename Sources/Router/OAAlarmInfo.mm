@@ -49,6 +49,13 @@ static int OALegacyAlarmTypeValue(OASRouteEventType *type)
     return 0;
 }
 
+@interface OAAlarmInfo ()
+
+@property (nonatomic, copy, readwrite) NSString *sourceTag;
+@property (nonatomic, copy, readwrite) NSString *sourceValue;
+
+@end
+
 @implementation OAAlarmInfo
 
 - (instancetype) init
@@ -85,11 +92,14 @@ static int OALegacyAlarmTypeValue(OASRouteEventType *type)
 {
     NSString *tag = [NSString stringWithUTF8String:ruleType.getTag().c_str()];
     NSString *value = [NSString stringWithUTF8String:ruleType.getValue().c_str()];
-    return [OASharedRouteDetailsProvider createAlarmInfoWithTag:tag
-                                                         value:value
-                                                 locationIndex:locInd
-                                                      latitude:coordinate.latitude
-                                                     longitude:coordinate.longitude];
+    OAAlarmInfo *alarm = [OASharedRouteDetailsProvider createAlarmInfoWithTag:tag
+                                                                        value:value
+                                                                locationIndex:locInd
+                                                                     latitude:coordinate.latitude
+                                                                    longitude:coordinate.longitude];
+    alarm.sourceTag = tag;
+    alarm.sourceValue = value;
+    return alarm;
 }
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance

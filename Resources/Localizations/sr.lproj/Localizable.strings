@@ -922,7 +922,7 @@
 "all_application_profiles" = "Сви профили апликације";
 "after_tapping_done" = "Након што додирнете Готово, избрисани профили ће бити потпуно изгубљени.";
 "empty_profile_name_warning" = "Име профила не може бити празно.";
-"preparing_file" = "Припрема датотеке";
+"preparing_file" = "Припремам датотеку";
 "profile_import_success" = "Профил апликације је успешно увезен";
 "profile_prefs_reset_successful" = "Све поставке налога враћене су на подразумевано.";
 "not_available_profile_name" = "Профил са овим именом већ постоји.";

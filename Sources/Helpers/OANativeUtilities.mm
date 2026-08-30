@@ -58,19 +58,12 @@
 
 - (std::tm) toTm
 {
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:self];
-    
-    struct tm res;
-    res.tm_year = (int) components.year - 1900;
-    res.tm_mon = (int) components.month - 1;
-    res.tm_mday = (int) components.day;
-    res.tm_hour = (int) components.hour;
-    res.tm_min = (int) components.minute;
-    res.tm_sec = (int) components.second;
-    std::mktime(&res);
-    
-    return res;
+    const time_t timestamp = static_cast<time_t>(self.timeIntervalSince1970);
+    std::tm result{};
+    if (::localtime_r(&timestamp, &result) == nullptr)
+        return std::tm{};
+
+    return result;
 }
 
 @end

@@ -9,40 +9,25 @@
 import UIKit
 
 enum CoordinateFormatHelper {
-    static let exampleLat = 50.43855
-    static let exampleLon = 30.50124
-    static let unavailablePlaceholder = "—"
+    private static let exampleLat = 50.43855
+    private static let exampleLon = 30.50124
+    private static let unavailablePlaceholder = "—"
     
-    private static let searchDebounce: TimeInterval = 0.25
-    private static var searchWorkItem: DispatchWorkItem?
+    private static let epsgNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        formatter.decimalSeparator = "."
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.usesGroupingSeparator = true
+        return formatter
+    }()
 
     static func resolve(_ ids: [String]) -> [CoordinateFormat] {
         ids.map { id in
             BuiltInCoordinateFormat.resolve(id) ?? EpsgCatalogRepository.shared.resolveFormat(id)
-        }
-    }
-
-    static func cancelSearch() {
-        searchWorkItem?.cancel()
-        searchWorkItem = nil
-    }
-    
-    static func search(_ query: String?, completion: @escaping ([CoordinateFormat]) -> Void) {
-        cancelSearch()
-        let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let work = DispatchWorkItem {
-            let results = trimmed.isEmpty
-                ? EpsgCatalogRepository.shared.listAll()
-                : EpsgCatalogRepository.shared.search(trimmed)
-            DispatchQueue.main.async {
-                completion(results)
-            }
-        }
-        searchWorkItem = work
-        if trimmed.isEmpty {
-            DispatchQueue.global(qos: .userInitiated).async(execute: work)
-        } else {
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + searchDebounce, execute: work)
         }
     }
     
@@ -88,14 +73,6 @@ enum CoordinateFormatHelper {
     }
 
     static func formatEpsgValue(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = " "
-        formatter.decimalSeparator = "."
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.usesGroupingSeparator = true
-        return formatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
+        epsgNumberFormatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
     }
 }

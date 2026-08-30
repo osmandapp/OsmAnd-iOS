@@ -15,6 +15,9 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     var onFormatAdded: ((String) -> Void)?
 
     private let searchController = UISearchController(searchResultsController: nil)
+    private let searchDebounce: TimeInterval = 0.25
+    private var searchWorkItem: DispatchWorkItem?
+    
     private var excludedIds: Set<String>
     private var searchQuery = ""
     private var searchResults: [CoordinateFormat] = []
@@ -214,18 +217,32 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
     }
-    
-    private func runCatalogSearch(_ query: String) {
-        CoordinateFormatHelper.search(query) { [weak self] results in
-            guard let self, self.isSearchActive, self.searchQuery == query else { return }
-            self.searchResults = results
-            self.generateData()
-            self.tableView.reloadData()
+
+    private func performSearch(_ query: String) {
+        searchWorkItem?.cancel()
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let work = DispatchWorkItem { [weak self] in
+            let results = trimmed.isEmpty
+                ? EpsgCatalogRepository.shared.listAll()
+                : EpsgCatalogRepository.shared.search(trimmed)
+            DispatchQueue.main.async {
+                guard let self else { return }
+                guard self.isSearchActive, self.searchQuery == query else { return }
+                self.searchResults = results
+                self.generateData()
+                self.tableView.reloadData()
+            }
+        }
+        searchWorkItem = work
+        if trimmed.isEmpty {
+            DispatchQueue.global(qos: .userInitiated).async(execute: work)
+        } else {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + searchDebounce, execute: work)
         }
     }
     
     deinit {
-        CoordinateFormatHelper.cancelSearch()
+        searchWorkItem?.cancel()
     }
 }
 
@@ -235,15 +252,9 @@ extension CoordinatesFormatAddViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         searchQuery = searchController.searchBar.text ?? ""
         if isSearching {
-            let query = searchQuery
-            CoordinateFormatHelper.search(query) { [weak self] results in
-                guard let self, self.searchQuery == query else { return }
-                self.searchResults = results
-                self.generateData()
-                self.tableView.reloadData()
-            }
+            performSearch(searchQuery)
         } else {
-            CoordinateFormatHelper.cancelSearch()
+            searchWorkItem?.cancel()
             searchResults = []
             generateData()
             tableView.reloadData()
@@ -257,13 +268,13 @@ extension CoordinatesFormatAddViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
         isSearchActive = true
         searchQuery = searchController.searchBar.text ?? ""
-        runCatalogSearch(searchQuery)
+        performSearch(searchQuery)
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
         isSearchActive = false
         searchQuery = ""
-        CoordinateFormatHelper.cancelSearch()
+        searchWorkItem?.cancel()
         searchResults = []
         generateData()
         tableView.reloadData()

@@ -25,7 +25,7 @@ final class FavoriteFolder {
     
     init(fullPath: String, parent: FavoriteFolder?) {
         self.fullPath = fullPath
-        self.name = fullPath.split(separator: "/", omittingEmptySubsequences: true).last.map(String.init) ?? ""
+        self.name = FavoriteFolderPath.lastSegment(fullPath)
         self.parent = parent
     }
     

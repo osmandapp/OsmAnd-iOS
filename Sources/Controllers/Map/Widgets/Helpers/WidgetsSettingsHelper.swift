@@ -28,11 +28,11 @@ class WidgetsSettingsHelper: NSObject {
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
-    func updateAppMode(_ appMode: OAApplicationMode) {
+    func setAppMode(_ appMode: OAApplicationMode) {
         self.appMode = appMode
     }
 
-    func updateLayoutMode(_ layoutMode: ScreenLayoutMode) {
+    func setLayoutMode(_ layoutMode: ScreenLayoutMode) {
         self.layoutMode = layoutMode
     }
 
@@ -187,10 +187,10 @@ class WidgetsSettingsHelper: NSObject {
                 }
             }
         }
-        panel.updateWidgetsOrder(pagedOrder: newPagedOrder,
-                                 appMode: appMode,
-                                 screenLayoutMode: layoutMode,
-                                 screenElementsMode: screenElementsMode)
+        panel.setWidgetsOrder(pagedOrder: newPagedOrder,
+                              appMode: appMode,
+                              screenLayoutMode: layoutMode,
+                              screenElementsMode: screenElementsMode)
     }
 
     func getWidgetsPagedOrder(fromAppMode: OAApplicationMode, panel: WidgetsPanel, filter: Int) -> [[String]] {

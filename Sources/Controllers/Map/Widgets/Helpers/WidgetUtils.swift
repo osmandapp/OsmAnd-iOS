@@ -27,7 +27,7 @@ final class WidgetUtils: NSObject {
                                         widgetRegistry: widgetRegistry,
                                         widgetParamsArray: widgetParamsArray)
         
-        panel.updateWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+        panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
     }
@@ -241,7 +241,7 @@ extension WidgetUtils {
             
             var flatOrder: [[String]] = []
             flatOrder.append([targetWidget.key])
-            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             
@@ -275,7 +275,7 @@ extension WidgetUtils {
                 orders[orders.count - 1] = lastPageOrder
             }
             widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
-            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     
@@ -311,7 +311,7 @@ extension WidgetUtils {
             
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
-            widgetsPanel.updateWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             var orders = sortedPagedOrder.map { $0.value }
@@ -343,7 +343,7 @@ extension WidgetUtils {
             orders[insertPage] = pageToAddWidget
             
             widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
-            widgetsPanel.updateWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         }
     }
     

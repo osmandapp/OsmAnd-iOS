@@ -156,15 +156,15 @@ class WidgetsPanel: NSObject, NSCopying {
         return (0, WidgetsPanel.DEFAULT_ORDER)
     }
 
-    func updateWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
+    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
         let preference = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
         preference.set(pagedOrder, mode: appMode)
     }
 
-    func updateWidgetsOrder(pagedOrder: [[String]],
-                            appMode: OAApplicationMode,
-                            screenLayoutMode: ScreenLayoutMode,
-                            screenElementsMode: ScreenElementsMode) {
+    func setWidgetsOrder(pagedOrder: [[String]],
+                         appMode: OAApplicationMode,
+                         screenLayoutMode: ScreenLayoutMode,
+                         screenElementsMode: ScreenElementsMode) {
         let preference = orderPreference(screenLayoutMode: screenLayoutMode,
                                          screenElementsMode: screenElementsMode,
                                          appMode: appMode)

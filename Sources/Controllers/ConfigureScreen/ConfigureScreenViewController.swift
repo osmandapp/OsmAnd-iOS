@@ -277,7 +277,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         settings.setApplicationModePref(appMode)
         self.appMode = appMode
-        widgetsSettingsHelper.updateAppMode(appMode)
+        widgetsSettingsHelper.setAppMode(appMode)
         updateScreenElementsMode()
         updateUIAnimated(nil)
     }
@@ -361,7 +361,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         guard let mode = ScreenLayoutMode(rawValue: Int32(segmentedControl.selectedSegmentIndex)),
               mode != screenLayoutMode else { return }
         screenLayoutMode = mode
-        widgetsSettingsHelper.updateLayoutMode(mode)
+        widgetsSettingsHelper.setLayoutMode(mode)
         reloadDataWith(animated: true, completion: nil)
     }
 }

@@ -139,6 +139,7 @@
                 <outlet property="connectStatusLabel" destination="yzi-QD-JYr" id="bY8-b0-oXv"/>
                 <outlet property="deviceImageView" destination="Hrb-Xg-1YT" id="cqL-AA-VRO"/>
                 <outlet property="deviceNameLabel" destination="sah-A4-PB2" id="tGO-oV-icR"/>
+                <outlet property="dividerBottomView" destination="Xg5-ru-81P" id="dvb-01-bot"/>
                 <outlet property="imageContainerView" destination="0uJ-Dc-WGi" id="ud8-k9-OK4"/>
                 <outlet property="signalIndicatorImageView" destination="0OA-N9-CDl" id="fvK-UD-R9f"/>
             </connections>

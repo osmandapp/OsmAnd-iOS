@@ -41,7 +41,9 @@ final class WidgetUtils: NSObject {
         let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.widgets(forPanel: appMode,
                                                                                         filterModes: Int(filter),
                                                                                         panels: [panel],
-                                                                                        screenLayoutMode: screenLayoutMode.rawValue)
+                                                                                        layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+                                                                                            ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                                            : nil)
         let widgetsToDelete: [MapWidgetInfo] = (currentWidgetInfos.array as! [MapWidgetInfo]).filter { !enabledWidgets.contains($0.key) }
         if !widgetsToDelete.isEmpty {
             let widgets: NSMutableOrderedSet = widgetRegistry.widgets(for: panel)
@@ -94,7 +96,9 @@ final class WidgetUtils: NSObject {
             let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
                                                      filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
                                                      panels: [panel],
-                                                     screenLayoutMode: screenLayoutMode.rawValue)?.array as? [MapWidgetInfo] ?? []
+                                                     layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+                                                         ? NSNumber(value: screenLayoutMode.rawValue)
+                                                         : nil)?.array as? [MapWidgetInfo] ?? []
             let currentWidgetIds = NSMutableArray(array: widgetInfos.map(\.key))
             var widgetParamsArrayLocal = widgetParamsArray
             for widgetInfoId in enabledWidgets {
@@ -216,7 +220,12 @@ extension WidgetUtils {
                                        screenLayoutMode: ScreenLayoutMode) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder: [Int: [String]] = [:]
-        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                    filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                    panels: [widgetsPanel],
+                                                    layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                        ? NSNumber(value: screenLayoutMode.rawValue)
+                                                        : nil)
         
         widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)
         
@@ -288,7 +297,12 @@ extension WidgetUtils {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         var pagedOrder = [Int: [String]]()
         
-        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode, filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels), panels: [widgetsPanel], screenLayoutMode: screenLayoutMode.rawValue)
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                    filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                    panels: [widgetsPanel],
+                                                    layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                        ? NSNumber(value: screenLayoutMode.rawValue)
+                                                        : nil)
         let sortedWidgets = (enabledWidgets!.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         
         widgetRegistry.widgets(for: targetWidget.widgetPanel).remove(targetWidget)

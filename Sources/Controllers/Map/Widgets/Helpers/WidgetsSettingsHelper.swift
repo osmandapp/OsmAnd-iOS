@@ -42,7 +42,9 @@ class WidgetsSettingsHelper: NSObject {
             let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
                                                         filterModes: Int(kWidgetModeMatchingPanels),
                                                         panels: WidgetsPanel.values,
-                                                        screenLayoutMode: layoutMode.rawValue)
+                                                        layoutMode: settings.useSeparateLayouts.get(appMode)
+                                                            ? NSNumber(value: layoutMode.rawValue)
+                                                            : nil)
             for widgetInfo in allWidgetInfos! {
                 widgetRegistry.enableDisableWidget(for: appMode,
                                                    widgetInfo: widgetInfo as? MapWidgetInfo,
@@ -202,7 +204,9 @@ class WidgetsSettingsHelper: NSObject {
         if let widgetInfos = widgetRegistry.widgets(forPanel: fromAppMode,
                                                     filterModes: filter,
                                                     panels: panels,
-                                                    screenLayoutMode: layoutMode.rawValue) {
+                                                    layoutMode: settings.useSeparateLayouts.get(appMode)
+                                                        ? NSNumber(value: layoutMode.rawValue)
+                                                        : nil) {
             for widgetInfo in widgetInfos {
                 guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
                 let widgetId = widgetInfo.key
@@ -279,7 +283,9 @@ class WidgetsSettingsHelper: NSObject {
             let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
                                                      filterModes: Int(kWidgetModeMatchingPanels),
                                                      panels: panels,
-                                                     screenLayoutMode: layoutMode.rawValue)
+                                                     layoutMode: settings.useSeparateLayouts.get(appMode)
+                                                         ? NSNumber(value: layoutMode.rawValue)
+                                                         : nil)
             for widgetInfo in widgetInfos! {
                 guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
                 if WidgetType.isOriginalWidget(widgetInfo.key)

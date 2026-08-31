@@ -268,9 +268,11 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         return widgetRegistry.widgets(forPanel: appMode,
-                                                 filterModes: filter,
-                                                 panels: [panel],
-                                                 screenLayoutMode: screenLayoutMode.rawValue).count
+                                      filterModes: filter,
+                                      panels: [panel],
+                                      layoutMode: screenElementsMode.usesSeparateLayouts
+                                                     ? NSNumber(value: screenLayoutMode.rawValue)
+                                                     : nil).count
     }
     
     // MARK: AppModeSelectionDelegate

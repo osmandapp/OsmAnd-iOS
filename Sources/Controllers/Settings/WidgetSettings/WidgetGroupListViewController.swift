@@ -54,13 +54,16 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
     
     func updateAvailableWidgets(_ section: OATableSectionData) {
-        
+        let settings = OAAppSettings.sharedManager()
+        let appMode = settings.applicationMode.get()
         let filter = Int(KWidgetModeAvailable | kWidgetModeDefault)
         
-        let availableWidgets = widgetRegistry.widgets(forPanel: OAAppSettings.sharedManager().applicationMode.get(),
-                                                                 filterModes: filter,
-                                                                 panels: [widgetPanel],
-                                                                 screenLayoutMode: screenLayoutMode.rawValue)!
+        let availableWidgets = widgetRegistry.widgets(forPanel: appMode,
+                                                      filterModes: filter,
+                                                      panels: [widgetPanel],
+                                                      layoutMode: settings.useSeparateLayouts.get(appMode)
+                                                                     ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                     : nil)!
         let hasAvailableWidgets = availableWidgets.count > 0
         
         if hasAvailableWidgets {
@@ -346,16 +349,20 @@ extension WidgetGroupListViewController {
             vc.selectedWidget = selectedWidget
             navigationController?.pushViewController(vc, animated: true)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
+            let settings = OAAppSettings.sharedManager()
+            let appMode = settings.applicationMode.get()
             guard let vc = WidgetConfigurationViewController(),
                   let widgetInfo = widgetRegistry.widgetInfo(for: widgetType,
-                                                             appMode: OAAppSettings.sharedManager().applicationMode.get(),
+                                                             appMode: appMode,
                                                              screenLayoutMode: screenLayoutMode.rawValue) else {
                 return
             }
-            if let enabledWidgets = widgetRegistry.widgets(forPanel: OAAppSettings.sharedManager().applicationMode.get(),
-                                                                      filterModes: Self.enabledWidgetsFilter,
-                                                                      panels: WidgetsPanel.values,
-                                                                      screenLayoutMode: screenLayoutMode.rawValue).array as? [MapWidgetInfo] {
+            if let enabledWidgets = widgetRegistry.widgets(forPanel: appMode,
+                                                           filterModes: Self.enabledWidgetsFilter,
+                                                           panels: WidgetsPanel.values,
+                                                           layoutMode: settings.useSeparateLayouts.get(appMode)
+                                                                          ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                          : nil).array as? [MapWidgetInfo] {
                 let similarAlreadyExist = enabledWidgets.contains { $0.key == widgetInfo.key }
                 let possibleSimilarWidgetArray = [WidgetType.averageSpeed.id]
                 if similarAlreadyExist, possibleSimilarWidgetArray.contains(widgetInfo.key) {

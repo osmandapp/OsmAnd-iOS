@@ -382,7 +382,8 @@
                                                     screenLayoutMode:(int)screenLayoutMode
 {
     MutableOrderedDictionary<NSNumber *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *widgetsByPages = [MutableOrderedDictionary dictionary];
-    for (OAMapWidgetInfo *widgetInfo in [self widgetsForPanel:appMode filterModes:filterModes panels:@[panel] screenLayoutMode:screenLayoutMode])
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
+    for (OAMapWidgetInfo *widgetInfo in [self widgetsForPanel:appMode filterModes:filterModes panels:@[panel] layoutMode:layoutMode])
     {
         NSInteger page = widgetInfo.pageIndex;
         NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPage = widgetsByPages[@(page)];
@@ -400,17 +401,7 @@
                                                 filterModes:(NSInteger) filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
 {
-    return [self widgetsForPanel:appMode
-                    filterModes:filterModes
-                         panels:panels
-               screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:appMode]];
-}
-
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
-                                                filterModes:(NSInteger)filterModes
-                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
-                                           screenLayoutMode:(int)screenLayoutMode
-{
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
     NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
     return [self widgetsForPanel:appMode
                     filterModes:filterModes

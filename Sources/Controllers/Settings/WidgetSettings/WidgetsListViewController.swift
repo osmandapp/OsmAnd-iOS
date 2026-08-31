@@ -571,7 +571,9 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
-                                                               screenLayoutMode: screenLayoutMode.rawValue)!
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         let noEnabledWidgets = enabledWidgets.count == 0
         if noEnabledWidgets && !editMode {
             var iconName = "ic_custom_screen_side_left_48"
@@ -734,7 +736,9 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
-                                                               screenLayoutMode: screenLayoutMode.rawValue)!
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         return editMode || enabledWidgets.count > 0 ? localizedString("add_widget") : ""
     }
     
@@ -742,7 +746,9 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel],
-                                                               screenLayoutMode: screenLayoutMode.rawValue)!
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     

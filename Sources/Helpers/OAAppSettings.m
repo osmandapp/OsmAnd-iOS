@@ -5860,6 +5860,24 @@ static NSString *kOfflineKey = @"OFFLINE";
         return basePreference;
 
     NSString *layoutPrefix = [ScreenLayoutModeWrapper keyFor:screenLayoutMode];
+    return [self layoutPreference:basePreference preferenceKey:preferenceKey layoutPrefix:layoutPrefix];
+}
+
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                          preferenceKey:(NSString *)preferenceKey
+                        screenLayoutMode:(NSNumber *)screenLayoutMode
+{
+    if (screenLayoutMode == nil)
+        return basePreference;
+
+    NSString *layoutPrefix = [ScreenLayoutModeWrapper keyForNumber:screenLayoutMode.intValue];
+    return [self layoutPreference:basePreference preferenceKey:preferenceKey layoutPrefix:layoutPrefix];
+}
+
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                           preferenceKey:(NSString *)preferenceKey
+                            layoutPrefix:(NSString *)layoutPrefix
+{
     NSString *key = [NSString stringWithFormat:@"%@_%@", layoutPrefix, preferenceKey];
     @synchronized(_profilePreferences)
     {
@@ -7178,10 +7196,18 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [[self transparentWidgetsForAppMode:appMode] get:appMode];
 }
 
+// todo
+- (OACommonString *)mapInfoControls:(NSNumber *)screenLayoutMode
+{
+    return (OACommonString *)[self layoutPreference:_mapInfoControls
+                                      preferenceKey:mapInfoControlsLayoutKey
+                                   screenLayoutMode:screenLayoutMode];
+}
+
 - (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
 {
     return (OACommonString *)[self layoutPreference:_mapInfoControls
-                                     preferenceKey:mapInfoControlsLayoutKey
+                                      preferenceKey:mapInfoControlsLayoutKey
                                    screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
                                  screenElementsMode:(ScreenElementsMode)screenElementsMode];
 }

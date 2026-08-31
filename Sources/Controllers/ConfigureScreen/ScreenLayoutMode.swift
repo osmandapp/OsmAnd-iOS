@@ -48,6 +48,10 @@ final class ScreenLayoutModeWrapper: NSObject {
         mode.key
     }
 
+    static func key(forNumber number: Int32) -> String {
+        ScreenLayoutMode(rawValue: number)?.key ?? ""
+    }
+
     static func allValues() -> [NSNumber] {
         ScreenLayoutMode.allCases.map { NSNumber(value: $0.rawValue) }
     }

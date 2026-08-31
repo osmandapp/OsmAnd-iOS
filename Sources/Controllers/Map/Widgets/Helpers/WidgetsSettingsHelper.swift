@@ -143,6 +143,11 @@ class WidgetsSettingsHelper: NSObject {
         var newPagedOrder = [[String]]()
         let defaultWidgetInfos = defaultWidgetInfos(panel: panel,
                                                     screenElementsMode: screenElementsMode)
+        let visibilityLayoutMode = screenElementsMode == .independent // todo
+            ? NSNumber(value: layoutMode.rawValue)
+            : nil
+        let widgetsVisibility = MapWidgetInfo.widgetsVisibility(appMode,
+                                                                screenLayoutMode: visibilityLayoutMode)
 
         if let widgetInfosToCopy = widgetRegistry.widgets(forPanel: fromAppMode,
                                                           filterModes: Int(filter),
@@ -164,7 +169,7 @@ class WidgetsSettingsHelper: NSObject {
                 if let defaultWidgetInfo = defaultWidgetInfo {
                     let widgetIdToAdd: String
                     let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode,
-                                                                          screenElementsMode: screenElementsMode)
+                                                                          widgetsVisibility: widgetsVisibility)
                     let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
                     if duplicateNotPossible || (disabled && !inAnotherPanel) {
                         enableDisableWidget(defaultWidgetInfo,
@@ -342,9 +347,12 @@ class WidgetsSettingsHelper: NSObject {
                                                enabled: enabled,
                                                recreateControls: false)
         } else {
-            widgetInfo.enableDisable(appMode: appMode,
-                                     enabled: enabled,
-                                     screenElementsMode: screenElementsMode)
+            let visibilityLayoutMode = screenElementsMode == .independent // todo
+                ? NSNumber(value: layoutMode.rawValue)
+                : nil
+            widgetInfo.enableDisableForMode(appMode,
+                                            enabled: enabled,
+                                            screenLayoutMode: visibilityLayoutMode)
         }
     }
 

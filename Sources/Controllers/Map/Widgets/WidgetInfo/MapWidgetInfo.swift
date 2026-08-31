@@ -15,6 +15,19 @@ class MapWidgetInfo: NSObject, Comparable {
     static let DELIMITER = "__"
     static let INVALID_ID = 0
     
+    static func widgetsVisibility(_ appMode: OAApplicationMode,
+                                  screenLayoutMode: NSNumber?) -> [String] {
+        let widgetsVisibilityString = visibilityPreference(screenLayoutMode).get(appMode)
+        guard !widgetsVisibilityString.isEmpty else {
+            return []
+        }
+        return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR).filter { !$0.isEmpty }
+    }
+
+    private static func visibilityPreference(_ screenLayoutMode: NSNumber?) -> OACommonString {
+        OAAppSettings.sharedManager().mapInfoControls(screenLayoutMode)
+    }
+
     let key: String
     let widget: OABaseWidgetView
     let appMode: OAApplicationMode
@@ -223,12 +236,19 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
-        return isEnabledForAppMode(appMode, screenElementsMode: screenElementsMode)
+        let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? NSNumber(value: self.screenLayoutMode.rawValue)
+            : nil
+        return isEnabledForAppMode(appMode, screenLayoutMode: screenLayoutMode)
     }
 
-    func isEnabledForAppMode(_ appMode: OAApplicationMode, screenElementsMode: ScreenElementsMode) -> Bool {
-        let widgetsVisibility = widgetsVisibility(appMode, screenElementsMode: screenElementsMode)
+    func isEnabledForAppMode(_ appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Bool {
+        isEnabledForAppMode(appMode,
+                            widgetsVisibility: Self.widgetsVisibility(appMode,
+                                                                      screenLayoutMode: screenLayoutMode))
+    }
+
+    func isEnabledForAppMode(_ appMode: OAApplicationMode, widgetsVisibility: [String]) -> Bool {
         if widgetsVisibility.contains(key) || widgetsVisibility.contains(COLLAPSED_PREFIX + key) {
             return true
         } else if widgetsVisibility.contains(HIDE_PREFIX + key) {
@@ -249,17 +269,21 @@ class MapWidgetInfo: NSObject, Comparable {
         return widget.handleRowSelected(item, viewController: viewController)
     }
     
-    func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
-        enableDisable(appMode: appMode, enabled: enabled, screenElementsMode: screenElementsMode)
+    func enableDisableForMode(_ appMode: OAApplicationMode, enabled: NSNumber?) {
+        let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? NSNumber(value: self.screenLayoutMode.rawValue)
+            : nil
+        enableDisableForMode(appMode, enabled: enabled, screenLayoutMode: screenLayoutMode)
     }
 
-    func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?, screenElementsMode: ScreenElementsMode) {
-        var widgetsVisibility = widgetsVisibility(appMode, screenElementsMode: screenElementsMode)
+    func enableDisableForMode(_ appMode: OAApplicationMode,
+                              enabled: NSNumber?,
+                              screenLayoutMode: NSNumber?) {
+        var widgetsVisibility = Self.widgetsVisibility(appMode,
+                                                       screenLayoutMode: screenLayoutMode)
         widgetsVisibility.removeAll(where: { $0 == key })
-        widgetsVisibility.removeAll(where: { $0 == COLLAPSED_PREFIX + key })
         widgetsVisibility.removeAll(where: { $0 == HIDE_PREFIX + key })
-        widgetsVisibility.removeAll(where: { $0 == "" })
+        widgetsVisibility.removeAll(where: { $0 == COLLAPSED_PREFIX + key })
 
         if let enabled, (!isCustomWidget() || enabled.boolValue) {
             widgetsVisibility.append(enabled.boolValue ? key : HIDE_PREFIX + key)
@@ -269,26 +293,13 @@ class MapWidgetInfo: NSObject, Comparable {
         for visibility in widgetsVisibility {
             newVisibilityString.append(visibility + SETTINGS_SEPARATOR)
         }
-        if !newVisibilityString.isEmpty {
-            newVisibilityString.removeLast()
-        }
 
-        visibilityPreference(screenElementsMode).set(newVisibilityString, mode: appMode)
+        Self.visibilityPreference(screenLayoutMode).set(newVisibilityString, mode: appMode)
 
-        if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode), (enabled == nil || !enabled!.boolValue) {
+        if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode),
+           enabled == nil || enabled?.boolValue == false {
             settingsPref.resetMode(toDefault: appMode)
         }
-    }
-    
-    private func widgetsVisibility(_ appMode: OAApplicationMode, screenElementsMode: ScreenElementsMode) -> [String] {
-        let widgetsVisibilityString = visibilityPreference(screenElementsMode).get(appMode)
-        return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
-    }
-    
-    private func visibilityPreference(_ screenElementsMode: ScreenElementsMode) -> OACommonString {
-        let settings = OAAppSettings.sharedManager()
-        return settings.mapInfoControls(screenLayoutMode.rawValue,
-                                        screenElementsMode: screenElementsMode.rawValue)
     }
 
     override func isEqual(_ obj: Any?) -> Bool {

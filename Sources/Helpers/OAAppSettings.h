@@ -1255,6 +1255,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 - (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode;
 - (BOOL)isTransparentWidgets;
+- (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode; // todo
 - (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 - (OACommonStringList *)customWidgetKeys:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 - (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel

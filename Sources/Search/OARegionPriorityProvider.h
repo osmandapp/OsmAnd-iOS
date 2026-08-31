@@ -18,5 +18,6 @@
 - (NSArray<NSString *> *)getOfflineIndexes;
 - (NSArray<NSString *> *)getOfflineIndexesWithMinRadius:(int)minRadius maxRadius:(int)maxRadius;
 - (int)getRegionWeight:(NSString *)resourceId;
+- (void)checkAndUpdate:(OASearchPhrase *)phrase;
 
 @end

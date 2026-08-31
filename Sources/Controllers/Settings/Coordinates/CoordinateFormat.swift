@@ -36,4 +36,49 @@ struct CoordinateFormat {
             isResolved: true
         )
     }
+    
+    static func epsg(code: Int, title: String?, subtitle: String?, isDeprecated: Bool) -> CoordinateFormat {
+        let titleValue: String
+        if let title, title.isEmpty == false {
+            titleValue = title
+        } else {
+            titleValue = "EPSG:\(code)"
+        }
+        return CoordinateFormat(
+            id: CoordinateFormatIds.epsg(code),
+            type: .epsg,
+            title: titleValue,
+            subtitle: subtitle,
+            epsgCode: code,
+            legacyFormat: nil,
+            isDeprecated: isDeprecated,
+            isResolved: true
+        )
+    }
+
+    static func unresolvedEpsg(code: Int) -> CoordinateFormat {
+        CoordinateFormat(
+            id: CoordinateFormatIds.epsg(code),
+            type: .epsg,
+            title: "EPSG:\(code)",
+            subtitle: nil,
+            epsgCode: code,
+            legacyFormat: nil,
+            isDeprecated: false,
+            isResolved: false
+        )
+    }
+
+    static func unknown(id: String) -> CoordinateFormat {
+        CoordinateFormat(
+            id: id,
+            type: .unknown,
+            title: id,
+            subtitle: nil,
+            epsgCode: nil,
+            legacyFormat: nil,
+            isDeprecated: false,
+            isResolved: false
+        )
+    }
 }

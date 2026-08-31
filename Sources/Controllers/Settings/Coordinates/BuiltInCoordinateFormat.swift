@@ -15,6 +15,9 @@ enum BuiltInCoordinateFormat: CaseIterable {
     case utm
     case olc
     case mgrs
+    case swissGrid
+    case swissGridPlus
+    case maidenhead
 
     var id: String {
         switch self {
@@ -24,6 +27,9 @@ enum BuiltInCoordinateFormat: CaseIterable {
         case .utm: return CoordinateFormatIds.builtinUtm
         case .olc: return CoordinateFormatIds.builtinOlc
         case .mgrs: return CoordinateFormatIds.builtinMgrs
+        case .swissGrid: return CoordinateFormatIds.builtinSwissGrid
+        case .swissGridPlus: return CoordinateFormatIds.builtinSwissGridPlus
+        case .maidenhead: return CoordinateFormatIds.builtinMaidenhead
         }
     }
 
@@ -35,6 +41,9 @@ enum BuiltInCoordinateFormat: CaseIterable {
         case .utm: return Int(FORMAT_UTM)
         case .olc: return Int(FORMAT_OLC)
         case .mgrs: return Int(FORMAT_MGRS)
+        case .swissGrid: return Int(SWISS_GRID_FORMAT)
+        case .swissGridPlus: return Int(SWISS_GRID_PLUS_FORMAT)
+        case .maidenhead: return Int(MAIDENHEAD_FORMAT)
         }
     }
 
@@ -46,6 +55,9 @@ enum BuiltInCoordinateFormat: CaseIterable {
         case .utm: return localizedString("navigate_point_format_UTM")
         case .olc: return localizedString("navigate_point_olc")
         case .mgrs: return localizedString("navigate_point_mgrs")
+        case .swissGrid: return localizedString("navigate_point_format_swiss_grid")
+        case .swissGridPlus: return localizedString("navigate_point_format_swiss_grid_plus")
+        case .maidenhead: return localizedString("navigate_point_format_maidenhead")
         }
     }
 

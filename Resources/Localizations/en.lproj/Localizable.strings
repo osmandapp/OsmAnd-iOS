@@ -5039,3 +5039,10 @@
 "coordinate_format_cancel_changes_title" = "Discard changes?";
 "coordinate_format_cancel_changes_message" = "Your changes to preferred formats will not be saved.";
 "coordinate_format_last_item_warning" = "At least one coordinate format is required.";
+"coordinate_format_add_title" = "Add format";
+"coordinate_format_add_search_hint" = "Search EPSG code or format name";
+"coordinate_format_add_empty_title" = "Looking for a specific format?";
+"coordinate_format_add_empty_body" = "Search a database of over 5,000 local and national EPSG codes by country, name, or ID.";
+"navigate_point_format_swiss_grid" = "Swiss Grid (CH1903)";
+"navigate_point_format_swiss_grid_plus" = "Swiss Grid (CH1903+)";
+"navigate_point_format_maidenhead" = "Maidenhead";

@@ -43,8 +43,6 @@ static const NSInteger MAP_GEO_FORMAT_SECONDS = 2;
 static const NSInteger MAP_GEO_UTM_FORMAT = 3;
 static const NSInteger MAP_GEO_OLC_FORMAT = 4;
 static const NSInteger MAP_GEO_MGRS_FORMAT = 5;
-static const NSInteger SWISS_GRID_FORMAT = 6;
-static const NSInteger SWISS_GRID_PLUS_FORMAT = 7;
 
 static const NSInteger ROTATE_MAP_NONE = 0;
 static const NSInteger ROTATE_MAP_BEARING = 1;

@@ -64,8 +64,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let image = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
-        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
+        let button = UIBarButtonItem(image: .icCheckmarkDefault, style: .done, target: self, action: #selector(onRightNavbarButtonPressed))
         button.accessibilityLabel = localizedString("shared_string_apply")
         button.isEnabled = isEditChanged
         applyButton = button
@@ -282,6 +281,19 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
     }
 
     @objc private func onAddAction() {
-        // Add format screen is not implemented yet.
+        let vc = CoordinatesFormatAddViewController(appMode: appMode, excludedIds: editableIds)
+        vc.onFormatAdded = { [weak self] id in
+            self?.appendToDraft(id)
+        }
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: true)
+    }
+
+    private func appendToDraft(_ id: String) {
+        guard let normalized = CoordinateFormatIds.normalize(id),
+              !editableIds.contains(normalized) else { return }
+        editableIds.append(normalized)
+        reloadDraft(animated: true)
     }
 }

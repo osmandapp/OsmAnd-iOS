@@ -121,6 +121,7 @@
 #import "OAFavoritePointBridgeItem.h"
 #import "OATrackPreviewMapRenderer.h"
 #import "OARoutingParamsDeepLinkBridge.h"
+#import "OAEpsgCoordinateTransformer.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

@@ -210,7 +210,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = localizedString("coordinate_format_add_search_hint")
         navigationItem.searchController = searchController
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         navigationItem.hidesSearchBarWhenScrolling = false

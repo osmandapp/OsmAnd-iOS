@@ -1218,14 +1218,14 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self onRowSelected:indexPath];
-
     if (!self.tableView.allowsMultipleSelectionDuringEditing)
     {
-        UITableViewCell *row = [self getRow:indexPath];
+        UITableViewCell *row = [tableView cellForRowAtIndexPath:indexPath];
         if (row && row.selectionStyle != UITableViewCellSelectionStyleNone)
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    
+    [self onRowSelected:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath

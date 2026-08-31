@@ -149,6 +149,17 @@ typedef enum
 
 @property (strong, nonatomic) OARouteInfoView* routeInfoView;
 
+- (void)enqueueContextMenuPresentation:(void (^)(void))presentation;
+- (void)processPendingContextMenuPresentation;
+- (void)presentContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
+                     selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects
+                    touchPointLatLon:(nullable CLLocation *)touchPointLatLon;
+- (void)presentContextMenu:(OATargetPoint *)targetPoint selectedObject:(nullable SelectedMapObject *)selectedObject;
+- (void)presentContextMenu:(OATargetPoint *)targetPoint
+                 saveState:(BOOL)saveState
+             preferredZoom:(float)preferredZoom
+            selectedObject:(nullable SelectedMapObject *)selectedObject;
+
 @end
 
 @implementation OAMapPanelViewController
@@ -200,6 +211,8 @@ typedef enum
     BOOL _isNewContextMenuStillEnabled;
 
     MBProgressHUD *_gpxProgress;
+    BOOL _contextMenuTransitionInProgress;
+    void (^_pendingContextMenuPresentation)(void);
 }
 
 - (instancetype) init
@@ -1411,9 +1424,16 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
-    if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
-        [_scrollableHudViewController forceHide];
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenuWithPoints:targetPoints selectedObjects:selectedObjects touchPointLatLon:touchPointLatLon];
+    }];
+}
 
+- (void)presentContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
+{
     if (self.isNewContextMenuDisabled)
         return;
 
@@ -1451,11 +1471,11 @@ typedef enum
     }
     if (selectedObjects.count == 1)
     {
-        [self showContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
+        [self presentContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
+        [self presentContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
     }
     else
     {
@@ -1489,14 +1509,16 @@ typedef enum
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
 {
-    [self showContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+    }];
 }
 
-- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
+- (void)presentContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
 {
-    if (_activeTargetType == OATargetGPX)
-        [self hideScrollableHudViewController];
-
     if (self.isNewContextMenuDisabled)
         return;
 
@@ -1638,6 +1660,16 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
 {
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenu:targetPoint selectedObject:selectedObject];
+    }];
+}
+
+- (void)presentContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
+{
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
@@ -1682,7 +1714,7 @@ typedef enum
     }
     else
     {
-        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
+        [self presentContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
     }
 }
 
@@ -2791,9 +2823,6 @@ typedef enum
             }
         }
         
-        if (onComplete)
-            onComplete();
-
         if (_prevScrollableHudViewController)
         {
             [self showScrollableHudViewController:_prevScrollableHudViewController];
@@ -2803,6 +2832,9 @@ typedef enum
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
+
+        if (onComplete)
+            onComplete();
     }];
     
     [_hudViewController updateControlsLayout:YES];
@@ -3136,17 +3168,78 @@ typedef enum
                         state:(OATrackMenuViewControllerState *)state
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        if (!state.openedFromTrackMenu)
+            state.navControllerHistory = nil;
+
+        [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
+    }];
+}
+
+- (void)enqueueContextMenuPresentation:(void (^)(void))presentation
+{
+    _pendingContextMenuPresentation = [presentation copy];
+    [self processPendingContextMenuPresentation];
+}
+
+- (void)processPendingContextMenuPresentation
+{
+    if (_contextMenuTransitionInProgress || !_pendingContextMenuPresentation)
+        return;
+
     if (_scrollableHudViewController)
     {
-        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            if (!state.openedFromTrackMenu)
-                state.navControllerHistory = nil;
+        _contextMenuTransitionInProgress = YES;
+        __weak __typeof(self) weakSelf = self;
+        [_scrollableHudViewController forceHideWithCompletion:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
 
-            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
+            strongSelf->_contextMenuTransitionInProgress = NO;
+            [strongSelf processPendingContextMenuPresentation];
         }];
         return;
     }
-    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
+
+    if (self.targetMultiMenuView.superview)
+    {
+        _contextMenuTransitionInProgress = YES;
+        __weak __typeof(self) weakSelf = self;
+        [self.targetMultiMenuView hide:YES duration:0.2 onComplete:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+
+            strongSelf->_contextMenuTransitionInProgress = NO;
+            [strongSelf processPendingContextMenuPresentation];
+        }];
+        return;
+    }
+
+    if (self.targetMenuView.superview)
+    {
+        _contextMenuTransitionInProgress = YES;
+        __weak __typeof(self) weakSelf = self;
+        [self hideTargetPointMenu:0.2 onComplete:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+
+            strongSelf->_contextMenuTransitionInProgress = NO;
+            [strongSelf processPendingContextMenuPresentation];
+        }];
+        return;
+    }
+
+    void (^presentation)(void) = _pendingContextMenuPresentation;
+    _pendingContextMenuPresentation = nil;
+    presentation();
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
@@ -3158,8 +3251,7 @@ typedef enum
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 
-    [self hideMultiMenuIfNeeded];
-    [self hideTargetPointMenu];
+    [_mapViewController hidePolygonHighlight];
     
     if (_dashboard)
         [self closeDashboard];

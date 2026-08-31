@@ -11,14 +11,9 @@ import Foundation
 @objc(OAWidgetsSettingsHelper)
 @objcMembers
 class WidgetsSettingsHelper: NSObject {
-
-    var isApplyingSettings: Bool {
-        applyingSettingsCount > 0
-    }
     
     private let widgetRegistry: OAMapWidgetRegistry
     private let widgetsFactory: MapWidgetsFactory
-    private var applyingSettingsCount = 0
     private var appMode: OAApplicationMode
     private var layoutMode: ScreenLayoutMode
     private let settings: OAAppSettings
@@ -42,8 +37,6 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func resetConfigureScreenSettings() {
-        applyingSettingsCount += 1
-        defer { applyingSettingsCount -= 1 }
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
             let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
@@ -84,8 +77,6 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
-        applyingSettingsCount += 1
-        defer { applyingSettingsCount -= 1 }
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
             ScreenElementsMode.allCases.forEach {
@@ -121,8 +112,6 @@ class WidgetsSettingsHelper: NSObject {
                              fromLayoutMode: ScreenLayoutMode? = nil,
                              panel: WidgetsPanel,
                              widgetParams: [String: Any]? = nil) {
-        applyingSettingsCount += 1
-        defer { applyingSettingsCount -= 1 }
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
             copyWidgetsForPanel(fromAppMode: fromAppMode,
@@ -281,8 +270,6 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func resetWidgetsForPanel(panel: WidgetsPanel) {
-        applyingSettingsCount += 1
-        defer { applyingSettingsCount -= 1 }
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             let panels = [panel]
             let widgetInfos = widgetRegistry.widgets(forPanel: appMode,

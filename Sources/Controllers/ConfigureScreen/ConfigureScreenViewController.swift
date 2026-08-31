@@ -34,6 +34,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                                                   layoutMode: screenLayoutMode)
     private var screenLayoutMode: ScreenLayoutMode = .portrait
     private var screenElementsMode: ScreenElementsMode = .defaultMode
+    private var isUpdatingSettings = false
 
     private var isSharedLandscapeLayout: Bool {
         screenLayoutMode == .landscape && screenElementsMode == .shared
@@ -322,8 +323,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let self else { return }
-            widgetsSettingsHelper.resetConfigureScreenSettings()
-            applyConfigureScreenSettings()
+            self.performSettingsUpdate {
+                self.widgetsSettingsHelper.resetConfigureScreenSettings()
+                self.applyConfigureScreenSettings()
+            }
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         actionSheet.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
@@ -334,6 +337,12 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         updateScreenElementsMode()
         OARootViewController.instance().mapPanel.recreateAllControls()
         reloadDataWith(animated: true, completion: nil)
+    }
+
+    private func performSettingsUpdate(_ update: () -> Void) {
+        isUpdatingSettings = true
+        defer { isUpdatingSettings = false }
+        update()
     }
 
     private func updateScreenElementsMode() {
@@ -509,7 +518,7 @@ extension ConfigureScreenViewController {
     // MARK: WidgetStateDelegate
 
     @objc func onWidgetStateChanged() {
-        guard !widgetsSettingsHelper.isApplyingSettings,
+        guard !isUpdatingSettings,
               navigationController == nil || navigationController?.topViewController === self else {
             return
         }
@@ -542,8 +551,10 @@ extension ConfigureScreenViewController: OACopyProfileBottomSheetDelegate {
 
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        widgetsSettingsHelper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
-                                                          widgetParams: ["selectedAppMode": appMode])
-        applyConfigureScreenSettings()
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
+                                                                   widgetParams: ["selectedAppMode": appMode])
+            self.applyConfigureScreenSettings()
+        }
     }
 }

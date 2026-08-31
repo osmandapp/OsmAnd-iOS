@@ -56,6 +56,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode,
                                                                    layoutMode: screenLayoutMode)
+    private var isUpdatingSettings = false
     
     // MARK: - Initialization
     
@@ -187,12 +188,20 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
 
     private func copyWidgets(from sourceScreenLayoutMode: ScreenLayoutMode) {
-        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: selectedAppMode,
-                                                  fromLayoutMode: sourceScreenLayoutMode,
-                                                  panel: widgetPanel,
-                                                  widgetParams: ["selectedAppMode": selectedAppMode])
-        OARootViewController.instance().mapPanel.recreateAllControls()
-        updateUIAnimated(nil)
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: self.selectedAppMode,
+                                                           fromLayoutMode: sourceScreenLayoutMode,
+                                                           panel: self.widgetPanel,
+                                                           widgetParams: ["selectedAppMode": self.selectedAppMode])
+            OARootViewController.instance().mapPanel.recreateAllControls()
+            self.updateUIAnimated(nil)
+        }
+    }
+
+    private func performSettingsUpdate(_ update: () -> Void) {
+        isUpdatingSettings = true
+        defer { isUpdatingSettings = false }
+        update()
     }
     
     func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
@@ -245,7 +254,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onWidgetStateChanged() {
-        if !editMode && !widgetsSettingsHelper.isApplyingSettings {
+        if !editMode && !isUpdatingSettings {
             updateUIAnimated(nil)
         }
     }
@@ -679,9 +688,11 @@ extension WidgetsListViewController {
                                                     preferredStyle: .actionSheet)
                 actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                     guard let self else { return }
-                    self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
-                    OARootViewController.instance().mapPanel.recreateAllControls()
-                    self.updateUIAnimated(nil)
+                    self.performSettingsUpdate {
+                        self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
+                        OARootViewController.instance().mapPanel.recreateAllControls()
+                        self.updateUIAnimated(nil)
+                    }
                 })
                 actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
                 if let popoverController = actionSheet.popoverPresentationController {
@@ -778,9 +789,11 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
     }
     
     func onCopyProfile(_ fromAppMode: OAApplicationMode!) {
-        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: widgetPanel)
-        OARootViewController.instance().mapPanel.recreateAllControls()
-        updateUIAnimated(nil)
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: self.widgetPanel)
+            OARootViewController.instance().mapPanel.recreateAllControls()
+            self.updateUIAnimated(nil)
+        }
     }
 }
 

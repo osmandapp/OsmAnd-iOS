@@ -232,6 +232,14 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func getUpdatedPanel() -> WidgetsPanel {
+        let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? NSNumber(value: self.screenLayoutMode.rawValue)
+            : nil
+        return getUpdatedPanel(appMode, screenLayoutMode: screenLayoutMode)
+    }
+
+    func getUpdatedPanel(_ appMode: OAApplicationMode,
+                         screenLayoutMode: NSNumber?) -> WidgetsPanel {
         fatalError("Subclass must override")
     }
     

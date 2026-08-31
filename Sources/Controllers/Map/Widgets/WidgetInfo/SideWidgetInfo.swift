@@ -35,18 +35,32 @@ class SideWidgetInfo: MapWidgetInfo {
         return externalProviderPackage
     }
     
-    override func getUpdatedPanel() -> WidgetsPanel {
+    override func getUpdatedPanel(_ appMode: OAApplicationMode,
+                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
         let widgetType = widgetType()
+        let layoutMode = screenLayoutMode.flatMap { ScreenLayoutMode(rawValue: $0.int32Value) } ?? self.screenLayoutMode
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: screenLayoutMode != nil) // todo
         if let widgetType {
-            if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode) {
+            if widgetType.defaultPanel == .leftPanel,
+               WidgetsPanel.rightPanel.contains(widgetId: key,
+                                                appMode: appMode,
+                                                screenLayoutMode: layoutMode,
+                                                screenElementsMode: screenElementsMode) {
                 widgetPanel = .rightPanel
-            } else if widgetType.defaultPanel == .rightPanel, WidgetsPanel.leftPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode) {
+            } else if widgetType.defaultPanel == .rightPanel,
+                      WidgetsPanel.leftPanel.contains(widgetId: key,
+                                                      appMode: appMode,
+                                                      screenLayoutMode: layoutMode,
+                                                      screenElementsMode: screenElementsMode) {
                 widgetPanel = .leftPanel
             } else {
                 widgetPanel = widgetType.defaultPanel
             }
         } else {
-            widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key, appMode: appMode, screenLayoutMode: screenLayoutMode) ? .leftPanel : .rightPanel
+            widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key,
+                                                          appMode: appMode,
+                                                          screenLayoutMode: layoutMode,
+                                                          screenElementsMode: screenElementsMode) ? .leftPanel : .rightPanel
         }
         
         return widgetPanel

@@ -319,14 +319,28 @@
 - (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
                                  screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
 {
-    BOOL useSeparateLayouts = [_settings.useSeparateLayouts get:appMode];
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
+    return [self widgetsForAppMode:appMode layoutMode:layoutMode];
+}
+
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                       layoutMode:(NSNumber *)layoutMode
+{
+    BOOL useSeparateLayouts = layoutMode != nil;
+    ScreenLayoutMode screenLayoutMode = useSeparateLayouts
+        ? (ScreenLayoutMode)layoutMode.intValue
+        : ScreenLayoutModePortrait;
     if (_cachedAppMode == appMode
-        && _cachedScreenLayoutMode == screenLayoutMode
-        && _cachedUseSeparateLayouts == useSeparateLayouts)
+        && _cachedUseSeparateLayouts == useSeparateLayouts
+        && (!useSeparateLayouts || _cachedScreenLayoutMode == screenLayoutMode))
     {
         return self.getAllWidgets;
     }
-    return [OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:screenLayoutMode];
+    return [OAWidgetsInitializer createAllControlsWithAppMode:appMode
+                                             screenLayoutMode:screenLayoutMode
+                                           screenElementsMode:useSeparateLayouts
+                                               ? ScreenElementsModeIndependent
+                                               : ScreenElementsModeShared]; // todo
 }
 
 - (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
@@ -397,21 +411,31 @@
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
                                            screenLayoutMode:(int)screenLayoutMode
 {
-    ScreenElementsMode screenElementsMode = [_settings.useSeparateLayouts get:appMode]
-        ? ScreenElementsModeIndependent
-        : ScreenElementsModeShared;
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
     return [self widgetsForPanel:appMode
                     filterModes:filterModes
                          panels:panels
-               screenLayoutMode:screenLayoutMode
-             screenElementsMode:screenElementsMode];
+                     layoutMode:layoutMode];
 }
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
                                                 filterModes:(NSInteger)filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
-                                           screenLayoutMode:(int)screenLayoutMode
-                                         screenElementsMode:(int)screenElementsMode
+                                                 layoutMode:(NSNumber *)layoutMode
+{
+    NSArray<OAMapWidgetInfo *> *widgetInfos = [self widgetsForAppMode:appMode layoutMode:layoutMode];
+    return [self filteredWidgets:widgetInfos
+                        appMode:appMode
+                     layoutMode:layoutMode
+                    filterModes:filterModes
+                         panels:panels];
+}
+
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)filteredWidgets:(NSArray<OAMapWidgetInfo *> *)widgetInfos
+                                                    appMode:(OAApplicationMode *)appMode
+                                                 layoutMode:(NSNumber *)layoutMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
 {
     NSMutableArray<Class> *includedWidgetTypes = [NSMutableArray array];
     if ([panels containsObject:OAWidgetsPanel.leftPanel] || [panels containsObject:OAWidgetsPanel.rightPanel])
@@ -424,19 +448,8 @@
         [includedWidgetTypes addObject:OACenterWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
     }
-    ScreenElementsMode currentScreenElementsMode = [_settings.useSeparateLayouts get:appMode]
-        ? ScreenElementsModeIndependent
-        : ScreenElementsModeShared;
-    NSArray<OAMapWidgetInfo *> *widgetInfos = (ScreenElementsMode)screenElementsMode == currentScreenElementsMode
-        ? [self widgetsForAppMode:appMode screenLayoutMode:(ScreenLayoutMode)screenLayoutMode]
-        : [OAWidgetsInitializer createAllControlsWithAppMode:appMode
-                                           screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                                         screenElementsMode:(ScreenElementsMode)screenElementsMode];
-    NSNumber *visibilityLayoutMode = (ScreenElementsMode)screenElementsMode == ScreenElementsModeIndependent // todo
-        ? @((ScreenLayoutMode)screenLayoutMode)
-        : nil;
     NSArray<NSString *> *widgetsVisibility = [OAMapWidgetInfo widgetsVisibility:appMode
-                                                               screenLayoutMode:visibilityLayoutMode];
+                                                               screenLayoutMode:layoutMode];
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
@@ -452,7 +465,8 @@
             BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode widgetsVisibility:widgetsVisibility];
             BOOL passAvailable = !availableMode || [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widget.key appMode:appMode];
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
-            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:widget.widgetPanel];
+            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:[widget getUpdatedPanel:appMode
+                                                                        screenLayoutMode:layoutMode]];
             BOOL passTypeAllowed = [widget widgetType] == nil || [[widget widgetType] isAllowed];
             BOOL passPanelAllowed = [widget widgetType] == nil || [[widget widgetType] isPanelsAllowed:panels];
             

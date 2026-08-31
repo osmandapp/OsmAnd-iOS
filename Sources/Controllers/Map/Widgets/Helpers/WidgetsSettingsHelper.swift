@@ -137,12 +137,14 @@ class WidgetsSettingsHelper: NSObject {
             : nil
         let widgetsVisibility = MapWidgetInfo.widgetsVisibility(appMode,
                                                                 screenLayoutMode: visibilityLayoutMode)
+        let sourceLayoutMode = screenElementsMode == .independent // todo
+            ? NSNumber(value: fromLayoutMode.rawValue)
+            : nil
 
         if let widgetInfosToCopy = widgetRegistry.widgets(forPanel: fromAppMode,
                                                           filterModes: Int(filter),
                                                           panels: [panel],
-                                                          screenLayoutMode: fromLayoutMode.rawValue,
-                                                          screenElementsMode: screenElementsMode.rawValue) {
+                                                          layoutMode: sourceLayoutMode) {
             for widgetInfoToCopy in widgetInfosToCopy {
                 guard let info = widgetInfoToCopy as? MapWidgetInfo,
                       WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: info.key, appMode: appMode) else {
@@ -218,11 +220,13 @@ class WidgetsSettingsHelper: NSObject {
 
     private func defaultWidgetInfos(panel: WidgetsPanel,
                                     screenElementsMode: ScreenElementsMode) -> [MapWidgetInfo] {
+        let targetLayoutMode = screenElementsMode == .independent // todo
+            ? NSNumber(value: layoutMode.rawValue)
+            : nil
         let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
                                                  filterModes: 0,
                                                  panels: [panel],
-                                                 screenLayoutMode: layoutMode.rawValue,
-                                                 screenElementsMode: screenElementsMode.rawValue)
+                                                 layoutMode: targetLayoutMode)
         if let widgetInfos {
             for widgetInfo in widgetInfos {
                 guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }

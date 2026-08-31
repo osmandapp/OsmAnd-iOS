@@ -26,11 +26,15 @@ class SimpleWidgetInfo: MapWidgetInfo {
         simpleWidget.setContentTitle(getWidgetTitle())
     }
 
-    override func getUpdatedPanel() -> WidgetsPanel {
+    override func getUpdatedPanel(_ appMode: OAApplicationMode,
+                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
         if let widgetType = widgetType() {
+            let layoutMode = screenLayoutMode.flatMap { ScreenLayoutMode(rawValue: $0.int32Value) } ?? self.screenLayoutMode
+            let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: screenLayoutMode != nil) // todo
             return widgetType.panel(key,
                                     appMode: appMode,
-                                    screenLayoutMode: screenLayoutMode)
+                                    screenLayoutMode: layoutMode,
+                                    screenElementsMode: screenElementsMode)
         }
         return widgetPanel
     }

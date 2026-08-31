@@ -137,11 +137,15 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = [settings.applicationMode get];
+    NSNumber *layoutMode = [settings.useSeparateLayouts get:appMode]
+        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+        : nil;
 
     OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
     NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry widgetsForPanel:appMode
                                                                                  filterModes:kWidgetModeEnabled
-                                                                                      panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
+                                                                                      panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]
+                                                                                  layoutMode:layoutMode];
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
     {
         if ([widgetInfo.key hasPrefix:OAWidgetType.markersTopBar.id])

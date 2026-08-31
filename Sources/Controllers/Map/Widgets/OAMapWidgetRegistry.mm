@@ -398,18 +398,6 @@
 }
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
-                                                filterModes:(NSInteger) filterModes
-                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
-{
-    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
-    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
-    return [self widgetsForPanel:appMode
-                    filterModes:filterModes
-                         panels:panels
-                     layoutMode:layoutMode];
-}
-
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
                                                 filterModes:(NSInteger)filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
                                                  layoutMode:(NSNumber *)layoutMode

@@ -36,9 +36,6 @@
 
 - (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
-                                                filterModes:(NSInteger) filterModes
-                                                     panels:(NSArray<OAWidgetsPanel *> *)panels;
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
                                                 filterModes:(NSInteger)filterModes
                                                      panels:(NSArray<OAWidgetsPanel *> *)panels
                                                  layoutMode:(nullable NSNumber *)layoutMode;

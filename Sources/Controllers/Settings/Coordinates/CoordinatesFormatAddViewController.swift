@@ -142,7 +142,6 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         cell.titleLabel.textColor = .textColorPrimary
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-        cell.setRightSeparatorInset(16)
 
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = item.title

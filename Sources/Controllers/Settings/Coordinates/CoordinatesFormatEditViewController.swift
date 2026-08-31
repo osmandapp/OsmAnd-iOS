@@ -141,7 +141,6 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         cell.descriptionLabel.numberOfLines = 1
-        cell.setRightSeparatorInset(16)
 
         if isAddRow {
             cell.isAccessibilityElement = true

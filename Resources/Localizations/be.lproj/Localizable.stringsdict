@@ -97,5 +97,25 @@
 			<string>%ld прыпынка</string>
 		</dict>
 	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ трэк</string>
+			<key>few</key>
+			<string>%2$@ трэкі</string>
+			<key>many</key>
+			<string>%2$@ трэкаў</string>
+			<key>other</key>
+			<string>%2$@ трэка</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

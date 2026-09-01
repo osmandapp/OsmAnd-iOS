@@ -137,13 +137,17 @@ protocol SortableFolder {
     
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
         let tracksCount = folder.totalTracksCount
-        let basicDescription = String(format: localizedString("folder_tracks_count"), NumberFormatter.localizedCount(tracksCount))
+        let basicDescription = formattedTracksCount(Int(tracksCount))
         let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))
         if !lastModifiedString.isEmpty {
             return "\(lastModifiedString) • \(basicDescription)"
         } else {
             return basicDescription
         }
+    }
+
+    static func formattedTracksCount(_ count: Int) -> String {
+        String.localizedStringWithFormat(NSLocalizedString("folder_tracks_count", comment: ""), count, NumberFormatter.localizedCount(count))
     }
     
     @objc static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {

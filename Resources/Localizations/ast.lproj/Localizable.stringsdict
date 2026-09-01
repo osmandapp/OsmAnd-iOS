@@ -77,5 +77,21 @@
 			<string>%ld parades</string>
 		</dict>
 	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ track</string>
+			<key>other</key>
+			<string>%2$@ tracks</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -87,5 +87,23 @@
 			<string>%ld станица</string>
 		</dict>
 	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ траг</string>
+			<key>few</key>
+			<string>%2$@ трага</string>
+			<key>other</key>
+			<string>%2$@ трагова</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -121,6 +121,7 @@ final class AstroVisibilityCardController {
     func cancelPendingWork() {
         computeWorkItem?.cancel()
         computeWorkItem = nil
+        lastLocationKey = nil
     }
 
     private func maybeRecomputeGraph(skyObject: SkyObject,

@@ -265,17 +265,14 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
         return @[];
 
     NSMutableArray<OASRouteEvent *> *events = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
-    NSMapTable<OASRouteEvent *, OAAlarmInfo *> *alarmsByEvent = [[NSMapTable alloc]
-        initWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
-        valueOptions:NSPointerFunctionsStrongMemory
-        capacity:route.alarmInfo.count];
+    NSMutableArray<OAAlarmInfo *> *eventAlarms = [NSMutableArray arrayWithCapacity:route.alarmInfo.count];
     for (OAAlarmInfo *alarm in route.alarmInfo)
     {
         OASRouteEvent *event = [OARouteCalculationResultSnapshotAdapter copyEvent:alarm];
         if (event)
         {
             [events addObject:event];
-            [alarmsByEvent setObject:alarm forKey:event];
+            [eventAlarms addObject:alarm];
         }
     }
 
@@ -295,9 +292,7 @@ OASKotlinIntArray *OACopySharedDistances(NSArray<NSNumber *> *distances)
     NSMutableArray<OALocationPointWrapper *> *result = [NSMutableArray arrayWithCapacity:selections.count];
     for (OASRouteEventSelection *selection in selections)
     {
-        OAAlarmInfo *alarm = [alarmsByEvent objectForKey:selection.event];
-        if (!alarm)
-            continue;
+        OAAlarmInfo *alarm = eventAlarms[selection.sourceIndex];
         OALocationPointWrapper *wrapper = [[OALocationPointWrapper alloc]
             initWithRouteCalculationResult:route
             type:LPW_ALARMS

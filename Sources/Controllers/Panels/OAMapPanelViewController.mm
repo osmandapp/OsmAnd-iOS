@@ -149,17 +149,6 @@ typedef enum
 
 @property (strong, nonatomic) OARouteInfoView* routeInfoView;
 
-- (void)enqueueContextMenuPresentation:(void (^)(void))presentation;
-- (void)processPendingContextMenuPresentation;
-- (void)presentContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
-                     selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects
-                    touchPointLatLon:(nullable CLLocation *)touchPointLatLon;
-- (void)presentContextMenu:(OATargetPoint *)targetPoint selectedObject:(nullable SelectedMapObject *)selectedObject;
-- (void)presentContextMenu:(OATargetPoint *)targetPoint
-                 saveState:(BOOL)saveState
-             preferredZoom:(float)preferredZoom
-            selectedObject:(nullable SelectedMapObject *)selectedObject;
-
 @end
 
 @implementation OAMapPanelViewController

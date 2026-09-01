@@ -86,7 +86,7 @@ class WidgetsSettingsHelper: NSObject {
                                         screenElementsMode: $0,
                                         widgetParams: widgetParams)
                 copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue,
-                                                                   screenElementsMode: $0.rawValue),
+                                                                    screenElementsMode: $0.rawValue),
                                     fromAppMode: fromAppMode)
                 copyPrefFromAppMode(pref: settings.transparentWidgets(layoutMode.rawValue,
                                                                       screenElementsMode: $0.rawValue),

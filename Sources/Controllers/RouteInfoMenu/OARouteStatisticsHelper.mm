@@ -16,7 +16,6 @@
 #import "OAApplicationMode.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
-#import "OARouteCalculationResultSnapshotAdapter.h"
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
@@ -74,6 +73,84 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
 }
 
 @implementation OARouteSegmentWithIncline
+
+@end
+
+@interface OARouteStatisticsAccessor : NSObject <OASIRouteStatisticsAccessor>
+
+- (instancetype)initWithRoute:(const vector<SHARED_PTR<RouteSegmentResult> > &)route;
+
+@end
+
+@implementation OARouteStatisticsAccessor
+{
+    const vector<SHARED_PTR<RouteSegmentResult> > *_route;
+}
+
+- (instancetype)initWithRoute:(const vector<SHARED_PTR<RouteSegmentResult> > &)route
+{
+    self = [super init];
+    if (self)
+        _route = &route;
+    return self;
+}
+
+- (int32_t)getSegmentsCount
+{
+    return (int32_t) _route->size();
+}
+
+- (float)getDistanceMetersSegmentIndex:(int32_t)segmentIndex
+{
+    return (*_route)[segmentIndex]->distance;
+}
+
+- (OASKotlinFloatArray *)getHeightValuesSegmentIndex:(int32_t)segmentIndex
+{
+    const std::vector<double> heightValues = (*_route)[segmentIndex]->getHeightValues();
+    OASKotlinFloatArray *result = [OASKotlinFloatArray arrayWithSize:(int32_t) heightValues.size()];
+    for (NSUInteger index = 0; index < heightValues.size(); index++)
+        [result setIndex:(int32_t) index value:(float) heightValues[index]];
+    return result;
+}
+
+- (int32_t)getRouteTypesCountSegmentIndex:(int32_t)segmentIndex
+{
+    const auto &segment = (*_route)[segmentIndex];
+    return segment && segment->object ? (int32_t) segment->object->types.size() : 0;
+}
+
+- (NSString * _Nullable)getRouteTypeTagSegmentIndex:(int32_t)segmentIndex
+                                     routeTypeIndex:(int32_t)routeTypeIndex
+{
+    return [self routeTypeStringSegmentIndex:segmentIndex routeTypeIndex:routeTypeIndex value:NO];
+}
+
+- (NSString * _Nullable)getRouteTypeValueSegmentIndex:(int32_t)segmentIndex
+                                       routeTypeIndex:(int32_t)routeTypeIndex
+{
+    return [self routeTypeStringSegmentIndex:segmentIndex routeTypeIndex:routeTypeIndex value:YES];
+}
+
+- (NSString * _Nullable)routeTypeStringSegmentIndex:(int32_t)segmentIndex
+                                      routeTypeIndex:(int32_t)routeTypeIndex
+                                               value:(BOOL)value
+{
+    const auto &segment = (*_route)[segmentIndex];
+    if (!segment || !segment->object || !segment->object->region
+        || routeTypeIndex < 0 || routeTypeIndex >= (int32_t) segment->object->types.size())
+    {
+        return nil;
+    }
+    const auto &road = segment->object;
+    uint32_t ruleId = road->types[routeTypeIndex];
+    if (ruleId >= road->region->routeEncodingRules.size())
+        return nil;
+
+    const auto &rule = road->region->quickGetEncodingRule(ruleId);
+    const std::string &result = value ? rule.getValue() : rule.getTag();
+    return [NSString stringWithUTF8String:result.c_str()];
+}
 
 @end
 
@@ -141,15 +218,8 @@ static BOOL OAIsUndefinedRenderingAttribute(NSDictionary<NSString *, NSNumber *>
                                             attributeNames:(NSArray<NSString *> *)attributeNames
                                         statisticsComputer:(OARouteStatisticsComputer *)statisticsComputer
 {
-    NSMutableArray<OASRouteSegment *> *sharedRoute = [NSMutableArray arrayWithCapacity:route.size()];
-    for (size_t index = 0; index < route.size(); index++)
-    {
-        [sharedRoute addObject:[OARouteCalculationResultSnapshotAdapter
-            copyStatisticsSegment:route[index]
-            syntheticIndex:(int) index]];
-    }
     return [OASRouteStatisticsCalculator.shared
-        calculateRoute:sharedRoute
+        calculateAccessor:[[OARouteStatisticsAccessor alloc] initWithRoute:route]
         attributeNames:attributeNames
         classifier:(id<OASRouteAttributeClassifier>) statisticsComputer];
 }

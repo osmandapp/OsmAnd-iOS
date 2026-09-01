@@ -115,34 +115,6 @@ OASRouteSegment *OACopySegment(const std::shared_ptr<RouteSegmentResult> &segmen
                       heightValues:OACopyHeightValues(segment)];
 }
 
-OASRouteSegment *OACopyStatisticsSegment(const std::shared_ptr<RouteSegmentResult> &segment,
-                                         int syntheticIndex)
-{
-    const std::shared_ptr<RouteDataObject> &road = segment->object;
-    return [[OASRouteSegment alloc]
-        initWithRoutePointStartIndex:syntheticIndex
-             routePointEndIndex:syntheticIndex
-            nativeStartPointIndex:segment->getStartPointIndex()
-              nativeEndPointIndex:segment->getEndPointIndex()
-                   distanceMeters:segment->distance
-                segmentTimeSeconds:0
-     segmentSpeedMetersPerSecond:0
-                            roadId:road->getId()
-                           forward:segment->isForwardDirection()
-                          roadName:nil
-                               ref:nil
-                   destinationName:nil
-                    destinationRef:nil
-                           highway:nil
-      maximumSpeedMetersPerSecond:0
-                             lanes:-1
-                   oneWayDirection:0
-                        roundabout:NO
-                            tunnel:NO
-                        routeTypes:OACopyRouteTypes(road)
-                      heightValues:OACopyHeightValues(segment)];
-}
-
 NSArray<OASRouteSegment *> *OACopySegments(
     const std::vector<std::shared_ptr<RouteSegmentResult>> &pointAlignedSegments,
     int routePointCount)
@@ -305,12 +277,6 @@ NSArray<OASInt *> *OACopyIntermediateRoutePointOffsets(
               routePointEndIndex:(int)routePointEndIndex
 {
     return OACopySegment(segment, routePointStartIndex, routePointEndIndex);
-}
-
-+ (OASRouteSegment *)copyStatisticsSegment:(const std::shared_ptr<RouteSegmentResult> &)segment
-                             syntheticIndex:(int)syntheticIndex
-{
-    return OACopyStatisticsSegment(segment, syntheticIndex);
 }
 
 + (OASRouteManeuver *)copyManeuver:(OARouteDirectionInfo *)direction

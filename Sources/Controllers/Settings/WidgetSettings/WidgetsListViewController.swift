@@ -294,11 +294,103 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         orders.append(currPage)
         
-        WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
-                                   panel: widgetPanel,
-                                   selectedAppMode: selectedAppMode,
-                                   screenLayoutMode: screenLayoutMode,
-                                   widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
+        applyWidgetsConfiguration(orderedWidgetPages: orders,
+                                  widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
+    }
+
+    private func applyWidgetsConfiguration(orderedWidgetPages: [[String]],
+                                           widgetParamsArray: [[String: Any]]?) {
+        let configuration = prepareWidgetsConfiguration(orderedWidgetPages: orderedWidgetPages,
+                                                        widgetParamsArray: widgetParamsArray)
+        let enabledWidgetIds = configuration.pagedOrder.flatMap { $0 }
+        applyWidgetsPanel(configuration.newWidgetInfos)
+        applyWidgetsVisibility(enabledWidgetIds)
+        applyWidgetsOrder(configuration.pagedOrder)
+        OARootViewController.instance().mapPanel.recreateControls()
+    }
+
+    private func prepareWidgetsConfiguration(orderedWidgetPages: [[String]],
+                                             widgetParamsArray: [[String: Any]]?)
+        -> (pagedOrder: [[String]], newWidgetInfos: [MapWidgetInfo]) {
+        let layoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
+        var currentWidgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                        filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                        panels: [widgetPanel],
+                                                        layoutMode: layoutMode)?.array as? [MapWidgetInfo] ?? []
+        var widgetParamsArray = widgetParamsArray
+        var pagedOrder = [[String]]()
+        var newWidgetInfos = [MapWidgetInfo]()
+        let widgetsFactory = MapWidgetsFactory()
+        for page in orderedWidgetPages {
+            var pageOrder = [String]()
+            for widgetInfoId in page {
+                if let index = currentWidgetInfos.firstIndex(where: { $0.key == widgetInfoId }) {
+                    pageOrder.append(currentWidgetInfos.remove(at: index).key)
+                } else {
+                    var params: [String: Any]?
+                    if let index = widgetParamsArray?.firstIndex(where: { $0["id"] as? String == widgetInfoId }) {
+                        params = widgetParamsArray?.remove(at: index)
+                    }
+                    if let widgetInfo = WidgetUtils.createWidget(widgetId: widgetInfoId,
+                                                                 panel: widgetPanel,
+                                                                 widgetsFactory: widgetsFactory,
+                                                                 selectedAppMode: selectedAppMode,
+                                                                 screenLayoutMode: screenLayoutMode,
+                                                                 widgetParams: params) {
+                        pageOrder.append(widgetInfo.key)
+                        newWidgetInfos.append(widgetInfo)
+                    }
+                }
+            }
+            if !pageOrder.isEmpty {
+                pagedOrder.append(pageOrder)
+            }
+        }
+        return (pagedOrder, newWidgetInfos)
+    }
+
+    private func applyWidgetsPanel(_ newWidgetInfos: [MapWidgetInfo]) {
+        for widgetInfo in newWidgetInfos {
+            WidgetUtils.createNewWidget(widgetInfo,
+                                        panel: widgetPanel,
+                                        appMode: selectedAppMode,
+                                        screenLayoutMode: screenLayoutMode,
+                                        recreateControls: false)
+        }
+    }
+
+    private func applyWidgetsVisibility(_ enabledWidgetIds: [String]) {
+        let layoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
+        let widgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                 filterModes: Int(kWidgetModeMatchingPanels),
+                                                 panels: [widgetPanel],
+                                                 layoutMode: layoutMode)?.array as? [MapWidgetInfo] ?? []
+        let widgetsVisibility = MapWidgetInfo.widgetsVisibility(selectedAppMode,
+                                                                screenLayoutMode: layoutMode)
+        for widgetInfo in widgetInfos {
+            let enabledFromApply = enabledWidgetIds.contains(widgetInfo.key)
+            if widgetInfo.isEnabledForAppMode(selectedAppMode,
+                                              widgetsVisibility: widgetsVisibility) != enabledFromApply {
+                if !enabledFromApply {
+                    AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
+                }
+                widgetRegistry.enableDisableWidget(for: selectedAppMode,
+                                                   widgetInfo: widgetInfo,
+                                                   enabled: NSNumber(value: enabledFromApply),
+                                                   recreateControls: false)
+            }
+        }
+    }
+
+    private func applyWidgetsOrder(_ pagedOrder: [[String]]) {
+        widgetPanel.setWidgetsOrder(pagedOrder: pagedOrder,
+                                    appMode: selectedAppMode,
+                                    screenLayoutMode: screenLayoutMode)
+        widgetRegistry.reorderWidgets()
     }
 }
 

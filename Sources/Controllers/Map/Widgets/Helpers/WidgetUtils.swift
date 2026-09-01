@@ -8,137 +8,12 @@
 
 @objcMembers
 final class WidgetUtils: NSObject {
-    
-    static func reorderWidgets(orderedWidgetPages: [[String]],
-                               panel: WidgetsPanel,
-                               selectedAppMode: OAApplicationMode,
-                               screenLayoutMode: ScreenLayoutMode,
-                               widgetParamsArray: [[String: Any]]? = nil) {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        
-        let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
-        removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode, widgetRegistry: widgetRegistry)
-        
-        let newOrders = createNewOrders(enabledWidgets: enabledWidgets,
-                                        orderedWidgetPages: orderedWidgetPages,
-                                        panel: panel,
-                                        appMode: selectedAppMode,
-                                        screenLayoutMode: screenLayoutMode,
-                                        widgetRegistry: widgetRegistry,
-                                        widgetParamsArray: widgetParamsArray)
-        
-        panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
-        widgetRegistry.reorderWidgets()
-        OARootViewController.instance().mapPanel.recreateControls()
-    }
-    
-    private static func removeUnusedWidgets(enabledWidgets: [String],
-                                            panel: WidgetsPanel,
-                                            appMode: OAApplicationMode,
-                                            screenLayoutMode: ScreenLayoutMode,
-                                            widgetRegistry: OAMapWidgetRegistry) {
-        let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
-        let currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.widgets(forPanel: appMode,
-                                                                                        filterModes: Int(filter),
-                                                                                        panels: [panel],
-                                                                                        layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
-                                                                                            ? NSNumber(value: screenLayoutMode.rawValue)
-                                                                                            : nil)
-        let widgetsToDelete: [MapWidgetInfo] = (currentWidgetInfos.array as! [MapWidgetInfo]).filter { !enabledWidgets.contains($0.key) }
-        if !widgetsToDelete.isEmpty {
-            let widgets: NSMutableOrderedSet = widgetRegistry.widgets(for: panel)
-            for widgetInfo in widgetsToDelete {
-                widgets.remove(widgetInfo)
-                AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
-                widgetRegistry.enableDisableWidget(for: appMode,
-                                                   widgetInfo: widgetInfo,
-                                                   enabled: NSNumber(value: false),
-                                                   recreateControls: false)
-            }
-        }
-    }
-    
-    private static func createNewOrders(enabledWidgets: [String],
-                                        orderedWidgetPages: [[String]],
-                                        panel: WidgetsPanel,
-                                        appMode: OAApplicationMode,
-                                        screenLayoutMode: ScreenLayoutMode,
-                                        widgetRegistry: OAMapWidgetRegistry,
-                                        widgetParamsArray: [[String: Any]]? = nil) -> [[String]] {
-        let newWidgetsList: NSMutableArray = buildNewWidgetsList(enabledWidgets: enabledWidgets, panel: panel, appMode: appMode, screenLayoutMode: screenLayoutMode, widgetRegistry: widgetRegistry, widgetParamsArray: widgetParamsArray)
-        var newOrders = [[String]]()
-        for page in orderedWidgetPages {
-            var newOrder: [String] = []
-            for enabledWidget in page {
-                let mapWidgetInfo: MapWidgetInfo? = newWidgetsList.first(where: { ($0 as! MapWidgetInfo).key.hasPrefix(enabledWidget) }) as? MapWidgetInfo
-                if let mapWidgetInfo {
-                    newWidgetsList.remove(mapWidgetInfo)
-                    newOrder.append(mapWidgetInfo.key)
-                    updateWidgetParams(with: mapWidgetInfo, newOrder: newOrder, newOrders: newOrders, panel: panel, selectedAppMode: appMode, widgetRegistry: widgetRegistry)
-                }
-            }
-            if !newOrder.isEmpty {
-                newOrders.append(newOrder)
-            }
-        }
-        return newOrders
-    }
-    
-    private static func buildNewWidgetsList(enabledWidgets: [String],
-                                            panel: WidgetsPanel,
-                                            appMode: OAApplicationMode,
-                                            screenLayoutMode: ScreenLayoutMode,
-                                            widgetRegistry: OAMapWidgetRegistry,
-                                            widgetParamsArray: [[String: Any]]? = nil) -> NSMutableArray {
-        let newWidgetsList = NSMutableArray()
-        let widgetsFactory = MapWidgetsFactory()
-        if !enabledWidgets.isEmpty {
-            let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                     filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
-                                                     panels: [panel],
-                                                     layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
-                                                         ? NSNumber(value: screenLayoutMode.rawValue)
-                                                         : nil)?.array as? [MapWidgetInfo] ?? []
-            let currentWidgetIds = NSMutableArray(array: widgetInfos.map(\.key))
-            var widgetParamsArrayLocal = widgetParamsArray
-            for widgetInfoId in enabledWidgets {
-                if !currentWidgetIds.contains(widgetInfoId) {
-                    var params: [String: Any]?
-                    if widgetParamsArrayLocal != nil {
-                        if let index = widgetParamsArrayLocal?.firstIndex(where: {
-                            guard let id = $0["id"] as? String else { return false }
-                            return id == widgetInfoId
-                        }) {
-                            params = widgetParamsArrayLocal?.remove(at: index)
-                        }
-                    }
-                    
-                    if let newMapWidgetInfo = createWidget(widgetId: widgetInfoId,
-                                                           panel: panel,
-                                                           widgetsFactory: widgetsFactory,
-                                                           selectedAppMode: appMode,
-                                                           screenLayoutMode: screenLayoutMode,
-                                                           widgetParams: params) {
-                        newWidgetsList.add(newMapWidgetInfo)
-                        currentWidgetIds.remove(widgetInfoId)
-                    }
-                } else {
-                    if let mapWidgetInfo = widgetInfos.first(where: { $0.key == widgetInfoId }) {
-                        newWidgetsList.add(mapWidgetInfo)
-                        currentWidgetIds.remove(widgetInfoId)
-                    }
-                }
-            }
-        }
-        return newWidgetsList
-    }
-    
-    private static func createWidget(widgetId: String,
-                                     panel: WidgetsPanel,
-                                     widgetsFactory: MapWidgetsFactory,
-                                     selectedAppMode: OAApplicationMode,
-                                     screenLayoutMode: ScreenLayoutMode,
-                                     widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
+    static func createWidget(widgetId: String,
+                             panel: WidgetsPanel,
+                             widgetsFactory: MapWidgetsFactory,
+                             selectedAppMode: OAApplicationMode,
+                             screenLayoutMode: ScreenLayoutMode,
+                             widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         guard let widgetType = WidgetType.getById(widgetId) else {
             return nil
         }
@@ -146,36 +21,12 @@ final class WidgetUtils: NSObject {
         guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, widgetParams: widgetParams) else {
             return nil
         }
-        let settings = OAAppSettings.sharedManager()
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(selectedAppMode))
-        settings.customWidgetKeys(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue).add(id, appMode: selectedAppMode)
         let creator = WidgetInfoCreator(appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
         return creator.createCustomWidgetInfo(widgetId: id,
                                               widget: widget,
                                               widgetType: widgetType,
                                               panel: panel)
     }
-    
-    private static func updateWidgetParams(with mapWidgetInfo: MapWidgetInfo,
-                                           newOrder: [String],
-                                           newOrders: [[String]],
-                                           panel: WidgetsPanel,
-                                           selectedAppMode: OAApplicationMode,
-                                           widgetRegistry: OAMapWidgetRegistry) {
-        guard !mapWidgetInfo.isEnabledForAppMode(selectedAppMode) else {
-            return
-        }
-        mapWidgetInfo.priority = newOrder.firstIndex(of: mapWidgetInfo.key) ?? newOrder.count - 1
-        mapWidgetInfo.pageIndex = newOrders.firstIndex(of: newOrder) ?? newOrders.count
-        widgetRegistry.widgets(for: panel)?.add(mapWidgetInfo)
-        widgetRegistry.enableDisableWidget(for: selectedAppMode,
-                                           widgetInfo: mapWidgetInfo,
-                                           enabled: NSNumber(value: true),
-                                           recreateControls: false)
-    }
-}
-
-extension WidgetUtils {
     
     static func createNewWidgets(widgetsIds: [String],
                                  panel: WidgetsPanel,
@@ -195,23 +46,54 @@ extension WidgetUtils {
                                              selectedAppMode: appMode,
                                              screenLayoutMode: screenLayoutMode,
                                              widgetParams: widgetParams) {
-                if let addToNext, let selectedWidget {
-                    addWidgetToSpecificPlace(with: widgetInfo,
-                                             widgetsPanel: panel,
-                                             selectedAppMode: appMode,
-                                             screenLayoutMode: screenLayoutMode,
-                                             selectedWidget: selectedWidget,
-                                             addToNext: addToNext)
-                } else {
-                    addWidgetToEnd(with: widgetInfo, widgetsPanel: panel, selectedAppMode: appMode, screenLayoutMode: screenLayoutMode)
-                }
+                createNewWidget(widgetInfo,
+                                panel: panel,
+                                appMode: appMode,
+                                screenLayoutMode: screenLayoutMode,
+                                recreateControls: false,
+                                selectedWidget: selectedWidget,
+                                addToNext: addToNext)
                 resultWidgetsInfos.append(widgetInfo)
-                widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo, enabled: true, recreateControls: false)
             }
         }
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
         return resultWidgetsInfos
+    }
+
+    static func createNewWidget(_ widgetInfo: MapWidgetInfo,
+                                panel: WidgetsPanel,
+                                appMode: OAApplicationMode,
+                                screenLayoutMode: ScreenLayoutMode,
+                                recreateControls: Bool,
+                                selectedWidget: String? = nil,
+                                addToNext: Bool? = nil) {
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        let settings = OAAppSettings.sharedManager()
+        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
+        settings.customWidgetKeys(screenLayoutMode.rawValue,
+                                  screenElementsMode: screenElementsMode.rawValue).add(widgetInfo.key,
+                                                                                      appMode: appMode) // todo
+        if let selectedWidget, let addToNext {
+            addWidgetToSpecificPlace(with: widgetInfo,
+                                     widgetsPanel: panel,
+                                     selectedAppMode: appMode,
+                                     screenLayoutMode: screenLayoutMode,
+                                     selectedWidget: selectedWidget,
+                                     addToNext: addToNext)
+        } else {
+            addWidgetToEnd(with: widgetInfo,
+                           widgetsPanel: panel,
+                           selectedAppMode: appMode,
+                           screenLayoutMode: screenLayoutMode)
+        }
+        widgetRegistry.enableDisableWidget(for: appMode,
+                                           widgetInfo: widgetInfo,
+                                           enabled: true,
+                                           recreateControls: false)
+        if recreateControls {
+            OARootViewController.instance().mapPanel.recreateControls()
+        }
     }
     
     private static func addWidgetToEnd(with targetWidget: MapWidgetInfo,

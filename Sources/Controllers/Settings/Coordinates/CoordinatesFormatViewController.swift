@@ -86,7 +86,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     }
     
     override func setupTableHeaderView() {
-        tableView.tableHeaderView = CoordinateFormatHelper.makeDescriptionHeader(width: view.bounds.width)
+        tableView.tableHeaderView = CoordinateFormatTableHeader.makeDescriptionHeader(width: view.bounds.width)
     }
     
     override func hideFirstHeader() -> Bool {
@@ -140,16 +140,6 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
         return cell
     }
     
-    // MARK: - Bottom buttons
-
-    override func getTopButtonTitle() -> String {
-        ""
-    }
-
-    override func getBottomButtonTitle() -> String {
-        ""
-    }
-    
     // MARK: - Layout
     
     private func updateTableBottomInset() {
@@ -164,8 +154,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
     private func relayoutTableHeaderViewIfNeeded() {
         guard let header = tableView.tableHeaderView else { return }
         let width = tableView.bounds.width
-        CoordinateFormatHelper.relayoutHeader(header, width: width)
-        header.frame.size.width = width
+        guard CoordinateFormatTableHeader.relayoutTableHeaderViewIfNeeded(header, width: width) else { return }
         tableView.tableHeaderView = header
     }
     

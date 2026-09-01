@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "map_ruler_center_day.svg",
+      "filename" : "ic_custom_segments_gap.svg",
       "idiom" : "universal"
     }
   ],
@@ -10,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
-    "preserves-vector-representation" : true
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }

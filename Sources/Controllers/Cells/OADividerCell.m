@@ -8,7 +8,7 @@
 
 #import "OADividerCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OADividerCell
 {
@@ -21,8 +21,8 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    _dividerColor = UIColorFromRGB(color_divider_light);
-    _dividerHight = 0.5;
+    _dividerColor = [SeparatorAppearance color];
+    _dividerHight = [SeparatorAppearance thicknessForView:self];
     _dividerInsets = UIEdgeInsetsMake(0, 44.0, 0, 0);
     
     _divider = [[CALayer alloc] init];

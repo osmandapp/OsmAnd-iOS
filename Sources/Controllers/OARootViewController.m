@@ -145,6 +145,10 @@ typedef enum : NSUInteger {
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    UIWindowScene *windowScene = self.view.window.windowScene;
+    if (windowScene)
+        [NSNotificationCenter.defaultCenter postNotificationName:OAMainApplicationUIReadyNotification object:windowScene];
+
     if (self.token != nil)
     {
         [self handleOsmAndCloudVerification:self.token];

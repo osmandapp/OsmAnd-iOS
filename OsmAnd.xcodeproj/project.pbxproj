@@ -309,7 +309,7 @@
 		27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */; };
 		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
-		2C1E55492FB75748008D311C /* OASearchAlgorithms.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1E55482FB75744008D311C /* OASearchAlgorithms.m */; };
+		2C1E55492FB75748008D311C /* OASearchAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C1E55482FB75744008D311C /* OASearchAlgorithms.mm */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		2CFF22942F7AB48A000C5477 /* OARegionPriorityProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF22932F7AB479000C5477 /* OARegionPriorityProvider.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
@@ -1495,6 +1495,11 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */; };
+		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
+		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
+		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
+		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
@@ -1599,6 +1604,7 @@
 		C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */; };
 		C5A466BE2D2E6B41008E0C87 /* ImageHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */; };
 		C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5A466CD2D356B68008E0C87 /* OAGpxApproximationHelper.mm */; };
+		C5A70DF83025CF6B00EDD44B /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A70DF73025CF6B00EDD44B /* SeparatorView.swift */; };
 		C5A887E42CAD7B8E00DA2979 /* TracksSearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */; };
 		C5A89E112FC2E54D00E5E8E1 /* GradientEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A89E102FC2E54D00E5E8E1 /* GradientEditorState.swift */; };
 		C5A89E132FC2E58A00E5E8E1 /* GradientEditorBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A89E122FC2E58A00E5E8E1 /* GradientEditorBehavior.swift */; };
@@ -1711,6 +1717,7 @@
 		CE7787D6302C70D300BEA7A6 /* SwissGridApproximation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */; };
 		CE7787D8302C70FC00BEA7A6 /* MaidenheadPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */; };
 		CE7787DA302C71E600BEA7A6 /* CoordinateGridFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */; };
+		CE77DB8830405134005BAD75 /* CoordinateFormatTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE77DB8730405134005BAD75 /* CoordinateFormatTableHeader.swift */; };
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		CE79CF243025D00000B3BA15 /* CoordinatesFormatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */; };
 		CE79CF263025D13600B3BA15 /* CoordinateFormatIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */; };
@@ -1795,6 +1802,7 @@
 		D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */; };
 		D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */; };
 		D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210167301B768C003CECB8 /* TwoLineTitleView.swift */; };
+		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
@@ -2402,7 +2410,6 @@
 		DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6C26C563A100F274C7 /* OAConfigureProfileViewController.m */; };
 		DA5A823E26C563A700F274C7 /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */; };
 		DA5A824026C563A700F274C7 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6F26C563A100F274C7 /* OATripRecordingSettingsViewController.mm */; };
-		DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B7026C563A100F274C7 /* OACoordinatesFormatViewController.m */; };
 		DA5A824226C563A700F274C7 /* OAMainSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B7126C563A100F274C7 /* OAMainSettingsViewController.m */; };
 		DA5A824326C563A700F274C7 /* OARecalculateRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B7626C563A100F274C7 /* OARecalculateRouteViewController.mm */; };
 		DA5A824426C563A700F274C7 /* OAVehicleParametersSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B7726C563A100F274C7 /* OAVehicleParametersSettingsViewController.mm */; };
@@ -3994,7 +4001,7 @@
 		2B47233F428DE06D90A7F7AE /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bg; path = bg.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2BB911378FA20D66676E7F33 /* mn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = mn; path = mn.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2C1E55472FB75703008D311C /* OASearchAlgorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASearchAlgorithms.h; sourceTree = "<group>"; };
-		2C1E55482FB75744008D311C /* OASearchAlgorithms.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchAlgorithms.m; sourceTree = "<group>"; };
+		2C1E55482FB75744008D311C /* OASearchAlgorithms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchAlgorithms.mm; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		2CF2F7A82F76E2DE000B0508 /* OARegionPriorityProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARegionPriorityProvider.h; sourceTree = "<group>"; };
@@ -5513,6 +5520,12 @@
 		BCFEE2D9C1986E49AFD9A27A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		BD862AFCF495F2E8367D299D /* ku */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ku; path = ku.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		BF9A08FCACC60D4CA32DFC31 /* mk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = mk; path = mk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashDiagnosticsManager.swift; sourceTree = "<group>"; };
+		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
+		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
+		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
+		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
+		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		C1687F4567959C306956D92A /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kab; path = kab.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C173345D7277A340D99DE996 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -5719,6 +5732,7 @@
 		C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageHeaderCell.xib; sourceTree = "<group>"; };
 		C5A466CC2D356B68008E0C87 /* OAGpxApproximationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationHelper.h; sourceTree = "<group>"; };
 		C5A466CD2D356B68008E0C87 /* OAGpxApproximationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationHelper.mm; sourceTree = "<group>"; };
+		C5A70DF73025CF6B00EDD44B /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksSearchFilter.swift; sourceTree = "<group>"; };
 		C5A89E102FC2E54D00E5E8E1 /* GradientEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientEditorState.swift; sourceTree = "<group>"; };
 		C5A89E122FC2E58A00E5E8E1 /* GradientEditorBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientEditorBehavior.swift; sourceTree = "<group>"; };
@@ -5878,6 +5892,7 @@
 		CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwissGridApproximation.swift; sourceTree = "<group>"; };
 		CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaidenheadPoint.swift; sourceTree = "<group>"; };
 		CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatting.swift; sourceTree = "<group>"; };
+		CE77DB8730405134005BAD75 /* CoordinateFormatTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatTableHeader.swift; sourceTree = "<group>"; };
 		CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuCell.swift; sourceTree = "<group>"; };
 		CE79CF233025D00000B3BA15 /* CoordinatesFormatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatViewController.swift; sourceTree = "<group>"; };
 		CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatIds.swift; sourceTree = "<group>"; };
@@ -5970,6 +5985,7 @@
 		D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentRouteSettingsViewController.swift; sourceTree = "<group>"; };
 		D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackFavoriteSortModeHelper.swift; sourceTree = "<group>"; };
 		D7210167301B768C003CECB8 /* TwoLineTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineTitleView.swift; sourceTree = "<group>"; };
+		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
 		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
@@ -6851,7 +6867,6 @@
 		DA5A7B0E26C563A100F274C7 /* OAProfileDataObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileDataObject.h; sourceTree = "<group>"; };
 		DA5A7B1026C563A100F274C7 /* OAConfigureProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureProfileViewController.h; sourceTree = "<group>"; };
 		DA5A7B1126C563A100F274C7 /* OAMainSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMainSettingsViewController.h; sourceTree = "<group>"; };
-		DA5A7B1226C563A100F274C7 /* OACoordinatesFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACoordinatesFormatViewController.h; sourceTree = "<group>"; };
 		DA5A7B1426C563A100F274C7 /* OARearrangeProfilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARearrangeProfilesViewController.m; sourceTree = "<group>"; };
 		DA5A7B1526C563A100F274C7 /* OABaseSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B1A26C563A100F274C7 /* OAOsmEditingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditingSettingsViewController.h; sourceTree = "<group>"; };
@@ -6878,7 +6893,6 @@
 		DA5A7B6C26C563A100F274C7 /* OAConfigureProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAConfigureProfileViewController.m; sourceTree = "<group>"; };
 		DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataObject.m; sourceTree = "<group>"; };
 		DA5A7B6F26C563A100F274C7 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
-		DA5A7B7026C563A100F274C7 /* OACoordinatesFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACoordinatesFormatViewController.m; sourceTree = "<group>"; };
 		DA5A7B7126C563A100F274C7 /* OAMainSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMainSettingsViewController.m; sourceTree = "<group>"; };
 		DA5A7B7326C563A100F274C7 /* OAVehicleParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersViewController.h; sourceTree = "<group>"; };
 		DA5A7B7426C563A100F274C7 /* OAAvoidPreferParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAvoidPreferParametersViewController.h; sourceTree = "<group>"; };
@@ -11120,6 +11134,17 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		C0D3C0082F60000100C0D308 /* CrashDiagnostics */ = {
+			isa = PBXGroup;
+			children = (
+				C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */,
+				C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */,
+				C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */,
+				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
+			);
+			path = CrashDiagnostics;
+			sourceTree = "<group>";
+		};
 		CE79CF223025CFDE00B3BA15 /* Coordinates */ = {
 			isa = PBXGroup;
 			children = (
@@ -11127,6 +11152,7 @@
 				CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */,
 				CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */,
 				CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */,
+				CE77DB8730405134005BAD75 /* CoordinateFormatTableHeader.swift */,
 				CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */,
 				CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */,
 				CE79CF273025D15B00B3BA15 /* CoordinateFormat.swift */,
@@ -11190,6 +11216,7 @@
 				D7210144301B768C003CECB8 /* PlanRoutePointCell.swift */,
 				D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */,
 				D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */,
+				D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */,
 				D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */,
 				D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */,
 				D7210149301B768C003CECB8 /* RouteGroupCell.swift */,
@@ -12352,7 +12379,7 @@
 		DA5A7A7126C563A000F274C7 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				2C1E55482FB75744008D311C /* OASearchAlgorithms.m */,
+				2C1E55482FB75744008D311C /* OASearchAlgorithms.mm */,
 				2C1E55472FB75703008D311C /* OASearchAlgorithms.h */,
 				DA5A7A7526C563A000F274C7 /* OAAtomicInteger.h */,
 				DA5A7A8026C563A000F274C7 /* OAAtomicInteger.m */,
@@ -12614,8 +12641,6 @@
 				DA5A7BA226C563A100F274C7 /* OABaseSettingsViewController.m */,
 				DA5A7B1026C563A100F274C7 /* OAConfigureProfileViewController.h */,
 				DA5A7B6C26C563A100F274C7 /* OAConfigureProfileViewController.m */,
-				DA5A7B1226C563A100F274C7 /* OACoordinatesFormatViewController.h */,
-				DA5A7B7026C563A100F274C7 /* OACoordinatesFormatViewController.m */,
 				DA5A7BA026C563A100F274C7 /* OACreateProfileViewController.h */,
 				DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */,
 				DA5A7BA726C563A100F274C7 /* OAGlobalSettingsViewController.h */,
@@ -14343,6 +14368,7 @@
 			isa = PBXGroup;
 			children = (
 				D7EE67193017818E0047F171 /* CancelableTableView.swift */,
+				C5A70DF73025CF6B00EDD44B /* SeparatorView.swift */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
 				DA5A806626C563A500F274C7 /* OAButton.m */,
@@ -14629,6 +14655,7 @@
 			isa = PBXGroup;
 			children = (
 				FAF6C89C2AD014C800A3ED94 /* ThemeManager */,
+				C0D3C0082F60000100C0D308 /* CrashDiagnostics */,
 				DA5A80E726C563A600F274C7 /* OALocationServices.h */,
 				DA5A80E826C563A600F274C7 /* OALocationServices.mm */,
 				DA5A80E926C563A600F274C7 /* OALocationSimulation.h */,
@@ -14947,6 +14974,8 @@
 			isa = PBXGroup;
 			children = (
 				46D5E4192D31A3EC00428227 /* BackupUtils.swift */,
+				C0D517770001000000000001 /* OAFavoritesBackupMerger.h */,
+				C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */,
 				DAA9F44B27EC9E99002BB1A8 /* Commands */,
 				DA4ABED22876D98D00B996EF /* LocalBackup */,
 				4657490F2B68129B0006046B /* BackupUiUtils.swift */,
@@ -17740,7 +17769,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\ncd \"$SRCROOT/../android\"\n./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\n\nif ! JAVA_17_HOME=\"$(/usr/libexec/java_home -v 17 2>/dev/null)\"; then\n  echo \"error: JDK 17 is required to build OsmAndShared. Install JDK 17 and try again.\" >&2\n  exit 1\nfi\nexport JAVA_HOME=\"$JAVA_17_HOME\"\nexport PATH=\"$JAVA_HOME/bin:$PATH\"\n\ncd \"$SRCROOT/../android\"\n./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
 		};
 		8401FCFC1EE4723B00238915 /* Copy phrases */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -17821,6 +17850,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */,
+				C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */,
+				C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */,
+				C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */,
 				321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */,
 				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
@@ -18061,6 +18094,7 @@
 				46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */,
 				DA5A855B26C563A900F274C7 /* OAWorldRegion.mm in Sources */,
 				DAEDAAA12865A0F100CE54D0 /* OAGenerateBackupInfoTask.m in Sources */,
+				C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */,
 				32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */,
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,
 				FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */,
@@ -18152,6 +18186,7 @@
 				DA5A812026C563A700F274C7 /* OAProducts.mm in Sources */,
 				CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */,
 				DA5A84F426C563A900F274C7 /* OATargetPoint.m in Sources */,
+				C5A70DF83025CF6B00EDD44B /* SeparatorView.swift in Sources */,
 				DA9A2C3026FDB72800BEC681 /* OARouteColorize.mm in Sources */,
 				32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */,
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
@@ -18177,6 +18212,7 @@
 				D7210170301B768C003CECB8 /* PlanRoutePointCell.swift in Sources */,
 				D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */,
 				D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */,
+				D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */,
 				D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */,
 				D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */,
 				D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */,
@@ -18258,7 +18294,6 @@
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
-				DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */,
 				46C841372C32F35100E284B0 /* OANavAddFirstIntermediateAction.m in Sources */,
 				DA5A813726C563A700F274C7 /* OAOsmPoint.m in Sources */,
 				DA5A835826C563A800F274C7 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
@@ -18669,7 +18704,7 @@
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
 				FA2CFCE22EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift in Sources */,
-				2C1E55492FB75748008D311C /* OASearchAlgorithms.m in Sources */,
+				2C1E55492FB75748008D311C /* OASearchAlgorithms.mm in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
 				DA5A82F026C563A800F274C7 /* OARadiusCell.m in Sources */,
 				C51766662E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift in Sources */,
@@ -19199,6 +19234,7 @@
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
 				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,
 				059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */,
+				CE77DB8830405134005BAD75 /* CoordinateFormatTableHeader.swift in Sources */,
 				32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
 				FAC166272B21BEF900D63755 /* CBUUIDConvertible.swift in Sources */,

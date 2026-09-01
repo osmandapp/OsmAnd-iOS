@@ -44,7 +44,6 @@
     OAAlertBottomSheetSelectCompletionBlock _selectCompletitionBlock;
     
     NSArray<NSArray *> *_data;
-    CGFloat _separatorHeight;
 }
 
 + (void) showAlertWithMessage:(NSString *)message cancelTitle:(NSString *)cancelTitle
@@ -122,7 +121,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     
     self.headerDividerView.hidden = YES;
     self.buttonsSectionDividerView.hidden = YES;
@@ -269,7 +267,6 @@
                 }
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         return cell;
     }

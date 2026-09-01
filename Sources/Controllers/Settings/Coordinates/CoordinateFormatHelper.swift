@@ -9,45 +9,33 @@
 import UIKit
 
 enum CoordinateFormatHelper {
-    static let exampleLat = 50.43855
-    static let exampleLon = 30.50124
-    static let unavailablePlaceholder = "—"
-
     private enum LocationShareLinkFormat {
         static let share = "https://osmand.net/map?pin=%.6f,%.6f#%d/%.4f/%.4f"
         static let osm = "https://www.openstreetmap.org/?mlat=%.4f&mlon=%.4f#map=%i/%.4f/%.4f"
     }
 
+    private static let exampleLat = 50.43855
+    private static let exampleLon = 30.50124
+    private static let unavailablePlaceholder = "—"
+    
     private static let searchDebounce: TimeInterval = 0.25
     private static var searchWorkItem: DispatchWorkItem?
+    
+    private static let epsgNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        formatter.decimalSeparator = "."
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.usesGroupingSeparator = true
+        return formatter
+    }()
 
     static func resolve(_ ids: [String]) -> [CoordinateFormat] {
         ids.map { id in
             BuiltInCoordinateFormat.resolve(id) ?? EpsgCatalogRepository.shared.resolveFormat(id)
-        }
-    }
-
-    static func cancelSearch() {
-        searchWorkItem?.cancel()
-        searchWorkItem = nil
-    }
-    
-    static func search(_ query: String?, completion: @escaping ([CoordinateFormat]) -> Void) {
-        cancelSearch()
-        let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let work = DispatchWorkItem {
-            let results = trimmed.isEmpty
-                ? EpsgCatalogRepository.shared.listAll()
-                : EpsgCatalogRepository.shared.search(trimmed)
-            DispatchQueue.main.async {
-                completion(results)
-            }
-        }
-        searchWorkItem = work
-        if trimmed.isEmpty {
-            DispatchQueue.global(qos: .userInitiated).async(execute: work)
-        } else {
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + searchDebounce, execute: work)
         }
     }
     
@@ -76,51 +64,6 @@ enum CoordinateFormatHelper {
         return format(coordFormat, lat: lat, lon: lon)
     }
 
-    static func makeDescriptionHeader(width: CGFloat) -> UIView {
-        let horizontalInset: CGFloat = 36 + OAUtilities.getLeftMargin()
-        let top: CGFloat = 12
-        let bottom: CGFloat = 8
-
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-
-        let text = localizedString("coordinate_format_description")
-        let attr = NSAttributedString(
-            string: text,
-            attributes: [
-                .font: UIFont.preferredFont(forTextStyle: .footnote),
-                .foregroundColor: UIColor.textColorSecondary
-            ]
-        )
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.attributedText = attr
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .natural
-        label.adjustsFontForContentSizeCategory = true
-        header.addSubview(label)
-
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: horizontalInset),
-            label.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -horizontalInset),
-            label.topAnchor.constraint(equalTo: header.topAnchor, constant: top),
-            label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -bottom)
-        ])
-
-        relayoutHeader(header, width: width)
-        return header
-    }
-
-    static func relayoutHeader(_ header: UIView, width: CGFloat) {
-        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let height = header.systemLayoutSizeFitting(
-            target,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-        header.frame.size = CGSize(width: width, height: height)
-    }
-
     static func format(_ format: CoordinateFormat, lat: Double, lon: Double) -> String {
         if format.type == .builtIn, let legacy = format.legacyFormat {
             return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy)
@@ -138,15 +81,7 @@ enum CoordinateFormatHelper {
     }
 
     static func formatEpsgValue(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = " "
-        formatter.decimalSeparator = "."
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.usesGroupingSeparator = true
-        return formatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
+        epsgNumberFormatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
     }
     
     static func preferredFormats() -> [CoordinateFormat] {

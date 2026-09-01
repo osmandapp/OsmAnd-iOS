@@ -63,6 +63,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _tableView.separatorColor = [SeparatorAppearance color];
     // drop shadow
     [_scrollableView.layer setShadowColor:[UIColor blackColor].CGColor];
     [_scrollableView.layer setShadowOpacity:0.3];

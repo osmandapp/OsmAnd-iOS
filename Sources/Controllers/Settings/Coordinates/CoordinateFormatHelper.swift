@@ -90,11 +90,10 @@ enum CoordinateFormatHelper {
     }
 
     static func formatPreferred(lat: Double, lon: Double) -> [FormattedCoordinate] {
-        preferredFormats().enumerated().map { index, format in
+        preferredFormats().map { format in
             FormattedCoordinate(
                 format: format,
-                text: Self.format(format, lat: lat, lon: lon),
-                primary: index == 0
+                text: Self.format(format, lat: lat, lon: lon)
             )
         }
     }

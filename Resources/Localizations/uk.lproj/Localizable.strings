@@ -1964,7 +1964,7 @@
 "markers_history" = "Історія позначок";
 "folder_already_exsists" = "Каталог з цією назвою вже існує";
 "incorrect_symbols" = "Уведено неприпустимі символи";
-"preparing_file" = "Підготування файлу";
+"preparing_file" = "Підготовка файлу";
 "export_failed" = "Не вдалося експортувати профіль";
 "export_profile_select_descr" = "Виберіть дані для експорту.";
 "delete_custom_categories" = "Вилучити власні категорії";
@@ -4096,3 +4096,4 @@
 "missing_maps_description" = "Деякі офлайн-мапи, необхідні для цього маршруту, відсутні або застарілі. Будь ласка, завантажте або оновіть ці мапи.";
 "shared_string_allow" = "Дозволити";
 "astro_alt_short" = "Вис.";
+"sort_by_nearest_to_current_location" = "Найближче до поточного місцезнаходження";

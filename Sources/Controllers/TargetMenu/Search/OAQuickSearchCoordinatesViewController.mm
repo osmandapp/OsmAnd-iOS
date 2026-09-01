@@ -523,7 +523,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                _lonStr = @"";
            }
        }
-       return YES;
+       return latLon;
    }
    else
    {

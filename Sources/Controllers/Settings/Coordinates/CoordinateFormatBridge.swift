@@ -140,7 +140,6 @@ final class CoordinateFormatBridge: NSObject {
         return CoordinateFormatHelper.format(format, lat: lat, lon: lon)
     }
 
-    /// Prefill field strings for the given format. Never returns nil values.
     static func prefillFields(lat: Double, lon: Double, formatId: String?) -> [String: String] {
         let info = resolveSearchFormat(formatId)
         var result: [String: String] = [
@@ -164,7 +163,6 @@ final class CoordinateFormatBridge: NSObject {
                 result["lon"] = OALocationConvert.convert(OAMapUtils.checkLongitude(lon), outputType: Int(FORMAT_DEGREES)) ?? ""
             }
         case .utm:
-            // leave empty here — VC already fills via GeographicLib; optional later
             break
         case .olc:
             result["olc"] = OALocationConvert.getLocationOlcName(lat, lon: lon) ?? ""

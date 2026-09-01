@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
-#import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
 #import "OAObservable.h"
 #import "OsmAndApp.h"
@@ -77,7 +76,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 };
 
 
-@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate, OAPOISearchDelegate, CoordinateFormatSelectorDelegate>
+@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAPOISearchDelegate, CoordinateFormatSelectorDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -347,7 +346,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (NSDictionary *) getLocationData:(CLLocation *)location
 {
-    NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
+    NSString *title = [CoordinateFormatBridge formatCoordinatesWithLat:location.coordinate.latitude
+                                                                   lon:location.coordinate.longitude
+                                                              formatId:_currentFormatId];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *subTitle = countryName ?: OALocalizedString(@"shared_string_location");
     
@@ -522,7 +523,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                _lonStr = @"";
            }
        }
-       return latLon;
+       return YES;
    }
    else
    {
@@ -1377,16 +1378,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSString *buttonText = ((UIButton *)sender).titleLabel.text;
     if (_currentEditingTextField)
         [_currentEditingTextField insertText:buttonText];
-}
-
-#pragma mark - OAQuickSearchCoordinateFormatsDelegate
-
-- (void)onCoordinateFormatChanged:(NSInteger)currentFormat
-{
-    NSString *formatId = [CoordinateFormatBridge formatIdFromLegacyFormat:currentFormat];
-    [self applyFormatId:formatId forceApply:NO];
-    [self parseLocation];
-    [self updateControllsSectionCells];
 }
 
 #pragma mark - CoordinateFormatSelectorDelegate

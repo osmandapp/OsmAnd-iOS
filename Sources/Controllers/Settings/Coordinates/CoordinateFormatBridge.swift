@@ -132,6 +132,14 @@ final class CoordinateFormatBridge: NSObject {
             epsgCode: epsg
         )
     }
+
+    static func formatCoordinates(lat: Double, lon: Double, formatId: String?) -> String {
+        let normalized = CoordinateFormatIds.normalize(formatId) ?? CoordinateFormatIds.builtinDdd
+        let format = CoordinateFormatHelper.resolve([normalized]).first
+            ?? BuiltInCoordinateFormat.ddd.toCoordinateFormat()
+        return CoordinateFormatHelper.format(format, lat: lat, lon: lon)
+    }
+
     /// Prefill field strings for the given format. Never returns nil values.
     static func prefillFields(lat: Double, lon: Double, formatId: String?) -> [String: String] {
         let info = resolveSearchFormat(formatId)

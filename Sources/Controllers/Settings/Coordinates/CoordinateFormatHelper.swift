@@ -9,9 +9,17 @@
 import UIKit
 
 enum CoordinateFormatHelper {
+    private enum LocationShareLinkFormat {
+        static let share = "https://osmand.net/map?pin=%.6f,%.6f#%d/%.4f/%.4f"
+        static let osm = "https://www.openstreetmap.org/?mlat=%.4f&mlon=%.4f#map=%i/%.4f/%.4f"
+    }
+
     private static let exampleLat = 50.43855
     private static let exampleLon = 30.50124
     private static let unavailablePlaceholder = "—"
+    
+    private static let searchDebounce: TimeInterval = 0.25
+    private static var searchWorkItem: DispatchWorkItem?
     
     private static let epsgNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -74,5 +82,67 @@ enum CoordinateFormatHelper {
 
     static func formatEpsgValue(_ value: Double) -> String {
         epsgNumberFormatter.string(from: NSNumber(value: value)) ?? unavailablePlaceholder
+    }
+    
+    static func preferredFormats() -> [CoordinateFormat] {
+        let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
+        return resolve(storage.preferredIds())
+    }
+
+    static func formatPreferred(lat: Double, lon: Double) -> [FormattedCoordinate] {
+        preferredFormats().map { format in
+            FormattedCoordinate(
+                format: format,
+                text: Self.format(format, lat: lat, lon: lon)
+            )
+        }
+    }
+
+    static func formatPrimary(lat: Double, lon: Double) -> String {
+        if let primary = formatPreferred(lat: lat, lon: lon).first {
+            return primary.text
+        }
+        return OAOsmAndFormatter.getFormattedCoordinates(
+            withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES)
+        ) ?? unavailablePlaceholder
+    }
+
+    static func primaryRowPrefix(lat: Double, lon: Double) -> String {
+        if let code = preferredFormats().first?.epsgCode {
+            return "EPSG:\(code)"
+        }
+        return localizedString("coordinates")
+    }
+
+    static func shareLink(lat: Double, lon: Double) -> String {
+        let zoom = Int(OARootViewController.instance().mapPanel.mapViewController.getMapZoom())
+        return String(format: LocationShareLinkFormat.share, lat, lon, zoom, lat, lon)
+    }
+
+    static func osmEditingLink(lat: Double, lon: Double) -> String? {
+        guard OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self) else { return nil }
+        let zoom = Int(OARootViewController.instance().mapPanel.mapViewController.getMapZoom())
+        return String(format: LocationShareLinkFormat.osm, lat, lon, zoom, lat, lon)
+    }
+
+    static func collapsedLocationData(lat: Double, lon: Double) -> [FormattedCoordinate] {
+        var rows = [FormattedCoordinate]()
+        let preferred = formatPreferred(lat: lat, lon: lon)
+
+        if let short = OAOsmAndFormatter.getFormattedCoordinates(
+            withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES_SHORT)
+        ), !short.isEmpty {
+            rows.append(.plain(short))
+        }
+        if preferred.count > 1 {
+            rows.append(contentsOf: preferred.dropFirst())
+        }
+
+        rows.append(.plain(shareLink(lat: lat, lon: lon)))
+
+        if let osm = osmEditingLink(lat: lat, lon: lon) {
+            rows.append(.plain(osm))
+        }
+        return rows
     }
 }

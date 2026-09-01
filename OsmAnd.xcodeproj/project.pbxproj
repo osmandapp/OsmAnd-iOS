@@ -1704,6 +1704,8 @@
 		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
+		CE6DAAF1302DBCBB00F71540 /* FormattedCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6DAAF0302DBCBB00F71540 /* FormattedCoordinate.swift */; };
+		CE6DAAF3302DBD9700F71540 /* CoordinateFormatBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */; };
 		CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */; };
 		CE72E15C30125FB400E89264 /* CarPlaySettingsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */; };
 		CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */; };
@@ -5877,6 +5879,8 @@
 		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
+		CE6DAAF0302DBCBB00F71540 /* FormattedCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedCoordinate.swift; sourceTree = "<group>"; };
+		CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatBridge.swift; sourceTree = "<group>"; };
 		CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchEmptyView.swift; sourceTree = "<group>"; };
 		CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySettingsListController.swift; sourceTree = "<group>"; };
 		CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayMapModeListController.swift; sourceTree = "<group>"; };
@@ -11152,6 +11156,7 @@
 				CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */,
 				CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */,
 				CE79CF273025D15B00B3BA15 /* CoordinateFormat.swift */,
+				CE6DAAF0302DBCBB00F71540 /* FormattedCoordinate.swift */,
 				CE79CF293025D18800B3BA15 /* BuiltInCoordinateFormat.swift */,
 				CE79CF2B30261E4000B3BA15 /* CoordinateFormatSettingsStorage.swift */,
 				CE7CC399302B71EE0048D36F /* OAEpsgCoordinateTransformer.h */,
@@ -11159,6 +11164,7 @@
 				CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */,
 				CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */,
 				CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */,
+				CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */,
 			);
 			path = Coordinates;
 			sourceTree = "<group>";
@@ -17977,6 +17983,7 @@
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,
 				DAA61CCE2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.mm in Sources */,
+				CE6DAAF1302DBCBB00F71540 /* FormattedCoordinate.swift in Sources */,
 				FA54CE0F2EBB938E007F1F68 /* Locale+Extension.swift in Sources */,
 				DA4ABF1C2876DA6800B996EF /* OAMapSourcesSettingsItem.mm in Sources */,
 				DA5A84CE26C563A900F274C7 /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */,
@@ -19317,6 +19324,7 @@
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
 				C5C472F22ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift in Sources */,
 				DAABE4E82A16102200569F71 /* AverageSpeedWidget.swift in Sources */,
+				CE6DAAF3302DBD9700F71540 /* CoordinateFormatBridge.swift in Sources */,
 				320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */,
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,
 				DAA612E527E9E934003317BD /* OAPrepareBackupResult.m in Sources */,

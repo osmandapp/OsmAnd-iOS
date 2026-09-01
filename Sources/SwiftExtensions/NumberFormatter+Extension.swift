@@ -28,7 +28,7 @@ extension NumberFormatter {
     private static let countFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.locale = .current
+        formatter.locale = Locale(identifier: OAUtilities.currentLang() ?? Locale.current.identifier)
         formatter.usesGroupingSeparator = true
         return formatter
     }()

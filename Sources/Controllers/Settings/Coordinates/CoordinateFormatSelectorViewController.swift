@@ -187,7 +187,6 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         }
         
         cell.textStackView.spacing = 4
-        cell.setRightSeparatorInset(16)
         return cell
     }
 

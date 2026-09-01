@@ -398,7 +398,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         || _inputMode == CoordinateSearchInputModeLatLon)
     {
         NSInteger legacy = _currentFormat >= 0 ? _currentFormat : MAP_GEO_FORMAT_DEGREES;
-        return [self applyLegacyFormat:legacy forceApply:YES]; // вынеси тело текущего applyFormat сюда
+        return [self applyLegacyFormat:legacy forceApply:YES];
     }
 
     if (!latLon)
@@ -1071,7 +1071,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
-            [cell setRightSeparatorInset:8];
         }
         return cell;
     }
@@ -1122,7 +1121,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.inputField.inputAccessoryView = self.toolbarView;
 
             [cell.inputField reloadInputViews];
-            [cell setRightSeparatorInset:8];
         }
         return cell;
     }

@@ -314,8 +314,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
     
     _controlsSectionData = [NSArray arrayWithArray:result];
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls]
-                  withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) updateLocationCell:(CLLocation *)latLon

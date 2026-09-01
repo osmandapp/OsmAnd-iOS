@@ -39,11 +39,6 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         OAPluginsHelper.createMapWidgets(self, appMode: appMode, widgetParams: nil)
 //        app.getAidlApi().createWidgetControls(mapActivity, mapWidgetsCache, appMode)
         createCustomWidgets()
-        let useSeparateLayouts = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
-        let currentScreenElementsMode = ScreenElementsMode(usesSeparateLayouts: useSeparateLayouts)
-        if screenElementsMode != currentScreenElementsMode {
-            applyStoredLayoutData()
-        }
         return mapWidgetsCache
     }
     
@@ -153,34 +148,6 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
                                          screenElementsMode: screenElementsMode.rawValue)
     }
 
-    private func applyStoredLayoutData() {
-        for widgetInfo in mapWidgetsCache {
-            let panel: WidgetsPanel
-            if let widgetType = widgetInfo.widget.widgetType {
-                panel = widgetType.panel(widgetInfo.key,
-                                         appMode: appMode,
-                                         screenLayoutMode: screenLayoutMode,
-                                         screenElementsMode: screenElementsMode)
-            } else {
-                panel = WidgetsPanel.values.first {
-                    $0.contains(widgetId: widgetInfo.key,
-                                appMode: appMode,
-                                screenLayoutMode: screenLayoutMode,
-                                screenElementsMode: screenElementsMode)
-                } ?? widgetInfo.widgetPanel
-            }
-            widgetInfo.widgetPanel = panel
-            widgetInfo.pageIndex = panel.widgetPage(widgetInfo.key,
-                                                    appMode: appMode,
-                                                    screenLayoutMode: screenLayoutMode,
-                                                    screenElementsMode: screenElementsMode)
-            widgetInfo.priority = panel.widgetOrder(widgetInfo.key,
-                                                    appMode: appMode,
-                                                    screenLayoutMode: screenLayoutMode,
-                                                    screenElementsMode: screenElementsMode)
-        }
-    }
-    
     // MARK: WidgetRegistrationDelegate
     
     func addWidget(_ widgetInfo: MapWidgetInfo) {

@@ -147,9 +147,12 @@ class WidgetsSettingsHelper: NSObject {
                                                           filterModes: Int(filter),
                                                           panels: [panel],
                                                           layoutMode: sourceLayoutMode) {
-            for widgetInfoToCopy in widgetInfosToCopy {
-                guard let info = widgetInfoToCopy as? MapWidgetInfo,
-                      WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: info.key, appMode: appMode) else {
+            let storedWidgetInfos = applyStoredLayoutData(widgetInfosToCopy,
+                                                          appMode: fromAppMode,
+                                                          screenLayoutMode: fromLayoutMode,
+                                                          screenElementsMode: screenElementsMode)
+            for info in storedWidgetInfos {
+                guard WidgetsAvailabilityHelper.isWidgetAvailable(widgetId: info.key, appMode: appMode) else {
                     continue
                 }
 
@@ -195,6 +198,44 @@ class WidgetsSettingsHelper: NSObject {
                               appMode: appMode,
                               screenLayoutMode: layoutMode,
                               screenElementsMode: screenElementsMode)
+    }
+
+    private func applyStoredLayoutData(_ widgetInfos: NSOrderedSet,
+                                       appMode: OAApplicationMode,
+                                       screenLayoutMode: ScreenLayoutMode,
+                                       screenElementsMode: ScreenElementsMode) -> [MapWidgetInfo] {
+        var storedWidgetInfos = [MapWidgetInfo]()
+        for case let widgetInfo as MapWidgetInfo in widgetInfos {
+            let panel: WidgetsPanel
+            if let widgetType = widgetInfo.widget.widgetType {
+                panel = widgetType.panel(widgetInfo.key,
+                                         appMode: appMode,
+                                         screenLayoutMode: screenLayoutMode,
+                                         screenElementsMode: screenElementsMode)
+            } else {
+                panel = WidgetsPanel.values.first {
+                    $0.contains(widgetId: widgetInfo.key,
+                                appMode: appMode,
+                                screenLayoutMode: screenLayoutMode,
+                                screenElementsMode: screenElementsMode)
+                } ?? widgetInfo.widgetPanel
+            }
+            widgetInfo.widgetPanel = panel
+            widgetInfo.pageIndex = panel.widgetPage(widgetInfo.key,
+                                                    appMode: appMode,
+                                                    screenLayoutMode: screenLayoutMode,
+                                                    screenElementsMode: screenElementsMode)
+            widgetInfo.priority = panel.widgetOrder(widgetInfo.key,
+                                                    appMode: appMode,
+                                                    screenLayoutMode: screenLayoutMode,
+                                                    screenElementsMode: screenElementsMode)
+            storedWidgetInfos.append(widgetInfo)
+        }
+        return storedWidgetInfos.enumerated().sorted {
+            $0.element.pageIndex == $1.element.pageIndex
+                ? $0.offset < $1.offset
+                : $0.element.pageIndex < $1.element.pageIndex
+        }.map(\.element)
     }
 
     func getWidgetsPagedOrder(fromAppMode: OAApplicationMode, panel: WidgetsPanel, filter: Int) -> [[String]] {

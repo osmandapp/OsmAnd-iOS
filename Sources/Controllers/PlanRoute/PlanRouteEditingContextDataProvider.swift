@@ -167,6 +167,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var hasCachedAnalysisData = false
     private var analysisGeneration = 0
     private var pendingAnalysisGeneration: Int?
+    private var pendingSegmentHistoryState: (wasPending: Bool, hadTrailingGap: Bool)?
     private var initialApplicationMode: OAApplicationMode {
         var supportedModes = bridge.availableModes()
         if let directLineMode = OAApplicationMode.default() {
@@ -271,12 +272,15 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func undo() {
-        pendingEmptySegmentIndex = nil
+        pendingSegmentHistoryState = (pendingEmptySegmentIndex != nil, bridge.hasTrailingGap)
         bridge.undo()
+        pendingSegmentHistoryState = nil
     }
 
     func redo() {
+        pendingSegmentHistoryState = (pendingEmptySegmentIndex != nil, bridge.hasTrailingGap)
         bridge.redo()
+        pendingSegmentHistoryState = nil
     }
 
     func reverseRoute() {
@@ -331,17 +335,20 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.apply(mode, pointIndex: pointIndex, wholeRoute: wholeRoute)
     }
 
+    func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int]) {
+        bridge.apply(mode, pointIndexes: pointIndexes.map { NSNumber(value: $0) })
+    }
+
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
         guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
-        if case let .profileGroup(group, _) = context {
-            for point in group.points {
-                bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
-            }
+        if case let .profileGroup(_, segment) = context, segment.isPendingEmpty {
+            guard let pointIndex = routeSegments.last?.pointIndexes.last else { return }
+            bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
+        } else if case let .profileGroup(group, _) = context {
+            applyMode(effectiveMode, pointIndexes: group.points.map(\.index))
         } else if case let .wholeSegment(segment) = context {
-            let allPoints = segment.groups.flatMap { $0.points }
-            for point in allPoints {
-                bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
-            }
+            let pointIndexes = segment.groups.flatMap { $0.points.map(\.index) }
+            applyMode(effectiveMode, pointIndexes: pointIndexes)
         } else {
             bridge.apply(effectiveMode, pointIndex: context.applyPointIndex, wholeRoute: context.applyWholeRoute)
         }
@@ -428,7 +435,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func scheduleAnalysisIfNeeded() {
-        guard isTrackReadyToCalculate,
+        guard bridge.hasPoints,
               !hasCachedAnalysisData,
               pendingAnalysisGeneration == nil,
               !bridge.isCalculatingRoute else { return }
@@ -458,6 +465,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 maxSpeed: analysis.maxSpeed > 0 ? Double(analysis.maxSpeed) : nil,
                 timeInMotion: analysis.timeMoving > 0 ? TimeInterval(analysis.timeMoving) / 1000 : nil,
                 hasElevationData: analysis.hasElevationData(),
+                hasSpeedData: analysis.isSpeedSpecified(),
                 gpxAnalysis: analysis,
                 gpxFile: gpxFile,
                 routeStatistics: stats
@@ -478,22 +486,34 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func updatePendingEmptySegment() {
-        guard let pendingEmptySegmentIndex else { return }
-        let segmentCount = bridgeSegments().count
-        if segmentCount == 0 || segmentCount >= pendingEmptySegmentIndex {
-            self.pendingEmptySegmentIndex = nil
+        let hasTrailingGap = bridge.hasTrailingGap
+        let shouldShowPendingSegment: Bool
+        if let pendingSegmentHistoryState {
+            shouldShowPendingSegment = hasTrailingGap
+                && (pendingSegmentHistoryState.wasPending || !pendingSegmentHistoryState.hadTrailingGap)
         } else {
-            self.pendingEmptySegmentIndex = segmentCount + 1
+            shouldShowPendingSegment = pendingEmptySegmentIndex != nil && hasTrailingGap
         }
+        pendingEmptySegmentIndex = shouldShowPendingSegment ? bridgeSegments().count + 1 : nil
     }
 
     private func mapSegment(_ segment: PlanRouteSegmentData) -> PlanRouteSegment {
-        PlanRouteSegment(index: segment.index,
-                         groups: segment.groups.map { mapGroup($0) },
-                         routed: segment.routed,
-                         multiMode: segment.multiMode,
-                         singleMode: segment.singleMode,
-                         distance: segment.distance)
+        let gapAfter = segment.hasGapAfter
+            ? PlanRouteSegmentGap(distance: segment.gapDistance, bearing: segment.gapBearing)
+            : nil
+        var distanceFromStart = 0.0
+        var groups: [PlanRouteProfileGroup] = []
+        for group in segment.groups {
+            groups.append(mapGroup(group, distanceFromStart: &distanceFromStart))
+        }
+        return PlanRouteSegment(index: segment.index,
+                                groups: groups,
+                                routed: segment.routed,
+                                multiMode: segment.multiMode,
+                                singleMode: segment.singleMode,
+                                distance: segment.distance,
+                                isPendingEmpty: false,
+                                gapAfter: gapAfter)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {
@@ -509,17 +529,24 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                                  item: item)
     }
 
-    private func mapGroup(_ group: PlanRouteGroupData) -> PlanRouteProfileGroup {
-        PlanRouteProfileGroup(appMode: group.appMode,
-                              distance: group.distance,
-                              lastPointIndex: group.lastGlobalIndex,
-                              points: group.points.map { mapPoint($0) })
+    private func mapGroup(_ group: PlanRouteGroupData, distanceFromStart: inout Double) -> PlanRouteProfileGroup {
+        var points: [PlanRoutePoint] = []
+        for point in group.points {
+            distanceFromStart += point.distanceFromPrevious
+            points.append(mapPoint(point, distanceFromStart: distanceFromStart))
+        }
+        return PlanRouteProfileGroup(appMode: group.appMode,
+                                     distance: group.distance,
+                                     lastPointIndex: group.lastGlobalIndex,
+                                     points: points)
     }
 
-    private func mapPoint(_ point: PlanRoutePointData) -> PlanRoutePoint {
+    private func mapPoint(_ point: PlanRoutePointData, distanceFromStart: Double) -> PlanRoutePoint {
         PlanRoutePoint(index: point.globalIndex,
+                       indexInSegment: point.indexInSegment,
                        name: point.name,
                        distanceFromPrevious: point.distanceFromPrevious,
+                       distanceFromStart: distanceFromStart,
                        bearing: point.bearing,
                        isStart: point.isStart,
                        isDestination: point.isDestination)

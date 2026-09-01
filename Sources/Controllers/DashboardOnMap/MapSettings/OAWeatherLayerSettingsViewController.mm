@@ -206,7 +206,7 @@
     CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
     _menuHeight += fmax(labelHeight, kSwitchCellLabelHeight) + kSwitchCellFixedHeight;
     
-    _dividerHeight = 1.0 / [UIScreen mainScreen].scale;
+    _dividerHeight = SeparatorAppearance.thickness;
     NSNumber *dividerInset = @(0.);
     NSDictionary *dividerCell = @{
         @"cellId" : OADividerCell.getCellIdentifier,
@@ -731,7 +731,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
         }
-        cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+        cell.dividerColor = [SeparatorAppearance color];
         CGFloat leftInset = [item[@"inset"] floatValue];
         cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
         cell.dividerHight = _dividerHeight;

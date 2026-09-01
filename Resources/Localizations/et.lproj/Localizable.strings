@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd kaardid";
+"send_crash_log" = "Saada krahhilogi";
+"send_crash_log_descr" = "Sisaldab teavet vaid rakenduse kokkujooksmise kohta";
 "download_depth_countours" = "Meresügavuse kontuurid";
 "day_short" = "P";
 "week_short" = "Näd";

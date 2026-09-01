@@ -172,8 +172,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     self.tableView.sectionHeaderTopPadding = 0;
+    self.tableView.separatorColor = [SeparatorAppearance color];
 
     self.navigationItem.title = OALocalizedString(@"coords_search");
     

@@ -28,12 +28,15 @@
                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cAi-yw-VnC" userLabel="Weather Top Separator">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cAi-yw-VnC" userLabel="Weather Top Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="72" width="405" height="1"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="1wk-jw-FAl"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="1wk-jw-FAl" id="s01-TC-001"/>
+                    </connections>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="F33-ES-4SU" userLabel="Weather Stack View">
                     <rect key="frame" x="0.0" y="73" width="405" height="95"/>
@@ -41,12 +44,15 @@
                         <constraint firstAttribute="height" constant="95" id="hIY-uT-yRA"/>
                     </constraints>
                 </stackView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIX-79-Rqj" userLabel="Weather Bottom Separator">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIX-79-Rqj" userLabel="Weather Bottom Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="168" width="405" height="1"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="mGv-tS-wsP"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="mGv-tS-wsP" id="s02-TC-002"/>
+                    </connections>
                 </view>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="H2C-uP-knh" customClass="OAWeatherTimeSegmentedSlider">
                     <rect key="frame" x="82" y="175" width="305" height="73"/>

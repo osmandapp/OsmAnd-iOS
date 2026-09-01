@@ -11,7 +11,6 @@ import Foundation
 struct FormattedCoordinate {
     let format: CoordinateFormat
     let text: String
-    let primary: Bool
 
     var displayPrefix: String? {
         if let code = format.epsgCode {
@@ -24,6 +23,6 @@ struct FormattedCoordinate {
     }
 
     static func plain(_ text: String) -> FormattedCoordinate {
-        FormattedCoordinate(format: .unknown(id: ""), text: text, primary: false)
+        FormattedCoordinate(format: .unknown(id: ""), text: text)
     }
 }

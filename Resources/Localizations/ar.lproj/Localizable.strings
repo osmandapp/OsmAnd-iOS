@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "خرائط أوسماند";
+"send_crash_log" = "إرسال سجل الأعطال";
+"send_crash_log_descr" = "يحتوي فقط على معلومات حول الأعطال";
 "shared_string_previous" = "السابق";
 "route_stops_before" = "%@ محطة توقف قبل";
 "transport_Routes" = "طرق";

@@ -57,6 +57,7 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 }
 
 final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabContent {
+    private static let contentTopInset: CGFloat = 10
 
     let planRouteTab: PlanRouteTab = .analyze
     var onAttachToRoadsRequested: (() -> Void)?
@@ -74,6 +75,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var hasCompletedElevationCalculation = false
     private var cachedState: AnalyzeState = .noData
     private var cachedHasOverviewData = false
+    private var cachedHasElevationData = false
+    private var cachedHasSpeedData = false
     private var cachedRoadAttributeStatistics: [OARouteStatistics] = []
     private var cachedSyntheticSteepness: OARouteStatistics?
     private var cachedSyntheticSteepnessSignature: Double = -1
@@ -105,6 +108,34 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         cachedState
     }
 
+    private var effectiveYAxisTypes: [NSNumber] {
+        let availableTypes = selectedYAxisTypes.filter { number in
+            guard let type = GPXDataSetType(rawValue: number.intValue) else { return false }
+            switch type {
+            case .altitude, .slope:
+                return cachedHasElevationData
+            case .speed:
+                return cachedHasSpeedData
+            default:
+                return true
+            }
+        }
+        if !availableTypes.isEmpty {
+            return availableTypes
+        }
+        if cachedHasSpeedData {
+            return [NSNumber(value: GPXDataSetType.speed.rawValue)]
+        }
+        if cachedHasElevationData {
+            return [NSNumber(value: GPXDataSetType.altitude.rawValue)]
+        }
+        return []
+    }
+
+    private var mapViewportBounds: CGRect? {
+        (parent as? PlanRouteScrollableViewController)?.mapViewportBounds
+    }
+
     init(dataSource: PlanRouteAnalyzeDataSource?) {
         self.dataSource = dataSource
         super.init(nibName: nil, bundle: nil)
@@ -134,7 +165,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         }
         wasCalculatingElevation = isElevationCalculating
         let analysisData = dataSource?.analysisData
-        cachedHasOverviewData = analysisData?.hasElevationData == true
+        cachedHasElevationData = analysisData?.hasElevationData == true
+        cachedHasSpeedData = analysisData?.hasSpeedData == true
+        cachedHasOverviewData = cachedHasElevationData || cachedHasSpeedData
         scheduleSteepnessComputationIfNeeded(analysisData: analysisData)
         cachedRoadAttributeStatistics = buildRoadAttributeStatistics(from: analysisData)
         expandedStatIndexes = Set(expandedStatIndexes.filter { $0 < cachedRoadAttributeStatistics.count })
@@ -155,7 +188,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
-        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 72, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
@@ -190,7 +223,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func showAxisPicker(startingOnYAxis: Bool) {
         guard let analysis = dataSource?.analysisData?.gpxAnalysis else { return }
         let sheet = StatisticsSelectionBottomSheetViewController(
-            types: selectedYAxisTypes,
+            types: effectiveYAxisTypes,
             selectedXAxisMode: selectedXAxisType,
             analysis: analysis,
             isYAxisMode: startingOnYAxis
@@ -230,8 +263,12 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
             return
         }
         let helper = trackChartHelper(for: gpxFile)
+        let viewportBounds = mapViewportBounds
+        if let viewportBounds {
+            helper.screenBBox = viewportBounds
+        }
         helper.refreshChart(chart,
-                            fitTrack: false,
+                            fitTrack: viewportBounds != nil,
                             forceFit: false,
                             recalculateXAxis: false,
                             analysis: analysis,
@@ -332,9 +369,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func resolvedYAxisTypes() -> (GPXDataSetType, GPXDataSetType) {
-        let first = selectedYAxisTypes.first.flatMap { GPXDataSetType(rawValue: $0.intValue) } ?? .altitude
-        let second = selectedYAxisTypes.count > 1
-            ? (GPXDataSetType(rawValue: selectedYAxisTypes[1].intValue) ?? .none)
+        let first = effectiveYAxisTypes.first.flatMap { GPXDataSetType(rawValue: $0.intValue) } ?? .none
+        let second = effectiveYAxisTypes.count > 1
+            ? (GPXDataSetType(rawValue: effectiveYAxisTypes[1].intValue) ?? .none)
             : .none
         return (first, second)
     }
@@ -345,14 +382,14 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                               roadAttributeStatistics: [OARouteStatistics]) -> AnalyzeState {
         if isRouteCalculating { return .routeCalculating }
         if isElevationCalculating {
-            return !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
+            return hasOverviewData || !roadAttributeStatistics.isEmpty ? .hasData : .elevationCalculating
         }
         if hasOverviewData || !roadAttributeStatistics.isEmpty { return .hasData }
         return .noData
     }
 
     private func yAxisButtonTitle() -> String {
-        let titles = selectedYAxisTypes.compactMap { GPXDataSetType(rawValue: $0.intValue)?.getTitle() }
+        let titles = effectiveYAxisTypes.compactMap { GPXDataSetType(rawValue: $0.intValue)?.getTitle() }
         guard let firstTitle = titles.first else { return "" }
         guard titles.count > 1, let secondTitle = titles.last else { return firstTitle }
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"), firstTitle, secondTitle)
@@ -400,7 +437,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
               let gpxFile = analysisData?.gpxFile else {
             return nil
         }
-        let yTypes = selectedYAxisTypes.map(\.stringValue).joined(separator: ",")
+        let yTypes = effectiveYAxisTypes.map(\.stringValue).joined(separator: ",")
         return [
             gpxFile.path,
             String(analysis.totalDistance),
@@ -414,6 +451,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private func statsSignature(for analysisData: PlanRouteAnalysisData?) -> String? {
         guard cachedHasOverviewData, let analysisData else { return nil }
         return [
+            String(analysisData.hasElevationData),
+            String(analysisData.hasSpeedData),
             String(analysisData.uphill),
             String(analysisData.downhill),
             String(analysisData.altMin ?? .nan),
@@ -498,6 +537,8 @@ private extension PlanRouteAnalyzeViewController {
     static let compactLegendMarkerSize: CGFloat = 16
     static let compactLegendInnerSpacing: CGFloat = 6
     static let compactLegendMinimumContrastRatio: CGFloat = 1.5
+    static let expandedLegendFadeDelay: TimeInterval = 0.08
+    static let expandedLegendFadeDuration: TimeInterval = 0.17
     static let steepnessAttributeName = "routeInfo_steepness"
     static let roadClassAttributeName = "routeInfo_roadClass"
     static let millisecondsPerHour: Int64 = 3_600_000
@@ -624,8 +665,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
         chart.dragYEnabled = false
 
-        let recalcSeparator = UIView()
-        recalcSeparator.backgroundColor = .customSeparator
+        let recalcSeparator = SeparatorView()
         recalcSeparator.translatesAutoresizingMaskIntoConstraints = false
 
         let recalcBtn = UIButton(type: .system)
@@ -634,6 +674,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         recalcBtn.titleLabel?.font = .preferredFont(forTextStyle: .body)
         recalcBtn.contentHorizontalAlignment = .left
         recalcBtn.addTarget(self, action: #selector(onRecalculateTapped), for: .touchUpInside)
+        recalcBtn.isEnabled = dataSource?.isCalculatingElevation != true
         recalcBtn.translatesAutoresizingMaskIntoConstraints = false
 
         [buttonStack, chart, recalcSeparator, recalcBtn].forEach { card.addSubview($0) }
@@ -652,7 +693,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcSeparator.topAnchor.constraint(equalTo: chart.bottomAnchor, constant: 10),
             recalcSeparator.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             recalcSeparator.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            recalcSeparator.heightAnchor.constraint(equalToConstant: 0.5),
 
             recalcBtn.topAnchor.constraint(equalTo: recalcSeparator.bottomAnchor),
             recalcBtn.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
@@ -695,8 +735,12 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
               let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
         let card = cell.cardView
 
+        let uphill = data.hasElevationData ? data.uphill : nil
+        let downhill = data.hasElevationData ? data.downhill : nil
+        let altitudeMinimum = data.hasElevationData ? data.altMin : nil
+        let altitudeMaximum = data.hasElevationData ? data.altMax : nil
         let altRange: String
-        if let min = data.altMin, let max = data.altMax {
+        if let min = altitudeMinimum, let max = altitudeMaximum {
             let minStr = OAOsmAndFormatter.getFormattedAlt(min) ?? "–"
             let maxStr = OAOsmAndFormatter.getFormattedAlt(max) ?? "–"
             altRange = "\(minStr), \(maxStr)"
@@ -705,19 +749,19 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         }
         let items = [
             AnalyzeStatItem(
-                value: fmtAlt(data.uphill),
+                value: fmtAlt(uphill),
                 label: localizedString("shared_string_uphill"),
-                accessibilityValue: accessibilityAltitude(data.uphill)
+                accessibilityValue: accessibilityAltitude(uphill)
             ),
             AnalyzeStatItem(
-                value: fmtAlt(data.downhill),
+                value: fmtAlt(downhill),
                 label: localizedString("shared_string_downhill"),
-                accessibilityValue: accessibilityAltitude(data.downhill)
+                accessibilityValue: accessibilityAltitude(downhill)
             ),
             AnalyzeStatItem(
                 value: altRange,
                 label: localizedString("altitude_range"),
-                accessibilityValue: accessibilityAltitudeRange(minimum: data.altMin, maximum: data.altMax)
+                accessibilityValue: accessibilityAltitudeRange(minimum: altitudeMinimum, maximum: altitudeMaximum)
             ),
             AnalyzeStatItem(
                 value: fmtSpeed(data.avgSpeed),
@@ -739,8 +783,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let topRow = makeGridRow(items: Array(items[0...2]))
         topRow.translatesAutoresizingMaskIntoConstraints = false
 
-        let hDivider = UIView()
-        hDivider.backgroundColor = .customSeparator
+        let hDivider = SeparatorView()
         hDivider.translatesAutoresizingMaskIntoConstraints = false
 
         let bottomRow = makeGridRow(items: Array(items[3...5]))
@@ -756,7 +799,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             hDivider.topAnchor.constraint(equalTo: topRow.bottomAnchor),
             hDivider.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             hDivider.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            hDivider.heightAnchor.constraint(equalToConstant: 0.5),
 
             bottomRow.topAnchor.constraint(equalTo: hDivider.bottomAnchor),
             bottomRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
@@ -789,10 +831,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func makeVerticalDivider() -> UIView {
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false
-        wrapper.widthAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale).isActive = true
 
-        let line = UIView()
-        line.backgroundColor = .customSeparator
+        let line = VerticalSeparatorView()
         line.translatesAutoresizingMaskIntoConstraints = false
         wrapper.addSubview(line)
         NSLayoutConstraint.activate([
@@ -859,24 +899,30 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.labelTextColor = .textColorSecondary
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
-        legendView.isUserInteractionEnabled = false
-        legendView.translatesAutoresizingMaskIntoConstraints = false
-
-        [barChart, legendView].forEach { card.addSubview($0) }
+        card.addSubview(barChart)
+        addRoadAttrLegend(legendView, to: card, below: barChart)
 
         NSLayoutConstraint.activate([
             barChart.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
             barChart.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             barChart.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            barChart.heightAnchor.constraint(equalToConstant: 54),
+            barChart.heightAnchor.constraint(equalToConstant: 54)
+        ])
 
+        return cell
+    }
+
+    private func addRoadAttrLegend(_ legendView: UIView, to card: UIView, below barChart: UIView) {
+        legendView.isUserInteractionEnabled = false
+        legendView.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(legendView)
+
+        NSLayoutConstraint.activate([
             legendView.topAnchor.constraint(equalTo: barChart.bottomAnchor),
             legendView.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             legendView.trailingAnchor.constraint(equalTo: card.trailingAnchor),
             legendView.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
-
-        return cell
     }
 
     private func makeCompactRoadAttrLegend(stat: OARouteStatistics) -> UIView {
@@ -930,10 +976,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
             guard index < items.count - 1 else { continue }
             let separatorContainer = UIView()
-            separatorContainer.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
 
-            let separator = UIView()
-            separator.backgroundColor = .customSeparator
+            let separator = SeparatorView()
             separator.translatesAutoresizingMaskIntoConstraints = false
             separatorContainer.addSubview(separator)
             NSLayoutConstraint.activate([
@@ -1052,8 +1096,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
     // MARK: - Formatters
 
-    private func fmtAlt(_ value: Double) -> String {
-        OAOsmAndFormatter.getFormattedAlt(value) ?? "–"
+    private func fmtAlt(_ value: Double?) -> String {
+        guard let value else { return "–" }
+        return OAOsmAndFormatter.getFormattedAlt(value) ?? "–"
     }
 
     private func fmtSpeed(_ value: Double?) -> String {
@@ -1180,19 +1225,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        switch currentState {
-        case .noData:
-            showGetElevationSheet()
-        case .elevationCalculating, .routeCalculating:
-            break
-        case .hasData:
-            if !hasOverviewData, indexPath.section == 0 {
-                showGetElevationSheet()
-                return
-            }
-            guard indexPath.section >= roadAttributesSectionStart else { return }
-            toggleRoadAttribute(at: indexPath.section - roadAttributesSectionStart)
-        }
+        guard case .hasData = currentState,
+              indexPath.section >= roadAttributesSectionStart else { return }
+        toggleRoadAttribute(at: indexPath.section - roadAttributesSectionStart)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -1217,6 +1252,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section != 0 else { return Self.contentTopInset }
         guard case .hasData = currentState, section >= roadAttributesSectionStart else {
             return .leastNormalMagnitude
         }
@@ -1270,6 +1306,7 @@ private extension PlanRouteAnalyzeViewController {
     private func scheduleSteepnessComputationIfNeeded(analysisData: PlanRouteAnalysisData?) {
         guard let analysisData,
               let gpxAnalysis = analysisData.gpxAnalysis,
+              isRoadAttributeDataAvailable(analysisData),
               !analysisData.routeStatistics.contains(where: { $0.name == Self.steepnessAttributeName }) else {
             return
         }
@@ -1300,6 +1337,7 @@ private extension PlanRouteAnalyzeViewController {
             guard let fallback = buildImmediateTerrainFallbackSteepnessStatistics() else { return [] }
             return Self.routeAttributeNames.compactMap { $0 == Self.steepnessAttributeName ? fallback : nil }
         }
+        guard isRoadAttributeDataAvailable(analysisData) else { return [] }
         let routeStatistics = analysisData.routeStatistics
         let groupedStatistics = Dictionary(grouping: routeStatistics) { $0.name }
         let syntheticSteepness: OARouteStatistics?
@@ -1319,6 +1357,10 @@ private extension PlanRouteAnalyzeViewController {
             }
             return groupedStatistics[attributeName]?.first
         }
+    }
+
+    private func isRoadAttributeDataAvailable(_ analysisData: PlanRouteAnalysisData) -> Bool {
+        hasCompletedElevationCalculation || allowsTerrainFallbackSteepness || !analysisData.routeStatistics.isEmpty
     }
 
     private func buildImmediateTerrainFallbackSteepnessStatistics() -> OARouteStatistics? {
@@ -1435,14 +1477,38 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func toggleRoadAttribute(at index: Int) {
+        let expandedLegendFadeDelay = Self.expandedLegendFadeDelay
+        let expandedLegendFadeDuration = Self.expandedLegendFadeDuration
+        guard roadAttributeStatistics.indices.contains(index) else { return }
         if expandedStatIndexes.contains(index) {
             expandedStatIndexes.remove(index)
         } else {
             expandedStatIndexes.insert(index)
         }
 
-        let section = IndexSet(integer: index + roadAttributesSectionStart)
-        tableView.reloadSections(section, with: .automatic)
+        let section = index + roadAttributesSectionStart
+        let indexPath = IndexPath(row: 0, section: section)
+        let stat = roadAttributeStatistics[index]
+        let isExpanded = expandedStatIndexes.contains(index)
+        (tableView.headerView(forSection: section) as? AnalyzeRouteAttributeHeaderView)?.setExpanded(isExpanded)
+
+        guard let cell = tableView.cellForRow(at: indexPath) as? AnalyzeCardCell,
+              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else { return }
+
+        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        legendView.alpha = isExpanded ? 0 : 1
+
+        cell.cardView.subviews.filter { $0 !== barChart }.forEach { $0.removeFromSuperview() }
+        addRoadAttrLegend(legendView, to: cell.cardView, below: barChart)
+        tableView.performBatchUpdates(nil)
+
+        guard isExpanded else { return }
+        UIView.animate(
+            withDuration: expandedLegendFadeDuration,
+            delay: expandedLegendFadeDelay,
+            options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseIn],
+            animations: { legendView.alpha = 1 }
+        )
     }
 
     private func buildSyntheticSteepnessStatistics(

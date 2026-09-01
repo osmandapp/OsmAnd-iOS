@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     private static let sectionHorizontalInset: CGFloat = 16
@@ -325,8 +326,10 @@ extension PlanRoutePoiViewController: UITableViewDelegate {
             return
         }
 
-        guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row) else { return }
-        OARootViewController.instance().mapPanel?.openTargetView(withWpt: groups[indexPath.section].points[indexPath.row].item, pushed: false)
+        guard groups.indices.contains(indexPath.section), groups[indexPath.section].points.indices.contains(indexPath.row),
+              let point = groups[indexPath.section].points[indexPath.row].item.point else { return }
+        let coordinate = CLLocationCoordinate2D(latitude: point.lat, longitude: point.lon)
+        OAPlanRouteEditingBridge.moveMap(to: coordinate)
     }
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

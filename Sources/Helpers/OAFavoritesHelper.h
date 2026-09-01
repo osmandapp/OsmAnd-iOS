@@ -43,6 +43,7 @@
 
 + (BOOL)addFavorite:(OAFavoriteItem *)point;
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites;
++ (NSInteger)copyToFavorites:(NSArray<OAFavoriteItem *> *)favorites;
 + (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
        lookupAddress:(BOOL)lookupAddress
          sortAndSave:(BOOL)sortAndSave
@@ -122,6 +123,7 @@
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
 + (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OASWptPt *> *)points
                               defaultCategory:(NSString *)defaultCategory;
++ (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites;
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
 + (void) backup;

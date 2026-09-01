@@ -125,6 +125,7 @@
     [self generateData];
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
+    self.tblView.separatorColor = [SeparatorAppearance color];
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }

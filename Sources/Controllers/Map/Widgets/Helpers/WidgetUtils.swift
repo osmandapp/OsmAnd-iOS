@@ -156,12 +156,12 @@ final class WidgetUtils: NSObject {
                                               panel: panel)
     }
     
-    static func updateWidgetParams(with mapWidgetInfo: MapWidgetInfo,
-                                   newOrder: [String],
-                                   newOrders: [[String]],
-                                   panel: WidgetsPanel,
-                                   selectedAppMode: OAApplicationMode,
-                                   widgetRegistry: OAMapWidgetRegistry) {
+    private static func updateWidgetParams(with mapWidgetInfo: MapWidgetInfo,
+                                           newOrder: [String],
+                                           newOrders: [[String]],
+                                           panel: WidgetsPanel,
+                                           selectedAppMode: OAApplicationMode,
+                                           widgetRegistry: OAMapWidgetRegistry) {
         guard !mapWidgetInfo.isEnabledForAppMode(selectedAppMode) else {
             return
         }

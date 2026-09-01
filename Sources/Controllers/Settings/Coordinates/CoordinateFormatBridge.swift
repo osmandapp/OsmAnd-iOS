@@ -33,6 +33,14 @@ final class CoordinateFormatBridge: NSObject {
         CoordinateFormatHelper.primaryRowPrefix(lat: lat, lon: lon)
     }
 
+    static func shareLink(lat: Double, lon: Double) -> String {
+        CoordinateFormatHelper.shareLink(lat: lat, lon: lon)
+    }
+
+    static func osmEditingLink(lat: Double, lon: Double) -> String? {
+        CoordinateFormatHelper.osmEditingLink(lat: lat, lon: lon)
+    }
+
     static func collapsedRows(lat: Double, lon: Double) -> [FormattedCoordinateItem] {
         CoordinateFormatHelper.collapsedLocationData(lat: lat, lon: lon).map { row in
             FormattedCoordinateItem(text: row.text, prefix: row.displayPrefix)

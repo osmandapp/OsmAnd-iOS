@@ -1422,6 +1422,9 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
+    if (self.isNewContextMenuDisabled)
+        return;
+
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1507,6 +1510,9 @@ typedef enum
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
 {
+    if (self.isNewContextMenuDisabled)
+        return;
+
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -3168,13 +3174,14 @@ typedef enum
                         state:(OATrackMenuViewControllerState *)state
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
+    BOOL shouldClearNavControllerHistory = _scrollableHudViewController && !state.openedFromTrackMenu;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
 
-        if (!state.openedFromTrackMenu)
+        if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
 
         [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
@@ -3196,7 +3203,7 @@ typedef enum
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
-            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
+            [strongSelf->_scrollableHudViewController hide:YES duration:0.2 onComplete:completion];
             return YES;
         },
         ^BOOL(dispatch_block_t completion) {
@@ -3212,7 +3219,8 @@ typedef enum
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
 
-            [strongSelf hideTargetPointMenu:0.2 onComplete:completion];
+            strongSelf->_prevScrollableHudViewController = nil;
+            [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         },
     ]];

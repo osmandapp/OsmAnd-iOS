@@ -114,7 +114,9 @@
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
         
-        ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
         NSString *widgetId = customId.length > 0 ? customId : type.id;
         OAWidgetsPanel *panel = [type panel:widgetId
                                   appMode:appMode

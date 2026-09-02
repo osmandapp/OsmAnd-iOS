@@ -29,12 +29,9 @@ class SimpleWidgetInfo: MapWidgetInfo {
     override func getUpdatedPanel(_ appMode: OAApplicationMode,
                                   screenLayoutMode: NSNumber?) -> WidgetsPanel {
         if let widgetType = widgetType() {
-            let layoutMode = screenLayoutMode.flatMap { ScreenLayoutMode(rawValue: $0.int32Value) } ?? self.screenLayoutMode
-            let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: screenLayoutMode != nil) // todo
             return widgetType.panel(key,
                                     appMode: appMode,
-                                    screenLayoutMode: layoutMode,
-                                    screenElementsMode: screenElementsMode)
+                                    screenLayoutMode: screenLayoutMode)
         }
         return widgetPanel
     }

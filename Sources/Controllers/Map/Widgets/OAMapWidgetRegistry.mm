@@ -268,8 +268,8 @@
     
     if ([widgetInfo isCustomWidget] && (!enabled || !enabled.boolValue))
     {
-        ScreenElementsMode screenElementsMode = [_settings.useSeparateLayouts get:appMode] ? ScreenElementsModeIndependent : ScreenElementsModeShared;
-        OACommonStringList *customWidgetKeys = [_settings customWidgetKeys:widgetInfo.screenLayoutMode screenElementsMode:screenElementsMode];
+        NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(widgetInfo.screenLayoutMode) : nil;
+        OACommonStringList *customWidgetKeys = [_settings customWidgetKeys:layoutMode];
         NSMutableArray<NSString *> *keys = [[customWidgetKeys get:appMode] mutableCopy];
         [keys removeObject:widgetInfo.key];
         [customWidgetKeys set:keys mode:appMode];
@@ -289,9 +289,10 @@
     NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *newAllWidgets = [NSMutableDictionary dictionary];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
+        NSNumber *layoutMode = [_settings.useSeparateLayouts get:widget.appMode] ? @(widget.screenLayoutMode) : nil;
         OAWidgetsPanel *panel = [widget getUpdatedPanel];
-        widget.pageIndex = [panel widgetPage:widget.key appMode:widget.appMode screenLayoutMode:widget.screenLayoutMode];
-        widget.priority = [panel widgetOrder:widget.key appMode:widget.appMode screenLayoutMode:widget.screenLayoutMode];
+        widget.pageIndex = [panel widgetPage:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
+        widget.priority = [panel widgetOrder:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         
         NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPanel = newAllWidgets[panel];
         if (widgetsOfPanel == nil && panel != nil)
@@ -338,9 +339,7 @@
     }
     return [OAWidgetsInitializer createAllControlsWithAppMode:appMode
                                              screenLayoutMode:screenLayoutMode
-                                           screenElementsMode:useSeparateLayouts
-                                               ? ScreenElementsModeIndependent
-                                               : ScreenElementsModeShared]; // todo
+                                         preferenceLayoutMode:layoutMode];
 }
 
 - (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType

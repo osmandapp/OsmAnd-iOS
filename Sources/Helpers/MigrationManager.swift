@@ -131,13 +131,9 @@ final class MigrationManager: NSObject {
         let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
         for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
             let value = legacyPreference.get(appMode)
-            var preferences = [
-                settings.transparentWidgets(ScreenLayoutMode.portrait.rawValue,
-                                            screenElementsMode: ScreenElementsMode.shared.rawValue)
-            ]
+            var preferences = [settings.transparentWidgets(nil)]
             ScreenLayoutMode.allCases.forEach {
-                preferences.append(settings.transparentWidgets($0.rawValue,
-                                                               screenElementsMode: ScreenElementsMode.independent.rawValue))
+                preferences.append(settings.transparentWidgets(NSNumber(value: $0.rawValue)))
             }
             for preference in preferences where !preference.isSet(for: appMode) {
                 preference.set(value, mode: appMode)
@@ -147,30 +143,23 @@ final class MigrationManager: NSObject {
 
     private func migrateWidgetLayoutPreferences() {
         for appMode in OAApplicationMode.allPossibleValues() {
+            let sourceVisibility = settings.mapInfoControls(nil)
+            let sourceCustomKeys = settings.customWidgetKeys(nil)
             for screenLayoutMode in ScreenLayoutMode.allCases {
-                let sourceVisibility = settings.mapInfoControls(screenLayoutMode.rawValue,
-                                                                screenElementsMode: ScreenElementsMode.shared.rawValue)
-                let targetVisibility = settings.mapInfoControls(screenLayoutMode.rawValue,
-                                                                screenElementsMode: ScreenElementsMode.independent.rawValue)
+                let layoutMode = NSNumber(value: screenLayoutMode.rawValue)
+                let targetVisibility = settings.mapInfoControls(layoutMode)
                 if sourceVisibility.isSet(for: appMode), !targetVisibility.isSet(for: appMode) {
                     targetVisibility.set(sourceVisibility.get(appMode), mode: appMode)
                 }
 
-                let sourceCustomKeys = settings.customWidgetKeys(screenLayoutMode.rawValue,
-                                                                 screenElementsMode: ScreenElementsMode.shared.rawValue)
-                let targetCustomKeys = settings.customWidgetKeys(screenLayoutMode.rawValue,
-                                                                 screenElementsMode: ScreenElementsMode.independent.rawValue)
+                let targetCustomKeys = settings.customWidgetKeys(layoutMode)
                 if sourceCustomKeys.isSet(for: appMode), !targetCustomKeys.isSet(for: appMode) {
                     targetCustomKeys.set(sourceCustomKeys.get(appMode), mode: appMode)
                 }
 
                 for panel in WidgetsPanel.values {
-                    let sourceOrder = settings.widgetPanelOrder(panel,
-                                                                screenLayoutMode: screenLayoutMode.rawValue,
-                                                                screenElementsMode: ScreenElementsMode.shared.rawValue)
-                    let targetOrder = settings.widgetPanelOrder(panel,
-                                                                screenLayoutMode: screenLayoutMode.rawValue,
-                                                                screenElementsMode: ScreenElementsMode.independent.rawValue)
+                    let sourceOrder = settings.widgetPanelOrder(panel, screenLayoutMode: nil)
+                    let targetOrder = settings.widgetPanelOrder(panel, screenLayoutMode: layoutMode)
                     if sourceOrder.isSet(for: appMode), !targetOrder.isSet(for: appMode) {
                         targetOrder.set(sourceOrder.get(appMode), mode: appMode)
                     }

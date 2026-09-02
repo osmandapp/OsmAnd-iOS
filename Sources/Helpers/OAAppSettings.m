@@ -5853,18 +5853,6 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
                           preferenceKey:(NSString *)preferenceKey
-                        screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                      screenElementsMode:(ScreenElementsMode)screenElementsMode
-{
-    if (screenElementsMode == ScreenElementsModeShared)
-        return basePreference;
-
-    NSString *layoutPrefix = [ScreenLayoutModeWrapper keyFor:screenLayoutMode];
-    return [self layoutPreference:basePreference preferenceKey:preferenceKey layoutPrefix:layoutPrefix];
-}
-
-- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
-                          preferenceKey:(NSString *)preferenceKey
                         screenLayoutMode:(NSNumber *)screenLayoutMode
 {
     if (screenLayoutMode == nil)
@@ -5907,14 +5895,12 @@ static NSString *kOfflineKey = @"OFFLINE";
     {
         OACommonPreference *preference = preferenceData.firstObject;
         NSString *preferenceKey = preferenceData.lastObject;
-        [self layoutPreference:preference
-                preferenceKey:preferenceKey
-              screenLayoutMode:ScreenLayoutModePortrait
-            screenElementsMode:ScreenElementsModeIndependent];
-        [self layoutPreference:preference
-                preferenceKey:preferenceKey
-              screenLayoutMode:ScreenLayoutModeLandscape
-            screenElementsMode:ScreenElementsModeIndependent];
+        for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+        {
+            [self layoutPreference:preference
+                    preferenceKey:preferenceKey
+                  screenLayoutMode:screenLayoutMode];
+        }
     }
 
     for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
@@ -7174,20 +7160,19 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [[self panelsLayoutModeForAppMode:appMode] get:appMode] == PanelsLayoutModeCompact;
 }
 
-- (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+- (OACommonBoolean *)transparentWidgets:(NSNumber *)screenLayoutMode
 {
     return (OACommonBoolean *)[self layoutPreference:_transparentMapTheme
                                       preferenceKey:transparentMapThemeKey
-                                    screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                                  screenElementsMode:(ScreenElementsMode)screenElementsMode];
+                                   screenLayoutMode:screenLayoutMode];
 }
 
 - (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode
 {
-    BOOL useSeparateLayouts = [_useSeparateLayouts get:appMode];
-    ScreenElementsMode screenElementsMode = useSeparateLayouts ? ScreenElementsModeIndependent : ScreenElementsModeShared;
-    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
-    return [self transparentWidgets:screenLayoutMode screenElementsMode:screenElementsMode];
+    NSNumber *screenLayoutMode = [_useSeparateLayouts get:appMode]
+        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+        : nil;
+    return [self transparentWidgets:screenLayoutMode];
 }
 
 - (BOOL)isTransparentWidgets
@@ -7196,7 +7181,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     return [[self transparentWidgetsForAppMode:appMode] get:appMode];
 }
 
-// todo
 - (OACommonString *)mapInfoControls:(NSNumber *)screenLayoutMode
 {
     return (OACommonString *)[self layoutPreference:_mapInfoControls
@@ -7204,25 +7188,15 @@ static NSString *kOfflineKey = @"OFFLINE";
                                    screenLayoutMode:screenLayoutMode];
 }
 
-- (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
-{
-    return (OACommonString *)[self layoutPreference:_mapInfoControls
-                                      preferenceKey:mapInfoControlsLayoutKey
-                                   screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                                 screenElementsMode:(ScreenElementsMode)screenElementsMode];
-}
-
-- (OACommonStringList *)customWidgetKeys:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+- (OACommonStringList *)customWidgetKeys:(NSNumber *)screenLayoutMode
 {
     return (OACommonStringList *)[self layoutPreference:_customWidgetKeys
                                           preferenceKey:customWidgetKeys
-                                        screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                                      screenElementsMode:(ScreenElementsMode)screenElementsMode];
+                                       screenLayoutMode:screenLayoutMode];
 }
 
 - (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
-                              screenLayoutMode:(int)screenLayoutMode
-                            screenElementsMode:(int)screenElementsMode
+                              screenLayoutMode:(NSNumber *)screenLayoutMode
 {
     OACommonListOfStringList *preference;
     NSString *preferenceKey;
@@ -7253,8 +7227,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
     return (OACommonListOfStringList *)[self layoutPreference:preference
                                                preferenceKey:preferenceKey
-                                             screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
-                                           screenElementsMode:(ScreenElementsMode)screenElementsMode];
+                                            screenLayoutMode:screenLayoutMode];
 }
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global

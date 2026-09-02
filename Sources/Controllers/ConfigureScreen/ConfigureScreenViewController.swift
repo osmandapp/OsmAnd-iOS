@@ -40,6 +40,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         screenLayoutMode == .landscape && screenElementsMode == .shared
     }
 
+    private var preferenceLayoutMode: NSNumber? {
+        screenElementsMode.usesSeparateLayouts ? NSNumber(value: screenLayoutMode.rawValue) : nil
+    }
+
     // MARK: Initialization
 
     override func commonInit() {
@@ -189,8 +193,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         transparencyRow.title = localizedString("map_widget_transparent")
         transparencyRow.key = "map_widget_transparent"
         transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
-        let transparentWidgets = settings.transparentWidgets(screenLayoutMode.rawValue,
-                                                             screenElementsMode: screenElementsMode.rawValue)
+        let transparentWidgets = settings.transparentWidgets(preferenceLayoutMode)
         transparencyRow.setObj(NSNumber(value: transparentWidgets.get(appMode)), forKey: selectedKey)
         transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
 
@@ -462,8 +465,7 @@ extension ConfigureScreenViewController {
         let data = tableData.item(for: indexPath)
         
         if data.key == "map_widget_transparent" {
-            let preference = settings.transparentWidgets(screenLayoutMode.rawValue,
-                                                         screenElementsMode: screenElementsMode.rawValue)
+            let preference = settings.transparentWidgets(preferenceLayoutMode)
             preference.set(sw.isOn, mode: appMode)
             OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
         }

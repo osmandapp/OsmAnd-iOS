@@ -52,6 +52,12 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
             OAAppSettings.sharedManager().applicationMode.get()
         }
     }
+
+    private var preferenceLayoutMode: NSNumber? {
+        OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
+    }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode,
@@ -312,13 +318,10 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private func prepareWidgetsConfiguration(orderedWidgetPages: [[String]],
                                              widgetParamsArray: [[String: Any]]?)
         -> (pagedOrder: [[String]], newWidgetInfos: [MapWidgetInfo]) {
-        let layoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
-            ? NSNumber(value: screenLayoutMode.rawValue)
-            : nil
         var currentWidgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                         filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
                                                         panels: [widgetPanel],
-                                                        layoutMode: layoutMode)?.array as? [MapWidgetInfo] ?? []
+                                                        layoutMode: preferenceLayoutMode)?.array as? [MapWidgetInfo] ?? []
         var widgetParamsArray = widgetParamsArray
         var pagedOrder = [[String]]()
         var newWidgetInfos = [MapWidgetInfo]()
@@ -362,15 +365,12 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
 
     private func applyWidgetsVisibility(_ enabledWidgetIds: [String]) {
-        let layoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
-            ? NSNumber(value: screenLayoutMode.rawValue)
-            : nil
         let widgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                  filterModes: Int(kWidgetModeMatchingPanels),
                                                  panels: [widgetPanel],
-                                                 layoutMode: layoutMode)?.array as? [MapWidgetInfo] ?? []
+                                                 layoutMode: preferenceLayoutMode)?.array as? [MapWidgetInfo] ?? []
         let widgetsVisibility = MapWidgetInfo.widgetsVisibility(selectedAppMode,
-                                                                screenLayoutMode: layoutMode)
+                                                                screenLayoutMode: preferenceLayoutMode)
         for widgetInfo in widgetInfos {
             let enabledFromApply = enabledWidgetIds.contains(widgetInfo.key)
             if widgetInfo.isEnabledForAppMode(selectedAppMode,
@@ -389,7 +389,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private func applyWidgetsOrder(_ pagedOrder: [[String]]) {
         widgetPanel.setWidgetsOrder(pagedOrder: pagedOrder,
                                     appMode: selectedAppMode,
-                                    screenLayoutMode: screenLayoutMode)
+                                    screenLayoutMode: preferenceLayoutMode)
         widgetRegistry.reorderWidgets()
     }
 }

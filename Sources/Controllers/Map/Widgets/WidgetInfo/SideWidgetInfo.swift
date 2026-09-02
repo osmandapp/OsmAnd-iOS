@@ -38,20 +38,16 @@ class SideWidgetInfo: MapWidgetInfo {
     override func getUpdatedPanel(_ appMode: OAApplicationMode,
                                   screenLayoutMode: NSNumber?) -> WidgetsPanel {
         let widgetType = widgetType()
-        let layoutMode = screenLayoutMode.flatMap { ScreenLayoutMode(rawValue: $0.int32Value) } ?? self.screenLayoutMode
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: screenLayoutMode != nil) // todo
         if let widgetType {
             if widgetType.defaultPanel == .leftPanel,
                WidgetsPanel.rightPanel.contains(widgetId: key,
                                                 appMode: appMode,
-                                                screenLayoutMode: layoutMode,
-                                                screenElementsMode: screenElementsMode) {
+                                                screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .rightPanel
             } else if widgetType.defaultPanel == .rightPanel,
                       WidgetsPanel.leftPanel.contains(widgetId: key,
                                                       appMode: appMode,
-                                                      screenLayoutMode: layoutMode,
-                                                      screenElementsMode: screenElementsMode) {
+                                                      screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .leftPanel
             } else {
                 widgetPanel = widgetType.defaultPanel
@@ -59,8 +55,7 @@ class SideWidgetInfo: MapWidgetInfo {
         } else {
             widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key,
                                                           appMode: appMode,
-                                                          screenLayoutMode: layoutMode,
-                                                          screenElementsMode: screenElementsMode) ? .leftPanel : .rightPanel
+                                                          screenLayoutMode: screenLayoutMode) ? .leftPanel : .rightPanel
         }
         
         return widgetPanel

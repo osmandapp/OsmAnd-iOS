@@ -70,10 +70,8 @@ final class WidgetUtils: NSObject {
                                 addToNext: Bool? = nil) {
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let settings = OAAppSettings.sharedManager()
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
-        settings.customWidgetKeys(screenLayoutMode.rawValue,
-                                  screenElementsMode: screenElementsMode.rawValue).add(widgetInfo.key,
-                                                                                      appMode: appMode) // todo
+        let layoutMode = preferenceLayoutMode(screenLayoutMode, appMode: appMode)
+        settings.customWidgetKeys(layoutMode).add(widgetInfo.key, appMode: appMode)
         if let selectedWidget, let addToNext {
             addWidgetToSpecificPlace(with: widgetInfo,
                                      widgetsPanel: panel,
@@ -132,7 +130,10 @@ final class WidgetUtils: NSObject {
             
             var flatOrder: [[String]] = []
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder,
+                                         appMode: selectedAppMode,
+                                         screenLayoutMode: preferenceLayoutMode(screenLayoutMode,
+                                                                                appMode: selectedAppMode))
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             
@@ -166,7 +167,10 @@ final class WidgetUtils: NSObject {
                 orders[orders.count - 1] = lastPageOrder
             }
             widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders,
+                                         appMode: selectedAppMode,
+                                         screenLayoutMode: preferenceLayoutMode(screenLayoutMode,
+                                                                                appMode: selectedAppMode))
         }
     }
     
@@ -207,7 +211,10 @@ final class WidgetUtils: NSObject {
             
             var flatOrder = [[String]]()
             flatOrder.append([targetWidget.key])
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder,
+                                         appMode: selectedAppMode,
+                                         screenLayoutMode: preferenceLayoutMode(screenLayoutMode,
+                                                                                appMode: selectedAppMode))
         } else {
             let sortedPagedOrder = pagedOrder.sorted { $0.key < $1.key }
             var orders = sortedPagedOrder.map { $0.value }
@@ -239,12 +246,22 @@ final class WidgetUtils: NSObject {
             orders[insertPage] = pageToAddWidget
             
             widgetRegistry.widgets(for: widgetsPanel).add(targetWidget)
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)
+            widgetsPanel.setWidgetsOrder(pagedOrder: orders,
+                                         appMode: selectedAppMode,
+                                         screenLayoutMode: preferenceLayoutMode(screenLayoutMode,
+                                                                                appMode: selectedAppMode))
         }
     }
     
     private static func getNewNextPageIndex(pages: [Int]) -> Int {
         pages.max() ?? 0
+    }
+
+    private static func preferenceLayoutMode(_ screenLayoutMode: ScreenLayoutMode,
+                                             appMode: OAApplicationMode) -> NSNumber? {
+        OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
     }
 }
 

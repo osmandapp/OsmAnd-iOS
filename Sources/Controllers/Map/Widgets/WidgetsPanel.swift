@@ -78,32 +78,12 @@ class WidgetsPanel: NSObject, NSCopying {
         return order ?? WidgetsPanel.DEFAULT_ORDER
     }
     
-    func widgetPage(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> Int {
+    func widgetPage(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
         pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).0
     }
-
-    func widgetPage(_ widgetId: String,
-                    appMode: OAApplicationMode,
-                    screenLayoutMode: ScreenLayoutMode,
-                    screenElementsMode: ScreenElementsMode) -> Int {
-        pagedOrder(widgetId,
-                   appMode: appMode,
-                   screenLayoutMode: screenLayoutMode,
-                   screenElementsMode: screenElementsMode).0
-    }
     
-    func widgetOrder(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> Int {
+    func widgetOrder(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
         pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).1
-    }
-
-    func widgetOrder(_ widgetId: String,
-                     appMode: OAApplicationMode,
-                     screenLayoutMode: ScreenLayoutMode,
-                     screenElementsMode: ScreenElementsMode) -> Int {
-        pagedOrder(widgetId,
-                   appMode: appMode,
-                   screenLayoutMode: screenLayoutMode,
-                   screenElementsMode: screenElementsMode).1
     }
     
     private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
@@ -118,16 +98,8 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     private func reorderedPages(_ appMode: OAApplicationMode,
-                                screenLayoutMode: ScreenLayoutMode,
-                                screenElementsMode: ScreenElementsMode? = nil) -> [[String]]? {
-        let pref: OACommonListOfStringList
-        if let screenElementsMode {
-            pref = orderPreference(screenLayoutMode: screenLayoutMode,
-                                   screenElementsMode: screenElementsMode,
-                                   appMode: appMode)
-        } else {
-            pref = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
-        }
+                                screenLayoutMode: NSNumber?) -> [[String]]? {
+        let pref = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
         let pages: [[String]]? = pref.get(appMode)
         guard let pages, !pages.isEmpty, isPanelVertical else {
             return pages
@@ -137,11 +109,9 @@ class WidgetsPanel: NSObject, NSCopying {
 
     private func pagedOrder(_ widgetId: String,
                             appMode: OAApplicationMode,
-                            screenLayoutMode: ScreenLayoutMode,
-                            screenElementsMode: ScreenElementsMode? = nil) -> (Int, Int) {
+                            screenLayoutMode: NSNumber?) -> (Int, Int) {
         guard let pages = reorderedPages(appMode,
-                                         screenLayoutMode: screenLayoutMode,
-                                         screenElementsMode: screenElementsMode),
+                                         screenLayoutMode: screenLayoutMode),
               !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
@@ -156,48 +126,18 @@ class WidgetsPanel: NSObject, NSCopying {
         return (0, WidgetsPanel.DEFAULT_ORDER)
     }
 
-    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
+    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: NSNumber?) {
         let preference = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
         preference.set(pagedOrder, mode: appMode)
     }
 
-    func setWidgetsOrder(pagedOrder: [[String]],
-                         appMode: OAApplicationMode,
-                         screenLayoutMode: ScreenLayoutMode,
-                         screenElementsMode: ScreenElementsMode) {
-        let preference = orderPreference(screenLayoutMode: screenLayoutMode,
-                                         screenElementsMode: screenElementsMode,
-                                         appMode: appMode)
-        preference.set(pagedOrder, mode: appMode)
-    }
-
-    func contains(widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> Bool {
+    func contains(widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Bool {
         widgetOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func contains(widgetId: String,
-                  appMode: OAApplicationMode,
-                  screenLayoutMode: ScreenLayoutMode,
-                  screenElementsMode: ScreenElementsMode) -> Bool {
-        widgetOrder(widgetId,
-                    appMode: appMode,
-                    screenLayoutMode: screenLayoutMode,
-                    screenElementsMode: screenElementsMode) != WidgetsPanel.DEFAULT_ORDER
-    }
-
-    func orderPreference(screenLayoutMode: ScreenLayoutMode, appMode: OAApplicationMode) -> OACommonListOfStringList {
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode))
-        return orderPreference(screenLayoutMode: screenLayoutMode,
-                               screenElementsMode: screenElementsMode,
-                               appMode: appMode)
-    }
-
-    func orderPreference(screenLayoutMode: ScreenLayoutMode,
-                         screenElementsMode: ScreenElementsMode,
-                         appMode: OAApplicationMode) -> OACommonListOfStringList {
+    func orderPreference(screenLayoutMode: NSNumber?, appMode: OAApplicationMode) -> OACommonListOfStringList {
         OAAppSettings.sharedManager().widgetPanelOrder(self,
-                                                       screenLayoutMode: screenLayoutMode.rawValue,
-                                                       screenElementsMode: screenElementsMode.rawValue)
+                                                       screenLayoutMode: screenLayoutMode)
     }
 
     static func getPagedWidgetIdsWithPages(_ pages: [[String]]) -> [[String]] {

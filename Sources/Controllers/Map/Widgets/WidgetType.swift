@@ -134,23 +134,10 @@ class WidgetType: NSObject {
         defaultPanel.getOriginalWidgetOrder(widgetId: id)
     }
 
-    func panel(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel {
+    func panel(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> WidgetsPanel {
         if let widgetsPanel = Self.findWidgetPanel(widgetId: widgetId,
                                                   mode: appMode,
                                                   screenLayoutMode: screenLayoutMode) {
-            return widgetsPanel
-        }
-        return defaultPanel
-    }
-
-    func panel(_ widgetId: String,
-               appMode: OAApplicationMode,
-               screenLayoutMode: ScreenLayoutMode,
-               screenElementsMode: ScreenElementsMode) -> WidgetsPanel {
-        if let widgetsPanel = Self.findWidgetPanel(widgetId: widgetId,
-                                                   mode: appMode,
-                                                   screenLayoutMode: screenLayoutMode,
-                                                   screenElementsMode: screenElementsMode) {
             return widgetsPanel
         }
         return defaultPanel
@@ -166,27 +153,13 @@ class WidgetType: NSObject {
 
     static func findWidgetPanel(widgetId: String,
                                 mode: OAApplicationMode? = nil,
-                                screenLayoutMode: ScreenLayoutMode) -> WidgetsPanel? {
-        let settings: OAAppSettings = OAAppSettings.sharedManager()
-        let appMode: OAApplicationMode = mode ?? settings.applicationMode.get()
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: settings.useSeparateLayouts.get(appMode))
-        return findWidgetPanel(widgetId: widgetId,
-                               mode: appMode,
-                               screenLayoutMode: screenLayoutMode,
-                               screenElementsMode: screenElementsMode)
-    }
-
-    static func findWidgetPanel(widgetId: String,
-                                mode: OAApplicationMode? = nil,
-                                screenLayoutMode: ScreenLayoutMode,
-                                screenElementsMode: ScreenElementsMode) -> WidgetsPanel? {
+                                screenLayoutMode: NSNumber?) -> WidgetsPanel? {
         let appMode: OAApplicationMode = mode ?? OAAppSettings.sharedManager().applicationMode.get()
         var setPanels: [WidgetsPanel] = []
         var unsetPanels: [WidgetsPanel] = []
 
         for panel in [WidgetsPanel.leftPanel, WidgetsPanel.topPanel, WidgetsPanel.rightPanel, WidgetsPanel.bottomPanel] {
             if panel.orderPreference(screenLayoutMode: screenLayoutMode,
-                                     screenElementsMode: screenElementsMode,
                                      appMode: appMode).isSet(for: appMode) {
                 setPanels.append(panel)
             } else {
@@ -196,15 +169,13 @@ class WidgetType: NSObject {
 
         for panel in setPanels where panel.contains(widgetId: widgetId,
                                                     appMode: appMode,
-                                                    screenLayoutMode: screenLayoutMode,
-                                                    screenElementsMode: screenElementsMode) {
+                                                    screenLayoutMode: screenLayoutMode) {
             return panel
         }
 
         for panel in unsetPanels where panel.contains(widgetId: widgetId,
                                                       appMode: appMode,
-                                                      screenLayoutMode: screenLayoutMode,
-                                                      screenElementsMode: screenElementsMode) {
+                                                      screenLayoutMode: screenLayoutMode) {
             return panel
         }
 

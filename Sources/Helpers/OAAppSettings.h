@@ -1252,15 +1252,13 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
 - (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode;
 - (BOOL)isCompactPanelsLayout;
-- (OACommonBoolean *)transparentWidgets:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
+- (OACommonBoolean *)transparentWidgets:(nullable NSNumber *)screenLayoutMode;
 - (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode;
 - (BOOL)isTransparentWidgets;
-- (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode; // todo
-- (OACommonString *)mapInfoControls:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
-- (OACommonStringList *)customWidgetKeys:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
+- (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode;
+- (OACommonStringList *)customWidgetKeys:(nullable NSNumber *)screenLayoutMode;
 - (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
-                              screenLayoutMode:(int)screenLayoutMode
-                            screenElementsMode:(int)screenElementsMode;
+                              screenLayoutMode:(nullable NSNumber *)screenLayoutMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;

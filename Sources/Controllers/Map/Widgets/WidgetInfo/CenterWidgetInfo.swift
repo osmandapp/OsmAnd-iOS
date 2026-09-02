@@ -14,21 +14,17 @@ class CenterWidgetInfo: MapWidgetInfo {
     override func getUpdatedPanel(_ appMode: OAApplicationMode,
                                   screenLayoutMode: NSNumber?) -> WidgetsPanel {
         let widgetType = widgetType()
-        let layoutMode = screenLayoutMode.flatMap { ScreenLayoutMode(rawValue: $0.int32Value) } ?? self.screenLayoutMode
-        let screenElementsMode = ScreenElementsMode(usesSeparateLayouts: screenLayoutMode != nil) // todo
         
         if let widgetType {
             if widgetType.defaultPanel == .bottomPanel,
                WidgetsPanel.topPanel.contains(widgetId: key,
                                               appMode: appMode,
-                                              screenLayoutMode: layoutMode,
-                                              screenElementsMode: screenElementsMode) {
+                                              screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .topPanel;
             } else if widgetType.defaultPanel == .topPanel,
                       WidgetsPanel.bottomPanel.contains(widgetId: key,
                                                         appMode: appMode,
-                                                        screenLayoutMode: layoutMode,
-                                                        screenElementsMode: screenElementsMode) {
+                                                        screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .bottomPanel
             } else {
                 widgetPanel = widgetType.defaultPanel
@@ -36,8 +32,7 @@ class CenterWidgetInfo: MapWidgetInfo {
         } else {
             widgetPanel = WidgetsPanel.topPanel.contains(widgetId: key,
                                                          appMode: appMode,
-                                                         screenLayoutMode: layoutMode,
-                                                         screenElementsMode: screenElementsMode) ? .topPanel : .bottomPanel
+                                                         screenLayoutMode: screenLayoutMode) ? .topPanel : .bottomPanel
         }
         return widgetPanel
     }

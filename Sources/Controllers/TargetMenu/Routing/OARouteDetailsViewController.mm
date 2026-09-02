@@ -782,14 +782,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                            analysis:self.analysis
                                             segment:self.segment];
         }
-        if ([recognizer.view isKindOfClass:BarLineChartViewBase.class])
-        {
-            BarLineChartViewBase *chart = (BarLineChartViewBase *)recognizer.view;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [chart layoutIfNeeded];
-                [self->_chartSynchronizer syncViewPortFromChart:chart];
-            });
-        }
     }
 }
 

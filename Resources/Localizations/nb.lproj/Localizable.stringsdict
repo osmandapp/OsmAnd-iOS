@@ -93,5 +93,21 @@
 			<string>%2$@ spor</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Are you sure you want to delete %2$@ edit?</string>
+			<key>other</key>
+			<string>Are you sure you want to delete %2$@ edits?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -117,5 +117,25 @@
 			<string>%2$@ stop</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Opravdu chcete smazat %2$@ úpravu?</string>
+			<key>few</key>
+			<string>Přejete si skutečně odstranit %2$@ úpravy?</string>
+			<key>many</key>
+			<string>Přejete si skutečně odstranit %2$@ úprav?</string>
+			<key>other</key>
+			<string>Přejete si skutečně odstranit %2$@ úprav?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

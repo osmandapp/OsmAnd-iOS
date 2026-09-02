@@ -103,5 +103,23 @@
 			<string>%2$@ trilhas</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Tem certeza de que deseja excluir a edição %2$@?</string>
+			<key>many</key>
+			<string>Tem certeza de que deseja excluir %2$@ edições?</string>
+			<key>other</key>
+			<string>Tem certeza de que deseja excluir %2$@ edições?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

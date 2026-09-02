@@ -103,5 +103,23 @@
 			<string>%2$@ pistas</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>¿Confirma que quiere eliminar %2$@ edición?</string>
+			<key>many</key>
+			<string>¿Confirma que quiere eliminar %2$@ ediciones?</string>
+			<key>other</key>
+			<string>¿Confirma que quiere eliminar %2$@ ediciones?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

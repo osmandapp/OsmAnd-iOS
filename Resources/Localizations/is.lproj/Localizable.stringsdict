@@ -93,5 +93,21 @@
 			<string>%2$@ ferlar</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ertu viss um að þú viljir eyða %2$@ breytingu?</string>
+			<key>other</key>
+			<string>Ertu viss um að þú viljir eyða %2$@ breytingum?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

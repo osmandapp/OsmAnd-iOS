@@ -93,5 +93,21 @@
 			<string>%2$@ nyomvonal</string>
 		</dict>
 	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Biztosan törölni szeretne %2$@ szerkesztést?</string>
+			<key>other</key>
+			<string>Biztosan törölni szeretne %2$@ szerkesztést?</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

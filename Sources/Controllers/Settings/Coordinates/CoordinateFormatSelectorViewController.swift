@@ -16,11 +16,9 @@ import UIKit
 
 @objcMembers
 final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
-
-    private static let formatIdKey = "formatId"
-    private static let isSelectedKey = "isSelected"
-    private static let isPrimaryKey = "isPrimary"
-    private static let selectOtherKey = "selectOther"
+    private enum Key: String {
+        case formatId, isSelected, isPrimary, selectOther
+    }
 
     weak var selectorDelegate: CoordinateFormatSelectorDelegate?
 
@@ -58,15 +56,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
                               delegate: CoordinateFormatSelectorDelegate?) {
         let vc = CoordinateFormatSelectorViewController(selectedFormatId: selectedFormatId)
         vc.selectorDelegate = delegate
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 38
-        }
-        presenter.present(nav, animated: true)
+        presenter.showMediumToLargeSheetViewController(vc)
     }
 
     // MARK: - Lifecycle
@@ -135,7 +125,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
             let row = otherSection.createNewRow()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.title = localizedString("coordinate_format_select_other")
-            row.key = Self.selectOtherKey
+            row.key = Key.selectOther.rawValue
         }
     }
 
@@ -150,11 +140,12 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         cell.selectionStyle = .default
         cell.accessoryType = .none
 
-        if item.key == Self.selectOtherKey {
+        if item.key == Key.selectOther.rawValue {
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorActive
+            cell.configureAccessibility(withTitle: item.title, selected: false)
             return cell
         }
 
@@ -162,7 +153,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         cell.titleLabel.textColor = .textColorPrimary
         cell.titleLabel.text = item.title
 
-        let isPrimary = (item.obj(forKey: Self.isPrimaryKey) as? NSNumber)?.boolValue == true
+        let isPrimary = (item.obj(forKey: Key.isPrimary.rawValue) as? NSNumber)?.boolValue == true
         let descr: String
         if isPrimary {
             let example = item.descr ?? ""
@@ -176,7 +167,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         cell.descriptionLabel.text = descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
 
-        let selected = (item.obj(forKey: Self.isSelectedKey) as? NSNumber)?.boolValue == true
+        let selected = (item.obj(forKey: Key.isSelected.rawValue) as? NSNumber)?.boolValue == true
         cell.leftIconVisibility(true)
         if selected {
             cell.leftIconView.image = .icCheckmarkDefault
@@ -187,6 +178,15 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         }
         
         cell.textStackView.spacing = 4
+        
+        let accessibilityTitle: String
+        if let title = item.title, !descr.isEmpty {
+            accessibilityTitle = "\(title), \(descr)"
+        } else {
+            accessibilityTitle = item.title ?? ""
+        }
+        cell.configureAccessibility(withTitle: accessibilityTitle, selected: selected)
+        
         return cell
     }
 
@@ -198,7 +198,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         guard let indexPath else { return }
         let item = tableData.item(for: indexPath)
 
-        if item.key == Self.selectOtherKey {
+        if item.key == Key.selectOther.rawValue {
             let delegate = selectorDelegate
             dismiss(animated: true) {
                 delegate?.coordinateFormatSelectorDidRequestOtherFormat(self)
@@ -206,7 +206,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
             return
         }
 
-        guard let formatId = item.obj(forKey: Self.formatIdKey) as? String else { return }
+        guard let formatId = item.obj(forKey: Key.formatId.rawValue) as? String else { return }
         let delegate = selectorDelegate
         dismiss(animated: true) {
             delegate?.coordinateFormatSelector(self, didSelectFormatId: formatId)
@@ -227,9 +227,9 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         } else {
             row.descr = CoordinateFormatHelper.exampleString(format)
         }
-        row.setObj(format.id, forKey: Self.formatIdKey)
-        row.setObj(NSNumber(value: selected), forKey: Self.isSelectedKey)
-        row.setObj(NSNumber(value: primary), forKey: Self.isPrimaryKey)
+        row.setObj(format.id, forKey: Key.formatId.rawValue)
+        row.setObj(NSNumber(value: selected), forKey: Key.isSelected.rawValue)
+        row.setObj(NSNumber(value: primary), forKey: Key.isPrimary.rawValue)
     }
 
     private func reloadFormats() {

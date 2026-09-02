@@ -407,17 +407,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         return NO;
     }
 
-    NSDictionary<NSString *, NSString *> *fields =
-        [CoordinateFormatBridge prefillFieldsWithLat:latLon.coordinate.latitude
-                                                 lon:latLon.coordinate.longitude
-                                            formatId:_currentFormatId];
-    _eastingStr = fields[@"easting"] ?: @"";
-    _northingStr = fields[@"northing"] ?: @"";
-    _maidenheadStr = fields[@"maidenhead"] ?: @"";
-    _olcStr = fields[@"olc"] ?: @"";
-    _mgrsStr = fields[@"mgrs"] ?: @"";
-    _latStr = fields[@"lat"] ?: @"";
-    _lonStr = fields[@"lon"] ?: @"";
+    CoordinateInputFields *fields = [CoordinateFormatBridge prefillFieldsWithLat:latLon.coordinate.latitude
+                                                                             lon:latLon.coordinate.longitude
+                                                                        formatId:_currentFormatId];
+    _eastingStr = fields.easting;
+    _northingStr = fields.northing;
+    _maidenheadStr = fields.maidenhead;
+    _olcStr = fields.olc;
+    _mgrsStr = fields.mgrs;
+    _latStr = fields.lat;
+    _lonStr = fields.lon;
 
     [self updateControllsSectionCells];
     return YES;
@@ -1396,14 +1395,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     __weak __typeof(self) weakSelf = self;
     [CoordinateFormatSelectorRouter presentAddFrom:self excludedIds:excluded onSelected:^(NSString *formatId) {
-        __strong __typeof(weakSelf) self = weakSelf;
-        if (!self) return;
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) return;
         
-        [OAAppSettings.sharedManager.coordinateFormatSettingsStorage addRecentId:formatId];
-        
-        [self applyFormatId:formatId forceApply:YES];
-        [self parseLocation];
-        [self updateControllsSectionCells];
+        [strongSelf applyFormatId:formatId forceApply:YES];
+        [strongSelf parseLocation];
+        [strongSelf updateControllsSectionCells];
     }];
 }
 

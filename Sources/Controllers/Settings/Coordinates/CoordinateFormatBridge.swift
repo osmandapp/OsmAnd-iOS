@@ -10,12 +10,18 @@ import Foundation
 import CoreLocation
 
 @objc enum CoordinateSearchInputMode: Int {
-    case latLon = 0
-    case utm
-    case olc
-    case mgrs
-    case maidenhead
-    case eastingNorthing
+    case latLon, utm, olc, mgrs, maidenhead, eastingNorthing
+}
+
+@objcMembers
+final class CoordinateInputFields: NSObject {
+    var lat = ""
+    var lon = ""
+    var easting = ""
+    var northing = ""
+    var olc = ""
+    var mgrs = ""
+    var maidenhead = ""
 }
 
 @objcMembers
@@ -140,50 +146,41 @@ final class CoordinateFormatBridge: NSObject {
         return CoordinateFormatHelper.format(format, lat: lat, lon: lon)
     }
 
-    static func prefillFields(lat: Double, lon: Double, formatId: String?) -> [String: String] {
+    static func prefillFields(lat: Double, lon: Double, formatId: String?) -> CoordinateInputFields {
         let info = resolveSearchFormat(formatId)
-        var result: [String: String] = [
-            "lat": "",
-            "lon": "",
-            "zone": "",
-            "easting": "",
-            "northing": "",
-            "olc": "",
-            "mgrs": "",
-            "maidenhead": ""
-        ]
+        let result = CoordinateInputFields()
         switch info.inputMode {
         case .latLon:
             let legacy = info.legacyFormat
             if legacy == Int(FORMAT_DEGREES) || legacy == Int(FORMAT_MINUTES) || legacy == Int(FORMAT_SECONDS) {
-                result["lat"] = OALocationConvert.convert(OAMapUtils.checkLatitude(lat), outputType: legacy) ?? ""
-                result["lon"] = OALocationConvert.convert(OAMapUtils.checkLongitude(lon), outputType: legacy) ?? ""
+                result.lat = OALocationConvert.convert(OAMapUtils.checkLatitude(lat), outputType: legacy) ?? ""
+                result.lon = OALocationConvert.convert(OAMapUtils.checkLongitude(lon), outputType: legacy) ?? ""
             } else {
-                result["lat"] = OALocationConvert.convert(OAMapUtils.checkLatitude(lat), outputType: Int(FORMAT_DEGREES)) ?? ""
-                result["lon"] = OALocationConvert.convert(OAMapUtils.checkLongitude(lon), outputType: Int(FORMAT_DEGREES)) ?? ""
+                result.lat = OALocationConvert.convert(OAMapUtils.checkLatitude(lat), outputType: Int(FORMAT_DEGREES)) ?? ""
+                result.lon = OALocationConvert.convert(OAMapUtils.checkLongitude(lon), outputType: Int(FORMAT_DEGREES)) ?? ""
             }
         case .utm:
             break
         case .olc:
-            result["olc"] = OALocationConvert.getLocationOlcName(lat, lon: lon) ?? ""
+            result.olc = OALocationConvert.getLocationOlcName(lat, lon: lon) ?? ""
         case .mgrs:
-            result["mgrs"] = OALocationConvert.getMgrsCoordinateString(lat, lon: lon) ?? ""
+            result.mgrs = OALocationConvert.getMgrsCoordinateString(lat, lon: lon) ?? ""
         case .maidenhead:
-            result["maidenhead"] = MaidenheadPoint.toMaidenhead(lat: lat, lon: lon)
+            result.maidenhead = MaidenheadPoint.toMaidenhead(lat: lat, lon: lon)
         case .eastingNorthing:
             if info.formatId == CoordinateFormatIds.builtinSwissGrid {
                 let p = SwissGridApproximation.convertWGS84ToLV03(lat: lat, lon: lon)
-                result["easting"] = CoordinateFormatHelper.formatEpsgValue(p.easting)
-                result["northing"] = CoordinateFormatHelper.formatEpsgValue(p.northing)
+                result.easting = CoordinateFormatHelper.formatEpsgValue(p.easting)
+                result.northing = CoordinateFormatHelper.formatEpsgValue(p.northing)
             } else if info.formatId == CoordinateFormatIds.builtinSwissGridPlus {
                 let p = SwissGridApproximation.convertWGS84ToLV95(lat: lat, lon: lon)
-                result["easting"] = CoordinateFormatHelper.formatEpsgValue(p.easting)
-                result["northing"] = CoordinateFormatHelper.formatEpsgValue(p.northing)
+                result.easting = CoordinateFormatHelper.formatEpsgValue(p.easting)
+                result.northing = CoordinateFormatHelper.formatEpsgValue(p.northing)
             } else if info.epsgCode > 0,
                       let point = OAEpsgCoordinateTransformer.sharedInstance()
                 .fromLonLat(withCode: info.epsgCode, lon: lon, lat: lat) {
-                result["easting"] = CoordinateFormatHelper.formatEpsgValue(point.easting)
-                result["northing"] = CoordinateFormatHelper.formatEpsgValue(point.northing)
+                result.easting = CoordinateFormatHelper.formatEpsgValue(point.easting)
+                result.northing = CoordinateFormatHelper.formatEpsgValue(point.northing)
             }
         @unknown default:
             break
@@ -205,26 +202,24 @@ final class CoordinateFormatBridge: NSObject {
         case .latLon:
             let latV = OALocationConvert.convert(lat ?? "")
             let lonV = OALocationConvert.convert(lon ?? "")
-            guard !latV.isNaN, !lonV.isNaN else { return nil }
-            return CLLocation(latitude: latV, longitude: lonV)
+            return locationIfValid(lat: latV, lon: lonV)
         case .maidenhead:
             guard let parsed = MaidenheadPoint.parse(maidenhead) else { return nil }
-            return CLLocation(latitude: parsed.lat, longitude: parsed.lon)
+            return locationIfValid(lat: parsed.lat, lon: parsed.lon)
         case .eastingNorthing:
-            let e = parseMetric(easting)
-            let n = parseMetric(northing)
-            guard !e.isNaN, !n.isNaN else { return nil }
+            guard let e = parseMetric(easting), let n = parseMetric(northing) else { return nil }
             if info.formatId == CoordinateFormatIds.builtinSwissGrid {
                 let p = SwissGridApproximation.convertLV03ToWGS84(easting: e, northing: n)
-                return CLLocation(latitude: p.lat, longitude: p.lon)
+                return locationIfValid(lat: p.lat, lon: p.lon)
             }
             if info.formatId == CoordinateFormatIds.builtinSwissGridPlus {
                 let p = SwissGridApproximation.convertLV95ToWGS84(easting: e, northing: n)
-                return CLLocation(latitude: p.lat, longitude: p.lon)
+                return locationIfValid(lat: p.lat, lon: p.lon)
             }
             if info.epsgCode > 0 {
-                return OAEpsgCoordinateTransformer.sharedInstance()
-                    .toLonLat(withCode: info.epsgCode, easting: e, northing: n)
+                guard let location = OAEpsgCoordinateTransformer.sharedInstance()
+                    .toLonLat(withCode: info.epsgCode, easting: e, northing: n) else { return nil }
+                return locationIfValid(lat: location.coordinate.latitude, lon: location.coordinate.longitude)
             }
             return nil
         default:
@@ -232,12 +227,18 @@ final class CoordinateFormatBridge: NSObject {
         }
     }
     
-    private static func parseMetric(_ raw: String?) -> Double {
-        guard var s = raw?.trimmingCharacters(in: .whitespacesAndNewlines), !s.isEmpty else {
-            return .nan
-        }
-        s = s.replacingOccurrences(of: " ", with: "")
-        s = s.replacingOccurrences(of: ",", with: ".")
-        return Double(s) ?? .nan
+    private static func locationIfValid(lat: Double, lon: Double) -> CLLocation? {
+        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        guard CLLocationCoordinate2DIsValid(coordinate) else { return nil }
+        return CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    }
+    
+    private static func parseMetric(_ raw: String?) -> Double? {
+        guard let raw else { return nil }
+        let value = raw
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: ",", with: ".")
+        return Double(value)
     }
 }

@@ -3329,7 +3329,7 @@
 "menu_my_trips" = "Mijn Tracks";
 "select_tracks" = "Kies tracks";
 "selected_tracks_count" = "Tracks - %d";
-"folder_tracks_count" = "%@ tracks";
+"folder_tracks_count" = "%d tracks";
 "delete_tracks_bottom_sheet_description_regular_part" = "Weet u zeker dat u wilt verwijderen ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
 "delete_tracks_bottom_sheet_title" = "Verwijder tracks?";

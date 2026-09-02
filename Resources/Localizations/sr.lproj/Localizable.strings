@@ -2961,7 +2961,7 @@
 "weather_update_over_wifi_only" = "Само преко WIFI";
 "disable_vertex_hillshade_3d" = "Онемогући вртложно сенчење у 3Д";
 "shared_string_hide_from_map" = "Сакриј на карти";
-"folder_tracks_count" = "%@ путања";
+"folder_tracks_count" = "%d путања";
 "osmand_depelopment_simulate_location_section" = "Опонашај";
 "osm_upload_gpx_tags_footer" = "Унесите ознаке одвојене зарезом.";
 "coordinates_widget_map_center" = "Координате: средиште карте";
@@ -4094,7 +4094,7 @@
 "gpx_logging_no_data" = "Нема података";
 "delete_changes" = "Обриши измене";
 "osm_edits_delete_item_confirmation" = "Да ли сте сигурни да желите да обришете %@ измену?";
-"osm_edits_delete_items_confirmation" = "Да ли сте сигурни да желите да обришете %@ измене?";
+"osm_edits_delete_items_confirmation" = "Да ли сте сигурни да желите да обришете %ld измене?";
 "show_touches" = "Прикажи додире";
 "folder_one_track" = "1 путања";
 "ios_release_5_4" = "• Додат тип визуелизације „Сенке терена“\n• Потпуно редизајниран кориснички интерфејс „Моја места“, додајући подфолдере за омиљене и практичније радње\n• Додата подршка за мапе само са путевима\n• Проширено прилагођавање профила додавањем подршке за све иконе ТОИ\n• Додато подешавање ширине бицикла како би се избегле уске бициклистичке стазе\n• Додат виџет за напон ДНВ-II адаптера\n• Побољшане перформансе за управљање великим бројем омиљених\n• Додата опција „Паузирај говорни звук“ за паузирање подкаста или аудио књига током упутстава за навигацију\n";
@@ -4473,7 +4473,7 @@
 "no_search_results" = "Нема резултата";
 "favorite_search_empty_state_description" = "Прилагодите претрагу или филтере да бисте видели да ли то помаже";
 "favorites_empty_folder_description" = "Ова фолдер још увек нема тачака.";
-"items_delete_confirmation_title" = "Обрисати %@ ставке?";
+"items_delete_confirmation_title" = "Обрисати %ld ставке?";
 "favorites_delete_confirmation_message" = "Ова радња се не може поништити.";
 "empty_state_favourites" = "Додај омиљене";
 "empty_state_favourites_desc" = "Увезите омиљене ставке или их додајте обележавањем тачака на мапи.";

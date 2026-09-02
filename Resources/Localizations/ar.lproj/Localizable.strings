@@ -3290,7 +3290,7 @@
 "osmand_cloud_delete_account_confirmation" = "حذف الحساب؟";
 "shared_string_hide_from_map" = "إخفاء من الخريطة";
 "osmand_cloud_deletion_secondary_devices_warning" = "سيتم تسجيل خروج الأجهزة الثانوية من أوسماند آيكلاود وستفقد الوصول إلى الميزات المدفوعة.";
-"folder_tracks_count" = "%@ المسارات";
+"folder_tracks_count" = "%d المسارات";
 "osmand_cloud_deletion_subscriptions_warning" = "لن يؤدي هذا إلى إلغاء اشتراكك في أوسماند برو.";
 "enter_new_name" = "أدخل اسم جديد";
 "start_recording" = "بدء التسجيل";

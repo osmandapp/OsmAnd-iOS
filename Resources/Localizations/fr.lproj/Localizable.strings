@@ -3101,7 +3101,7 @@
 "track_sort_za" = "Nom Z ‐ A";
 "shared_string_not_available" = "Non Disponible";
 "shared_string_hide_from_map" = "Masquer de la carte";
-"folder_tracks_count" = "%@ trace";
+"folder_tracks_count" = "%d trace";
 "action_cant_be_undone" = "Cette action ne peut être annulée.";
 "manage_subscriptions" = "Gérer les abonnements.";
 "deleting_complete" = "Suppression terminée";
@@ -4091,7 +4091,7 @@
 "show_touches" = "Afficher les détails";
 "delete_changes" = "Supprimer les modifications";
 "osm_edits_delete_item_confirmation" = "Êtes-vous sûr de vouloir supprimer la modification %@ ?";
-"osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %@ modifications ?";
+"osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %ld modifications ?";
 "shared_string_url" = "URL";
 "folder_one_track" = "1 trace";
 "ios_release_5_4" = "• Ajout du type de visualisation « Ombres du terrain »\n• Refonte complète de l'interface utilisateur « Mes lieux », avec l'ajout de sous-dossiers pour les favoris et des actions plus pratiques\n• Ajout de la prise en charge des cartes routières uniquement\n• Extension des options de personnalisation du profil grâce à la prise en charge de toutes les icônes de points d'intérêt\n• Ajout d'un paramètre de largeur de vélo pour éviter les pistes cyclables étroites\n• Ajout d'un widget de tension pour l'adaptateur OBD-II\n• Amélioration des performances pour la gestion d'un grand nombre de favoris\n• Ajout de l'option « Mettre en pause l'audio » pour interrompre les podcasts ou les livres audio pendant les instructions de navigation\n";
@@ -4259,7 +4259,7 @@
 "no_search_results" = "Aucun résultat";
 "favorite_search_empty_state_description" = "Modifiez votre recherche ou vos filtres pour voir si cela vous aide";
 "favorites_empty_folder_description" = "Ce dossier ne comporte encore aucun point.";
-"items_delete_confirmation_title" = "Supprimer %@ éléments ?";
+"items_delete_confirmation_title" = "Supprimer %ld éléments ?";
 "favorites_delete_confirmation_message" = "Cette action ne peut pas être annulée.";
 "empty_state_favourites" = "Ajouter aux favoris";
 "empty_state_favourites_desc" = "Importez vos favoris ou ajoutez-les en marquant des points sur la carte.";

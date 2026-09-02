@@ -3147,7 +3147,7 @@
 "shared_string_not_available" = "Nicht verfügbar";
 "help_article_plugins_custom_name" = "Individuelles Paket";
 "shared_string_move" = "Verschieben";
-"folder_tracks_count" = "%@ Tracks";
+"folder_tracks_count" = "%d Tracks";
 "my_places_no_tracks_title" = "Leerer Ordner";
 "my_places_no_tracks_descr" = "Dieser Ordner hat noch keine Tracks.";
 "delete_folder" = "Ordner löschen";

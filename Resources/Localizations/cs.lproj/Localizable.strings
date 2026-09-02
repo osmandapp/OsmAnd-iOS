@@ -3178,7 +3178,7 @@
 "distance_during_navigation" = "Vzdálenost během navigace";
 "shared_string_precise" = "Přesná";
 "shared_string_round_up" = "Zaokrouhlená";
-"folder_tracks_count" = "%@ stop";
+"folder_tracks_count" = "%d stop";
 "cleared_travel_search_history" = "Historie smazána";
 "images" = "Obrázky";
 "no_travel_guides_data_title" = "Nemáte žádná cestovní data";
@@ -4114,7 +4114,7 @@
 "folder_one_track" = "1 stopa";
 "delete_changes" = "smazat změny";
 "osm_edits_delete_item_confirmation" = "Opravdu chcete smazat %@ úpravu?";
-"osm_edits_delete_items_confirmation" = "Přejete si skutečně odstranit %@ úpravy?";
+"osm_edits_delete_items_confirmation" = "Přejete si skutečně odstranit %ld úpravy?";
 "ios_release_5_4" = "• Přidán typ vizualizace „Terénní stíny“\n• Zcela přepracováno uživatelské rozhraní „Moje místa“ s přidáním podsložek pro Oblíbené a pohodlnějších akcí\n• Přidána podpora pro mapy pouze pro silnice\n• Rozšířené přizpůsobení profilu přidáním podpory pro všechny ikony POI\n• Přidáno nastavení šířky jízdního kola pro vyhnutí se úzkým cyklostezkám\n• Přidán widget napětí adaptéru OBD-II\n• Vylepšený výkon pro správu velkého počtu oblíbených položek\n• Přidána možnost „Pozastavit mluvený zvuk“ pro pozastavení podcastů nebo audioknih během navigačních pokynů\n";
 "default_appearance_description" = "Tato nastavení platí pro všechny nově přidané skladby do této složky.";
 "change_default_tracks_appearance_confirmation" = "Použít změny na existující skladby ve složce nebo pouze na nové?";
@@ -4403,7 +4403,7 @@
 "no_search_results" = "Žádné výsledky";
 "favorite_search_empty_state_description" = "Upravte hledání nebo filtry, abyste zjistili, zda to pomáhá";
 "favorites_empty_folder_description" = "Tato složka ještě nemá žádné body.";
-"items_delete_confirmation_title" = "Odstranit %@ položky?";
+"items_delete_confirmation_title" = "Odstranit %ld položky?";
 "favorites_delete_confirmation_message" = "Tuto akci nelze vrátit zpět.";
 "show_all_tracks_on_the_map" = "Zobrazit všechny stopy na mapě";
 "empty_state_favourites" = "Přidejte Oblíbené";

@@ -3134,7 +3134,7 @@
 "delete_account" = "Radera konto";
 "shared_string_error" = "Fel";
 "distance_during_navigation" = "Avstånd under navigation";
-"folder_tracks_count" = "%@ spår";
+"folder_tracks_count" = "%d spår";
 "average_glide_ratio_time_interval_desc" = "Visar genomsnittliga glidtalet eller vertikala hastigheten för det angivna intervallet.";
 "shared_string_development" = "Utveckling";
 "my_places_no_tracks_title_root" = "Du har inga spårfiler";

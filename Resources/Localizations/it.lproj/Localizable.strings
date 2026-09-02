@@ -3131,7 +3131,7 @@
 "cloud_item_restored" = "%@ è ripristinato nel Cloud.";
 "shared_string_not_available" = "Non disponibile";
 "shared_string_hide_from_map" = "Nascondi dalla mappa";
-"folder_tracks_count" = "%@ tracce";
+"folder_tracks_count" = "%d tracce";
 "shared_string_open_track" = "Apri la traccia";
 "enter_new_name" = "Inserisci il nuovo nome";
 "my_places_no_tracks_title" = "Cartella vuota";
@@ -4269,7 +4269,7 @@
 "shared_string_pinned" = "Fissato";
 "delete_track_confirmation_title" = "Eliminare \"%@\"?";
 "tracks_delete_confirmation_message" = "Questa azione non può essere annullata.";
-"items_delete_confirmation_title" = "Eliminare %@ elementi?";
+"items_delete_confirmation_title" = "Eliminare %ld elementi?";
 "favorites_delete_confirmation_message" = "Questa azione non può essere annullata.";
 "delete_favorite_confirmation_title" = "Eliminare \"%@\"?";
 "choose_color" = "Scegli colore";
@@ -4279,7 +4279,7 @@
 "folder_one_track" = "1 traccia";
 "delete_changes" = "Elimina modifiche";
 "osm_edits_delete_item_confirmation" = "Eliminare %@ modifica?";
-"osm_edits_delete_items_confirmation" = "Eliminare %@ modifiche?";
+"osm_edits_delete_items_confirmation" = "Eliminare %ld modifiche?";
 "enable_msaa_carplay" = "Abilita MSAA per CarPlay";
 "show_touches" = "Mostra tocchi";
 "poi_mobile" = "Telefonia";

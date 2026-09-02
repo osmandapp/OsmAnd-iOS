@@ -3179,7 +3179,7 @@
 "show_all_tracks" = "Mostrar todas as trilhas";
 "no_track_files" = "Você não tem arquivos de trilha";
 "recently_visible" = "Visível recentemente %@";
-"folder_tracks_count" = "%@ trilhas";
+"folder_tracks_count" = "%d trilhas";
 "my_places_no_tracks_title_root" = "Você não tem arquivos de trilha";
 "verify_account" = "Verificar a sua conta";
 "verify_account_deletion_descr" = "Precisamos verificar sua conta antes de excluí-la. \n \nPor favor, insira o endereço de e-mail com o qual você se registrou. Uma senha de uso único para a próxima etapa será enviada a ele.";
@@ -4116,7 +4116,7 @@
 "organize_by" = "Organizar por";
 "delete_changes" = "Excluir alterações";
 "osm_edits_delete_item_confirmation" = "Tem certeza de que deseja excluir a edição %@?";
-"osm_edits_delete_items_confirmation" = "Tem certeza de que deseja excluir %@ edições?";
+"osm_edits_delete_items_confirmation" = "Tem certeza de que deseja excluir %ld edições?";
 "map_variant_duplicate_title" = "Mapa duplicado";
 "map_variant_replace_with_road_only" = "Substituir por Somente estrada";
 "map_variant_replace_with_standard" = "Substituir pelo padrão";
@@ -4433,7 +4433,7 @@
 "tracks_empty_folder_description" = "Esta pasta ainda não tem nenhum ponto.";
 "delete_favorite_confirmation_title" = "Excluir \"%@\"?";
 "add_new_folder" = "Adicionar nova pasta";
-"items_delete_confirmation_title" = "Excluir %@ itens?";
+"items_delete_confirmation_title" = "Excluir %ld itens?";
 "ais_type_aid_to_navigation" = "Auxílios à navegação";
 "ais_type_virtual_aid_to_navigation" = "Auxílio virtual à navegação";
 "ais_unknown" = "desconhecido";

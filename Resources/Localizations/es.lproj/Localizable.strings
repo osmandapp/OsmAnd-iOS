@@ -3198,7 +3198,7 @@
 "not_recorded" = "Sin guardar";
 "start_recording" = "Iniciar grabación";
 "recorded_track" = "Pista grabada";
-"folder_tracks_count" = "%@ pistas";
+"folder_tracks_count" = "%d pistas";
 "shared_string_move" = "Mover";
 "my_places_no_tracks_title_root" = "No tiene archivos de pistas";
 "enter_new_name" = "Introduzca el nuevo nombre";
@@ -4146,7 +4146,7 @@
 "import_tracks_cancel_descr" = "Si cierra ahora, las selecciones de trazas no se importarán.";
 "import_tracks_descr_one" = "El archivo %1$@ contiene %2$@ traza separada. Seleccione la que quiera importar.";
 "import_tracks_descr_other" = "El archivo %@ contiene %@ trazas separadas. Seleccione las que quiera importar.";
-"osm_edits_delete_items_confirmation" = "¿Confirma que quiere eliminar %@ ediciones?";
+"osm_edits_delete_items_confirmation" = "¿Confirma que quiere eliminar %ld ediciones?";
 "osm_edits_delete_item_confirmation" = "¿Confirma que quiere eliminar %@ edición?";
 "delete_colors_palette_dialog_summary" = "¿Confirma que quiere eliminar %@ paleta?";
 "gradient_input_value_duplicate_warn" = "Este valor ya existe en la paleta.";
@@ -4171,7 +4171,7 @@
 "shared_string_pinned" = "Anclados";
 "add_to_track" = "Añadir a traza";
 "tracks_delete_confirmation_message" = "Esta acción no se puede deshacer.";
-"items_delete_confirmation_title" = "¿Quiere eliminar %@ elementos?";
+"items_delete_confirmation_title" = "¿Quiere eliminar %ld elementos?";
 "favorites_delete_confirmation_message" = "Esta acción no se puede deshacer.";
 "pause_spoken_audio" = "Pausar audio hablado";
 "empty_state_favourites" = "Añadir favoritos";

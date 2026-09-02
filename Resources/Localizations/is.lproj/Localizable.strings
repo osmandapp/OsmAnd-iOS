@@ -3405,7 +3405,7 @@
 "my_places_no_tracks_title_root" = "Þú ert ekki með neinar ferlaskrár";
 "lang_mr" = "Marathí";
 "track_3d_empty_view_title" = "Sýn á þrívíddarferil";
-"folder_tracks_count" = "%@ ferlar";
+"folder_tracks_count" = "%d ferlar";
 "mile" = "míl";
 "action_cant_be_undone" = "Það er ekki hægt að afturkalla við þessa aðgerð.";
 "osmand_cloud_delete_account_descr_with_email" = "Ertu viss um að þú viljir eyða OsmAnd tölvuskýsaðgangnum: %@?";
@@ -3992,7 +3992,7 @@
 "folder_one_track" = "1 slóð";
 "delete_changes" = "Eyða breytingum";
 "osm_edits_delete_item_confirmation" = "Ertu viss um að þú viljir eyða %@ breytingu?";
-"osm_edits_delete_items_confirmation" = "Ertu viss um að þú viljir eyða %@ breytingum?";
+"osm_edits_delete_items_confirmation" = "Ertu viss um að þú viljir eyða %ld breytingum?";
 "wind_animation_layer" = "Vindalag með hreyfingu";
 "quick_action_wind_animation_layer" = "Víxlhnappur til að birta eða fela vindhreyfingalag á kortinu.";
 "weather_layers" = "Veðurlög";

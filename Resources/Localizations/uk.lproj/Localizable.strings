@@ -3318,7 +3318,7 @@
 "required_maps" = "Необхідні мапи";
 "shared_string_precise" = "Точно";
 "shared_string_round_up" = "Округлити";
-"folder_tracks_count" = "%@ треків";
+"folder_tracks_count" = "%d треків";
 "help_article_plugins_custom_name" = "Користувацький пакет";
 "shared_string_not_available" = "Не доступно";
 "shared_string_file_info" = "Інформація про файл";

@@ -1081,7 +1081,7 @@
 "tracks_delete_confirmation_message" = "This action cannot be undone.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
-"items_delete_confirmation_title" = "Delete %@ items?";
+"items_delete_confirmation_title" = "Delete %ld items?";
 "favorites_delete_confirmation_message" = "This action cannot be undone.";
 "empty_state_favourites" = "Add Favorites";
 "empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
@@ -1878,7 +1878,7 @@
 
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
-"folder_tracks_count" = "%@ tracks";
+"folder_tracks_count" = "%d tracks";
 "folder_one_track" = "1 track";
 
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
@@ -1904,7 +1904,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "delete_changes" = "Delete changes";
 "osm_edits_delete_item_confirmation" = "Are you sure you want to delete %@ edit?";
-"osm_edits_delete_items_confirmation" = "Are you sure you want to delete %@ edits?";
+"osm_edits_delete_items_confirmation" = "Are you sure you want to delete %ld edits?";
 
 "routing_algorithm" = "Routing algorithm";
 "auto_zoom" = "Autozoom";

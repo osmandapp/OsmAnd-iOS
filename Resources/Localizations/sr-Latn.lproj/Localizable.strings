@@ -3083,7 +3083,7 @@
 "weather_update_disabled" = "Onemogućeno";
 "weather_update_over_wifi_only" = "Samo preko WIFI";
 "weather_update_over_any_network" = "Preko bilo koje mreže";
-"folder_tracks_count" = "%@ putanja'";
+"folder_tracks_count" = "%d putanja'";
 "delete_tracks_bottom_sheet_title" = "Izbrisati putanje?";
 "simulate_location_movement_speed_x3_desc" = "Brzina pomeranja lokacije tokom simulacije biće 3 puta veća od brzine u selektovanom fajlu.";
 "hide_map_center" = "Sakrij Koordinate: mapa u centru";
@@ -4092,7 +4092,7 @@
 "gpx_logging_no_data" = "Nema podataka";
 "delete_changes" = "Obriši izmene";
 "osm_edits_delete_item_confirmation" = "Da li ste sigurni da želite da obrišete %@ izmenu?";
-"osm_edits_delete_items_confirmation" = "Da li ste sigurni da želite da obrišete %@ izmene?";
+"osm_edits_delete_items_confirmation" = "Da li ste sigurni da želite da obrišete %ld izmene?";
 "show_touches" = "Prikaži dodire";
 "folder_one_track" = "1 trasa";
 "ios_release_5_4" = "• Dodat tip vizuelizacije „Senke terena“\n• Potpuno redizajniran korisnički interfejs „Moja mesta“, dodajući podfoldere za omiljene i praktičnije radnje\n• Dodata podrška za mape samo sa putevima\n• Prošireno prilagođavanje profila dodavanjem podrške za sve ikone TOI\n• Dodato podešavanje širine bicikla kako bi se izbegle uske biciklističke staze\n• Dodat vidžet za napon OBD-II adaptera\n• Poboljšane performanse za upravljanje velikim brojem omiljenih\n• Dodata opcija „Pauziraj govorni zvuk“ za pauziranje podkasta ili audio knjiga tokom uputstava za navigaciju\n";
@@ -4471,7 +4471,7 @@
 "no_search_results" = "Nema rezultata";
 "favorite_search_empty_state_description" = "Prilagodite pretragu ili filtere da biste videli da li to pomaže";
 "favorites_empty_folder_description" = "Ova folder još uvek nema tačaka.";
-"items_delete_confirmation_title" = "Obrisati %@ stavke?";
+"items_delete_confirmation_title" = "Obrisati %ld stavke?";
 "favorites_delete_confirmation_message" = "Ova radnja se ne može poništiti.";
 "empty_state_favourites" = "Dodaj omiljene";
 "empty_state_favourites_desc" = "Uvezite omiljene stavke ili ih dodajte obeležavanjem tačaka na mapi.";

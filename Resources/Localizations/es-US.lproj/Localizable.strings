@@ -3220,7 +3220,7 @@
 "time_to_navigation_point_widget_settings_desc" = "Pulsa el widget para cambiar de modo.";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar la cuenta?";
 "help_article_plugins_custom_name" = "Paquete personalizado";
-"folder_tracks_count" = "%@ trazas";
+"folder_tracks_count" = "%d trazas";
 "my_places_no_tracks_title" = "Carpeta vacía";
 "new_track" = "Nueva traza";
 "action_cant_be_undone" = "Esta acción no puede deshacerse.";

@@ -3684,7 +3684,7 @@
 "edit_tilesource_url_to_load" = "URL";
 "shared_string_litres" = "литры";
 "test_heightmap" = "Тестовая карта высот";
-"folder_tracks_count" = "%@ треков";
+"folder_tracks_count" = "%d треков";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d треков?";
 "routing_algorithm" = "Алгоритм маршрутизации";
 "routing_algorithm_highway_hierarchies" = "Иерархии магистралей";

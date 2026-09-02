@@ -3208,7 +3208,7 @@
 "new_track" = "Nueva traza";
 "not_recorded" = "No grabado";
 "start_recording" = "Iniciar grabación";
-"folder_tracks_count" = "%@ trazas";
+"folder_tracks_count" = "%d trazas";
 "recorded_track" = "Traza grabada";
 "map_widget_sun_position_desc" = "Muestra el tiempo hasta el amanecer o el atardecer.";
 "shared_string_mode" = "Modo";

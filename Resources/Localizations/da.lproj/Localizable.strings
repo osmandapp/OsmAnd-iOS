@@ -3130,7 +3130,7 @@
 "shared_string_not_available" = "Ikke tilgængelig";
 "help_article_plugins_custom_name" = "Brugerdefineret pakke";
 "shared_string_hide_from_map" = "Skjul på kort";
-"folder_tracks_count" = "%@ spor";
+"folder_tracks_count" = "%d spor";
 "shared_string_open_track" = "Åbn spor";
 "my_places_no_tracks_title_root" = "Du har ingen sporfiler";
 "my_places_no_tracks_title" = "Tom mappe";
@@ -4092,7 +4092,7 @@
 "gpx_logging_no_data" = "Ingen data";
 "delete_changes" = "Slet ændringer";
 "osm_edits_delete_item_confirmation" = "Er du sikker på, at du vil slette %@ redigering?";
-"osm_edits_delete_items_confirmation" = "Er du sikker på, at du vil slette %@ redigeringer?";
+"osm_edits_delete_items_confirmation" = "Er du sikker på, at du vil slette %ld redigeringer?";
 "show_touches" = "Vis berøringer";
 "shared_string_url" = "URL";
 "folder_one_track" = "1 spor";
@@ -4472,7 +4472,7 @@
 "no_search_results" = "Ingen resultater";
 "favorite_search_empty_state_description" = "Juster din søgning eller filtre for at se, om det hjælper";
 "favorites_empty_folder_description" = "Denne mappe har endnu ingen punkter.";
-"items_delete_confirmation_title" = "Slet %@ elementer?";
+"items_delete_confirmation_title" = "Slet %ld elementer?";
 "favorites_delete_confirmation_message" = "Denne handling kan ikke fortrydes.";
 "empty_state_favourites" = "Tilføj favoritter";
 "empty_state_favourites_desc" = "Importer favoritter, eller tilføj dem ved at markere punkter på kortet.";

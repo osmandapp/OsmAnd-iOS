@@ -2380,7 +2380,7 @@
 "res_online_name_descr" = "Παροχή ονόματος για την διαδικτυακή πηγή";
 "menu_my_trips" = "Τα ίχνη μου";
 "selected_tracks_count" = "Ίχνη - %d";
-"folder_tracks_count" = "%@ ίχνη";
+"folder_tracks_count" = "%d ίχνη";
 "osm_failed_uploads" = "Απέτυχε";
 "precipitation_show" = "Εμφάνιση υετού";
 "show_terrain" = "Εμφάνιση εδάφους";
@@ -4011,7 +4011,7 @@
 "folder_one_track" = "1 ίχνος";
 "delete_changes" = "Διαγραφή αλλαγών";
 "osm_edits_delete_item_confirmation" = "Σίγουρα θέλετε να διαγράψετε %@ αλλαγή;";
-"osm_edits_delete_items_confirmation" = "Σίγουρα θέλετε να διαγράψετε %@ αλλαγές;";
+"osm_edits_delete_items_confirmation" = "Σίγουρα θέλετε να διαγράψετε %ld αλλαγές;";
 "enable_msaa_carplay" = "Ενεργοποίηση MSAA για CarPlay";
 "poi_mobile" = "Κινητό";
 "poi_cuisine" = "Κουζίνα";
@@ -4132,7 +4132,7 @@
 "favorite_search_empty_state_description" = "Προσαρμόστε την αναζήτησή σας ή τα φίλτρα σας για να δείτε μήπως σας βοηθήσει";
 "favorites_empty_folder_description" = "Αυτός ο φάκελος δεν έχει ακόμη κανένα σημείο.";
 "tracks_empty_folder_description" = "Αυτός ο φάκελος δεν έχει ακόμη κανένα σημείο.";
-"items_delete_confirmation_title" = "Διαγραφή %@ αντικειμένων;";
+"items_delete_confirmation_title" = "Διαγραφή %ld αντικειμένων;";
 "favorites_delete_confirmation_message" = "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
 "empty_state_favourites" = "Προσθήκη αγαπημένων";
 "empty_state_favourites_desc" = "Εισαγωγή αγαπημένων, ή προσθήκη τους μέσω σημείων επισήμανσης στον χάρτη.";

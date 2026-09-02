@@ -2715,7 +2715,7 @@
 "res_install_no_space" = "Tidak cukup ruang untuk memasang";
 "res_uninst_unmanaged_q" = "Anda akan menghapus %@. Ini bukan dari katalog, jadi pastikan Anda memiliki cadangan jika diperlukan.";
 "selected_tracks_count" = "Trek - %d";
-"folder_tracks_count" = "%@ trek";
+"folder_tracks_count" = "%d trek";
 "simulate_location_unselected_track_footer" = "Anda perlu memilih file trek";
 "use_heightmap_setting" = "Gunakan peta ketinggian relief 3D";
 "osm_editing_login_and_pass" = "Login dan kata sandi";
@@ -3880,7 +3880,7 @@
 "empty_state_favourites_desc" = "Impor Favorit atau tambahkan Favorit dengan menempatkan titik di peta.";
 "favorites_delete_confirmation_message" = "Tindakan ini tidak bisa dibatalkan.";
 "empty_state_favourites" = "Tambahkan Favorit";
-"items_delete_confirmation_title" = "Hapus %@ item?";
+"items_delete_confirmation_title" = "Hapus %ld item?";
 "astro_designations" = "Penunjukan";
 "purchases_feature_desc_astronomy" = "Jelajahi langit malam dengan peta offline dan katalog benda langit. Rencanakan pengamatan menggunakan grafik visibilitas pintar, jadwal harian, dan mode AR interaktif.";
 "shared_string_clear_filters" = "Hapus filter";
@@ -4046,7 +4046,7 @@
 "folder_one_track" = "1 trek";
 "delete_changes" = "Hapus perubahan";
 "osm_edits_delete_item_confirmation" = "Apakah Anda yakin ingin menghapus %@ pengeditan?";
-"osm_edits_delete_items_confirmation" = "Apakah Anda yakin ingin menghapus %@ pengeditan?";
+"osm_edits_delete_items_confirmation" = "Apakah Anda yakin ingin menghapus %ld pengeditan?";
 "enable_msaa_carplay" = "Aktifkan MSAA untuk CarPlay";
 "show_touches" = "Tampilkan sentuhan";
 "poi_mobile" = "Seluler";

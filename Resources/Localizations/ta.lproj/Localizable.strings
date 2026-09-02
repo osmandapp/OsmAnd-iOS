@@ -2932,7 +2932,7 @@
 "feedback" = "கருத்து";
 "select_tracks" = "தடங்களைத் தேர்ந்தெடுக்கவும்";
 "selected_tracks_count" = "தடங்கள் - %d";
-"folder_tracks_count" = "%@ தடங்கள்";
+"folder_tracks_count" = "%d தடங்கள்";
 "osm_upload_failed_title" = "பதிவேற்றம் தோல்வியடைந்தது";
 "osm_upload_no_internet" = "உங்கள் இணைய இணைப்பை சரிபார்த்து மீண்டும் முயற்சிக்கவும்.";
 "osm_succsessful_uploads" = "செய்";

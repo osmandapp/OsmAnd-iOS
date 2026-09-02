@@ -3076,7 +3076,7 @@
 "shared_string_hide_from_map" = "Ascunde de pe hartă";
 "shared_string_open_track" = "Deschide traseu";
 "there_are_no_connected_sensors_of_this_type" = "Nu există senzori de acest tip conectați";
-"folder_tracks_count" = "%@ înregistrări";
+"folder_tracks_count" = "%d înregistrări";
 "map_widget_ant_heart_rate" = "Puls";
 "map_widget_ant_bicycle_cadence_desc" = "Afișați viteza la care pedalează utilizatorul";
 "map_widget_ant_bicycle_speed" = "Viteza bicicletei";

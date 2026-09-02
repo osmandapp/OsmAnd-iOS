@@ -740,10 +740,6 @@
 
         if ([strongSelf.app.data.destinations indexOfObjectIdenticalTo:destCopy] == NSNotFound)
             return;
-        
-        if (![OAUtilities doublesEqualUpToDigits:5 source:destCopy.latitude destination:position.latitude] ||
-            ![OAUtilities doublesEqualUpToDigits:5 source:destCopy.longitude destination:position.longitude])
-            return;
 
         OADestination *updated = [destCopy copy];
         updated.desc = address;

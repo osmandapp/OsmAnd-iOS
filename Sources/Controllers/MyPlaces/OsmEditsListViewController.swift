@@ -439,8 +439,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
                 title = localizedString("select_items")
             } else {
                 let totalSelectedPoints = selectionManager.selectedItems.count
-                let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
-                title = "\(NumberFormatter.localizedCount(totalSelectedPoints)) \(itemText)"
+                title = String.localizedStringWithFormat(NSLocalizedString("selected_items_count", comment: ""), totalSelectedPoints, NumberFormatter.localizedCount(totalSelectedPoints)).lowercased()
             }
         } else {
             title = localizedString("osm_edits_title")

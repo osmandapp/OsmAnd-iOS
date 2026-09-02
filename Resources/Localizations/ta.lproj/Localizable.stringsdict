@@ -109,5 +109,21 @@
 			<string>Are you sure you want to delete %2$@ edits?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ உருப்படி</string>
+			<key>other</key>
+			<string>%2$@ உருப்படிகள்</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

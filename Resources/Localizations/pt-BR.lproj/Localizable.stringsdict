@@ -121,5 +121,23 @@
 			<string>Tem certeza de que deseja excluir %2$@ edições?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Item</string>
+			<key>many</key>
+			<string>%2$@ Itens</string>
+			<key>other</key>
+			<string>%2$@ Itens</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

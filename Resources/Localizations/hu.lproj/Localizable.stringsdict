@@ -109,5 +109,21 @@
 			<string>Biztosan törölni szeretne %2$@ szerkesztést?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Elem</string>
+			<key>other</key>
+			<string>%2$@ Elem</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

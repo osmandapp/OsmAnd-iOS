@@ -121,5 +121,23 @@
 			<string>Êtes-vous sûr de vouloir supprimer %2$@ modifications ?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Élément</string>
+			<key>many</key>
+			<string>%2$@ Éléments</string>
+			<key>other</key>
+			<string>%2$@ Éléments</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -137,5 +137,25 @@
 			<string>Přejete si skutečně odstranit %2$@ úprav?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Položka</string>
+			<key>few</key>
+			<string>%2$@ Položky</string>
+			<key>many</key>
+			<string>%2$@ Položek</string>
+			<key>other</key>
+			<string>%2$@ Položek</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

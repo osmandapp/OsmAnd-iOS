@@ -123,5 +123,23 @@
 			<string>Да ли сте сигурни да желите да обришете %2$@ измена?</string>
 		</dict>
 	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Ставка</string>
+			<key>few</key>
+			<string>%2$@ Ставке</string>
+			<key>other</key>
+			<string>%2$@ Ставки</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

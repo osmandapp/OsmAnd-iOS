@@ -670,8 +670,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 
                 let totalTracks = totalSelectedTracks + tracksInSelectedFolders
-                let itemText = localizedString("shared_string_item").lowercased()
-                title = "\(NumberFormatter.localizedCount(totalSelectedItems)) \(itemText)"
+                title = String.localizedStringWithFormat(NSLocalizedString("selected_items_count", comment: ""), totalSelectedItems, NumberFormatter.localizedCount(totalSelectedItems)).lowercased()
                 if totalTracks > 0 {
                     title += " (\(TracksSortModeHelper.formattedTracksCount(totalTracks)))"
                 }

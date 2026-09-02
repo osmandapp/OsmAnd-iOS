@@ -171,7 +171,7 @@ final class RouteChartSynchronizer: NSObject {
         notifyStateChanged()
     }
 
-    @objc(syncViewPortFromChart:) func syncViewPort(from sourceChart: BarLineChartViewBase) {
+    func syncViewPort(from sourceChart: BarLineChartViewBase) {
         let targetCharts = synchronizedCharts.filter { $0 !== sourceChart }
         if usesDistanceXAxis {
             guard let visibleRange = visibleRange(in: sourceChart) else { return }

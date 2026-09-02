@@ -958,13 +958,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
 {
     if ([chartView isKindOfClass:BarLineChartViewBase.class])
-        [_chartSynchronizer syncViewPortFromChart:(BarLineChartViewBase *)chartView];
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 - (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
 {
     if ([chartView isKindOfClass:BarLineChartViewBase.class])
-        [_chartSynchronizer syncViewPortFromChart:(BarLineChartViewBase *)chartView];
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 #pragma mark - OAStatisticsSelectionDelegate

@@ -351,7 +351,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath("")?.getFlattenedTrackItems() {
                     let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
-                    allFoldersRow.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
+                    allFoldersRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(matchingTracksCount), NumberFormatter.localizedCount(totalTracksCount))
                 }
             }
             
@@ -365,7 +365,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems() {
                     let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
-                    row.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
+                    row.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(matchingTracksCount), NumberFormatter.localizedCount(totalTracksCount))
                 }
                 
                 if !isRootFolder {

@@ -232,7 +232,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     // MARK: - Bottom buttons
 
     override func getTopButtonTitle() -> String? {
-        "\(localizedString("shared_string_import")) \(NumberFormatter.localizedCount(selection.selectedItems.count))/\(NumberFormatter.localizedCount(trackItems.count))"
+        let tracksCount = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(selection.selectedItems.count), NumberFormatter.localizedCount(trackItems.count))
+        return "\(localizedString("shared_string_import")) \(tracksCount)"
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -405,7 +406,7 @@ private extension ImportTracksViewController {
         hideSeparator(for: cell, true)
 
         if item.key == RowKey.trackWaypoints.rawValue, let trackItem = item.obj(forKey: RowObjKey.importTrackItem.rawValue) as? ImportTrackItem {
-            cell.valueLabel.text = "\(NumberFormatter.localizedCount(trackItem.selectedPoints.count))/\(NumberFormatter.localizedCount(allPointsCount))"
+            cell.valueLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(trackItem.selectedPoints.count), NumberFormatter.localizedCount(allPointsCount))
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
         }

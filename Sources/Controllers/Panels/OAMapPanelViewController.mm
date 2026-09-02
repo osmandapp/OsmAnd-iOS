@@ -200,8 +200,9 @@ typedef enum
     BOOL _isNewContextMenuStillEnabled;
 
     MBProgressHUD *_gpxProgress;
-    BOOL _contextMenuTransitionInProgress;
-    void (^_pendingContextMenuPresentation)(void);
+    ContextMenuPresentationCoordinator *_contextMenuPresentationCoordinator;
+    BOOL _contextMenuPresentationUITestFixtureStarted;
+    UIView *_contextMenuPresentationUITestStateView;
 }
 
 - (instancetype) init
@@ -226,6 +227,7 @@ typedef enum
     _destinationsHelper = [OADestinationsHelper instance];
     _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
     _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
+    _contextMenuPresentationCoordinator = [ContextMenuPresentationCoordinator new];
 
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
@@ -285,6 +287,8 @@ typedef enum
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    self.targetMenuView.accessibilityIdentifier = @"context_menu_container";
+    self.targetMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
     self.targetMenuView.menuViewDelegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
@@ -294,6 +298,10 @@ typedef enum
 
     // Setup target multi menu
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
+    self.targetMultiMenuView.accessibilityIdentifier = @"multi_context_menu_container";
+    self.targetMultiMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
+
+    [self setupContextMenuPresentationUITestStateViewIfNeeded];
 
     [self updateHUD:NO];
 }
@@ -324,6 +332,7 @@ typedef enum
         [self onCarPlayConnected];
     
     [[OADiscountHelper instance] checkAndDisplay];
+    [self runContextMenuPresentationUITestFixtureIfNeeded];
 }
 
 - (void) viewWillLayoutSubviews
@@ -1546,6 +1555,8 @@ typedef enum
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+    _targetMenuView.accessibilityValue = targetPoint.title;
+    _contextMenuPresentationUITestStateView.accessibilityValue = targetPoint.title;
     
     [_targetMenuView setSelectedObject:selectedObject.object];
 
@@ -3172,63 +3183,39 @@ typedef enum
 
 - (void)enqueueContextMenuPresentation:(void (^)(void))presentation
 {
-    _pendingContextMenuPresentation = [presentation copy];
+    [_contextMenuPresentationCoordinator enqueuePresentation:presentation];
     [self processPendingContextMenuPresentation];
 }
 
 - (void)processPendingContextMenuPresentation
 {
-    if (_contextMenuTransitionInProgress || !_pendingContextMenuPresentation)
-        return;
-
-    if (_scrollableHudViewController)
-    {
-        _contextMenuTransitionInProgress = YES;
-        __weak __typeof(self) weakSelf = self;
-        [_scrollableHudViewController forceHideWithCompletion:^{
+    __weak __typeof(self) weakSelf = self;
+    [_contextMenuPresentationCoordinator processPendingPresentationWithDismissHandlers:@[
+        ^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
+            if (!strongSelf || !strongSelf->_scrollableHudViewController)
+                return NO;
 
-            strongSelf->_contextMenuTransitionInProgress = NO;
-            [strongSelf processPendingContextMenuPresentation];
-        }];
-        return;
-    }
-
-    if (self.targetMultiMenuView.superview)
-    {
-        _contextMenuTransitionInProgress = YES;
-        __weak __typeof(self) weakSelf = self;
-        [self.targetMultiMenuView hide:YES duration:0.2 onComplete:^{
+            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
+            return YES;
+        },
+        ^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
+            if (!strongSelf || !strongSelf.targetMultiMenuView.superview)
+                return NO;
 
-            strongSelf->_contextMenuTransitionInProgress = NO;
-            [strongSelf processPendingContextMenuPresentation];
-        }];
-        return;
-    }
-
-    if (self.targetMenuView.superview)
-    {
-        _contextMenuTransitionInProgress = YES;
-        __weak __typeof(self) weakSelf = self;
-        [self hideTargetPointMenu:0.2 onComplete:^{
+            [strongSelf.targetMultiMenuView hide:YES duration:0.2 onComplete:completion];
+            return YES;
+        },
+        ^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
+            if (!strongSelf || !strongSelf.targetMenuView.superview)
+                return NO;
 
-            strongSelf->_contextMenuTransitionInProgress = NO;
-            [strongSelf processPendingContextMenuPresentation];
-        }];
-        return;
-    }
-
-    void (^presentation)(void) = _pendingContextMenuPresentation;
-    _pendingContextMenuPresentation = nil;
-    presentation();
+            [strongSelf hideTargetPointMenu:0.2 onComplete:completion];
+            return YES;
+        },
+    ]];
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
@@ -4734,6 +4721,118 @@ typedef enum
     if (gpxFileName && gpxFileName.length > 0)
         fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
     [self targetPointAddWaypoint:fullPath];
+}
+
+#pragma mark - UI Tests
+
+- (BOOL)isContextMenuPresentationUITestingEnabled
+{
+    return [[[NSProcessInfo processInfo] arguments] containsObject:@"-ui-testing-context-menu-presentation-race"];
+}
+
+- (void)setupContextMenuPresentationUITestStateViewIfNeeded
+{
+    if (![self isContextMenuPresentationUITestingEnabled])
+        return;
+
+    _contextMenuPresentationUITestStateView = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 44.0, 44.0)];
+    _contextMenuPresentationUITestStateView.backgroundColor = UIColor.clearColor;
+    _contextMenuPresentationUITestStateView.isAccessibilityElement = YES;
+    _contextMenuPresentationUITestStateView.accessibilityIdentifier = @"context_menu_presentation_test_state";
+    _contextMenuPresentationUITestStateView.accessibilityLabel = @"idle";
+    _contextMenuPresentationUITestStateView.accessibilityValue = @"idle";
+    [self.view addSubview:_contextMenuPresentationUITestStateView];
+}
+
+- (OATargetPoint *)contextMenuPresentationUITestTargetWithType:(OATargetPointType)type
+                                                         title:(NSString *)title
+                                                      latitude:(CLLocationDegrees)latitude
+                                                     longitude:(CLLocationDegrees)longitude
+{
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = type;
+    targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
+    targetPoint.title = title;
+    targetPoint.titleAddress = title;
+    targetPoint.addressFound = YES;
+    targetPoint.toolbarNeeded = NO;
+    if (type == OATargetDestination)
+        targetPoint.targetObj = [[OADestination alloc] initWithDesc:title latitude:latitude longitude:longitude];
+    return targetPoint;
+}
+
+- (void)runContextMenuPresentationUITestFixtureIfNeeded
+{
+    if (![self isContextMenuPresentationUITestingEnabled] || _contextMenuPresentationUITestFixtureStarted)
+        return;
+
+    _contextMenuPresentationUITestFixtureStarted = YES;
+
+    __weak __typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OATargetPoint *firstTarget = [strongSelf contextMenuPresentationUITestTargetWithType:OATargetDestination
+                                                                                       title:@"UITest Destination A"
+                                                                                    latitude:52.379189
+                                                                                   longitude:4.899431];
+        [strongSelf enqueueContextMenuPresentation:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                [strongSelf presentContextMenuPresentationUITestTarget:firstTarget onComplete:^{
+                    [strongSelf enqueueContextMenuPresentationUITestFollowUps];
+                }];
+        }];
+    });
+}
+
+- (void)enqueueContextMenuPresentationUITestFollowUps
+{
+    OATargetPoint *secondTarget = [self contextMenuPresentationUITestTargetWithType:OATargetParking
+                                                                              title:@"UITest Parking B"
+                                                                           latitude:52.380189
+                                                                          longitude:4.900431];
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenuPresentationUITestTarget:secondTarget onComplete:nil];
+    }];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OATargetPoint *thirdTarget = [strongSelf contextMenuPresentationUITestTargetWithType:OATargetMyLocation
+                                                                                       title:@"UITest My Location C"
+                                                                                    latitude:52.381189
+                                                                                   longitude:4.901431];
+        [strongSelf enqueueContextMenuPresentation:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                [strongSelf presentContextMenuPresentationUITestTarget:thirdTarget onComplete:nil];
+        }];
+    });
+}
+
+- (void)presentContextMenuPresentationUITestTarget:(OATargetPoint *)targetPoint
+                                        onComplete:(void (^)(void))onComplete
+{
+    [self applyTargetPoint:targetPoint];
+    [_targetMenuView setTargetPoint:targetPoint];
+    _targetMenuView.accessibilityValue = targetPoint.title;
+    _contextMenuPresentationUITestStateView.accessibilityLabel = targetPoint.title;
+    NSString *presentationHistory = _contextMenuPresentationUITestStateView.accessibilityValue;
+    if (!presentationHistory || [presentationHistory isEqualToString:@"idle"])
+        _contextMenuPresentationUITestStateView.accessibilityValue = targetPoint.title;
+    else
+        _contextMenuPresentationUITestStateView.accessibilityValue = [presentationHistory stringByAppendingFormat:@"|%@", targetPoint.title];
+    [self.view bringSubviewToFront:_contextMenuPresentationUITestStateView];
+
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:onComplete];
 }
 
 @end

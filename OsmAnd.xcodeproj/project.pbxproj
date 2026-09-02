@@ -3106,6 +3106,10 @@
 		DA6F7C97216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */; };
 		DA6F7C99216602F7006F14E3 /* ic_action_directions_from@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C95216602F6006F14E3 /* ic_action_directions_from@3x.png */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
+		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
+		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
 		DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8927E6109F0081B9C1 /* OALocalFile.m */; };
@@ -3597,6 +3601,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		DA72AB8E2508F41000851313 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBA3AF30197FC4BB0039D991;
+			remoteInfo = "OsmAnd Maps";
+		};
+		D1C571210000000000000006 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
 			proxyType = 1;
@@ -8051,6 +8062,11 @@
 		DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
+		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
+		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
+		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
+		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
 		DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARemoteFile.m; sourceTree = "<group>"; };
@@ -8685,6 +8701,13 @@
 				DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */,
 				DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */,
 				DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C57121000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10944,6 +10967,7 @@
 				DA5A78FF26C5639F00F274C7 /* Sources */,
 				DA32848026CD38170036BA73 /* Support Files */,
 				DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000005 /* OsmAnd MapsUITests */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
@@ -10956,6 +10980,7 @@
 			children = (
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */,
 				DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */,
+				D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -13222,6 +13247,7 @@
 			children = (
 				DA5A7DA326C563A300F274C7 /* OADirectionAppearanceViewController.h */,
 				DA5A7D9F26C563A300F274C7 /* OADirectionAppearanceViewController.m */,
+				D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */,
 				DA5A7D9E26C563A300F274C7 /* OAMapPanelViewController.h */,
 				DA5A7DA126C563A300F274C7 /* OAMapPanelViewController.mm */,
 				DA5A7DA026C563A300F274C7 /* OAOptionsPanelBlackViewController.h */,
@@ -14702,6 +14728,7 @@
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
+				D1C571200000000000000006 /* Panels */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -14717,6 +14744,23 @@
 				DA72AB942508F44900851313 /* SearchUICoreTest.mm */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		D1C571200000000000000006 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
+			);
+			path = Panels;
+			sourceTree = "<group>";
+		};
+		D1C571210000000000000005 /* OsmAnd MapsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C571210000000000000003 /* Info.plist */,
+			);
+			path = "OsmAnd MapsUITests";
 			sourceTree = "<group>";
 		};
 		DA7F2587231A68CD00E54F77 /* Libraries */ = {
@@ -15701,6 +15745,24 @@
 			productReference = DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D1C571210000000000000007 /* OsmAnd MapsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */;
+			buildPhases = (
+				D1C571210000000000000009 /* Sources */,
+				D1C57121000000000000000A /* Frameworks */,
+				D1C57121000000000000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D1C57121000000000000000C /* PBXTargetDependency */,
+			);
+			name = "OsmAnd MapsUITests";
+			productName = "OsmAnd MapsUITests";
+			productReference = D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -15726,6 +15788,10 @@
 					DA72AB882508F40F00851313 = {
 						CreatedOnToolsVersion = 11.7;
 						LastSwiftMigration = 1620;
+						TestTargetID = BBA3AF30197FC4BB0039D991;
+					};
+					D1C571210000000000000007 = {
+						CreatedOnToolsVersion = 26.6;
 						TestTargetID = BBA3AF30197FC4BB0039D991;
 					};
 				};
@@ -15838,6 +15904,7 @@
 			targets = (
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				DA72AB882508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000007 /* OsmAnd MapsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -17696,6 +17763,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C57121000000000000000B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -19489,6 +19563,7 @@
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
+				D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
@@ -19508,6 +19583,16 @@
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
+				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
+				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C571210000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19518,6 +19603,11 @@
 			isa = PBXTargetDependency;
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
 			targetProxy = DA72AB8E2508F41000851313 /* PBXContainerItemProxy */;
+		};
+		D1C57121000000000000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
+			targetProxy = D1C571210000000000000006 /* PBXContainerItemProxy */;
 		};
 		FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -20282,6 +20372,107 @@
 			};
 			name = Release;
 		};
+		D1C57121000000000000000D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
+			};
+			name = Debug;
+		};
+		D1C57121000000000000000E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -20308,6 +20499,15 @@
 			buildConfigurations = (
 				DA72AB902508F41000851313 /* Debug */,
 				DA72AB912508F41000851313 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1C57121000000000000000D /* Debug */,
+				D1C57121000000000000000E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

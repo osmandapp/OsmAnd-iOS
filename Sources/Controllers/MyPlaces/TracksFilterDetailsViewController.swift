@@ -339,6 +339,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             }
         case .folder:
             let foldersToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
+            let filteredTrackPaths = Set(baseFilters.getFilteredTrackItems().map(\.path))
             if !isSearchActive {
                 let allFoldersSection = tableData.createNewSection()
                 let allFoldersRow = allFoldersSection.createNewRow()
@@ -348,10 +349,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 allFoldersRow.icon = .icCustomFolderOpen
                 allFoldersRow.iconTintColor = .iconColorSelected
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath("")?.getFlattenedTrackItems() {
-                    let filteredTracks = baseFilters.getFilteredTrackItems()
-                    let matchingTracksCount = folderTracks.filter { trackItem in
-                        filteredTracks.contains(where: { $0.path == trackItem.path })
-                    }.count
+                    let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
                     allFoldersRow.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
                 }
@@ -365,10 +363,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.icon = folderItem.icon
                 row.iconTintColor = folderItem.iconTintColor
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems() {
-                    let filteredTracks = baseFilters.getFilteredTrackItems()
-                    let matchingTracksCount = folderTracks.filter { trackItem in
-                        filteredTracks.contains(where: { $0.path == trackItem.path })
-                    }.count
+                    let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
                     row.descr = "\(NumberFormatter.localizedCount(matchingTracksCount))/\(NumberFormatter.localizedCount(totalTracksCount))"
                 }

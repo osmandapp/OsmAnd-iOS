@@ -517,7 +517,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }
     }
     mapButton.image = image;
-    mapButton.focusedImage = image;
 }
 
 - (void)onMap3dModeUpdated

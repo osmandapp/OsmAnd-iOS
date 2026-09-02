@@ -88,6 +88,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     int _calculationProgress;
 
     CPMapButton *_3DModeMapButton;
+    BOOL _lastIs3DMode;
     BOOL _wasIn3DBeforePreview;
 
     OAAutoObserverProxy *_locationUpdateObserver;
@@ -155,7 +156,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _mapTemplate.trailingNavigationBarButtons = @[panningButton];
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeSettings], [self createBarButton:EOACarPlayButtonTypeDirections]];
 
-    _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D];
+    BOOL is3DMode = [OAMapViewTrackingUtilities.instance is3DMode];
+    _lastIs3DMode = is3DMode;
+    _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D is3DMode:is3DMode];
     _mapTemplate.mapButtons = @[_3DModeMapButton, [self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
     [self onMap3dModeUpdated];
 }
@@ -473,7 +476,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [directionsGrid present];
 }
 
-- (void)updateMapButton:(CPMapButton *)mapButton forType:(EOACarPlayButtonType)type
+- (void)updateMapButton:(CPMapButton *)mapButton
+               forType:(EOACarPlayButtonType)type
+              is3DMode:(BOOL)is3DMode
 {
     UIImage *image = nil;
     if (@available(iOS 26.0, *))
@@ -490,7 +495,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 image = [UIImage templateImageNamed:ACImageNameIcCustomMapLocationPosition];
                 break;
             case EOACarPlayButtonType3D:
-                image = [UIImage templateImageNamed:[OAMapViewTrackingUtilities.instance is3DMode] ? ACImageNameIcCustom2D : ACImageNameIcCustom3D];
+                image = [UIImage templateImageNamed:is3DMode ? ACImageNameIcCustom2D : ACImageNameIcCustom3D];
                 break;
             default:
                 break;
@@ -510,7 +515,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 image = [UIImage imageNamed:ACImageNameBtnMapCurrentLocation];
                 break;
             case EOACarPlayButtonType3D:
-                image = [UIImage imageNamed:[OAMapViewTrackingUtilities.instance is3DMode] ? ACImageNameBtnMap2DMode : ACImageNameBtnMap3DMode];
+                image = [UIImage imageNamed:is3DMode ? ACImageNameBtnMap2DMode : ACImageNameBtnMap3DMode];
                 break;
             default:
                 break;
@@ -519,26 +524,54 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     mapButton.image = image;
 }
 
+- (void)replace3DModeMapButton:(CPMapButton *)mapButton
+{
+    NSUInteger buttonIndex = [_mapTemplate.mapButtons indexOfObjectIdenticalTo:_3DModeMapButton];
+    if (buttonIndex == NSNotFound)
+        return;
+
+    NSMutableArray<CPMapButton *> *mapButtons = _mapTemplate.mapButtons.mutableCopy;
+    mapButtons[buttonIndex] = mapButton;
+    _3DModeMapButton = mapButton;
+    _mapTemplate.mapButtons = mapButtons;
+}
+
 - (void)onMap3dModeUpdated
 {
     if (_3DModeMapButton)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+            BOOL is3DMode = [mapViewTrackingUtilities is3DMode];
             Map3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
             BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
-                || (map3DMode == Map3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities is3DMode]);
-            _3DModeMapButton.hidden = hideButton ? YES : NO;
-            [self updateMapButton:_3DModeMapButton forType:EOACarPlayButtonType3D];
-            if ([mapViewTrackingUtilities is3DMode])
+                || (map3DMode == Map3DModeVisibilityVisibleIn3DMode && !is3DMode);
+            BOOL shouldRecreateButton = NO;
+            if (@available(iOS 26.0, *))
             {
-                _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
+                BOOL isButtonPresented = [_mapTemplate.mapButtons indexOfObjectIdenticalTo:_3DModeMapButton] != NSNotFound;
+                shouldRecreateButton = _lastIs3DMode != is3DMode && isButtonPresented;
+            }
+            _lastIs3DMode = is3DMode;
+
+            CPMapButton *mapButton = shouldRecreateButton
+                ? [self createMapButton:EOACarPlayButtonType3D is3DMode:is3DMode]
+                : _3DModeMapButton;
+            if (!shouldRecreateButton)
+                [self updateMapButton:mapButton forType:EOACarPlayButtonType3D is3DMode:is3DMode];
+            mapButton.hidden = hideButton;
+            if (is3DMode)
+            {
+                mapButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
             }
             else
             {
-                _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
+                mapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
             }
-            _3DModeMapButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
+            mapButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
+
+            if (shouldRecreateButton)
+                [self replace3DModeMapButton:mapButton];
         });
     }
 }
@@ -656,7 +689,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         completion();
 }
 
-- (CPMapButton *) createMapButton:(EOACarPlayButtonType)type
+- (CPMapButton *)createMapButton:(EOACarPlayButtonType)type
+{
+    return [self createMapButton:type is3DMode:[OAMapViewTrackingUtilities.instance is3DMode]];
+}
+
+- (CPMapButton *)createMapButton:(EOACarPlayButtonType)type is3DMode:(BOOL)is3DMode
 {
     CPMapButton *mapButton = [[CPMapButton alloc] initWithHandler:^(CPMapButton * _Nonnull mapButton) {
         switch (type) {
@@ -685,7 +723,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }
     }];
     
-    [self updateMapButton:mapButton forType:type];
+    [self updateMapButton:mapButton forType:type is3DMode:is3DMode];
     
     return mapButton;
 }

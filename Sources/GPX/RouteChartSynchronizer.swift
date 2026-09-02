@@ -116,9 +116,10 @@ final class RouteChartSynchronizer: NSObject {
             .forEach { $0.highlightColor = .chartSliderLine }
         chart.notifyDataSetChanged()
         if primaryXAxisType != nil {
-            barCharts.allObjects.forEach {
-                updateHorizontalAxis(of: $0)
-                $0.notifyDataSetChanged()
+            barCharts.allObjects.forEach { barChart in
+                updateHorizontalAxis(of: barChart)
+                barChart.notifyDataSetChanged()
+                applyStoredVisibleRange(to: barChart)
             }
         }
         applyStoredVisibleRange(to: chart)

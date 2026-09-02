@@ -95,7 +95,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         let proxy = AnalyzeChartDelegateProxy()
         proxy.onNothingSelected = { [weak self] _ in
             self?.chartSynchronizer.clearSynchronizedHighlights()
-            self?.hideChartLocation()
         }
         proxy.onValueSelected = { [weak self] chart, highlight in
             guard let self, let chartView, chart === chartView else { return }
@@ -158,7 +157,12 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     override func viewDidLoad() {
         super.viewDidLoad()
         chartSynchronizer.onChartStateChanged = { [weak self] state in
-            self?.refreshChartOnMap(state)
+            guard let self else { return }
+            if let state {
+                refreshChartOnMap(state)
+            } else {
+                hideChartLocation()
+            }
         }
         setupTableView()
         reloadData()

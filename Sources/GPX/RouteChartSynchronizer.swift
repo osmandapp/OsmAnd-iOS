@@ -52,7 +52,7 @@ private final class RouteStatisticsYAxisRenderer: YAxisRendererHorizontalBarChar
 final class RouteChartSynchronizer: NSObject {
     private static let maxHighlightDistance: CGFloat = 10_000
 
-    @nonobjc var onChartStateChanged: ((TrackChartState) -> Void)?
+    @nonobjc var onChartStateChanged: ((TrackChartState?) -> Void)?
 
     private let barCharts = NSHashTable<HorizontalBarChartView>.weakObjects()
     private weak var primaryChart: ElevationChart?
@@ -197,6 +197,7 @@ final class RouteChartSynchronizer: NSObject {
             clearHighlight(in: primaryChart)
         }
         barCharts.allObjects.forEach { clearHighlight(in: $0) }
+        onChartStateChanged?(nil)
     }
 
     func reset() {
@@ -306,13 +307,11 @@ final class RouteChartSynchronizer: NSObject {
         guard scale.isFinite else { return }
 
         let handler = chart.viewPortHandler
-        var matrix = handler.touchMatrix
-        matrix.a = scale
-        handler.refresh(newMatrix: matrix, chart: chart, invalidate: false)
+        let scaleMatrix = handler.setZoom(scaleX: scale, scaleY: handler.scaleY)
+        handler.refresh(newMatrix: scaleMatrix, chart: chart, invalidate: false)
         let startPoint = chart.pixelForValues(x: visibleRange.lowerBound, y: 0, axis: .left)
-        let translation = handler.contentLeft - startPoint.x
-        matrix = handler.touchMatrix.concatenating(CGAffineTransform(translationX: translation, y: 0))
-        handler.refresh(newMatrix: matrix, chart: chart, invalidate: true)
+        let translationMatrix = handler.translate(pt: CGPoint(x: startPoint.x, y: handler.contentTop))
+        handler.refresh(newMatrix: translationMatrix, chart: chart, invalidate: true)
     }
 
     private func applyStoredVisibleRange(to chart: BarLineChartViewBase) {

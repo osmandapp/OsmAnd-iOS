@@ -141,5 +141,23 @@
 			<string>%2$@ Stavki</string>
 		</dict>
 	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Fajl %2$@ sadrži %3$@ zasebnu putanju. Izaberite onu koju želite da uvezete.</string>
+			<key>few</key>
+			<string>Fajl %2$@ sadrži %3$@ odvojene putanje. Izaberite one koje želite da uvezete.</string>
+			<key>other</key>
+			<string>Fajl %2$@ sadrži %3$@ odvojenih putanja. Izaberite one koje želite da uvezete.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

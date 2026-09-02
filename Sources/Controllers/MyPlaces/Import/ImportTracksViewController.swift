@@ -571,9 +571,7 @@ private extension ImportTracksViewController {
 
     func makeImportTracksDescription(tracksCount: Int) -> NSAttributedString {
         let formattedTracksCount = NumberFormatter.localizedCount(tracksCount)
-        let text = tracksCount == 1
-            ? String(format: localizedString("import_tracks_descr_one"), fileName, formattedTracksCount)
-            : String(format: localizedString("import_tracks_descr_other"), fileName, formattedTracksCount)
+        let text = String.localizedStringWithFormat(NSLocalizedString("import_tracks_description", comment: ""), tracksCount, fileName, formattedTracksCount)
 
         let result = NSMutableAttributedString(
             string: text,

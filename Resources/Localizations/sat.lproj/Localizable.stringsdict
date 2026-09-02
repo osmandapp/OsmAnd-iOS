@@ -131,5 +131,21 @@
 			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
 		</dict>
 	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<key>other</key>
+			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

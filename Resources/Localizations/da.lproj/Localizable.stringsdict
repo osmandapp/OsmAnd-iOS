@@ -125,5 +125,21 @@
 			<string>%2$@ Elementer</string>
 		</dict>
 	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Filen %2$@ indeholder %3$@ separat spor. Vælg det spor, du vil importere.</string>
+			<key>other</key>
+			<string>Filen %2$@ indeholder %3$@ separate spor. Vælg det spor, du vil importere.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

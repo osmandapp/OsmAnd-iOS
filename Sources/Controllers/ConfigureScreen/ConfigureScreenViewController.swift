@@ -30,11 +30,11 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     private var mapButtonsHelper: OAMapButtonsHelper!
-    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: appMode,
-                                                                  layoutMode: screenLayoutMode)
     private var screenLayoutMode: ScreenLayoutMode = .portrait
     private var screenElementsMode: ScreenElementsMode = .defaultMode
     private var isUpdatingSettings = false
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: appMode,
+                                                                  layoutMode: screenLayoutMode)
 
     private var isSharedLandscapeLayout: Bool {
         screenLayoutMode == .landscape && screenElementsMode == .shared

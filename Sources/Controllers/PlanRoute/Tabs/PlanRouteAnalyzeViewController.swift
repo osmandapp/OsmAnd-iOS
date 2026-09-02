@@ -94,8 +94,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var registeredChartsByCell = [ObjectIdentifier: BarLineChartViewBase]()
     private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
         let proxy = AnalyzeChartDelegateProxy()
-        proxy.onNothingSelected = { [weak self] _ in
-            self?.chartSynchronizer.clearSynchronizedHighlights()
+        proxy.onNothingSelected = { [weak self] chart in
+            guard let self, let chartView, chart === chartView else { return }
+            chartSynchronizer.clearSynchronizedHighlights()
         }
         proxy.onValueSelected = { [weak self] chart, highlight in
             guard let self, let chartView, chart === chartView else { return }

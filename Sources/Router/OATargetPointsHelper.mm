@@ -37,12 +37,12 @@
     OARoutingHelper *_routingHelper;
     
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
-    NSUUID *_homeLookupToken;
-    NSUUID *_workLookupToken;
-    NSUUID *_startLookupToken;
-    NSUUID *_myLocationLookupToken;
-    NSUUID *_destinationLookupToken;
-    NSMapTable<OARTargetPoint *, NSUUID *> *_intermediateLookupTokens;
+    NSString *_homeLookupToken;
+    NSString *_workLookupToken;
+    NSString *_startLookupToken;
+    NSString *_myLocationLookupToken;
+    NSString *_destinationLookupToken;
+    NSMapTable<OARTargetPoint *, NSString *> *_intermediateLookupTokens;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -560,12 +560,12 @@
 
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     _homeLookupToken = lookupToken;
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf || ![strongSelf->_homeLookupToken isEqual:lookupToken])
+        if (!strongSelf || ![strongSelf->_homeLookupToken isEqualToString:lookupToken])
             return;
 
         OAFavoriteItem *home = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType HOME]];
@@ -591,12 +591,12 @@
 
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     _workLookupToken = lookupToken;
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf || ![strongSelf->_workLookupToken isEqual:lookupToken])
+        if (!strongSelf || ![strongSelf->_workLookupToken isEqualToString:lookupToken])
             return;
 
         OAFavoriteItem *work = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType WORK]];
@@ -622,13 +622,13 @@
 
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     _startLookupToken = lookupToken;
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
 
-        if (!strongSelf || ![strongSelf->_startLookupToken isEqual:lookupToken] || strongSelf->_pointToStart != point)
+        if (!strongSelf || ![strongSelf->_startLookupToken isEqualToString:lookupToken] || strongSelf->_pointToStart != point)
             return;
         if (![OAUtilities doublesEqualUpToDigits:5 source:point.getLatitude destination:lookupLat] ||
             ![OAUtilities doublesEqualUpToDigits:5 source:point.getLongitude destination:lookupLon])
@@ -648,13 +648,13 @@
 
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     _myLocationLookupToken = lookupToken;
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
 
-        if (!strongSelf || ![strongSelf->_myLocationLookupToken isEqual:lookupToken] || strongSelf->_myLocationToStart != point)
+        if (!strongSelf || ![strongSelf->_myLocationLookupToken isEqualToString:lookupToken] || strongSelf->_myLocationToStart != point)
             return;
         if (![OAUtilities doublesEqualUpToDigits:5 source:point.getLatitude destination:lookupLat] ||
             ![OAUtilities doublesEqualUpToDigits:5 source:point.getLongitude destination:lookupLon])
@@ -675,12 +675,12 @@
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
     const BOOL isNameNotValid = [point isSearchingAddress];
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     _destinationLookupToken = lookupToken;
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf || ![strongSelf->_destinationLookupToken isEqual:lookupToken] || strongSelf->_pointToNavigate != point)
+        if (!strongSelf || ![strongSelf->_destinationLookupToken isEqualToString:lookupToken] || strongSelf->_pointToNavigate != point)
             return;
         if (![OAUtilities doublesEqualUpToDigits:5 source:point.getLatitude destination:lookupLat] ||
             ![OAUtilities doublesEqualUpToDigits:5 source:point.getLongitude destination:lookupLon])
@@ -713,14 +713,14 @@
 
     const double lookupLat = point.getLatitude;
     const double lookupLon = point.getLongitude;
-    NSUUID *lookupToken = [NSUUID UUID];
+    NSString *lookupToken = [NSUUID UUID].UUIDString;
     [_intermediateLookupTokens setObject:lookupToken forKey:point];
     __weak __typeof(self) weakSelf = self;
     [self getLocationName:point.point completion:^(NSString *address) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
-        if (![[strongSelf->_intermediateLookupTokens objectForKey:point] isEqual:lookupToken])
+        if (![[strongSelf->_intermediateLookupTokens objectForKey:point] isEqualToString:lookupToken])
             return;
         if ([strongSelf->_intermediatePoints indexOfObjectIdenticalTo:point] == NSNotFound)
             return;

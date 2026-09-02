@@ -91,6 +91,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var currentChartDataSignature: String?
     private var trackChartFilePath: String?
     private var trackChartHelper: TrackChartHelper?
+    private var registeredChartsByCell = [ObjectIdentifier: BarLineChartViewBase]()
     private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
         let proxy = AnalyzeChartDelegateProxy()
         proxy.onNothingSelected = { [weak self] _ in
@@ -1206,6 +1207,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
+        registeredChartsByCell[ObjectIdentifier(cell)] = chart
         cell.layoutIfNeeded()
         if let primaryChart = chart as? ElevationChart {
             chartView = primaryChart
@@ -1216,7 +1218,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
+        guard let chart = registeredChartsByCell.removeValue(forKey: ObjectIdentifier(cell)) else { return }
         if let primaryChart = chart as? ElevationChart {
             chartSynchronizer.unregisterPrimaryChart(primaryChart)
             if chartView === primaryChart {

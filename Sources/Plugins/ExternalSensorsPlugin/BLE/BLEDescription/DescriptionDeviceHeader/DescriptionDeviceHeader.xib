@@ -117,6 +117,7 @@
             <constraints>
                 <constraint firstItem="jbx-xX-LM3" firstAttribute="centerY" secondItem="0uJ-Dc-WGi" secondAttribute="centerY" id="0Wu-sK-iqM"/>
                 <constraint firstItem="0uJ-Dc-WGi" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="3fa-2r-Zlu"/>
+                <constraint firstItem="jbx-xX-LM3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="31.670000000000002" id="8ck-zO-Tuf"/>
                 <constraint firstItem="jbx-xX-LM3" firstAttribute="leading" secondItem="0uJ-Dc-WGi" secondAttribute="trailing" constant="20" id="8h0-wn-N7E"/>
                 <constraint firstItem="Xg5-ru-81P" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Red-cz-UGQ"/>
                 <constraint firstAttribute="bottom" secondItem="C4V-Q7-dfT" secondAttribute="bottom" id="SKF-a7-Xkb"/>
@@ -128,9 +129,9 @@
                 <constraint firstItem="NkN-F9-TSx" firstAttribute="leading" secondItem="0uJ-Dc-WGi" secondAttribute="leading" id="l96-3C-n3J"/>
                 <constraint firstAttribute="trailing" secondItem="h0J-ik-bhZ" secondAttribute="trailing" constant="20" id="n1O-dV-MoU"/>
                 <constraint firstItem="C4V-Q7-dfT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="nfu-HB-yeB"/>
-                <constraint firstItem="0uJ-Dc-WGi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="oLh-6X-oJL"/>
                 <constraint firstItem="C4V-Q7-dfT" firstAttribute="top" secondItem="NkN-F9-TSx" secondAttribute="bottom" constant="2" id="uNI-xX-riw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="C4V-Q7-dfT" secondAttribute="trailing" constant="20" id="wPH-Ql-soL"/>
+                <constraint firstItem="NkN-F9-TSx" firstAttribute="top" secondItem="jbx-xX-LM3" secondAttribute="bottom" constant="31.329999999999998" id="z0G-Pd-gc5"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

@@ -18,6 +18,12 @@ final class DescriptionDeviceCell: UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    func configure(header: DescriptionDeviceHeader) {
+        guard deviceHeader !== header else { return }
+        deviceHeader?.removeFromSuperview()
+        setupView(header)
+    }
 
     private func setupView(_ header: DescriptionDeviceHeader) {
         selectionStyle = .none
@@ -31,16 +37,9 @@ final class DescriptionDeviceCell: UITableViewCell {
             header.topAnchor.constraint(equalTo: contentView.topAnchor),
             header.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             header.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            header.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            header.heightAnchor.constraint(equalToConstant: 156)
+            header.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
         deviceHeader = header
-    }
-
-    func configure(header: DescriptionDeviceHeader) {
-        guard deviceHeader !== header else { return }
-        deviceHeader?.removeFromSuperview()
-        setupView(header)
     }
 }

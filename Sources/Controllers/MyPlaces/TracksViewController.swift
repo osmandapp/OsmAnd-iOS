@@ -672,7 +672,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 let totalTracks = totalSelectedTracks + tracksInSelectedFolders
                 title = String.localizedStringWithFormat(NSLocalizedString("selected_items_count", comment: ""), totalSelectedItems, NumberFormatter.localizedCount(totalSelectedItems)).lowercased()
                 if totalTracks > 0 {
-                    title += " (\(TracksSortModeHelper.formattedTracksCount(totalTracks)))"
+                    title = String(format: localizedString("ltr_or_rtl_combine_with_brackets"), title, TracksSortModeHelper.formattedTracksCount(totalTracks))
                 }
             }
         } else if isRootFolder {
@@ -800,7 +800,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         var baseTitle = localizedString("filter_current_poiButton")
         var baseIcon: UIImage = .icCustomFilter
         if let count = isEditFilterActive ? smartFolder.filters?.count : baseFilters?.getAppliedFiltersCount(), count > 0 {
-            baseTitle += " (\(NumberFormatter.localizedCount(count)))"
+            baseTitle = String(format: localizedString("ltr_or_rtl_combine_with_brackets"), baseTitle, NumberFormatter.localizedCount(count))
             baseIcon = .icCustomFilterFilled
         }
         

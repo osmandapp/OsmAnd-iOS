@@ -89,10 +89,14 @@ final class ContextMenuPresentationUITests: XCTestCase {
 
         let waypoint = element(identifier: AccessibilityIdentifier.ContextMenu.GPX.waypoint("UITest Waypoint A"))
         XCTAssertTrue(waypoint.waitForExistence(timeout: Timeout.initialMenu))
-        waypoint.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(waypoint.waitUntilHittable(timeout: Timeout.transition))
 
         let openTrackButton = element(identifier: AccessibilityIdentifier.ContextMenu.GPX.waypointOpenTrackButton)
-        XCTAssertTrue(openTrackButton.waitForExistence(timeout: Timeout.transition))
+        for _ in 0..<2 where !openTrackButton.exists {
+            waypoint.tap()
+            _ = openTrackButton.waitForExistence(timeout: Timeout.transition / 2)
+        }
+        XCTAssertTrue(openTrackButton.exists)
         openTrackButton.tap()
 
         XCTAssertTrue(openTrackButton.waitForNonExistence(timeout: Timeout.transition))
@@ -149,6 +153,12 @@ final class ContextMenuPresentationUITests: XCTestCase {
 }
 
 private extension XCUIElement {
+    func waitUntilHittable(timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "exists == true AND hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
     func waitUntilHidden(timeout: TimeInterval) -> Bool {
         let predicate = NSPredicate(format: "exists == false OR hittable == false")
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)

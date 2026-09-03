@@ -364,9 +364,17 @@
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     UIColor *selectedColor;
     if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
+    {
+        // Follow the destination group's existing appearance if it already has one;
+        // otherwise fall through to the color the caller (e.g. a Quick Action) pre-selected.
         selectedColor = [OAFavoritesHelper groupByTrimmedName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
+        if (!selectedColor)
+            selectedColor = [_pointHandler getColor];
+    }
     else
+    {
         selectedColor = [_pointHandler getColor];
+    }
     if (!selectedColor)
         selectedColor = [OADefaultFavorite getDefaultColor];
     

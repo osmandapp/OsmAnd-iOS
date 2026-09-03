@@ -16,6 +16,8 @@
 
 #define kWptDefaultColorKey @"WptDefaultColorKey"
 #define kWptDefaultGroupKey @"WptDefaultGroupKey"
+#define kWptDefaultIconKey @"WptDefaultIconKey"
+#define kWptDefaultBackgroundKey @"WptDefaultBackgroundKey"
 
 @interface OAFavoriteColor : NSObject
 

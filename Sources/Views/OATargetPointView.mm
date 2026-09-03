@@ -1647,11 +1647,20 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         if (self.customController.leftControlButton)
+        {
             [_controlButtonLeft setTitle:self.customController.leftControlButton.title forState:UIControlStateNormal];
+            _controlButtonLeft.accessibilityIdentifier = self.customController.leftControlButton.accessibilityIdentifier;
+        }
         if (self.customController.rightControlButton)
+        {
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
+            _controlButtonRight.accessibilityIdentifier = self.customController.rightControlButton.accessibilityIdentifier;
+        }
         if (self.customController.downloadControlButton)
+        {
             [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
+            _controlButtonDownload.accessibilityIdentifier = self.customController.downloadControlButton.accessibilityIdentifier;
+        }
         
         if ([self.customController isKindOfClass:OAFavoriteViewController.class])
         {
@@ -2376,7 +2385,10 @@ static const NSInteger _buttonsCount = 4;
 - (void) contentChanged
 {
     if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
+    {
         [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
+        _controlButtonDownload.accessibilityIdentifier = self.customController.downloadControlButton.accessibilityIdentifier;
+    }
 
     [self doLayoutSubviews:YES];
 }

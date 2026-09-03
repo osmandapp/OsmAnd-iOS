@@ -65,6 +65,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_open_track");
+        self.leftControlButton.accessibilityIdentifier = UITestAccessibilityIdentifier.gpxWaypointOpenTrackButton;
     }
     return self;
 }

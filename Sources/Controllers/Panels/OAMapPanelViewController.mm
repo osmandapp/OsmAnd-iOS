@@ -201,7 +201,6 @@ typedef enum
 
     MBProgressHUD *_gpxProgress;
     ContextMenuPresentationCoordinator *_contextMenuPresentationCoordinator;
-    BOOL _contextMenuPresentationUITestFixtureStarted;
     UIView *_contextMenuPresentationUITestStateView;
 }
 
@@ -287,7 +286,7 @@ typedef enum
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
-    self.targetMenuView.accessibilityIdentifier = @"context_menu_container";
+    self.targetMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.contextMenuContainer;
     self.targetMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
     self.targetMenuView.menuViewDelegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
@@ -298,7 +297,7 @@ typedef enum
 
     // Setup target multi menu
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
-    self.targetMultiMenuView.accessibilityIdentifier = @"multi_context_menu_container";
+    self.targetMultiMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.multiContextMenuContainer;
     self.targetMultiMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
 
     [self setupContextMenuPresentationUITestStateViewIfNeeded];
@@ -327,12 +326,13 @@ typedef enum
     BOOL isCarPlayConnected = UIApplication.sharedApplication.isCarPlayConnected;
     if ([_mapViewController parentViewController] != self && !isCarPlayConnected)
         [self doMapRestore];
-    
+
     if (isCarPlayConnected)
         [self onCarPlayConnected];
-    
+
+    [self runUITestsIfNeeded];
+
     [[OADiscountHelper instance] checkAndDisplay];
-    [self runContextMenuPresentationUITestFixtureIfNeeded];
 }
 
 - (void) viewWillLayoutSubviews
@@ -4733,9 +4733,20 @@ typedef enum
 
 #pragma mark - UI Tests
 
+- (void)runUITestsIfNeeded
+{
+    [self runContextMenuPresentationUITestFixtureIfNeeded];
+    [self runGpxWaypointOpenTrackUITestFixtureIfNeeded];
+}
+
 - (BOOL)isContextMenuPresentationUITestingEnabled
 {
-    return [[[NSProcessInfo processInfo] arguments] containsObject:@"-ui-testing-context-menu-presentation-race"];
+    return UITestState.isContextMenuPresentationRaceEnabled;
+}
+
+- (BOOL)isGpxWaypointOpenTrackUITestingEnabled
+{
+    return UITestState.isGpxWaypointOpenTrackEnabled;
 }
 
 - (void)setupContextMenuPresentationUITestStateViewIfNeeded
@@ -4746,7 +4757,7 @@ typedef enum
     _contextMenuPresentationUITestStateView = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 44.0, 44.0)];
     _contextMenuPresentationUITestStateView.backgroundColor = UIColor.clearColor;
     _contextMenuPresentationUITestStateView.isAccessibilityElement = YES;
-    _contextMenuPresentationUITestStateView.accessibilityIdentifier = @"context_menu_presentation_test_state";
+    _contextMenuPresentationUITestStateView.accessibilityIdentifier = UITestAccessibilityIdentifier.contextMenuPresentationState;
     _contextMenuPresentationUITestStateView.accessibilityLabel = @"idle";
     _contextMenuPresentationUITestStateView.accessibilityValue = @"idle";
     [self.view addSubview:_contextMenuPresentationUITestStateView];
@@ -4771,10 +4782,8 @@ typedef enum
 
 - (void)runContextMenuPresentationUITestFixtureIfNeeded
 {
-    if (![self isContextMenuPresentationUITestingEnabled] || _contextMenuPresentationUITestFixtureStarted)
+    if (![UITestState shouldRunContextMenuPresentationRaceFixture])
         return;
-
-    _contextMenuPresentationUITestFixtureStarted = YES;
 
     __weak __typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -4841,6 +4850,46 @@ typedef enum
     [self.view bringSubviewToFront:_contextMenuPresentationUITestStateView];
 
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:onComplete];
+}
+
+- (void)runGpxWaypointOpenTrackUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunGpxWaypointOpenTrackFixture])
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+        NSString *waypointName = @"UITest Waypoint A";
+        BOOL hasFixtureWaypoint = NO;
+        for (OASWptPt *point in [currentTrack getPointsList])
+        {
+            if ([point.name isEqualToString:waypointName])
+            {
+                hasFixtureWaypoint = YES;
+                break;
+            }
+        }
+
+        if (!hasFixtureWaypoint)
+        {
+            OASWptPt *waypoint = [[OASWptPt alloc] initWithLat:52.379189 lon:4.899431];
+            waypoint.name = waypointName;
+            waypoint.category = @"UITest";
+            [currentTrack addPointPoint:waypoint];
+            [currentTrack processPoints];
+        }
+
+        OASTrackItem *trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+        [strongSelf openTargetViewWithGPX:trackItem
+                              selectedTab:EOATrackMenuHudPointsTab
+                     selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab
+                            openedFromMap:NO];
+    });
 }
 
 @end

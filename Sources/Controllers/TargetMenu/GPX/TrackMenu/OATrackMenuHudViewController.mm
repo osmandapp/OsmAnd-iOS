@@ -2549,6 +2549,7 @@
                 cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
         }
         outCell = cell;
     }

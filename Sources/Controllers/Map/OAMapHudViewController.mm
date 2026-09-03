@@ -1458,8 +1458,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateBottomBarViewBackgroundColor
 {
-    BOOL useClearBackground = _settings.isCompactPanelsLayout
-        || (![OAUtilities isLandscape] && [OAUtilities isIPad]);
+    BOOL useClearBackground = _settings.isCompactPanelsLayout;
     if (useClearBackground)
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else

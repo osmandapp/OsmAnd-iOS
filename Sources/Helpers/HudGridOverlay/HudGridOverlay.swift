@@ -16,6 +16,7 @@ final class HudGridOverlay: UIView {
         var cellFixPx: CGFloat = 0
         var safeAreaInsets: UIEdgeInsets = .zero
         var bottomOverlayPx: CGFloat = 0
+        var leftOverlayPx: CGFloat = 0
         var showsEffectiveGrid: Bool = false
         var showsSlots: Bool = false
         var showsFrames: Bool = false
@@ -52,7 +53,10 @@ final class HudGridOverlay: UIView {
     
     override func draw(_ rect: CGRect) {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
-        let physical = UIEdgeInsets(top: cfg.safeAreaInsets.top, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
+        let physical = UIEdgeInsets(top: cfg.safeAreaInsets.top,
+                                    left: cfg.safeAreaInsets.left + cfg.leftOverlayPx,
+                                    bottom: cfg.safeAreaInsets.bottom,
+                                    right: cfg.safeAreaInsets.right)
         if cfg.showsEffectiveGrid {
             drawFourCornerGrid(in: ctx)
         }
@@ -75,7 +79,7 @@ final class HudGridOverlay: UIView {
     private func drawFourCornerGrid(in ctx: CGContext) {
         let cell = cfg.cellSizePx
         guard cell > 0 else { return }
-        let left0 = cfg.safeAreaInsets.left + cfg.cellFixPx + cfg.defaultMarginPx
+        let left0 = cfg.safeAreaInsets.left + cfg.leftOverlayPx + cfg.cellFixPx + cfg.defaultMarginPx
         let right0 = bounds.width - cfg.safeAreaInsets.right - cfg.cellFixPx - cfg.defaultMarginPx
         let top0 = cfg.safeAreaInsets.top + cfg.cellFixPx + cfg.defaultMarginPx
         let bottom0 = bounds.height - cfg.safeAreaInsets.bottom - cfg.cellFixPx - cfg.defaultMarginPx - cfg.bottomOverlayPx

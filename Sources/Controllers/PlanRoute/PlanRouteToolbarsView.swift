@@ -38,6 +38,10 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         didSet { saveButton.isEnabled = isSaveButtonEnabled }
     }
 
+    var showsGradient = true {
+        didSet { updateBackgroundLayers() }
+    }
+
     private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
@@ -68,6 +72,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     }
 
     func updateMapTheme() {
+        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
@@ -134,9 +139,11 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 
     private func updateBackgroundLayers() {
         let isCompactLayout = traitCollection.verticalSizeClass == .compact
-        backgroundContainerView.isHidden = isCompactLayout
+        let isBackgroundHidden = isCompactLayout || !showsGradient
+        backgroundContainerView.isHidden = isBackgroundHidden
+        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
 
-        guard !isCompactLayout else { return }
+        guard !isBackgroundHidden else { return }
         backgroundMaskLayer.frame = backgroundContainerView.bounds
         backgroundMaskLayer.colors = [
             UIColor.black.withAlphaComponent(Self.backgroundFirstAlpha).cgColor,
@@ -155,13 +162,19 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 }
 
 final class PlanRouteBottomToolbarView: UIView {
-    private static let edgeInset: CGFloat = 16
+    private static let defaultHorizontalContentInset: CGFloat = 16
     private static let buttonSpacing: CGFloat = 8
 
     var onAddPoi: (() -> Void)?
     var onUndo: (() -> Void)?
     var onRedo: (() -> Void)?
     var onAddRoutePoint: (() -> Void)?
+
+    var leadingContentInset = PlanRouteBottomToolbarView.defaultHorizontalContentInset {
+        didSet {
+            addPoiLeadingConstraint?.constant = leadingContentInset
+        }
+    }
 
     var isUndoEnabled = false {
         didSet { undoButton.isEnabled = isUndoEnabled }
@@ -171,14 +184,35 @@ final class PlanRouteBottomToolbarView: UIView {
         didSet { redoButton.isEnabled = isRedoEnabled }
     }
 
-    private let undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomUndo)
-    private let redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomRedo)
+    private let undoButton: UIButton
+    private let redoButton: UIButton
+    private let addPoiButton: UIButton
+    private let routeButton: UIButton
+    private let passesTouchesOutsideButtons: Bool
+    private var addPoiLeadingConstraint: NSLayoutConstraint?
 
-    private lazy var addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
-    private lazy var routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"), image: .icCustomAdd, imagePlacement: .trailing)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(useMapStyle: Bool) {
+        passesTouchesOutsideButtons = useMapStyle
+        if useMapStyle {
+            let buttonHeight = PlanRouteButtonFactory.toolbarButtonSize
+            undoButton = PlanRouteButtonFactory.iconButton(image: .icCustomUndo)
+            redoButton = PlanRouteButtonFactory.iconButton(image: .icCustomRedo)
+            addPoiButton = PlanRouteButtonFactory.labeledButton(title: localizedString("poi"),
+                                                                image: .icCustomAdd,
+                                                                height: buttonHeight)
+            routeButton = PlanRouteButtonFactory.labeledButton(title: localizedString("layer_route"),
+                                                                image: .icCustomAdd,
+                                                                imagePlacement: .trailing,
+                                                                height: buttonHeight)
+        } else {
+            undoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomUndo)
+            redoButton = PlanRouteButtonFactory.bottomToolbarIconButton(image: .icCustomRedo)
+            addPoiButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("poi"), image: .icCustomAdd)
+            routeButton = PlanRouteButtonFactory.bottomToolbarLabeledButton(title: localizedString("layer_route"),
+                                                                             image: .icCustomAdd,
+                                                                             imagePlacement: .trailing)
+        }
+        super.init(frame: .zero)
         setupView()
     }
 
@@ -186,7 +220,13 @@ final class PlanRouteBottomToolbarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hitView = super.hitTest(point, with: event)
+        return passesTouchesOutsideButtons && hitView === self ? nil : hitView
+    }
+
     private func setupView() {
+        let defaultHorizontalContentInset = Self.defaultHorizontalContentInset
         backgroundColor = .clear
 
         let centerStack = UIStackView(arrangedSubviews: [undoButton, redoButton])
@@ -206,13 +246,16 @@ final class PlanRouteBottomToolbarView: UIView {
             $0.titleLabel?.lineBreakMode = .byTruncatingTail
         }
 
-        let inset = Self.edgeInset
+        let leadingConstraint = addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leadingContentInset)
+        let trailingConstraint = routeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                                       constant: -defaultHorizontalContentInset)
+        addPoiLeadingConstraint = leadingConstraint
         NSLayoutConstraint.activate([
-            addPoiButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
+            leadingConstraint,
             addPoiButton.topAnchor.constraint(equalTo: topAnchor),
             addPoiButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 
-            routeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            trailingConstraint,
             routeButton.centerYAnchor.constraint(equalTo: addPoiButton.centerYAnchor),
             routeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: PlanRouteButtonFactory.bottomButtonHeight),
 

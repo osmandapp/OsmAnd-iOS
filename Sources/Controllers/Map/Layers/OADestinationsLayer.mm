@@ -714,20 +714,39 @@
 
 - (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
-    if (object && [self isObjectMovable:object])
-    {
-        OADestination *dest = (OADestination *)object;
-        OADestination *destCopy = [dest copy];
-        OADestinationsHelper *helper = [OADestinationsHelper instance];
-        destCopy.latitude = position.latitude;
-        destCopy.longitude = position.longitude;
-        NSString *address = [[OAReverseGeocoder instance] lookupAddressAtLat:destCopy.latitude lon:destCopy.longitude];
-        address = address && address.length > 0 ? address : [OAPointDescription getLocationNamePlain:destCopy.latitude lon:destCopy.longitude];
-        destCopy.desc = address;
-        [helper replaceDestination:dest withDestination:destCopy];
-        [_destinationLayerWidget moveMarker:-1];
-        [self drawDestinationLines];
-    }
+    if (!object || ![self isObjectMovable:object])
+        return;
+
+    OADestination *dest = (OADestination *)object;
+    OADestination *destCopy = [dest copy];
+    OADestinationsHelper *helper = [OADestinationsHelper instance];
+
+    destCopy.latitude = position.latitude;
+    destCopy.longitude = position.longitude;
+    destCopy.desc = [OAPointDescription getLocationNamePlain:position.latitude lon:position.longitude];
+
+    [helper replaceDestination:dest withDestination:destCopy];
+    [_destinationLayerWidget moveMarker:-1];
+    [self drawDestinationLines];
+
+    __weak __typeof(self) weakSelf = self;
+    [[OAReverseGeocoder instance] lookupAddressAtLat:position.latitude
+                                                 lon:position.longitude
+                                            objectId:0
+                                          completion:^(NSString *address) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || address.length == 0)
+            return;
+
+        if ([strongSelf.app.data.destinations indexOfObjectIdenticalTo:destCopy] == NSNotFound)
+            return;
+
+        OADestination *updated = [destCopy copy];
+        updated.desc = address;
+        [helper replaceDestination:destCopy withDestination:updated];
+        [strongSelf->_destinationLayerWidget moveMarker:-1];
+        [strongSelf drawDestinationLines];
+    }];
 }
 
 - (UIImage *)getPointIcon:(id)object

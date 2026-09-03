@@ -2892,7 +2892,7 @@
 "wikipedia_language_settings_descr" = "Vali keeled, milles soovid Vikipeedia artikleid oma kaardil näha. Artikli lugemisel saad ka olemasolevate keeleversioonide vahel vahetada.";
 "not_recorded" = "Pole salvestust";
 "my_places_no_tracks_descr_root" = "Sa võid OsmAndiga importida, luua või salvestada radasid.";
-"remove_folder_with_files_descr" = "Kas sa oled kindel, et soovid kustutada kausta „%@“ ja kõik %d rada?";
+"remove_folder_with_files_descr" = "Kas sa oled kindel, et soovid kustutada kausta „%@“ ja kõik %@ rada?";
 "getting_list_required_maps" = "Laadime vajalike kaartide loendit...";
 "shared_string_analysis" = "Analüüs";
 "ant_plus_nothing_found_description" = "Palun kontrolli, et:\n– Bluetooth on sisse lülitatud\n– andur on töös\n– see nutiseade on anduri lähedal";

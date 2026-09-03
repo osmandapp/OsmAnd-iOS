@@ -339,6 +339,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             }
         case .folder:
             let foldersToDisplay = isSearchActive ? filteredFoldersListItems : allFoldersListItems
+            let filteredTrackPaths = Set(baseFilters.getFilteredTrackItems().map(\.path))
             if !isSearchActive {
                 let allFoldersSection = tableData.createNewSection()
                 let allFoldersRow = allFoldersSection.createNewRow()
@@ -348,12 +349,9 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 allFoldersRow.icon = .icCustomFolderOpen
                 allFoldersRow.iconTintColor = .iconColorSelected
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath("")?.getFlattenedTrackItems() {
-                    let filteredTracks = baseFilters.getFilteredTrackItems()
-                    let matchingTracksCount = folderTracks.filter { trackItem in
-                        filteredTracks.contains(where: { $0.path == trackItem.path })
-                    }.count
+                    let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
-                    allFoldersRow.descr = "\(matchingTracksCount)/\(totalTracksCount)"
+                    allFoldersRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(matchingTracksCount), NumberFormatter.localizedCount(totalTracksCount))
                 }
             }
             
@@ -365,12 +363,9 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.icon = folderItem.icon
                 row.iconTintColor = folderItem.iconTintColor
                 if let folderTracks = TracksSearchFilter.getTrackFolderByPath(folderItem.key)?.getTrackItems() {
-                    let filteredTracks = baseFilters.getFilteredTrackItems()
-                    let matchingTracksCount = folderTracks.filter { trackItem in
-                        filteredTracks.contains(where: { $0.path == trackItem.path })
-                    }.count
+                    let matchingTracksCount = folderTracks.count { filteredTrackPaths.contains($0.path) }
                     let totalTracksCount = folderTracks.count
-                    row.descr = "\(matchingTracksCount)/\(totalTracksCount)"
+                    row.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), NumberFormatter.localizedCount(matchingTracksCount), NumberFormatter.localizedCount(totalTracksCount))
                 }
                 
                 if !isRootFolder {
@@ -560,7 +555,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         let row = section.createNewRow()
         row.cellType = OAValueTableViewCell.reuseIdentifier
         row.key = itemName
-        row.descr = "\(listFilterType?.getTracksCountForItem(itemName: itemName) ?? 0)"
+        row.descr = NumberFormatter.localizedCount(listFilterType?.getTracksCountForItem(itemName: itemName) ?? 0)
         switch filterType {
         case .activity:
             let activity = RouteActivityHelper.shared.findRouteActivity(id: itemName)

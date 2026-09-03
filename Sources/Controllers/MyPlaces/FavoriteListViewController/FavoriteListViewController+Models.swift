@@ -120,7 +120,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     var lastModified: Date? { bridgeItem.lastModifiedDate }
 
     var subtitle: String {
-        let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
+        let pointsText = "\(NumberFormatter.localizedCount(bridgeItem.subtreePointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
         guard let lastModified else { return pointsText }
         return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText)
     }
@@ -169,7 +169,7 @@ struct FavoriteFolderStats: Hashable {
     var text: String {
         var parts: [String] = []
         if foldersCount > 0 {
-            parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
+            parts.append("\(localizedString("shared_string_folders").lowercased()) \(NumberFormatter.localizedCount(foldersCount))")
         }
 
         parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
@@ -179,7 +179,7 @@ struct FavoriteFolderStats: Hashable {
     }
 
     private var formattedPointsCount: String {
-        NumberFormatter.localizedString(from: NSNumber(value: pointsCount), number: .decimal)
+        NumberFormatter.localizedCount(pointsCount)
     }
 }
 

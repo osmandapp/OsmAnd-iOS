@@ -15,6 +15,8 @@
 + (OADayNightHelper *)instance;
 
 - (BOOL)isNightMode;
+- (BOOL)isNightModeCarPlay;
+
 - (void)forceUpdate;
 - (BOOL)setTempMode:(NSInteger)dayNightMode;
 - (BOOL)resetTempMode;

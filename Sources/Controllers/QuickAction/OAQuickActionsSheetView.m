@@ -269,7 +269,7 @@
 
 - (void) setupButton:(UIButton *)button active:(BOOL)active title:(NSString *)title
 {
-    BOOL isDayMode = !_settings.nightMode;
+    BOOL isDayMode = !_settings.isAppMapNightMode;
     [button setTitle:title forState:UIControlStateNormal];
     if (isDayMode)
     {
@@ -290,7 +290,7 @@
 
 - (void) setupDayNightColors
 {
-    BOOL isDayMode = !_settings.nightMode;
+    BOOL isDayMode = !_settings.isAppMapNightMode;
     _horizontalLine.backgroundColor = isDayMode ? UIColorFromRGB(color_tint_gray).CGColor : UIColorFromRGB(color_divider_night).CGColor;
     self.backgroundColor = isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night);
     [_closeBtn setBackgroundColor:isDayMode ? UIColorFromRGB(color_bottom_sheet_secondary) : UIColorFromRGB(color_bottom_sheet_secondary_night)];
@@ -482,7 +482,7 @@
 - (void)animateCellSelected:(NSIndexPath * _Nonnull)indexPath
 {
     UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
-    BOOL isDayMode = !_settings.nightMode;
+    BOOL isDayMode = !_settings.isAppMapNightMode;
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
@@ -497,7 +497,7 @@
 - (void)animateCellDeselected:(NSIndexPath * _Nonnull)indexPath
 {
     UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
-    BOOL isDayMode = !_settings.nightMode;
+    BOOL isDayMode = !_settings.isAppMapNightMode;
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
@@ -560,7 +560,7 @@
         }
         
         BOOL isEnabled = action.isActionEnabled;
-        BOOL isDayMode = !_settings.nightMode;
+        BOOL isDayMode = !_settings.isAppMapNightMode;
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
         resultCell.userInteractionEnabled = isEnabled;
         resultCell.backgroundColor = UIColor.clearColor;

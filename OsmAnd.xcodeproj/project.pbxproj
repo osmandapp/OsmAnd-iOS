@@ -832,6 +832,7 @@
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
 		4695B25F2CF0A5D3003FB38A /* TrackChartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */; };
+		A5C7E00133F0000100C0DE01 /* RouteChartSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */; };
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
 		469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */; };
 		469F0C242C627F9000874CC6 /* PaletteCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */; };
@@ -4681,6 +4682,7 @@
 		46903D6C29B6649A004459F1 /* OAWikiLanguagesWebViewContoller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikiLanguagesWebViewContoller.h; sourceTree = "<group>"; };
 		46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikiLanguagesWebViewContoller.m; sourceTree = "<group>"; };
 		4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackChartHelper.swift; sourceTree = "<group>"; };
+		A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteChartSynchronizer.swift; sourceTree = "<group>"; };
 		46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_announcement_time_day@3x.png"; path = "Resources/Icons/img_help_announcement_time_day@3x.png"; sourceTree = "<group>"; };
 		469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteCollectionViewCell.swift; sourceTree = "<group>"; };
 		469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaletteCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -12415,6 +12417,7 @@
 				3284BEBB2EABA32C0011A9BA /* GpxAppearanceInfo.swift */,
 				FA8516EF2D42946D00B321C6 /* GpxDataItemHandler.swift */,
 				4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */,
+				A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */,
 				DA5A7AC026C563A100F274C7 /* OAGPXDatabase.h */,
 				DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */,
 				320F71352A8643550071C0E7 /* OAGPXDocumentAdapter.h */,
@@ -18334,6 +18337,7 @@
 				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
 				46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */,
 				4695B25F2CF0A5D3003FB38A /* TrackChartHelper.swift in Sources */,
+				A5C7E00133F0000100C0DE01 /* RouteChartSynchronizer.swift in Sources */,
 				DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */,
 				27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */,
 				DA5A844926C563A900F274C7 /* OADiscountToolbarViewController.mm in Sources */,

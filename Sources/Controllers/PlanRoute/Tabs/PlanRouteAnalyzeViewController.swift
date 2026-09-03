@@ -39,20 +39,25 @@ private struct AnalyzeStatItem {
 }
 
 private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
-    var onNothingSelected: (() -> Void)?
-    var onValueSelected: (() -> Void)?
-    var onTranslated: (() -> Void)?
+    var onNothingSelected: ((ChartViewBase) -> Void)?
+    var onValueSelected: ((ChartViewBase, Highlight) -> Void)?
+    var onTranslated: ((ChartViewBase) -> Void)?
+    var onScaled: ((ChartViewBase) -> Void)?
 
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
-        onNothingSelected?()
+        onNothingSelected?(chartView)
     }
 
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        onValueSelected?()
+        onValueSelected?(chartView, highlight)
     }
 
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
-        onTranslated?()
+        onTranslated?(chartView)
+    }
+
+    func chartScaled(_ chartView: ChartViewBase, scaleX: CGFloat, scaleY: CGFloat) {
+        onScaled?(chartView)
     }
 }
 
@@ -63,6 +68,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     var onAttachToRoadsRequested: (() -> Void)?
 
     private let tableView = CancelableTableView(frame: .zero, style: .plain)
+    private let chartSynchronizer = RouteChartSynchronizer()
 
     private var selectedYAxisTypes: [NSNumber] = [
         NSNumber(value: GPXDataSetType.altitude.rawValue),
@@ -82,30 +88,39 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var cachedSyntheticSteepnessSignature: Double = -1
     private var pendingSteepnessSignature: Double = -1
     private var lastRenderState: AnalyzeRenderState?
+    private var currentChartDataSignature: String?
     private var trackChartFilePath: String?
     private var trackChartHelper: TrackChartHelper?
-    private var highlightDrawX: CGFloat = -1
-    private var lastTranslation: CGPoint = .zero
+    private var registeredChartsByCell = [ObjectIdentifier: BarLineChartViewBase]()
+    private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
+        let proxy = AnalyzeChartDelegateProxy()
+        proxy.onNothingSelected = { [weak self] chart in
+            guard let self, let chartView, chart === chartView else { return }
+            chartSynchronizer.clearSynchronizedHighlights()
+        }
+        proxy.onValueSelected = { [weak self] chart, highlight in
+            guard let self, let chartView, chart === chartView else { return }
+            chartSynchronizer.syncHighlight(highlight, sourceChart: chartView)
+        }
+        proxy.onTranslated = { [weak self] chart in
+            self?.handleChartViewPortChanged(chart)
+        }
+        proxy.onScaled = { [weak self] chart in
+            self?.handleChartViewPortChanged(chart)
+        }
+        return proxy
+    }()
     private weak var dataSource: PlanRouteAnalyzeDataSource?
     private weak var chartView: ElevationChart?
     private weak var yAxisButton: UIButton?
     private weak var xAxisButton: UIButton?
-    private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
-        let proxy = AnalyzeChartDelegateProxy()
-        proxy.onNothingSelected = { [weak self] in
-            self?.hideChartLocation()
-        }
-        proxy.onValueSelected = { [weak self] in
-            self?.refreshChartOnMap()
-        }
-        proxy.onTranslated = { [weak self] in
-            self?.handleChartTranslated()
-        }
-        return proxy
-    }()
 
     private var currentState: AnalyzeState {
         cachedState
+    }
+
+    private var shouldCalculateWithoutGaps: Bool {
+        dataSource?.analysisData?.calcWithoutGaps ?? false
     }
 
     private var effectiveYAxisTypes: [NSNumber] {
@@ -147,6 +162,14 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        chartSynchronizer.onChartStateChanged = { [weak self] state in
+            guard let self else { return }
+            if let state {
+                refreshChartOnMap(state)
+            } else {
+                hideChartLocation()
+            }
+        }
         setupTableView()
         reloadData()
     }
@@ -165,6 +188,13 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         }
         wasCalculatingElevation = isElevationCalculating
         let analysisData = dataSource?.analysisData
+        let nextChartDataSignature = chartDataSignature(for: analysisData)
+        if currentChartDataSignature != nextChartDataSignature {
+            chartSynchronizer.reset()
+            chartView = nil
+            currentChartDataSignature = nextChartDataSignature
+            hideChartLocation()
+        }
         cachedHasElevationData = analysisData?.hasElevationData == true
         cachedHasSpeedData = analysisData?.hasSpeedData == true
         cachedHasOverviewData = cachedHasElevationData || cachedHasSpeedData
@@ -177,6 +207,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
                                    roadAttributeStatistics: cachedRoadAttributeStatistics)
         let renderState = makeRenderState(analysisData: analysisData)
         if renderState.graphSignature == nil {
+            chartSynchronizer.reset()
+            chartView = nil
             hideChartLocation()
         }
         applyRenderState(renderState)
@@ -232,31 +264,21 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         showMediumSheetViewController(viewController: sheet, isLargeAvailable: true)
     }
 
-    private func dataItem(for gpxFile: GpxFile) -> GpxDataItem? {
-        OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxFile.path))
-    }
-
     private func refreshChart() {
-        guard let data = dataSource?.analysisData,
-              let analysis = data.gpxAnalysis,
-              let gpxFile = data.gpxFile,
+        guard let analysis = dataSource?.analysisData?.gpxAnalysis,
               let chart = chartView else { return }
-        let gpxItem = dataItem(for: gpxFile)
         let (firstType, secondType) = resolvedYAxisTypes()
         GpxUIHelper.refreshLineChart(chartView: chart,
                                      analysis: analysis,
                                      firstType: firstType,
                                      secondType: secondType,
                                      axisType: selectedXAxisType,
-                                     calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
-        if !chart.highlighted.isEmpty {
-            refreshChartOnMap()
-        }
+                                     calcWithoutGaps: shouldCalculateWithoutGaps)
+        chartSynchronizer.setPrimaryChart(chart)
     }
 
-    private func refreshChartOnMap() {
-        guard let chart = chartView,
-              let data = dataSource?.analysisData,
+    private func refreshChartOnMap(_ state: TrackChartState) {
+        guard let data = dataSource?.analysisData,
               let analysis = data.gpxAnalysis,
               let gpxFile = data.gpxFile,
               let segment = chartSegment(for: analysis, gpxFile: gpxFile) else {
@@ -267,25 +289,23 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         if let viewportBounds {
             helper.screenBBox = viewportBounds
         }
-        helper.refreshChart(chart,
+        let joinSegments = !data.calcWithoutGaps
+        helper.refreshChart(state,
                             fitTrack: viewportBounds != nil,
                             forceFit: false,
-                            recalculateXAxis: false,
                             analysis: analysis,
-                            segment: segment)
+                            segment: segment,
+                            joinSegments: joinSegments)
     }
 
-    private func bindChartGestures(_ chart: ElevationChart) {
+    private func bindChartDelegate(_ chart: BarLineChartViewBase) {
         chart.delegate = chartDelegateProxy
-        chart.gestureRecognizers?.forEach { recognizer in
-            if recognizer is UIPanGestureRecognizer {
-                recognizer.addTarget(self, action: #selector(onChartScrolled(_:)))
-            }
-            recognizer.addTarget(self, action: #selector(onChartGesture(_:)))
-        }
     }
 
     private func chartSegment(for analysis: GpxTrackAnalysis, gpxFile: GpxFile) -> TrkSegment? {
+        if let segment = gpxFile.getGeneralSegment(), segment.points.count > 0 {
+            return segment
+        }
         if let segment = TrackChartHelper.getTrackSegment(analysis, gpxItem: gpxFile) {
             return segment
         }
@@ -315,57 +335,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         dataSource?.hideChartHighlight()
     }
 
-    @objc private func onChartScrolled(_ recognizer: UIPanGestureRecognizer) {
-        guard let chart = recognizer.view as? ElevationChart else { return }
-
-        if recognizer.state == .changed {
-            if chart.lowestVisibleX > 0.1,
-               roundedChartValue(chart.highestVisibleX) != roundedChartValue(chart.chartXMax) {
-                lastTranslation = recognizer.translation(in: chart)
-                return
-            }
-
-            let touchPoint = recognizer.location(in: chart)
-            let translation = recognizer.translation(in: chart)
-            let highlightX = chart.isFullyZoomedOut
-                ? touchPoint.x
-                : highlightDrawX + (lastTranslation.x - translation.x)
-            guard let highlight = chart.getHighlightByTouchPoint(CGPoint(x: highlightX, y: 0)) else { return }
-            chart.lastHighlighted = highlight
-            chart.highlightValue(highlight, callDelegate: true)
-        } else if recognizer.state == .ended {
-            lastTranslation = .zero
-            if let highlight = chart.highlighted.first {
-                highlightDrawX = highlight.drawX
-            }
-        }
-    }
-
-    @objc private func onChartGesture(_ recognizer: UIGestureRecognizer) {
-        guard let chart = recognizer.view as? ElevationChart else { return }
-
-        if recognizer.state == .began {
-            if let highlight = chart.highlighted.first {
-                highlightDrawX = highlight.drawX
-            } else {
-                highlightDrawX = -1
-            }
-        } else if (recognizer is UIPinchGestureRecognizer
-                    || (recognizer is UITapGestureRecognizer
-                        && (recognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2))
-                    && recognizer.state == .ended {
-            refreshChartOnMap()
-        }
-    }
-
-    private func roundedChartValue(_ value: Double) -> Double {
-        (value * 10).rounded() / 10
-    }
-
-    private func handleChartTranslated() {
-        guard let chart = self.chartView, highlightDrawX != -1 else { return }
-        guard let highlight = chart.getHighlightByTouchPoint(CGPoint(x: highlightDrawX, y: 0)) else { return }
-        chart.highlightValue(highlight, callDelegate: true)
+    private func handleChartViewPortChanged(_ chart: ChartViewBase) {
+        guard let chart = chart as? BarLineChartViewBase else { return }
+        chartSynchronizer.syncViewPort(from: chart)
     }
 
     private func resolvedYAxisTypes() -> (GPXDataSetType, GPXDataSetType) {
@@ -445,6 +417,17 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
             String(analysis.startTime),
             selectedXAxisType.getName(),
             yTypes
+        ].joined(separator: "|")
+    }
+
+    private func chartDataSignature(for analysisData: PlanRouteAnalysisData?) -> String? {
+        guard let analysis = analysisData?.gpxAnalysis,
+              let gpxFile = analysisData?.gpxFile else { return nil }
+        return [
+            gpxFile.path,
+            String(analysis.totalDistance),
+            String(analysis.timeSpan),
+            String(analysis.startTime)
         ].joined(separator: "|")
     }
 
@@ -622,9 +605,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     // MARK: - Chart section card
 
     private func makeChartSectionCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        guard let data = dataSource?.analysisData,
-              let analysis = data.gpxAnalysis,
-              let gpxFile = data.gpxFile,
+        guard let analysis = dataSource?.analysisData?.gpxAnalysis,
               let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
         let card = cell.cardView
 
@@ -644,10 +625,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
         let chart = ElevationChart(frame: .zero)
         chart.translatesAutoresizingMaskIntoConstraints = false
-        chartView = chart
-        bindChartGestures(chart)
 
-        let gpxItem = dataItem(for: gpxFile)
         let useHours = (analysis.timeSpan / Self.millisecondsPerHour) > 0
         GpxUIHelper.setupElevationChart(chartView: chart,
                                         topOffset: 20,
@@ -662,8 +640,10 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      firstType: firstType,
                                      secondType: secondType,
                                      axisType: selectedXAxisType,
-                                     calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
+                                     calcWithoutGaps: shouldCalculateWithoutGaps)
         chart.dragYEnabled = false
+        chartView = chart
+        bindChartDelegate(chart)
 
         let recalcSeparator = SeparatorView()
         recalcSeparator.translatesAutoresizingMaskIntoConstraints = false
@@ -701,6 +681,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcBtn.heightAnchor.constraint(equalToConstant: 50)
         ])
 
+        cell.chartView = chart
         return cell
     }
 
@@ -880,11 +861,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let isExpanded = expandedStatIndexes.contains(statIndex)
 
         let barChart = HorizontalBarChartView(frame: .zero)
-        barChart.isUserInteractionEnabled = false
         barChart.translatesAutoresizingMaskIntoConstraints = false
         GpxUIHelper.refreshBarChart(chartView: barChart,
                                     statistics: stat,
                                     analysis: analysis,
+                                    calcWithoutGaps: shouldCalculateWithoutGaps,
                                     nightMode: OAAppSettings.sharedManager().nightMode)
         barChart.dragYEnabled = false
         barChart.extraTopOffset = 0
@@ -897,6 +878,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.drawGridLinesEnabled = true
         rightAxis.gridColor = .chartAxisGridLine
         rightAxis.labelTextColor = .textColorSecondary
+        bindChartDelegate(barChart)
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
         card.addSubview(barChart)
@@ -909,6 +891,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             barChart.heightAnchor.constraint(equalToConstant: 54)
         ])
 
+        cell.chartView = barChart
         return cell
     }
 
@@ -1222,6 +1205,30 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension PlanRouteAnalyzeViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
+        registeredChartsByCell[ObjectIdentifier(cell)] = chart
+        cell.layoutIfNeeded()
+        if let primaryChart = chart as? ElevationChart {
+            chartView = primaryChart
+            chartSynchronizer.setPrimaryChart(primaryChart)
+        } else if let barChart = chart as? HorizontalBarChartView {
+            chartSynchronizer.registerBarChart(barChart)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let chart = registeredChartsByCell.removeValue(forKey: ObjectIdentifier(cell)) else { return }
+        if let primaryChart = chart as? ElevationChart {
+            chartSynchronizer.unregisterPrimaryChart(primaryChart)
+            if chartView === primaryChart {
+                chartView = nil
+            }
+        } else if let barChart = chart as? HorizontalBarChartView {
+            chartSynchronizer.unregisterBarChart(barChart)
+        }
+    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)

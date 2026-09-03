@@ -456,6 +456,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 toDistance: nil,
                 pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
             )
+            let calcWithoutGaps = !analysis.joinSegments && analysis.totalDistanceWithoutGaps > 0
             let analysisData = PlanRouteAnalysisData(
                 uphill: analysis.diffElevationUp,
                 downhill: analysis.diffElevationDown,
@@ -466,6 +467,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 timeInMotion: analysis.timeMoving > 0 ? TimeInterval(analysis.timeMoving) / 1000 : nil,
                 hasElevationData: analysis.hasElevationData(),
                 hasSpeedData: analysis.isSpeedSpecified(),
+                calcWithoutGaps: calcWithoutGaps,
                 gpxAnalysis: analysis,
                 gpxFile: gpxFile,
                 routeStatistics: stats

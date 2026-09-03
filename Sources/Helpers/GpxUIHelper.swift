@@ -113,6 +113,31 @@ class GpxUIHelper: NSObject {
         }
     }
 
+    private final class DistanceValueFormatter: AxisValueFormatter {
+        private let formatter: NumberFormatter?
+        private let unitsX: String
+
+        init(maximumFractionDigits: Int?, unitsX: String) {
+            self.unitsX = unitsX
+            if let maximumFractionDigits {
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .decimal
+                formatter.minimumFractionDigits = 0
+                formatter.maximumFractionDigits = maximumFractionDigits
+                formatter.usesGroupingSeparator = false
+                self.formatter = formatter
+            } else {
+                formatter = nil
+            }
+        }
+
+        func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+            let formattedValue = formatter?.string(from: value as NSNumber) ?? String(format: "%.0f", value)
+            let showsUnit = formatter == nil || value == axis?.entries.first
+            return formattedValue + (showsUnit ? (" " + unitsX) : "")
+        }
+    }
+
     private class HeightFormatter: FillFormatter {
         func getFillLinePosition(dataSet: LineChartDataSetProtocol,
                                  dataProvider: LineChartDataProvider) -> CGFloat {
@@ -395,6 +420,7 @@ class GpxUIHelper: NSObject {
     static func refreshBarChart(chartView: HorizontalBarChartView,
                                 statistics: OARouteStatistics,
                                 analysis: GpxTrackAnalysis,
+                                calcWithoutGaps: Bool,
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
                                 yLabelsCount: 4,
@@ -407,6 +433,7 @@ class GpxUIHelper: NSObject {
         let barData = buildStatisticChart(chartView: chartView,
                                           routeStatistics: statistics,
                                           analysis: analysis,
+                                          calcWithoutGaps: calcWithoutGaps,
                                           useRightAxis: true,
                                           nightMode: nightMode)
         chartView.data = barData
@@ -811,6 +838,7 @@ class GpxUIHelper: NSObject {
     private static func buildStatisticChart(chartView: HorizontalBarChartView,
                                             routeStatistics: OARouteStatistics,
                                             analysis: GpxTrackAnalysis,
+                                            calcWithoutGaps: Bool,
                                             useRightAxis: Bool,
                                             nightMode: Bool) -> BarChartData {
         let xAxis = chartView.xAxis
@@ -823,7 +851,11 @@ class GpxUIHelper: NSObject {
         } else {
             yAxis = chartView.leftAxis
         }
-        let divX = setupAxisDistance(axisBase: yAxis, meters: Double(analysis.totalDistance))
+        let sourceDistance = Double(routeStatistics.totalDistance)
+        let analysisDistance = Double(calcWithoutGaps ? analysis.totalDistanceWithoutGaps : analysis.totalDistance)
+        let targetDistance = analysisDistance.isFinite && analysisDistance > 0 ? analysisDistance : sourceDistance
+        let distanceScale = sourceDistance.isFinite && sourceDistance > 0 ? targetDistance / sourceDistance : 1
+        let divX = setupAxisDistance(axisBase: yAxis, meters: targetDistance)
         let segments = routeStatistics.elements
         var entries = [BarChartDataEntry]()
         var stacks = Array(repeating: 0 as Double, count: segments?.count ?? 0)
@@ -832,7 +864,7 @@ class GpxUIHelper: NSObject {
         if let segments {
             for i in 0..<stacks.count {
                 let segment = segments[i]
-                stacks[i] = Double(segment.distance) / divX
+                stacks[i] = Double(segment.distance) * distanceScale / divX
                 colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor)
             }
         }
@@ -1051,9 +1083,7 @@ class GpxUIHelper: NSObject {
         let mc: EOAMetricsConstant = settings.metricSystem.get()
         var divX: Double = 0
 
-        let format1 = "%.0f"
-        let format2 = "%.1f"
-        var fmt: String?
+        var maximumFractionDigits: Int?
         var granularity: Double = 1
         var mainUnitStr: String
         var mainUnitInMeters: Double
@@ -1068,7 +1098,7 @@ class GpxUIHelper: NSObject {
             mainUnitInMeters = GpxUIHelper.metersInOneMile
         }
         if meters > 9.99 * mainUnitInMeters {
-            fmt = format1
+            maximumFractionDigits = 1
             granularity = 0.1
         }
         if meters >= 100 * mainUnitInMeters ||
@@ -1081,12 +1111,12 @@ class GpxUIHelper: NSObject {
             mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET && meters > 0.99 * mainUnitInMeters {
 
             divX = mainUnitInMeters
-            if fmt == nil {
-                fmt = format2
+            if maximumFractionDigits == nil {
+                maximumFractionDigits = 2
                 granularity = 0.01
             }
         } else {
-            fmt = nil
+            maximumFractionDigits = nil
             granularity = 1
             if mc == EOAMetricsConstant.KILOMETERS_AND_METERS || mc == EOAMetricsConstant.MILES_AND_METERS {
                 divX = 1
@@ -1103,9 +1133,9 @@ class GpxUIHelper: NSObject {
             }
         }
 
-        let formatX: String? = fmt
         axisBase.granularity = granularity
-        axisBase.valueFormatter = ValueFormatterLocal(formatX: formatX, unitsX: mainUnitStr)
+        axisBase.valueFormatter = DistanceValueFormatter(maximumFractionDigits: maximumFractionDigits,
+                                                         unitsX: mainUnitStr)
 
         return divX
     }

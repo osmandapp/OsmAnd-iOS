@@ -28,26 +28,38 @@ final class GpxUtils: NSObject {
                                  segment: TrkSegment?,
                                  pos: Float,
                                  joinSegments: Bool) -> CLLocation? {
-        var point: WptPt?
         if let ds = chart.lineData?.dataSets,
            let dataSet = ds.first as? GpxUIHelper.OrderedLineDataSet,
            let segment {
-            if GpxUIHelper.getDataSetAxisType(dataSet: dataSet) == .time
-                || GpxUIHelper.getDataSetAxisType(dataSet: dataSet) == .timeOfDay {
-                let time = pos * 1000
-                point = getSegmentPointByTime(segment,
+            return location(at: pos,
+                            axisType: GpxUIHelper.getDataSetAxisType(dataSet: dataSet),
+                            axisDivisor: dataSet.getDivX(),
+                            gpxFile: gpxFile,
+                            segment: segment,
+                            joinSegments: joinSegments)
+        }
+        return nil
+    }
+
+    @nonobjc static func location(at position: Float,
+                                  axisType: GPXDataSetAxisType,
+                                  axisDivisor: Double,
+                                  gpxFile: GpxFile,
+                                  segment: TrkSegment,
+                                  joinSegments: Bool) -> CLLocation? {
+        let point: WptPt?
+        if axisType == .time || axisType == .timeOfDay {
+            point = getSegmentPointByTime(segment,
+                                          gpxFile: gpxFile,
+                                          time: position * 1000,
+                                          preciseLocation: false,
+                                          joinSegments: joinSegments)
+        } else {
+            point = getSegmentPointByDistance(segment,
                                               gpxFile: gpxFile,
-                                              time: time,
+                                              distanceToPoint: position * Float(axisDivisor),
                                               preciseLocation: false,
                                               joinSegments: joinSegments)
-            } else {
-                let distance = pos * Float(dataSet.getDivX())
-                point = getSegmentPointByDistance(segment,
-                                                  gpxFile: gpxFile,
-                                                  distanceToPoint: distance,
-                                                  preciseLocation: false,
-                                                  joinSegments: joinSegments)
-            }
         }
         guard let point else { return nil }
         return CLLocation(latitude: point.getLatitude(), longitude: point.getLongitude())
@@ -134,7 +146,7 @@ final class GpxUtils: NSObject {
                                                                      lon2: currPoint.lon)
                         }
                         if passedSegmentsPointsDistance + currPoint.distance >= Double(distanceToPoint)
-                            || abs(passedDistance - Double(distanceToPoint)) < 0.1 {
+                            || passedDistance >= Double(distanceToPoint) {
                             guard let prevPoint,
                                   preciseLocation,
                                   currPoint.distance + passedSegmentsPointsDistance >= Double(distanceToPoint) else {

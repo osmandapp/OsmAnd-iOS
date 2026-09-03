@@ -95,11 +95,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSArray<NSNumber *> *_types;
     GPXDataSetAxisType _selectedXAxisMode;
     
-    BOOL _hasTranslated;
-    double _highlightDrawX;
-    
-    CGPoint _lastTranslation;
-    
+    RouteChartSynchronizer *_chartSynchronizer;
+
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
     NSString *_emission;
@@ -279,6 +276,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [self populateStatistics:_analysisTabData section:section];
 }
 
+- (BOOL)shouldCalculateWithoutGaps
+{
+    OASGpxDataItem *gpxItem = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    return [GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpxItem overrideIsGeneralTrack:YES];
+}
+
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
@@ -296,24 +299,20 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                         startTime:self.analysis.startTime
                                          useHours:useHours];
 
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:_selectedXAxisMode
-                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx overrideIsGeneralTrack:YES]];
+                               calcWithoutGaps:[self shouldCalculateWithoutGaps]];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
     self.statisticsChart = routeStatsCell.chartView;
+    [_chartSynchronizer setPrimaryChart:self.statisticsChart];
     UITableViewCell *analyzeBtnCell = [self getAnalyzeButtonCell];
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
-        if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-        {
-            [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
-        }
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
     
@@ -357,6 +356,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (!originalRoute.empty())
     {
         NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
+        BOOL calcWithoutGaps = [self shouldCalculateWithoutGaps];
         
         for (OARouteStatistics *stat in routeInfo)
         {
@@ -366,17 +366,17 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
-            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:self.analysis nightMode:[OAAppSettings sharedManager].nightMode];
+            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView
+                                           statistics:stat
+                                             analysis:self.analysis
+                                      calcWithoutGaps:calcWithoutGaps
+                                            nightMode:[OAAppSettings sharedManager].nightMode];
+            [_chartSynchronizer registerBarChart:cell.barChartView];
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
             {
-                if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-                {
-                    [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
-                }
                 [recognizer addTarget:self action:@selector(onChartGesture:)];
             }
-            [cell.barChartView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBarChartTapped:)]];
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
@@ -408,7 +408,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (_selectedXAxisMode != GPXDataSetAxisTypeDistance && _selectedXAxisMode != GPXDataSetAxisTypeTime && _selectedXAxisMode != GPXDataSetAxisTypeTimeOfDay)
         _selectedXAxisMode = GPXDataSetAxisTypeDistance;
     
-    _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
     
@@ -510,6 +509,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
     _expandedSections = [NSMutableSet new];
+    _chartSynchronizer = [RouteChartSynchronizer new];
     [self registerCells];
     [self generateData];
     
@@ -599,6 +599,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void)refreshContent
 {
     NSInteger contentSectionNumber = 1;
+    [_chartSynchronizer reset];
     [self populateInstructionsTabCells:contentSectionNumber];
     [self populateAnalysisTabCells:contentSectionNumber];
     [self generateData];
@@ -776,58 +777,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
   
 }
 
-- (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
+- (void)onChartGesture:(UIGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake([recognizer locationInView:self.statisticsChart].x, 0.)];
-        self.statisticsChart.lastHighlighted = h;
-        [self.statisticsChart highlightValue:h callDelegate:YES];
-    }
-}
-
-- (void) onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
-{
-    if (recognizer.state == UIGestureRecognizerStateChanged)
-    {
-        if (self.statisticsChart.lowestVisibleX > 0.1 && [self getRoundedDouble:self.statisticsChart.highestVisibleX] != [self getRoundedDouble:self.statisticsChart.chartXMax])
-        {
-            _lastTranslation = [recognizer translationInView:self.statisticsChart];
-            return;
-        }
-        
-        ChartHighlight *lastHighlighted = self.statisticsChart.lastHighlighted;
-        CGPoint touchPoint = [recognizer locationInView:self.statisticsChart];
-        CGPoint translation = [recognizer translationInView:self.statisticsChart];
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(self.statisticsChart.isFullyZoomedOut ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
-        
-        if (h != lastHighlighted)
-        {
-            self.statisticsChart.lastHighlighted = h;
-            [self.statisticsChart highlightValue:h callDelegate:YES];
-        }
-    }
-    else if (recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        _lastTranslation = CGPointZero;
-        if (self.statisticsChart.highlighted.count > 0)
-            _highlightDrawX = self.statisticsChart.highlighted.firstObject.drawX;
-    }
-}
-
-- (void) onChartGesture:(UIGestureRecognizer *)recognizer
-{
-    if (recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        _hasTranslated = NO;
-        if (self.statisticsChart.highlighted.count > 0)
-            _highlightDrawX = self.statisticsChart.highlighted.firstObject.drawX;
-        else
-            _highlightDrawX = -1;
-    }
-    else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-              ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
-             && recognizer.state == UIGestureRecognizerStateEnded)
+    if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
+         ([recognizer isKindOfClass:UITapGestureRecognizer.class] && ((UITapGestureRecognizer *)recognizer).nsuiNumberOfTapsRequired == 2))
+        && recognizer.state == UIGestureRecognizerStateEnded)
     {
         if (self.analysis && self.segment)
         {
@@ -991,36 +945,15 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void)chartValueNothingSelected:(ChartViewBase *)chartView
 {
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
-    
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                [routeCell.barChartView highlightValue:nil];
-            }
-        }
-    }
+    [_chartSynchronizer clearSynchronizedHighlights];
 }
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                
-                ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.xPx];
-                [bh setDrawWithX:highlight.xPx y:highlight.xPx];
-                [routeCell.barChartView highlightValue:bh];
-            }
-        }
-    }
+    if (chartView != self.statisticsChart)
+        return;
+
+    [_chartSynchronizer syncHighlight:highlight sourceChart:self.statisticsChart];
     if (self.analysis && self.segment)
     {
         [self.trackChartHelper refreshChart:self.statisticsChart
@@ -1034,50 +967,14 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
 {
-    [self syncVisibleCharts:chartView];
+    if ([chartView isKindOfClass:BarLineChartViewBase.class])
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 - (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
 {
-    [self syncVisibleCharts:chartView];
-    _hasTranslated = true;
-    if (_highlightDrawX != -1)
-    {
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h)
-        {
-            [self.statisticsChart highlightValue:h callDelegate:YES];
-            if (self.analysis && self.segment)
-            {
-                [self.trackChartHelper refreshChart:self.statisticsChart
-                                               fitTrack:YES
-                                               forceFit:NO
-                                       recalculateXAxis:NO
-                                               analysis:self.analysis
-                                                segment:self.segment];
-            }
-        }
-    }
-}
-
-- (void) syncVisibleCharts:(ChartViewBase *)chartView
-{
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
-            }
-            else if ([cell isKindOfClass:ElevationChartCell.class])
-            {
-                ElevationChartCell *chartCell = (ElevationChartCell *) cell;
-                [chartCell.chartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.chartView invalidate:YES];
-            }
-        }
-    }
+    if ([chartView isKindOfClass:BarLineChartViewBase.class])
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 #pragma mark - OAStatisticsSelectionDelegate
@@ -1102,6 +999,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                        analysis:self.analysis
                                   statsModeCell:statsModeCell
                          overrideIsGeneralTrack:YES];
+        [_chartSynchronizer setPrimaryChart:graphCell.chartView];
     }
 }
 

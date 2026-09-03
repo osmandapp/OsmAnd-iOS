@@ -19,6 +19,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let sheetAnimationDuration: TimeInterval = 0.3
     private static let sheetFlingVelocityThresholdPointsPerSecond: CGFloat = 800
     private static let sidePanelWidth: CGFloat = 393
+    private static let minimumSidePanelMapWidth: CGFloat = 252
     private static let sidePanelHorizontalInset: CGFloat = 16
     private static let sidePanelTopPadding: CGFloat = 8
     private static let sidePanelVerticalInset: CGFloat = 16
@@ -687,7 +688,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func shouldUseSidePanelLayout(for size: CGSize) -> Bool {
-        OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac() || size.width > size.height
+        let supportsSidePanel = OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac() || size.width > size.height
+        guard supportsSidePanel else { return false }
+        let minimumMapWidth = Self.minimumSidePanelMapWidth
+        let visibleMapWidth = size.width - sidePanelMapInset - view.safeAreaInsets.right
+        return visibleMapWidth >= minimumMapWidth
     }
 
     private func sidePanelTopInset(for size: CGSize) -> CGFloat {

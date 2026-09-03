@@ -161,8 +161,12 @@
 			<string>ld</string>
 			<key>one</key>
 			<string>%2$@ Elementas</string>
-			<key>other</key>
+			<key>few</key>
 			<string>%2$@ Elementai</string>
+			<key>many</key>
+			<string>%2$@ Elemento</string>
+			<key>other</key>
+			<string>%2$@ Elementų</string>
 		</dict>
 	</dict>
 	<key>import_tracks_description</key>

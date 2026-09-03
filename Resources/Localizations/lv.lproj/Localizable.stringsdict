@@ -143,10 +143,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ Vienumu</string>
 			<key>one</key>
-			<string>%2$@ Item</string>
+			<string>%2$@ Vienums</string>
 			<key>other</key>
-			<string>%2$@ Items</string>
+			<string>%2$@ Vienumi</string>
 		</dict>
 	</dict>
 	<key>import_tracks_description</key>

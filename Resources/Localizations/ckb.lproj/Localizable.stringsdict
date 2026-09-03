@@ -136,9 +136,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%2$@ Item</string>
+			<string>%2$@ بڕگە</string>
 			<key>other</key>
-			<string>%2$@ Items</string>
+			<string>%2$@ بڕگە</string>
 		</dict>
 	</dict>
 	<key>import_tracks_description</key>

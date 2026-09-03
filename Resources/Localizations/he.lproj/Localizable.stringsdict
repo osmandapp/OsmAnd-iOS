@@ -151,6 +151,8 @@
 			<string>ld</string>
 			<key>one</key>
 			<string>%2$@ פריט</string>
+			<key>two</key>
+			<string>%2$@ פריטים</string>
 			<key>other</key>
 			<string>%2$@ פריטים</string>
 		</dict>

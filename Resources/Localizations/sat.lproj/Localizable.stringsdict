@@ -145,6 +145,8 @@
 			<string>ld</string>
 			<key>one</key>
 			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+			<key>two</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
 			<key>other</key>
 			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
 		</dict>

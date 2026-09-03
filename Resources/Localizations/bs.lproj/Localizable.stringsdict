@@ -148,9 +148,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%2$@ Item</string>
+			<string>%2$@ Stavka</string>
+			<key>few</key>
+			<string>%2$@ Stavke</string>
 			<key>other</key>
-			<string>%2$@ Items</string>
+			<string>%2$@ Stavki</string>
 		</dict>
 	</dict>
 	<key>import_tracks_description</key>

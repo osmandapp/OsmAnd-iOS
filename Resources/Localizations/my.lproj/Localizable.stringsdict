@@ -123,10 +123,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%2$@ Item</string>
 			<key>other</key>
-			<string>%2$@ Items</string>
+			<string>%2$@ အရာ</string>
 		</dict>
 	</dict>
 	<key>import_tracks_description</key>

@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */; };
-		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
-		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
-		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
@@ -1383,6 +1379,7 @@
 		9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */; };
 		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
+		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -1500,6 +1497,13 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */; };
+		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
+		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
+		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
+		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
+		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
+		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
@@ -1745,6 +1749,10 @@
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
 		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
+		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
+		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -1758,7 +1766,6 @@
 		D7210171301B768C003CECB8 /* PlanRouteProfileGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */; };
 		D7210172301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */; };
 		D7210173301B768C003CECB8 /* PlanRouteStartSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */; };
-		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7210174301B768C003CECB8 /* RoadAttributeLegendItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */; };
 		D7210175301B768C003CECB8 /* RouteGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210149301B768C003CECB8 /* RouteGroupCell.swift */; };
 		D7210176301B768C003CECB8 /* RouteSettingNavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */; };
@@ -1767,7 +1774,6 @@
 		D7210179301B768C003CECB8 /* SegmentReorderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014D301B768C003CECB8 /* SegmentReorderCell.swift */; };
 		D721017B301B768C003CECB8 /* SyntheticSteepnessSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */; };
 		D721017C301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */; };
-		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		D721017D301B768C003CECB8 /* PlanRoutePoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */; };
 		D721017E301B768C003CECB8 /* PlanRouteRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */; };
 		D721017F301B768C003CECB8 /* GetElevationDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */; };
@@ -1788,6 +1794,7 @@
 		D721018E301B768C003CECB8 /* SegmentRouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */; };
 		D721018F301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */; };
 		D7210190301B768C003CECB8 /* TwoLineTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210167301B768C003CECB8 /* TwoLineTitleView.swift */; };
+		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
@@ -3596,6 +3603,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D1C571210000000000000006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBA3AF30197FC4BB0039D991;
+			remoteInfo = "OsmAnd Maps";
+		};
 		DA72AB8E2508F41000851313 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
@@ -3634,10 +3648,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashDiagnosticsManager.swift; sourceTree = "<group>"; };
-		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
-		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
-		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		0309480ECBC201C5E8317E6D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ko; path = ko.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -5334,6 +5344,8 @@
 		9F5A00022FD0000100484401 /* AisObjectDrawable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AisObjectDrawable.mm; sourceTree = "<group>"; };
 		A0CF279954D69E24AEAACBF0 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pl; path = pl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		A0EC68AFE40C27F9670CE9C5 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hi; path = hi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
+		A11CE00133EF000100000001 /* ListFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Extension.swift"; sourceTree = "<group>"; };
 		A5A500012F50000100000001 /* AstronomyPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPlugin.swift; sourceTree = "<group>"; };
 		A5A500052F50000100000005 /* AstronomyPluginSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPluginSettings.swift; sourceTree = "<group>"; };
 		A5A500072F50000100000007 /* AstroDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataProvider.swift; sourceTree = "<group>"; };
@@ -5510,6 +5522,13 @@
 		BCFEE2D9C1986E49AFD9A27A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		BD862AFCF495F2E8367D299D /* ku */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ku; path = ku.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		BF9A08FCACC60D4CA32DFC31 /* mk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = mk; path = mk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashDiagnosticsManager.swift; sourceTree = "<group>"; };
+		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
+		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
+		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
+		C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		C0DA57132FE9000200C0DA57 /* UITestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestState.swift; sourceTree = "<group>"; };
+		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		C1687F4567959C306956D92A /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kab; path = kab.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C173345D7277A340D99DE996 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -5909,6 +5928,11 @@
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
 		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
+		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
+		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
+		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
+		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3CA6B52398C60EDCB0357E5 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
@@ -5923,7 +5947,6 @@
 		D7210145301B768C003CECB8 /* PlanRouteProfileGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileGroupCell.swift; sourceTree = "<group>"; };
 		D7210146301B768C003CECB8 /* PlanRouteSegmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentHeaderView.swift; sourceTree = "<group>"; };
 		D7210147301B768C003CECB8 /* PlanRouteStartSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteStartSegmentCell.swift; sourceTree = "<group>"; };
-		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7210148301B768C003CECB8 /* RoadAttributeLegendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadAttributeLegendItem.swift; sourceTree = "<group>"; };
 		D7210149301B768C003CECB8 /* RouteGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGroupCell.swift; sourceTree = "<group>"; };
 		D721014A301B768C003CECB8 /* RouteSettingNavigationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingNavigationCell.swift; sourceTree = "<group>"; };
@@ -5932,7 +5955,6 @@
 		D721014D301B768C003CECB8 /* SegmentReorderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentReorderCell.swift; sourceTree = "<group>"; };
 		D721014F301B768C003CECB8 /* SyntheticSteepnessSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticSteepnessSegment.swift; sourceTree = "<group>"; };
 		D7210151301B768C003CECB8 /* PlanRouteAnalyzeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteAnalyzeViewController.swift; sourceTree = "<group>"; };
-		A11CE00133EF000100000001 /* ListFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListFormatter+Extension.swift"; sourceTree = "<group>"; };
 		D7210152301B768C003CECB8 /* PlanRoutePoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiViewController.swift; sourceTree = "<group>"; };
 		D7210153301B768C003CECB8 /* PlanRouteRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteRouteViewController.swift; sourceTree = "<group>"; };
 		D7210155301B768C003CECB8 /* GetElevationDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetElevationDataViewController.swift; sourceTree = "<group>"; };
@@ -5954,6 +5976,7 @@
 		D7210165301B768C003CECB8 /* SegmentRouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentRouteSettingsViewController.swift; sourceTree = "<group>"; };
 		D7210166301B768C003CECB8 /* TrackFavoriteSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackFavoriteSortModeHelper.swift; sourceTree = "<group>"; };
 		D7210167301B768C003CECB8 /* TwoLineTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineTitleView.swift; sourceTree = "<group>"; };
+		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
 		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
@@ -7214,7 +7237,6 @@
 		DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
 		DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeCell.xib; sourceTree = "<group>"; };
 		DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesParameters.h; sourceTree = "<group>"; };
-		A11323A22608070000000002 /* OARouteParametersInternal+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteParametersInternal+cpp.h"; sourceTree = "<group>"; };
 		DA5A7D6226C563A300F274C7 /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
 		DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GpxUIHelper.swift; sourceTree = "<group>"; };
 		DA5A7D6426C563A300F274C7 /* OANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationController.h; sourceTree = "<group>"; };
@@ -8666,6 +8688,13 @@
 				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
 				FA7000012F90000000000009 /* AFNetworking in Frameworks */,
 				FA7000012F9000000000000A /* BRCybertron in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C57121000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10944,6 +10973,7 @@
 				DA5A78FF26C5639F00F274C7 /* Sources */,
 				DA32848026CD38170036BA73 /* Support Files */,
 				DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000005 /* OsmAnd MapsUITests */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
@@ -10956,6 +10986,7 @@
 			children = (
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */,
 				DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */,
+				D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -11107,6 +11138,17 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		C0D3C0082F60000100C0D308 /* CrashDiagnostics */ = {
+			isa = PBXGroup;
+			children = (
+				C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */,
+				C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */,
+				C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */,
+				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
+			);
+			path = CrashDiagnostics;
+			sourceTree = "<group>";
+		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
 			isa = PBXGroup;
 			children = (
@@ -11141,6 +11183,23 @@
 				CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		D1C571200000000000000006 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
+			);
+			path = Panels;
+			sourceTree = "<group>";
+		};
+		D1C571210000000000000005 /* OsmAnd MapsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C571210000000000000003 /* Info.plist */,
+			);
+			path = "OsmAnd MapsUITests";
 			sourceTree = "<group>";
 		};
 		D7210150301B768C003CECB8 /* Cells */ = {
@@ -13222,6 +13281,7 @@
 			children = (
 				DA5A7DA326C563A300F274C7 /* OADirectionAppearanceViewController.h */,
 				DA5A7D9F26C563A300F274C7 /* OADirectionAppearanceViewController.m */,
+				D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */,
 				DA5A7D9E26C563A300F274C7 /* OAMapPanelViewController.h */,
 				DA5A7DA126C563A300F274C7 /* OAMapPanelViewController.mm */,
 				DA5A7DA026C563A300F274C7 /* OAOptionsPanelBlackViewController.h */,
@@ -14418,9 +14478,28 @@
 			path = XibViews;
 			sourceTree = "<group>";
 		};
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C0DA57172FE9000200C0DA57 /* AppEnvironment */,
+				C0DA57182FE9000200C0DA57 /* UITests */,
 				FAB7440F2FB467160001FFF8 /* AlertPresenter */,
 				FA29F6132F9610DB00257B88 /* DeepLinkManager */,
 				FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */,
@@ -14702,6 +14781,7 @@
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
+				D1C571200000000000000006 /* Panels */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -15521,17 +15601,6 @@
 			path = AppStartupMonitor;
 			sourceTree = "<group>";
 		};
-		C0D3C0082F60000100C0D308 /* CrashDiagnostics */ = {
-			isa = PBXGroup;
-			children = (
-				C0D3C0052F60000100C0D305 /* OACrashDiagnosticsManager.swift */,
-				C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */,
-				C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */,
-				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
-			);
-			path = CrashDiagnostics;
-			sourceTree = "<group>";
-		};
 		FAB6243D2E0953580048965E /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -15683,6 +15752,24 @@
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D1C571210000000000000007 /* OsmAnd MapsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */;
+			buildPhases = (
+				D1C571210000000000000009 /* Sources */,
+				D1C57121000000000000000A /* Frameworks */,
+				D1C57121000000000000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D1C57121000000000000000C /* PBXTargetDependency */,
+			);
+			name = "OsmAnd MapsUITests";
+			productName = "OsmAnd MapsUITests";
+			productReference = D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		DA72AB882508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA72AB922508F41000851313 /* Build configuration list for PBXNativeTarget "OsmAnd MapsTests" */;
@@ -15722,6 +15809,10 @@
 								enabled = 1;
 							};
 						};
+					};
+					D1C571210000000000000007 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = BBA3AF30197FC4BB0039D991;
 					};
 					DA72AB882508F40F00851313 = {
 						CreatedOnToolsVersion = 11.7;
@@ -15838,6 +15929,7 @@
 			targets = (
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				DA72AB882508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000007 /* OsmAnd MapsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -17688,6 +17780,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C57121000000000000000B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA72AB872508F40F00851313 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -18941,6 +19040,9 @@
 				277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
+				C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */,
+				C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */,
+				C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
 				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
@@ -19489,10 +19591,19 @@
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
+				D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C571210000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19508,12 +19619,19 @@
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
+				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
+				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D1C57121000000000000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
+			targetProxy = D1C571210000000000000006 /* PBXContainerItemProxy */;
+		};
 		DA72AB8F2508F41000851313 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
@@ -20141,6 +20259,107 @@
 			};
 			name = Release;
 		};
+		D1C57121000000000000000D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
+			};
+			name = Debug;
+		};
+		D1C57121000000000000000E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
+			};
+			name = Release;
+		};
 		DA72AB902508F41000851313 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -20299,6 +20518,15 @@
 			buildConfigurations = (
 				BBA3AFEC197FC4BB0039D991 /* Debug */,
 				BBA3AFED197FC4BB0039D991 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1C57121000000000000000D /* Debug */,
+				D1C57121000000000000000E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

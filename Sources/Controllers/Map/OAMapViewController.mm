@@ -607,6 +607,9 @@ static char kMapSourceUpdateQueueKey;
 
 - (void) showWhatsNewDialogIfNeeded
 {
+    if (AppEnvironment.isUITesting)
+        return;
+
     if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];

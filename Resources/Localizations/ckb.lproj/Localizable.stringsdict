@@ -104,9 +104,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%2$@ track</string>
+			<string>%2$@ ڕێڕەو</string>
 			<key>other</key>
-			<string>%2$@ tracks</string>
+			<string>%2$@ ڕێڕەو</string>
 		</dict>
 	</dict>
 	<key>osm_edits_delete_items_confirmation</key>

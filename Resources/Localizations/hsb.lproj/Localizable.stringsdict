@@ -124,9 +124,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%2$@ track</string>
+			<string>%2$@ čara</string>
+			<key>two</key>
+			<string>%2$@ čarje</string>
+			<key>few</key>
+			<string>%2$@ čary</string>
 			<key>other</key>
-			<string>%2$@ tracks</string>
+			<string>%2$@ čarow</string>
 		</dict>
 	</dict>
 	<key>osm_edits_delete_items_confirmation</key>

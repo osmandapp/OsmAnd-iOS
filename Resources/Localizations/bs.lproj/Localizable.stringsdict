@@ -114,9 +114,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%2$@ track</string>
+			<string>%2$@ staza</string>
+			<key>few</key>
+			<string>%2$@ staze</string>
 			<key>other</key>
-			<string>%2$@ tracks</string>
+			<string>%2$@ staza</string>
 		</dict>
 	</dict>
 	<key>osm_edits_delete_items_confirmation</key>

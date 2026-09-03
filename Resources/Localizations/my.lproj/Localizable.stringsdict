@@ -93,10 +93,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%2$@ track</string>
 			<key>other</key>
-			<string>%2$@ tracks</string>
+			<string>%2$@ လမ်းကြောင်း</string>
 		</dict>
 	</dict>
 	<key>osm_edits_delete_items_confirmation</key>

@@ -5,17 +5,25 @@
 	<key>items_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%1$#@items@</string>
+		<string>Dileu %1$#@items@?</string>
 		<key>items</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ eitem</string>
 			<key>one</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ eitem</string>
+			<key>two</key>
+			<string>%2$@ eitem</string>
+			<key>few</key>
+			<string>%2$@ eitem</string>
+			<key>many</key>
+			<string>%2$@ eitem</string>
 			<key>other</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ eitem</string>
 		</dict>
 	</dict>
 	<key>favorites_delete_confirmation_title</key>

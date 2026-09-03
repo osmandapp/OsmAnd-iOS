@@ -5,7 +5,7 @@
 	<key>items_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%1$#@items@</string>
+		<string>%1$#@items@ ўчирилсинми?</string>
 		<key>items</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ элемент</string>
 			<key>other</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ элемент</string>
 		</dict>
 	</dict>
 	<key>favorites_delete_confirmation_title</key>

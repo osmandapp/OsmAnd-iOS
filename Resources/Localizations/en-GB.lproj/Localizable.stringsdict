@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>Delete %2$@ item?</string>
 			<key>other</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>Delete %2$@ items?</string>
 		</dict>
 	</dict>
 	<key>favorites_delete_confirmation_title</key>

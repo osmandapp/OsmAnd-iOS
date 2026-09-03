@@ -5,7 +5,7 @@
 	<key>items_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%1$#@items@</string>
+		<string>حذف %1$#@items@?</string>
 		<key>items</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +13,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ أغراض</string>
 			<key>one</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ غرض</string>
 			<key>two</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ غرضان</string>
 			<key>few</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ أغراض</string>
 			<key>many</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ غرضًا</string>
 			<key>other</key>
-			<string>Delete selected items (%2$@)?</string>
+			<string>%2$@ غرض</string>
 		</dict>
 	</dict>
 	<key>favorites_delete_confirmation_title</key>

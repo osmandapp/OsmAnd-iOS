@@ -935,6 +935,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _hiding = YES;
+    OATargetMenuViewController *customController = self.customController;
     [self.menuViewDelegate contextMenuDidHide];
     [[OARootViewController instance].mapPanel.hudViewController updateControlsLayout:YES];
     
@@ -972,11 +973,12 @@ static const NSInteger _buttonsCount = 4;
                 
                 [self removeFromSuperview];
 
-                if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                if (self.menuViewDelegate && customController && customController.needsMapRuler)
                     [self.menuViewDelegate targetResetRulerPosition];
 
-                [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
+                [customController onMenuDismissed];
+                [self clearCustomControllerIfNeeded];
 
                 if (onComplete)
                     onComplete();
@@ -991,11 +993,12 @@ static const NSInteger _buttonsCount = 4;
             
             [self removeFromSuperview];
             
-            if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+            if (self.menuViewDelegate && customController && customController.needsMapRuler)
                 [self.menuViewDelegate targetResetRulerPosition];
-            
-            [self clearCustomControllerIfNeeded];
+
             [self restoreTargetType];
+            [customController onMenuDismissed];
+            [self clearCustomControllerIfNeeded];
 
             if (onComplete)
                 onComplete();
@@ -1007,9 +1010,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _hiding = NO;
     }
-    if (self.customController)
-        [self.customController onMenuDismissed];
-    
+
     [self stopLocationUpdate];
 }
 

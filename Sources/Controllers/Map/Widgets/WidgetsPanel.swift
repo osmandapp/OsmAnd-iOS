@@ -78,20 +78,12 @@ class WidgetsPanel: NSObject, NSCopying {
         return order ?? WidgetsPanel.DEFAULT_ORDER
     }
     
-    func getWidgetPage(_ widgetId: String) -> Int {
-        getWidgetPage(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
-    }
-
-    func getWidgetPage(_ widgetId: String, appMode: OAApplicationMode) -> Int {
-        getPagedOrder(widgetId, appMode: appMode).0
+    func widgetPage(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
+        pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).0
     }
     
-    func getWidgetOrder(_ widgetId: String) -> Int {
-        return getWidgetOrder(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
-    }
-
-    func getWidgetOrder(_ widgetId: String, appMode: OAApplicationMode) -> Int {
-        return getPagedOrder(widgetId, appMode: appMode).1
+    func widgetOrder(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
+        pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).1
     }
     
     private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
@@ -105,17 +97,22 @@ class WidgetsPanel: NSObject, NSCopying {
         fatalError("Unsupported panel")
     }
 
-    private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {
-        let pref: OACommonListOfStringList = getOrderPreference()
+    private func reorderedPages(_ appMode: OAApplicationMode,
+                                screenLayoutMode: NSNumber?) -> [[String]]? {
+        let pref = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
         let pages: [[String]]? = pref.get(appMode)
-        guard let pages, !pages.isEmpty, (pref.key == OAAppSettings.sharedManager().topWidgetPanelOrder.key || pref.key == OAAppSettings.sharedManager().bottomWidgetPanelOrder.key) else {
+        guard let pages, !pages.isEmpty, isPanelVertical else {
             return pages
         }
         return WidgetsPanel.getPagedWidgetIdsWithPages(pages)
     }
 
-    private func getPagedOrder(_ widgetId: String, appMode: OAApplicationMode) -> (Int, Int) {
-        guard let pages = getReorderedPages(appMode), !pages.isEmpty else {
+    private func pagedOrder(_ widgetId: String,
+                            appMode: OAApplicationMode,
+                            screenLayoutMode: NSNumber?) -> (Int, Int) {
+        guard let pages = reorderedPages(appMode,
+                                         screenLayoutMode: screenLayoutMode),
+              !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
 
@@ -129,27 +126,18 @@ class WidgetsPanel: NSObject, NSCopying {
         return (0, WidgetsPanel.DEFAULT_ORDER)
     }
 
-    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode) {
-        let orderPreference = getOrderPreference()
-        orderPreference.set(pagedOrder, mode: appMode)
+    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: NSNumber?) {
+        let preference = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
+        preference.set(pagedOrder, mode: appMode)
     }
 
-    func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()) -> Bool {
-         getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
+    func contains(widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Bool {
+        widgetOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func getOrderPreference() -> OACommonListOfStringList {
-        let settings = OAAppSettings.sharedManager()
-        if self == .leftPanel {
-            return settings.leftWidgetPanelOrder
-        } else if self == .rightPanel {
-            return settings.rightWidgetPanelOrder
-        } else if self == .topPanel {
-            return settings.topWidgetPanelOrder
-        } else if self == .bottomPanel {
-            return settings.bottomWidgetPanelOrder
-        }
-        fatalError("Unsupported panel")
+    func orderPreference(screenLayoutMode: NSNumber?, appMode: OAApplicationMode) -> OACommonListOfStringList {
+        OAAppSettings.sharedManager().widgetPanelOrder(self,
+                                                       screenLayoutMode: screenLayoutMode)
     }
 
     static func getPagedWidgetIdsWithPages(_ pages: [[String]]) -> [[String]] {

@@ -13,14 +13,12 @@ final class MapHudLayout: NSObject {
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
     private let hudBasePaddingDp: CGFloat = 16.0
-    private let tablet: Bool
     
     private var gridOverlay: HudGridOverlay?
     private var topInset: CGFloat
     private var bottomInset: CGFloat
     private var leftInset: CGFloat
     private var rightInset: CGFloat
-    private var portrait: Bool
     private var lastWidth: CGFloat = 0
     private var mapButtons: [OAHudButton] = []
     private var widgetPositions: [UIView: ButtonPositionSize] = [:]
@@ -40,8 +38,6 @@ final class MapHudLayout: NSObject {
     
     init(containerView: UIView) {
         self.containerView = containerView
-        self.tablet = OAUtilities.isIPad()
-        self.portrait = OAUtilities.isPortrait()
         let ins = containerView.safeAreaInsets
         self.topInset = ins.top
         self.bottomInset = ins.bottom
@@ -214,7 +210,6 @@ final class MapHudLayout: NSObject {
     }
     
     func onContainerSizeChanged() {
-        portrait = OAUtilities.isPortrait()
         let safeAreaIns = containerView.safeAreaInsets
         let insetChanged = topInset != safeAreaIns.top || bottomInset != safeAreaIns.bottom || leftInset != safeAreaIns.left || rightInset != safeAreaIns.right
         topInset = safeAreaIns.top
@@ -284,7 +279,7 @@ final class MapHudLayout: NSObject {
         if view === topBarPanelContainer || view is OADownloadMapWidget {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: isCompactPanelsLayout ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
             position.setNonMoveable()
         } else if view === leftWidgetsPanel {
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
@@ -299,7 +294,7 @@ final class MapHudLayout: NSObject {
         } else if view === bottomBarPanelContainer {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: isCompactPanelsLayout ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
             position.setNonMoveable()
         } else if view is OAMapRulerView {
             position.setMoveHorizontal()
@@ -364,7 +359,7 @@ final class MapHudLayout: NSObject {
             }
         }
         
-        if hasBanner && !portrait {
+        if hasBanner && isCompactPanelsLayout {
             result.append(contentsOf: pendingSidePanels)
         }
         
@@ -403,7 +398,7 @@ final class MapHudLayout: NSObject {
             let hostW = containerView.bounds.width
             let available = max(0, getAdjustedWidth())
             let heightPx: CGFloat = view.bounds.height > 0 ? view.bounds.height : 155.0
-            let desiredWidth = portrait ? available : min(available, hostW * 0.5)
+            let desiredWidth = isCompactPanelsLayout ? min(available, hostW * 0.5) : available
             let width8 = Int32(max(1, floor(desiredWidth / dpToPx / cell)))
             let height8 = Int32(max(1, ceil(heightPx / dpToPx / cell)))
             position.setSize(width8dp: width8, height8dp: height8)
@@ -411,9 +406,7 @@ final class MapHudLayout: NSObject {
             position.marginY = 0
             let parentW = Int(available)
             let parentH = Int(getAdjustedHeight())
-            let xPixelsPortrait: CGFloat = 0
-            let xPixelsLandscape: CGFloat = (available - desiredWidth) / 2.0
-            let xPixels = Int(round(max(0, portrait ? xPixelsPortrait : xPixelsLandscape)))
+            let xPixels = Int(round(max(0, isCompactPanelsLayout ? (available - desiredWidth) / 2.0 : 0)))
             let yPixels = 0
             position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: true, x: Int32(xPixels), gravTop: true, y: Int32(yPixels))
             return position
@@ -433,7 +426,7 @@ final class MapHudLayout: NSObject {
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
             position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
-        } else if (view === topBarPanelContainer || view === bottomBarPanelContainer), !portrait || tablet {
+        } else if (view === topBarPanelContainer || view === bottomBarPanelContainer), isCompactPanelsLayout {
             let parentW = Int(getAdjustedWidth())
             let parentH = Int(getAdjustedHeight())
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
@@ -451,12 +444,15 @@ final class MapHudLayout: NSObject {
         
         return position
     }
+
+    private var isCompactPanelsLayout: Bool {
+        OAAppSettings.sharedManager().isCompactPanelsLayout()
+    }
     
     @discardableResult private func updateButtonParams(for view: UIView, with position: ButtonPositionSize) -> Bool {
         if view is OADownloadMapWidget {
             let available = max(0, getAdjustedWidth())
-            let isPortrait = OAUtilities.isPortrait()
-            let desiredWidth = isPortrait ? available : min(available, containerView.bounds.width * 0.5)
+            let desiredWidth = isCompactPanelsLayout ? min(available, containerView.bounds.width * 0.5) : available
             let x = leftInset + (available - desiredWidth) / 2.0
             let y = topInset
             let height = view.bounds.height > 0 ? view.bounds.height : 155.0

@@ -52,16 +52,20 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
             OAAppSettings.sharedManager().applicationMode.get()
         }
     }
+
+    private var preferenceLayoutMode: NSNumber? {
+        OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
+    }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode,
+                                                                   layoutMode: screenLayoutMode)
+    private var isUpdatingSettings = false
     
     // MARK: - Initialization
     
-    convenience init(widgetPanel: WidgetsPanel!) {
-        self.init(widgetPanel: widgetPanel, screenLayoutMode: .defaultMode)
-    }
-
     init(widgetPanel: WidgetsPanel!, screenLayoutMode: ScreenLayoutMode) {
         self.widgetPanel = widgetPanel
         self.screenLayoutMode = screenLayoutMode
@@ -69,8 +73,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     required init?(coder: NSCoder) {
-        screenLayoutMode = .defaultMode
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func registerNotifications() {
@@ -155,7 +158,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     override func onTopButtonPressed() {
-        let vc = WidgetGroupListViewController()
+        let vc = WidgetGroupListViewController(screenLayoutMode: screenLayoutMode)
         vc.widgetPanel = widgetPanel
         vc.addToNext = nil
         vc.selectedWidget = nil
@@ -190,8 +193,21 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
 
-    private func copyWidgets(from screenLayoutMode: ScreenLayoutMode) {
-        // TODO: Copy widgets from the selected screen layout.
+    private func copyWidgets(from sourceScreenLayoutMode: ScreenLayoutMode) {
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: self.selectedAppMode,
+                                                           fromLayoutMode: sourceScreenLayoutMode,
+                                                           panel: self.widgetPanel,
+                                                           widgetParams: ["selectedAppMode": self.selectedAppMode])
+            OARootViewController.instance().mapPanel.recreateAllControls()
+            self.updateUIAnimated(nil)
+        }
+    }
+
+    private func performSettingsUpdate(_ update: () -> Void) {
+        isUpdatingSettings = true
+        defer { isUpdatingSettings = false }
+        update()
     }
     
     func addWidget(newWidget: MapWidgetInfo, params: [String: Any]?) {
@@ -244,7 +260,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onWidgetStateChanged() {
-        if !editMode {
+        if !editMode && !isUpdatingSettings {
             updateUIAnimated(nil)
         }
     }
@@ -284,10 +300,97 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         orders.append(currPage)
         
-        WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
-                                   panel: widgetPanel,
-                                   selectedAppMode: selectedAppMode,
-                                   widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
+        applyWidgetsConfiguration(orderedWidgetPages: orders,
+                                  widgetParamsArray: widgetParamsArray ?? addWidgetsParamsArray)
+    }
+
+    private func applyWidgetsConfiguration(orderedWidgetPages: [[String]],
+                                           widgetParamsArray: [[String: Any]]?) {
+        let configuration = prepareWidgetsConfiguration(orderedWidgetPages: orderedWidgetPages,
+                                                        widgetParamsArray: widgetParamsArray)
+        let enabledWidgetIds = configuration.pagedOrder.flatMap { $0 }
+        applyWidgetsPanel(configuration.newWidgetInfos)
+        applyWidgetsVisibility(enabledWidgetIds)
+        applyWidgetsOrder(configuration.pagedOrder)
+        OARootViewController.instance().mapPanel.recreateControls()
+    }
+
+    private func prepareWidgetsConfiguration(orderedWidgetPages: [[String]],
+                                             widgetParamsArray: [[String: Any]]?)
+        -> (pagedOrder: [[String]], newWidgetInfos: [MapWidgetInfo]) {
+        var currentWidgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                        filterModes: Int(kWidgetModeEnabled | kWidgetModeMatchingPanels),
+                                                        panels: [widgetPanel],
+                                                        layoutMode: preferenceLayoutMode)?.array as? [MapWidgetInfo] ?? []
+        var widgetParamsArray = widgetParamsArray
+        var pagedOrder = [[String]]()
+        var newWidgetInfos = [MapWidgetInfo]()
+        let widgetsFactory = MapWidgetsFactory()
+        for page in orderedWidgetPages {
+            var pageOrder = [String]()
+            for widgetInfoId in page {
+                if let index = currentWidgetInfos.firstIndex(where: { $0.key == widgetInfoId }) {
+                    pageOrder.append(currentWidgetInfos.remove(at: index).key)
+                } else {
+                    var params: [String: Any]?
+                    if let index = widgetParamsArray?.firstIndex(where: { $0["id"] as? String == widgetInfoId }) {
+                        params = widgetParamsArray?.remove(at: index)
+                    }
+                    if let widgetInfo = WidgetUtils.createWidget(widgetId: widgetInfoId,
+                                                                 panel: widgetPanel,
+                                                                 widgetsFactory: widgetsFactory,
+                                                                 selectedAppMode: selectedAppMode,
+                                                                 screenLayoutMode: screenLayoutMode,
+                                                                 widgetParams: params) {
+                        pageOrder.append(widgetInfo.key)
+                        newWidgetInfos.append(widgetInfo)
+                    }
+                }
+            }
+            if !pageOrder.isEmpty {
+                pagedOrder.append(pageOrder)
+            }
+        }
+        return (pagedOrder, newWidgetInfos)
+    }
+
+    private func applyWidgetsPanel(_ newWidgetInfos: [MapWidgetInfo]) {
+        for widgetInfo in newWidgetInfos {
+            WidgetUtils.createNewWidget(widgetInfo,
+                                        panel: widgetPanel,
+                                        appMode: selectedAppMode,
+                                        screenLayoutMode: screenLayoutMode,
+                                        recreateControls: false)
+        }
+    }
+
+    private func applyWidgetsVisibility(_ enabledWidgetIds: [String]) {
+        let widgetInfos = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                 filterModes: Int(kWidgetModeMatchingPanels),
+                                                 panels: [widgetPanel],
+                                                 layoutMode: preferenceLayoutMode)?.array as? [MapWidgetInfo] ?? []
+        let widgetsVisibility = MapWidgetInfo.widgetsVisibility(selectedAppMode,
+                                                                screenLayoutMode: preferenceLayoutMode)
+        for widgetInfo in widgetInfos {
+            let enabledFromApply = enabledWidgetIds.contains(widgetInfo.key)
+            if widgetInfo.isEnabledForAppMode(selectedAppMode,
+                                              widgetsVisibility: widgetsVisibility) != enabledFromApply {
+                if !enabledFromApply {
+                    AverageSpeedComputerService.shared.removeComputer(for: widgetInfo.key)
+                }
+                widgetRegistry.enableDisableWidget(for: selectedAppMode,
+                                                   widgetInfo: widgetInfo,
+                                                   enabled: NSNumber(value: enabledFromApply),
+                                                   recreateControls: false)
+            }
+        }
+    }
+
+    private func applyWidgetsOrder(_ pagedOrder: [[String]]) {
+        widgetPanel.setWidgetsOrder(pagedOrder: pagedOrder,
+                                    appMode: selectedAppMode,
+                                    screenLayoutMode: preferenceLayoutMode)
+        widgetRegistry.reorderWidgets()
     }
 }
 
@@ -557,7 +660,12 @@ extension WidgetsListViewController {
     }
     
     private func updateEnabledWidgets() {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])!
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
+                                                               filterModes: Self.enabledWidgetsFilter,
+                                                               panels: [widgetPanel],
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         let noEnabledWidgets = enabledWidgets.count == 0
         if noEnabledWidgets && !editMode {
             var iconName = "ic_custom_screen_side_left_48"
@@ -578,7 +686,10 @@ extension WidgetsListViewController {
             row.iconTintColor = .iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
+            let pagedWidgets = widgetRegistry.pagedWidgets(forPanel: selectedAppMode,
+                                                           panel: widgetPanel,
+                                                           filterModes: Self.enabledWidgetsFilter,
+                                                           screenLayoutMode: screenLayoutMode.rawValue)!
             tableData.clearAllData()
             tableData.createNewSection()
             for i in 0..<pagedWidgets.count {
@@ -671,9 +782,11 @@ extension WidgetsListViewController {
                                                     preferredStyle: .actionSheet)
                 actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                     guard let self else { return }
-                    self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
-                    OARootViewController.instance().mapPanel.recreateAllControls()
-                    self.updateUIAnimated(nil)
+                    self.performSettingsUpdate {
+                        self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
+                        OARootViewController.instance().mapPanel.recreateAllControls()
+                        self.updateUIAnimated(nil)
+                    }
                 })
                 actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
                 if let popoverController = actionSheet.popoverPresentationController {
@@ -712,16 +825,22 @@ extension WidgetsListViewController {
     }
     
     override func getTopButtonTitle() -> String {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
-                                                               panels: [widgetPanel])!
+                                                               panels: [widgetPanel],
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         return editMode || enabledWidgets.count > 0 ? localizedString("add_widget") : ""
     }
     
     override func getBottomButtonTitle() -> String {
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
+        let enabledWidgets = widgetRegistry.widgets(forPanel: selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
-                                                               panels: [widgetPanel])!
+                                                               panels: [widgetPanel],
+                                                               layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+                                                                   ? NSNumber(value: screenLayoutMode.rawValue)
+                                                                   : nil)!
         return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     
@@ -768,9 +887,11 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
     }
     
     func onCopyProfile(_ fromAppMode: OAApplicationMode!) {
-        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: widgetPanel)
-        OARootViewController.instance().mapPanel.recreateAllControls()
-        updateUIAnimated(nil)
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: self.widgetPanel)
+            OARootViewController.instance().mapPanel.recreateAllControls()
+            self.updateUIAnimated(nil)
+        }
     }
 }
 

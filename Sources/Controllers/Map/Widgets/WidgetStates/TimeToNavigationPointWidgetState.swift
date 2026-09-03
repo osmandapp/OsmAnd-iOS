@@ -65,6 +65,14 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate).set(arrivalTimeOrTimeToGo.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId,
+                                                              intermediate: intermediate).set(arrivalTimeOrTimeToGo.get(fromAppMode),
+                                                                                            mode: toAppMode)
+    }
     
     private static func registerTimeTypePref(customId: String?,
                                              intermediate: Bool,

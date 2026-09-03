@@ -281,7 +281,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     return YES;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -819,7 +819,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
 }
 
-- (OAWidgetState *)getWidgetState
+- (OAWidgetState *)storedWidgetState
 {
     return _widgetState;
 }

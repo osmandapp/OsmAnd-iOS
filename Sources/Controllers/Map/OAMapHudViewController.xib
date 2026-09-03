@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
             <connections>
+                <outlet property="bottomBarLeadingConstraint" destination="ZQz-tI-ohe" id="KeZ-5S-8Fl"/>
+                <outlet property="bottomBarTrailingConstraint" destination="dQ4-jK-VzO" id="4gs-hT-Yw2"/>
                 <outlet property="bottomBarView" destination="2Fb-ez-Rsg" id="0en-6T-4Vn"/>
                 <outlet property="bottomBarViewHeightConstraint" destination="vDy-Bj-0RM" id="H0Q-8R-MR7"/>
                 <outlet property="bottomWidgetsView" destination="2RZ-GK-954" id="aQF-fs-YDY"/>
@@ -38,6 +40,7 @@
                 <outlet property="statusBarViewHeightConstraint" destination="IvW-Gf-meU" id="Zio-ov-kE7"/>
                 <outlet property="topWidgetsView" destination="K8g-PT-gdL" id="ul7-YR-TLk"/>
                 <outlet property="topWidgetsViewHeightConstraint" destination="22d-Ah-0dl" id="JpG-v2-OYy"/>
+                <outlet property="topWidgetsViewCenterXConstraint" destination="nd0-KQ-Ihp" id="Knq-xX-8lq"/>
                 <outlet property="topWidgetsViewWidthConstraint" destination="yax-4w-LsJ" id="HkI-5d-3J5"/>
                 <outlet property="topWidgetsViewYConstraint" destination="l7W-kJ-xAQ" id="Jsx-7s-avC"/>
                 <outlet property="view" destination="1" id="3"/>

@@ -26,7 +26,25 @@ enum ScreenElementsMode: Int32, CaseIterable {
         self == .independent
     }
 
+    var key: String {
+        switch self {
+        case .shared: "single"
+        case .independent: "separate"
+        }
+    }
+
     init(usesSeparateLayouts: Bool) {
         self = usesSeparateLayouts ? .independent : .shared
+    }
+}
+
+@objcMembers
+final class ScreenElementsModeWrapper: NSObject {
+    static func key(for mode: ScreenElementsMode) -> String {
+        mode.key
+    }
+
+    static func allValues() -> [NSNumber] {
+        ScreenElementsMode.allCases.map { NSNumber(value: $0.rawValue) }
     }
 }

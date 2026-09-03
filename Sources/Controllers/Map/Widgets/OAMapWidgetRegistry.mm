@@ -27,6 +27,23 @@
     NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *_allWidgets;
     OAAppSettings *_settings;
     OAApplicationMode *_cachedAppMode;
+    ScreenLayoutMode _cachedScreenLayoutMode;
+    BOOL _cachedUseSeparateLayouts;
+    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSArray<OAMapWidgetInfo *> *> *> *_createdWidgetsCache;
+}
+
+- (NSArray<NSString *> *)widgetsVisibilityForAppMode:(OAApplicationMode *)appMode
+{
+    return [self widgetsVisibilityForAppMode:appMode
+                            screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:appMode]];
+}
+
+- (NSArray<NSString *> *)widgetsVisibilityForAppMode:(OAApplicationMode *)appMode
+                                    screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
+{
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
+    return [OAMapWidgetInfo widgetsVisibility:appMode
+                              screenLayoutMode:layoutMode];
 }
 
 + (OAMapWidgetRegistry *)sharedInstance
@@ -45,6 +62,7 @@
     if (self)
     {
         _allWidgets = [NSMutableDictionary dictionary];
+        _createdWidgetsCache = [NSMutableDictionary dictionary];
         _settings = [OAAppSettings sharedManager];
     }
     return self;
@@ -56,7 +74,10 @@
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
 
-    NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)];
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:mode];
+    NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:mode
+                                                              screenLayoutMode:screenLayoutMode];
+    NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self pagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels) screenLayoutMode:screenLayoutMode];
     if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
     {
         pagedWidgets = @[];
@@ -69,7 +90,7 @@
         }];
         for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
         {
-            if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
+            if ([widgetInfo isEnabledForAppMode:mode widgetsVisibility:widgetsVisibility] || weatherToolbarVisible)
                 [currentPage addObject:widgetInfo.widget];
             else
                 [widgetInfo.widget detachView:widgetPanel];
@@ -100,9 +121,10 @@
 
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode
 {
+    NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:appMode];
     for (OAMapWidgetInfo *widgetInfo in [self getAllWidgets])
     {
-        if ([widgetInfo isEnabledForAppMode:appMode])
+        if ([widgetInfo isEnabledForAppMode:appMode widgetsVisibility:widgetsVisibility])
             [widgetInfo.widget updateInfo];
     }
 }
@@ -119,23 +141,24 @@
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *) getLeftWidgets
 {
-    return [self getWidgetsForPanel:OAWidgetsPanel.leftPanel];
+    return [self widgetsForPanel:OAWidgetsPanel.leftPanel];
 }
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *) getRightWidgets
 {
-    return [self getWidgetsForPanel:OAWidgetsPanel.rightPanel];
+    return [self widgetsForPanel:OAWidgetsPanel.rightPanel];
 }
 
 - (BOOL) isAnyWeatherWidgetVisible
 {
     OAApplicationMode *mode = [_settings.applicationMode get];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
+    NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:mode];
     for (OAMapWidgetInfo *widgetInfo in OAMapWidgetRegistry.sharedInstance.getAllWidgets)
     {
-        if (widgetInfo.getWidgetType.group == OAWidgetGroup.weather)
+        if (widgetInfo.widgetType.group == OAWidgetGroup.weather)
         {
-            if (weatherToolbarVisible || [widgetInfo isEnabledForAppMode:mode])
+            if (weatherToolbarVisible || [widgetInfo isEnabledForAppMode:mode widgetsVisibility:widgetsVisibility])
                 return YES;
         }
     }
@@ -145,10 +168,11 @@
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded
 {
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
+    NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:mode];
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        BOOL enabledForAppMode = [widgetInfo isEnabledForAppMode:mode];
-        if (enabledForAppMode || (weatherToolbarVisible && widgetInfo.getWidgetType.group == OAWidgetGroup.weather))
+        BOOL enabledForAppMode = [widgetInfo isEnabledForAppMode:mode widgetsVisibility:widgetsVisibility];
+        if (enabledForAppMode || (weatherToolbarVisible && widgetInfo.widgetType.group == OAWidgetGroup.weather))
             [widgetInfo.widget updateInfo];
     }
 }
@@ -187,6 +211,8 @@
 - (void) clearWidgets
 {
     [_allWidgets removeAllObjects];
+    [_createdWidgetsCache removeAllObjects];
+    _cachedAppMode = nil;
     [self notifyWidgetsCleared];
 }
 
@@ -240,11 +266,17 @@
                             enabled:(NSNumber *)enabled
                    recreateControls:(BOOL)recreateControls
 {
-    [widgetInfo enableDisableWithAppMode:appMode enabled:enabled];
+    [widgetInfo enableDisableForMode:appMode enabled:enabled];
     [self notifyWidgetVisibilityChanged:widgetInfo];
     
     if ([widgetInfo isCustomWidget] && (!enabled || !enabled.boolValue))
-        [_settings.customWidgetKeys remove:widgetInfo.key];
+    {
+        NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(widgetInfo.screenLayoutMode) : nil;
+        OACommonStringList *customWidgetKeys = [_settings customWidgetKeys:layoutMode];
+        NSMutableArray<NSString *> *keys = [[customWidgetKeys get:appMode] mutableCopy];
+        [keys removeObject:widgetInfo.key];
+        [customWidgetKeys set:keys mode:appMode];
+    }
     
     if (recreateControls)
         [[OARootViewController instance].mapPanel recreateControls];
@@ -260,9 +292,10 @@
     NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *newAllWidgets = [NSMutableDictionary dictionary];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
+        NSNumber *layoutMode = [_settings.useSeparateLayouts get:widget.appMode] ? @(widget.screenLayoutMode) : nil;
         OAWidgetsPanel *panel = [widget getUpdatedPanel];
-        widget.pageIndex = [panel getWidgetPage:widget.key];
-        widget.priority = [panel getWidgetOrder:widget.key];
+        widget.pageIndex = [panel widgetPage:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
+        widget.priority = [panel widgetOrder:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         
         NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPanel = newAllWidgets[panel];
         if (widgetsOfPanel == nil && panel != nil)
@@ -281,28 +314,92 @@
     NSMutableArray<OAMapWidgetInfo *> *widgets = [NSMutableArray array];
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        if (widgetInfo.getWidgetType == widgetType)
+        if (widgetInfo.widgetType == widgetType)
             [widgets addObject:widgetInfo];
     }
     return [widgets copy];
 }
 
-- (OAMapWidgetInfo *)getWidgetInfoForType:(OAWidgetType *)widgetType
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                 screenLayoutMode:(ScreenLayoutMode)screenLayoutMode
+{
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
+    return [self widgetsForAppMode:appMode layoutMode:layoutMode];
+}
+
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                       layoutMode:(NSNumber *)layoutMode
+{
+    BOOL useSeparateLayouts = layoutMode != nil;
+    ScreenLayoutMode screenLayoutMode = useSeparateLayouts
+        ? (ScreenLayoutMode)layoutMode.intValue
+        : ScreenLayoutModePortrait;
+    if (_cachedAppMode == appMode
+        && _cachedUseSeparateLayouts == useSeparateLayouts
+        && (!useSeparateLayouts || _cachedScreenLayoutMode == screenLayoutMode))
+    {
+        return self.getAllWidgets;
+    }
+
+    NSString *layoutModeKey = layoutMode != nil ? layoutMode.stringValue : @"shared";
+    NSMutableDictionary<NSString *, NSArray<OAMapWidgetInfo *> *> *appModeCache = _createdWidgetsCache[appMode.stringKey];
+    NSArray<OAMapWidgetInfo *> *cachedWidgets = appModeCache[layoutModeKey];
+    if (cachedWidgets != nil)
+        return cachedWidgets;
+
+    NSArray<OAMapWidgetInfo *> *createdWidgets = [OAWidgetsInitializer createAllControlsWithAppMode:appMode
+                                                                                   screenLayoutMode:screenLayoutMode
+                                                                               preferenceLayoutMode:layoutMode];
+    if (appModeCache == nil)
+    {
+        appModeCache = [NSMutableDictionary dictionary];
+        _createdWidgetsCache[appMode.stringKey] = appModeCache;
+    }
+    appModeCache[layoutModeKey] = createdWidgets;
+    return createdWidgets;
+}
+
+- (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
 {
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        if (widgetInfo.getWidgetType == widgetType && ![widgetInfo isCustomWidget])
+        if (widgetInfo.widgetType == widgetType && ![widgetInfo isCustomWidget])
             return widgetInfo;
     }
     return nil;
 }
 
-- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)getPagedWidgetsForPanel:(OAApplicationMode *)appMode
-                                                                  panel:(OAWidgetsPanel *)panel
-                                                            filterModes:(NSInteger)filterModes
+- (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
+                               appMode:(OAApplicationMode *)appMode
+                      screenLayoutMode:(int)screenLayoutMode
+{
+    for (OAMapWidgetInfo *widgetInfo in [self widgetsForAppMode:appMode
+                                              screenLayoutMode:(ScreenLayoutMode)screenLayoutMode])
+    {
+        if (widgetInfo.widgetType == widgetType && !widgetInfo.isCustomWidget)
+            return widgetInfo;
+    }
+    return nil;
+}
+
+- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
+                                                               panel:(OAWidgetsPanel *)panel
+                                                         filterModes:(NSInteger)filterModes
+{
+    return [self pagedWidgetsForPanel:appMode
+                                panel:panel
+                          filterModes:filterModes
+                     screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:appMode]];
+}
+
+- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
+                                                               panel:(OAWidgetsPanel *)panel
+                                                         filterModes:(NSInteger)filterModes
+                                                    screenLayoutMode:(int)screenLayoutMode
 {
     MutableOrderedDictionary<NSNumber *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *widgetsByPages = [MutableOrderedDictionary dictionary];
-    for (OAMapWidgetInfo *widgetInfo in [self getWidgetsForPanel:appMode filterModes:filterModes panels:@[panel]])
+    NSNumber *layoutMode = [_settings.useSeparateLayouts get:appMode] ? @(screenLayoutMode) : nil;
+    for (OAMapWidgetInfo *widgetInfo in [self widgetsForPanel:appMode filterModes:filterModes panels:@[panel] layoutMode:layoutMode])
     {
         NSInteger page = widgetInfo.pageIndex;
         NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPage = widgetsByPages[@(page)];
@@ -316,9 +413,24 @@
     return widgetsByPages.allValues;
 }
 
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAApplicationMode *)appMode
-                                                   filterModes:(NSInteger) filterModes
-                                                        panels:(NSArray<OAWidgetsPanel *> *)panels
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
+                                                 layoutMode:(NSNumber *)layoutMode
+{
+    NSArray<OAMapWidgetInfo *> *widgetInfos = [self widgetsForAppMode:appMode layoutMode:layoutMode];
+    return [self filteredWidgets:widgetInfos
+                        appMode:appMode
+                     layoutMode:layoutMode
+                    filterModes:filterModes
+                         panels:panels];
+}
+
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)filteredWidgets:(NSArray<OAMapWidgetInfo *> *)widgetInfos
+                                                    appMode:(OAApplicationMode *)appMode
+                                                 layoutMode:(NSNumber *)layoutMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
 {
     NSMutableArray<Class> *includedWidgetTypes = [NSMutableArray array];
     if ([panels containsObject:OAWidgetsPanel.leftPanel] || [panels containsObject:OAWidgetsPanel.rightPanel])
@@ -331,16 +443,8 @@
         [includedWidgetTypes addObject:OACenterWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
     }
-    NSMutableArray<OAMapWidgetInfo *> *widgetInfos = [NSMutableArray array];
-    if (_cachedAppMode == appMode)
-    {
-        [widgetInfos addObjectsFromArray:self.getAllWidgets];
-    }
-    else
-    {
-        _cachedAppMode = appMode;
-        [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControlsWithAppMode:appMode]];
-    }
+    NSArray<NSString *> *widgetsVisibility = [OAMapWidgetInfo widgetsVisibility:appMode
+                                                               screenLayoutMode:layoutMode];
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
@@ -352,13 +456,14 @@
             BOOL defaultMode = (filterModes & kWidgetModeDefault) == kWidgetModeDefault;
             BOOL matchingPanelsMode = (filterModes & kWidgetModeMatchingPanels) == kWidgetModeMatchingPanels;
 
-            BOOL passDisabled = !disabledMode || ![widget isEnabledForAppMode:appMode];
-            BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode];
+            BOOL passDisabled = !disabledMode || ![widget isEnabledForAppMode:appMode widgetsVisibility:widgetsVisibility];
+            BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode widgetsVisibility:widgetsVisibility];
             BOOL passAvailable = !availableMode || [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widget.key appMode:appMode];
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
-            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:widget.widgetPanel];
-            BOOL passTypeAllowed = [widget getWidgetType] == nil || [[widget getWidgetType] isAllowed];
-            BOOL passPanelAllowed = [widget getWidgetType] == nil || [[widget getWidgetType] isPanelsAllowed:panels];
+            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:[widget getUpdatedPanel:appMode
+                                                                        screenLayoutMode:layoutMode]];
+            BOOL passTypeAllowed = [widget widgetType] == nil || [[widget widgetType] isAllowed];
+            BOOL passPanelAllowed = [widget widgetType] == nil || [[widget widgetType] isPanelsAllowed:panels];
             
             if (passDisabled && passEnabled && passAvailable && defaultAvailable && passMatchedPanels && passTypeAllowed && passPanelAllowed)
                 [filteredWidgets addObject:widget];
@@ -372,7 +477,7 @@
     return [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
 }
 
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAWidgetsPanel *)panel
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAWidgetsPanel *)panel
 {
     NSMutableOrderedSet<OAMapWidgetInfo *> *widgets = _allWidgets[panel];
     if (widgets == nil)
@@ -383,17 +488,16 @@
     return widgets;
 }
 
-- (void) resetDefaultAppearance:(OAApplicationMode *)appMode
-{
-    [_settings.transparentMapTheme resetToDefault];
-    [_settings.positionPlacementOnMap resetToDefault];
-}
-
 - (void) registerAllControls
 {
+    [_createdWidgetsCache removeAllObjects];
     OAApplicationMode *appMode = _settings.applicationMode.get;
-    NSArray<OAMapWidgetInfo *> *infos = [OAWidgetsInitializer createAllControlsWithAppMode:appMode];
+    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
+    NSArray<OAMapWidgetInfo *> *infos = [OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:screenLayoutMode];
     [self reorderWidgets:infos];
+    _cachedAppMode = appMode;
+    _cachedScreenLayoutMode = screenLayoutMode;
+    _cachedUseSeparateLayouts = [_settings.useSeparateLayouts get:appMode];
     
     for (OAMapWidgetInfo *widgetInfo : infos)
     {

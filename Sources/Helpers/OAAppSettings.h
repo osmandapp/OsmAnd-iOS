@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory, OAWidgetsPanel;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
@@ -1250,6 +1250,15 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *osmEditsSortMode;
 
 - (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode;
+- (BOOL)isCompactPanelsLayout;
+- (OACommonBoolean *)transparentWidgets:(nullable NSNumber *)screenLayoutMode;
+- (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode;
+- (BOOL)isTransparentWidgets;
+- (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode;
+- (OACommonStringList *)customWidgetKeys:(nullable NSNumber *)screenLayoutMode;
+- (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
+                              screenLayoutMode:(nullable NSNumber *)screenLayoutMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;

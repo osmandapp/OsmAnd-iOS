@@ -97,7 +97,10 @@ final class DeepLinkAppRouter: NSObject {
         mapPanel.loadViewIfNeeded()
         guard (nav.visibleViewController as? WidgetsListViewController)?.widgetPanel != panel else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        nav.pushViewController(WidgetsListViewController(widgetPanel: panel), animated: true)
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
+        nav.pushViewController(WidgetsListViewController(widgetPanel: panel,
+                                                         screenLayoutMode: .default(forAppMode: appMode)),
+                               animated: true)
     }
     
     func openMapSettings(screen: EMapSettingsScreen) {

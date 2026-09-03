@@ -30,11 +30,18 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     private var mapButtonsHelper: OAMapButtonsHelper!
-    private var screenLayoutMode: ScreenLayoutMode = .defaultMode
+    private var screenLayoutMode: ScreenLayoutMode = .portrait
     private var screenElementsMode: ScreenElementsMode = .defaultMode
+    private var isUpdatingSettings = false
+    private lazy var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: appMode,
+                                                                  layoutMode: screenLayoutMode)
 
     private var isSharedLandscapeLayout: Bool {
         screenLayoutMode == .landscape && screenElementsMode == .shared
+    }
+
+    private var preferenceLayoutMode: NSNumber? {
+        screenElementsMode.usesSeparateLayouts ? NSNumber(value: screenLayoutMode.rawValue) : nil
     }
 
     // MARK: Initialization
@@ -42,6 +49,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
+        screenLayoutMode = .default(forAppMode: appMode)
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
         updateScreenElementsMode()
     }
@@ -56,11 +64,24 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         localizedString("layer_map_appearance")
     }
 
+    override func refreshOnAppear() -> Bool {
+        true
+    }
+
     override func createSubview() -> UIView {
         let segmentedControl = UISegmentedControl(items: ScreenLayoutMode.allCases.map { $0.title })
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.scaledSystemFont(ofSize: 15, weight: .medium)
+        ]
+        segmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
         segmentedControl.selectedSegmentIndex = Int(screenLayoutMode.rawValue)
         segmentedControl.addTarget(self, action: #selector(onLayoutModeChanged(_:)), for: .valueChanged)
         return segmentedControl
+    }
+
+    override func onContentSizeChanged(_ notification: Notification) {
+        super.onContentSizeChanged(notification)
+        updateSubview(true)
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
@@ -172,7 +193,8 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         transparencyRow.title = localizedString("map_widget_transparent")
         transparencyRow.key = "map_widget_transparent"
         transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
-        transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: selectedKey)
+        let transparentWidgets = settings.transparentWidgets(preferenceLayoutMode)
+        transparencyRow.setObj(NSNumber(value: transparentWidgets.get(appMode)), forKey: selectedKey)
         transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
 
         if isSharedLandscapeLayout {
@@ -246,16 +268,21 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     }
 
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
-        // todo
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
+        return widgetRegistry.widgets(forPanel: appMode,
+                                      filterModes: filter,
+                                      panels: [panel],
+                                      layoutMode: screenElementsMode.usesSeparateLayouts
+                                                     ? NSNumber(value: screenLayoutMode.rawValue)
+                                                     : nil).count
     }
     
     // MARK: AppModeSelectionDelegate
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         settings.setApplicationModePref(appMode)
         self.appMode = appMode
+        widgetsSettingsHelper.setAppMode(appMode)
         updateScreenElementsMode()
         updateUIAnimated(nil)
     }
@@ -301,10 +328,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let self else { return }
-            let helper = WidgetsSettingsHelper(appMode: appMode)
-            helper.setLayoutMode(screenLayoutMode)
-            helper.resetConfigureScreenSettings()
-            applyConfigureScreenSettings()
+            self.performSettingsUpdate {
+                self.widgetsSettingsHelper.resetConfigureScreenSettings()
+                self.applyConfigureScreenSettings()
+            }
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         actionSheet.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItems?.first
@@ -315,6 +342,12 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         updateScreenElementsMode()
         OARootViewController.instance().mapPanel.recreateAllControls()
         reloadDataWith(animated: true, completion: nil)
+    }
+
+    private func performSettingsUpdate(_ update: () -> Void) {
+        isUpdatingSettings = true
+        defer { isUpdatingSettings = false }
+        update()
     }
 
     private func updateScreenElementsMode() {
@@ -333,6 +366,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         guard let mode = ScreenLayoutMode(rawValue: Int32(segmentedControl.selectedSegmentIndex)),
               mode != screenLayoutMode else { return }
         screenLayoutMode = mode
+        widgetsSettingsHelper.setLayoutMode(mode)
         reloadDataWith(animated: true, completion: nil)
     }
 }
@@ -431,7 +465,8 @@ extension ConfigureScreenViewController {
         let data = tableData.item(for: indexPath)
         
         if data.key == "map_widget_transparent" {
-            settings.transparentMapTheme.set(sw.isOn)
+            let preference = settings.transparentWidgets(preferenceLayoutMode)
+            preference.set(sw.isOn, mode: appMode)
             OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
         }
         
@@ -487,6 +522,10 @@ extension ConfigureScreenViewController {
     // MARK: WidgetStateDelegate
 
     @objc func onWidgetStateChanged() {
+        guard !isUpdatingSettings,
+              navigationController == nil || navigationController?.topViewController === self else {
+            return
+        }
         reloadDataWith(animated: true, completion: nil)
     }
 
@@ -516,10 +555,10 @@ extension ConfigureScreenViewController: OACopyProfileBottomSheetDelegate {
 
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        let helper = WidgetsSettingsHelper(appMode: appMode)
-        helper.setLayoutMode(screenLayoutMode)
-        helper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
-                                           widgetParams: ["selectedAppMode": appMode])
-        applyConfigureScreenSettings()
+        performSettingsUpdate {
+            self.widgetsSettingsHelper.copyConfigureScreenSettings(fromAppMode: fromAppMode,
+                                                                   widgetParams: ["selectedAppMode": appMode])
+            self.applyConfigureScreenSettings()
+        }
     }
 }

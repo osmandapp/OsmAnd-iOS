@@ -51,8 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable OACommonBoolean *) getWidgetVisibilityPref;
 - (nullable OACommonPreference *) getWidgetSettingsPrefToReset:(OAApplicationMode *)appMode;
 - (void) copySettings:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
-- (nullable OAWidgetState *) getWidgetState;
-- (nullable OAMapWidgetInfo *)getWidgetInfo;
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(nullable NSString *)customId;
+- (nullable OAWidgetState *)storedWidgetState;
+- (nullable OAMapWidgetInfo *)widgetInfo;
 - (BOOL)isExternal;
 
 - (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode

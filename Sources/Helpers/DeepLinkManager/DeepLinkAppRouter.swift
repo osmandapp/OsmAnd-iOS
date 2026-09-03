@@ -97,8 +97,9 @@ final class DeepLinkAppRouter: NSObject {
         mapPanel.loadViewIfNeeded()
         guard (nav.visibleViewController as? WidgetsListViewController)?.widgetPanel != panel else { return }
         guard let nav = dismissAndPopToRoot() else { return }
+        let appMode = OAAppSettings.sharedManager().applicationMode.get()
         nav.pushViewController(WidgetsListViewController(widgetPanel: panel,
-                                                         screenLayoutMode: .portrait),
+                                                         screenLayoutMode: .default(forAppMode: appMode)),
                                animated: true)
     }
     

@@ -382,7 +382,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
     
     override var currentState: EOADraggableMenuState {
-        sheetState
+        usesSidePanelLayout ? .expanded : sheetState
     }
 
     func reloadData() {

@@ -3185,13 +3185,13 @@ typedef enum
                         state:(OATrackMenuViewControllerState *)state
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
+    BOOL shouldClearNavControllerHistory = _scrollableHudViewController != nil && !state.openedFromTrackMenu;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
 
-        BOOL shouldClearNavControllerHistory = strongSelf->_scrollableHudViewController && !state.openedFromTrackMenu;
         if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
 

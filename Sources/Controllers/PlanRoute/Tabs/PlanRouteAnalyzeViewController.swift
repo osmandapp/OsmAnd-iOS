@@ -885,7 +885,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         GpxUIHelper.refreshBarChart(chartView: barChart,
                                     statistics: stat,
                                     analysis: analysis,
-                                    nightMode: OAAppSettings.sharedManager().nightMode)
+                                    nightMode: OAAppSettings.sharedManager().isAppMapNightMode)
         barChart.dragYEnabled = false
         barChart.extraTopOffset = 0
         barChart.extraBottomOffset = 12

@@ -514,8 +514,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
         }
         
-        if mainSection.rowCount() > 0 || ((recordingTracksSection?.rowCount() ?? 0) > 0) {
-            let lastRow = mainSection.getRow(mainSection.rowCount() - 1)
+        let lastNonEmptySection = mainSection.rowCount() > 0 ? mainSection : recordingTracksSection
+        if let lastNonEmptySection, lastNonEmptySection.rowCount() > 0 {
+            let lastRow = lastNonEmptySection.getRow(lastNonEmptySection.rowCount() - 1)
             lastRow.setObj(true, forKey: isFullWidthSeparatorKey)
         }
     }

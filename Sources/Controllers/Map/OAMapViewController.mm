@@ -204,6 +204,7 @@ static char kMapSourceUpdateQueueKey;
     OACurrentPositionHelper *_currentPositionHelper;
 
     OAAutoObserverProxy* _dayNightModeObserver;
+    OAAutoObserverProxy* _carPlayDayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
     OAAutoObserverProxy* _mapLayerChangeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
@@ -319,6 +320,10 @@ static char kMapSourceUpdateQueueKey;
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onDayNightModeChanged)
                                                   andObserve:_app.dayNightModeObservable];
+    
+    _carPlayDayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onCarPlayDayNightModeChanged)
+                                                              andObserve:_app.carPlayDayNightModeObservable];
 
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onMapSettingsChanged)
@@ -2242,7 +2247,7 @@ static char kMapSourceUpdateQueueKey;
     return 0.0f;
 }
 
-- (void) onDayNightModeChanged
+- (void)reloadMapSourceForDayNightModeChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.mapViewLoaded || [self isMapHidden])
@@ -2255,6 +2260,17 @@ static char kMapSourceUpdateQueueKey;
             [self updateCurrentMapSource];
         });
     });
+}
+
+- (void)onDayNightModeChanged
+{
+    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive)
+        [self reloadMapSourceForDayNightModeChange];
+}
+
+- (void)onCarPlayDayNightModeChanged
+{
+    [self reloadMapSourceForDayNightModeChange];
 }
 
 - (void) onAppModeChanged
@@ -2616,7 +2632,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            if (settings.nightMode)
+            if (settings.isCurrentMapNightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2814,7 +2830,8 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            if (settings.nightMode)
+            BOOL mapNightMode = settings.isCurrentMapNightMode;
+            if (mapNightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                 [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];

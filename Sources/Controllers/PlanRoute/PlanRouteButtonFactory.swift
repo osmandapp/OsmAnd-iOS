@@ -166,7 +166,7 @@ enum PlanRouteButtonFactory {
         if #available(iOS 26.0, *) {
             applySystemGlass(to: button, cornerRadius: cornerRadius)
         } else {
-            button.addBlurEffect(!OAAppSettings.sharedManager().nightMode, cornerRadius: cornerRadius, padding: 0)
+            button.addBlurEffect(!OAAppSettings.sharedManager().isAppMapNightMode, cornerRadius: cornerRadius, padding: 0)
         }
         button.layer.cornerRadius = cornerRadius
         button.layer.shadowColor = UIColor.black.cgColor
@@ -193,7 +193,7 @@ enum PlanRouteButtonFactory {
         button.viewWithTag(glassEffectTag)?.removeFromSuperview()
 
         let shouldUseClearGlass = !ThemeManager.shared.isLightTheme()
-        let isDarkAppearance = shouldUseClearGlass || OAAppSettings.sharedManager().nightMode
+        let isDarkAppearance = shouldUseClearGlass || OAAppSettings.sharedManager().isAppMapNightMode
         let glass = UIGlassEffect(style: shouldUseClearGlass ? .clear : .regular)
         if !shouldUseClearGlass {
             glass.tintColor = isDarkAppearance

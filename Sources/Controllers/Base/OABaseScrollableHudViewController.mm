@@ -114,7 +114,7 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     BOOL isNotFullScreen = self.currentState != EOADraggableMenuStateFullScreen;
-    if (isNotFullScreen && [OAAppSettings sharedManager].nightMode)
+    if (isNotFullScreen && [OAAppSettings sharedManager].isAppMapNightMode)
         return UIStatusBarStyleLightContent;
     else if (isNotFullScreen && ![ThemeManager shared].isLightTheme)
         return UIStatusBarStyleDarkContent;

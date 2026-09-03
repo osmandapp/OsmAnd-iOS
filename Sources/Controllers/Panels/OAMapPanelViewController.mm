@@ -3214,7 +3214,7 @@ typedef enum
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
-            [strongSelf->_scrollableHudViewController hide:YES duration:0.2 onComplete:completion];
+            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
             return YES;
         }],
         [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {

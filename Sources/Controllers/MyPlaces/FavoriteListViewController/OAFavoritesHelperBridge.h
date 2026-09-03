@@ -38,8 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
                 iconName:(nullable NSString *)iconName
                    color:(nullable UIColor *)color
       backgroundIconName:(nullable NSString *)backgroundIconName;
-- (void)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName;
-- (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName;
+- (BOOL)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName;
+- (BOOL)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName;
 - (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems;
 - (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex;
 

@@ -51,8 +51,15 @@ extension FavoriteListViewController {
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
     }
 
-    func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        favoritePointRows(allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.bridgeItem.groupName) })
+    func favoritePointRows(inFolder fullPath: String) -> [FavoritePointRow] {
+        let groups: [OAFavoriteFolderBridgeItem]
+        if let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath), folder.isRoot() {
+            groups = folder.getGroup().map { [$0] } ?? []
+        } else {
+            groups = FavoriteFolderProvider.shared.getFavoriteGroupsInSubtree(fullPath)
+        }
+        let points = groups.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.groupName) }
+        return favoritePointRows(points)
     }
 
     func makeActionsMenu() -> UIMenu {
@@ -108,14 +115,15 @@ extension FavoriteListViewController {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
             guard let self, let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-            let oldGroupName = folder.bridgeItem.groupName
-            let newGroupName = self.groupName(oldGroupName, replacingLastComponentWith: text)
-            if self.hasFolderInList(named: newGroupName, excluding: oldGroupName) {
+            guard FavoriteFolderPath.isValidSegment(text) else { return }
+            let oldGroupName = folder.fullPath
+            let newGroupName = FavoriteFolderPath.join(FavoriteFolderPath.split(FavoriteFolderPath.parentPath(oldGroupName)) + [text])
+            guard oldGroupName != newGroupName else { return }
+            guard OAFavoritesHelperBridge.shared().renameFavoriteGroup(oldGroupName, newName: newGroupName) else {
                 self.showErrorAlert(localizedString("folder_already_exsists"))
                 return
             }
 
-            OAFavoritesHelperBridge.shared().renameFavoriteGroup(oldGroupName, newName: newGroupName)
             self.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
             self.applySnapshot(animatingDifferences: true)
         }
@@ -132,12 +140,12 @@ extension FavoriteListViewController {
     }
 
     func showDeleteAlert(for folder: FavoriteFolderRow) {
-        let title = deleteConfirmationTitle(for: [folder.bridgeItem])
-        let message = deleteConfirmationMessage(for: [folder.bridgeItem])
+        let title = deleteConfirmationTitle(for: [folder.fullPath])
+        let message = deleteConfirmationMessage(for: [folder.fullPath])
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
-            self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
+            guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.fullPath) else { return }
+            self?.clearFavoriteSortModes(forGroupNames: [folder.fullPath])
             self?.applySnapshot(animatingDifferences: true)
         })
 
@@ -174,7 +182,11 @@ extension FavoriteListViewController {
     }
     
     func selectedFavoritePointsCount(for selectedItems: [Any]) -> Int {
-        let folderPointsCount = selectedItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.reduce(0) { $0 + Int($1.subtreePointsCount) }
+        let folderPointsCount = selectedItems.compactMap { $0 as? String }.reduce(0) { result, fullPath in
+            guard let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath) else { return result }
+            return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
+        }
+
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
         return folderPointsCount + pointsCount
     }
@@ -184,7 +196,7 @@ extension FavoriteListViewController {
             guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch item {
             case .folder(let folder):
-                return folder.bridgeItem
+                return folder.fullPath
             case .favorite(let favorite):
                 return favorite.bridgeItem
             default:
@@ -204,7 +216,7 @@ extension FavoriteListViewController {
 
                 switch item {
                 case .folder(let folder):
-                    bridgeItems.append(folder.bridgeItem)
+                    bridgeItems.append(folder.fullPath)
                 case .favorite(let favorite):
                     bridgeItems.append(favorite.bridgeItem)
                 default:
@@ -403,7 +415,7 @@ extension FavoriteListViewController {
     @objc func updateDistanceAndDirection() {
         updateDistanceAndDirection(false)
     }
-    
+
     private func selectableItems() -> [FavoriteSelectionItem] {
         dataSource.snapshot().sectionIdentifiers.flatMap { section in
             dataSource.snapshot(for: section).items.compactMap(\.selectionItem)
@@ -418,32 +430,11 @@ extension FavoriteListViewController {
         let modalNavigationController = UINavigationController(rootViewController: viewController)
         navigationController.present(modalNavigationController, animated: true)
     }
-    
-    private func isSearchGroup(_ groupName: String, parentGroupName: String?) -> Bool {
-        guard let parentGroupName else { return true }
-        guard !parentGroupName.isEmpty else { return groupName.isEmpty }
-        return groupName == parentGroupName || isNestedFolder(groupName, in: parentGroupName)
-    }
-    
-    private func groupName(_ groupName: String, replacingLastComponentWith lastComponent: String) -> String {
-        guard let separatorIndex = groupName.lastIndex(of: "/") else { return lastComponent }
-        let parentGroupName = groupName[..<separatorIndex]
-        guard !parentGroupName.isEmpty else { return lastComponent }
-        return "\(parentGroupName)/\(lastComponent)"
-    }
-    
+
     private func showErrorAlert(_ text: String) {
         let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         present(alert, animated: true)
-    }
-
-    private func hasFolderInList(named groupName: String, excluding excludedGroupName: String) -> Bool {
-        let normalizedGroupName = groupName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return favoriteFolders().contains { folder in
-            let existingGroupName = folder.bridgeItem.groupName
-            return existingGroupName != excludedGroupName && existingGroupName.trimmingCharacters(in: .whitespacesAndNewlines) == normalizedGroupName
-        }
     }
     
     private func favoritePointShareItems(for point: OAFavoritePointBridgeItem) -> [Any] {
@@ -523,7 +514,7 @@ extension FavoriteListViewController {
     }
 
     private func removeSelectedFavoriteItems(_ items: [Any]) {
-        let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
+        let groupNames = items.compactMap { $0 as? String }
         if OAFavoritesHelperBridge.shared().deleteFavoriteItems(items) {
             clearFavoriteSortModes(forGroupNames: groupNames)
         }
@@ -533,7 +524,7 @@ extension FavoriteListViewController {
     }
     
     private func deleteConfirmationTitle(for selectedItems: [Any]) -> String {
-        let foldersCount = selectedItems.filter { $0 is OAFavoriteFolderBridgeItem }.count
+        let foldersCount = selectedItems.filter { $0 is String }.count
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
         let itemsCount = foldersCount + pointsCount
         guard itemsCount > 0 else { return localizedString("shared_string_delete") }
@@ -548,13 +539,16 @@ extension FavoriteListViewController {
     }
 
     private func deleteConfirmationMessage(for selectedItems: [Any]) -> String {
-        let folders = selectedItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
+        let folders = selectedItems.compactMap { $0 as? String }
         let points = selectedItems.compactMap { $0 as? OAFavoritePointBridgeItem }
         if folders.isEmpty {
             return localizedString("favorites_delete_confirmation_message")
         }
 
-        let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
+        let folderPointsCount = folders.reduce(0) { result, fullPath in
+            guard let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath) else { return result }
+            return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
+        }
         let pointsCount = folderPointsCount + points.count
         return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, NumberFormatter.localizedCount(folders.count), pointsCount, NumberFormatter.localizedCount(pointsCount))
     }

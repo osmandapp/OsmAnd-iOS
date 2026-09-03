@@ -176,7 +176,10 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
             )
         }
 
-        for groupName in favoriteGroupNames ?? OAFavoritesHelperBridge.shared().favoriteGroupNames() {
+        let groupNames = favoriteGroupNames ?? FavoriteFolderProvider.shared.getFlattenedFavoriteFolders(includeRoot: true)
+            .filter { !$0.isRoot() || $0.getGroup() != nil }
+            .map { $0.getFullPath() }
+        for groupName in groupNames {
             let displayName = OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: groupName)
             addGroupRow(
                 to: section,

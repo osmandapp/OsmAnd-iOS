@@ -129,10 +129,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>Vai tiešām vēlaties dzēst %2$@ labojumu?</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Vai tiešām vēlaties dzēst %2$@ labojumu?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Vai tiešām vēlaties dzēst %2$@ labojumus?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

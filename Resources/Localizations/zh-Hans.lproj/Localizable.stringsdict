@@ -106,7 +106,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>确定要删除 %2$@ 处编辑吗？</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

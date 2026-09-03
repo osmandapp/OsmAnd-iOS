@@ -120,9 +120,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Ziur zaude %2$@ edizioa ezabatu nahi duzula?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Ziur zaude %2$@ edizio ezabatu nahi dituzula?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

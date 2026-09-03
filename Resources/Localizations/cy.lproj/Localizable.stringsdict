@@ -171,10 +171,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>two</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ olygiad?</string>
+			<key>few</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>many</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

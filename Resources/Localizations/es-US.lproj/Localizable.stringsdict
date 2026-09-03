@@ -132,11 +132,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>¿Confirma que quiere borrar %2$@ edición?</string>
 			<key>many</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>¿Confirma que quiere borrar %2$@ ediciones?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>¿Confirma que quiere borrar %2$@ ediciones?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

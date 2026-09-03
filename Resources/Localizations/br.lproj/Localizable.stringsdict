@@ -162,9 +162,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>two</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>few</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>many</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

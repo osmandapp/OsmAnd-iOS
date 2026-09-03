@@ -134,9 +134,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Da li ste sigurni da želite obrisati %2$@ izmjenu?</string>
+			<key>few</key>
+			<string>Da li ste sigurni da želite obrisati %2$@ izmjene?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Da li ste sigurni da želite obrisati %2$@ izmjena?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

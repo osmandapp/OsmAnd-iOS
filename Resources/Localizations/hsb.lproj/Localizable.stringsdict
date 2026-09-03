@@ -148,9 +148,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>Chceće woprawdźe %2$@ změnu wušmórnyć?</string>
+			<key>two</key>
+			<string>Chceće woprawdźe %2$@ změnje wušmórnyć?</string>
+			<key>few</key>
+			<string>Chceće woprawdźe %2$@ změny wušmórnyć?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>Chceće woprawdźe %2$@ změnow wušmórnyć?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

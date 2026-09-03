@@ -120,9 +120,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>আপনি কি নিশ্চিতভাবে %2$@ সম্পাদনা মুছে ফেলতে চান?</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>আপনি কি নিশ্চিতভাবে %2$@ সম্পাদনা মুছে ফেলতে চান?</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

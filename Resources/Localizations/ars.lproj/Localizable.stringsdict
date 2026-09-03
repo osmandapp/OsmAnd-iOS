@@ -172,17 +172,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
 			<key>one</key>
-			<string>Are you sure you want to delete %2$@ edit?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
 			<key>two</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلين؟</string>
 			<key>few</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلات؟</string>
 			<key>many</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلًا؟</string>
 			<key>other</key>
-			<string>Are you sure you want to delete %2$@ edits?</string>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
 		</dict>
 	</dict>
 	<key>selected_items_count</key>

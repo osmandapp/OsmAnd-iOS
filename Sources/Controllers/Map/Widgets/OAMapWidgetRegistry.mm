@@ -29,6 +29,7 @@
     OAApplicationMode *_cachedAppMode;
     ScreenLayoutMode _cachedScreenLayoutMode;
     BOOL _cachedUseSeparateLayouts;
+    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSArray<OAMapWidgetInfo *> *> *> *_createdWidgetsCache;
 }
 
 - (NSArray<NSString *> *)widgetsVisibilityForAppMode:(OAApplicationMode *)appMode
@@ -61,6 +62,7 @@
     if (self)
     {
         _allWidgets = [NSMutableDictionary dictionary];
+        _createdWidgetsCache = [NSMutableDictionary dictionary];
         _settings = [OAAppSettings sharedManager];
     }
     return self;
@@ -209,6 +211,7 @@
 - (void) clearWidgets
 {
     [_allWidgets removeAllObjects];
+    [_createdWidgetsCache removeAllObjects];
     _cachedAppMode = nil;
     [self notifyWidgetsCleared];
 }
@@ -337,9 +340,23 @@
     {
         return self.getAllWidgets;
     }
-    return [OAWidgetsInitializer createAllControlsWithAppMode:appMode
-                                             screenLayoutMode:screenLayoutMode
-                                         preferenceLayoutMode:layoutMode];
+
+    NSString *layoutModeKey = layoutMode != nil ? layoutMode.stringValue : @"shared";
+    NSMutableDictionary<NSString *, NSArray<OAMapWidgetInfo *> *> *appModeCache = _createdWidgetsCache[appMode.stringKey];
+    NSArray<OAMapWidgetInfo *> *cachedWidgets = appModeCache[layoutModeKey];
+    if (cachedWidgets != nil)
+        return cachedWidgets;
+
+    NSArray<OAMapWidgetInfo *> *createdWidgets = [OAWidgetsInitializer createAllControlsWithAppMode:appMode
+                                                                                   screenLayoutMode:screenLayoutMode
+                                                                               preferenceLayoutMode:layoutMode];
+    if (appModeCache == nil)
+    {
+        appModeCache = [NSMutableDictionary dictionary];
+        _createdWidgetsCache[appMode.stringKey] = appModeCache;
+    }
+    appModeCache[layoutModeKey] = createdWidgets;
+    return createdWidgets;
 }
 
 - (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
@@ -473,6 +490,7 @@
 
 - (void) registerAllControls
 {
+    [_createdWidgetsCache removeAllObjects];
     OAApplicationMode *appMode = _settings.applicationMode.get;
     ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:appMode];
     NSArray<OAMapWidgetInfo *> *infos = [OAWidgetsInitializer createAllControlsWithAppMode:appMode screenLayoutMode:screenLayoutMode];

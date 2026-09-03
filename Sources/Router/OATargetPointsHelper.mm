@@ -65,7 +65,9 @@
         _settings = [OAAppSettings sharedManager];
         _listeners = [NSMutableArray array];
         _routingHelper = [OARoutingHelper sharedInstance];
-        _intermediateLookupTokens = [NSMapTable weakToStrongObjectsMapTable];
+        _intermediateLookupTokens = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsWeakMemory | NSPointerFunctionsObjectPointerPersonality
+                                                              valueOptions:NSPointerFunctionsStrongMemory
+                                                                  capacity:0];
 
         [self readFromSettings];
     }

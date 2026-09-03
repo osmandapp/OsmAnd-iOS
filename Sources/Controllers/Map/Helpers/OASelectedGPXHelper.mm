@@ -146,6 +146,9 @@ static NSString *kBackupSuffix = @"_osmand_backup";
         [_operationQueue addOperations:gpxLoadOperations waitUntilFinished:NO];
     
     [self removeInactiveGpxFiles];
+
+    if (_loadingGPXPaths.count == 0)
+        [self startGpxFilesystemReconciliationIfNeeded];
     
     return _loadingGPXPaths.count > 0;
 }
@@ -176,6 +179,13 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 - (void)removeFilePathFromLoadingQueue:(NSString *)filePath
 {
     [_loadingGPXPaths removeObject:filePath];
+    if (_loadingGPXPaths.count == 0)
+        [self startGpxFilesystemReconciliationIfNeeded];
+}
+
+- (void)startGpxFilesystemReconciliationIfNeeded
+{
+    [[OASGpxDbHelper shared] startFilesystemReconciliation];
 }
 
 - (void)completeTrackLoadingForFilePath:(NSString *)absoluteFilePath

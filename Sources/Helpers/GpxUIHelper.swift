@@ -420,6 +420,7 @@ class GpxUIHelper: NSObject {
     static func refreshBarChart(chartView: HorizontalBarChartView,
                                 statistics: OARouteStatistics,
                                 analysis: GpxTrackAnalysis,
+                                calcWithoutGaps: Bool,
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
                                 yLabelsCount: 4,
@@ -432,6 +433,7 @@ class GpxUIHelper: NSObject {
         let barData = buildStatisticChart(chartView: chartView,
                                           routeStatistics: statistics,
                                           analysis: analysis,
+                                          calcWithoutGaps: calcWithoutGaps,
                                           useRightAxis: true,
                                           nightMode: nightMode)
         chartView.data = barData
@@ -836,6 +838,7 @@ class GpxUIHelper: NSObject {
     private static func buildStatisticChart(chartView: HorizontalBarChartView,
                                             routeStatistics: OARouteStatistics,
                                             analysis: GpxTrackAnalysis,
+                                            calcWithoutGaps: Bool,
                                             useRightAxis: Bool,
                                             nightMode: Bool) -> BarChartData {
         let xAxis = chartView.xAxis
@@ -848,7 +851,11 @@ class GpxUIHelper: NSObject {
         } else {
             yAxis = chartView.leftAxis
         }
-        let divX = setupAxisDistance(axisBase: yAxis, meters: Double(analysis.totalDistance))
+        let sourceDistance = Double(routeStatistics.totalDistance)
+        let analysisDistance = Double(calcWithoutGaps ? analysis.totalDistanceWithoutGaps : analysis.totalDistance)
+        let targetDistance = analysisDistance.isFinite && analysisDistance > 0 ? analysisDistance : sourceDistance
+        let distanceScale = sourceDistance.isFinite && sourceDistance > 0 ? targetDistance / sourceDistance : 1
+        let divX = setupAxisDistance(axisBase: yAxis, meters: targetDistance)
         let segments = routeStatistics.elements
         var entries = [BarChartDataEntry]()
         var stacks = Array(repeating: 0 as Double, count: segments?.count ?? 0)
@@ -857,7 +864,7 @@ class GpxUIHelper: NSObject {
         if let segments {
             for i in 0..<stacks.count {
                 let segment = segments[i]
-                stacks[i] = Double(segment.distance) / divX
+                stacks[i] = Double(segment.distance) * distanceScale / divX
                 colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor)
             }
         }

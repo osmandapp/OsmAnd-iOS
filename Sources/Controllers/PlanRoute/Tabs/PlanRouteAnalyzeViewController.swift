@@ -119,6 +119,10 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         cachedState
     }
 
+    private var shouldCalculateWithoutGaps: Bool {
+        dataSource?.analysisData?.calcWithoutGaps ?? false
+    }
+
     private var effectiveYAxisTypes: [NSNumber] {
         let availableTypes = selectedYAxisTypes.filter { number in
             guard let type = GPXDataSetType(rawValue: number.intValue) else { return false }
@@ -260,23 +264,16 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         showMediumSheetViewController(viewController: sheet, isLargeAvailable: true)
     }
 
-    private func dataItem(for gpxFile: GpxFile) -> GpxDataItem? {
-        OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxFile.path))
-    }
-
     private func refreshChart() {
-        guard let data = dataSource?.analysisData,
-              let analysis = data.gpxAnalysis,
-              let gpxFile = data.gpxFile,
+        guard let analysis = dataSource?.analysisData?.gpxAnalysis,
               let chart = chartView else { return }
-        let gpxItem = dataItem(for: gpxFile)
         let (firstType, secondType) = resolvedYAxisTypes()
         GpxUIHelper.refreshLineChart(chartView: chart,
                                      analysis: analysis,
                                      firstType: firstType,
                                      secondType: secondType,
                                      axisType: selectedXAxisType,
-                                     calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
+                                     calcWithoutGaps: shouldCalculateWithoutGaps)
         chartSynchronizer.setPrimaryChart(chart)
     }
 
@@ -292,11 +289,13 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         if let viewportBounds {
             helper.screenBBox = viewportBounds
         }
+        let joinSegments = !data.calcWithoutGaps
         helper.refreshChart(state,
                             fitTrack: viewportBounds != nil,
                             forceFit: false,
                             analysis: analysis,
-                            segment: segment)
+                            segment: segment,
+                            joinSegments: joinSegments)
     }
 
     private func bindChartDelegate(_ chart: BarLineChartViewBase) {
@@ -304,6 +303,9 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func chartSegment(for analysis: GpxTrackAnalysis, gpxFile: GpxFile) -> TrkSegment? {
+        if let segment = gpxFile.getGeneralSegment(), segment.points.count > 0 {
+            return segment
+        }
         if let segment = TrackChartHelper.getTrackSegment(analysis, gpxItem: gpxFile) {
             return segment
         }
@@ -603,9 +605,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     // MARK: - Chart section card
 
     private func makeChartSectionCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
-        guard let data = dataSource?.analysisData,
-              let analysis = data.gpxAnalysis,
-              let gpxFile = data.gpxFile,
+        guard let analysis = dataSource?.analysisData?.gpxAnalysis,
               let cell = dequeueCardCell(tableView, indexPath) else { return UITableViewCell() }
         let card = cell.cardView
 
@@ -626,7 +626,6 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let chart = ElevationChart(frame: .zero)
         chart.translatesAutoresizingMaskIntoConstraints = false
 
-        let gpxItem = dataItem(for: gpxFile)
         let useHours = (analysis.timeSpan / Self.millisecondsPerHour) > 0
         GpxUIHelper.setupElevationChart(chartView: chart,
                                         topOffset: 20,
@@ -641,7 +640,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                      firstType: firstType,
                                      secondType: secondType,
                                      axisType: selectedXAxisType,
-                                     calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxFile, gpxDataItem: gpxItem, overrideIsGeneralTrack: true))
+                                     calcWithoutGaps: shouldCalculateWithoutGaps)
         chart.dragYEnabled = false
         chartView = chart
         bindChartDelegate(chart)
@@ -866,6 +865,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         GpxUIHelper.refreshBarChart(chartView: barChart,
                                     statistics: stat,
                                     analysis: analysis,
+                                    calcWithoutGaps: shouldCalculateWithoutGaps,
                                     nightMode: OAAppSettings.sharedManager().nightMode)
         barChart.dragYEnabled = false
         barChart.extraTopOffset = 0

@@ -220,14 +220,16 @@ final class TrackChartHelper: NSObject {
                                fitTrack: Bool,
                                forceFit: Bool,
                                analysis: GpxTrackAnalysis,
-                               segment: TrkSegment) {
+                               segment: TrkSegment,
+                               joinSegments: Bool) {
         guard let gpxDoc else { return }
         prepareTrackChartPoints(analysis: analysis, segment: segment, gpxDoc: gpxDoc)
         chartHighlightPos = adjustedHighlightPosition(state.selectedX, visibleRange: state.visibleXRange)
         let location = location(at: chartHighlightPos,
                                 axisType: state.axisType,
                                 axisDivisor: state.axisDivisor,
-                                segment: segment)
+                                segment: segment,
+                                joinSegments: joinSegments)
         if let location {
             trackChartPoints?.highlightedPoint = location.coordinate
         }
@@ -380,15 +382,15 @@ final class TrackChartHelper: NSObject {
     private func location(at position: Double,
                           axisType: GPXDataSetAxisType,
                           axisDivisor: Double,
-                          segment: TrkSegment) -> CLLocation? {
+                          segment: TrkSegment,
+                          joinSegments: Bool) -> CLLocation? {
         guard let gpxDoc else { return nil }
-        let gpx = OAGPXDatabase.sharedDb().getGPXItem(gpxDoc.path)
         return GpxUtils.location(at: Float(position),
                                  axisType: axisType,
                                  axisDivisor: axisDivisor,
                                  gpxFile: gpxDoc,
                                  segment: segment,
-                                 joinSegments: gpx?.joinSegments ?? false)
+                                 joinSegments: joinSegments)
     }
 
     private func prepareTrackChartPoints(analysis: GpxTrackAnalysis,

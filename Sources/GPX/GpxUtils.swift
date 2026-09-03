@@ -146,7 +146,7 @@ final class GpxUtils: NSObject {
                                                                      lon2: currPoint.lon)
                         }
                         if passedSegmentsPointsDistance + currPoint.distance >= Double(distanceToPoint)
-                            || abs(passedDistance - Double(distanceToPoint)) < 0.1 {
+                            || passedDistance >= Double(distanceToPoint) {
                             guard let prevPoint,
                                   preciseLocation,
                                   currPoint.distance + passedSegmentsPointsDistance >= Double(distanceToPoint) else {

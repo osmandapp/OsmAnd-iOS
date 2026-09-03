@@ -172,9 +172,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>הקובץ %2$@ מכיל %3$@ מסלול נפרד. יש לבחור את המסלול לייבוא.</string>
+			<key>two</key>
+			<string>הקובץ %2$@ מכיל %3$@ מסלולים נפרדים. יש לבחור את המסלולים לייבוא.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>הקובץ %2$@ מכיל %3$@ מסלולים נפרדים. יש לבחור את המסלולים לייבוא.</string>
 		</dict>
 	</dict>
 </dict>

@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ dosyası %3$@ ayrı yol içeriyor. İçe aktarmak istediğinizi seçin.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ dosyası %3$@ ayrı yol içeriyor. İçe aktarmak istediklerinizi seçin.</string>
 		</dict>
 	</dict>
 </dict>

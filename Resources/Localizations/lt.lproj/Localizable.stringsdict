@@ -188,9 +188,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Faile %2$@ yra %3$@ atskiras kelias. Pasirinkite tą, kurį norite importuoti.</string>
+			<key>few</key>
+			<string>Faile %2$@ yra %3$@ atskiri keliai. Pasirinkite tuos, kuriuos norite importuoti.</string>
+			<key>many</key>
+			<string>Faile %2$@ yra %3$@ atskiro kelio. Pasirinkite tuos, kuriuos norite importuoti.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Faile %2$@ yra %3$@ atskirų kelių. Pasirinkite tuos, kuriuos norite importuoti.</string>
 		</dict>
 	</dict>
 </dict>

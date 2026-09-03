@@ -170,9 +170,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Datoteka %2$@ sadrži %3$@ zasebnu stazu. Odaberite koju želite uvesti.</string>
+			<key>few</key>
+			<string>Datoteka %2$@ sadrži %3$@ zasebne staze. Odaberite koje želite uvesti.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Datoteka %2$@ sadrži %3$@ zasebnih staza. Odaberite koje želite uvesti.</string>
 		</dict>
 	</dict>
 </dict>

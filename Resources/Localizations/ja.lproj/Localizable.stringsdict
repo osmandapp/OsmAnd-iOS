@@ -134,7 +134,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>ファイル %2$@ には %3$@ 件の個別の経路が含まれています。インポートする経路を選択してください。</string>
 		</dict>
 	</dict>
 </dict>

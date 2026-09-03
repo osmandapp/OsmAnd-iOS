@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Afaylu %2$@ igber %3$@ ubrid yemgarraden. Fren wid tebɣiḍ ad tsekcmeḍ.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Afaylu %2$@ igber %3$@ iberdan yemgarraden. Fren wid tebɣiḍ ad tsekcmeḍ.</string>
 		</dict>
 	</dict>
 </dict>

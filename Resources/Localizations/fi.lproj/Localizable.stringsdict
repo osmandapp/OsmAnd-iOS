@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Tiedosto %2$@ sisältää %3$@ erillisen jäljen. Valitse jälki, jonka haluat tuoda.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Tiedosto %2$@ sisältää %3$@ erillistä jälkeä. Valitse jäljet, jotka haluat tuoda.</string>
 		</dict>
 	</dict>
 </dict>

@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ fitxategiak %3$@ arrasto bereizi du. Hautatu inportatu nahi duzuna.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ fitxategiak %3$@ arrasto bereizi ditu. Hautatu inportatu nahi dituzunak.</string>
 		</dict>
 	</dict>
 </dict>

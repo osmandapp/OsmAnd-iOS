@@ -134,7 +134,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Tệp %2$@ chứa %3$@ hành trình riêng biệt. Chọn những hành trình bạn muốn nhập.</string>
 		</dict>
 	</dict>
 </dict>

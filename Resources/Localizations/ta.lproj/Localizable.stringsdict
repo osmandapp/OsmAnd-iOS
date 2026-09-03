@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ கோப்பில் %3$@ தனித் தடம் உள்ளது. இறக்குமதி செய்ய விரும்புவதைத் தேர்வுசெய்க.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ கோப்பில் %3$@ தனித் தடங்கள் உள்ளன. இறக்குமதி செய்ய விரும்புவனவற்றைத் தேர்வுசெய்க.</string>
 		</dict>
 	</dict>
 </dict>

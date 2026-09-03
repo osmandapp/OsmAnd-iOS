@@ -188,13 +188,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Файл %2$@ содержит %3$@ отдельный трек. Выберите тот, который хотите импортировать.</string>
 			<key>few</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Файл %2$@ содержит %3$@ отдельных трека. Выберите те, которые хотите импортировать.</string>
 			<key>many</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Файл %2$@ содержит %3$@ отдельных треков. Выберите те, которые хотите импортировать.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Файл %2$@ содержит %3$@ отдельных треков. Выберите те, которые хотите импортировать.</string>
 		</dict>
 	</dict>
 </dict>

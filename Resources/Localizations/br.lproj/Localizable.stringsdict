@@ -206,9 +206,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>two</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>few</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>many</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
 		</dict>
 	</dict>
 </dict>

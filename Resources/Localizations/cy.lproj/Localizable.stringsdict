@@ -219,10 +219,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch yr un rydych am ei fewnforio.</string>
+			<key>two</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ drac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>few</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ thrac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>many</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ thrac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
 		</dict>
 	</dict>
 </dict>

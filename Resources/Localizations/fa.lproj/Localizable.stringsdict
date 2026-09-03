@@ -150,9 +150,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>پرونده %2$@ شامل %3$@ رد مجزا است. مواردی را که می‌خواهید درون‌برد کنید انتخاب کنید.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>پرونده %2$@ شامل %3$@ رد مجزا است. مواردی را که می‌خواهید درون‌برد کنید انتخاب کنید.</string>
 		</dict>
 	</dict>
 </dict>

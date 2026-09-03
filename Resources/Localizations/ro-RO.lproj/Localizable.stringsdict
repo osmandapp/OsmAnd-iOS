@@ -170,11 +170,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Fișierul %2$@ conține %3$@ traseu separat. Selectați-l pe cel pe care doriți să îl importați.</string>
 			<key>few</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Fișierul %2$@ conține %3$@ trasee separate. Selectați-le pe cele pe care doriți să le importați.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Fișierul %2$@ conține %3$@ de trasee separate. Selectați-le pe cele pe care doriți să le importați.</string>
 		</dict>
 	</dict>
 </dict>

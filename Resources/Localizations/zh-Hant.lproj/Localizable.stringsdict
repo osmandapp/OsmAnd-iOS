@@ -134,7 +134,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>檔案 %2$@ 包含 %3$@ 個獨立軌跡。請選取要匯入的軌跡。</string>
 		</dict>
 	</dict>
 </dict>

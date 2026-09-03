@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Skráin %2$@ inniheldur %3$@ aðskilinn feril. Veldu þann sem þú vilt flytja inn.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Skráin %2$@ inniheldur %3$@ aðskilda ferla. Veldu þá sem þú vilt flytja inn.</string>
 		</dict>
 	</dict>
 </dict>

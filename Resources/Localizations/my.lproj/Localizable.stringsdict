@@ -133,10 +133,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ ဖိုင်တွင် သီးခြား လမ်းကြောင်း %3$@ ခု ပါဝင်သည်။ တင်သွင်းလိုသည်များကို ရွေးချယ်ပါ။</string>
 		</dict>
 	</dict>
 </dict>

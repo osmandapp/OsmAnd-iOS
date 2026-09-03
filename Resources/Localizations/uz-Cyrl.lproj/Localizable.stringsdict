@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ файлида %3$@ алоҳида трек бор. Импорт қилмоқчи бўлганингизни танланг.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>%2$@ файлида %3$@ алоҳида трек бор. Импорт қилмоқчи бўлганларингизни танланг.</string>
 		</dict>
 	</dict>
 </dict>

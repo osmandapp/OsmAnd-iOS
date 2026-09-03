@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Skedari %2$@ përmban %3$@ gjurmë të veçantë. Zgjidhni atë që doni të importoni.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Skedari %2$@ përmban %3$@ gjurmë të veçanta. Zgjidhni ato që doni të importoni.</string>
 		</dict>
 	</dict>
 </dict>

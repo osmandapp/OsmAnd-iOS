@@ -188,9 +188,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitu čaru. Wubjerće tu, kotruž chceće importować.</string>
+			<key>two</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitej čarje. Wubjerće te, kotrež chceće importować.</string>
+			<key>few</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebite čary. Wubjerće te, kotrež chceće importować.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitych čarow. Wubjerće te, kotrež chceće importować.</string>
 		</dict>
 	</dict>
 </dict>

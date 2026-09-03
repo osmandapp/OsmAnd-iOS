@@ -165,10 +165,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
+			<key>zero</key>
+			<string>Failā %2$@ ir %3$@ atsevišķu treku. Atzīmējiet tos, kurus vēlaties importēt.</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Failā %2$@ ir %3$@ atsevišķs treks. Atzīmējiet to, kuru vēlaties importēt.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Failā %2$@ ir %3$@ atsevišķi treki. Atzīmējiet tos, kurus vēlaties importēt.</string>
 		</dict>
 	</dict>
 </dict>

@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Fail %2$@ sisaldab %3$@ eraldi rada. Vali see, mida soovid importida.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Fail %2$@ sisaldab %3$@ eraldi rada. Vali need, mida soovid importida.</string>
 		</dict>
 	</dict>
 </dict>

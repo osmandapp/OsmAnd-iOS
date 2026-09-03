@@ -168,11 +168,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>O arquivo %2$@ contém %3$@ trilha separada. Selecione a que deseja importar.</string>
 			<key>many</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>O arquivo %2$@ contém %3$@ trilhas separadas. Selecione as que deseja importar.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>O arquivo %2$@ contém %3$@ trilhas separadas. Selecione as que deseja importar.</string>
 		</dict>
 	</dict>
 </dict>

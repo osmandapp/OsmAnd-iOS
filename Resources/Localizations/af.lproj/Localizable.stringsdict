@@ -152,9 +152,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Die lêer %2$@ bevat %3$@ aparte spoor. Kies die een wat jy wil invoer.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Die lêer %2$@ bevat %3$@ aparte spore. Kies dié wat jy wil invoer.</string>
 		</dict>
 	</dict>
 </dict>

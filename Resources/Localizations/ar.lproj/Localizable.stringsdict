@@ -220,17 +220,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
 			<key>two</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسارين منفصلين. حدد ما تريد استيراده.</string>
 			<key>few</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسارات منفصلة. حدد ما تريد استيراده.</string>
 			<key>many</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسارًا منفصلًا. حدد ما تريد استيراده.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
 		</dict>
 	</dict>
 </dict>

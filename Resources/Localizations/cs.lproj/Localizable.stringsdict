@@ -188,13 +188,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Soubor %2$@ obsahuje %3$@ samostatnou stopu. Vyberte tu, kterou chcete importovat.</string>
 			<key>few</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Soubor %2$@ obsahuje %3$@ samostatné stopy. Vyberte ty, které chcete importovat.</string>
 			<key>many</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Soubor %2$@ obsahuje %3$@ samostatné stopy. Vyberte ty, které chcete importovat.</string>
 			<key>other</key>
-			<string>Number of separate tracks in the file %2$@: %3$@. Select the tracks you want to import.</string>
+			<string>Soubor %2$@ obsahuje %3$@ samostatných stop. Vyberte ty, které chcete importovat.</string>
 		</dict>
 	</dict>
 </dict>

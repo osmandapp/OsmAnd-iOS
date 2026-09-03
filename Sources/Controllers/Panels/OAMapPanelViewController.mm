@@ -1422,7 +1422,7 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
-    if (self.isNewContextMenuDisabled)
+    if (!self.canPresentNewContextMenu)
         return;
 
     __weak __typeof(self) weakSelf = self;
@@ -1435,7 +1435,7 @@ typedef enum
 
 - (void)presentContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
-    if (self.isNewContextMenuDisabled)
+    if (!self.canPresentNewContextMenu)
         return;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
@@ -1508,9 +1508,14 @@ typedef enum
     || _activeTargetType == OATargetMapModeParametersSettings;
 }
 
+- (BOOL)canPresentNewContextMenu
+{
+    return !self.isNewContextMenuDisabled || _activeTargetType == OATargetGPX;
+}
+
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
 {
-    if (self.isNewContextMenuDisabled)
+    if (!self.canPresentNewContextMenu)
         return;
 
     __weak __typeof(self) weakSelf = self;
@@ -1523,7 +1528,7 @@ typedef enum
 
 - (void)presentContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
 {
-    if (self.isNewContextMenuDisabled)
+    if (!self.canPresentNewContextMenu)
         return;
 
     NSLog(@"[ContextMenu] Target setup BEGIN targetType=%ld object=%@",
@@ -1666,6 +1671,9 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
 {
+    if (!self.canPresentNewContextMenu)
+        return;
+
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1676,6 +1684,9 @@ typedef enum
 
 - (void)presentContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
 {
+    if (!self.canPresentNewContextMenu)
+        return;
+
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
@@ -3174,13 +3185,13 @@ typedef enum
                         state:(OATrackMenuViewControllerState *)state
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
-    BOOL shouldClearNavControllerHistory = _scrollableHudViewController && !state.openedFromTrackMenu;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
 
+        BOOL shouldClearNavControllerHistory = strongSelf->_scrollableHudViewController && !state.openedFromTrackMenu;
         if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
 
@@ -3198,23 +3209,23 @@ typedef enum
 {
     __weak __typeof(self) weakSelf = self;
     [_contextMenuPresentationCoordinator processPendingPresentationWithDismissHandlers:@[
-        ^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
             [strongSelf->_scrollableHudViewController hide:YES duration:0.2 onComplete:completion];
             return YES;
-        },
-        ^BOOL(dispatch_block_t completion) {
+        }],
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMultiMenuView.superview)
                 return NO;
 
             [strongSelf.targetMultiMenuView hide:YES duration:0.2 onComplete:completion];
             return YES;
-        },
-        ^BOOL(dispatch_block_t completion) {
+        }],
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
@@ -3222,7 +3233,7 @@ typedef enum
             strongSelf->_prevScrollableHudViewController = nil;
             [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
             return YES;
-        },
+        }],
     ]];
 }
 

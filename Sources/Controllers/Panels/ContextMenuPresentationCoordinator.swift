@@ -7,10 +7,26 @@
 //
 
 @objcMembers
+final class ContextMenuDismissHandler: NSObject {
+
+    typealias Completion = @convention(block) () -> Void
+    typealias Handler = @convention(block) (@escaping Completion) -> Bool
+
+    private let handler: Handler
+
+    @objc(initWithHandler:) init(handler: @escaping Handler) {
+        self.handler = handler
+    }
+
+    func dismiss(completion: @escaping Completion) -> Bool {
+        handler(completion)
+    }
+}
+
+@objcMembers
 final class ContextMenuPresentationCoordinator: NSObject {
 
-    typealias DismissCompletion = @convention(block) () -> Void
-    typealias DismissHandler = @convention(block) (@escaping DismissCompletion) -> Bool
+    typealias DismissCompletion = ContextMenuDismissHandler.Completion
 
     var isTransitionInProgress: Bool {
         transitionInProgressValue
@@ -24,17 +40,11 @@ final class ContextMenuPresentationCoordinator: NSObject {
     }
 
     @nonobjc
-    func processPendingPresentation(with dismissHandlers: [DismissHandler]) {
+    func processPendingPresentation(with dismissHandlers: [ContextMenuDismissHandler]) {
         processPendingPresentation(withDismissHandlers: dismissHandlers)
     }
 
-    @objc(processPendingPresentationWithDismissHandlers:)
-    func processPendingPresentation(withDismissHandlers dismissHandlers: NSArray) {
-        let handlers = dismissHandlers.map { unsafeBitCast($0 as AnyObject, to: DismissHandler.self) }
-        processPendingPresentation(withDismissHandlers: handlers)
-    }
-
-    private func processPendingPresentation(withDismissHandlers dismissHandlers: [DismissHandler]) {
+    func processPendingPresentation(withDismissHandlers dismissHandlers: [ContextMenuDismissHandler]) {
         guard !transitionInProgressValue, let pendingPresentation else {
             return
         }
@@ -55,7 +65,7 @@ final class ContextMenuPresentationCoordinator: NSObject {
                 self.processPendingPresentation(withDismissHandlers: dismissHandlers)
             }
 
-            if dismissHandler(completion) {
+            if dismissHandler.dismiss(completion: completion) {
                 transitionInProgressValue = true
                 if completedSynchronously {
                     transitionInProgressValue = false

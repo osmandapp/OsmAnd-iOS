@@ -29,14 +29,14 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         var dismissCount = 0
         var presentedMenus: [String] = []
 
-        let dismissHandler: ContextMenuPresentationCoordinator.DismissHandler = { completion in
+        let dismissHandler = ContextMenuDismissHandler(handler: { completion in
             if dismissCount == 0 {
                 dismissCount += 1
                 pendingDismissalCompletion = completion
                 return true
             }
             return false
-        }
+        })
 
         coordinator.enqueuePresentation {
             presentedMenus.append("first")
@@ -67,14 +67,14 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         var pendingDismissalCompletion: (() -> Void)?
         var presentationCount = 0
 
-        let dismissHandler: ContextMenuPresentationCoordinator.DismissHandler = { completion in
+        let dismissHandler = ContextMenuDismissHandler(handler: { completion in
             if remainingMenus > 0 {
                 remainingMenus -= 1
                 pendingDismissalCompletion = completion
                 return true
             }
             return false
-        }
+        })
 
         coordinator.enqueuePresentation {
             presentationCount += 1
@@ -100,14 +100,14 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         var remainingMenus = 1
         var presentationCount = 0
 
-        let dismissHandler: ContextMenuPresentationCoordinator.DismissHandler = { completion in
+        let dismissHandler = ContextMenuDismissHandler(handler: { completion in
             if remainingMenus > 0 {
                 remainingMenus -= 1
                 completion()
                 return true
             }
             return false
-        }
+        })
 
         coordinator.enqueuePresentation {
             presentationCount += 1

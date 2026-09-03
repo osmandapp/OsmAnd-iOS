@@ -79,7 +79,7 @@ final class ContextMenuPresentationUITests: XCTestCase {
             .matching(identifier: AccessibilityIdentifier.ContextMenu.container)
             .firstMatch
             .exists {
-            XCTFail("Expected the queчued context menu presentation fixture to show the latest synthetic target.")
+            XCTFail("Expected the queue context menu presentation fixture to show the latest synthetic target.")
         }
         assertNoOverlappingContextMenus()
     }

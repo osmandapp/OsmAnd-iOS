@@ -3187,7 +3187,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"ltr_or_rtl_combine_via_of" = "%ld z %ld";
+"ltr_or_rtl_combine_via_of" = "%@ z %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "osmand_live" = "OsmAnd Live";
 "edit_tilesource_url_to_load" = "URL adresa";

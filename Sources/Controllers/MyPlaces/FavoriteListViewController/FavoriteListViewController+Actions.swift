@@ -535,13 +535,15 @@ extension FavoriteListViewController {
     private func deleteConfirmationTitle(for selectedItems: [Any]) -> String {
         let foldersCount = selectedItems.filter { $0 is OAFavoriteFolderBridgeItem }.count
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
+        let itemsCount = foldersCount + pointsCount
+        guard itemsCount > 0 else { return localizedString("shared_string_delete") }
 
         if foldersCount > 0 && pointsCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount, NumberFormatter.localizedCount(foldersCount))
         } else if pointsCount > 0 && foldersCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount)
+            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount, NumberFormatter.localizedCount(pointsCount))
         } else {
-            return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("items_delete_confirmation_title", comment: ""), itemsCount, NumberFormatter.localizedCount(itemsCount))
         }
     }
 
@@ -554,7 +556,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
-        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, pointsCount)
+        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, NumberFormatter.localizedCount(folders.count), pointsCount, NumberFormatter.localizedCount(pointsCount))
     }
     
     private func openPickerToImport() {

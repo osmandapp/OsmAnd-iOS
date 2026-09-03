@@ -104,7 +104,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         if usesSidePanelLayout {
             let minX = min(bounds.maxX, bounds.minX + sidePanelMapInset)
             let maxX = max(minX, bounds.maxX - view.safeAreaInsets.right)
-            return CGRect(x: minX, y: bounds.minY, width: maxX - minX, height: bounds.height)
+            let minY = bounds.minY + getNavbarHeight()
+            let bottomInset = sidePanelMapControlsReservedHeight(for: bounds.size)
+            let maxY = max(minY, bounds.maxY - bottomInset)
+            return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
         }
         let minY = bounds.minY + getNavbarHeight()
         let sheetHeight = height(for: sheetState)

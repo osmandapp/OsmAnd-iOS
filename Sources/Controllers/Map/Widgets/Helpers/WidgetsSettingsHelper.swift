@@ -25,6 +25,14 @@ class WidgetsSettingsHelper: NSObject {
             : nil
     }
 
+    private var allPreferenceLayoutModes: [NSNumber?] {
+        var preferenceLayoutModes: [NSNumber?] = [nil]
+        ScreenLayoutMode.allCases.forEach {
+            preferenceLayoutModes.append(NSNumber(value: $0.rawValue))
+        }
+        return preferenceLayoutModes
+    }
+
     init(appMode: OAApplicationMode, layoutMode: ScreenLayoutMode) {
         self.appMode = appMode
         self.layoutMode = layoutMode
@@ -44,25 +52,29 @@ class WidgetsSettingsHelper: NSObject {
 
     func resetConfigureScreenSettings() {
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
-            let currentLayoutMode = preferenceLayoutMode
-            let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                        filterModes: Int(kWidgetModeMatchingPanels),
-                                                        panels: WidgetsPanel.values,
-                                                        layoutMode: currentLayoutMode)
-            for widgetInfo in allWidgetInfos! {
-                widgetRegistry.enableDisableWidget(for: appMode,
-                                                   widgetInfo: widgetInfo as? MapWidgetInfo,
-                                                   enabled: nil,
-                                                   recreateControls: false)
+            for preferenceLayoutMode in allPreferenceLayoutModes {
+                if let allWidgetInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                               filterModes: Int(kWidgetModeMatchingPanels),
+                                                               panels: WidgetsPanel.values,
+                                                               layoutMode: preferenceLayoutMode) {
+                    for widgetInfo in allWidgetInfos {
+                        widgetRegistry.enableDisableWidget(for: appMode,
+                                                           widgetInfo: widgetInfo as? MapWidgetInfo,
+                                                           enabled: nil,
+                                                           recreateControls: false)
+                    }
+                }
+                resetWidgetPreferences(preferenceLayoutMode)
+                settings.transparentWidgets(preferenceLayoutMode).resetMode(toDefault: appMode)
             }
-            resetWidgetPreferences(currentLayoutMode)
 
-            ScreenElementsMode.allCases.forEach {
-                settings.panelsLayoutMode(layoutMode.rawValue,
-                                          screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
+            ScreenLayoutMode.allCases.forEach { screenLayoutMode in
+                ScreenElementsMode.allCases.forEach {
+                    settings.panelsLayoutMode(screenLayoutMode.rawValue,
+                                              screenElementsMode: $0.rawValue).resetMode(toDefault: appMode)
+                }
             }
             settings.useSeparateLayouts.resetMode(toDefault: appMode)
-            settings.transparentWidgets(currentLayoutMode).resetMode(toDefault: appMode)
             settings.showDistanceRuler.resetMode(toDefault: appMode)
             settings.distanceByTapTextSize.resetMode(toDefault: appMode)
             settings.positionPlacementOnMap.resetMode(toDefault: appMode)
@@ -84,18 +96,19 @@ class WidgetsSettingsHelper: NSObject {
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             copyPrefFromAppMode(pref: settings.useSeparateLayouts, fromAppMode: fromAppMode)
-            ScreenElementsMode.allCases.forEach {
-                let preferenceLayoutMode = $0.usesSeparateLayouts
-                    ? NSNumber(value: layoutMode.rawValue)
-                    : nil
+            allPreferenceLayoutModes.forEach { preferenceLayoutMode in
                 copyWidgetsForAllPanels(fromAppMode: fromAppMode,
                                         screenLayoutMode: preferenceLayoutMode,
                                         widgetParams: widgetParams)
-                copyPrefFromAppMode(pref: settings.panelsLayoutMode(layoutMode.rawValue,
-                                                                    screenElementsMode: $0.rawValue),
-                                    fromAppMode: fromAppMode)
                 copyPrefFromAppMode(pref: settings.transparentWidgets(preferenceLayoutMode),
                                     fromAppMode: fromAppMode)
+            }
+            ScreenLayoutMode.allCases.forEach { screenLayoutMode in
+                ScreenElementsMode.allCases.forEach {
+                    copyPrefFromAppMode(pref: settings.panelsLayoutMode(screenLayoutMode.rawValue,
+                                                                        screenElementsMode: $0.rawValue),
+                                        fromAppMode: fromAppMode)
+                }
             }
             copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
             copyPrefFromAppMode(pref: settings.distanceByTapTextSize, fromAppMode: fromAppMode)
@@ -284,8 +297,11 @@ class WidgetsSettingsHelper: NSObject {
         let duplicateWidgetId = WidgetType.getDuplicateWidgetId(widgetType: widgetType)
         let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, widgetParams: widgetParams)
         if let duplicateWidget {
+            let widgetScreenLayoutMode = screenLayoutMode
+                .flatMap { ScreenLayoutMode(rawValue: $0.int32Value) }
+                ?? layoutMode
             let creator = WidgetInfoCreator(appMode: appMode,
-                                            screenLayoutMode: layoutMode,
+                                            screenLayoutMode: widgetScreenLayoutMode,
                                             preferenceLayoutMode: screenLayoutMode)
             settings.customWidgetKeys(screenLayoutMode).add(duplicateWidgetId, appMode: appMode)
             let duplicateWidgetInfo = creator.createCustomWidgetInfo(widgetId: duplicateWidgetId, widget: duplicateWidget, widgetType: widgetType, panel: panel)

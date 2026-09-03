@@ -4488,3 +4488,11 @@
 "send_current_app_log_descr" = "Desde que o aplicativo foi iniciado";
 "plan_route_change_for_whole_segment" = "Alteração para todo o segmento";
 "plan_route_change_for_whole_track" = "Alteração para toda a trilha";
+"plan_route_avoid_roads" = "Evite estradas";
+"osm_edits_empty_state_title" = "Não há edições pendentes no mapa";
+"osm_edits_empty_state_description" = "As alterações feitas no OsmAnd aparecerão aqui antes de serem enviadas para o OpenStreetMap";
+"message_graph_will_be_available_after_recalculation" = "Por favor, espere. \nO gráfico estará disponível após o recálculo da rota.";
+"plan_route_graph_available_after_recalculation" = "O gráfico estará disponível após o recálculo da rota.";
+"use_nearby_roads" = "Usar estradas próximas";
+"msg_favorites_skipped_as_existing" = "Os pontos favoritos (%d) foram ignorados como já existentes.";
+"astro_search_visible_all_night" = "Visível a noite toda";

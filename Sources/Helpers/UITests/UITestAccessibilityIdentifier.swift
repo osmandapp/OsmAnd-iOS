@@ -8,9 +8,6 @@
 
 @objcMembers
 final class UITestAccessibilityIdentifier: NSObject {
-    static var firstUsageSkipDownloadButton: String {
-        "first_usage_skip_download_button"
-    }
 
     enum ContextMenu {
         static let container = "context_menu_container"

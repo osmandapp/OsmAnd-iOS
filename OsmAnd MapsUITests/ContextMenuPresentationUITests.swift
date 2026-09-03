@@ -20,7 +20,6 @@ final class ContextMenuPresentationUITests: XCTestCase {
     }
 
     private enum AccessibilityIdentifier {
-        static let firstUsageSkipDownloadButton = "first_usage_skip_download_button"
 
         enum ContextMenu {
             static let container = "context_menu_container"
@@ -62,7 +61,6 @@ final class ContextMenuPresentationUITests: XCTestCase {
         app.launchArguments += [LaunchArgument.ContextMenu.presentationRace]
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
-        dismissStartupIfNeeded()
 
         let stateMarker = app.descendants(matching: .any)
             .matching(identifier: AccessibilityIdentifier.ContextMenu.presentationState)
@@ -126,14 +124,6 @@ final class ContextMenuPresentationUITests: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: 30)
         if result != .completed {
             XCTFail("Expected context menu presentation history to contain \(title).", file: file, line: line)
-        }
-    }
-
-    private func dismissStartupIfNeeded() {
-        let skipDownloadButton = app.buttons[AccessibilityIdentifier.firstUsageSkipDownloadButton]
-        if skipDownloadButton.waitForExistence(timeout: Timeout.startupPrompt) {
-            skipDownloadButton.tap()
-            XCTAssertTrue(skipDownloadButton.waitUntilHidden(timeout: Timeout.transition))
         }
     }
 

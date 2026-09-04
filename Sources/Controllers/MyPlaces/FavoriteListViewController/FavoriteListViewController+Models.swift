@@ -144,9 +144,9 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
         fullPath = folder.getFullPath()
         let group = folder.getGroup()
         self.group = group
-        if let group {
-            lastModified = group.lastModifiedDate
-            subtreePointsCount = Int(group.subtreePointsCount)
+        if folder.isRoot() {
+            lastModified = group?.lastModifiedDate
+            subtreePointsCount = folder.getExactPointsCount()
         } else {
             let timestamp = folder.getSubtreeLastModified()
             lastModified = timestamp > 0 ? Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000.0) : nil

@@ -125,8 +125,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
             NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
             NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
             long long fileSize = [fileAttributes[NSFileSize] longLongValue];
-            NSUInteger subtreePointsCount = [self subtreePointsCountForGroupName:groupName groups:groups];
-            [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize subtreePointsCount:subtreePointsCount]];
+            [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize]];
         }];
 
         _favoriteFoldersCache = [folders copy];

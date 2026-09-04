@@ -151,10 +151,40 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
 
     @objc private func onDonePressed() {
         if selectedMode != initialMode {
-            settings.useSeparateLayouts.set(selectedMode.usesSeparateLayouts, mode: appMode)
+            OAAppSettings.performBatchedPreferenceNotifications { [self] in
+                if initialMode == .shared && selectedMode == .independent {
+                    copySharedWidgetsIfNeeded()
+                }
+                settings.useSeparateLayouts.set(selectedMode.usesSeparateLayouts, mode: appMode)
+            }
             OARootViewController.instance().mapPanel.recreateAllControls()
             delegate?.onSettingsChanged()
         }
         dismiss(animated: true)
+    }
+
+    private func copySharedWidgetsIfNeeded() {
+        let sourceVisibility = settings.mapInfoControls(nil)
+        let sourceCustomKeys = settings.customWidgetKeys(nil)
+        for screenLayoutMode in ScreenLayoutMode.allCases {
+            let layoutMode = NSNumber(value: screenLayoutMode.rawValue)
+            let targetVisibility = settings.mapInfoControls(layoutMode)
+            if sourceVisibility.isSet(for: appMode), !targetVisibility.isSet(for: appMode) {
+                targetVisibility.set(sourceVisibility.get(appMode), mode: appMode)
+            }
+
+            let targetCustomKeys = settings.customWidgetKeys(layoutMode)
+            if sourceCustomKeys.isSet(for: appMode), !targetCustomKeys.isSet(for: appMode) {
+                targetCustomKeys.set(sourceCustomKeys.get(appMode), mode: appMode)
+            }
+
+            for panel in WidgetsPanel.values {
+                let sourceOrder = settings.widgetPanelOrder(panel, screenLayoutMode: nil)
+                let targetOrder = settings.widgetPanelOrder(panel, screenLayoutMode: layoutMode)
+                if sourceOrder.isSet(for: appMode), !targetOrder.isSet(for: appMode) {
+                    targetOrder.set(sourceOrder.get(appMode), mode: appMode)
+                }
+            }
+        }
     }
 }

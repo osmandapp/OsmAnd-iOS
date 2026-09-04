@@ -11152,6 +11152,23 @@
 			path = CrashDiagnostics;
 			sourceTree = "<group>";
 		};
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
 			isa = PBXGroup;
 			children = (
@@ -14480,23 +14497,6 @@
 				DA5A807F26C563A500F274C7 /* OptionsPanel.xib */,
 			);
 			path = XibViews;
-			sourceTree = "<group>";
-		};
-		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
-			);
-			path = AppEnvironment;
-			sourceTree = "<group>";
-		};
-		C0DA57182FE9000200C0DA57 /* UITests */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
-				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
-			);
-			path = UITests;
 			sourceTree = "<group>";
 		};
 		DA5A808E26C563A500F274C7 /* Helpers */ = {

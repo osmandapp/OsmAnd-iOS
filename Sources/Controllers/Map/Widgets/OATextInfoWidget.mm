@@ -697,11 +697,6 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
     
-    if (![[self getWidgetPanel] isPanelVertical])
-    {
-        self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
-        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
-    }
 }
 
 - (BOOL)isEnabledTextInfoComponents

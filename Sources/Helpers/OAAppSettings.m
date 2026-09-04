@@ -301,6 +301,7 @@ static NSString * const cycleRoutesParameterKey = @"cycleRoutesParameter";
 static NSString * const mountainBikeRoutesParameterKey = @"mountainBikeRoutesParameter";
 static NSString * const mapManuallyRotatingAngleKey = @"mapManuallyRotatingAngle";
 static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
+static NSString * const keepScreenOnKey = @"keep_screen_on";
 static NSString * const detailedTrackGuidanceKey = @"detailedTrackGuidance";
 static NSString * const gpxApproximationDistanceKey = @"gpxApproximationDistance";
 static NSString * const activeMarkerKey = @"activeMarkerKey";
@@ -6885,6 +6886,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
+
+        _keepScreenOn = [[OACommonInteger withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeSystemDefault] makeProfile];
+        [_profilePreferences setObject:_keepScreenOn forKey:keepScreenOnKey];
         
         _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];
         [_profilePreferences setObject:_detailedTrackGuidance forKey:@"detailed_track_guidance"];
@@ -7469,7 +7473,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     OAApplicationMode *nextAppMode = [self getSwitchedAppMode:appMode next:next];
     if (appMode != nextAppMode)
     {
-        [_applicationMode set:nextAppMode];
+        [self setApplicationModePref:nextAppMode];
         [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"application_profile_changed"), [nextAppMode toHumanString]]
                        details:@""
                       duration:4

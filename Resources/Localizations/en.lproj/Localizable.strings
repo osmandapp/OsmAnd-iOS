@@ -4346,6 +4346,9 @@
 "map_orientation_landscape" = "Landscape";
 "map_screen_orientation" = "Screen orientation";
 
+"keep_screen_on" = "Keep screen on";
+"during_navigation" = "During navigation";
+
 "change_appearance" = "Change appearance";
 "default_appearance" = "Default appearance";
 "default_appearance_description" = "These settings apply to all new tracks added to this folder.";

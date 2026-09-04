@@ -73,6 +73,13 @@ typedef NS_ENUM(NSInteger, EOAScreenOrientation)
     EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 };
 
+typedef NS_ENUM(NSInteger, EOAKeepScreenOnMode)
+{
+    EOAKeepScreenOnModeSystemDefault = 0,
+    EOAKeepScreenOnModeDuringNavigation,
+    EOAKeepScreenOnModeAlways
+};
+
 typedef NS_ENUM(NSInteger, EOATrackApproximationType)
 {
     EOATrackApproximationManual = 0,
@@ -1001,6 +1008,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
+@property (nonatomic) OACommonInteger *keepScreenOn;
 @property (nonatomic) OACommonInteger *detailedTrackGuidance;
 @property (nonatomic) OACommonInteger *gpxApproximationDistance;
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center

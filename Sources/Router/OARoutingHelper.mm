@@ -31,6 +31,7 @@
 #import "OARTargetPoint.h"
 #import "OAResultMatcher.h"
 #import "OAApplicationMode.h"
+#import "OAAutoObserverProxy.h"
 #import "CLLocation+Extension.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
@@ -55,6 +56,7 @@ static const CLLocationSpeed kCarDisconnectPauseSpeedMetersPerSecond = 1.0;
 @property (nonatomic) OARouteCalculationResult *route;
 
 - (void) showMessage:(NSString *)msg;
+- (void)onApplicationModeChanged;
 
 @end
 
@@ -87,6 +89,7 @@ static const CLLocationSpeed kCarDisconnectPauseSpeedMetersPerSecond = 1.0;
     BOOL _deviceHasBearing;
     
     OATransportRoutingHelper *_transportRoutingHelper;
+    OAAutoObserverProxy *_applicationModeChangedObserver;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -110,8 +113,16 @@ static BOOL _isDeviatedFromRoute = false;
         [self setAppMode:_settings.applicationMode.get];
         _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
         _routingModeChangedObservable  = [[OAObservable alloc] init];
+        _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onApplicationModeChanged)
+                                                                    andObserve:_app.applicationModeChangedObservable];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_applicationModeChangedObserver detach];
 }
 
 + (OARoutingHelper *) sharedInstance
@@ -131,6 +142,7 @@ static BOOL _isDeviatedFromRoute = false;
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
     [_routingModeChangedObservable notifyEventWithKey:mode];
+    [self updateScreenTurnOff];
 }
 
 - (OAApplicationMode *) getAppMode
@@ -240,6 +252,24 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [self updateScreenTurnOff];
+}
+
+- (void)updateScreenTurnOff
+{
+    OAApplicationMode *appMode = _isFollowingMode ? _mode : _settings.applicationMode.get;
+    EOAKeepScreenOnMode keepScreenOnMode = appMode != nil
+               ? (EOAKeepScreenOnMode)[_settings.keepScreenOn get:appMode]
+               : EOAKeepScreenOnModeSystemDefault;
+    BOOL keepScreenOn = !_app.isInBackgroundOnDevice
+            && (keepScreenOnMode == EOAKeepScreenOnModeAlways
+                || (keepScreenOnMode == EOAKeepScreenOnModeDuringNavigation && _isFollowingMode));
+    [_app allowScreenTurnOff:!keepScreenOn];
+}
+
+- (void)onApplicationModeChanged
+{
+    [self updateScreenTurnOff];
 }
 
 - (BOOL) isRoutePlanningMode

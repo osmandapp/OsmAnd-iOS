@@ -18,6 +18,8 @@
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAEditGroupViewController.h"
+#import "OAQuickActionAppearanceViewController.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OASimpleTableViewCell.h"
@@ -48,7 +50,7 @@
 
 #define KEY_MESSAGE @"message"
 
-@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
+@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate, OAEditorDelegate>
 
 @end
 
@@ -65,6 +67,7 @@
 
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
+    OAQuickActionAppearanceViewController *_appearanceController;
     
     UIView *_tableHeaderView;
     OAKeyboardHintBar *_hintView;
@@ -449,11 +452,16 @@
                 cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.height / 2;
                 cell.leftIconView.backgroundColor = color.color;
             }
+            else if ([item[@"key"] isEqualToString:@"category_appearance"])
+            {
+                cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.height / 2;
+                cell.leftIconView.backgroundColor = item[@"appearanceColor"];
+            }
             else
             {
                 [cell leftIconVisibility:NO];
             }
-            
+
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
@@ -614,6 +622,15 @@
         _colorController = [[OAEditColorViewController alloc] initWithColor:favCol.color];
         _colorController.delegate = self;
         [self showViewController:_colorController];
+        [self.view endEditing:YES];
+    }
+    else if ([item[@"key"] isEqualToString:@"category_appearance"])
+    {
+        _appearanceController = [[OAQuickActionAppearanceViewController alloc] initWithColor:item[@"appearanceColor"]
+                                                                                       iconName:item[@"appearanceIcon"]
+                                                                             backgroundIconName:item[@"appearanceBackgroundIcon"]];
+        _appearanceController.delegate = self;
+        [self showViewController:_appearanceController];
         [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"key_category"])
@@ -1093,6 +1110,60 @@
     }
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
     [self.tableView reloadData];
+}
+
+#pragma mark - OAEditorDelegate
+
+- (void)addNewItemWithName:(nullable NSString *)name
+                   iconName:(NSString *)iconName
+                      color:(UIColor *)color
+         backgroundIconName:(NSString *)backgroundIconName
+{
+    NSString *key = _data.allKeys.lastObject;
+    NSArray *items = _data[key];
+    NSMutableArray *newItems = [NSMutableArray new];
+    for (NSDictionary *item in items)
+    {
+        NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
+        if ([item[@"key"] isEqualToString:@"category_appearance"])
+        {
+            [mutableItem setObject:color forKey:@"appearanceColor"];
+            [mutableItem setObject:iconName ?: @"" forKey:@"appearanceIcon"];
+            [mutableItem setObject:backgroundIconName ?: @"" forKey:@"appearanceBackgroundIcon"];
+        }
+        else if ([item[@"key"] isEqualToString:@"category_name"])
+        {
+            NSInteger nearestIndex = [[OADefaultFavorite builtinColors] indexOfObject:[OADefaultFavorite nearestFavColor:color]];
+            [mutableItem setObject:@(nearestIndex) forKey:@"color"];
+        }
+        [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
+    }
+    [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [self.tableView reloadData];
+}
+
+- (void)selectColorItem:(OASPaletteItemSolid *)colorItem
+{
+}
+
+- (nullable OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color
+{
+    return [[OAGPXAppearanceCollection sharedInstance] addNewSelectedColor:color] ?: [[OAGPXAppearanceCollection sharedInstance] defaultPointColorItem];
+}
+
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
+{
+    [[OAGPXAppearanceCollection sharedInstance] changeColor:colorItem newColor:color];
+}
+
+- (nullable OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem
+{
+    return [[OAGPXAppearanceCollection sharedInstance] duplicateColor:colorItem] ?: colorItem;
+}
+
+- (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
+{
+    [[OAGPXAppearanceCollection sharedInstance] deleteColor:colorItem];
 }
 
 #pragma mark - OAAddCategoryDelegate

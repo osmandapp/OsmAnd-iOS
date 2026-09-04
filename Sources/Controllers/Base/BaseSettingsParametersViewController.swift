@@ -73,7 +73,7 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let statusBarStyle = settings.nightMode ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
+        let statusBarStyle = settings.isAppMapNightMode ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
         mapPanel.targetUpdateControlsLayout(true, customStatusBarStyle: statusBarStyle)
     }
 

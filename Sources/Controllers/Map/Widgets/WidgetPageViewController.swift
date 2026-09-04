@@ -223,6 +223,10 @@ extension WidgetPageViewController {
         for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
+            if !horizontalSeparatorView.isHidden {
+                // update color for horizontal separator
+                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light
+            }
         }
     }
 }

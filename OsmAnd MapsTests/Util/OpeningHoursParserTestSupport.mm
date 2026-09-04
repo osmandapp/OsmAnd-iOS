@@ -3,6 +3,12 @@
 
 #include <openingHoursParser.h>
 
+@interface NSDate (OpeningHoursParserTestSupport)
+
+- (std::tm)toTm;
+
+@end
+
 namespace {
 
 tm parseDateTimeString(NSString *dateTimeString) {
@@ -54,6 +60,10 @@ NSString *normalizeString(const std::string &value) {
     OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
     OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
+}
+
++ (NSInteger)weekdayForDate:(NSDate *)date {
+    return [date toTm].tm_wday;
 }
 
 - (instancetype)initWithOpeningHoursString:(NSString *)openingHoursString {

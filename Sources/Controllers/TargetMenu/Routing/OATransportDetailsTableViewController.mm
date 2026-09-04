@@ -203,7 +203,7 @@
     NSString *timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     NSString *str = @(route->color.c_str());
     str = str.length == 0 ? stopType.renderAttr : str;
-    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
+    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.isAppMapNightMode renderAttrName:str];
     if (color)
     {
         [arr addObject:@{
@@ -240,7 +240,7 @@
         OATransportStopType *altStopType = [OATransportStopType findType:@(altRoute->type.c_str())];
         NSString *altColorName = @(altRoute->color.c_str());
         altColorName = altColorName.length == 0 ? altStopType.renderAttr : altColorName;
-        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:altColorName];
+        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.isAppMapNightMode renderAttrName:altColorName];
         if (!altColor)
             altColor = color; // fallback to main color if none resolved
 

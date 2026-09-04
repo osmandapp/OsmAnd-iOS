@@ -306,7 +306,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
     BOOL transparent = [_settings.transparentMapTheme get];
-    BOOL nightMode = _settings.nightMode;
+    BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     
     int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
@@ -339,8 +339,8 @@
 {
     if (hasTopWidgets) {
         CACornerMask maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
-        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
-        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.isAppMapNightMode];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.isAppMapNightMode];
         if (_rightPanelController.pages.count > 1)
         {
             [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
@@ -363,8 +363,8 @@
         if ([OAUtilities isLandscapeIpadAware])
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.isAppMapNightMode];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.isAppMapNightMode];
             if (_rightPanelController.pages.count > 1)
             {
                 [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
@@ -383,7 +383,7 @@
         }
         else
         {
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner isNighTheme:_settings.nightMode];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner isNighTheme:_settings.isAppMapNightMode];
             if (_rightPanelController.pages.count > 1)
             {
                 [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMinXMaxYCorner];
@@ -392,7 +392,7 @@
             else
                 [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
             
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner isNighTheme:_settings.nightMode];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner isNighTheme:_settings.isAppMapNightMode];
             if (_leftPanelController.pages.count > 1)
             {
                 [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner];
@@ -788,7 +788,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
     BOOL transparent = [_settings.transparentMapTheme get];
-    BOOL nightMode = _settings.nightMode;
+    BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
     ts.textBold = following;

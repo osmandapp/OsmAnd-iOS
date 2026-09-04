@@ -142,6 +142,7 @@
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
         [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
+        self.titleView.accessibilityIdentifier = UITestAccessibilityIdentifier.gpxTrackMenuTitle;
         self.titleIconView.image = icon;
         self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     }

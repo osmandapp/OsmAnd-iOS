@@ -38,6 +38,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) addWaypoint;
 
 - (void) requestHeaderOnlyMode;
+- (void)requestHeaderOnlyModeAnimated:(BOOL)animated;
 - (void) requestFullScreenMode;
 - (void) requestFullMode;
 
@@ -67,6 +68,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @interface OATargetMenuControlButton : NSObject
 
 @property (nonatomic) NSString *title;
+@property (nonatomic, nullable) NSString *accessibilityIdentifier;
 @property (nonatomic) BOOL disabled;
 
 @end

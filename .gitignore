@@ -4,7 +4,7 @@
 # XCode
 *.pbxuser
 xcuserdata
-
+DerivedData/*
 # AppCode
 /.idea
 

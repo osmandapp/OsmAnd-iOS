@@ -1523,7 +1523,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 if (gpx.getNonEmptySegmentsCount > 1 && gpxParams != nil && gpxParams.selectedSegment != -1)
                 {
-                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
+                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), [NSNumberFormatter localizedCount:@(gpxParams.selectedSegment + 1)], [NSNumberFormatter localizedCount:@(gpx.getNonEmptySegmentsCount)]], fileName];
                 }
                 
                 cell.finishPoint = NO;

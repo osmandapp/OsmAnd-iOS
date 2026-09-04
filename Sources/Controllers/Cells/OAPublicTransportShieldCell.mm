@@ -80,7 +80,7 @@ static UIFont *_shieldFont;
 
     UIColor *color =
         [OARootViewController.instance.mapPanel.mapViewController
-         getTransportRouteColor:OAAppSettings.sharedManager.nightMode
+         getTransportRouteColor:OAAppSettings.sharedManager.isAppMapNightMode
          renderAttrName:colorName];
 
     if (!color)

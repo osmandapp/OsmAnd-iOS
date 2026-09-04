@@ -73,7 +73,13 @@ extension FavoriteListViewController {
     }
 
     func setEditing(_ isEditing: Bool) {
+        let shouldHideSearch = isEditing && isSearchActive
         let shouldResetSearchSelection = !isEditing && isSelectionModeInSearch
+        if shouldHideSearch {
+            isSearchActive = false
+            isSelectionModeInSearch = true
+        }
+
         if !isEditing {
             collectionView.indexPathsForSelectedItems?.forEach { collectionView.deselectItem(at: $0, animated: false) }
             isSelectionModeInSearch = false
@@ -85,14 +91,17 @@ extension FavoriteListViewController {
         }
 
         collectionView.isEditing = isEditing
-        collectionView.reloadData()
-        myPlacesDelegate?.updateEditMode(isEditing)
-        configureNavigation()
-        navigationController?.setToolbarHidden(!isEditing, animated: true)
-        if shouldResetSearchSelection {
+        if shouldHideSearch {
+            hideSearchController()
+        } else if shouldResetSearchSelection {
             clearSearchControllerText()
             applySnapshot(animatingDifferences: false)
         }
+
+        navigationController?.setToolbarHidden(!isEditing, animated: true)
+        myPlacesDelegate?.updateEditMode(isEditing)
+        configureNavigation()
+        configureToolbar()
     }
 
     func showRenameAlert(for folder: FavoriteFolderRow) {
@@ -123,8 +132,9 @@ extension FavoriteListViewController {
     }
 
     func showDeleteAlert(for folder: FavoriteFolderRow) {
-        let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
-        let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
+        let title = deleteConfirmationTitle(for: [folder.bridgeItem])
+        let message = deleteConfirmationMessage(for: [folder.bridgeItem])
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
             guard OAFavoritesHelperBridge.shared().deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
             self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
@@ -255,6 +265,7 @@ extension FavoriteListViewController {
     }
 
     func hideSearchController() {
+        cachedSearchFavoriteItems = nil
         if isRootFolder {
             let searchController = navigationController?.navigationBar.topItem?.searchController
             searchController?.isActive = false
@@ -276,6 +287,8 @@ extension FavoriteListViewController {
     }
 
     @objc func searchButtonPressed(_ sender: Any) {
+        lastAppliedSearchState = nil
+        cachedSearchFavoriteItems = nil
         isSearchActive = true
         showSearchController()
         configureNavigationButtons()
@@ -284,16 +297,13 @@ extension FavoriteListViewController {
     }
 
     @objc func searchSelectButtonPressed() {
-        isSelectionModeInSearch = true
-        isSearchActive = false
-        hideSearchController()
-
+        isCancellingSearch = true
         selectButtonPressed()
+        isCancellingSearch = false
     }
 
     @objc func cancelButtonPressed() {
         setEditing(false)
-        configureToolbar()
     }
 
     @objc func selectAllButtonPressed() {
@@ -309,6 +319,7 @@ extension FavoriteListViewController {
 
     @objc func favoriteDataDidChange() {
         DispatchQueue.main.async { [weak self] in
+            self?.cachedSearchFavoriteItems = nil
             self?.applySnapshot(animatingDifferences: true)
         }
     }
@@ -524,13 +535,15 @@ extension FavoriteListViewController {
     private func deleteConfirmationTitle(for selectedItems: [Any]) -> String {
         let foldersCount = selectedItems.filter { $0 is OAFavoriteFolderBridgeItem }.count
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
+        let itemsCount = foldersCount + pointsCount
+        guard itemsCount > 0 else { return localizedString("shared_string_delete") }
 
         if foldersCount > 0 && pointsCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("folders_delete_confirmation_title", comment: ""), foldersCount, NumberFormatter.localizedCount(foldersCount))
         } else if pointsCount > 0 && foldersCount == 0 {
-            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount)
+            return String.localizedStringWithFormat(NSLocalizedString("favorites_delete_confirmation_title", comment: ""), pointsCount, NumberFormatter.localizedCount(pointsCount))
         } else {
-            return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
+            return String.localizedStringWithFormat(NSLocalizedString("items_delete_confirmation_title", comment: ""), itemsCount, NumberFormatter.localizedCount(itemsCount))
         }
     }
 
@@ -543,7 +556,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
-        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, pointsCount)
+        return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, NumberFormatter.localizedCount(folders.count), pointsCount, NumberFormatter.localizedCount(pointsCount))
     }
     
     private func openPickerToImport() {

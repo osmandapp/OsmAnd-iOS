@@ -135,7 +135,7 @@
 {
     [super viewDidAppear:animated];
     [_mapPanel targetUpdateControlsLayout:YES
-                     customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+                     customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

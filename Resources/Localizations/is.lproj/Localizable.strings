@@ -2725,7 +2725,7 @@
 "map_widget_sunrise_sunset_time_left" = "Tími eftir";
 "map_widget_next_sunrise" = "Næsta sólarupprás";
 "map_widget_next_sunset" = "Næsta sólsetur";
-"ltr_or_rtl_combine_via_of" = "%ld af %ld";
+"ltr_or_rtl_combine_via_of" = "%@ af %@";
 "map_widget_camera_tilt" = "Halli myndavélar";
 "map_widget_camera_distance" = "Hæð myndavélar";
 "route_betw_points_descr" = "Veldu hvernig eigi að tengja punktana; með beinni línu eða reikna leið milli þeirra eins og tiltekið er í einu af snuðunum hér fyrir neðan.";
@@ -3412,7 +3412,7 @@
 "shared_string_update_required" = "Uppfæra nauðsynlegt";
 "my_places_no_tracks_descr" = "Þessi mappa er ekki ennþá með neina ferla.";
 "online_plugins" = "Viðbætur á netinu";
-"remove_folder_with_files_descr" = "Ertu viss um að þú viljir fjarlægja \"%@\" möppuna og alla %d ferlana?";
+"remove_folder_with_files_descr" = "Ertu viss um að þú viljir fjarlægja \"%@\" möppuna og alla %@ ferlana?";
 "getting_list_required_maps" = "Sæki lista yfir nauðsynleg kort...";
 "osmand_depelopment_use_discrete_autozoom" = "Óáberandi sjálfvirkur aðdráttur (eldri útgáfa)";
 "battery_saving_mode" = "Rafhlöðusparnaðarhamur";
@@ -3991,7 +3991,7 @@
 "icon_size" = "Stærð táknmynda";
 "folder_one_track" = "1 slóð";
 "delete_changes" = "Eyða breytingum";
-"osm_edits_delete_item_confirmation" = "Ertu viss um að þú viljir eyða %ld breytingu?";
+"osm_edits_delete_item_confirmation" = "Ertu viss um að þú viljir eyða %@ breytingu?";
 "osm_edits_delete_items_confirmation" = "Ertu viss um að þú viljir eyða %ld breytingum?";
 "wind_animation_layer" = "Vindalag með hreyfingu";
 "quick_action_wind_animation_layer" = "Víxlhnappur til að birta eða fela vindhreyfingalag á kortinu.";

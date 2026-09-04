@@ -120,7 +120,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     var lastModified: Date? { bridgeItem.lastModifiedDate }
 
     var subtitle: String {
-        let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
+        let pointsText = "\(NumberFormatter.localizedCount(bridgeItem.subtreePointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
         guard let lastModified else { return pointsText }
         return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText)
     }
@@ -169,7 +169,7 @@ struct FavoriteFolderStats: Hashable {
     var text: String {
         var parts: [String] = []
         if foldersCount > 0 {
-            parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
+            parts.append("\(localizedString("shared_string_folders").lowercased()) \(NumberFormatter.localizedCount(foldersCount))")
         }
 
         parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
@@ -179,16 +179,35 @@ struct FavoriteFolderStats: Hashable {
     }
 
     private var formattedPointsCount: String {
-        NumberFormatter.localizedString(from: NSNumber(value: pointsCount), number: .decimal)
+        NumberFormatter.localizedCount(pointsCount)
     }
 }
 
 final class FavoriteListCell: UICollectionViewListCell {
     private static let rowHeight: CGFloat = 68.0
+    private var separatorConstraint: NSLayoutConstraint?
+    private weak var primaryTextLayoutGuide: UILayoutGuide?
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
+        guard let textContentView = primaryTextLayoutGuide?.owningView, textContentView.bounds.width > 0 else {
+            attributes.frame.size.height = ceil(max(Self.rowHeight, attributes.frame.height))
+            return attributes
+        }
+
+        let targetSize = CGSize(width: textContentView.bounds.width, height: UIView.layoutFittingCompressedSize.height)
+        let contentHeight = textContentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+        attributes.frame.size.height = ceil(max(Self.rowHeight, max(attributes.frame.height, contentHeight)))
         return attributes
+    }
+
+    func setPrimaryTextLayoutGuide(_ layoutGuide: UILayoutGuide?) {
+        guard primaryTextLayoutGuide !== layoutGuide else { return }
+        separatorConstraint?.isActive = false
+        separatorConstraint = nil
+        primaryTextLayoutGuide = layoutGuide
+        guard let layoutGuide else { return }
+        separatorConstraint = separatorLayoutGuide.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor)
+        separatorConstraint?.isActive = true
     }
 }

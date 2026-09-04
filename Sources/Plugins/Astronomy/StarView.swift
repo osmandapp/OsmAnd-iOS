@@ -6,6 +6,7 @@
 //  Copyright (c) 2026 OsmAnd. All rights reserved.
 //
 
+import CoreImage
 import OsmAndShared
 import UIKit
 
@@ -265,6 +266,17 @@ final class StarView: UIView {
     private let inertialStopSpeed: CGFloat = 5
     private let inertialMinStartSpeed: CGFloat = 80
     private let gyroSnapBackDelay: TimeInterval = 0.5
+    
+    private let redFilterCIContext = CIContext(options: [.useSoftwareRenderer: false])
+    private let redColorMatrixFilter: CIFilter? = {
+        let filter = CIFilter(name: "CIColorMatrix")
+        filter?.setValue(CIVector(x: 0.33, y: 0.33, z: 0.33, w: 0), forKey: "inputRVector")
+        filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputGVector")
+        filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputBVector")
+        filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 1), forKey: "inputAVector")
+        filter?.setValue(CIVector(x: 0, y: 0, z: 0, w: 0), forKey: "inputBiasVector")
+        return filter
+    }()
 
     private var lastTouchPoint = CGPoint.zero
     private var isPanning = false
@@ -359,34 +371,30 @@ final class StarView: UIView {
         rebuildObjectMap()
         occupiedRects.removeAll(keepingCapacity: true)
 
+        let redFilterEnabled = settings.starMap.showRedFilter
+        if redFilterEnabled {
+            if isCameraMode {
+                context.clear(bounds)
+                UIColor.mapBgZenith.withAlphaComponent(0.20).setFill()
+                context.fill(bounds)
+            }
+            let format = UIGraphicsImageRendererFormat()
+            format.opaque = false
+            format.scale = screenScale
+            let raw = UIGraphicsImageRenderer(size: bounds.size, format: format).image { rendererContext in
+                let cg = rendererContext.cgContext
+                if !self.isCameraMode {
+                    self.drawBackground(in: cg)
+                }
+                self.drawSkyContent(in: cg)
+            }
+            applyRedColorMatrix(to: raw)?.draw(in: bounds)
+            return
+        }
+
         context.saveGState()
         drawBackground(in: context)
-        if settings.starMap.showEquatorialGrid {
-            drawEquatorialGrid(in: context)
-        }
-        if settings.starMap.showAzimuthalGrid {
-            drawAzimuthalGrid(in: context)
-        }
-        if settings.starMap.showEclipticLine {
-            drawEclipticLine(in: context)
-        }
-        if settings.starMap.showMeridianLine {
-            drawMeridianLine(in: context)
-        }
-        if settings.starMap.showEquatorLine {
-            drawEquatorLine(in: context)
-        }
-        if settings.starMap.showGalacticLine {
-            drawGalacticLine(in: context)
-        }
-        drawConstellationLines(in: context)
-        drawHorizon(in: context)
-        drawCelestialPaths(in: context)
-        drawConstellationLabels(in: context)
-        drawSkyObjects(in: context)
-        drawHighlights(in: context)
-        drawDirectionArrows(in: context)
-
+        drawSkyContent(in: context)
         context.restoreGState()
     }
     
@@ -515,7 +523,6 @@ final class StarView: UIView {
     }
 
     func updateRedFilter() {
-        AstroRedFilter.apply(settings.starMap.showRedFilter, to: self)
         setNeedsDisplay()
     }
 
@@ -946,6 +953,46 @@ final class StarView: UIView {
         context.fill(bounds)
     }
 
+    private func drawSkyContent(in context: CGContext) {
+        if settings.starMap.showEquatorialGrid {
+            drawEquatorialGrid(in: context)
+        }
+        if settings.starMap.showAzimuthalGrid {
+            drawAzimuthalGrid(in: context)
+        }
+        if settings.starMap.showEclipticLine {
+            drawEclipticLine(in: context)
+        }
+        if settings.starMap.showMeridianLine {
+            drawMeridianLine(in: context)
+        }
+        if settings.starMap.showEquatorLine {
+            drawEquatorLine(in: context)
+        }
+        if settings.starMap.showGalacticLine {
+            drawGalacticLine(in: context)
+        }
+        drawConstellationLines(in: context)
+        drawHorizon(in: context)
+        drawCelestialPaths(in: context)
+        drawConstellationLabels(in: context)
+        drawSkyObjects(in: context)
+        drawHighlights(in: context)
+        drawDirectionArrows(in: context)
+    }
+
+    private func applyRedColorMatrix(to image: UIImage) -> UIImage? {
+        guard let cgImage = image.cgImage, let redColorMatrixFilter else {
+            return image
+        }
+        redColorMatrixFilter.setValue(CIImage(cgImage: cgImage), forKey: kCIInputImageKey)
+        guard let output = redColorMatrixFilter.outputImage,
+              let resultCGImage = redFilterCIContext.createCGImage(output, from: output.extent) else {
+            return image
+        }
+        return UIImage(cgImage: resultCGImage, scale: image.scale, orientation: .up)
+    }
+
     private func drawSkyObjects(in context: CGContext) {
         for object in skyObjects {
             if isObjectVisibleInSettings(object) || object === selectedObject {
@@ -1068,10 +1115,10 @@ final class StarView: UIView {
         }
         stroke(path, color: .mapLineHorizon, width: 1.2, in: context)
 
-        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
-        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("north_abbreviation"), azimuth: 0, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("east_abbreviation"), azimuth: 90, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("south_abbreviation"), azimuth: 180, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
+        drawOutsideLabel(localizedString("west_abbreviation"), azimuth: 270, altitude: 0, color: .mapLineHorizon, offset: 30, in: context)
     }
 
     private func drawAzimuthalGrid(in context: CGContext) {

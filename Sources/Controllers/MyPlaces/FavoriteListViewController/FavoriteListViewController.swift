@@ -56,17 +56,18 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     }
     var normalTitle: String {
         switch screenMode {
-        case .root: localizedString("shared_string_favorites")
-        case .folder(let folder, _): folder.title
+        case .root: return localizedString("shared_string_favorites")
+        case .folder(let fullPath, _):
+            return OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.lastSegment(fullPath))
         }
     }
     var parentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode, !folder.bridgeItem.groupName.isEmpty else { return nil }
-        return folder.bridgeItem.groupName
+        guard case .folder(let fullPath, _) = screenMode, !fullPath.isEmpty else { return nil }
+        return fullPath
     }
     var searchParentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode else { return nil }
-        return folder.bridgeItem.groupName
+        guard case .folder(let fullPath, _) = screenMode else { return nil }
+        return fullPath
     }
     var currentSortMode: FavoriteSortMode {
         isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()

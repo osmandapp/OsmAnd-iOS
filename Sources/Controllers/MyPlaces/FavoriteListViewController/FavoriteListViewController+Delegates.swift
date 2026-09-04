@@ -16,7 +16,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 updateSelectionUI()
                 return
             }
-            let viewController = FavoriteListViewController(frame: view.bounds, screenMode: .folder(folder, previousTitle: normalTitle))
+            let viewController = FavoriteListViewController(frame: view.bounds, screenMode: .folder(folder.fullPath, previousTitle: normalTitle))
             viewController.myPlacesDelegate = myPlacesDelegate
             navigationController?.pushViewController(viewController, animated: true)
         case .favorite(let favorite):
@@ -191,7 +191,7 @@ extension FavoriteListViewController: SelectFavoriteGroupDelegate {
 
         let targetGroupName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let availableGroupNames = OAFavoritesHelperBridge.shared().favoriteGroupNames(forMovingFavoriteItems: favoriteItemsToMove)
-        if let existingGroupName = availableGroupNames.first(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == targetGroupName }) {
+        if let existingGroupName = availableGroupNames.first(where: { $0 == targetGroupName }) {
             moveFavoriteItems(toGroupName: existingGroupName)
             return
         }
@@ -206,9 +206,11 @@ extension FavoriteListViewController: SelectFavoriteGroupDelegate {
 
     private func moveFavoriteItems(toGroupName targetGroupName: String) {
         guard let favoriteItemsToMove else { return }
+        guard OAFavoritesHelperBridge.shared().moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName) else {
+            self.favoriteItemsToMove = nil
+            return
+        }
 
-        createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
-        OAFavoritesHelperBridge.shared().moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
         updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
         setEditing(false)
         applySnapshot(animatingDifferences: true)
@@ -231,10 +233,10 @@ extension FavoriteListViewController: OAOpenAddTrackDelegate {
 extension FavoriteListViewController: OAEditorDelegate {
     func addNewItem(withName name: String?, iconName: String, color: UIColor, backgroundIconName: String) {
         guard OAFavoritesHelperBridge.shared().addFavoriteGroup(name ?? "",
-                                                      parentGroupName: parentGroupName,
-                                                      iconName: iconName,
-                                                      color: color,
-                                                      backgroundIconName: backgroundIconName) else { return }
+                                                                parentGroupName: parentGroupName,
+                                                                iconName: iconName,
+                                                                color: color,
+                                                                backgroundIconName: backgroundIconName) else { return }
         applySnapshot(animatingDifferences: true)
     }
 
@@ -249,8 +251,7 @@ extension FavoriteListViewController: OAEditorDelegate {
 
     func selectColorItem(_ colorItem: PaletteItemSolid) {}
 
-    @discardableResult
-    func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid? {
         guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else {
             return appearanceCollection.defaultPointColorItem()
         }
@@ -262,8 +263,7 @@ extension FavoriteListViewController: OAEditorDelegate {
         appearanceCollection.changeColor(colorItem, newColor: color)
     }
 
-    @discardableResult
-    func duplicateColorItem(_ colorItem: PaletteItemSolid) -> PaletteItemSolid {
+    @discardableResult func duplicateColorItem(_ colorItem: PaletteItemSolid) -> PaletteItemSolid? {
         guard let duplicatedColorItem = appearanceCollection.duplicateColor(colorItem) else {
             return colorItem
         }

@@ -342,6 +342,7 @@
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
         favoriteGroup.isVisible = ![pointsGroup isHidden];
+        favoriteGroup.isPinned = pointsGroup.isPinned.boolValue;
     }
     return favoriteGroup;
 }

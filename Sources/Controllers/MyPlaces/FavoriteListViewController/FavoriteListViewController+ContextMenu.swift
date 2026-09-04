@@ -11,6 +11,7 @@ extension FavoriteListViewController {
         let folderFavoriteItem: [Any] = [folder.fullPath]
         let subtreeFavoriteItems: [Any] = favoritePointRows(inFolder: folder.fullPath).map { $0.bridgeItem }
         let hasFavoritePoints = !subtreeFavoriteItems.isEmpty
+        var sections: [UIMenu] = []
         let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: folder.isVisible ? .icCustomHideOutlined : .icCustomShowOutlined) { [weak self] _ in
             guard let self, let group = folder.group else { return }
             OAFavoritesHelperBridge.shared().setFavoriteGroupVisible(group.groupName, visible: !folder.isVisible)
@@ -21,17 +22,22 @@ extension FavoriteListViewController {
             OAFavoritesHelperBridge.shared().setFavoriteGroupPinned(group.groupName, pinned: !folder.isPinned)
             self.applySnapshot(animatingDifferences: true)
         }
-        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: folder.group == nil ? [] : [showHideAction, pinAction])
+        if folder.group != nil {
+            sections.append(UIMenu(title: "", options: .displayInline, children: [showHideAction, pinAction]))
+        }
 
         let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
-            guard let self else { return }
-            self.showRenameAlert(for: folder)
+            self?.showRenameAlert(for: folder)
         }
         let defaultAppearanceAction = UIAction(title: localizedString("default_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
             guard let self, let group = folder.group else { return }
             self.openFavoriteGroupAppearance(group.groupName)
         }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: folder.group == nil ? [renameAction] : [renameAction, defaultAppearanceAction])
+        var secondButtons: [UIMenuElement] = [renameAction]
+        if folder.group != nil {
+            secondButtons.append(defaultAppearanceAction)
+        }
+        sections.append(UIMenu(title: "", options: .displayInline, children: secondButtons))
 
         let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
             guard let self else { return }
@@ -42,33 +48,40 @@ extension FavoriteListViewController {
             })
         }
         let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsMove(folderFavoriteItem)
+            self?.openFavoriteItemsMove(folderFavoriteItem)
         }
-        let thirdButtons: [UIMenuElement] = (hasFavoritePoints ? [shareAction] : []) + (folder.fullPath.isEmpty ? [] : [moveAction])
-        let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: thirdButtons)
+        var thirdButtons: [UIMenuElement] = []
+        if hasFavoritePoints {
+            thirdButtons.append(shareAction)
+        }
+        if !folder.fullPath.isEmpty {
+            thirdButtons.append(moveAction)
+        }
+        if !thirdButtons.isEmpty {
+            sections.append(UIMenu(title: "", options: .displayInline, children: thirdButtons))
+        }
 
         let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
             OAFavoritesHelperBridge.shared().addFavoriteItems(toMapMarkers: folderFavoriteItem)
         }
         let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteGroupAddToTrack(folder.fullPath)
+            self?.openFavoriteGroupAddToTrack(folder.fullPath)
         }
         let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
             OAFavoritesHelperBridge.shared().addFavoriteItems(toNavigation: folderFavoriteItem)
         }
-        let addToActions: [UIMenuElement] = hasFavoritePoints ? (folder.group == nil ? [trackAction] : [mapMarkersAction, trackAction, navigationAction]) : []
-        let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: addToActions)]
-        let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: fourthButtons)
+        if hasFavoritePoints {
+            let addToActions: [UIMenuElement] = folder.group == nil ? [trackAction] : [mapMarkersAction, trackAction, navigationAction]
+            let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: addToActions)
+            sections.append(UIMenu(title: "", options: .displayInline, children: [addToMenu]))
+        }
 
         let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-            guard let self else { return }
-            self.showDeleteAlert(for: folder)
+            self?.showDeleteAlert(for: folder)
         }
-        let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
+        sections.append(UIMenu(title: "", options: .displayInline, children: [deleteAction]))
 
-        return UIMenu(title: "", children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, fourthButtonsSection, lastButtonsSection].filter { !$0.children.isEmpty })
+        return UIMenu(title: "", children: sections)
     }
 
     func makePointContextMenu(for point: FavoritePointRow, indexPath: IndexPath) -> UIMenu {
@@ -81,8 +94,7 @@ extension FavoriteListViewController {
         let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction])
 
         let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsMove([point.bridgeItem])
+            self?.openFavoriteItemsMove([point.bridgeItem])
         }
         let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
             guard let self,
@@ -98,8 +110,7 @@ extension FavoriteListViewController {
             OAFavoritesHelperBridge.shared().addFavoriteItems(toMapMarkers: [point.bridgeItem])
         }
         let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsAddToTrack([point.bridgeItem])
+            self?.openFavoriteItemsAddToTrack([point.bridgeItem])
         }
         let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
             OAFavoritesHelperBridge.shared().addFavoriteItems(toNavigation: [point.bridgeItem])
@@ -108,8 +119,7 @@ extension FavoriteListViewController {
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
 
         let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-            guard let self else { return }
-            self.showFavoriteDeleteAlert(for: point)
+            self?.showFavoriteDeleteAlert(for: point)
         }
         let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
 
@@ -146,9 +156,8 @@ extension FavoriteListViewController {
         let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
             self?.openFavoriteItemsAppearance()
         }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction])
         if !containsVirtualFolder {
-            menuElements.append(secondButtonsSection)
+            menuElements.append(UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction]))
         }
 
         if !hasPoints {

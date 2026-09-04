@@ -54,7 +54,7 @@ final class GlideAverageWidget: GlideBaseWidget {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func getWidgetState() -> OAWidgetState? {
+    override func storedWidgetState() -> OAWidgetState? {
         widgetState
     }
 
@@ -198,6 +198,14 @@ final class GlideAverageWidget: GlideBaseWidget {
 
     override func copySettings(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref?.get(appMode) ?? AverageValueComputer.defaultIntervalMillis, mode: appMode)
+    }
+
+    override func copySettings(from fromAppMode: OAApplicationMode,
+                               appMode toAppMode: OAApplicationMode,
+                               customId: String?) {
+        super.copySettings(from: fromAppMode, appMode: toAppMode, customId: customId)
+        Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref?.get(fromAppMode) ?? AverageValueComputer.defaultIntervalMillis,
+                                                        mode: toAppMode)
     }
 
     private static func registerMeasuredIntervalPref(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonLong {

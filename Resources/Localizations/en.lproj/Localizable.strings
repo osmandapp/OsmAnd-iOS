@@ -1625,6 +1625,19 @@
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
 "new_plugin_added" = "New plugin added";
+"screen_elements" = "Screen elements";
+"screen_elements_descr" = "Landscape uses the same screen elements as Portrait. Changes in one orientation apply to both.";
+"switch_to_independent" = "Switch to Independent";
+"screen_elements_mode_descr" = "Choose whether Portrait and Landscape share the same screen elements or have independent sets.";
+"screen_elements_shared" = "Shared";
+"screen_elements_independent" = "Independent";
+"copy_from_portrait_layout" = "Copy from Portrait layout";
+"copy_from_landscape_layout" = "Copy from Landscape layout";
+"panels_layout" = "Panels layout";
+"panels_layout_wide" = "Wide";
+"panels_layout_compact" = "Compact";
+"panels_layout_wide_descr" = "Top and bottom panels span the full screen width.";
+"panels_layout_compact_descr" = "Top and bottom panels fit between side panels and buttons.";
 
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";

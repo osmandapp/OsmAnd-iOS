@@ -76,6 +76,7 @@ final class WidgetPageViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        bottomStackViewConstraint.priority = UILayoutPriority(999)
         heightStackViewConstraint = stackView.heightAnchor.constraint(equalToConstant: 44)
         if isMultipleWidgetsInRow {
             bottomStackViewConstraint.isActive = true
@@ -101,6 +102,15 @@ final class WidgetPageViewController: UIViewController {
             height = fittingSize.height
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
+            let isCompactPanelsLayout = OAAppSettings.sharedManager().isCompactPanelsLayout()
+            let maxSidePanelWidth: CGFloat
+            if isCompactPanelsLayout && OAUtilities.isPortrait() {
+                maxSidePanelWidth = UIScreen.main.bounds.width * 0.35
+            } else if isCompactPanelsLayout && OARootViewController.instance().mapPanel.hasTopWidget() {
+                maxSidePanelWidth = 120
+            } else {
+                maxSidePanelWidth = UIScreen.main.bounds.width * 0.45
+            }
             for widget in widgetViews {
                 if widget.isSimpleLayout {
                     // This block calculates sizes for side-panel medium and large layout widgets
@@ -110,7 +120,7 @@ final class WidgetPageViewController: UIViewController {
                     }
                     let fittingSize = widget.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
                     height += fittingSize.height
-                    width = max(width, min(fittingSize.width, OARootViewController.instance().mapPanel.hasTopWidget() && OAUtilities.isLandscapeIpadAware() ? 120 : UIScreen.main.bounds.width * 0.45))
+                    width = max(width, min(fittingSize.width, maxSidePanelWidth))
                 } else {
                     // This block calculates sizes for side-panel small/default layout widgets
                     widget.translatesAutoresizingMaskIntoConstraints = false

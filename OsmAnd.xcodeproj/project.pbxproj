@@ -227,6 +227,8 @@
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
 		2753876E2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2753876D2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift */; };
+		27584BF6302DE44B009AC53F /* DoubleImageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27584BF4302DE44B009AC53F /* DoubleImageHeaderCell.swift */; };
+		27584BF7302DE44B009AC53F /* DoubleImageHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27584BF5302DE44B009AC53F /* DoubleImageHeaderCell.xib */; };
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
@@ -257,6 +259,7 @@
 		279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */; };
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
+		27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A3E02330051E10004969BE /* ScreenElementsViewController.swift */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27B0967E2F8FCB0A00EDC462 /* GeoNavigationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */; };
 		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
@@ -582,6 +585,10 @@
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */; };
+		32C0DE01300A100100000001 /* ScreenLayoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE02300A100100000002 /* ScreenLayoutMode.swift */; };
+		32C0DE03300A100100000003 /* PanelsLayoutMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE04300A100100000004 /* PanelsLayoutMode.swift */; };
+		32C0DE05300A100100000005 /* PanelsLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE06300A100100000006 /* PanelsLayoutViewController.swift */; };
+		32C0DE07300A100100000007 /* ScreenElementsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DE08300A100100000008 /* ScreenElementsMode.swift */; };
 		32C1C4ED2DD4C4F200A053D4 /* OAClickableWayHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C1C4E42DD4C4F200A053D4 /* OAClickableWayHelper.mm */; };
 		32C1C4EF2DD4C4F200A053D4 /* OAMapSelectionHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C1C4E72DD4C4F200A053D4 /* OAMapSelectionHelper.mm */; };
 		32C1EF132FB608B6008BBA40 /* OACollapsablePoiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F01E3C2FB6049D00736C97 /* OACollapsablePoiView.swift */; };
@@ -3914,6 +3921,8 @@
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
 		2753876D2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleAlgorithms.swift; sourceTree = "<group>"; };
+		27584BF4302DE44B009AC53F /* DoubleImageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleImageHeaderCell.swift; sourceTree = "<group>"; };
+		27584BF5302DE44B009AC53F /* DoubleImageHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DoubleImageHeaderCell.xib; sourceTree = "<group>"; };
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
@@ -3946,6 +3955,7 @@
 		279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedMapsViewController.swift; sourceTree = "<group>"; };
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
+		27A3E02330051E10004969BE /* ScreenElementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenElementsViewController.swift; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoNavigationParser.swift; sourceTree = "<group>"; };
 		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
@@ -4391,6 +4401,10 @@
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadGPXFilesTask.m; sourceTree = "<group>"; };
+		32C0DE02300A100100000002 /* ScreenLayoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutMode.swift; sourceTree = "<group>"; };
+		32C0DE04300A100100000004 /* PanelsLayoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelsLayoutMode.swift; sourceTree = "<group>"; };
+		32C0DE06300A100100000006 /* PanelsLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelsLayoutViewController.swift; sourceTree = "<group>"; };
+		32C0DE08300A100100000008 /* ScreenElementsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenElementsMode.swift; sourceTree = "<group>"; };
 		32C1C4E32DD4C4F200A053D4 /* OAClickableWayHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAClickableWayHelper.h; sourceTree = "<group>"; };
 		32C1C4E42DD4C4F200A053D4 /* OAClickableWayHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAClickableWayHelper.mm; sourceTree = "<group>"; };
 		32C1C4E52DD4C4F200A053D4 /* OAClickableWayHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAClickableWayHelper+cpp.h"; sourceTree = "<group>"; };
@@ -12986,6 +13000,7 @@
 				C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */,
 				2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */,
 				C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */,
+				27584BF4302DE44B009AC53F /* DoubleImageHeaderCell.swift */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
 				C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */,
@@ -13025,6 +13040,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27584BF5302DE44B009AC53F /* DoubleImageHeaderCell.xib */,
 				272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */,
 				2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */,
 				27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */,
@@ -14899,6 +14915,11 @@
 				2745FEF52F3A11F2004F6AB4 /* Views */,
 				DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */,
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
+				32C0DE02300A100100000002 /* ScreenLayoutMode.swift */,
+				32C0DE08300A100100000008 /* ScreenElementsMode.swift */,
+				32C0DE04300A100100000004 /* PanelsLayoutMode.swift */,
+				32C0DE06300A100100000006 /* PanelsLayoutViewController.swift */,
+				27A3E02330051E10004969BE /* ScreenElementsViewController.swift */,
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
 				27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */,
@@ -17555,6 +17576,7 @@
 				DA1341C4243DC5A90039D214 /* map_action_snowmobile@2x.png in Resources */,
 				DAE08315253F0953009B5A11 /* ic_custom_save_complete@2x.png in Resources */,
 				DA5A82AB26C563A700F274C7 /* OAFoldersCell.xib in Resources */,
+				27584BF7302DE44B009AC53F /* DoubleImageHeaderCell.xib in Resources */,
 				DA86AF7526454AC600627B66 /* left_menu_icon_plugins@3x.png in Resources */,
 				C5A466BE2D2E6B41008E0C87 /* ImageHeaderCell.xib in Resources */,
 				84342E0A1CFD872E00EF04ED /* left_menu_icon_waypoints@3x.png in Resources */,
@@ -18592,6 +18614,7 @@
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
 				DAD3FD152A4984C300BFA03A /* WidgetParameterViewController.swift in Sources */,
 				DA14DC922A31D76A002A91BC /* OAWeatherWidget.mm in Sources */,
+				27584BF6302DE44B009AC53F /* DoubleImageHeaderCell.swift in Sources */,
 				DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */,
 				321C83982F33CB7E0028FCCC /* MaxWeightRowBehaviour.swift in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
@@ -18868,6 +18891,11 @@
 				9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */,
 				9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */,
 				9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */,
+				27A3E02430051E10004969BE /* ScreenElementsViewController.swift in Sources */,
+				32C0DE01300A100100000001 /* ScreenLayoutMode.swift in Sources */,
+				32C0DE07300A100100000007 /* ScreenElementsMode.swift in Sources */,
+				32C0DE03300A100100000003 /* PanelsLayoutMode.swift in Sources */,
+				32C0DE05300A100100000005 /* PanelsLayoutViewController.swift in Sources */,
 				9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */,
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
 				9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */,

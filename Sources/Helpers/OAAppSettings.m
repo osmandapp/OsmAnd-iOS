@@ -136,7 +136,8 @@ static NSString * const availableApplicationModesKey = @"available_application_m
 static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
-static NSString * const transparentMapThemeKey = @"transparentMapTheme";
+static NSString * const mapInfoControlsLayoutKey = @"map_info_controls";
+static NSString * const transparentMapThemeKey = @"transparent_map_theme";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
@@ -488,6 +489,8 @@ static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_ord
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
+
+static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 @interface OAMetricsConstant()
 
@@ -1588,6 +1591,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
 - (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
+- (instancetype)copyWithKey:(NSString *)key;
+- (OACommonPreference *)setupCopy:(OACommonPreference *)copy;
 
 @end
 
@@ -1628,6 +1633,26 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 {
     _lastModifiedTimeStored = YES;
     return self;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return nil;
+}
+
+- (OACommonPreference *)setupCopy:(OACommonPreference *)copy
+{
+    if (self.global)
+        [copy makeGlobal];
+    else
+        [copy makeProfile];
+    if (self.shared)
+        [copy makeShared];
+    if (self.lastModifiedTimeStored)
+        [copy storeLastModifiedTime];
+    copy.defaultValue = self.defaultValue;
+    copy.defaultValues = [self.defaultValues copy];
+    return copy;
 }
 
 - (OAApplicationMode *)appMode
@@ -1944,6 +1969,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonBoolean *)[self setupCopy:[OACommonBoolean withKey:key defValue:self.defValue]];
+}
+
 - (BOOL) get
 {
     return [self get:self.appMode];
@@ -2157,6 +2187,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonString *)[self setupCopy:[OACommonString withKey:key defValue:self.defValue]];
+}
+
 - (NSString *) get
 {
     return [self get:self.appMode];
@@ -2292,6 +2327,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonStringList *)[self setupCopy:[OACommonStringList withKey:key defValue:self.defValue]];
+}
+
 - (NSArray<NSString *> *) get
 {
     return [self get:self.appMode];
@@ -2380,6 +2420,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonListOfStringList *)[self setupCopy:[OACommonListOfStringList withKey:key defValue:self.defValue]];
 }
 
 - (NSArray<NSArray<NSString *> *> *) get
@@ -5139,6 +5184,99 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
 
 @end
 
+@implementation OACommonPanelsLayoutMode
+
+static NSString *kPanelsLayoutWideKey = @"WIDE";
+static NSString *kPanelsLayoutCompactKey = @"COMPACT";
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonPanelsLayoutMode *obj = [[OACommonPanelsLayoutMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)panelsLayoutMode
+{
+    [super set:panelsLayoutMode];
+}
+
+- (void)set:(int)panelsLayoutMode mode:(OAApplicationMode *)mode
+{
+    [super set:panelsLayoutMode mode:mode];
+}
+
+- (void)resetToDefault
+{
+    PanelsLayoutMode defaultValue = self.defValue;
+    NSNumber *profileDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    if ([profileDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (PanelsLayoutMode)profileDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:string appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *panelsLayoutModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        panelsLayoutModeMap = @{
+            kPanelsLayoutWideKey: @(PanelsLayoutModeWide),
+            kPanelsLayoutCompactKey: @(PanelsLayoutModeCompact)
+        };
+    });
+    return panelsLayoutModeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    PanelsLayoutMode panelsLayoutMode = [self get:mode];
+    return [self toStringFromValue:@(panelsLayoutMode)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+
+    PanelsLayoutMode panelsLayoutMode = (PanelsLayoutMode)[value intValue];
+    switch (panelsLayoutMode)
+    {
+        case PanelsLayoutModeWide:
+            return kPanelsLayoutWideKey;
+        case PanelsLayoutModeCompact:
+            return kPanelsLayoutCompactKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonWidgetDefaultView
 
 static NSString *kArrivalTimeKey = @"ARRIVAL_TIME";
@@ -5714,6 +5852,68 @@ static NSString *kOfflineKey = @"OFFLINE";
     return _sharedManager;
 }
 
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                          preferenceKey:(NSString *)preferenceKey
+                        screenLayoutMode:(NSNumber *)screenLayoutMode
+{
+    if (screenLayoutMode == nil)
+        return basePreference;
+
+    NSString *layoutPrefix = [ScreenLayoutModeWrapper keyForNumber:screenLayoutMode.intValue];
+    return [self layoutPreference:basePreference preferenceKey:preferenceKey layoutPrefix:layoutPrefix];
+}
+
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                           preferenceKey:(NSString *)preferenceKey
+                            layoutPrefix:(NSString *)layoutPrefix
+{
+    NSString *key = [NSString stringWithFormat:@"%@_%@", layoutPrefix, preferenceKey];
+    @synchronized(_profilePreferences)
+    {
+        OACommonPreference *preference = [_profilePreferences objectForKey:key];
+        if (!preference)
+        {
+            preference = [basePreference copyWithKey:key];
+            [_profilePreferences setObject:preference forKey:key];
+            [self registerPreference:preference forKey:key];
+        }
+        return preference;
+    }
+}
+
+- (void)registerWidgetLayoutPreferences
+{
+    NSArray<NSArray *> *preferences = @[
+        @[_mapInfoControls, mapInfoControlsLayoutKey],
+        @[_customWidgetKeys, customWidgetKeys],
+        @[_transparentMapTheme, transparentMapThemeKey],
+        @[_leftWidgetPanelOrder, leftWidgetPanelOrderKey],
+        @[_rightWidgetPanelOrder, rightWidgetPanelOrderKey],
+        @[_topWidgetPanelOrder, topWidgetPanelOrderOldKey],
+        @[_bottomWidgetPanelOrder, bottomWidgetPanelOrderKeyOld]
+    ];
+    for (NSArray *preferenceData in preferences)
+    {
+        OACommonPreference *preference = preferenceData.firstObject;
+        NSString *preferenceKey = preferenceData.lastObject;
+        for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+        {
+            [self layoutPreference:preference
+                    preferenceKey:preferenceKey
+                  screenLayoutMode:screenLayoutMode];
+        }
+    }
+
+    for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+    {
+        for (NSNumber *screenElementsMode in [ScreenElementsModeWrapper allValues])
+        {
+            [self panelsLayoutMode:screenLayoutMode.intValue
+                screenElementsMode:screenElementsMode.intValue];
+        }
+    }
+}
+
 + (void)performBatchedPreferenceNotifications:(void (^)(void))changes
 {
     if (!changes)
@@ -6053,7 +6253,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
-        [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
+        [_profilePreferences setObject:_mapInfoControls forKey:mapInfoControlsLayoutKey];
         
         _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
         [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
@@ -6165,7 +6365,10 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
-        [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
+        [_profilePreferences setObject:_transparentMapTheme forKey:transparentMapThemeKey];
+
+        _useSeparateLayouts = [OACommonBoolean withKey:useSeparateLayoutsKey defValue:NO];
+        [_profilePreferences setObject:_useSeparateLayouts forKey:useSeparateLayoutsKey];
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
@@ -6906,6 +7109,8 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _sphericalMap = [[OACommonBoolean withKey:@"sphericalMap" defValue:NO] makeProfile];
         [_globalPreferences setObject:_sphericalMap forKey:@"spherical_map"];
+
+        [self registerWidgetLayoutPreferences];
         
         [self fetchImpassableRoads];
 
@@ -6922,6 +7127,111 @@ static NSString *kOfflineKey = @"OFFLINE";
         }
     }
     return self;
+}
+
+- (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+{
+    NSString *screenElementsPrefix = [ScreenElementsModeWrapper keyFor:(ScreenElementsMode)screenElementsMode];
+    NSString *screenLayoutPrefix = [ScreenLayoutModeWrapper keyFor:(ScreenLayoutMode)screenLayoutMode];
+    NSString *key = [NSString stringWithFormat:@"%@_%@_panels_layout_mode", screenElementsPrefix, screenLayoutPrefix];
+    @synchronized(_profilePreferences)
+    {
+        OACommonPanelsLayoutMode *preference = (OACommonPanelsLayoutMode *)[_profilePreferences objectForKey:key];
+        if (!preference)
+        {
+            preference = [OACommonPanelsLayoutMode withKey:key defValue:PanelsLayoutModeWide];
+            [_profilePreferences setObject:preference forKey:key];
+            [self registerPreference:preference forKey:key];
+        }
+        return preference;
+    }
+}
+
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode
+{
+    ScreenElementsMode screenElementsMode = [_useSeparateLayouts get:appMode]
+        ? ScreenElementsModeIndependent
+        : ScreenElementsModeShared;
+    ScreenLayoutMode screenLayoutMode = [OAUtilities isLandscape]
+        ? ScreenLayoutModeLandscape
+        : ScreenLayoutModePortrait;
+    return [self panelsLayoutMode:screenLayoutMode screenElementsMode:screenElementsMode];
+}
+
+- (BOOL)isCompactPanelsLayout
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self panelsLayoutModeForAppMode:appMode] get:appMode] == PanelsLayoutModeCompact;
+}
+
+- (OACommonBoolean *)transparentWidgets:(NSNumber *)screenLayoutMode
+{
+    return (OACommonBoolean *)[self layoutPreference:_transparentMapTheme
+                                      preferenceKey:transparentMapThemeKey
+                                   screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode
+{
+    NSNumber *screenLayoutMode = [_useSeparateLayouts get:appMode]
+        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+        : nil;
+    return [self transparentWidgets:screenLayoutMode];
+}
+
+- (BOOL)isTransparentWidgets
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self transparentWidgetsForAppMode:appMode] get:appMode];
+}
+
+- (OACommonString *)mapInfoControls:(NSNumber *)screenLayoutMode
+{
+    return (OACommonString *)[self layoutPreference:_mapInfoControls
+                                      preferenceKey:mapInfoControlsLayoutKey
+                                   screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonStringList *)customWidgetKeys:(NSNumber *)screenLayoutMode
+{
+    return (OACommonStringList *)[self layoutPreference:_customWidgetKeys
+                                          preferenceKey:customWidgetKeys
+                                       screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
+                              screenLayoutMode:(NSNumber *)screenLayoutMode
+{
+    OACommonListOfStringList *preference;
+    NSString *preferenceKey;
+    if (panel == OAWidgetsPanel.leftPanel)
+    {
+        preference = _leftWidgetPanelOrder;
+        preferenceKey = leftWidgetPanelOrderKey;
+    }
+    else if (panel == OAWidgetsPanel.rightPanel)
+    {
+        preference = _rightWidgetPanelOrder;
+        preferenceKey = rightWidgetPanelOrderKey;
+    }
+    else if (panel == OAWidgetsPanel.topPanel)
+    {
+        preference = _topWidgetPanelOrder;
+        preferenceKey = topWidgetPanelOrderOldKey;
+    }
+    else if (panel == OAWidgetsPanel.bottomPanel)
+    {
+        preference = _bottomWidgetPanelOrder;
+        preferenceKey = bottomWidgetPanelOrderKeyOld;
+    }
+    else
+    {
+        preference = _leftWidgetPanelOrder;
+        preferenceKey = leftWidgetPanelOrderKey;
+    }
+    return (OACommonListOfStringList *)[self layoutPreference:preference
+                                               preferenceKey:preferenceKey
+                                            screenLayoutMode:screenLayoutMode];
 }
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global

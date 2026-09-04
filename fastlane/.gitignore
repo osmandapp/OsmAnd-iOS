@@ -1,0 +1,4 @@
+# Release notes are generated from Resources/Localizations by Scripts/generate_release_notes.rb
+metadata/
+report.xml
+README.md

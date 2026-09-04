@@ -174,7 +174,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     for (OAFavoriteItem *point in points)
         [items addObject:[[OAFavoritePointBridgeItem alloc] initWithFavorite:point]];
 
-    return items.copy;
+    return [items copy];
 }
 
 - (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
@@ -361,8 +361,8 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     NSMutableArray<NSString *> *selectedFolderPaths = [NSMutableArray array];
     for (id item in favoriteItems)
     {
-        if ([item isKindOfClass:NSString.class] && ((NSString *) item).length > 0)
-            [selectedFolderPaths addObject:(NSString *) item];
+        if ([item isKindOfClass:[NSString class]] && ((NSString *)item).length > 0)
+            [selectedFolderPaths addObject:(NSString *)item];
     }
 
     NSArray<NSString *> *movedFolderPaths = [self topLevelFavoriteFolderPaths:selectedFolderPaths];
@@ -387,10 +387,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
             continue;
 
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
         BOOL isInsideMovedGroup = NO;
         for (NSString *movedGroupName in movedFolderPaths)
         {
@@ -435,11 +435,12 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
 - (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
 {
+    // favoriteItems mixes folder paths (NSString *) and OAFavoritePointBridgeItem *, only the paths matter here
     NSMutableSet<NSString *> *selectedGroupNames = [NSMutableSet set];
     for (id item in favoriteItems)
     {
-        if ([item isKindOfClass:NSString.class])
-            [selectedGroupNames addObject:(NSString *) item];
+        if ([item isKindOfClass:[NSString class]])
+            [selectedGroupNames addObject:(NSString *)item];
     }
 
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
@@ -477,10 +478,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:NSString.class])
+        if (![item isKindOfClass:[NSString class]])
             continue;
 
-        NSString *folderPath = (NSString *) item;
+        NSString *folderPath = (NSString *)item;
         OAFavoriteGroup *group = [self favoriteGroupWithName:folderPath];
         if (!group)
             continue;
@@ -491,10 +492,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
             continue;
 
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
         OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
         if (!favorite)
             continue;
@@ -544,10 +545,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:NSString.class])
+        if (![item isKindOfClass:[NSString class]])
             continue;
 
-        NSString *folderPath = (NSString *) item;
+        NSString *folderPath = (NSString *)item;
         for (OAFavoriteGroup *groupToShare in [self favoriteGroupsInsideOrEqualToGroupName:folderPath])
         {
             NSString *sourceGroupName = groupToShare.name;
@@ -567,10 +568,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
             continue;
 
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
         OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
         if (!favorite)
             continue;
@@ -643,10 +644,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:NSString.class])
+        if (![item isKindOfClass:[NSString class]])
             continue;
 
-        NSString *folderPath = (NSString *) item;
+        NSString *folderPath = (NSString *)item;
         for (OAFavoriteGroup *groupToDelete in [self favoriteGroupsInsideOrEqualToGroupName:folderPath])
         {
             NSString *groupName = groupToDelete.name;
@@ -660,10 +661,10 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
             continue;
 
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
         BOOL isInsideDeletedGroup = NO;
         for (NSString *groupName in deletedGroupNames)
         {
@@ -909,19 +910,19 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:NSString.class])
+        if (![item isKindOfClass:[NSString class]])
             continue;
 
-        NSString *folderPath = (NSString *) item;
+        NSString *folderPath = (NSString *)item;
         [self addFavoriteItemsInsideOrEqualToGroupName:folderPath toArray:result addedPointKeys:addedPointKeys];
     }
 
     for (id item in favoriteItems)
     {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
             continue;
 
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
         OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
         if (!favorite)
             continue;
@@ -1041,7 +1042,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
             result[groupName] = attributes;
     }
 
-    return result.copy;
+    return [result copy];
 }
 
 - (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName
@@ -1054,7 +1055,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
             [result addObject:favoriteGroup];
     }
 
-    return result.copy;
+    return [result copy];
 }
 
 - (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier
@@ -1160,7 +1161,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
         }
     }
 
-    return folderPaths.copy;
+    return [folderPaths copy];
 }
 
 - (NSArray<NSString *> *)topLevelFavoriteFolderPaths:(NSArray<NSString *> *)folderPaths
@@ -1182,7 +1183,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
             [result addObject:path];
     }
 
-    return result.copy;
+    return [result copy];
 }
 
 - (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points

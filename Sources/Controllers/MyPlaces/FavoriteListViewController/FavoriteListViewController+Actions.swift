@@ -53,8 +53,8 @@ extension FavoriteListViewController {
 
     func favoritePointRows(inFolder fullPath: String) -> [FavoritePointRow] {
         let groups: [OAFavoriteFolderBridgeItem]
-        if let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath), folder.isRoot() {
-            groups = folder.getGroup().map { [$0] } ?? []
+        if let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath), folder.isRoot {
+            groups = folder.group.map { [$0] } ?? []
         } else {
             groups = FavoriteFolderProvider.shared.favoriteGroupsInSubtree(fullPath)
         }
@@ -184,7 +184,7 @@ extension FavoriteListViewController {
     func selectedFavoritePointsCount(for selectedItems: [Any]) -> Int {
         let folderPointsCount = selectedItems.compactMap { $0 as? String }.reduce(0) { result, fullPath in
             guard let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath) else { return result }
-            return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
+            return result + (folder.isRoot ? folder.exactPointsCount : folder.subtreePointsCount)
         }
 
         let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
@@ -547,7 +547,7 @@ extension FavoriteListViewController {
 
         let folderPointsCount = folders.reduce(0) { result, fullPath in
             guard let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath) else { return result }
-            return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
+            return result + (folder.isRoot ? folder.exactPointsCount : folder.subtreePointsCount)
         }
         let pointsCount = folderPointsCount + points.count
         return String.localizedStringWithFormat(NSLocalizedString("folders_favorites_delete_message", comment: ""), folders.count, NumberFormatter.localizedCount(folders.count), pointsCount, NumberFormatter.localizedCount(pointsCount))

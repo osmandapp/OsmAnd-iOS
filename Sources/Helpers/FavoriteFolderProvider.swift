@@ -34,7 +34,7 @@ final class FavoriteFolderProvider {
     }
 
     func favoriteRootFolders() -> [FavoriteFolder] {
-        ensureFavoriteFolderSnapshot().root.getSubFolders()
+        ensureFavoriteFolderSnapshot().root.subFolders
     }
 
     func flattenedFavoriteFolders(includeRoot: Bool) -> [FavoriteFolder] {
@@ -44,7 +44,7 @@ final class FavoriteFolderProvider {
             result.append(root)
         }
 
-        for subFolder in root.getSubFolders() {
+        for subFolder in root.subFolders {
             collectFlattenedFavoriteFolders(subFolder, result: &result)
         }
 
@@ -52,7 +52,7 @@ final class FavoriteFolderProvider {
     }
 
     func favoriteGroupsInSubtree(_ fullPath: String) -> [OAFavoriteFolderBridgeItem] {
-        favoriteFoldersInSubtree(fullPath).compactMap { $0.getGroup() }
+        favoriteFoldersInSubtree(fullPath).compactMap { $0.group }
     }
 
     private func invalidateFavoriteFolderCache() {
@@ -71,7 +71,7 @@ final class FavoriteFolderProvider {
 
     private func buildFavoriteFolderSnapshot() -> FavoriteFolderSnapshot {
         let root = FavoriteFolder(fullPath: "", parent: nil)
-        var folders = [root.getFullPath(): root]
+        var folders = [root.fullPath: root]
         for group in OAFavoritesHelperBridge.shared().favoriteFolders() {
             addFavoriteGroupToSnapshot(root, folders: &folders, group: group)
         }
@@ -84,7 +84,7 @@ final class FavoriteFolderProvider {
     private func addFavoriteGroupToSnapshot(_ root: FavoriteFolder, folders: inout [String: FavoriteFolder], group: OAFavoriteFolderBridgeItem) {
         let fullPath = group.groupName
         if fullPath.isEmpty {
-            root.setGroup(group)
+            root.group = group
             return
         }
 
@@ -102,12 +102,12 @@ final class FavoriteFolderProvider {
             }
         }
 
-        parent.setGroup(group)
+        parent.group = group
     }
 
     private func collectFlattenedFavoriteFolders(_ folder: FavoriteFolder, result: inout [FavoriteFolder]) {
         result.append(folder)
-        for subFolder in folder.getSubFolders() {
+        for subFolder in folder.subFolders {
             collectFlattenedFavoriteFolders(subFolder, result: &result)
         }
     }

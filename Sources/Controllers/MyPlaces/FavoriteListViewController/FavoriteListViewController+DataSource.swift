@@ -198,8 +198,8 @@ extension FavoriteListViewController {
             return
         }
 
-        var rootFolders = rootFolder.getSubFolders()
-        if rootFolder.getGroup() != nil {
+        var rootFolders = rootFolder.subFolders
+        if rootFolder.group != nil {
             rootFolders.insert(rootFolder, at: 0)
         }
 
@@ -260,14 +260,14 @@ extension FavoriteListViewController {
             return
         }
 
-        let subFolders = FavoriteSortModeHelper.sortFoldersWithMode((folder.isRoot() ? [] : folder.getSubFolders()).map { FavoriteFolderRow(folder: $0) }.filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(favoritePointRows(folder.getExactPoints(), sortMode: currentSortMode).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
+        let subFolders = FavoriteSortModeHelper.sortFoldersWithMode((folder.isRoot ? [] : folder.subFolders).map { FavoriteFolderRow(folder: $0) }.filter { matchesSearch($0.title) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(favoritePointRows(folder.exactPoints(), sortMode: currentSortMode).filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         if favorites.isEmpty && subFolders.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
         var snapshot = Snapshot()
-        let stats = folderStats(folder: folder, exactRoot: folder.isRoot())
+        let stats = folderStats(folder: folder, exactRoot: folder.isRoot)
         let sections: [FavoriteListSection] = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
         updateLayoutSections(sections)
         snapshot.appendSections(sections)
@@ -452,15 +452,15 @@ extension FavoriteListViewController {
     private func folderStats(folder: FavoriteFolder, exactRoot: Bool = false) -> FavoriteFolderStats? {
         guard !isSearchResultsMode else { return nil }
         if exactRoot {
-            let pointsCount = folder.getExactPointsCount()
+            let pointsCount = folder.exactPointsCount
             guard pointsCount > 0 else { return nil }
-            return FavoriteFolderStats(foldersCount: 0, pointsCount: pointsCount, fileSize: folder.getGroup()?.fileSize ?? 0)
+            return FavoriteFolderStats(foldersCount: 0, pointsCount: pointsCount, fileSize: folder.group?.fileSize ?? 0)
         }
 
-        let pointsCount = folder.getSubtreePointsCount()
-        let foldersCount = folder.getSubtreeFoldersCount()
-        guard folder.getGroup() != nil || foldersCount > 0 || pointsCount > 0 else { return nil }
-        return FavoriteFolderStats(foldersCount: foldersCount, pointsCount: pointsCount, fileSize: folder.getSubtreeFileSize())
+        let pointsCount = folder.subtreePointsCount
+        let foldersCount = folder.subtreeFoldersCount
+        guard folder.group != nil || foldersCount > 0 || pointsCount > 0 else { return nil }
+        return FavoriteFolderStats(foldersCount: foldersCount, pointsCount: pointsCount, fileSize: folder.subtreeFileSize)
     }
     
     private func matchesSearch(_ text: String?) -> Bool {
@@ -476,7 +476,7 @@ extension FavoriteListViewController {
             if let parentFullPath {
                 favoriteRows = favoritePointRows(inFolder: parentFullPath)
             } else {
-                let groups = FavoriteFolderProvider.shared.flattenedFavoriteFolders(includeRoot: true).compactMap { $0.getGroup() }
+                let groups = FavoriteFolderProvider.shared.flattenedFavoriteFolders(includeRoot: true).compactMap { $0.group }
                 let points = groups.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.groupName) }
                 favoriteRows = favoritePointRows(points)
             }

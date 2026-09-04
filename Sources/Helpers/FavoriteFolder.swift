@@ -11,54 +11,31 @@ import Foundation
 final class FavoriteFolder {
     private static let personalCategory = "personal"
 
-    private let fullPath: String
-    private let name: String
+    let fullPath: String
+    let name: String
+    var group: OAFavoriteFolderBridgeItem?
 
-    private var subFolders: [FavoriteFolder] = []
-    private var group: OAFavoriteFolderBridgeItem?
-    private var subtreePointsCount = 0
-    private var subtreeFileSize: Int64 = 0
-    private var subtreeFoldersCount = 0
-    private var subtreeLastModified: Int64 = 0
-
-    private weak var parent: FavoriteFolder?
+    private(set) var subFolders: [FavoriteFolder] = []
+    private(set) var subtreePointsCount = 0
+    private(set) var subtreeFileSize: Int64 = 0
+    private(set) var subtreeFoldersCount = 0
+    private(set) var subtreeLastModified: Int64 = 0
+    private(set) weak var parent: FavoriteFolder?
+    
+    var isVirtual: Bool {
+        group == nil
+    }
+    var isRoot: Bool {
+        parent == nil
+    }
+    var exactPointsCount: Int {
+        Int(group?.pointsCount ?? 0)
+    }
 
     init(fullPath: String, parent: FavoriteFolder?) {
         self.fullPath = fullPath
         self.name = FavoriteFolderPath.lastSegment(fullPath)
         self.parent = parent
-    }
-
-    func getFullPath() -> String {
-        fullPath
-    }
-
-    func getName() -> String {
-        name
-    }
-
-    func getParent() -> FavoriteFolder? {
-        parent
-    }
-
-    func getGroup() -> OAFavoriteFolderBridgeItem? {
-        group
-    }
-
-    func setGroup(_ group: OAFavoriteFolderBridgeItem?) {
-        self.group = group
-    }
-
-    func isVirtual() -> Bool {
-        group == nil
-    }
-
-    func isRoot() -> Bool {
-        parent == nil
-    }
-
-    func getSubFolders() -> [FavoriteFolder] {
-        subFolders
     }
 
     func addSubFolder(_ subFolder: FavoriteFolder) {
@@ -81,7 +58,7 @@ final class FavoriteFolder {
     }
 
     func updateSubtreeStats() {
-        var pointsCount = getExactPointsCount()
+        var pointsCount = exactPointsCount
         var fileSize = group?.fileSize ?? 0
         var foldersCount = subFolders.count
         var lastModified = group?.lastModifiedDate.map { Int64(($0.timeIntervalSince1970 * 1000.0).rounded()) } ?? 0
@@ -99,29 +76,9 @@ final class FavoriteFolder {
         subtreeLastModified = lastModified
     }
 
-    func getExactPoints() -> [OAFavoritePointBridgeItem] {
+    func exactPoints() -> [OAFavoritePointBridgeItem] {
         guard let group else { return [] }
         return OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: group.groupName)
-    }
-
-    func getExactPointsCount() -> Int {
-        Int(group?.pointsCount ?? 0)
-    }
-
-    func getSubtreePointsCount() -> Int {
-        subtreePointsCount
-    }
-
-    func getSubtreeFileSize() -> Int64 {
-        subtreeFileSize
-    }
-
-    func getSubtreeFoldersCount() -> Int {
-        subtreeFoldersCount
-    }
-
-    func getSubtreeLastModified() -> Int64 {
-        subtreeLastModified
     }
 }
 

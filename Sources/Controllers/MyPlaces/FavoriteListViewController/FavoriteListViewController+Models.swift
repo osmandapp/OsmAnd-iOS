@@ -141,16 +141,16 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     }
 
     init(folder: FavoriteFolder) {
-        fullPath = folder.getFullPath()
-        let group = folder.getGroup()
+        fullPath = folder.fullPath
+        let group = folder.group
         self.group = group
-        if folder.isRoot() {
+        if folder.isRoot {
             lastModified = group?.lastModifiedDate
-            subtreePointsCount = folder.getExactPointsCount()
+            subtreePointsCount = folder.exactPointsCount
         } else {
-            let timestamp = folder.getSubtreeLastModified()
+            let timestamp = folder.subtreeLastModified
             lastModified = timestamp > 0 ? Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000.0) : nil
-            subtreePointsCount = folder.getSubtreePointsCount()
+            subtreePointsCount = folder.subtreePointsCount
         }
     }
 }

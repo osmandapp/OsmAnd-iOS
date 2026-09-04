@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Builds and caches the folder tree out of the flat group list: every path segment becomes a folder, and one without its own group is virtual. Lives inside FavouritesHelper on Android.
 final class FavoriteFolderProvider {
     private struct FavoriteFolderSnapshot {
         let root: FavoriteFolder

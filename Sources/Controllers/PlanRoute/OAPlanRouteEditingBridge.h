@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, PlanRoutePointData, PlanRouteGroupData, PlanRouteSegmentData, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
+@class OAApplicationMode, PlanRoutePointData, PlanRouteGroupData, PlanRouteSegmentData, UIViewController, OASGpxFile, OAGpxWptItem, OASRouteStatistic, TrackChartPoints;
 
 typedef NS_ENUM(NSInteger, EOAPlanRouteShowAlongType) {
     EOAPlanRouteShowAlongTypePoi = 0,
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly) BOOL isCalculatingRoute;
 @property (nonatomic, readonly) BOOL isTerrainElevationAvailable;
 
-- (NSArray<OARouteStatistics *> *)calculateRouteStatistics;
+- (NSArray<OASRouteStatistic *> *)calculateRouteStatistics;
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads;
 - (void)cancelElevationCalculation;
 

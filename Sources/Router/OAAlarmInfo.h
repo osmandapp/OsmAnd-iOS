@@ -13,40 +13,29 @@
 #import "OALocationPoint.h"
 
 struct RouteTypeRule;
+@class OASRouteEventType;
 
-typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
-{
-    AIT_SPEED_CAMERA = 0,
-    AIT_SPEED_LIMIT,
-    AIT_BORDER_CONTROL,
-    AIT_RAILWAY,
-    AIT_TRAFFIC_CALMING,
-    AIT_TOLL_BOOTH,
-    AIT_STOP,
-    AIT_PEDESTRIAN,
-    AIT_TUNNEL,
-    AIT_HAZARD,
-    AIT_MAXIMUM,
-    AIT_RED_LIGHT_CAMERA,
-};
+FOUNDATION_EXPORT BOOL OARouteEventTypeEquals(OASRouteEventType *type, OASRouteEventType *expected);
 
 @interface OAAlarmInfo : NSObject<OALocationPoint>
 
-@property (nonatomic, readonly) EOAAlarmInfoType type;
+@property (nonatomic, strong, readonly) OASRouteEventType *type;
 @property (nonatomic, readonly) int locationIndex;
 @property (nonatomic) int lastLocationIndex;
 @property (nonatomic) int intValue;
 @property (nonatomic) float floatValue;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
+@property (nonatomic, copy, readonly) NSString *sourceTag;
+@property (nonatomic, copy, readonly) NSString *sourceValue;
 
-- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex;
+- (instancetype) initWithType:(OASRouteEventType *)type locationIndex:(int)locationIndex;
 
 + (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond;
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate;
 
-+ (int) getPriority:(EOAAlarmInfoType)type;
-+ (NSString* ) getName:(EOAAlarmInfoType)type;
-+ (NSString* ) getVisualName:(EOAAlarmInfoType)type;
++ (int) getPriority:(OASRouteEventType *)type;
++ (NSString* ) getName:(OASRouteEventType *)type;
++ (NSString* ) getVisualName:(OASRouteEventType *)type;
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance;
 

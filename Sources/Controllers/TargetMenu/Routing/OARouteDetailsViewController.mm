@@ -20,7 +20,6 @@
 #import "OAMapLayers.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"
@@ -32,6 +31,7 @@
 #import "OAEmissionHelper.h"
 #import "OASegmentTableViewCell.h"
 #import "OARouteDirectionInfo.h"
+#import "OASharedRouteDetailsProvider.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
@@ -52,32 +52,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     EOAOARouteDetailsViewControllerModeInstructions = 0,
     EOAOARouteDetailsViewControllerModeAnalysis
 };
-
-@implementation OACumulativeInfo
-
-+ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
-{
-    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
-    if (position >= routeDirections.count)
-        return cumulativeInfo;
-    
-    for (int i = 0; i < position; i++)
-    {
-        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
-        cumulativeInfo.distance += routeDirectionInfo.distance;
-    }
-    return cumulativeInfo;
-}
-
-+ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
-{
-    long timeInSeconds = [model getExpectedTime];
-    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
-}
-
-@end
-
 
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate, OAEmissionHelperListener>
 
@@ -148,17 +122,25 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
     
     NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
+    NSArray<OASRouteCumulativeInfo *> *cumulativeInfoByPosition =
+        [OASharedRouteDetailsProvider getCumulativeInfoByPosition:routeDirections];
     for (NSInteger i = 0; i < routeDirections.count; i++)
     {
         OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        UITableViewCell *cell = [self getRouteDirectionCell:i
+                                                     model:routeDirectionInfo
+                                            directionsInfo:routeDirections
+                                            cumulativeInfo:cumulativeInfoByPosition[i + 1]];
         [cells addObject:cell];
     }
 
     [_instructionsTabData setObject:cells forKey:@(section++)];
 }
 
-- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex
+                                      model:(OARouteDirectionInfo *)model
+                             directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+                             cumulativeInfo:(OASRouteCumulativeInfo *)cumulativeInfo
 {
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -200,9 +182,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         [cell setTopLeftLabelWithText:segmentDistanceLabelText];
         [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
         
-        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
-        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance withParams:[OsmAndFormatterParams useLowerBounds]];
-        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distanceMeters withParams:[OsmAndFormatterParams useLowerBounds]];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.timeSeconds shortFormat:YES];
         [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }
     else
@@ -356,9 +337,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     const auto& originalRoute = self.routingHelper.getRoute.getOriginalRoute;
     if (!originalRoute.empty())
     {
-        NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
+        NSArray<OASRouteStatistic *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
         
-        for (OARouteStatistics *stat in routeInfo)
+        for (OASRouteStatistic *stat in routeInfo)
         {
             OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
             cell.detailsButton.tag = section;
@@ -382,11 +363,17 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             
             OARouteInfoLegendCell *legend = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
             
-            for (NSString *key in stat.partition)
+            for (OASRouteStatisticElement *segment in stat.partition)
             {
-                OARouteSegmentAttribute *segment = stat.partition[key];
-                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] && ![segment.getUserPropertyName isEqualToString:kUndefinedAttr] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
-                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[OAOsmAndFormatter getFormattedDistance:segment.distance]];
+                NSString *propertyName = segment.userPropertyName;
+                NSString *title = [stat.name isEqualToString:@"steepness"]
+                    && ![propertyName isEqualToString:kUndefinedAttr]
+                    ? propertyName
+                    : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", propertyName]);
+                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc]
+                    initWithTitle:title
+                    color:UIColorFromARGB(segment.color)
+                    distance:[OAOsmAndFormatter getFormattedDistance:segment.distanceMeters]];
                 [legend.legendStackView addArrangedSubview:item];
             }
             [dataArr setObject:@[cell, legend] forKey:@(section++)];

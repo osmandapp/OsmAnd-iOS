@@ -22,7 +22,6 @@
 #import "OARouteCalculationResult.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
-#import "OARouteStatistics.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"

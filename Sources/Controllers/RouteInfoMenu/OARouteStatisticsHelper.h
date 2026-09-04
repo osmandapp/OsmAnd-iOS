@@ -17,24 +17,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
-@class OARouteStatistics, OARouteSegmentAttribute;
+@class OARouteStatisticsComputer, OASRouteAttributeClassification, OASRouteStatistic;
+
+typedef NSDictionary<NSString *, NSNumber *> * _Nullable (^OARouteStatisticsRenderingLookup)(
+    NSString *attribute,
+    NSDictionary<NSString *, NSString *> *settings);
 
 @interface OARouteSegmentWithIncline : NSObject
 
 @property (nonatomic) std::shared_ptr<RouteDataObject> obj;
-@property (nonatomic) float dist;
-@property (nonatomic) float h;
-@property (nonatomic) NSMutableArray<NSNumber *> *interpolatedHeightByStep;
-@property (nonatomic) NSMutableArray<NSNumber *> *slopeByStep;
-@property (nonatomic) NSMutableArray<NSString *> *slopeClassUserString;
-@property (nonatomic) NSMutableArray<NSNumber *> *slopeClass;
 
 @end
 
 @interface OARouteStatisticsHelper : NSObject
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames;
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames;
++ (NSArray<OASRouteStatistic *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
+                                            attributeNames:(NSArray<NSString *> *)attributeNames
+                                        statisticsComputer:(OARouteStatisticsComputer *)statisticsComputer;
 + (NSArray<NSString *> *) getRouteStatisticAttrsNames:(BOOL)excludeSteepness;
 
 @end
@@ -43,9 +44,11 @@ static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
 - (instancetype)initWithPresentationEnvironment:(std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultPresentationEnv;
 
-- (OARouteStatistics *) computeStatistic:(NSArray<OARouteSegmentWithIncline *> *) route attribute:(NSString *) attribute;
+/** Testable renderer boundary with the same current/default fallback as production. */
+- (instancetype)initWithCurrentRendererLookup:(OARouteStatisticsRenderingLookup)currentRendererLookup
+                        defaultRendererLookup:(OARouteStatisticsRenderingLookup)defaultRendererLookup;
 
-- (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
+- (OASRouteAttributeClassification *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment;
 
 @end
 

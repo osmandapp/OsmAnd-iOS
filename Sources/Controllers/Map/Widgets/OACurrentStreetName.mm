@@ -15,6 +15,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"
+#import "OsmAndSharedWrapper.h"
 
 #include "routeSegmentResult.h"
 #include <OsmAndCore/Utilities.h>
@@ -88,7 +89,7 @@
         if (!_turnType)
             _turnType = TurnType::ptrValueOf(TurnType::C, false);
         
-        OAExitInfo *exitInfo = info.directionInfo.exitInfo;
+        OASRouteExitInfo *exitInfo = info.directionInfo.exitInfo;
         if (exitInfo)
         {
             // don't display name of exit street name

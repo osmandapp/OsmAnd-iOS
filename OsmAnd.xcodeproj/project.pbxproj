@@ -2604,7 +2604,6 @@
 		DA5A836326C563A800F274C7 /* OAHomeWorkCollectionViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3626C563A300F274C7 /* OAHomeWorkCollectionViewCell.mm */; };
 		DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */; };
 		DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */; };
-		DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */; };
 		DA5A836726C563A800F274C7 /* OARoutingSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */; };
 		DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */; };
 		DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */; };
@@ -3015,8 +3014,9 @@
 		DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810026C563A600F274C7 /* OAGpxRouteApproximation.mm */; };
 		DA5A856226C563A900F274C7 /* OAWaypointHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810126C563A600F274C7 /* OAWaypointHelper.mm */; };
 		DA5A856326C563A900F274C7 /* OARouteCalculationResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810226C563A600F274C7 /* OARouteCalculationResult.mm */; };
+		C1D800012F70000100D80001 /* OARouteCalculationResultSnapshotAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D800042F70000100D80004 /* OARouteCalculationResultSnapshotAdapter.mm */; };
+		C1D900012F71000100D90001 /* OASharedRouteDetailsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D900042F71000100D90004 /* OASharedRouteDetailsProvider.mm */; };
 		DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */; };
-		DA5A856526C563A900F274C7 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810526C563A600F274C7 /* OAExitInfo.m */; };
 		DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810626C563A600F274C7 /* OALocationsHolder.mm */; };
 		DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */; };
 		DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810E26C563A600F274C7 /* OATransportRoutingHelper.mm */; };
@@ -3130,6 +3130,10 @@
 		DA80D9A62716CC1800445DAF /* map_track_point_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */; };
 		DA80D9A72716CC1800445DAF /* map_track_point_start@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
+		C1D800022F70000100D80002 /* OARouteCalculationResultSnapshotAdapterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D800052F70000100D80005 /* OARouteCalculationResultSnapshotAdapterTest.mm */; };
+		C1D900022F71000100D90002 /* OASharedRouteDetailsProviderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */; };
+		C1DA00012F72000100DA0001 /* OASharedRouteEventHelperCompatibilityTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1DA00022F72000100DA0002 /* OASharedRouteEventHelperCompatibilityTest.mm */; };
+		C1DB00012F73000100DB0001 /* OASharedRouteStatisticsCompatibilityTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
 		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
@@ -7203,7 +7207,6 @@
 		DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACompoundViewController.m; sourceTree = "<group>"; };
 		DA5A7D3926C563A300F274C7 /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARootViewController.h; sourceTree = "<group>"; };
 		DA5A7D3B26C563A300F274C7 /* OAAppModeView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppModeView.mm; sourceTree = "<group>"; };
-		DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARouteStatistics.m; sourceTree = "<group>"; };
 		DA5A7D3D26C563A300F274C7 /* OARoutingSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutingSettingsCell.xib; sourceTree = "<group>"; };
 		DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteAvoidTransportSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteSettingsViewController.mm; sourceTree = "<group>"; };
@@ -7219,7 +7222,6 @@
 		DA5A7D4926C563A300F274C7 /* OARouteSegmentShieldView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteSegmentShieldView.xib; sourceTree = "<group>"; };
 		DA5A7D4A26C563A300F274C7 /* OARoutingTargetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingTargetCell.m; sourceTree = "<group>"; };
 		DA5A7D4B26C563A300F274C7 /* OARoutingInfoCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingInfoCell.mm; sourceTree = "<group>"; };
-		DA5A7D4C26C563A300F274C7 /* OARouteStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteStatistics.h; sourceTree = "<group>"; };
 		DA5A7D4D26C563A300F274C7 /* OAAppModeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppModeView.h; sourceTree = "<group>"; };
 		DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingInfoCell.h; sourceTree = "<group>"; };
 		DA5A7D4F26C563A300F274C7 /* OARoutingSettingsCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingSettingsCell.mm; sourceTree = "<group>"; };
@@ -7940,7 +7942,6 @@
 		DA5A80F526C563A600F274C7 /* OARouteProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteProvider.h; sourceTree = "<group>"; };
 		DA5A80F626C563A600F274C7 /* OARoutingHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingHelper.mm; sourceTree = "<group>"; };
 		DA5A80F726C563A600F274C7 /* OARouteDirectionInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteDirectionInfo.mm; sourceTree = "<group>"; };
-		DA5A80F826C563A600F274C7 /* OAExitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
 		DA5A80F926C563A600F274C7 /* OAWaypointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointHelper.h; sourceTree = "<group>"; };
 		DA5A80FA26C563A600F274C7 /* OATransportRouteCalculationParams.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportRouteCalculationParams.mm; sourceTree = "<group>"; };
 		DA5A80FB26C563A600F274C7 /* OARouteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteImporter.h; sourceTree = "<group>"; };
@@ -7951,9 +7952,12 @@
 		DA5A810026C563A600F274C7 /* OAGpxRouteApproximation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxRouteApproximation.mm; sourceTree = "<group>"; };
 		DA5A810126C563A600F274C7 /* OAWaypointHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointHelper.mm; sourceTree = "<group>"; };
 		DA5A810226C563A600F274C7 /* OARouteCalculationResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResult.mm; sourceTree = "<group>"; };
+		C1D800032F70000100D80003 /* OARouteCalculationResultSnapshotAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteCalculationResultSnapshotAdapter.h; sourceTree = "<group>"; };
+		C1D800042F70000100D80004 /* OARouteCalculationResultSnapshotAdapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultSnapshotAdapter.mm; sourceTree = "<group>"; };
+		C1D900032F71000100D90003 /* OASharedRouteDetailsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASharedRouteDetailsProvider.h; sourceTree = "<group>"; };
+		C1D900042F71000100D90004 /* OASharedRouteDetailsProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteDetailsProvider.mm; sourceTree = "<group>"; };
 		DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximator.mm; sourceTree = "<group>"; };
 		DA5A810426C563A600F274C7 /* OAGpxApproximator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximator.h; sourceTree = "<group>"; };
-		DA5A810526C563A600F274C7 /* OAExitInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
 		DA5A810626C563A600F274C7 /* OALocationsHolder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALocationsHolder.mm; sourceTree = "<group>"; };
 		DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityLocationPoint.mm; sourceTree = "<group>"; };
 		DA5A810826C563A600F274C7 /* OATargetPointsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetPointsHelper.h; sourceTree = "<group>"; };
@@ -8101,6 +8105,10 @@
 		DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@2x.png"; path = "Resources/Icons/map_track_point_start@2x.png"; sourceTree = "<group>"; };
 		DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@3x.png"; path = "Resources/Icons/map_track_point_start@3x.png"; sourceTree = "<group>"; };
 		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
+		C1D800052F70000100D80005 /* OARouteCalculationResultSnapshotAdapterTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultSnapshotAdapterTest.mm; sourceTree = "<group>"; };
+		C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteDetailsProviderTest.mm; sourceTree = "<group>"; };
+		C1DA00022F72000100DA0002 /* OASharedRouteEventHelperCompatibilityTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteEventHelperCompatibilityTest.mm; sourceTree = "<group>"; };
+		C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteStatisticsCompatibilityTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
 		DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Concurrent.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Concurrent.a"; sourceTree = "<group>"; };
@@ -13196,8 +13204,6 @@
 				DA5A7D5B26C563A300F274C7 /* OARouteSettingsParameterController.mm */,
 				DA5A7D5226C563A300F274C7 /* OARouteSettingsViewController.h */,
 				DA5A7D3F26C563A300F274C7 /* OARouteSettingsViewController.mm */,
-				DA5A7D4C26C563A300F274C7 /* OARouteStatistics.h */,
-				DA5A7D3C26C563A300F274C7 /* OARouteStatistics.m */,
 				DA5A7D4626C563A300F274C7 /* OARouteStatisticsHelper.h */,
 				DA5A7D4226C563A300F274C7 /* OARouteStatisticsHelper.mm */,
 				DA5A7D4E26C563A300F274C7 /* OARoutingInfoCell.h */,
@@ -14711,8 +14717,6 @@
 				DA5A811E26C563A600F274C7 /* OAAlarmInfo.mm */,
 				DA5A811826C563A600F274C7 /* OAAmenityLocationPoint.h */,
 				DA5A810726C563A600F274C7 /* OAAmenityLocationPoint.mm */,
-				DA5A80F826C563A600F274C7 /* OAExitInfo.h */,
-				DA5A810526C563A600F274C7 /* OAExitInfo.m */,
 				DA5A810426C563A600F274C7 /* OAGpxApproximator.h */,
 				DA5A810326C563A600F274C7 /* OAGpxApproximator.mm */,
 				C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */,
@@ -14727,6 +14731,10 @@
 				DA5A811F26C563A600F274C7 /* OARouteCalculationParams.mm */,
 				DA5A810A26C563A600F274C7 /* OARouteCalculationResult.h */,
 				DA5A810226C563A600F274C7 /* OARouteCalculationResult.mm */,
+				C1D800032F70000100D80003 /* OARouteCalculationResultSnapshotAdapter.h */,
+				C1D800042F70000100D80004 /* OARouteCalculationResultSnapshotAdapter.mm */,
+				C1D900032F71000100D90003 /* OASharedRouteDetailsProvider.h */,
+				C1D900042F71000100D90004 /* OASharedRouteDetailsProvider.mm */,
 				DA5A811726C563A600F274C7 /* OARouteDirectionInfo.h */,
 				DA5A80F726C563A600F274C7 /* OARouteDirectionInfo.mm */,
 				DA5A80FB26C563A600F274C7 /* OARouteImporter.h */,
@@ -14815,6 +14823,10 @@
 			isa = PBXGroup;
 			children = (
 				DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */,
+				C1D800052F70000100D80005 /* OARouteCalculationResultSnapshotAdapterTest.mm */,
+				C1D900052F71000100D90005 /* OASharedRouteDetailsProviderTest.mm */,
+				C1DA00022F72000100DA0002 /* OASharedRouteEventHelperCompatibilityTest.mm */,
+				C1DB00022F73000100DB0002 /* OASharedRouteStatisticsCompatibilityTest.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -18173,7 +18185,6 @@
 				FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */,
 				DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */,
 				DA5A834B26C563A800F274C7 /* OATitleDescrDraggableCell.m in Sources */,
-				DA5A856526C563A900F274C7 /* OAExitInfo.m in Sources */,
 				DA5A83E926C563A800F274C7 /* OAWikiMenuViewController.m in Sources */,
 				DA4ABF192876DA6800B996EF /* OAQuickActionsSettingsItem.mm in Sources */,
 				2745FEF72F3A1207004F6AB4 /* PreviewImageView.swift in Sources */,
@@ -18191,7 +18202,6 @@
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
-				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
 				2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */,
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,
@@ -19169,6 +19179,8 @@
 				2783B4382E66E81900682723 /* PredefinedInputDeviceProfile.swift in Sources */,
 				DA5A814126C563A700F274C7 /* OARelation.m in Sources */,
 				DA5A856326C563A900F274C7 /* OARouteCalculationResult.mm in Sources */,
+				C1D800012F70000100D80001 /* OARouteCalculationResultSnapshotAdapter.mm in Sources */,
+				C1D900012F71000100D90001 /* OASharedRouteDetailsProvider.mm in Sources */,
 				DA5A834926C563A800F274C7 /* OAProgressBarCell.mm in Sources */,
 				DA5A845D26C563A900F274C7 /* OAMapillaryLayer.mm in Sources */,
 				DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */,
@@ -19622,6 +19634,10 @@
 				D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */,
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
+				C1D800022F70000100D80002 /* OARouteCalculationResultSnapshotAdapterTest.mm in Sources */,
+				C1D900022F71000100D90002 /* OASharedRouteDetailsProviderTest.mm in Sources */,
+				C1DA00012F72000100DA0001 /* OASharedRouteEventHelperCompatibilityTest.mm in Sources */,
+				C1DB00012F73000100DB0001 /* OASharedRouteStatisticsCompatibilityTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,

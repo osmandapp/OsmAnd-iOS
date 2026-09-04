@@ -2068,7 +2068,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 // MARK: - Route statistics
 
-- (NSArray<OARouteStatistics *> *)calculateRouteStatistics
+- (NSArray<OASRouteStatistic *> *)calculateRouteStatistics
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)

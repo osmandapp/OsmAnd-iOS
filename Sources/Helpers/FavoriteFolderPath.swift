@@ -74,7 +74,7 @@ final class FavoriteFolderPath {
 
     static func isValidSegment(_ segment: String?) -> Bool {
         guard let segment, !segment.isEmpty else { return false }
-        return !segment.contains(delimiter) && !segment.contains("_%_")
+        return !segment.contains(delimiter) && !segment.contains(SUBFOLDER_PLACEHOLDER)
     }
 
     static func requireValidFullPath(_ fullPath: String) {

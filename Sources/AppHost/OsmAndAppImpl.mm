@@ -86,7 +86,6 @@
 #define VERSION_4_7_5 4.75
 
 #define kAppData @"app_data"
-#define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
 
 #define _(name)
@@ -1300,13 +1299,13 @@
 
 - (NSString *)getGroupFileName:(NSString *)groupName
 {
-    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:SUBFOLDER_PLACEHOLDER];
     result = [result stringByReplacingOccurrencesOfString:@":" withString:XML_COLON];
     return result;
 }
 
 - (NSString *)getGroupName:(NSString *)fileName {
-    NSString *result = [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+    NSString *result = [fileName stringByReplacingOccurrencesOfString:SUBFOLDER_PLACEHOLDER withString:@"/"];
     result = [result stringByReplacingOccurrencesOfString:XML_COLON withString:@":"];
     return result;
 }

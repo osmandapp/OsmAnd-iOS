@@ -294,7 +294,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
       backgroundIconName:(nullable NSString *)backgroundIconName
 {
     NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
-    if ([trimmedName containsString:@"/"] || [trimmedName containsString:@"_%_"])
+    if ([trimmedName containsString:@"/"] || [trimmedName containsString:SUBFOLDER_PLACEHOLDER])
         return NO;
 
     NSString *parent = parentGroupName ?: @"";
@@ -316,7 +316,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     NSString *targetGroupName = newName ?: @"";
     for (NSString *segment in [targetGroupName componentsSeparatedByString:@"/"])
-        if (segment.length == 0 || [segment containsString:@"_%_"])
+        if (segment.length == 0 || [segment containsString:SUBFOLDER_PLACEHOLDER])
             return NO;
 
     NSString *sourceGroupName = group ? group.name : (groupName ?: @"");

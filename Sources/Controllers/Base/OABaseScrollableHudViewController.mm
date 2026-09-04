@@ -35,6 +35,7 @@
     
     BOOL _isDragging;
     BOOL _isHiding;
+    void (^_forceHideCompletion)(void);
     CGFloat _initialTouchPoint;
     CGFloat _tableViewContentOffsetY;
 }
@@ -488,6 +489,12 @@
     [self hide];
 }
 
+- (void)forceHideWithCompletion:(void (^)(void))onComplete
+{
+    _forceHideCompletion = [onComplete copy];
+    [self forceHide];
+}
+
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _isHiding = YES;
@@ -502,14 +509,28 @@
             [_mapPanel hideScrollableHudViewController];
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
-            [self dismissViewControllerAnimated:NO completion:onComplete];
+            [self dismissViewControllerAnimated:NO completion:^{
+                if (onComplete)
+                    onComplete();
+                void (^forceHideCompletion)(void) = _forceHideCompletion;
+                _forceHideCompletion = nil;
+                if (forceHideCompletion)
+                    forceHideCompletion();
+            }];
         }];
     }
     else
     {
         [_mapPanel hideScrollableHudViewController];
         _scrollableView.frame = frame;
-        [self dismissViewControllerAnimated:YES completion:onComplete];
+        [self dismissViewControllerAnimated:YES completion:^{
+            if (onComplete)
+                onComplete();
+            void (^forceHideCompletion)(void) = _forceHideCompletion;
+            _forceHideCompletion = nil;
+            if (forceHideCompletion)
+                forceHideCompletion();
+        }];
     }
 }
 

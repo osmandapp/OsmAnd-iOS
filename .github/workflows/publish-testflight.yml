@@ -1,0 +1,56 @@
+name: Publish TestFlight (self hosted)
+
+# Publishes an IPA that a previous "Build OsmAndMaps (self hosted)" run already produced,
+# so a build can be checked first and uploaded later without rebuilding it.
+# Release notes are taken from the in-app "What's new" strings, see fastlane/Fastfile.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Run ID of the build to publish (the number in the build run URL)'
+        required: true
+      releaseversion:
+        description: 'Release Version (selects the ios_release_X_Y notes)'
+        required: true
+        default: '5.4.0'
+
+jobs:
+  publish:
+    runs-on: self-hosted
+    permissions:
+      actions: read
+    steps:
+    - name: Checkout ios
+      uses: actions/checkout@v4
+      with:
+        ref: refs/heads/master
+        repository: osmandapp/OsmAnd-iOS
+        path: ios
+        clean: true
+
+    - name: Download IPA from build run
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '*.ipa'
+        merge-multiple: true
+        path: ipa
+        run-id: ${{ github.event.inputs.run_id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup fastlane
+      run: |
+        command -v fastlane >/dev/null 2>&1 || brew install fastlane
+        fastlane --version
+
+    - name: Publish TestFlight
+      working-directory: ios
+      env:
+        LANG: "en_US.UTF-8"
+        RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }}
+        IPA_PATH: ${{ github.workspace }}/ipa/OsmAnd Maps.ipa
+        ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        FASTLANE_USER: ${{ secrets.APPLEID_USERNAME }}
+        FASTLANE_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+      run: fastlane beta

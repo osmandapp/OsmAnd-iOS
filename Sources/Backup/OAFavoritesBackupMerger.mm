@@ -9,6 +9,7 @@
 
 #import "OABackupHelper.h"
 #import "OABackupInfo.h"
+#import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAFavoriteItem.h"
@@ -47,6 +48,11 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
             continue;
 
         OAFavoritesSettingsItem *localItem = (OAFavoritesSettingsItem *)localFile.item;
+        // Merging downloads the remote file, so skip types the backup would filter out anyway.
+        OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localItem];
+        if (exportType == nil || ![[BackupUtils getBackupTypePref:exportType] get])
+            continue;
+
         OAFavoriteGroup *localGroup = localItem.items.count == 1 ? localItem.items.firstObject : nil;
         if (!localGroup || localGroup.isPersonal)
             continue;

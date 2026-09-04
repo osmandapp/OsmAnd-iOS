@@ -11,12 +11,15 @@ import Foundation
 @objcMembers
 final class VehicleTrackPointsAnalyser: NSObject, GpxTrackAnalysisTrackPointsAnalyser {
     
+    private static let gpxTags: [String] = OBDCommand.entries.compactMap { $0.gpxTag }
+
     func onAnalysePoint(analysis: GpxTrackAnalysis, point: WptPt, attribute: PointAttributes) {
+        let deferredExtensions = point.getDeferredExtensionsToRead()
+        let extensions = point.getExtensionsToRead()
         // Skip analyser entirely if the point has no OBD extensions
-        guard !(point.getDeferredExtensionsToRead().isEmpty && point.getExtensionsToRead().isEmpty) else { return }
-        for command in OBDCommand.entries {
-            guard let tag = command.gpxTag else { continue }
-            let value = getPointAttribute(wptPt: point, key: tag)
+        guard !(deferredExtensions.isEmpty && extensions.isEmpty) else { return }
+        for tag in Self.gpxTags {
+            let value = getPointAttribute(deferredExtensions: deferredExtensions, extensions: extensions, key: tag)
             attribute.setAttributeValue(tag: tag, value: value)
             if !analysis.hasData(tag: tag) && attribute.hasValidValue(tag: tag) {
                 analysis.setHasData(tag: tag, hasData: true)
@@ -24,10 +27,10 @@ final class VehicleTrackPointsAnalyser: NSObject, GpxTrackAnalysisTrackPointsAna
         }
     }
     
-    private func getPointAttribute(wptPt: WptPt, key: String) -> Float {
-        var value = wptPt.getDeferredExtensionsToRead()[key]
+    private func getPointAttribute(deferredExtensions: [String: String], extensions: [String: String], key: String) -> Float {
+        var value = deferredExtensions[key]
         if value?.isEmpty ?? true {
-            value = wptPt.getExtensionsToRead()[key]
+            value = extensions[key]
         }
         
         return Float(value ?? "") ?? 0

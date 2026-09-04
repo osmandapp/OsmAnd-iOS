@@ -814,14 +814,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
         var sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder = smartFolder {
-            sortModes[smartFolder.getId()] = sortMode.title
+            sortModes[smartFolder.getId()] = sortMode.value
         } else if let folder = currentFolder {
             if !isSortingSubfolders {
-                sortModes[folder.relativePath] = sortMode.title
+                sortModes[folder.relativePath] = sortMode.value
             } else {
                 let subFolders = folder.getFlattenedSubFolders()
                 for subFolder in subFolders {
-                    sortModes[subFolder.relativePath] = sortMode.title
+                    sortModes[subFolder.relativePath] = sortMode.value
                 }
             }
         }
@@ -830,25 +830,25 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func setSearchTracksSortMode(_ sortMode: TracksSortMode) {
-        settings.searchTracksSortModes.set(sortMode.title)
+        settings.searchTracksSortModes.set(sortMode.value)
     }
     
     private func getTracksSortMode() -> TracksSortMode {
         let sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder {
-            if let sortModeTitle = sortModes[smartFolder.getId()] {
-                return TracksSortMode.getByTitle(sortModeTitle)
+            if let sortModeValue = sortModes[smartFolder.getId()] {
+                return TracksSortMode.getByValue(sortModeValue)
             }
-        } else if let folderName = currentFolder?.relativePath, let sortModeTitle = sortModes[folderName] {
-            return TracksSortMode.getByTitle(sortModeTitle)
+        } else if let folderName = currentFolder?.relativePath, let sortModeValue = sortModes[folderName] {
+            return TracksSortMode.getByValue(sortModeValue)
         }
         
-        return TracksSortModeHelper.getDefaultSortMode(for: currentFolder.getId())
+        return TracksSortModeHelper.defaultSortMode(for: currentFolder.getId())
     }
     
     private func getSearchTracksSortMode() -> TracksSortMode {
-        let searchSortModeTitle = settings.searchTracksSortModes.get()
-        return TracksSortMode.getByTitle(searchSortModeTitle)
+        let searchSortModeValue = settings.searchTracksSortModes.get()
+        return TracksSortMode.getByValue(searchSortModeValue)
     }
     
     private func setupTableFooter(isEditing: Bool? = nil) {
@@ -1015,7 +1015,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
 
         let currentSortMode = isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode
-        guard currentSortMode == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
+        guard currentSortMode.isCurrentLocationDistanceOriented, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else {
             return
         }
         
@@ -1163,7 +1163,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let isNumeric = smartFolder?.getOrganizeByType()?.getTrackSortScope() == TracksSortScope.organizedByValue
             newMode = isNumeric ? .shortestDistanceFirst : .nameAZ
         } else {
-            newMode = TracksSortModeHelper.getDefaultSortMode(for: smartFolder.getId())
+            newMode = TracksSortModeHelper.defaultSortMode(for: smartFolder.getId())
         }
         setTracksSortMode(newMode, isSortingSubfolders: false)
         sortMode = newMode
@@ -2921,9 +2921,12 @@ extension TracksViewController {
         if !isSortingSubfolders && isShowingOrganizedGroups() {
             return createOrganizedGroupsSortMenu()
         }
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest, isSortingSubfolders: isSortingSubfolders),
+        let lastModifiedOption = UIMenu(options: .displayInline, children: [
             createAction(for: .lastModified, isSortingSubfolders: isSortingSubfolders)
+        ])
+        let nearestOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearestToCurrentLocation, isSortingSubfolders: isSortingSubfolders),
+            createAction(for: .nearestToMapCenter, isSortingSubfolders: isSortingSubfolders)
         ])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [
             createAction(for: .nameAZ, isSortingSubfolders: isSortingSubfolders),
@@ -2942,7 +2945,7 @@ extension TracksViewController {
             createAction(for: .shorterDurationFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         
-        let menuOptions = [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions]
+        let menuOptions = [lastModifiedOption, nearestOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions]
         var mainMenuElements: [UIMenuElement]
         if isSortingSubfolders {
             mainMenuElements = [UIDeferredMenuElement.uncached { completion in

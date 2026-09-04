@@ -16,7 +16,7 @@ protocol SortableFolder {
 }
 
 @objc enum TracksSortMode: Int, CaseIterable {
-    case nearest
+    case nearestToCurrentLocation
     case lastModified
     case nameAZ
     case nameZA
@@ -26,10 +26,28 @@ protocol SortableFolder {
     case shortestDistanceFirst
     case longestDurationFirst
     case shorterDurationFirst
+    case nearestToMapCenter
+
+    var value: String {
+        switch self {
+        case .nearestToCurrentLocation: return "NEAREST"
+        case .nearestToMapCenter: return "NEAREST_TO_MAP_CENTER"
+        case .lastModified: return "LAST_MODIFIED"
+        case .nameAZ: return "NAME_ASCENDING"
+        case .nameZA: return "NAME_DESCENDING"
+        case .newestDateFirst: return "DATE_ASCENDING"
+        case .oldestDateFirst: return "DATE_DESCENDING"
+        case .longestDistanceFirst: return "DISTANCE_DESCENDING"
+        case .shortestDistanceFirst: return "DISTANCE_ASCENDING"
+        case .longestDurationFirst: return "DURATION_DESCENDING"
+        case .shorterDurationFirst: return "DURATION_ASCENDING"
+        }
+    }
     
     var title: String {
         switch self {
-        case .nearest: return localizedString("shared_string_nearest")
+        case .nearestToCurrentLocation: return localizedString("sort_by_nearest_to_current_location")
+        case .nearestToMapCenter: return localizedString("sort_by_nearest_to_map_center")
         case .lastModified: return localizedString("sort_last_modified")
         case .nameAZ: return localizedString("track_sort_az")
         case .nameZA: return localizedString("track_sort_za")
@@ -44,7 +62,8 @@ protocol SortableFolder {
     
     var image: UIImage? {
         switch self {
-        case .nearest: return .icCustomNearby
+        case .nearestToCurrentLocation: return .icCustomNearby
+        case .nearestToMapCenter: return .icCustomNearestMapCenter
         case .lastModified: return .icCustomLastModified
         case .nameAZ: return .icCustomSortNameAscending
         case .nameZA: return .icCustomSortNameDescending
@@ -57,8 +76,20 @@ protocol SortableFolder {
         }
     }
     
-    static func getByTitle(_ title: String) -> TracksSortMode {
-        TracksSortMode.allCases.first(where: { $0.title == title }) ?? .lastModified
+    static func getByValue(_ value: String) -> TracksSortMode {
+        TracksSortMode.allCases.first(where: { $0.value == value }) ?? .lastModified
+    }
+
+    var isDistanceOriented: Bool {
+        isCurrentLocationDistanceOriented || isMapCenterDistanceOriented
+    }
+
+    var isCurrentLocationDistanceOriented: Bool {
+        self == .nearestToCurrentLocation
+    }
+
+    var isMapCenterDistanceOriented: Bool {
+        self == .nearestToMapCenter
     }
 }
 
@@ -71,14 +102,18 @@ protocol SortableFolder {
         return formatter
     }()
     
-    @objc static func getDefaultSortMode(for sortEntryId: String?) -> TracksSortMode {
+    @objc static func defaultSortMode(for sortEntryId: String?) -> TracksSortMode {
         sortEntryId == nil || sortEntryId?.isEmpty == true || sortEntryId == "rec" || sortEntryId == "import"
         ? .lastModified
         : .nameAZ
     }
     
     @objc static func getDefaultSortModeTitle(for sortEntryId: String?) -> String {
-        title(for: getDefaultSortMode(for: sortEntryId))
+        title(for: defaultSortMode(for: sortEntryId))
+    }
+
+    @objc static func getDefaultSortModeValue(for sortEntryId: String?) -> String {
+        defaultSortMode(for: sortEntryId).value
     }
     
     @objc static private func title(for mode: TracksSortMode) -> String {
@@ -87,7 +122,7 @@ protocol SortableFolder {
     
     static func sortFoldersWithMode(_ folders: [SortableFolder], mode: TracksSortMode) -> [SortableFolder] {
         switch mode {
-        case .nearest:
+        case .nearestToCurrentLocation, .nearestToMapCenter:
             return folders
         case .lastModified:
             return folders.sorted { $0.lastModified() > $1.lastModified() }
@@ -112,8 +147,9 @@ protocol SortableFolder {
     
     static func sortTracksWithMode(_ tracks: [GpxDataItem], mode: TracksSortMode) -> [GpxDataItem] {
         switch mode {
-        case .nearest:
-            return tracks.sorted { TracksSortModeHelper.distanceToGPX(gpx: $0) < TracksSortModeHelper.distanceToGPX(gpx: $1) }
+        case .nearestToCurrentLocation, .nearestToMapCenter:
+            let referenceLocation = referenceLocation(for: mode)
+            return tracks.sorted { distanceToGPX(gpx: $0, from: referenceLocation) < distanceToGPX(gpx: $1, from: referenceLocation) }
         case .lastModified:
             return tracks.sorted { $0.lastModifiedTime > $1.lastModifiedTime }
         case .nameAZ:
@@ -162,9 +198,10 @@ protocol SortableFolder {
         let detailsText = "\(distance) • \(time) • \(waypointCount)"
         let detailsString = NSAttributedString(string: detailsText, attributes: defaultAttributes)
         switch sortMode {
-        case .nearest:
+        case .nearestToCurrentLocation, .nearestToMapCenter:
             let distanceToTrack: String
-            let calculatedDistance = distanceToGPX(gpx: track)
+            let referenceLocation = referenceLocation(for: sortMode)
+            let calculatedDistance = distanceToGPX(gpx: track, from: referenceLocation)
             if calculatedDistance != CGFloat.greatestFiniteMagnitude {
                 distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
             } else {
@@ -173,17 +210,32 @@ protocol SortableFolder {
             
             var directionAngle: CGFloat = 0.0
             if let analysis = track.getAnalysis(), let start = analysis.getLatLonStart() {
-                directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: start.latitude, destinationLongitude: start.longitude)
+                if sortMode.isMapCenterDistanceOriented {
+                    let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+                    directionAngle = OADistanceAndDirectionsUpdater.directionAngle(
+                        from: referenceLocation,
+                        sourceDirection: Double(mapViewController.azimuth()),
+                        toDestinationLatitude: start.latitude,
+                        destinationLongitude: start.longitude
+                    )
+                } else {
+                    directionAngle = OADistanceAndDirectionsUpdater.directionAngle(
+                        from: referenceLocation,
+                        toDestinationLatitude: start.latitude,
+                        destinationLongitude: start.longitude
+                    )
+                }
             }
             
             let cityName = track.nearestCity ?? localizedString("shared_string_not_available")
-            if let locationAttributedString = createImageAttributedString(named: "location.north.fill", tintColor: UIColor.iconColorActive, defaultAttributes: defaultAttributes, rotate: true, rotationAngle: directionAngle) {
+            let directionColor: UIColor = sortMode.isMapCenterDistanceOriented ? .iconColorDirectionMapCenter : .iconColorActive
+            if let locationAttributedString = createImageAttributedString(named: "location.north.fill", tintColor: directionColor, defaultAttributes: defaultAttributes, rotate: true, rotationAngle: directionAngle) {
                 fullString.append(locationAttributedString)
                 fullString.append(NSAttributedString(string: " "))
             }
             
             let directionString = distanceToTrack + ", "
-            let directionAttributedString = NSAttributedString(string: directionString, attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.iconColorActive])
+            let directionAttributedString = NSAttributedString(string: directionString, attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: directionColor])
             let cityString = NSAttributedString(string: "\(cityName) | ", attributes: defaultAttributes)
             fullString.append(directionAttributedString)
             fullString.append(cityString)
@@ -212,11 +264,21 @@ protocol SortableFolder {
         return fullString
     }
     
-    static func distanceToGPX(gpx: GpxDataItem) -> CGFloat {
-        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return CGFloat.greatestFiniteMagnitude }
+    static func referenceLocation(for sortMode: TracksSortMode) -> CLLocation? {
+        if sortMode.isMapCenterDistanceOriented {
+            let coordinate = OARootViewController.instance().mapPanel.mapViewController.getMapLocation().coordinate
+            guard CLLocationCoordinate2DIsValid(coordinate) else { return nil }
+            return CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        }
+
+        return OsmAndApp.swiftInstance().locationServices?.lastKnownLocation
+    }
+
+    private static func distanceToGPX(gpx: GpxDataItem, from referenceLocation: CLLocation?) -> CGFloat {
+        guard let referenceLocation else { return CGFloat.greatestFiniteMagnitude }
         guard let analysis = gpx.getAnalysis(), let start = analysis.getLatLonStart(), CLLocationCoordinate2DIsValid(CLLocationCoordinate2DMake(start.latitude, start.longitude)) else { return CGFloat.greatestFiniteMagnitude }
         
-        return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: start.latitude, destinationLongitude: start.longitude)
+        return OADistanceAndDirectionsUpdater.distance(from: referenceLocation, toDestinationLatitude: start.latitude, destinationLongitude: start.longitude)
     }
     
     static func createImageAttributedString(named imageName: String, tintColor: UIColor, defaultAttributes: [NSAttributedString.Key: Any], rotate: Bool = false, rotationAngle: CGFloat = 0) -> NSAttributedString? {

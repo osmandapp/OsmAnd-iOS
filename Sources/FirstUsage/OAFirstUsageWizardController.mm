@@ -144,6 +144,7 @@ typedef enum
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
     _lbDescription.font = [UIFont scaledSystemFontOfSize:14.];
     [_btnSkip setTitle:OALocalizedString(@"skip_download") forState:UIControlStateNormal];
+    _btnSkip.accessibilityIdentifier = @"first_usage_skip_download_button";
     _btnSkip.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     
     // Init no location view
@@ -266,6 +267,7 @@ typedef enum
     [items addObject:flexibleSpaceItem];
     
     UIBarButtonItem *skipDownloadButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"skip_download") style:UIBarButtonItemStylePlain target:self action:@selector(closeWizard)];
+    skipDownloadButtonItem.accessibilityIdentifier = @"first_usage_skip_download_button";
     [skipDownloadButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorNamed:ACColorNameTextColorActive], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [items addObject:skipDownloadButtonItem];
 

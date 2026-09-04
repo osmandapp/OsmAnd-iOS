@@ -188,7 +188,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                     break;
                 }
             }
-            if (!mapInstalled)
+            if (!mapInstalled && !AppEnvironment.isUITesting)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
                 LogStartup(@"initialize: first launch detected (no maps)");

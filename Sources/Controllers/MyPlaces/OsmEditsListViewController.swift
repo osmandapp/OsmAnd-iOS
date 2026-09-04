@@ -48,6 +48,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         case sortHeader(SortHeader)
         case header(Header)
         case point(OsmPoint)
+        case emptyState
 
         var selectionItem: OsmPoint? {
             guard case .point(let point) = self else { return nil }
@@ -113,6 +114,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, _, headerItem) in
         cell.sortButton.setImage(headerItem.sortMode.image?.resizedMenuImage(), for: .normal)
         cell.sortButton.menu = headerItem.menu
+    }
+
+    private let emptyStateCellRegistration = UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { cell, _, _ in
+        cell.configure(image: .icActionOpenstreetmapLogo, title: localizedString("osm_edits_empty_state_title"), description: localizedString("osm_edits_empty_state_description"))
+        cell.button.isHidden = true
     }
 
     // MARK: - Init
@@ -189,6 +195,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelectionDuringEditing = true
         collectionView.tintColor = .iconColorActive
@@ -218,7 +225,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
 
             var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             config.backgroundColor = .clear
-            if !self.isSearchActive && !self.isSelectionModeInSearch {
+            if !self.isSearchActive && !self.isSelectionModeInSearch && !self.isEmptyStateSection(at: sectionIndex) {
                 config.headerMode = .firstItemInSection
             }
 
@@ -236,28 +243,29 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
             return true
         }
     }
+
+    private func isEmptyStateSection(at sectionIndex: Int) -> Bool {
+        guard let dataSource else { return false }
+        let snapshot = dataSource.snapshot()
+        guard snapshot.sectionIdentifiers.indices.contains(sectionIndex) else { return false }
+        return snapshot.itemIdentifiers(inSection: snapshot.sectionIdentifiers[sectionIndex]).contains(.emptyState)
+    }
     
     private func makeDataSource() -> DataSource {
         let source = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item -> UICollectionViewCell in
             guard let self else { return UICollectionViewCell() }
             switch item {
             case .sortHeader(let headerItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: headerItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: headerItem)
             case .header(let headerItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: headerItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration, for: indexPath, item: headerItem)
             case .point(let pointItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
-                                                                        for: indexPath,
-                                                                        item: pointItem)
-                return cell
+                return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: pointItem)
+            case .emptyState:
+                return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
+
         return source
     }
     
@@ -265,6 +273,13 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         var snapshot = Snapshot()
         let poi = OAOsmEditsDBHelper.sharedDatabase().getOpenstreetmapPoints()
         let notes = OAOsmBugsDBHelper.sharedDatabase().getOsmBugsPoints()
+        guard !poi.isEmpty || !notes.isEmpty else {
+            let emptyStateSection = Header(title: "", points: [])
+            snapshot.appendSections([emptyStateSection])
+            snapshot.appendItems([.emptyState], toSection: emptyStateSection)
+            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            return
+        }
         
         let sortSection = Header(title: "", points: [])
         let sortHeader = SortHeader(sortMode: sortMode, menu: createSortMenu())
@@ -424,8 +439,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
                 title = localizedString("select_items")
             } else {
                 let totalSelectedPoints = selectionManager.selectedItems.count
-                let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
-                title = "\(totalSelectedPoints) \(itemText)"
+                title = String.localizedStringWithFormat(NSLocalizedString("selected_items_count", comment: ""), totalSelectedPoints, NumberFormatter.localizedCount(totalSelectedPoints)).lowercased()
             }
         } else {
             title = localizedString("osm_edits_title")
@@ -505,16 +519,22 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
 
         return action
     }
-    
-    private func delete(_ point: OAOsmPoint) {
-        let count = 1
-        let message = String(format: localizedString("osm_edits_delete_item_confirmation"), count)
+
+    private func deleteConfirmationMessage(count: Int) -> NSAttributedString {
+        let formattedCount = NumberFormatter.localizedCount(count)
+        let message = String.localizedStringWithFormat(NSLocalizedString("osm_edits_delete_items_confirmation", comment: ""), count, formattedCount)
         let attributedString = NSMutableAttributedString(string: message)
 
-        if let range = message.range(of: "\(count)") {
+        if let range = message.range(of: formattedCount) {
             let nsRange = NSRange(range, in: message)
             attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
         }
+
+        return attributedString
+    }
+
+    private func delete(_ point: OAOsmPoint) {
+        let attributedString = deleteConfirmationMessage(count: 1)
         
         let alert = UIAlertController(title: localizedString("delete_changes"), message: nil, preferredStyle: .alert)
         alert.setValue(attributedString, forKey: "attributedMessage")
@@ -660,15 +680,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         let shouldEdit = !collectionView.isEditing
         let selectedPoints = Array(selectionManager.selectedItems)
         if !selectedPoints.isEmpty {
-            let count = selectedPoints.count
-            let message = String(format: localizedString("osm_edits_delete_items_confirmation"), count)
-            let attributedString = NSMutableAttributedString(string: message)
-
-            if let range = message.range(of: "\(count)") {
-                let nsRange = NSRange(range, in: message)
-                attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
-            }
-            
+            let attributedString = deleteConfirmationMessage(count: selectedPoints.count)
             let alert = UIAlertController(title: localizedString("delete_changes"), message: nil, preferredStyle: .alert)
             alert.setValue(attributedString, forKey: "attributedMessage")
             alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))

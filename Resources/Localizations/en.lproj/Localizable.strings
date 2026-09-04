@@ -1557,7 +1557,7 @@
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"ltr_or_rtl_combine_via_of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_of" = "%@ of %@";
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
@@ -1916,7 +1916,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "delete_changes" = "Delete changes";
-"osm_edits_delete_item_confirmation" = "Are you sure you want to delete %ld edit?";
+"osm_edits_delete_item_confirmation" = "Are you sure you want to delete %@ edit?";
 "osm_edits_delete_items_confirmation" = "Are you sure you want to delete %ld edits?";
 
 "routing_algorithm" = "Routing algorithm";
@@ -2008,6 +2008,8 @@
 "osm_edits_notes" = "Notes";
 "osm_poi_id_label" = "POI id:";
 "osm_edits_title" = "OSM Edits";
+"osm_edits_empty_state_title" = "No pending map edits";
+"osm_edits_empty_state_description" = "Changes you make in OsmAnd will appear here before they’re uploaded to OpenStreetMap";
 "osm_edits_edits_label" = "Edits";
 "upload_to_osm" = "Upload modifications to OSM";
 "osm_edit_show_on_map" = "Show modification on the map";
@@ -4388,7 +4390,7 @@
 "add_to_favorites" = "Add to favorites";
 "msg_favorites_skipped_as_existing" = "Favorite points (%d) were skipped as already existing.";
 "short_min" = "m";
-"remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
+"remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %@ tracks?";
 "new_track" = "New track";
 "not_recorded" = "Not recorded";
 "start_recording" = "Start recording";
@@ -5016,8 +5018,8 @@
 
 "import_tracks_cancel_title" = "Cancel import?";
 "import_tracks_cancel_descr" = "If you close now, your track selections will not be imported.";
-"import_tracks_descr_one" = "The file %@ contains 1 separate track. Select the one you want to import.";
-"import_tracks_descr_other" = "The file %@ contains %d separate tracks. Select the ones you want to import.";
+"import_tracks_descr_one" = "The file %1$@ contains %2$@ separate track. Select the one you want to import.";
+"import_tracks_descr_other" = "The file %@ contains %@ separate tracks. Select the ones you want to import.";
 "import_as_one_track" = "Import as one track";
 "import_tracks_folders_footer" = "Select a destination folder for the imported tracks.";
 "error_reading_gpx" = "Could not read GPX data.";
@@ -5046,3 +5048,5 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"carplay_trip_via_point" = "Via %@";

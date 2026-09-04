@@ -2870,7 +2870,7 @@
 "update_parameters" = "Perbarui parameter";
 "use_login_and_password_description" = "Gunakan email/login dan kata sandi Anda untuk masuk ke OpenStreetMap.org.";
 "ios_release_4_5" = "• Pengalaman widget yang didesain ulang sepenuhnya: menambahkan kemampuan untuk mengubah posisi widget, menambahkan pengelompokan berdasarkan halaman, satu daftar widget untuk panel kiri dan kanan\n• Mendesain ulang layar konfigurasi\n• Cadangan gratis favorit, pengaturan, dan editan OSM ke OsmAnd Cloud\n• Menambahkan skala \"CAI\" untuk \"Klasifikasi tingkat kesulitan rute\"\n• \"Plugin garis kontur\" diubah namanya menjadi \"Topografi\", menambahkan dukungan untuk format peta medan baru\n• Menambahkan Relief 3D\n• Menambahkan otorisasi OAuth untuk plugin Pengeditan OpenStreetMap\n• Menambahkan tombol terpisah untuk beralih antara Mode 2D atau 3D\n• Mengubah arah gerakan kemiringan\n• Memperbaiki masalah dengan ekspor favorit, yang dapat menyebabkan kehilangan data\n";
-"remove_folder_with_files_descr" = "Anda yakin ingin menghapus folder \"%@\" dan semua %d trek?";
+"remove_folder_with_files_descr" = "Anda yakin ingin menghapus folder \"%@\" dan semua %@ trek?";
 "permanent_delete_warning" = "%@ akan dihapus secara permanen. Anda yakin?";
 "shared_string_instructions" = "Instruksi";
 "online_photos" = "Foto online";
@@ -3396,7 +3396,7 @@
 "selected_of" = "Dipilih - %d/%d";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
-"ltr_or_rtl_combine_via_of" = "%ld dari %ld";
+"ltr_or_rtl_combine_via_of" = "%@ dari %@";
 "shared_string_rearrange" = "Tata ulang";
 "osm_notes_online_layer" = "Catatan OSM (online)";
 "mapillary_get_descr" = "Dapatkan Mapillary untuk menambahkan foto ke lokasi ini";
@@ -4045,7 +4045,7 @@
 "icon_size" = "Ukuran ikon";
 "folder_one_track" = "1 trek";
 "delete_changes" = "Hapus perubahan";
-"osm_edits_delete_item_confirmation" = "Apakah Anda yakin ingin menghapus %ld pengeditan?";
+"osm_edits_delete_item_confirmation" = "Apakah Anda yakin ingin menghapus %@ pengeditan?";
 "osm_edits_delete_items_confirmation" = "Apakah Anda yakin ingin menghapus %ld pengeditan?";
 "enable_msaa_carplay" = "Aktifkan MSAA untuk CarPlay";
 "show_touches" = "Tampilkan sentuhan";
@@ -4467,8 +4467,8 @@
 "shared_string_kts" = "kn";
 "import_tracks_cancel_title" = "Batalkan impor?";
 "import_tracks_cancel_descr" = "Jika Anda menutupnya sekarang, pilihan trek Anda tidak akan diimpor.";
-"import_tracks_descr_one" = "Berkas %@ berisi 1 trek terpisah. Pilih trek yang ingin Anda impor.";
-"import_tracks_descr_other" = "Berkas %@ berisi %d trek terpisah. Pilih trek yang ingin Anda impor.";
+"import_tracks_descr_one" = "Berkas %1$@ berisi %2$@ trek terpisah. Pilih trek yang ingin Anda impor.";
+"import_tracks_descr_other" = "Berkas %@ berisi %@ trek terpisah. Pilih trek yang ingin Anda impor.";
 "import_as_one_track" = "Impor sebagai satu trek";
 "import_tracks_folders_footer" = "Pilih folder tujuan untuk trek yang diimpor.";
 "error_reading_gpx" = "Tidak dapat membaca data GPX.";

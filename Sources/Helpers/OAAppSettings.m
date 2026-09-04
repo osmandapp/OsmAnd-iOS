@@ -264,6 +264,7 @@ static NSString * const customWidgetKeys = @"custom_widgets_keys";
 static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
 static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const favoriteSortModesKey = @"favorite_sort_modes";
+static NSString * const favoriteCollapsedSectionsKey = @"favorite_collapsed_sections";
 static NSString * const searchFavoriteSortModeKey = @"search_favorite_sort_mode";
 static NSString * const travelGuidesSortModeKey = @"travel_guides_tabs_sort_mode";
 static NSString * const osmEditsSortModeKey = @"osm_edits_tabs_sort_mode";
@@ -6392,6 +6393,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_favoriteSortModes forKey:favoriteSortModesKey];
 
+        _favoriteCollapsedSections = [[OACommonStringList withKey:favoriteCollapsedSectionsKey defValue:@[]] makeGlobal];
+        [_globalPreferences setObject:_favoriteCollapsedSections forKey:favoriteCollapsedSectionsKey];
+
         _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
 
@@ -8155,9 +8159,21 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
-- (BOOL) nightMode
+- (BOOL)isAppMapNightMode
 {
     return [_dayNightHelper isNightMode];
+}
+
+- (BOOL)isCarPlayMapNightMode
+{
+    return [_dayNightHelper isNightModeCarPlay];
+}
+
+- (BOOL)isCurrentMapNightMode
+{
+    return UIApplication.sharedApplication.isAnyCarPlaySceneActive
+        ? self.isCarPlayMapNightMode
+        : self.isAppMapNightMode;
 }
 
 - (void) fetchImpassableRoads

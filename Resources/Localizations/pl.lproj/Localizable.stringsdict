@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Usuń %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ pozycję</string>
+			<key>few</key>
+			<string>%2$@ pozycje</string>
+			<key>many</key>
+			<string>%2$@ pozycji</string>
+			<key>other</key>
+			<string>%2$@ pozycji</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Usuń %#@favorites@?</string>
+		<string>Usuń %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld ulubiony punkt</string>
+			<string>%2$@ ulubiony punkt</string>
 			<key>few</key>
-			<string>%ld ulubione punkty</string>
+			<string>%2$@ ulubione punkty</string>
 			<key>many</key>
-			<string>%ld ulubionych punktów</string>
+			<string>%2$@ ulubionych punktów</string>
 			<key>other</key>
-			<string>%ld ulubionego punktu</string>
+			<string>%2$@ ulubionego punktu</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Usuń %#@folders@?</string>
+		<string>Usuń %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldery</string>
+			<string>%2$@ foldery</string>
 			<key>many</key>
-			<string>%ld folderów</string>
+			<string>%2$@ folderów</string>
 			<key>other</key>
-			<string>%ld folderu</string>
+			<string>%2$@ folderu</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Usuń %#@folders@ i %#@points@. Tego działania nie można cofnąć.</string>
+		<string>Usuń %1$#@folders@ i %3$#@points@. Tego działania nie można cofnąć.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldery</string>
+			<string>%2$@ foldery</string>
 			<key>many</key>
-			<string>%ld folderów</string>
+			<string>%2$@ folderów</string>
 			<key>other</key>
-			<string>%ld folderu</string>
+			<string>%2$@ folderu</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,113 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld punkt</string>
+			<string>%4$@ punkt</string>
 			<key>few</key>
-			<string>%ld punkty</string>
+			<string>%4$@ punkty</string>
 			<key>many</key>
-			<string>%ld punktów</string>
+			<string>%4$@ punktów</string>
 			<key>other</key>
-			<string>%ld punktu</string>
+			<string>%4$@ punktu</string>
+		</dict>
+	</dict>
+    <key>carplay_trip_via_stops</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>Przez %#@stops@</string>
+        <key>stops</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>ld</string>
+            <key>one</key>
+            <string>%ld przystanek</string>
+            <key>few</key>
+            <string>%ld przystanki</string>
+            <key>many</key>
+            <string>%ld przystanków</string>
+            <key>other</key>
+            <string>%ld przystanku</string>
+        </dict>
+    </dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ścieżka</string>
+			<key>few</key>
+			<string>%2$@ ścieżki</string>
+			<key>many</key>
+			<string>%2$@ ścieżek</string>
+			<key>other</key>
+			<string>%2$@ ścieżek</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Czy na pewno chcesz usunąć %2$@ zmianę?</string>
+			<key>few</key>
+			<string>Czy na pewno chcesz usunąć %2$@ zmiany?</string>
+			<key>many</key>
+			<string>Czy na pewno chcesz usunąć %2$@ zmian?</string>
+			<key>other</key>
+			<string>Czy na pewno chcesz usunąć %2$@ zmian?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Pozycja</string>
+			<key>few</key>
+			<string>%2$@ Pozycje</string>
+			<key>many</key>
+			<string>%2$@ Pozycji</string>
+			<key>other</key>
+			<string>%2$@ Pozycji</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Plik %2$@ zawiera %3$@ osobną ścieżkę. Wybierz tę, którą chcesz zaimportować.</string>
+			<key>few</key>
+			<string>Plik %2$@ zawiera %3$@ osobne ścieżki. Wybierz te, które chcesz zaimportować.</string>
+			<key>many</key>
+			<string>Plik %2$@ zawiera %3$@ osobnych ścieżek. Wybierz te, które chcesz zaimportować.</string>
+			<key>other</key>
+			<string>Plik %2$@ zawiera %3$@ osobnych ścieżek. Wybierz te, które chcesz zaimportować.</string>
 		</dict>
 	</dict>
 </dict>

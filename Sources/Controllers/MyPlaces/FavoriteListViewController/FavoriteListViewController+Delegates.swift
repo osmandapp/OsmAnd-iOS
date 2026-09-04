@@ -112,16 +112,34 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
     }
 
     func searchResults(for searchController: UISearchController) {
-        isSearchActive = searchController.isActive
-        if isSearchActive || !isSelectionModeInSearch {
-            searchText = searchController.searchBar.searchTextField.text ?? ""
+        guard !isCancellingSearch else { return }
+        if lastAppliedSearchState == nil, isSearchActive, !searchController.isActive {
+            return
         }
+
+        let searchState = (isActive: searchController.isActive, text: searchController.searchBar.searchTextField.text ?? "")
+        if let lastAppliedSearchState, lastAppliedSearchState.isActive == searchState.isActive, lastAppliedSearchState.text == searchState.text {
+            return
+        }
+
+        lastAppliedSearchState = searchState
+        isSearchActive = searchState.isActive
+        if isSearchActive || !isSelectionModeInSearch {
+            searchText = searchState.text
+        }
+        let shouldHideToolbarBeforeSnapshot = shouldHideSearchToolbar()
         configureToolbar()
-        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
+        navigationController?.setToolbarHidden(shouldHideToolbarBeforeSnapshot, animated: true)
         applySnapshot(animatingDifferences: false)
+        let shouldHideToolbarAfterSnapshot = shouldHideSearchToolbar()
+        if shouldHideToolbarBeforeSnapshot != shouldHideToolbarAfterSnapshot {
+            configureToolbar()
+            navigationController?.setToolbarHidden(shouldHideToolbarAfterSnapshot, animated: true)
+        }
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        isCancellingSearch = true
         isSearchActive = false
         if !isSelectionModeInSearch {
             searchText = ""
@@ -132,6 +150,8 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         configureToolbar()
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
+        lastAppliedSearchState = (isActive: false, text: searchBar.searchTextField.text ?? "")
+        isCancellingSearch = false
     }
 
     func presentSearchController(_ searchController: UISearchController) {

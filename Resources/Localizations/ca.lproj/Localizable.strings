@@ -3271,3 +3271,4 @@
 "track_appearance_3D_visualization" = "Visualització 3D";
 "x" = "X (abans Twitter)";
 "shared_string_avg_altitude" = "Altitud mitjana";
+"sort_by_nearest_to_current_location" = "Més proper a la ubicació actual";

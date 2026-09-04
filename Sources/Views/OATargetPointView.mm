@@ -433,7 +433,7 @@ static const NSInteger _buttonsCount = 4;
     BOOL showTopControls = [self.customController showTopControls];
     _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
     
-    [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
+    [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
     
     if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton)
     {
@@ -2391,17 +2391,26 @@ static const NSInteger _buttonsCount = 4;
     [self applyTargetObjectChanges];
 }
 
-- (CGPoint) applyMode:(BOOL)applyOffset
+- (CGPoint)applyMode:(BOOL)applyOffset animated:(BOOL)animated
 {
     CGPoint newOffset = self.contentOffset;
     if (applyOffset)
     {
-        [UIView animateWithDuration:.3 animations:^{
+        if (animated)
+        {
+            [UIView animateWithDuration:.3 animations:^{
+                [self doLayoutSubviews];
+            } completion:^(BOOL finished) {
+                if (!_showFullScreen)
+                    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+            }];
+        }
+        else
+        {
             [self doLayoutSubviews];
-        } completion:^(BOOL finished) {
             if (!_showFullScreen)
-                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
-        }];
+                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:NO];
+        }
     }
     else
     {
@@ -2416,11 +2425,16 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         BOOL showTopControls = [self.customController showTopControls];
-        [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
+        [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
         if (!showTopControls)
             [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     return newOffset;
+}
+
+- (CGPoint)applyMode:(BOOL)applyOffset
+{
+    return [self applyMode:applyOffset animated:YES];
 }
 
 - (void) showProgressBar
@@ -2462,12 +2476,7 @@ static const NSInteger _buttonsCount = 4;
     [self.menuViewDelegate targetOpenRouteSettings];
 }
 
-- (void) requestHeaderOnlyMode
-{
-    [self requestHeaderOnlyMode:YES];
-}
-
-- (CGPoint) requestHeaderOnlyMode:(BOOL)applyOffset
+- (CGPoint)requestHeaderOnlyMode:(BOOL)applyOffset animated:(BOOL)animated
 {
     CGPoint newOffset = self.contentOffset;
     if (![self isLandscape])
@@ -2478,17 +2487,32 @@ static const NSInteger _buttonsCount = 4;
         CGFloat h = _headerHeight;
         
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar] && !self.targetPoint.toolbarNeeded))
-            [self hideTopToolbar:YES];
+            [self hideTopToolbar:animated];
         
         if (self.customController)
             [self.customController goHeaderOnly];
 
         [self onMenuStateChanged];
-        [self applyMapInteraction:h animated:YES];
+        [self applyMapInteraction:h animated:animated];
         
-        newOffset = [self applyMode:applyOffset];
+        newOffset = [self applyMode:applyOffset animated:animated];
     }
     return newOffset;
+}
+
+- (CGPoint)requestHeaderOnlyMode:(BOOL)applyOffset
+{
+    return [self requestHeaderOnlyMode:applyOffset animated:YES];
+}
+
+- (void)requestHeaderOnlyModeAnimated:(BOOL)animated
+{
+    [self requestHeaderOnlyMode:YES animated:animated];
+}
+
+- (void)requestHeaderOnlyMode
+{
+    [self requestHeaderOnlyModeAnimated:YES];
 }
 
 - (void) requestFullMode

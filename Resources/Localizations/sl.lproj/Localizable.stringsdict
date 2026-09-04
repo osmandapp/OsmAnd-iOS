@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Izbriši %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ predmet</string>
+			<key>two</key>
+			<string>%2$@ predmeta</string>
+			<key>few</key>
+			<string>%2$@ predmete</string>
+			<key>other</key>
+			<string>%2$@ predmetov</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Izbriši %#@favorites@?</string>
+		<string>Izbriši %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld priljubljeno</string>
+			<string>%2$@ priljubljeno</string>
 			<key>two</key>
-			<string>%ld priljubljeni</string>
+			<string>%2$@ priljubljeni</string>
 			<key>few</key>
-			<string>%ld priljubljene</string>
+			<string>%2$@ priljubljene</string>
 			<key>other</key>
-			<string>%ld priljubljenih</string>
+			<string>%2$@ priljubljenih</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Izbriši %#@folders@?</string>
+		<string>Izbriši %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld mapo</string>
+			<string>%2$@ mapo</string>
 			<key>two</key>
-			<string>%ld mapi</string>
+			<string>%2$@ mapi</string>
 			<key>few</key>
-			<string>%ld mape</string>
+			<string>%2$@ mape</string>
 			<key>other</key>
-			<string>%ld map</string>
+			<string>%2$@ map</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Izbriši %#@folders@ in %#@points@. Tega dejanja ni mogoče preklicati.</string>
+		<string>Izbriši %1$#@folders@ in %3$#@points@. Tega dejanja ni mogoče preklicati.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld mapo</string>
+			<string>%2$@ mapo</string>
 			<key>two</key>
-			<string>%ld mapi</string>
+			<string>%2$@ mapi</string>
 			<key>few</key>
-			<string>%ld mape</string>
+			<string>%2$@ mape</string>
 			<key>other</key>
-			<string>%ld map</string>
+			<string>%2$@ map</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,113 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld točko</string>
+			<string>%4$@ točko</string>
 			<key>two</key>
-			<string>%ld točki</string>
+			<string>%4$@ točki</string>
 			<key>few</key>
-			<string>%ld točke</string>
+			<string>%4$@ točke</string>
 			<key>other</key>
-			<string>%ld točk</string>
+			<string>%4$@ točk</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld postaja</string>
+			<key>two</key>
+			<string>%ld postaji</string>
+			<key>few</key>
+			<string>%ld postaje</string>
+			<key>other</key>
+			<string>%ld postaj</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ sled</string>
+			<key>two</key>
+			<string>%2$@ sledi</string>
+			<key>few</key>
+			<string>%2$@ sledi</string>
+			<key>other</key>
+			<string>%2$@ sledi</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ali ste prepričani, da želite izbrisati %2$@ urejanje?</string>
+			<key>two</key>
+			<string>Ali ste prepričani, da želite izbrisati %2$@ urejanji?</string>
+			<key>few</key>
+			<string>Ali ste prepričani, da želite izbrisati %2$@ urejanja?</string>
+			<key>other</key>
+			<string>Ali ste prepričani, da želite izbrisati %2$@ urejanj?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Predmet</string>
+			<key>two</key>
+			<string>%2$@ Predmeta</string>
+			<key>few</key>
+			<string>%2$@ Predmeti</string>
+			<key>other</key>
+			<string>%2$@ Predmetov</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Datoteka %2$@ vsebuje %3$@ ločeno sled. Izberite tisto, ki jo želite uvoziti.</string>
+			<key>two</key>
+			<string>Datoteka %2$@ vsebuje %3$@ ločeni sledi. Izberite tiste, ki jih želite uvoziti.</string>
+			<key>few</key>
+			<string>Datoteka %2$@ vsebuje %3$@ ločene sledi. Izberite tiste, ki jih želite uvoziti.</string>
+			<key>other</key>
+			<string>Datoteka %2$@ vsebuje %3$@ ločenih sledi. Izberite tiste, ki jih želite uvoziti.</string>
 		</dict>
 	</dict>
 </dict>

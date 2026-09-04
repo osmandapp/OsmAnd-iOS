@@ -661,7 +661,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
     if (!parser)
         return @"";
-    const auto info = parser->getCombinedInfo([NSDate.date toTm]);
+    const auto info = parser->getCombinedInfo();
     return [NSString stringWithUTF8String:info->getShortInfo().c_str()] ?: @"";
 }
 

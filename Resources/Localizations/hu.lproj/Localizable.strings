@@ -1397,7 +1397,7 @@
 "extra_maps_menu_group" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
-"plan_route_split_before" = "Elvágás ez előtt:";
+"plan_route_split_before" = "Elvágás előtte";
 "shared_string_import" = "Importálás";
 "icon_group_transport" = "Közlekedés";
 "transport" = "Tömegközlekedés";
@@ -1407,7 +1407,7 @@
 "shared_string_circle" = "Kör";
 "segments_count" = "%d szakasz";
 "replace_favorite_confirmation" = "Lecseréli ezt a kedvencet: %@?";
-"plan_route_split_after" = "Elvágás ez után:";
+"plan_route_split_after" = "Elvágás utána";
 "update_frequency" = "Frissítés gyakorisága";
 "shared_string_enable" = "Engedélyezés";
 "searching_gps" = "Műholdak keresése";
@@ -3873,7 +3873,7 @@
 "my_places_no_tracks_title_root" = "Nincsenek nyomvonal-fájljai";
 "my_places_no_tracks_descr_root" = "Az OsmAnd használatával importálhat, létrehozhat vagy rögzíthet nyomvonal-fájlokat.";
 "my_places_no_tracks_descr" = "Ez a mappa még nem tartalmaz nyomvonal-fájlokat.";
-"remove_folder_with_files_descr" = "Biztosan törölni szeretné a(z) „%@” mappát és az összes %d nyomvonalat?";
+"remove_folder_with_files_descr" = "Biztosan törölni szeretné a(z) „%@” mappát és az összes %@ nyomvonalat?";
 "simple_widget_footer" = "A modul csak egyetlen teljes sort vagy csak oszlopot foglalhat el.";
 "delete_all_items_desc" = "Biztosan törölni szeretné a Lomtár összes elemét? Ez a művelet nem vonható vissza.";
 "permanent_delete_warning" = "A(z) %@ véglegesen törölve lesz. Biztos benne?";
@@ -3900,7 +3900,7 @@
 "altitud_and_elevation" = "Magasságok";
 "board_at" = "Tábla itt:";
 "ruler_circles" = "Vonalzókörök";
-"ltr_or_rtl_combine_via_of" = "%ld / %ld";
+"ltr_or_rtl_combine_via_of" = "%@ / %@";
 "map_settings_clear_geo_cache" = "Geo-csempék törlése";
 "navigate_point_format_OLC" = "Nyílt helykód (OLC)";
 "shared_string_of" = "-";
@@ -4055,7 +4055,7 @@
 "gpx_logging_no_data" = "Nincsenek adatok";
 "show_touches" = "Érintések megjelenítése";
 "delete_changes" = "Módosítások törlése";
-"osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
+"osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %@ szerkesztést?";
 "osm_edits_delete_items_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
 "shared_string_url" = "Webcím";
 "folder_one_track" = "1 nyomvonal";
@@ -4239,8 +4239,8 @@
 "shared_string_play" = "Lejátszás";
 "import_tracks_cancel_title" = "Megszakítja az importálást?";
 "import_tracks_cancel_descr" = "Ha most bezárja, a kijelölt nyomvonalak nem kerülnek importálásra.";
-"import_tracks_descr_one" = "A(z) %@ fájl 1 különálló nyomvonalat tartalmaz. Válassza ki azt, amelyet importálni szeretne.";
-"import_tracks_descr_other" = "A(z) %@ fájl %d különálló nyomvonalat tartalmaz. Válassza ki azokat, amelyeket importálni szeretne.";
+"import_tracks_descr_one" = "A(z) %1$@ fájl %2$@ különálló nyomvonalat tartalmaz. Válassza ki azt, amelyet importálni szeretne.";
+"import_tracks_descr_other" = "A(z) %@ fájl %@ különálló nyomvonalat tartalmaz. Válassza ki azokat, amelyeket importálni szeretne.";
 "import_as_one_track" = "Importálás egyetlen nyomvonalként";
 "import_tracks_folders_footer" = "Válasszon célmappát az importált nyomvonalak számára.";
 "error_reading_gpx" = "Nem sikerült a GPX-adatok beolvasása.";
@@ -4511,3 +4511,7 @@
 "shared_string_send" = "Küldés";
 "send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
 "send_current_app_log_descr" = "Alkalmazás indulása óta";
+"msg_favorites_skipped_as_existing" = "A kedvenc pontok (%d) ki lettek hagyva, mivel azok már léteznek.";
+"osm_edits_empty_state_title" = "Nincsenek függőben lévő térképszerkesztések";
+"osm_edits_empty_state_description" = "Az OsmAnd-ban végzett módosításai itt fognak megjelenni, mielőtt feltöltené azokat az OpenStreetMap-re";
+"carplay_trip_via_point" = "Ezen keresztül: %@";

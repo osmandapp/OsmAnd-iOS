@@ -138,6 +138,7 @@
 @synthesize defaultRoutingConfig = _defaultRoutingConfig;
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
+@synthesize carPlayDayNightModeObservable = _carPlayDayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
 @synthesize updateGpxTracksOnMapObservable = _updateGpxTracksOnMapObservable;
 @synthesize updateRecTrackOnMapObservable = _updateRecTrackOnMapObservable;
@@ -706,6 +707,7 @@
 
     // Init observables
     _dayNightModeObservable = [[OAObservable alloc] init];
+    _carPlayDayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
     _updateRecTrackOnMapObservable = [[OAObservable alloc] init];

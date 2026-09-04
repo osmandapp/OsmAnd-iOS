@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>ಅಳಿಸಿ %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ಐಟಂ</string>
+			<key>other</key>
+			<string>%2$@ ಐಟಂಗಳು</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ಅಳಿಸಿ %#@favorites@?</string>
+		<string>ಅಳಿಸಿ %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld ಇಷ್ಟವಾದ</string>
+			<string>%2$@ ಇಷ್ಟವಾದ</string>
 			<key>other</key>
-			<string>%ld ಇಷ್ಟವಾದವುಗಳು</string>
+			<string>%2$@ ಇಷ್ಟವಾದವುಗಳು</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ಅಳಿಸಿ %#@folders@?</string>
+		<string>ಅಳಿಸಿ %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ಅಳಿಸಿ %#@folders@ ಮತ್ತು %#@points@. This action cannot be undone.</string>
+		<string>ಅಳಿಸಿ %1$#@folders@ ಮತ್ತು %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,89 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld point</string>
+			<string>%4$@ point</string>
 			<key>other</key>
-			<string>%ld points</string>
+			<string>%4$@ points</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld ನಿಲ್ದಾಣ</string>
+			<key>other</key>
+			<string>%ld ನಿಲ್ದಾಣಗಳು</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ಟ್ರ್ಯಾಕ್</string>
+			<key>other</key>
+			<string>%2$@ ಟ್ರ್ಯಾಕ್‌ಗಳು</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ಸಂಪಾದನೆಯನ್ನು ಅಳಿಸಲು ಖಚಿತವೇ?</string>
+			<key>other</key>
+			<string>%2$@ ಸಂಪಾದನೆಗಳನ್ನು ಅಳಿಸಲು ಖಚಿತವೇ?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ಐಟಂ</string>
+			<key>other</key>
+			<string>%2$@ ಐಟಂಗಳು</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ಕಡತದಲ್ಲಿ %3$@ ಪ್ರತ್ಯೇಕ ಟ್ರ್ಯಾಕ್ ಇದೆ. ಒಳತರಲು ಬಯಸುವುದನ್ನು ಆಯ್ದುಕೊಳ್ಳಿ.</string>
+			<key>other</key>
+			<string>%2$@ ಕಡತದಲ್ಲಿ %3$@ ಪ್ರತ್ಯೇಕ ಟ್ರ್ಯಾಕ್‌ಗಳಿವೆ. ಒಳತರಲು ಬಯಸುವವುಗಳನ್ನು ಆಯ್ದುಕೊಳ್ಳಿ.</string>
 		</dict>
 	</dict>
 </dict>

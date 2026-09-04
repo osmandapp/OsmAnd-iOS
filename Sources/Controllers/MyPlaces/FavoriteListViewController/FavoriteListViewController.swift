@@ -34,7 +34,10 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var pointToShare: OAFavoritePointBridgeItem?
     var searchText = ""
     var isSearchActive = false
+    var lastAppliedSearchState: (isActive: Bool, text: String)?
+    var cachedSearchFavoriteItems: [OAFavoritePointBridgeItem]?
     var isSelectionModeInSearch = false
+    var isCancellingSearch = false
     var lastDistanceDirectionUpdate: TimeInterval = 0.0
     var isContextMenuVisible = false
     var shouldReloadCollectionView = false
@@ -81,6 +84,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         collectionView.backgroundColor = .clear
         collectionView.tintColor = .iconColorActive
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -193,6 +197,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
         lastDistanceDirectionUpdate = currentTime
         if currentSortMode.isDistanceOriented {
+            cachedSearchFavoriteItems = nil
             applySnapshot(animatingDifferences: false)
         } else {
             updateVisibleFavoriteCellsDistanceAndDirection()
@@ -207,14 +212,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     func configureNavigation() {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        if !isRootFolder {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            navigationController?.navigationBar.tintColor = .iconColorActive
-        }
-
+        navigationController?.setDefaultNavigationBarAppearance()
         navigationController?.navigationBar.prefersLargeTitles = false
         configureNavigationButtons()
         configureSearchVisibility()
@@ -342,6 +340,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
             guard let self else { return nil }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            configuration.backgroundColor = .clear
             let section = self.layoutSections.indices.contains(sectionIndex) ? self.layoutSections[sectionIndex] : nil
             if section == .sortHeader {
                 return self.sortHeaderLayoutSection()
@@ -402,8 +401,8 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         if collectionView.isEditing {
             let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
-            let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-            setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
+            let subtitle = "\(NumberFormatter.localizedCount(pointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
+            setNavigationTitle(NumberFormatter.localizedCount(selectedItems.count), subtitle: subtitle, hideSubtitle: false)
         } else {
             setNavigationTitle(normalTitle, subtitle: normalSubtitle, hideSubtitle: false)
         }

@@ -2,10 +2,34 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Dileu %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ eitem</string>
+			<key>one</key>
+			<string>%2$@ eitem</string>
+			<key>two</key>
+			<string>%2$@ eitem</string>
+			<key>few</key>
+			<string>%2$@ eitem</string>
+			<key>many</key>
+			<string>%2$@ eitem</string>
+			<key>other</key>
+			<string>%2$@ eitem</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Dileu %#@favorites@?</string>
+		<string>Dileu %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,21 +37,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Ffefryn</string>
+			<string>%2$@ Ffefryn</string>
 			<key>two</key>
-			<string>%ld Ffefrynnau</string>
+			<string>%2$@ Ffefrynnau</string>
 			<key>few</key>
-			<string>%ld Ffefrynnau</string>
+			<string>%2$@ Ffefrynnau</string>
 			<key>many</key>
-			<string>%ld Ffefrynnau</string>
+			<string>%2$@ Ffefrynnau</string>
 			<key>other</key>
-			<string>%ld Ffefrynnau</string>
+			<string>%2$@ Ffefrynnau</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Dileu %#@folders@?</string>
+		<string>Dileu %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -35,21 +59,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>many</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Dileu %#@folders@ a %#@points@. This action cannot be undone.</string>
+		<string>Dileu %1$#@folders@ a %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -57,17 +81,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>many</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -76,17 +100,137 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld Pwyntiau</string>
+			<string>%4$@ Pwyntiau</string>
 			<key>one</key>
-			<string>%ld Pwynt</string>
+			<string>%4$@ Pwynt</string>
 			<key>two</key>
-			<string>%ld Pwyntiau</string>
+			<string>%4$@ Pwyntiau</string>
 			<key>few</key>
-			<string>%ld Pwyntiau</string>
+			<string>%4$@ Pwyntiau</string>
 			<key>many</key>
-			<string>%ld Pwyntiau</string>
+			<string>%4$@ Pwyntiau</string>
 			<key>other</key>
-			<string>%ld Pwyntiau</string>
+			<string>%4$@ Pwyntiau</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld stop</string>
+			<key>one</key>
+			<string>%ld stop</string>
+			<key>two</key>
+			<string>%ld stop</string>
+			<key>few</key>
+			<string>%ld stop</string>
+			<key>many</key>
+			<string>%ld stop</string>
+			<key>other</key>
+			<string>%ld stop</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ trac</string>
+			<key>one</key>
+			<string>%2$@ trac</string>
+			<key>two</key>
+			<string>%2$@ drac</string>
+			<key>few</key>
+			<string>%2$@ thrac</string>
+			<key>many</key>
+			<string>%2$@ thrac</string>
+			<key>other</key>
+			<string>%2$@ trac</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>one</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>two</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ olygiad?</string>
+			<key>few</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>many</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+			<key>other</key>
+			<string>Ydych chi'n siŵr eich bod am ddileu %2$@ golygiad?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ Eitem</string>
+			<key>one</key>
+			<string>%2$@ Eitem</string>
+			<key>two</key>
+			<string>%2$@ Eitem</string>
+			<key>few</key>
+			<string>%2$@ Eitem</string>
+			<key>many</key>
+			<string>%2$@ Eitem</string>
+			<key>other</key>
+			<string>%2$@ Eitem</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>one</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch yr un rydych am ei fewnforio.</string>
+			<key>two</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ drac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>few</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ thrac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>many</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ thrac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
+			<key>other</key>
+			<string>Mae'r ffeil %2$@ yn cynnwys %3$@ trac ar wahân. Dewiswch y rhai rydych am eu mewnforio.</string>
 		</dict>
 	</dict>
 </dict>

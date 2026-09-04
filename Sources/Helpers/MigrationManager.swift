@@ -24,6 +24,7 @@ final class MigrationManager: NSObject {
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
+        case migrateTracksSortModeKeysAndFormat
     }
     
     private struct HudMigrationScenario {
@@ -113,6 +114,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
                 migrateCarPlayMapAppearanceMode()
                 defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
+                migrateTracksSortModeKeysAndFormat()
+                defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
             }
         }
     }
@@ -622,6 +627,66 @@ final class MigrationManager: NSObject {
         let resolved = settings.isCarPlayModeDefault.get() ? (current.isDerivedRouting(from: .car()) ? current : firstCar) : settings.carPlayMode.get()
 
         settings.carPlayMapAppearanceMode.set(settings.appearanceMode.get(resolved))
+    }
+
+    private func migrateTracksSortModeKeysAndFormat() {
+        let valuesByLocalizedTitle = tracksSortModeValuesByLocalizedTitle()
+        let validValues = Set(TracksSortMode.allCases.map(\.value))
+        var tracksSortModes = settings.getTracksSortModes()
+
+        for (sortEntryId, storedValue) in tracksSortModes where !validValues.contains(storedValue) {
+            if let value = valuesByLocalizedTitle[storedValue] {
+                tracksSortModes[sortEntryId] = value
+            }
+        }
+
+        if !tracksSortModes.isEmpty {
+            settings.saveTracksSortModes(tracksSortModes)
+        }
+
+        let searchSortMode = settings.searchTracksSortModes.get()
+        if !validValues.contains(searchSortMode), let value = valuesByLocalizedTitle[searchSortMode] {
+            settings.searchTracksSortModes.set(value)
+        }
+    }
+
+    private func tracksSortModeValuesByLocalizedTitle() -> [String: String] {
+        let migrationEntries: [(value: String, localizationKeys: [String])] = [
+            (TracksSortMode.nearestToCurrentLocation.value, ["shared_string_nearest", "sort_by_nearest_to_current_location"]),
+            (TracksSortMode.nearestToMapCenter.value, ["sort_by_nearest_to_map_center"]),
+            (TracksSortMode.lastModified.value, ["sort_last_modified"]),
+            (TracksSortMode.nameAZ.value, ["track_sort_az"]),
+            (TracksSortMode.nameZA.value, ["track_sort_za"]),
+            (TracksSortMode.newestDateFirst.value, ["newest_date_first"]),
+            (TracksSortMode.oldestDateFirst.value, ["oldest_date_first"]),
+            (TracksSortMode.longestDistanceFirst.value, ["longest_distance_first"]),
+            (TracksSortMode.shortestDistanceFirst.value, ["shortest_distance_first"]),
+            (TracksSortMode.longestDurationFirst.value, ["longest_duration_first"]),
+            (TracksSortMode.shorterDurationFirst.value, ["shorter_duration_first"])
+        ]
+        // Sentinel returned by Bundle when a localization key is missing, so it is not treated as a saved title.
+        let missingTranslation = "__missing_track_sort_mode_translation__"
+        let localizationBundles = Bundle.main.localizations.compactMap { languageCode -> Bundle? in
+            guard let path = Bundle.main.path(forResource: languageCode, ofType: "lproj") else { return nil }
+            return Bundle(path: path)
+        }
+        var valuesByLocalizedTitle = [String: String]()
+
+        for entry in migrationEntries {
+            for localizationKey in entry.localizationKeys {
+                for bundle in localizationBundles {
+                    let title = bundle.localizedString(forKey: localizationKey, value: missingTranslation, table: nil)
+                    guard title != missingTranslation, !title.isEmpty else { continue }
+                    // Some legacy translations are identical for two modes. The order above
+                    // keeps the value that matches the meaning of the duplicated title.
+                    if valuesByLocalizedTitle[title] == nil {
+                        valuesByLocalizedTitle[title] = entry.value
+                    }
+                }
+            }
+        }
+
+        return valuesByLocalizedTitle
     }
 
     // MARK: - Import old versions

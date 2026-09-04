@@ -100,7 +100,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode)
         initialDayColor = appearanceSettings.color(for: target, panel: panel, nightMode: false)
         initialNightColor = appearanceSettings.color(for: target, panel: panel, nightMode: true)
-        isNightColorMode = OAAppSettings.sharedManager().nightMode
+        isNightColorMode = OAAppSettings.sharedManager().isAppMapNightMode
 
         switch target {
         case .primaryText:

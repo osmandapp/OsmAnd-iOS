@@ -418,7 +418,7 @@
     ResolvedWidgetPanelAppearance *appearance =
         [WidgetPanelAppearanceResolver resolveForPanel:panel
                                                appMode:_settings.applicationMode.get
-                                             nightMode:_settings.nightMode];
+                                             nightMode:_settings.isAppMapNightMode];
     view.direction = appearance.transparent ? ShadowPathDirectionClear : direction;
 }
 

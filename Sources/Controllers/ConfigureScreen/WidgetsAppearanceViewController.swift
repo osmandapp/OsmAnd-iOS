@@ -168,7 +168,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
             return nil
         }
         let title = item.title ?? ""
-        let nightMode = OAAppSettings.sharedManager().nightMode
+        let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         let resolvedAppearance = WidgetPanelAppearanceResolver.resolve(panel: selectedPanel,
                                                                        appMode: appMode,
                                                                        nightMode: nightMode)

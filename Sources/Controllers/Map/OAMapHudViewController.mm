@@ -1444,7 +1444,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _bottomBarView.backgroundColor =
             [WidgetPanelAppearanceResolver resolveForPanel:OAWidgetsPanel.bottomPanel
                                                    appMode:_settings.applicationMode.get
-                                                 nightMode:_settings.nightMode].backgroundColor;
+                                                 nightMode:_settings.isAppMapNightMode].backgroundColor;
 }
 
 - (void)updateWidgetPanelAppearanceColors

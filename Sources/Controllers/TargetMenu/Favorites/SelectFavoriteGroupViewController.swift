@@ -176,7 +176,7 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
             )
         }
 
-        let groupNames = favoriteGroupNames ?? FavoriteFolderProvider.shared.getFlattenedFavoriteFolders(includeRoot: true)
+        let groupNames = favoriteGroupNames ?? FavoriteFolderProvider.shared.flattenedFavoriteFolders(includeRoot: true)
             .filter { !$0.isRoot() || $0.getGroup() != nil }
             .map { $0.getFullPath() }
         for groupName in groupNames {

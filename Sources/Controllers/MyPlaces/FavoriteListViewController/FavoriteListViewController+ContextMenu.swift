@@ -130,7 +130,7 @@ extension FavoriteListViewController {
         var menuElements: [UIMenuElement] = []
         let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
         let folderPaths = selectedBridgeItems.compactMap { $0 as? String }
-        let folders = folderPaths.compactMap { FavoriteFolderProvider.shared.getFavoriteFolder($0)?.getGroup() }
+        let folders = folderPaths.compactMap { FavoriteFolderProvider.shared.favoriteFolder($0)?.getGroup() }
         let containsVirtualFolder = folders.count != folderPaths.count
         let hasPoints = selectedBridgeItems.contains { $0 is OAFavoritePointBridgeItem }
 

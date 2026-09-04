@@ -25,19 +25,19 @@ final class FavoriteFolderProvider {
         }
     }
 
-    func getFavoriteFolderRoot() -> FavoriteFolder {
+    func favoriteFolderRoot() -> FavoriteFolder {
         ensureFavoriteFolderSnapshot().root
     }
 
-    func getFavoriteFolder(_ fullPath: String) -> FavoriteFolder? {
+    func favoriteFolder(_ fullPath: String) -> FavoriteFolder? {
         ensureFavoriteFolderSnapshot().folders[fullPath]
     }
 
-    func getFavoriteRootFolders() -> [FavoriteFolder] {
+    func favoriteRootFolders() -> [FavoriteFolder] {
         ensureFavoriteFolderSnapshot().root.getSubFolders()
     }
 
-    func getFlattenedFavoriteFolders(includeRoot: Bool) -> [FavoriteFolder] {
+    func flattenedFavoriteFolders(includeRoot: Bool) -> [FavoriteFolder] {
         var result: [FavoriteFolder] = []
         let root = ensureFavoriteFolderSnapshot().root
         if includeRoot {
@@ -51,8 +51,8 @@ final class FavoriteFolderProvider {
         return result
     }
 
-    func getFavoriteGroupsInSubtree(_ fullPath: String) -> [OAFavoriteFolderBridgeItem] {
-        getFavoriteFoldersInSubtree(fullPath).compactMap { $0.getGroup() }
+    func favoriteGroupsInSubtree(_ fullPath: String) -> [OAFavoriteFolderBridgeItem] {
+        favoriteFoldersInSubtree(fullPath).compactMap { $0.getGroup() }
     }
 
     private func invalidateFavoriteFolderCache() {
@@ -112,9 +112,9 @@ final class FavoriteFolderProvider {
         }
     }
 
-    private func getFavoriteFoldersInSubtree(_ fullPath: String) -> [FavoriteFolder] {
+    private func favoriteFoldersInSubtree(_ fullPath: String) -> [FavoriteFolder] {
         var result: [FavoriteFolder] = []
-        if let folder = getFavoriteFolder(fullPath) {
+        if let folder = favoriteFolder(fullPath) {
             collectFlattenedFavoriteFolders(folder, result: &result)
         }
 

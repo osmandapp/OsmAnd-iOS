@@ -192,7 +192,7 @@ extension FavoriteListViewController {
     }
 
     private func applyRootSnapshot(animatingDifferences: Bool) {
-        let rootFolder = FavoriteFolderProvider.shared.getFavoriteFolderRoot()
+        let rootFolder = FavoriteFolderProvider.shared.favoriteFolderRoot()
         if isSearchResultsMode {
             applySearchSnapshot(parentFullPath: nil, animatingDifferences: animatingDifferences)
             return
@@ -250,7 +250,7 @@ extension FavoriteListViewController {
     }
 
     private func applyFolderSnapshot(fullPath: String, animatingDifferences: Bool) {
-        guard let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath) else {
+        guard let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath) else {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
@@ -476,7 +476,7 @@ extension FavoriteListViewController {
             if let parentFullPath {
                 favoriteRows = favoritePointRows(inFolder: parentFullPath)
             } else {
-                let groups = FavoriteFolderProvider.shared.getFlattenedFavoriteFolders(includeRoot: true).compactMap { $0.getGroup() }
+                let groups = FavoriteFolderProvider.shared.flattenedFavoriteFolders(includeRoot: true).compactMap { $0.getGroup() }
                 let points = groups.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.groupName) }
                 favoriteRows = favoritePointRows(points)
             }

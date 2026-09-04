@@ -53,10 +53,10 @@ extension FavoriteListViewController {
 
     func favoritePointRows(inFolder fullPath: String) -> [FavoritePointRow] {
         let groups: [OAFavoriteFolderBridgeItem]
-        if let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath), folder.isRoot() {
+        if let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath), folder.isRoot() {
             groups = folder.getGroup().map { [$0] } ?? []
         } else {
-            groups = FavoriteFolderProvider.shared.getFavoriteGroupsInSubtree(fullPath)
+            groups = FavoriteFolderProvider.shared.favoriteGroupsInSubtree(fullPath)
         }
         let points = groups.flatMap { OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: $0.groupName) }
         return favoritePointRows(points)
@@ -183,7 +183,7 @@ extension FavoriteListViewController {
     
     func selectedFavoritePointsCount(for selectedItems: [Any]) -> Int {
         let folderPointsCount = selectedItems.compactMap { $0 as? String }.reduce(0) { result, fullPath in
-            guard let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath) else { return result }
+            guard let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath) else { return result }
             return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
         }
 
@@ -546,7 +546,7 @@ extension FavoriteListViewController {
         }
 
         let folderPointsCount = folders.reduce(0) { result, fullPath in
-            guard let folder = FavoriteFolderProvider.shared.getFavoriteFolder(fullPath) else { return result }
+            guard let folder = FavoriteFolderProvider.shared.favoriteFolder(fullPath) else { return result }
             return result + (folder.isRoot() ? folder.getExactPointsCount() : folder.getSubtreePointsCount())
         }
         let pointsCount = folderPointsCount + points.count

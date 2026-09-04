@@ -1102,31 +1102,34 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
 }
 
+// Download names of the regions of every route point, at all levels of the region hierarchy
+// (Kyiv -> ukraine_kyiv-city_europe, ukraine_kyiv_europe, ukraine_europe). HHRoutePlanner uses
+// them to reject groups of maps which don't belong to the route regions.
+// Regions common to all points must not be used here: countries published only as sub-regions
+// (Ukraine, France, Germany, Poland, ...) have no downloadable map named after the country
+// itself, so for 2 points of different sub-regions the only common region would never match
+// any downloaded file, and the check would always fail.
 - (void) calculateRegionsWithAllRoutePoints:(std::shared_ptr<RoutingContext>)ctx
                                       start:(CLLocation *)start
                                     targets:(NSArray<CLLocation *> *)targets
 {
-    NSMutableDictionary<NSString*, NSNumber*> *regionCounter = [NSMutableDictionary dictionary];
+    NSMutableOrderedSet<NSString *> *regions = [NSMutableOrderedSet orderedSet];
 
-    [self getRegionsOfPoint:start regionCounter:regionCounter];
+    [self collectRegionsOfPoint:start regions:regions];
 
     for (CLLocation *loc in targets) {
-       [self getRegionsOfPoint:loc regionCounter:regionCounter];
+       [self collectRegionsOfPoint:loc regions:regions];
     }
 
-    int allPoints = 1 + (int)targets.count;
-
     std::vector<std::string> result;
-    for (NSString *region in regionCounter) {
-        if ([regionCounter[region] intValue] == allPoints) {
-            result.emplace_back([region UTF8String]);
-        }
+    for (NSString *region in regions) {
+        result.emplace_back([region UTF8String]);
     }
     ctx->regionsCoveringStartAndTargets = std::move(result);
 }
 
-- (void) getRegionsOfPoint:(CLLocation *) ll
-             regionCounter:(NSMutableDictionary<NSString*, NSNumber*> *) regionCounter
+- (void) collectRegionsOfPoint:(CLLocation *) ll
+                       regions:(NSMutableOrderedSet<NSString *> *) regions
 {
     NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAtWithoutSort:ll.coordinate.latitude longitude:ll.coordinate.longitude];
     for (OAWorldRegion *region in regionsArray)
@@ -1136,7 +1139,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         {
             name = [name substringToIndex:[name length] - 1];
         }
-        regionCounter[name] = @([regionCounter[name] integerValue] + 1);
+        if (name)
+        {
+            [regions addObject:name];
+        }
     }
 }
 

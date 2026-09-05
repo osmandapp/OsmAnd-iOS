@@ -221,7 +221,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         guard indexingRefreshTimer == nil, view.window != nil else { return }
         let timer = Timer(timeInterval: 6, repeats: true) { [weak self] _ in
             guard let self else { return }
-            let stillIndexing = self.hasUnindexedTracksInCurrentFolder()
+            let stillIndexing = self.isIndexingInProgress()
             if !stillIndexing {
                 self.stopIndexingRefreshTimer()
                 self.lastRenderedIndexedTrackCount = -1
@@ -238,7 +238,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func updateIndexingRefreshState() {
-        if view.window != nil, hasUnindexedTracksInCurrentFolder() {
+        if view.window != nil, isIndexingInProgress() {
             startIndexingRefreshTimer()
         } else {
             stopIndexingRefreshTimer()
@@ -256,12 +256,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         return folder?.getTrackItems() ?? []
     }
 
-    private func hasUnindexedTracksInCurrentFolder() -> Bool {
-        currentFolderTrackItems().contains { $0.dataItem == nil }
+    private func isIndexingInProgress() -> Bool {
+        GpxDbHelper.shared.isReading()
     }
 
     private func shouldShowCalculatingStatsRow() -> Bool {
-        !tableView.isEditing && hasUnindexedTracksInCurrentFolder()
+        !tableView.isEditing && isIndexingInProgress()
     }
 
     private func addCalculatingStatsSectionIfNeeded() {
@@ -332,7 +332,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if !isLoadingInProgress {
                 reloadTracks()
             }
-        } else if hasUnindexedTracksInCurrentFolder() {
+        } else if isIndexingInProgress() {
             startIndexingRefreshTimer()
             updateData()
         }

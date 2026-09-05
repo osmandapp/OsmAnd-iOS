@@ -701,17 +701,17 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
 #pragma mark - OAUserInteractionPassThroughDelegate
 
-- (BOOL)isTouchEventAllowedForView:(UIView *)view { 
+- (BOOL)isTouchEventAllowedForView:(UIView *)view {
     if ([view isKindOfClass:[OAHudButton class]])
     {
         OAHudButton *quickActionButton = (OAHudButton *)view;
         if ([quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
         {
             QuickActionButtonState *buttonState = (QuickActionButtonState *)quickActionButton.buttonState;
-            OAQuickAction *quickAction = buttonState.quickActions.firstObject;
-            if (quickAction)
+            for (OAQuickAction *quickAction in buttonState.quickActions)
             {
-                return [quickAction isKindOfClass:[LockScreenAction class]];
+                if ([quickAction isKindOfClass:[LockScreenAction class]])
+                    return YES;
             }
         }
     }

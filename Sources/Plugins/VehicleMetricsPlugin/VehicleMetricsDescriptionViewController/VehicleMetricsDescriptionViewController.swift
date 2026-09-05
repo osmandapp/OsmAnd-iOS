@@ -12,12 +12,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         case normal, scrollToSearch
     }
     
-    private enum Section: Int {
-        case vehicleInfo, receivedData, settings, forgetSensor
-        
-        var key: String {
-            String(describing: self)
-        }
+    private enum SectionKey: String {
+        case deviceHeader, vehicleInfo, receivedData, settings, forgetSensor
     }
     
     static let placeholderTextNA: String = "N/A"
@@ -82,14 +78,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = Self.estimatedRowHeight
         
-        configureHeader()
         headerView.configure(device: device)
         headerView.didPairedDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()
         }
-        tableView.tableHeaderView = headerView
         plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin
         
         // NOTE: to debug obd simulator
@@ -110,23 +104,30 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         }
     }
     
-    override func setupTableHeaderView() {
-        configureHeader()
+    override func hideFirstHeader() -> Bool {
+        true
     }
     
     override func registerCells() {
+        tableView.register(DescriptionDeviceCell.self, forCellReuseIdentifier: DescriptionDeviceCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
         tableData.clearAllData()
         
+        let headerSection = tableData.createNewSection()
+        headerSection.key = SectionKey.deviceHeader.rawValue
+        let headerRow = headerSection.createNewRow()
+        headerRow.cellType = DescriptionDeviceCell.reuseIdentifier
+        headerRow.key = SectionKey.deviceHeader.rawValue
+        
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
             // Vehicle info
             let vehicleInfoSection = tableData.createNewSection()
             vehicleInfoSection.headerText = localizedString("obd_vehicle_info").uppercased()
             vehicleInfoSection.footerText = localizedString("obd_vin_desc")
-            vehicleInfoSection.key = Section.vehicleInfo.key
+            vehicleInfoSection.key = SectionKey.vehicleInfo.rawValue
             
             let vinRow = vehicleInfoSection.createNewRow()
             vinRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -143,7 +144,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             // Received Data
             let receivedDataSection = tableData.createNewSection()
             receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
-            receivedDataSection.key = Section.receivedData.key
+            receivedDataSection.key = SectionKey.receivedData.rawValue
             
             for widget in widgets {
                 let row = receivedDataSection.createNewRow()
@@ -164,7 +165,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             // Settings
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings").uppercased()
-            settingsSection.key = Section.settings.key
+            settingsSection.key = SectionKey.settings.rawValue
             
             let nameRow = settingsSection.createNewRow()
             nameRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -173,7 +174,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             nameRow.descr = device.deviceName
             
             let forgetSensorSection = tableData.createNewSection()
-            forgetSensorSection.key = Section.forgetSensor.key
+            forgetSensorSection.key = SectionKey.forgetSensor.rawValue
             let forgetSensorRow = forgetSensorSection.createNewRow()
             forgetSensorRow.cellType = OAValueTableViewCell.reuseIdentifier
             forgetSensorRow.key = "forget_sensor_row"
@@ -186,20 +187,34 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        if let section = Section(rawValue: section), section == .forgetSensor {
+        let key = tableData.sectionData(for: UInt(section)).key
+        if key == SectionKey.deviceHeader.rawValue {
+            return .leastNonzeroMagnitude
+        }
+        if key == SectionKey.forgetSensor.rawValue {
             return 34
-        } else if !DeviceHelper.shared.isPairedDevice(id: device.id) {
+        }
+        if !DeviceHelper.shared.isPairedDevice(id: device.id) {
             return .leastNonzeroMagnitude
         }
         return 56
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : UITableView.automaticDimension
+        let key = tableData.sectionData(for: UInt(section)).key
+        if key == SectionKey.deviceHeader.rawValue {
+            return .leastNonzeroMagnitude
+        }
+        return DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : UITableView.automaticDimension
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
+        if item.cellType == DescriptionDeviceCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: DescriptionDeviceCell.reuseIdentifier, for: indexPath) as! DescriptionDeviceCell
+            cell.configure(header: headerView)
+            return cell
+        }
         if item.cellType == OAValueTableViewCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell else {
                 return nil
@@ -208,7 +223,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             cell.separatorInset = .zero
             cell.titleLabel.text = item.title
             let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
-            if sectionKey == Section.receivedData.key || sectionKey == Section.vehicleInfo.key {
+            if sectionKey == SectionKey.receivedData.rawValue || sectionKey == SectionKey.vehicleInfo.rawValue {
                 if let widgetItem = item.obj(forKey: "widgetItem") as? OBDDataComputer.OBDComputerWidget {
                     cell.valueLabel.text = description(for: widgetItem)
                 } else {
@@ -217,19 +232,19 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             } else {
                 cell.valueLabel.text = item.descr
             }
-            if sectionKey == Section.receivedData.key || sectionKey == Section.vehicleInfo.key {
-                cell.leftIconVisibility(sectionKey == Section.receivedData.key)
+            if sectionKey == SectionKey.receivedData.rawValue || sectionKey == SectionKey.vehicleInfo.rawValue {
+                cell.leftIconVisibility(sectionKey == SectionKey.receivedData.rawValue)
                 cell.imageView?.image = item.icon
                 cell.selectionStyle = .none
                 cell.accessoryType = .none
                 cell.titleLabel.textColor = .textColorPrimary
-            } else if sectionKey == Section.settings.key {
+            } else if sectionKey == SectionKey.settings.rawValue {
                 cell.leftIconVisibility(false)
                 cell.imageView?.image = nil
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
                 cell.titleLabel.textColor = .textColorPrimary
-            } else if sectionKey == Section.forgetSensor.key {
+            } else if sectionKey == SectionKey.forgetSensor.rawValue {
                 cell.leftIconVisibility(false)
                 cell.imageView?.image = nil
                 cell.selectionStyle = .gray
@@ -294,7 +309,7 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
         for indexPath in visibleIndexPaths {
             let sectionData = tableData.sectionData(for: UInt(indexPath.section))
             
-            guard sectionData.key == Section.receivedData.key || sectionData.key == Section.vehicleInfo.key else { continue }
+            guard sectionData.key == SectionKey.receivedData.rawValue || sectionData.key == SectionKey.vehicleInfo.rawValue else { continue }
             guard let cell = tableView.cellForRow(at: indexPath) as? OAValueTableViewCell else { continue }
             
             let item = tableData.item(for: indexPath)
@@ -310,18 +325,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     private func scrollToSearchSection() {
         for index in 0..<tableData.sectionCount() {
             let section = tableData.sectionData(for: index)
-            if section.key == Section.settings.key {
+            if section.key == SectionKey.settings.rawValue {
                 let indexPath = IndexPath(row: 0, section: Int(index))
                 tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 break
             }
         }
-    }
-    
-    private func configureHeader() {
-        headerView.frame.size.height = 156
-        headerView.frame.size.width = view.frame.width
-        tableView.tableHeaderView = headerView
     }
 }
 

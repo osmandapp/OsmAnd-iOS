@@ -16,6 +16,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectActivityView: UIActivityIndicatorView!
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
+    @IBOutlet private weak var dividerBottomView: UIView!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPairedDeviceAction: (() -> Void)?
@@ -23,6 +24,10 @@ final class DescriptionDeviceHeader: UIView {
     private var device: Device?
     
     // MARK: - Configure
+    func hideBottomDivider() {
+        dividerBottomView?.isHidden = true
+    }
+    
     func configure(device: Device) {
         self.device = device
         deviceNameLabel.text = device.deviceName

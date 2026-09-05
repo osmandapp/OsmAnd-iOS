@@ -2885,7 +2885,7 @@
 "delete_all_items_desc" = "Weet u zeker dat u alle items in de Prullenbak definitief wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.";
 "simple_widget_footer" = "Widget kan volledige rijbreedte innemen of slechts een kolom.";
 "recorded_track" = "Opgenomen track";
-"remove_folder_with_files_descr" = "Weet u zeker dat u folder \"%@\" en alle %d tracks wilt verwijderen?";
+"remove_folder_with_files_descr" = "Weet u zeker dat u folder \"%@\" en alle %@ tracks wilt verwijderen?";
 "short_min" = "m";
 "my_places_no_tracks_descr" = "Deze folder bevat nog geen tracks.";
 "my_places_no_tracks_descr_root" = "U kunt track-bestanden importeren, creëren of opnemen met OsmAnd.";
@@ -3569,7 +3569,7 @@
 "restoring_from" = "Geselecteerde gegevens worden hersteld uit de cloud";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_of" = "%@ of %@";
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "added_items" = "Items toegevoegd: %@";

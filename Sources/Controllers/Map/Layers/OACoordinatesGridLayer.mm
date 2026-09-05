@@ -43,6 +43,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     
     OAAutoObserverProxy *_mapSettingsChangeObserver;
     OAAutoObserverProxy *_dayNightModeObserver;
+    OAAutoObserverProxy *_carPlayDayNightModeObserver;
 }
 
 - (NSString *)layerId
@@ -61,6 +62,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWidgetsLayoutDidChange) name:kWidgetsPanelsDidLayoutNotification object:nil];
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:self.app.mapSettingsChangeObservable];
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:OsmAndApp.instance.dayNightModeObservable];
+    _carPlayDayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onPreferenceChange) andObserve:OsmAndApp.instance.carPlayDayNightModeObservable];
 }
 
 - (BOOL)updateLayer
@@ -102,6 +104,11 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     {
         [_dayNightModeObserver detach];
         _dayNightModeObserver = nil;
+    }
+    if (_carPlayDayNightModeObserver)
+    {
+        [_carPlayDayNightModeObserver detach];
+        _carPlayDayNightModeObserver = nil;
     }
 }
 
@@ -165,7 +172,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _cachedTextScale = [_gridSettings getTextScaleForAppMode:appMode];
     _cachedGridEnabled = [_gridSettings isEnabled];
     _cachedZoomLimits = [_gridSettings getZoomLevelsWithRestrictionsForAppMode:appMode];
-    _cachedNightMode = OADayNightHelper.instance.isNightMode;
+    _cachedNightMode = _settings.isCurrentMapNightMode;
 }
 
 - (BOOL)updateVariablesWithAppMode:(OAApplicationMode *)appMode
@@ -206,7 +213,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
         updated = YES;
     }
     
-    BOOL newNightMode = OADayNightHelper.instance.isNightMode;
+    BOOL newNightMode = _settings.isCurrentMapNightMode;
     if (_cachedNightMode != newNightMode)
     {
         _cachedNightMode = newNightMode;

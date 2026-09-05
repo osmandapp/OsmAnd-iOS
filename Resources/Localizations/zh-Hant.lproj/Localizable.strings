@@ -1300,7 +1300,7 @@
 "routing_attr_allow_motorway_description" = "允許進高速公路。";
 "rendering_attr_contourColorScheme_name" = "等高線的顏色配置";
 "rendering_attr_piste_type_sleigh_name" = "雪橇道";
-"online_webpage_warning" = "此頁面僅在在線狀態提供。是否在網頁瀏覽器中開啟？";
+"online_webpage_warning" = "此頁面僅在線上狀態提供。是否在網頁瀏覽器中開啟？";
 "app_mode_pedestrian" = "走路";
 "app_mode_bicycle" = "腳踏車";
 "app_mode_car" = "開車";
@@ -2379,7 +2379,7 @@
 "available_map_styles" = "可用的地圖風格";
 "available_map_sources" = "可用的地圖來源";
 "export_failed" = "無法匯出設定檔";
-"ltr_or_rtl_combine_via_of" = "%ld 的 %ld";
+"ltr_or_rtl_combine_via_of" = "%@ 的 %@";
 "rearrange_profile_descr" = "無法刪除預設的 OsmAnd 設定檔，但您可以在上一個螢幕上停用它們，或將它們拖到列表的底端。";
 "not_available_profile_name" = "已存在具有相同名稱的設定檔。";
 "add_one_more_pnt" = "新增一個點";
@@ -2979,7 +2979,7 @@
 "help_article_map_interact_with_map_name" = "與地圖互動";
 "help_article_map_map_context_menu_name" = "快速動作選單";
 "help_article_map_point_layers_on_map_name" = "地圖上的點位";
-"help_article_map_raster_maps_name" = "點陣地圖 (在線/離線)";
+"help_article_map_raster_maps_name" = "點陣地圖 (線上/離線)";
 "help_article_map_legend_osmand_name" = "OsmAnd 地圖圖例";
 "help_article_map_legend_ski_map_name" = "滑雪地圖圖例";
 "help_article_map_track_context_menu_name" = "軌跡選單內容";
@@ -3471,7 +3471,7 @@
 "shared_string_interface" = "介面";
 "lock_screen_description" = "啟用或關閉觸控螢幕功能來避免誤觸";
 "screen_is_unlocked" = "觸控螢幕已經解鎖。";
-"remove_folder_with_files_descr" = "你確定你想要移除\"%@\"b資料夾以及所有%d軌跡？";
+"remove_folder_with_files_descr" = "你確定你想要移除\"%@\"b資料夾以及所有%@軌跡？";
 "recorded_track" = "已經錄製的軌跡";
 "simple_widget_footer" = "小工具可以佔整個行的寬度或是只有一個欄的寬度。";
 "delete_all_items_desc" = "你確定要永久刪除所有在垃圾筒的物件？這項動作無法復原。";
@@ -4065,7 +4065,7 @@
 "delete_colors_palette_dialog_summary" = "您確定要刪除 %@ 色盤嗎？";
 "folder_one_track" = "1 條軌跡";
 "delete_changes" = "刪除變動";
-"osm_edits_delete_item_confirmation" = "您確定要刪除 %ld 編輯嗎？";
+"osm_edits_delete_item_confirmation" = "您確定要刪除 %@ 編輯嗎？";
 "osm_edits_delete_items_confirmation" = "您確定要刪除 %ld 編輯嗎？";
 "show_touches" = "顯示觸控";
 "ios_release_5_4" = "* 新增「地形陰影」視覺狀態\n* 完整重新設計「我的地點」使用者界面，新增收藏子目錄以及其他方便操作\n* 新增只有道路的地圖支援\n* 擴充新增所有興趣點圖示的支援來自訂個人檔案\n* 新增自訂單車道寬度來避免行駛窄小的單車道\n* 新增 OBD-II 轉接器的伏特小工具\n* 改進管理大量收藏數量的效能\n* 新增「暫停語言」選項在導航指引時暫停 podcast 或是有聲書的播放\n";
@@ -4109,3 +4109,5 @@
 "traffic_warning_red_light_camera" = "闖紅燈照相機";
 "astro_search_info_nebulas" = "星雲是宇宙中由塵埃與氣體構成的巨大雲團，通常是恆星誕生的區域。";
 "plugin_ais_tracker_name" = "AIS 船隻追蹤器";
+"no_crashes_recorded" = "還沒有記錄到當機紀錄";
+"share_crash_log" = "分享當機紀錄";

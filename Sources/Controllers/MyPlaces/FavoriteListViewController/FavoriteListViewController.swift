@@ -401,8 +401,8 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         if collectionView.isEditing {
             let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
-            let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-            setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
+            let subtitle = "\(NumberFormatter.localizedCount(pointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
+            setNavigationTitle(NumberFormatter.localizedCount(selectedItems.count), subtitle: subtitle, hideSubtitle: false)
         } else {
             setNavigationTitle(normalTitle, subtitle: normalSubtitle, hideSubtitle: false)
         }

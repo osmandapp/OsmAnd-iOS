@@ -300,7 +300,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)updateAllValues
 {
-    _nightMode = _settings.nightMode;
+    _nightMode = _settings.isAppMapNightMode;
     _selectedDayNightMode = OALocalizedString(_nightMode ? @"daynight_mode_night" : @"day");
     
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];

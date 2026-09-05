@@ -13,6 +13,12 @@ final class OpeningHoursParserTest: XCTestCase {
         configure(localeIdentifier: "en_GB", twelveHour: false)
     }
 
+    func testNSDateToTmWeekday() {
+        let date = Date(timeIntervalSince1970: 1_788_110_400)
+        let expectedWeekday = Calendar.current.component(.weekday, from: date) - 1
+        XCTAssertEqual(OpeningHoursParserTestSupport.weekday(for: date), expectedWeekday)
+    }
+
     func testOpeningHours() {
         var hours = makeHours("Mo-Fr 11:00-22:00; Sa,Su,PH 12:00-22:00; 2022 jul 31-2022 Aug 31 off \"Betriebsferien\"")
         assertOpened("25.08.2022 11:30", hours: hours, expected: false)

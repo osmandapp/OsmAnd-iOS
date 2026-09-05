@@ -2,10 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Obrisati %2$@ stavku?</string>
+			<key>few</key>
+			<string>Obrisati %2$@ stavke?</string>
+			<key>other</key>
+			<string>Obrisati %2$@ stavki?</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Obriši %#@favorites@?</string>
+		<string>Obriši %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld omiljenu</string>
+			<string>%2$@ omiljenu</string>
 			<key>few</key>
-			<string>%ld omiljene</string>
+			<string>%2$@ omiljene</string>
 			<key>other</key>
-			<string>%ld omiljenih</string>
+			<string>%2$@ omiljenih</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Obriši %#@folders@?</string>
+		<string>Obriši %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +49,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 			<key>other</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Obriši %#@folders@ i %#@points@. Ova radnja se ne može poništiti.</string>
+		<string>Obriši %1$#@folders@ i %3$#@points@. Ova radnja se ne može poništiti.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>few</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 			<key>other</key>
-			<string>%ld foldera</string>
+			<string>%2$@ foldera</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +80,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld tačku</string>
+			<string>%4$@ tačku</string>
 			<key>few</key>
-			<string>%ld tačke</string>
+			<string>%4$@ tačke</string>
 			<key>other</key>
-			<string>%ld tačaka</string>
+			<string>%4$@ tačaka</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -85,6 +103,78 @@
 			<string>%ld stanice</string>
 			<key>other</key>
 			<string>%ld stanica</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ putanja</string>
+			<key>few</key>
+			<string>%2$@ putanje</string>
+			<key>other</key>
+			<string>%2$@ putanja</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Da li ste sigurni da želite da obrišete %2$@ izmenu?</string>
+			<key>few</key>
+			<string>Da li ste sigurni da želite da obrišete %2$@ izmene?</string>
+			<key>other</key>
+			<string>Da li ste sigurni da želite da obrišete %2$@ izmena?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Stavka</string>
+			<key>few</key>
+			<string>%2$@ Stavke</string>
+			<key>other</key>
+			<string>%2$@ Stavki</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Fajl %2$@ sadrži %3$@ zasebnu putanju. Izaberite onu koju želite da uvezete.</string>
+			<key>few</key>
+			<string>Fajl %2$@ sadrži %3$@ odvojene putanje. Izaberite one koje želite da uvezete.</string>
+			<key>other</key>
+			<string>Fajl %2$@ sadrži %3$@ odvojenih putanja. Izaberite one koje želite da uvezete.</string>
 		</dict>
 	</dict>
 </dict>

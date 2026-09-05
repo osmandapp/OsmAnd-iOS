@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Ištrinti %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ elementą</string>
+			<key>few</key>
+			<string>%2$@ elementus</string>
+			<key>many</key>
+			<string>%2$@ elemento</string>
+			<key>other</key>
+			<string>%2$@ elementų</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Ištrinti %#@favorites@?</string>
+		<string>Ištrinti %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Įsiminta vieta</string>
+			<string>%2$@ Įsiminta vieta</string>
 			<key>few</key>
-			<string>%ld Įsimintos vietos</string>
+			<string>%2$@ Įsimintos vietos</string>
 			<key>many</key>
-			<string>%ld Įsimintos vietos</string>
+			<string>%2$@ Įsimintos vietos</string>
 			<key>other</key>
-			<string>%ld Įsimintos vietos</string>
+			<string>%2$@ Įsimintos vietos</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Ištrinti %#@folders@?</string>
+		<string>Ištrinti %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Aplankas</string>
+			<string>%2$@ Aplankas</string>
 			<key>few</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 			<key>many</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 			<key>other</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Ištrinti %#@folders@ ir %#@points@. This action cannot be undone.</string>
+		<string>Ištrinti %1$#@folders@ ir %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Aplankas</string>
+			<string>%2$@ Aplankas</string>
 			<key>few</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 			<key>many</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 			<key>other</key>
-			<string>%ld aplankai</string>
+			<string>%2$@ aplankai</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Taškas</string>
+			<string>%4$@ Taškas</string>
 			<key>few</key>
-			<string>%ld Taškai</string>
+			<string>%4$@ Taškai</string>
 			<key>many</key>
-			<string>%ld Taškai</string>
+			<string>%4$@ Taškai</string>
 			<key>other</key>
-			<string>%ld Taškai</string>
+			<string>%4$@ Taškai</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -95,6 +115,86 @@
 			<string>%ld stotelės</string>
 			<key>other</key>
 			<string>%ld stotelių</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ kelias</string>
+			<key>few</key>
+			<string>%2$@ keliai</string>
+			<key>many</key>
+			<string>%2$@ kelio</string>
+			<key>other</key>
+			<string>%2$@ kelių</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ar tikrai norite ištrinti %2$@ pakeitimą?</string>
+			<key>few</key>
+			<string>Ar tikrai norite ištrinti %2$@ pakeitimus?</string>
+			<key>many</key>
+			<string>Ar tikrai norite ištrinti %2$@ pakeitimo?</string>
+			<key>other</key>
+			<string>Ar tikrai norite ištrinti %2$@ pakeitimų?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Elementas</string>
+			<key>few</key>
+			<string>%2$@ Elementai</string>
+			<key>many</key>
+			<string>%2$@ Elemento</string>
+			<key>other</key>
+			<string>%2$@ Elementų</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Faile %2$@ yra %3$@ atskiras kelias. Pasirinkite tą, kurį norite importuoti.</string>
+			<key>few</key>
+			<string>Faile %2$@ yra %3$@ atskiri keliai. Pasirinkite tuos, kuriuos norite importuoti.</string>
+			<key>many</key>
+			<string>Faile %2$@ yra %3$@ atskiro kelio. Pasirinkite tuos, kuriuos norite importuoti.</string>
+			<key>other</key>
+			<string>Faile %2$@ yra %3$@ atskirų kelių. Pasirinkite tuos, kuriuos norite importuoti.</string>
 		</dict>
 	</dict>
 </dict>

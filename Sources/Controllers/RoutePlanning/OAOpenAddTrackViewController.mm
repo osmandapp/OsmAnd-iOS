@@ -335,7 +335,7 @@ static const NSInteger kSegmentRow = 0;
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 2;
+            cell.separatorView.hidden = indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1;
         }
         return cell;
     }

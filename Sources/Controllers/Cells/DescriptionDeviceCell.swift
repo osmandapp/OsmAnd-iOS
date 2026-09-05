@@ -20,7 +20,9 @@ final class DescriptionDeviceCell: UITableViewCell {
     }
     
     func configure(header: DescriptionDeviceHeader) {
-        guard deviceHeader !== header else { return }
+        if deviceHeader === header, header.superview === contentView {
+            return
+        }
         deviceHeader?.removeFromSuperview()
         setupView(header)
     }

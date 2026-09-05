@@ -67,6 +67,8 @@
 #include <binaryRoutePlanner.h>
 #include <routePlannerFrontEnd.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
@@ -124,6 +126,7 @@
 @synthesize travelGuidesPath = _travelGuidesPath;
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
+@synthesize onlineTileSourcesPath = _onlineTileSourcesPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
 @synthesize models3dPath = _models3dPath;
 @synthesize colorsPalettePath = _colorsPalettePath;
@@ -180,6 +183,7 @@
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
+        _onlineTileSourcesPath = [_dataPath stringByAppendingPathComponent:@"OnlineTileSources"];
         _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
         _colorsPalettePath = [_documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
 
@@ -223,6 +227,61 @@
     [self createFolderIfNeeded:_favoritesPath];
     [self createFolderIfNeeded:_weatherForecastPath];
     [self createFolderIfNeeded:_hiddenMapsPath];
+    [self createFolderIfNeeded:_onlineTileSourcesPath];
+    [self restoreOnlineTileSourcesFromBackup];
+}
+
+// Online tile sources (added via "Add online source") are normally scanned from Library/Caches,
+// which iOS is free to purge at any time the app isn't running (typically overnight). Their
+// definition (".metainfo") is backed up to this durable, non-purgeable folder every time the app
+// is backgrounded (see -syncOnlineTileSourcesBackup), so a purge only costs the re-download of
+// cached tile images, never the source definition itself. This must run before the resources
+// manager is constructed, since it only scans Library/Caches once, at startup.
+- (void)restoreOnlineTileSourcesFromBackup
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSArray<NSString *> *backedUpNames = [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil];
+    for (NSString *name in backedUpNames)
+    {
+        NSString *backupMetainfoPath = [[_onlineTileSourcesPath stringByAppendingPathComponent:name] stringByAppendingPathComponent:@".metainfo"];
+        if (![fileManager fileExistsAtPath:backupMetainfoPath])
+            continue;
+
+        NSString *cacheEntryPath = [_cachePath stringByAppendingPathComponent:name];
+        NSString *cacheMetainfoPath = [cacheEntryPath stringByAppendingPathComponent:@".metainfo"];
+        if ([fileManager fileExistsAtPath:cacheMetainfoPath])
+            continue;
+
+        NSError *error;
+        [fileManager createDirectoryAtPath:cacheEntryPath withIntermediateDirectories:YES attributes:nil error:&error];
+        if (![fileManager copyItemAtPath:backupMetainfoPath toPath:cacheMetainfoPath error:&error])
+            OALog(@"Failed to restore online tile source \"%@\" from backup: %@", name, error.localizedFailureReason);
+    }
+}
+
+// Mirrors the resources manager's current in-memory set of online tile sources into the durable
+// backup folder, adding/refreshing entries that exist and removing ones that were deleted/renamed.
+- (void)syncOnlineTileSourcesBackup
+{
+    if (_resourcesManager == nullptr)
+        return;
+
+    NSMutableSet<NSString *> *currentNames = [NSMutableSet set];
+    const auto& collection = _resourcesManager->onlineTileSources->getCollection();
+    for (auto it = collection.constBegin(); it != collection.constEnd(); ++it)
+    {
+        const auto& source = it.value();
+        [currentNames addObject:source->name.toNSString()];
+        OsmAnd::OnlineTileSources::installTileSource(source, QString::fromNSString(_onlineTileSourcesPath));
+    }
+
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSArray<NSString *> *backedUpNames = [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil];
+    for (NSString *name in backedUpNames)
+    {
+        if (![currentNames containsObject:name])
+            [fileManager removeItemAtPath:[_onlineTileSourcesPath stringByAppendingPathComponent:name] error:nil];
+    }
 }
 
 - (void)createFolderIfNeeded:(NSString *)path
@@ -435,6 +494,7 @@
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
     LogStartup(@"resources manager created");
+    [self syncOnlineTileSourcesBackup];
 
     // Attach observables handlers
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -841,6 +901,8 @@
         LogStartup(@"terminating early before finalizing init");
         return NO;
     }
+
+    [self syncOnlineTileSourcesBackup];
 
     _initialized = YES;
     LogStartup(@"initialize finish");
@@ -1359,6 +1421,7 @@
     [self.backgroundStateObservable notifyEvent];
 
     [self saveDataToPermamentStorage];
+    [self syncOnlineTileSourcesBackup];
 
     // In background allow to turn off screen
     [self allowScreenTurnOff:YES];

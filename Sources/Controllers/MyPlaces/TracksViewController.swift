@@ -219,13 +219,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     private func startIndexingRefreshTimer() {
         guard indexingRefreshTimer == nil, view.window != nil else { return }
-        let timer = Timer(timeInterval: 2, repeats: true) { [weak self] _ in
+        let timer = Timer(timeInterval: 6, repeats: true) { [weak self] _ in
             guard let self else { return }
-            if !self.hasUnindexedTracksInCurrentFolder() {
+            let stillIndexing = self.hasUnindexedTracksInCurrentFolder()
+            if !stillIndexing {
                 self.stopIndexingRefreshTimer()
                 self.lastRenderedIndexedTrackCount = -1
             }
-            self.refreshIndexingListIfPossible()
+            self.refreshIndexingListIfPossible(force: !stillIndexing)
         }
         RunLoop.main.add(timer, forMode: .common)
         indexingRefreshTimer = timer
@@ -274,7 +275,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         tableData.addSection(section, at: 0)
     }
 
-    private func refreshIndexingListIfPossible() {
+    private func refreshIndexingListIfPossible(force: Bool = false) {
         guard hasReceivedFirstBatch,
               view.window != nil,
               !isSearchActive,
@@ -287,6 +288,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if item.dataItem != nil { count += 1 }
         }
         guard indexedCount != lastRenderedIndexedTrackCount else { return }
+
+        let progressed = indexedCount - lastRenderedIndexedTrackCount
+        guard force || lastRenderedIndexedTrackCount < 0 || progressed < 0 || progressed >= 25 else { return }
         lastRenderedIndexedTrackCount = indexedCount
 
         let spinnerOnScreen = tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.accessoryView is CircularProgressView

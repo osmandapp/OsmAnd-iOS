@@ -36,7 +36,11 @@
     {
         if ([self.delegate respondsToSelector:@selector(isTouchEventAllowedForView:)])
         {
-            UIView *findView = [self findView:self];
+            // The quick-action buttons (including the one that can unlock the screen) are
+            // siblings of this view, not descendants of it - they are added directly to
+            // this view's superview (see OAMapHudViewController/MapHudLayout). Searching
+            // from `self` alone can never find them, so search starts one level up.
+            UIView *findView = [self findView:self.superview ?: self];
             if (findView)
             {
                 CGPoint convertedPoint = [findView convertPoint:point fromView:self];

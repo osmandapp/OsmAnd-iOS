@@ -15,3 +15,7 @@ DerivedData/*
 *.xcscmblueprint
 /build
 qt-ios-prebuilt.zip*
+
+# Prebuilt ANGLE frameworks - fetched by prepare.sh, not stored in the repository
+/libEGL.xcframework/
+/libGLESv2.xcframework/

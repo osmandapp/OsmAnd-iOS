@@ -17,6 +17,25 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	rm -rf $FILE_TO_DOWNLOADEDIR
 fi
 
+# Fetch prebuilt ANGLE frameworks, unless they are already here.
+# They are only used by the Simulator build (OSMAND_USE_ANGLE is defined for the
+# iphonesimulator SDK only): the Simulator serves native OpenGL ES through a software
+# rasteriser, so the map runs at roughly 1 fps, while ANGLE routes the same calls to Metal,
+# which the Simulator does accelerate. Device builds use EAGL and never load these.
+# Not fatal if it fails - only Simulator rendering depends on it.
+if [ ! -d "$SRCLOC/libEGL.xcframework" ] || [ ! -d "$SRCLOC/libGLESv2.xcframework" ]; then
+	echo "Downloading prebuilt ANGLE frameworks"
+	ANGLE_ZIP="$SRCLOC/angle_download.zip"
+	if wget -q https://builder.osmand.net/binaries/ios/angle-ios-prebuilt.zip -O "$ANGLE_ZIP"; then
+		unzip -o -q -d "$SRCLOC" "$ANGLE_ZIP"
+		rm -f "$ANGLE_ZIP"
+	else
+		rm -f "$ANGLE_ZIP"
+		echo "WARNING: could not fetch ANGLE frameworks - the Simulator build will not link."
+		echo "         Device builds are unaffected."
+	fi
+fi
+
 # Bake or update core projects for XCode
 OSMAND_BUILD_TOOL=xcode "$SRCLOC/../build/fat-ios.sh"
 

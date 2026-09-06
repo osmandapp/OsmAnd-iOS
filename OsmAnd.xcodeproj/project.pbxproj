@@ -27,8 +27,6 @@
 		05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */; };
 		05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */; };
 		05DCD5412D50C7EC00C32EBB /* he_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = 05DCD5402D50C7EC00C32EBB /* he_tts.js */; };
-		05DCE543304D48B5005DA649 /* libEGL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE542304D48B5005DA649 /* libEGL.xcframework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		05DCE545304D48BC005DA649 /* libGLESv2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		05DCE548304D88EC005DA649 /* libEGL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE542304D48B5005DA649 /* libEGL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
@@ -8666,7 +8664,6 @@
 				8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */,
 				8AF348772779D88100A64824 /* libproj_static.a in Frameworks */,
 				8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */,
-				05DCE545304D48BC005DA649 /* libGLESv2.xcframework in Frameworks */,
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
 				DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */,
@@ -8689,7 +8686,6 @@
 				BBA3AF78197FC4BB0039D991 /* Foundation.framework in Frameworks */,
 				BBA3AF79197FC4BB0039D991 /* CoreGraphics.framework in Frameworks */,
 				BBA3AF7A197FC4BB0039D991 /* CoreLocation.framework in Frameworks */,
-				05DCE543304D48B5005DA649 /* libEGL.xcframework in Frameworks */,
 				BBA3AF7B197FC4BB0039D991 /* SystemConfiguration.framework in Frameworks */,
 				BBA3AF7C197FC4BB0039D991 /* libQt5Core.a in Frameworks */,
 				DA67994F299A761100CC1509 /* BackgroundTasks.framework in Frameworks */,
@@ -20204,6 +20200,18 @@
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 					"OSMAND_USE_ANGLE=1",
 				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
@@ -20285,6 +20293,18 @@
 					"GLES_SILENCE_DEPRECATION=1",
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 					"OSMAND_USE_ANGLE=1",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

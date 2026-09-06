@@ -4059,3 +4059,10 @@
 "terrain_shadows_footer_descr" = "يتم تفعيل خاصية التضاريس ثلاثية الأبعاد تلقائيًا، حيث إنها مطلوبة لعرض ظلال التضاريس";
 "shared_string_int_name" = "الاسم العالمي";
 "show_debug_tile" = "عرض معلومات المربع";
+"no_crashes_recorded" = "لم تسجل أي حوادث";
+"share_crash_log" = "مشاركة سجل الأعطال";
+"crash_report_prompt_title" = "واجه أوسماند خطأً غير متوقع.";
+"crash_report_prompt_description" = "ساعدنا في تحسين التطبيق بإرسال تقرير الأعطال. سيساعدنا تقرير الأعطال في تحديد المشكلة وإصلاحها.";
+"shared_string_send" = "إرسال";
+"traffic_warning_red_light_camera" = "كاميرا ضوء أحمر";
+"shared_string_disabled" = "ملغى";

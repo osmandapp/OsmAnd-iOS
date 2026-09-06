@@ -168,11 +168,7 @@
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
     const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
-#if TARGET_IPHONE_SIMULATOR
-    rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Normal;
-#else
     rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
-#endif
     _renderer->setConfiguration(rendererConfig);
 
     OAObservable* stateObservable = _stateObservable;

@@ -3337,8 +3337,8 @@
 "rendering_value_pale_name" = "Chiaro";
 "map_settings_weather_temp_air" = "Temperatura dell'aria";
 "map_settings_weather_temp_water" = "Temperatura dell'acqua";
-"rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per bici da cross";
-"rendering_attr_showDirtbikeTrails_name" = "Sentieri per bici da sterrato";
+"rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per motocross";
+"rendering_attr_showDirtbikeTrails_name" = "Sentieri per motocross";
 "resting_navigation_position" = "Posizione di riposo e navigazione";
 "location_radius_description" = "Mostra l\'area circolare che rappresenta la precisione della tua posizione attuale";
 "navigation_position_icon_summary" = "Icona visualizzata durante la navigazione o lo spostamento.";

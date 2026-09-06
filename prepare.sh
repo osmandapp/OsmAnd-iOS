@@ -17,21 +17,24 @@ if [ "$DOWNLOAD_PREBUILT_QT_FILES" == "true" ] ; then
 	rm -rf $FILE_TO_DOWNLOADEDIR
 fi
 
-# Fetch prebuilt ANGLE frameworks, unless they are already here.
+# Fetch the prebuilt ANGLE frameworks and the Khronos/ANGLE headers that go with them,
+# unless they are already here. Like the externals in core, these are upstream files and are
+# not kept in the repository.
 # They are only used by the Simulator build (OSMAND_USE_ANGLE is defined for the
 # iphonesimulator SDK only): the Simulator serves native OpenGL ES through a software
 # rasteriser, so the map runs at roughly 1 fps, while ANGLE routes the same calls to Metal,
 # which the Simulator does accelerate. Device builds use EAGL and never load these.
 # Not fatal if it fails - only Simulator rendering depends on it.
-if [ ! -d "$SRCLOC/libEGL.xcframework" ] || [ ! -d "$SRCLOC/libGLESv2.xcframework" ]; then
-	echo "Downloading prebuilt ANGLE frameworks"
+if [ ! -d "$SRCLOC/libEGL.xcframework" ] || [ ! -d "$SRCLOC/libGLESv2.xcframework" ] \
+	|| [ ! -d "$SRCLOC/Libraries/ANGLE/include" ]; then
+	echo "Downloading prebuilt ANGLE frameworks and headers"
 	ANGLE_ZIP="$SRCLOC/angle_download.zip"
 	if wget -q https://builder.osmand.net/binaries/ios/angle-ios-prebuilt.zip -O "$ANGLE_ZIP"; then
 		unzip -o -q -d "$SRCLOC" "$ANGLE_ZIP"
 		rm -f "$ANGLE_ZIP"
 	else
 		rm -f "$ANGLE_ZIP"
-		echo "WARNING: could not fetch ANGLE frameworks - the Simulator build will not link."
+		echo "WARNING: could not fetch ANGLE - the Simulator build will not compile."
 		echo "         Device builds are unaffected."
 	fi
 fi

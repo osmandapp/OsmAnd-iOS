@@ -1,7 +1,10 @@
 # ANGLE headers
 
-Khronos EGL/GLES headers plus ANGLE's own extension header, taken verbatim from an ANGLE
-checkout (`include/` — EGL, GLES2, GLES3, KHR).
+`include/` holds the Khronos EGL/GLES headers plus ANGLE's own extension headers, taken
+verbatim from an ANGLE checkout (EGL, GLES2, GLES3, KHR). Like the externals under `core`,
+they are upstream files and are **not** kept in the repository - `prepare.sh` downloads them
+together with the prebuilt frameworks, and `.gitignore` excludes them. Only this README and
+`patches/` are tracked here.
 
 They are used only when `OSMAND_USE_ANGLE` is defined, which is currently limited to the
 iOS Simulator SDK — see `GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]`. The Simulator

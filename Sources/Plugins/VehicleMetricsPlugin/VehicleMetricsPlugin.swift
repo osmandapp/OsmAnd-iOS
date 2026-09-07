@@ -42,7 +42,9 @@ final class VehicleMetricsPlugin: OAPlugin {
     }
 
     override func createWidgets(_ delegate: any WidgetRegistrationDelegate, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) {
-        let creator = WidgetInfoCreator(appMode: appMode, screenLayoutMode: delegate.screenLayoutMode)
+        let creator = WidgetInfoCreator(appMode: appMode,
+                                        screenLayoutMode: delegate.screenLayoutMode,
+                                        preferenceLayoutMode: delegate.preferenceLayoutMode)
         let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption, .OBDAltBatteryVoltage]
         for widgetType in widgetTypeArray {
             guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams), let info = creator.createWidgetInfo(widget: widget) else { continue }

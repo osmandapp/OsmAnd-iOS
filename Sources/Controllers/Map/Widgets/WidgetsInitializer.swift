@@ -11,6 +11,7 @@ import Foundation
 @objc(OAWidgetRegistrationDelegate)
 protocol WidgetRegistrationDelegate {
     var screenLayoutMode: ScreenLayoutMode { get }
+    var preferenceLayoutMode: NSNumber? { get }
     func addWidget(_ widgetInfo: MapWidgetInfo)
 }
 
@@ -19,7 +20,7 @@ protocol WidgetRegistrationDelegate {
 class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     private let appMode: OAApplicationMode
     let screenLayoutMode: ScreenLayoutMode
-    private let preferenceLayoutMode: NSNumber?
+    let preferenceLayoutMode: NSNumber?
     private let factory: MapWidgetsFactory
     private let creator: WidgetInfoCreator
     private var mapWidgetsCache: [MapWidgetInfo] = []

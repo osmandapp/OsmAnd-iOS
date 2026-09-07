@@ -106,7 +106,9 @@
 
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode screenLayoutMode:delegate.screenLayoutMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
     OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:widget]];
 }

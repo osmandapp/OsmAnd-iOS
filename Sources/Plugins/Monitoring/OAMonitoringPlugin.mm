@@ -102,7 +102,9 @@
               appMode:(OAApplicationMode *)appMode
          widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode screenLayoutMode:delegate.screenLayoutMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
     OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];

@@ -91,7 +91,9 @@
                appMode:(OAApplicationMode *)appMode
           widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode screenLayoutMode:delegate.screenLayoutMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
     _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];

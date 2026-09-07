@@ -7230,8 +7230,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
     else
     {
-        preference = _leftWidgetPanelOrder;
-        preferenceKey = leftWidgetPanelOrderKey;
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Unsupported panel" userInfo:nil];
     }
     return (OACommonListOfStringList *)[self layoutPreference:preference
                                                preferenceKey:preferenceKey

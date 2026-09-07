@@ -1637,6 +1637,7 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 - (instancetype)copyWithKey:(NSString *)key
 {
+    NSAssert(NO, @"%@ must override %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return nil;
 }
 

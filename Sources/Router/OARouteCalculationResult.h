@@ -22,7 +22,7 @@
 
 struct RouteSegmentResult;
 
-@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
+@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect, OASRouteDetailsSnapshot;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -52,6 +52,7 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) bool initialCalculation;
 @property (nonatomic, readonly) CLLocation *currentStraightAnglePoint;
 @property (nonatomic, readonly) EOARouteService routeProvider;
+@property (nonatomic, readonly) OASRouteDetailsSnapshot *routeDetailsSnapshot;
 @property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 @property (nonatomic) NSArray<OAWorldRegion *> * potentiallyUsedMaps;

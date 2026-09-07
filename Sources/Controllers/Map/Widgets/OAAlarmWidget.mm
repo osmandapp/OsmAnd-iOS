@@ -15,6 +15,7 @@
 #import "OALocationServices.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OAAlarmWidget ()
@@ -158,7 +159,7 @@
             NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
-            if (alarm.type == AIT_SPEED_LIMIT)
+            if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.speedLimit))
             {
                 if (isCanadianRegion)
                 {
@@ -172,38 +173,38 @@
                 }
                 text = @(alarm.intValue).stringValue;
             }
-            else if (alarm.type == AIT_SPEED_CAMERA || alarm.type == AIT_RED_LIGHT_CAMERA)
+            else if ([alarm isTrafficCamera])
             {
                 locImgId = @"warnings_speed_camera";
             }
-            else if (alarm.type == AIT_BORDER_CONTROL)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.borderControl))
             {
                 locImgId = @"warnings_border_control";
             }
-            else if (alarm.type == AIT_HAZARD)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.hazard))
             {
                 if (americanSigns)
                     locImgId = @"warnings_hazard_us";
                 else
                     locImgId = @"warnings_hazard";
             }
-            else if (alarm.type == AIT_TOLL_BOOTH)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.tollBooth))
             {
                 //image done by drawing red ring
                 text = @"$";
             }
-            else if (alarm.type == AIT_TRAFFIC_CALMING)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.trafficCalming))
             {
                 if (americanSigns)
                     locImgId = @"warnings_traffic_calming_us";
                 else
                     locImgId = @"warnings_traffic_calming";
             }
-            else if (alarm.type == AIT_STOP)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.stop))
             {
                 locImgId = @"warnings_stop";
             }
-            else if(alarm.type == AIT_RAILWAY)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.railway))
             {
                 if (isCanadianRegion)
                     locImgId = @"warnings_railways_ca";
@@ -212,21 +213,24 @@
                 else
                     locImgId = @"warnings_railways";
             }
-            else if (alarm.type == AIT_PEDESTRIAN)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.pedestrian))
             {
                 if (americanSigns)
                     locImgId = @"warnings_pedestrian_us";
                 else
                     locImgId = @"warnings_pedestrian";
             }
-            else if (alarm.type == AIT_TUNNEL)
+            else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.tunnel))
             {
                 if (americanSigns)
                     locImgId = @"warnings_tunnel_us";
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OsmAndFormatterParams useLowerBounds] : nil];
+                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue
+                                                          withParams:OARouteEventTypeEquals(alarm.type, OASRouteEventType.tunnel)
+                                                                     ? [OsmAndFormatterParams useLowerBounds]
+                                                                     : nil];
             }
             else
             {
@@ -236,13 +240,13 @@
             visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
-                if (alarm.type == AIT_SPEED_CAMERA || alarm.type == AIT_RED_LIGHT_CAMERA)
+                if ([alarm isTrafficCamera])
                     visible = cams;
-                else if (alarm.type == AIT_PEDESTRIAN)
+                else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.pedestrian))
                     visible = peds;
-                else if (alarm.type == AIT_SPEED_LIMIT)
+                else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.speedLimit))
                     visible = speedLimitExceed;
-                else if (alarm.type == AIT_TUNNEL)
+                else if (OARouteEventTypeEquals(alarm.type, OASRouteEventType.tunnel))
                     visible = tunnels;
                 else
                     visible = trafficWarnings;
@@ -259,7 +263,7 @@
                     _textString = text;
                     _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? (_carPlayMode ? 4. : 10) : 0;
+                    f.origin.y = OARouteEventTypeEquals(alarm.type, OASRouteEventType.speedLimit) && americanSigns && !isCanadianRegion ? (_carPlayMode ? 4. : 10) : 0;
                     _textView.frame = f;
                 }
                 if (![self stringEquals:bottomText b:_bottomTextString])

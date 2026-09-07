@@ -264,7 +264,9 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     if (routeSegments.empty() || attributeName.length == 0)
         return NO;
     
-    NSArray<OARouteStatistics *> *stats = [OARouteStatisticsHelper calculateRouteStatistic:routeSegments attributeNames:@[attributeName]];
+    NSArray<OASRouteStatistic *> *stats = [OARouteStatisticsHelper
+        calculateRouteStatistic:routeSegments
+        attributeNames:@[attributeName]];
     
     return stats.count > 0;
 }

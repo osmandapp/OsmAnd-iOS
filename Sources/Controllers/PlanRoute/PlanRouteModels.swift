@@ -193,7 +193,7 @@ struct PlanRouteAnalysisData {
     let hasSpeedData: Bool
     let gpxAnalysis: GpxTrackAnalysis?
     let gpxFile: GpxFile?
-    let routeStatistics: [OARouteStatistics]
+    let routeStatistics: [RouteStatistic]
 }
 
 enum SegmentRouteContext {

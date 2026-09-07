@@ -19,7 +19,6 @@
 #import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
-#import "OAExitInfo.h"
 #import "OAApplicationMode.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
@@ -308,7 +307,7 @@ std::string preferredLanguage;
     if (play != nil) {
         NSString *tParam = [self getTurnType:next.turnType];
         BOOL isPlay = YES;
-        OAExitInfo *exitInfo = next.exitInfo;
+        OASRouteExitInfo *exitInfo = next.exitInfo;
         if (tParam != nil) {
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
@@ -408,7 +407,7 @@ std::string preferredLanguage;
 {
     OACommandBuilder *p = [self getNewCommandPlayerToPlay];
     NSString *tParam = [self getTurnType:next.turnType];
-    OAExitInfo *exitInfo = next.exitInfo;
+    OASRouteExitInfo *exitInfo = next.exitInfo;
     if (p)
     {
         //        notifyOnVoiceMessage();
@@ -437,7 +436,7 @@ std::string preferredLanguage;
     if (play != nil)
     {
         NSString *tParam = [self getTurnType:nextInfo.turnType];
-        OAExitInfo *exitInfo = nextInfo.exitInfo;
+        OASRouteExitInfo *exitInfo = nextInfo.exitInfo;
         BOOL isplay = YES;
         if (tParam != nil) {
             if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
@@ -699,7 +698,7 @@ std::string preferredLanguage;
     }
 }
 
-- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo
+- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OASRouteExitInfo *)exitInfo
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
     if (!exitInfo || ![_settings.speakStreetNames get])
@@ -825,18 +824,20 @@ std::string preferredLanguage;
 
 - (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
 {
-    EOAAlarmInfoType type = info.type;
-    if (type == AIT_SPEED_LIMIT)
+    OASRouteEventType *type = info.type;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedLimit))
     {
         [self announceSpeedAlarm:info.intValue speed:speed];
     }
     else
     {
         BOOL speakTrafficWarnings = [_settings.speakTrafficWarnings get];
-        BOOL speakTunnels = type == AIT_TUNNEL && [_settings.speakTunnels get];
-        BOOL speakPedestrian = type == AIT_PEDESTRIAN && [_settings.speakPedestrian get];
-        BOOL speakSpeedCamera = (type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA) && [_settings.speakCameras get];
-        BOOL speakPrefType = type == AIT_TUNNEL || type == AIT_PEDESTRIAN || type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA;
+        BOOL speakTunnels = OARouteEventTypeEquals(type, OASRouteEventType.tunnel) && [_settings.speakTunnels get];
+        BOOL speakPedestrian = OARouteEventTypeEquals(type, OASRouteEventType.pedestrian) && [_settings.speakPedestrian get];
+        BOOL speakSpeedCamera = [info isTrafficCamera] && [_settings.speakCameras get];
+        BOOL speakPrefType = OARouteEventTypeEquals(type, OASRouteEventType.tunnel)
+            || OARouteEventTypeEquals(type, OASRouteEventType.pedestrian)
+            || [info isTrafficCamera];
 
         if (speakSpeedCamera || speakPedestrian || speakTunnels || (speakTrafficWarnings && !speakPrefType))
         {
@@ -846,7 +847,7 @@ std::string preferredLanguage;
                 [[p attention:typeName] play];
 
             // See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
-            if (type == AIT_TOLL_BOOTH)
+            if (OARouteEventTypeEquals(type, OASRouteEventType.tollBooth))
                 suppressDest = false;
         }
     }

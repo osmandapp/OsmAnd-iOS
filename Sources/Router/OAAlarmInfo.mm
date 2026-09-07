@@ -9,8 +9,52 @@
 #import "OAAlarmInfo.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
+#import "OASharedRouteDetailsProvider.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeTypeRule.h>
+
+BOOL OARouteEventTypeEquals(OASRouteEventType *type, OASRouteEventType *expected)
+{
+    return type == expected || [type isEqual:expected];
+}
+
+static int OALegacyAlarmTypeValue(OASRouteEventType *type)
+{
+    // Keep OAAlarmInfo hash values stable. The removed iOS enum placed TUNNEL before HAZARD and MAXIMUM.
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedCamera))
+        return 0;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedLimit))
+        return 1;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.borderControl))
+        return 2;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.railway))
+        return 3;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.trafficCalming))
+        return 4;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.tollBooth))
+        return 5;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.stop))
+        return 6;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.pedestrian))
+        return 7;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.tunnel))
+        return 8;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.hazard))
+        return 9;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.maximum))
+        return 10;
+    if (OARouteEventTypeEquals(type, OASRouteEventType.redLightCamera))
+        return 11;
+    return 0;
+}
+
+@interface OAAlarmInfo ()
+
+@property (nonatomic, copy, readwrite) NSString *sourceTag;
+@property (nonatomic, copy, readwrite) NSString *sourceValue;
+
+@end
 
 @implementation OAAlarmInfo
 
@@ -19,12 +63,13 @@
     self = [super init];
     if (self)
     {
+        _type = OASRouteEventType.speedCamera;
         _lastLocationIndex = -1;
     }
     return self;
 }
 
-- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex
+- (instancetype) initWithType:(OASRouteEventType *)type locationIndex:(int)locationIndex
 {
     self = [self init];
     if (self)
@@ -37,199 +82,80 @@
 
 + (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond
 {
-    OAAlarmInfo *info = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_LIMIT locationIndex:0];
-    info.coordinate = CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude);
-    info.intValue = speed;
-    info.floatValue = speedMetersPerSecond;
-    return info;
+    return [OASharedRouteDetailsProvider createSpeedLimit:speed
+                                                 latitude:coordinate.latitude
+                                                longitude:coordinate.longitude
+                                     speedMetersPerSecond:speedMetersPerSecond];
 }
 
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate
 {
-    OAAlarmInfo *alarmInfo = nil;
-    if ("highway" == ruleType.getTag())
-    {
-        if ("speed_camera" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_CAMERA locationIndex:locInd];
-        }
-        else if ("stop" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_STOP locationIndex:locInd];
-        }
-    }
-    else if ("enforcement" == ruleType.getTag())
-    {
-        if ("traffic_signals" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RED_LIGHT_CAMERA locationIndex:locInd];
-        }
-    }
-    else if ("barrier" == ruleType.getTag())
-    {
-        if ("toll_booth" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TOLL_BOOTH locationIndex:locInd];
-        }
-        else if ("border_control" == ruleType.getValue())
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_BORDER_CONTROL locationIndex:locInd];
-        }
-    }
-    else if ("traffic_calming" == ruleType.getTag())
-    {
-        const auto& v = ruleType.getValue();
-        bool isIslandType = (v == "island") || (v == "choked_island") || (v == "painted_island");
-        if (!isIslandType)
-        {
-            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAFFIC_CALMING locationIndex:locInd];
-        }
-    }
-    else if ("hazard" == (ruleType.getTag()))
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_HAZARD locationIndex:locInd];
-    }
-    else if ("railway" == (ruleType.getTag()) && "level_crossing" == ruleType.getValue())
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RAILWAY locationIndex:locInd];
-    }
-    else if ("crossing" == (ruleType.getTag()) && "uncontrolled" == ruleType.getValue())
-    {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_PEDESTRIAN locationIndex:locInd];
-    }
-    if (alarmInfo)
-    {
-        alarmInfo.coordinate = coordinate;
-    }
-    return alarmInfo;
+    NSString *tag = [NSString stringWithUTF8String:ruleType.getTag().c_str()];
+    NSString *value = [NSString stringWithUTF8String:ruleType.getValue().c_str()];
+    OAAlarmInfo *alarm = [OASharedRouteDetailsProvider createAlarmInfoWithTag:tag
+                                                                        value:value
+                                                                locationIndex:locInd
+                                                                     latitude:coordinate.latitude
+                                                                    longitude:coordinate.longitude];
+    alarm.sourceTag = tag;
+    alarm.sourceValue = value;
+    return alarm;
 }
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance
 {
-    if (distance > 1500)
-        return INT_MAX;
-    
-    // 1 level of priorities
-    if (time < 6 || distance < 75 || self.type == AIT_SPEED_LIMIT)
-        return [self.class getPriority:self.type];
-
-    if ((self.type == AIT_SPEED_CAMERA || self.type == AIT_RED_LIGHT_CAMERA) && (time < 15 || distance < 150))
-        return [self.class getPriority:self.type];
-
-    // 2nd level
-    if (time < 7 || distance < 100)
-        return [self.class getPriority:self.type] + [self.class getPriority:AIT_MAXIMUM];
-    
-    return INT_MAX;
+    return [OASRouteEventHelper.shared updateDistanceAndGetPriorityType:self.type
+                                                            timeSeconds:time
+                                                          distanceMeters:distance];
 }
 
-+ (int) getPriority:(EOAAlarmInfoType)type
++ (int) getPriority:(OASRouteEventType *)type
 {
-    switch (type) {
-        case AIT_SPEED_CAMERA:
-            return 1;
-        case AIT_SPEED_LIMIT:
-            return 2;
-        case AIT_BORDER_CONTROL:
-            return 3;
-        case AIT_RAILWAY:
-            return 4;
-        case AIT_TRAFFIC_CALMING:
-            return 5;
-        case AIT_TOLL_BOOTH:
-            return 6;
-        case AIT_STOP:
-            return 7;
-        case AIT_PEDESTRIAN:
-            return 8;
-        case AIT_HAZARD:
-            return 9;
-        case AIT_MAXIMUM:
-            return 10;
-        case AIT_TUNNEL:
-            return 11;
-        case AIT_RED_LIGHT_CAMERA:
-            return 12;
-
-        default:
-            return 0;
-    }
+    return type.androidPriority;
 }
 
-+ (NSString* ) getName:(EOAAlarmInfoType)type
++ (NSString* ) getName:(OASRouteEventType *)type
 {
-    switch (type) {
-        case AIT_SPEED_CAMERA:
-            return @"SPEED_CAMERA";
-        case AIT_SPEED_LIMIT:
-            return @"SPEED_LIMIT";
-        case AIT_BORDER_CONTROL:
-            return @"BORDER_CONTROL";
-        case AIT_RAILWAY:
-            return @"RAILWAY";
-        case AIT_TRAFFIC_CALMING:
-            return @"TRAFFIC_CALMING";
-        case AIT_TOLL_BOOTH:
-            return @"TOLL_BOOTH";
-        case AIT_STOP:
-            return @"STOP";
-        case AIT_PEDESTRIAN:
-            return @"PEDESTRIAN";
-        case AIT_HAZARD:
-            return @"HAZARD";
-        case AIT_TUNNEL:
-            return @"TUNNEL";
-        case AIT_MAXIMUM:
-            return @"MAXIMUM";
-        case AIT_RED_LIGHT_CAMERA:
-            return @"RED_LIGHT_CAMERA";
-
-        default:
-            return @"";
-    }
+    return type.name ?: @"";
 }
 
-+ (NSString* ) getVisualName:(EOAAlarmInfoType)type
++ (NSString* ) getVisualName:(OASRouteEventType *)type
 {
-    switch (type) {
-        case AIT_SPEED_CAMERA:
-            return OALocalizedString(@"traffic_warning_speed_camera");
-        case AIT_SPEED_LIMIT:
-            return OALocalizedString(@"traffic_warning_speed_limit");
-        case AIT_BORDER_CONTROL:
-            return OALocalizedString(@"traffic_warning_border_control");
-        case AIT_RAILWAY:
-            return OALocalizedString(@"traffic_warning_railways");
-        case AIT_TRAFFIC_CALMING:
-            return OALocalizedString(@"traffic_warning_calming");
-        case AIT_TOLL_BOOTH:
-            return OALocalizedString(@"traffic_warning_payment");
-        case AIT_STOP:
-            return OALocalizedString(@"traffic_warning_stop");
-        case AIT_PEDESTRIAN:
-            return OALocalizedString(@"traffic_warning_pedestrian");
-        case AIT_HAZARD:
-            return OALocalizedString(@"traffic_warning_hazard");
-        case AIT_TUNNEL:
-            return OALocalizedString(@"tunnel_warning");
-        case AIT_MAXIMUM:
-            return OALocalizedString(@"traffic_warning");
-        case AIT_RED_LIGHT_CAMERA:
-            return OALocalizedString(@"traffic_warning_red_light_camera");
-            
-        default:
-            return @"";
-    }
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedCamera))
+        return OALocalizedString(@"traffic_warning_speed_camera");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.speedLimit))
+        return OALocalizedString(@"traffic_warning_speed_limit");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.borderControl))
+        return OALocalizedString(@"traffic_warning_border_control");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.railway))
+        return OALocalizedString(@"traffic_warning_railways");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.trafficCalming))
+        return OALocalizedString(@"traffic_warning_calming");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.tollBooth))
+        return OALocalizedString(@"traffic_warning_payment");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.stop))
+        return OALocalizedString(@"traffic_warning_stop");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.pedestrian))
+        return OALocalizedString(@"traffic_warning_pedestrian");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.hazard))
+        return OALocalizedString(@"traffic_warning_hazard");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.tunnel))
+        return OALocalizedString(@"tunnel_warning");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.maximum))
+        return OALocalizedString(@"traffic_warning");
+    if (OARouteEventTypeEquals(type, OASRouteEventType.redLightCamera))
+        return OALocalizedString(@"traffic_warning_red_light_camera");
+    return @"";
 }
 
 - (BOOL) isTrafficCamera
 {
-    return self.type == AIT_SPEED_CAMERA || self.type == AIT_RED_LIGHT_CAMERA;
+    return [self.type isTrafficCamera];
 }
 
 - (NSUInteger) hash
 {
-    return ((int)_type << 16) + _locationIndex;
+    return (OALegacyAlarmTypeValue(_type) << 16) + _locationIndex;
 }
 
 - (BOOL) isEqual:(id)obj

@@ -28,6 +28,8 @@
 #import "OAPOIUIFilter.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARouteDirectionInfo.h"
+#import "OASharedRouteDetailsProvider.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <binaryRead.h>
 
@@ -49,8 +51,8 @@
 
     NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *_locationPoints;
     NSMapTable<id<OALocationPoint>, NSNumber *> *_locationPointsStates;
-    NSMapTable<NSNumber *, OAAlarmInfo *> *_lastAnnouncedAlarms;
-    NSMapTable<NSNumber *, NSNumber *> *_lastAnnouncedAlarmsTime;
+    NSMapTable<OASRouteEventType *, OAAlarmInfo *> *_lastAnnouncedAlarms;
+    NSMapTable<OASRouteEventType *, NSNumber *> *_lastAnnouncedAlarmsTime;
 
     NSMutableArray<NSNumber *> *_pointsProgress;
     OARouteCalculationResult *_route;
@@ -89,11 +91,6 @@
     return _array;
 }
 
-+ (double) DISTANCE_IGNORE_DOUBLE_SPEEDCAMS
-{
-    return 150.0;
-}
-   
 - (instancetype) init
 {
     self = [super init];
@@ -412,32 +409,28 @@
                                     kIterator++;
                                     continue;
                                 }
-                                EOAAlarmInfoType t = alarm.type;
+                                OASRouteEventType *t = alarm.type;
                                 int announceRadius;
                                 BOOL filter = NO;
-                                switch (t)
+                                if (OARouteEventTypeEquals(t, OASRouteEventType.trafficCalming)
+                                    || OARouteEventTypeEquals(t, OASRouteEventType.hazard))
                                 {
-                                    case AIT_TRAFFIC_CALMING:
-                                    case AIT_HAZARD:
-                                        announceRadius = kStateShortAlarmAnnounce;
-                                        filter = YES;
-                                        break;
-                                    case AIT_PEDESTRIAN:
-                                        announceRadius = (nextRoute != nil
-                                                          && nextRoute.turnType->isRoundAbout()
-                                                          && kIterator != 0)
-                                                          ? kStateShortAlarmAnnounce
-                                                          : kStateLongAlarmAnnounce;
-                                        break;
-                                    default:
-                                        announceRadius = kStateLongAlarmAnnounce;
-                                        break;
+                                    announceRadius = kStateShortAlarmAnnounce;
+                                    filter = YES;
                                 }
+                                else if (OARouteEventTypeEquals(t, OASRouteEventType.pedestrian))
+                                    announceRadius = (nextRoute != nil
+                                                      && nextRoute.turnType->isRoundAbout()
+                                                      && kIterator != 0)
+                                                      ? kStateShortAlarmAnnounce
+                                                      : kStateLongAlarmAnnounce;
+                                else
+                                    announceRadius = kStateLongAlarmAnnounce;
 
                                 BOOL proceed = [atd isTurnStateActive:atdSpeed dist:d1 turnType:announceRadius];
                                 if (proceed && filter)
                                 {
-                                    OAAlarmInfo *lastAlarm = [_lastAnnouncedAlarms objectForKey:@(t)];
+                                    OAAlarmInfo *lastAlarm = [_lastAnnouncedAlarms objectForKey:t];
                                     if (lastAlarm)
                                     {
                                         double dist = [[[CLLocation alloc] initWithLatitude:lastAlarm.coordinate.latitude longitude:lastAlarm.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:alarm.coordinate.latitude longitude:alarm.coordinate.longitude]];
@@ -447,7 +440,7 @@
                                             proceed = NO;
                                         }
                                     }
-                                    NSNumber * timeLastAlarm = [_lastAnnouncedAlarmsTime objectForKey:@(t)];
+                                    NSNumber * timeLastAlarm = [_lastAnnouncedAlarmsTime objectForKey:t];
                                     if (timeLastAlarm && proceed)
                                     {
                                         NSTimeInterval ms = CACurrentMediaTime();
@@ -501,9 +494,9 @@
                             {
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) pw.point;
                                 [voiceRouter announceAlarm:[[OAAlarmInfo alloc] initWithType:alarm.type locationIndex:-1] speed:lastKnownLocation.speed];
-                                [_lastAnnouncedAlarms setObject:alarm forKey:@(alarm.type)];
+                                [_lastAnnouncedAlarms setObject:alarm forKey:alarm.type];
                                 NSTimeInterval ms = CACurrentMediaTime();
-                                [_lastAnnouncedAlarmsTime setObject:@(ms) forKey:@(alarm.type)];
+                                [_lastAnnouncedAlarmsTime setObject:@(ms) forKey:alarm.type];
                             }
                         }
                         else if (type == LPW_FAVORITES)
@@ -573,7 +566,7 @@
 
                 float time = speed > 0 ? distanceByRoute / speed : INT_MAX;
                 int priority = [inf updateDistanceAndGetPriority:time distance:distanceByRoute];
-                if (priority < mostPriority && (showCameras || (inf.type != AIT_SPEED_CAMERA && inf.type != AIT_RED_LIGHT_CAMERA)))
+                if (priority < mostPriority && (showCameras || ![inf isTrafficCamera]))
                 {
                     mostImportant = inf;
                     mostPriority = priority;
@@ -674,36 +667,17 @@
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (![settings.showScreenAlerts get:mode])
-        return;
-
-    OAAlarmInfo *prevSpeedCam = nil;
-    for (OAAlarmInfo *i in route.alarmInfo)
-    {
-        if (i.type == AIT_SPEED_CAMERA || i.type == AIT_RED_LIGHT_CAMERA)
-        {
-            if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
-            {
-                OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                // ignore double speed cams
-                if (!prevSpeedCam || [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] >= [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
-                {
-                    [lw setAnnounce:[settings.speakCameras get:mode]];
-                    [array addObject:lw];
-                    prevSpeedCam = i;
-                }
-            }
-        }
-        else
-        {
-            if ([settings.showTrafficWarnings get:mode] || [settings.speakTrafficWarnings get:mode])
-            {
-                OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                [lw setAnnounce:[settings.speakTrafficWarnings get:mode]];
-                [array addObject:lw];
-            }
-        }
-    }
+    [array addObjectsFromArray:[OASharedRouteDetailsProvider
+        selectAlarmWrappersForRoute:route
+        routingAlarmsEnabled:[settings.showScreenAlerts get:mode]
+        showCameras:[settings.showCameras get:mode]
+        speakSpeedCameras:[settings.speakCameras get:mode]
+        showTunnels:[settings.showTunnels get:mode]
+        speakTunnels:[settings.speakTunnels get:mode]
+        showPedestrian:[settings.showPedestrian get:mode]
+        speakPedestrian:[settings.speakPedestrian get:mode]
+        showTrafficWarnings:[settings.showTrafficWarnings get:mode]
+        speakTrafficWarnings:[settings.speakTrafficWarnings get:mode]]];
 }
 
 - (void) calculatePoi:(OARouteCalculationResult *)route locationPoints:(NSMutableArray<OALocationPointWrapper *> *)locationPoints announcePOI:(BOOL)announcePOI
@@ -772,7 +746,6 @@
             if (route.appMode)
             {
                 [self calculateAlarms:route array:array mode:_appMode];
-                [self sortList:array];
             }
         }
         if (type == LPW_WAYPOINTS || all)
@@ -925,7 +898,7 @@
                 OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
                 if (info)
                 {
-                    if ((info.type != AIT_SPEED_CAMERA && info.type != AIT_RED_LIGHT_CAMERA) || showCameras)
+                    if (![info isTrafficCamera] || showCameras)
                     {
                         return info;
                     }

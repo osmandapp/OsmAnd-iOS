@@ -9,14 +9,13 @@
 //  git revision fcd69744821733a04ce15dee7f111576bac478d6
 
 #import <Foundation/Foundation.h>
-#import "OAExitInfo.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>
 #include <binaryRead.h>
 
-@class OAExitInfo;
+@class OASRouteExitInfo;
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -29,7 +28,7 @@
 @property (nonatomic) float averageSpeed;
 
 // calculated vars
-// after action (excluding expectedTime)
+// time from this action to route finish, including expectedTime
 @property (nonatomic) long afterLeftTime;
 // distance after action (for i.e. after turn to next turn)
 @property (nonatomic) int distance;
@@ -38,7 +37,7 @@
 @property (nonatomic) NSString* streetName;
 @property (nonatomic) NSString* destinationName;
 @property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
-@property (nonatomic) OAExitInfo *exitInfo;
+@property (nonatomic) OASRouteExitInfo *exitInfo;
 @property (nonatomic) NSString* destinationRef;
 
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;

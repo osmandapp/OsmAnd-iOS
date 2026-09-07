@@ -2417,7 +2417,10 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName
 {
-    return OALocalizedString([NSString stringWithFormat:@"%@_name", properyName]);
+    NSString *routeInfoName = [properyName hasPrefix:@"routeInfo_"]
+        ? properyName
+        : [@"routeInfo_" stringByAppendingString:properyName];
+    return OALocalizedString([NSString stringWithFormat:@"%@_name", routeInfoName]);
 }
 
 + (BOOL) isIPhone

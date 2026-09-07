@@ -9,6 +9,7 @@
 #import "OARoutingHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
+#import "OAAlarmInfo.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationResult.h"
 #import "OAAppSettings.h"
@@ -31,6 +32,10 @@
 #import "OARTargetPoint.h"
 #import "OAResultMatcher.h"
 #import "OAApplicationMode.h"
+#import "OAOsmAndFormatter.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAPluginsHelper.h"
+#import "OAUtilities.h"
 #import "CLLocation+Extension.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
@@ -49,6 +54,217 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
 
 static const NSInteger kCarDisconnectStopNavigationDistanceMeters = 100;
 static const CLLocationSpeed kCarDisconnectPauseSpeedMetersPerSecond = 1.0;
+
+namespace
+{
+
+NSString * _Nullable OAFindRouteTypeValue(OASRouteSegment *segment, NSString * _Nullable tag)
+{
+    if (!segment || NSStringIsEmpty(tag))
+        return nil;
+
+    for (OASRouteTypeAttribute *routeType in segment.routeTypes)
+    {
+        if ([tag isEqualToString:routeType.tag] && !NSStringIsEmpty(routeType.value))
+            return routeType.value;
+    }
+    return nil;
+}
+
+int OAFindRoutePointIndex(OASRouteDetailsSnapshot *snapshot, OASRouteEvent *event)
+{
+    int alarmIndex = event.locationIndex;
+    if (alarmIndex > 0 && alarmIndex <= (int) snapshot.points.count
+        && [snapshot.points[alarmIndex - 1].location isEqual:event.location])
+    {
+        return alarmIndex - 1;
+    }
+    if (alarmIndex >= 0 && alarmIndex < (int) snapshot.points.count
+        && [snapshot.points[alarmIndex].location isEqual:event.location])
+    {
+        return alarmIndex;
+    }
+    return alarmIndex >= 0 && alarmIndex < (int) snapshot.points.count ? alarmIndex : -1;
+}
+
+int OAGetDistanceFromStart(OASRouteDetailsSnapshot *snapshot, int pointIndex)
+{
+    if (pointIndex < 0)
+        return -1;
+    if (pointIndex >= (int) snapshot.points.count)
+        return snapshot.summary.totalDistanceMeters;
+    return snapshot.summary.totalDistanceMeters - snapshot.points[pointIndex].distanceToFinishMeters;
+}
+
+OASRouteSegment * _Nullable OAFindRouteSegment(OASRouteDetailsSnapshot *snapshot, int pointIndex)
+{
+    for (OASRouteSegment *segment in snapshot.segments)
+    {
+        if (pointIndex >= segment.routePointStartIndex && pointIndex <= segment.routePointEndIndex)
+            return segment;
+    }
+    return nil;
+}
+
+OASRouteSegment * _Nullable OAFindRouteSegmentWithType(OASRouteDetailsSnapshot *snapshot,
+                                                       int pointIndex,
+                                                       NSString * _Nullable tag)
+{
+    if (NSStringIsEmpty(tag))
+        return nil;
+
+    for (OASRouteSegment *segment in snapshot.segments)
+    {
+        if (pointIndex >= segment.routePointStartIndex
+            && pointIndex <= segment.routePointEndIndex
+            && !NSStringIsEmpty(OAFindRouteTypeValue(segment, tag)))
+        {
+            return segment;
+        }
+    }
+    return nil;
+}
+
+void OAAppendRouteDebugValue(NSMutableString *result, NSString * _Nullable value)
+{
+    if (NSStringIsEmpty(value))
+        return;
+    if (result.length > 0)
+        [result appendString:@" • "];
+    [result appendString:value];
+}
+
+NSString *OAFormatRouteSegment(OASRouteSegment * _Nullable segment)
+{
+    if (!segment)
+        return @"";
+
+    NSMutableString *road = [NSMutableString string];
+    OAAppendRouteDebugValue(road, segment.roadName);
+    OAAppendRouteDebugValue(road, segment.ref);
+    if (!NSStringIsEmpty(segment.highway))
+        OAAppendRouteDebugValue(road, [@"highway=" stringByAppendingString:segment.highway]);
+    NSString *surface = OAFindRouteTypeValue(segment, @"surface");
+    if (!NSStringIsEmpty(surface))
+        OAAppendRouteDebugValue(road, [@"surface=" stringByAppendingString:surface]);
+    return [road copy];
+}
+
+NSString *OAFormatHazardName(NSString *value)
+{
+    NSString *name = [value stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    return [OAUtilities capitalizeFirstLetter:name] ?: value;
+}
+
+NSString *OAFormatRouteEventDistance(OASRouteDetailsSnapshot *snapshot, OASRouteEvent *event)
+{
+    int startDistance = OAGetDistanceFromStart(snapshot, OAFindRoutePointIndex(snapshot, event));
+    if (startDistance < 0)
+        return @"unknown";
+
+    NSString *start = [OAOsmAndFormatter getFormattedDistance:startDistance];
+    if (event.lastLocationIndex >= 0 && event.lastLocationIndex != event.locationIndex)
+    {
+        int endDistance = OAGetDistanceFromStart(snapshot, event.lastLocationIndex);
+        if (endDistance >= 0)
+        {
+            return [NSString stringWithFormat:@"%@ .. %@",
+                                              start,
+                                              [OAOsmAndFormatter getFormattedDistance:endDistance]];
+        }
+    }
+    return start;
+}
+
+NSString *OAFormatRouteAlertsDebug(OARouteCalculationResult *route, OASRouteDetailsSnapshot *snapshot)
+{
+    if (snapshot.events.count == 0)
+        return @"No alerts/warnings found along the route.";
+
+    NSMutableString *message = [NSMutableString string];
+    NSArray<OAAlarmInfo *> *sourceAlarms = route.alarmInfo;
+    for (NSUInteger index = 0; index < snapshot.events.count; index++)
+    {
+        OASRouteEvent *event = snapshot.events[index];
+        OAAlarmInfo *sourceAlarm = index < sourceAlarms.count ? sourceAlarms[index] : nil;
+        NSString *sourceTag = sourceAlarm.sourceTag;
+        NSString *markerValue = sourceAlarm.sourceValue;
+        int geometryPointIndex = OAFindRoutePointIndex(snapshot, event);
+        OASRouteSegment *sourceSegment = OAFindRouteSegmentWithType(snapshot, geometryPointIndex, sourceTag);
+        NSString *segmentValue = OAFindRouteTypeValue(sourceSegment, sourceTag);
+        NSString *resolvedValue = !NSStringIsEmpty(segmentValue) ? segmentValue : markerValue;
+
+        if (index > 0)
+            [message appendString:@"\n\n"];
+
+        NSString *visualName = [OAAlarmInfo getVisualName:event.type];
+        [message appendFormat:@"%lu. %@", (unsigned long) index + 1, visualName];
+        if (OARouteEventTypeEquals(event.type, OASRouteEventType.hazard)
+            && !NSStringIsEmpty(resolvedValue))
+        {
+            [message appendFormat:@": %@", OAFormatHazardName(resolvedValue)];
+        }
+        [message appendFormat:@" [%@]\nDistance from start: %@",
+                               event.type.name,
+                               OAFormatRouteEventDistance(snapshot, event)];
+
+        if (event.lastLocationIndex >= 0 && event.lastLocationIndex != event.locationIndex)
+        {
+            [message appendFormat:@"\nGeometry points: %@..%d",
+                                   geometryPointIndex >= 0 ? @(geometryPointIndex).stringValue : @"unknown",
+                                   event.lastLocationIndex];
+        }
+        else
+        {
+            [message appendFormat:@"\nGeometry point: %@",
+                                   geometryPointIndex >= 0 ? @(geometryPointIndex).stringValue : @"unknown"];
+        }
+
+        if (!NSStringIsEmpty(sourceTag))
+        {
+            [message appendFormat:@"\nSource rule: %@", sourceTag];
+            if (!NSStringIsEmpty(resolvedValue))
+                [message appendFormat:@"=%@", resolvedValue];
+            if (!NSStringIsEmpty(markerValue) && ![markerValue isEqualToString:resolvedValue])
+                [message appendFormat:@"\nAlarm marker: %@", markerValue];
+        }
+
+        OASRouteSegment *segment = sourceSegment ?: OAFindRouteSegment(snapshot, geometryPointIndex);
+        NSString *road = OAFormatRouteSegment(segment);
+        if (!NSStringIsEmpty(road))
+            [message appendFormat:@"\nRoad: %@", road];
+        [message appendFormat:@"\nLocation: %.6f, %.6f",
+                               event.location.latitude,
+                               event.location.longitude];
+        if (event.intValue != 0)
+            [message appendFormat:@"\nInteger value: %d", event.intValue];
+        if (event.floatValue != 0)
+        {
+            if (OARouteEventTypeEquals(event.type, OASRouteEventType.tunnel))
+            {
+                [message appendFormat:@"\nTunnel length: %@",
+                                       [OAOsmAndFormatter getFormattedDistance:event.floatValue]];
+            }
+            else
+            {
+                [message appendFormat:@"\nFloat value: %g", event.floatValue];
+            }
+        }
+    }
+    return [message copy];
+}
+
+void OALogRouteAlerts(OARouteCalculationResult *route)
+{
+    OASRouteDetailsSnapshot *snapshot = route.routeDetailsSnapshot;
+    if (!snapshot)
+        return;
+    NSLog(@"OARoutingHelper Route alerts/warnings: %lu\n%@",
+          (unsigned long) snapshot.events.count,
+          OAFormatRouteAlertsDebug(route, snapshot));
+}
+
+} // namespace
 
 @interface OARoutingHelper()
 
@@ -370,6 +586,9 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) newRouteCalculated:(BOOL)newRoute
 {
+    if ([OAPluginsHelper isEnabled:OAOsmandDevelopmentPlugin.class])
+        OALogRouteAlerts(_route);
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized (_listeners)
         {

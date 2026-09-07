@@ -7,7 +7,6 @@
 //
 
 #import "OARouteInfoLegendItemView.h"
-#import "OARouteStatistics.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 

@@ -22,6 +22,7 @@
 #import "OADefaultFavorite.h"
 #import "OAAlarmInfo.h"
 #import "OAUtilities.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation OALocationPointWrapper
 
@@ -98,46 +99,46 @@
         EOADrivingRegion drivingRegion = [[OAAppSettings sharedManager].drivingRegion get];
         BOOL americanSigns = [OADrivingRegion isAmericanSigns:drivingRegion];
         OAAlarmInfo *alarm = (OAAlarmInfo *) _point;
-        EOAAlarmInfoType type = alarm.type;
+        OASRouteEventType *type = alarm.type;
         //assign alarm list icons manually for now
-        if (type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA)
+        if ([alarm isTrafficCamera])
         {
             return [OAUtilities getMxIcon:@"highway_speed_camera"];
         }
-        else if (type == AIT_BORDER_CONTROL)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.borderControl))
         {
             return [OAUtilities getMxIcon:@"barrier_border_control"];
         }
-        else if (type == AIT_RAILWAY)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.railway))
         {
             if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_railways_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_railways"];
         }
-        else if (type == AIT_TRAFFIC_CALMING)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.trafficCalming))
         {
             if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_traffic_calming_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_traffic_calming"];
         }
-        else if (type == AIT_TOLL_BOOTH)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.tollBooth))
         {
             return [OAUtilities getMxIcon:@"toll_booth"];
         }
-        else if (type == AIT_STOP)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.stop))
         {
             return [UIImage imageNamed:@"list_stop"];
         }
-        else if (type == AIT_PEDESTRIAN)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.pedestrian))
         {
             if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_pedestrian_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_pedestrian"];
         }
-        else if (type == AIT_TUNNEL)
+        else if (OARouteEventTypeEquals(type, OASRouteEventType.tunnel))
         {
             if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_tunnel_us"];

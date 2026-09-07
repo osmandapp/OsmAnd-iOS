@@ -393,7 +393,7 @@ class GpxUIHelper: NSObject {
     }
 
     static func refreshBarChart(chartView: HorizontalBarChartView,
-                                statistics: OARouteStatistics,
+                                statistics: RouteStatistic,
                                 analysis: GpxTrackAnalysis,
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
@@ -809,7 +809,7 @@ class GpxUIHelper: NSObject {
     }
 
     private static func buildStatisticChart(chartView: HorizontalBarChartView,
-                                            routeStatistics: OARouteStatistics,
+                                            routeStatistics: RouteStatistic,
                                             analysis: GpxTrackAnalysis,
                                             useRightAxis: Bool,
                                             nightMode: Bool) -> BarChartData {
@@ -826,15 +826,13 @@ class GpxUIHelper: NSObject {
         let divX = setupAxisDistance(axisBase: yAxis, meters: Double(analysis.totalDistance))
         let segments = routeStatistics.elements
         var entries = [BarChartDataEntry]()
-        var stacks = Array(repeating: 0 as Double, count: segments?.count ?? 0)
-        var colors = Array(repeating: NSUIColor(cgColor: UIColor.white.cgColor), count: segments?.count ?? 0)
+        var stacks = Array(repeating: 0 as Double, count: segments.count)
+        var colors = Array(repeating: NSUIColor(cgColor: UIColor.white.cgColor), count: segments.count)
 
-        if let segments {
-            for i in 0..<stacks.count {
-                let segment = segments[i]
-                stacks[i] = Double(segment.distance) / divX
-                colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor)
-            }
+        for i in 0..<stacks.count {
+            let segment = segments[i]
+            stacks[i] = Double(segment.distanceMeters) / divX
+            colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(bitPattern: segment.color)).cgColor)
         }
 
         entries.append(BarChartDataEntry(x: 0, yValues: stacks))

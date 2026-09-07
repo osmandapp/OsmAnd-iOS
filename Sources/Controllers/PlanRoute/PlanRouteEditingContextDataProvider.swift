@@ -17,6 +17,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
+    var onApproximationApplied: (() -> Void)? {
+        didSet { bridge.onApproximationApplied = onApproximationApplied }
+    }
     var onApproximationPopupDismissed: (() -> Void)? {
         didSet { bridge.onApproximationPopupDismissed = onApproximationPopupDismissed }
     }
@@ -177,7 +180,12 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         return supportedModes.first(where: { $0.stringKey == currentMode.stringKey }) ?? .default()
     }
 
-    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil, applicationMode: OAApplicationMode? = nil) {
+    init(mode: PlanRouteMode = .newRoute,
+         filePath: String? = nil,
+         gpxFile: GpxFile? = nil,
+         selectedSegment: Int = -1,
+         initialPoint: CLLocationCoordinate2D? = nil,
+         applicationMode: OAApplicationMode? = nil) {
         self.mode = mode
         self.filePath = filePath
         bridge.onChange = { [weak self] in
@@ -208,7 +216,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
             }
             self?.onPointEditModeRequested?(mode)
         }
-        if mode.isEditTrack, let filePath {
+        if mode.isEditTrack, let gpxFile {
+            bridge.openTrack(with: gpxFile,
+                             applicationMode: applicationMode,
+                             selectedSegment: selectedSegment)
+        } else if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
         } else {
             bridge.prepareNewRoute(with: applicationMode ?? initialApplicationMode)
@@ -303,12 +315,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.append(toTrack: filePath, onComplete: onComplete)
     }
 
-    func enterNavigation() {
-        bridge.enterNavigation(withTrackName: mode.title)
+    func enterNavigation(followTrackMode: Bool) {
+        bridge.enterNavigation(withTrackName: mode.title, followTrackMode: followTrackMode)
     }
 
     func setCrosshairPosition(screenPoint: CGPoint) {
         bridge.setCrosshairScreenPoint(screenPoint)
+    }
+
+    func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat) {
+        bridge.fitTrackOnMap(withBottomInset: bottomInset, leftInset: leftInset)
     }
 
     func dismissLayer() {

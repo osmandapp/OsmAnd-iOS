@@ -263,10 +263,13 @@
 {
     if (_gpx)
     {
-        NSString *filePath = _gpx.path;
+        OASGpxFile *gpx = _gpx;
+        NSString *fileName = gpx.path.lastPathComponent.stringByDeletingPathExtension;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
-            [PlanRouteScrollableViewController openExistingTrackWithFilePath:filePath];
+            [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
+                                                                   fileName:fileName ?: @""
+                                                            showSnapWarning:showSnapWarning];
         }];
     }
 }

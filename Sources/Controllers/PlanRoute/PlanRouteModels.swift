@@ -330,7 +330,7 @@ protocol PlanRouteSaveDataSource: AnyObject {
     func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func appendToTrack(filePath: String, onComplete: @escaping (Bool) -> Void)
-    func enterNavigation()
+    func enterNavigation(followTrackMode: Bool)
 }
 
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {
@@ -345,12 +345,14 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var presenterViewController: UIViewController? { get set }
     var onDataChanged: (() -> Void)? { get set }
     var onRouteInfoChanged: (() -> Void)? { get set }
+    var onApproximationApplied: (() -> Void)? { get set }
     var onApproximationPopupDismissed: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }
 
     func setCrosshairPosition(screenPoint: CGPoint)
+    func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat)
     func applyPointEdit()
     func cancelPointEdit()
     func addAnotherPoint()

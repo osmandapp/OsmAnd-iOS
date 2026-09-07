@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, copy, nullable) void (^onRouteInfoChanged)(void);
 @property (nonatomic, copy, nullable) void (^onNewSegmentStarted)(void);
 @property (nonatomic, copy, nullable) void (^onPointEditModeRequested)(EOAPlanRoutePointEditMode mode);
+@property (nonatomic, copy, nullable) void (^onApproximationApplied)(void);
 @property (nonatomic, copy, nullable) void (^onApproximationPopupDismissed)(void);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeBeforeHandler) void (^onChangeRouteTypeBefore)(NSInteger pointIndex);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeAfterHandler) void (^onChangeRouteTypeAfter)(NSInteger pointIndex);
@@ -79,7 +80,11 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)prepareNewRoute;
 - (void)prepareNewRouteWithApplicationMode:(OAApplicationMode *)applicationMode;
 - (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)openTrackWithGpxFile:(OASGpxFile *)gpxFile
+             applicationMode:(nullable OAApplicationMode *)applicationMode
+             selectedSegment:(NSInteger)selectedSegment;
 - (void)openTrackWithFilePath:(NSString *)filePath;
+- (void)fitTrackOnMapWithBottomInset:(CGFloat)bottomInset leftInset:(CGFloat)leftInset;
 - (void)addCenterPoint;
 - (void)setCrosshairScreenPoint:(CGPoint)point;
 + (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
@@ -137,7 +142,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)appendToTrack:(NSString *)filePath
            onComplete:(void (^)(BOOL success))onComplete;
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName;
+- (void)enterNavigationWithTrackName:(NSString *)trackName followTrackMode:(BOOL)followTrackMode;
 
 @end
 

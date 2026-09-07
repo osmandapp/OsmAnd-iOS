@@ -1069,8 +1069,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (_gpx)
     {
+        NSString *fileName = _routingHelper.getCurrentGPXRoute.file.path.lastPathComponent.stringByDeletingPathExtension;
         [[OARootViewController instance].mapPanel closeRouteInfo];
-        [PlanRouteScrollableViewController openExistingTrackWithFilePath:_gpx.path];
+        [PlanRouteScrollableViewController openExistingTrackWithGpxFile:_gpx
+                                                               fileName:fileName ?: @""
+                                                        showSnapWarning:YES];
     }
 }
 

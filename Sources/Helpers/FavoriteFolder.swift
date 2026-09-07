@@ -34,7 +34,7 @@ final class FavoriteFolder {
 
     init(fullPath: String, parent: FavoriteFolder?) {
         self.fullPath = fullPath
-        self.name = FavoriteFolderPath.lastSegment(fullPath)
+        self.name = FavoriteFolderPath.shared.lastSegment(fullPath: fullPath)
         self.parent = parent
     }
 

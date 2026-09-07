@@ -58,7 +58,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         switch screenMode {
         case .root: return localizedString("shared_string_favorites")
         case .folder(let fullPath, _):
-            return OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.lastSegment(fullPath))
+            return OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.shared.lastSegment(fullPath: fullPath))
         }
     }
     var parentGroupName: String? {

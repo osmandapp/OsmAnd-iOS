@@ -48,10 +48,10 @@ extension FavoriteListViewController {
     func updateFavoriteSortModeKeysAfterMove(_ favoriteItems: [Any], toGroupName targetGroupName: String) {
         let folderPaths = favoriteItems.compactMap { $0 as? String }.filter { !$0.isEmpty }
         let topLevelFolderPaths = folderPaths.filter { path in
-            !folderPaths.contains { $0 != path && FavoriteFolderPath.isDescendantOrSelf(path, ancestorPath: $0) }
+            !folderPaths.contains { $0 != path && FavoriteFolderPath.shared.isDescendantOrSelf(path: path, ancestorPath: $0) }
         }
         for oldGroupName in topLevelFolderPaths {
-            let folderName = FavoriteFolderPath.lastSegment(oldGroupName)
+            let folderName = FavoriteFolderPath.shared.lastSegment(fullPath: oldGroupName)
             let newGroupName = targetGroupName.isEmpty ? folderName : "\(targetGroupName)/\(folderName)"
             renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
         }
@@ -176,7 +176,7 @@ extension FavoriteListViewController {
     }
     
     private func isFavoriteSortModeKey(_ key: String, insideOrEqualTo groupName: String) -> Bool {
-        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + FavoriteFolderPath.delimiter))
+        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + FavoriteFolderPath.shared.DELIMITER))
     }
     
     private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {

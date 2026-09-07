@@ -114,7 +114,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     let lastModified: Date?
     let subtreePointsCount: Int
 
-    var title: String { group?.title ?? OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.lastSegment(fullPath)) }
+    var title: String { group?.title ?? OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.shared.lastSegment(fullPath: fullPath)) }
     var isVisible: Bool { group?.isVisible ?? true }
     var isPinned: Bool { group?.isPinned ?? false }
     var subtitle: String {

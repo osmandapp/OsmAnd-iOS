@@ -1507,7 +1507,6 @@
 		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
-		C503BC5030457BD200EB704D /* FavoriteFolderPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4F30457BD200EB704D /* FavoriteFolderPath.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
@@ -5542,7 +5541,6 @@
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
 		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
-		C503BC4F30457BD200EB704D /* FavoriteFolderPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderPath.swift; sourceTree = "<group>"; };
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
@@ -11160,6 +11158,23 @@
 			path = CrashDiagnostics;
 			sourceTree = "<group>";
 		};
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
 			isa = PBXGroup;
 			children = (
@@ -14490,23 +14505,6 @@
 			path = XibViews;
 			sourceTree = "<group>";
 		};
-		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
-			);
-			path = AppEnvironment;
-			sourceTree = "<group>";
-		};
-		C0DA57182FE9000200C0DA57 /* UITests */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
-				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
-			);
-			path = UITests;
-			sourceTree = "<group>";
-		};
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -14590,7 +14588,6 @@
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
 				C503BC4D3045798E00EB704D /* FavoriteFolder.swift */,
 				C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */,
-				C503BC4F30457BD200EB704D /* FavoriteFolderPath.swift */,
 				C56319422EF05389008854B3 /* OADeepLinkBridge.h */,
 				C56319432EF05389008854B3 /* OADeepLinkBridge.mm */,
 				DA5A80DC26C563A600F274C7 /* OAFileNameTranslationHelper.h */,
@@ -19197,7 +19194,6 @@
 				C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */,
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
-				C503BC5030457BD200EB704D /* FavoriteFolderPath.swift in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
 				2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */,
 				27CE0CF22DF9D54300A3E627 /* NextTurnWidget+Extension.swift in Sources */,

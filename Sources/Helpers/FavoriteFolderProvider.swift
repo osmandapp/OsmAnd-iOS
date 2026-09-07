@@ -91,8 +91,8 @@ final class FavoriteFolderProvider {
 
         var parent = root
         var currentPath = ""
-        for segment in FavoriteFolderPath.split(fullPath) {
-            currentPath = currentPath.isEmpty ? segment : currentPath + FavoriteFolderPath.delimiter + segment
+        for segment in FavoriteFolderPath.shared.split(fullPath: fullPath) {
+            currentPath = currentPath.isEmpty ? segment : currentPath + FavoriteFolderPath.shared.DELIMITER + segment
             if let folder = folders[currentPath] {
                 parent = folder
             } else {

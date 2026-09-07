@@ -115,9 +115,9 @@ extension FavoriteListViewController {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
             guard let self, let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-            guard FavoriteFolderPath.isValidSegment(text) else { return }
+            guard FavoriteFolderPath.shared.isValidSegment(segment: text) else { return }
             let oldGroupName = folder.fullPath
-            let newGroupName = FavoriteFolderPath.join(FavoriteFolderPath.split(FavoriteFolderPath.parentPath(oldGroupName)) + [text])
+            let newGroupName = FavoriteFolderPath.shared.join(segments: FavoriteFolderPath.shared.split(fullPath: FavoriteFolderPath.shared.parentPath(fullPath: oldGroupName)) + [text])
             guard oldGroupName != newGroupName else { return }
             guard OAFavoritesHelperBridge.shared().renameFavoriteGroup(oldGroupName, newName: newGroupName) else {
                 self.showErrorAlert(localizedString("folder_already_exsists"))

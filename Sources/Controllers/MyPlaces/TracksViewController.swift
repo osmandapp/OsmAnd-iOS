@@ -195,13 +195,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     // MARK: - Loading progress HUD and cell
 
     private func showLoadingHUD() {
-        guard loadingHUD == nil else { return }
+        guard loadingHUD == nil, isTableDataEmpty() else { return }
+        
         let container = UIView()
         container.backgroundColor = .clear
+        
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.color = .iconColorActive
         container.addSubview(indicator)
+        
         NSLayoutConstraint.activate([
             indicator.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             indicator.centerYAnchor.constraint(equalTo: container.centerYAnchor)
@@ -215,6 +218,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         loadingHUD?.stopAnimating()
         loadingHUD = nil
         tableView.backgroundView = nil
+    }
+
+    private func isTableDataEmpty() -> Bool {
+        for section in 0..<Int(tableData.sectionCount()) where Int(tableData.rowCount(UInt(section))) > 0 {
+            return false
+        }
+        return true
     }
 
     private func startIndexingRefreshTimer() {

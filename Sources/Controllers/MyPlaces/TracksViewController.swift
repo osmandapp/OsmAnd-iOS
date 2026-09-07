@@ -65,8 +65,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var asyncLoader: TrackFolderLoaderTask?
     private var hasReceivedFirstBatch = false
     private var isLoadingInProgress = false
-    private var indexingRefreshTimer: Timer?
-    private var lastRenderedIndexedTrackCount = -1
     private var loadingHUD: UIActivityIndicatorView?
     
     private var recCell: OATwoButtonsTableViewCell?
@@ -227,45 +225,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         return true
     }
 
-    private func startIndexingRefreshTimer() {
-        guard indexingRefreshTimer == nil, view.window != nil else { return }
-        let timer = Timer(timeInterval: 6, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            let stillIndexing = self.isIndexingInProgress()
-            if !stillIndexing {
-                self.stopIndexingRefreshTimer()
-                self.lastRenderedIndexedTrackCount = -1
-            }
-            self.refreshIndexingListIfPossible(force: !stillIndexing)
-        }
-        RunLoop.main.add(timer, forMode: .common)
-        indexingRefreshTimer = timer
-    }
-
-    private func stopIndexingRefreshTimer() {
-        indexingRefreshTimer?.invalidate()
-        indexingRefreshTimer = nil
-    }
-
-    private func updateIndexingRefreshState() {
-        if view.window != nil, isIndexingInProgress() {
-            startIndexingRefreshTimer()
-        } else {
-            stopIndexingRefreshTimer()
-        }
-    }
-
-    private func currentFolderTrackItems() -> [TrackItem] {
-        if isSmartFolder {
-            if let organizedGroup {
-                return organizedGroup.getTrackItems()
-            }
-            return smartFolder?.getTrackItems() ?? []
-        }
-        let folder = isVisibleOnMapFolder ? visibleTracksFolder : getTrackFolderByPath(currentFolderPath)
-        return folder?.getTrackItems() ?? []
-    }
-
     private func isIndexingInProgress() -> Bool {
         GpxDbHelper.shared.isReading()
     }
@@ -285,40 +244,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         tableData.addSection(section, at: 0)
     }
 
-    private func refreshIndexingListIfPossible(force: Bool = false) {
-        guard hasReceivedFirstBatch,
-              view.window != nil,
+    private func refreshTracksListFromLoader() {
+        guard view.window != nil,
               !isSearchActive,
               !isSelectionModeInSearch,
               !isEditFilterActive,
               !tableView.isEditing else {
             return
         }
-        let indexedCount = currentFolderTrackItems().reduce(into: 0) { count, item in
-            if item.dataItem != nil { count += 1 }
-        }
-        guard indexedCount != lastRenderedIndexedTrackCount else { return }
-
-        let progressed = indexedCount - lastRenderedIndexedTrackCount
-        guard force || lastRenderedIndexedTrackCount < 0 || progressed < 0 || progressed >= 25 else { return }
-        lastRenderedIndexedTrackCount = indexedCount
-
-        let spinnerOnScreen = tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.accessoryView is CircularProgressView
-        let previousSectionCount = tableView.numberOfSections
-
-        generateData()
-
-        let newSectionCount = Int(tableData.sectionCount())
-        let hasCalculatingSection = newSectionCount > 1 && tableData.sectionData(for: 0).key == calculatingStatsKey
-
-        if spinnerOnScreen, hasCalculatingSection, previousSectionCount == newSectionCount {
-            UIView.performWithoutAnimation {
-                tableView.reloadSections(IndexSet(integersIn: 1..<newSectionCount), with: .none)
-            }
-        } else {
-            tableView.reloadData()
-        }
-        setupTableFooter()
+        hideLoadingHUD()
+        updateData()
     }
     
     // MARK: - Base UI settings
@@ -337,25 +272,47 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if isRootFolder {
             myPlacesDelegate?.updateContentScrollView(tableView)
         }
-        if !hasReceivedFirstBatch {
+        if !isRootFolder {
+            updateData()
+        } else if !hasReceivedFirstBatch {
             showLoadingHUD()
             if !isLoadingInProgress {
                 reloadTracks()
             }
         } else if isIndexingInProgress() {
-            startIndexingRefreshTimer()
             updateData()
         }
     }
-    
+
+    private func canRenderFromInheritedTree() -> Bool {
+        guard !isRootFolder, rootFolder != nil else { return false }
+        return isSmartFolder || getTrackFolderByPath(currentFolderPath) != nil
+    }
+
+    private func propagateLoaderRefresh() {
+        refreshTracksListFromLoader()
+        guard let top = navigationController?.viewControllers.last as? TracksViewController,
+              top !== self else {
+            return
+        }
+        top.rootFolder = rootFolder
+        top.currentFolder = top.getTrackFolderByPath(top.currentFolderPath) ?? rootFolder
+        top.refreshTracksListFromLoader()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
         tableView.tintColor = .iconColorActive
         tableView.allowsMultipleSelectionDuringEditing = true
         addRefreshControl()
-        reloadTracks(forceLoad: true)
-        
+        if canRenderFromInheritedTree() {
+            hasReceivedFirstBatch = true
+            isLoadingInProgress = false
+        } else {
+            reloadTracks(forceLoad: true)
+        }
+
         if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
             configureFolders()
         }
@@ -381,11 +338,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if let asyncLoader {
-            asyncLoader.cancel()
+        if isMovingFromParent || isBeingDismissed {
+            asyncLoader?.cancel()
+            asyncLoader = nil
+            isLoadingInProgress = false
         }
-        isLoadingInProgress = false
-        stopIndexingRefreshTimer()
         hideLoadingHUD()
         if !isRootFolder {
             navigationItem.searchController = nil
@@ -393,9 +350,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
-    
+
     deinit {
-        stopIndexingRefreshTimer()
+        asyncLoader?.cancel()
         unregisterNotificationsAndObservers()
     }
     
@@ -465,8 +422,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             asyncLoader.cancel()
         }
         isLoadingInProgress = false
-        lastRenderedIndexedTrackCount = -1
-        stopIndexingRefreshTimer()
 
         if !(tableView.refreshControl?.isRefreshing ?? false) {
             hasReceivedFirstBatch = false
@@ -521,9 +476,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     emptyFilterBannerRow.iconName = "ic_custom_search"
                     emptyFilterBannerRow.iconTintColor = .iconColorSecondary
                 } else {
-                    let gpxItems = allTracks.compactMap { $0.dataItem }
-                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: isEditFilterActive ? sortMode : sortModeForSearch)
-                    sortedTracks.forEach { createRowFor(track: $0, section: mainSection) }
+                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(allTracks, mode: isEditFilterActive ? sortMode : sortModeForSearch)
+                    sortedTracks.forEach { createRowFor(trackItem: $0, section: mainSection) }
                 }
             }
         } else {
@@ -625,16 +579,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 
                 if isSmartFolder {
                     if let group = organizedGroup {
-                        let gpxItems = group.getTrackItems().compactMap { $0.dataItem }
-                        let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
+                        let sortedTracks = TracksSortModeHelper.sortTracksWithMode(group.getTrackItems(), mode: sortMode)
                         for trackItem in sortedTracks {
-                            createRowFor(track: trackItem, section: mainSection)
+                            createRowFor(trackItem: trackItem, section: mainSection)
                         }
                     } else if !isEditFilterActive && smartFolder.organizeByParams != nil {
                         let groups = smartFolder.getOrganizedTrackItems()
                         if groups.isEmpty {
-                            let gpxItems = smartFolder.getTrackItems().compactMap { $0.dataItem }
-                            if gpxItems.isEmpty && !shouldShowCalculatingStatsRow() {
+                            let smartTrackItems = smartFolder.getTrackItems()
+                            if smartTrackItems.isEmpty && !shouldShowCalculatingStatsRow() {
                                 let emptySmartFolderBannerRow = mainSection.createNewRow()
                                 emptySmartFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
                                 emptySmartFolderBannerRow.key = emptySmartFolderKey
@@ -644,7 +597,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                                 emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
                                 emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
                             } else {
-                                TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode).forEach { createRowFor(track: $0, section: mainSection) }
+                                TracksSortModeHelper.sortTracksWithMode(smartTrackItems, mode: sortMode).forEach { createRowFor(trackItem: $0, section: mainSection) }
                             }
                         } else {
                             let sortedGroups = sortOrganizedGroups(groups)
@@ -653,8 +606,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                             }
                         }
                     } else {
-                        let gpxItems = smartFolder.getTrackItems().compactMap { $0.dataItem }
-                        if !isEditFilterActive && gpxItems.isEmpty && !shouldShowCalculatingStatsRow() {
+                        let smartTrackItems = smartFolder.getTrackItems()
+                        if !isEditFilterActive && smartTrackItems.isEmpty && !shouldShowCalculatingStatsRow() {
                             let emptySmartFolderBannerRow = mainSection.createNewRow()
                             emptySmartFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
                             emptySmartFolderBannerRow.key = emptySmartFolderKey
@@ -664,14 +617,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                             emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
                             emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
                         } else {
-                            TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode).forEach { createRowFor(track: $0, section: mainSection) }
+                            TracksSortModeHelper.sortTracksWithMode(smartTrackItems, mode: sortMode).forEach { createRowFor(trackItem: $0, section: mainSection) }
                         }
                     }
                 } else {
-                    let gpxItems = currentTrackFolder.getTrackItems().compactMap { $0.dataItem }
-                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
+                    let sortedTracks = TracksSortModeHelper.sortTracksWithMode(currentTrackFolder.getTrackItems(), mode: sortMode)
                     for trackItem in sortedTracks {
-                        createRowFor(track: trackItem, section: mainSection)
+                        createRowFor(trackItem: trackItem, section: mainSection)
                     }
                 }
             }
@@ -738,26 +690,27 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         row.setObj(organizedGroup, forKey: organizedGroupKey)
     }
 
-    fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
+    fileprivate func createRowFor(trackItem: TrackItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
-        let fileName = track.gpxFileName
         let shouldShowFolderInfo = isSmartFolder || isSearchActive || isSelectionModeInSearch
-        
+        let relativePath = trackItem.gpxFilePath
+
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
-        trackRow.title = fileName.lastPathComponent().deletingPathExtension()
-        trackRow.setObj(track, forKey: trackObjectKey)
-        trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
-        trackRow.setObj(fileName, forKey: fileNameKey)
+        trackRow.title = trackItem.name
+        trackRow.setObj(trackItem, forKey: trackObjectKey)
+        trackRow.setObj(relativePath as Any, forKey: pathKey)
+        trackRow.setObj(trackItem.gpxFileName, forKey: fileNameKey)
         trackRow.iconName = "ic_custom_trip"
-        let isVisible = settings.isGpxVisible(track.gpxFilePath)
+        let isVisible = !relativePath.isEmpty && settings.isGpxVisible(relativePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
-        trackRow.setObj(trackIconColor(for: track, isVisible: isVisible), forKey: colorKey)
-        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: shouldShowFolderInfo), forKey: trackSortDescrKey)
+        trackRow.setObj(trackIconColor(for: trackItem, isVisible: isVisible), forKey: colorKey)
+        trackRow.setObj(TracksSortModeHelper.getTrackDescription(trackItem: trackItem, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: shouldShowFolderInfo), forKey: trackSortDescrKey)
     }
-    
-    private func trackIconColor(for track: GpxDataItem, isVisible: Bool) -> UIColor {
-        if tableView.isEditing && selectedTracks.contains(where: { $0.gpxFilePath == track.gpxFilePath }) {
+
+    private func trackIconColor(for trackItem: TrackItem, isVisible: Bool) -> UIColor {
+        if tableView.isEditing, let dataItem = trackItem.dataItem,
+           selectedTracks.contains(where: { $0.gpxFilePath == dataItem.gpxFilePath }) {
             return .iconColorActive
         } else {
             return isVisible ? .iconColorActive : .iconColorDefault
@@ -766,7 +719,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     private func updateTrackRowIconColor(at indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        guard item.key == trackKey, let track = item.obj(forKey: trackObjectKey) as? GpxDataItem else {
+        guard item.key == trackKey, let track = item.obj(forKey: trackObjectKey) as? TrackItem else {
             return
         }
 
@@ -1269,7 +1222,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         guard !path.isEmpty else {
             return rootFolder
         }
-        return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) }) ?? rootFolder
+        return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) })
     }
     
     func onOrganizeByParamsApplied() {
@@ -2087,7 +2040,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
      }
     
     @objc private func didFinishImport() {
-        guard view.window != nil else { return }
+        guard view.window != nil else {
+            shouldReload = true
+            return
+        }
         updateAllFoldersVCData(forceLoad: true)
     }
     
@@ -2649,8 +2605,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     showTracksViewControllerForOrganizedGroup(group)
                 }
             } else if item.key == trackKey {
-                if let trackPath = item.obj(forKey: pathKey) as? String,
-                   let track = rootFolder.getFlattenedTrackItems().first(where: { $0.gpxFilePath == trackPath }),
+                if let track = item.obj(forKey: trackObjectKey) as? TrackItem,
                    let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
                                                                                    navControllerHistory: newCurrentHistory,
@@ -2804,13 +2759,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let isTrackVisible = item.bool(forKey: isVisibleKey)
             let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
             let selectedTrackFilename = item.string(forKey: self.fileNameKey) ?? ""
-            var track = getTrackFolderByPath(currentFolderPath)?
-                .getTrackItems()
-                .first(where: { $0.gpxFileName == selectedTrackFilename })
-            if track == nil, (isSearchActive || isSmartFolder),
-               let gpx = item.obj(forKey: trackObjectKey) as? GpxDataItem {
-                track = TrackItem(file: gpx.file)
-                track?.dataItem = gpx
+            var track = item.obj(forKey: trackObjectKey) as? TrackItem
+            if track == nil, !isCurrentTrack, !selectedTrackFilename.isEmpty {
+                track = getTrackFolderByPath(currentFolderPath)?
+                    .getTrackItems()
+                    .first(where: { $0.gpxFileName == selectedTrackFilename })
             }
             
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
@@ -3034,22 +2987,24 @@ extension TracksViewController {
 extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksProgress(items: KotlinArray<TrackItem>) {
         debugPrint("function: \(#function)")
+        hasReceivedFirstBatch = true
+        propagateLoaderRefresh()
     }
-    
+
     func loadTracksStarted() {
         debugPrint("function: \(#function)")
         if !hasReceivedFirstBatch {
             showLoadingHUD()
         }
     }
-    
+
     func deferredLoadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         hideLoadingHUD()
         onLoadFinished(folder: folder, endRefresh: true)
-        updateIndexingRefreshState()
+        propagateLoaderRefresh()
     }
 
     func loadTracksFinished(folder: TrackFolder) {
@@ -3058,9 +3013,9 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
         isLoadingInProgress = false
         hideLoadingHUD()
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)
-        updateIndexingRefreshState()
+        propagateLoaderRefresh()
     }
-    
+
     func tracksLoaded(folder: TrackFolder) {
         debugPrint("function: \(#function)")
     }

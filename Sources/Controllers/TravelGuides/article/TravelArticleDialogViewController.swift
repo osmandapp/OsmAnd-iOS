@@ -508,7 +508,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
                 pointsButton.setTitle("", for: .normal)
                 pointsButton.isEnabled = false
                 if let gpxFile, gpxFile.pointsCount() > 0 {
-                    let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
+                    let title = localizedString("shared_string_gpx_points") + ": " + NumberFormatter.localizedCount(gpxFile.pointsCount())
                     pointsButton.setTitle(title, for: .normal)
                     pointsButton.isEnabled = true
                 }

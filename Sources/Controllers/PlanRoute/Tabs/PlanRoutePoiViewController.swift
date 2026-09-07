@@ -176,6 +176,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     
     private func configurePoiCell(_ cell: UITableViewCell, with point: PlanRoutePoiPoint, sortMode: TrackFavoriteSortMode) {
         cell.selectionStyle = .none
+        cell.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: Self.sectionHorizontalInset)
         cell.contentConfiguration = PointContentConfiguration(icon: point.icon, title: point.name, secondaryContent: poiSecondaryContent(for: point, sortMode: sortMode))
         cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
     }

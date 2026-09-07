@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>پاک‌کردن %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ مورد</string>
+			<key>other</key>
+			<string>%2$@ مورد</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>پاک‌کردن %#@favorites@?</string>
+		<string>پاک‌کردن %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld علاقه‌مندی</string>
+			<string>%2$@ علاقه‌مندی</string>
 			<key>other</key>
-			<string>%ld علاقه‌مندی‌ها</string>
+			<string>%2$@ علاقه‌مندی‌ها</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>پاک‌کردن %#@folders@?</string>
+		<string>پاک‌کردن %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld پوشه</string>
+			<string>%2$@ پوشه</string>
 			<key>other</key>
-			<string>%ld پوشه‌ها</string>
+			<string>%2$@ پوشه‌ها</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>پاک‌کردن %#@folders@ و %#@points@. این کنش قابل بازگشت نیست.</string>
+		<string>پاک‌کردن %1$#@folders@ و %3$#@points@. این کنش قابل بازگشت نیست.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld پوشه</string>
+			<string>%2$@ پوشه</string>
 			<key>other</key>
-			<string>%ld پوشه‌ها</string>
+			<string>%2$@ پوشه‌ها</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,87 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld نقطه</string>
+			<string>%4$@ نقطه</string>
 			<key>other</key>
-			<string>%ld نقاط</string>
+			<string>%4$@ نقاط</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld ایستگاه</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ رد</string>
+			<key>other</key>
+			<string>%2$@ رد</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>آیا مطمئنید که می‌خواهید %2$@ ویرایش را حذف کنید؟</string>
+			<key>other</key>
+			<string>آیا مطمئنید که می‌خواهید %2$@ ویرایش را حذف کنید؟</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ مورد</string>
+			<key>other</key>
+			<string>%2$@ اقلام</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>پرونده %2$@ شامل %3$@ رد مجزا است. مواردی را که می‌خواهید درون‌برد کنید انتخاب کنید.</string>
+			<key>other</key>
+			<string>پرونده %2$@ شامل %3$@ رد مجزا است. مواردی را که می‌خواهید درون‌برد کنید انتخاب کنید.</string>
 		</dict>
 	</dict>
 </dict>

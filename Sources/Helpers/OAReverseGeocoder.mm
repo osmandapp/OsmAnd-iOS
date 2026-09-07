@@ -93,21 +93,6 @@
         [self.addressCache setObject:address forKey:cacheKey];
 }
 
-- (NSString *)lookupAddressAtLat:(double)lat
-                             lon:(double)lon
-                        objectId:(uint64_t)objectId
-{
-    NSString *lookupKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
-    NSString *cachedAddress = [self cachedAddressForKey:lookupKey];
-    if (cachedAddress)
-        return cachedAddress;
-
-    if (NSThread.isMainThread)
-        NSLog(@"[OAReverseGeocoder] [WARNING] Synchronous reverse geocoding must not be performed on the main thread. Use async lookupAddressAtLat:lon:objectId:completion: instead.");
-
-    return [self performLookupAddressAtLat:lat lon:lon objectId:objectId];
-}
-
 - (void)lookupAddressAtLat:(double)lat
                        lon:(double)lon
                   objectId:(uint64_t)objectId
@@ -257,11 +242,6 @@
     [self cacheAddress:finalAddress forKey:cacheKey];
     
     return finalAddress;
-}
-
-- (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon
-{
-    return [self lookupAddressAtLat:lat lon:lon objectId:0];
 }
 
 - (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon

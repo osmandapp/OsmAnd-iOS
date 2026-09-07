@@ -46,18 +46,22 @@ extension FavoriteListViewController {
             content.secondaryTextProperties.color = .textColorSecondary
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
-            cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+            cell.accessories = [.multiselect(), .disclosureIndicator(displayed: .whenNotEditing)]
             self?.updateVisibleSelectionState(at: indexPath)
         }
     }
 
-    var favoriteCellRegistration: CellRegistration<FavoritePointRow> {
-        CellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
+    var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
+        RowCellRegistration<FavoritePointRow> { [weak self] cell, indexPath, favorite in
             guard let self else { return }
             if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
-            cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
+            var content = favoriteContentConfiguration(for: favorite)
+            content.primaryTextLayoutGuideHandler = { [weak cell] layoutGuide in
+                cell?.setPrimaryTextLayoutGuide(layoutGuide)
+            }
+            cell.contentConfiguration = content
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
             updateVisibleSelectionState(at: indexPath)

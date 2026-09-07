@@ -44,7 +44,6 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 @implementation OAFavoritesHelperBridge
 {
     NSArray<OAFavoriteFolderBridgeItem *> *_favoriteFoldersCache;
-    NSArray<NSString *> *_collapsedSections;
     OAAutoObserverProxy *_favoritesStorageChangedObserver;
 }
 
@@ -62,10 +61,7 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 {
     self = [super init];
     if (self)
-    {
-        _collapsedSections = @[];
         [self registerFavoritesStorageObserver];
-    }
 
     return self;
 }
@@ -106,12 +102,12 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
 - (NSArray<NSString *> *)collapsedSections
 {
-    return _collapsedSections;
+    return [OAAppSettings.sharedManager.favoriteCollapsedSections get];
 }
 
 - (void)updateCollapsedSections:(NSArray<NSString *> *)sections
 {
-    _collapsedSections = [sections copy];
+    [OAAppSettings.sharedManager.favoriteCollapsedSections set:sections];
 }
 
 - (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders

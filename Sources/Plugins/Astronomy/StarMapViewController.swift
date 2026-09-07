@@ -25,6 +25,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let leftPanelWidth: CGFloat = 393
         static let zoomButtonsBottomPadding: CGFloat = 34
     }
+    
+    enum CompassTrackingState {
+        case off, compass, ar
+        
+        var isEnabled: Bool {
+            self != .off
+        }
+    }
 
     private let mainLayout = UIView()
     private let starView = StarView()
@@ -80,6 +88,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var mapControlsContainerTopConstraint: NSLayoutConstraint?
     private var nightMode: Bool = false
     private var isApplyingControlChange = false
+    private var compassState: CompassTrackingState = .off
     private var isGyroActive: Bool {
         arModeHelper.isArModeEnabled
     }
@@ -368,7 +377,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         addRoundButton(closeButton, icon: .icNavbarClose, accessibilityLabel: localizedString("shared_string_close"))
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
-        addRoundButton(settingsButton, icon: .icCustomOverlayMap, accessibilityLabel: localizedString("shared_string_settings"))
+        addRoundButton(settingsButton, icon: .icCustomOverlayMap, accessibilityLabel: localizedString("astro_configure_view"))
         settingsButton.addTarget(self, action: #selector(showConfigureSheet), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -478,11 +487,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             syncControlUI()
         }
         arModeHelper.onUnavailable = { [weak self] in
-            self?.disableArExperience(force: true)
+            self?.disableArExperience(motionFailed: true)
             self?.showMessage(localizedString("astro_ar_unavailable"))
         }
         cameraHelper.onUnavailable = { [weak self] message in
-            self?.disableArExperience(force: true)
+            self?.disableArExperience(cameraFailed: true)
             self?.showMessage(message)
         }
         cameraHelper.onCameraStateChanged = { [weak self] _ in
@@ -575,6 +584,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         } else {
             starView.setNeedsDisplay()
         }
+        arControlCard.isHidden = starMap.is2DMode
         updateMagnitudeControls()
         configureSheetController?.config = starMap
         configureSheetController?.commonConfig = common
@@ -824,19 +834,22 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             syncControlUI()
         }
         
-        guard arModeHelper.toggleArMode(enable: true) else { return }
+        if compassState == .off {
+            guard arModeHelper.toggleArMode(enable: true) else { return }
+            compassState = .ar
+        }
         
         if !cameraHelper.isCameraOverlayEnabled {
             cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
         }
     }
 
-    private func disableArExperience(force: Bool = false) {
-        guard force || isGyroActive || isArCameraActive else {
+    private func disableArExperience(motionFailed: Bool = false, cameraFailed: Bool = false) {
+        guard motionFailed || cameraFailed || isGyroActive || isArCameraActive else {
             syncControlUI()
             return
         }
-        guard force || !isApplyingControlChange else { return }
+        guard motionFailed || cameraFailed || !isApplyingControlChange else { return }
         isApplyingControlChange = true
         defer {
             isApplyingControlChange = false
@@ -845,17 +858,18 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if cameraHelper.isCameraOverlayEnabled {
             cameraHelper.toggleCameraOverlay(in: mainLayout, below: starView)
         }
-        if arModeHelper.isArModeEnabled {
+        if compassState == .ar || starView.is2DMode || motionFailed {
             arModeHelper.toggleArMode(enable: false)
+            compassState = .off
+            starView.roll = 0
         }
-        starView.roll = 0
     }
     
     private func syncControlUI() {
         let gyroEnabled = isGyroActive
         let cameraEnabled = isArCameraActive
         
-        compassButton.setArDirectionEnabled(gyroEnabled)
+        compassButton.setArDirectionEnabled(compassState.isEnabled)
         
         arControlCard.setArActive(cameraEnabled)
         arControlCard.updateTheme(nightMode: nightMode, arActive: cameraEnabled)
@@ -1384,6 +1398,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let navigationController = UINavigationController(rootViewController: sheet)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.navigationBar.prefersLargeTitles = false
+        navigationController.view.accessibilityViewIsModal = true
         
         configureSheetController = sheet
         configureSheetNavigationController = navigationController
@@ -1520,9 +1535,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             syncControlUI()
         }
         if enabled {
-            arModeHelper.toggleArMode(enable: true)
+            guard arModeHelper.toggleArMode(enable: true) else { return }
+            compassState = .compass
         } else {
             arModeHelper.toggleArMode(enable: false)
+            compassState = .off
             starView.roll = 0
         }
     }

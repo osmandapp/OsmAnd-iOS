@@ -101,20 +101,46 @@ final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
         weak var overlay: OverlayWindow?
 
+        private var activeTouches: Set<ObjectIdentifier> = []
+
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+            for touch in touches {
+                activeTouches.insert(ObjectIdentifier(touch))
+            }
+
             overlay?.handle(touches)
+            state = state == .possible ? .began : .changed
         }
 
         override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
             overlay?.handle(touches)
+            state = .changed
         }
 
         override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
             overlay?.handle(touches)
+            removeActiveTouches(touches)
+            state = activeTouches.isEmpty ? .ended : .changed
         }
 
         override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
             overlay?.handle(touches)
+            state = .cancelled
+        }
+
+        override func reset() {
+            super.reset()
+            activeTouches.removeAll()
+        }
+
+        override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
+            false
+        }
+
+        private func removeActiveTouches(_ touches: Set<UITouch>) {
+            for touch in touches {
+                activeTouches.remove(ObjectIdentifier(touch))
+            }
         }
     }
 

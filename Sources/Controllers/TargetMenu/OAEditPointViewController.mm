@@ -411,6 +411,7 @@
             [names addObject:group[@"title"]];
             [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : [UIColor colorNamed:ACColorNameIconColorActive]];
             [sizes addObject:@(group[@"count"].intValue)];
+            [hidden addObject:@(group[@"hidden"].boolValue)];
         }
     }
 

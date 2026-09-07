@@ -2296,3 +2296,5 @@
 "trip_recording_moving_time_widget_description" = "Näyttää kuluneen ajan tai edellisessä ylä- tai alamäessä kuluneen ajan.";
 "trip_recording_moving_time" = "Siirtymisaika";
 "start_navigation" = "Aloita navigointi";
+"preparing_file" = "Valmistellaan tiedostoa";
+"sort_by_nearest_to_current_location" = "Lähin nykyiseen sijaintiin";

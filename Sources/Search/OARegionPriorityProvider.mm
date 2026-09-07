@@ -12,12 +12,14 @@
 
 static const int BBOX_STEP = 50000; // 50 km
 static const int BBOX_MAX = 50000 * 20; // 1000 km
+static const double LOCATION_SHIFT_THRESHOLD_METERS = 30000.0; // 30 km
 
 @implementation OARegionPriorityProvider
 {
     NSMutableDictionary<NSNumber *, NSMutableArray<NSString *> *> *_priorityMap;
     NSDictionary<NSString *, NSNumber *> *_regionsPriority;
     CLLocation * _searchLocation;
+    NSInteger _lastIndexesCount;
 }
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)phrase
@@ -147,6 +149,42 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     [self initRegionsPriority];
     NSNumber *priority = _regionsPriority[[resourceId lowerCase]];
     return priority ? [priority intValue] : 0;
+}
+
+- (void)checkAndUpdate:(OASearchPhrase *)phrase
+{
+    if (!phrase || ![phrase getSettings])
+    {
+        return;
+    }
+
+    CLLocation *newLocation = [[phrase getSettings] getOriginalLocation];
+    NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes];
+    NSInteger cnt = offlineIndexes ? offlineIndexes.count : 0;
+
+    if ([self shouldReinitializeWithLocation:newLocation count:cnt])
+    {
+        _searchLocation = newLocation ? newLocation : _searchLocation;
+        _lastIndexesCount = cnt;
+        [_priorityMap removeAllObjects];
+        _regionsPriority = nil;
+        [self initPriorityMap:phrase];
+    }
+}
+
+- (BOOL)shouldReinitializeWithLocation:(CLLocation *)newLocation count:(NSInteger)cnt
+{
+    if (_searchLocation == nil || _lastIndexesCount != cnt)
+    {
+        return YES;
+    }
+
+    if (newLocation != nil)
+    {
+        CLLocationDistance distance = [_searchLocation distanceFromLocation:newLocation];
+        return distance >= LOCATION_SHIFT_THRESHOLD_METERS;
+    }
+    return NO;
 }
 
 @end

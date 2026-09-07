@@ -2725,7 +2725,7 @@
 "search_history_disabled" = "El historial de búsqueda está desactivado";
 "delete_history_items" = "¿Borrar %@ elemento(s) del historial?";
 "history_clear_alert_message" = "¿Borrar los elementos marcados en el historial?";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "history_preferences_descr" = "Podés desactivar el registro del historial individualmente para cada tipo de historial.";
 "navigation_history" = "Historial de navegación";
 "map_markers_history" = "Historial de los marcadores del mapa";
@@ -3204,7 +3204,7 @@
 "my_places_no_tracks_title" = "Carpeta vacía";
 "my_places_no_tracks_descr" = "Esta carpeta no tiene trazas aún.";
 "delete_folder" = "Borrar carpeta";
-"remove_folder_with_files_descr" = "¿Quitar la carpeta «%@» y todas sus %d trazas?";
+"remove_folder_with_files_descr" = "¿Quitar la carpeta «%@» y todas sus %@ trazas?";
 "new_track" = "Nueva traza";
 "not_recorded" = "No grabado";
 "start_recording" = "Iniciar grabación";

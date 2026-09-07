@@ -2,10 +2,34 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>حذف %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ أغراض</string>
+			<key>one</key>
+			<string>%2$@ غرض</string>
+			<key>two</key>
+			<string>%2$@ غرضان</string>
+			<key>few</key>
+			<string>%2$@ أغراض</string>
+			<key>many</key>
+			<string>%2$@ غرضًا</string>
+			<key>other</key>
+			<string>%2$@ غرض</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@favorites@?</string>
+		<string>حذف %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,21 +37,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 			<key>two</key>
-			<string>%ld مفضلتان</string>
+			<string>%2$@ مفضلتان</string>
 			<key>few</key>
-			<string>%ld مفضلات</string>
+			<string>%2$@ مفضلات</string>
 			<key>many</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 			<key>other</key>
-			<string>%ld مفضلة</string>
+			<string>%2$@ مفضلة</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@folders@?</string>
+		<string>حذف %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -35,21 +59,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 			<key>two</key>
-			<string>%ld مجلدان</string>
+			<string>%2$@ مجلدان</string>
 			<key>few</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>many</key>
-			<string>%ld مجلدا</string>
+			<string>%2$@ مجلدا</string>
 			<key>other</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>حذف %#@folders@ و %#@points@. لا يمكن التراجع عن هذا الإجراء.</string>
+		<string>حذف %1$#@folders@ و %3$#@points@. لا يمكن التراجع عن هذا الإجراء.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -57,17 +81,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>one</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 			<key>two</key>
-			<string>%ld مجلدان</string>
+			<string>%2$@ مجلدان</string>
 			<key>few</key>
-			<string>%ld مجلدات</string>
+			<string>%2$@ مجلدات</string>
 			<key>many</key>
-			<string>%ld مجلدا</string>
+			<string>%2$@ مجلدا</string>
 			<key>other</key>
-			<string>%ld مجلد</string>
+			<string>%2$@ مجلد</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -76,17 +100,137 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>zero</key>
-			<string>%ld نقاط</string>
+			<string>%4$@ نقاط</string>
 			<key>one</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
 			<key>two</key>
-			<string>%ld نقطتان</string>
+			<string>%4$@ نقطتان</string>
 			<key>few</key>
-			<string>%ld نقاط</string>
+			<string>%4$@ نقاط</string>
 			<key>many</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
 			<key>other</key>
-			<string>%ld نقطة</string>
+			<string>%4$@ نقطة</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>عبر %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%ld محطات</string>
+			<key>one</key>
+			<string>%ld محطة</string>
+			<key>two</key>
+			<string>%ld محطتين</string>
+			<key>few</key>
+			<string>%ld محطات</string>
+			<key>many</key>
+			<string>%ld محطة</string>
+			<key>other</key>
+			<string>%ld محطة</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ مسار</string>
+			<key>one</key>
+			<string>%2$@ مسار</string>
+			<key>two</key>
+			<string>%2$@ مسارين</string>
+			<key>few</key>
+			<string>%2$@ مسار</string>
+			<key>many</key>
+			<string>%2$@ مسارات</string>
+			<key>other</key>
+			<string>%2$@ مسار</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
+			<key>one</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
+			<key>two</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلين؟</string>
+			<key>few</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلات؟</string>
+			<key>many</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديلًا؟</string>
+			<key>other</key>
+			<string>هل أنت متأكد أنك تريد حذف %2$@ تعديل؟</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>%2$@ أغراض</string>
+			<key>one</key>
+			<string>%2$@ غرض</string>
+			<key>two</key>
+			<string>%2$@ غرضان</string>
+			<key>few</key>
+			<string>%2$@ أغراض</string>
+			<key>many</key>
+			<string>%2$@ غرضًا</string>
+			<key>other</key>
+			<string>%2$@ غرض</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>zero</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
+			<key>one</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
+			<key>two</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسارين منفصلين. حدد ما تريد استيراده.</string>
+			<key>few</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسارات منفصلة. حدد ما تريد استيراده.</string>
+			<key>many</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسارًا منفصلًا. حدد ما تريد استيراده.</string>
+			<key>other</key>
+			<string>يحتوي الملف %2$@ على %3$@ مسار منفصل. حدد ما تريد استيراده.</string>
 		</dict>
 	</dict>
 </dict>

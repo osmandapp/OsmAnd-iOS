@@ -679,6 +679,12 @@ typedef enum {
         _courseIconScaleFactor = courseIconScaleFactor;
         [self refreshMarkersCollection];
     }
+    else
+    {
+        [self updateMode];
+        if (_previewMarker)
+            [self updateMode:_previewMarker];
+    }
 
     return YES;
 }
@@ -811,7 +817,7 @@ typedef enum {
 
 - (void) updateMode:(OAMarkerCollection *)c
 {
-    c.mode = [OAAppSettings sharedManager].nightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
+    c.mode = [OAAppSettings sharedManager].isCurrentMapNightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
 - (void)updatePreviewLocation:(BOOL)showBearing newLocation:(CLLocation *)newLocation

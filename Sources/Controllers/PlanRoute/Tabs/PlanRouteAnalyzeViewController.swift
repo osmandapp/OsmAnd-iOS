@@ -866,7 +866,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                     statistics: stat,
                                     analysis: analysis,
                                     calcWithoutGaps: shouldCalculateWithoutGaps,
-                                    nightMode: OAAppSettings.sharedManager().nightMode)
+                                    nightMode: OAAppSettings.sharedManager().isAppMapNightMode)
         barChart.dragYEnabled = false
         barChart.extraTopOffset = 0
         barChart.extraBottomOffset = 12

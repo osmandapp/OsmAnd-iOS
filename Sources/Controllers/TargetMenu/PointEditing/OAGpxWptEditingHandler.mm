@@ -139,6 +139,7 @@
         NSString *color = point.category == nil ? @"" : UIColorFromARGB([point getColor]).toHexARGBString;
         NSString *count = @"1";
         categories[@"count"] = count;
+        categories[@"hidden"] = _gpxDocument.pointsGroups[title].hidden ? @"true" : @"false";
 
         BOOL emptyCategory = title.length == 0;
         if (!emptyCategory)
@@ -173,6 +174,7 @@
             categories[@"title"] = title;
             categories[@"color"] = UIColorFromARGB(group.color).toHexARGBString;
             categories[@"count"] = @"0";
+            categories[@"hidden"] = group.hidden ? @"true" : @"false";
             [map setObject:categories forKey:title];
         }
     }];

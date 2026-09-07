@@ -397,13 +397,16 @@ final class StarMapMyDataViewController: UIViewController {
     }
     
     private func hideSearchButton() {
+        guard !OAUtilities.isIPhone() else { return }
         navigationItem.rightBarButtonItem = nil
     }
     
     private func showSearchController() {
         navigationItem.searchController = makeSearchController()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.navigationItem.searchController?.isActive = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            UIView.performWithoutAnimation {
+                self.navigationItem.searchController?.isActive = true
+            }
         }
     }
     
@@ -631,11 +634,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     @objc private func backPressed() {
-        if isSearchActive {
-            hideSearchController()
-        } else {
-            navigationController?.popViewController(animated: true)
-        }
+        navigationController?.popViewController(animated: true)
     }
 
     @objc private func myDataSegmentChanged(_ sender: UISegmentedControl) {
@@ -656,7 +655,7 @@ final class StarMapMyDataViewController: UIViewController {
         isSearchBarAnimating = true
         showSearchController()
         
-        UIView.animate(withDuration: 0.4, delay: 0, options: .showHideTransitionViews) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .showHideTransitionViews) {
             self.myDataSegmentedControlContainer.isHidden = true
             self.myDataSegmentedControlContainer.alpha = 0
             self.view.layoutIfNeeded()

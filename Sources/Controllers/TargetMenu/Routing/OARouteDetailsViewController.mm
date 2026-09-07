@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                            statistics:stat
                                              analysis:self.analysis
                                       calcWithoutGaps:calcWithoutGaps
-                                            nightMode:[OAAppSettings sharedManager].nightMode];
+                                            nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
             [_chartSynchronizer registerBarChart:cell.barChartView];
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)

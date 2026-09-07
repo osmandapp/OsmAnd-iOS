@@ -91,7 +91,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
-    BOOL _isLayingOutWidgets;
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
@@ -432,10 +431,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (void) layoutWidgets
 {
-    if (_isLayingOutWidgets)
-        return;
-
-    _isLayingOutWidgets = YES;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
     BOOL hasTopWidgets = [_topPanelController hasWidgets];
     BOOL hasTopSpecialWidgets = [_topPanelController.specialPanelController hasWidgets];
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
@@ -634,7 +630,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     [self.delegate widgetsLayoutDidChange:YES];
     [_mapWidgetRegistry notifyWidgetsPanelsDidLayout];
-    _isLayingOutWidgets = NO;
 }
 
 - (void)updateWeatherToolbarVisible
@@ -1008,7 +1003,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (void)onPanelSizeChanged
 {
-    [self layoutWidgets];
+    // Finish the current UIKit layout pass before recalculating widget constraints.
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
+    [self performSelector:@selector(layoutWidgets) withObject:nil afterDelay:0];
 }
 
 @end

@@ -68,6 +68,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @interface OATargetMenuControlButton : NSObject
 
 @property (nonatomic) NSString *title;
+@property (nonatomic, nullable) NSString *accessibilityIdentifier;
 @property (nonatomic) BOOL disabled;
 
 @end

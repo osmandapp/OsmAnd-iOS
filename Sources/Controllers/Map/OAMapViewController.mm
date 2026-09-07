@@ -607,6 +607,9 @@ static char kMapSourceUpdateQueueKey;
 
 - (void) showWhatsNewDialogIfNeeded
 {
+    if (AppEnvironment.isUITesting)
+        return;
+
     if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
@@ -819,6 +822,16 @@ static char kMapSourceUpdateQueueKey;
 {
     [self setViewportScaleX:x];
     [self setViewportScaleY:y];
+}
+
+- (double)viewportXScale
+{
+    return _mapView.viewportXScale;
+}
+
+- (void)setViewportXScale:(double)viewportXScale
+{
+    [self setViewportScaleX:viewportXScale];
 }
 
 - (double)viewportYScale

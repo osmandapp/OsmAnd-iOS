@@ -4496,3 +4496,4 @@
 "use_nearby_roads" = "Usar estradas próximas";
 "msg_favorites_skipped_as_existing" = "Os pontos favoritos (%d) foram ignorados como já existentes.";
 "astro_search_visible_all_night" = "Visível a noite toda";
+"shared_string_pinned" = "Fixado";

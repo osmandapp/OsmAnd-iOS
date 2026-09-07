@@ -27,6 +27,7 @@ final class MapHudLayout: NSObject {
     private var additionalOrder: [UIView] = []
     private var externalTopOverlayPx: CGFloat = 0
     private var externalBottomOverlayPx: CGFloat = 0
+    private var externalLeftOverlayPx: CGFloat = 0
     private var externalRulerLeftOffsetPx: CGFloat = 0
     private var ignoreTopSidePanels = false
     private var ignoreBottomSidePanels = false
@@ -146,6 +147,13 @@ final class MapHudLayout: NSObject {
             refresh()
         }
     }
+
+    func setExternalLeftOverlay(_ pixels: CGFloat) {
+        let px = max(0, pixels)
+        guard abs(px - externalLeftOverlayPx) > 0 else { return }
+        externalLeftOverlayPx = px
+        refresh()
+    }
     
     func setExternalRulerLeftOffset(_ pixels: CGFloat) {
         let px = max(0, pixels)
@@ -188,7 +196,7 @@ final class MapHudLayout: NSObject {
         let width = Int(getAdjustedWidth())
         let height = Int(getAdjustedHeight())
         let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
-        let leftGap = m.left - leftInset
+        let leftGap = m.left - leftInset - externalLeftOverlayPx
         let rightGap = m.right - rightInset
         let topGap = m.top - topInset
         let bottomGap = m.bottom - bottomInset
@@ -323,7 +331,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func getAdjustedWidth() -> CGFloat {
-        containerView.bounds.width - leftInset - rightInset
+        max(0, containerView.bounds.width - leftInset - rightInset - externalLeftOverlayPx)
     }
     
     private func collectPositions() -> [(UIView, ButtonPositionSize)] {
@@ -421,7 +429,7 @@ final class MapHudLayout: NSObject {
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             let leftAligned = position.isLeft
             let topAligned = position.isTop
-            let xRaw = leftAligned ? m.left - leftInset : m.right - rightInset
+            let xRaw = leftAligned ? m.left - leftInset - externalLeftOverlayPx : m.right - rightInset
             let yRaw = topAligned ? m.top - topInset : m.bottom - bottomInset
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
@@ -432,7 +440,7 @@ final class MapHudLayout: NSObject {
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             let leftAligned = position.isLeft
             let topAligned = position.isTop
-            let xRaw = leftAligned ? m.left - leftInset : m.right - rightInset
+            let xRaw = leftAligned ? m.left - leftInset - externalLeftOverlayPx : m.right - rightInset
             let yRaw = topAligned ? m.top - topInset : m.bottom - bottomInset
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
@@ -453,7 +461,7 @@ final class MapHudLayout: NSObject {
         if view is OADownloadMapWidget {
             let available = max(0, getAdjustedWidth())
             let desiredWidth = isCompactPanelsLayout ? min(available, containerView.bounds.width * 0.5) : available
-            let x = leftInset + (available - desiredWidth) / 2.0
+            let x = leftInset + externalLeftOverlayPx + (available - desiredWidth) / 2.0
             let y = topInset
             let height = view.bounds.height > 0 ? view.bounds.height : 155.0
             let newFrame = CGRect(x: x, y: y, width: desiredWidth, height: height)
@@ -471,9 +479,11 @@ final class MapHudLayout: NSObject {
         let placeOnLeft = position.isLeft
         let ruler = view as? OAMapRulerView
         if let ruler, position.isBottom, !ignoreBottomSidePanels, let bottomBarPanelContainer, !bottomBarPanelContainer.isHidden, bottomBarPanelContainer.alpha > 0.01, bottomBarPanelContainer.bounds.height > 0 {
-            var proposedX = placeOnLeft ? leftInset + startX : containerView.bounds.width - rightInset - ruler.bounds.width - startX
+            var proposedX = placeOnLeft
+                ? leftInset + externalLeftOverlayPx + startX
+                : containerView.bounds.width - rightInset - ruler.bounds.width - startX
             if placeOnLeft, externalRulerLeftOffsetPx > 0 {
-                proposedX += max(0, externalRulerLeftOffsetPx - startX)
+                proposedX += max(0, externalRulerLeftOffsetPx - leftInset - externalLeftOverlayPx - startX)
             }
             
             let bottomFrame = bottomBarPanelContainer.convert(bottomBarPanelContainer.bounds, to: containerView)
@@ -489,8 +499,16 @@ final class MapHudLayout: NSObject {
         
         let extraTop = position.isTop && !additionalOrder.contains { !$0.isHidden && $0.alpha > 0.01 && $0.bounds.height > 0 && $0 is OADownloadMapWidget } ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
-        let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
-        let newX: CGFloat = (placeOnLeft ? leftInset + startX : containerView.bounds.width - rightInset - view.bounds.width - startX) + rulerExtraX
+        let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft
+            ? max(0, externalRulerLeftOffsetPx - leftInset - externalLeftOverlayPx - startX)
+            : 0.0
+        let baseX: CGFloat
+        if placeOnLeft {
+            baseX = leftInset + externalLeftOverlayPx + startX
+        } else {
+            baseX = containerView.bounds.width - rightInset - view.bounds.width - startX
+        }
+        let newX = baseX + rulerExtraX
         let newY: CGFloat = position.isTop ? topInset + startY + extraTop : topInset + getAdjustedHeight() - view.bounds.height - startY - extraBottom
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
@@ -558,6 +576,7 @@ extension MapHudLayout {
         cfg.cellFixPx = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
         cfg.safeAreaInsets = containerView.safeAreaInsets
         cfg.bottomOverlayPx = externalBottomOverlayPx
+        cfg.leftOverlayPx = externalLeftOverlayPx
         overlay.cfg = cfg
     }
     

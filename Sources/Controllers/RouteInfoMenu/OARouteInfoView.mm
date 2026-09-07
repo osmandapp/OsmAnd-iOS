@@ -1067,13 +1067,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) openAttachToTheRoadsScreen
 {
-    if (_gpx)
+    OASGpxFile *gpx = _gpx ?: [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
+    if (gpx)
     {
         NSString *fileName = _routingHelper.getCurrentGPXRoute.file.path.lastPathComponent.stringByDeletingPathExtension;
-        [[OARootViewController instance].mapPanel closeRouteInfo];
-        [PlanRouteScrollableViewController openExistingTrackWithGpxFile:_gpx
-                                                               fileName:fileName ?: @""
-                                                        showSnapWarning:YES];
+        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+        [mapPanel closeRouteInfo:YES onComplete:^{
+            [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
+                                                                   fileName:fileName ?: @""
+                                                            showSnapWarning:YES];
+        }];
     }
 }
 

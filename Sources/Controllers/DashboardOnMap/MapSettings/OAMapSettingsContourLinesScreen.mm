@@ -165,7 +165,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray *colorNames = [NSMutableArray new];
     OAMapStyleParameter *colorParameter = [_styleSettings getParameter:CONTOUR_COLOR_SCHEME_ATTR];
     NSArray *colorValues = [colorParameter possibleValuesUnsorted];
-    BOOL nightMode = _settings.nightMode;
+    BOOL nightMode = _settings.isAppMapNightMode;
     _defaultColorScheme = kDefaultColorScheme;
     NSNumber *defaultColor = nil;
     for (OAMapStyleParameterValue *value in colorValues)

@@ -34,6 +34,26 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         .lightContent
     }
 
+    override var currentState: EOADraggableMenuState {
+        usesSidePanelLayout ? .expanded : sheetState
+    }
+
+    var mapViewportBounds: CGRect {
+        let bounds = view.bounds
+        if usesSidePanelLayout {
+            let minX = min(bounds.maxX, bounds.minX + sidePanelMapInset)
+            let maxX = max(minX, bounds.maxX - view.safeAreaInsets.right)
+            let minY = bounds.minY + getNavbarHeight()
+            let bottomInset = sidePanelMapControlsReservedHeight(for: bounds.size)
+            let maxY = max(minY, bounds.maxY - bottomInset)
+            return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+        }
+        let minY = bounds.minY + getNavbarHeight()
+        let sheetHeight = height(for: sheetState)
+        let maxY = max(minY, bounds.maxY - sheetHeight)
+        return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
+    }
+
     private let dataProvider: PlanRouteDataProvider
 
     private let sheetView = UIView()
@@ -98,22 +118,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var lastSidePanelBottomInset: CGFloat = 0
     private var lastMapControlsReservedHeight: CGFloat = 0
     private var transitionTargetSize: CGSize?
-
-    var mapViewportBounds: CGRect {
-        let bounds = view.bounds
-        if usesSidePanelLayout {
-            let minX = min(bounds.maxX, bounds.minX + sidePanelMapInset)
-            let maxX = max(minX, bounds.maxX - view.safeAreaInsets.right)
-            let minY = bounds.minY + getNavbarHeight()
-            let bottomInset = sidePanelMapControlsReservedHeight(for: bounds.size)
-            let maxY = max(minY, bounds.maxY - bottomInset)
-            return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
-        }
-        let minY = bounds.minY + getNavbarHeight()
-        let sheetHeight = height(for: sheetState)
-        let maxY = max(minY, bounds.maxY - sheetHeight)
-        return CGRect(x: bounds.minX, y: minY, width: bounds.width, height: maxY - minY)
-    }
 
     private var suggestedFileName: String {
         switch dataProvider.mode {
@@ -348,8 +352,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func forceHide() {
+        forceHide(completion: nil)
+    }
+
+    override func forceHide(completion onComplete: (() -> Void)?) {
         isForceHiding = true
-        hide(false, duration: 0, onComplete: nil)
+        hide(false, duration: 0, onComplete: onComplete)
     }
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
@@ -384,10 +392,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         usesSidePanelLayout
     }
     
-    override var currentState: EOADraggableMenuState {
-        usesSidePanelLayout ? .expanded : sheetState
-    }
-
     func reloadData() {
         let routeInfo = dataProvider.routeInfo
         topPartView.configure(with: routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
@@ -749,7 +753,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        let nightMode = OAAppSettings.sharedManager().nightMode
+        let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         crosshairView.image = .mapRulerCenter
         crosshairView.tintColor = nightMode ? .iconColorBlack.dark : .iconColorBlack.light
         crosshairView.isAccessibilityElement = false
@@ -925,10 +929,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         presentApproximationWarning(force: false)
     }
 
-    @discardableResult
-    private func presentApproximationWarning(force: Bool) -> Bool {
+    @discardableResult private func presentApproximationWarning(force: Bool) -> Bool {
         if approximationNavigationController != nil { return true }
-        guard (force || dataProvider.shouldShowApproximationWarning),
+        guard force || dataProvider.shouldShowApproximationWarning,
               let warningViewController = dataProvider.approximationWarningViewController else { return false }
         let navigationController = UINavigationController(rootViewController: warningViewController)
         navigationController.setNavigationBarHidden(true, animated: false)
@@ -1134,7 +1137,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func refreshMapControls() {
-        let style: UIStatusBarStyle = OAAppSettings.sharedManager().nightMode ? .lightContent : .default
+        let style: UIStatusBarStyle = OAAppSettings.sharedManager().isAppMapNightMode ? .lightContent : .default
         OARootViewController.instance().mapPanel?.targetUpdateControlsLayout(true, customStatusBarStyle: style)
     }
 

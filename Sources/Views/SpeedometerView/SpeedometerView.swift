@@ -168,7 +168,7 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private func configureUserInterfaceStyleWithMapTheme() {
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
+        overrideUserInterfaceStyle = OAAppSettings.sharedManager().isAppMapNightMode ? .dark : .light
     }
     
     private func updateComponents() {

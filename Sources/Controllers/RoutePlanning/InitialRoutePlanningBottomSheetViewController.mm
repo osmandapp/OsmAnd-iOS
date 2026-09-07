@@ -51,7 +51,7 @@ static const NSUInteger kRecentTracksLimit = 5;
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return [OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+    return [OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
 }
 
 - (void) applyLocalization

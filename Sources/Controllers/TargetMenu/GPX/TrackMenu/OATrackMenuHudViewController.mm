@@ -701,6 +701,8 @@
         for (OASWptPt *gpxWpt in self.doc.getPointsList)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+            if (!self.isCurrentTrack)
+                gpxWptItem.docPath = self.doc.path;
             if (gpxWpt.category.length == 0)
             {
                 NSMutableArray<OAGpxWptItem *> *withoutGroup = _waypointGroups[OALocalizedString(@"shared_string_gpx_points")];
@@ -737,6 +739,8 @@
         for (OASWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
+            if (!self.isCurrentTrack)
+                rtePtItem.docPath = self.doc.path;
             rtePtItem.routePoint = YES;
             NSMutableArray<OAGpxWptItem *> *rtePtsGroup = _waypointGroups[OALocalizedString(@"route_points")];
             if (!rtePtsGroup)
@@ -2545,6 +2549,7 @@
                 cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
         }
         outCell = cell;
     }

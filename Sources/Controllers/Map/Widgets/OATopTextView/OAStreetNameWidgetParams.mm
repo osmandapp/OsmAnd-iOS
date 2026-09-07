@@ -63,7 +63,7 @@ static const double kMaxMarkerDistance = 50;
         if ([_routingHelper isFollowingMode])
         {
             [self setupCurrentStreetName];
-            _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
+            _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].appMapThemeColor;
         }
         else
         {
@@ -72,7 +72,7 @@ static const double kMaxMarkerDistance = 50;
             {
                 _showClosestWaypointFirstInAddress = NO;
                 [self setupCurrentStreetName];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].appMapThemeColor;
             }
         }
     }

@@ -24,4 +24,29 @@ extension NumberFormatter {
         formatter.locale = Locale(identifier: OAUtilities.currentLang() ?? Locale.current.identifier)
         return formatter
     }()
+
+    private static let countFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = .autoupdatingCurrent
+        formatter.usesGroupingSeparator = true
+        return formatter
+    }()
+
+    static func localizedCount(_ count: NSNumber) -> String {
+        countFormatter.string(from: count) ?? count.stringValue
+    }
+
+    @nonobjc
+    static func localizedCount<T: BinaryInteger>(_ count: T) -> String {
+        if let signedCount = Int64(exactly: count) {
+            return localizedCount(NSNumber(value: signedCount))
+        }
+
+        if let unsignedCount = UInt64(exactly: count) {
+            return localizedCount(NSNumber(value: unsignedCount))
+        }
+
+        return String(describing: count)
+    }
 }

@@ -27,14 +27,8 @@
         _groupName = [favorite getCategory] ?: @"";
         _title = [favorite getDisplayName] ?: @"";
         _address = [favorite getAddress];
-        _displayGroupName = [favorite getCategoryDisplayName] ?: @"";
-        _itemDescription = [favorite getDescription];
-        _encodedNameForLink = [[favorite getName] escapeUrl] ?: @"";
-        _distance = [self.class distanceForFavorite:favorite];
-        _direction = [self.class directionForFavorite:favorite];
         _latitude = [favorite getLatitude];
         _longitude = [favorite getLongitude];
-        _timestampDate = [favorite getTimestamp];
         _isVisible = [favorite isVisible];
         _favorite = favorite;
     }
@@ -45,6 +39,26 @@
 - (UIImage *)icon
 {
     return [_favorite getCompositeIcon];
+}
+
+- (NSString *)displayGroupName
+{
+    return [_favorite getCategoryDisplayName] ?: @"";
+}
+
+- (NSString *)itemDescription
+{
+    return [_favorite getDescription];
+}
+
+- (NSString *)encodedNameForLink
+{
+    return [[_favorite getName] escapeUrl] ?: @"";
+}
+
+- (NSDate *)timestampDate
+{
+    return [_favorite getTimestamp];
 }
 
 - (void)updateDistanceAndDirection

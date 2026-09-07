@@ -1472,7 +1472,7 @@
 "rendering_attr_subwayMode_name" = "Metroaj kursoj";
 "rendering_attr_highway_class_motorway_name" = "Aŭtovojoj";
 "rendering_value_brown_name" = "Bruna";
-"rendering_attr_hideIcons_name" = "Emblemoj de interesejoj";
+"rendering_attr_hideIcons_name" = "Bildsimboloj de interesejoj";
 "rendering_attr_roadColors_description" = "Elektu skemkoloron de vojoj:";
 "rendering_value_browse_map_name" = "Foliumi mapon";
 "rendering_attr_surface_asphalt_name" = "Asfalto";

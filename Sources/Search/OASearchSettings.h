@@ -13,6 +13,7 @@
 #import "OAWorldRegion.h"
 
 @class OAObjectType;
+@class OASearchPhrase;
 
 typedef NS_ENUM(NSInteger, OASearchSortType)
 {
@@ -59,5 +60,10 @@ typedef NS_ENUM(NSInteger, OASearchSortType)
 + (OASearchSettings *) parseJSON:(NSDictionary *)json;
 - (OASearchSortType) getSortType;
 - (OASearchSettings *) setSortType:(OASearchSortType)sortType;
+- (void) updateRegionPriorityProvider:(OASearchPhrase *)phrase;
+- (BOOL) hasRegionPriority;
+- (NSArray<NSString *> *) getRegionPriorityIndexes;
+- (NSArray<NSString *> *) getRegionPriorityIndexesWithMinRadius:(int)minMeters maxRadius:(int)maxMeters;
+- (NSNumber *) getRegionPriority:(NSString *) resId;
 
 @end

@@ -90,7 +90,7 @@ static CGFloat const kShadowRadius = 6;
 
 - (void)updateColorsForPressedState:(BOOL)isPressed
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].isAppMapNightMode;
 
     if (isPressed)
         self.backgroundColor = isNight ? self.pressedColorNight : self.pressedColorDay;
@@ -209,7 +209,7 @@ static CGFloat const kShadowRadius = 6;
         glassView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
         glassView.userInteractionEnabled = NO;
         glassView.layer.cornerRadius = [self appearanceCornerRadius];
-        glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+        glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].isAppMapNightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
         
         [self insertSubview:glassView atIndex:0];
     }

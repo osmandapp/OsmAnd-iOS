@@ -2787,7 +2787,7 @@
 "map_markers_history" = "سجل علامات الخريطة";
 "history_clear_alert_message" = "هل أنت متأكد أنك تريد حذف كافة عناصر سجل التاريخ؟";
 "restart_is_required_title" = "إعادة التشغيل مطلوبة";
-"ltr_or_rtl_combine_via_of" = "%ld من %ld";
+"ltr_or_rtl_combine_via_of" = "%@ من %@";
 "last_seven_days" = "آخر ٧ أيام";
 "confirm_history_item_delete" = "هل تريد بالتأكيد حذف (%ld) من عناصر المحفوظات؟";
 "free_downloads" = "تحميل مجاني";
@@ -3296,7 +3296,7 @@
 "start_recording" = "بدء التسجيل";
 "delete_folder" = "حذف مجلد";
 "map_widget_sun_position_desc" = "يعرض هذا الودجت الوقت حتى شروق الشمس أو غروبها، اعتمادا على الوقت الحالي.";
-"remove_folder_with_files_descr" = "هل أنت متأكد من أنك تريد إزالة \"% @\"الملف وجميع المسارات ٪؟";
+"remove_folder_with_files_descr" = "هل أنت متأكد من أنك تريد إزالة \"%@\"الملف وجميع المسارات %@؟";
 "map_widget_sun_position" = "موقع الشمس";
 "osmand_cloud_deleting_account_descr" = "في غضون لحظات قليلة ، سيتم حذف جميع بياناتك وحسابك من أوسماند آيكلاود. \n \nتظل جميع البيانات الموجودة على الجهاز كما هي.";
 "verify_account_deletion_descr" = "نحن بحاجة للتحقق من حسابك قبل حذفه. \n \nالرجاء إدخال عنوان البريد الإلكتروني الذي قمت بالتسجيل به. سيتم إرسال كلمة مرور لمرة واحدة للخطوة التالية.";
@@ -4059,3 +4059,10 @@
 "terrain_shadows_footer_descr" = "يتم تفعيل خاصية التضاريس ثلاثية الأبعاد تلقائيًا، حيث إنها مطلوبة لعرض ظلال التضاريس";
 "shared_string_int_name" = "الاسم العالمي";
 "show_debug_tile" = "عرض معلومات المربع";
+"no_crashes_recorded" = "لم تسجل أي حوادث";
+"share_crash_log" = "مشاركة سجل الأعطال";
+"crash_report_prompt_title" = "واجه أوسماند خطأً غير متوقع.";
+"crash_report_prompt_description" = "ساعدنا في تحسين التطبيق بإرسال تقرير الأعطال. سيساعدنا تقرير الأعطال في تحديد المشكلة وإصلاحها.";
+"shared_string_send" = "إرسال";
+"traffic_warning_red_light_camera" = "كاميرا ضوء أحمر";
+"shared_string_disabled" = "ملغى";

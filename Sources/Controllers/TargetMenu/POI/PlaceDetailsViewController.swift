@@ -277,7 +277,9 @@ final class PlaceDetailsViewController: OAPOIViewController {
         guard let mapPanel = OARootViewController.instance()?.mapPanel,
               let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
 
-        targetPoint.title = amenity.nameLocalized ?? amenity.name
+        if targetPoint.title?.isEmpty ?? true {
+            targetPoint.title = amenity.nameLocalized ?? amenity.name
+        }
         targetPoint.icon = amenity.type?.icon()
 
         mapPanel.update(targetPoint)

@@ -72,7 +72,7 @@
                     </subviews>
                     <color key="backgroundColor" name="viewBg"/>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w85-oe-bd8" userLabel="Bottom Toolbar View">
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="YES" id="w85-oe-bd8" userLabel="Bottom Toolbar View">
                     <rect key="frame" x="0.0" y="836" width="414" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>

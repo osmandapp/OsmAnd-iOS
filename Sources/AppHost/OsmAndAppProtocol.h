@@ -83,6 +83,7 @@
 @property(readonly) OAObservable* appearanceChangeObservable;
 
 @property(readonly) OAObservable* dayNightModeObservable;
+@property(readonly) OAObservable* carPlayDayNightModeObservable;
 @property(readonly) OAObservable* mapSettingsChangeObservable;
 @property(readonly) OAObservable* updateGpxTracksOnMapObservable;
 @property(readonly) OAObservable* updateRecTrackOnMapObservable;

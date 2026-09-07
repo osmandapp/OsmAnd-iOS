@@ -309,6 +309,7 @@
     
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi touchLocation:nil];
     targetPoint.centerMap = YES;
+    targetPoint.shouldFetchAddress = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 

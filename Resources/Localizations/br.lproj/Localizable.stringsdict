@@ -2,10 +2,32 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Dilemel %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ elfenn</string>
+			<key>two</key>
+			<string>%2$@ elfenn</string>
+			<key>few</key>
+			<string>%2$@ elfenn</string>
+			<key>many</key>
+			<string>%2$@ elfenn</string>
+			<key>other</key>
+			<string>%2$@ elfenn</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@favorites@?</string>
+		<string>Delete %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,21 +35,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld favorite</string>
+			<string>%2$@ favorite</string>
 			<key>two</key>
-			<string>%ld favorites</string>
+			<string>%2$@ favorites</string>
 			<key>few</key>
-			<string>%ld favorites</string>
+			<string>%2$@ favorites</string>
 			<key>many</key>
-			<string>%ld favorites</string>
+			<string>%2$@ favorites</string>
 			<key>other</key>
-			<string>%ld favorites</string>
+			<string>%2$@ favorites</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@folders@?</string>
+		<string>Delete %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -35,21 +57,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>two</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>few</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>many</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>other</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Delete %#@folders@ and %#@points@. This action cannot be undone.</string>
+		<string>Delete %1$#@folders@ and %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -57,15 +79,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>two</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>few</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>many</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 			<key>other</key>
-			<string>%ld Teuliad</string>
+			<string>%2$@ Teuliad</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -74,15 +96,125 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld point</string>
+			<string>%4$@ point</string>
 			<key>two</key>
-			<string>%ld points</string>
+			<string>%4$@ points</string>
 			<key>few</key>
-			<string>%ld points</string>
+			<string>%4$@ points</string>
 			<key>many</key>
-			<string>%ld points</string>
+			<string>%4$@ points</string>
 			<key>other</key>
-			<string>%ld points</string>
+			<string>%4$@ points</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld arsav</string>
+			<key>two</key>
+			<string>%ld arsav</string>
+			<key>few</key>
+			<string>%ld arsav</string>
+			<key>many</key>
+			<string>%ld arsav</string>
+			<key>other</key>
+			<string>%ld arsav</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ roud</string>
+			<key>two</key>
+			<string>%2$@ roud</string>
+			<key>few</key>
+			<string>%2$@ roud</string>
+			<key>many</key>
+			<string>%2$@ roud</string>
+			<key>other</key>
+			<string>%2$@ roud</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>two</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>few</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>many</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+			<key>other</key>
+			<string>Ha sur oc'h e fell deoc'h dilemel %2$@ kemm?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Elfenn</string>
+			<key>two</key>
+			<string>%2$@ Elfenn</string>
+			<key>few</key>
+			<string>%2$@ Elfenn</string>
+			<key>many</key>
+			<string>%2$@ Elfenn</string>
+			<key>other</key>
+			<string>%2$@ Elfenn</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>two</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>few</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>many</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
+			<key>other</key>
+			<string>Ar restr %2$@ ez eus enni %3$@ roud disrannet. Dibabit ar re a fell deoc'h enporzhiañ.</string>
 		</dict>
 	</dict>
 </dict>

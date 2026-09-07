@@ -922,7 +922,7 @@
 "all_application_profiles" = "Сви профили апликације";
 "after_tapping_done" = "Након што додирнете Готово, избрисани профили ће бити потпуно изгубљени.";
 "empty_profile_name_warning" = "Име профила не може бити празно.";
-"preparing_file" = "Припрема датотеке";
+"preparing_file" = "Припремам датотеку";
 "profile_import_success" = "Профил апликације је успешно увезен";
 "profile_prefs_reset_successful" = "Све поставке налога враћене су на подразумевано.";
 "not_available_profile_name" = "Профил са овим именом већ постоји.";
@@ -2939,7 +2939,7 @@
 "shared_string_discard_changes" = "Одбаци измене";
 "use_heightmap_setting" = "Користи 3Д рељефне висинске мапе";
 "weather_update_over_any_network" = "Преко било које мреже";
-"ltr_or_rtl_combine_via_of" = "%ld од %ld";
+"ltr_or_rtl_combine_via_of" = "%@ од %@";
 "shared_string_rearrange" = "Препаковати";
 "simulate_location_movement_speed_original_desc" = "Брзина померања локације током симулације биће једнака брзини у селектованом фајлу.";
 "simulate_location_movement_speed_x2_desc" = "Брзина померања локације током симулације биће 2 пута већа од брзине у селектованом фајлу.";
@@ -3191,7 +3191,7 @@
 "announcement_time_passing" = "Пролазак";
 "my_places_no_tracks_descr" = "Овај фолдер нема ни један траг још увек.";
 "delete_folder" = "Избриши фолдер";
-"remove_folder_with_files_descr" = "Да ли сте сигурни да желите да уклоните \"%@\" фолдер и све %d трагове?";
+"remove_folder_with_files_descr" = "Да ли сте сигурни да желите да уклоните \"%@\" фолдер и све %@ трагове?";
 "trash_is_empty_banner_desc" = "Фајлови уклоњени из Османд Облака биће доступни овде после %@ дана.";
 "delete_all_items" = "Обриши све ставке";
 "permanent_delete_warning" = "%@ биће трајно обрисано. Да ли сте сигурни?";
@@ -4093,7 +4093,7 @@
 "dismiss_changes_descr" = "Све промене ће бити одбачене.";
 "gpx_logging_no_data" = "Нема података";
 "delete_changes" = "Обриши измене";
-"osm_edits_delete_item_confirmation" = "Да ли сте сигурни да желите да обришете %ld измену?";
+"osm_edits_delete_item_confirmation" = "Да ли сте сигурни да желите да обришете %@ измену?";
 "osm_edits_delete_items_confirmation" = "Да ли сте сигурни да желите да обришете %ld измене?";
 "show_touches" = "Прикажи додире";
 "folder_one_track" = "1 путања";
@@ -4278,8 +4278,8 @@
 "shared_string_play" = "Пусти";
 "import_tracks_cancel_title" = "Отказати увоз?";
 "import_tracks_cancel_descr" = "Ако сада затворите, ваши избори путања неће бити увезени.";
-"import_tracks_descr_one" = "Датотека %@ садржи 1 засебну путању. Изаберите ону коју желите да увезете.";
-"import_tracks_descr_other" = "Датотека %@ садржи %d одвојених путања. Изаберите оне које желите да увезете.";
+"import_tracks_descr_one" = "Датотека %1$@ садржи %2$@ засебну путању. Изаберите ону коју желите да увезете.";
+"import_tracks_descr_other" = "Датотека %@ садржи %@ одвојених путања. Изаберите оне које желите да увезете.";
 "import_as_one_track" = "Увези као једну путању";
 "import_tracks_folders_footer" = "Изаберите одредишну фасциклу за увезене путање.";
 "error_reading_gpx" = "Није могуће прочитати ГПКс податке.";
@@ -4550,3 +4550,7 @@
 "shared_string_send" = "Пошаљи";
 "send_current_app_log" = "Пошаљи тренутни дневник апликације";
 "send_current_app_log_descr" = "Од почетка апликације";
+"msg_favorites_skipped_as_existing" = "Омиљене тачке (%d) су прескочене као већ постојеће.";
+"osm_edits_empty_state_title" = "Нема измена мапе на чекању";
+"osm_edits_empty_state_description" = "Промене које направите у ОсмАнду ће се појавити овде пре него што се отпреме на ОпенСтритМап";
+"carplay_trip_via_point" = "Преко %@";

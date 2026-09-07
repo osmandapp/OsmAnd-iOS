@@ -2,10 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+			<key>two</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+			<key>other</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %#@favorites@?</string>
+		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld favorite</string>
+			<string>%2$@ favorite</string>
 			<key>two</key>
-			<string>%ld ᱠᱩᱥᱤᱭᱟᱜ</string>
+			<string>%2$@ ᱠᱩᱥᱤᱭᱟᱜ</string>
 			<key>other</key>
-			<string>%ld ᱠᱩᱥᱤᱭᱟᱜ</string>
+			<string>%2$@ ᱠᱩᱥᱤᱭᱟᱜ</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %#@folders@?</string>
+		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +49,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %#@folders@ and %#@points@. This action cannot be undone.</string>
+		<string>ᱢᱮᱴᱟᱣ ᱢᱮ %1$#@folders@ and %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>other</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +80,97 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld ᱴᱩᱲᱟᱹᱜ</string>
+			<string>%4$@ ᱴᱩᱲᱟᱹᱜ</string>
 			<key>two</key>
-			<string>%ld ᱴᱩᱲᱟᱹᱜ</string>
+			<string>%4$@ ᱴᱩᱲᱟᱹᱜ</string>
 			<key>other</key>
-			<string>%ld ᱴᱩᱲᱟᱹᱜ</string>
+			<string>%4$@ ᱴᱩᱲᱟᱹᱜ</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>other</key>
+			<string>%ld ᱯᱟᱹᱰᱤ</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ᱴᱮᱨᱮᱠ</string>
+			<key>two</key>
+			<string>%2$@ ᱴᱮᱨᱮᱠ</string>
+			<key>other</key>
+			<string>%2$@ ᱴᱮᱨᱮᱠ</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ᱥᱟᱯᱲᱟᱣ ᱢᱮᱴᱟᱣ ᱢᱮ?</string>
+			<key>two</key>
+			<string>%2$@ ᱥᱟᱯᱲᱟᱣ ᱢᱮᱴᱟᱣ ᱢᱮ?</string>
+			<key>other</key>
+			<string>%2$@ ᱥᱟᱯᱲᱟᱣ ᱢᱮᱴᱟᱣ ᱢᱮ?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+			<key>two</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+			<key>other</key>
+			<string>%2$@ ᱡᱤᱱᱤᱥ</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ᱨᱮ %3$@ ᱴᱮᱨᱮᱠ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱹᱜᱩ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾</string>
+			<key>two</key>
+			<string>%2$@ ᱨᱮ %3$@ ᱴᱮᱨᱮᱠ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱹᱜᱩ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾</string>
+			<key>other</key>
+			<string>%2$@ ᱨᱮ %3$@ ᱴᱮᱨᱮᱠ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱟᱹᱜᱩ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾</string>
 		</dict>
 	</dict>
 </dict>

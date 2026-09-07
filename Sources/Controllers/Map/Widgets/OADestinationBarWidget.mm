@@ -379,7 +379,9 @@
     CGRect frame;
     CGFloat left = self.frame.origin.x;
     CGFloat top = self.frame.origin.y;
-    CGFloat w = self.bounds.size.width;
+    CGFloat w = self.superview.bounds.size.width;
+    if (w <= 0)
+        w = _settings.isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : [OAUtilities calculateScreenWidth];
     BOOL isPortrait = !OAUtilities.isLandscape;
     BOOL isCompactPortrait = isPortrait && _settings.isCompactPanelsLayout;
     BOOL useMultipleRows = isCompactPortrait

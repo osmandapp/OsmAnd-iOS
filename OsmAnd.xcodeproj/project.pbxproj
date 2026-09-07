@@ -1709,6 +1709,7 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		CE0BA2093045A00300089B64 /* DescriptionDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */; };
 		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
@@ -5888,6 +5889,7 @@
 		CC6607A6F7360E88DCA8FEE4 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bn; path = bn.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CC7D243BAE1166300BAFDC9E /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = br; path = br.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CDE7D422EC55BED3C95FEF00 /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sr; path = sr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionDeviceCell.swift; sourceTree = "<group>"; };
 		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
@@ -13024,6 +13026,7 @@
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
 				C54BBE6D3023553E00691F10 /* PointRowContentView.swift */,
+				CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -18101,6 +18104,7 @@
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				FAB5B7292EF30693002E3D79 /* OAMapTopPlace.m in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
+				CE0BA2093045A00300089B64 /* DescriptionDeviceCell.swift in Sources */,
 				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,

@@ -142,9 +142,12 @@ final class MigrationManager: NSObject {
     }
 
     private func migrateWidgetLayoutPreferences() {
+        let sourceVisibility = settings.mapInfoControls(nil)
+        let sourceCustomKeys = settings.customWidgetKeys(nil)
+        let sourcePanelOrders = WidgetsPanel.values.map { panel in
+            (panel, settings.widgetPanelOrder(panel, screenLayoutMode: nil))
+        }
         for appMode in OAApplicationMode.allPossibleValues() {
-            let sourceVisibility = settings.mapInfoControls(nil)
-            let sourceCustomKeys = settings.customWidgetKeys(nil)
             for screenLayoutMode in ScreenLayoutMode.allCases {
                 let layoutMode = NSNumber(value: screenLayoutMode.rawValue)
                 let targetVisibility = settings.mapInfoControls(layoutMode)
@@ -157,8 +160,7 @@ final class MigrationManager: NSObject {
                     targetCustomKeys.set(sourceCustomKeys.get(appMode), mode: appMode)
                 }
 
-                for panel in WidgetsPanel.values {
-                    let sourceOrder = settings.widgetPanelOrder(panel, screenLayoutMode: nil)
+                for (panel, sourceOrder) in sourcePanelOrders {
                     let targetOrder = settings.widgetPanelOrder(panel, screenLayoutMode: layoutMode)
                     if sourceOrder.isSet(for: appMode), !targetOrder.isSet(for: appMode) {
                         targetOrder.set(sourceOrder.get(appMode), mode: appMode)

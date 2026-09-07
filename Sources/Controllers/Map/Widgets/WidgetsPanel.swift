@@ -99,7 +99,7 @@ class WidgetsPanel: NSObject, NSCopying {
 
     private func reorderedPages(_ appMode: OAApplicationMode,
                                 screenLayoutMode: NSNumber?) -> [[String]]? {
-        let pref = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
+        let pref = orderPreference(screenLayoutMode: screenLayoutMode)
         let pages: [[String]]? = pref.get(appMode)
         guard let pages, !pages.isEmpty, isPanelVertical else {
             return pages
@@ -127,7 +127,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: NSNumber?) {
-        let preference = orderPreference(screenLayoutMode: screenLayoutMode, appMode: appMode)
+        let preference = orderPreference(screenLayoutMode: screenLayoutMode)
         preference.set(pagedOrder, mode: appMode)
     }
 
@@ -135,7 +135,7 @@ class WidgetsPanel: NSObject, NSCopying {
         widgetOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func orderPreference(screenLayoutMode: NSNumber?, appMode: OAApplicationMode) -> OACommonListOfStringList {
+    func orderPreference(screenLayoutMode: NSNumber?) -> OACommonListOfStringList {
         OAAppSettings.sharedManager().widgetPanelOrder(self,
                                                        screenLayoutMode: screenLayoutMode)
     }

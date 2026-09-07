@@ -159,8 +159,7 @@ class WidgetType: NSObject {
         var unsetPanels: [WidgetsPanel] = []
 
         for panel in [WidgetsPanel.leftPanel, WidgetsPanel.topPanel, WidgetsPanel.rightPanel, WidgetsPanel.bottomPanel] {
-            if panel.orderPreference(screenLayoutMode: screenLayoutMode,
-                                     appMode: appMode).isSet(for: appMode) {
+            if panel.orderPreference(screenLayoutMode: screenLayoutMode).isSet(for: appMode) {
                 setPanels.append(panel)
             } else {
                 unsetPanels.append(panel)

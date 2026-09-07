@@ -284,8 +284,7 @@ class WidgetsSettingsHelper: NSObject {
                 }
             }
         }
-        panel.orderPreference(screenLayoutMode: screenLayoutMode,
-                              appMode: appMode).resetMode(toDefault: appMode)
+        panel.orderPreference(screenLayoutMode: screenLayoutMode).resetMode(toDefault: appMode)
         return widgetInfos.flatMap { Array(_immutableCocoaArray: $0) } ?? []
     }
 
@@ -348,8 +347,7 @@ class WidgetsSettingsHelper: NSObject {
                                                        recreateControls: false)
                 }
             }
-            panel.orderPreference(screenLayoutMode: preferenceLayoutMode,
-                                  appMode: appMode).resetMode(toDefault: appMode)
+            panel.orderPreference(screenLayoutMode: preferenceLayoutMode).resetMode(toDefault: appMode)
         }
     }
 

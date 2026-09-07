@@ -57,11 +57,10 @@ class WidgetsSettingsHelper: NSObject {
                                                                filterModes: Int(kWidgetModeMatchingPanels),
                                                                panels: WidgetsPanel.values,
                                                                layoutMode: preferenceLayoutMode) {
-                    for widgetInfo in allWidgetInfos {
-                        widgetRegistry.enableDisableWidget(for: appMode,
-                                                           widgetInfo: widgetInfo as? MapWidgetInfo,
-                                                           enabled: nil,
-                                                           recreateControls: false)
+                    for case let widgetInfo as MapWidgetInfo in allWidgetInfos {
+                        enableDisableWidget(widgetInfo,
+                                            enabled: nil,
+                                            screenLayoutMode: preferenceLayoutMode)
                     }
                 }
                 resetWidgetPreferences(preferenceLayoutMode)

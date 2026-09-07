@@ -38,6 +38,18 @@ private struct AnalyzeStatItem {
     let accessibilityValue: String
 }
 
+private final class AnalyzeDisplayedChartRegistration {
+    let indexPath: IndexPath
+    weak var cell: UITableViewCell?
+    weak var chart: BarLineChartViewBase?
+
+    init(cell: UITableViewCell, indexPath: IndexPath, chart: BarLineChartViewBase) {
+        self.indexPath = indexPath
+        self.cell = cell
+        self.chart = chart
+    }
+}
+
 private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
     var onNothingSelected: ((ChartViewBase) -> Void)?
     var onValueSelected: ((ChartViewBase, Highlight) -> Void)?
@@ -91,7 +103,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     private var currentChartDataSignature: String?
     private var trackChartFilePath: String?
     private var trackChartHelper: TrackChartHelper?
-    private var registeredChartsByCell = [ObjectIdentifier: BarLineChartViewBase]()
+    private var displayedChartRegistrations = [AnalyzeDisplayedChartRegistration]()
     private lazy var chartDelegateProxy: AnalyzeChartDelegateProxy = {
         let proxy = AnalyzeChartDelegateProxy()
         proxy.onNothingSelected = { [weak self] chart in
@@ -300,6 +312,27 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private func bindChartDelegate(_ chart: BarLineChartViewBase) {
         chart.delegate = chartDelegateProxy
+    }
+
+    private func unregisterDisplayedChart(for cell: UITableViewCell, at indexPath: IndexPath) {
+        guard let registrationIndex = displayedChartRegistrations.firstIndex(where: {
+            $0.cell === cell && $0.indexPath == indexPath
+        }) else {
+            return
+        }
+        let registration = displayedChartRegistrations.remove(at: registrationIndex)
+        guard let chart = registration.chart,
+              !displayedChartRegistrations.contains(where: { $0.chart === chart }) else {
+            return
+        }
+        if let primaryChart = chart as? ElevationChart {
+            chartSynchronizer.unregisterPrimaryChart(primaryChart)
+            if chartView === primaryChart {
+                chartView = nil
+            }
+        } else if let barChart = chart as? HorizontalBarChartView {
+            chartSynchronizer.unregisterBarChart(barChart)
+        }
     }
 
     private func chartSegment(for analysis: GpxTrackAnalysis, gpxFile: GpxFile) -> TrkSegment? {
@@ -1208,7 +1241,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let chart = (cell as? AnalyzeCardCell)?.chartView else { return }
-        registeredChartsByCell[ObjectIdentifier(cell)] = chart
+        displayedChartRegistrations.append(AnalyzeDisplayedChartRegistration(cell: cell,
+                                                                              indexPath: indexPath,
+                                                                              chart: chart))
         cell.layoutIfNeeded()
         if let primaryChart = chart as? ElevationChart {
             chartView = primaryChart
@@ -1219,15 +1254,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let chart = registeredChartsByCell.removeValue(forKey: ObjectIdentifier(cell)) else { return }
-        if let primaryChart = chart as? ElevationChart {
-            chartSynchronizer.unregisterPrimaryChart(primaryChart)
-            if chartView === primaryChart {
-                chartView = nil
-            }
-        } else if let barChart = chart as? HorizontalBarChartView {
-            chartSynchronizer.unregisterBarChart(barChart)
-        }
+        unregisterDisplayedChart(for: cell, at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -175,17 +175,20 @@ class WidgetsSettingsHelper: NSObject {
                                                           widgetInfos: defaultWidgetInfos)
 
                 if let defaultWidgetInfo = defaultWidgetInfo {
-                    let widgetIdToAdd: String
+                    var widgetIdToAdd = ""
                     let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode,
                                                                           widgetsVisibility: widgetsVisibility)
                     let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
-                    if duplicateNotPossible || (disabled && !inAnotherPanel) {
+                    let defaultAlreadyUsed = newPagedOrder.contains { $0.contains(defaultWidgetInfo.key) }
+                    let canReuseDefault = (duplicateNotPossible || (disabled && !inAnotherPanel)) && !defaultAlreadyUsed
+
+                    if canReuseDefault {
                         enableDisableWidget(defaultWidgetInfo,
                                             enabled: NSNumber(value: true),
                                             screenLayoutMode: targetLayoutMode)
                         widgetIdToAdd = defaultWidgetInfo.key
-                    } else {
-                        let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!,
+                    } else if let widgetTypeToCopy {
+                        let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy,
                                                                             panel: panel,
                                                                             screenLayoutMode: targetLayoutMode,
                                                                             widgetParams: widgetParams)

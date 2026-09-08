@@ -276,12 +276,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [self populateStatistics:_analysisTabData section:section];
 }
 
-- (BOOL)shouldCalculateWithoutGaps
-{
-    OASGpxDataItem *gpxItem = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    return [GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpxItem overrideIsGeneralTrack:YES];
-}
-
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
@@ -299,12 +293,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                         startTime:self.analysis.startTime
                                          useHours:useHours];
 
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
-                                      analysis:self.analysis
-                                     firstType:GPXDataSetTypeAltitude
-                                    secondType:GPXDataSetTypeSlope
-                                      axisType:_selectedXAxisMode
-                               calcWithoutGaps:[self shouldCalculateWithoutGaps]];
+    [GpxUIHelper refreshRouteLineChartWithChartView:routeStatsCell.chartView
+                                           analysis:self.analysis
+                                          firstType:GPXDataSetTypeAltitude
+                                         secondType:GPXDataSetTypeSlope
+                                           axisType:_selectedXAxisMode];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
@@ -356,8 +349,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (!originalRoute.empty())
     {
         NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
-        BOOL calcWithoutGaps = [self shouldCalculateWithoutGaps];
-        
         for (OARouteStatistics *stat in routeInfo)
         {
             OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
@@ -366,11 +357,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
-            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView
-                                           statistics:stat
-                                             analysis:self.analysis
-                                      calcWithoutGaps:calcWithoutGaps
-                                            nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
+            [GpxUIHelper refreshRouteBarChartWithChartView:cell.barChartView
+                                                statistics:stat
+                                                  analysis:self.analysis
+                                                 nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
             [_chartSynchronizer registerBarChart:cell.barChartView];
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
@@ -998,7 +988,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                           chart:graphCell.chartView
                                        analysis:self.analysis
                                   statsModeCell:statsModeCell
-                         overrideIsGeneralTrack:YES];
+                         overrideIsGeneralTrack:YES
+                         useRouteDistanceLayout:YES];
         [_chartSynchronizer setPrimaryChart:graphCell.chartView];
     }
 }

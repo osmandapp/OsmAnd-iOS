@@ -25,18 +25,22 @@ final class GpxUtils: NSObject {
 
     static func getLocationAtPos(_ chart: LineChartView,
                                  gpxFile: GpxFile,
+                                 analysis: GpxTrackAnalysis,
                                  segment: TrkSegment?,
                                  pos: Float,
                                  joinSegments: Bool) -> CLLocation? {
         if let ds = chart.lineData?.dataSets,
            let dataSet = ds.first as? GpxUIHelper.OrderedLineDataSet,
            let segment {
+            let includesSegmentGaps = dataSet.includesSegmentGaps
             return location(at: pos,
                             axisType: GpxUIHelper.getDataSetAxisType(dataSet: dataSet),
                             axisDivisor: dataSet.getDivX(),
                             gpxFile: gpxFile,
+                            analysis: analysis,
                             segment: segment,
-                            joinSegments: joinSegments)
+                            joinSegments: includesSegmentGaps || joinSegments,
+                            useAccumulatedDistanceForGeneralSegment: includesSegmentGaps)
         }
         return nil
     }
@@ -45,8 +49,10 @@ final class GpxUtils: NSObject {
                                   axisType: GPXDataSetAxisType,
                                   axisDivisor: Double,
                                   gpxFile: GpxFile,
+                                  analysis: GpxTrackAnalysis,
                                   segment: TrkSegment,
-                                  joinSegments: Bool) -> CLLocation? {
+                                  joinSegments: Bool,
+                                  useAccumulatedDistanceForGeneralSegment: Bool) -> CLLocation? {
         let point: WptPt?
         if axisType == .time || axisType == .timeOfDay {
             point = getSegmentPointByTime(segment,
@@ -55,11 +61,22 @@ final class GpxUtils: NSObject {
                                           preciseLocation: false,
                                           joinSegments: joinSegments)
         } else {
-            point = getSegmentPointByDistance(segment,
-                                              gpxFile: gpxFile,
-                                              distanceToPoint: position * Float(axisDivisor),
-                                              preciseLocation: false,
-                                              joinSegments: joinSegments)
+            let distance = position * Float(axisDivisor)
+            if useAccumulatedDistanceForGeneralSegment,
+               segment.isGeneralSegment(),
+               joinSegments,
+               let distanceLayout = GpxUIHelper.routeChartDistanceLayout(analysis: analysis) {
+                point = generalSegmentPointByDistance(segment,
+                                                      pointDistances: distanceLayout.pointDistances,
+                                                      totalDistance: distanceLayout.totalDistance,
+                                                      distanceToPoint: distance)
+            } else {
+                point = getSegmentPointByDistance(segment,
+                                                  gpxFile: gpxFile,
+                                                  distanceToPoint: distance,
+                                                  preciseLocation: false,
+                                                  joinSegments: joinSegments)
+            }
         }
         guard let point else { return nil }
         return CLLocation(latitude: point.getLatitude(), longitude: point.getLongitude())
@@ -146,7 +163,7 @@ final class GpxUtils: NSObject {
                                                                      lon2: currPoint.lon)
                         }
                         if passedSegmentsPointsDistance + currPoint.distance >= Double(distanceToPoint)
-                            || passedDistance >= Double(distanceToPoint) {
+                            || abs(passedDistance - Double(distanceToPoint)) < 0.1 {
                             guard let prevPoint,
                                   preciseLocation,
                                   currPoint.distance + passedSegmentsPointsDistance >= Double(distanceToPoint) else {
@@ -213,6 +230,50 @@ final class GpxUtils: NSObject {
             }
         }
         return nil
+    }
+
+    private static func generalSegmentPointByDistance(_ segment: TrkSegment,
+                                                      pointDistances: [Double],
+                                                      totalDistance: Double,
+                                                      distanceToPoint: Float) -> WptPt? {
+        let points = segment.points.compactMap { $0 as? WptPt }
+        guard let firstPoint = points.first,
+              let lastPoint = points.last else { return nil }
+        let usesAnalysisDistances = points.count == pointDistances.count
+        var resolvedDistances = pointDistances
+        if !usesAnalysisDistances {
+            resolvedDistances = Array(repeating: 0, count: points.count)
+            if points.count > 1 {
+                for index in 1..<points.count {
+                    resolvedDistances[index] = resolvedDistances[index - 1]
+                        + OAMapUtils.getDistance(points[index - 1].lat,
+                                                lon1: points[index - 1].lon,
+                                                lat2: points[index].lat,
+                                                lon2: points[index].lon)
+                }
+            }
+            if let geometryTotal = resolvedDistances.last, geometryTotal > 0 {
+                let scale = totalDistance / geometryTotal
+                resolvedDistances = resolvedDistances.map { $0 * scale }
+            }
+        }
+        let targetDistance = Double(distanceToPoint)
+        if targetDistance <= resolvedDistances[0] {
+            return firstPoint
+        }
+        for index in 1..<points.count where resolvedDistances[index] >= targetDistance {
+            let previousDistance = resolvedDistances[index - 1]
+            let stepDistance = resolvedDistances[index] - previousDistance
+            let coefficient = stepDistance > 0 ? (targetDistance - previousDistance) / stepDistance : 1
+            let previousPoint = points[index - 1]
+            let currentPoint = points[index]
+            let result = WptPt()
+            result.lat = previousPoint.lat + (currentPoint.lat - previousPoint.lat) * coefficient
+            result.lon = previousPoint.lon + (currentPoint.lon - previousPoint.lon) * coefficient
+            return result
+        }
+        let overshoot = targetDistance - (resolvedDistances.last ?? 0)
+        return overshoot < 0.1 ? lastPoint : nil
     }
 
     private static func getIntermediatePointByTime(_ passedTime: Double,

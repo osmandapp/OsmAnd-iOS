@@ -601,7 +601,8 @@
                                           chart:graphCell.chartView
                                        analysis:self.analysis
                                   statsModeCell:statsModeCell
-                         overrideIsGeneralTrack:[self.segment isGeneralSegment]];
+                         overrideIsGeneralTrack:[self.segment isGeneralSegment]
+                         useRouteDistanceLayout:YES];
     }
 }
 

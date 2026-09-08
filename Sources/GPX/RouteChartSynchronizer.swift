@@ -59,6 +59,7 @@ final class RouteChartSynchronizer: NSObject {
     private var primaryXAxisType: GPXDataSetAxisType?
     private var primaryXAxisRange: ClosedRange<Double>?
     private var primaryXAxisDivisor: Double?
+    private var primaryIncludesSegmentGaps = false
     private var selectedProgress: Double?
     private var selectedXAxisValue: Double?
     private var visibleProgressRange: ClosedRange<Double>?
@@ -97,7 +98,8 @@ final class RouteChartSynchronizer: NSObject {
         return TrackChartState(selectedX: selectedX,
                                visibleXRange: visibleRange,
                                axisType: primaryXAxisType,
-                               axisDivisor: primaryXAxisDivisor)
+                               axisDivisor: primaryXAxisDivisor,
+                               includesSegmentGaps: primaryIncludesSegmentGaps)
     }
 
     func setPrimaryChart(_ chart: ElevationChart) {
@@ -110,6 +112,7 @@ final class RouteChartSynchronizer: NSObject {
         primaryXAxisType = xAxisType
         primaryXAxisRange = horizontalRange(for: chart)
         primaryXAxisDivisor = dataSet?.getDivX()
+        primaryIncludesSegmentGaps = dataSet?.includesSegmentGaps == true
         primaryChart = chart
         chart.lineData?.dataSets
             .compactMap { $0 as? LineChartDataSetProtocol }
@@ -213,6 +216,7 @@ final class RouteChartSynchronizer: NSObject {
         primaryXAxisType = nil
         primaryXAxisRange = nil
         primaryXAxisDivisor = nil
+        primaryIncludesSegmentGaps = false
         barCharts.allObjects.forEach { chart in
             clearHighlight(in: chart)
             removeSelectionGestureTargets(from: chart)

@@ -131,10 +131,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         cachedState
     }
 
-    private var shouldCalculateWithoutGaps: Bool {
-        dataSource?.analysisData?.calcWithoutGaps ?? false
-    }
-
     private var effectiveYAxisTypes: [NSNumber] {
         let availableTypes = selectedYAxisTypes.filter { number in
             guard let type = GPXDataSetType(rawValue: number.intValue) else { return false }
@@ -280,12 +276,11 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         guard let analysis = dataSource?.analysisData?.gpxAnalysis,
               let chart = chartView else { return }
         let (firstType, secondType) = resolvedYAxisTypes()
-        GpxUIHelper.refreshLineChart(chartView: chart,
-                                     analysis: analysis,
-                                     firstType: firstType,
-                                     secondType: secondType,
-                                     axisType: selectedXAxisType,
-                                     calcWithoutGaps: shouldCalculateWithoutGaps)
+        GpxUIHelper.refreshRouteLineChart(chartView: chart,
+                                          analysis: analysis,
+                                          firstType: firstType,
+                                          secondType: secondType,
+                                          axisType: selectedXAxisType)
         chartSynchronizer.setPrimaryChart(chart)
     }
 
@@ -301,13 +296,11 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         if let viewportBounds {
             helper.screenBBox = viewportBounds
         }
-        let joinSegments = !data.calcWithoutGaps
         helper.refreshChart(state,
                             fitTrack: viewportBounds != nil,
                             forceFit: false,
                             analysis: analysis,
-                            segment: segment,
-                            joinSegments: joinSegments)
+                            segment: segment)
     }
 
     private func bindChartDelegate(_ chart: BarLineChartViewBase) {
@@ -668,12 +661,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
                                         startTime: analysis.startTime,
                                         useHours: useHours)
         let (firstType, secondType) = resolvedYAxisTypes()
-        GpxUIHelper.refreshLineChart(chartView: chart,
-                                     analysis: analysis,
-                                     firstType: firstType,
-                                     secondType: secondType,
-                                     axisType: selectedXAxisType,
-                                     calcWithoutGaps: shouldCalculateWithoutGaps)
+        GpxUIHelper.refreshRouteLineChart(chartView: chart,
+                                          analysis: analysis,
+                                          firstType: firstType,
+                                          secondType: secondType,
+                                          axisType: selectedXAxisType)
         chart.dragYEnabled = false
         chartView = chart
         bindChartDelegate(chart)
@@ -895,11 +887,10 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
         let barChart = HorizontalBarChartView(frame: .zero)
         barChart.translatesAutoresizingMaskIntoConstraints = false
-        GpxUIHelper.refreshBarChart(chartView: barChart,
-                                    statistics: stat,
-                                    analysis: analysis,
-                                    calcWithoutGaps: shouldCalculateWithoutGaps,
-                                    nightMode: OAAppSettings.sharedManager().isAppMapNightMode)
+        GpxUIHelper.refreshRouteBarChart(chartView: barChart,
+                                         statistics: stat,
+                                         analysis: analysis,
+                                         nightMode: OAAppSettings.sharedManager().isAppMapNightMode)
         barChart.dragYEnabled = false
         barChart.extraTopOffset = 0
         barChart.extraBottomOffset = 12

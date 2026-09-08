@@ -1156,8 +1156,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .analyze:
             let analyzeViewController = PlanRouteAnalyzeViewController(dataSource: dataProvider)
             analyzeViewController.onAttachToRoadsRequested = { [weak self] in
-                guard let self, dataProvider.isApproximationNeeded else { return }
-                presentApproximationWarning(force: true)
+                self?.presentApproximationWarning(force: true)
             }
             return analyzeViewController
         case .route:

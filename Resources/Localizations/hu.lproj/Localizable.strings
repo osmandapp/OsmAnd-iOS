@@ -2646,7 +2646,7 @@
 "true_bearing_widget_desc" = "A valódi észak és az úti cél közötti szög, az Ön tartózkodási helyéről megfigyelve.";
 "map_widget_group_sunrise_sunset" = "Napkelte, napnyugta";
 "shared_string_all_colors" = "Összes szín";
-"report_an_issues" = "Jelentsen egy problémát";
+"report_an_issues" = "Hibajelentés";
 "shared_string_uploading" = "Felöltés folyamatban";
 "osmand_cloud_deleted_account_descr" = "Minden fiók- és egyéb adat törölve lett az OsmAnd Cloudból.";
 "delete_account" = "Fiók törlése";

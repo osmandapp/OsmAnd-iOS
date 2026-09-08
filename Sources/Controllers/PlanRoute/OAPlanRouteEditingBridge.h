@@ -142,7 +142,9 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)appendToTrack:(NSString *)filePath
            onComplete:(void (^)(BOOL success))onComplete;
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName followTrackMode:(BOOL)followTrackMode;
+- (void)enterNavigationWithTrackName:(NSString *)trackName
+                     followTrackMode:(BOOL)followTrackMode
+                      sourceFilePath:(nullable NSString *)sourceFilePath;
 
 @end
 

@@ -19,6 +19,8 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (OAMeasurementEditingContext *)editingContextForGpxFile:(OASGpxFile *)gpxFile
                                           applicationMode:(OAApplicationMode *)applicationMode
                                           selectedSegment:(NSInteger)selectedSegment;
++ (nullable NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpxFile
+                                          sourceFilePath:(nullable NSString *)sourceFilePath;
 
 @end
 
@@ -67,6 +69,28 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                                                               selectedSegment:-1];
 
     XCTAssertEqual(context.appMode, OAApplicationMode.CAR);
+}
+
+- (void)testSourceFilePathOverridesPathlessExportForNavigation
+{
+    OASGpxFile *exportedGpx = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    NSString *sourceFilePath = @"/Documents/GPX/twisty-route.gpx";
+
+    NSString *navigationFilePath = [OAPlanRouteEditingBridge navigationFilePathForExportedGpx:exportedGpx
+                                                                               sourceFilePath:sourceFilePath];
+
+    XCTAssertEqualObjects(navigationFilePath, sourceFilePath);
+    XCTAssertEqual(exportedGpx.path.length, 0);
+}
+
+- (void)testPathlessExportWithoutSourceFilePathKeepsNavigationPathEmpty
+{
+    OASGpxFile *exportedGpx = [[OASGpxFile alloc] initWithAuthor:@"test"];
+
+    NSString *navigationFilePath = [OAPlanRouteEditingBridge navigationFilePathForExportedGpx:exportedGpx
+                                                                               sourceFilePath:nil];
+
+    XCTAssertNil(navigationFilePath);
 }
 
 @end

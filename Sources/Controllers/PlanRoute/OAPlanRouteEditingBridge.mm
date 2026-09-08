@@ -441,6 +441,16 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx;
 }
 
++ (NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpx
+                                 sourceFilePath:(NSString *)sourceFilePath
+{
+    if (sourceFilePath.length > 0)
+        return sourceFilePath;
+    if (gpx.path.length > 0)
+        return gpx.path;
+    return nil;
+}
+
 - (void)openTrackWithEditingContext:(OAMeasurementEditingContext *)ctx
 {
     OAMeasurementToolLayer *layer = [self layer];
@@ -1891,7 +1901,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     });
 }
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName followTrackMode:(BOOL)followTrackMode
+- (void)enterNavigationWithTrackName:(NSString *)trackName
+                     followTrackMode:(BOOL)followTrackMode
+                      sourceFilePath:(NSString *)sourceFilePath
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || (![ctx hasRoute] && ![ctx hasChanges]))
@@ -1901,6 +1913,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (gpx == nil)
         return;
 
+    NSString *navigationFilePath = [OAPlanRouteEditingBridge navigationFilePathForExportedGpx:gpx
+                                                                               sourceFilePath:sourceFilePath];
     [self addPoiGroupsFromGpx:ctx.gpxData.gpxFile toGpx:gpx];
     [self addDraftWaypointsToGpx:gpx];
     OASGpxDataItem *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
@@ -1908,7 +1922,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
     if (routingHelper.isFollowingMode && followTrackMode)
     {
-        [mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+        [mapActions setGPXRouteParamsWithDocument:gpx path:navigationFilePath];
         [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
         [routingHelper recalculateRouteDueToSettingsChange];
     }

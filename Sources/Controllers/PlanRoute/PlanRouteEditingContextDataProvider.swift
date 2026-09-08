@@ -319,7 +319,9 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func enterNavigation(followTrackMode: Bool) {
-        bridge.enterNavigation(withTrackName: mode.title, followTrackMode: followTrackMode)
+        bridge.enterNavigation(withTrackName: mode.title,
+                               followTrackMode: followTrackMode,
+                               sourceFilePath: sourceFilePath)
     }
 
     func setCrosshairPosition(screenPoint: CGPoint) {

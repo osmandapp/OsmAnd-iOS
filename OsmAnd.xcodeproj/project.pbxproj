@@ -1752,6 +1752,9 @@
 		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
 		D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */; };
+		D1C573510000000000000001 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
+		D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
+		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
 		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
@@ -5932,6 +5935,8 @@
 		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
 		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
 		D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridgeTest.mm; sourceTree = "<group>"; };
+		D1C573510000000000000003 /* PlanRouteTrackSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSource.swift; sourceTree = "<group>"; };
+		D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSourceTests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -11199,6 +11204,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
+				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
 			);
 			path = PlanRoute;
 			sourceTree = "<group>";
@@ -11258,6 +11264,7 @@
 				D7210159301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift */,
 				D721015A301B768C003CECB8 /* PlanRouteEditingModels.swift */,
 				D721015B301B768C003CECB8 /* PlanRouteModels.swift */,
+				D1C573510000000000000003 /* PlanRouteTrackSource.swift */,
 				D721015C301B768C003CECB8 /* PlanRoutePointMenuViewController.swift */,
 				D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */,
 				D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */,
@@ -18289,6 +18296,7 @@
 				D7210182301B768C003CECB8 /* PlanRouteEditingContextDataProvider.swift in Sources */,
 				D7210183301B768C003CECB8 /* PlanRouteEditingModels.swift in Sources */,
 				D7210184301B768C003CECB8 /* PlanRouteModels.swift in Sources */,
+				D1C573510000000000000001 /* PlanRouteTrackSource.swift in Sources */,
 				D7210185301B768C003CECB8 /* PlanRoutePointMenuViewController.swift in Sources */,
 				D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */,
 				D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */,
@@ -19632,6 +19640,8 @@
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
+				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,
+				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

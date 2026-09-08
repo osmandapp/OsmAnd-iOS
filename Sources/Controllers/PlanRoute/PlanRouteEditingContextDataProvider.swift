@@ -13,6 +13,7 @@ import OsmAndShared
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     let mode: PlanRouteMode
+    let sourceFilePath: String?
 
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
@@ -182,12 +183,14 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     init(mode: PlanRouteMode = .newRoute,
          filePath: String? = nil,
+         sourceFilePath: String? = nil,
          gpxFile: GpxFile? = nil,
          selectedSegment: Int = -1,
          initialPoint: CLLocationCoordinate2D? = nil,
          applicationMode: OAApplicationMode? = nil) {
         self.mode = mode
         self.filePath = filePath
+        self.sourceFilePath = sourceFilePath
         bridge.onChange = { [weak self] in
             guard let self else { return }
             invalidateCachedData()

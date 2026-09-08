@@ -269,6 +269,7 @@
             [[OARootViewController instance].mapPanel closeRouteInfo];
             [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
                                                                    fileName:fileName ?: @""
+                                                             sourceFilePath:gpx.path
                                                             showSnapWarning:showSnapWarning];
         }];
     }

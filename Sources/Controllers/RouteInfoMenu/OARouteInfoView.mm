@@ -1070,11 +1070,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OASGpxFile *gpx = _gpx ?: [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
     if (gpx)
     {
-        NSString *fileName = _routingHelper.getCurrentGPXRoute.file.path.lastPathComponent.stringByDeletingPathExtension;
+        NSString *sourceFilePath = _routingHelper.getCurrentGPXRoute.file.path;
+        NSString *fileName = sourceFilePath.lastPathComponent.stringByDeletingPathExtension;
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
         [mapPanel closeRouteInfo:YES onComplete:^{
             [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
                                                                    fileName:fileName ?: @""
+                                                             sourceFilePath:sourceFilePath
                                                             showSnapWarning:YES];
         }];
     }

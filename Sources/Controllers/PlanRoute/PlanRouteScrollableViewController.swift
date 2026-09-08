@@ -152,11 +152,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                       shouldAdjustMapToTrack: false)
     }
 
-    @objc(openExistingTrackWithGpxFile:fileName:showSnapWarning:) static func openExistingTrack(gpxFile: GpxFile, fileName: String, showSnapWarning: Bool) {
+    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:showSnapWarning:) static func openExistingTrack(
+        gpxFile: GpxFile,
+        fileName: String,
+        sourceFilePath: String?,
+        showSnapWarning: Bool) {
         let resolvedFileName = fileName.isEmpty ? localizedString("quick_action_new_route") : fileName
-        let filePath = gpxFile.path.isEmpty ? nil : gpxFile.path
+        let trackSource = PlanRouteTrackSource(gpxFilePath: gpxFile.path, sourceFilePath: sourceFilePath)
         let dataProvider = PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: resolvedFileName),
-                                                               filePath: filePath,
+                                                               filePath: trackSource.editableFilePath,
+                                                               sourceFilePath: trackSource.sourceFilePath,
                                                                gpxFile: gpxFile,
                                                                selectedSegment: Int(OAAppSettings.sharedManager().gpxRouteSegment.get()),
                                                                applicationMode: OARoutingHelper.sharedInstance().getAppMode())

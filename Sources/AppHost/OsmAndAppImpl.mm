@@ -67,8 +67,6 @@
 #include <binaryRoutePlanner.h>
 #include <routePlannerFrontEnd.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/IOnlineTileSources.h>
-#include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
@@ -228,59 +226,94 @@
     [self createFolderIfNeeded:_weatherForecastPath];
     [self createFolderIfNeeded:_hiddenMapsPath];
     [self createFolderIfNeeded:_onlineTileSourcesPath];
-    [self restoreOnlineTileSourcesFromBackup];
+    [self restoreOnlineTileSourcesToCache];
+    [self backupAllOnlineTileSources];
 }
 
-// Online tile sources (added via "Add online source") are normally scanned from Library/Caches,
-// which iOS is free to purge at any time the app isn't running (typically overnight). Their
-// definition (".metainfo") is backed up to this durable, non-purgeable folder every time the app
-// is backgrounded (see -syncOnlineTileSourcesBackup), so a purge only costs the re-download of
-// cached tile images, never the source definition itself. This must run before the resources
-// manager is constructed, since it only scans Library/Caches once, at startup.
-- (void)restoreOnlineTileSourcesFromBackup
+// The resources manager only ever looks for online tile source definitions (".metainfo" files,
+// written by "Add online source") under Library/Caches, which iOS is free to purge whenever the
+// app isn't running and which no device backup ever contains. That copy is therefore treated as
+// disposable, and onlineTileSourcesPath holds the definitions that actually define the user's
+// sources; a purge then costs only the re-download of the cached tile images. This puts the
+// definitions back where the resources manager expects them, and must run before it is
+// constructed, since it scans Library/Caches exactly once, at startup.
+- (void)restoreOnlineTileSourcesToCache
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSArray<NSString *> *backedUpNames = [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil];
-    for (NSString *name in backedUpNames)
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil])
     {
-        NSString *backupMetainfoPath = [[_onlineTileSourcesPath stringByAppendingPathComponent:name] stringByAppendingPathComponent:@".metainfo"];
+        NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
         if (![fileManager fileExistsAtPath:backupMetainfoPath])
             continue;
 
-        NSString *cacheEntryPath = [_cachePath stringByAppendingPathComponent:name];
-        NSString *cacheMetainfoPath = [cacheEntryPath stringByAppendingPathComponent:@".metainfo"];
+        NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
         if ([fileManager fileExistsAtPath:cacheMetainfoPath])
             continue;
 
-        NSError *error;
-        [fileManager createDirectoryAtPath:cacheEntryPath withIntermediateDirectories:YES attributes:nil error:&error];
-        if (![fileManager copyItemAtPath:backupMetainfoPath toPath:cacheMetainfoPath error:&error])
-            OALog(@"Failed to restore online tile source \"%@\" from backup: %@", name, error.localizedFailureReason);
+        [self copyMetainfoFrom:backupMetainfoPath to:cacheMetainfoPath forSource:name];
     }
 }
 
-// Mirrors the resources manager's current in-memory set of online tile sources into the durable
-// backup folder, adding/refreshing entries that exist and removing ones that were deleted/renamed.
-- (void)syncOnlineTileSourcesBackup
+// Takes over the definitions that only Library/Caches still holds — sources added by a build that
+// predates onlineTileSourcesPath, or installed straight into the cache by the core. Purely
+// additive: a definition leaves onlineTileSourcesPath only through
+// -removeOnlineTileSourceBackup:, so a failure here can never drop the last copy of one.
+- (void)backupAllOnlineTileSources
 {
-    if (_resourcesManager == nullptr)
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_cachePath error:nil])
+    {
+        if ([fileManager fileExistsAtPath:[self metainfoPathIn:_cachePath forSource:name]])
+            [self backupOnlineTileSource:name];
+    }
+}
+
+// Write-through: call right after a source's ".metainfo" has been written to Library/Caches, so
+// that the definition is never one termination or crash away from being lost.
+- (void)backupOnlineTileSource:(NSString *)name
+{
+    NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
+    NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager fileExistsAtPath:cacheMetainfoPath])
         return;
 
-    NSMutableSet<NSString *> *currentNames = [NSMutableSet set];
-    const auto& collection = _resourcesManager->onlineTileSources->getCollection();
-    for (auto it = collection.constBegin(); it != collection.constEnd(); ++it)
-    {
-        const auto& source = it.value();
-        [currentNames addObject:source->name.toNSString()];
-        OsmAnd::OnlineTileSources::installTileSource(source, QString::fromNSString(_onlineTileSourcesPath));
-    }
+    if ([fileManager contentsEqualAtPath:cacheMetainfoPath andPath:backupMetainfoPath])
+        return;
 
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSArray<NSString *> *backedUpNames = [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil];
-    for (NSString *name in backedUpNames)
+    [fileManager removeItemAtPath:backupMetainfoPath error:nil];
+    [self copyMetainfoFrom:cacheMetainfoPath to:backupMetainfoPath forSource:name];
+}
+
+// Write-through counterpart: call wherever a source's ".metainfo" is removed from Library/Caches,
+// so that deleting a source deletes it for good instead of having it reappear on the next launch.
+- (void)removeOnlineTileSourceBackup:(NSString *)name
+{
+    NSError *error = nil;
+    NSString *backupEntryPath = [_onlineTileSourcesPath stringByAppendingPathComponent:name];
+    if ([NSFileManager.defaultManager fileExistsAtPath:backupEntryPath]
+        && ![NSFileManager.defaultManager removeItemAtPath:backupEntryPath error:&error])
     {
-        if (![currentNames containsObject:name])
-            [fileManager removeItemAtPath:[_onlineTileSourcesPath stringByAppendingPathComponent:name] error:nil];
+        OALog(@"Failed to remove online tile source \"%@\" from %@: %@", name, _onlineTileSourcesPath, error.localizedDescription);
+    }
+}
+
+- (NSString *)metainfoPathIn:(NSString *)directory forSource:(NSString *)name
+{
+    return [[directory stringByAppendingPathComponent:name] stringByAppendingPathComponent:@".metainfo"];
+}
+
+- (void)copyMetainfoFrom:(NSString *)sourcePath to:(NSString *)destinationPath forSource:(NSString *)name
+{
+    NSError *error = nil;
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager createDirectoryAtPath:destinationPath.stringByDeletingLastPathComponent
+                withIntermediateDirectories:YES
+                                 attributes:nil
+                                      error:&error]
+        || ![fileManager copyItemAtPath:sourcePath toPath:destinationPath error:&error])
+    {
+        OALog(@"Failed to copy online tile source \"%@\" to %@: %@", name, destinationPath, error.localizedDescription);
     }
 }
 
@@ -494,7 +527,6 @@
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
     LogStartup(@"resources manager created");
-    [self syncOnlineTileSourcesBackup];
 
     // Attach observables handlers
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -579,6 +611,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
+        [self backupAllOnlineTileSources];
         LogStartup(@"first launch - built-in tile sources installed");
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
@@ -592,6 +625,7 @@
             _data.underlayMapSource = nil;
             _data.lastMapSource = [OAAppData defaultMapSource];
             _resourcesManager->installBuiltInTileSources();
+            [self backupAllOnlineTileSources];
 
             [self clearUnsupportedTilesCache];
             LogStartup(@"version < 3.10 migration done");
@@ -901,8 +935,6 @@
         LogStartup(@"terminating early before finalizing init");
         return NO;
     }
-
-    [self syncOnlineTileSourcesBackup];
 
     _initialized = YES;
     LogStartup(@"initialize finish");
@@ -1421,7 +1453,6 @@
     [self.backgroundStateObservable notifyEvent];
 
     [self saveDataToPermamentStorage];
-    [self syncOnlineTileSourcesBackup];
 
     // In background allow to turn off screen
     [self allowScreenTurnOff:YES];

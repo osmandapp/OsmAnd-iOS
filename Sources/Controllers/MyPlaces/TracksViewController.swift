@@ -193,7 +193,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func isIndexingInProgress() -> Bool {
-        GpxDbHelper.shared.isReading()
+        let helper = GpxDbHelper.shared
+        guard helper.isReading() || helper.isFilesystemReconciliationRunning() else {
+            return false
+        }
+        return (indexingRemainingCount() ?? 0) > 0
     }
 
     private func refreshIndexingHeader() {

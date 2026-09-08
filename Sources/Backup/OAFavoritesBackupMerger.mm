@@ -9,11 +9,13 @@
 
 #import "OABackupHelper.h"
 #import "OABackupInfo.h"
+#import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAFavoriteItem.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
+#import "OASettingsItemType.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -25,7 +27,8 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
 - (instancetype)initWithBaseItem:(OAFavoritesSettingsItem *)baseItem
                        localGroup:(OAFavoriteGroup *)localGroup
                       mergedGroup:(OAFavoriteGroup *)mergedGroup
-               sourceModifiedTime:(long)sourceModifiedTime;
+               sourceModifiedTime:(long)sourceModifiedTime
+                     baseSyncTime:(long)baseSyncTime;
 - (void)finishUpload:(NSString *)fileName uploadTime:(long)uploadTime;
 
 @end
@@ -45,6 +48,11 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
             continue;
 
         OAFavoritesSettingsItem *localItem = (OAFavoritesSettingsItem *)localFile.item;
+        // Merging downloads the remote file, so skip types the backup would filter out anyway.
+        OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localItem];
+        if (exportType == nil || ![[BackupUtils getBackupTypePref:exportType] get])
+            continue;
+
         OAFavoriteGroup *localGroup = localItem.items.count == 1 ? localItem.items.firstObject : nil;
         if (!localGroup || localGroup.isPersonal)
             continue;
@@ -58,7 +66,8 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
         localFile.item = [[OAMergedFavoritesSettingsItem alloc] initWithBaseItem:localItem
                                                                      localGroup:localGroup
                                                                     mergedGroup:mergedGroup
-                                                             sourceModifiedTime:localFile.localModifiedTime];
+                                                             sourceModifiedTime:localFile.localModifiedTime
+                                                                   baseSyncTime:localFile.uploadTime];
         [info.filesToUpload addObject:localFile];
         [info.filesToMerge removeObject:pair];
     }
@@ -74,7 +83,11 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
     OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *)item;
     if ([favoritesItem isKindOfClass:OAMergedFavoritesSettingsItem.class])
     {
-        [(OAMergedFavoritesSettingsItem *)favoritesItem finishUpload:fileName uploadTime:uploadTime];
+        // Upload callbacks run in parallel, while applying a group mutates shared Favorites state.
+        @synchronized (self)
+        {
+            [(OAMergedFavoritesSettingsItem *)favoritesItem finishUpload:fileName uploadTime:uploadTime];
+        }
     }
     else if (favoritesItem.localModifiedTime == favoritesItem.lastModifiedTime)
     {
@@ -370,7 +383,9 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
 {
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite =
         [OAFavoritesHelper getFavoritesCollection]->copyFavoriteLocation(point.favorite);
-    return [[OAFavoriteItem alloc] initWithFavorite:favorite];
+    OAFavoriteItem *copy = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+    [copy setVisible:point.isVisible];
+    return copy;
 }
 
 + (OAFavoriteGroup *)copyGroup:(OAFavoriteGroup *)group
@@ -393,12 +408,14 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
     OAFavoriteGroup *_localGroup;
     OAFavoriteGroup *_mergedGroup;
     long _sourceModifiedTime;
+    long _baseSyncTime;
 }
 
 - (instancetype)initWithBaseItem:(OAFavoritesSettingsItem *)baseItem
                        localGroup:(OAFavoriteGroup *)localGroup
                       mergedGroup:(OAFavoriteGroup *)mergedGroup
                sourceModifiedTime:(long)sourceModifiedTime
+                     baseSyncTime:(long)baseSyncTime
 {
     self = [super initWithItems:@[mergedGroup] baseItem:baseItem];
     if (self)
@@ -406,6 +423,7 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
         _localGroup = [OAFavoritesBackupMerger copyGroup:localGroup];
         _mergedGroup = mergedGroup;
         _sourceModifiedTime = sourceModifiedTime;
+        _baseSyncTime = baseSyncTime;
     }
     return self;
 }
@@ -435,7 +453,13 @@ static NSString * const kFavoritesSnapshotDirectory = @"favorites_sync";
     else
     {
         if (current)
+        {
+            // Preserve the old common base so the next preparation keeps both sides in conflict.
+            [OABackupHelper.sharedInstance updateFileUploadTime:[OASettingsItemType typeName:self.type]
+                                                       fileName:fileName
+                                                     uploadTime:_baseSyncTime];
             self.localModifiedTime = MAX((long)(NSDate.date.timeIntervalSince1970 * 1000.0), uploadTime + 1);
+        }
     }
 }
 

@@ -22,7 +22,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     fileprivate var shouldReload = false
     
-    fileprivate var rootFolder: TrackFolder!
+    fileprivate var rootFolder: TrackFolder! {
+        didSet { indexingCountSeeded = false }
+    }
     fileprivate var visibleTracksFolder: TrackFolder!
     fileprivate var currentFolder: TrackFolder!
     fileprivate var smartFolder: SmartFolder!
@@ -68,7 +70,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private weak var indexingHeaderIndicator: UIActivityIndicatorView?
     private weak var indexingHeaderLabel: UILabel?
     private var indexingProgressTimer: Timer?
-    
+    private var cachedIndexingRemaining = 0
+    private var indexingCountSeeded = false
+
     private var recCell: OATwoButtonsTableViewCell?
     private var baseFilters: TracksSearchFilter?
     private var baseFiltersResult: FilterResults?
@@ -197,7 +201,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         guard helper.isReading() || helper.isFilesystemReconciliationRunning() else {
             return false
         }
-        return (indexingRemainingCount() ?? 0) > 0
+        return cachedIndexingRemaining > 0
     }
 
     private func refreshIndexingHeader() {
@@ -206,11 +210,22 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func applyIndexingHeaderState(to header: UIView) {
-        let indexing = isIndexingInProgress()
+        let helper = GpxDbHelper.shared
+        let active = helper.isReading() || helper.isFilesystemReconciliationRunning()
+        if active {
+            if !indexingCountSeeded, let remaining = indexingRemainingCount() {
+                cachedIndexingRemaining = remaining
+                indexingCountSeeded = true
+            }
+        } else {
+            cachedIndexingRemaining = 0
+            indexingCountSeeded = false
+        }
+        let indexing = active && cachedIndexingRemaining > 0
         indexingHeaderRow?.isHidden = !indexing
         if indexing {
             indexingHeaderIndicator?.startAnimating()
-            indexingHeaderLabel?.text = indexingHeaderText()
+            indexingHeaderLabel?.text = indexingHeaderText(remaining: cachedIndexingRemaining)
             startIndexingProgressTimer()
         } else {
             indexingHeaderIndicator?.stopAnimating()
@@ -227,10 +242,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
 
-    private func indexingHeaderText() -> String {
+    private func indexingHeaderText(remaining: Int) -> String {
         let base = localizedString("tracks_stats_are_being_calculated")
 
-        guard !isLoadingInProgress, let remaining = indexingRemainingCount(), remaining > 0 else {
+        guard !isLoadingInProgress, remaining > 0 else {
             return base
         }
         return String(format: localizedString("tracks_stats_are_being_calculated_left"),
@@ -250,7 +265,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func startIndexingProgressTimer() {
         guard indexingProgressTimer == nil, view.window != nil else { return }
         let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
-            self?.refreshIndexingHeader()
+            guard let self else { return }
+            self.cachedIndexingRemaining = self.indexingRemainingCount() ?? 0
+            self.refreshIndexingHeader()
         }
         RunLoop.main.add(timer, forMode: .common)
         indexingProgressTimer = timer

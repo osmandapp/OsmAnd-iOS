@@ -102,8 +102,32 @@
     return [result copy];
 }
 
+// alignChars() is the identity for pure-ASCII text without apostrophe-like characters:
+// removeApostrophes / replaceGermanSS / removeQuotes / stripDiacritics and the Arabic
+// normalization all only touch non-ASCII, ' and `. Detecting that here avoids the
+// NSString -> QString -> NSString round trip, which the search hot path repeats for
+// every compared name.
++ (BOOL)needsAlignChars:(NSString *)text
+{
+    const CFIndex length = text.length;
+    if (length == 0) // also covers a nil string, which callers do pass
+        return NO;
+
+    CFStringInlineBuffer buffer;
+    CFStringInitInlineBuffer((__bridge CFStringRef) text, &buffer, CFRangeMake(0, length));
+    for (CFIndex i = 0; i < length; i++)
+    {
+        const UniChar c = CFStringGetCharacterFromInlineBuffer(&buffer, i);
+        if (c >= 0x80 || c == 0x0027 /* ' */ || c == 0x0060 /* ` */)
+            return YES;
+    }
+    return NO;
+}
+
 + (NSString *)alignChars:(NSString *)fullText
 {
+    if (![self needsAlignChars:fullText])
+        return fullText;
     return OsmAnd::SearchAlgorithms::alignChars(QString::fromNSString(fullText)).toNSString();
 }
 

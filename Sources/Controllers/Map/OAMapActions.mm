@@ -260,10 +260,9 @@
     }
     else
     {
-        OASGpxDataItem *dataItem = trackItem.dataItem;
-        if (dataItem)
+        NSString *path = trackItem.dataItem ? trackItem.dataItem.file.absolutePath : trackItem.path;
+        if (path.length > 0)
         {
-            NSString *path = dataItem.file.absolutePath;
             if ([gpxMap objectForKey:path])
             {
                 gpxFile = gpxMap[path];
@@ -271,11 +270,8 @@
             }
             else
             {
-                if (path.length > 0)
-                {
-                    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-                }
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
             }
         }
     }

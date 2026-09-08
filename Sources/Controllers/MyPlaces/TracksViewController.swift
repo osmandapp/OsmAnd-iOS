@@ -86,7 +86,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var isContextMenuVisible = false
     private var shouldUpdateAllFolders = false
     
-    private var selectedTrack: GpxDataItem?
+    private var selectedTrack: TrackItem?
     private var selectedFolderPath: String?
     private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
@@ -1810,7 +1810,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
             let state = OATrackMenuViewControllerState()
             state.openedFromTracksList = true
-            state.gpxFilePath = trackItem.dataItem?.gpxFilePath
+            state.gpxFilePath = trackItem.gpxFilePath
             state.navControllerHistory = newCurrentHistory
             rootVC.mapPanel.openTargetView(withGPX: trackItem, trackHudMode: .appearanceHudMode, state: state)
             shouldReload = true
@@ -1876,14 +1876,20 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         guard let trackItem else { return }
         let gpxDoc: GpxFile?
+        let dataItem: GpxDataItem?
         if isCurrentTrack {
             gpxDoc = nil
+            dataItem = nil
         } else {
             guard let file = trackItem.getFile() else { return }
             gpxDoc = GpxUtilities.shared.loadGpxFile(file: file)
+
+            dataItem = trackItem.dataItem
+                ?? OAGPXDatabase.sharedDb().getGPXItem(trackItem.path)
+                ?? GpxDataItem(file: file)
         }
-        
-        gpxHelper.openExport(forTrack: trackItem.dataItem, gpxDoc: gpxDoc, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
+
+        gpxHelper.openExport(forTrack: dataItem, gpxDoc: gpxDoc, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
     }
     
     private func onTrackUploadToOsmClicked(_ track: TrackItem?) {
@@ -1937,7 +1943,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 let newNameToChange = newName.hasSuffix(fileExtension)
                 ? String(newName.dropLast(fileExtension.count))
                 : newName
-                gpxHelper.renameTrack(trackItem.dataItem, newName: newNameToChange, hostVC: self)
+                gpxHelper.renameTrackItem(trackItem, newName: newNameToChange, hostVC: self)
                 self.updateAllFoldersVCData(forceLoad: true)
             } else {
                 gpxHelper.renameTrack(nil, doc: nil, newName: nil, hostVC: self)
@@ -1949,8 +1955,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func onTrackMoveClicked(_ trackItem: TrackItem?, isCurrentTrack: Bool) {
         guard let trackItem else { return }
-        
-        selectedTrack = trackItem.dataItem
+
+        selectedTrack = trackItem
         if let vc = OASelectTrackFolderViewController(selectedFolderName: trackItem.gpxFolderName) {
             vc.delegate = self
             let navController = UINavigationController(rootViewController: vc)
@@ -1972,12 +1978,18 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 updateData()
             } else {
-                guard let dataItem = trackItem.dataItem else { return }
                 let isVisible = settings.isGpxVisible(trackItem.gpxFilePath)
                 if isVisible {
                     settings.hideGpx([trackItem.gpxFilePath])
                 }
-                gpxDB.removeGpxItem(dataItem, withLocalRemove: true)
+                if let dataItem = trackItem.dataItem {
+                    gpxDB.removeGpxItem(dataItem, withLocalRemove: true)
+                } else {
+                    if let file = trackItem.getFile() {
+                        _ = GpxDbHelper.shared.remove(file: file)
+                    }
+                    try? FileManager.default.removeItem(atPath: trackItem.path)
+                }
                 if let file = trackItem.getFile() {
                     handleDeletedGpxFile(gpxFile: file)
                 }
@@ -2870,7 +2882,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
             performMove(toFolder: selectedFolderName, tracks: selectedTracks, folders: fullRelativeFolders)
         } else if let track = selectedTrack {
-            performMove(toFolder: selectedFolderName, tracks: [track], folders: nil)
+            gpxHelper.copyGPX(toNewFolder: selectedFolderName,
+                              renameToNewName: nil,
+                              deleteOriginalFile: true,
+                              openTrack: false,
+                              trackItem: track)
         } else if let folderPath = selectedFolderPath {
             performMove(toFolder: selectedFolderName, tracks: nil, folders: [folderPath])
         }

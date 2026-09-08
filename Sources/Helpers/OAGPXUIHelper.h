@@ -69,6 +69,10 @@ NS_ASSUME_NONNULL_BEGIN
              newName:(NSString *)newName
               hostVC:(UIViewController*)hostVC;
 
+- (void) renameTrackItem:(OASTrackItem *)trackItem
+                 newName:(NSString *)newName
+                  hostVC:(UIViewController*)hostVC;
+
 - (void) renameTrack:(nullable OASGpxDataItem *)gpx
                  doc:(nullable OASGpxFile *)doc
              newName:(nullable NSString *)newName

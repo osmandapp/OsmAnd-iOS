@@ -2478,7 +2478,7 @@ typedef enum
             {
                 gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
                 if (!gpxFile)
-                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:([trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path])];
             }
 
             [self displayGpxOnMap:gpxFile];
@@ -3205,7 +3205,7 @@ typedef enum
     _activeTargetObj = targetPoint.targetObj;
     _activeViewControllerState = state;
 
-    _formattedTargetName = item.dataItem ? item.dataItem.gpxFileNameWithoutExtension : @"";
+    _formattedTargetName = item.gpxFileNameWithoutExtension;
     _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
@@ -3502,7 +3502,7 @@ typedef enum
         gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
         if (!gpxFile)
         {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
+            OASKFile *file = [trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path];
             gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
     }
@@ -3510,7 +3510,8 @@ typedef enum
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
+        BOOL joinSegments = trackItem.dataItem ? trackItem.joinSegments : [gpxFile isJoinSegments];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)

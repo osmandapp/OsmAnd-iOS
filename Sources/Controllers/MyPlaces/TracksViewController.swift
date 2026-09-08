@@ -1832,10 +1832,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if trackItem.isShowCurrentTrack {
             let analysis = savingHelper.currentTrack.getAnalysis(fileTimestamp: 0)
             totalTracks = Int(analysis.totalTracks)
-        } else {
-            if let dataItem = trackItem.dataItem {
-                totalTracks = dataItem.totalTracks
-            }
+        } else if let dataItem = trackItem.dataItem {
+            totalTracks = dataItem.totalTracks
+        } else if let file = trackItem.getFile() {
+            totalTracks = Int(GpxUtilities.shared.loadGpxFile(file: file).getNonEmptySegmentsCount())
         }
         if totalTracks > 1 {
             let absolutePath = getAbsolutePath(trackItem.gpxFilePath)

@@ -309,6 +309,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     // cancel all operations download GPX
     [_operationQueue cancelAllOperations];
     [_loadingGPXPaths removeAllObjects];
+    [self startGpxFilesystemReconciliationIfNeeded];
 }
 
 @end

@@ -63,7 +63,7 @@ static NSCharacterSet * _APOSTROPHES;
 
 + (BOOL) cmatches:(NSString *)fullName part:(NSString *)part alignPart:(BOOL)alignPart  mode:(StringMatcherMode)mode
 {
-    if (fullName != nil && [self.class containsHyphen:fullName])
+    if (fullName != nil && [fullName rangeOfString:@"-"].location != NSNotFound)
     {
         NSString *stringWithoutHyphen = [self replaceHyphen:fullName replacement:@("")];
         if ([self.class cmatches:stringWithoutHyphen part:part mode:mode])
@@ -221,19 +221,7 @@ static NSCharacterSet * _APOSTROPHES;
 
 + (BOOL) isSpace:(unichar) c
 {
-    // Called per character of every compared name: avoid re-fetching the shared
-    // NSCharacterSets and short-circuit the ASCII range.
-    if (c < 0x80)
-        return !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
-
-    static NSCharacterSet *letters;
-    static NSCharacterSet *digits;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        letters = [NSCharacterSet letterCharacterSet];
-        digits = [NSCharacterSet decimalDigitCharacterSet];
-    });
-    return ![letters characterIsMember:c] && ![digits characterIsMember:c];
+    return ![[NSCharacterSet letterCharacterSet] characterIsMember:c] && ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c];
 }
 
 + (BOOL)isWordStart:(NSString *)searchIn index:(int)index part:(NSString *)part
@@ -248,53 +236,16 @@ static NSCharacterSet * _APOSTROPHES;
     {
         return YES;
     }
-    if (current != '-' || part.length <= 1 || [part characterAtIndex:0] != '-')
-        return NO;
-    const unichar second = [part characterAtIndex:1];
-    if (second < 0x80)
-        return second >= '0' && second <= '9';
-    return [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:second];
+    return (current == '-' && part.length > 1 &&
+            [part characterAtIndex:0] == '-' &&
+            [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[part characterAtIndex:1]]);
 }
 
 + (NSString *) lowercaseAndAlignChars:(NSString *)fullText
 {
-    return [self alignChars:[self lowerCaseIfNeeded:fullText]];
-}
-
-// -lowerCase resolves +[NSLocale currentLocale] and runs a locale-aware fold on every
-// call. It runs on every compared name, so skip it when the text holds no character
-// that lowercasing could possibly change.
-+ (NSString *) lowerCaseIfNeeded:(NSString *)text
-{
-    const CFIndex length = text.length;
-    if (length == 0) // also covers a nil string, which callers do pass
-        return text;
-
-    CFStringInlineBuffer buffer;
-    CFStringInitInlineBuffer((__bridge CFStringRef) text, &buffer, CFRangeMake(0, length));
-    for (CFIndex i = 0; i < length; i++)
-    {
-        const UniChar c = CFStringGetCharacterFromInlineBuffer(&buffer, i);
-        if (c >= 0x80 || (c >= 'A' && c <= 'Z'))
-            return text.lowerCase;
-    }
-    return text;
-}
-
-+ (BOOL) containsHyphen:(NSString *)text
-{
-    const CFIndex length = text.length;
-    if (length == 0) // also covers a nil string, which callers do pass
-        return NO;
-
-    CFStringInlineBuffer buffer;
-    CFStringInitInlineBuffer((__bridge CFStringRef) text, &buffer, CFRangeMake(0, length));
-    for (CFIndex i = 0; i < length; i++)
-    {
-        if (CFStringGetCharacterFromInlineBuffer(&buffer, i) == '-')
-            return YES;
-    }
-    return NO;
+    fullText = fullText.lowerCase;
+    fullText = [self alignChars:fullText];
+    return fullText;
 }
 
 + (NSString *) alignChars:(NSString *)fullText
@@ -304,9 +255,6 @@ static NSCharacterSet * _APOSTROPHES;
 
 + (NSString *) replaceHyphen:(NSString *)text replacement:(NSString *)replacement
 {
-    // Avoid allocating a copy when there is nothing to replace
-    if (![self containsHyphen:text])
-        return text;
     return [text stringByReplacingOccurrencesOfString:@"-" withString:replacement];
 }
 

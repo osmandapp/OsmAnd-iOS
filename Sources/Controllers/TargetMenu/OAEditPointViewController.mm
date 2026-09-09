@@ -628,8 +628,12 @@
 
 - (NSString *)getGroupTitle
 {
+    NSString *lastCategory = [[OAAppSettings sharedManager].lastFavCategoryEntered get];
+    if (![OAFavoritesHelper groupByTrimmedName:lastCategory])
+        lastCategory = @"";
+
     return _isNewItemAdding && _editPointType == EOAEditPointTypeFavorite
-        ? [OAFavoriteGroup getDisplayName:[[OAAppSettings sharedManager].lastFavCategoryEntered get]]
+        ? [OAFavoriteGroup getDisplayName:lastCategory]
         : [_pointHandler getGroupTitle];
 }
 

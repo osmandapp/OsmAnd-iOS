@@ -480,9 +480,19 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isPlanRouteVisible = target == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
     BOOL hasHUD = _mapPanelViewController.scrollableHudViewController != nil;
+    BOOL isSidePanelPlanRoute = isPlanRouteVisible
+        && hasHUD
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    CGFloat sidePanelLeftOffset = 0.0;
+    if (isSidePanelPlanRoute)
+    {
+        CGFloat panelRight = [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+        sidePanelLeftOffset = MAX(0.0, panelRight - self.view.safeAreaInsets.left);
+    }
+    [self.mapHudLayout setExternalLeftOverlay:sidePanelLeftOffset];
     CGFloat leftOffset = kButtonOffset;
     BOOL shouldApply = NO;
-    if (isLandscape)
+    if (isLandscape || isSidePanelPlanRoute)
     {
         if ([_mapPanelViewController isTargetMapRulerNeeds])
         {
@@ -1448,6 +1458,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
     BOOL contextMenuMode = self.contextMenuMode;
+    BOOL isSidePanelPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    BOOL shouldIgnoreContextToolbar = isPhoneLandscape && !isSidePanelPlanRoute;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1467,9 +1481,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (isBannerVisible)
         bannerH = self.downloadMapWidget.frame.size.height + self.downloadMapWidget.shadowOffset;
     
-    BOOL ignoreTopSidePanels = !isPhoneLandscape && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
+    BOOL ignoreTopSidePanels = !shouldIgnoreContextToolbar
+        && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
     CGFloat extraTop = 0.0;
-    if (!isPhoneLandscape)
+    if (!shouldIgnoreContextToolbar)
     {
         if (contextMenuMode || isTargetMode)
         {
@@ -1569,8 +1584,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _lastIgnoreBottomSidePanels = ignoreBottomSidePanels;
         _lastExtraBottom = extraBottom;
         [self.mapHudLayout setExternalBottomOverlay:extraBottom ignorePanels:ignoreBottomSidePanels];
-        [self resetToDefaultRulerLayout];
     }
+    if (self.mapHudLayout)
+        [self resetToDefaultRulerLayout];
 }
 
 - (CGFloat) getHudMinTopOffset

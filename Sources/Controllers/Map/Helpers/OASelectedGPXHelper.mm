@@ -16,6 +16,7 @@
 #import "OAObservable.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OASavingTrackHelper.h"
 
 static NSString *kBackupSuffix = @"_osmand_backup";
 
@@ -186,12 +187,17 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
-- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt {
+- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt
+{
     for (OASGpxFile *gpxFile in _activeGpx.allValues) {
-        if ([[gpxFile getPointsList] containsObject:gpxWpt]) {
+        if ([[gpxFile getPointsList] containsObject:gpxWpt] || [[gpxFile getRoutePoints] containsObject:gpxWpt])
             return gpxFile;
-        }
     }
+    
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if ([[currentTrack getPointsList] containsObject:gpxWpt] || [[currentTrack getRoutePoints] containsObject:gpxWpt])
+        return currentTrack;
+    
     return nil;
 }
 

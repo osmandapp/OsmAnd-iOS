@@ -86,7 +86,6 @@
 #define VERSION_4_7_5 4.75
 
 #define kAppData @"app_data"
-#define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
 
 #define _(name)
@@ -124,6 +123,7 @@
 @synthesize travelGuidesPath = _travelGuidesPath;
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
+@synthesize onlineTileSourcesPath = _onlineTileSourcesPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
 @synthesize models3dPath = _models3dPath;
 @synthesize colorsPalettePath = _colorsPalettePath;
@@ -180,6 +180,7 @@
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
+        _onlineTileSourcesPath = [_dataPath stringByAppendingPathComponent:@"OnlineTileSources"];
         _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
         _colorsPalettePath = [_documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
 
@@ -223,6 +224,96 @@
     [self createFolderIfNeeded:_favoritesPath];
     [self createFolderIfNeeded:_weatherForecastPath];
     [self createFolderIfNeeded:_hiddenMapsPath];
+    [self createFolderIfNeeded:_onlineTileSourcesPath];
+    [self restoreOnlineTileSourcesToCache];
+    [self backupAllOnlineTileSources];
+}
+
+// The resources manager only ever looks for online tile source definitions (".metainfo" files,
+// written by "Add online source") under Library/Caches, which iOS is free to purge whenever the
+// app isn't running and which no device backup ever contains. That copy is therefore treated as
+// disposable, and onlineTileSourcesPath holds the definitions that actually define the user's
+// sources; a purge then costs only the re-download of the cached tile images. This puts the
+// definitions back where the resources manager expects them, and must run before it is
+// constructed, since it scans Library/Caches exactly once, at startup.
+- (void)restoreOnlineTileSourcesToCache
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil])
+    {
+        NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
+        if (![fileManager fileExistsAtPath:backupMetainfoPath])
+            continue;
+
+        NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
+        if ([fileManager fileExistsAtPath:cacheMetainfoPath])
+            continue;
+
+        [self copyMetainfoFrom:backupMetainfoPath to:cacheMetainfoPath forSource:name];
+    }
+}
+
+// Takes over the definitions that only Library/Caches still holds — sources added by a build that
+// predates onlineTileSourcesPath, or installed straight into the cache by the core. Purely
+// additive: a definition leaves onlineTileSourcesPath only through
+// -removeOnlineTileSourceBackup:, so a failure here can never drop the last copy of one.
+- (void)backupAllOnlineTileSources
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_cachePath error:nil])
+    {
+        if ([fileManager fileExistsAtPath:[self metainfoPathIn:_cachePath forSource:name]])
+            [self backupOnlineTileSource:name];
+    }
+}
+
+// Write-through: call right after a source's ".metainfo" has been written to Library/Caches, so
+// that the definition is never one termination or crash away from being lost.
+- (void)backupOnlineTileSource:(NSString *)name
+{
+    NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
+    NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager fileExistsAtPath:cacheMetainfoPath])
+        return;
+
+    if ([fileManager contentsEqualAtPath:cacheMetainfoPath andPath:backupMetainfoPath])
+        return;
+
+    [fileManager removeItemAtPath:backupMetainfoPath error:nil];
+    [self copyMetainfoFrom:cacheMetainfoPath to:backupMetainfoPath forSource:name];
+}
+
+// Write-through counterpart: call wherever a source's ".metainfo" is removed from Library/Caches,
+// so that deleting a source deletes it for good instead of having it reappear on the next launch.
+- (void)removeOnlineTileSourceBackup:(NSString *)name
+{
+    NSError *error = nil;
+    NSString *backupEntryPath = [_onlineTileSourcesPath stringByAppendingPathComponent:name];
+    if ([NSFileManager.defaultManager fileExistsAtPath:backupEntryPath]
+        && ![NSFileManager.defaultManager removeItemAtPath:backupEntryPath error:&error])
+    {
+        OALog(@"Failed to remove online tile source \"%@\" from %@: %@", name, _onlineTileSourcesPath, error.localizedDescription);
+    }
+}
+
+- (NSString *)metainfoPathIn:(NSString *)directory forSource:(NSString *)name
+{
+    return [[directory stringByAppendingPathComponent:name] stringByAppendingPathComponent:@".metainfo"];
+}
+
+- (void)copyMetainfoFrom:(NSString *)sourcePath to:(NSString *)destinationPath forSource:(NSString *)name
+{
+    NSError *error = nil;
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager createDirectoryAtPath:destinationPath.stringByDeletingLastPathComponent
+                withIntermediateDirectories:YES
+                                 attributes:nil
+                                      error:&error]
+        || ![fileManager copyItemAtPath:sourcePath toPath:destinationPath error:&error])
+    {
+        OALog(@"Failed to copy online tile source \"%@\" to %@: %@", name, destinationPath, error.localizedDescription);
+    }
 }
 
 - (void)createFolderIfNeeded:(NSString *)path
@@ -519,6 +610,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
+        [self backupAllOnlineTileSources];
         LogStartup(@"first launch - built-in tile sources installed");
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
@@ -532,6 +624,7 @@
             _data.underlayMapSource = nil;
             _data.lastMapSource = [OAAppData defaultMapSource];
             _resourcesManager->installBuiltInTileSources();
+            [self backupAllOnlineTileSources];
 
             [self clearUnsupportedTilesCache];
             LogStartup(@"version < 3.10 migration done");
@@ -761,6 +854,7 @@
     LogStartup(@"target points cleared");
 
     [[OASGpxDbHelper shared] loadItemsBlocking];
+    [[OASGpxDbHelper shared] startFilesystemReconciliation];
     LogStartup(@"GPX DB helper loaded items blocking");
 
     [OASavingTrackHelper sharedInstance];
@@ -1300,13 +1394,13 @@
 
 - (NSString *)getGroupFileName:(NSString *)groupName
 {
-    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:SUBFOLDER_PLACEHOLDER];
     result = [result stringByReplacingOccurrencesOfString:@":" withString:XML_COLON];
     return result;
 }
 
 - (NSString *)getGroupName:(NSString *)fileName {
-    NSString *result = [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+    NSString *result = [fileName stringByReplacingOccurrencesOfString:SUBFOLDER_PLACEHOLDER withString:@"/"];
     result = [result stringByReplacingOccurrencesOfString:XML_COLON withString:@":"];
     return result;
 }

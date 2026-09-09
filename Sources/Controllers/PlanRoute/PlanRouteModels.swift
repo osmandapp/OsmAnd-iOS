@@ -297,6 +297,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var defaultMode: OAApplicationMode? { get }
     var isTrackReadyToCalculate: Bool { get }
     var isApproximationNeeded: Bool { get }
+    var shouldRequestApproximationBeforeNavigation: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
     var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }

@@ -77,6 +77,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var approximationNavigationController: UINavigationController?
     private var hasAdjustedMapToTrack = false
     private var hasPresentedInitialSnapWarning = false
+    private var shouldEnterNavigationAfterApproximation = false
     private weak var currentTabViewController: UIViewController?
 
     private var suggestedFileName: String {
@@ -736,6 +737,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func dismissApproximationPopup() {
+        shouldEnterNavigationAfterApproximation = false
         guard let navigationController = approximationNavigationController else { return }
         navigationController.remove()
         approximationNavigationController = nil
@@ -750,13 +752,25 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleApproximationApplied() {
-        guard followTrackMode else {
+        if followTrackMode {
+            let result = dataProvider.applyAttachedTrackToNavigation {
+                restoreMapViewport()
+            }
+            guard result == .success else {
+                dismissApproximationPopup()
+                showNavigationError()
+                return
+            }
+            forceHide()
+            return
+        }
+        guard shouldEnterNavigationAfterApproximation else {
             dismissApproximationPopup()
             return
         }
-        let result = dataProvider.applyAttachedTrackToNavigation {
-            restoreMapViewport()
-        }
+        shouldEnterNavigationAfterApproximation = false
+        restoreMapViewport()
+        let result = dataProvider.enterNavigation(followTrackMode: false)
         guard result == .success else {
             dismissApproximationPopup()
             showNavigationError()
@@ -1064,6 +1078,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .reverseRoute:
             dataProvider.reverseRoute()
         case .navigation:
+            if !followTrackMode && dataProvider.shouldRequestApproximationBeforeNavigation {
+                shouldEnterNavigationAfterApproximation = true
+                guard presentApproximationWarning(force: true) else {
+                    shouldEnterNavigationAfterApproximation = false
+                    showNavigationError()
+                    return
+                }
+                return
+            }
             restoreMapViewport()
             let result = dataProvider.enterNavigation(followTrackMode: followTrackMode)
             guard result == .success else {

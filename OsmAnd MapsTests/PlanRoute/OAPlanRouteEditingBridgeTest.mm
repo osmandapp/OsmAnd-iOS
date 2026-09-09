@@ -24,6 +24,9 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
++ (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
+                                                        hasRoute:(BOOL)hasRoute
+                                             approximationNeeded:(BOOL)approximationNeeded;
 - (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)context
                                                trackName:(NSString *)trackName;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
@@ -139,6 +142,22 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertFalse([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:0]);
     XCTAssertTrue([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:1]);
     XCTAssertFalse([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:2]);
+}
+
+- (void)testGenericNavigationRequestsApproximationBeforeExport
+{
+    XCTAssertTrue([OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:928
+                                                                                              hasRoute:NO
+                                                                                   approximationNeeded:YES]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:928
+                                                                                               hasRoute:YES
+                                                                                    approximationNeeded:YES]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:928
+                                                                                               hasRoute:NO
+                                                                                    approximationNeeded:NO]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:1
+                                                                                               hasRoute:NO
+                                                                                    approximationNeeded:YES]);
 }
 
 - (void)testAttachApplyPreflightReportsFailureReason

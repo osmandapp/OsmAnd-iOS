@@ -132,6 +132,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isApproximationNeeded
     }
 
+    var shouldRequestApproximationBeforeNavigation: Bool {
+        bridge.shouldRequestApproximationBeforeNavigation
+    }
+
     var shouldShowApproximationWarning: Bool {
         bridge.shouldShowApproximationWarning
     }

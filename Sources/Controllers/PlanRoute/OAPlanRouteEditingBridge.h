@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
 @property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
 @property (nonatomic, readonly) BOOL isApproximationNeeded;
+@property (nonatomic, readonly) BOOL shouldRequestApproximationBeforeNavigation;
 @property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
 @property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;

@@ -158,6 +158,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
++ (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
+                                                        hasRoute:(BOOL)hasRoute
+                                             approximationNeeded:(BOOL)approximationNeeded;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
@@ -238,6 +241,16 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     return ctx != nil && [ctx isApproximationNeeded];
+}
+
+- (BOOL)shouldRequestApproximationBeforeNavigation
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return NO;
+    return [OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:ctx.getPoints.count
+                                                                                      hasRoute:ctx.hasRoute
+                                                                           approximationNeeded:ctx.isApproximationNeeded];
 }
 
 - (BOOL)shouldShowApproximationWarning
@@ -1998,6 +2011,13 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount
 {
     return pointCount == 1;
+}
+
++ (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
+                                                        hasRoute:(BOOL)hasRoute
+                                             approximationNeeded:(BOOL)approximationNeeded
+{
+    return pointCount != 1 && !hasRoute && approximationNeeded;
 }
 
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext

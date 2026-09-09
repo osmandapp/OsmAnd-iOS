@@ -490,7 +490,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
             UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom]];
             background.tag = kQuickActionSlashBackgroundTag;
             background.frame = frame;
-            [background setTintColor:!_settings.isAppMapNightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
+            [background setTintColor:!_settings.isAppMapNightMode ?
+             [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light :
+             [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark];
             [quickActionButton.imageView addSubview:background];
 
             UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop]];

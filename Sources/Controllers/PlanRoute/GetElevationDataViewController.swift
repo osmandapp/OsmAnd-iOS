@@ -8,6 +8,18 @@
 
 import UIKit
 
+private enum GetElevationDataSheetLayout {
+    static let panelWidth: CGFloat = 393
+    static let horizontalInset: CGFloat = 16
+    static let phoneTopInset: CGFloat = 20
+    static let padTopInset: CGFloat = 8
+    static let verticalInset: CGFloat = 16
+    static let minimumMapWidth: CGFloat = 252
+    static let cornerRadius: CGFloat = 20
+    static let animationDuration: TimeInterval = 0.3
+    static let dimmingAlpha: CGFloat = 0.2
+}
+
 final class GetElevationDataViewController: UIViewController {
 
     var onSelectMethod: ((Bool) -> Void)?
@@ -16,10 +28,13 @@ final class GetElevationDataViewController: UIViewController {
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let separatorView = SeparatorView()
+    private let sheetTransitioningDelegate = GetElevationDataSheetTransitioningDelegate()
 
     init(isTerrainMapsAvailable: Bool) {
         self.isTerrainMapsAvailable = isTerrainMapsAvailable
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .custom
+        transitioningDelegate = sheetTransitioningDelegate
     }
 
     required init?(coder: NSCoder) {
@@ -87,20 +102,22 @@ final class GetElevationDataViewController: UIViewController {
             optionsCard.addSubview($0)
         }
 
+        let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            closeButton.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 16),
+            closeButton.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
 
             titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
 
             descriptionLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 16),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 32),
+            descriptionLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
 
             optionsCard.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
-            optionsCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            optionsCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            optionsCard.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
+            optionsCard.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
+            optionsCard.bottomAnchor.constraint(lessThanOrEqualTo: safeArea.bottomAnchor, constant: -16),
 
             nearbyRoadsRow.topAnchor.constraint(equalTo: optionsCard.topAnchor),
             nearbyRoadsRow.leadingAnchor.constraint(equalTo: optionsCard.leadingAnchor),
@@ -200,12 +217,201 @@ final class GetElevationDataViewController: UIViewController {
 
     @objc private func onTerrainMaps() {
         guard OAIAPHelper.isOsmAndProAvailable() else {
-            guard let navigationController else { return }
-            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.terrain(), navController: navigationController)
+            let choosePlanViewController = OAChoosePlanViewController(feature: OAFeature.terrain())
+            let navController = UINavigationController(rootViewController: choosePlanViewController)
+            navController.isNavigationBarHidden = true
+            navController.edgesForExtendedLayout = []
+            present(navController, animated: true)
             return
         }
         dismiss(animated: true) { [weak self] in
             self?.onSelectMethod?(false)
         }
+    }
+}
+
+final class GetElevationDataSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+
+    func presentationController(forPresented presented: UIViewController,
+                               presenting: UIViewController?,
+                               source: UIViewController) -> UIPresentationController? {
+        GetElevationDataSheetPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+
+    func animationController(forPresented presented: UIViewController,
+                            presenting: UIViewController,
+                            source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        GetElevationDataSheetAnimator(isPresenting: true)
+    }
+
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        GetElevationDataSheetAnimator(isPresenting: false)
+    }
+}
+
+final class GetElevationDataSheetPresentationController: UIPresentationController {
+
+    private lazy var dimmingView: UIView = {
+        let dimming = UIView()
+        dimming.backgroundColor = UIColor.black.withAlphaComponent(GetElevationDataSheetLayout.dimmingAlpha)
+        dimming.alpha = 0
+        dimming.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onDimmingTapped)))
+        return dimming
+    }()
+
+    override var frameOfPresentedViewInContainerView: CGRect {
+        guard let containerView else { return .zero }
+        return frame(for: containerView.bounds.size, safeArea: containerView.safeAreaInsets)
+    }
+
+    override func presentationTransitionWillBegin() {
+        super.presentationTransitionWillBegin()
+        guard let containerView else { return }
+        dimmingView.frame = containerView.bounds
+        dimmingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        containerView.addSubview(dimmingView)
+        if let presentedView {
+            presentedView.layer.cornerRadius = GetElevationDataSheetLayout.cornerRadius
+            presentedView.layer.masksToBounds = true
+        }
+        applyCornerMask(for: containerView.bounds.size)
+        presentedViewController.transitionCoordinator?.animate { [weak self] _ in
+            self?.dimmingView.alpha = 1
+        }
+    }
+
+    override func dismissalTransitionWillBegin() {
+        super.dismissalTransitionWillBegin()
+        presentedViewController.transitionCoordinator?.animate { [weak self] _ in
+            self?.dimmingView.alpha = 0
+        }
+    }
+
+    override func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        guard let containerView else { return }
+        dimmingView.frame = containerView.bounds
+        applyCornerMask(for: containerView.bounds.size)
+        if presentedViewController.transitionCoordinator == nil {
+            presentedView?.frame = frameOfPresentedViewInContainerView
+        }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate { [weak self] _ in
+            guard let self, let containerView else { return }
+            presentedView?.frame = frame(for: size, safeArea: containerView.safeAreaInsets)
+            applyCornerMask(for: size)
+        } completion: { [weak self] _ in
+            guard let self, let containerView else { return }
+            presentedView?.frame = frameOfPresentedViewInContainerView
+            applyCornerMask(for: containerView.bounds.size)
+        }
+    }
+
+    @objc private func onDimmingTapped() {
+        presentingViewController.dismiss(animated: true)
+    }
+
+    private func isPhoneLandscape(_ size: CGSize) -> Bool {
+        !OAUtilities.isIPad() && !OAUtilities.isiOSAppOnMac() && size.width > size.height
+    }
+
+    private func isSidePanel(for size: CGSize, safeArea: UIEdgeInsets) -> Bool {
+        guard OAUtilities.isIPad() || OAUtilities.isiOSAppOnMac() || size.width > size.height else { return false }
+        let leftInset = max(GetElevationDataSheetLayout.horizontalInset, safeArea.left)
+        let visibleMapWidth = size.width - leftInset - GetElevationDataSheetLayout.panelWidth - safeArea.right
+        return visibleMapWidth >= GetElevationDataSheetLayout.minimumMapWidth
+    }
+
+    private func frame(for size: CGSize, safeArea: UIEdgeInsets) -> CGRect {
+        if isSidePanel(for: size, safeArea: safeArea) {
+            let left = max(GetElevationDataSheetLayout.horizontalInset, safeArea.left)
+            let top = isPhoneLandscape(size)
+                ? max(GetElevationDataSheetLayout.phoneTopInset, safeArea.top)
+                : safeArea.top + GetElevationDataSheetLayout.padTopInset
+            let bottom = isPhoneLandscape(size)
+                ? 0
+                : max(GetElevationDataSheetLayout.verticalInset, safeArea.bottom)
+            return CGRect(x: left,
+                          y: top,
+                          width: GetElevationDataSheetLayout.panelWidth,
+                          height: max(0, size.height - top - bottom))
+        }
+        let contentHeight = measuredContentHeight(forWidth: size.width)
+        let maxHeight = size.height - safeArea.top - 24
+        let height = min(contentHeight + safeArea.bottom, maxHeight)
+        return CGRect(x: 0, y: size.height - height, width: size.width, height: height)
+    }
+
+    private func measuredContentHeight(forWidth width: CGFloat) -> CGFloat {
+        guard width > 0, let contentView = presentedViewController.view else { return 320 }
+        let target = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+        let fitting = contentView.systemLayoutSizeFitting(target,
+                                                          withHorizontalFittingPriority: .required,
+                                                          verticalFittingPriority: .fittingSizeLevel)
+        let insets = contentView.safeAreaInsets
+        return max(160, ceil(fitting.height - insets.top - insets.bottom))
+    }
+
+    private func applyCornerMask(for size: CGSize) {
+        guard let presentedView else { return }
+        let roundsAllCorners = isSidePanel(for: size, safeArea: containerView?.safeAreaInsets ?? .zero)
+            && !isPhoneLandscape(size)
+        presentedView.layer.maskedCorners = roundsAllCorners
+            ? [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            : [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+}
+
+final class GetElevationDataSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+
+    private let isPresenting: Bool
+
+    init(isPresenting: Bool) {
+        self.isPresenting = isPresenting
+        super.init()
+    }
+
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        GetElevationDataSheetLayout.animationDuration
+    }
+
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let container = transitionContext.containerView
+        let duration = transitionDuration(using: transitionContext)
+        if isPresenting {
+            guard let toViewController = transitionContext.viewController(forKey: .to),
+                  let toView = transitionContext.view(forKey: .to) else {
+                transitionContext.completeTransition(false)
+                return
+            }
+            let finalFrame = transitionContext.finalFrame(for: toViewController)
+            toView.frame = finalFrame
+            toView.transform = offscreenTransform(for: finalFrame, in: container)
+            container.addSubview(toView)
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut], animations: {
+                toView.transform = .identity
+            }, completion: { _ in
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            })
+        } else {
+            guard let fromView = transitionContext.view(forKey: .from) else {
+                transitionContext.completeTransition(false)
+                return
+            }
+            let targetTransform = offscreenTransform(for: fromView.frame, in: container)
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseIn], animations: {
+                fromView.transform = targetTransform
+            }, completion: { _ in
+                fromView.removeFromSuperview()
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            })
+        }
+    }
+
+    private func offscreenTransform(for frame: CGRect, in container: UIView) -> CGAffineTransform {
+        CGAffineTransform(translationX: 0, y: container.bounds.height - frame.minY)
     }
 }

@@ -218,7 +218,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func showGetElevationSheet() {
-        let presenter = parent ?? self
+        let host = parent ?? self
         let sheet = GetElevationDataViewController(isTerrainMapsAvailable: dataSource?.isTerrainElevationAvailable ?? false)
         sheet.onSelectMethod = { [weak self] useNearbyRoads in
             guard let self else { return }
@@ -230,7 +230,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
             reloadData()
             dataSource?.startElevationCalculation(useNearbyRoads: false)
         }
-        presenter.showMediumSheetViewController(viewController: sheet, isLargeAvailable: false)
+        (host.navigationController ?? host).present(sheet, animated: true)
     }
 
     private func showAxisPicker(startingOnYAxis: Bool) {

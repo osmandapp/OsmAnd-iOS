@@ -157,6 +157,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                           selectedSegment:(NSInteger)selectedSegment;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
++ (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
@@ -1923,12 +1924,31 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:ctx != nil];
     if (preflightResult != EOAPlanRouteNavigationResultSuccess)
         return preflightResult;
-    OASGpxFile *gpx = [self navigationGpxWithEditingContext:ctx trackName:trackName];
-    if (gpx == nil)
-        return EOAPlanRouteNavigationResultExportFailed;
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    BOOL shouldNavigateDirectlyToPoint =
+        [OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:points.count];
     OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
     if (mapActions == nil)
         return EOAPlanRouteNavigationResultTransitionFailed;
+    if (shouldNavigateDirectlyToPoint)
+    {
+        OASWptPt *point = points.firstObject;
+        OATargetPointsHelper *targetPointsHelper = OATargetPointsHelper.sharedInstance;
+        [targetPointsHelper clearAllPoints:NO];
+        CLLocation *destination = [[CLLocation alloc] initWithLatitude:point.getLatitude
+                                                            longitude:point.getLongitude];
+        [targetPointsHelper navigateToPoint:destination updateRoute:NO intermediate:-1];
+        [mapActions enterRoutePlanningModeGivenGpx:nil
+                                             from:nil
+                                         fromName:nil
+                   useIntermediatePointsByDefault:YES
+                                       showDialog:YES];
+        [self clearDraftGpx];
+        return EOAPlanRouteNavigationResultSuccess;
+    }
+    OASGpxFile *gpx = [self navigationGpxWithEditingContext:ctx trackName:trackName];
+    if (gpx == nil)
+        return EOAPlanRouteNavigationResultExportFailed;
     [self performNavigationWithGpx:gpx
                    editingContext:ctx
                     routingHelper:OARoutingHelper.sharedInstance
@@ -1973,6 +1993,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
 {
     return hasContext ? EOAPlanRouteNavigationResultSuccess : EOAPlanRouteNavigationResultInvalidContext;
+}
+
++ (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount
+{
+    return pointCount == 1;
 }
 
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext

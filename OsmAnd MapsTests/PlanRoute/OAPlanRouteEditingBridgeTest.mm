@@ -23,6 +23,7 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                           sourceFilePath:(nullable NSString *)sourceFilePath;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
++ (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
 - (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)context
                                                trackName:(NSString *)trackName;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
@@ -131,6 +132,13 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertEqual(result, EOAPlanRouteNavigationResultSuccess);
     XCTAssertNotNil(navigationGpx);
     XCTAssertEqual(navigationGpx.path.length, 0);
+}
+
+- (void)testGenericNavigationUsesDirectDestinationOnlyForOnePoint
+{
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:0]);
+    XCTAssertTrue([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:1]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:2]);
 }
 
 - (void)testAttachApplyPreflightReportsFailureReason

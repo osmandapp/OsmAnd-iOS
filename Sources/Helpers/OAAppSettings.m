@@ -7140,13 +7140,14 @@ static NSString *kOfflineKey = @"OFFLINE";
         OACommonPanelsLayoutMode *preference = (OACommonPanelsLayoutMode *)[_profilePreferences objectForKey:key];
         if (!preference)
         {
-            PanelsLayoutMode defaultValue = screenLayoutMode == ScreenLayoutModeLandscape || [OAUtilities isIPad]
-                ? PanelsLayoutModeCompact
-                : PanelsLayoutModeWide;
-            preference = [OACommonPanelsLayoutMode withKey:key defValue:defaultValue];
+            preference = [OACommonPanelsLayoutMode withKey:key defValue:PanelsLayoutModeWide];
             [_profilePreferences setObject:preference forKey:key];
             [self registerPreference:preference forKey:key];
         }
+        preference.defValue = (screenLayoutMode == ScreenLayoutModeLandscape || [OAUtilities isIPad])
+            && ![OAUtilities isWindowed]
+            ? PanelsLayoutModeCompact
+            : PanelsLayoutModeWide;
         return preference;
     }
 }

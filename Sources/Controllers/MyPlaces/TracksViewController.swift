@@ -23,7 +23,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     fileprivate var shouldReload = false
     
     fileprivate var rootFolder: TrackFolder! {
-        didSet { indexingCountSeeded = false }
+        didSet {
+            indexingCountSeeded = false
+            cachedIndexingRemaining = 0
+        }
     }
     fileprivate var visibleTracksFolder: TrackFolder!
     fileprivate var currentFolder: TrackFolder!
@@ -201,6 +204,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         guard helper.isReading() || helper.isFilesystemReconciliationRunning() else {
             return false
         }
+        if !indexingCountSeeded, let remaining = indexingRemainingCount() {
+            cachedIndexingRemaining = remaining
+            indexingCountSeeded = true
+        }
         return cachedIndexingRemaining > 0
     }
 
@@ -211,17 +218,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     private func applyIndexingHeaderState(to header: UIView) {
         let helper = GpxDbHelper.shared
-        let active = helper.isReading() || helper.isFilesystemReconciliationRunning()
-        if active {
-            if !indexingCountSeeded, let remaining = indexingRemainingCount() {
-                cachedIndexingRemaining = remaining
-                indexingCountSeeded = true
-            }
-        } else {
+        if !(helper.isReading() || helper.isFilesystemReconciliationRunning()) {
             cachedIndexingRemaining = 0
             indexingCountSeeded = false
         }
-        let indexing = active && cachedIndexingRemaining > 0
+        let indexing = isIndexingInProgress()
         indexingHeaderRow?.isHidden = !indexing
         if indexing {
             indexingHeaderIndicator?.startAnimating()

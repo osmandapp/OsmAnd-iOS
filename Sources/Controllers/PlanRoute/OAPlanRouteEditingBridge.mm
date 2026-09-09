@@ -1917,7 +1917,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                                                                sourceFilePath:sourceFilePath];
     [self addPoiGroupsFromGpx:ctx.gpxData.gpxFile toGpx:gpx];
     [self addDraftWaypointsToGpx:gpx];
-    OASGpxDataItem *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
     OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
     if (routingHelper.isFollowingMode && followTrackMode)
@@ -1930,7 +1929,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     {
         [mapActions stopNavigationWithoutConfirm];
         [mapActions enterRoutePlanningModeGivenGpx:gpx
-                                              path:track.gpxFilePath
+                                              path:navigationFilePath
                                               from:nil
                                           fromName:nil
                     useIntermediatePointsByDefault:YES
@@ -1941,7 +1940,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         [mapActions stopNavigationWithoutConfirm];
         [mapActions enterRoutePlanningModeGivenGpx:gpx
                                            appMode:ctx.appMode
-                                              path:track.gpxFilePath
+                                              path:navigationFilePath
                                               from:nil
                                           fromName:nil
                     useIntermediatePointsByDefault:YES

@@ -36,19 +36,9 @@
     {
         if ([self.delegate respondsToSelector:@selector(isTouchEventAllowedForView:)])
         {
-            // The quick-action buttons (including the one that can unlock the screen) are
-            // siblings of this view, not descendants of it - they are added directly to
-            // this view's superview (see OAMapHudViewController/MapHudLayout). Searching
-            // from `self` alone can never find them, so search starts one level up.
-            UIView *findView = [self findView:self.superview ?: self];
-            if (findView)
-            {
-                CGPoint convertedPoint = [findView convertPoint:point fromView:self];
-                if ([findView pointInside:convertedPoint withEvent:event])
-                    return findView;
-                else
-                    return self;
-            }
+            // Quick-action buttons are siblings of this view in the map HUD container.
+            UIView *findView = [self findView:self.superview ?: self atPoint:point withEvent:event];
+            return findView ?: self;
         }
         return [super hitTest:point withEvent:event];
     }
@@ -57,15 +47,21 @@
     return view == self ? nil : view;
 }
 
-- (UIView *)findView:(UIView *)view
+- (UIView *)findView:(UIView *)view atPoint:(CGPoint)point withEvent:(UIEvent *)event
 {
-    BOOL isTouchEventAllowed = [self.delegate isTouchEventAllowedForView:view];
-    if (isTouchEventAllowed)
-        return view;
+    if (view.hidden || view.alpha <= 0.01 || !view.userInteractionEnabled)
+        return nil;
+
+    if ([self.delegate isTouchEventAllowedForView:view])
+    {
+        CGPoint convertedPoint = [view convertPoint:point fromView:self];
+        if ([view pointInside:convertedPoint withEvent:event])
+            return view;
+    }
     
     for (UIView *subview in view.subviews)
     {
-        UIView *foundView = [self findView:subview];
+        UIView *foundView = [self findView:subview atPoint:point withEvent:event];
         if (foundView)
         {
             return foundView;

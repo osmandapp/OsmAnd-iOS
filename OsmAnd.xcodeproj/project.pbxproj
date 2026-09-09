@@ -1501,6 +1501,7 @@
 		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
 		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
 		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
+		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
 		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
 		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
@@ -1818,7 +1819,6 @@
 		DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */; };
 		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
 		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
-		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		DA06BB5529967A4C003B9212 /* depthcontourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */; };
@@ -3153,8 +3153,6 @@
 		DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */; };
 		DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */; };
 		DA84E84D21D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */; };
-		DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */; };
-		DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86607D2268A2870041F57D /* ic_custom_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660762268A2850041F57D /* ic_custom_remove@3x.png */; };
 		DA86607F2268A2870041F57D /* ic_custom_show_on_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660772268A2850041F57D /* ic_custom_show_on_map@3x.png */; };
@@ -5527,6 +5525,8 @@
 		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
 		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
 		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
+		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
+		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		C0DA57132FE9000200C0DA57 /* UITestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestState.swift; sourceTree = "<group>"; };
 		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
@@ -6003,8 +6003,6 @@
 		DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@2x.png"; sourceTree = "<group>"; };
 		DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupExporter.h; sourceTree = "<group>"; };
 		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
-		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
-		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = depthcontourlines.addon.render.xml; path = ../resources/rendering_styles/depthcontourlines.addon.render.xml; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerDistanceWidget.swift; sourceTree = "<group>"; };
@@ -8128,8 +8126,6 @@
 		DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseDeleteFilesCommand.m; sourceTree = "<group>"; };
 		DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@2x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@2x.png"; sourceTree = "<group>"; };
 		DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@3x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@3x.png"; sourceTree = "<group>"; };
-		DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@2x.png"; path = "Resources/Icons/ic_action_close_banner@2x.png"; sourceTree = "<group>"; };
-		DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@3x.png"; path = "Resources/Icons/ic_action_close_banner@3x.png"; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8660762268A2850041F57D /* ic_custom_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove@3x.png"; path = "Resources/Icons/ic_custom_remove@3x.png"; sourceTree = "<group>"; };
 		DA8660772268A2850041F57D /* ic_custom_show_on_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_show_on_map@3x.png"; path = "Resources/Icons/ic_custom_show_on_map@3x.png"; sourceTree = "<group>"; };
@@ -9453,8 +9449,6 @@
 				8AE0194124505C8900DA5C33 /* ic_action_bus@3x.png */,
 				84669637207CD7DF00BA971B /* ic_action_clear_all@2x.png */,
 				84669639207CD7DF00BA971B /* ic_action_clear_all@3x.png */,
-				DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */,
-				DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */,
 				DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */,
 				DAF3452D22F44825009E2EB6 /* ic_action_create_poi@3x.png */,
 				DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */,
@@ -11150,6 +11144,23 @@
 				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
 			);
 			path = CrashDiagnostics;
+			sourceTree = "<group>";
+		};
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
 			sourceTree = "<group>";
 		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
@@ -14481,23 +14492,6 @@
 			path = XibViews;
 			sourceTree = "<group>";
 		};
-		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
-			);
-			path = AppEnvironment;
-			sourceTree = "<group>";
-		};
-		C0DA57182FE9000200C0DA57 /* UITests */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
-				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
-			);
-			path = UITests;
-			sourceTree = "<group>";
-		};
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -17499,7 +17493,6 @@
 				DA5A82B726C563A800F274C7 /* OAPublicTransportRouteCell.xib in Resources */,
 				8AE0196E24505C8B00DA5C33 /* ic_custom_parking@2x.png in Resources */,
 				DA8EE7F2246D446400069A6D /* ic_action_slope@3x.png in Resources */,
-				DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */,
 				0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */,
 				0AB314F3271EFC43007C34A3 /* OAPointWithRegionTableViewCell.xib in Resources */,
 				8476E2981F6C1EEC00EC274F /* map_car_location@2x.png in Resources */,
@@ -17549,7 +17542,6 @@
 				DA9C623D221C46590087E140 /* ic_custom_trip@3x.png in Resources */,
 				DABA3DE122686E72005BB777 /* ic_custom_overflow_menu@3x.png in Resources */,
 				0A6B69D426725D1F00778353 /* ic_custom_road_works@3x.png in Resources */,
-				DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */,
 				DA0D1615281BEEF500CEEF58 /* map_turn_slight_left_dark@2x.png in Resources */,
 				8476E2621F6C1EEC00EC274F /* map_bicycle_location_view_angle_night@2x.png in Resources */,
 				DA1341C4243DC5A90039D214 /* map_action_snowmobile@2x.png in Resources */,

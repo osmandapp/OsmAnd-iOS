@@ -755,7 +755,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             return
         }
         restoreMapViewport()
-        dataProvider.enterNavigation(followTrackMode: true)
+        _ = dataProvider.applyAttachedTrackToNavigation()
         forceHide()
     }
 

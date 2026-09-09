@@ -155,7 +155,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (OAMeasurementEditingContext *)editingContextForGpxFile:(nullable OASGpxFile *)gpxFile
                                           applicationMode:(nullable OAApplicationMode *)applicationMode
                                           selectedSegment:(NSInteger)selectedSegment;
++ (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 - (void)openTrackWithEditingContext:(OAMeasurementEditingContext *)ctx;
+- (BOOL)performNavigationWithEditingContext:(OAMeasurementEditingContext *)ctx
+                                  trackName:(NSString *)trackName
+                            followTrackMode:(BOOL)followTrackMode
+                             sourceFilePath:(nullable NSString *)sourceFilePath;
 
 @end
 
@@ -1908,10 +1913,42 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || (![ctx hasRoute] && ![ctx hasChanges]))
         return;
+    [self performNavigationWithEditingContext:ctx
+                                    trackName:trackName
+                              followTrackMode:followTrackMode
+                               sourceFilePath:sourceFilePath];
+}
+
+- (BOOL)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
+                                     sourceFilePath:(NSString *)sourceFilePath
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    BOOL hasRoute = ctx != nil && [ctx hasRoute];
+    BOOL hasChanges = ctx != nil && [ctx hasChanges];
+    if (ctx == nil)
+        return NO;
+    if (![OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:hasRoute changes:hasChanges])
+        return NO;
+    return [self performNavigationWithEditingContext:ctx
+                                           trackName:trackName
+                                     followTrackMode:YES
+                                      sourceFilePath:sourceFilePath];
+}
+
++ (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges
+{
+    return hasRoute || hasChanges;
+}
+
+- (BOOL)performNavigationWithEditingContext:(OAMeasurementEditingContext *)ctx
+                                  trackName:(NSString *)trackName
+                            followTrackMode:(BOOL)followTrackMode
+                             sourceFilePath:(NSString *)sourceFilePath
+{
     NSString *name = trackName.length > 0 ? trackName : OALocalizedString(@"quick_action_new_route");
     OASGpxFile *gpx = [ctx exportGpx:name];
     if (gpx == nil)
-        return;
+        return NO;
 
     NSString *navigationFilePath = [OAPlanRouteEditingBridge navigationFilePathForExportedGpx:gpx
                                                                                sourceFilePath:sourceFilePath];
@@ -1947,6 +1984,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                         showDialog:YES];
     }
     [self clearDraftGpx];
+    return YES;
 }
 
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes

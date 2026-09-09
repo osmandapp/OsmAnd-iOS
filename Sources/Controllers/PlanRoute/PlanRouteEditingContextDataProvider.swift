@@ -324,6 +324,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                                sourceFilePath: sourceFilePath)
     }
 
+    func applyAttachedTrackToNavigation() -> Bool {
+        bridge.applyAttachedTrackToNavigation(withTrackName: mode.title,
+                                              sourceFilePath: sourceFilePath)
+    }
+
     func setCrosshairPosition(screenPoint: CGPoint) {
         bridge.setCrosshairScreenPoint(screenPoint)
     }

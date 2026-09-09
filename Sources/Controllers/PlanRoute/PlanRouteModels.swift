@@ -331,6 +331,7 @@ protocol PlanRouteSaveDataSource: AnyObject {
     func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func appendToTrack(filePath: String, onComplete: @escaping (Bool) -> Void)
     func enterNavigation(followTrackMode: Bool)
+    func applyAttachedTrackToNavigation() -> Bool
 }
 
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {

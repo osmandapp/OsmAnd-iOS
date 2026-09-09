@@ -21,6 +21,7 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                           selectedSegment:(NSInteger)selectedSegment;
 + (nullable NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpxFile
                                           sourceFilePath:(nullable NSString *)sourceFilePath;
++ (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
 
 @end
 
@@ -91,6 +92,14 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                                                                sourceFilePath:nil];
 
     XCTAssertNil(navigationFilePath);
+}
+
+- (void)testAttachApplyRequiresRouteOrChanges
+{
+    XCTAssertFalse([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:NO changes:NO]);
+    XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:NO]);
+    XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:NO changes:YES]);
+    XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:YES]);
 }
 
 @end

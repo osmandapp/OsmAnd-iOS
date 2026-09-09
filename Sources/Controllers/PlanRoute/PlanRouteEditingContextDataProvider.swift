@@ -153,13 +153,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     var editTrackFolder: String? {
-        guard mode.isEditTrack, let filePath, !filePath.isEmpty else { return nil }
-        var path = filePath
-        if (path as NSString).isAbsolutePath, let gpxRoot = OsmAndApp.swiftInstance().gpxPath, path.hasPrefix(gpxRoot) {
-            path = String(path.dropFirst(gpxRoot.count))
-        }
-        let folder = (path as NSString).deletingLastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        return folder.isEmpty ? nil : folder
+        let trackSource = PlanRouteTrackSource(gpxFilePath: filePath ?? "", sourceFilePath: sourceFilePath)
+        return mode.isEditTrack ? trackSource.savingFolder(relativeTo: OsmAndApp.swiftInstance().gpxPath) : nil
     }
 
     private let bridge = OAPlanRouteEditingBridge()

@@ -22,6 +22,9 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (nullable NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpxFile
                                           sourceFilePath:(nullable NSString *)sourceFilePath;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
++ (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                  hasRoute:(BOOL)hasRoute
+                                                                hasChanges:(BOOL)hasChanges;
 
 @end
 
@@ -100,6 +103,26 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:NO]);
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:NO changes:YES]);
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:YES]);
+}
+
+- (void)testAttachApplyPreflightReportsFailureReason
+{
+    EOAPlanRouteNavigationResult invalidContext =
+        [OAPlanRouteEditingBridge attachNavigationPreflightResultWithContext:NO
+                                                                    hasRoute:NO
+                                                                  hasChanges:NO];
+    EOAPlanRouteNavigationResult missingApproximation =
+        [OAPlanRouteEditingBridge attachNavigationPreflightResultWithContext:YES
+                                                                    hasRoute:NO
+                                                                  hasChanges:NO];
+    EOAPlanRouteNavigationResult success =
+        [OAPlanRouteEditingBridge attachNavigationPreflightResultWithContext:YES
+                                                                    hasRoute:YES
+                                                                  hasChanges:NO];
+
+    XCTAssertEqual(invalidContext, EOAPlanRouteNavigationResultInvalidContext);
+    XCTAssertEqual(missingApproximation, EOAPlanRouteNavigationResultMissingApproximationResult);
+    XCTAssertEqual(success, EOAPlanRouteNavigationResultSuccess);
 }
 
 @end

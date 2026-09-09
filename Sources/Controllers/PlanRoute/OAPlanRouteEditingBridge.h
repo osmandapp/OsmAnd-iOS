@@ -34,6 +34,14 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
     EOAPlanRoutePointEditModeAddAfter
 };
 
+typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
+    EOAPlanRouteNavigationResultSuccess = 0,
+    EOAPlanRouteNavigationResultInvalidContext,
+    EOAPlanRouteNavigationResultMissingApproximationResult,
+    EOAPlanRouteNavigationResultExportFailed,
+    EOAPlanRouteNavigationResultTransitionFailed
+};
+
 @interface OAPlanRouteEditingBridge : NSObject
 
 @property (nonatomic, copy, nullable) void (^onChange)(void);
@@ -146,8 +154,9 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
                      followTrackMode:(BOOL)followTrackMode
                       sourceFilePath:(nullable NSString *)sourceFilePath;
 
-- (BOOL)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
-                                     sourceFilePath:(nullable NSString *)sourceFilePath;
+- (EOAPlanRouteNavigationResult)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
+                                                            sourceFilePath:(nullable NSString *)sourceFilePath
+                                                          beforeTransition:(void (NS_NOESCAPE ^)(void))beforeTransition;
 
 @end
 

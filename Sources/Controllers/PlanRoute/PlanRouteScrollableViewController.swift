@@ -754,8 +754,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dismissApproximationPopup()
             return
         }
-        restoreMapViewport()
-        _ = dataProvider.applyAttachedTrackToNavigation()
+        let result = dataProvider.applyAttachedTrackToNavigation {
+            restoreMapViewport()
+        }
+        guard result == .success else {
+            dismissApproximationPopup()
+            showNavigationError()
+            return
+        }
         forceHide()
     }
 
@@ -1172,6 +1178,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func showSaveError() {
         let alert = UIAlertController(title: localizedString("gpx_export_failed"),
+                                      message: nil,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+        present(alert, animated: true)
+    }
+
+    private func showNavigationError() {
+        let alert = UIAlertController(title: localizedString("unexpected_error_occurred_warn"),
                                       message: nil,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))

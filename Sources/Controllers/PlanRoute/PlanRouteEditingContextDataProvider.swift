@@ -258,8 +258,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func openAddPoi(from presentingViewController: UIViewController) {
-        guard mode.isNewRoute || (filePath?.isEmpty == false) else { return }
-        bridge.openAddPoi(withFilePath: filePath, presenting: presentingViewController)
+        let trackSource = PlanRouteTrackSource(gpxFilePath: filePath ?? "", sourceFilePath: sourceFilePath)
+        let waypointFilePath = trackSource.waypointEditingFilePath
+        guard mode.isNewRoute || waypointFilePath != nil else { return }
+        bridge.openAddPoi(withFilePath: waypointFilePath, presenting: presentingViewController)
     }
 
     func addPoiGroup(_ name: String) {

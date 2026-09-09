@@ -9,6 +9,12 @@ final class PlanRouteTrackSourceTests: XCTestCase {
         XCTAssertEqual(source.sourceFilePath, "/Documents/GPX/twisty-route.gpx")
     }
 
+    func testPathlessGpxUsesSourceFilePathForWaypointEditing() {
+        let source = PlanRouteTrackSource(gpxFilePath: "", sourceFilePath: "/Documents/GPX/twisty-route.gpx")
+
+        XCTAssertEqual(source.waypointEditingFilePath, "/Documents/GPX/twisty-route.gpx")
+    }
+
     func testGpxFilePathIsUsedWhenExplicitSourceFilePathIsMissing() {
         let source = PlanRouteTrackSource(gpxFilePath: "/Documents/GPX/twisty-route.gpx", sourceFilePath: nil)
 
@@ -21,5 +27,6 @@ final class PlanRouteTrackSourceTests: XCTestCase {
 
         XCTAssertNil(source.editableFilePath)
         XCTAssertNil(source.sourceFilePath)
+        XCTAssertNil(source.waypointEditingFilePath)
     }
 }

@@ -70,6 +70,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     ]
     private var selectedXAxisType: GPXDataSetAxisType = .distance
     private var expandedStatIndexes: Set<Int> = []
+    private var measuredRowHeights: [String: CGFloat] = [:]
+    private var lastLayoutWidth: CGFloat = 0
     private var allowsTerrainFallbackSteepness = false
     private var wasCalculatingElevation = false
     private var hasCompletedElevationCalculation = false
@@ -151,6 +153,16 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         reloadData()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let width = tableView.bounds.width
+        guard width > 0, width != lastLayoutWidth else { return }
+        lastLayoutWidth = width
+        guard !measuredRowHeights.isEmpty else { return }
+        measuredRowHeights.removeAll()
+        tableView.reloadData()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         hideChartLocation()
@@ -188,6 +200,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
+        tableView.estimatedRowHeight = Self.fallbackEstimatedRowHeight
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
@@ -481,12 +494,14 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         let previousState = lastRenderState
         lastRenderState = renderState
         guard let previousState else {
+            measuredRowHeights.removeAll()
             tableView.reloadData()
             return
         }
         guard previousState.state == renderState.state,
               previousState.hasOverviewData == renderState.hasOverviewData,
               previousState.sectionCount == renderState.sectionCount else {
+            measuredRowHeights.removeAll()
             tableView.reloadData()
             return
         }
@@ -513,6 +528,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         }
 
         guard !changedSections.isEmpty else { return }
+        measuredRowHeights.removeAll()
         tableView.reloadSections(changedSections, with: .none)
     }
 }
@@ -533,6 +549,9 @@ private extension PlanRouteAnalyzeViewController {
     static let statsSection = 1
     static let roadAttributesBase = 2
     static let cardHorizontalInset: CGFloat = 16
+    static let roadAttrCardChartTopInset: CGFloat = 20
+    static let roadAttrCardChartHeight: CGFloat = 54
+    static let fallbackEstimatedRowHeight: CGFloat = 160
     static let compactLegendBorderWidth: CGFloat = 1
     static let compactLegendMarkerSize: CGFloat = 16
     static let compactLegendInnerSpacing: CGFloat = 6
@@ -903,10 +922,10 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         addRoadAttrLegend(legendView, to: card, below: barChart)
 
         NSLayoutConstraint.activate([
-            barChart.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
+            barChart.topAnchor.constraint(equalTo: card.topAnchor, constant: Self.roadAttrCardChartTopInset),
             barChart.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             barChart.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            barChart.heightAnchor.constraint(equalToConstant: 54)
+            barChart.heightAnchor.constraint(equalToConstant: Self.roadAttrCardChartHeight)
         ])
 
         return cell
@@ -1231,7 +1250,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        UITableView.automaticDimension
+        exactRoadAttrRowHeight(for: indexPath) ?? UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        exactRoadAttrRowHeight(for: indexPath) ?? Self.fallbackEstimatedRowHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -1375,6 +1398,41 @@ private extension PlanRouteAnalyzeViewController {
         return roadAttributeStatistics[statIndex]
     }
 
+    private func roadAttrHeightKey(name: String?, isExpanded: Bool) -> String {
+        "\(name ?? "")|\(isExpanded ? "expanded" : "collapsed")"
+    }
+
+    private func exactRoadAttrRowHeight(for indexPath: IndexPath) -> CGFloat? {
+        guard case .hasData = currentState,
+              indexPath.section >= roadAttributesSectionStart,
+              let stat = roadAttributeStatistic(for: indexPath.section) else {
+            return nil
+        }
+        let isExpanded = expandedStatIndexes.contains(indexPath.section - roadAttributesSectionStart)
+        let key = roadAttrHeightKey(name: stat.name, isExpanded: isExpanded)
+        if let cached = measuredRowHeights[key] {
+            return cached
+        }
+        guard let computed = roadAttrRowHeight(for: stat, isExpanded: isExpanded) else {
+            return nil
+        }
+        measuredRowHeights[key] = computed
+        return computed
+    }
+
+    private func roadAttrRowHeight(for stat: OARouteStatistics, isExpanded: Bool) -> CGFloat? {
+        let width = tableView.bounds.width - Self.cardHorizontalInset * 2
+        guard width > 0 else { return nil }
+        let legend = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        legend.translatesAutoresizingMaskIntoConstraints = false
+        let legendHeight = legend.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        return Self.roadAttrCardChartTopInset + Self.roadAttrCardChartHeight + legendHeight
+    }
+
     private func roadAttributeTitle(for stat: OARouteStatistics) -> String {
         if stat.name == Self.roadClassAttributeName {
             return localizedString("routeInfo_road_types_name")
@@ -1477,8 +1535,6 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func toggleRoadAttribute(at index: Int) {
-        let expandedLegendFadeDelay = Self.expandedLegendFadeDelay
-        let expandedLegendFadeDuration = Self.expandedLegendFadeDuration
         guard roadAttributeStatistics.indices.contains(index) else { return }
         if expandedStatIndexes.contains(index) {
             expandedStatIndexes.remove(index)
@@ -1487,25 +1543,35 @@ private extension PlanRouteAnalyzeViewController {
         }
 
         let section = index + roadAttributesSectionStart
-        let indexPath = IndexPath(row: 0, section: section)
-        let stat = roadAttributeStatistics[index]
         let isExpanded = expandedStatIndexes.contains(index)
+        let stat = roadAttributeStatistics[index]
         (tableView.headerView(forSection: section) as? AnalyzeRouteAttributeHeaderView)?.setExpanded(isExpanded)
 
+        if let height = roadAttrRowHeight(for: stat, isExpanded: isExpanded) {
+            measuredRowHeights[roadAttrHeightKey(name: stat.name, isExpanded: isExpanded)] = height
+        }
+
+        let indexPath = IndexPath(row: 0, section: section)
         guard let cell = tableView.cellForRow(at: indexPath) as? AnalyzeCardCell,
-              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else { return }
+              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            return
+        }
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
         legendView.alpha = isExpanded ? 0 : 1
 
         cell.cardView.subviews.filter { $0 !== barChart }.forEach { $0.removeFromSuperview() }
         addRoadAttrLegend(legendView, to: cell.cardView, below: barChart)
-        tableView.performBatchUpdates(nil)
+
+        tableView.beginUpdates()
+        tableView.endUpdates()
 
         guard isExpanded else { return }
         UIView.animate(
-            withDuration: expandedLegendFadeDuration,
-            delay: expandedLegendFadeDelay,
+            withDuration: Self.expandedLegendFadeDuration,
+            delay: Self.expandedLegendFadeDelay,
             options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseIn],
             animations: { legendView.alpha = 1 }
         )

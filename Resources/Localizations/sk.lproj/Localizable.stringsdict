@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Odstrániť %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ položku</string>
+			<key>few</key>
+			<string>%2$@ položky</string>
+			<key>many</key>
+			<string>%2$@ položky</string>
+			<key>other</key>
+			<string>%2$@ položiek</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@favorites@?</string>
+		<string>Odstrániť %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld obľúbenú položku</string>
+			<string>%2$@ obľúbenú položku</string>
 			<key>few</key>
-			<string>%ld obľúbené položky</string>
+			<string>%2$@ obľúbené položky</string>
 			<key>many</key>
-			<string>%ld obľúbených položiek</string>
+			<string>%2$@ obľúbených položiek</string>
 			<key>other</key>
-			<string>%ld obľúbenej položky</string>
+			<string>%2$@ obľúbenej položky</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@folders@?</string>
+		<string>Odstrániť %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld priečinok</string>
+			<string>%2$@ priečinok</string>
 			<key>few</key>
-			<string>%ld priečinky</string>
+			<string>%2$@ priečinky</string>
 			<key>many</key>
-			<string>%ld priečinkov</string>
+			<string>%2$@ priečinkov</string>
 			<key>other</key>
-			<string>%ld priečinka</string>
+			<string>%2$@ priečinka</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Odstrániť %#@folders@ a %#@points@. Táto akcia sa nedá odvolať.</string>
+		<string>Odstrániť %1$#@folders@ a %3$#@points@. Táto akcia sa nedá odvolať.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld priečinok</string>
+			<string>%2$@ priečinok</string>
 			<key>few</key>
-			<string>%ld priečinky</string>
+			<string>%2$@ priečinky</string>
 			<key>many</key>
-			<string>%ld priečinkov</string>
+			<string>%2$@ priečinkov</string>
 			<key>other</key>
-			<string>%ld priečinka</string>
+			<string>%2$@ priečinka</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld bod</string>
+			<string>%4$@ bod</string>
 			<key>few</key>
-			<string>%ld body</string>
+			<string>%4$@ body</string>
 			<key>many</key>
-			<string>%ld bodov</string>
+			<string>%4$@ bodov</string>
 			<key>other</key>
-			<string>%ld bodu</string>
+			<string>%4$@ bodu</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -95,6 +115,86 @@
 			<string>%ld zastávky</string>
 			<key>other</key>
 			<string>%ld zastávok</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ stopa</string>
+			<key>few</key>
+			<string>%2$@ stopy</string>
+			<key>many</key>
+			<string>%2$@ stôp</string>
+			<key>other</key>
+			<string>%2$@ stôp</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Naozaj chcete odstrániť %2$@ úpravu?</string>
+			<key>few</key>
+			<string>Naozaj chcete odstrániť %2$@ úpravy?</string>
+			<key>many</key>
+			<string>Naozaj chcete odstrániť %2$@ úpravy?</string>
+			<key>other</key>
+			<string>Naozaj chcete odstrániť %2$@ úprav?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Položka</string>
+			<key>few</key>
+			<string>%2$@ Položky</string>
+			<key>many</key>
+			<string>%2$@ Položiek</string>
+			<key>other</key>
+			<string>%2$@ Položiek</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Súbor %2$@ obsahuje %3$@ samostatnú stopu. Zvoľte tú, ktorú chcete importovať.</string>
+			<key>few</key>
+			<string>Súbor %2$@ obsahuje %3$@ samostatné stopy. Zvoľte tie, ktoré chcete importovať.</string>
+			<key>many</key>
+			<string>Súbor %2$@ obsahuje %3$@ samostatné stopy. Zvoľte tie, ktoré chcete importovať.</string>
+			<key>other</key>
+			<string>Súbor %2$@ obsahuje %3$@ samostatných stôp. Zvoľte tie, ktoré chcete importovať.</string>
 		</dict>
 	</dict>
 </dict>

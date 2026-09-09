@@ -37,8 +37,8 @@
         _scaleCoefficient = scaleCoefficient;
         _miniCoeff = 2.f;
         _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
-        _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].appMapThemeColor;
+        _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].appMapThemeColor;
         
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
@@ -134,7 +134,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
     CGContextSetAllowsAntialiasing(context, true);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].currentMapThemeColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].appMapThemeColor.CGColor);
 
     //to change color immediately when needed
     if (!_lanes.empty())
@@ -145,9 +145,9 @@
         for (int i = 0; i < _lanes.size(); i++)
         {
             if ((_lanes[i] & 1) == 1)
-                _routeDirectionColor = [UIColor colorNamed:_imminent ? ACColorNameNavArrowImminentColor : ACColorNameNavArrowColor].currentMapThemeColor;
+                _routeDirectionColor = [UIColor colorNamed:_imminent ? ACColorNameNavArrowImminentColor : ACColorNameNavArrowColor].appMapThemeColor;
             else
-                _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
+                _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].appMapThemeColor;
 
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);

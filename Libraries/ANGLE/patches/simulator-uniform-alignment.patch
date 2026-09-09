@@ -1,0 +1,17 @@
+diff --git a/src/libANGLE/renderer/metal/mtl_common.h b/src/libANGLE/renderer/metal/mtl_common.h
+index 85cc743..ddb95ca 100644
+--- a/src/libANGLE/renderer/metal/mtl_common.h
++++ b/src/libANGLE/renderer/metal/mtl_common.h
+@@ -131,7 +131,11 @@ constexpr uint32_t kMaxRenderPassesPerCommandBuffer = 16;
+ 
+ constexpr uint32_t kVertexAttribBufferStrideAlignment = 4;
+ // Alignment requirement for offset passed to setVertex|FragmentBuffer
+-#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
++// The iOS Simulator runs on top of the macOS Metal driver and enforces the macOS 256-byte
++// constant buffer offset alignment, but it reports as neither OSX nor MACCATALYST, so without
++// TARGET_OS_SIMULATOR here it picks 4 and Metal's validation layer aborts with
++// "the offset into the buffer ANGLE_userUniforms ... must be a multiple of 256".
++#if TARGET_OS_OSX || TARGET_OS_MACCATALYST || TARGET_OS_SIMULATOR
+ constexpr uint32_t kUniformBufferSettingOffsetMinAlignment = 256;
+ #else
+ constexpr uint32_t kUniformBufferSettingOffsetMinAlignment = 4;

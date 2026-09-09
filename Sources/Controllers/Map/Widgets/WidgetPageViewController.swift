@@ -207,7 +207,7 @@ extension WidgetPageViewController {
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
             if !horizontalSeparatorView.isHidden {
                 // update color for horizontal separator
-                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light
+                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light
             }
         }
     }

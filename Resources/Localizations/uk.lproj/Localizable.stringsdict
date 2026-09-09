@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Видалити %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ пункт</string>
+			<key>few</key>
+			<string>%2$@ пункти</string>
+			<key>many</key>
+			<string>%2$@ пунктів</string>
+			<key>other</key>
+			<string>%2$@ пункти</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Видалити %#@favorites@?</string>
+		<string>Видалити %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld закладку</string>
+			<string>%2$@ закладку</string>
 			<key>few</key>
-			<string>%ld закладки</string>
+			<string>%2$@ закладки</string>
 			<key>many</key>
-			<string>%ld закладок</string>
+			<string>%2$@ закладок</string>
 			<key>other</key>
-			<string>%ld закладки</string>
+			<string>%2$@ закладки</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Видалити %#@folders@?</string>
+		<string>Видалити %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld папку</string>
+			<string>%2$@ папку</string>
 			<key>few</key>
-			<string>%ld папки</string>
+			<string>%2$@ папки</string>
 			<key>many</key>
-			<string>%ld папок</string>
+			<string>%2$@ папок</string>
 			<key>other</key>
-			<string>%ld папки</string>
+			<string>%2$@ папки</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Видалити %#@folders@ та %#@points@. Цю дію не можна скасувати.</string>
+		<string>Видалити %1$#@folders@ та %3$#@points@. Цю дію не можна скасувати.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld папку</string>
+			<string>%2$@ папку</string>
 			<key>few</key>
-			<string>%ld папки</string>
+			<string>%2$@ папки</string>
 			<key>many</key>
-			<string>%ld папок</string>
+			<string>%2$@ папок</string>
 			<key>other</key>
-			<string>%ld папки</string>
+			<string>%2$@ папки</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld точку</string>
+			<string>%4$@ точку</string>
 			<key>few</key>
-			<string>%ld точки</string>
+			<string>%4$@ точки</string>
 			<key>many</key>
-			<string>%ld точок</string>
+			<string>%4$@ точок</string>
 			<key>other</key>
-			<string>%ld точки</string>
+			<string>%4$@ точки</string>
 		</dict>
 	</dict>
     <key>carplay_trip_via_stops</key>
@@ -97,5 +117,85 @@
             <string>%ld зупинок</string>
         </dict>
     </dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ трек</string>
+			<key>few</key>
+			<string>%2$@ треки</string>
+			<key>many</key>
+			<string>%2$@ треків</string>
+			<key>other</key>
+			<string>%2$@ трека</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Ви впевнені, що хочете видалити %2$@ правку?</string>
+			<key>few</key>
+			<string>Ви впевнені, що хочете видалити %2$@ правки?</string>
+			<key>many</key>
+			<string>Ви впевнені, що хочете видалити %2$@ правок?</string>
+			<key>other</key>
+			<string>Ви впевнені, що хочете видалити %2$@ правки?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Пункт</string>
+			<key>few</key>
+			<string>%2$@ Пункти</string>
+			<key>many</key>
+			<string>%2$@ Пунктів</string>
+			<key>other</key>
+			<string>%2$@ Пунктів</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Файл %2$@ містить %3$@ окремий трек. Оберіть той, який хочете імпортувати.</string>
+			<key>few</key>
+			<string>Файл %2$@ містить %3$@ окремі треки. Оберіть ті, які хочете імпортувати.</string>
+			<key>many</key>
+			<string>Файл %2$@ містить %3$@ окремих треків. Оберіть ті, які хочете імпортувати.</string>
+			<key>other</key>
+			<string>Файл %2$@ містить %3$@ окремого трека. Оберіть ті, які хочете імпортувати.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

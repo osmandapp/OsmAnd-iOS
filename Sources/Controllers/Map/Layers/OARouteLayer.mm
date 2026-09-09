@@ -163,7 +163,7 @@ struct DrawPathData
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
     _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(refreshRoute)
+                                                              withHandler:@selector(onUpdateGpxTracksOnMap)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 
     [self.app.paletteRepository addListenerListener:self];
@@ -339,7 +339,7 @@ struct DrawPathData
         NSString *str = [NSString stringWithUTF8String:routeSegment->route->color.c_str()];
         str = str.length == 0 ? type.renderAttr : str;
         OsmAnd::ColorARGB colorARGB;
-        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
+        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.isCurrentMapNightMode renderAttrName:str];
         CGFloat red, green, blue, alpha;
         if (str.length > 0 && color)
         {
@@ -548,7 +548,7 @@ struct DrawPathData
 
 - (NSInteger)getDefaultColor:(BOOL)forTurnArrows
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].isCurrentMapNightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
     return colorVal
             ? colorVal.intValue
@@ -971,6 +971,14 @@ struct DrawPathData
     [self refreshRoute:YES];
 }
 
+- (void)onUpdateGpxTracksOnMap
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshRoute];
+    });
+}
+
 - (void) refreshRoute:(BOOL)forceRedraw
 {
     [self drawRouteWithSync:YES forceRedraw:forceRedraw];
@@ -989,7 +997,7 @@ struct DrawPathData
     if (!_routeAttributes || !_walkAttributes || !_walkPTAttributes)
         return;
 
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].isCurrentMapNightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
 
     // Draw public transport route

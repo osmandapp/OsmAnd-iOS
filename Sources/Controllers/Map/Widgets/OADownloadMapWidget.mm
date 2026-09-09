@@ -254,7 +254,7 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.overrideUserInterfaceStyle = OAAppSettings.sharedManager.nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+        self.overrideUserInterfaceStyle = OAAppSettings.sharedManager.isAppMapNightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
         [self updateColors];
         [self updateWidgetInformation];
     });

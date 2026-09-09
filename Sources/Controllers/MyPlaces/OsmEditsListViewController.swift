@@ -439,8 +439,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
                 title = localizedString("select_items")
             } else {
                 let totalSelectedPoints = selectionManager.selectedItems.count
-                let itemText = localizedString(totalSelectedPoints > 1 ? "shared_string_items" : "shared_string_item").lowercased()
-                title = "\(totalSelectedPoints) \(itemText)"
+                title = String.localizedStringWithFormat(NSLocalizedString("selected_items_count", comment: ""), totalSelectedPoints, NumberFormatter.localizedCount(totalSelectedPoints)).lowercased()
             }
         } else {
             title = localizedString("osm_edits_title")
@@ -520,16 +519,22 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
 
         return action
     }
-    
-    private func delete(_ point: OAOsmPoint) {
-        let count = 1
-        let message = String(format: localizedString("osm_edits_delete_item_confirmation"), count)
+
+    private func deleteConfirmationMessage(count: Int) -> NSAttributedString {
+        let formattedCount = NumberFormatter.localizedCount(count)
+        let message = String.localizedStringWithFormat(NSLocalizedString("osm_edits_delete_items_confirmation", comment: ""), count, formattedCount)
         let attributedString = NSMutableAttributedString(string: message)
 
-        if let range = message.range(of: "\(count)") {
+        if let range = message.range(of: formattedCount) {
             let nsRange = NSRange(range, in: message)
             attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
         }
+
+        return attributedString
+    }
+
+    private func delete(_ point: OAOsmPoint) {
+        let attributedString = deleteConfirmationMessage(count: 1)
         
         let alert = UIAlertController(title: localizedString("delete_changes"), message: nil, preferredStyle: .alert)
         alert.setValue(attributedString, forKey: "attributedMessage")
@@ -675,15 +680,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         let shouldEdit = !collectionView.isEditing
         let selectedPoints = Array(selectionManager.selectedItems)
         if !selectedPoints.isEmpty {
-            let count = selectedPoints.count
-            let message = String(format: localizedString("osm_edits_delete_items_confirmation"), count)
-            let attributedString = NSMutableAttributedString(string: message)
-
-            if let range = message.range(of: "\(count)") {
-                let nsRange = NSRange(range, in: message)
-                attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
-            }
-            
+            let attributedString = deleteConfirmationMessage(count: selectedPoints.count)
             let alert = UIAlertController(title: localizedString("delete_changes"), message: nil, preferredStyle: .alert)
             alert.setValue(attributedString, forKey: "attributedMessage")
             alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))

@@ -2,10 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>¿Quiere eliminar %2$@ elemento?</string>
+			<key>many</key>
+			<string>¿Quiere eliminar %2$@ elementos?</string>
+			<key>other</key>
+			<string>¿Quiere eliminar %2$@ elementos?</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Borrar %#@favorites@?</string>
+		<string>Borrar %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Favorito</string>
+			<string>%2$@ Favorito</string>
 			<key>many</key>
-			<string>%ld Favoritos</string>
+			<string>%2$@ Favoritos</string>
 			<key>other</key>
-			<string>%ld Favoritos</string>
+			<string>%2$@ Favoritos</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Borrar %#@folders@?</string>
+		<string>Borrar %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +49,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Carpeta</string>
+			<string>%2$@ Carpeta</string>
 			<key>many</key>
-			<string>%ld carpetas</string>
+			<string>%2$@ carpetas</string>
 			<key>other</key>
-			<string>%ld carpetas</string>
+			<string>%2$@ carpetas</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Borrar %#@folders@ y %#@points@. Esta acción no se puede deshacer.</string>
+		<string>Borrar %1$#@folders@ y %3$#@points@. Esta acción no se puede deshacer.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Carpeta</string>
+			<string>%2$@ Carpeta</string>
 			<key>many</key>
-			<string>%ld carpetas</string>
+			<string>%2$@ carpetas</string>
 			<key>other</key>
-			<string>%ld carpetas</string>
+			<string>%2$@ carpetas</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +80,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punto</string>
+			<string>%4$@ Punto</string>
 			<key>many</key>
-			<string>%ld Puntos</string>
+			<string>%4$@ Puntos</string>
 			<key>other</key>
-			<string>%ld Puntos</string>
+			<string>%4$@ Puntos</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -83,6 +101,78 @@
 			<string>%ld parada</string>
 			<key>other</key>
 			<string>%ld paradas</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ pista</string>
+			<key>many</key>
+			<string>%2$@ pistas</string>
+			<key>other</key>
+			<string>%2$@ pistas</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>¿Confirma que quiere eliminar %2$@ edición?</string>
+			<key>many</key>
+			<string>¿Confirma que quiere eliminar %2$@ ediciones?</string>
+			<key>other</key>
+			<string>¿Confirma que quiere eliminar %2$@ ediciones?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Elemento</string>
+			<key>many</key>
+			<string>%2$@ Elementos</string>
+			<key>other</key>
+			<string>%2$@ Elementos</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>El archivo %2$@ contiene %3$@ traza separada. Seleccione la que quiera importar.</string>
+			<key>many</key>
+			<string>El archivo %2$@ contiene %3$@ trazas separadas. Seleccione las que quiera importar.</string>
+			<key>other</key>
+			<string>El archivo %2$@ contiene %3$@ trazas separadas. Seleccione las que quiera importar.</string>
 		</dict>
 	</dict>
 </dict>

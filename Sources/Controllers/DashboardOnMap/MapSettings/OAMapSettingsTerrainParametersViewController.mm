@@ -152,7 +152,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
         _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
-        _isNightCoordinatesGridColorMode = _settings.nightMode;
+        _isNightCoordinatesGridColorMode = _settings.isAppMapNightMode;
         _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection defaultLineColorItem];
         _currentDayColorItem  = _baseDayColorItem;
         _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection defaultLineColorItem];
@@ -220,7 +220,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [super viewDidAppear:animated];
 
     [_mapPanel targetUpdateControlsLayout:YES
-                     customStatusBarStyle:_settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+                     customStatusBarStyle:_settings.isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -1095,7 +1095,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         [cell setSegmentedControlBottomSpacing:8.0];
-        [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.nightMode ? 1 : 0 selectedTitles:nil];
+        [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.isAppMapNightMode ? 1 : 0 selectedTitles:nil];
         __weak __typeof(self) weakSelf = self;
         cell.didSelectSegmentIndex = ^(NSInteger idx) {
             [weakSelf segmentChanged:idx];

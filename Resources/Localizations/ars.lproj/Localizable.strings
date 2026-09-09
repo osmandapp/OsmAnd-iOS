@@ -2990,7 +2990,7 @@
 "shared_string_keep_active" = "البقاء نشطا";
 "angular_measeurement_descr" = "تغيير قياس زاوية السمت.";
 "announcement_time_title" = "وقت الإشعار";
-"ltr_or_rtl_combine_via_of" = "%ld من %ld";
+"ltr_or_rtl_combine_via_of" = "%@ من %@";
 "rendering_attr_alpineHiking_name" = "تصنيف الصعوبات";
 "visible_in_3d_mode" = "مرئي في الوضع ثلاثي الأبعاد";
 "speed_cameras_alert" = "يحظر القانون تنبيهات كاميرات السرعة في بعض البلدان.";

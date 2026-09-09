@@ -29,6 +29,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
+#import "OATopIndexFilter.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAndSharedWrapper.h"
@@ -159,6 +160,11 @@
                     iconName = [OAPOIUIFilter getCustomFilterIconName:filter];
                 return iconName && iconName.length > 0 ? iconName : @"ic_custom_search";
             }
+            else if ([searchResult.object isKindOfClass:OATopIndexFilter.class])
+            {
+                return [((OATopIndexFilter *)searchResult.object) getIconResource];
+            }
+            return @"ic_custom_search";
         }
         case EOAObjectTypePoi:
         {

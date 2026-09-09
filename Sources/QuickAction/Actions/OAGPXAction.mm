@@ -23,11 +23,19 @@
 #import "OAFavoritesHelper.h"
 #import "OrderedDictionary.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor =  @"category_color";
+static NSString * const kCategoryIcon = @"category_icon";
+static NSString * const kCategoryBackgroundIcon = @"category_background_icon";
+// Full ARGB color chosen via the "Appearance" editor - takes priority over the legacy
+// kCategoryColor (a builtin-palette index) when present, so existing configured buttons
+// keep working while new ones get full custom-color support.
+static NSString * const kCategoryColorArgb = @"category_color_argb";
+static NSString * const kCategoryAppearance = @"category_appearance";
 
 static QuickActionType *TYPE;
 
@@ -78,12 +86,33 @@ static QuickActionType *TYPE;
         [self addWaypointWithDialog:lat lon:lon title:title];
 }
 
+- (UIColor *)resolvedCategoryColor
+{
+    if (self.getParams[kCategoryColorArgb])
+        return UIColorFromARGB([self.getParams[kCategoryColorArgb] intValue]);
+    if (self.getParams[kCategoryColor])
+    {
+        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
+        return favCol.color;
+    }
+    return [OADefaultFavorite getDefaultColor];
+}
+
 - (void)addWaypointWithDialog:(double)lat lon:(double)lon title:(NSString *)title
 {
-    if (self.getParams[kCategoryColor])
-        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[kCategoryColor] integerValue] forKey:kFavoriteDefaultColorKey];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:(int32_t)[[self resolvedCategoryColor] toARGBNumber] forKey:kWptDefaultColorKey];
     if (self.getParams[kCategoryName])
-        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
+        [userDefaults setObject:self.getParams[kCategoryName] forKey:kWptDefaultGroupKey];
+    if (self.getParams[kCategoryIcon])
+        [userDefaults setObject:self.getParams[kCategoryIcon] forKey:kWptDefaultIconKey];
+    else
+        [userDefaults removeObjectForKey:kWptDefaultIconKey];
+    if (self.getParams[kCategoryBackgroundIcon])
+        [userDefaults setObject:self.getParams[kCategoryBackgroundIcon] forKey:kWptDefaultBackgroundKey];
+    else
+        [userDefaults removeObjectForKey:kWptDefaultBackgroundKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
     if ([OAFavoritesHelper hasFavoriteAt:point])
@@ -101,19 +130,8 @@ static QuickActionType *TYPE;
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     NSString *groupName = self.getParams[kCategoryName];
-    UIColor* color;
-    if (self.getParams[kCategoryColor])
-    {
-        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
-        color = favCol.color;
-    }
-    else
-    {
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        color = favCol.color;
-    }
-    
+    UIColor *color = [self resolvedCategoryColor];
+
     OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
     OASWptPt *p = [[OASWptPt alloc] init];
     p.name = title;
@@ -121,6 +139,9 @@ static QuickActionType *TYPE;
     p.lon = lon;
     p.category = groupName;
     p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
+    [p setIconNameIconName:self.getParams[kCategoryIcon]];
+    NSString *backgroundIcon = self.getParams[kCategoryBackgroundIcon];
+    [p setBackgroundTypeBackType:backgroundIcon.length > 0 ? backgroundIcon : DEFAULT_ICON_SHAPE_KEY];
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -180,9 +201,9 @@ static QuickActionType *TYPE;
                           }
                       ] forKey:kSectionNoName];
     
-    NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-    OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
-    
+    UIColor *appearanceColor = [self resolvedCategoryColor];
+    NSInteger defaultColor = [[OADefaultFavorite builtinColors] indexOfObject:[OADefaultFavorite nearestFavColor:appearanceColor]];
+
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
@@ -193,10 +214,11 @@ static QuickActionType *TYPE;
                           },
                       @{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : kCategoryColor,
-                          @"title" : OALocalizedString(@"shared_string_color"),
-                          @"value" : color ? color.name : @"",
-                          @"color" : @(defaultColor)
+                          @"key" : kCategoryAppearance,
+                          @"title" : OALocalizedString(@"shared_string_appearance"),
+                          @"appearanceColor" : appearanceColor,
+                          @"appearanceIcon" : self.getParams[kCategoryIcon] ?: @"",
+                          @"appearanceBackgroundIcon" : self.getParams[kCategoryBackgroundIcon] ?: @""
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_select_group")
@@ -221,6 +243,14 @@ static QuickActionType *TYPE;
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
                 [params setValue:item[@"color"] forKey:kCategoryColor];
+            }
+            else if ([item[@"key"] isEqualToString:kCategoryAppearance])
+            {
+                UIColor *appearanceColor = item[@"appearanceColor"];
+                if (appearanceColor)
+                    [params setValue:@((int32_t)[appearanceColor toARGBNumber]) forKey:kCategoryColorArgb];
+                [params setValue:item[@"appearanceIcon"] forKey:kCategoryIcon];
+                [params setValue:item[@"appearanceBackgroundIcon"] forKey:kCategoryBackgroundIcon];
             }
         }
     }

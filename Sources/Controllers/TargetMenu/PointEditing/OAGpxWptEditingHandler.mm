@@ -58,7 +58,33 @@
     {
         _gpxFileName = gpxFileName;
         _gpxDocument = gpxFile;
-        UIColor *color = [OADefaultFavorite getDefaultColor];
+        [self commonInit];
+
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *groupName = [userDefaults objectForKey:kWptDefaultGroupKey] ? [userDefaults stringForKey:kWptDefaultGroupKey] : @"";
+
+        UIColor *color;
+        NSString *iconName = nil;
+        NSString *backgroundType = nil;
+
+        OASGpxUtilitiesPointsGroup *existingGroup = _gpxDocument.pointsGroups[groupName];
+        if (existingGroup)
+        {
+            // Follow the target track's already-defined folder appearance, if present
+            color = UIColorFromARGB(existingGroup.color);
+            iconName = existingGroup.iconName;
+            backgroundType = existingGroup.backgroundType;
+        }
+        else if ([userDefaults objectForKey:kWptDefaultColorKey])
+        {
+            color = UIColorFromARGB((int32_t)[userDefaults integerForKey:kWptDefaultColorKey]);
+            iconName = [userDefaults stringForKey:kWptDefaultIconKey];
+            backgroundType = [userDefaults stringForKey:kWptDefaultBackgroundKey];
+        }
+        else
+        {
+            color = [OADefaultFavorite getDefaultColor];
+        }
 
         OAGpxWptItem *wpt = [[OAGpxWptItem alloc] init];
         OASWptPt* p = [[OASWptPt alloc] init];
@@ -66,22 +92,23 @@
         p.lat = location.latitude;
         p.lon = location.longitude;
         p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
+        p.category = groupName.length > 0 ? groupName : nil;
         OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
-        
+
         [p setColorColor:colorToSave];
         p.desc = @"";
-        
-        _iconName = nil;
+
+        _iconName = iconName;
         NSString *poiIconName = [self.class getPoiIconName:poi];
         if (poiIconName && poiIconName.length > 0)
             _iconName = poiIconName;
-        
+
         [p setIconNameIconName:_iconName];
-        [p setBackgroundTypeBackType:DEFAULT_ICON_SHAPE_KEY];
+        [p setBackgroundTypeBackType:backgroundType.length > 0 ? backgroundType : DEFAULT_ICON_SHAPE_KEY];
         [p setAddressAddress:address];
         NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:AMENITY_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
-        
+
         NSString *originName = poi.toStringEn;
         if (originName.length > 0)
             [p setAmenityOriginNameOriginName:originName];
@@ -90,8 +117,6 @@
         wpt.point = p;
 
         _gpxWpt = wpt;
-
-        [self commonInit];
     }
     return self;
 }

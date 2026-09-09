@@ -50,7 +50,16 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
 
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
+        OAFavoriteColor *favCol;
+        if ([userDefaults objectForKey:kFavoriteDefaultColorKey])
+        {
+            NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[userDefaults integerForKey:kFavoriteDefaultColorKey]];
+            favCol = [OADefaultFavorite builtinColors][colorIndex];
+        }
+        else
+        {
+            favCol = [OADefaultFavorite builtinColors].firstObject;
+        }
         _favorite = [[OAFavoriteItem alloc] initWithLat:location.latitude
                                                     lon:location.longitude
                                                    name:formattedTitle

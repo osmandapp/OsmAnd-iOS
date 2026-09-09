@@ -136,7 +136,7 @@
         NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
         NSString *title = point.category == nil ? @"" : point.category;
         categories[@"title"] = title;
-        NSString *color = point.category == nil ? @"" : UIColorFromARGB([point getColor]).toHexARGBString;
+        NSString *color = UIColorFromARGB([point getColor]).toHexARGBString;
         NSString *count = @"1";
         categories[@"count"] = count;
         categories[@"hidden"] = _gpxDocument.pointsGroups[title].hidden ? @"true" : @"false";

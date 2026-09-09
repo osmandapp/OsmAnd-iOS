@@ -481,6 +481,9 @@ static const NSInteger kSegmentRow = 0;
 
 - (void)onLeftNavbarButtonPressed
 {
+    if ([self.delegate respondsToSelector:@selector(onFileSelectionCancelled)])
+        [self.delegate onFileSelectionCancelled];
+
     [self dismissViewControllerAnimated:YES completion:^{
         if (_screenType == EOAFollowTrack)
             [self closeBottomSheetDelegate];
@@ -542,6 +545,9 @@ static const NSInteger kSegmentRow = 0;
 
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
 {
+    if ([self.delegate respondsToSelector:@selector(onFileSelectionCancelled)])
+        [self.delegate onFileSelectionCancelled];
+
     if (_screenType == EOAFollowTrack)
         [self closeBottomSheetDelegate];
 }

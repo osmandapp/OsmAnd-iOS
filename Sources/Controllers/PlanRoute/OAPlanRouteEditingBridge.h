@@ -150,9 +150,9 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 - (void)appendToTrack:(NSString *)filePath
            onComplete:(void (^)(BOOL success))onComplete;
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName
-                     followTrackMode:(BOOL)followTrackMode
-                      sourceFilePath:(nullable NSString *)sourceFilePath;
+- (EOAPlanRouteNavigationResult)enterNavigationWithTrackName:(NSString *)trackName
+                                             followTrackMode:(BOOL)followTrackMode
+                                              sourceFilePath:(nullable NSString *)sourceFilePath;
 
 - (EOAPlanRouteNavigationResult)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
                                                             sourceFilePath:(nullable NSString *)sourceFilePath

@@ -22,6 +22,9 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (nullable NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpxFile
                                           sourceFilePath:(nullable NSString *)sourceFilePath;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
+- (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)context
+                                               trackName:(NSString *)trackName;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
@@ -103,6 +106,31 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:NO]);
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:NO changes:YES]);
     XCTAssertTrue([OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:YES changes:YES]);
+}
+
+- (void)testGenericNavigationAllowsUnchangedPlainTrack
+{
+    OASGpxFile *gpxFile = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    OASTrack *track = [[OASTrack alloc] init];
+    OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+    segment.points = [NSMutableArray arrayWithObjects:createPoint(1, 2), createPoint(2, 3), nil];
+    track.segments = [NSMutableArray arrayWithObject:segment];
+    gpxFile.tracks = [NSMutableArray arrayWithObject:track];
+
+    OAMeasurementEditingContext *context = [OAPlanRouteEditingBridge editingContextForGpxFile:gpxFile
+                                                                              applicationMode:OAApplicationMode.CAR
+                                                                              selectedSegment:-1];
+    [context addPoints];
+    EOAPlanRouteNavigationResult result =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:context != nil];
+    OASGpxFile *navigationGpx = [[[OAPlanRouteEditingBridge alloc] init] navigationGpxWithEditingContext:context
+                                                                                           trackName:@"plain-track"];
+
+    XCTAssertFalse(context.hasRoute);
+    XCTAssertFalse(context.hasChanges);
+    XCTAssertEqual(result, EOAPlanRouteNavigationResultSuccess);
+    XCTAssertNotNil(navigationGpx);
+    XCTAssertEqual(navigationGpx.path.length, 0);
 }
 
 - (void)testAttachApplyPreflightReportsFailureReason

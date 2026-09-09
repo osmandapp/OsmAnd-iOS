@@ -1065,8 +1065,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dataProvider.reverseRoute()
         case .navigation:
             restoreMapViewport()
-            dataProvider.enterNavigation(followTrackMode: followTrackMode)
-            hide()
+            let result = dataProvider.enterNavigation(followTrackMode: followTrackMode)
+            guard result == .success else {
+                showNavigationError()
+                return
+            }
+            forceHide()
         case .clearAllPoints:
             confirmClearAllPoints()
         }

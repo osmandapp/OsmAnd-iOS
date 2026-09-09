@@ -318,7 +318,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.append(toTrack: filePath, onComplete: onComplete)
     }
 
-    func enterNavigation(followTrackMode: Bool) {
+    func enterNavigation(followTrackMode: Bool) -> EOAPlanRouteNavigationResult {
         bridge.enterNavigation(withTrackName: mode.title,
                                followTrackMode: followTrackMode,
                                sourceFilePath: sourceFilePath)

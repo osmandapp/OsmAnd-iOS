@@ -156,6 +156,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                           applicationMode:(nullable OAApplicationMode *)applicationMode
                                           selectedSegment:(NSInteger)selectedSegment;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
@@ -1913,23 +1914,28 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     });
 }
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName
-                     followTrackMode:(BOOL)followTrackMode
-                      sourceFilePath:(NSString *)sourceFilePath
+- (EOAPlanRouteNavigationResult)enterNavigationWithTrackName:(NSString *)trackName
+                                             followTrackMode:(BOOL)followTrackMode
+                                              sourceFilePath:(NSString *)sourceFilePath
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || (![ctx hasRoute] && ![ctx hasChanges]))
-        return;
+    EOAPlanRouteNavigationResult preflightResult =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:ctx != nil];
+    if (preflightResult != EOAPlanRouteNavigationResultSuccess)
+        return preflightResult;
     OASGpxFile *gpx = [self navigationGpxWithEditingContext:ctx trackName:trackName];
+    if (gpx == nil)
+        return EOAPlanRouteNavigationResultExportFailed;
     OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
-    if (gpx == nil || mapActions == nil)
-        return;
+    if (mapActions == nil)
+        return EOAPlanRouteNavigationResultTransitionFailed;
     [self performNavigationWithGpx:gpx
                    editingContext:ctx
                     routingHelper:OARoutingHelper.sharedInstance
                        mapActions:mapActions
                   followTrackMode:followTrackMode
                    sourceFilePath:sourceFilePath];
+    return EOAPlanRouteNavigationResultSuccess;
 }
 
 - (EOAPlanRouteNavigationResult)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
@@ -1962,6 +1968,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges
 {
     return hasRoute || hasChanges;
+}
+
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+{
+    return hasContext ? EOAPlanRouteNavigationResultSuccess : EOAPlanRouteNavigationResultInvalidContext;
 }
 
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext

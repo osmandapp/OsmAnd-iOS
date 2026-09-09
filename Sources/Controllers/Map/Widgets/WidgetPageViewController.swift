@@ -49,7 +49,7 @@ final class WidgetPageViewController: UIViewController {
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != simpleWidgetViews.count {
+                if index < simpleWidgetViews.count - 1 {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }

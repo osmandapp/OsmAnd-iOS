@@ -430,8 +430,11 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         guard !hiddenMapControlStates.isEmpty else { return }
         hiddenMapControlStates.forEach { $0.view.isHidden = $0.wasHidden }
         hiddenMapControlStates.removeAll()
-        mapPanel.hudViewController?.updateControlsLayout(false)
-        mapPanel.hudViewController?.updateDependentButtonsVisibility()
+        guard let hudViewController = mapPanel.hudViewController else { return }
+        hudViewController.updateControlsLayout(false)
+        hudViewController.updateDependentButtonsVisibility()
+        hudViewController.view.layoutIfNeeded()
+        hudViewController.mapHudLayout.updateButtons()
     }
 
     private func setCustomMode() {

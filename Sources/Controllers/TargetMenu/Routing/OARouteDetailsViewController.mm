@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
-            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:self.analysis nightMode:[OAAppSettings sharedManager].nightMode];
+            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:self.analysis nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
             {

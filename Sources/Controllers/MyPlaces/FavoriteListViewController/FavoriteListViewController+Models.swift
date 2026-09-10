@@ -8,7 +8,7 @@
 
 enum ScreenMode {
     case root
-    case folder(FavoriteFolderRow, previousTitle: String)
+    case folder(String, previousTitle: String)
 }
 
 enum FavoriteFolderSection: String, Hashable {
@@ -54,7 +54,7 @@ enum FavoriteListItem: Hashable {
     var selectionItem: FavoriteSelectionItem? {
         switch self {
         case .folder(let folder):
-            return .folder(folder.bridgeItem.groupName)
+            return .folder(folder.fullPath)
         case .favorite(let favorite):
             return .favorite(favorite.bridgeItem.identifier)
         default:
@@ -71,7 +71,7 @@ enum FavoriteListItem: Hashable {
         case .header(let section):
             return .header(section)
         case .folder(let folder):
-            return .folder(folder.bridgeItem.groupName)
+            return .folder(folder.fullPath)
         case .favorite(let favorite):
             return .favorite(favorite.bridgeItem.identifier)
         case .statsFooter:
@@ -109,18 +109,16 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
         return formatter
     }()
 
-    let bridgeItem: OAFavoriteFolderBridgeItem
+    let fullPath: String
+    let group: OAFavoriteFolderBridgeItem?
+    let lastModified: Date?
+    let subtreePointsCount: Int
 
-    var title: String { bridgeItem.title }
-
-    var isVisible: Bool { bridgeItem.isVisible }
-
-    var isPinned: Bool { bridgeItem.isPinned }
-
-    var lastModified: Date? { bridgeItem.lastModifiedDate }
-
+    var title: String { group?.title ?? OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.shared.lastSegment(fullPath: fullPath)) }
+    var isVisible: Bool { group?.isVisible ?? true }
+    var isPinned: Bool { group?.isPinned ?? false }
     var subtitle: String {
-        let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
+        let pointsText = "\(NumberFormatter.localizedCount(subtreePointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
         guard let lastModified else { return pointsText }
         return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText)
     }
@@ -130,7 +128,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     }
 
     var iconColor: UIColor {
-        isVisible ? (bridgeItem.color ?? .iconColorSelected) : .iconColorSecondary
+        isVisible ? (group?.color ?? .iconColorSelected) : .iconColorSecondary
     }
 
     var titleColor: UIColor {
@@ -142,8 +140,18 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
         return UIFont(descriptor: descriptor, size: 0)
     }
 
-    init(item: OAFavoriteFolderBridgeItem) {
-        bridgeItem = item
+    init(folder: FavoriteFolder) {
+        fullPath = folder.fullPath
+        let group = folder.group
+        self.group = group
+        if folder.isRoot {
+            lastModified = group?.lastModifiedDate
+            subtreePointsCount = folder.exactPointsCount
+        } else {
+            let timestamp = folder.subtreeLastModified
+            lastModified = timestamp > 0 ? Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000.0) : nil
+            subtreePointsCount = folder.subtreePointsCount
+        }
     }
 }
 
@@ -169,7 +177,7 @@ struct FavoriteFolderStats: Hashable {
     var text: String {
         var parts: [String] = []
         if foldersCount > 0 {
-            parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
+            parts.append("\(localizedString("shared_string_folders").lowercased()) \(NumberFormatter.localizedCount(foldersCount))")
         }
 
         parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
@@ -179,7 +187,7 @@ struct FavoriteFolderStats: Hashable {
     }
 
     private var formattedPointsCount: String {
-        NumberFormatter.localizedString(from: NSNumber(value: pointsCount), number: .decimal)
+        NumberFormatter.localizedCount(pointsCount)
     }
 }
 

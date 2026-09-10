@@ -170,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cardinalDirections = @[ @"N", @"NE", @"E", @"SE", @"S", @"SW", @"W", @"NW"];
     _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
     _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
-    _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
+    _imageView.image = _settings.isAppMapNightMode ? _centerIconNight : _centerIconDay;
     self.hidden = YES;
 
     _degrees = [NSMutableArray arrayWithCapacity:72];
@@ -184,7 +184,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) updateStyles
 {
-    _cachedMapMode = _settings.nightMode;
+    _cachedMapMode = _settings.isAppMapNightMode;
 
     _rulerCircleAttrs = [_mapViewController getLineRenderingAttributes:@"rulerCircle"];
     _rulerCircleAltAttrs = [_mapViewController getLineRenderingAttributes:@"rulerCircleAlt"];
@@ -228,8 +228,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 {
     BOOL showLightCenterIcon;
     if (_cachedRulerMode == RULER_MODE_NO_CIRCLES)
-        showLightCenterIcon = _settings.nightMode;
-    else if (!_settings.nightMode)
+        showLightCenterIcon = _settings.isAppMapNightMode;
+    else if (!_settings.isAppMapNightMode)
         showLightCenterIcon = _cachedRulerMode == RULER_MODE_LIGHT;
     else
         showLightCenterIcon = YES;
@@ -782,10 +782,10 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _imageView.hidden = mapPanel.activeTargetType == OATargetRoutePlanning;
     if (visible)
     {
-        if (_firstUpdate || _cachedMapMode != _settings.nightMode)
+        if (_firstUpdate || _cachedMapMode != _settings.isAppMapNightMode)
         {
-            _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
-            _cachedMapMode = _settings.nightMode;
+            _imageView.image = _settings.isAppMapNightMode ? _centerIconNight : _centerIconDay;
+            _cachedMapMode = _settings.isAppMapNightMode;
         }
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;

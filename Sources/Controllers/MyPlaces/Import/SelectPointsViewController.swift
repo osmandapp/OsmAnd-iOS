@@ -327,8 +327,8 @@ private extension SelectPointsViewController {
         case .all: localizedString("shared_string_selected")
         case .none: localizedString("shared_string_not_selected")
         case .part: String(format: localizedString("ltr_or_rtl_combine_via_slash"),
-                           "\(group.items.filter { selection.selectedItems.contains($0.point) }.count)",
-                           "\(group.items.count)")
+                           NumberFormatter.localizedCount(group.items.filter { selection.selectedItems.contains($0.point) }.count),
+                           NumberFormatter.localizedCount(group.items.count))
         }
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = group.name

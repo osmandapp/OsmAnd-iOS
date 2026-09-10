@@ -291,8 +291,9 @@ static OATransportRouteToolbarViewController *toolbarController;
     toolbarController = nil;
 }
 
-- (void) onMenuSwipedOff
+- (void)onMenuDismissed
 {
+    [super onMenuDismissed];
     [self.class hideToolbar];
     
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

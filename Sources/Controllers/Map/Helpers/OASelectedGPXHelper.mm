@@ -16,6 +16,7 @@
 #import "OAObservable.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OASavingTrackHelper.h"
 
 static NSString *kBackupSuffix = @"_osmand_backup";
 
@@ -146,6 +147,9 @@ static NSString *kBackupSuffix = @"_osmand_backup";
         [_operationQueue addOperations:gpxLoadOperations waitUntilFinished:NO];
     
     [self removeInactiveGpxFiles];
+
+    if (_loadingGPXPaths.count == 0)
+        [self startGpxFilesystemReconciliationIfNeeded];
     
     return _loadingGPXPaths.count > 0;
 }
@@ -176,6 +180,13 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 - (void)removeFilePathFromLoadingQueue:(NSString *)filePath
 {
     [_loadingGPXPaths removeObject:filePath];
+    if (_loadingGPXPaths.count == 0)
+        [self startGpxFilesystemReconciliationIfNeeded];
+}
+
+- (void)startGpxFilesystemReconciliationIfNeeded
+{
+    [[OASGpxDbHelper shared] startFilesystemReconciliation];
 }
 
 - (void)completeTrackLoadingForFilePath:(NSString *)absoluteFilePath
@@ -186,12 +197,17 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
-- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt {
+- (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt
+{
     for (OASGpxFile *gpxFile in _activeGpx.allValues) {
-        if ([[gpxFile getPointsList] containsObject:gpxWpt]) {
+        if ([[gpxFile getPointsList] containsObject:gpxWpt] || [[gpxFile getRoutePoints] containsObject:gpxWpt])
             return gpxFile;
-        }
     }
+    
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if ([[currentTrack getPointsList] containsObject:gpxWpt] || [[currentTrack getRoutePoints] containsObject:gpxWpt])
+        return currentTrack;
+    
     return nil;
 }
 
@@ -293,6 +309,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
     // cancel all operations download GPX
     [_operationQueue cancelAllOperations];
     [_loadingGPXPaths removeAllObjects];
+    [self startGpxFilesystemReconciliationIfNeeded];
 }
 
 @end

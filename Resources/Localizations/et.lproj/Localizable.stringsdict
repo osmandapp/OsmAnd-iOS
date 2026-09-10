@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Kustuta %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ element</string>
+			<key>other</key>
+			<string>%2$@ elementi</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kustuta %#@favorites@?</string>
+		<string>Kustuta %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Lemmik</string>
+			<string>%2$@ Lemmik</string>
 			<key>other</key>
-			<string>%ld Lemmikud</string>
+			<string>%2$@ Lemmikud</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kustuta %#@folders@?</string>
+		<string>Kustuta %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Kaust</string>
+			<string>%2$@ Kaust</string>
 			<key>other</key>
-			<string>%ld kaustad</string>
+			<string>%2$@ kaustad</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kustuta %#@folders@ ja %#@points@. Seda tegevust ei saa tagasi pöörata.</string>
+		<string>Kustuta %1$#@folders@ ja %3$#@points@. Seda tegevust ei saa tagasi pöörata.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Kaust</string>
+			<string>%2$@ Kaust</string>
 			<key>other</key>
-			<string>%ld kaustad</string>
+			<string>%2$@ kaustad</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punkt</string>
+			<string>%4$@ Punkt</string>
 			<key>other</key>
-			<string>%ld Punktid</string>
+			<string>%4$@ Punktid</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -75,6 +91,70 @@
 			<string>%ld peatus</string>
 			<key>other</key>
 			<string>%ld peatust</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ rada</string>
+			<key>other</key>
+			<string>%2$@ rada</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Kas sa oled kindel, et soovid kustutada %2$@ muudatuse?</string>
+			<key>other</key>
+			<string>Kas sa oled kindel, et soovid kustutada %2$@ muudatust?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Element</string>
+			<key>other</key>
+			<string>%2$@ Objekti</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Fail %2$@ sisaldab %3$@ eraldi rada. Vali see, mida soovid importida.</string>
+			<key>other</key>
+			<string>Fail %2$@ sisaldab %3$@ eraldi rada. Vali need, mida soovid importida.</string>
 		</dict>
 	</dict>
 </dict>

@@ -134,16 +134,56 @@ protocol SortableFolder {
             return tracks.sorted { $0.timeSpan < $1.timeSpan }
         }
     }
-    
+
+    static func sortTracksWithMode(_ tracks: [TrackItem], mode: TracksSortMode) -> [TrackItem] {
+        switch mode {
+        case .nameAZ:
+            return tracks.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .nameZA:
+            return tracks.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
+        case .lastModified:
+            return tracks.sorted { $0.lastModified > $1.lastModified }
+        case .nearest:
+            return sortByDataItem(tracks) { TracksSortModeHelper.distanceToGPX(gpx: $0) < TracksSortModeHelper.distanceToGPX(gpx: $1) }
+        case .newestDateFirst:
+            return sortByDataItem(tracks) { $0.creationDate > $1.creationDate }
+        case .oldestDateFirst:
+            return sortByDataItem(tracks) { $0.creationDate < $1.creationDate }
+        case .longestDistanceFirst:
+            return sortByDataItem(tracks) { $0.totalDistance > $1.totalDistance }
+        case .shortestDistanceFirst:
+            return sortByDataItem(tracks) { $0.totalDistance < $1.totalDistance }
+        case .longestDurationFirst:
+            return sortByDataItem(tracks) { $0.timeSpan > $1.timeSpan }
+        case .shorterDurationFirst:
+            return sortByDataItem(tracks) { $0.timeSpan < $1.timeSpan }
+        }
+    }
+
+    private static func sortByDataItem(_ tracks: [TrackItem], _ comparator: (GpxDataItem, GpxDataItem) -> Bool) -> [TrackItem] {
+        tracks.sorted { lhs, rhs in
+            switch (lhs.dataItem, rhs.dataItem) {
+            case let (l?, r?): return comparator(l, r)
+            case (_?, nil): return true
+            case (nil, _?): return false
+            case (nil, nil): return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+            }
+        }
+    }
+
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
         let tracksCount = folder.totalTracksCount
-        let basicDescription = String(format: localizedString("folder_tracks_count"), tracksCount)
+        let basicDescription = formattedTracksCount(Int(tracksCount))
         let lastModifiedString = TracksSortModeHelper.dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(folder.lastModified() / 1000)))
         if !lastModifiedString.isEmpty {
             return "\(lastModifiedString) • \(basicDescription)"
         } else {
             return basicDescription
         }
+    }
+
+    static func formattedTracksCount(_ count: Int) -> String {
+        String.localizedStringWithFormat(NSLocalizedString("folder_tracks_count", comment: ""), count, NumberFormatter.localizedCount(count))
     }
     
     @objc static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
@@ -152,7 +192,7 @@ protocol SortableFolder {
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")
         let duration = track.getAnalysis()?.getDurationInSeconds() ?? 0
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(duration), shortFormat: true) ?? localizedString("shared_string_not_available")
-        let waypointCount = "\(track.wptPoints)"
+        let waypointCount = NumberFormatter.localizedCount(track.wptPoints)
         let fullString = NSMutableAttributedString()
         let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
         let detailsText = "\(distance) • \(time) • \(waypointCount)"
@@ -204,10 +244,17 @@ protocol SortableFolder {
         if includeFolderInfo {
             appendFolderInfo(to: fullString, track: track, defaultAttributes: defaultAttributes)
         }
-        
+
         return fullString
     }
-    
+
+    static func getTrackDescription(trackItem: TrackItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
+        guard let track = trackItem.dataItem else {
+            return NSAttributedString(string: "")
+        }
+        return getTrackDescription(track: track, sortMode: sortMode, includeFolderInfo: includeFolderInfo)
+    }
+
     static func distanceToGPX(gpx: GpxDataItem) -> CGFloat {
         guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return CGFloat.greatestFiniteMagnitude }
         guard let analysis = gpx.getAnalysis(), let start = analysis.getLatLonStart(), CLLocationCoordinate2DIsValid(CLLocationCoordinate2DMake(start.latitude, start.longitude)) else { return CGFloat.greatestFiniteMagnitude }

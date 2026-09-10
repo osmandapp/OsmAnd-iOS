@@ -2725,7 +2725,7 @@
 "history_preferences_descr" = "Puedes desactivar el registro del historial individualmente para cada tipo de historial.";
 "history_clear_alert_message" = "¿Confirma que quiere eliminar todos los elementos del historial?";
 "history_actions_footer_text" = "Puede exportar el historial a un archivo. Puede borrar todas las entradas del historial registradas hasta el momento.";
-"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"ltr_or_rtl_combine_via_of" = "%@ de %@";
 "confirm_history_item_delete" = "¿Confirma que quiere eliminar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
 "rotate_map_manual_opt" = "Rotación manual";
@@ -3193,7 +3193,7 @@
 "my_places_no_tracks_title" = "Carpeta vacía";
 "my_places_no_tracks_descr" = "Esta carpeta aún no tiene ninguna pista.";
 "delete_folder" = "Borrar carpeta";
-"remove_folder_with_files_descr" = "¿Confirma que quiere eliminar la carpeta «%@» y las %d trazas?";
+"remove_folder_with_files_descr" = "¿Confirma que quiere eliminar la carpeta «%@» y las %@ trazas?";
 "new_track" = "Nueva pista";
 "not_recorded" = "Sin guardar";
 "start_recording" = "Iniciar grabación";
@@ -4144,10 +4144,10 @@
 "error_reading_gpx" = "No se pudieron leer los datos GPX.";
 "import_tracks_cancel_title" = "¿Quiere cancelar la importación?";
 "import_tracks_cancel_descr" = "Si cierra ahora, las selecciones de trazas no se importarán.";
-"import_tracks_descr_one" = "El archivo %@ contiene 1 traza separada. Seleccione la que quiera importar.";
-"import_tracks_descr_other" = "El archivo %@ contiene %d trazas separadas. Seleccione las que quiera importar.";
+"import_tracks_descr_one" = "El archivo %1$@ contiene %2$@ traza separada. Seleccione la que quiera importar.";
+"import_tracks_descr_other" = "El archivo %@ contiene %@ trazas separadas. Seleccione las que quiera importar.";
 "osm_edits_delete_items_confirmation" = "¿Confirma que quiere eliminar %ld ediciones?";
-"osm_edits_delete_item_confirmation" = "¿Confirma que quiere eliminar %ld edición?";
+"osm_edits_delete_item_confirmation" = "¿Confirma que quiere eliminar %@ edición?";
 "delete_colors_palette_dialog_summary" = "¿Confirma que quiere eliminar %@ paleta?";
 "gradient_input_value_duplicate_warn" = "Este valor ya existe en la paleta.";
 "favorites_empty_folder_description" = "Esta carpeta aún no contiene ningún punto.";

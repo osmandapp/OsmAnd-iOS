@@ -317,14 +317,15 @@
                 NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
                 : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
-                NSDictionary *makeBackupWarningCell = @{
+                NSMutableDictionary *makeBackupWarningCell = [@{
                     kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                     kCellKeyKey: @"makeBackupWarning",
                     kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
-                    kCellDescrKey: descr ? descr : @"",
-                    kCellIconTint: @(color),
-                    kCellIconNameKey: _status.warningIconName
-                };
+                    kCellDescrKey: descr ?: @"",
+                    kCellIconTint: @(color)
+                } mutableCopy];
+                if (_status.warningIconName != nil)
+                    makeBackupWarningCell[kCellIconNameKey] = _status.warningIconName;
                 [backupRows addRowFromDictionary:makeBackupWarningCell];
             }
         }
@@ -341,13 +342,13 @@
         }
         else if (_settingsHelper.isBackupSyncing)
         {
-            NSDictionary *cancellCell = @{
+            NSDictionary *cancelCell = @{
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"cancellBackupPressed",
                 kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
                 kCellIconNameKey: @"ic_custom_cancel"
             };
-            [backupRows addRowFromDictionary:cancellCell];
+            [backupRows addRowFromDictionary:cancelCell];
         }
         else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.BACKUP_COMPLETE)
         {

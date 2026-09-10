@@ -200,7 +200,7 @@ const static int kDoubleTouchCount = 2;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     for (const auto p : points)
     {
-        const auto icon = OsmAnd::SingleSkImage(settings.nightMode ? _centerIconNight : _centerIconDay);
+        const auto icon = OsmAnd::SingleSkImage(settings.isCurrentMapNightMode ? _centerIconNight : _centerIconDay);
         const auto iconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         
         OsmAnd::MapMarkerBuilder builder;

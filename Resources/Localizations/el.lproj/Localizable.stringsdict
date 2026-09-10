@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Διαγραφή %2$@ αντικειμένου;</string>
+			<key>other</key>
+			<string>Διαγραφή %2$@ αντικειμένων;</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Διαγραφή %#@favorites@?</string>
+		<string>Διαγραφή %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Αγαπημένο</string>
+			<string>%2$@ Αγαπημένο</string>
 			<key>other</key>
-			<string>%ld Αγαπημένα</string>
+			<string>%2$@ Αγαπημένα</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Διαγραφή %#@folders@?</string>
+		<string>Διαγραφή %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Φάκελος</string>
+			<string>%2$@ Φάκελος</string>
 			<key>other</key>
-			<string>%ld Φάκελοι</string>
+			<string>%2$@ Φάκελοι</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Διαγραφή %#@folders@ και %#@points@. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
+		<string>Διαγραφή %1$#@folders@ και %3$#@points@. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Φάκελος</string>
+			<string>%2$@ Φάκελος</string>
 			<key>other</key>
-			<string>%ld Φάκελοι</string>
+			<string>%2$@ Φάκελοι</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Σημείο</string>
+			<string>%4$@ Σημείο</string>
 			<key>other</key>
-			<string>%ld Σημεία</string>
+			<string>%4$@ Σημεία</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -75,6 +91,70 @@
 			<string>%ld στάση</string>
 			<key>other</key>
 			<string>%ld στάσεις</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ ίχνος</string>
+			<key>other</key>
+			<string>%2$@ ίχνη</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Σίγουρα θέλετε να διαγράψετε %2$@ αλλαγή;</string>
+			<key>other</key>
+			<string>Σίγουρα θέλετε να διαγράψετε %2$@ αλλαγές;</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Αντικείμενο</string>
+			<key>other</key>
+			<string>%2$@ Στοιχεία</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Το αρχείο %2$@ περιέχει %3$@ ξεχωριστό ίχνος. Επιλέξτε αυτό που θέλετε να εισάγετε.</string>
+			<key>other</key>
+			<string>Το αρχείο %2$@ περιέχει %3$@ ξεχωριστά ίχνη. Επιλέξτε αυτά που θέλετε να εισάγετε.</string>
 		</dict>
 	</dict>
 </dict>

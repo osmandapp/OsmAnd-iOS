@@ -2,10 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Șterge %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ element</string>
+			<key>few</key>
+			<string>%2$@ elemente</string>
+			<key>other</key>
+			<string>%2$@ elemente</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Șterge %#@favorites@?</string>
+		<string>Șterge %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,17 +31,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Favorit</string>
+			<string>%2$@ Favorit</string>
 			<key>few</key>
-			<string>%ld Favorite</string>
+			<string>%2$@ Favorite</string>
 			<key>other</key>
-			<string>%ld Favorite</string>
+			<string>%2$@ Favorite</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Șterge %#@folders@?</string>
+		<string>Șterge %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -31,17 +49,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Folder</string>
+			<string>%2$@ Folder</string>
 			<key>few</key>
-			<string>%ld folderele</string>
+			<string>%2$@ folderele</string>
 			<key>other</key>
-			<string>%ld folderele</string>
+			<string>%2$@ folderele</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Șterge %#@folders@ și %#@points@. Această acțiune nu poate fi anulată.</string>
+		<string>Șterge %1$#@folders@ și %3$#@points@. Această acțiune nu poate fi anulată.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -49,11 +67,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Folder</string>
+			<string>%2$@ Folder</string>
 			<key>few</key>
-			<string>%ld folderele</string>
+			<string>%2$@ folderele</string>
 			<key>other</key>
-			<string>%ld folderele</string>
+			<string>%2$@ folderele</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -62,11 +80,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Punct</string>
+			<string>%4$@ Punct</string>
 			<key>few</key>
-			<string>%ld Puncte</string>
+			<string>%4$@ Puncte</string>
 			<key>other</key>
-			<string>%ld Puncte</string>
+			<string>%4$@ Puncte</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -85,6 +103,78 @@
 			<string>%ld opriri</string>
 			<key>other</key>
 			<string>%ld opriri</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ traseu</string>
+			<key>few</key>
+			<string>%2$@ trasee</string>
+			<key>other</key>
+			<string>%2$@ de trasee</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Sunteți sigur că doriți să ștergeți %2$@ editare?</string>
+			<key>few</key>
+			<string>Sunteți sigur că doriți să ștergeți %2$@ editări?</string>
+			<key>other</key>
+			<string>Sunteți sigur că doriți să ștergeți %2$@ de editări?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Element</string>
+			<key>few</key>
+			<string>%2$@ Elemente</string>
+			<key>other</key>
+			<string>%2$@ Elemente</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Fișierul %2$@ conține %3$@ traseu separat. Selectați-l pe cel pe care doriți să îl importați.</string>
+			<key>few</key>
+			<string>Fișierul %2$@ conține %3$@ trasee separate. Selectați-le pe cele pe care doriți să le importați.</string>
+			<key>other</key>
+			<string>Fișierul %2$@ conține %3$@ de trasee separate. Selectați-le pe cele pe care doriți să le importați.</string>
 		</dict>
 	</dict>
 </dict>

@@ -56,17 +56,18 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     }
     var normalTitle: String {
         switch screenMode {
-        case .root: localizedString("shared_string_favorites")
-        case .folder(let folder, _): folder.title
+        case .root: return localizedString("shared_string_favorites")
+        case .folder(let fullPath, _):
+            return OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.shared.lastSegment(fullPath: fullPath))
         }
     }
     var parentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode, !folder.bridgeItem.groupName.isEmpty else { return nil }
-        return folder.bridgeItem.groupName
+        guard case .folder(let fullPath, _) = screenMode, !fullPath.isEmpty else { return nil }
+        return fullPath
     }
     var searchParentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode else { return nil }
-        return folder.bridgeItem.groupName
+        guard case .folder(let fullPath, _) = screenMode else { return nil }
+        return fullPath
     }
     var currentSortMode: FavoriteSortMode {
         isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()
@@ -401,8 +402,8 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         if collectionView.isEditing {
             let selectedItems = bridgeItems(for: selectionManager.selectedItems)
             let pointsCount = selectedFavoritePointsCount(for: selectedItems)
-            let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-            setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
+            let subtitle = "\(NumberFormatter.localizedCount(pointsCount)) \(localizedString("shared_string_gpx_points").lowercased())"
+            setNavigationTitle(NumberFormatter.localizedCount(selectedItems.count), subtitle: subtitle, hideSubtitle: false)
         } else {
             setNavigationTitle(normalTitle, subtitle: normalSubtitle, hideSubtitle: false)
         }

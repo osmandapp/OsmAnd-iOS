@@ -2,10 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Wotstronić %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ element</string>
+			<key>two</key>
+			<string>%2$@ elementaj</string>
+			<key>few</key>
+			<string>%2$@ elementy</string>
+			<key>other</key>
+			<string>%2$@ elementow</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@favorites@?</string>
+		<string>Wotstronić %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,19 +33,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Faworit</string>
+			<string>%2$@ Faworit</string>
 			<key>two</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 			<key>few</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 			<key>other</key>
-			<string>%ld Fawority</string>
+			<string>%2$@ Fawority</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@folders@?</string>
+		<string>Wotstronić %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -33,19 +53,19 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>few</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>other</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Wotstronić %#@folders@ a %#@points@. This action cannot be undone.</string>
+		<string>Wotstronić %1$#@folders@ a %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -53,13 +73,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld folder</string>
+			<string>%2$@ folder</string>
 			<key>two</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>few</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 			<key>other</key>
-			<string>%ld rjadowaki</string>
+			<string>%2$@ rjadowaki</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -68,13 +88,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>two</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>few</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 			<key>other</key>
-			<string>%ld Dypk</string>
+			<string>%4$@ Dypk</string>
 		</dict>
 	</dict>
 	<key>carplay_trip_via_stops</key>
@@ -95,6 +115,86 @@
 			<string>%ld zastawy</string>
 			<key>other</key>
 			<string>%ld zastawow</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ čara</string>
+			<key>two</key>
+			<string>%2$@ čarje</string>
+			<key>few</key>
+			<string>%2$@ čary</string>
+			<key>other</key>
+			<string>%2$@ čarow</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Chceće woprawdźe %2$@ změnu wušmórnyć?</string>
+			<key>two</key>
+			<string>Chceće woprawdźe %2$@ změnje wušmórnyć?</string>
+			<key>few</key>
+			<string>Chceće woprawdźe %2$@ změny wušmórnyć?</string>
+			<key>other</key>
+			<string>Chceće woprawdźe %2$@ změnow wušmórnyć?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Element</string>
+			<key>two</key>
+			<string>%2$@ Elementaj</string>
+			<key>few</key>
+			<string>%2$@ Elementy</string>
+			<key>other</key>
+			<string>%2$@ Elementow</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitu čaru. Wubjerće tu, kotruž chceće importować.</string>
+			<key>two</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitej čarje. Wubjerće te, kotrež chceće importować.</string>
+			<key>few</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebite čary. Wubjerće te, kotrež chceće importować.</string>
+			<key>other</key>
+			<string>Dataja %2$@ wobsahuje %3$@ wosebitych čarow. Wubjerće te, kotrež chceće importować.</string>
 		</dict>
 	</dict>
 </dict>

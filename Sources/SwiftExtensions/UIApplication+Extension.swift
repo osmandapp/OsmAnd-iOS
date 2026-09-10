@@ -91,9 +91,11 @@ extension UIApplication {
     ///
     /// This indicates that the Dashboard UI is being shown on the CarPlay display.
     @objc var isCarPlayDashboardActive: Bool {
-        connectedScenes.contains {
-            $0.session.configuration.name == Constants.carPlayDashboardConfiguration &&
-            $0.activationState == .foregroundActive
+        safelyCheckConnectedScenes {
+            connectedScenes.contains {
+                $0.session.configuration.name == Constants.carPlayDashboardConfiguration &&
+                $0.activationState == .foregroundActive
+            }
         }
     }
     

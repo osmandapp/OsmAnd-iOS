@@ -111,7 +111,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
             
             let row = section.createNewRow()
             row.setObj(widgetInfo, forKey: "widget_info")
-            row.iconName = widgetInfo.getMapIconId(nightMode: OAAppSettings.sharedManager().nightMode)
+            row.iconName = widgetInfo.getMapIconId(nightMode: OAAppSettings.sharedManager().isAppMapNightMode)
             row.title = widgetInfo.getTitle()
             row.descr = "1"
             row.cellType = OAValueTableViewCell.getIdentifier()

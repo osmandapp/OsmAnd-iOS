@@ -224,60 +224,60 @@
 - (void) updateSearchResult:(OASearchResultCollection *)res
           completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler
 {
-    NSMutableArray<OAQuickSearchListItem *> *searchItems = [NSMutableArray array];
-    NSMutableArray<CPListItem *> *cpItems = [NSMutableArray array];
-
-    if (_searching && _currentSearchPhrase.length > 0)
-        [cpItems addObject:_searchingItem];
-
-    NSInteger maximumItemCount = (NSInteger)CPListTemplate.maximumItemCount - 1;
-    if (res && [res getCurrentSearchResults].count > 0)
-    {
-        NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
-        OASearchWord* lastWord = res.phrase.getLastSelectedWord;
-        NSInteger inc = 1;
-        if (lastWord.getType == EOAObjectTypeStreet)
-        {
-            inc = searchResultItems.count / maximumItemCount;
-        }
-        __weak __typeof(self) weakSelf = self;
-        for (NSInteger i = 0; i < searchResultItems.count; i+= inc)
-        {
-            if (cpItems.count >= maximumItemCount)
-                break;
-
-            OASearchResult *sr = searchResultItems[i];
-            NSString *imageName = [OAQuickSearchListItem getIconName:sr] ?: @"";
-            UIImage *image = [UIImage mapSvgImageNamed:imageName] ?: [UIImage imageNamed:imageName];
-            OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
-            CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
-                                                       detailText:[self generateDescription:qsItem]
-                                                            image:image
-                                                   accessoryImage:[self getAccessoryImageFor:sr.objectType] accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-            cpItem.userInfo = @{
-                @"index": @(i),
-                @"searchListItem": qsItem
-            };
-            cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
-                [weakSelf onItemSelected:item completionHandler:completionHandler];
-                if (completionBlock)
-                    completionBlock();
-            };
-
-            [searchItems addObject:qsItem];
-            [cpItems addObject:cpItem];
-        }
-    }
-    else if (!_searching && _currentSearchPhrase.length > 0)
-    {
-        [cpItems addObject:_emptyItem];
-    }
-
-    _searchItems = searchItems;
-    _cpItems = cpItems;
+    NSArray<OASearchResult *> *searchResultItems = res ? [[res getCurrentSearchResults] copy] : @[];
+    BOOL isStreetResult = res && res.phrase.getLastSelectedWord.getType == EOAObjectTypeStreet;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+        NSMutableArray<OAQuickSearchListItem *> *searchItems = [NSMutableArray array];
+        NSMutableArray<CPListItem *> *cpItems = [NSMutableArray array];
+
+        if (_searching && _currentSearchPhrase.length > 0)
+            [cpItems addObject:_searchingItem];
+
+        NSInteger maximumItemCount = (NSInteger)CPListTemplate.maximumItemCount - 1;
+        if (searchResultItems.count > 0)
+        {
+            NSInteger inc = 1;
+            if (isStreetResult)
+                inc = searchResultItems.count / maximumItemCount;
+
+            __weak __typeof(self) weakSelf = self;
+            for (NSInteger i = 0; i < searchResultItems.count; i += inc)
+            {
+                if (cpItems.count >= maximumItemCount)
+                    break;
+
+                OASearchResult *sr = searchResultItems[i];
+                NSString *imageName = [OAQuickSearchListItem getIconName:sr] ?: @"";
+                UIImage *image = [UIImage mapSvgImageNamed:imageName] ?: [UIImage imageNamed:imageName];
+                OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
+                CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
+                                                           detailText:[self generateDescription:qsItem]
+                                                                image:image
+                                                       accessoryImage:[self getAccessoryImageFor:sr.objectType] accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+                cpItem.userInfo = @{
+                    @"index": @(i),
+                    @"searchListItem": qsItem
+                };
+                cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                    [weakSelf onItemSelected:(CPListItem *)item completionHandler:completionHandler];
+                    if (completionBlock)
+                        completionBlock();
+                };
+
+                [searchItems addObject:qsItem];
+                [cpItems addObject:cpItem];
+            }
+        }
+        else if (!_searching && _currentSearchPhrase.length > 0)
+        {
+            [cpItems addObject:_emptyItem];
+        }
+
+        _searchItems = [searchItems copy];
+        _cpItems = [cpItems copy];
+        CPListSection *section = [[CPListSection alloc] initWithItems:_cpItems];
+        [_resultsListTemplate updateSections:@[section]];
         if (completionHandler)
             completionHandler(@[]);
     });

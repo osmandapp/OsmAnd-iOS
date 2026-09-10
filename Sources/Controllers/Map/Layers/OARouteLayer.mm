@@ -163,7 +163,7 @@ struct DrawPathData
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
     _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(refreshRoute)
+                                                              withHandler:@selector(onUpdateGpxTracksOnMap)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 
     [self.app.paletteRepository addListenerListener:self];
@@ -969,6 +969,14 @@ struct DrawPathData
 - (void) refreshRoute
 {
     [self refreshRoute:YES];
+}
+
+- (void)onUpdateGpxTracksOnMap
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshRoute];
+    });
 }
 
 - (void) refreshRoute:(BOOL)forceRedraw

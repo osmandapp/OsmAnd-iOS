@@ -3493,7 +3493,7 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_gpx_tracks" = "Tracks";
 "navigate_point_format_DMS" = "DDD MM SS.S";
-"shared_string_show_less" = "Weniger zeigen";
+"shared_string_show_less" = "Weniger anzeigen";
 "quick_action_verb_start_pause" = "Start/Pause";
 "lang_ber" = "Berberisch";
 "shared_string_pause" = "Pause";
@@ -3515,7 +3515,7 @@
 "lang_te" = "Telugu";
 "lang_tl" = "Tagalog";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"detailed_track_guidance" = "Detaillierte Track Navigation";
+"detailed_track_guidance" = "Detaillierte Track-Navigation";
 "shared_string_import" = "Importieren";
 "battery_widget_level_privacy_ios_desc" = "Aus Gründen des iOS-Datenschutzes kann das Widget den Akkustand nur in 5-Prozent-Schritten anzeigen, z. B. 35 %, 60 % oder 85 %";
 "osmand_live" = "OsmAnd Live";
@@ -4042,7 +4042,7 @@
 "shared_string_alt_name" = "Alternativer Name";
 "y_axis" = "Y-Achse";
 "x_axis" = "X-Achse";
-"external_sensor_widgets" = "Externer Sensor";
+"external_sensor_widgets" = "Externe Sensoren";
 "read_on" = "Lesen auf %@";
 "vehicle_metrics_chart_category" = "Fahrzeugdaten";
 "poi_cuisine" = "Küche";
@@ -4122,7 +4122,7 @@
 "routing_attr_motor_type_ethanol_name" = "Ethanol";
 "plugin_ais_tracker_name" = "AIS-Schiffstracker";
 "traffic_warning_red_light_camera" = "Rotlichtblitzer";
-"shared_string_disabled" = "Deaktiveret";
+"shared_string_disabled" = "Deaktiviert";
 "gpx_logging_no_data" = "Keine Daten";
 "share_link" = "Link teilen";
 "share_as_file" = "Als Datei teilen";

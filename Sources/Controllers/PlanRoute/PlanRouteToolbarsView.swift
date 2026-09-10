@@ -91,6 +91,8 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
+        saveButton.tintAdjustmentMode = .normal
+        
         let trailingStack = UIStackView(arrangedSubviews: [optionsButton, saveButton])
         trailingStack.spacing = Self.buttonSpacing
         trailingStack.alignment = .center

@@ -33,30 +33,6 @@ enum GridFormat: Int32, CaseIterable {
         }
     }
     
-    func projection() -> OAProjection {
-        switch self {
-        case .dms, .dm, .digital:
-            return .wgs84
-        case .utm:
-            return .utm
-        case .mgrs:
-            return .mgrs
-        }
-    }
-    
-    func getFormat() -> OAFormat {
-        switch self {
-        case .dms:
-            return .dms
-        case .dm:
-            return .dm
-        case .digital:
-            return .decimal
-        case .utm, .mgrs:
-            return .decimal
-        }
-    }
-    
     static func valueOf(_ formatId: Int) -> GridFormat {
         switch formatId {
         case MAP_GEO_FORMAT_DEGREES:
@@ -109,34 +85,11 @@ enum GridLabelsPosition: Int32, CaseIterable {
     }
 }
 
-@objc
-enum OAProjection: Int32 {
-    case wgs84 = 0
-    case utm
-    case mgrs
-    case mercator
-}
-
-@objc
-enum OAFormat: Int32 {
-    case decimal = 0
-    case dms
-    case dm
-}
-
 @objcMembers
 final class GridFormatWrapper: NSObject {
     static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
         let format = GridFormat.valueOf(Int(geoFormatId))
         return NSNumber(value: format.rawValue)
-    }
-    
-    static func projection(for format: GridFormat) -> OAProjection {
-        format.projection()
-    }
-    
-    static func getFormat(for format: GridFormat) -> OAFormat {
-        format.getFormat()
     }
     
     static func needSuffixesForFormat(_ format: GridFormat) -> Bool {

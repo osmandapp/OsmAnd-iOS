@@ -50,8 +50,10 @@
 #import "OAWeatherHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAObservable.h"
+#import "OsmAndSharedWrapper.h"
 
 #define kWidgetsTopPadding 10.0
+static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 @implementation OATextState
 @end
@@ -100,7 +102,7 @@
                    containerView:(ShadowPathView *)containerView
                              top:(BOOL)top
 {
-    if ([_settings.transparentMapTheme get])
+    if (_settings.isTransparentWidgets)
         containerView.direction = ShadowPathDirectionClear;
     else
         containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
@@ -305,7 +307,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     
@@ -323,7 +325,7 @@
             ResolvedWidgetPanelAppearance *appearance =
                 [WidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
             OATextState *panelState = [self calculateTextStateForAppearance:appearance baseState:state];
-            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
+            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
                 [widgetInfo.widget updateColors:panelState];
                 [widgetInfo.widget updatesSeparatorsColor:appearance.dividerColor];
@@ -360,7 +362,7 @@
     }
     else
     {
-        if ([OAUtilities isLandscapeIpadAware])
+        if (_settings.isCompactPanelsLayout)
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
             [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.isAppMapNightMode];
@@ -419,7 +421,7 @@
         [WidgetPanelAppearanceResolver resolveForPanel:panel
                                                appMode:_settings.applicationMode.get
                                              nightMode:_settings.isAppMapNightMode];
-    view.direction = appearance.transparent ? ShadowPathDirectionClear : direction;
+    view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -442,6 +444,7 @@
 
 - (void) layoutWidgets
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
     BOOL hasTopWidgets = [_topPanelController hasWidgets];
     BOOL hasTopSpecialWidgets = [_topPanelController.specialPanelController hasWidgets];
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
@@ -476,7 +479,64 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    CGSize leftSize = CGSizeZero;
+    CGFloat leftPageControlHeight = 0.0;
+    CGFloat leftPanelWidth = 0.0;
+    if (hasLeftWidgets)
+    {
+        leftSize = [_leftPanelController calculateContentSize];
+        leftPageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
+        leftPanelWidth = leftSize.width + (_leftPanelController.view.layer.borderWidth * 2);
+    }
+
+    CGSize rightSize = CGSizeZero;
+    CGFloat rightPageControlHeight = 0.0;
+    CGFloat rightPanelWidth = 0.0;
+    if (hasRightWidgets)
+    {
+        rightSize = [_rightPanelController calculateContentSize];
+        rightPageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
+        rightPanelWidth = rightSize.width + (_rightPanelController.view.layer.borderWidth * 2);
+    }
+
+    BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
+    BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape];
+    CGFloat topPanelWidth;
+    CGFloat bottomPanelWidth;
+    CGFloat topPanelCenterX = 0.0;
+    if (isCompactPortrait)
+    {
+        CGFloat availableWidth = CGRectGetWidth(_mapHudViewController.widgetsView.bounds);
+        if (availableWidth <= 0)
+            availableWidth = DeviceScreenWidth;
+
+        CGFloat defaultPanelWidth = availableWidth * kCompactPortraitPanelWidthRatio;
+        CGFloat centeredMargin = (availableWidth - defaultPanelWidth) / 2;
+        CGFloat defaultMargin = [OASButtonPositionSize companion].DEF_MARGIN_DP;
+        CGFloat panelsMargin = defaultMargin * 2;
+        CGFloat topButtonsMargin = (ButtonAppearanceParams.smallSize + defaultMargin * 4) * 2;
+        CGFloat bottomButtonsMargin = (ButtonAppearanceParams.bigSize + defaultMargin * 4) * 2;
+        CGFloat topLeftMargin = MAX(centeredMargin, topButtonsMargin);
+        if (leftPanelWidth > 0)
+            topLeftMargin = MAX(topLeftMargin, leftPanelWidth + panelsMargin);
+
+        CGFloat topRightMargin = centeredMargin;
+        if (rightPanelWidth > 0)
+            topRightMargin = MAX(topRightMargin, rightPanelWidth + panelsMargin);
+
+        CGFloat bottomHorizontalMargin = MAX(centeredMargin, bottomButtonsMargin);
+        topPanelWidth = MAX(0, availableWidth - topLeftMargin - topRightMargin);
+        topPanelCenterX = (topLeftMargin - topRightMargin) / 2;
+        bottomPanelWidth = MAX(0, availableWidth - bottomHorizontalMargin * 2);
+    }
+    else
+    {
+        CGFloat horizontalPanelWidth = isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+        topPanelWidth = horizontalPanelWidth;
+        bottomPanelWidth = horizontalPanelWidth;
+    }
+    _mapHudViewController.topWidgetsViewCenterXConstraint.constant = topPanelCenterX;
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = topPanelWidth;
 
     if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
@@ -508,10 +568,8 @@
 
     if (hasLeftWidgets)
     {
-        CGSize leftSize = [_leftPanelController calculateContentSize];
-        CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + leftPageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
+        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftPanelWidth;
     }
     else
     {
@@ -519,7 +577,7 @@
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
 
-    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = bottomPanelWidth;
     if (hasBottomWidgets)
     {
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
@@ -550,18 +608,23 @@
    
     if (hasRightWidgets)
     {
-        CGSize rightSize = [_rightPanelController calculateContentSize];
-        CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + rightPageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
+        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightPanelWidth;
     }
     else
     {
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
     }
+
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
-    if ([OAUtilities isLandscapeIpadAware])
+    if (isCompactPortrait)
+    {
+        leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
+            ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant + kWidgetsTopPadding
+            : kWidgetsTopPadding;
+    }
+    else if (isCompactPanelsLayout)
     {
         if (hasLeftWidgets)
         {
@@ -579,7 +642,7 @@
         [self updateWeatherToolbarVisible];
 
     [self.delegate widgetsLayoutDidChange:YES];
-    [_mapWidgetRegistry notifyWidgetsPanelsDidLayout];   
+    [_mapWidgetRegistry notifyWidgetsPanelsDidLayout];
 }
 
 - (void)updateWeatherToolbarVisible
@@ -787,7 +850,7 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -980,7 +1043,9 @@
 
 - (void)onPanelSizeChanged
 {
-    [self layoutWidgets];
+    // Finish the current UIKit layout pass before recalculating widget constraints.
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
+    [self performSelector:@selector(layoutWidgets) withObject:nil afterDelay:0];
 }
 
 @end

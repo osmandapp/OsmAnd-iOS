@@ -39,7 +39,7 @@
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" constant="2" id="Q6U-lP-hgl"/>
                         <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" id="kmS-9A-Kcj"/>
-                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" constant="2" id="zPn-gh-3vl"/>
+                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" priority="999" constant="2" id="zPn-gh-3vl"/>
                     </constraints>
                 </view>
             </subviews>

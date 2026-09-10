@@ -156,7 +156,7 @@ final class RouteInfoWidget: OASimpleWidget {
         return data
     }
     
-    override func getWidgetState() -> OAWidgetState? {
+    override func storedWidgetState() -> OAWidgetState? {
         widgetState
     }
     

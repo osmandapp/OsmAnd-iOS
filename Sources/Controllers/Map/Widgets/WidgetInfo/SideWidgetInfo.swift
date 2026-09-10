@@ -19,8 +19,10 @@ class SideWidgetInfo: MapWidgetInfo {
          message: String,
          page: Int,
          order: Int,
-         widgetPanel: WidgetsPanel) {
-        super.init(key: key, widget: textWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
+         widgetPanel: WidgetsPanel,
+         appMode: OAApplicationMode,
+         screenLayoutMode: ScreenLayoutMode) {
+        super.init(key: key, widget: textWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel, appMode: appMode, screenLayoutMode: screenLayoutMode)
         
         textWidget.setContentTitle(getWidgetTitle())
     }
@@ -33,21 +35,29 @@ class SideWidgetInfo: MapWidgetInfo {
         return externalProviderPackage
     }
     
-    override func getUpdatedPanel() -> WidgetsPanel {
-        let widgetType = getWidgetType()
+    override func getUpdatedPanel(_ appMode: OAApplicationMode,
+                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
+        let widgetType = widgetType()
         if let widgetType {
-            if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key) {
+            if widgetType.defaultPanel == .leftPanel,
+               WidgetsPanel.rightPanel.contains(widgetId: key,
+                                                appMode: appMode,
+                                                screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .rightPanel
-            } else if widgetType.defaultPanel == .rightPanel, WidgetsPanel.leftPanel.contains(widgetId: key) {
+            } else if widgetType.defaultPanel == .rightPanel,
+                      WidgetsPanel.leftPanel.contains(widgetId: key,
+                                                      appMode: appMode,
+                                                      screenLayoutMode: screenLayoutMode) {
                 widgetPanel = .leftPanel
             } else {
                 widgetPanel = widgetType.defaultPanel
             }
         } else {
-            widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key) ? .leftPanel : .rightPanel
+            widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key,
+                                                          appMode: appMode,
+                                                          screenLayoutMode: screenLayoutMode) ? .leftPanel : .rightPanel
         }
         
         return widgetPanel
     }
 }
-

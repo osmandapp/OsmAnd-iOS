@@ -30,6 +30,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     private let appMode: OAApplicationMode
+    private let layoutMode: ScreenLayoutMode
     private let panels = WidgetsPanel.values
     private let appearanceSettings: WidgetPanelAppearanceSettings
     private let previewView = WidgetPanelPreviewView()
@@ -37,8 +38,11 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     private lazy var previewHeaderView = UIView()
     private var selectedPanel: WidgetsPanel
 
-    init(appMode: OAApplicationMode, initialPanel: WidgetsPanel = .leftPanel) {
+    init(appMode: OAApplicationMode,
+         layoutMode: ScreenLayoutMode,
+         initialPanel: WidgetsPanel = .leftPanel) {
         self.appMode = appMode
+        self.layoutMode = layoutMode
         selectedPanel = initialPanel
         appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode)
         super.init()
@@ -345,18 +349,17 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         controller.delegate = self
         controller.navControllerHistory = navigationController.saveCurrentStateForScrollableHud()
         OARootViewController.instance().mapPanel.showScrollableHudViewController(controller)
-        // FIXME: 
-      //  navigationController.popToViewController(OARootViewController.instance(), animated: false)
     }
 
     private func applySizeMode(_ mode: WidgetPanelSizeMode) {
         guard let sizeStyle = mode.widgetSizeStyle else { return }
-        WidgetsSettingsHelper(appMode: appMode).applyWidgetsSize(sizeStyle, panel: selectedPanel)
+        WidgetsSettingsHelper(appMode: appMode, layoutMode: layoutMode)
+            .applyWidgetsSize(sizeStyle, panel: selectedPanel)
     }
 
     private func applyIconMode(_ mode: WidgetPanelIconMode) {
         guard mode != .original else { return }
-        WidgetsSettingsHelper(appMode: appMode)
+        WidgetsSettingsHelper(appMode: appMode, layoutMode: layoutMode)
             .applyWidgetsIconVisibility(mode == .on, panel: selectedPanel)
     }
 

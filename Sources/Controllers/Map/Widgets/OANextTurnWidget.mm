@@ -114,7 +114,13 @@
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
         
-        OAWidgetsPanel *panel = [type getPanel:customId ?: type.id appMode:appMode];
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
+        NSString *widgetId = customId.length > 0 ? customId : type.id;
+        OAWidgetsPanel *panel = [type panel:widgetId
+                                  appMode:appMode
+                         screenLayoutMode:screenLayoutMode];
         _isPanelVertical = [panel isPanelVertical];
         
         _turnDrawable = [[OATurnDrawable alloc] initWithMini:!_isPanelVertical && horisontalMini themeColor:EOATurnDrawableThemeColorMap];

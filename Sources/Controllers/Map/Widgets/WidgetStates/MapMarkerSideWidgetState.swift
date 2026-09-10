@@ -115,6 +115,23 @@ final class MapMarkerSideWidgetState: OAWidgetState {
         let _ = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
         let _ = MapMarkerSideWidgetState.registerAverageSpeedIntervalPref(customId, settings: settings, firstMarker: firstMarker, widgetParams: nil)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerModePref(customId,
+                              settings: settings,
+                              firstMarker: firstMarker,
+                              widgetParams: nil).set(mapMarkerModePref.get(fromAppMode), mode: toAppMode)
+        Self.registerAverageSpeedIntervalPref(customId,
+                                              settings: settings,
+                                              firstMarker: firstMarker,
+                                              widgetParams: nil).set(averageSpeedIntervalPref.get(fromAppMode), mode: toAppMode)
+        Self.registerMarkerClickBehaviourPref(customId,
+                                               settings: settings,
+                                               firstMarker: firstMarker,
+                                               widgetParams: nil).set(markerClickBehaviourPref.get(fromAppMode), mode: toAppMode)
+    }
     
     func isFirstMarker() -> Bool {
         return firstMarker

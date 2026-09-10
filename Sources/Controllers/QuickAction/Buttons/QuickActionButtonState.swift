@@ -134,9 +134,12 @@ final class QuickActionButtonState: MapButtonState {
         }
     }
 
+    override func storedVisibilityPref() -> OACommonBoolean {
+        statePref
+    }
+
     override func resetForMode(_ appMode: OAApplicationMode) {
         super.resetForMode(appMode)
-        statePref.resetMode(toDefault: appMode)
         fabMarginPref.resetMode(toDefault: appMode)
     }
 

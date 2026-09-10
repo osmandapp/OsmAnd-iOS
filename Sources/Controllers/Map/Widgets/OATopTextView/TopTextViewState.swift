@@ -34,6 +34,12 @@ final class TopTextViewState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerShowNextTurnPreference(customId: customId).set(showNextTurnPref.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerShowNextTurnPreference(customId: customId).set(showNextTurnPref.get(fromAppMode), mode: toAppMode)
+    }
     
     @objc
     func isShowNextTurnEnabled(with appMode: OAApplicationMode) -> Bool {

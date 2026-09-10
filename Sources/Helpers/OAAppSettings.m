@@ -6184,7 +6184,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _tracksSortModes = [[[OACommonStringList withKey:tracksSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_tracksSortModes forKey:tracksSortModesKey];
         
-        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
+        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeValueFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
         
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
@@ -7691,8 +7691,15 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
     if (modes != nil && modes.count > 0)
     {
-        for (NSString *sortMode in modes)
+        // OACommonStringList splits imported values by comma, so restore the raw Android-compatible value first.
+        NSString *joinedSortModes = [modes componentsJoinedByString:@","];
+        NSArray<NSString *> *serializedSortModes = [joinedSortModes containsString:@";;"]
+            ? [joinedSortModes componentsSeparatedByString:@";;"]
+            : modes;
+        for (NSString *sortMode in serializedSortModes)
         {
+            if (sortMode.length == 0)
+                continue;
             NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
             if (parts.count == 2)
                 sortModes[parts[0]] = parts[1];
@@ -7743,7 +7750,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [sortTypes addObject:combined];
     }
     
-    return [sortTypes copy];
+    return sortTypes.count > 0 ? @[[[sortTypes componentsJoinedByString:@";;"] stringByAppendingString:@";;"]] : @[];
 }
 
 - (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes

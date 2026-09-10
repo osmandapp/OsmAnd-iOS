@@ -261,7 +261,7 @@ final class CoordinateFormatSelectorRouter: NSObject {
                                  excludedIds: [String],
                                  onSelected: @escaping (String) -> Void) {
         let mode = OAAppSettings.sharedManager().applicationMode.get()
-        let addVC = CoordinatesFormatAddViewController(appMode: mode, excludedIds: excludedIds)
+        let addVC = CoordinatesFormatAddViewController(appMode: mode, excludedIds: excludedIds, focusSearch: true)
         addVC.onFormatAdded = { id in
             OAAppSettings.sharedManager().coordinateFormatSettingsStorage.addRecentId(id)
             presenter.dismiss(animated: true) { onSelected(id) }

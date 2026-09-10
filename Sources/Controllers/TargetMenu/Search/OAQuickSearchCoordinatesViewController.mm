@@ -213,7 +213,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"chevron.left"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"xmark"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     backButton.tintColor = [UIColor labelColor];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
@@ -1085,7 +1085,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         if (cell)
         {
             NSInteger tag = [item[@"tag"] integerValue];
-            if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs)
+            if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs || tag == EOAQuickSearchCoordinatesTextFieldMaidenhead)
                 cell.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             else
                 cell.inputField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
@@ -1114,7 +1114,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             UITextInputAssistantItem *inputAssistantItem = cell.inputField.inputAssistantItem;
             inputAssistantItem.leadingBarButtonGroups = @[];
             inputAssistantItem.trailingBarButtonGroups = @[];
-            if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+            
+            BOOL isProjectedMetric = (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+                                        && _inputMode == CoordinateSearchInputModeEastingNorthing;
+            
+            if ((tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing) && !isProjectedMetric)
                 cell.inputField.inputAccessoryView = nil;
             else
                 cell.inputField.inputAccessoryView = self.toolbarView;
@@ -1321,12 +1325,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             hintList = @[@"+", @"C", @"F", @"G", @"H", @"J", @"M", @"P", @"Q", @"R", @"V", @"W", @"X"];
         else if (tag == EOAQuickSearchCoordinatesTextFieldMgrs)
             hintList = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"J", @"K", @"L", @"M", @"N", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
-        else if (tag == EOAQuickSearchCoordinatesTextFieldNorthing)
-            hintList = @[];
-        else if (tag == EOAQuickSearchCoordinatesTextFieldEasting)
-            hintList = @[];
+        else if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+            hintList = (_inputMode == CoordinateSearchInputModeEastingNorthing) ? @[@"-", @"."] : @[];
         else if (tag == EOAQuickSearchCoordinatesTextFieldZone)
             hintList = @[@"N", @"S", @"C", @"D", @"E", @"F", @"G", @"H", @"J", @"K", @"L", @"M", @"P", @"Q", @"R", @"T", @"U", @"V", @"W", @"X"];
+        else if (tag == EOAQuickSearchCoordinatesTextFieldMaidenhead)
+            hintList = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X"];
     }
     _shouldHideHintBar = hintList.count == 0;
     [self updateHints:hintList];

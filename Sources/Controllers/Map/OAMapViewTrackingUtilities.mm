@@ -13,6 +13,8 @@
 #import "OALocationServices.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -803,6 +805,9 @@ static double const TILT_ANIMATION_TIME = 0.4;
 {
     if (![_settings.autoZoomMap get] || location.speed <= 0)
         return NO;
+
+    if ([self isQuickActionsSheetVisible])
+        return NO;
     
     NSTimeInterval now = [[NSDate now] timeIntervalSince1970];
     BOOL isUserZoomed = _lastTimeManualZooming > _lastTimeAutoZooming;
@@ -811,6 +816,12 @@ static double const TILT_ANIMATION_TIME = 0.4;
         return (now - _lastTimeManualZooming) > MAX([_settings.autoFollowRoute get], AUTO_ZOOM_DEFAULT_CHANGE_ZOOM);
     else
         return (now - _lastTimeAutoZooming) > autoZoomFrequency;
+}
+
+- (BOOL)isQuickActionsSheetVisible
+{
+    OAFloatingButtonsHudViewController *floatingButtonsController = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
+    return floatingButtonsController != nil && [floatingButtonsController isActionSheetVisible];
 }
 
 - (void) setZoomTime:(NSTimeInterval)time

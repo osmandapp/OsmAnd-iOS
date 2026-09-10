@@ -85,17 +85,6 @@ class WidgetsPanel: NSObject, NSCopying {
     func widgetOrder(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
         pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).1
     }
-    
-    private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
-        if !rtl || self == .topPanel || self == .bottomPanel {
-            return self
-        } else if self == .leftPanel {
-            return .rightPanel
-        } else if self == .rightPanel {
-            return .leftPanel
-        }
-        fatalError("Unsupported panel")
-    }
 
     private func reorderedPages(_ appMode: OAApplicationMode,
                                 screenLayoutMode: NSNumber?) -> [[String]]? {

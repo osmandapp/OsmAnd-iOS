@@ -500,7 +500,8 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     }
 
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
-    BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape];
+    // Device orientation does not describe the window layout of an iPad app running on Mac.
+    BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape] && ![OAUtilities isiOSAppOnMac];
     CGFloat topPanelWidth;
     CGFloat bottomPanelWidth;
     CGFloat topPanelCenterX = 0.0;

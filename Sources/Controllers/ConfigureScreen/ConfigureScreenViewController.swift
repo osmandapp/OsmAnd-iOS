@@ -22,14 +22,14 @@ protocol MapButtonsDelegate: AnyObject {
 class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
 
     private enum RawKey: String {
-        case screenElements = "screen_elements"
-        case panelsLayout = "panels_layout"
-        case transparentWidgets = "map_widget_transparent"
+        case screenElements
+        case panelsLayout
+        case transparentWidgets
         case customButtons
         case defaultButtons
-        case positionOnMap = "position_on_map"
-        case distanceByTap = "map_widget_distance_by_tap"
-        case speedometer = "shared_string_speedometer"
+        case positionOnMap
+        case distanceByTap
+        case speedometer
     }
 
     private let selectedKey = "selected"

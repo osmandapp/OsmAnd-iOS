@@ -9,6 +9,7 @@
 #import "OACoordinatesGridLayer.h"
 #import "OAAppSettings.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAGridFormatMapping.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Map/GridMarksProvider.h>
 #import "OANativeUtilities.h"
@@ -225,10 +226,8 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
 
 - (void)updateGridAppearance
 {
-    OAFormat oaFmt = [GridFormatWrapper getFormatFor:_cachedGridFormat];
-    OAProjection oaProj = [GridFormatWrapper projectionFor:_cachedGridFormat];
-    auto format = static_cast<OsmAnd::GridConfiguration::Format>(oaFmt);
-    auto projection = static_cast<OsmAnd::GridConfiguration::Projection>(oaProj);
+    auto format = OACoreFormatForGridFormat(_cachedGridFormat);
+    auto projection = OACoreProjectionForGridFormat(_cachedGridFormat);
     OsmAnd::ZoomLevel minZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.min);
     OsmAnd::ZoomLevel maxZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.max);
     int colorInt = _cachedNightMode ? _cachedGridColorNight : _cachedGridColorDay;
@@ -236,7 +235,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     UIColor *haloUIColor = [OAUtilities isColorBright:colorFromARGB(colorInt)] ? [UIColor colorWithWhite:0 alpha:0.5] : [UIColor whiteColor];
     OsmAnd::FColorARGB haloColor = [haloUIColor toFColorARGB];
     
-    _gridConfiguration->setPrimaryProjection(projection);
+    _gridConfiguration->setPrimaryProjection(OsmAnd::GridConfiguration::Projection::WGS84);
     _gridConfiguration->setPrimaryFormat(format);
     _gridConfiguration->setPrimaryColor(color);
     _gridConfiguration->setPrimaryMinZoomLevel(minZoom);

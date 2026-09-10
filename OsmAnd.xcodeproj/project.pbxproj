@@ -5535,6 +5535,7 @@
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
+		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
 		C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesTableViewCell.swift; sourceTree = "<group>"; };
 		C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesTableViewCell.xib; sourceTree = "<group>"; };
@@ -14558,6 +14559,7 @@
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
 				C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */,
 				C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */,
+				C50611192DB9678300E8F204 /* OAGridFormatMapping.h */,
 				DA5A80BC26C563A600F274C7 /* OACurrentPositionHelper.h */,
 				DA5A80BA26C563A600F274C7 /* OACurrentPositionHelper.mm */,
 				DA5A809326C563A500F274C7 /* OACustomRegion.h */,

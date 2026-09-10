@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
     EOAPlanRouteNavigationResultSuccess = 0,
     EOAPlanRouteNavigationResultInvalidContext,
+    EOAPlanRouteNavigationResultNoPoints,
     EOAPlanRouteNavigationResultMissingApproximationResult,
     EOAPlanRouteNavigationResultExportFailed,
     EOAPlanRouteNavigationResultTransitionFailed

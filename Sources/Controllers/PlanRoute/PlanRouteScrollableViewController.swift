@@ -1030,7 +1030,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        guard ensurePointsForSaving() else { return }
+        guard ensureRouteHasPoints() else { return }
         let fileName: String
         let folder: String?
         switch dataProvider.mode {
@@ -1065,19 +1065,20 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
         switch action {
         case .saveAs:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentSaveDialog(saveAsCopy: false)
         case .saveAsCopy:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentSaveDialog(saveAsCopy: true)
         case .appendToExistingTrack:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentAppendToTrack()
         case .changeSegmentOrder:
             presentSegmentReorder()
         case .reverseRoute:
             dataProvider.reverseRoute()
         case .navigation:
+            guard ensureRouteHasPoints() else { return }
             if !followTrackMode && dataProvider.shouldRequestApproximationBeforeNavigation {
                 shouldEnterNavigationAfterApproximation = true
                 guard presentApproximationWarning(force: true) else {
@@ -1099,7 +1100,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
     }
 
-    private func ensurePointsForSaving() -> Bool {
+    private func ensureRouteHasPoints() -> Bool {
         guard dataProvider.hasPoints else {
             let alert = UIAlertController(title: nil,
                                           message: localizedString("none_point_error"),

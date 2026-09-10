@@ -24,7 +24,8 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (nullable NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpxFile
                                           sourceFilePath:(nullable NSString *)sourceFilePath;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
-+ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                 pointCount:(NSInteger)pointCount;
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
 + (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
                                                         hasRoute:(BOOL)hasRoute
@@ -172,7 +173,8 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                                                               selectedSegment:-1];
     [context addPoints];
     EOAPlanRouteNavigationResult result =
-        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:context != nil];
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:context != nil
+                                                                    pointCount:context.getPoints.count];
     OASGpxFile *navigationGpx = [[[OAPlanRouteEditingBridge alloc] init] navigationGpxWithEditingContext:context
                                                                                            trackName:@"plain-track"];
 
@@ -181,6 +183,23 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertEqual(result, EOAPlanRouteNavigationResultSuccess);
     XCTAssertNotNil(navigationGpx);
     XCTAssertEqual(navigationGpx.path.length, 0);
+}
+
+- (void)testGenericNavigationPreflightRejectsMissingPoints
+{
+    EOAPlanRouteNavigationResult invalidContext =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:NO pointCount:0];
+    EOAPlanRouteNavigationResult noPoints =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:YES pointCount:0];
+    EOAPlanRouteNavigationResult singlePoint =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:YES pointCount:1];
+    EOAPlanRouteNavigationResult multiplePoints =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:YES pointCount:2];
+
+    XCTAssertEqual(invalidContext, EOAPlanRouteNavigationResultInvalidContext);
+    XCTAssertEqual(noPoints, EOAPlanRouteNavigationResultNoPoints);
+    XCTAssertEqual(singlePoint, EOAPlanRouteNavigationResultSuccess);
+    XCTAssertEqual(multiplePoints, EOAPlanRouteNavigationResultSuccess);
 }
 
 - (void)testGenericNavigationPassesNilForDefaultEditingMode

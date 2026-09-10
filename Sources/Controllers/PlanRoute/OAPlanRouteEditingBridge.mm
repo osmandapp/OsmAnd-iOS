@@ -156,7 +156,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                           applicationMode:(nullable OAApplicationMode *)applicationMode
                                           selectedSegment:(NSInteger)selectedSegment;
 + (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
-+ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext;
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                 pointCount:(NSInteger)pointCount;
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
 + (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
                                                         hasRoute:(BOOL)hasRoute
@@ -1934,7 +1935,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     EOAPlanRouteNavigationResult preflightResult =
-        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:ctx != nil];
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:ctx != nil
+                                                                    pointCount:ctx.getPoints.count];
     if (preflightResult != EOAPlanRouteNavigationResultSuccess)
         return preflightResult;
     NSArray<OASWptPt *> *points = ctx.getPoints;
@@ -2004,8 +2006,13 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 }
 
 + (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                 pointCount:(NSInteger)pointCount
 {
-    return hasContext ? EOAPlanRouteNavigationResultSuccess : EOAPlanRouteNavigationResultInvalidContext;
+    if (!hasContext)
+        return EOAPlanRouteNavigationResultInvalidContext;
+    if (pointCount == 0)
+        return EOAPlanRouteNavigationResultNoPoints;
+    return EOAPlanRouteNavigationResultSuccess;
 }
 
 + (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount

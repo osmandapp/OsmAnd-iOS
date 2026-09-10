@@ -259,7 +259,7 @@
     [self openPlanRoute:NO];
 }
 
-- (void) openPlanRoute:(BOOL)showSnapWarning
+- (void) openPlanRoute:(BOOL)attachToRoads
 {
     if (_gpx)
     {
@@ -271,7 +271,8 @@
                 [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
                                                                        fileName:fileName ?: @""
                                                                  sourceFilePath:gpx.path
-                                                                showSnapWarning:showSnapWarning];
+                                                                 followTrackMode:attachToRoads
+                                                                showSnapWarning:attachToRoads];
             }];
         }];
     }

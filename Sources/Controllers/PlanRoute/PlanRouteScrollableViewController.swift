@@ -153,10 +153,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                       shouldAdjustMapToTrack: false)
     }
 
-    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:showSnapWarning:) static func openExistingTrack(
+    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:followTrackMode:showSnapWarning:) static func openExistingTrack(
         gpxFile: GpxFile,
         fileName: String,
         sourceFilePath: String?,
+        followTrackMode: Bool,
         showSnapWarning: Bool) {
         let resolvedFileName = fileName.isEmpty ? localizedString("quick_action_new_route") : fileName
         let trackSource = PlanRouteTrackSource(gpxFilePath: gpxFile.path, sourceFilePath: sourceFilePath)
@@ -166,7 +167,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                                                                gpxFile: gpxFile,
                                                                selectedSegment: Int(OAAppSettings.sharedManager().gpxRouteSegment.get()),
                                                                applicationMode: OARoutingHelper.sharedInstance().getAppMode())
-        showPlanRoute(dataProvider: dataProvider, followTrackMode: true, showSnapWarning: showSnapWarning)
+        showPlanRoute(dataProvider: dataProvider,
+                      followTrackMode: followTrackMode,
+                      showSnapWarning: showSnapWarning)
     }
 
     private static func showPlanRoute(dataProvider: PlanRouteDataProvider,

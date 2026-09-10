@@ -733,7 +733,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             return
         }
         
-        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
+        guard isTracksAvailable, currentSortMode.isCurrentLocationDistanceOriented, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()
@@ -923,9 +923,12 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
 
 extension MapSettingsGpxViewController {
     private func createSortMenu() -> UIMenu {
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
+        let lastModifiedOption = UIMenu(options: .displayInline, children: [
             createAction(for: .lastModified)
+        ])
+        let nearestOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearestToCurrentLocation),
+            createAction(for: .nearestToMapCenter)
         ])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [
             createAction(for: .nameAZ),
@@ -944,7 +947,7 @@ extension MapSettingsGpxViewController {
             createAction(for: .shorterDurationFirst)
         ])
         
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        return UIMenu(title: "", children: [lastModifiedOption, nearestOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
     }
     
     private func createAction(for sortType: TracksSortMode) -> UIAction {

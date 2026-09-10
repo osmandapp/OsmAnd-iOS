@@ -30,6 +30,10 @@ static OASWptPt *createPoint(double latitude, double longitude)
 + (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
                                                         hasRoute:(BOOL)hasRoute
                                              approximationNeeded:(BOOL)approximationNeeded;
++ (BOOL)shouldUseRoutePointsOnlyForNavigationWithPointCount:(NSInteger)pointCount
+                                                   hasRoute:(BOOL)hasRoute
+                                        approximationNeeded:(BOOL)approximationNeeded;
++ (OASGpxFile *)routePointsOnlyNavigationGpxWithPoints:(NSArray<OASWptPt *> *)points;
 - (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)context
                                                trackName:(NSString *)trackName;
 - (void)performNavigationWithGpx:(OASGpxFile *)gpx
@@ -259,6 +263,30 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertFalse([OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:1
                                                                                                hasRoute:NO
                                                                                     approximationNeeded:YES]);
+}
+
+- (void)testGenericNavigationUsesRoutePointsOnlyWithoutRouteOrApproximation
+{
+    XCTAssertTrue([OAPlanRouteEditingBridge shouldUseRoutePointsOnlyForNavigationWithPointCount:3
+                                                                                          hasRoute:NO
+                                                                               approximationNeeded:NO]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldUseRoutePointsOnlyForNavigationWithPointCount:1
+                                                                                           hasRoute:NO
+                                                                                approximationNeeded:NO]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldUseRoutePointsOnlyForNavigationWithPointCount:3
+                                                                                           hasRoute:YES
+                                                                                approximationNeeded:NO]);
+    XCTAssertFalse([OAPlanRouteEditingBridge shouldUseRoutePointsOnlyForNavigationWithPointCount:3
+                                                                                           hasRoute:NO
+                                                                                approximationNeeded:YES]);
+
+    NSArray<OASWptPt *> *points = @[createPoint(1, 2), createPoint(2, 3), createPoint(3, 4)];
+    OASGpxFile *gpx = [OAPlanRouteEditingBridge routePointsOnlyNavigationGpxWithPoints:points];
+
+    XCTAssertTrue(gpx.hasRtePt);
+    XCTAssertFalse(gpx.hasTrkPt);
+    XCTAssertEqual(gpx.getRoutePoints.count, points.count);
+    XCTAssertEqual(gpx.path.length, 0);
 }
 
 - (void)testAttachApplyPreflightReportsFailureReason

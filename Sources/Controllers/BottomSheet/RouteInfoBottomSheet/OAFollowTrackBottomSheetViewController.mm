@@ -266,11 +266,13 @@
         OASGpxFile *gpx = _gpx;
         NSString *fileName = gpx.path.lastPathComponent.stringByDeletingPathExtension;
         [self dismissViewControllerAnimated:NO completion:^{
-            [[OARootViewController instance].mapPanel closeRouteInfo];
-            [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
-                                                                   fileName:fileName ?: @""
-                                                             sourceFilePath:gpx.path
-                                                            showSnapWarning:showSnapWarning];
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            [mapPanel closeRouteInfo:YES onComplete:^{
+                [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
+                                                                       fileName:fileName ?: @""
+                                                                 sourceFilePath:gpx.path
+                                                                showSnapWarning:showSnapWarning];
+            }];
         }];
     }
 }

@@ -5046,3 +5046,5 @@
 "navigate_point_format_swiss_grid" = "Swiss Grid (CH1903)";
 "navigate_point_format_swiss_grid_plus" = "Swiss Grid (CH1903+)";
 "navigate_point_format_maidenhead" = "Maidenhead";
+"shared_string_recent" = "Recent";
+"coordinate_format_select_other" = "Select other format";

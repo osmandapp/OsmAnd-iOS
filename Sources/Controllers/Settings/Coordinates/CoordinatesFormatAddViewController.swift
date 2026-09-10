@@ -22,12 +22,14 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     private var searchQuery = ""
     private var searchResults: [CoordinateFormat] = []
     private var isSearchActive = false
+    private var shouldFocusSearch: Bool
     private var isSearching: Bool {
         isSearchActive
     }
 
-    init(appMode: OAApplicationMode, excludedIds: [String]) {
+    init(appMode: OAApplicationMode, excludedIds: [String], focusSearch: Bool = false) {
         self.excludedIds = Set(excludedIds.compactMap { CoordinateFormatIds.normalize($0) })
+        self.shouldFocusSearch = focusSearch
         super.init(appMode: appMode)
     }
     
@@ -44,6 +46,13 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupSearchController()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard shouldFocusSearch else { return }
+        shouldFocusSearch = false
+        searchController.isActive = true
     }
 
     // MARK: - NavBar
@@ -264,6 +273,15 @@ extension CoordinatesFormatAddViewController: UISearchResultsUpdating {
 // MARK: - UISearchControllerDelegate
 
 extension CoordinatesFormatAddViewController: UISearchControllerDelegate {
+    func presentSearchController(_ searchController: UISearchController) {
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+            if !searchController.searchBar.isFirstResponder {
+                searchController.searchBar.becomeFirstResponder()
+            }
+        }
+    }
+
     func willPresentSearchController(_ searchController: UISearchController) {
         isSearchActive = true
         searchQuery = searchController.searchBar.text ?? ""

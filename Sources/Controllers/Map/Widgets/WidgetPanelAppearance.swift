@@ -105,10 +105,19 @@ final class WidgetPanelAppearanceSettings {
     }
 
     private let appMode: OAApplicationMode
+    let layoutMode: ScreenLayoutMode?
     private let settings = OAAppSettings.sharedManager()
 
     init(appMode: OAApplicationMode) {
         self.appMode = appMode
+        layoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? .default(forAppMode: appMode)
+            : nil
+    }
+
+    init(appMode: OAApplicationMode, layoutMode: ScreenLayoutMode?) {
+        self.appMode = appMode
+        self.layoutMode = layoutMode
     }
 
     static func defaultColor(for target: WidgetPanelColorTarget,
@@ -268,7 +277,10 @@ final class WidgetPanelAppearanceSettings {
         let preference = modePreference(.background,
                                         panel: panel,
                                         defaultValue: WidgetPanelBackgroundMode.default.rawValue)
-        if !preference.isSet(for: appMode), settings.transparentMapTheme.get(appMode) {
+        let transparentWidgets = settings.transparentWidgets(
+            layoutMode.map { NSNumber(value: $0.rawValue) }
+        )
+        if !preference.isSet(for: appMode), transparentWidgets.get(appMode) {
             return .transparent
         }
         return WidgetPanelBackgroundMode(rawValue: preference.get(appMode)) ?? .default
@@ -304,8 +316,11 @@ final class WidgetPanelAppearanceSettings {
     private func modePreference(_ preference: ModePreference,
                                 panel: WidgetsPanel,
                                 defaultValue: String) -> OACommonString {
-        settings.registerStringPreference("widget_panel_\(preference.rawValue)_mode_\(panel.preferenceSuffix)",
-                                          defValue: defaultValue).makeProfile()
+        let key = "widget_panel_\(preference.rawValue)_mode_\(panel.preferenceSuffix)"
+        let basePreference = settings.registerStringPreference(key, defValue: defaultValue).makeProfile()
+        return settings.layoutPreference(basePreference,
+                                         preferenceKey: key,
+                                         screenLayoutMode: layoutMode.map { NSNumber(value: $0.rawValue) }) as! OACommonString
     }
 
     private func colorPreference(_ target: WidgetPanelColorTarget,
@@ -319,9 +334,14 @@ final class WidgetPanelAppearanceSettings {
         }
         let theme = nightMode ? "night" : "day"
         let defaultColor = Self.defaultColor(for: target, panel: panel, nightMode: nightMode)
-        return settings.registerIntPreference("widget_panel_\(key)_\(theme)_\(panel.preferenceSuffix)",
-                                              defValue: Int32(truncatingIfNeeded: defaultColor.toARGBNumber()))
-            .makeProfile()
+        let preferenceKey = "widget_panel_\(key)_\(theme)_\(panel.preferenceSuffix)"
+        let basePreference = settings.registerIntPreference(
+            preferenceKey,
+            defValue: Int32(truncatingIfNeeded: defaultColor.toARGBNumber())
+        ).makeProfile()
+        return settings.layoutPreference(basePreference,
+                                         preferenceKey: preferenceKey,
+                                         screenLayoutMode: layoutMode.map { NSNumber(value: $0.rawValue) }) as! OACommonInteger
     }
 }
 
@@ -357,7 +377,19 @@ final class WidgetPanelAppearanceResolver: NSObject {
         appMode: OAApplicationMode,
         nightMode: Bool
     ) -> ResolvedWidgetPanelAppearance {
-        let settings = WidgetPanelAppearanceSettings(appMode: appMode)
+        resolve(panel: panel,
+                appMode: appMode,
+                layoutMode: OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+                    ? .default(forAppMode: appMode)
+                    : nil,
+                nightMode: nightMode)
+    }
+
+    static func resolve(panel: WidgetsPanel,
+                        appMode: OAApplicationMode,
+                        layoutMode: ScreenLayoutMode?,
+                        nightMode: Bool) -> ResolvedWidgetPanelAppearance {
+        let settings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
         let backgroundMode = settings.backgroundMode(for: panel)
         let transparent = backgroundMode == .transparent
         var backgroundColor = WidgetPanelAppearanceSettings.defaultColor(for: .background,

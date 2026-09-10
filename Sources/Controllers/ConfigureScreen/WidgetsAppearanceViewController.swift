@@ -17,20 +17,26 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         case reset
     }
 
-    private enum Constants {
+    fileprivate enum Constants {
         static let previewHeight: CGFloat = 250
         static let previewVerticalPadding: CGFloat = 16
         static let rowHeight: CGFloat = 52
-        static let panelIconNames = [
-            "ic_custom20_screen_side_left",
-            "ic_custom20_screen_side_right",
-            "ic_custom20_screen_side_top",
-            "ic_custom20_screen_side_bottom"
-        ]
+        static func panelIcons(for layoutMode: ScreenLayoutMode?) -> [UIImage] {
+            layoutMode == .landscape
+                ? [UIImage(resource: .icCustom20ScreenSideLandscapeLeft),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeRight),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeTop),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeBottom)]
+                : [UIImage(named: "ic_custom20_screen_side_left")!,
+                   UIImage(named: "ic_custom20_screen_side_right")!,
+                   UIImage(named: "ic_custom20_screen_side_top")!,
+                   UIImage(named: "ic_custom20_screen_side_bottom")!]
+        }
     }
 
     private let appMode: OAApplicationMode
     private let layoutMode: ScreenLayoutMode
+    private let appearanceLayoutMode: ScreenLayoutMode?
     private let panels = WidgetsPanel.values
     private let appearanceSettings: WidgetPanelAppearanceSettings
     private let previewView = WidgetPanelPreviewView()
@@ -43,8 +49,12 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
          initialPanel: WidgetsPanel = .leftPanel) {
         self.appMode = appMode
         self.layoutMode = layoutMode
+        appearanceLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? layoutMode
+            : nil
         selectedPanel = initialPanel
-        appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode)
+        appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                            layoutMode: appearanceLayoutMode)
         super.init()
     }
 
@@ -100,8 +110,8 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     override func createSubview() -> UIView? {
-        let icons = zip(Constants.panelIconNames, panels).compactMap { iconName, panel -> UIImage? in
-            guard let image = UIImage(named: iconName) else { return nil }
+        let panelIcons = Constants.panelIcons(for: appearanceLayoutMode)
+        let icons = zip(panelIcons, panels).map { image, panel -> UIImage in
             image.accessibilityLabel = panel.title
             return image
         }
@@ -175,6 +185,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         let resolvedAppearance = WidgetPanelAppearanceResolver.resolve(panel: selectedPanel,
                                                                        appMode: appMode,
+                                                                       layoutMode: appearanceLayoutMode,
                                                                        nightMode: nightMode)
 
         switch key {
@@ -345,6 +356,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         guard let navigationController = OARootViewController.instance().navigationController else { return }
         let controller = WidgetPanelColorViewController(appMode: appMode,
                                                         panel: selectedPanel,
+                                                        layoutMode: appearanceLayoutMode,
                                                         target: target)
         controller.delegate = self
         controller.navControllerHistory = navigationController.saveCurrentStateForScrollableHud()
@@ -437,7 +449,8 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     @objc private func showCopyFrom() {
         let controller = WidgetsAppearanceCopyFromBottomSheetViewController(panels: panels,
-                                                                            selectedPanel: selectedPanel)
+                                                                            selectedPanel: selectedPanel,
+                                                                            layoutMode: appearanceLayoutMode)
         controller.onSelectProfile = { [weak self] in
             self?.showCopyFromProfile()
         }
@@ -461,10 +474,14 @@ private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNa
 
     private let panels: [WidgetsPanel]
     private let selectedPanel: WidgetsPanel
+    private let layoutMode: ScreenLayoutMode?
 
-    init(panels: [WidgetsPanel], selectedPanel: WidgetsPanel) {
+    init(panels: [WidgetsPanel],
+         selectedPanel: WidgetsPanel,
+         layoutMode: ScreenLayoutMode?) {
         self.panels = panels
         self.selectedPanel = selectedPanel
+        self.layoutMode = layoutMode
         super.init()
     }
 
@@ -507,11 +524,12 @@ private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNa
         profileRow.accessibilityLabel = profileRow.title
 
         let panelsSection = tableData.createNewSection()
-        for panel in panels where panel != selectedPanel {
+        let panelIcons = WidgetsAppearanceViewController.Constants.panelIcons(for: layoutMode)
+        for (index, panel) in panels.enumerated() where panel != selectedPanel {
             let row = panelsSection.createNewRow()
             row.key = RowKey.panel.rawValue
             row.title = panel.title
-            row.iconName = panel.iconName
+            row.icon = panelIcons[index]
             row.setObj(panel, forKey: RowKey.panel.rawValue)
             row.accessibilityLabel = row.title
         }

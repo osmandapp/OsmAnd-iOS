@@ -65,6 +65,13 @@ class WidgetsSettingsHelper: NSObject {
                 }
                 resetWidgetPreferences(preferenceLayoutMode)
                 settings.transparentWidgets(preferenceLayoutMode).resetMode(toDefault: appMode)
+                let appearanceLayoutMode = preferenceLayoutMode.flatMap {
+                    ScreenLayoutMode(rawValue: $0.int32Value)
+                }
+                for panel in WidgetsPanel.values {
+                    WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: appearanceLayoutMode)
+                        .reset(panel: panel)
+                }
             }
 
             ScreenLayoutMode.allCases.forEach { screenLayoutMode in
@@ -101,6 +108,13 @@ class WidgetsSettingsHelper: NSObject {
                                         widgetParams: widgetParams)
                 copyPrefFromAppMode(pref: settings.transparentWidgets(preferenceLayoutMode),
                                     fromAppMode: fromAppMode)
+                let appearanceLayoutMode = preferenceLayoutMode.flatMap {
+                    ScreenLayoutMode(rawValue: $0.int32Value)
+                }
+                for panel in WidgetsPanel.values {
+                    WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: appearanceLayoutMode)
+                        .copy(from: fromAppMode, panel: panel)
+                }
             }
             ScreenLayoutMode.allCases.forEach { screenLayoutMode in
                 ScreenElementsMode.allCases.forEach {

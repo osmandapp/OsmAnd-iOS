@@ -21,7 +21,6 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private enum RawKey: String {
         case screenElements = "screen_elements"
         case panelsLayout = "panels_layout"
-        case transparentWidgets = "map_widget_transparent"
         case customButtons
         case defaultButtons
         case positionOnMap = "position_on_map"
@@ -204,14 +203,6 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         if !isSharedLandscapeLayout {
             panelsLayoutRow.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
         }
-
-        let transparencyRow = widgetsSection.createNewRow()
-        transparencyRow.title = localizedString("map_widget_transparent")
-        transparencyRow.key = RawKey.transparentWidgets.rawValue
-        transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
-        let transparentWidgets = settings.transparentWidgets(preferenceLayoutMode)
-        transparencyRow.setObj(NSNumber(value: transparentWidgets.get(appMode)), forKey: selectedKey)
-        transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
 
         if isSharedLandscapeLayout {
             return
@@ -437,7 +428,7 @@ extension ConfigureScreenViewController {
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.image = item.icon ?? UIImage.templateImageNamed(item.iconName)
                 if item.key == RawKey.distanceByTap.rawValue {
                     let selected = item.bool(forKey: selectedKey)
                     cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
@@ -479,12 +470,6 @@ extension ConfigureScreenViewController {
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
-        
-        if data.key == RawKey.transparentWidgets.rawValue {
-            let preference = settings.transparentWidgets(preferenceLayoutMode)
-            preference.set(sw.isOn, mode: appMode)
-            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
-        }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {

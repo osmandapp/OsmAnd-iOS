@@ -586,13 +586,6 @@ extension WidgetsAppearanceViewController: WidgetPanelColorViewControllerDelegat
 }
 
 final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private var panel: WidgetsPanel = .leftPanel
-    private var hostedState: HostedPanelState?
-    private var panelSizeUpdateGeneration = 0
-    private var isMeasuringPanelSize = false
-
     private struct HostedPanelState {
         let controller: WidgetPanelViewController
         let originalParent: UIViewController?
@@ -612,14 +605,27 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let translatesAutoresizingMaskIntoConstraints: Bool
         let pageControlHidden: Bool
         let pageControlHeight: CGFloat
+        let pageControlTransform: CGAffineTransform
         let pageContainerCornerRadius: CGFloat
         let pageContainerMaskedCorners: CACornerMask
         let pageContainerSizeConstraints: [(constraint: NSLayoutConstraint, constant: CGFloat)]
-        var previewContentSize: CGSize
         let excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
         let disabledLongPressRecognizers: [UILongPressGestureRecognizer]
         let removedButtonMenus: [(button: UIButton, menu: UIMenu?)]
+        
+        var previewContentSize: CGSize
     }
+    
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    private var panel: WidgetsPanel = .leftPanel
+    private var hostedState: HostedPanelState?
+    private var pendingPanel: WidgetsPanel?
+    private var panelSizeUpdateGeneration = 0
+    private var isMeasuringPanelSize = false
+    
+    private weak var pendingParentViewController: UIViewController?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -649,10 +655,27 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        if hostedState == nil,
+           let pendingPanel,
+           let pendingParentViewController,
+           bounds.width > 0,
+           bounds.height > 0 {
+            self.pendingPanel = nil
+            self.pendingParentViewController = nil
+            panel = pendingPanel
+            hostWidgets(for: pendingPanel, parentViewController: pendingParentViewController)
+        }
         layoutHostedPanel()
     }
 
     func configure(panel: WidgetsPanel, parentViewController: UIViewController) {
+        guard bounds.width > 0, bounds.height > 0 else {
+            pendingPanel = panel
+            pendingParentViewController = parentViewController
+            return
+        }
+        pendingPanel = nil
+        pendingParentViewController = nil
         releaseHostedWidgets()
         self.panel = panel
         hostWidgets(for: panel, parentViewController: parentViewController)
@@ -660,6 +683,8 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     }
 
     func releaseHostedWidgets() {
+        pendingPanel = nil
+        pendingParentViewController = nil
         guard let state = hostedState else { return }
         panelSizeUpdateGeneration += 1
         state.controller.delegate = nil
@@ -675,6 +700,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         state.controller.view.translatesAutoresizingMaskIntoConstraints = state.translatesAutoresizingMaskIntoConstraints
         state.controller.pageControl.isHidden = state.pageControlHidden
         state.controller.pageControlHeightConstraint.constant = state.pageControlHeight
+        state.controller.pageControl.transform = state.pageControlTransform
         state.controller.pageContainerView.layer.cornerRadius = state.pageContainerCornerRadius
         state.controller.pageContainerView.layer.maskedCorners = state.pageContainerMaskedCorners
         state.pageContainerSizeConstraints.forEach { $0.constraint.constant = $0.constant }
@@ -698,7 +724,6 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         if let originalParent = state.originalParent {
             state.controller.didMove(toParent: originalParent)
         }
-        state.controller.view.layoutIfNeeded()
         state.controller.delegate = state.originalDelegate
         hostedState = nil
         if let hudViewController = state.originalParent as? OAMapHudViewController {
@@ -722,12 +747,6 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             controller = mapInfoController.bottomPanelController
         }
         controller.loadViewIfNeeded()
-        UIView.performWithoutAnimation {
-            controller.updateWidgetSizes()
-            controller.view.superview?.superview?.layoutIfNeeded()
-            controller.view.superview?.layoutIfNeeded()
-            controller.view.layoutIfNeeded()
-        }
         controller.view.layer.removeAllAnimations()
         controller.pageContainerView.layer.removeAllAnimations()
         let excludedWidgets = controller.widgetPages
@@ -760,6 +779,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalTranslatesAutoresizingMaskIntoConstraints = controller.view.translatesAutoresizingMaskIntoConstraints
         let originalPageControlHidden = controller.pageControl.isHidden
         let originalPageControlHeight = controller.pageControlHeightConstraint.constant
+        let originalPageControlTransform = controller.pageControl.transform
         let originalPageContainerCornerRadius = controller.pageContainerView.layer.cornerRadius
         let originalPageContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
         let pageContainerSizeConstraints = controller.pageContainerView.constraints.compactMap { constraint -> (constraint: NSLayoutConstraint, constant: CGFloat)? in
@@ -773,16 +793,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         }
         controller.delegate = nil
         excludedWidgets.forEach { $0.widget.isHidden = true }
-        controller.view.layoutIfNeeded()
         let panelContentSize = controller.calculateContentSize()
-        updatePageContainerSize(panelContentSize, for: controller)
         let previewContentSize = previewSize(for: panelContentSize,
                                              controller: controller,
                                              originalContainerSize: originalContainerSize)
-        var previewBounds = controller.view.bounds
-        previewBounds.size = previewContentSize
-        controller.view.bounds = previewBounds
-        controller.view.layoutIfNeeded()
         let state = HostedPanelState(controller: controller,
                                      originalParent: originalParent,
                                      originalDelegate: originalDelegate,
@@ -801,13 +815,14 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                                      translatesAutoresizingMaskIntoConstraints: originalTranslatesAutoresizingMaskIntoConstraints,
                                      pageControlHidden: originalPageControlHidden,
                                      pageControlHeight: originalPageControlHeight,
+                                     pageControlTransform: originalPageControlTransform,
                                      pageContainerCornerRadius: originalPageContainerCornerRadius,
                                      pageContainerMaskedCorners: originalPageContainerMaskedCorners,
                                      pageContainerSizeConstraints: pageContainerSizeConstraints,
-                                     previewContentSize: previewContentSize,
                                      excludedWidgets: excludedWidgets,
                                      disabledLongPressRecognizers: disabledLongPressRecognizers,
-                                     removedButtonMenus: removedButtonMenus)
+                                     removedButtonMenus: removedButtonMenus,
+                                     previewContentSize: previewContentSize)
         hostedState = state
         controller.willMove(toParent: nil)
         NSLayoutConstraint.deactivate(originalSuperviewConstraints)
@@ -816,7 +831,6 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         parentViewController.addChild(controller)
         contentView.addSubview(controller.view)
         controller.didMove(toParent: parentViewController)
-        controller.delegate = self
         controller.onCurrentPageChanged = { [weak self] in
             self?.updateHostedPanelSize()
         }
@@ -824,10 +838,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         controller.view.alpha = 1
         controller.view.isUserInteractionEnabled = true
         controller.view.translatesAutoresizingMaskIntoConstraints = true
-        UIView.performWithoutAnimation {
-            layoutHostedPanel()
-            layoutIfNeeded()
-        }
+        updatePageContainerSize(panelContentSize, for: controller)
+        layoutHostedPanel()
+        controller.delegate = self
+        schedulePanelSizeUpdate()
     }
 
     private func hostedPanelContentSize() -> CGSize {
@@ -846,6 +860,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                 break
             }
         }
+        controller.view.setNeedsLayout()
     }
 
     private func previewSize(for panelContentSize: CGSize,
@@ -872,8 +887,17 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     }
 
     func onPanelSizeChanged() {
-        guard !isMeasuringPanelSize else { return }
+        guard !isMeasuringPanelSize, !isPageTransitionInProgress else { return }
         schedulePanelSizeUpdate()
+    }
+
+    private var isPageTransitionInProgress: Bool {
+        guard let pageScrollView = hostedState?.controller.pageViewController?.scrollView else {
+            return false
+        }
+        return pageScrollView.isTracking
+            || pageScrollView.isDragging
+            || pageScrollView.isDecelerating
     }
 
     private func schedulePanelSizeUpdate() {
@@ -881,7 +905,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         panelSizeUpdateGeneration += 1
         let generation = panelSizeUpdateGeneration
         DispatchQueue.main.async { [weak self] in
-            guard let self, generation == self.panelSizeUpdateGeneration else { return }
+            guard let self,
+                  generation == self.panelSizeUpdateGeneration,
+                  !self.isPageTransitionInProgress else { return }
             self.updateHostedPanelSize()
         }
     }
@@ -932,6 +958,13 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     }
 
     private func layoutHostedPanel() {
+        guard bounds.width > 0, bounds.height > 0 else {
+            contentView.transform = .identity
+            contentView.frame = .zero
+            scrollView.contentSize = .zero
+            scrollView.isScrollEnabled = false
+            return
+        }
         guard let state = hostedState else {
             contentView.frame = .zero
             scrollView.contentSize = bounds.size
@@ -947,10 +980,17 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         }
         state.view.isHidden = false
         state.view.transform = .identity
-        state.view.frame = CGRect(origin: .zero, size: contentSize)
+        var hostedViewSize = state.bounds.size
+        if hostedViewSize.width <= 0 || hostedViewSize.height <= 0 {
+            hostedViewSize = state.originalContainerSize
+        }
+        hostedViewSize.width = max(hostedViewSize.width, contentSize.width)
+        hostedViewSize.height = max(hostedViewSize.height, contentSize.height)
+        state.view.frame = CGRect(origin: .zero, size: hostedViewSize)
         state.view.setNeedsLayout()
-        state.view.layoutIfNeeded()
+        updatePageControlPosition(for: state, contentSize: contentSize)
         let scale = min(1, bounds.width / contentSize.width)
+        guard scale > 0, scale.isFinite else { return }
         let size = CGSize(width: contentSize.width * scale, height: contentSize.height * scale)
         let x: CGFloat
         if panel == .rightPanel {
@@ -967,6 +1007,19 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         contentView.frame.origin = CGPoint(x: x, y: y)
         scrollView.contentSize = CGSize(width: bounds.width, height: max(bounds.height, size.height))
         scrollView.isScrollEnabled = size.height > bounds.height
+    }
+
+    private func updatePageControlPosition(for state: HostedPanelState, contentSize: CGSize) {
+        guard let pageControl = state.controller.pageControl else { return }
+        guard !state.pageControlHidden,
+              panel == .leftPanel || panel == .rightPanel else {
+            pageControl.transform = state.pageControlTransform
+            return
+        }
+        let offset = contentSize.height - state.view.bounds.height
+        pageControl.transform = state.pageControlTransform.concatenating(
+            CGAffineTransform(translationX: 0, y: offset)
+        )
     }
 
     deinit {

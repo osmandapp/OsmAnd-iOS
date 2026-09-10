@@ -161,6 +161,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 + (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
                                                         hasRoute:(BOOL)hasRoute
                                              approximationNeeded:(BOOL)approximationNeeded;
++ (nullable OAApplicationMode *)navigationAppModeForEditingAppMode:(nullable OAApplicationMode *)editingAppMode;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
@@ -227,8 +228,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (nullable OAApplicationMode *)defaultAppMode
 {
-    OAApplicationMode *mode = [self editingContext].appMode;
-    return (mode == OAApplicationMode.DEFAULT) ? nil : mode;
+    return [OAPlanRouteEditingBridge navigationAppModeForEditingAppMode:[self editingContext].appMode];
 }
 
 - (BOOL)isTrackReadyToCalculate
@@ -2020,6 +2020,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return pointCount != 1 && !hasRoute && approximationNeeded;
 }
 
++ (OAApplicationMode *)navigationAppModeForEditingAppMode:(OAApplicationMode *)editingAppMode
+{
+    return editingAppMode == OAApplicationMode.DEFAULT ? nil : editingAppMode;
+}
+
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges
@@ -2072,8 +2077,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     else
     {
         [mapActions stopNavigationWithoutConfirm];
+        OAApplicationMode *navigationAppMode = [OAPlanRouteEditingBridge navigationAppModeForEditingAppMode:ctx.appMode];
         [mapActions enterRoutePlanningModeGivenGpx:gpx
-                                           appMode:ctx.appMode
+                                           appMode:navigationAppMode
                                               path:navigationFilePath
                                               from:nil
                                           fromName:nil

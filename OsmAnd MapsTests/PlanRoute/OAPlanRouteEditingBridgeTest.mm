@@ -3,8 +3,10 @@
 #import <OsmAndShared/OsmAndShared.h>
 #import "OAApplicationMode.h"
 #import "OAGpxData.h"
+#import "OAMapActions.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAPlanRouteEditingBridge.h"
+#import "OARoutingHelper.h"
 
 static OASWptPt *createPoint(double latitude, double longitude)
 {
@@ -29,9 +31,53 @@ static OASWptPt *createPoint(double latitude, double longitude)
                                              approximationNeeded:(BOOL)approximationNeeded;
 - (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)context
                                                trackName:(NSString *)trackName;
+- (void)performNavigationWithGpx:(OASGpxFile *)gpx
+                  editingContext:(OAMeasurementEditingContext *)context
+                   routingHelper:(OARoutingHelper *)routingHelper
+                      mapActions:(OAMapActions *)mapActions
+                 followTrackMode:(BOOL)followTrackMode
+                  sourceFilePath:(nullable NSString *)sourceFilePath;
 + (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
                                                                   hasRoute:(BOOL)hasRoute
                                                                 hasChanges:(BOOL)hasChanges;
+
+@end
+
+@interface OAPlanRouteTestRoutingHelper : NSObject
+
+@end
+
+@implementation OAPlanRouteTestRoutingHelper
+
+- (BOOL)isFollowingMode
+{
+    return NO;
+}
+
+@end
+
+@interface OAPlanRouteTestMapActions : NSObject
+
+@property (nonatomic) OAApplicationMode *capturedAppMode;
+
+@end
+
+@implementation OAPlanRouteTestMapActions
+
+- (void)stopNavigationWithoutConfirm
+{
+}
+
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                               appMode:(OAApplicationMode *)appMode
+                                  path:(NSString *)path
+                                  from:(CLLocation *)from
+                              fromName:(OAPointDescription *)fromName
+        useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                            showDialog:(BOOL)showDialog
+{
+    self.capturedAppMode = appMode;
+}
 
 @end
 
@@ -135,6 +181,42 @@ static OASWptPt *createPoint(double latitude, double longitude)
     XCTAssertEqual(result, EOAPlanRouteNavigationResultSuccess);
     XCTAssertNotNil(navigationGpx);
     XCTAssertEqual(navigationGpx.path.length, 0);
+}
+
+- (void)testGenericNavigationPassesNilForDefaultEditingMode
+{
+    OAPlanRouteEditingBridge *bridge = [[OAPlanRouteEditingBridge alloc] init];
+    OAMeasurementEditingContext *context = [[OAMeasurementEditingContext alloc] init];
+    context.appMode = OAApplicationMode.DEFAULT;
+    OAPlanRouteTestRoutingHelper *routingHelper = [[OAPlanRouteTestRoutingHelper alloc] init];
+    OAPlanRouteTestMapActions *mapActions = [[OAPlanRouteTestMapActions alloc] init];
+
+    [bridge performNavigationWithGpx:[[OASGpxFile alloc] initWithAuthor:@"test"]
+                       editingContext:context
+                        routingHelper:(OARoutingHelper *)routingHelper
+                           mapActions:(OAMapActions *)mapActions
+                      followTrackMode:NO
+                       sourceFilePath:nil];
+
+    XCTAssertNil(mapActions.capturedAppMode);
+}
+
+- (void)testGenericNavigationPreservesExplicitEditingMode
+{
+    OAPlanRouteEditingBridge *bridge = [[OAPlanRouteEditingBridge alloc] init];
+    OAMeasurementEditingContext *context = [[OAMeasurementEditingContext alloc] init];
+    context.appMode = OAApplicationMode.BICYCLE;
+    OAPlanRouteTestRoutingHelper *routingHelper = [[OAPlanRouteTestRoutingHelper alloc] init];
+    OAPlanRouteTestMapActions *mapActions = [[OAPlanRouteTestMapActions alloc] init];
+
+    [bridge performNavigationWithGpx:[[OASGpxFile alloc] initWithAuthor:@"test"]
+                       editingContext:context
+                        routingHelper:(OARoutingHelper *)routingHelper
+                           mapActions:(OAMapActions *)mapActions
+                      followTrackMode:NO
+                       sourceFilePath:nil];
+
+    XCTAssertEqual(mapActions.capturedAppMode, OAApplicationMode.BICYCLE);
 }
 
 - (void)testGenericNavigationUsesDirectDestinationOnlyForOnePoint

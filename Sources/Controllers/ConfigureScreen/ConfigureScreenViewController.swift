@@ -108,9 +108,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                                    image: .icCustomReset) { [weak self] _ in
             self?.showResetToDefaultAlert()
         }
-        let screenElementsSection = UIMenu(title: "", options: .displayInline, children: [screenElementsAction])
-        let profileActionsSection = UIMenu(title: "", options: .displayInline, children: [copyAction, resetAction])
-        let menu = UIMenu(title: "", children: [screenElementsSection, profileActionsSection])
+        let menu = UIMenu.composedMenu(from: [[screenElementsAction], [copyAction, resetAction]])
         let menuButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
         menuButton.tintColor = .iconColorBlack
         menuButton.accessibilityLabel = localizedString("shared_string_options")

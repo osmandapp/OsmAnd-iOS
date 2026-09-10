@@ -26,11 +26,7 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     private var allPreferenceLayoutModes: [NSNumber?] {
-        var preferenceLayoutModes: [NSNumber?] = [nil]
-        ScreenLayoutMode.allCases.forEach {
-            preferenceLayoutModes.append(NSNumber(value: $0.rawValue))
-        }
-        return preferenceLayoutModes
+        [nil] + ScreenLayoutMode.allCases.map { NSNumber(value: $0.rawValue) }
     }
 
     init(appMode: OAApplicationMode, layoutMode: ScreenLayoutMode) {
@@ -174,7 +170,7 @@ class WidgetsSettingsHelper: NSObject {
                 let defaultWidgetInfo = getWidgetInfoById(widgetId: defaultWidgetId,
                                                           widgetInfos: defaultWidgetInfos)
 
-                if let defaultWidgetInfo = defaultWidgetInfo {
+                if let defaultWidgetInfo {
                     var widgetIdToAdd = ""
                     let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode,
                                                                           widgetsVisibility: widgetsVisibility)
@@ -326,28 +322,29 @@ class WidgetsSettingsHelper: NSObject {
     func resetWidgetsForPanel(panel: WidgetsPanel) {
         OAAppSettings.performBatchedPreferenceNotifications { [self] in
             let panels = [panel]
-            let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                     filterModes: Int(kWidgetModeMatchingPanels),
-                                                     panels: panels,
-                                                     layoutMode: preferenceLayoutMode)
-            for widgetInfo in widgetInfos! {
-                guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
-                if WidgetType.isOriginalWidget(widgetInfo.key)
-                    && WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: widgetInfo.key,
-                                                                          appMode: appMode) {
-                    widgetRegistry.enableDisableWidget(for: appMode,
-                                                       widgetInfo: widgetInfo,
-                                                       enabled: true,
-                                                       recreateControls: false)
-                } else {
-                    // Disable "false" (not reset "nil"), because visible by default widget should be disabled in non-default panel
-                    let enabled: NSNumber? = isOriginalWidgetOnAnotherPanel(widgetInfo: widgetInfo)
-                        ? NSNumber(value: false)
-                        : nil
-                    widgetRegistry.enableDisableWidget(for: appMode,
-                                                       widgetInfo: widgetInfo,
-                                                       enabled: enabled,
-                                                       recreateControls: false)
+            if let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
+                                                        filterModes: Int(kWidgetModeMatchingPanels),
+                                                        panels: panels,
+                                                        layoutMode: preferenceLayoutMode) {
+                for widgetInfo in widgetInfos {
+                    guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
+                    if WidgetType.isOriginalWidget(widgetInfo.key)
+                        && WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: widgetInfo.key,
+                                                                              appMode: appMode) {
+                        widgetRegistry.enableDisableWidget(for: appMode,
+                                                           widgetInfo: widgetInfo,
+                                                           enabled: true,
+                                                           recreateControls: false)
+                    } else {
+                        // Disable "false" (not reset "nil"), because visible by default widget should be disabled in non-default panel
+                        let enabled: NSNumber? = isOriginalWidgetOnAnotherPanel(widgetInfo: widgetInfo)
+                            ? NSNumber(value: false)
+                            : nil
+                        widgetRegistry.enableDisableWidget(for: appMode,
+                                                           widgetInfo: widgetInfo,
+                                                           enabled: enabled,
+                                                           recreateControls: false)
+                    }
                 }
             }
             panel.orderPreference(screenLayoutMode: preferenceLayoutMode).resetMode(toDefault: appMode)

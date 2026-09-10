@@ -1813,14 +1813,6 @@
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
 		D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
-		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
-		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
-		DA0132DF2A1E4A6300920C14 /* ic_custom20_screen_side_top@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D72A1E4A6100920C14 /* ic_custom20_screen_side_top@3x.png */; };
-		DA0132E02A1E4A6300920C14 /* ic_custom20_screen_side_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D82A1E4A6100920C14 /* ic_custom20_screen_side_left@2x.png */; };
-		DA0132E12A1E4A6300920C14 /* ic_custom20_screen_side_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D92A1E4A6200920C14 /* ic_custom20_screen_side_right@3x.png */; };
-		DA0132E22A1E4A6300920C14 /* ic_custom20_screen_side_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */; };
-		DA0132E32A1E4A6300920C14 /* ic_custom20_screen_side_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */; };
-		DA0132E42A1E4A6300920C14 /* ic_custom20_screen_side_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */; };
 		DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
@@ -6012,14 +6004,6 @@
 		D7EE671E301782CA0047F171 /* OAReorderSegmentCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAReorderSegmentCommand.h; sourceTree = "<group>"; };
 		D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderSegmentCommand.mm; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
-		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
-		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
-		DA0132D72A1E4A6100920C14 /* ic_custom20_screen_side_top@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@3x.png"; sourceTree = "<group>"; };
-		DA0132D82A1E4A6100920C14 /* ic_custom20_screen_side_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_left@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_left@2x.png"; sourceTree = "<group>"; };
-		DA0132D92A1E4A6200920C14 /* ic_custom20_screen_side_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@3x.png"; sourceTree = "<group>"; };
-		DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@2x.png"; sourceTree = "<group>"; };
-		DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@3x.png"; sourceTree = "<group>"; };
-		DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_left@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_left@3x.png"; sourceTree = "<group>"; };
 		DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsSettingsHelper.swift; sourceTree = "<group>"; };
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
@@ -9225,14 +9209,6 @@
 				321251402A4B207F006C44BD /* ic_custom_button_3d_off@3x.png */,
 				321251412A4B2080006C44BD /* ic_custom_button_3d@2x.png */,
 				3212513C2A4B207E006C44BD /* ic_custom_button_3d@3x.png */,
-				DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */,
-				DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */,
-				DA0132D82A1E4A6100920C14 /* ic_custom20_screen_side_left@2x.png */,
-				DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */,
-				DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */,
-				DA0132D92A1E4A6200920C14 /* ic_custom20_screen_side_right@3x.png */,
-				DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */,
-				DA0132D72A1E4A6100920C14 /* ic_custom20_screen_side_top@3x.png */,
 				DA2EC7C529FFB76400ECEB37 /* ic_custom_screen_side_bottom@2x.png */,
 				DA2EC7D029FFB76800ECEB37 /* ic_custom_screen_side_bottom@3x.png */,
 				DA2EC7D129FFB76800ECEB37 /* ic_custom_screen_side_left@2x.png */,
@@ -16189,10 +16165,8 @@
 				0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */,
 				0A3EE213275E9F9B00C8B772 /* ic_custom_folder_visible@2x.png in Resources */,
 				46B9E79929B23B8200FA802D /* ic_custom_export_outlined@3x.png in Resources */,
-				DA0132E42A1E4A6300920C14 /* ic_custom20_screen_side_left@3x.png in Resources */,
 				8454DA211B2F16D700E5A5C5 /* ic_coordinates@3x.png in Resources */,
 				DA6471A322CF5433008F937F /* ic_custom_timer@3x.png in Resources */,
-				DA0132E22A1E4A6300920C14 /* ic_custom20_screen_side_bottom@2x.png in Resources */,
 				DA5A82CB26C563A800F274C7 /* OATitleDescrDraggableCell.xib in Resources */,
 				8431E7741B380D010063C9AF /* ic_dialog_export@2x.png in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
@@ -16354,7 +16328,6 @@
 				DA5A843626C563A800F274C7 /* OAImpassableRoadSelectionViewController.xib in Resources */,
 				DA2EC68929FBBE0300ECEB37 /* warnings_hazard_us@3x.png in Resources */,
 				DA80D9A52716CC1800445DAF /* map_track_point_start_finish@3x.png in Resources */,
-				DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */,
 				DA2EC78C29FBBE0400ECEB37 /* warnings_railways_ca@2x.png in Resources */,
 				8AE0196024505C8B00DA5C33 /* ic_custom_arrow_right@3x.png in Resources */,
 				DA5A82CC26C563A800F274C7 /* OASegmentSliderTableViewCell.xib in Resources */,
@@ -16431,7 +16404,6 @@
 				DA2EC6DA29FBBE0300ECEB37 /* widget_marker_triangle_pin_3@2x.png in Resources */,
 				DA5A83FC26C563A800F274C7 /* OACategoriesTableViewController.xib in Resources */,
 				DA22DC5C25C05F130070FFCA /* ic_custom_join_segments@3x.png in Resources */,
-				DA0132E12A1E4A6300920C14 /* ic_custom20_screen_side_right@3x.png in Resources */,
 				8476E2641F6C1EEC00EC274F /* map_bicycle_location_view_angle_night@3x.png in Resources */,
 				3AFEEE4E1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */,
@@ -16456,7 +16428,6 @@
 				323BD9062628850400D255ED /* ic_bg_point_octagon_bottom@2x.png in Resources */,
 				DAB265D62913FD8500B9B79A /* ic_custom_device@3x.png in Resources */,
 				333168C22507804400266047 /* ic_custom_logo_wikidata@2x.png in Resources */,
-				DA0132DF2A1E4A6300920C14 /* ic_custom20_screen_side_top@3x.png in Resources */,
 				0CBDD0AF245038ED00C94BC2 /* map_marker_direction_arrow_p3_shadow@2x.png in Resources */,
 				0A8D1A0D26FBA1750042444C /* ic_small_altitude_average@2x.png in Resources */,
 				0AA3BB9226EB540100A9885D /* ic_custom_waypoint@2x.png in Resources */,
@@ -16892,7 +16863,6 @@
 				DA0D1642281BEEF500CEEF58 /* map_turn_keep_left@3x.png in Resources */,
 				DAF345C522F4482C009E2EB6 /* ic_custom_moon@2x.png in Resources */,
 				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
-				DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */,
 				32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */,
 				46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
@@ -17299,7 +17269,6 @@
 				DA5F6A17245844A200C7DF71 /* map_public_transport_stop_shield@3x.png in Resources */,
 				46453ADA2835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png in Resources */,
 				DA5A82DC26C563A800F274C7 /* OAProgressTitleCell.xib in Resources */,
-				DA0132E32A1E4A6300920C14 /* ic_custom20_screen_side_bottom@3x.png in Resources */,
 				FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */,
 				DA1BC11E233F9B01004DAF78 /* ic_custom_reverse@2x.png in Resources */,
 				DA5A851C26C563A900F274C7 /* OptionsPanel.xib in Resources */,
@@ -17758,7 +17727,6 @@
 				DA0D161E281BEEF500CEEF58 /* map_turn_roundabout_right_dark@3x.png in Resources */,
 				8A6CBCB421CE25F0004033C7 /* img_logo_38dp_osmand@3x.png in Resources */,
 				C54260242AA0F90700E76C00 /* ic_custom_3d_relief@3x.png in Resources */,
-				DA0132E02A1E4A6300920C14 /* ic_custom20_screen_side_left@2x.png in Resources */,
 				DA5A81A426C563A700F274C7 /* OADownloadMapViewController.xib in Resources */,
 				468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */,
 				323BD8E92628850400D255ED /* ic_bg_point_square_bottom_small@2x.png in Resources */,
@@ -20221,6 +20189,11 @@
 					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
 					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -20239,18 +20212,6 @@
 					"GLES_SILENCE_DEPRECATION=1",
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 					"OSMAND_USE_ANGLE=1",
-				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
-					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"-framework",
-					libEGL,
-					"-framework",
-					libGLESv2,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20283,6 +20244,13 @@
 					"-ljpeg_static",
 					"-lpng_static",
 					"-lz_static",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -20317,6 +20285,11 @@
 					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
 					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -20333,18 +20306,6 @@
 					"GLES_SILENCE_DEPRECATION=1",
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 					"OSMAND_USE_ANGLE=1",
-				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
-					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"-framework",
-					libEGL,
-					"-framework",
-					libGLESv2,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20377,6 +20338,13 @@
 					"-ljpeg_static",
 					"-lpng_static",
 					"-lz_static",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

@@ -88,16 +88,16 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         let useLandscapeIcons = screenLayoutMode == .landscape
             && OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
-        let iconNames = useLandscapeIcons
-            ? ["ic_custom20_screen_side_landscape_left",
-               "ic_custom20_screen_side_landscape_right",
-               "ic_custom20_screen_side_landscape_top",
-               "ic_custom20_screen_side_landscape_bottom"]
-            : ["ic_custom20_screen_side_left",
-               "ic_custom20_screen_side_right",
-               "ic_custom20_screen_side_top",
-               "ic_custom20_screen_side_bottom"]
-        let segmentedControl = UISegmentedControl(items: iconNames.map { UIImage(named: $0)! })
+        let icons: [UIImage] = useLandscapeIcons
+            ? [.icCustom20ScreenSideLandscapeLeft,
+               .icCustom20ScreenSideLandscapeRight,
+               .icCustom20ScreenSideLandscapeTop,
+               .icCustom20ScreenSideLandscapeBottom]
+            : [.icCustom20ScreenSideLeft,
+               .icCustom20ScreenSideRight,
+               .icCustom20ScreenSideTop,
+               .icCustom20ScreenSideBottom]
+        let segmentedControl = UISegmentedControl(items: icons)
         segmentedControl.selectedSegmentIndex = panels.firstIndex(of: widgetPanel) ?? 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl

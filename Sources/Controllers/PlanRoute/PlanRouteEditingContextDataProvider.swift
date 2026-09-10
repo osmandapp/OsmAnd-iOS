@@ -19,7 +19,18 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     var onRouteInfoChanged: (() -> Void)?
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
     var onApproximationApplied: (() -> Void)? {
-        didSet { bridge.onApproximationApplied = onApproximationApplied }
+        didSet {
+            guard onApproximationApplied != nil else {
+                bridge.onApproximationApplied = nil
+                return
+            }
+            bridge.onApproximationApplied = { [weak self] in
+                guard let callback = self?.onApproximationApplied else { return }
+                DispatchQueue.main.async {
+                    callback()
+                }
+            }
+        }
     }
     var onApproximationPopupDismissed: (() -> Void)? {
         didSet { bridge.onApproximationPopupDismissed = onApproximationPopupDismissed }

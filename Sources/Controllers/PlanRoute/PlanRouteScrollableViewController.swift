@@ -226,9 +226,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.showPointEditingView(mode: mode)
         }
         dataProvider.onApproximationApplied = { [weak self] in
-            DispatchQueue.main.async {
-                self?.handleApproximationApplied()
-            }
+            self?.handleApproximationApplied()
         }
         dataProvider.onApproximationPopupDismissed = { [weak self] in
             DispatchQueue.main.async {

@@ -170,7 +170,47 @@ protocol SortableFolder {
             return tracks.sorted { $0.timeSpan < $1.timeSpan }
         }
     }
-    
+
+    static func sortTracksWithMode(_ tracks: [TrackItem], mode: TracksSortMode) -> [TrackItem] {
+        switch mode {
+        case .nameAZ:
+            return tracks.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .nameZA:
+            return tracks.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
+        case .lastModified:
+            return tracks.sorted { $0.lastModified > $1.lastModified }
+        case .nearestToCurrentLocation, .nearestToMapCenter:
+            let referenceLocation = referenceLocation(for: mode)
+            return sortByDataItem(tracks) {
+                distanceToGPX(gpx: $0, from: referenceLocation)
+                    < distanceToGPX(gpx: $1, from: referenceLocation)
+            }
+        case .newestDateFirst:
+            return sortByDataItem(tracks) { $0.creationDate > $1.creationDate }
+        case .oldestDateFirst:
+            return sortByDataItem(tracks) { $0.creationDate < $1.creationDate }
+        case .longestDistanceFirst:
+            return sortByDataItem(tracks) { $0.totalDistance > $1.totalDistance }
+        case .shortestDistanceFirst:
+            return sortByDataItem(tracks) { $0.totalDistance < $1.totalDistance }
+        case .longestDurationFirst:
+            return sortByDataItem(tracks) { $0.timeSpan > $1.timeSpan }
+        case .shorterDurationFirst:
+            return sortByDataItem(tracks) { $0.timeSpan < $1.timeSpan }
+        }
+    }
+
+    private static func sortByDataItem(_ tracks: [TrackItem], _ comparator: (GpxDataItem, GpxDataItem) -> Bool) -> [TrackItem] {
+        tracks.sorted { lhs, rhs in
+            switch (lhs.dataItem, rhs.dataItem) {
+            case let (l?, r?): return comparator(l, r)
+            case (_?, nil): return true
+            case (nil, _?): return false
+            case (nil, nil): return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+            }
+        }
+    }
+
     static func descriptionForFolder(folder: TrackFolder, currentFolderPath: String) -> String {
         let tracksCount = folder.totalTracksCount
         let basicDescription = formattedTracksCount(Int(tracksCount))
@@ -260,7 +300,7 @@ protocol SortableFolder {
         if includeFolderInfo {
             appendFolderInfo(to: fullString, track: track, defaultAttributes: defaultAttributes)
         }
-        
+
         return fullString
     }
     
@@ -272,6 +312,13 @@ protocol SortableFolder {
         }
 
         return OsmAndApp.swiftInstance().locationServices?.lastKnownLocation
+    }
+
+    static func getTrackDescription(trackItem: TrackItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
+        guard let track = trackItem.dataItem else {
+            return NSAttributedString(string: "")
+        }
+        return getTrackDescription(track: track, sortMode: sortMode, includeFolderInfo: includeFolderInfo)
     }
 
     private static func distanceToGPX(gpx: GpxDataItem, from referenceLocation: CLLocation?) -> CGFloat {

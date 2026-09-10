@@ -4196,3 +4196,4 @@
 "shared_string_send" = "Αποστολή";
 "send_current_app_log" = "Αποστολή τρέχοντος αρχείου καταγραφής εφαρμογής";
 "send_current_app_log_descr" = "Από όταν ξεκίνησε η εφαρμογή";
+"carplay_trip_via_point" = "Μέσω %@";

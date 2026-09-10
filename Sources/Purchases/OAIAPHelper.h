@@ -158,7 +158,13 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (BOOL)productsLoaded;
 
 - (NSArray *)getSubscriptionStateByOrderId:(NSString *)orderId;
+/** @param answered set to YES only when the server actually replied, so that a failed
+    request can be told from a reply that carries no subscription. */
+- (NSArray *)getSubscriptionStateByOrderId:(NSString *)orderId answered:(BOOL *)answered;
 - (NSString *)getOrderIdByDeviceIdAndToken;
+/** @param answered see getSubscriptionStateByOrderId:answered:. Stays NO when the device
+    is not registered and no request is made. */
+- (NSString *)getOrderIdByDeviceIdAndTokenAnswered:(BOOL *)answered;
 - (OASubscription *)getAnyPurchasedOsmAndProSubscription;
 - (BOOL)checkBackupSubscriptions;
 

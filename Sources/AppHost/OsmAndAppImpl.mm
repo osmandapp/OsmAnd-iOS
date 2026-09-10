@@ -854,7 +854,6 @@
     LogStartup(@"target points cleared");
 
     [[OASGpxDbHelper shared] loadItemsBlocking];
-    [[OASGpxDbHelper shared] startFilesystemReconciliation];
     LogStartup(@"GPX DB helper loaded items blocking");
 
     [OASavingTrackHelper sharedInstance];

@@ -630,10 +630,13 @@ final class MigrationManager: NSObject {
     }
 
     private func migrateTracksSortModeKeysAndFormat() {
-        let valuesByLocalizedTitle = tracksSortModeValuesByLocalizedTitle()
         let validValues = Set(TracksSortMode.allCases.map(\.value))
         var tracksSortModes = settings.getTracksSortModes()
-
+        let searchSortMode = settings.searchTracksSortModes.get()
+        let needsTitleLookup = tracksSortModes.values.contains { !validValues.contains($0) }
+        || !validValues.contains(searchSortMode)
+        let valuesByLocalizedTitle = needsTitleLookup ? tracksSortModeValuesByLocalizedTitle() : [:]
+        
         for (sortEntryId, storedValue) in tracksSortModes where !validValues.contains(storedValue) {
             if let value = valuesByLocalizedTitle[storedValue] {
                 tracksSortModes[sortEntryId] = value
@@ -644,7 +647,6 @@ final class MigrationManager: NSObject {
             settings.saveTracksSortModes(tracksSortModes)
         }
 
-        let searchSortMode = settings.searchTracksSortModes.get()
         if !validValues.contains(searchSortMode), let value = valuesByLocalizedTitle[searchSortMode] {
             settings.searchTracksSortModes.set(value)
         }

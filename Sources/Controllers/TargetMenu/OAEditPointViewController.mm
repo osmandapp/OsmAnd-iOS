@@ -254,6 +254,16 @@
         if ([group hasColor])
             selectedColor = group.color;
 
+        if (group.iconName.length > 0)
+        {
+            _selectedIconName = group.iconName;
+            [_poiIconCollectionHandler setIconName:_selectedIconName];
+        }
+        
+        NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
+        if (backgroundIndex != NSNotFound)
+            _selectedBackgroundIndex = backgroundIndex;
+
         self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
     }
     else

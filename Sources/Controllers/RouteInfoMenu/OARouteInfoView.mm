@@ -1077,8 +1077,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
                                                                    fileName:fileName ?: @""
                                                              sourceFilePath:sourceFilePath
-                                                             followTrackMode:YES
-                                                            showSnapWarning:YES];
+                                                              attachToRoads:YES];
         }];
     }
 }

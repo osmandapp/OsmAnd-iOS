@@ -1,5 +1,24 @@
 import XCTest
 
+final class PlanRoutePresentationContextTests: XCTestCase {
+
+    func testFollowTrackEditPreservesFollowModeWithoutAttachBehavior() {
+        let context = PlanRoutePresentationContext.followTrack(attachToRoads: false)
+
+        XCTAssertTrue(context.followTrackMode)
+        XCTAssertFalse(context.showSnapWarning)
+        XCTAssertFalse(context.appliesApproximationToNavigation)
+    }
+
+    func testFollowTrackAttachEnablesWarningAndNavigationApply() {
+        let context = PlanRoutePresentationContext.followTrack(attachToRoads: true)
+
+        XCTAssertTrue(context.followTrackMode)
+        XCTAssertTrue(context.showSnapWarning)
+        XCTAssertTrue(context.appliesApproximationToNavigation)
+    }
+}
+
 final class PlanRouteTrackSourceTests: XCTestCase {
 
     private let gpxDirectory = "/Documents/GPX"

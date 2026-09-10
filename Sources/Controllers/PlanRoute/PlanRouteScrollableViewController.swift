@@ -39,6 +39,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let dataProvider: PlanRouteDataProvider
     private let followTrackMode: Bool
     private let showSnapWarning: Bool
+    private let appliesApproximationToNavigation: Bool
     private let shouldAdjustMapToTrack: Bool
 
     private let sheetView = UIView()
@@ -100,12 +101,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     init(dataProvider: PlanRouteDataProvider,
-         followTrackMode: Bool = false,
-         showSnapWarning: Bool = false,
+         presentationContext: PlanRoutePresentationContext = .standard,
          shouldAdjustMapToTrack: Bool = true) {
         self.dataProvider = dataProvider
-        self.followTrackMode = followTrackMode
-        self.showSnapWarning = showSnapWarning
+        followTrackMode = presentationContext.followTrackMode
+        showSnapWarning = presentationContext.showSnapWarning
+        appliesApproximationToNavigation = presentationContext.appliesApproximationToNavigation
         self.shouldAdjustMapToTrack = shouldAdjustMapToTrack
         sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded
         super.init(nibName: nil, bundle: nil)
@@ -153,12 +154,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                       shouldAdjustMapToTrack: false)
     }
 
-    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:followTrackMode:showSnapWarning:) static func openExistingTrack(
+    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:attachToRoads:) static func openExistingTrack(
         gpxFile: GpxFile,
         fileName: String,
         sourceFilePath: String?,
-        followTrackMode: Bool,
-        showSnapWarning: Bool) {
+        attachToRoads: Bool) {
+        let presentationContext = PlanRoutePresentationContext.followTrack(attachToRoads: attachToRoads)
         let resolvedFileName = fileName.isEmpty ? localizedString("quick_action_new_route") : fileName
         let trackSource = PlanRouteTrackSource(gpxFilePath: gpxFile.path, sourceFilePath: sourceFilePath)
         let dataProvider = PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: resolvedFileName),
@@ -168,19 +169,16 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                                                                selectedSegment: Int(OAAppSettings.sharedManager().gpxRouteSegment.get()),
                                                                applicationMode: OARoutingHelper.sharedInstance().getAppMode())
         showPlanRoute(dataProvider: dataProvider,
-                      followTrackMode: followTrackMode,
-                      showSnapWarning: showSnapWarning)
+                      presentationContext: presentationContext)
     }
 
     private static func showPlanRoute(dataProvider: PlanRouteDataProvider,
                                       navControllerHistory: [UIViewController] = [],
                                       trackMenuState: OATrackMenuViewControllerState? = nil,
-                                      followTrackMode: Bool = false,
-                                      showSnapWarning: Bool = false,
+                                      presentationContext: PlanRoutePresentationContext = .standard,
                                       shouldAdjustMapToTrack: Bool = true) {
         let controller = PlanRouteScrollableViewController(dataProvider: dataProvider,
-                                                           followTrackMode: followTrackMode,
-                                                           showSnapWarning: showSnapWarning,
+                                                           presentationContext: presentationContext,
                                                            shouldAdjustMapToTrack: shouldAdjustMapToTrack)
         controller.navControllerHistory = navControllerHistory
         controller.trackMenuState = trackMenuState
@@ -269,8 +267,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dataProvider.fitTrackOnMap(bottomInset: isLeftSidePresentation() ? 0 : getViewHeight(),
                                        leftInset: isLeftSidePresentation() ? getLandscapeViewWidth() : 0)
         }
-        if !hasPresentedInitialSnapWarning
-            && (showSnapWarning || (followTrackMode && dataProvider.isApproximationNeeded)) {
+        if !hasPresentedInitialSnapWarning && showSnapWarning {
             hasPresentedInitialSnapWarning = true
             presentApproximationWarning(force: true)
         }
@@ -753,7 +750,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleApproximationApplied() {
-        if followTrackMode {
+        if appliesApproximationToNavigation {
             let result = dataProvider.applyAttachedTrackToNavigation {
                 restoreMapViewport()
             }
@@ -771,7 +768,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         shouldEnterNavigationAfterApproximation = false
         restoreMapViewport()
-        let result = dataProvider.enterNavigation(followTrackMode: false)
+        let result = dataProvider.enterNavigation(followTrackMode: followTrackMode)
         guard result == .success else {
             dismissApproximationPopup()
             showNavigationError()
@@ -1080,7 +1077,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             dataProvider.reverseRoute()
         case .navigation:
             guard ensureRouteHasPoints() else { return }
-            if !followTrackMode && dataProvider.shouldRequestApproximationBeforeNavigation {
+            if dataProvider.shouldRequestApproximationBeforeNavigation {
                 shouldEnterNavigationAfterApproximation = true
                 guard presentApproximationWarning(force: true) else {
                     shouldEnterNavigationAfterApproximation = false

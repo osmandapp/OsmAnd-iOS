@@ -271,8 +271,7 @@
                 [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
                                                                        fileName:fileName ?: @""
                                                                  sourceFilePath:gpx.path
-                                                                 followTrackMode:attachToRoads
-                                                                showSnapWarning:attachToRoads];
+                                                                  attachToRoads:attachToRoads];
             }];
         }];
     }

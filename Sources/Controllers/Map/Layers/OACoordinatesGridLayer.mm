@@ -235,7 +235,7 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     UIColor *haloUIColor = [OAUtilities isColorBright:colorFromARGB(colorInt)] ? [UIColor colorWithWhite:0 alpha:0.5] : [UIColor whiteColor];
     OsmAnd::FColorARGB haloColor = [haloUIColor toFColorARGB];
     
-    _gridConfiguration->setPrimaryProjection(projection);
+    _gridConfiguration->setPrimaryProjection(OsmAnd::GridConfiguration::Projection::WGS84);
     _gridConfiguration->setPrimaryFormat(format);
     _gridConfiguration->setPrimaryColor(color);
     _gridConfiguration->setPrimaryMinZoomLevel(minZoom);

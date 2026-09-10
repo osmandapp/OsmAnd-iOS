@@ -383,7 +383,7 @@
     if (w <= 0)
         w = _settings.isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : [OAUtilities calculateScreenWidth];
     BOOL isPortrait = !OAUtilities.isLandscape;
-    BOOL isCompactPortrait = isPortrait && _settings.isCompactPanelsLayout;
+    BOOL isCompactPortrait = isPortrait && _settings.isCompactPanelsLayout && ![OAUtilities isiOSAppOnMac];
     BOOL useMultipleRows = isCompactPortrait
         ? _destinationCells.count > 1
         : isPortrait && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad;

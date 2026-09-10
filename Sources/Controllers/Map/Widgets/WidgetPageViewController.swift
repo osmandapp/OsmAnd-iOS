@@ -104,7 +104,7 @@ final class WidgetPageViewController: UIViewController {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
             let isCompactPanelsLayout = OAAppSettings.sharedManager().isCompactPanelsLayout()
             let maxSidePanelWidth: CGFloat
-            if isCompactPanelsLayout && OAUtilities.isPortrait() {
+            if isCompactPanelsLayout && OAUtilities.isPortrait() && !OAUtilities.isiOSAppOnMac() {
                 maxSidePanelWidth = UIScreen.main.bounds.width * 0.35
             } else if isCompactPanelsLayout && OARootViewController.instance().mapPanel.hasTopWidget() {
                 maxSidePanelWidth = 120

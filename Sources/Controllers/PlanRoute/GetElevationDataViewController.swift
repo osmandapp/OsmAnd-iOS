@@ -46,11 +46,6 @@ final class GetElevationDataViewController: UIViewController {
         setupView()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-
     private func setupView() {
         view.backgroundColor = .viewBg
 
@@ -230,7 +225,7 @@ final class GetElevationDataViewController: UIViewController {
     }
 }
 
-final class GetElevationDataSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+private final class GetElevationDataSheetTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
 
     func presentationController(forPresented presented: UIViewController,
                                presenting: UIViewController?,
@@ -249,7 +244,7 @@ final class GetElevationDataSheetTransitioningDelegate: NSObject, UIViewControll
     }
 }
 
-final class GetElevationDataSheetPresentationController: UIPresentationController {
+private final class GetElevationDataSheetPresentationController: UIPresentationController {
 
     private lazy var dimmingView: UIView = {
         let dimming = UIView()
@@ -267,6 +262,7 @@ final class GetElevationDataSheetPresentationController: UIPresentationControlle
     override func presentationTransitionWillBegin() {
         super.presentationTransitionWillBegin()
         guard let containerView else { return }
+        containerView.accessibilityViewIsModal = true
         dimmingView.frame = containerView.bounds
         dimmingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         containerView.addSubview(dimmingView)
@@ -365,7 +361,7 @@ final class GetElevationDataSheetPresentationController: UIPresentationControlle
     }
 }
 
-final class GetElevationDataSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+private final class GetElevationDataSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
     private let isPresenting: Bool
 

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import OsmAndShared
 
 final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
     private static let topPartViewHeight: CGFloat = 50
@@ -36,6 +37,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private let dataProvider: PlanRouteDataProvider
+    private let followTrackMode: Bool
+    private let showSnapWarning: Bool
+    private let appliesApproximationToNavigation: Bool
+    private let shouldAdjustMapToTrack: Bool
 
     private let sheetView = UIView()
     private let grabberView = UIView()
@@ -71,6 +76,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var approximationHeight: CGFloat?
     private var approximationPreviousSheetState: EOADraggableMenuState?
     private var approximationNavigationController: UINavigationController?
+    private var hasAdjustedMapToTrack = false
+    private var hasPresentedInitialSnapWarning = false
+    private var shouldEnterNavigationAfterApproximation = false
     private weak var currentTabViewController: UIViewController?
 
     private var suggestedFileName: String {
@@ -92,8 +100,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         return view.bounds.height
     }
 
-    init(dataProvider: PlanRouteDataProvider) {
+    init(dataProvider: PlanRouteDataProvider,
+         presentationContext: PlanRoutePresentationContext = .standard,
+         shouldAdjustMapToTrack: Bool = true) {
         self.dataProvider = dataProvider
+        followTrackMode = presentationContext.followTrackMode
+        showSnapWarning = presentationContext.showSnapWarning
+        appliesApproximationToNavigation = presentationContext.appliesApproximationToNavigation
+        self.shouldAdjustMapToTrack = shouldAdjustMapToTrack
         sheetState = dataProvider.mode.isNewRoute ? .initial : .expanded
         super.init(nibName: nil, bundle: nil)
     }
@@ -121,17 +135,51 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     static func openExistingTrack(filePath: String, navControllerHistory: [UIViewController]) {
         let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath),
-                      navControllerHistory: navControllerHistory)
+                      navControllerHistory: navControllerHistory,
+                      shouldAdjustMapToTrack: navControllerHistory.isEmpty)
     }
 
     @objc(openExistingTrackWithFilePath:trackMenuState:) static func openExistingTrack(filePath: String, trackMenuState: OATrackMenuViewControllerState) {
         let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
         showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath),
-                      trackMenuState: trackMenuState)
+                      trackMenuState: trackMenuState,
+                      shouldAdjustMapToTrack: false)
     }
 
-    private static func showPlanRoute(dataProvider: PlanRouteDataProvider, navControllerHistory: [UIViewController] = [], trackMenuState: OATrackMenuViewControllerState? = nil) {
-        let controller = PlanRouteScrollableViewController(dataProvider: dataProvider)
+    @objc(openCurrentTrackWithGpxFile:trackMenuState:) static func openCurrentTrack(gpxFile: GpxFile, trackMenuState: OATrackMenuViewControllerState) {
+        let dataProvider = PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: localizedString("shared_string_currently_recording_track")),
+                                                               gpxFile: gpxFile)
+        showPlanRoute(dataProvider: dataProvider,
+                      trackMenuState: trackMenuState,
+                      shouldAdjustMapToTrack: false)
+    }
+
+    @objc(openExistingTrackWithGpxFile:fileName:sourceFilePath:attachToRoads:) static func openExistingTrack(
+        gpxFile: GpxFile,
+        fileName: String,
+        sourceFilePath: String?,
+        attachToRoads: Bool) {
+        let presentationContext = PlanRoutePresentationContext.followTrack(attachToRoads: attachToRoads)
+        let resolvedFileName = fileName.isEmpty ? localizedString("quick_action_new_route") : fileName
+        let trackSource = PlanRouteTrackSource(gpxFilePath: gpxFile.path, sourceFilePath: sourceFilePath)
+        let dataProvider = PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: resolvedFileName),
+                                                               filePath: trackSource.editableFilePath,
+                                                               sourceFilePath: trackSource.sourceFilePath,
+                                                               gpxFile: gpxFile,
+                                                               selectedSegment: Int(OAAppSettings.sharedManager().gpxRouteSegment.get()),
+                                                               applicationMode: OARoutingHelper.sharedInstance().getAppMode())
+        showPlanRoute(dataProvider: dataProvider,
+                      presentationContext: presentationContext)
+    }
+
+    private static func showPlanRoute(dataProvider: PlanRouteDataProvider,
+                                      navControllerHistory: [UIViewController] = [],
+                                      trackMenuState: OATrackMenuViewControllerState? = nil,
+                                      presentationContext: PlanRoutePresentationContext = .standard,
+                                      shouldAdjustMapToTrack: Bool = true) {
+        let controller = PlanRouteScrollableViewController(dataProvider: dataProvider,
+                                                           presentationContext: presentationContext,
+                                                           shouldAdjustMapToTrack: shouldAdjustMapToTrack)
         controller.navControllerHistory = navControllerHistory
         controller.trackMenuState = trackMenuState
         OARootViewController.instance().mapPanel?.showScrollableHudViewController(controller)
@@ -175,6 +223,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         dataProvider.onPointEditModeRequested = { [weak self] mode in
             self?.showPointEditingView(mode: mode)
         }
+        dataProvider.onApproximationApplied = { [weak self] in
+            self?.handleApproximationApplied()
+        }
         dataProvider.onApproximationPopupDismissed = { [weak self] in
             DispatchQueue.main.async {
                 self?.dismissApproximationPopup()
@@ -211,6 +262,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setMapHudStatusBarHidden(true)
+        if shouldAdjustMapToTrack && dataProvider.mode.isEditTrack && !hasAdjustedMapToTrack {
+            hasAdjustedMapToTrack = true
+            dataProvider.fitTrackOnMap(bottomInset: isLeftSidePresentation() ? 0 : getViewHeight(),
+                                       leftInset: isLeftSidePresentation() ? getLandscapeViewWidth() : 0)
+        }
+        if !hasPresentedInitialSnapWarning && showSnapWarning {
+            hasPresentedInitialSnapWarning = true
+            presentApproximationWarning(force: true)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -334,10 +394,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             return
         }
         state.openedFromTrackMenu = false
-        guard let filePath = state.gpxFilePath, !filePath.isEmpty,
-              let gpx = OAGPXDatabase.sharedDb().getGPXItem(filePath) else { return }
-        let trackItem = TrackItem(file: gpx.file)
-        trackItem.dataItem = gpx
+        let trackItem: TrackItem
+        if let filePath = state.gpxFilePath, !filePath.isEmpty,
+           let gpx = OAGPXDatabase.sharedDb().getGPXItem(filePath) {
+            trackItem = TrackItem(file: gpx.file)
+            trackItem.dataItem = gpx
+        } else {
+            guard let currentTrack = OASavingTrackHelper.sharedInstance().currentTrack else { return }
+            trackItem = TrackItem(gpxFile: currentTrack)
+        }
         OARootViewController.instance().mapPanel?.openTargetView(withGPX: trackItem, trackHudMode: .menuHudMode, state: state)
     }
 
@@ -670,6 +735,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func dismissApproximationPopup() {
+        shouldEnterNavigationAfterApproximation = false
         guard let navigationController = approximationNavigationController else { return }
         navigationController.remove()
         approximationNavigationController = nil
@@ -681,6 +747,34 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let state = approximationPreviousSheetState ?? sheetState
         approximationPreviousSheetState = nil
         setState(state, animated: true)
+    }
+
+    private func handleApproximationApplied() {
+        if appliesApproximationToNavigation {
+            let result = dataProvider.applyAttachedTrackToNavigation {
+                restoreMapViewport()
+            }
+            guard result == .success else {
+                dismissApproximationPopup()
+                showNavigationError()
+                return
+            }
+            forceHide()
+            return
+        }
+        guard shouldEnterNavigationAfterApproximation else {
+            dismissApproximationPopup()
+            return
+        }
+        shouldEnterNavigationAfterApproximation = false
+        restoreMapViewport()
+        let result = dataProvider.enterNavigation(followTrackMode: followTrackMode)
+        guard result == .success else {
+            dismissApproximationPopup()
+            showNavigationError()
+            return
+        }
+        forceHide()
     }
 
     private func updateApproximationPopupHeight(_ viewController: UIViewController, animated: Bool) {
@@ -934,7 +1028,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        guard ensurePointsForSaving() else { return }
+        guard ensureRouteHasPoints() else { return }
         let fileName: String
         let folder: String?
         switch dataProvider.mode {
@@ -969,28 +1063,42 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
         switch action {
         case .saveAs:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentSaveDialog(saveAsCopy: false)
         case .saveAsCopy:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentSaveDialog(saveAsCopy: true)
         case .appendToExistingTrack:
-            guard ensurePointsForSaving() else { return }
+            guard ensureRouteHasPoints() else { return }
             presentAppendToTrack()
         case .changeSegmentOrder:
             presentSegmentReorder()
         case .reverseRoute:
             dataProvider.reverseRoute()
         case .navigation:
+            guard ensureRouteHasPoints() else { return }
+            if dataProvider.shouldRequestApproximationBeforeNavigation {
+                shouldEnterNavigationAfterApproximation = true
+                guard presentApproximationWarning(force: true) else {
+                    shouldEnterNavigationAfterApproximation = false
+                    showNavigationError()
+                    return
+                }
+                return
+            }
             restoreMapViewport()
-            hide()
-            dataProvider.enterNavigation()
+            let result = dataProvider.enterNavigation(followTrackMode: followTrackMode)
+            guard result == .success else {
+                showNavigationError()
+                return
+            }
+            forceHide()
         case .clearAllPoints:
             confirmClearAllPoints()
         }
     }
 
-    private func ensurePointsForSaving() -> Bool {
+    private func ensureRouteHasPoints() -> Bool {
         guard dataProvider.hasPoints else {
             let alert = UIAlertController(title: nil,
                                           message: localizedString("none_point_error"),
@@ -1096,6 +1204,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func showSaveError() {
         let alert = UIAlertController(title: localizedString("gpx_export_failed"),
+                                      message: nil,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+        present(alert, animated: true)
+    }
+
+    private func showNavigationError() {
+        let alert = UIAlertController(title: localizedString("unexpected_error_occurred_warn"),
                                       message: nil,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))

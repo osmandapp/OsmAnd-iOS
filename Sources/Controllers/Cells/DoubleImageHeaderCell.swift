@@ -9,13 +9,21 @@
 import UIKit
 
 final class DoubleImageHeaderCell: UITableViewCell {
-    @IBOutlet weak var leftBackgroundImageView: UIImageView!
-    @IBOutlet weak var rightBackgroundImageView: UIImageView!
-    @IBOutlet weak var secondBackgroundImageView: UIImageView!
+    @IBOutlet private weak var leftBackgroundImageView: UIImageView!
+    @IBOutlet private weak var rightBackgroundImageView: UIImageView!
+    @IBOutlet private weak var secondBackgroundImageView: UIImageView!
     @IBOutlet private weak var firstBackgroundView: UIView!
     @IBOutlet private weak var secondBackgroundView: UIView!
 
-    func configure(isSingleView: Bool, cornerRadius: CGFloat) {
+    func configure(leftImage: UIImage,
+                   rightImage: UIImage,
+                   secondImage: UIImage,
+                   isSingleView: Bool,
+                   cornerRadius: CGFloat) {
+        leftBackgroundImageView.image = leftImage
+        rightBackgroundImageView.image = rightImage
+        secondBackgroundImageView.image = secondImage
+
         rightBackgroundImageView.isHidden = !isSingleView
         secondBackgroundView.isHidden = isSingleView
 

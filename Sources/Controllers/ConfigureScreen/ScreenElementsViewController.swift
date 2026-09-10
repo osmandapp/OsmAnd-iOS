@@ -95,10 +95,11 @@ final class ScreenElementsViewController: OABaseNavbarViewController {
                 return UITableViewCell()
             }
             cell.backgroundConfiguration = .clear()
-            cell.leftBackgroundImageView.image = .imgPanelsLayoutPortraitWide
-            cell.rightBackgroundImageView.image = .imgPanelsLayoutLandscapeWide
-            cell.secondBackgroundImageView.image = .imgPanelsLayoutLandscapeCompact2
-            cell.configure(isSingleView: isShared, cornerRadius: previewCornerRadius)
+            cell.configure(leftImage: .imgPanelsLayoutPortraitWide,
+                           rightImage: .imgPanelsLayoutLandscapeWide,
+                           secondImage: .imgPanelsLayoutLandscapeCompact2,
+                           isSingleView: isShared,
+                           cornerRadius: previewCornerRadius)
             return cell
         }
 

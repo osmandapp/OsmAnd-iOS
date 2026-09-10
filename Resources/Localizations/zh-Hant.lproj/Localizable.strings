@@ -4111,3 +4111,4 @@
 "plugin_ais_tracker_name" = "AIS 船隻追蹤器";
 "no_crashes_recorded" = "還沒有記錄到當機紀錄";
 "share_crash_log" = "分享當機紀錄";
+"crash_report_prompt_title" = "OsmAnd 遇到非預期的錯誤。";

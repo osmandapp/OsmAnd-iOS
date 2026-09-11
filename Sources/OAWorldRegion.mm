@@ -37,6 +37,7 @@
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
+    double _area; // negative until calculated
 }
 
 - (instancetype) initWorld
@@ -186,6 +187,7 @@
     _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
     _flattenedSubregions = [[NSMutableArray alloc] init];
+    _area = -1.;
 }
 
 - (void) deinit
@@ -195,12 +197,14 @@
 - (double) calculateArea:(const QVector<OsmAnd::Point<int>> &)points31
 {
     double area = 0.;
-    for (int i = 1; i < points31.count(); i++)
+    const int count = points31.count();
+    const auto *points = points31.constData();
+    for (int i = 1; i < count; i++)
     {
-        double ax = points31.at(i - 1).x;
-        double bx = points31.at(i).x;
-        double ay = points31.at(i - 1).y;
-        double by = points31.at(i).y;
+        double ax = points[i - 1].x;
+        double bx = points[i].x;
+        double ay = points[i - 1].y;
+        double by = points[i].y;
         area += (bx + ax) * (by - ay) / 1.631E10;
     }
     return area;
@@ -208,6 +212,10 @@
 
 - (double) getArea
 {
+    // Cached: the polygon never changes, and this is called from sort comparators
+    if (_area >= 0.)
+        return _area;
+
     double area = 0.;
     if (_worldRegion != nullptr)
     {
@@ -220,7 +228,8 @@
                 area += [self calculateArea:additionalArea];
         }
     }
-    return ABS(area);
+    _area = ABS(area);
+    return _area;
 }
 
 - (BOOL)polygonContains:(double)lat lon:(double)lon polygon:(const QVector<OsmAnd::Point<int>> &)points
@@ -691,9 +700,11 @@
         }];
 
         [mapRegions sortUsingComparator:^NSComparisonResult(id a, id b) {
-            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
-            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
-            return [first compare:second];
+            double first = [(OAWorldRegion *) a getArea];
+            double second = [(OAWorldRegion *) b getArea];
+            if (first < second)
+                return NSOrderedAscending;
+            return first > second ? NSOrderedDescending : NSOrderedSame;
         }];
     }
     return mapRegions;

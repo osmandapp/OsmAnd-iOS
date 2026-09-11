@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAProfileGeneralSettingsViewController
 {
@@ -87,6 +88,23 @@
     {
         appThemeValue = OALocalizedString(@"shared_string_system_default");
         appThemeIcon = @"ic_custom_device";
+    }
+
+    EOAKeepScreenOnMode keepScreenOnMode = [_settings.keepScreenOn get:self.appMode];
+
+    NSString *keepScreenOnValue;
+    switch (keepScreenOnMode)
+    {
+        case EOAKeepScreenOnModeDuringNavigation:
+            keepScreenOnValue = OALocalizedString(@"during_navigation");
+            break;
+        case EOAKeepScreenOnModeAlways:
+            keepScreenOnValue = OALocalizedString(@"shared_string_always");
+            break;
+        case EOAKeepScreenOnModeSystemDefault:
+        default:
+            keepScreenOnValue = OALocalizedString(@"shared_string_system_default");
+            break;
     }
     
     NSString *rotateMapValue;
@@ -282,6 +300,13 @@
             @"key" : @"screenOrientation"
         }];
     }
+    [appearanceArr addObject:@{
+        @"type" : OAValueTableViewCell.reuseIdentifier,
+        @"title" : OALocalizedString(@"keep_screen_on"),
+        @"value" : keepScreenOnValue,
+        @"icon" : ACImageNameIcCustomMapModeAppThemeFilled,
+        @"key" : @"keep_screen_on"
+    }];
     [regionsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"driving_region"),
@@ -449,6 +474,8 @@
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"app_theme"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAppTheme applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"keep_screen_on"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsKeepScreenOn applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"screenOrientation"])
@@ -476,7 +503,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"keep_screen_on"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else if ([itemKey isEqualToString:@"externalImputDevice"])
             [self showViewController:settingsViewController];

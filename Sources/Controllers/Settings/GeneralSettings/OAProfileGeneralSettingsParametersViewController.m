@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -106,6 +107,9 @@
         case EOAProfileGeneralSettingsAppTheme:
             _title = OALocalizedString(@"settings_app_theme");
             break;
+        case EOAProfileGeneralSettingsKeepScreenOn:
+            _title = OALocalizedString(@"keep_screen_on");
+            break;
         default:
             break;
     }
@@ -139,6 +143,7 @@
         case EOAProfileGeneralSettingsMapOrientation:
             return _openFromMap ? @"" : [self.appMode toHumanString];
         case EOAProfileGeneralSettingsAppTheme:
+        case EOAProfileGeneralSettingsKeepScreenOn:
         case EOAProfileGeneralSettingsDistanceDuringNavigation:
         case EOAProfileGeneralSettingsDisplayPosition:
         case EOAProfileGeneralSettingsUnitsOfVolume:
@@ -155,7 +160,7 @@
     if (@available(iOS 26.0, *))
         return NO;
     else
-        return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
+        return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsKeepScreenOn || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader
@@ -247,6 +252,8 @@
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
     NSInteger screenOrientation = [_settings.mapScreenOrientation get:self.appMode];
     Theme appTheme = [_settings.appearanceProfileTheme get:self.appMode];
+    EOAKeepScreenOnMode keepScreenOnMode = [_settings.keepScreenOn get:self.appMode];
+    BOOL isBrowseMapMode = self.appMode == [OAApplicationMode DEFAULT];
     EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     BOOL isPreciseDistanceNumbers = [_settings.preciseDistanceNumbers get:self.appMode];
@@ -281,6 +288,33 @@
                 @"name" : @"system",
                 @"title" : OALocalizedString(@"shared_string_system_default"),
                 @"selected" : @(appTheme == ThemeSystem),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : OASimpleTableViewCell.reuseIdentifier
+            }];
+            break;
+
+        case EOAProfileGeneralSettingsKeepScreenOn:
+            [dataArr addObject:@{
+                @"name" : @"systemDefault",
+                @"title" : OALocalizedString(@"shared_string_system_default"),
+                @"selected" : @(keepScreenOnMode == EOAKeepScreenOnModeSystemDefault),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : OASimpleTableViewCell.reuseIdentifier
+            }];
+            if (!isBrowseMapMode)
+            {
+                [dataArr addObject:@{
+                    @"name" : @"duringNavigation",
+                    @"title" : OALocalizedString(@"during_navigation"),
+                    @"selected" : @(keepScreenOnMode == EOAKeepScreenOnModeDuringNavigation),
+                    @"icon" : @"ic_checkmark_default",
+                    @"type" : OASimpleTableViewCell.reuseIdentifier
+                }];
+            }
+            [dataArr addObject:@{
+                @"name" : @"always",
+                @"title" : OALocalizedString(@"shared_string_always"),
+                @"selected" : @(keepScreenOnMode == EOAKeepScreenOnModeAlways),
                 @"icon" : @"ic_checkmark_default",
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
@@ -677,6 +711,7 @@
         cell.descriptionLabel.text = item[@"description"];
         NSSet *iconOnlyTypes = [NSSet setWithArray:@[
             @(EOAProfileGeneralSettingsAppTheme),
+            @(EOAProfileGeneralSettingsKeepScreenOn),
             @(EOAProfileGeneralSettingsScreenOrientation),
             @(EOAProfileGeneralSettingsDistanceDuringNavigation),
             @(EOAProfileGeneralSettingsUnitsOfVolume),
@@ -710,6 +745,7 @@
         {
             NSSet *excludedTypes = [NSSet setWithArray:@[
                 @(EOAProfileGeneralSettingsAppTheme),
+                @(EOAProfileGeneralSettingsKeepScreenOn),
                 @(EOAProfileGeneralSettingsScreenOrientation),
                 @(EOAProfileGeneralSettingsDistanceDuringNavigation),
                 @(EOAProfileGeneralSettingsUnitsOfVolume),
@@ -741,6 +777,9 @@
     switch (_settingsType) {
         case EOAProfileGeneralSettingsAppTheme:
             [self selectAppThemeMode:name];
+            break;
+        case EOAProfileGeneralSettingsKeepScreenOn:
+            [self selectKeepScreenOn:name];
             break;
         case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
@@ -848,6 +887,18 @@
         currentTheme = ThemeSystem;
     
     [[ThemeManager shared] apply:currentTheme appMode:self.appMode withNotification:NO];
+}
+
+- (void)selectKeepScreenOn:(NSString *)name
+{
+    EOAKeepScreenOnMode keepScreenOnMode = EOAKeepScreenOnModeSystemDefault;
+    if ([name isEqualToString:@"duringNavigation"])
+        keepScreenOnMode = EOAKeepScreenOnModeDuringNavigation;
+    else if ([name isEqualToString:@"always"])
+        keepScreenOnMode = EOAKeepScreenOnModeAlways;
+
+    [_settings.keepScreenOn set:keepScreenOnMode mode:self.appMode];
+    [[OARoutingHelper sharedInstance] updateScreenTurnOff];
 }
 
 - (void)selectDisplayPosition:(int)idx

@@ -63,6 +63,7 @@ struct RouteSegmentResult;
 - (void) setPauseNavigation:(BOOL) b;
 - (BOOL) isPauseNavigation;
 - (void) setFollowingMode:(BOOL)follow;
+- (void)updateScreenTurnOff;
 - (BOOL) isRoutePlanningMode;
 - (void) setRoutePlanningMode:(BOOL)isRoutePlanningMode;
 - (BOOL)isOnRoute;

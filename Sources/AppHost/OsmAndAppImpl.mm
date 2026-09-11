@@ -839,8 +839,8 @@
         LogStartup(@"location services initialized and started");
     }
 
-    [self allowScreenTurnOff:NO];
-    LogStartup(@"screen turn off disallowed");
+    [self allowScreenTurnOff:YES];
+    LogStartup(@"screen turn off allowed");
 
     _appearance = [[OADaytimeAppearance alloc] init];
     LogStartup(@"OADaytimeAppearance initialized");
@@ -1426,7 +1426,7 @@
     return deviceMemoryAvailable;
 }
 
-- (void) allowScreenTurnOff:(BOOL)allow
+- (void)allowScreenTurnOff:(BOOL)allow
 {
     if (allow)
         OALog(@"Going to enable screen turn-off");
@@ -1465,13 +1465,14 @@
 
 - (void) onApplicationWillEnterForeground
 {
-    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
 - (void) onApplicationDidBecomeActive
 {
     _isInBackground = NO;
+
+    [[OARoutingHelper sharedInstance] updateScreenTurnOff];
 
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
 

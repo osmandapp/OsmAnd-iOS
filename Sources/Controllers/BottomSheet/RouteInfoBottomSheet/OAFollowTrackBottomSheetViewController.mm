@@ -151,7 +151,7 @@
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
     if (isSegment)
     {
-        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
+        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), [NSNumberFormatter localizedCount:@(params.selectedSegment + 1)], [NSNumberFormatter localizedCount:@(_gpx.getNonEmptySegmentsCount)]], title];
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";

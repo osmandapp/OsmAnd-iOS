@@ -139,6 +139,7 @@ typedef enum
             _app.resourcesManager->uninstallTilesResource(item->name);
         }
         OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+        [_app backupOnlineTileSource:item->name.toNSString()];
         _app.resourcesManager->installTilesResource(item);
     }
     if (_selectedSources.size() == 1)

@@ -266,6 +266,7 @@ static NSString * const customWidgetKeys = @"custom_widgets_keys";
 static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
 static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const favoriteSortModesKey = @"favorite_sort_modes";
+static NSString * const favoriteCollapsedSectionsKey = @"favorite_collapsed_sections";
 static NSString * const searchFavoriteSortModeKey = @"search_favorite_sort_mode";
 static NSString * const travelGuidesSortModeKey = @"travel_guides_tabs_sort_mode";
 static NSString * const osmEditsSortModeKey = @"osm_edits_tabs_sort_mode";
@@ -6186,11 +6187,14 @@ static NSString *kOfflineKey = @"OFFLINE";
         _tracksSortModes = [[[OACommonStringList withKey:tracksSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_tracksSortModes forKey:tracksSortModesKey];
         
-        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
+        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeValueFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
         
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_favoriteSortModes forKey:favoriteSortModesKey];
+
+        _favoriteCollapsedSections = [[OACommonStringList withKey:favoriteCollapsedSectionsKey defValue:@[]] makeGlobal];
+        [_globalPreferences setObject:_favoriteCollapsedSections forKey:favoriteCollapsedSectionsKey];
 
         _searchFavoriteSortMode = [[[OACommonString withKey:searchFavoriteSortModeKey defValue:[FavoriteSortModeHelper defaultSortModeValue]] makeGlobal] makeShared];
         [_globalPreferences setObject:_searchFavoriteSortMode forKey:searchFavoriteSortModeKey];
@@ -7708,8 +7712,15 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
     if (modes != nil && modes.count > 0)
     {
-        for (NSString *sortMode in modes)
+        // OACommonStringList splits imported values by comma, so restore the raw Android-compatible value first.
+        NSString *joinedSortModes = [modes componentsJoinedByString:@","];
+        NSArray<NSString *> *serializedSortModes = [joinedSortModes containsString:@";;"]
+            ? [joinedSortModes componentsSeparatedByString:@";;"]
+            : modes;
+        for (NSString *sortMode in serializedSortModes)
         {
+            if (sortMode.length == 0)
+                continue;
             NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
             if (parts.count == 2)
                 sortModes[parts[0]] = parts[1];
@@ -7760,7 +7771,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [sortTypes addObject:combined];
     }
     
-    return [sortTypes copy];
+    return sortTypes.count > 0 ? @[[[sortTypes componentsJoinedByString:@";;"] stringByAppendingString:@";;"]] : @[];
 }
 
 - (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes
@@ -7866,9 +7877,21 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
 }
 
-- (BOOL) nightMode
+- (BOOL)isAppMapNightMode
 {
     return [_dayNightHelper isNightMode];
+}
+
+- (BOOL)isCarPlayMapNightMode
+{
+    return [_dayNightHelper isNightModeCarPlay];
+}
+
+- (BOOL)isCurrentMapNightMode
+{
+    return UIApplication.sharedApplication.isAnyCarPlaySceneActive
+        ? self.isCarPlayMapNightMode
+        : self.isAppMapNightMode;
 }
 
 - (void) fetchImpassableRoads

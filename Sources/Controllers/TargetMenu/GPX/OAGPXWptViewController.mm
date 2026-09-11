@@ -50,9 +50,11 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     if (self)
     {
         _app = [OsmAndApp instance];
-        if (!wpt.docPath)
+        if (wpt.docPath.length == 0)
         {
-            wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
+            OASGpxFile *selectedGpx = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point];
+            if (selectedGpx && !selectedGpx.isShowCurrentTrack)
+                wpt.docPath = selectedGpx.path;
         }
         self.wpt = wpt;
         NSDictionary<NSString *, NSString *> *extensions = [self.wpt.point getExtensionsToRead];
@@ -63,6 +65,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_open_track");
+        self.leftControlButton.accessibilityIdentifier = UITestAccessibilityIdentifier.gpxWaypointOpenTrackButton;
     }
     return self;
 }
@@ -144,7 +147,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
 - (void) buildWaypointsView:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *name = OALocalizedString(@"context_menu_points_of_group");
-    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
+    NSString *gpxName = self.wpt.docPath.length == 0 ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
     UIColor *color = [self getItemColor];
     UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
     
@@ -260,15 +263,27 @@ static const NSInteger kOrderWptPointLinkRow = 2;
 
 - (void) leftControlButtonPressed
 {
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
+    OASTrackItem *trackItem = nil;
+    if (self.wpt.docPath.length > 0)
+    {
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
         if (gpx)
         {
-            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
             trackItem.dataItem = gpx;
-            [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
         }
+    }
+    else
+    {
+        OASGpxFile *selectedGpx = [[OASelectedGPXHelper instance] getSelectedGpx:self.wpt.point];
+        if (selectedGpx.isShowCurrentTrack)
+            trackItem = [[OASTrackItem alloc] initWithGpxFile:selectedGpx];
+    }
+
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
+        if (trackItem)
+            [mapPanel openTargetViewWithGPX:trackItem selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
     }];
 }
 

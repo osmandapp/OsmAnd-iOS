@@ -44,7 +44,7 @@ static QuickActionType *TYPE;
 
 - (void)execute
 {
-    if (_settings.nightMode)
+    if (_settings.isAppMapNightMode)
         [_settings.appearanceMode set:DayNightModeDay];
     else
         [_settings.appearanceMode set:DayNightModeNight];
@@ -53,7 +53,7 @@ static QuickActionType *TYPE;
 
 - (NSString *)getIconResName
 {
-    if (_settings.nightMode)
+    if (_settings.isAppMapNightMode)
         return @"ic_custom_sun";
     return @"ic_custom_moon";
 }
@@ -65,7 +65,7 @@ static QuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return _settings.nightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
+    return _settings.isAppMapNightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
 }
 
 + (QuickActionType *)getQuickActionType

@@ -20,6 +20,20 @@
                ReferencedContainer = "container:OsmAnd.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D1C571210000000000000007"
+               BuildableName = "OsmAnd MapsUITests.xctest"
+               BlueprintName = "OsmAnd MapsUITests"
+               ReferencedContainer = "container:OsmAnd.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -46,6 +60,16 @@
                BlueprintIdentifier = "DA72AB882508F40F00851313"
                BuildableName = "OsmAnd MapsTests.xctest"
                BlueprintName = "OsmAnd MapsTests"
+               ReferencedContainer = "container:OsmAnd.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D1C571210000000000000007"
+               BuildableName = "OsmAnd MapsUITests.xctest"
+               BlueprintName = "OsmAnd MapsUITests"
                ReferencedContainer = "container:OsmAnd.xcodeproj">
             </BuildableReference>
          </TestableReference>

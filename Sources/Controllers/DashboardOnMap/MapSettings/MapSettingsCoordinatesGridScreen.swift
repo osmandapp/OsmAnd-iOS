@@ -102,7 +102,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             colorRow.descr = localizedString("customize_grid_color")
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
             colorRow.iconTintColor = .iconColorDefault
-            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.nightMode ? coordinatesGridSettings.getNightGridColor() : coordinatesGridSettings.getDayGridColor())))
+            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.isAppMapNightMode ? coordinatesGridSettings.getNightGridColor() : coordinatesGridSettings.getDayGridColor())))
             colorRow.setObj(localizedString("shared_string_get"), forKey: Constants.buttonTitleKey)
             colorRow.setObj("ic_custom_arrow_forward", forKey: Constants.buttonIconKey)
         }

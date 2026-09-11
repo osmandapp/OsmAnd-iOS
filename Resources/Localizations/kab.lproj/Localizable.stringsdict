@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Kkes %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ aferdis</string>
+			<key>other</key>
+			<string>%2$@ iferdisen</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kkes %#@favorites@?</string>
+		<string>Kkes %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Menyif</string>
+			<string>%2$@ Menyif</string>
 			<key>other</key>
-			<string>%ld Imenyafen</string>
+			<string>%2$@ Imenyafen</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kkes %#@folders@?</string>
+		<string>Kkes %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Akaram</string>
+			<string>%2$@ Akaram</string>
 			<key>other</key>
-			<string>%ld ikaramen</string>
+			<string>%2$@ ikaramen</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Kkes %#@folders@ d %#@points@. This action cannot be undone.</string>
+		<string>Kkes %1$#@folders@ d %3$#@points@. This action cannot be undone.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Akaram</string>
+			<string>%2$@ Akaram</string>
 			<key>other</key>
-			<string>%ld ikaramen</string>
+			<string>%2$@ ikaramen</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,89 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Taneqqiḍt</string>
+			<string>%4$@ Taneqqiḍt</string>
 			<key>other</key>
-			<string>%ld Tineqqiḍin</string>
+			<string>%4$@ Tineqqiḍin</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld addad</string>
+			<key>other</key>
+			<string>%ld addaden</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ abrid</string>
+			<key>other</key>
+			<string>%2$@ iberdan</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Tebɣiḍ ad tekkseḍ %2$@ usnifel?</string>
+			<key>other</key>
+			<string>Tebɣiḍ ad tekkseḍ %2$@ isnifal?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ Aferdis</string>
+			<key>other</key>
+			<string>%2$@ Iferdisen</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>Afaylu %2$@ igber %3$@ ubrid yemgarraden. Fren wid tebɣiḍ ad tsekcmeḍ.</string>
+			<key>other</key>
+			<string>Afaylu %2$@ igber %3$@ iberdan yemgarraden. Fren wid tebɣiḍ ad tsekcmeḍ.</string>
 		</dict>
 	</dict>
 </dict>

@@ -27,6 +27,8 @@
 		05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */; };
 		05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */; };
 		05DCD5412D50C7EC00C32EBB /* he_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = 05DCD5402D50C7EC00C32EBB /* he_tts.js */; };
+		05DCE548304D88EC005DA649 /* libEGL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE542304D48B5005DA649 /* libEGL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
 		0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */; };
@@ -1498,7 +1500,12 @@
 		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
 		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
 		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
+		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
+		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
+		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
+		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
+		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
 		C50867892D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */; };
@@ -1699,6 +1706,7 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		CE0BA2093045A00300089B64 /* DescriptionDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */; };
 		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
@@ -1760,6 +1768,10 @@
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
 		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
+		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
+		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -3609,6 +3621,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D1C571210000000000000006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBA3AF30197FC4BB0039D991;
+			remoteInfo = "OsmAnd Maps";
+		};
 		DA72AB8E2508F41000851313 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
@@ -3639,6 +3658,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05DCE548304D88EC005DA649 /* libEGL.xcframework in Embed Frameworks */,
+				05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */,
 				FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -3680,6 +3701,8 @@
 		05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAXmlFactory.m; sourceTree = "<group>"; };
 		05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUtil.swift; sourceTree = "<group>"; };
 		05DCD5402D50C7EC00C32EBB /* he_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = he_tts.js; path = ../resources/voice/he/he_tts.js; sourceTree = "<group>"; };
+		05DCE542304D48B5005DA649 /* libEGL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libEGL.xcframework; sourceTree = "<group>"; };
+		05DCE544304D48BC005DA649 /* libGLESv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libGLESv2.xcframework; sourceTree = "<group>"; };
 		06D17C78B408CD77F33D4466 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
 		0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@2x.png"; path = "Resources/Icons/ic_custom_info@2x.png"; sourceTree = "<group>"; };
@@ -5522,11 +5545,16 @@
 		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
 		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
 		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
+		C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		C0DA57132FE9000200C0DA57 /* UITestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestState.swift; sourceTree = "<group>"; };
+		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		C1687F4567959C306956D92A /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kab; path = kab.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C173345D7277A340D99DE996 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
+		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
+		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
 		C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesTableViewCell.swift; sourceTree = "<group>"; };
@@ -5872,6 +5900,7 @@
 		CC6607A6F7360E88DCA8FEE4 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bn; path = bn.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CC7D243BAE1166300BAFDC9E /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = br; path = br.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CDE7D422EC55BED3C95FEF00 /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sr; path = sr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionDeviceCell.swift; sourceTree = "<group>"; };
 		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
@@ -5939,6 +5968,11 @@
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
 		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
+		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
+		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
+		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
+		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3CA6B52398C60EDCB0357E5 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
@@ -8695,6 +8729,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C57121000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA72AB862508F40F00851313 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -10968,6 +11009,7 @@
 				DA5A78FF26C5639F00F274C7 /* Sources */,
 				DA32848026CD38170036BA73 /* Support Files */,
 				DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000005 /* OsmAnd MapsUITests */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
@@ -10980,6 +11022,7 @@
 			children = (
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */,
 				DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */,
+				D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -10990,6 +11033,8 @@
 				DA67994E299A761100CC1509 /* BackgroundTasks.framework */,
 				DA22D6CB28D8688C0074FA65 /* IOKit.framework */,
 				8AAFE752278DE23700F6504E /* libsqlite_static.a */,
+				05DCE542304D48B5005DA649 /* libEGL.xcframework */,
+				05DCE544304D48BC005DA649 /* libGLESv2.xcframework */,
 				8AF348762779D88100A64824 /* libproj_static.a */,
 				8A5A002727735D76002227DD /* libharfbuzz_static.a */,
 				DADC09E927295A4B00ADBB3B /* MobileCoreServices.framework */,
@@ -11165,6 +11210,23 @@
 				CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */,
 			);
 			path = Coordinates;
+            sourceTree = "<group>";
+        };
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
 			sourceTree = "<group>";
 		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
@@ -11201,6 +11263,23 @@
 				CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		D1C571200000000000000006 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
+			);
+			path = Panels;
+			sourceTree = "<group>";
+		};
+		D1C571210000000000000005 /* OsmAnd MapsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C571210000000000000003 /* Info.plist */,
+			);
+			path = "OsmAnd MapsUITests";
 			sourceTree = "<group>";
 		};
 		D7210150301B768C003CECB8 /* Cells */ = {
@@ -13015,6 +13094,7 @@
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
 				C54BBE6D3023553E00691F10 /* PointRowContentView.swift */,
+				CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -13281,6 +13361,7 @@
 			children = (
 				DA5A7DA326C563A300F274C7 /* OADirectionAppearanceViewController.h */,
 				DA5A7D9F26C563A300F274C7 /* OADirectionAppearanceViewController.m */,
+				D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */,
 				DA5A7D9E26C563A300F274C7 /* OAMapPanelViewController.h */,
 				DA5A7DA126C563A300F274C7 /* OAMapPanelViewController.mm */,
 				DA5A7DA026C563A300F274C7 /* OAOptionsPanelBlackViewController.h */,
@@ -14477,6 +14558,8 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C0DA57172FE9000200C0DA57 /* AppEnvironment */,
+				C0DA57182FE9000200C0DA57 /* UITests */,
 				FAB7440F2FB467160001FFF8 /* AlertPresenter */,
 				FA29F6132F9610DB00257B88 /* DeepLinkManager */,
 				FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */,
@@ -14553,6 +14636,8 @@
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */,
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
+				C503BC4D3045798E00EB704D /* FavoriteFolder.swift */,
+				C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */,
 				C56319422EF05389008854B3 /* OADeepLinkBridge.h */,
 				C56319432EF05389008854B3 /* OADeepLinkBridge.mm */,
 				DA5A80DC26C563A600F274C7 /* OAFileNameTranslationHelper.h */,
@@ -14758,6 +14843,7 @@
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
+				D1C571200000000000000006 /* Panels */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -15714,6 +15800,7 @@
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				FA45668A2AFB839000B07165 /* Run Script: SwiftLint */,
 				DA7F2596231A697300E54F77 /* Embed Frameworks */,
+				05DCE54A304D8925005DA649 /* Exclude ANGLE frameworks for Release */,
 			);
 			buildRules = (
 			);
@@ -15729,6 +15816,24 @@
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D1C571210000000000000007 /* OsmAnd MapsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */;
+			buildPhases = (
+				D1C571210000000000000009 /* Sources */,
+				D1C57121000000000000000A /* Frameworks */,
+				D1C57121000000000000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D1C57121000000000000000C /* PBXTargetDependency */,
+			);
+			name = "OsmAnd MapsUITests";
+			productName = "OsmAnd MapsUITests";
+			productReference = D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		DA72AB882508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXNativeTarget;
@@ -15769,6 +15874,10 @@
 								enabled = 1;
 							};
 						};
+					};
+					D1C571210000000000000007 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = BBA3AF30197FC4BB0039D991;
 					};
 					DA72AB882508F40F00851313 = {
 						CreatedOnToolsVersion = 11.7;
@@ -15885,6 +15994,7 @@
 			targets = (
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				DA72AB882508F40F00851313 /* OsmAnd MapsTests */,
+				D1C571210000000000000007 /* OsmAnd MapsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -17732,6 +17842,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C57121000000000000000B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DA72AB872508F40F00851313 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -17764,6 +17881,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\n\nif ! JAVA_17_HOME=\"$(/usr/libexec/java_home -v 17 2>/dev/null)\"; then\n  echo \"error: JDK 17 is required to build OsmAndShared. Install JDK 17 and try again.\" >&2\n  exit 1\nfi\nexport JAVA_HOME=\"$JAVA_17_HOME\"\nexport PATH=\"$JAVA_HOME/bin:$PATH\"\n\ncd \"$SRCROOT/../android\"\n./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
+		};
+		05DCE54A304D8925005DA649 /* Exclude ANGLE frameworks for Release */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Exclude ANGLE frameworks for Release";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$PLATFORM_NAME\" != \"iphonesimulator\" ]; then\n    rm -rf \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libEGL.framework\"\n    rm -rf \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libGLESv2.framework\"\nfi\n";
 		};
 		8401FCFC1EE4723B00238915 /* Copy phrases */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -17945,6 +18081,7 @@
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
+				C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */,
 				C56319462EF189EC008854B3 /* DeepLinkManager.swift in Sources */,
 				4603FD222AD4B97600525A93 /* OABaseNavbarSubviewViewController.m in Sources */,
 				DA5A831126C563A800F274C7 /* OARouteInfoCell.m in Sources */,
@@ -18032,6 +18169,7 @@
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				FAB5B7292EF30693002E3D79 /* OAMapTopPlace.m in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
+				CE0BA2093045A00300089B64 /* DescriptionDeviceCell.swift in Sources */,
 				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
@@ -18994,6 +19132,9 @@
 				277BE07F2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
+				C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */,
+				C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */,
+				C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */,
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
 				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
@@ -19213,6 +19354,7 @@
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				C58924052D693D1700EC5910 /* FinishTripRecordingAction.swift in Sources */,
 				C5AD0F162EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift in Sources */,
+				C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */,
 				328EE3562E1710DC003CDB48 /* OABaseLoadAsyncTask.swift in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
 				464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */,
@@ -19549,10 +19691,19 @@
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
 				27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
+				D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C571210000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19568,12 +19719,19 @@
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
+				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
+				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D1C57121000000000000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
+			targetProxy = D1C571210000000000000006 /* PBXContainerItemProxy */;
+		};
 		DA72AB8F2508F41000851313 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
@@ -20091,10 +20249,40 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"DEBUG=1",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"DEBUG=1",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -20157,10 +20345,38 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -20198,6 +20414,107 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		D1C57121000000000000000D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
+			};
+			name = Debug;
+		};
+		D1C57121000000000000000E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd MapsUITests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "OsmAnd Maps";
 			};
 			name = Release;
 		};
@@ -20359,6 +20676,15 @@
 			buildConfigurations = (
 				BBA3AFEC197FC4BB0039D991 /* Debug */,
 				BBA3AFED197FC4BB0039D991 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1C571210000000000000008 /* Build configuration list for PBXNativeTarget "OsmAnd MapsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1C57121000000000000000D /* Debug */,
+				D1C57121000000000000000E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -3044,7 +3044,7 @@
 "open_street_map_login_mode_simple" = "Potrebno je da se ulogujete da bi otpremili izmene.";
 "wikipedia_language_settings_descr" = "Izaberite jezike na kojima će se članci Vikipedije pojaviti na mapi. Dok čitate članak, možete se prebacivati između bilo kojeg dostupnog jezika.";
 "rotate_map_manual_opt" = "Ručno okretanje";
-"remove_folder_with_files_descr" = "Da li ste sigurni da želite da uklonite \"%@\" folder i sve %d tragove?";
+"remove_folder_with_files_descr" = "Da li ste sigurni da želite da uklonite \"%@\" folder i sve %@ tragove?";
 "restore_from_trash" = "Povrati iz kante otpada";
 "map_widget_sun_position_desc" = "Prikazuje vreme do izlaska ili zalaska sunca.";
 "map_widget_sun_position" = "Pozicija Sunca";
@@ -3135,7 +3135,7 @@
 "my_places_no_tracks_descr" = "Ovaj folder nema ni jedan trag još uvek.";
 "shared_string_profile" = "Profil";
 "visibility" = "Vidljivost";
-"ltr_or_rtl_combine_via_of" = "%ld od %ld'";
+"ltr_or_rtl_combine_via_of" = "%@ od %@'";
 "pressure_hide" = "Sakrij pritisak";
 "dowload_cloud_version" = "Preuzmi verziju oblaka";
 "search_favorites" = "Traži u favoritima";
@@ -4091,7 +4091,7 @@
 "dismiss_changes_descr" = "Sve promene će biti odbačene.";
 "gpx_logging_no_data" = "Nema podataka";
 "delete_changes" = "Obriši izmene";
-"osm_edits_delete_item_confirmation" = "Da li ste sigurni da želite da obrišete %ld izmenu?";
+"osm_edits_delete_item_confirmation" = "Da li ste sigurni da želite da obrišete %@ izmenu?";
 "osm_edits_delete_items_confirmation" = "Da li ste sigurni da želite da obrišete %ld izmene?";
 "show_touches" = "Prikaži dodire";
 "folder_one_track" = "1 trasa";
@@ -4276,8 +4276,8 @@
 "shared_string_play" = "Pusti";
 "import_tracks_cancel_title" = "Otkazati uvoz?";
 "import_tracks_cancel_descr" = "Ako sada zatvorite, vaši izbori putanja neće biti uvezeni.";
-"import_tracks_descr_one" = "Fajl %@ sadrži 1 zasebnu putanju. Izaberite onu koju želite da uvezete.";
-"import_tracks_descr_other" = "Fajl %@ sadrži %d odvojenih putanja. Izaberite one koje želite da uvezete.";
+"import_tracks_descr_one" = "Fajl %1$@ sadrži %2$@ zasebnu putanju. Izaberite onu koju želite da uvezete.";
+"import_tracks_descr_other" = "Fajl %@ sadrži %@ odvojenih putanja. Izaberite one koje želite da uvezete.";
 "import_as_one_track" = "Uvezi kao jednu putanju";
 "import_tracks_folders_footer" = "Izaberite odredišni folder za uvezene putanje.";
 "error_reading_gpx" = "Nije moguće pročitati GPX podatke.";
@@ -4548,3 +4548,7 @@
 "shared_string_send" = "Pošalji";
 "send_current_app_log" = "Pošalji trenutni dnevnik aplikacije";
 "send_current_app_log_descr" = "Od početka aplikacije";
+"msg_favorites_skipped_as_existing" = "Omiljene tačke (%d) su preskočene kao već postojeće.";
+"osm_edits_empty_state_title" = "Nema izmena mape na čekanju";
+"osm_edits_empty_state_description" = "Promene koje napravite u OsmAndu će se pojaviti ovde pre nego što se otpreme na OpenStreetMap";
+"carplay_trip_via_point" = "Preko %@";

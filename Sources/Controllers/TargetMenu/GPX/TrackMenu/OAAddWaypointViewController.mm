@@ -85,7 +85,7 @@
         {
             _gpx.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
         }
-        _currentGpx = [OASGpxUtilities.shared loadGpxFileFile:_gpx.dataItem.file];
+        _currentGpx = [OASGpxUtilities.shared loadGpxFileFile:([_gpx getFile] ?: [[OASKFile alloc] initWithFilePath:_gpx.path])];
         
         auto rect = _currentGpx.getRect;
         movedPoint.position = CLLocationCoordinate2DMake(rect.centerY, rect.centerX);
@@ -108,7 +108,7 @@
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     if (self.delegate)
-        [self.delegate requestHeaderOnlyMode];
+        [self.delegate requestHeaderOnlyModeAnimated:NO];
 
     OsmAnd::LatLon latLon(_movedPoint.point.position.latitude, _movedPoint.point.position.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];

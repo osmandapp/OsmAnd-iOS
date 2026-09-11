@@ -3665,7 +3665,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@ — %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"ltr_or_rtl_combine_via_of" = "%ld из %ld";
+"ltr_or_rtl_combine_via_of" = "%@ из %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 "shared_string_rearrange" = "Перестроить";
 "new_smart_folder" = "Новая умная папка";
@@ -3929,7 +3929,7 @@
 "copy_as_new_folder" = "Копировать как новую папку";
 "add_to_a_folder" = "Добавить в папку";
 "add_to_favorites" = "Добавить в избранное";
-"remove_folder_with_files_descr" = "Вы уверены, что хотите удалить папку \"%@\" и все треки %d?";
+"remove_folder_with_files_descr" = "Вы уверены, что хотите удалить папку \"%@\" и все треки %@?";
 "recorded_track" = "Записанный трек";
 "simple_widget_footer" = "Виджет может занимать всю ширину строки или только один столбец.";
 "delete_all_items_desc" = "Вы уверены, что хотите безвозвратно удалить все элементы из корзины? Это действие невозможно отменить.";

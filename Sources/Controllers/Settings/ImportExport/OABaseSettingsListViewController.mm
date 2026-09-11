@@ -205,7 +205,7 @@
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
                 cell.titleLabel.text = groupData.groupName;
-                cell.descriptionLabel.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
+                cell.descriptionLabel.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), [NSNumberFormatter localizedCount:@(itemSelectionCount)], [NSNumberFormatter localizedCount:@(itemCount)]];
                 if (size > 0)
                 {
                     cell.descriptionLabel.text = [cell.descriptionLabel.text stringByAppendingFormat:@" • %@",
@@ -262,7 +262,7 @@
                     OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                     NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                     NSInteger itemsTotal = [items getItemsForType:settingType].count;
-                    NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), selectedAmount, itemsTotal]);
+                    NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), [NSNumberFormatter localizedCount:@(selectedAmount)], [NSNumberFormatter localizedCount:@(itemsTotal)]]);
                     
                     long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
                     if (size > 0)

@@ -700,7 +700,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (![[self getWidgetPanel] isPanelVertical])
     {
         self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
-        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].currentMapThemeColor];
+        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
     }
 }
 

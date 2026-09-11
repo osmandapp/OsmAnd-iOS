@@ -1149,14 +1149,6 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func backPressed() {
-        if searchState.hasBrowseContext(),
-           searchController.isActive || !searchState.query.isEmpty {
-            searchState.query = ""
-            syncSearchQuery()
-            searchController.isActive = false
-            applyFiltersAndSort(scrollToTop: true)
-            return
-        }
         guard !handleBackPressedInternal() else { return }
         popOrDismiss()
     }

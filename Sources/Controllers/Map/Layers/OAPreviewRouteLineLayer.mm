@@ -336,7 +336,7 @@
 
 - (NSInteger)getDefaultColor:(BOOL)forTurnArrows
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].isCurrentMapNightMode;
     NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
     return colorVal
             ? colorVal.intValue
@@ -593,7 +593,7 @@
     _locationMarker->setPosition(area.center());
     _locationMarker->setIsHidden(false);
     
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = [OAAppSettings sharedManager].isCurrentMapNightMode;
     _prevRouteColoringType = _routeColoringType;
     _prevRouteInfoAttribute = _routeInfoAttribute;
     _prevArea = area;

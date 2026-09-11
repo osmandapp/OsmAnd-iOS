@@ -51,6 +51,7 @@ static const int POINT_LOCATION_LIST_HEADER = 201;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *address;
 
 @property (nonatomic, readonly) NSString *type;
 

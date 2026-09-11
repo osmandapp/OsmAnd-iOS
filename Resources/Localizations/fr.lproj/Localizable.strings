@@ -4550,3 +4550,5 @@
 "osm_edits_empty_state_description" = "Les modifications que vous effectuez dans OsmAnd s'afficheront ici avant d'être transférées vers OpenStreetMap";
 "msg_favorites_skipped_as_existing" = "Les points favoris (%d) ont été ignorés car ils existaient déjà.";
 "carplay_trip_via_point" = "Via %@";
+"tracks_stats_are_being_calculated" = "Les statistiques des itinéraires sont en cours de calcul...";
+"tracks_stats_are_being_calculated_left" = "%1$@ %2$@ restants";

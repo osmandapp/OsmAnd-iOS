@@ -2803,11 +2803,8 @@ static const NSInteger _buttonsCount = 4;
         }
         case OAShareMenuActivityCopyCoordinates:
         {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            NSInteger f = [settings.settingGeoFormat get];
-            NSString *coordinates = [OAOsmAndFormatter getFormattedCoordinatesWithLat:_targetPoint.location.latitude
-                                                                                  lon:_targetPoint.location.longitude
-                                                                         outputFormat:f];
+            NSString *coordinates = [CoordinateFormatBridge formatPrimaryWithLat:_targetPoint.location.latitude
+                                                                             lon:_targetPoint.location.longitude];
             [self copyToClipboardWithToast:coordinates];
             break;
         }

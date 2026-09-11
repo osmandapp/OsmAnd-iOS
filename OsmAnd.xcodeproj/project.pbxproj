@@ -1507,6 +1507,7 @@
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
+		C506111C2DB9678300E8F204 /* OAGridFormatMappingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
 		C50867892D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */; };
 		C508678C2D9D5E32000B7219 /* SegmentTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C508678B2D9D5E32000B7219 /* SegmentTextTableViewCell.xib */; };
@@ -1764,6 +1765,9 @@
 		CEAF081B2FD9226C0048A74A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF081A2FD9226C0048A74A /* Array+Extension.swift */; };
 		CEDB71E52FD993C3009DAA0D /* TrackStatsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */; };
 		CEFA10002D29000100ABCDEF /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = CEFA10012D29000100ABCDEF /* Localizable.stringsdict */; };
+		CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */; };
+		CEFC9E7230372F6500D224E4 /* CoordinateGridFormatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */; };
+		CEFC9E7430373A5300D224E4 /* CoordinateGridFormatBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
@@ -5562,8 +5566,10 @@
 		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
-		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
+		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
+		C506111A2DB9678300E8F204 /* OAGridFormatMappingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMappingBridge.h; sourceTree = "<group>"; };
+		C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGridFormatMappingBridge.mm; sourceTree = "<group>"; };
 		C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesTableViewCell.swift; sourceTree = "<group>"; };
 		C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesTableViewCell.xib; sourceTree = "<group>"; };
 		C508678A2D9D5E32000B7219 /* SegmentTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTextTableViewCell.swift; sourceTree = "<group>"; };
@@ -5968,6 +5974,9 @@
 		CEAF081A2FD9226C0048A74A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStatsTableCell.swift; sourceTree = "<group>"; };
 		CEFA10022D29000100ABCDEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormat.swift; sourceTree = "<group>"; };
+		CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatProvider.swift; sourceTree = "<group>"; };
+		CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatBridge.swift; sourceTree = "<group>"; };
 		CFAD0317D259939278620F4D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = da; path = da.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D086857B31B2466506C886C1 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cy; path = cy.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D11B1870D2F27BC8784B9B6E /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = eu; path = eu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -11218,7 +11227,10 @@
 				CE7787D5302C70D300BEA7A6 /* SwissGridApproximation.swift */,
 				CE7787D7302C70FC00BEA7A6 /* MaidenheadPoint.swift */,
 				CE7787D9302C71E600BEA7A6 /* CoordinateGridFormatting.swift */,
+				CEFC9E6F30372CA500D224E4 /* CoordinateGridFormat.swift */,
+				CEFC9E7130372F6500D224E4 /* CoordinateGridFormatProvider.swift */,
 				CE6DAAF2302DBD9700F71540 /* CoordinateFormatBridge.swift */,
+				CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */,
 			);
 			path = Coordinates;
             sourceTree = "<group>";
@@ -14640,7 +14652,6 @@
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
 				C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */,
 				C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */,
-				C50611192DB9678300E8F204 /* OAGridFormatMapping.h */,
 				DA5A80BC26C563A600F274C7 /* OACurrentPositionHelper.h */,
 				DA5A80BA26C563A600F274C7 /* OACurrentPositionHelper.mm */,
 				DA5A809326C563A500F274C7 /* OACustomRegion.h */,
@@ -14669,6 +14680,9 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				DA5A809626C563A500F274C7 /* OAGPXUIHelper.h */,
 				DA5A80D926C563A600F274C7 /* OAGPXUIHelper.mm */,
+				C50611192DB9678300E8F204 /* OAGridFormatMapping.h */,
+				C506111A2DB9678300E8F204 /* OAGridFormatMappingBridge.h */,
+				C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
 				DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */,
 				DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */,
@@ -18147,6 +18161,7 @@
 				CE762AEE2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift in Sources */,
 				2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */,
 				C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */,
+				CEFC9E7430373A5300D224E4 /* CoordinateGridFormatBridge.swift in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				322B53952C78DD14006B48B0 /* OAIconsPaletteCell.m in Sources */,
@@ -18214,6 +18229,7 @@
 				328EE35B2E171BA4003CDB48 /* SelectedGpxPoint.swift in Sources */,
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
+				CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
@@ -19164,6 +19180,7 @@
 				32ABB6502AEC01C000491E99 /* ImageToStringConverter.swift in Sources */,
 				329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
+				CEFC9E7230372F6500D224E4 /* CoordinateGridFormatProvider.swift in Sources */,
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
@@ -19467,6 +19484,7 @@
 				46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */,
+				C506111C2DB9678300E8F204 /* OAGridFormatMappingBridge.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
 				81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */,
 				C5817F1F2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift in Sources */,

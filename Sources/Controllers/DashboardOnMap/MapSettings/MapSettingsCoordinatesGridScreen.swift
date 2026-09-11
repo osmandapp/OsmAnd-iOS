@@ -74,16 +74,17 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         if isCoordinatesGridEnabled {
             let formatZoomSection = data.createNewSection()
             let formatRow = formatZoomSection.createNewRow()
-            formatRow.cellType = OAButtonTableViewCell.reuseIdentifier
+            formatRow.cellType = OAValueTableViewCell.reuseIdentifier
             formatRow.key = RowKey.formatRowKey.rawValue
             formatRow.title = localizedString("shared_string_format")
+            formatRow.descr = currentGridFormatTitle()
             formatRow.icon = .icCustomLongitude
             formatRow.iconTintColor = .iconColorDefault
             let zoomRow = formatZoomSection.createNewRow()
             zoomRow.cellType = OAValueTableViewCell.reuseIdentifier
             zoomRow.key = RowKey.zoomRowKey.rawValue
             zoomRow.title = localizedString("shared_string_zoom_levels")
-            zoomRow.descr = "\(coordinatesGridSettings.getZoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).min) – \(coordinatesGridSettings.getZoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).max)"
+            zoomRow.descr = "\(coordinatesGridSettings.zoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).min) – \(coordinatesGridSettings.zoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).max)"
             zoomRow.icon = .icCustomOverlayMap
             zoomRow.iconTintColor = .iconColorDefault
             
@@ -92,7 +93,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             labelsPositionRow.cellType = OAButtonTableViewCell.reuseIdentifier
             labelsPositionRow.key = RowKey.labelsPositionRowKey.rawValue
             labelsPositionRow.title = localizedString("labels_position")
-            let pos = GridLabelsPosition(rawValue: coordinatesGridSettings.getGridLabelsPosition(forAppMode: settings.applicationMode.get())) ?? .edges
+            let pos = GridLabelsPosition(rawValue: coordinatesGridSettings.gridLabelsPosition(forAppMode: settings.applicationMode.get())) ?? .edges
             labelsPositionRow.icon = pos.icon
             labelsPositionRow.iconTintColor = .iconColorDefault
             let colorRow = positionColorSection.createNewRow()
@@ -102,7 +103,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             colorRow.descr = localizedString("customize_grid_color")
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
             colorRow.iconTintColor = .iconColorDefault
-            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.isAppMapNightMode ? coordinatesGridSettings.getNightGridColor() : coordinatesGridSettings.getDayGridColor())))
+            colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.isAppMapNightMode ? coordinatesGridSettings.nightGridColor() : coordinatesGridSettings.dayGridColor())))
             colorRow.setObj(localizedString("shared_string_get"), forKey: Constants.buttonTitleKey)
             colorRow.setObj("ic_custom_arrow_forward", forKey: Constants.buttonIconKey)
         }
@@ -195,6 +196,8 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = data.item(for: indexPath)
         switch item.key {
+        case RowKey.formatRowKey.rawValue:
+            presentFormatSelector()
         case RowKey.zoomRowKey.rawValue:
             showTerrainParametersScreen(type: .EOATerrainSettingsTypeCoordinatesGridZoomLevels)
         case RowKey.colorRowKey.rawValue:
@@ -222,19 +225,47 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         tblView?.reloadData()
     }
     
+    private func currentGridFormatTitle() -> String {
+        let id = coordinatesGridSettings.resolvedGridFormatId(forAppMode: settings.applicationMode.get())
+            ?? CoordinateFormatIds.builtinDdd
+        return CoordinateFormatHelper.resolve([id]).first?.title ?? localizedString("dd_ddddd_format")
+    }
+
+    private func applyGridFormat(_ formatId: String) {
+        guard let resolved = CoordinateFormatHelper.gridFormatProvider.resolve(formatId) else {
+            let title = CoordinateFormatHelper.resolve([formatId]).first?.title ?? formatId
+            OAUtilities.showToast(title,
+                                  details: localizedString("shared_string_unavailable"),
+                                  duration: 4,
+                                  in: OARootViewController.instance().view)
+            return
+        }
+
+        coordinatesGridSettings.setGridFormatId(resolved.id, forAppMode: settings.applicationMode.get())
+        settings.coordinateFormatSettingsStorage.addRecentId(resolved.id)
+        updateData()
+    }
+
+    private func presentFormatSelector() {
+        guard let presenter = vwController else { return }
+
+        let appMode = settings.applicationMode.get()
+        let selectedId = coordinatesGridSettings.gridFormatId(forAppMode: appMode)
+
+        CoordinateFormatSelectorViewController.present(
+            from: presenter,
+            selectedFormatId: selectedId,
+            appMode: appMode,
+            delegate: self,
+            showSelectOther: true,
+            gridFormatsOnly: true
+        )
+    }
+
     private func createStateSelectionMenu(for key: String) -> UIMenu {
-        if key == RowKey.formatRowKey.rawValue {
-            let actions = GridFormat.allCases.map { format in
-                UIAction(title: format.title, state: format.id == coordinatesGridSettings.getGridFormat(forAppMode: settings.applicationMode.get()) ? .on : .off) { [weak self] _ in
-                    guard let self else { return }
-                    self.coordinatesGridSettings.setGridFormat(format.id, forAppMode: settings.applicationMode.get())
-                    self.updateData()
-                }
-            }
-            return UIMenu(options: .singleSelection, children: actions)
-        } else if key == RowKey.labelsPositionRowKey.rawValue {
+        if key == RowKey.labelsPositionRowKey.rawValue {
             let actions = GridLabelsPosition.allCases.map { pos in
-                UIAction(title: pos.title, state: pos.rawValue == coordinatesGridSettings.getGridLabelsPosition(forAppMode: settings.applicationMode.get()) ? .on : .off) { [weak self] _ in
+                UIAction(title: pos.title, state: pos.rawValue == coordinatesGridSettings.gridLabelsPosition(forAppMode: settings.applicationMode.get()) ? .on : .off) { [weak self] _ in
                     guard let self else { return }
                     self.coordinatesGridSettings.setGridLabelsPosition(pos.rawValue, forAppMode: settings.applicationMode.get())
                     self.updateData()
@@ -286,5 +317,23 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
 extension MapSettingsCoordinatesGridScreen: OATerrainParametersDelegate {
     func onBackTerrainParameters() {
         OARootViewController.instance()?.mapPanel.showCoordinatesGridScreen()
+    }
+}
+
+extension MapSettingsCoordinatesGridScreen: CoordinateFormatSelectorDelegate {
+    func coordinateFormatSelector(_ selector: CoordinateFormatSelectorViewController,
+                                  didSelectFormatId formatId: String) {
+        applyGridFormat(formatId)
+    }
+
+    func coordinateFormatSelectorDidRequestOtherFormat(_ selector: CoordinateFormatSelectorViewController) {
+        guard let presenter = vwController else { return }
+
+        CoordinateFormatSelectorRouter.presentGridAdd(
+            from: presenter,
+            appMode: settings.applicationMode.get()
+        ) { [weak self] id in
+            self?.applyGridFormat(id)
+        }
     }
 }

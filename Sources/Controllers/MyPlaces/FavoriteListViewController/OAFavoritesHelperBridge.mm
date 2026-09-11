@@ -36,6 +36,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "OAFavoriteFolderBridgeItem.h"
 #import "OAFavoritePointBridgeItem.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -202,10 +203,8 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 
 - (NSString *)formattedCoordinatesForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
 {
-    NSInteger format = [OAAppSettings.sharedManager.settingGeoFormat get];
-    return [OAOsmAndFormatter getFormattedCoordinatesWithLat:favoriteItem.latitude
-                                                         lon:favoriteItem.longitude
-                                                outputFormat:format];
+    return [CoordinateFormatBridge formatPrimaryWithLat:favoriteItem.latitude
+                                                    lon:favoriteItem.longitude];
 }
 
 - (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible

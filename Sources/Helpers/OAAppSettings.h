@@ -959,7 +959,14 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
-@interface OACommonGridFormat : OACommonInteger
+@interface OACommonGridFormat : OACommonString
+
++ (instancetype)withKey:(NSString *)key defValue:(NSString *)defValue;
+
+- (NSString *)get;
+- (NSString *)get:(OAApplicationMode *)mode;
+- (void)set:(NSString *)formatId;
+- (void)set:(NSString *)formatId mode:(OAApplicationMode *)mode;
 
 @end
 

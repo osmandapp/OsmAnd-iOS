@@ -3158,8 +3158,6 @@
 		DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */; };
 		DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */; };
 		DA84E84D21D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */; };
-		DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */; };
-		DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86607D2268A2870041F57D /* ic_custom_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660762268A2850041F57D /* ic_custom_remove@3x.png */; };
 		DA86607F2268A2870041F57D /* ic_custom_show_on_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660772268A2850041F57D /* ic_custom_show_on_map@3x.png */; };
@@ -8140,8 +8138,6 @@
 		DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseDeleteFilesCommand.m; sourceTree = "<group>"; };
 		DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@2x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@2x.png"; sourceTree = "<group>"; };
 		DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@3x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@3x.png"; sourceTree = "<group>"; };
-		DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@2x.png"; path = "Resources/Icons/ic_action_close_banner@2x.png"; sourceTree = "<group>"; };
-		DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@3x.png"; path = "Resources/Icons/ic_action_close_banner@3x.png"; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8660762268A2850041F57D /* ic_custom_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove@3x.png"; path = "Resources/Icons/ic_custom_remove@3x.png"; sourceTree = "<group>"; };
 		DA8660772268A2850041F57D /* ic_custom_show_on_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_show_on_map@3x.png"; path = "Resources/Icons/ic_custom_show_on_map@3x.png"; sourceTree = "<group>"; };
@@ -9465,8 +9461,6 @@
 				8AE0194124505C8900DA5C33 /* ic_action_bus@3x.png */,
 				84669637207CD7DF00BA971B /* ic_action_clear_all@2x.png */,
 				84669639207CD7DF00BA971B /* ic_action_clear_all@3x.png */,
-				DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */,
-				DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */,
 				DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */,
 				DAF3452D22F44825009E2EB6 /* ic_action_create_poi@3x.png */,
 				DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */,
@@ -17517,7 +17511,6 @@
 				DA5A82B726C563A800F274C7 /* OAPublicTransportRouteCell.xib in Resources */,
 				8AE0196E24505C8B00DA5C33 /* ic_custom_parking@2x.png in Resources */,
 				DA8EE7F2246D446400069A6D /* ic_action_slope@3x.png in Resources */,
-				DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */,
 				0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */,
 				0AB314F3271EFC43007C34A3 /* OAPointWithRegionTableViewCell.xib in Resources */,
 				8476E2981F6C1EEC00EC274F /* map_car_location@2x.png in Resources */,
@@ -17567,7 +17560,6 @@
 				DA9C623D221C46590087E140 /* ic_custom_trip@3x.png in Resources */,
 				DABA3DE122686E72005BB777 /* ic_custom_overflow_menu@3x.png in Resources */,
 				0A6B69D426725D1F00778353 /* ic_custom_road_works@3x.png in Resources */,
-				DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */,
 				DA0D1615281BEEF500CEEF58 /* map_turn_slight_left_dark@2x.png in Resources */,
 				8476E2621F6C1EEC00EC274F /* map_bicycle_location_view_angle_night@2x.png in Resources */,
 				DA1341C4243DC5A90039D214 /* map_action_snowmobile@2x.png in Resources */,

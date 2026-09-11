@@ -36,15 +36,9 @@
     {
         if ([self.delegate respondsToSelector:@selector(isTouchEventAllowedForView:)])
         {
-            UIView *findView = [self findView:self];
-            if (findView)
-            {
-                CGPoint convertedPoint = [findView convertPoint:point fromView:self];
-                if ([findView pointInside:convertedPoint withEvent:event])
-                    return findView;
-                else
-                    return self;
-            }
+            // Quick-action buttons are siblings of this view in the map HUD container.
+            UIView *findView = [self findView:self.superview ?: self atPoint:point withEvent:event];
+            return findView ?: self;
         }
         return [super hitTest:point withEvent:event];
     }
@@ -53,15 +47,21 @@
     return view == self ? nil : view;
 }
 
-- (UIView *)findView:(UIView *)view
+- (UIView *)findView:(UIView *)view atPoint:(CGPoint)point withEvent:(UIEvent *)event
 {
-    BOOL isTouchEventAllowed = [self.delegate isTouchEventAllowedForView:view];
-    if (isTouchEventAllowed)
-        return view;
+    if (view.hidden || view.alpha <= 0.01 || !view.userInteractionEnabled)
+        return nil;
+
+    if ([self.delegate isTouchEventAllowedForView:view])
+    {
+        CGPoint convertedPoint = [view convertPoint:point fromView:self];
+        if ([view pointInside:convertedPoint withEvent:event])
+            return view;
+    }
     
     for (UIView *subview in view.subviews)
     {
-        UIView *foundView = [self findView:subview];
+        UIView *foundView = [self findView:subview atPoint:point withEvent:event];
         if (foundView)
         {
             return foundView;

@@ -12,7 +12,6 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
-#import "OACoordinatesFormatViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -202,30 +201,7 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    NSString *geoFormatValue;
-    switch ([_settings.settingGeoFormat get:self.appMode]) {
-        case MAP_GEO_FORMAT_DEGREES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-        case MAP_GEO_FORMAT_MINUTES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DM");
-            break;
-        case MAP_GEO_FORMAT_SECONDS:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DMS");
-            break;
-        case MAP_GEO_UTM_FORMAT:
-            geoFormatValue = @"UTM";
-            break;
-        case MAP_GEO_OLC_FORMAT:
-            geoFormatValue = @"OLC";
-            break;
-        case MAP_GEO_MGRS_FORMAT:
-            geoFormatValue = @"MGRS";
-            break;
-        default:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-    }
+    NSString *geoFormatValue = [CoordinateFormatBridge primaryFormatTitleWithMode:self.appMode];
     
     NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
@@ -466,7 +442,7 @@
     else if ([itemKey isEqualToString:@"tempUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[CoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
@@ -478,7 +454,7 @@
         settingsViewController.delegate = self;
         if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
-        else if ([itemKey isEqualToString:@"externalImputDevice"])
+        else if ([itemKey isEqualToString:@"externalImputDevice"] || [itemKey isEqualToString:@"coordsFormat"])
             [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];

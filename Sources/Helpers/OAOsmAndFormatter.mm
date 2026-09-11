@@ -640,6 +640,22 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
             r = @"0, 0";
         [result appendString:r];
     }
+    else if (outputFormat == SWISS_GRID_FORMAT)
+    {
+        [result appendString:[CoordinateGridFormatting formatSwissGridLV03WithLat:lat lon:lon]];
+        [result insertString:kLTRMark atIndex:0];
+    }
+    else if (outputFormat == SWISS_GRID_PLUS_FORMAT)
+    {
+        [result appendString:[CoordinateGridFormatting formatSwissGridLV95WithLat:lat lon:lon]];
+        [result insertString:kLTRMark atIndex:0];
+    }
+    else if (outputFormat == MAIDENHEAD_FORMAT)
+    {
+        [result appendString:[CoordinateGridFormatting formatMaidenheadWithLat:lat lon:lon]];
+        [result insertString:kLTRMark atIndex:0];
+    }
+
     return [NSString stringWithString:result];
 }
 

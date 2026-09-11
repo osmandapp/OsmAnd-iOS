@@ -381,7 +381,7 @@ final class StarMapMyDataViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.title = localizedString("astro_explore_my_data")
         navigationItem.largeTitleDisplayMode = .never
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
     }

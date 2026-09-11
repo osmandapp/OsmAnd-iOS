@@ -1878,6 +1878,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonAppMode *)[self setupCopy:[OACommonAppMode withKey:key defValue:self.defValue]];
+}
+
 - (OAApplicationMode *)get
 {
     return [self get:self.appMode];
@@ -2047,6 +2052,15 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    // Preserve enum subclasses without calling their differently typed factories.
+    OACommonInteger *copy = [[self.class alloc] init];
+    copy.key = key;
+    copy.defValue = self.defValue;
+    return (OACommonInteger *)[self setupCopy:copy];
+}
+
 - (int) get
 {
     return [self get:self.appMode];
@@ -2121,6 +2135,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonLong *)[self setupCopy:[OACommonLong withKey:key defValue:self.defValue]];
 }
 
 - (long) get
@@ -2261,6 +2280,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonDouble *)[self setupCopy:[OACommonDouble withKey:key defValue:self.defValue]];
 }
 
 - (double) get
@@ -2505,6 +2529,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonSubscriptionState *)[self setupCopy:[OACommonSubscriptionState withKey:key defValue:self.defValue]];
+}
+
 - (OASubscriptionState *) get
 {
     return [self get:self.appMode];
@@ -2556,6 +2585,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonMapSource *)[self setupCopy:[OACommonMapSource withKey:key defValue:self.defValue]];
 }
 
 - (nullable OAMapSource *) get
@@ -4079,6 +4113,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonDownloadMode *copy = [super copyWithKey:key];
+    copy.values = [self.values copy];
+    return copy;
+}
+
 - (OADownloadMode *) get
 {
     NSInteger indexOfValue = [super get:self.appMode];
@@ -4177,6 +4218,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonColoringType *copy = [super copyWithKey:key];
+    copy.values = [self.values copy];
+    return copy;
+}
+
 - (OAColoringType *) get
 {
     NSInteger indexOfValue = [super get:self.appMode];
@@ -4271,6 +4319,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonUnit *)[self setupCopy:[OACommonUnit withKey:key defValue:self.defValue]];
 }
 
 - (NSUnit *) get

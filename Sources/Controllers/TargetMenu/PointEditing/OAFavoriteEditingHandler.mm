@@ -46,15 +46,11 @@
         [self commonInit];
 
         _iconName = [self.class getPoiIconName:poi];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
-
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         _favorite = [[OAFavoriteItem alloc] initWithLat:location.latitude
                                                     lon:location.longitude
                                                    name:formattedTitle
-                                               category:groupName];
+                                               category:@""];
         [_favorite setAddress:formattedLocation];
         [_favorite setTimestamp:[NSDate date]];
         [_favorite setIcon:_iconName];

@@ -64,4 +64,6 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
                              poi:(OAPOI *)poi
                      gpxFile:(OASGpxFile *)gpxFile;
 
+- (void)applyQuickActionParams:(NSDictionary *)params;
+
 @end

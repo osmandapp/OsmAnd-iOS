@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 
 @optional
 
+- (void)onFileSelectionCancelled;
 - (void) closeBottomSheet;
 - (void) onSegmentSelected:(NSInteger)position gpx:(OASGpxFile *)gpx;
 

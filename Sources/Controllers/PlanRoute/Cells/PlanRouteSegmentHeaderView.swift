@@ -10,6 +10,7 @@ import UIKit
 final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
 
     private static let horizontalInset: CGFloat = 16
+    private static let minimumHeight: CGFloat = 44
     private static let optionsButtonSize: CGFloat = 44
 
     private let titleLabel = UILabel()
@@ -37,49 +38,56 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     }
 
     private func setupView() {
-        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
         titleLabel.textColor = .textColorPrimary
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 0
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         subtitleLabel.font = .scaledSystemFont(ofSize: 15)
         subtitleLabel.textColor = .textColorSecondary
-        subtitleLabel.numberOfLines = 1
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+        subtitleLabel.lineBreakMode = .byWordWrapping
+        subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         let textStack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
         textStack.axis = .vertical
+        textStack.distribution = .fillProportionally
         textStack.spacing = 2
+        textStack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        var configuration = UIButton.Configuration.plain()
-        configuration.title = "⋯"
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attributes in
-            var updated = attributes
-            updated.font = .systemFont(ofSize: 17, weight: .bold)
-            return updated
-        }
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
+        var configuration = UIButton.Configuration.tinted()
+        configuration.image = UIImage(systemName: "ellipsis", withConfiguration: symbolConfiguration)
+        configuration.baseBackgroundColor = .buttonAccentsBlue
         configuration.baseForegroundColor = .buttonAccentsBlue
-        configuration.background.image = .blueCircleFill
+        configuration.cornerStyle = .capsule
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
         optionsButton.accessibilityLabel = localizedString("shared_string_options")
+        optionsButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         [textStack, optionsButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
 
-        let textConstraints = [
+        let constraints = [
             textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
             textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12)
-        ]
-        textConstraints.forEach { $0.priority = UILayoutPriority(999) }
-        NSLayoutConstraint.activate(textConstraints + [
+            optionsButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
             optionsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             optionsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             optionsButton.widthAnchor.constraint(equalToConstant: Self.optionsButtonSize),
             optionsButton.heightAnchor.constraint(equalToConstant: Self.optionsButtonSize)
+        ]
+        constraints.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(constraints + [
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
         ])
     }
 }

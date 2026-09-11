@@ -197,7 +197,6 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         [cell layoutIfNeeded];
         return cell;

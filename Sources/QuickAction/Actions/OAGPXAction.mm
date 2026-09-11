@@ -55,10 +55,19 @@ static QuickActionType *TYPE;
 {
     CLLocation *latLon = [self getMapLocation];
     NSString *title = self.getParams[kName];
-    if (!title || title.length == 0)
-        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
-    
-    [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
+    BOOL autoFill = ![self.getParams[kDialog] boolValue];
+    if (title.length > 0)
+    {
+        [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:autoFill];
+        return;
+    }
+
+    [OAReverseGeocoder.instance lookupAddressAtLat:latLon.coordinate.latitude
+                                               lon:latLon.coordinate.longitude
+                                          objectId:0
+                                        completion:^(NSString *address) {
+        [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:address autoFill:autoFill];
+    }];
 }
 
 - (void) addWaypoint:(double)lat lon:(double)lon title:(NSString *)title autoFill:(BOOL)autoFill
@@ -71,10 +80,6 @@ static QuickActionType *TYPE;
 
 - (void)addWaypointWithDialog:(double)lat lon:(double)lon title:(NSString *)title
 {
-    if (self.getParams[kCategoryColor])
-        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[kCategoryColor] integerValue] forKey:kFavoriteDefaultColorKey];
-    if (self.getParams[kCategoryName])
-        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
     if ([OAFavoritesHelper hasFavoriteAt:point])
@@ -84,14 +89,17 @@ static QuickActionType *TYPE;
     targetPoint.title = title;
     targetPoint.type = OATargetFavorite;
     targetPoint.location = point;
-    
+    targetPoint.values = @{[self getActionTypeId] : self.getParams};
     [mapPanel showContextMenu:targetPoint];
     [mapPanel targetPointAddWaypoint];
 }
 
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    NSString *groupName = self.getParams[kCategoryName];
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.getParams[kCategoryName] ?: @""] trim];
+    if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
+        groupName = @"";
+
     UIColor* color;
     if (self.getParams[kCategoryColor])
     {
@@ -104,7 +112,11 @@ static QuickActionType *TYPE;
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         color = favCol.color;
     }
-    
+
+    OASGpxUtilitiesPointsGroup *group = [OASavingTrackHelper sharedInstance].currentTrack.pointsGroups[groupName];
+    if (group.color != 0)
+        color = UIColorFromARGB(group.color);
+
     OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
     OASWptPt *p = [[OASWptPt alloc] init];
     p.name = title;

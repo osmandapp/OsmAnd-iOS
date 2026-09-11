@@ -242,6 +242,47 @@
     _floatingTextFieldControllers = [NSMutableArray array];
 }
 
+- (void)applyQuickActionParams:(NSDictionary *)params
+{
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[@"category_name"] ?: @""] trim];
+    NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[@"category_color"] integerValue]];
+    OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
+    UIColor *selectedColor = favCol.color;
+    if (_editPointType == EOAEditPointTypeFavorite)
+    {
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
+        if ([group hasColor])
+            selectedColor = group.color;
+
+        if (group.iconName.length > 0)
+        {
+            _selectedIconName = group.iconName;
+            [_poiIconCollectionHandler setIconName:_selectedIconName];
+        }
+        
+        NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
+        if (backgroundIndex != NSNotFound)
+            _selectedBackgroundIndex = backgroundIndex;
+
+        self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
+    }
+    else
+    {
+        if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
+            groupName = @"";
+
+        OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
+        if (group.color != 0)
+            selectedColor = UIColorFromARGB(group.color);
+
+        self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
+    }
+
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
+    _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+    [_colorCollectionHandler generateData:@[_sortedColorItems]];
+}
+
 - (void)postInit
 {
     _initialName = self.name;
@@ -411,6 +452,7 @@
             [names addObject:group[@"title"]];
             [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : [UIColor colorNamed:ACColorNameIconColorActive]];
             [sizes addObject:@(group[@"count"].intValue)];
+            [hidden addObject:@(group[@"hidden"].boolValue)];
         }
     }
 
@@ -627,8 +669,12 @@
 
 - (NSString *)getGroupTitle
 {
+    NSString *lastCategory = [[OAAppSettings sharedManager].lastFavCategoryEntered get];
+    if (![OAFavoritesHelper groupByTrimmedName:lastCategory])
+        lastCategory = @"";
+
     return _isNewItemAdding && _editPointType == EOAEditPointTypeFavorite
-        ? [OAFavoriteGroup getDisplayName:[[OAAppSettings sharedManager].lastFavCategoryEntered get]]
+        ? [OAFavoriteGroup getDisplayName:lastCategory]
         : [_pointHandler getGroupTitle];
 }
 

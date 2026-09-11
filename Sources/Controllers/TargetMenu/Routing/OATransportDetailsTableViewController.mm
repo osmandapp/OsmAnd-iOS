@@ -203,7 +203,7 @@
     NSString *timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     NSString *str = @(route->color.c_str());
     str = str.length == 0 ? stopType.renderAttr : str;
-    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
+    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.isAppMapNightMode renderAttrName:str];
     if (color)
     {
         [arr addObject:@{
@@ -240,7 +240,7 @@
         OATransportStopType *altStopType = [OATransportStopType findType:@(altRoute->type.c_str())];
         NSString *altColorName = @(altRoute->color.c_str());
         altColorName = altColorName.length == 0 ? altStopType.renderAttr : altColorName;
-        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:altColorName];
+        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.isAppMapNightMode renderAttrName:altColorName];
         if (!altColor)
             altColor = color; // fallback to main color if none resolved
 
@@ -646,11 +646,11 @@
         if (cell)
         {
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.dividerColor = [SeparatorAppearance color];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
-            cell.dividerHight = 0.5;
+            cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
     }
@@ -679,7 +679,7 @@
     NSDictionary *item = [self getItem:indexPath];
     
     if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
+        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     return UITableViewAutomaticDimension;
 }
 

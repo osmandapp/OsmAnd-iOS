@@ -675,7 +675,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             }
             
             if hasPoints || hasTravelGpxTracks {
-                OAAppSettings.sharedManager().showGpx([filename], update: true)
+                OATravelGuidesHelper.showGpx(filename, documentAdapter: gpxFile)
                 if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
                     let trackItem = TrackItem(file: gpx.file)
                     trackItem.dataItem = gpx

@@ -480,9 +480,19 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isPlanRouteVisible = target == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
     BOOL hasHUD = _mapPanelViewController.scrollableHudViewController != nil;
+    BOOL isSidePanelPlanRoute = isPlanRouteVisible
+        && hasHUD
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    CGFloat sidePanelLeftOffset = 0.0;
+    if (isSidePanelPlanRoute)
+    {
+        CGFloat panelRight = [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+        sidePanelLeftOffset = MAX(0.0, panelRight - self.view.safeAreaInsets.left);
+    }
+    [self.mapHudLayout setExternalLeftOverlay:sidePanelLeftOffset];
     CGFloat leftOffset = kButtonOffset;
     BOOL shouldApply = NO;
-    if (isLandscape)
+    if (isLandscape || isSidePanelPlanRoute)
     {
         if ([_mapPanelViewController isTargetMapRulerNeeds])
         {
@@ -1347,7 +1357,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
     else
-        return _settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+        return _settings.isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
 }
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController
@@ -1441,13 +1451,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if ([OAUtilities isLandscape] || [OAUtilities isIPad])
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
+        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
 }
 
 - (void) updateTopButtonsLayoutY
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
     BOOL contextMenuMode = self.contextMenuMode;
+    BOOL isSidePanelPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    BOOL shouldIgnoreContextToolbar = isPhoneLandscape && !isSidePanelPlanRoute;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1467,9 +1481,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (isBannerVisible)
         bannerH = self.downloadMapWidget.frame.size.height + self.downloadMapWidget.shadowOffset;
     
-    BOOL ignoreTopSidePanels = !isPhoneLandscape && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
+    BOOL ignoreTopSidePanels = !shouldIgnoreContextToolbar
+        && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
     CGFloat extraTop = 0.0;
-    if (!isPhoneLandscape)
+    if (!shouldIgnoreContextToolbar)
     {
         if (contextMenuMode || isTargetMode)
         {
@@ -1569,8 +1584,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _lastIgnoreBottomSidePanels = ignoreBottomSidePanels;
         _lastExtraBottom = extraBottom;
         [self.mapHudLayout setExternalBottomOverlay:extraBottom ignorePanels:ignoreBottomSidePanels];
-        [self resetToDefaultRulerLayout];
     }
+    if (self.mapHudLayout)
+        [self resetToDefaultRulerLayout];
 }
 
 - (CGFloat) getHudMinTopOffset
@@ -1625,7 +1641,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (UIColor *) getStatusBarBackgroundColor
 {
-    BOOL isNight = _settings.nightMode;
+    BOOL isNight = _settings.isAppMapNightMode;
     BOOL transparent = [_settings.transparentMapTheme get];
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])
@@ -1672,12 +1688,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             {
                 if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
                 {
-                    NSString *positionAddress;
                     _previousLocation = currentLocation;
-                    positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    [OAReverseGeocoder.instance lookupAddressAtLat:currentLocation.coordinate.latitude
+                                                               lon:currentLocation.coordinate.longitude
+                                                          objectId:0
+                                                        completion:^(NSString *positionAddress) {
                         _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
-                    });
+                    }];
                 }
             }
         }
@@ -1860,7 +1877,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isScrollableHudAllowed = _mapPanelViewController.activeTargetType == OATargetMapModeParametersSettings;
     BOOL isTargetMultiMenuViewVisible = [_mapPanelViewController isTargetMultiMenuViewVisible];
     BOOL isBottomPanelVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
-    BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings;
+    BOOL isPlanRouteFullscreen = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
+    BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
+        || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || isPlanRouteFullscreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible & !isTargetMultiMenuViewVisible && !isWeatherToolbarVisible;

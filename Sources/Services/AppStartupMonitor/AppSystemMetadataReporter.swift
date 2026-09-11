@@ -11,6 +11,7 @@ final class AppSystemMetadataReporter {
         makeAppInfoLines()
             + makeDeviceInfoLines()
             + makeRuntimeInfoLines()
+            + makeAccessibilityInfoLines()
             + makeStorageInfoLines()
             + ["Launch options: \(summarizeLaunchOptions(launchOptions))"]
     }
@@ -56,6 +57,13 @@ final class AppSystemMetadataReporter {
         return [
             "State: application \(UIApplication.stateDescription(application.applicationState)), protected data: \(protectedDataAvailable), background refresh: \(backgroundRefresh)",
             "System: physical memory \(memory), thermal state: \(thermalState), low power mode: \(lowPowerMode)"
+        ]
+    }
+
+    private static func makeAccessibilityInfoLines() -> [String] {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        return [
+            "Accessibility: content size \(contentSizeCategory.rawValue), accessibility category: \(yesNo(contentSizeCategory.isAccessibilityCategory)), voice over: \(yesNo(UIAccessibility.isVoiceOverRunning)), switch control: \(yesNo(UIAccessibility.isSwitchControlRunning)), reduce motion: \(yesNo(UIAccessibility.isReduceMotionEnabled)), reduce transparency: \(yesNo(UIAccessibility.isReduceTransparencyEnabled)), bold text: \(yesNo(UIAccessibility.isBoldTextEnabled)), darker system colors: \(yesNo(UIAccessibility.isDarkerSystemColorsEnabled))"
         ]
     }
     
@@ -173,6 +181,10 @@ final class AppSystemMetadataReporter {
     
     private static func formatSize(_ size: CGSize) -> String {
         "\(Int(size.width))x\(Int(size.height))"
+    }
+
+    private static func yesNo(_ value: Bool) -> String {
+        value ? "yes" : "no"
     }
 }
 

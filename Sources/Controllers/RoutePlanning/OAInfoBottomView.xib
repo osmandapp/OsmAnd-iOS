@@ -80,12 +80,15 @@
                                         <constraint firstItem="E5l-P8-lOD" firstAttribute="leading" secondItem="MYf-5X-Eur" secondAttribute="trailing" constant="16" id="yde-dW-dsf"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uri-VU-2iv">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uri-VU-2iv" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="56" width="414" height="1"/>
                                     <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="2c8-l0-Wan"/>
                                     </constraints>
+                                    <connections>
+                                        <outlet property="thicknessConstraint" destination="2c8-l0-Wan" id="s01-TC-001"/>
+                                    </connections>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" name="viewBg"/>

@@ -1,4 +1,6 @@
 "download_depth_countours" = "Merelliset korkeuskäyrät";
+"send_crash_log" = "Lähetä kaatumisloki";
+"send_crash_log_descr" = "Sisältää ainoastaan tietoa kaatumisista";
 "day_short" = "pv";
 "week_short" = "vko";
 "weeks_short" = "vko";
@@ -2294,3 +2296,5 @@
 "trip_recording_moving_time_widget_description" = "Näyttää kuluneen ajan tai edellisessä ylä- tai alamäessä kuluneen ajan.";
 "trip_recording_moving_time" = "Siirtymisaika";
 "start_navigation" = "Aloita navigointi";
+"preparing_file" = "Valmistellaan tiedostoa";
+"sort_by_nearest_to_current_location" = "Lähin nykyiseen sijaintiin";

@@ -484,7 +484,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self updateBackgroundViewLayout:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.separatorColor = [SeparatorAppearance color];
     
     [self setupView];
     

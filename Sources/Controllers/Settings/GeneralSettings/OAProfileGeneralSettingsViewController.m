@@ -12,7 +12,6 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
-#import "OACoordinatesFormatViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"

@@ -99,7 +99,7 @@
                     <rect key="frame" x="0.0" y="830" width="414" height="66"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eEp-8m-8mY">
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eEp-8m-8mY" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" name="customSeparator"/>

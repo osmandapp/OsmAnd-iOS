@@ -42,6 +42,8 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 								 env:(OARoutingEnvironment *)env
 								gctx:(SHARED_PTR<GpxRouteApproximation> &)gctx
 							  points:(const std::vector<SHARED_PTR<GpxPoint>> &)points
+					 locationsHolder:(OALocationsHolder *)locationsHolder
+				useExternalTimestamps:(BOOL)useExternalTimestamps
 					   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 @end
@@ -52,6 +54,8 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 	OARoutingEnvironment *_env;
 	SHARED_PTR<GpxRouteApproximation> _gctx;
 	std::vector<SHARED_PTR<GpxPoint>> _points;
+	OALocationsHolder *_locationsHolder;
+	BOOL _useExternalTimestamps;
 	OAResultMatcher<OAGpxRouteApproximation *> *_resultMatcher;
 }
 
@@ -59,6 +63,8 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 								 env:(OARoutingEnvironment *)env
 								gctx:(SHARED_PTR<GpxRouteApproximation> &)gctx
 							  points:(const std::vector<SHARED_PTR<GpxPoint>> &)points
+					 locationsHolder:(OALocationsHolder *)locationsHolder
+				useExternalTimestamps:(BOOL)useExternalTimestamps
 					   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
 	self = [super init];
@@ -69,6 +75,8 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 		_env = env;
 		_gctx = gctx;
 		_points = points;
+		_locationsHolder = locationsHolder;
+		_useExternalTimestamps = useExternalTimestamps;
 		_resultMatcher = resultMatcher;
 	}
 	return self;
@@ -101,7 +109,12 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 		}
 		return;
 	}
-	[OARoutingHelper.sharedInstance calculateGpxApproximation:_env gctx:_gctx points:_points resultMatcher:_resultMatcher];
+	[OARoutingHelper.sharedInstance calculateGpxApproximation:_env
+												gctx:_gctx
+											  points:_points
+									 locationsHolder:_locationsHolder
+								useExternalTimestamps:_useExternalTimestamps
+									   resultMatcher:_resultMatcher];
 	@synchronized (_approximator)
 	{
 		_approximator.approximationTask = nil;
@@ -214,7 +227,8 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 		_gctx->ctx->progress->cancelled = true;
 }
 
-- (void) calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+- (void)calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+            useExternalTimestamps:(BOOL)useExternalTimestamps
 {
 	if (OAHasValidProgress(_gctx))
 		_gctx->ctx->progress->cancelled = true;
@@ -237,12 +251,19 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
 	_gctx = gctx;
 	[self startProgress];
 	[self updateProgress:gctx];
-	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self env:_env gctx:_gctx points:points resultMatcher:resultMatcher];
+	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self
+														 env:_env
+														gctx:_gctx
+													  points:points
+												 locationsHolder:_locationsHolder
+											useExternalTimestamps:useExternalTimestamps
+												   resultMatcher:resultMatcher];
 	task.previousTask = _approximationTask;
 	[task start];
 }
 
-- (void) calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+- (void)calculateGpxApproximationSync:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+                useExternalTimestamps:(BOOL)useExternalTimestamps
 {
     @try {
         auto gctx = [self getNewGpxApproximationContext];
@@ -259,7 +280,12 @@ static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
             return;
         }
 
-        [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
+        [_routingHelper calculateGpxApproximation:_env
+                                             gctx:gctx
+                                           points:points
+                                  locationsHolder:_locationsHolder
+                             useExternalTimestamps:useExternalTimestamps
+                                    resultMatcher:resultMatcher];
     } @catch (NSException *exception) {
         [resultMatcher publish:nil];
         NSLog(@"Error: %@", exception.reason);

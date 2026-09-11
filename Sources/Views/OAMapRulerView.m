@@ -132,7 +132,7 @@
 
 - (void) updateColors
 {
-    if ([OAAppSettings sharedManager].nightMode)
+    if ([OAAppSettings sharedManager].isAppMapNightMode)
         [self setNight];
     else
         [self setDay];

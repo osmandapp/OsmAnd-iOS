@@ -19,7 +19,7 @@
 static const CGFloat kRightIconLargeTitleSmall = 34.;
 static const CGFloat kRightIconLargeTitleLarge = 40.;
 static const CGFloat kDefaultBarButtonSize = 44.;
-static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
+static const CGFloat kDefaultBarButtonSizeiOS26 = 36.;
 static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
 @implementation OABaseNavbarViewController
@@ -77,6 +77,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = [SeparatorAppearance color];
     [self registerCells];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     NSString *tableFooterText = [self getTableFooterText];
@@ -1217,14 +1218,14 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self onRowSelected:indexPath];
-
     if (!self.tableView.allowsMultipleSelectionDuringEditing)
     {
-        UITableViewCell *row = [self getRow:indexPath];
+        UITableViewCell *row = [tableView cellForRowAtIndexPath:indexPath];
         if (row && row.selectionStyle != UITableViewCellSelectionStyleNone)
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    
+    [self onRowSelected:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath

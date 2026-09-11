@@ -31,13 +31,16 @@
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vYQ-vX-ZxQ" userLabel="Right Action Container">
                         <rect key="frame" x="349" y="0.0" width="65" height="48"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1O1-Eo-wqf" userLabel="Right Action Divider">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1O1-Eo-wqf" userLabel="Right Action Divider" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="3" width="1" height="42"/>
                                 <color key="backgroundColor" name="customSeparator"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="42" id="llf-v7-7eT"/>
                                     <constraint firstAttribute="width" constant="1" id="xBq-sL-Gw8"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="thicknessConstraint" destination="xBq-sL-Gw8" id="s01-TC-001"/>
+                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdi-Io-AaC" userLabel="Right Action Button">
                                 <rect key="frame" x="15" y="6" width="36" height="36"/>

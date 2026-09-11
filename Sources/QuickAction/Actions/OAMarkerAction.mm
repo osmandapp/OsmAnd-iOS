@@ -39,7 +39,12 @@ static QuickActionType *TYPE;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     CLLocation *latLon = [self getMapLocation];
-    [mapPanel addMapMarker:latLon.coordinate.latitude lon:latLon.coordinate.longitude description:[[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude]];
+    [OAReverseGeocoder.instance lookupAddressAtLat:latLon.coordinate.latitude
+                                               lon:latLon.coordinate.longitude
+                                          objectId:0
+                                        completion:^(NSString *address) {
+        [mapPanel addMapMarker:latLon.coordinate.latitude lon:latLon.coordinate.longitude description:address];
+    }];
 }
 
 - (NSString *)getActionText

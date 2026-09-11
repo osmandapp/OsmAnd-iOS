@@ -114,12 +114,15 @@
                                             <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IjP-Ok-skA" userLabel="Separator">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IjP-Ok-skA" userLabel="Separator" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="40.5" width="414" height="0.5"/>
                                             <color key="backgroundColor" name="customSeparator"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="4uW-mr-c17"/>
                                             </constraints>
+                                            <connections>
+                                                <outlet property="thicknessConstraint" destination="4uW-mr-c17" id="s01-TC-001"/>
+                                            </connections>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" name="viewBg"/>
@@ -188,12 +191,15 @@
                                 <action selector="onApplyButtonPressed:" destination="-1" eventType="touchUpInside" id="GAP-EA-nsT"/>
                             </connections>
                         </button>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Plt-VQ-IPp" userLabel="Divider">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Plt-VQ-IPp" userLabel="Divider" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="99" width="414" height="1"/>
                             <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="Eux-nt-4Uj"/>
                             </constraints>
+                            <connections>
+                                <outlet property="thicknessConstraint" destination="Eux-nt-4Uj" id="s02-TC-002"/>
+                            </connections>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Drh-T0-05Q" userLabel="Title View Container">
                             <rect key="frame" x="125.5" y="96" width="163" height="4"/>

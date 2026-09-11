@@ -14,6 +14,6 @@ final class SegmentTableHeaderView: UITableViewHeaderFooterView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        separatorViewHeight.constant = 1 / UIScreen.main.scale
+        separatorViewHeight.constant = SeparatorAppearance.thickness(forView: self)
     }
 }

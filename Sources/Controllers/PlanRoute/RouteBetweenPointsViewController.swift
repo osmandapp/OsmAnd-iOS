@@ -120,11 +120,14 @@ final class RouteBetweenPointsViewController: UIViewController {
     }
 
     private func buildSections() -> [SectionModel] {
-        let segments: [PlanRouteSegment]
+        var segments: [PlanRouteSegment]
         if let scoped = scopedSegment {
             segments = [scoped]
         } else {
             segments = dataSource?.routeSegments ?? []
+            if let pendingEmptySegment = makePendingEmptySegment(after: segments) {
+                segments.append(pendingEmptySegment)
+            }
         }
         var result: [SectionModel] = segments.map { makeSegmentSection($0) }
 
@@ -133,6 +136,24 @@ final class RouteBetweenPointsViewController: UIViewController {
         }
         result.append(SectionModel(headerTitle: nil, rows: [.changeWholeTrack]))
         return result
+    }
+
+    private func makePendingEmptySegment(after segments: [PlanRouteSegment]) -> PlanRouteSegment? {
+        guard scopedSegment == nil,
+              let pendingIndex = dataSource?.pendingEmptySegmentIndex else { return nil }
+        let mode = dataSource?.defaultMode
+        let group = PlanRouteProfileGroup(appMode: mode,
+                                          distance: 0,
+                                          lastPointIndex: segments.last?.pointIndexes.last ?? 0,
+                                          points: [])
+        return PlanRouteSegment(index: pendingIndex - 1,
+                                groups: [group],
+                                routed: mode != nil,
+                                multiMode: false,
+                                singleMode: mode,
+                                distance: 0,
+                                isPendingEmpty: true,
+                                gapAfter: nil)
     }
 
     private func makeSegmentSection(_ segment: PlanRouteSegment) -> SectionModel {

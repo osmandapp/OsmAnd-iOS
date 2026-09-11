@@ -23,7 +23,8 @@ struct RouteSegmentResult;
                        route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route
                    locations:(NSArray<CLLocation *> *)locations
            routePointIndexes:(std::vector<int>)routePointIndexes
-                      points:(NSArray<OASWptPt *> *)points;
+                      points:(NSArray<OASWptPt *> *)points
+          preserveTimestamps:(BOOL)preserveTimestamps;
 - (OASGpxFile *)exportRoute;
 - (OASTrkSegment *)generateRouteSegment;
 

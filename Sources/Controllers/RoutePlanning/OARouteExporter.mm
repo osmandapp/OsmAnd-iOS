@@ -23,6 +23,7 @@
     NSArray<CLLocation *> *_locations;
     std::vector<int> _routePointIndexes;
     NSArray<OASWptPt *> *_points;
+    BOOL _preserveTimestamps;
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -30,6 +31,7 @@
                     locations:(NSArray<CLLocation *> *)locations
             routePointIndexes:(std::vector<int>)routePointIndexes
                        points:(NSArray<OASWptPt *> *)points
+           preserveTimestamps:(BOOL)preserveTimestamps
 {
     self = [super init];
     if (self) {
@@ -38,6 +40,7 @@
         _routePointIndexes = routePointIndexes;
         _locations = locations;
         _points = points;
+        _preserveTimestamps = preserveTimestamps;
     }
     return self;
 }
@@ -170,6 +173,13 @@
         OASWptPt *pt = [[OASWptPt alloc] initWithLat:loc.coordinate.latitude lon:loc.coordinate.longitude];
         if (loc.speed > 0)
             pt.speed = loc.speed;
+
+        if (_preserveTimestamps)
+        {
+            NSTimeInterval timestamp = loc.timestamp.timeIntervalSince1970;
+            if (timestamp > 0)
+                pt.time = (int64_t)(timestamp * 1000.0);
+        }
         
         if (loc.altitude > 0)
             pt.ele = loc.altitude;

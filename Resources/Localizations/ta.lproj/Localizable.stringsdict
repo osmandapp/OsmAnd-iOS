@@ -2,10 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>items_delete_confirmation_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>அழி %1$#@items@?</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ உருப்படி</string>
+			<key>other</key>
+			<string>%2$@ உருப்படிகள்</string>
+		</dict>
+	</dict>
 	<key>favorites_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@favorites@?</string>
+		<string>அழி %1$#@favorites@?</string>
 		<key>favorites</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -13,15 +29,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld பிடித்தவை</string>
+			<string>%2$@ பிடித்தவை</string>
 			<key>other</key>
-			<string>%ld பிடித்தவைகள்</string>
+			<string>%2$@ பிடித்தவைகள்</string>
 		</dict>
 	</dict>
 	<key>folders_delete_confirmation_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@folders@?</string>
+		<string>அழி %1$#@folders@?</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -29,15 +45,15 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld கோப்புறை</string>
+			<string>%2$@ கோப்புறை</string>
 			<key>other</key>
-			<string>%ld கோப்புறைகளும்</string>
+			<string>%2$@ கோப்புறைகளும்</string>
 		</dict>
 	</dict>
 	<key>folders_favorites_delete_message</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>அழி %#@folders@ மற்றும் %#@points@. இந்த செயலை செயல்தவிர்க்க முடியாது.</string>
+		<string>அழி %1$#@folders@ மற்றும் %3$#@points@. இந்த செயலை செயல்தவிர்க்க முடியாது.</string>
 		<key>folders</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -45,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld கோப்புறை</string>
+			<string>%2$@ கோப்புறை</string>
 			<key>other</key>
-			<string>%ld கோப்புறைகளும்</string>
+			<string>%2$@ கோப்புறைகளும்</string>
 		</dict>
 		<key>points</key>
 		<dict>
@@ -56,9 +72,89 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld புள்ளி</string>
+			<string>%4$@ புள்ளி</string>
 			<key>other</key>
-			<string>%ld பிரிவகம்</string>
+			<string>%4$@ பிரிவகம்</string>
+		</dict>
+	</dict>
+	<key>carplay_trip_via_stops</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Via %#@stops@</string>
+		<key>stops</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld நிறுத்தம்</string>
+			<key>other</key>
+			<string>%ld நிறுத்தங்கள்</string>
+		</dict>
+	</dict>
+	<key>folder_tracks_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ டிராக்</string>
+			<key>other</key>
+			<string>%2$@ தடங்கள்</string>
+		</dict>
+	</dict>
+	<key>osm_edits_delete_items_confirmation</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@edits@</string>
+		<key>edits</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ திருத்தத்தை நீக்க விரும்புகிறீர்களா?</string>
+			<key>other</key>
+			<string>%2$@ திருத்தங்களை நீக்க விரும்புகிறீர்களா?</string>
+		</dict>
+	</dict>
+	<key>selected_items_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ உருப்படி</string>
+			<key>other</key>
+			<string>%2$@ உருப்படிகள்</string>
+		</dict>
+	</dict>
+	<key>import_tracks_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@tracks@</string>
+		<key>tracks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%2$@ கோப்பில் %3$@ தனித் தடம் உள்ளது. இறக்குமதி செய்ய விரும்புவதைத் தேர்வுசெய்க.</string>
+			<key>other</key>
+			<string>%2$@ கோப்பில் %3$@ தனித் தடங்கள் உள்ளன. இறக்குமதி செய்ய விரும்புவனவற்றைத் தேர்வுசெய்க.</string>
 		</dict>
 	</dict>
 </dict>

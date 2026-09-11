@@ -24,6 +24,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OASelectedGPXHelper.h"
+#import "OAAppSettings.h"
 #import "OAGPXDatabase.h"
 #import "OAMapAlgorithms.h"
 #import "OAMapLayers.h"
@@ -520,6 +521,16 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     }
     return gpx;
     
+}
+
++ (void)showGpx:(NSString *)path documentAdapter:(OAGPXDocumentAdapter *)documentAdapter
+{
+    if (path.length == 0 || !documentAdapter.object)
+        return;
+
+    [OASelectedGPXHelper.instance addGpxFile:documentAdapter.object for:path];
+    [OAAppSettings.sharedManager showGpx:@[[OAUtilities getGpxShortPath:path]] update:NO];
+    [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
 }
 
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName

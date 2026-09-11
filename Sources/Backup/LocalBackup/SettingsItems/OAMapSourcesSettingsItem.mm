@@ -159,6 +159,7 @@
                     {
                         NSString *path = [app.cachePath stringByAppendingPathComponent:name];
                         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                        [app removeOnlineTileSourceBackup:name];
                         app.resourcesManager->uninstallTilesResource(QString::fromNSString(name));
                         [self.appliedItems addObject:item];
                     }
@@ -186,6 +187,7 @@
             {
                 const auto result = localItem.toOnlineTileSource;
                 OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
+                [app backupOnlineTileSource:result->name.toNSString()];
                 app.resourcesManager->installTilesResource(result);
             }
         }

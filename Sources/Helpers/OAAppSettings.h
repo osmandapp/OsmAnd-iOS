@@ -995,15 +995,15 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonDayNightMode *appearanceMode;
 @property (nonatomic) OACommonInteger *appearanceProfileTheme; // 0 - System; 1 - Light; 2 - Dark
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
-@property (readonly, nonatomic) BOOL nightMode;
+@property (readonly, nonatomic, getter=isAppMapNightMode) BOOL appMapNightMode;
+@property (readonly, nonatomic, getter=isCarPlayMapNightMode) BOOL carPlayMapNightMode;
+@property (readonly, nonatomic, getter=isCurrentMapNightMode) BOOL currentMapNightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;
 @property (nonatomic) OACommonAltitudeMetricSystem *altitudeMetric;
 @property (nonatomic) OACommonBoolean *drivingRegionAutomatic;
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
-@property (nonatomic) OACommonStringList *preferredCoordinateFormatIds;
-@property (nonatomic) OACommonStringList *recentlyAddedCoordinateFormatIds;
 @property (nonatomic, readonly) CoordinateFormatSettingsStorage *coordinateFormatSettingsStorage;
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
@@ -1242,6 +1242,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonStringList *tracksSortModes;
 @property (nonatomic) OACommonString *searchTracksSortModes;
 @property (nonatomic) OACommonStringList *favoriteSortModes;
+@property (nonatomic) OACommonStringList *favoriteCollapsedSections;
 @property (nonatomic) OACommonString *searchFavoriteSortMode;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
 @property (nonatomic) OACommonString *osmEditsSortMode;

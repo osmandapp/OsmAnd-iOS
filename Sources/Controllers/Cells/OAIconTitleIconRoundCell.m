@@ -8,6 +8,7 @@
 
 #import "OAIconTitleIconRoundCell.h"
 #import "OAUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kTitleTopBottomMargin 13.0
 #define defaultCellHeight 48.0
@@ -65,7 +66,7 @@ static UIFont *_titleFont;
         textWidth = textWidth - self.secondaryImageView.frame.size.width - cellMargin;
     _titleView.frame = CGRectMake(2*cellMargin + self.iconView.frame.size.width, _titleView.frame.origin.y, textWidth, height - 2 * kTitleTopBottomMargin);
     
-    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
+    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self];
     self.separatorView.frame = CGRectMake(_titleView.frame.origin.x, height - separatorHeight, width - _titleView.frame.origin.x, separatorHeight);
     
 	UIRectCorner corners;

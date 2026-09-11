@@ -119,12 +119,6 @@
     }
     
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
-    [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:trackItem.dataItem];
-    OASGpxTrackAnalysis *analysis = trackItem.dataItem.getAnalysis;
-
-    CLLocation *loc = [[CLLocation alloc] initWithLatitude:analysis.locationEnd.getLatitude
-                                                 longitude:analysis.locationEnd.getLongitude];
-    [[OATargetPointsHelper sharedInstance] navigateToPoint:loc updateRoute:YES intermediate:-1];
         
     [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:trackItem
                                                                                  from:nil

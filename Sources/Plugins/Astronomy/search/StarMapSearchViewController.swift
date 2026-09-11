@@ -415,7 +415,7 @@ final class StarMapSearchViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         
@@ -1149,14 +1149,6 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func backPressed() {
-        if searchState.hasBrowseContext(),
-           searchController.isActive || !searchState.query.isEmpty {
-            searchState.query = ""
-            syncSearchQuery()
-            searchController.isActive = false
-            applyFiltersAndSort(scrollToTop: true)
-            return
-        }
         guard !handleBackPressedInternal() else { return }
         popOrDismiss()
     }

@@ -256,14 +256,11 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     private func clearTrash() {
-        var files: [OARemoteFile] = []
-        for item: TrashItem in collectTrashItems() {
-            files.append(contentsOf: item.remoteFiles)
-        }
+        let files = collectTrashItems().map(\.deletedFile)
 
         let trashDeletionListener = TrashDeletionListener(with: localizedString("trash_is_empty"), deleteAll: true)
         trashDeletionListener.delegate = self
-        backupHelper?.deleteFilesSync(files, byVersion: true, listener: trashDeletionListener)
+        backupHelper?.emptyTrash(files, listener: trashDeletionListener)
     }
 
     private func downloadItem(_ trashItem: TrashItem, shouldReplace: Bool) {
@@ -361,9 +358,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
             let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("shared_string_is_deleted"), trashItem.name))
             trashDeletionListener.delegate = self
-            self?.backupHelper?.deleteFilesSync(trashItem.remoteFiles,
-                                                byVersion: true,
-                                                listener: trashDeletionListener)
+            self?.backupHelper?.emptyTrash([trashItem.deletedFile], listener: trashDeletionListener)
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
@@ -383,13 +378,15 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     func onFilesDeleteDone(_ message: String, errors: [OARemoteFile: String], deleteAll: Bool) {
-        let hasErrors = !errors.isEmpty
-        if hasErrors || !message.isEmpty {
+        if !errors.isEmpty {
             resetSelectedIndexPath()
-            OAUtilities.showToast(hasErrors ? localizedString("subscribe_email_error") : message,
-                                  details: hasErrors ? errors.values.joined(separator: "\n") : nil,
+            OAUtilities.showToast(localizedString("shared_string_error"),
+                                  details: errors.values.sorted().joined(separator: "\n"),
                                   duration: 4,
                                   in: view)
+        } else if !message.isEmpty {
+            resetSelectedIndexPath()
+            OAUtilities.showToast(message, details: nil, duration: 4, in: view)
         }
         backupHelper?.prepareBackup()
     }

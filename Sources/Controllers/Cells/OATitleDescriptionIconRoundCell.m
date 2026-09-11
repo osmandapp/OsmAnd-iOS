@@ -112,7 +112,7 @@ static UIFont *_descrFont;
     iconFrame.origin.y = _contentContainer.frame.size.height / 2 - iconFrame.size.height / 2;
     self.iconView.frame = iconFrame;
     
-    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
+    CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self];
     self.separatorView.frame = CGRectMake(_titleView.frame.origin.x, height - separatorHeight, width - _titleView.frame.origin.x, separatorHeight);
     
     UIRectCorner corners;

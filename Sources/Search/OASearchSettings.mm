@@ -9,6 +9,7 @@
 #import "OASearchSettings.h"
 #import "OAObjectType.h"
 #import "OAMapUtils.h"
+#import "OARegionPriorityProvider.h"
 
 #define MIN_DISTANCE_REGION_LANG_RECALC 10000.0
 
@@ -27,6 +28,7 @@
 @property (nonatomic) BOOL pSortByName;
 @property (nonatomic) BOOL pAddressSearch;
 @property (nonatomic) OASearchSortType pSortType;
+@property (nonatomic) OARegionPriorityProvider *regionPriorityProvider;
 
 @end
 
@@ -68,6 +70,7 @@
             self.pSortByName = s.pSortByName;
             self.pAddressSearch = s.pAddressSearch;
             self.pSortType = [s getSortType];
+            self.regionPriorityProvider = s.regionPriorityProvider;
         }
     }
     return self;
@@ -286,6 +289,47 @@
 {
     self.pSortType = sortType;
     return self;
+}
+
+- (void) updateRegionPriorityProvider:(OASearchPhrase *)phrase
+{
+    if (_regionPriorityProvider == nil)
+    {
+        _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:phrase];
+    }
+    [_regionPriorityProvider checkAndUpdate:phrase];
+}
+
+- (BOOL) hasRegionPriority
+{
+    return _regionPriorityProvider != nil;
+}
+
+- (NSArray<NSString *> *) getRegionPriorityIndexes
+{
+    if (_regionPriorityProvider)
+    {
+        return [_regionPriorityProvider getOfflineIndexes];
+    }
+    return _resourceIds;
+}
+
+- (NSArray<NSString *> *) getRegionPriorityIndexesWithMinRadius:(int)minMeters maxRadius:(int)maxMeters
+{
+    if (_regionPriorityProvider)
+    {
+        return [_regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters];
+    }
+    return _resourceIds;
+}
+
+- (NSNumber *) getRegionPriority:(NSString *) resId
+{
+    if (_regionPriorityProvider)
+    {
+        return @([_regionPriorityProvider getRegionWeight:resId]);
+    }
+    return 0;
 }
 
 @end

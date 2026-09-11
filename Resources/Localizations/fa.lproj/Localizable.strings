@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "نقشه‌های OsmAnd";
+"send_crash_log" = "ارسال گزارش خرابی";
+"send_crash_log_descr" = "فقط شامل اطلاعات مربوط به خرابی‌ها";
 "error_avoid_specific_road" = "مسیر دیگری یافت نشد";
 "road_blocked" = "جاده مسدود است";
 "starting_point" = "مبدأ";

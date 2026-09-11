@@ -738,12 +738,12 @@ private final class AstroActionCard: UIControl {
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(greaterThanOrEqualToConstant: 75),
-            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 9),
+            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 11),
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
             iconView.heightAnchor.constraint(equalToConstant: 30),
             
-            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 5),
+            titleLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: 3),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 3),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -9),
@@ -775,7 +775,7 @@ private final class AstroSwitchRow: UIControl {
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
     private let switcher = UISwitch()
-    private let dividerView = UIView()
+    private let dividerView = SeparatorView()
     private let onToggle: (Bool) -> Void
     private var checked: Bool
 
@@ -833,7 +833,6 @@ private final class AstroSwitchRow: UIControl {
             self?.switchChanged()
         }, for: .valueChanged)
 
-        dividerView.backgroundColor = .customSeparator
         dividerView.isHidden = !showDivider
         dividerView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -851,7 +850,6 @@ private final class AstroSwitchRow: UIControl {
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 62),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
             iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 30),
@@ -884,7 +882,6 @@ private final class AstroSwitchRow: UIControl {
         iconView.image = AstroIcon.template(checked ? iconNameEnabled : iconNameDisabled)
         iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
         titleLabel.textColor = .textColorPrimary
-        dividerView.backgroundColor = .customSeparator
     }
     
     private func updateAccessibility() {

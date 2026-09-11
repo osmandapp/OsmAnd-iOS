@@ -95,6 +95,8 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 72
+        tableView.register(OATableViewCustomHeaderView.self,
+                           forHeaderFooterViewReuseIdentifier: OATableViewCustomHeaderView.reuseIdentifier)
         tableView.backgroundColor = .clear
         view.backgroundColor = UIColor.viewBg
         tableView.sectionHeaderTopPadding = 26
@@ -129,7 +131,28 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        30
+        36
+    }
+
+    override func getCustomView(forHeader section: Int) -> UIView? {
+        let title = getTitleForHeader(section)
+        guard !title.isEmpty else {
+            return nil
+        }
+
+        let titleFont = UIFont.preferredFont(forTextStyle: .footnote)
+        let headerFont = UIFontMetrics(forTextStyle: .footnote)
+            .scaledFont(for: .systemFont(ofSize: titleFont.pointSize, weight: .semibold))
+        let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: OATableViewCustomHeaderView.reuseIdentifier
+        ) as? OATableViewCustomHeaderView
+        headerView?.label.attributedText = nil
+        headerView?.contentView.backgroundColor = .viewBg
+        headerView?.label.text = title
+        headerView?.label.font = headerFont
+        headerView?.label.textColor = .textColorSecondary
+        headerView?.setYOffset(8)
+        return headerView
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
@@ -143,11 +166,6 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
             cell.configure(item: discoveredDevices[indexPath.row])
         }
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as? UITableViewHeaderFooterView
-        header?.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {

@@ -44,6 +44,7 @@
 #import "OAPluginsHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kMargin = 16.0;
 static const CGFloat kButtonsViewHeight = 44.0;
@@ -230,7 +231,7 @@ static const NSInteger _buttonsCount = 4;
     self.buttonShadow.hidden = YES;
 
     _horizontalRouteLine = [CALayer layer];
-    _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -253,7 +254,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+        _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
         [self setupControlButton:self.controlButtonLeft];
         [self setupControlButton:self.controlButtonRight];
         [self setupControlButton:self.controlButtonDownload];
@@ -432,7 +433,7 @@ static const NSInteger _buttonsCount = 4;
     BOOL showTopControls = [self.customController showTopControls];
     _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
     
-    [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
+    [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
     
     if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton)
     {
@@ -866,7 +867,9 @@ static const NSInteger _buttonsCount = 4;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-    
+
+    NSLog(@"[ContextMenu] Show animation BEGIN animated=%@", animated ? @"yes" : @"no");
+    CFTimeInterval animationStartTime = CACurrentMediaTime();
     if (animated)
     {
         CGRect frame = self.frame;
@@ -892,6 +895,10 @@ static const NSInteger _buttonsCount = 4;
             self.frame = frame;
             
         } completion:^(BOOL finished) {
+            CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=%@",
+                  animationDuration,
+                  finished ? @"finished" : @"interrupted");
             if (onComplete)
                 onComplete();
             
@@ -908,7 +915,9 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         
         self.frame = frame;
-        
+        CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Show animation END (%.3f ms) result=finished", animationDuration);
+
         if (onComplete)
             onComplete();
 
@@ -926,6 +935,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _hiding = YES;
+    OATargetMenuViewController *customController = self.customController;
     [self.menuViewDelegate contextMenuDidHide];
     [[OARootViewController instance].mapPanel.hudViewController updateControlsLayout:YES];
     
@@ -963,11 +973,12 @@ static const NSInteger _buttonsCount = 4;
                 
                 [self removeFromSuperview];
 
-                if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                if (self.menuViewDelegate && customController && customController.needsMapRuler)
                     [self.menuViewDelegate targetResetRulerPosition];
 
-                [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
+                [customController onMenuDismissed];
+                [self clearCustomControllerIfNeeded];
 
                 if (onComplete)
                     onComplete();
@@ -982,11 +993,12 @@ static const NSInteger _buttonsCount = 4;
             
             [self removeFromSuperview];
             
-            if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+            if (self.menuViewDelegate && customController && customController.needsMapRuler)
                 [self.menuViewDelegate targetResetRulerPosition];
-            
-            [self clearCustomControllerIfNeeded];
+
             [self restoreTargetType];
+            [customController onMenuDismissed];
+            [self clearCustomControllerIfNeeded];
 
             if (onComplete)
                 onComplete();
@@ -998,9 +1010,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _hiding = NO;
     }
-    if (self.customController)
-        [self.customController onMenuDismissed];
-    
+
     [self stopLocationUpdate];
 }
 
@@ -1440,7 +1450,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _horizontalRouteLine.hidden = NO;
-        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, [SeparatorAppearance thicknessForView:self]);
     }
     
     if (self.customController && [self.customController hasBottomToolbar])
@@ -1638,11 +1648,20 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         if (self.customController.leftControlButton)
+        {
             [_controlButtonLeft setTitle:self.customController.leftControlButton.title forState:UIControlStateNormal];
+            _controlButtonLeft.accessibilityIdentifier = self.customController.leftControlButton.accessibilityIdentifier;
+        }
         if (self.customController.rightControlButton)
+        {
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
+            _controlButtonRight.accessibilityIdentifier = self.customController.rightControlButton.accessibilityIdentifier;
+        }
         if (self.customController.downloadControlButton)
+        {
             [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
+            _controlButtonDownload.accessibilityIdentifier = self.customController.downloadControlButton.accessibilityIdentifier;
+        }
         
         if ([self.customController isKindOfClass:OAFavoriteViewController.class])
         {
@@ -2367,7 +2386,10 @@ static const NSInteger _buttonsCount = 4;
 - (void) contentChanged
 {
     if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
+    {
         [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
+        _controlButtonDownload.accessibilityIdentifier = self.customController.downloadControlButton.accessibilityIdentifier;
+    }
 
     [self doLayoutSubviews:YES];
 }
@@ -2382,17 +2404,26 @@ static const NSInteger _buttonsCount = 4;
     [self applyTargetObjectChanges];
 }
 
-- (CGPoint) applyMode:(BOOL)applyOffset
+- (CGPoint)applyMode:(BOOL)applyOffset animated:(BOOL)animated
 {
     CGPoint newOffset = self.contentOffset;
     if (applyOffset)
     {
-        [UIView animateWithDuration:.3 animations:^{
+        if (animated)
+        {
+            [UIView animateWithDuration:.3 animations:^{
+                [self doLayoutSubviews];
+            } completion:^(BOOL finished) {
+                if (!_showFullScreen)
+                    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+            }];
+        }
+        else
+        {
             [self doLayoutSubviews];
-        } completion:^(BOOL finished) {
             if (!_showFullScreen)
-                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
-        }];
+                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:NO];
+        }
     }
     else
     {
@@ -2407,11 +2438,16 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         BOOL showTopControls = [self.customController showTopControls];
-        [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
+        [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
         if (!showTopControls)
             [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     return newOffset;
+}
+
+- (CGPoint)applyMode:(BOOL)applyOffset
+{
+    return [self applyMode:applyOffset animated:YES];
 }
 
 - (void) showProgressBar
@@ -2453,12 +2489,7 @@ static const NSInteger _buttonsCount = 4;
     [self.menuViewDelegate targetOpenRouteSettings];
 }
 
-- (void) requestHeaderOnlyMode
-{
-    [self requestHeaderOnlyMode:YES];
-}
-
-- (CGPoint) requestHeaderOnlyMode:(BOOL)applyOffset
+- (CGPoint)requestHeaderOnlyMode:(BOOL)applyOffset animated:(BOOL)animated
 {
     CGPoint newOffset = self.contentOffset;
     if (![self isLandscape])
@@ -2469,17 +2500,32 @@ static const NSInteger _buttonsCount = 4;
         CGFloat h = _headerHeight;
         
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar] && !self.targetPoint.toolbarNeeded))
-            [self hideTopToolbar:YES];
+            [self hideTopToolbar:animated];
         
         if (self.customController)
             [self.customController goHeaderOnly];
 
         [self onMenuStateChanged];
-        [self applyMapInteraction:h animated:YES];
+        [self applyMapInteraction:h animated:animated];
         
-        newOffset = [self applyMode:applyOffset];
+        newOffset = [self applyMode:applyOffset animated:animated];
     }
     return newOffset;
+}
+
+- (CGPoint)requestHeaderOnlyMode:(BOOL)applyOffset
+{
+    return [self requestHeaderOnlyMode:applyOffset animated:YES];
+}
+
+- (void)requestHeaderOnlyModeAnimated:(BOOL)animated
+{
+    [self requestHeaderOnlyMode:YES animated:animated];
+}
+
+- (void)requestHeaderOnlyMode
+{
+    [self requestHeaderOnlyModeAnimated:YES];
 }
 
 - (void) requestFullMode
@@ -2784,29 +2830,37 @@ static const NSInteger _buttonsCount = 4;
         return;
 
     _addressLookupTarget = targetPoint;
+    NSLog(@"[ContextMenu] Address resolution BEGIN");
+    CFTimeInterval addressStartTime = CACurrentMediaTime();
 
     __weak __typeof(self) weakSelf = self;
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool
+    [targetPoint resolveAddressWithCompletion:^{
+        targetPoint.shouldFetchAddress = NO;
+
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
         {
-            [targetPoint initAddressIfNeeded];
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=view_released", addressDuration);
+            return;
         }
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            targetPoint.shouldFetchAddress = NO;
+        strongSelf->_addressLookupTarget = nil;
+        if (strongSelf.targetPoint == targetPoint)
+        {
+            [strongSelf updateTargetPointAddress];
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=applied", addressDuration);
+        }
+        else
+        {
+            CFTimeInterval addressDuration = (CACurrentMediaTime() - addressStartTime) * 1000.0;
+            NSLog(@"[ContextMenu] Address resolution END (%.3f ms) result=discarded reason=target_changed", addressDuration);
+        }
 
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-
-            strongSelf->_addressLookupTarget = nil;
-            if (strongSelf.targetPoint == targetPoint)
-                [strongSelf updateTargetPointAddress];
-
-            [strongSelf fetchAddressIfNeededAsync];
-        });
-    });
+        [strongSelf fetchAddressIfNeededAsync];
+    }];
 }
 
 - (void)updateTargetPointAddress
@@ -2814,7 +2868,15 @@ static const NSInteger _buttonsCount = 4;
     if (self.targetPoint.titleAddress.length == 0)
         self.targetPoint.titleAddress = OALocalizedString(@"map_no_address");
 
-    [self addressLabelUpdated];
+    if (self.targetPoint.addressFound && [self.targetPoint.title isEqualToString:OALocalizedString(@"map_no_address")])
+    {
+        self.targetPoint.title = self.targetPoint.titleAddress;
+        [self applyTargetPoint];
+    }
+    else
+    {
+        [self addressLabelUpdated];
+    }
 }
 
 @end

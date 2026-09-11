@@ -56,13 +56,16 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                     </collectionView>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcR-tK-PF2" userLabel="Right Action Divider">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcR-tK-PF2" userLabel="Right Action Divider" customClass="VerticalSeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="1.5" width="1" height="42"/>
                                         <color key="backgroundColor" name="customSeparator"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="42" id="4iH-Ia-NAC"/>
                                             <constraint firstAttribute="width" constant="1" id="Wy4-CY-mNz"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="thicknessConstraint" destination="Wy4-CY-mNz" id="s01-TC-001"/>
+                                        </connections>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
                                         <rect key="frame" x="337" y="4.6666666666666643" width="36" height="36"/>

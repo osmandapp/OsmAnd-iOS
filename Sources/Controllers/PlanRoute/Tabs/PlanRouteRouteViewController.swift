@@ -12,6 +12,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private enum Row {
         case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
         case point(PlanRoutePoint, color: UIColor)
+        case gap(PlanRouteSegmentGap)
         case empty
     }
 
@@ -26,8 +27,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private static let sectionHorizontalInset: CGFloat = 16
     private static let separatorLeftInset: CGFloat = 76
     private static let bottomContentInset: CGFloat = 72
-    private static let pointRowHeight: CGFloat = 68
-    private static let profileGroupRowHeight: CGFloat = 53
+    private static let estimatedRowHeight: CGFloat = 68
+    private static let estimatedSectionHeaderHeight: CGFloat = 60
 
     let planRouteTab: PlanRouteTab = .route
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
@@ -56,6 +57,15 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         reloadData()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard isViewLoaded,
+              previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.performBatchUpdates(nil)
+        }
+    }
+
     func reloadData() {
         guard isViewLoaded else { return }
         let segments = dataSource?.routeSegments ?? []
@@ -79,15 +89,20 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.alwaysBounceVertical = true
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = Self.estimatedRowHeight
         tableView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0,
                                                                      leading: horizontalInset,
                                                                      bottom: 0,
                                                                      trailing: horizontalInset)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = Self.estimatedSectionHeaderHeight
         tableView.sectionHeaderTopPadding = 0
         tableView.register(PlanRoutePointCell.self, forCellReuseIdentifier: PlanRoutePointCell.reuseIdentifier)
         tableView.register(PlanRouteProfileGroupCell.self, forCellReuseIdentifier: PlanRouteProfileGroupCell.reuseIdentifier)
+        tableView.register(PlanRouteSegmentGapCell.self, forCellReuseIdentifier: PlanRouteSegmentGapCell.reuseIdentifier)
         tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.reuseIdentifier)
         tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier)
@@ -112,7 +127,17 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
         let pendingEmptySegmentIndex = dataSource?.pendingEmptySegmentIndex
         let multipleSegments = segments.count > 1 || pendingEmptySegmentIndex != nil
-        var result: [SectionModel] = segments.flatMap { makeSections(for: $0, multipleSegments: multipleSegments) }
+        var result: [SectionModel] = segments.flatMap { segment in
+            var segmentSections = makeSections(for: segment, multipleSegments: multipleSegments)
+            if let gapAfter = segment.gapAfter {
+                segmentSections.append(SectionModel(headerTitle: nil,
+                                                    headerSubtitle: nil,
+                                                    headerMenu: nil,
+                                                    rows: [.gap(gapAfter)],
+                                                    isStartNewSegment: false))
+            }
+            return segmentSections
+        }
 
         if let pendingIndex = pendingEmptySegmentIndex {
             let title = String(format: localizedString("segments_count"), pendingIndex)
@@ -141,7 +166,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                 let pointIndexes = group.points.map(\.index).map(String.init).joined(separator: ",")
                 return "mode=\(groupMode),distance=\(Int(group.distance.rounded())),last=\(group.lastPointIndex),points=\(pointIndexes)"
             }.joined(separator: ";")
-            return "index=\(segment.index),routed=\(segment.routed),multi=\(segment.multiMode),mode=\(segmentMode),distance=\(Int(segment.distance.rounded())),groups=\(groupsSignature)"
+            let gapSignature = segment.gapAfter.map { "\(Int($0.distance.rounded())),\(Int($0.bearing))" } ?? "nil"
+            return "index=\(segment.index),routed=\(segment.routed),multi=\(segment.multiMode),mode=\(segmentMode),distance=\(Int(segment.distance.rounded())),gap=\(gapSignature),groups=\(groupsSignature)"
         }.joined(separator: "|")
         return "pending=\(pendingSignature),canStart=\(canStartNewSegment),segments=\(segmentsSignature)"
     }
@@ -174,7 +200,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                 }
             }
             return [SectionModel(headerTitle: title,
-                                 headerSubtitle: nil,
+                                 headerSubtitle: formattedDistance(segment.distance),
                                  headerMenu: segmentMenu,
                                  rows: rows,
                                  isStartNewSegment: false)]
@@ -369,28 +395,21 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
                 self?.deletePoint(at: point.index)
             }
             return cell
+        case let .gap(gap):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteSegmentGapCell.reuseIdentifier, for: indexPath) as? PlanRouteSegmentGapCell else {
+                return UITableViewCell()
+            }
+            let title = "\(formattedDistance(gap.distance)) • \(Int(gap.bearing))°"
+            cell.configure(title: title)
+            return cell
         }
     }
 }
 
 // MARK: - UITableViewDelegate
 extension PlanRouteRouteViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let section = sections[indexPath.section]
-        guard !section.isStartNewSegment else { return UITableView.automaticDimension }
-        switch section.rows[indexPath.row] {
-        case .profileGroup:
-            return Self.profileGroupRowHeight
-        case .point:
-            return Self.pointRowHeight
-        case .empty:
-            return UITableView.automaticDimension
-        }
-    }
-
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard sections[section].headerTitle != nil else { return 0 }
-        return sections[section].headerSubtitle != nil ? 60 : 44
+        sections[section].headerTitle == nil ? .leastNormalMagnitude : UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -416,7 +435,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             }
         case let .profileGroup(group, segment):
             onChangeRouteType?(.profileGroup(group, segment: segment))
-        case .empty:
+        case .gap, .empty:
             break
         }
     }

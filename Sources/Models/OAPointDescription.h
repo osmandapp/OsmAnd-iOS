@@ -50,6 +50,7 @@ static const int OSM_LOCATION_URL = 210;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *typeName;
 @property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *address;
 
 @property (nonatomic, readonly) NSString *type;
 
@@ -74,9 +75,6 @@ static const int OSM_LOCATION_URL = 210;
 
 + (NSString *) formatToHumanString:(NSInteger)format;
 + (NSInteger) coordinatesFormatToFormatterMode:(NSInteger)format;
-
-+ (NSString *)shareLinkForLat:(double)lat lon:(double)lon;
-+ (nullable NSString *)osmEditingLinkForLat:(double)lat lon:(double)lon;
 
 - (BOOL) isLocation;
 - (BOOL) isAddress;

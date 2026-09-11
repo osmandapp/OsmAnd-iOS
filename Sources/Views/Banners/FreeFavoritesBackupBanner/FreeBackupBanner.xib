@@ -46,12 +46,15 @@
                     <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJm-7d-FQ5" userLabel="SeparatorView">
+                <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJm-7d-FQ5" userLabel="SeparatorView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="66" y="61" width="376" height="0.0"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" id="S8A-0R-Dxs"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="S8A-0R-Dxs" id="s01-TC-001"/>
+                    </connections>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X7E-aX-qVf">
                     <rect key="frame" x="66" y="62" width="356" height="48"/>
@@ -96,7 +99,6 @@
                 <outlet property="imageView" destination="kUA-vC-GQM" id="XNS-Vq-iZJ"/>
                 <outlet property="leadingSubviewConstraint" destination="9In-jS-AVq" id="ANB-4m-aoO"/>
                 <outlet property="osmAndCloudButton" destination="X7E-aX-qVf" id="VEk-0E-LvB"/>
-                <outlet property="separatorViewHeightConstraint" destination="S8A-0R-Dxs" id="VFc-Gp-Q0u"/>
                 <outlet property="titleLabel" destination="qXa-fC-2qj" id="npZ-GU-kOI"/>
                 <outlet property="trailingSubviewConstraint" destination="SYj-qk-wc1" id="pB0-P6-tet"/>
             </connections>

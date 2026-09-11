@@ -81,12 +81,15 @@
                                 <color key="textColor" name="textColorSecondary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gt-VC-wOR">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gt-VC-wOR" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                 <rect key="frame" x="16" y="69" width="287" height="1"/>
                                 <color key="backgroundColor" name="customSeparator"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="ETz-0s-2SQ"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="thicknessConstraint" destination="ETz-0s-2SQ" id="s01-TC-001"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" name="groupBgColor"/>
@@ -129,7 +132,6 @@
                 <outlet property="distanceLabel" destination="SOu-J2-sIb" id="DXU-s8-9Si"/>
                 <outlet property="fileName" destination="gLZ-F8-d1B" id="hMv-aJ-vMG"/>
                 <outlet property="rightIconImageVIew" destination="LqT-JX-834" id="eFF-S9-dKb"/>
-                <outlet property="separatorHeightConstraint" destination="ETz-0s-2SQ" id="mWa-wP-Tbb"/>
                 <outlet property="separatorView" destination="3gt-VC-wOR" id="EIj-di-Haw"/>
                 <outlet property="timeImageView" destination="2dZ-ec-SQ0" id="3RS-y6-X4O"/>
                 <outlet property="timeLabel" destination="YAZ-sX-f1S" id="2OZ-02-Pha"/>

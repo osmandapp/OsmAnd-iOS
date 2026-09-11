@@ -17,7 +17,6 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTitleOffset;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomTitleOffset;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeight;
 
 @end
 
@@ -35,7 +34,6 @@
 - (void) setupViews
 {
     self.separatorInset = UIEdgeInsetsZero;
-    self.separatorHeight.constant = 1.0;
     self.topTitleOffset.constant = 20;
     self.bottomTitleOffset.constant = 8;
 }

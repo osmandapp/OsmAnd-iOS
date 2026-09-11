@@ -8,6 +8,8 @@
 
 #import "OASearchAlgorithms.h"
 
+#include <OsmAndCore/SearchAlgorithms.h>
+
 @implementation OASearchAlgorithms
 
 + (NSString *)removeApostrophes:(NSString *)s
@@ -98,6 +100,30 @@
     }
 
     return [result copy];
+}
+
++ (BOOL)needsAlignChars:(NSString *)text
+{
+    const CFIndex length = text.length;
+    if (length == 0) // also covers a nil string, which callers do pass
+        return NO;
+
+    CFStringInlineBuffer buffer;
+    CFStringInitInlineBuffer((__bridge CFStringRef) text, &buffer, CFRangeMake(0, length));
+    for (CFIndex i = 0; i < length; i++)
+    {
+        const UniChar c = CFStringGetCharacterFromInlineBuffer(&buffer, i);
+        if (c >= 0x80 || c == 0x0027 /* ' */ || c == 0x0060 /* ` */)
+            return YES;
+    }
+    return NO;
+}
+
++ (NSString *)alignChars:(NSString *)fullText
+{
+    if (![self needsAlignChars:fullText])
+        return fullText;
+    return OsmAnd::SearchAlgorithms::alignChars(QString::fromNSString(fullText)).toNSString();
 }
 
 @end

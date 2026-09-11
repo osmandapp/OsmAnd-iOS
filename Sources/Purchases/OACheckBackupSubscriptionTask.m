@@ -29,56 +29,88 @@
 - (void) execute:(void(^)(BOOL))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        BOOL active = [self doInBackground];
+        NSNumber *active = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onPostExecute:active onComplete:onComplete];
         });
     });
 }
 
-- (BOOL) doInBackground
+/** @return nil when the state could not be verified - a request that did not reach the
+    server must not be stored as "there is no subscription". */
+- (NSNumber *) doInBackground
 {
-    BOOL promoActive = NO;
+    BOOL anyActive = NO;
+    BOOL anyUnverified = NO;
+
     NSString *promocode = [_settings.backupPromocode get];
     if (promocode.length > 0)
-        promoActive = [self checkBackupSubscription:promocode];
-    if (!promoActive)
     {
-        //Get only PRO subscriptions
-        NSString *orderId = [_iapHelper getOrderIdByDeviceIdAndToken];
-        if (orderId.length > 0) {
-            promoActive = [self checkBackupSubscription:orderId];
-        }
-        return promoActive;
+        NSNumber *activeByPromocode = [self checkBackupSubscription:promocode];
+        if (activeByPromocode == nil)
+            anyUnverified = YES;
+        else
+            anyActive = activeByPromocode.boolValue;
     }
-    return NO;
+    if (!anyActive)
+    {
+        // Get only PRO subscriptions
+        BOOL answered = NO;
+        NSString *orderId = [_iapHelper getOrderIdByDeviceIdAndTokenAnswered:&answered];
+        if (!answered)
+        {
+            // Either the request failed or the device is not registered
+            anyUnverified = YES;
+        }
+        else if (orderId.length > 0)
+        {
+            NSNumber *activeByOrderId = [self checkBackupSubscription:orderId];
+            if (activeByOrderId == nil)
+                anyUnverified = YES;
+            else
+                anyActive = activeByOrderId.boolValue;
+        }
+    }
+    if (anyActive)
+        return @YES;
+    // Report inactive only when every check that ran actually got an answer
+    return anyUnverified ? nil : @NO;
 }
 
-- (BOOL) checkBackupSubscription:(NSString *)orderId
+- (NSNumber *) checkBackupSubscription:(NSString *)orderId
 {
-    NSArray *entry = [_iapHelper getSubscriptionStateByOrderId:orderId];
+    BOOL answered = NO;
+    NSArray *entry = [_iapHelper getSubscriptionStateByOrderId:orderId answered:&answered];
+    if (!answered)
+        return nil;
+
     if (entry)
     {
         OASubscriptionStateHolder *stateHolder = entry.lastObject;
-        
+
         [_settings.backupPurchaseSku set:stateHolder.sku];
         [_settings.proSubscriptionOrigin set:(int) stateHolder.origin];
         [_settings.backupPurchaseState set:stateHolder.state];
         [_settings.backupPurchaseStartTime set:stateHolder.startTime];
         [_settings.backupPurchaseExpireTime set:stateHolder.expireTime];
         [_settings.proSubscriptionDuration set:(int)stateHolder.duration];
-        return stateHolder.state.isActive;
+        return @(stateHolder.state.isActive);
     }
-    return NO;
+    return @NO;
 }
 
-- (void) onPostExecute:(BOOL)active onComplete:(void(^)(BOOL))onComplete
+- (void) onPostExecute:(NSNumber *)active onComplete:(void(^)(BOOL))onComplete
 {
-    [_iapHelper onBackupPurchaseRequested];
-    [_settings.backupPurchaseActive set:active];
-    
+    if (active != nil)
+    {
+        // Leave both the stored state and the check time untouched when nothing was
+        // verified, so that a failed check does not postpone the next attempt
+        [_iapHelper onBackupPurchaseRequested];
+        [_settings.backupPurchaseActive set:active.boolValue];
+    }
+
     if (onComplete)
-        onComplete(active);
+        onComplete(active.boolValue);
 }
 
 @end

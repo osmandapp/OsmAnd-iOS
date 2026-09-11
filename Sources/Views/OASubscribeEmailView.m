@@ -107,7 +107,7 @@
     self.containerView.layer.shadowOffset = CGSizeMake(0.0, 0.5);
     
     _div = [[CALayer alloc] init];
-    _div.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    _div.backgroundColor = [SeparatorAppearance color].CGColor;
     [self.containerView.layer addSublayer:_div];
     [self addSubview:self.containerView];
 }
@@ -154,7 +154,7 @@
 
 - (void) updateColorForCALayer
 {
-    _div.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    _div.backgroundColor = [SeparatorAppearance color].CGColor;
 }
 
 @end

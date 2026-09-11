@@ -701,6 +701,8 @@
         for (OASWptPt *gpxWpt in self.doc.getPointsList)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+            if (!self.isCurrentTrack)
+                gpxWptItem.docPath = self.doc.path;
             if (gpxWpt.category.length == 0)
             {
                 NSMutableArray<OAGpxWptItem *> *withoutGroup = _waypointGroups[OALocalizedString(@"shared_string_gpx_points")];
@@ -737,6 +739,8 @@
         for (OASWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
+            if (!self.isCurrentTrack)
+                rtePtItem.docPath = self.doc.path;
             rtePtItem.routePoint = YES;
             NSMutableArray<OAGpxWptItem *> *rtePtsGroup = _waypointGroups[OALocalizedString(@"route_points")];
             if (!rtePtsGroup)
@@ -938,7 +942,7 @@
         state.openedFromTrackMenu = YES;
         OASGpxFile *gpxFile = weakSelf.doc;
         if (!gpxFile)
-            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
+            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:([weakSelf.gpx getFile] ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path])];
         
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
@@ -1062,18 +1066,17 @@
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
     if ([self isRteGroup:groupName])
-        return [UIColorFromRGB(color_footer_icon_gray) toRGBNumber];
+        return [UIColorFromRGB(color_footer_icon_gray) toARGBNumber];
 
-    UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        groupColor = waypoint.color ?: UIColorFromARGB([waypoint.point getColor]);
+        NSInteger color = [waypoint.point getColor];
+        if (color != 0)
+            return color;
     }
-    if (!groupColor)
-        groupColor = [OADefaultFavorite getDefaultColor];
 
-    return [groupColor toARGBNumber];
+    return [[OADefaultFavorite getDefaultColor] toARGBNumber];
 }
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
@@ -1124,25 +1127,37 @@
 - (void)deleteWaypointsGroup:(NSString *)groupName
            selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints
 {
-    BOOL deleteGroup = selectedWaypoints == nil && ![self isRteGroup:groupName];
+    BOOL canDeleteGroup = ![self isRteGroup:groupName];
     NSMutableArray<NSNumber *> *waypointsIdxToDelete = [NSMutableArray array];
-    NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
+    NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ?: _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in _waypointGroups[groupName])
     {
         if ([waypointsToDelete containsObject:waypoint])
             [waypointsIdxToDelete addObject:@([_waypointGroups[groupName] indexOfObject:waypoint])];
     }
 
-    NSString *path = !self.isCurrentTrack ? [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
-    [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
+    NSString *path = nil;
+    if (!self.isCurrentTrack)
+    {
+        path = self.gpx.path;
+        if (path.length == 0 && self.gpx.gpxFilePath.length > 0)
+            path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+    }
+    if (![self.mapViewController deleteWpts:waypointsToDelete docPath:path])
+    {
+        NSLog(@"[OATrackMenu] Failed to delete waypoints from %@", path);
+        return;
+    }
 
-    NSDictionary *dataToUpdate = @{
+    NSMutableDictionary *dataToUpdate = [@{
             @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
             @"delete_waypoints_idx": waypointsIdxToDelete
-    };
+    } mutableCopy];
 
     [self updateGpxData:YES updateDocument:YES];
-    if (deleteGroup)
+    BOOL isGroupEmpty = _waypointGroups[groupName].count == 0;
+    dataToUpdate[@"delete_empty_group"] = @(isGroupEmpty);
+    if (canDeleteGroup && isGroupEmpty)
     {
         NSString *groupKey = [self isDefaultGroup:groupName] ? @"" : groupName;
         BOOL groupMetadataDeleted = NO;
@@ -1452,7 +1467,7 @@
 
 - (NSString *)getGpxFileSize
 {
-    NSString *absolutePath = self.gpx.dataItem.file.absolutePath;
+    NSString *absolutePath = self.gpx.path;
     NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:absolutePath error:nil];
     return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
                                           countStyle:NSByteCountFormatterCountStyleFile];
@@ -1588,7 +1603,7 @@
 
 - (BOOL)isJoinSegments
 {
-    return self.gpx.joinSegments;
+    return self.gpx.dataItem ? self.gpx.joinSegments : [self.doc isJoinSegments];
 }
 
 - (CLLocationCoordinate2D)getCenterGpxLocation
@@ -1628,9 +1643,15 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
         touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
     }
-    if (self.gpx.dataItem)
+    OASGpxDataItem *dataItem = self.gpx.dataItem;
+    if (!dataItem && ![self isCurrentTrack])
     {
-        [_gpxUIHelper openExportForTrack:self.gpx.dataItem
+        OASKFile *file = [self.gpx getFile] ?: [[OASKFile alloc] initWithFilePath:self.gpx.path];
+        dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path] ?: [[OASGpxDataItem alloc] initWithFile:file];
+    }
+    if (dataItem || [self isCurrentTrack])
+    {
+        [_gpxUIHelper openExportForTrack:dataItem
                                   gpxDoc:self.doc
                           isCurrentTrack:[self isCurrentTrack]
                         inViewController:self
@@ -1919,7 +1940,17 @@
             if (weakSelf.isShown)
                 [weakSelf.settings hideGpx:@[weakSelf.gpx.gpxFilePath] update:YES];
 
-            [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
+            OASKFile *file = weakSelf.gpx.getFile ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path];
+            if (weakSelf.gpx.dataItem)
+            {
+                [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
+            }
+            else
+            {
+                [[OASGpxDbHelper shared] removeFile:file];
+                [[NSFileManager defaultManager] removeItemAtPath:weakSelf.gpx.path error:nil];
+            }
+            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:file];
         }
 
         [weakSelf hide];
@@ -1929,8 +1960,7 @@
 }
 
 - (void)showAlertRenameTrack {
-   
-    NSString *gpxFileName = self.gpx.dataItem.gpxFileName.lastPathComponent;
+    NSString *gpxFileName = self.gpx.gpxFileName.lastPathComponent;
     NSString *gpxFileNameWithoutExtension = [gpxFileName stringByDeletingPathExtension];
     
     if (gpxFileNameWithoutExtension.length > 0) {
@@ -2422,7 +2452,6 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -2485,7 +2514,6 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -2536,6 +2564,7 @@
                 cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
         }
         outCell = cell;
     }
@@ -3198,7 +3227,12 @@
         [favoriteItems addObject:favoriteItem];
     }
     
-    [OAFavoritesHelper addFavorites:[favoriteItems copy]];
+    NSInteger duplicateCount = [OAFavoritesHelper copyToFavorites:favoriteItems];
+    if (duplicateCount > 0)
+    {
+        NSString *message = [NSString stringWithFormat:OALocalizedString(@"msg_favorites_skipped_as_existing"), (int)duplicateCount];
+        [OAUtilities showToast:message details:nil duration:4 inView:self.view];
+    }
     _editingWaypointsGroupName = nil;
 }
 

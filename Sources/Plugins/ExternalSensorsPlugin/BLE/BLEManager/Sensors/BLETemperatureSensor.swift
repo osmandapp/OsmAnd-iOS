@@ -10,12 +10,12 @@ import Foundation
 import CoreBluetooth
 
 final class BLETemperatureSensor: Sensor {
-    
+
     final class TemperatureData: SensorData {
-        
+
         var timestamp: TimeInterval = Date.now.timeIntervalSince1970
         var temperature: Double = 0.0
-        
+
         var widgetFields: [SensorWidgetDataField]? {
             return [SensorWidgetDataField(fieldType: .temperature,
                                           nameId: localizedString("shared_string_temperature"),
@@ -23,33 +23,34 @@ final class BLETemperatureSensor: Sensor {
                                           numberValue: nil,
                                           stringValue: String(temperature))]
         }
-        
+
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
             widgetFields?.first
         }
     }
 
     var lastTemperatureData: TemperatureData?
-    
+
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.temperature]
     }
-    
+
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         guard widgetType == .temperature else { return nil }
         return [lastTemperatureData].compactMap { $0 }
     }
-    
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return
         }
-        
+
         switch characteristic.uuid {
         case GattAttributes.CHAR_TEMPERATURE_MEASUREMENT.CBUUIDRepresentation:
             let dataFromSensor = dataToSignedBytes16(value: data as NSData, count: 2)
             let ambientTemperature = Double(dataFromSensor[1]) / 128
-            
+            markActualData(for: .temperature)
+
             if lastTemperatureData == nil {
                 lastTemperatureData = TemperatureData()
             }
@@ -65,7 +66,7 @@ final class BLETemperatureSensor: Sensor {
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
     }
-    
+
     private func dataToSignedBytes16(value: NSData, count: Int) -> [Int16] {
         var array = [Int16](repeating: 0, count: count)
         value.getBytes(&array,

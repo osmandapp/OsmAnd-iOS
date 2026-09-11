@@ -15,11 +15,32 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
-#import <OpenGLES/ES3/gl.h>
-#import <OpenGLES/ES3/glext.h>
+
+// Rendering backend. EAGL is deprecated by Apple and, in the Simulator, is served by a pure
+// software rasterizer ("Apple Software Renderer"), which is why the map crawls there. ANGLE
+// routes the same GLES calls to Metal, which the Simulator does accelerate.
+#if !defined(OSMAND_USE_ANGLE)
+#   define OSMAND_USE_ANGLE 0
+#endif
+
+// ANGLE/Metal discards the render pass if it is ended part-way through a frame, and the GPU
+// worker context uploading concurrently does exactly that - without this the map goes blank and
+// never recovers. EAGL tolerates the concurrency, so this is not needed there.
+#define OSMAND_SERIALIZE_WORKER_WITH_FRAME OSMAND_USE_ANGLE
+
+#if OSMAND_USE_ANGLE
+#   import <QuartzCore/CAMetalLayer.h>
+#   include <EGL/egl.h>
+#   include <EGL/eglext.h>
+#   include <GLES3/gl3.h>
+#   include <GLES2/gl2ext.h>
+#else
+#   import <OpenGLES/EAGL.h>
+#   import <OpenGLES/ES2/gl.h>
+#   import <OpenGLES/ES2/glext.h>
+#   import <OpenGLES/ES3/gl.h>
+#   import <OpenGLES/ES3/glext.h>
+#endif
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore.h>
@@ -41,6 +62,17 @@
 
 @implementation OAMapRendererView
 {
+#if OSMAND_USE_ANGLE
+    // The EGL window surface is the default framebuffer, so none of the manually managed
+    // framebuffer/renderbuffer objects below are needed on this path; MSAA is requested
+    // through EGL_SAMPLES on the config instead of being resolved by hand.
+    EGLDisplay _eglDisplay;
+    EGLConfig _eglConfig;
+    EGLSurface _eglSurface;
+    EGLSurface _eglWorkerSurface;
+    EGLContext _eglRenderContext;
+    EGLContext _eglWorkerContext;
+#else
     EAGLSharegroup* _glShareGroup;
     EAGLContext* _glRenderContext;
     EAGLContext* _glWorkerContext;
@@ -51,6 +83,7 @@
     GLuint _msaaFramebuffer;
     GLuint _msaaColorRenderBuffer;
     GLuint _msaaDepthRenderBuffer;
+#endif
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
     BOOL _msaaEnabled;
@@ -72,7 +105,11 @@
 
 + (Class) layerClass
 {
+#if OSMAND_USE_ANGLE
+    return [CAMetalLayer class];
+#else
     return [CAEAGLLayer class];
+#endif
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -103,6 +140,14 @@
     _targetChangedObservable = [[OAObservable alloc] init];
 
     // Set default values
+#if OSMAND_USE_ANGLE
+    _eglDisplay = EGL_NO_DISPLAY;
+    _eglConfig = nullptr;
+    _eglSurface = EGL_NO_SURFACE;
+    _eglWorkerSurface = EGL_NO_SURFACE;
+    _eglRenderContext = EGL_NO_CONTEXT;
+    _eglWorkerContext = EGL_NO_CONTEXT;
+#else
     _glShareGroup = nil;
     _glRenderContext = nil;
     _glWorkerContext = nil;
@@ -112,6 +157,7 @@
     _msaaFramebuffer = 0;
     _msaaColorRenderBuffer = 0;
     _msaaDepthRenderBuffer = 0;
+#endif
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
     _msaaEnabled = NO;
@@ -122,11 +168,7 @@
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
     const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
-#if TARGET_IPHONE_SIMULATOR
-    rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Normal;
-#else
     rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
-#endif
     _renderer->setConfiguration(rendererConfig);
 
     OAObservable* stateObservable = _stateObservable;
@@ -450,6 +492,21 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getState().fixedPixel;
 }
 
+- (CGPoint)mapTargetScreenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI targetScreenPoint = _renderer->getState().fixedPixel;
+    return CGPointMake(targetScreenPoint.x / scale, targetScreenPoint.y / scale);
+}
+
+- (void)setMapTargetScreenPoint:(CGPoint)mapTargetScreenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI screenPoint(static_cast<int32_t>(mapTargetScreenPoint.x * scale),
+                               static_cast<int32_t>(mapTargetScreenPoint.y * scale));
+    _renderer->setMapTarget(screenPoint, self.target31);
+}
+
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
@@ -656,6 +713,14 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->resetMapTargetPixelCoordinates(screenPoint);
 }
 
+- (void)reanchorMapTarget:(CGPoint)screenPoint
+{
+    CGFloat scale = self.contentScaleFactor;
+    OsmAnd::PointI targetScreenPoint(static_cast<int32_t>(screenPoint.x * scale),
+                                     static_cast<int32_t>(screenPoint.y * scale));
+    _renderer->resetMapTargetPixelCoordinates(targetScreenPoint);
+}
+
 - (OsmAnd::AreaI) getVisibleBBox31
 {
     return _renderer->getVisibleBBox31();
@@ -724,8 +789,170 @@ forcedUpdate:(BOOL)forcedUpdate
     return _mapMarkersAnimator;
 }
 
+#if OSMAND_USE_ANGLE
+// ANGLE reports far more through GL_KHR_debug than glGetError can express - shader
+// recompiles, resource lifetime problems, cross-context synchronisation complaints.
+// Debug state is per-context, so this has to be installed on the worker context too.
+static void GL_APIENTRY OAMapRendererView_glDebugCallback(
+    GLenum source, GLenum type, GLuint id, GLenum severity,
+    GLsizei length, const GLchar* message, const void* userParam)
+{
+    const char* severityName = "?";
+    switch (severity)
+    {
+        case GL_DEBUG_SEVERITY_HIGH_KHR:         severityName = "HIGH"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM_KHR:       severityName = "MEDIUM"; break;
+        case GL_DEBUG_SEVERITY_LOW_KHR:          severityName = "LOW"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION_KHR: severityName = "NOTE"; break;
+    }
+    OALog(@"[ANGLE %s] id=%u %s", severityName, id, message);
+}
+
+static void OAMapRendererView_installGLDebugCallback(const char* which)
+{
+    PFNGLDEBUGMESSAGECALLBACKKHRPROC setCallback =
+        (PFNGLDEBUGMESSAGECALLBACKKHRPROC)eglGetProcAddress("glDebugMessageCallbackKHR");
+    PFNGLDEBUGMESSAGECONTROLKHRPROC setControl =
+        (PFNGLDEBUGMESSAGECONTROLKHRPROC)eglGetProcAddress("glDebugMessageControlKHR");
+    if (setCallback == NULL || setControl == NULL)
+    {
+        OALog(@"[ANGLE] GL_KHR_debug is not available for %s context", which);
+        return;
+    }
+    glEnable(GL_DEBUG_OUTPUT_KHR);
+    // Synchronous so the reported message lands next to the call that caused it
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
+    setCallback(OAMapRendererView_glDebugCallback, NULL);
+    setControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
+    OALog(@"[ANGLE] debug output enabled for %s context", which);
+}
+#endif // OSMAND_USE_ANGLE
+
+// Backend-neutral helpers, so the call sites below stay free of #if noise.
+
+- (BOOL)makeRenderContextCurrent
+{
+#if OSMAND_USE_ANGLE
+    return eglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglRenderContext) == EGL_TRUE;
+#else
+    return [EAGLContext setCurrentContext:_glRenderContext];
+#endif
+}
+
+- (BOOL)isDrawableAllocated
+{
+#if OSMAND_USE_ANGLE
+    return _eglSurface != EGL_NO_SURFACE;
+#else
+    return _framebuffer != 0;
+#endif
+}
+
 - (void)createContext
 {
+#if OSMAND_USE_ANGLE
+    if (_eglDisplay != EGL_NO_DISPLAY)
+        return;
+
+    OALog(@"[OAMapRendererView %p] Creating ANGLE/EGL context", self);
+
+    CAMetalLayer* metalLayer = (CAMetalLayer*)self.layer;
+    metalLayer.opaque = YES;
+
+    // Ask ANGLE for its Metal backend explicitly rather than letting it pick a default
+    PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
+        (PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
+    if (getPlatformDisplay != NULL)
+    {
+        const EGLint displayAttributes[] = {
+            EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE,
+            EGL_NONE
+        };
+        // This entry point takes a void*, while EGL_DEFAULT_DISPLAY is (EGLNativeDisplayType)0
+        // and EGLNativeDisplayType is an int on Apple platforms - which C++ will not convert.
+        // The default display is simply the null native display.
+        _eglDisplay = getPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE, nullptr, displayAttributes);
+    }
+    else
+    {
+        _eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    }
+    if (_eglDisplay == EGL_NO_DISPLAY)
+    {
+        [NSException raise:NSGenericException format:@"Failed to get EGL display"];
+        return;
+    }
+
+    EGLint eglMajor = 0, eglMinor = 0;
+    if (!eglInitialize(_eglDisplay, &eglMajor, &eglMinor))
+    {
+        _eglDisplay = EGL_NO_DISPLAY;
+        [NSException raise:NSGenericException format:@"Failed to initialize EGL 0x%08x", eglGetError()];
+        return;
+    }
+    OALog(@"[OAMapRendererView %p] EGL %d.%d, %s", self, eglMajor, eglMinor,
+          eglQueryString(_eglDisplay, EGL_VENDOR));
+
+    // MSAA is resolved by EGL here, so it is part of the config rather than a hand-rolled
+    // multisampled framebuffer. It is therefore fixed for the life of the context.
+    const EGLint samples = _msaaEnabled ? 4 : 0;
+    const EGLint configAttributes[] = {
+        EGL_RED_SIZE, 8,
+        EGL_GREEN_SIZE, 8,
+        EGL_BLUE_SIZE, 8,
+        EGL_ALPHA_SIZE, 8,
+        EGL_DEPTH_SIZE, 24,
+        EGL_STENCIL_SIZE, 8,
+        EGL_SAMPLES, samples,
+        // PBUFFER is needed too: the GPU worker context is made current against a 1x1 pbuffer
+        EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
+        EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+        EGL_NONE
+    };
+    EGLint numConfigs = 0;
+    if (!eglChooseConfig(_eglDisplay, configAttributes, &_eglConfig, 1, &numConfigs) || numConfigs < 1)
+    {
+        [NSException raise:NSGenericException format:@"Failed to choose EGL config 0x%08x", eglGetError()];
+        return;
+    }
+
+    const EGLint contextAttributes[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
+    _eglRenderContext = eglCreateContext(_eglDisplay, _eglConfig, EGL_NO_CONTEXT, contextAttributes);
+    if (_eglRenderContext == EGL_NO_CONTEXT)
+    {
+        [NSException raise:NSGenericException format:@"Failed to create EGL context 0x%08x", eglGetError()];
+        return;
+    }
+
+    // Worker context shares objects with the render context, replacing the EAGLSharegroup.
+    _eglWorkerContext = eglCreateContext(_eglDisplay, _eglConfig, _eglRenderContext, contextAttributes);
+    if (_eglWorkerContext == EGL_NO_CONTEXT)
+    {
+        [NSException raise:NSGenericException format:@"Failed to create EGL worker context 0x%08x", eglGetError()];
+        return;
+    }
+
+    // A context can only be made current with a surface, and the worker never draws to the
+    // screen, so give it a minimal pbuffer of its own.
+    const EGLint pbufferAttributes[] = { EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE };
+    _eglWorkerSurface = eglCreatePbufferSurface(_eglDisplay, _eglConfig, pbufferAttributes);
+    if (_eglWorkerSurface == EGL_NO_SURFACE)
+    {
+        [NSException raise:NSGenericException format:@"Failed to create EGL worker surface 0x%08x", eglGetError()];
+        return;
+    }
+
+    // The window surface does not exist yet (it follows the view size), so the render context is
+    // made current without one just to let the renderer initialize.
+    if (!eglMakeCurrent(_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, _eglRenderContext))
+    {
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current EGL context 0x%08x", eglGetError()];
+        return;
+    }
+    OALog(@"[OAMapRendererView %p] %s", self, glGetString(GL_RENDERER));
+    OAMapRendererView_installGLDebugCallback("render");
+#else
     if (_glShareGroup != nil)
         return;
 
@@ -778,13 +1005,50 @@ forcedUpdate:(BOOL)forcedUpdate
                     format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
     }
+#endif // OSMAND_USE_ANGLE
 
     // Setup renderer
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.maxNumberOfRasterMapLayersInBatch = 4;
     rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
-    rendererSetup.gpuWorkerThreadEnabled = true;
+    // DIAGNOSTIC: set to 0 to upload every GPU resource on the render thread instead of the
+    // shared worker context. Uploads are slower, but it removes cross-context sharing from the
+    // picture - which is the difference between the EAGLSharegroup this used to rely on and the
+    // EGL share context it uses under ANGLE.
+#define OSMAND_GPU_WORKER_THREAD 1
+    rendererSetup.gpuWorkerThreadEnabled = OSMAND_GPU_WORKER_THREAD ? true : false;
     rendererSetup.displayDensityFactor = _displayDensityFactor;
+#if OSMAND_SERIALIZE_WORKER_WITH_FRAME
+    // Each frame suspends the worker before encoding, so the worker must be interruptible between
+    // resources rather than only between whole queues. Costs an extra pass over the resource
+    // collections per slice, which is why only this path asks for it.
+    rendererSetup.gpuWorkerUploadSliceSize = 4;
+#endif
+#if OSMAND_USE_ANGLE
+    const auto capturedDisplay = _eglDisplay;
+    const auto capturedWorkerSurface = _eglWorkerSurface;
+    const auto capturedWorkerContext = _eglWorkerContext;
+    rendererSetup.gpuWorkerThreadPrologue =
+        [capturedDisplay, capturedWorkerSurface, capturedWorkerContext]
+        (const OsmAnd::IMapRenderer* const renderer)
+        {
+            // Activate worker context
+            if (!eglMakeCurrent(capturedDisplay, capturedWorkerSurface, capturedWorkerSurface, capturedWorkerContext))
+            {
+                [NSException raise:NSGenericException
+                            format:@"Failed to set current EGL context in GPU worker thread 0x%08x", eglGetError()];
+                return;
+            }
+            OAMapRendererView_installGLDebugCallback("worker");
+        };
+    rendererSetup.gpuWorkerThreadEpilogue =
+        [capturedDisplay]
+        (const OsmAnd::IMapRenderer* const renderer)
+        {
+            // Detach the context so it is not left current on a thread that is going away
+            eglMakeCurrent(capturedDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        };
+#else
     const auto capturedWorkerContext = _glWorkerContext;
     rendererSetup.gpuWorkerThreadPrologue =
         [capturedWorkerContext]
@@ -804,6 +1068,7 @@ forcedUpdate:(BOOL)forcedUpdate
         {
             // Nothing to do
         };
+#endif
     _renderer->setup(rendererSetup);
 
     // Initialize rendering
@@ -819,8 +1084,13 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void)releaseContext:(BOOL)gpuContextLost
 {
+#if OSMAND_USE_ANGLE
+    if (_eglDisplay == EGL_NO_DISPLAY)
+        return;
+#else
     if (_glShareGroup == nil)
         return;
+#endif
 
     OALog(@"[OAMapRendererView %p] Releasing context", self);
 
@@ -839,11 +1109,33 @@ forcedUpdate:(BOOL)forcedUpdate
     [self releaseRenderAndFrameBuffers];
 
     // Tear down contexts
+#if OSMAND_USE_ANGLE
+    eglMakeCurrent(_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    if (_eglWorkerSurface != EGL_NO_SURFACE)
+    {
+        eglDestroySurface(_eglDisplay, _eglWorkerSurface);
+        _eglWorkerSurface = EGL_NO_SURFACE;
+    }
+    if (_eglWorkerContext != EGL_NO_CONTEXT)
+    {
+        eglDestroyContext(_eglDisplay, _eglWorkerContext);
+        _eglWorkerContext = EGL_NO_CONTEXT;
+    }
+    if (_eglRenderContext != EGL_NO_CONTEXT)
+    {
+        eglDestroyContext(_eglDisplay, _eglRenderContext);
+        _eglRenderContext = EGL_NO_CONTEXT;
+    }
+    eglTerminate(_eglDisplay);
+    _eglDisplay = EGL_NO_DISPLAY;
+    _eglConfig = nullptr;
+#else
     if ([EAGLContext currentContext] == _glRenderContext || [EAGLContext currentContext] == _glWorkerContext)
         [EAGLContext setCurrentContext:nil];
     _glWorkerContext = nil;
     _glRenderContext = nil;
     _glShareGroup = nil;
+#endif
 }
 
 #if defined(DEBUG)
@@ -908,7 +1200,7 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     
     _msaaEnabled = enableMSAA;
-    if (_framebuffer != 0)
+    if ([self isDrawableAllocated])
         [self releaseRenderAndFrameBuffers];
 }
 
@@ -916,6 +1208,43 @@ forcedUpdate:(BOOL)forcedUpdate
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
 
+#if OSMAND_USE_ANGLE
+    // On this path there is nothing to allocate by hand: the EGL window surface *is* the
+    // default framebuffer, and it carries colour, depth, stencil and MSAA as configured.
+    if (_eglSurface != EGL_NO_SURFACE)
+        return;
+
+    CAMetalLayer* metalLayer = (CAMetalLayer*)self.layer;
+    // Unlike CAEAGLLayer, CAMetalLayer does not derive its drawable size from bounds
+    const CGFloat scale = self.window.screen.scale > 0.0 ? self.window.screen.scale : UIScreen.mainScreen.scale;
+    metalLayer.contentsScale = scale;
+    metalLayer.drawableSize = CGSizeMake(self.bounds.size.width * scale, self.bounds.size.height * scale);
+
+    _eglSurface = eglCreateWindowSurface(_eglDisplay, _eglConfig,
+                                         (__bridge EGLNativeWindowType)metalLayer, NULL);
+    if (_eglSurface == EGL_NO_SURFACE)
+    {
+        [NSException raise:NSGenericException
+                    format:@"Failed to create EGL window surface 0x%08x", eglGetError()];
+        return;
+    }
+
+    if (![self makeRenderContextCurrent])
+    {
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current EGL context 0x%08x", eglGetError()];
+        return;
+    }
+
+    EGLint surfaceWidth = 0, surfaceHeight = 0;
+    eglQuerySurface(_eglDisplay, _eglSurface, EGL_WIDTH, &surfaceWidth);
+    eglQuerySurface(_eglDisplay, _eglSurface, EGL_HEIGHT, &surfaceHeight);
+    _viewSize.x = surfaceWidth;
+    _viewSize.y = surfaceHeight;
+    OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
+
+    validateGL();
+#else
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current context"];
@@ -999,12 +1328,22 @@ forcedUpdate:(BOOL)forcedUpdate
     }
 
     validateGL();
+#endif // OSMAND_USE_ANGLE
 }
 
 - (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);
 
+#if OSMAND_USE_ANGLE
+    if (_eglSurface == EGL_NO_SURFACE)
+        return;
+
+    // Detach before destroying: the surface must not be current when it goes away
+    eglMakeCurrent(_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, _eglRenderContext);
+    eglDestroySurface(_eglDisplay, _eglSurface);
+    _eglSurface = EGL_NO_SURFACE;
+#else
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
@@ -1048,6 +1387,7 @@ forcedUpdate:(BOOL)forcedUpdate
         _depthRenderBuffer = 0;
         validateGL();
     }
+#endif // OSMAND_USE_ANGLE
 }
 
 @synthesize settingsObservable = _settingsObservable;
@@ -1073,10 +1413,9 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void)render:(CADisplayLink*)displayLink
 {
-    if (![EAGLContext setCurrentContext:_glRenderContext])
+    if (![self makeRenderContextCurrent])
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
+        [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
         return;
     }
 
@@ -1093,7 +1432,7 @@ forcedUpdate:(BOOL)forcedUpdate
     _mapMarkersAnimator->update(timePassed);
 
     // Allocate buffers if they are not yet allocated
-    if (_framebuffer == 0)
+    if (![self isDrawableAllocated])
     {
         if (self.bounds.size.width <= 0 || self.bounds.size.height <= 0)
         {
@@ -1143,10 +1482,19 @@ forcedUpdate:(BOOL)forcedUpdate
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
+#if OSMAND_SERIALIZE_WORKER_WITH_FRAME
+        const bool workerWasSuspendedForFrame = _renderer->suspendGpuWorker();
+#endif
+#if OSMAND_USE_ANGLE
+        // The EGL window surface is framebuffer 0, and MSAA (if any) is resolved by EGL on swap
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        validateGL();
+#else
         // Activate MSAA framebuffer if available, otherwise use regular framebuffer
         GLuint targetFramebuffer = (_msaaFramebuffer != 0) ? _msaaFramebuffer : _framebuffer;
         glBindFramebuffer(GL_FRAMEBUFFER, targetFramebuffer);
         validateGL();
+#endif
 
         // Clear buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -1164,6 +1512,17 @@ forcedUpdate:(BOOL)forcedUpdate
 
         validateGL();
 
+#if OSMAND_USE_ANGLE
+        // Depth and stencil are not needed after the frame. On the default framebuffer the
+        // attachments are named GL_DEPTH / GL_STENCIL rather than GL_*_ATTACHMENT.
+        const GLenum defaultBuffersToDiscard[] = { GL_DEPTH, GL_STENCIL };
+        glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, defaultBuffersToDiscard);
+        validateGL();
+
+        // Present results
+        if (!eglSwapBuffers(_eglDisplay, _eglSurface))
+            OALog(@"[OAMapRendererView %p] eglSwapBuffers failed 0x%08x", self, eglGetError());
+#else
         // Resolve MSAA to resolve framebuffer if MSAA is enabled
         if (_msaaFramebuffer != 0)
         {
@@ -1209,6 +1568,12 @@ forcedUpdate:(BOOL)forcedUpdate
         glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
         validateGL();
         [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
+#endif // OSMAND_USE_ANGLE
+
+#if OSMAND_SERIALIZE_WORKER_WITH_FRAME
+        if (workerWasSuspendedForFrame)
+            _renderer->resumeGpuWorker();
+#endif
 
         _frameId++;        
         if (self.rendererDelegate)
@@ -1237,10 +1602,9 @@ forcedUpdate:(BOOL)forcedUpdate
     if (_displayLink != nil || self.window == nil)
         return FALSE;
 
-    if (![EAGLContext setCurrentContext:_glRenderContext])
+    if (![self makeRenderContextCurrent])
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
+        [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
         return FALSE;
     }
     
@@ -1265,10 +1629,9 @@ forcedUpdate:(BOOL)forcedUpdate
     if (_displayLink == nil)
         return FALSE;
 
-    if (![EAGLContext setCurrentContext:_glRenderContext])
+    if (![self makeRenderContextCurrent])
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
+        [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
         return FALSE;
     }
 

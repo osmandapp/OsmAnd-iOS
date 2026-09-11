@@ -39,6 +39,7 @@
 #import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "StartupLogging.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
@@ -187,7 +188,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                     break;
                 }
             }
-            if (!mapInstalled)
+            if (!mapInstalled && !AppEnvironment.isUITesting)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
                 LogStartup(@"initialize: first launch detected (no maps)");
@@ -300,6 +301,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     LogStartup(@"didFinishLaunchingWithOptions");
+    [OACrashReportPromptCoordinator.shared start];
+    [OACrashDiagnosticsManager.shared start];
     _didFinishLaunching = YES;
    
     if (!_dataFetchQueue)

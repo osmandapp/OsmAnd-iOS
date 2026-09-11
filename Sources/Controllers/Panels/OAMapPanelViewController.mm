@@ -20,6 +20,7 @@
 #import "OAProducts.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
+#import <QuartzCore/QuartzCore.h>
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -90,6 +91,8 @@
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
 #import "OAEditPointViewController.h"
+#import "OAFavoriteAction.h"
+#import "OAGPXAction.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
@@ -199,6 +202,8 @@ typedef enum
     BOOL _isNewContextMenuStillEnabled;
 
     MBProgressHUD *_gpxProgress;
+    ContextMenuPresentationCoordinator *_contextMenuPresentationCoordinator;
+    UIView *_contextMenuPresentationUITestStateView;
 }
 
 - (instancetype) init
@@ -223,6 +228,7 @@ typedef enum
     _destinationsHelper = [OADestinationsHelper instance];
     _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
     _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
+    _contextMenuPresentationCoordinator = [ContextMenuPresentationCoordinator new];
 
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
@@ -282,6 +288,8 @@ typedef enum
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    self.targetMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.contextMenuContainer;
+    self.targetMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
     self.targetMenuView.menuViewDelegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
@@ -291,6 +299,10 @@ typedef enum
 
     // Setup target multi menu
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
+    self.targetMultiMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.multiContextMenuContainer;
+    self.targetMultiMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
+
+    [self setupContextMenuPresentationUITestStateViewIfNeeded];
 
     [self updateHUD:NO];
 }
@@ -316,10 +328,12 @@ typedef enum
     BOOL isCarPlayConnected = UIApplication.sharedApplication.isCarPlayConnected;
     if ([_mapViewController parentViewController] != self && !isCarPlayConnected)
         [self doMapRestore];
-    
+
     if (isCarPlayConnected)
         [self onCarPlayConnected];
-    
+
+    [self runUITestsIfNeeded];
+
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
@@ -1410,10 +1424,20 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
 {
-    if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
-        [_scrollableHudViewController forceHide];
+    if (!self.canPresentNewContextMenu)
+        return;
 
-    if (self.isNewContextMenuDisabled)
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenuWithPoints:targetPoints selectedObjects:selectedObjects touchPointLatLon:touchPointLatLon];
+    }];
+}
+
+- (void)presentContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints selectedObjects:(nullable NSArray<SelectedMapObject *> *)selectedObjects touchPointLatLon:(nullable CLLocation *)touchPointLatLon
+{
+    if (!self.canPresentNewContextMenu)
         return;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
@@ -1450,11 +1474,11 @@ typedef enum
     }
     if (selectedObjects.count == 1)
     {
-        [self showContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
+        [self presentContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
+        [self presentContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
     }
     else
     {
@@ -1486,19 +1510,33 @@ typedef enum
     || _activeTargetType == OATargetMapModeParametersSettings;
 }
 
-- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
+- (BOOL)canPresentNewContextMenu
 {
-    [self showContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+    return !self.isNewContextMenuDisabled || _activeTargetType == OATargetGPX;
 }
 
-- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
+- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
 {
-    if (_activeTargetType == OATargetGPX)
-        [self hideScrollableHudViewController];
-
-    if (self.isNewContextMenuDisabled)
+    if (!self.canPresentNewContextMenu)
         return;
 
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+    }];
+}
+
+- (void)presentContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
+{
+    if (!self.canPresentNewContextMenu)
+        return;
+
+    NSLog(@"[ContextMenu] Target setup BEGIN targetType=%ld object=%@",
+          (long)targetPoint.type,
+          targetPoint.targetObj ? NSStringFromClass([targetPoint.targetObj class]) : @"none");
+    CFTimeInterval targetSetupStartTime = CACurrentMediaTime();
     _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1510,6 +1548,8 @@ typedef enum
         [self goToTargetPointMapillary];
         [self hideMultiMenuIfNeeded];
         [self setNeedsStatusBarAppearanceUpdate];
+        CFTimeInterval targetSetupDuration = (CACurrentMediaTime() - targetSetupStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Target setup END (%.3f ms) result=mapillary", targetSetupDuration);
         return;
     }
     else if (targetPoint.type == OATargetMapDownload)
@@ -1528,6 +1568,8 @@ typedef enum
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+    _targetMenuView.accessibilityValue = targetPoint.title;
+    _contextMenuPresentationUITestStateView.accessibilityValue = targetPoint.title;
     
     [_targetMenuView setSelectedObject:selectedObject.object];
 
@@ -1542,6 +1584,10 @@ typedef enum
     }
 
     [self setSelectedObject:targetPoint];
+    CFTimeInterval targetSetupDuration = (CACurrentMediaTime() - targetSetupStartTime) * 1000.0;
+    NSLog(@"[ContextMenu] Target setup END (%.3f ms) result=ready targetType=%ld",
+          targetSetupDuration,
+          (long)targetPoint.type);
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
@@ -1627,6 +1673,22 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
 {
+    if (!self.canPresentNewContextMenu)
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenu:targetPoint selectedObject:selectedObject];
+    }];
+}
+
+- (void)presentContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
+{
+    if (!self.canPresentNewContextMenu)
+        return;
+
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
@@ -1671,7 +1733,7 @@ typedef enum
     }
     else
     {
-        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
+        [self presentContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
     }
 }
 
@@ -1809,11 +1871,6 @@ typedef enum
     _targetLatitude = targetPoint.location.latitude;
     _targetLongitude = targetPoint.location.longitude;
     _targetZoom = 0.0;
-}
-
-- (NSString *) findRoadNameByLat:(double)lat lon:(double)lon
-{
-    return [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 }
 
 - (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
@@ -2186,6 +2243,13 @@ typedef enum
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
                                                             poi:poi];
+    NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAFavoriteAction getQuickActionType].stringId];
+    if (quickActionParams)
+    {
+        [controller applyQuickActionParams:quickActionParams];
+        self.targetMenuView.targetPoint.values = nil;
+    }
+
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
@@ -2205,10 +2269,36 @@ typedef enum
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
 {
+    BOOL needsAddress = descr.length == 0 || [descr isEqualToString:OALocalizedString(@"map_no_address")];
+    if (needsAddress)
+        descr = [OAPointDescription getLocationNamePlain:lat lon:lon];
+    
     OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
     [_mapViewController hideContextPinMarker];
     [_destinationsHelper addDestinationWithNewColor:destination];
     [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
+    
+    if (needsAddress)
+        [self resolveAddressAndUpdateMarker:destination];
+}
+
+- (void)resolveAddressAndUpdateMarker:(OADestination *)destination
+{
+    __weak __typeof(self) weakSelf = self;
+    [[OAReverseGeocoder instance] lookupAddressAtLat:destination.latitude
+                                                 lon:destination.longitude
+                                            objectId:0
+                                          completion:^(NSString *address) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || address.length == 0)
+            return;
+        if ([strongSelf->_app.data.destinations indexOfObjectIdenticalTo:destination] == NSNotFound)
+            return;
+
+        OADestination *updated = [destination copy];
+        updated.desc = address;
+        [strongSelf->_destinationsHelper replaceDestination:destination withDestination:updated];
+    }];
 }
 
 - (void) targetPointDirection
@@ -2245,13 +2335,21 @@ typedef enum
     }
     else if (self.targetMenuView.targetPoint.type != OATargetParking)
     {
-        OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
+        NSString *descr = _formattedTargetName;
+        BOOL needsAddress = descr.length == 0 || [descr isEqualToString:OALocalizedString(@"map_no_address")];
+        if (needsAddress)
+            descr = [OAPointDescription getLocationNamePlain:_targetLatitude lon:_targetLongitude];
+        
+        OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:_targetLatitude longitude:_targetLongitude];
 
         UIColor *color = [_destinationsHelper addDestinationWithNewColor:destination];
         if (color)
         {
             [_mapViewController hideContextPinMarker];
             [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
+            
+            if (needsAddress)
+                [self resolveAddressAndUpdateMarker:destination];
         }
         else
         {
@@ -2341,6 +2439,13 @@ typedef enum
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
                                                                             poi:poi];
+    NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId];
+    if (quickActionParams)
+    {
+        [controller applyQuickActionParams:quickActionParams];
+        self.targetMenuView.targetPoint.values = nil;
+    }
+
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
@@ -2438,7 +2543,7 @@ typedef enum
             {
                 gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
                 if (!gpxFile)
-                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:([trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path])];
             }
 
             [self displayGpxOnMap:gpxFile];
@@ -2486,6 +2591,8 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete afterComplete:(void (^)(void))afterComplete
 {
+    NSLog(@"[ContextMenu] Presentation BEGIN targetType=%ld", (long)_targetMenuView.targetPoint.type);
+    CFTimeInterval openingStartTime = CACurrentMediaTime();
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
@@ -2500,6 +2607,8 @@ typedef enum
         _activeTargetActive = NO;
         BOOL activeTargetChildPushed = _activeTargetChildPushed;
         _activeTargetChildPushed = NO;
+        CFTimeInterval presentationDuration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=restarting_after_active_target", presentationDuration);
         
         [self hideTargetPointMenu:.1 onComplete:^{
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
@@ -2517,7 +2626,9 @@ typedef enum
         [self saveMapStateNoRestore];
     
     _mapStateSaved = saveMapState;
-    
+
+    NSLog(@"[ContextMenu] View preparation BEGIN");
+    CFTimeInterval preparationStartTime = CACurrentMediaTime();
     OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
@@ -2617,6 +2728,10 @@ typedef enum
         [self.targetMenuView setCustomViewController:controller needFullMenu:NO];
         [self.targetMenuView prepareNoInit];
     }
+    CFTimeInterval preparationDuration = (CACurrentMediaTime() - preparationStartTime) * 1000.0;
+    NSLog(@"[ContextMenu] View preparation END (%.3f ms) controller=%@",
+          preparationDuration,
+          controller ? NSStringFromClass([controller class]) : @"none");
     
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -2629,6 +2744,8 @@ typedef enum
     if (_targetMenuView.targetPoint.minimized)
     {
         _targetMenuView.targetPoint.minimized = NO;
+        CFTimeInterval presentationDuration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=minimized", presentationDuration);
         if (onComplete)
             onComplete();
         
@@ -2643,6 +2760,8 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController updateDependentButtonsVisibility];
     [self.targetMenuView show:YES onComplete:^{
+        CFTimeInterval duration = (CACurrentMediaTime() - openingStartTime) * 1000.0;
+        NSLog(@"[ContextMenu] Presentation END (%.3f ms) result=shown", duration);
         self.sidePanelController.recognizesPanGesture = NO;
         if (afterComplete)
             afterComplete();
@@ -2753,6 +2872,9 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
+        if (onComplete)
+            onComplete();
+
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -2766,9 +2888,6 @@ typedef enum
             }
         }
         
-        if (onComplete)
-            onComplete();
-
         if (_prevScrollableHudViewController)
         {
             [self showScrollableHudViewController:_prevScrollableHudViewController];
@@ -3111,17 +3230,56 @@ typedef enum
                         state:(OATrackMenuViewControllerState *)state
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
-    if (_scrollableHudViewController)
-    {
-        [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
-            if (!state.openedFromTrackMenu)
-                state.navControllerHistory = nil;
+    BOOL shouldClearNavControllerHistory = _scrollableHudViewController != nil && !state.openedFromTrackMenu;
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
 
-            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
-        }];
-        return;
-    }
-    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
+        if (shouldClearNavControllerHistory)
+            state.navControllerHistory = nil;
+
+        [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
+    }];
+}
+
+- (void)enqueueContextMenuPresentation:(void (^)(void))presentation
+{
+    [_contextMenuPresentationCoordinator enqueuePresentation:presentation];
+    [self processPendingContextMenuPresentation];
+}
+
+- (void)processPendingContextMenuPresentation
+{
+    __weak __typeof(self) weakSelf = self;
+    [_contextMenuPresentationCoordinator processPendingPresentationWithDismissHandlers:@[
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || !strongSelf->_scrollableHudViewController)
+                return NO;
+
+            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
+            return YES;
+        }],
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || !strongSelf.targetMultiMenuView.superview)
+                return NO;
+
+            [strongSelf.targetMultiMenuView hide:YES duration:0.2 onComplete:completion];
+            return YES;
+        }],
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || !strongSelf.targetMenuView.superview)
+                return NO;
+
+            strongSelf->_prevScrollableHudViewController = nil;
+            [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
+            return YES;
+        }],
+    ]];
 }
 
 - (void)doShowGpxItem:(OASTrackItem *)item
@@ -3133,8 +3291,7 @@ typedef enum
 {
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 
-    [self hideMultiMenuIfNeeded];
-    [self hideTargetPointMenu];
+    [_mapViewController hidePolygonHighlight];
     
     if (_dashboard)
         [self closeDashboard];
@@ -3151,7 +3308,7 @@ typedef enum
     _activeTargetObj = targetPoint.targetObj;
     _activeViewControllerState = state;
 
-    _formattedTargetName = item.dataItem ? item.dataItem.gpxFileNameWithoutExtension : @"";
+    _formattedTargetName = item.gpxFileNameWithoutExtension;
     _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
@@ -3448,7 +3605,7 @@ typedef enum
         gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
         if (!gpxFile)
         {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
+            OASKFile *file = [trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path];
             gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
     }
@@ -3456,7 +3613,8 @@ typedef enum
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
+        BOOL joinSegments = trackItem.dataItem ? trackItem.joinSegments : [gpxFile isJoinSegments];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)
@@ -4622,12 +4780,179 @@ typedef enum
 
 #pragma mark - OAOpenAddTrackDelegate
 
+- (void)onFileSelectionCancelled
+{
+    if (self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId])
+        self.targetMenuView.targetPoint.values = nil;
+}
+
 - (void)onFileSelected:(NSString *)gpxFileName
 {
     NSString *fullPath = nil;
     if (gpxFileName && gpxFileName.length > 0)
         fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
     [self targetPointAddWaypoint:fullPath];
+}
+
+#pragma mark - UI Tests
+
+- (void)runUITestsIfNeeded
+{
+    [self runContextMenuPresentationUITestFixtureIfNeeded];
+    [self runGpxWaypointOpenTrackUITestFixtureIfNeeded];
+}
+
+- (BOOL)isContextMenuPresentationUITestingEnabled
+{
+    return UITestState.isContextMenuPresentationRaceEnabled;
+}
+
+- (BOOL)isGpxWaypointOpenTrackUITestingEnabled
+{
+    return UITestState.isGpxWaypointOpenTrackEnabled;
+}
+
+- (void)setupContextMenuPresentationUITestStateViewIfNeeded
+{
+    if (![self isContextMenuPresentationUITestingEnabled])
+        return;
+
+    _contextMenuPresentationUITestStateView = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 44.0, 44.0)];
+    _contextMenuPresentationUITestStateView.backgroundColor = UIColor.clearColor;
+    _contextMenuPresentationUITestStateView.isAccessibilityElement = YES;
+    _contextMenuPresentationUITestStateView.accessibilityIdentifier = UITestAccessibilityIdentifier.contextMenuPresentationState;
+    _contextMenuPresentationUITestStateView.accessibilityLabel = @"idle";
+    _contextMenuPresentationUITestStateView.accessibilityValue = @"idle";
+    [self.view addSubview:_contextMenuPresentationUITestStateView];
+}
+
+- (OATargetPoint *)contextMenuPresentationUITestTargetWithType:(OATargetPointType)type
+                                                         title:(NSString *)title
+                                                      latitude:(CLLocationDegrees)latitude
+                                                     longitude:(CLLocationDegrees)longitude
+{
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = type;
+    targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
+    targetPoint.title = title;
+    targetPoint.titleAddress = title;
+    targetPoint.addressFound = YES;
+    targetPoint.toolbarNeeded = NO;
+    if (type == OATargetDestination)
+        targetPoint.targetObj = [[OADestination alloc] initWithDesc:title latitude:latitude longitude:longitude];
+    return targetPoint;
+}
+
+- (void)runContextMenuPresentationUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunContextMenuPresentationRaceFixture])
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OATargetPoint *firstTarget = [strongSelf contextMenuPresentationUITestTargetWithType:OATargetDestination
+                                                                                       title:@"UITest Destination A"
+                                                                                    latitude:52.379189
+                                                                                   longitude:4.899431];
+        [strongSelf enqueueContextMenuPresentation:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                [strongSelf presentContextMenuPresentationUITestTarget:firstTarget onComplete:^{
+                    [strongSelf enqueueContextMenuPresentationUITestFollowUps];
+                }];
+        }];
+    });
+}
+
+- (void)enqueueContextMenuPresentationUITestFollowUps
+{
+    OATargetPoint *secondTarget = [self contextMenuPresentationUITestTargetWithType:OATargetParking
+                                                                              title:@"UITest Parking B"
+                                                                           latitude:52.380189
+                                                                          longitude:4.900431];
+    __weak __typeof(self) weakSelf = self;
+    [self enqueueContextMenuPresentation:^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf)
+            [strongSelf presentContextMenuPresentationUITestTarget:secondTarget onComplete:nil];
+    }];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OATargetPoint *thirdTarget = [strongSelf contextMenuPresentationUITestTargetWithType:OATargetMyLocation
+                                                                                       title:@"UITest My Location C"
+                                                                                    latitude:52.381189
+                                                                                   longitude:4.901431];
+        [strongSelf enqueueContextMenuPresentation:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                [strongSelf presentContextMenuPresentationUITestTarget:thirdTarget onComplete:nil];
+        }];
+    });
+}
+
+- (void)presentContextMenuPresentationUITestTarget:(OATargetPoint *)targetPoint
+                                        onComplete:(void (^)(void))onComplete
+{
+    [self applyTargetPoint:targetPoint];
+    [_targetMenuView setTargetPoint:targetPoint];
+    _targetMenuView.accessibilityValue = targetPoint.title;
+    _contextMenuPresentationUITestStateView.accessibilityLabel = targetPoint.title;
+    NSString *presentationHistory = _contextMenuPresentationUITestStateView.accessibilityValue;
+    if (!presentationHistory || [presentationHistory isEqualToString:@"idle"])
+        _contextMenuPresentationUITestStateView.accessibilityValue = targetPoint.title;
+    else
+        _contextMenuPresentationUITestStateView.accessibilityValue = [presentationHistory stringByAppendingFormat:@"|%@", targetPoint.title];
+    [self.view bringSubviewToFront:_contextMenuPresentationUITestStateView];
+
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:onComplete];
+}
+
+- (void)runGpxWaypointOpenTrackUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunGpxWaypointOpenTrackFixture])
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+        NSString *waypointName = @"UITest Waypoint A";
+        BOOL hasFixtureWaypoint = NO;
+        for (OASWptPt *point in [currentTrack getPointsList])
+        {
+            if ([point.name isEqualToString:waypointName])
+            {
+                hasFixtureWaypoint = YES;
+                break;
+            }
+        }
+
+        if (!hasFixtureWaypoint)
+        {
+            OASWptPt *waypoint = [[OASWptPt alloc] initWithLat:52.379189 lon:4.899431];
+            waypoint.name = waypointName;
+            waypoint.category = @"UITest";
+            [currentTrack addPointPoint:waypoint];
+            [currentTrack processPoints];
+        }
+
+        OASTrackItem *trackItem = [[OASTrackItem alloc] initWithGpxFile:currentTrack];
+        [strongSelf openTargetViewWithGPX:trackItem
+                              selectedTab:EOATrackMenuHudPointsTab
+                     selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab
+                            openedFromMap:NO];
+    });
 }
 
 @end

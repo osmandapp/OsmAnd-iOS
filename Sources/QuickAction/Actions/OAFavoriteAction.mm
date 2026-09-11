@@ -53,20 +53,24 @@ static QuickActionType *TYPE;
 {
     CLLocation *latLon = [self getMapLocation];
     NSString *title = self.getParams[kName];
-    if (!title || title.length == 0)
-        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
-    if (!title || title.length == 0)
-        title = OALocalizedString(@"favorite");
-    
-    [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
+    BOOL autoFill = ![self.getParams[kDialog] boolValue];
+    if (title.length > 0)
+    {
+        [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:autoFill];
+        return;
+    }
+
+    [OAReverseGeocoder.instance lookupAddressAtLat:latLon.coordinate.latitude
+                                               lon:latLon.coordinate.longitude
+                                          objectId:0
+                                        completion:^(NSString *address) {
+        NSString *resolvedTitle = address.length > 0 ? address : OALocalizedString(@"favorite");
+        [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:resolvedTitle autoFill:autoFill];
+    }];
 }
 
 - (void)addFavoriteWithDialog:(double)lat lon:(double)lon title:(NSString *)title
 {
-    if (self.getParams[kCategoryColor])
-        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[kCategoryColor] integerValue] forKey:kFavoriteDefaultColorKey];
-    if (self.getParams[kCategoryName])
-        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
     if ([OAFavoritesHelper hasFavoriteAt:point])
@@ -76,6 +80,7 @@ static QuickActionType *TYPE;
     targetPoint.title = title;
     targetPoint.type = OATargetFavorite;
     targetPoint.location = point;
+    targetPoint.values = @{[self getActionTypeId] : self.getParams};
     
     [mapPanel showContextMenu:targetPoint];
     [mapPanel targetPointAddFavorite];
@@ -91,7 +96,11 @@ static QuickActionType *TYPE;
 
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    NSString *groupName = self.getParams[kCategoryName] ? self.getParams[kCategoryName] : @"";
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.getParams[kCategoryName] ?: @""] trim];
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (group)
+        groupName = group.name;
+
     UIColor* color;
     if (self.getParams[kCategoryColor])
     {
@@ -104,6 +113,9 @@ static QuickActionType *TYPE;
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         color = favCol.color;
     }
+
+    if ([group hasColor])
+        color = group.color;
 
     if ([self isItemExists:title])
         title = [self getNewItemName:title];

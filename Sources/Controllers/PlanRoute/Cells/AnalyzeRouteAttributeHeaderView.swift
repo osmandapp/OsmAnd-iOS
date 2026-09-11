@@ -31,11 +31,15 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
     func configure(title: String, isExpanded: Bool, onTap: @escaping () -> Void) {
         titleLabel.text = title
         accessibilityLabel = title
+        setExpanded(isExpanded)
+        self.onTap = onTap
+    }
+
+    func setExpanded(_ isExpanded: Bool) {
         chevronImageView.image = UIImage(
             systemName: isExpanded ? "chevron.down" : "chevron.right",
             withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
         )
-        self.onTap = onTap
     }
 
     private func setupView() {

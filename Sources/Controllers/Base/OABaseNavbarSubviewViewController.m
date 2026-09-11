@@ -164,15 +164,13 @@
 
         if ([self shouldShowSubviewSeparator])
         {
-            _separatorView = [[UIView alloc] init];
-            _separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            _separatorView = [[SeparatorView alloc] init];
             _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
             [containerView addSubview:_separatorView];
             [NSLayoutConstraint activateConstraints:@[
                 [_separatorView.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor],
                 [_separatorView.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor],
                 [_separatorView.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor],
-                [_separatorView.heightAnchor constraintEqualToConstant:0.5],
             ]];
         }
         else

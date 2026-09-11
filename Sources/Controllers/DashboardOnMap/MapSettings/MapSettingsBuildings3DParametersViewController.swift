@@ -110,7 +110,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let statusBarStyle: UIStatusBarStyle = settings.nightMode ? .lightContent : .default
+        let statusBarStyle: UIStatusBarStyle = settings.isAppMapNightMode ? .lightContent : .default
         mapPanel.targetUpdateControlsLayout(true, customStatusBarStyle: statusBarStyle)
     }
     
@@ -203,7 +203,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             currentAlpha = baseAlpha
         case .color:
             guard let plugin else { return }
-            isNightColorMode = settings.nightMode
+            isNightColorMode = settings.isAppMapNightMode
             baseBuildings3DColorStyle = plugin.get3DBuildingsColorStyle()
             currentBuildings3DColorStyle = baseBuildings3DColorStyle
             let defaultColorItem = appearanceCollection.defaultLineColorItem()

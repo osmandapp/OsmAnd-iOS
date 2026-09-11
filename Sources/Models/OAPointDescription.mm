@@ -14,14 +14,8 @@
 #import "OALocationPoint.h"
 #import "OALocationConvert.h"
 #import "OrderedDictionary.h"
-#import "OARootViewController.h"
-#import "OAMapViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapRendererView.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
-#import "OAOsmEditingPlugin.h"
-#import "OAPluginsHelper.h"
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -173,20 +167,6 @@
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
     return [CoordinateFormatBridge formatPrimaryWithLat:lat lon:lon];
-}
-
-+ (NSString *)shareLinkForLat:(double)lat lon:(double)lon
-{
-    int zoom = [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
-    return [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
-}
-
-+ (NSString *)osmEditingLinkForLat:(double)lat lon:(double)lon
-{
-    if (![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
-        return nil;
-    int zoom = [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
-    return [NSString stringWithFormat:kOsmCoordinatesLink, lat, lon, zoom, lat, lon];
 }
 
 + (NSString *) formatToHumanString:(NSInteger)format

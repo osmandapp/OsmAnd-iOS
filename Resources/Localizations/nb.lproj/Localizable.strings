@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd-kart";
+"send_crash_log" = "Send krasjlogg";
+"send_crash_log_descr" = "Inneholder kun informasjon om krasjer";
 "years_short" = "År";
 "day" = "Dag";
 "days_2_4" = "Dager";
@@ -2079,7 +2081,7 @@
 "map_markers_history" = "Kartmarkørhistorikk";
 "shared_string_countries" = "Land";
 "restoring_from" = "Gjenoppretter valgt data fra skyen …";
-"ltr_or_rtl_combine_via_of" = "%ld av %ld";
+"ltr_or_rtl_combine_via_of" = "%@ av %@";
 "shared_string_total_size" = "Total størrelse";
 "shared_string_loading" = "Laster inn";
 "shared_string_delete_data" = "Slett data";

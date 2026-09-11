@@ -395,7 +395,11 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 - (void)setupButtonRotation:(OAHudButton *)button
 {
     if ([self isMapOrientationButton:button])
+    {
+        button.imageView.contentMode = UIViewContentModeCenter;
+        button.imageView.clipsToBounds = NO;
         [self configMapOrientationButtonIfExists];
+    }
 }
 
 - (void)restorePinPosition
@@ -453,7 +457,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                     UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"]];
                     background.tag = kQuickActionSlashBackgroundTag;
                     background.frame = frame;
-                    [background setTintColor:!_settings.nightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
+                    [background setTintColor:!_settings.isAppMapNightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
                     [quickActionButton.imageView addSubview:background];
 
                     UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"]];
@@ -570,14 +574,25 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     }
 }
 
+- (BOOL)isPlanRouteVisibleOnMapPanel:(OAMapPanelViewController *)mapPanel
+{
+    return mapPanel.activeTargetType == OATargetRoutePlanning
+        && [mapPanel.scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class];
+}
+
 - (void)setupMap3dModeButtonVisibility
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     Map3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
+    BOOL contextMenuHidesButton = [mapPanel isContextMenuVisible]
+        && ![self isPlanRouteVisibleOnMapPanel:mapPanel];
+    BOOL isPlanRouteFullscreen = [self isPlanRouteVisibleOnMapPanel:mapPanel]
+        && mapPanel.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
         || (map3DMode == Map3DModeVisibilityVisibleIn3DMode
             && ![OAMapViewTrackingUtilities.instance is3DMode])
-        || [mapPanel isContextMenuVisible]
+        || contextMenuHidesButton
+        || isPlanRouteFullscreen
         || [mapPanel isDashboardVisible]
         || [mapPanel gpxModeActive]
         || [mapPanel isRouteInfoVisible]

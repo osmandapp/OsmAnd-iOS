@@ -302,12 +302,15 @@
                         <inset key="sectionInset" minX="0.0" minY="6" maxX="0.0" maxY="6"/>
                     </collectionViewFlowLayout>
                 </collectionView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="230.5" width="414" height="0.5"/>
                     <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="jDd-9D-qD8"/>
                     </constraints>
+                    <connections>
+                        <outlet property="thicknessConstraint" destination="jDd-9D-qD8" id="s01-TC-001"/>
+                    </connections>
                 </view>
             </subviews>
             <color key="backgroundColor" name="groupBg"/>

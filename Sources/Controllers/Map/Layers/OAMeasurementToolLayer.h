@@ -40,5 +40,6 @@
 - (void) onMapPointSelected:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
 
 - (void) moveMapToPoint:(NSInteger)pos;
+- (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
 
 @end

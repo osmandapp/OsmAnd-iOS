@@ -17,6 +17,11 @@
 #import "OAGPXDatabase.h"
 #import "OAGpxData.h"
 
+static BOOL OAShouldUseExternalTimestamps(OALocationsHolder *locationsHolder)
+{
+    return locationsHolder.size > 0 && [locationsHolder timeAtIndex:0] > 0;
+}
+
 @interface OAGpxApproximationHelper () <OAGpxApproximationProgressDelegate>
 
 @end
@@ -105,19 +110,23 @@
         OAGpxApproximator *gpxApproximator = approximationsToDo.firstObject;
         [approximationsToDo removeObjectAtIndex:0];
         _currentApproximator = gpxApproximator;
-        [gpxApproximator calculateGpxApproximation:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approxPtr) {
+        __weak __typeof(self) weakSelf = self;
+        OAResultMatcher<OAGpxRouteApproximation *> *resultMatcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approxPtr) {
             OAGpxRouteApproximation *strongApprox = (approxPtr && *approxPtr) ? *approxPtr : nil;
             dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
                 if (!gpxApproximator.isCancelled)
                 {
                     approximateResult[gpxApproximator.locationsHolder] = strongApprox;
-                    [self approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
+                    [strongSelf approximateMultipleGpxAsync:approximationsToDo withResult:approximateResult];
                 }
             });
             return YES;
         } cancelledFunc:^BOOL {
             return NO;
-        }]];
+        }];
+        [gpxApproximator calculateGpxApproximation:resultMatcher
+                             useExternalTimestamps:OAShouldUseExternalTimestamps(gpxApproximator.locationsHolder)];
     } else {
         NSArray *pair = [self processApproximationResults:approximateResult];
         if (self.delegate)
@@ -149,13 +158,15 @@
         OAGpxApproximator *approximator = [self getNewGpxApproximator:holder];
         if (approximator)
         {
-            [approximator calculateGpxApproximationSync:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
+            OAResultMatcher<OAGpxRouteApproximation *> *resultMatcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAGpxRouteApproximation *__autoreleasing *approximation) {
                 if (approximation && *approximation)
                     approximateResult[holder] = *approximation;
                 return YES;
             } cancelledFunc:^BOOL {
                 return NO;
-            }]];
+            }];
+            [approximator calculateGpxApproximationSync:resultMatcher
+                                  useExternalTimestamps:OAShouldUseExternalTimestamps(holder)];
         }
     }
     

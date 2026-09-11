@@ -73,12 +73,15 @@
                                                         <constraint firstAttribute="height" constant="30" id="IN2-UA-RlG"/>
                                                     </constraints>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wvy-CM-dFA" userLabel="bottomSeparatorView">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wvy-CM-dFA" userLabel="bottomSeparatorView" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="72.666666666666671" width="393" height="0.3333333333333286"/>
                                                     <color key="backgroundColor" name="customSeparator"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="0.5" id="urB-JK-cPK"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <outlet property="thicknessConstraint" destination="urB-JK-cPK" id="s01-TC-001"/>
+                                                    </connections>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

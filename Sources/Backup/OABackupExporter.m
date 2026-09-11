@@ -8,6 +8,7 @@
 
 #import "OABackupExporter.h"
 #import "OABackupHelper.h"
+#import "OAFavoritesBackupMerger.h"
 #import "OASettingsItem.h"
 #import "OABackupListeners.h"
 #import "OAAbstractWriter.h"
@@ -293,7 +294,10 @@
     if (error.length > 0)
         [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
     else
+    {
         [self markOldFileForDeletion:item fileName:fileName];
+        [OAFavoritesBackupMerger onUploadSuccess:item fileName:fileName uploadTime:uploadTime];
+    }
     int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
     __strong id<OANetworkExportProgressListener> listener = _listener;
     if (listener)

@@ -20,6 +20,7 @@
 
 static NSString * const kLinkInternalType = @"internal_link";
 static NSString * const kLinkExternalType = @"ext_link";
+static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
 
 @implementation OAHelpViewController
 {
@@ -31,6 +32,11 @@ static NSString * const kLinkExternalType = @"ext_link";
 }
 
 #pragma mark - Initialization
+
+- (void)registerNotifications
+{
+    [self addNotification:OACrashDiagnosticsManager.reportsDidChangeNotification selector:@selector(onCrashReportsDidChange:)];
+}
 
 - (void)commonInit
 {
@@ -71,7 +77,13 @@ static NSString * const kLinkExternalType = @"ext_link";
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     __weak __typeof(self) weakSelf = self;
-    UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_log") image:[UIImage imageNamed:@"ic_custom_file_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    BOOL hasCrashReports = OACrashDiagnosticsManager.shared.hasCrashReports;
+    UIAction *sendCrashLogs = [UIAction actionWithTitle:OALocalizedString(@"send_crash_log") image:[UIImage imageNamed:@"ic_custom_file_crashlog_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf sendCrashLogs];
+    }];
+    sendCrashLogs.attributes = hasCrashReports ? 0 : UIMenuElementAttributesDisabled;
+
+    UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_current_app_log") image:[UIImage imageNamed:@"ic_custom_file_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf sendLogFile];
     }];
     
@@ -79,11 +91,11 @@ static NSString * const kLinkExternalType = @"ext_link";
         [weakSelf copyBuildVersion];
     }];
     
-    UIMenu *sendLogMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[sendLog]];
+    UIMenu *sendLogMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[sendCrashLogs, sendLog]];
     
     UIMenu *copyBuildVersionMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[copyBuildVersion]];
     
-    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[copyBuildVersionMenu, sendLogMenu]];
+    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[sendLogMenu, copyBuildVersionMenu]];
     
     UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_overflow_menu_stroke" action:@selector(onRightNavbarButtonPressed) menu:menu];
     
@@ -215,12 +227,21 @@ static NSString * const kLinkExternalType = @"ext_link";
     [openIssueOnGitHubRow setIconName:@"ic_custom_logo_github"];
     [openIssueOnGitHubRow setObj:kLinkExternalType forKey:@"linkType"];
     [openIssueOnGitHubRow setObj:kOpenIssueOnGitHub forKey:@"url"];
+
+    BOOL hasCrashReports = OACrashDiagnosticsManager.shared.hasCrashReports;
+    OATableRowData *sendCrashLogsRow = [reportAnIssuesSection createNewRow];
+    [sendCrashLogsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
+    [sendCrashLogsRow setKey:@"sendCrashLogs"];
+    [sendCrashLogsRow setTitle:OALocalizedString(@"send_crash_log")];
+    [sendCrashLogsRow setDescr:OALocalizedString(hasCrashReports ? @"send_crash_log_descr" : @"no_crashes_recorded")];
+    [sendCrashLogsRow setIconName:@"ic_custom_file_crashlog_send_outlined"];
+    [sendCrashLogsRow setObj:@(hasCrashReports) forKey:kCrashReportsAvailableKey];
     
     OATableRowData *sendLogRow = [reportAnIssuesSection createNewRow];
     [sendLogRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [sendLogRow setKey:@"sendLog"];
-    [sendLogRow setTitle:OALocalizedString(@"send_log")];
-    [sendLogRow setDescr:OALocalizedString(@"detailed_log_file")];
+    [sendLogRow setTitle:OALocalizedString(@"send_current_app_log")];
+    [sendLogRow setDescr:OALocalizedString(@"send_current_app_log_descr")];
     [sendLogRow setIconName:@"ic_custom_file_send_outlined"];
     
     OATableSectionData *aboutOsmAndSection = [_data createNewSection];
@@ -330,7 +351,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     NSString *description = item.descr;
     NSString *key = item.key;
-    BOOL isCellAccessoryNone = [key isEqualToString:@"contactSupport"] || [key isEqualToString:@"reportAnIssues"] || [key isEqualToString:@"sendLog"] || [key isEqualToString:@"aboutOsmAnd"];
+    BOOL isCellAccessoryNone = [key isEqualToString:@"contactSupport"] || [key isEqualToString:@"reportAnIssues"] || [key isEqualToString:@"sendCrashLogs"] || [key isEqualToString:@"sendLog"] || [key isEqualToString:@"aboutOsmAnd"];
     
     OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
@@ -340,6 +361,13 @@ static NSString * const kLinkExternalType = @"ext_link";
     }
     if (cell)
     {
+        BOOL isCrashLogsRow = [key isEqualToString:@"sendCrashLogs"];
+        BOOL hasCrashReports = !isCrashLogsRow || [[item objForKey:kCrashReportsAvailableKey] boolValue];
+
+        cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        cell.accessibilityTraits &= ~(UIAccessibilityTraitLink | UIAccessibilityTraitNotEnabled);
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         [cell descriptionVisibility:description && description.length > 0];
         cell.titleLabel.text = item.title;
         cell.descriptionLabel.text = description;
@@ -355,6 +383,23 @@ static NSString * const kLinkExternalType = @"ext_link";
         }
         
         cell.accessoryType = isCellAccessoryNone ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
+
+        if ([key isEqualToString:@"reportAnIssues"])
+        {
+            UIImageView *externalLinkView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"arrow.up.forward"]];
+            externalLinkView.frame = CGRectMake(0., 0., 24., 24.);
+            externalLinkView.contentMode = UIViewContentModeCenter;
+            externalLinkView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.accessoryView = externalLinkView;
+            cell.accessibilityTraits |= UIAccessibilityTraitLink;
+        }
+        else if (isCrashLogsRow && !hasCrashReports)
+        {
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessibilityTraits |= UIAccessibilityTraitNotEnabled;
+        }
     }
     return cell;
 }
@@ -386,6 +431,11 @@ static NSString * const kLinkExternalType = @"ext_link";
     {
         [self sendLogFile];
     }
+    else if ([key isEqualToString:@"sendCrashLogs"])
+    {
+        if ([[item objForKey:kCrashReportsAvailableKey] boolValue])
+            [self sendCrashLogs];
+    }
 }
 
 - (UIContextMenuConfiguration *)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point
@@ -411,6 +461,11 @@ static NSString * const kLinkExternalType = @"ext_link";
 }
 
 #pragma mark - Additions
+
+- (void)onCrashReportsDidChange:(NSNotification *)notification
+{
+    [self updateUI];
+}
 
 - (void)copyBuildVersion
 {
@@ -446,6 +501,41 @@ static NSString * const kLinkExternalType = @"ext_link";
         CGRect bottomScreenCenterPoint = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
         [self showActivity:@[[NSURL fileURLWithPath:latestLogFile]] applicationActivities:nil excludedActivityTypes:nil sourceView:self.view sourceRect:bottomScreenCenterPoint barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionDown completionWithItemsHandler:nil];
     }
+}
+
+- (void)sendCrashLogs
+{
+    OACrashDiagnosticsManager *manager = OACrashDiagnosticsManager.shared;
+    __weak __typeof(self) weakSelf = self;
+    [manager prepareCrashReportsForSharing:^(NSArray<NSURL *> * _Nonnull crashReportURLs) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+        {
+            [manager cleanUpCrashReportsShareSnapshot:crashReportURLs];
+            return;
+        }
+        UIWindow *window = strongSelf.viewIfLoaded.window;
+        if (crashReportURLs.count == 0)
+        {
+            // The on-disk state can change after the menu or row is rendered.
+            // Refresh instead of presenting an empty activity controller.
+            [strongSelf updateUI];
+            return;
+        }
+        if (!window
+            || window.windowScene.activationState != UISceneActivationStateForegroundActive
+            || strongSelf.presentedViewController
+            || strongSelf.transitionCoordinator)
+        {
+            [manager cleanUpCrashReportsShareSnapshot:crashReportURLs];
+            return;
+        }
+
+        CGRect bottomScreenCenterPoint = CGRectMake(CGRectGetMidX(strongSelf.view.bounds), strongSelf.view.bounds.size.height, 0, 0);
+        [strongSelf showActivity:crashReportURLs applicationActivities:nil excludedActivityTypes:nil sourceView:strongSelf.view sourceRect:bottomScreenCenterPoint barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionDown completionWithItemsHandler:^{
+            [manager cleanUpCrashReportsShareSnapshot:crashReportURLs];
+        }];
+    }];
 }
 
 - (NSString *)createMailToUrl

@@ -25,7 +25,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonFullWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleRelativeToButtonConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleRelativeToMarginConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
 
 
 - (void) setRightButtonVisibility:(BOOL)visible;

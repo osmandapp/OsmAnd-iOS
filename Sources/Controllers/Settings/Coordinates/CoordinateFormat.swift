@@ -38,11 +38,16 @@ struct CoordinateFormat {
     }
     
     static func epsg(code: Int, title: String?, subtitle: String?, isDeprecated: Bool) -> CoordinateFormat {
-        let fallback = "EPSG:\(code)"
+        let titleValue: String
+        if let title, title.isEmpty == false {
+            titleValue = title
+        } else {
+            titleValue = "EPSG:\(code)"
+        }
         return CoordinateFormat(
             id: CoordinateFormatIds.epsg(code),
             type: .epsg,
-            title: title?.isEmpty == false ? title! : fallback,
+            title: titleValue,
             subtitle: subtitle,
             epsgCode: code,
             legacyFormat: nil,

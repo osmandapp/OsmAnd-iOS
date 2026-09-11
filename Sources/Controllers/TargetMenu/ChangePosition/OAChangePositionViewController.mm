@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
@@ -95,7 +96,7 @@
     _contextLayer.changePositionDelegate = self;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
-    bottomDividerFrame.size.height = 0.5;
+    bottomDividerFrame.size.height = [SeparatorAppearance thicknessForView:self.bottomToolBarDividerView];
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
     if ([_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])

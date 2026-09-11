@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 struct FilterResults {
     var values: [TrackItem] = []
     var count: Int {
@@ -42,6 +40,7 @@ final class TracksSearchFilter: FilterChangedListener {
         recreateFilters()
         
         DispatchQueue.global(qos: .utility).async {
+            let trackItemsSnapshot = self.trackItems
             if let dateFilter = self.getFilterByType(.dateCreation) as? DateTrackFilter {
                 let minDate = GpxDbHelper.shared.getTracksMinCreateDate()
                 let now = Date().timeIntervalSince1970 * 1000
@@ -61,14 +60,7 @@ final class TracksSearchFilter: FilterChangedListener {
                         self.updateRangeFilterMaxValue(trackFilterType)
                     case .singleFieldList:
                         if let filter = self.getFilterByType(trackFilterType) as? ListTrackFilter {
-                            guard let filterParams = trackFilterType.additionalData as? SingleFieldTrackFilterParams else { continue }
-                            let items = GpxDbHelper.shared.getStringIntItemsCollection(
-                                columnName: trackFilterType.property?.columnName ?? "",
-                                includeEmptyValues: filterParams.includeEmptyValues(),
-                                sortByName: filterParams.sortByName(),
-                                sortDescending: filterParams.sortDescending()
-                            )
-                            filter.setFullItemsCollection(collection_: items)
+                            filter.setFullItemsCollection(items: trackItemsSnapshot)
                             if trackFilterType == .folder, let folder = self.currentFolder {
                                 filter.firstItem = folder.relativePath
                             }
@@ -143,17 +135,12 @@ final class TracksSearchFilter: FilterChangedListener {
             
             results.values = res
         }
-        if let folderFilter = getFilterByType(.folder) as? ListTrackFilter {
-            if let folderItems = filterSpecificSearchResults[.folder], folderItems.isEmpty {
-                let items = GpxDbHelper.shared.getStringIntItemsCollection(
-                    columnName: folderFilter.trackFilterType.property?.columnName ?? "",
-                    includeEmptyValues: folderFilter.collectionFilterParams.includeEmptyValues(),
-                    sortByName: folderFilter.collectionFilterParams.sortByName(),
-                    sortDescending: folderFilter.collectionFilterParams.sortDescending()
-                )
-                folderFilter.setFullItemsCollection(collection_: items)
-            } else if let ignoreFoldersItems = filterSpecificSearchResults[.folder] {
-                folderFilter.updateFullCollection(items: ignoreFoldersItems)
+        for filter in currentFilters {
+            if let listFilter = filter as? ListTrackFilter {
+                listFilter.setFullItemsCollection(items: trackItems)
+                if filterCount > 0 {
+                    listFilter.updateFullCollection(items: filterSpecificSearchResults[filter.trackFilterType])
+                }
             }
         }
         

@@ -7,30 +7,31 @@
 //
 
 #import "OARoutingTargetCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OARoutingTargetCell
 {
-    CALayer *_divider;
+    SeparatorView *_divider;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
 
-    // Initialization code
-    _divider = [CALayer layer];
-    _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    [self.contentView.layer addSublayer:_divider];
+    _divider = [[SeparatorView alloc] init];
+    [self.contentView addSubview:_divider];
 }
 
 - (void) layoutSubviews
 {
     [super layoutSubviews];
     
+    CGFloat dividerHeight = [SeparatorAppearance thicknessForView:_divider];
+    CGFloat dividerY = self.contentView.frame.size.height - dividerHeight;
     if (!_finishPoint)
-        _divider.frame = CGRectMake(62.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width - 62.0 - 60., 0.5);
+        _divider.frame = CGRectMake(62.0, dividerY, self.contentView.frame.size.width - 62.0 - 60., dividerHeight);
     else
-        _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
+        _divider.frame = CGRectMake(0.0, dividerY, self.contentView.frame.size.width, dividerHeight);
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

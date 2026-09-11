@@ -10,6 +10,7 @@
 #import "OATopIndexFilter.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIHelper.h"
+#import "OASearchAlgorithms.h"
 
 @implementation OATopIndexFilter
 
@@ -61,9 +62,10 @@
     return @"ic_custom_search";
 }
 
-+ (NSString *)getValueKey:(NSString *)value 
++ (NSString *)getValueKey:(NSString *)value
 {
-    NSString *key = [[value lowercaseString] stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+    NSString *key = [OASearchAlgorithms alignChars:value];
+    key = [[key lowercaseString] stringByReplacingOccurrencesOfString:@":" withString:@"_"];
     key = [key stringByReplacingOccurrencesOfString:@"'" withString:@""];
     key = [key stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     key = [key stringByReplacingOccurrencesOfString:@"\"" withString:@""];

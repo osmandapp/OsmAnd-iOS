@@ -1,4 +1,6 @@
 "OsmAnd Maps" = "OsmAnd térképek";
+"send_crash_log" = "Összeomlási naplók elküldése";
+"send_crash_log_descr" = "Csak az összeomlásokról tartalmaz információkat";
 // Shared Strings
 "shared_string_back" = "Vissza";
 "shared_string_cancel" = "Mégse";
@@ -1395,7 +1397,7 @@
 "extra_maps_menu_group" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
-"plan_route_split_before" = "Elvágás ez előtt:";
+"plan_route_split_before" = "Elvágás előtte";
 "shared_string_import" = "Importálás";
 "icon_group_transport" = "Közlekedés";
 "transport" = "Tömegközlekedés";
@@ -1405,7 +1407,7 @@
 "shared_string_circle" = "Kör";
 "segments_count" = "%d szakasz";
 "replace_favorite_confirmation" = "Lecseréli ezt a kedvencet: %@?";
-"plan_route_split_after" = "Elvágás ez után:";
+"plan_route_split_after" = "Elvágás utána";
 "update_frequency" = "Frissítés gyakorisága";
 "shared_string_enable" = "Engedélyezés";
 "searching_gps" = "Műholdak keresése";
@@ -2616,7 +2618,7 @@
 "help_article_navigation_guidance_map_during_navigation_name" = "Térkép képernyő navigáció közben";
 "shared_string_buttons" = "Gombok";
 "ant_plus_searching_text" = "Érzékelők keresése";
-"ask_question_propose_features" = "Tegyen fel kérdést, javasoljon funkciókat";
+"ask_question_propose_features" = "Tegyen fel kérdéseket, javasoljon funkciókat";
 "enter_new_name" = "Új név megadása";
 "map_widget_sun_position" = "Napszak váltás";
 "map_3d_mode_hint" = "A gomb hosszú érintése lehetővé teszi a gomb pozíciójának megváltoztatását.";
@@ -2644,7 +2646,7 @@
 "true_bearing_widget_desc" = "A valódi észak és az úti cél közötti szög, az Ön tartózkodási helyéről megfigyelve.";
 "map_widget_group_sunrise_sunset" = "Napkelte, napnyugta";
 "shared_string_all_colors" = "Összes szín";
-"report_an_issues" = "Jelentsen be hibát";
+"report_an_issues" = "Hibajelentés";
 "shared_string_uploading" = "Felöltés folyamatban";
 "osmand_cloud_deleted_account_descr" = "Minden fiók- és egyéb adat törölve lett az OsmAnd Cloudból.";
 "delete_account" = "Fiók törlése";
@@ -3871,7 +3873,7 @@
 "my_places_no_tracks_title_root" = "Nincsenek nyomvonal-fájljai";
 "my_places_no_tracks_descr_root" = "Az OsmAnd használatával importálhat, létrehozhat vagy rögzíthet nyomvonal-fájlokat.";
 "my_places_no_tracks_descr" = "Ez a mappa még nem tartalmaz nyomvonal-fájlokat.";
-"remove_folder_with_files_descr" = "Biztosan törölni szeretné a(z) „%@” mappát és az összes %d nyomvonalat?";
+"remove_folder_with_files_descr" = "Biztosan törölni szeretné a(z) „%@” mappát és az összes %@ nyomvonalat?";
 "simple_widget_footer" = "A modul csak egyetlen teljes sort vagy csak oszlopot foglalhat el.";
 "delete_all_items_desc" = "Biztosan törölni szeretné a Lomtár összes elemét? Ez a művelet nem vonható vissza.";
 "permanent_delete_warning" = "A(z) %@ véglegesen törölve lesz. Biztos benne?";
@@ -3898,7 +3900,7 @@
 "altitud_and_elevation" = "Magasságok";
 "board_at" = "Tábla itt:";
 "ruler_circles" = "Vonalzókörök";
-"ltr_or_rtl_combine_via_of" = "%ld / %ld";
+"ltr_or_rtl_combine_via_of" = "%@ / %@";
 "map_settings_clear_geo_cache" = "Geo-csempék törlése";
 "navigate_point_format_OLC" = "Nyílt helykód (OLC)";
 "shared_string_of" = "-";
@@ -4053,7 +4055,7 @@
 "gpx_logging_no_data" = "Nincsenek adatok";
 "show_touches" = "Érintések megjelenítése";
 "delete_changes" = "Módosítások törlése";
-"osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
+"osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %@ szerkesztést?";
 "osm_edits_delete_items_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
 "shared_string_url" = "Webcím";
 "folder_one_track" = "1 nyomvonal";
@@ -4237,8 +4239,8 @@
 "shared_string_play" = "Lejátszás";
 "import_tracks_cancel_title" = "Megszakítja az importálást?";
 "import_tracks_cancel_descr" = "Ha most bezárja, a kijelölt nyomvonalak nem kerülnek importálásra.";
-"import_tracks_descr_one" = "A(z) %@ fájl 1 különálló nyomvonalat tartalmaz. Válassza ki azt, amelyet importálni szeretne.";
-"import_tracks_descr_other" = "A(z) %@ fájl %d különálló nyomvonalat tartalmaz. Válassza ki azokat, amelyeket importálni szeretne.";
+"import_tracks_descr_one" = "A(z) %1$@ fájl %2$@ különálló nyomvonalat tartalmaz. Válassza ki azt, amelyet importálni szeretne.";
+"import_tracks_descr_other" = "A(z) %@ fájl %@ különálló nyomvonalat tartalmaz. Válassza ki azokat, amelyeket importálni szeretne.";
 "import_as_one_track" = "Importálás egyetlen nyomvonalként";
 "import_tracks_folders_footer" = "Válasszon célmappát az importált nyomvonalak számára.";
 "error_reading_gpx" = "Nem sikerült a GPX-adatok beolvasása.";
@@ -4432,11 +4434,8 @@
 "no_search_results" = "Nincsenek eredmények";
 "favorite_search_empty_state_description" = "Próbálja meg módosítani a keresési feltételeket vagy a szűrőket, hátha ez segít";
 "favorites_empty_folder_description" = "Ebben a mappában még nincsenek pontok.";
-"favorites_delete_confirmation_title" = "Biztosan töröl %ld kedvencet?";
 "items_delete_confirmation_title" = "Biztosan töröl %ld elemet?";
-"folders_delete_confirmation_title" = "Biztosan töröl %ld mappát?";
 "favorites_delete_confirmation_message" = "Ez a művelet nem vonható vissza.";
-"mixed_delete_confirmation_message" = "Ezzel törölve lesz %ld mappa és %ld pont. Ez a művelet nem vonható vissza.";
 "empty_state_favourites" = "Hozzáadás a kedvencekhez";
 "empty_state_favourites_desc" = "Kedvencek importálása vagy hozzáadása a térképen pontok megjelölésével.";
 "tracks_empty_folder" = "Üres mappa";
@@ -4505,3 +4504,14 @@
 "ais_apply_setting_to_profiles" = "Beállítás alkalmazása";
 "ais_apply_to_current_profile" = "Alkalmazás erre: %@";
 "ais_apply_to_all_profiles" = "Alkalmazás az összes profilra";
+"no_crashes_recorded" = "Nincsenek rögzített összeomlások";
+"share_crash_log" = "Összeomlási napló megosztása";
+"crash_report_prompt_title" = "Az OsmAnd váratlan hibába ütközött.";
+"crash_report_prompt_description" = "Segítsen fejleszteni az alkalmazást a hibajelentés elküldésével. A hibajelentése segít azonosítani és javítani a problémát.";
+"shared_string_send" = "Küldés";
+"send_current_app_log" = "Jelenlegi alkalmazásnapló küldése";
+"send_current_app_log_descr" = "Alkalmazás indulása óta";
+"msg_favorites_skipped_as_existing" = "A kedvenc pontok (%d) ki lettek hagyva, mivel azok már léteznek.";
+"osm_edits_empty_state_title" = "Nincsenek függőben lévő térképszerkesztések";
+"osm_edits_empty_state_description" = "Az OsmAnd-ban végzett módosításai itt fognak megjelenni, mielőtt feltöltené azokat az OpenStreetMap-re";
+"carplay_trip_via_point" = "Ezen keresztül: %@";

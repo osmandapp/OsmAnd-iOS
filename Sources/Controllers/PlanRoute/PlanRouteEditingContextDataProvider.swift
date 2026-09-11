@@ -13,10 +13,25 @@ import OsmAndShared
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     let mode: PlanRouteMode
+    let sourceFilePath: String?
 
     var onDataChanged: (() -> Void)?
     var onRouteInfoChanged: (() -> Void)?
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)?
+    var onApproximationApplied: (() -> Void)? {
+        didSet {
+            guard onApproximationApplied != nil else {
+                bridge.onApproximationApplied = nil
+                return
+            }
+            bridge.onApproximationApplied = { [weak self] in
+                guard let callback = self?.onApproximationApplied else { return }
+                DispatchQueue.main.async {
+                    callback()
+                }
+            }
+        }
+    }
     var onApproximationPopupDismissed: (() -> Void)? {
         didSet { bridge.onApproximationPopupDismissed = onApproximationPopupDismissed }
     }
@@ -128,6 +143,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.isApproximationNeeded
     }
 
+    var shouldRequestApproximationBeforeNavigation: Bool {
+        bridge.shouldRequestApproximationBeforeNavigation
+    }
+
     var shouldShowApproximationWarning: Bool {
         bridge.shouldShowApproximationWarning
     }
@@ -149,13 +168,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     var editTrackFolder: String? {
-        guard mode.isEditTrack, let filePath, !filePath.isEmpty else { return nil }
-        var path = filePath
-        if (path as NSString).isAbsolutePath, let gpxRoot = OsmAndApp.swiftInstance().gpxPath, path.hasPrefix(gpxRoot) {
-            path = String(path.dropFirst(gpxRoot.count))
-        }
-        let folder = (path as NSString).deletingLastPathComponent.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-        return folder.isEmpty ? nil : folder
+        let trackSource = PlanRouteTrackSource(gpxFilePath: filePath ?? "", sourceFilePath: sourceFilePath)
+        return mode.isEditTrack ? trackSource.savingFolder(relativeTo: OsmAndApp.swiftInstance().gpxPath) : nil
     }
 
     private let bridge = OAPlanRouteEditingBridge()
@@ -177,9 +191,16 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         return supportedModes.first(where: { $0.stringKey == currentMode.stringKey }) ?? .default()
     }
 
-    init(mode: PlanRouteMode = .newRoute, filePath: String? = nil, initialPoint: CLLocationCoordinate2D? = nil, applicationMode: OAApplicationMode? = nil) {
+    init(mode: PlanRouteMode = .newRoute,
+         filePath: String? = nil,
+         sourceFilePath: String? = nil,
+         gpxFile: GpxFile? = nil,
+         selectedSegment: Int = -1,
+         initialPoint: CLLocationCoordinate2D? = nil,
+         applicationMode: OAApplicationMode? = nil) {
         self.mode = mode
         self.filePath = filePath
+        self.sourceFilePath = sourceFilePath
         bridge.onChange = { [weak self] in
             guard let self else { return }
             invalidateCachedData()
@@ -208,7 +229,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
             }
             self?.onPointEditModeRequested?(mode)
         }
-        if mode.isEditTrack, let filePath {
+        if mode.isEditTrack, let gpxFile {
+            bridge.openTrack(with: gpxFile,
+                             applicationMode: applicationMode,
+                             selectedSegment: selectedSegment)
+        } else if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
         } else {
             bridge.prepareNewRoute(with: applicationMode ?? initialApplicationMode)
@@ -243,8 +268,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func openAddPoi(from presentingViewController: UIViewController) {
-        guard mode.isNewRoute || (filePath?.isEmpty == false) else { return }
-        bridge.openAddPoi(withFilePath: filePath, presenting: presentingViewController)
+        let trackSource = PlanRouteTrackSource(gpxFilePath: filePath ?? "", sourceFilePath: sourceFilePath)
+        let waypointFilePath = trackSource.waypointEditingFilePath
+        guard mode.isNewRoute || waypointFilePath != nil else { return }
+        bridge.openAddPoi(withFilePath: waypointFilePath, presenting: presentingViewController)
     }
 
     func addPoiGroup(_ name: String) {
@@ -303,12 +330,24 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.append(toTrack: filePath, onComplete: onComplete)
     }
 
-    func enterNavigation() {
-        bridge.enterNavigation(withTrackName: mode.title)
+    func enterNavigation(followTrackMode: Bool) -> EOAPlanRouteNavigationResult {
+        bridge.enterNavigation(withTrackName: mode.title,
+                               followTrackMode: followTrackMode,
+                               sourceFilePath: sourceFilePath)
+    }
+
+    func applyAttachedTrackToNavigation(beforeTransition: () -> Void) -> EOAPlanRouteNavigationResult {
+        bridge.applyAttachedTrackToNavigation(withTrackName: mode.title,
+                                              sourceFilePath: sourceFilePath,
+                                              beforeTransition: beforeTransition)
     }
 
     func setCrosshairPosition(screenPoint: CGPoint) {
         bridge.setCrosshairScreenPoint(screenPoint)
+    }
+
+    func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat) {
+        bridge.fitTrackOnMap(withBottomInset: bottomInset, leftInset: leftInset)
     }
 
     func dismissLayer() {

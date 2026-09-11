@@ -277,12 +277,6 @@ final class WidgetPanelAppearanceSettings {
         let preference = modePreference(.background,
                                         panel: panel,
                                         defaultValue: WidgetPanelBackgroundMode.default.rawValue)
-        let transparentWidgets = settings.transparentWidgets(
-            layoutMode.map { NSNumber(value: $0.rawValue) }
-        )
-        if !preference.isSet(for: appMode), transparentWidgets.get(appMode) {
-            return .transparent
-        }
         return WidgetPanelBackgroundMode(rawValue: preference.get(appMode)) ?? .default
     }
 

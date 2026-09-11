@@ -36,7 +36,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     weak var delegate: WidgetPanelColorViewControllerDelegate?
 
+    private let appMode: OAApplicationMode
     private let panel: WidgetsPanel
+    private let layoutMode: ScreenLayoutMode?
     private let target: WidgetPanelColorTarget
     private let appearanceSettings: WidgetPanelAppearanceSettings
     private let appearanceCollection: OAGPXAppearanceCollection = OAGPXAppearanceCollection.sharedInstance()
@@ -96,7 +98,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
          panel: WidgetsPanel,
          layoutMode: ScreenLayoutMode?,
          target: WidgetPanelColorTarget) {
+        self.appMode = appMode
         self.panel = panel
+        self.layoutMode = layoutMode
         self.target = target
         appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
         initialDayColor = appearanceSettings.color(for: target, panel: panel, nightMode: false)
@@ -388,7 +392,10 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     private func reloadPreview() {
         applyPreviewPanelVisibility()
-        previewView.configure(panel: panel, parentViewController: self)
+        previewView.configure(panel: panel,
+                              appMode: appMode,
+                              layoutMode: layoutMode,
+                              parentViewController: self)
     }
 
     private func reloadPreviewIfVisible() {

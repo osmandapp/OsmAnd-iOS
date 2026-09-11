@@ -901,6 +901,17 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     return state;
 }
 
+- (void)applyTextState:(OATextState *)textState
+             toWidgets:(NSArray<OABaseWidgetView *> *)widgets
+{
+    for (OABaseWidgetView *widget in widgets)
+    {
+        [widget updateColors:textState];
+        [widget updatesSeparatorsColor:textState.dividerColor];
+        [self updateColors:textState sideWidget:widget];
+    }
+}
+
 - (OAWidgetPanelViewController *)controllerForPanel:(OAWidgetsPanel *)panel
 {
     if (panel == OAWidgetsPanel.leftPanel)

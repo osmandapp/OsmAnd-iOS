@@ -179,13 +179,6 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
             }
         }
-        let appearanceRow = widgetsSection.createNewRow()
-        appearanceRow.key = RawKey.appearanceRowKey.rawValue
-        appearanceRow.title = localizedString("shared_string_appearance")
-        appearanceRow.icon = UIImage.templateImageNamed("ic_custom_appearance")
-        appearanceRow.iconTintColor = appMode.getProfileColor()
-        appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
-        appearanceRow.accessibilityLabel = appearanceRow.title
         
         let panelsLayoutPreference = settings.panelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
         let panelsLayoutMode = PanelsLayoutMode(rawValue: panelsLayoutPreference.get(appMode)) ?? .defaultMode
@@ -201,6 +194,14 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         if !isSharedLandscapeLayout {
             panelsLayoutRow.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
         }
+        
+        let appearanceRow = widgetsSection.createNewRow()
+        appearanceRow.key = RawKey.appearanceRowKey.rawValue
+        appearanceRow.title = localizedString("shared_string_appearance")
+        appearanceRow.icon = UIImage.templateImageNamed("ic_custom_appearance")
+        appearanceRow.iconTintColor = appMode.getProfileColor()
+        appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
+        appearanceRow.accessibilityLabel = appearanceRow.title
 
         if isSharedLandscapeLayout {
             return

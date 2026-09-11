@@ -61,6 +61,9 @@
 
 - (void)updateWidgetsInfo;
 
+- (void)applyTextState:(OATextState *)textState
+             toWidgets:(NSArray<OABaseWidgetView *> *)widgets;
+
 - (void)updateLayout;
 - (void)viewWillTransition:(CGSize)size;
 - (void)updateSpeedometer;

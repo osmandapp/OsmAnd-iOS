@@ -1092,7 +1092,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @property (nonatomic) OACommonBoolean *settingDoNotShowPromotions;
 @property (nonatomic) OACommonBoolean *settingUseAnalytics;
-@property (nonatomic) OACommonString *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
+@property (nonatomic) OACommonString *settingExternalInputDevice; // InputDeviceProfile device identifier.
 @property (nonatomic) OACommonString *settingCustomExternalInputDevice;
 
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchased;

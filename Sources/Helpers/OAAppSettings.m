@@ -2047,6 +2047,11 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonInteger *)[self setupCopy:[OACommonInteger withKey:key defValue:self.defValue]];
+}
+
 - (int) get
 {
     return [self get:self.appMode];

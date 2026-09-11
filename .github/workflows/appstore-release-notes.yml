@@ -1,0 +1,53 @@
+name: App Store release notes
+
+# Pushes the localized release notes to App Store Connect without building anything.
+# The text is the in-app "What's new" string ios_release_<major>_<minor> from
+# Resources/Localizations/*/Localizable.strings, so re-running this after Weblate has
+# delivered more translations is the way to fill in the languages that were missing.
+on:
+  workflow_dispatch:
+    inputs:
+      releaseversion:
+        description: 'Release Version (selects the ios_release_X_Y notes)'
+        required: true
+        default: '5.4.0'
+      submit_for_review:
+        description: 'Submit the version for review after uploading'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  metadata:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout ios
+      uses: actions/checkout@v4
+      with:
+        ref: refs/heads/master
+        repository: osmandapp/OsmAnd-iOS
+        path: ios
+        clean: true
+
+    - name: Setup fastlane
+      run: |
+        command -v fastlane >/dev/null 2>&1 || brew install fastlane
+        fastlane --version
+
+    - name: Upload release notes
+      working-directory: ios
+      env:
+        LANG: "en_US.UTF-8"
+        RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }}
+        ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        FASTLANE_USER: ${{ secrets.APPLEID_USERNAME }}
+        FASTLANE_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+      run: fastlane release submit_for_review:${{ github.event.inputs.submit_for_review }}
+
+    - name: Upload generated release notes
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-notes-${{ github.event.inputs.releaseversion }}
+        path: ios/fastlane/metadata

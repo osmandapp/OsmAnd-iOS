@@ -39,7 +39,6 @@
 #include <OsmAndCore/Data/ObfAddressSectionInfo.h>
 #include <exception>
 
-
 #define SECOND_IN_MILLIS 1000L
 
 static NSLock *OAGPXNearestCitySearchLock()
@@ -126,6 +125,63 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
 @end
 
+
+// Settlements are read out of the address section once per map and kept in a quadtree for the
+// session, so every later lookup is an in-memory box query.
+
+static const int kNearestCityAddressRadiusMeters = 50 * 1000;
+
+typedef OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> OAGPXCityQuadTreeType;
+
+static NSLock *OAGPXNearestCityAddressLock()
+{
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    return lock;
+}
+
+static std::shared_ptr<OAGPXCityQuadTreeType> &OAGPXCityQuadTree()
+{
+    static std::shared_ptr<OAGPXCityQuadTreeType> tree =
+        std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+    return tree;
+}
+
+// Resources whose address section has already been read into the quadtree.
+static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
+{
+    static NSMutableSet<NSString *> *loaded;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loaded = [NSMutableSet set];
+    });
+    return loaded;
+}
+
+// Of those, the ones that turned out to carry settlements at all.
+static NSMutableSet<NSString *> *OAGPXCityResourceIdsWithAddressData()
+{
+    static NSMutableSet<NSString *> *withAddressData;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        withAddressData = [NSMutableSet set];
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                         object:nil
+                                                          queue:nil
+                                                     usingBlock:^(NSNotification * _Nonnull note) {
+            NSLock *lock = OAGPXNearestCityAddressLock();
+            [lock lock];
+            [OAGPXLoadedCityResourceIds() removeAllObjects];
+            [withAddressData removeAllObjects];
+            OAGPXCityQuadTree() = std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+            [lock unlock];
+        }];
+    });
+    return withAddressData;
+}
 
 @interface OAGPXUIHelper() <UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate>
 
@@ -432,50 +488,6 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
         [gpxFile setGradientColorPaletteGradientColorPaletteName:gpxItem.gradientPaletteName];
 }
 
-// Settlements are read out of the address section once per map and kept in a quadtree for the
-// session, so every later lookup is an in-memory box query.
-
-static const int kNearestCityAddressRadiusMeters = 50 * 1000;
-
-typedef OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> OAGPXCityQuadTreeType;
-
-static NSLock *OAGPXNearestCityAddressLock()
-{
-    static NSLock *lock;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        lock = [NSLock new];
-    });
-    return lock;
-}
-
-static std::shared_ptr<OAGPXCityQuadTreeType> &OAGPXCityQuadTree()
-{
-    static std::shared_ptr<OAGPXCityQuadTreeType> tree =
-        std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
-    return tree;
-}
-
-static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
-{
-    static NSMutableSet<NSString *> *loaded;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        loaded = [NSMutableSet set];
-        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
-                                                         object:nil
-                                                          queue:nil
-                                                     usingBlock:^(NSNotification * _Nonnull note) {
-            NSLock *lock = OAGPXNearestCityAddressLock();
-            [lock lock];
-            [loaded removeAllObjects];
-            OAGPXCityQuadTree() = std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
-            [lock unlock];
-        }];
-    });
-    return loaded;
-}
-
 + (NSString *)searchNearestCityName:(CLLocationCoordinate2D)latLon
 {
     NSString *fromAddress = [self nearestCityNameFromAddressIndex:latLon];
@@ -504,6 +516,7 @@ static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
         try
         {
             NSMutableSet<NSString *> *loaded = OAGPXLoadedCityResourceIds();
+            NSMutableSet<NSString *> *withAddressData = OAGPXCityResourceIdsWithAddressData();
             const auto &obfsCollection = app.resourcesManager->obfsCollection;
             for (const auto &resource : app.resourcesManager->getLocalResources())
             {
@@ -526,28 +539,36 @@ static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
                                                                    OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)))
                     continue;
 
-                covered = YES;
                 NSString *resourceId = resource->id.toNSString();
-                if ([loaded containsObject:resourceId])
-                    continue;
-
-                [loaded addObject:resourceId];
-                const auto dataInterface = obfsCollection->obtainDataInterface({resource});
-                QList<std::shared_ptr<const OsmAnd::StreetGroup>> groups;
-                dataInterface->loadStreetGroups(&groups, nullptr,
-                    OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
-
-                for (const auto &group : groups)
+                if (![loaded containsObject:resourceId])
                 {
-                    // bbox31 is optional on a street group.
-                    OsmAnd::AreaI area(group->position31.y, group->position31.x, group->position31.y, group->position31.x);
-                    if (group->bbox31.size() >= 4)
+                    [loaded addObject:resourceId];
+                    const auto dataInterface = obfsCollection->obtainDataInterface({resource});
+                    QList<std::shared_ptr<const OsmAnd::StreetGroup>> groups;
+                    dataInterface->loadStreetGroups(&groups, nullptr,
+                        OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
+
+                    if (!groups.isEmpty())
+                        [withAddressData addObject:resourceId];
+
+                    for (const auto &group : groups)
                     {
-                        // bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
-                        area = OsmAnd::AreaI(group->bbox31.at(1), group->bbox31.at(0), group->bbox31.at(3), group->bbox31.at(2));
+                        // bbox31 is optional on a street group.
+                        OsmAnd::AreaI area(group->position31.y, group->position31.x, group->position31.y, group->position31.x);
+                        if (group->bbox31.size() >= 4)
+                        {
+                            // bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                            area = OsmAnd::AreaI(group->bbox31.at(1), group->bbox31.at(0), group->bbox31.at(3), group->bbox31.at(2));
+                        }
+                        OAGPXCityQuadTree()->insert(group, area);
                     }
-                    OAGPXCityQuadTree()->insert(group, area);
                 }
+
+                // Probing coverage with the POI mask only says a map is here, not that it has an
+                // address section. Without this the POI fallback could never run and a track in
+                // such an area would silently get an empty name.
+                if ([withAddressData containsObject:resourceId])
+                    covered = YES;
             }
 
             if (covered)

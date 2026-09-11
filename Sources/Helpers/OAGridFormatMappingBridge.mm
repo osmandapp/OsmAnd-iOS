@@ -12,7 +12,10 @@ static const int32_t kEpsgTransverseMercator = 9807;
 static const int32_t kEpsgObliqueStereographic = 9809;
 static const int32_t kEpsgHotineObliqueMercatorV2 = 9815;
 
-static const float kLocatorGridGranularity = 3.0f;
+static const float kOlcGridGranularity = 3.0f;
+static const float kMlsGridGranularity = 6.0f;
+
+static const int32_t kOlcGridMaxZoom = 18;
 
 @implementation OAGridFormatMappingBridge
 
@@ -48,12 +51,21 @@ static const float kLocatorGridGranularity = 3.0f;
 
 + (NSNumber *)granularityForProjectionRaw:(int32_t)projectionRaw
 {
-    auto projection = OACoreProjectionForRaw(projectionRaw);
-    if (projection == OsmAnd::GridConfiguration::Projection::OLC
-        || projection == OsmAnd::GridConfiguration::Projection::MLS)
+    switch (OACoreProjectionForRaw(projectionRaw))
     {
-        return @(kLocatorGridGranularity);
+        case OsmAnd::GridConfiguration::Projection::OLC:
+            return @(kOlcGridGranularity);
+        case OsmAnd::GridConfiguration::Projection::MLS:
+            return @(kMlsGridGranularity);
+        default:
+            return nil;
     }
+}
+
++ (NSNumber *)maxZoomForProjectionRaw:(int32_t)projectionRaw
+{
+    if (OACoreProjectionForRaw(projectionRaw) == OsmAnd::GridConfiguration::Projection::OLC)
+        return @(kOlcGridMaxZoom);
     return nil;
 }
 

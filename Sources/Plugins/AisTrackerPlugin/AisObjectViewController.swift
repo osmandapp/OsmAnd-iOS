@@ -239,7 +239,7 @@ final class AisObjectViewController: OATargetInfoViewController {
         let lat = position.latitude
         let lon = position.longitude
         let formatId = CoordinateFormatBridge.primaryFormatId()
-        
+
         switch formatId {
         case CoordinateFormatIds.builtinUtm:
             return OALocationConvert.getUTMCoordinateString(lat, lon: lon) ?? ""

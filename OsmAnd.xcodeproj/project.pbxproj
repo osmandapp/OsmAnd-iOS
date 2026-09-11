@@ -5566,7 +5566,6 @@
 		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
-		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
 		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
 		C506111A2DB9678300E8F204 /* OAGridFormatMappingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMappingBridge.h; sourceTree = "<group>"; };
@@ -14653,7 +14652,6 @@
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
 				C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */,
 				C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */,
-				C50611192DB9678300E8F204 /* OAGridFormatMapping.h */,
 				DA5A80BC26C563A600F274C7 /* OACurrentPositionHelper.h */,
 				DA5A80BA26C563A600F274C7 /* OACurrentPositionHelper.mm */,
 				DA5A809326C563A500F274C7 /* OACustomRegion.h */,

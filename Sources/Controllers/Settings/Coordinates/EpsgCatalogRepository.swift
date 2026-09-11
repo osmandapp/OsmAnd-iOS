@@ -21,6 +21,7 @@ final class EpsgCatalogRepository {
     private static let supportedHelmertMethods = "'9603', '9606', '9607'"
     private static let maxTransformCandidates = 16
     private static let maxGridCacheSize = 64
+    private static let maxFormatCacheSize = 64
 
     private static let baseSelect = """
         SELECT crs.code, crs.name, group_concat(DISTINCT e.name), crs.deprecated \
@@ -38,7 +39,7 @@ final class EpsgCatalogRepository {
         LEFT JOIN usage u ON u.object_table_name = 'projected_crs' \
         AND u.object_auth_name = crs.auth_name AND u.object_code = crs.code \
         LEFT JOIN extent e ON e.auth_name = u.extent_auth_name AND e.code = u.extent_code \
-        AND IFNULL(e.deprecated, 0) = 0 
+        AND IFNULL(e.deprecated, 0) = 0
         """
 
     private static let supportedAreaFilter = """
@@ -48,20 +49,20 @@ final class EpsgCatalogRepository {
         WHERE area_usage.object_table_name = 'projected_crs' \
         AND area_usage.object_auth_name = crs.auth_name AND area_usage.object_code = crs.code \
         AND IFNULL(area_extent.deprecated, 0) = 0 \
-        AND area_extent.west_lon > area_extent.east_lon) 
+        AND area_extent.west_lon > area_extent.east_lon)
         """
 
     private static let gridSupportedFilter = """
         WHERE crs.auth_name = 'EPSG' AND IFNULL(crs.deprecated, 0) = 0 \
         AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(supportedProjectionMethods)) \
-        \(supportedAreaFilter)\
+        \(supportedAreaFilter) \
         AND ((crs.geodetic_crs_auth_name = 'EPSG' AND crs.geodetic_crs_code = '4326') \
         OR EXISTS (SELECT 1 FROM helmert_transformation h \
         WHERE h.auth_name = 'EPSG' AND IFNULL(h.deprecated, 0) = 0 \
         AND h.source_crs_auth_name = crs.geodetic_crs_auth_name \
         AND h.source_crs_code = crs.geodetic_crs_code \
         AND h.target_crs_auth_name = 'EPSG' AND h.target_crs_code = '4326' \
-        AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(supportedHelmertMethods)))) 
+        AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(supportedHelmertMethods))))
         """
 
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
@@ -69,23 +70,49 @@ final class EpsgCatalogRepository {
     private var gridDefinitionCache: [Int: EpsgGridDefinition] = [:]
     private var unsupportedGridCodes = Set<Int>()
 
+    private let formatLock = NSLock()
+    private var formatByCodeCache: [Int: CoordinateFormat?] = [:]
+
     private init() {}
 
     // MARK: - Public CRS
 
     func getByCode(_ code: Int) -> CoordinateFormat? {
-        guard code > 0, let db = openConnection() else { return nil }
+        guard code > 0 else { return nil }
+
+        formatLock.lock()
+        if let cached = formatByCodeCache[code] {
+            formatLock.unlock()
+            return cached
+        }
+        formatLock.unlock()
+
+        let (format, queried) = queryByCode(code)
+        guard queried else { return nil }
+
+        formatLock.lock()
+        if formatByCodeCache.count >= Self.maxFormatCacheSize {
+            formatByCodeCache.removeAll(keepingCapacity: true)
+        }
+        formatByCodeCache[code] = format
+        formatLock.unlock()
+
+        return format
+    }
+
+    private func queryByCode(_ code: Int) -> (CoordinateFormat?, Bool) {
+        guard let db = openConnection() else { return (nil, false) }
         defer { sqlite3_close(db) }
 
-        let sql = Self.baseSelect + """
+        let sql = Self.baseSelect + " " + """
             WHERE crs.auth_name = 'EPSG' AND crs.code = ? AND IFNULL(crs.deprecated, 0) = 0 \
             GROUP BY crs.code, crs.name, crs.deprecated
             """
         var stmt: OpaquePointer?
-        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return (nil, false) }
         defer { sqlite3_finalize(stmt) }
         sqlite3_bind_text(stmt, 1, String(code), -1, transient)
-        return sqlite3_step(stmt) == SQLITE_ROW ? readFormat(stmt) : nil
+        return (sqlite3_step(stmt) == SQLITE_ROW ? readFormat(stmt) : nil, true)
     }
 
     func resolveFormat(_ id: String) -> CoordinateFormat {
@@ -99,7 +126,7 @@ final class EpsgCatalogRepository {
         guard let db = openConnection() else { return [] }
         defer { sqlite3_close(db) }
 
-        let sql = Self.baseSelect + """
+        let sql = Self.baseSelect + " " + """
             WHERE crs.auth_name = 'EPSG' AND IFNULL(crs.deprecated, 0) = 0 \
             GROUP BY crs.code, crs.name, crs.deprecated \
             ORDER BY crs.name \
@@ -122,7 +149,7 @@ final class EpsgCatalogRepository {
         let codePrefix = numeric ? "\(normalized)%" : ""
         let likeQuery = "%\(escapeLike(normalized.lowercased()))%"
 
-        let sql = Self.baseSelect + """
+        let sql = Self.baseSelect + " " + """
             WHERE crs.auth_name = 'EPSG' AND IFNULL(crs.deprecated, 0) = 0 AND (\
             crs.code = ? OR crs.code LIKE ? OR lower(crs.name) LIKE ? ESCAPE '\\' \
             OR lower(IFNULL(crs.description, '')) LIKE ? ESCAPE '\\' \
@@ -169,7 +196,7 @@ final class EpsgCatalogRepository {
             JOIN conversion c ON c.auth_name = crs.conversion_auth_name AND c.code = crs.conversion_code \
             WHERE crs.auth_name = 'EPSG' AND crs.code = ? AND IFNULL(crs.deprecated, 0) = 0 \
             AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(Self.supportedProjectionMethods)) \
-            \(Self.supportedAreaFilter)\
+            \(Self.supportedAreaFilter) \
             ORDER BY CAST(c.method_code AS INTEGER), c.code \
             LIMIT 1
             """
@@ -254,13 +281,19 @@ final class EpsgCatalogRepository {
                 AND (crs.code = ? OR crs.code LIKE ? OR lower(crs.name) LIKE ? ESCAPE '\\' \
                 OR lower(IFNULL(crs.description, '')) LIKE ? ESCAPE '\\' \
                 OR lower(IFNULL(e.name, '')) LIKE ? ESCAPE '\\' \
-                OR lower(IFNULL(e.description, '')) LIKE ? ESCAPE '\\') 
+                OR lower(IFNULL(e.description, '')) LIKE ? ESCAPE '\\')
                 """
             orderBy = "ORDER BY CASE WHEN crs.code = ? THEN 0 WHEN crs.code LIKE ? THEN 1 ELSE 2 END, crs.name "
         }
 
-        let sql = Self.gridBaseSelect + Self.gridSupportedFilter + queryFilter +
-            "GROUP BY crs.code, crs.name, crs.deprecated " + orderBy + "LIMIT ?"
+        let sql = [
+            Self.gridBaseSelect,
+            Self.gridSupportedFilter,
+            queryFilter,
+            "GROUP BY crs.code, crs.name, crs.deprecated",
+            orderBy,
+            "LIMIT ?"
+        ].filter { !$0.isEmpty }.joined(separator: " ")
 
         var stmt: OpaquePointer?
         guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return [] }

@@ -30,7 +30,9 @@ final class CoordinateGridFormatProvider {
         let epsgCode = builtIn?.epsgCode?.intValue ?? CoordinateFormatIds.epsgCode(normalizedId)
 
         let resolved: CoordinateGridFormat?
-        if epsgCode == nil {
+        if let code = epsgCode {
+            resolved = resolveProjectedFormat(normalizedId, epsgCode: code, builtIn: builtIn)
+        } else {
             resolved = builtIn.map {
                 CoordinateGridFormat(
                     id: normalizedId,
@@ -40,10 +42,6 @@ final class CoordinateGridFormatProvider {
                     projectionParameters: nil
                 )
             }
-        } else if let code = epsgCode {
-            resolved = resolveProjectedFormat(normalizedId, epsgCode: code, builtIn: builtIn)
-        } else {
-            resolved = nil
         }
 
         if let resolved {
@@ -57,11 +55,10 @@ final class CoordinateGridFormatProvider {
     func isSupported(_ formatId: String?) -> Bool {
         guard let normalizedId = normalizeId(formatId) else { return false }
         let builtIn = GridFormat.from(formatId: normalizedId)
-        let epsgCode = builtIn?.epsgCode?.intValue ?? CoordinateFormatIds.epsgCode(normalizedId)
-        if epsgCode == nil {
+        guard let code = builtIn?.epsgCode?.intValue ?? CoordinateFormatIds.epsgCode(normalizedId) else {
             return builtIn != nil
         }
-        return repository.getGridDefinition(epsgCode!) != nil
+        return repository.getGridDefinition(code) != nil
     }
 
     func filterSupportedIds(_ formatIds: [String]) -> [String] {

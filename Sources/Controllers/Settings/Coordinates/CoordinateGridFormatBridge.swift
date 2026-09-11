@@ -15,6 +15,7 @@ final class CoordinateGridFormatInfo: NSObject {
     let formatRaw: Int32
     let needSuffixes: Bool
     let granularity: NSNumber?
+    let maxZoom: NSNumber?
 
     let hasProjectionParameters: Bool
     let lonMin: Double
@@ -47,6 +48,11 @@ final class CoordinateGridFormatInfo: NSObject {
             granularity = NSNumber(value: g)
         } else {
             granularity = nil
+        }
+        if let z = format.maxZoom {
+            maxZoom = NSNumber(value: z)
+        } else {
+            maxZoom = nil
         }
 
         if let p = format.projectionParameters {

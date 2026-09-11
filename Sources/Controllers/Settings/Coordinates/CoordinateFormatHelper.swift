@@ -20,9 +20,6 @@ enum CoordinateFormatHelper {
     
     static let gridFormatProvider = CoordinateGridFormatProvider()
     
-    private static let searchDebounce: TimeInterval = 0.25
-    private static var searchWorkItem: DispatchWorkItem?
-    
     private static let epsgNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -39,19 +36,6 @@ enum CoordinateFormatHelper {
         ids.map { id in
             BuiltInCoordinateFormat.resolve(id) ?? EpsgCatalogRepository.shared.resolveFormat(id)
         }
-    }
-    
-    static func searchGridFormats(_ query: String?, completion: @escaping ([CoordinateFormat]) -> Void) {
-        cancelSearch()
-        let trimmed = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let work = DispatchWorkItem {
-            let results = EpsgCatalogRepository.shared.searchGridFormats(trimmed.isEmpty ? nil : trimmed)
-            DispatchQueue.main.async {
-                completion(results)
-            }
-        }
-        searchWorkItem = work
-        DispatchQueue.global(qos: .userInitiated).async(execute: work)
     }
     
     static func summary(_ format: CoordinateFormat, primary: Bool) -> String {
@@ -104,6 +88,12 @@ enum CoordinateFormatHelper {
         return resolve(storage.preferredIds())
     }
 
+    static func primaryFormat() -> CoordinateFormat? {
+        let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
+        guard let primaryId = storage.preferredIds().first else { return nil }
+        return resolve([primaryId]).first
+    }
+
     static func formatPreferred(lat: Double, lon: Double) -> [FormattedCoordinate] {
         preferredFormats().map { format in
             FormattedCoordinate(
@@ -114,8 +104,8 @@ enum CoordinateFormatHelper {
     }
 
     static func formatPrimary(lat: Double, lon: Double) -> String {
-        if let primary = formatPreferred(lat: lat, lon: lon).first {
-            return primary.text
+        if let primary = primaryFormat() {
+            return format(primary, lat: lat, lon: lon)
         }
         return OAOsmAndFormatter.getFormattedCoordinates(
             withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES)
@@ -123,7 +113,7 @@ enum CoordinateFormatHelper {
     }
 
     static func primaryRowPrefix(lat: Double, lon: Double) -> String {
-        if let code = preferredFormats().first?.epsgCode {
+        if let code = primaryFormat()?.epsgCode {
             return "EPSG:\(code)"
         }
         return localizedString("coordinates")

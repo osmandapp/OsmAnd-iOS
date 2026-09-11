@@ -13,7 +13,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         case preferred
         case gridSelection
     }
-    
+
     private static let infoRowKey = "info"
     private static let formatIdKey = "formatId"
 
@@ -48,6 +48,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         super.viewDidLoad()
         tableView.setEditing(true, animated: false)
         tableView.sectionHeaderTopPadding = 0
+        tableView.keyboardDismissMode = .onDrag
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -193,10 +194,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         let formats = BuiltInCoordinateFormat.allCases
             .map { $0.toCoordinateFormat() }
             .filter { !excludedIds.contains($0.id) }
-        if addMode == .gridSelection {
-            return formats.filter { CoordinateFormatHelper.gridFormatProvider.isSupported($0.id) }
-        }
-        return formats
+        return supportedInCurrentMode(formats)
     }
 
     private func visibleFormats() -> [CoordinateFormat] {
@@ -204,6 +202,11 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
             return searchResults.filter { !excludedIds.contains($0.id) }
         }
         return availableFormats()
+    }
+
+    private func supportedInCurrentMode(_ formats: [CoordinateFormat]) -> [CoordinateFormat] {
+        guard addMode == .gridSelection else { return formats }
+        return formats.filter { CoordinateFormatHelper.gridFormatProvider.isSupported($0.id) }
     }
 
     private func addFormat(_ id: String) {
@@ -240,10 +243,17 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
     private func performSearch(_ query: String) {
         searchWorkItem?.cancel()
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let gridOnly = addMode == .gridSelection
         let work = DispatchWorkItem { [weak self] in
-            let results = trimmed.isEmpty
-                ? EpsgCatalogRepository.shared.listAll()
-                : EpsgCatalogRepository.shared.search(trimmed)
+            let repository = EpsgCatalogRepository.shared
+            let results: [CoordinateFormat]
+            if gridOnly {
+                results = repository.searchGridFormats(trimmed)
+            } else {
+                results = trimmed.isEmpty
+                    ? repository.listAll()
+                    : repository.search(trimmed)
+            }
             DispatchQueue.main.async {
                 guard let self else { return }
                 guard self.isSearchActive, self.searchQuery == query else { return }

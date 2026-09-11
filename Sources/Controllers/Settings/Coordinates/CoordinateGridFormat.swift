@@ -49,6 +49,10 @@ struct CoordinateGridFormat {
     var granularity: Float? {
         OAGridFormatMappingBridge.granularity(forProjectionRaw: projectionRaw)?.floatValue
     }
+
+    var maxZoom: Int32? {
+        OAGridFormatMappingBridge.maxZoom(forProjectionRaw: projectionRaw)?.int32Value
+    }
 }
 
 struct EpsgGridDefinition {

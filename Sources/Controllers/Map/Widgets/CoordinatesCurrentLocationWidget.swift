@@ -9,7 +9,7 @@
 @objc(OACoordinatesCurrentLocationWidget)
 @objcMembers
 final class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
-    
+
     init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
         super.init(type: .coordinatesCurrentLocation,
                    customId: customId,

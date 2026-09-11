@@ -20,31 +20,6 @@ enum GridFormat: Int32, CaseIterable {
     case swissGridPlus
     case maidenhead
     
-    var id: Int32 { rawValue }
-    
-    var title: String {
-        switch self {
-        case .dms:
-            return localizedString("dd_mm_ss_format")
-        case .dm:
-            return localizedString("dd_mm_mmm_format")
-        case .digital:
-            return localizedString("dd_ddddd_format")
-        case .utm:
-            return localizedString("navigate_point_format_UTM")
-        case .olc:
-            return localizedString("navigate_point_olc")
-        case .mgrs:
-            return localizedString("navigate_point_mgrs")
-        case .swissGrid:
-            return localizedString("navigate_point_format_swiss_grid")
-        case .swissGridPlus:
-            return localizedString("navigate_point_format_swiss_grid_plus")
-        case .maidenhead:
-            return localizedString("navigate_point_format_maidenhead")
-        }
-    }
-    
     var needSuffixes: Bool {
         switch self {
         case .utm, .olc, .mgrs, .swissGrid, .swissGridPlus, .maidenhead:
@@ -64,7 +39,7 @@ enum GridFormat: Int32, CaseIterable {
             return nil
         }
     }
-    
+
     var formatId: String {
         switch self {
         case .dms:
@@ -111,14 +86,6 @@ enum GridFormat: Int32, CaseIterable {
             return nil
         }
     }
-    
-    static func valueOf(_ formatId: Int) -> GridFormat {
-        if let id = CoordinateFormatIds.fromOldFormat(formatId),
-           let format = from(formatId: id) {
-            return format
-        }
-        return .digital
-    }
 }
 
 @objc
@@ -155,37 +122,16 @@ enum GridLabelsPosition: Int32, CaseIterable {
 
 @objcMembers
 final class GridFormatWrapper: NSObject {
-    static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
-        let format = GridFormat.valueOf(Int(geoFormatId))
-        return NSNumber(value: format.rawValue)
+    static var defaultFormatId: String {
+        CoordinateFormatIds.builtinDdd
     }
-    
-    static func gridFormatRaw(forFormatId formatId: String?) -> NSNumber {
-        NSNumber(value: gridFormat(forFormatId: formatId).rawValue)
-    }
-    
-    static func formatId(forGeoFormat geoFormatId: Int32) -> String {
-        GridFormat.valueOf(Int(geoFormatId)).formatId
-    }
-    
-    static func formatId(forRaw raw: Int32) -> String {
-        GridFormat(rawValue: raw)?.formatId ?? CoordinateFormatIds.builtinDdd
-    }
-    
-    static func needSuffixesForFormat(_ format: GridFormat) -> Bool {
-        format.needSuffixes
-    }
-    
-    static func gridFormat(forFormatId formatId: String?) -> GridFormat {
-        GridFormat.from(formatId: formatId) ?? .digital
-    }
-    
+
     static func migratePreferenceValue(_ value: Any?) -> String {
         if let stringValue = value as? String {
             if let normalized = CoordinateFormatIds.normalize(stringValue) {
                 return normalized
             }
-            
+
             switch stringValue {
             case "DD_MM_SS":
                 return CoordinateFormatIds.builtinDms
@@ -203,16 +149,27 @@ final class GridFormatWrapper: NSObject {
                 break
             }
         }
-        if let numberValue = value as? NSNumber {
-            let raw = numberValue.intValue
-            
-            if let fromGeo = CoordinateFormatIds.fromOldFormat(raw) {
-                return fromGeo
-            }
-            if let format = GridFormat(rawValue: Int32(raw)) {
-                return format.formatId
-            }
+        if let numberValue = value as? NSNumber,
+           let legacyId = legacyStoredGridFormatId(numberValue.intValue) {
+            return legacyId
         }
         return CoordinateFormatIds.builtinDdd
+    }
+
+    private static func legacyStoredGridFormatId(_ storedRawValue: Int) -> String? {
+        switch storedRawValue {
+        case 0:
+            return CoordinateFormatIds.builtinDms
+        case 1:
+            return CoordinateFormatIds.builtinDdm
+        case 2:
+            return CoordinateFormatIds.builtinDdd
+        case 3:
+            return CoordinateFormatIds.builtinUtm
+        case 4:
+            return CoordinateFormatIds.builtinMgrs
+        default:
+            return nil
+        }
     }
 }

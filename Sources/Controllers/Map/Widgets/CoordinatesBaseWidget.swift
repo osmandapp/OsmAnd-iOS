@@ -11,7 +11,8 @@
 class CoordinatesBaseWidget: OABaseWidgetView {
     private static let widgetHeight: CGFloat = 44
     private static let formatPrefId = "coordinates_widget_format"
-    
+    private static let selectedAppModeParamId = "selectedAppMode"
+
     @IBOutlet private var divider: UIView!
     @IBOutlet private var firstContainer: UIStackView!
     @IBOutlet private var secondContainer: UIStackView!
@@ -32,9 +33,9 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     var coloredUnit = false
     
     private var customId: String?
-    
+
     private weak var configViewController: WidgetConfigurationViewController?
-    
+
     private lazy var coordinateFormatPref: OACommonString = {
         Self.registerFormatPref(
             widgetType: widgetType ?? .coordinatesCurrentLocation,
@@ -50,7 +51,8 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         self.customId = customId
 
         if let widgetValue = widgetParams?[Self.formatPrefId] as? String {
-            coordinateFormatPref.set(widgetValue, mode: appMode)
+            let targetMode = widgetParams?[Self.selectedAppModeParamId] as? OAApplicationMode ?? appMode
+            coordinateFormatPref.set(widgetValue, mode: targetMode)
         }
         commonInit()
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(copyCoordinates)))
@@ -72,7 +74,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         if let customId, !customId.isEmpty {
             key += "_\(customId)"
         }
-        
+
         return OAAppSettings.sharedManager()
             .registerStringPreference(key, defValue: "")
             .makeProfile()
@@ -103,7 +105,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
         return data
     }
-    
+
     override func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
         guard item.key == "coordinate_format" else { return false }
 
@@ -128,7 +130,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         )
         return true
     }
-    
+
     override func getWidgetSettingsPref(toReset appMode: OAApplicationMode) -> OACommonPreference? {
         coordinateFormatPref
     }
@@ -138,7 +140,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         Self.registerFormatPref(widgetType: widgetType, customId: customId)
             .set(coordinateFormatPref.get(appMode), mode: appMode)
     }
-    
+
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
 
@@ -172,7 +174,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     func coordinateFormat(_ appMode: OAApplicationMode) -> CoordinateFormat {
         resolveFormat(coordinateFormatPref.get(appMode), appMode: appMode)
     }
-    
+
     func getCoordinateIcon() -> UIImage? {
         nil // override it
     }
@@ -209,7 +211,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
     
     // MARK: Private func's
-    
+
     private func commonInit() {
         // swiftlint:disable force_unwrapping
         let widgetView = Bundle.main.loadNibNamed("OACoordinatesBaseWidget", owner: self, options: nil)![0] as! UIView
@@ -217,7 +219,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
         widgetView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(widgetView)
-       
+
         NSLayoutConstraint.activate([
             widgetView.leadingAnchor.constraint(equalTo: leadingAnchor),
             widgetView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -225,17 +227,18 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             widgetView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
+
     private func showGenericCoordinates(_ text: String) {
         setupForNonStandardFormat()
         firstCoordinate.text = text
     }
-    
+
     private func applySelectedFormat(_ formatId: String) {
         guard let vc = configViewController else { return }
 
         if vc.createNew {
             vc.widgetConfigurationParams?[Self.formatPrefId] = formatId
+            vc.widgetConfigurationParams?[Self.selectedAppModeParamId] = vc.selectedAppMode
         } else {
             coordinateFormatPref.set(formatId, mode: vc.selectedAppMode)
             _ = updateInfo()
@@ -243,7 +246,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         }
         vc.onWidgetStateChanged()
     }
-    
+
     private func resolveFormat(_ id: String, appMode: OAApplicationMode) -> CoordinateFormat {
         let resolvedId = id.isEmpty
             ? OAAppSettings.sharedManager().coordinateFormatSettingsStorage.getPrimaryId(appMode)
@@ -270,6 +273,9 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     private func setupForNonStandardFormat() {
+        if firstIcon.superview !== firstContainer {
+            firstContainer.insertArrangedSubview(firstIcon, at: 0)
+        }
         firstIcon.isHidden = false
         divider.isHidden = true
         secondContainer.isHidden = true
@@ -352,9 +358,9 @@ extension CoordinatesBaseWidget: CoordinateFormatSelectorDelegate {
 
     func coordinateFormatSelectorDidRequestOtherFormat(_ selector: CoordinateFormatSelectorViewController) {
         guard let vc = configViewController else { return }
-        
+
         let excluded = OAAppSettings.sharedManager().coordinateFormatSettingsStorage.preferredIds(vc.selectedAppMode)
-        
+
         CoordinateFormatSelectorRouter.presentAdd(from: vc, appMode: vc.selectedAppMode, excludedIds: excluded) { [weak self] id in
             self?.applySelectedFormat(id)
         }

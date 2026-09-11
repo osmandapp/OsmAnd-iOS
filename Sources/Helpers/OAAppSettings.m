@@ -5440,12 +5440,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     NSObject *raw = [self getValue:mode];
     if (!raw)
         return self.defValue;
-    
-    NSString *migrated = [GridFormatWrapper migratePreferenceValue:raw];
-    
-    if (![raw isKindOfClass:[NSString class]] || ![((NSString *)raw) isEqualToString:migrated])
-        [self set:migrated mode:mode];
-    return migrated;
+
+    return [GridFormatWrapper migratePreferenceValue:raw];
 }
 
 - (void)set:(NSString *)formatId
@@ -5923,7 +5919,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _mapSettingShowCoordinatesGrid = [[OACommonBoolean withKey:mapSettingShowCoordinatesGridKey defValue:NO] makeProfile];
         _showPolygonsWhenUnderlayIsOn = [[OACommonBoolean withKey:showPolygonsWhenUnderlayIsOnKey defValue:NO] makeProfile];
-        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:@"builtin:ddd"] makeProfile];
+        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatWrapper.defaultFormatId] makeProfile];
         _coordinateGridMinZoom = [[OACommonInteger withKey:coordinateGridMinZoomKey defValue:0] makeProfile];
         _coordinateGridMaxZoom = [[OACommonInteger withKey:coordinateGridMaxZoomKey defValue:31] makeProfile];
         _coordinatesGridLabelsPosition = [[OACommonGridLabelsPosition withKey:coordinatesGridLabelsPositionKey defValue:GridLabelsPositionEdges] makeProfile];

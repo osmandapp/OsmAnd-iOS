@@ -26,6 +26,7 @@ final class MigrationManager: NSObject {
         case migrateCarPlayMapAppearanceMode
         case migrateCoordinateFormatPreferredIds
         case migrateTracksSortModeKeysAndFormat
+        case migrateCoordinateGridFormatIds
     }
     
     private struct HudMigrationScenario {
@@ -124,6 +125,17 @@ final class MigrationManager: NSObject {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue) {
+                migrateCoordinateGridFormatIds()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue)
+            }
+        }
+    }
+
+    private func migrateCoordinateGridFormatIds() {
+        let pref = settings.coordinateGridFormat
+        for mode in OAApplicationMode.allPossibleValues() where pref.isSet(for: mode) {
+            pref.set(pref.get(mode), mode: mode)
         }
     }
     

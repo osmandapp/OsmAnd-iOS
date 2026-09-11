@@ -122,7 +122,7 @@
 {
     NSString *formatId = [self gridFormatIdForAppMode:appMode];
     CoordinateGridFormatInfo *info = [CoordinateGridFormatBridge resolveInfo:formatId];
-    return info.formatId ?: @"builtin:ddd";
+    return info.formatId ?: GridFormatWrapper.defaultFormatId;
 }
 
 - (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
@@ -132,7 +132,7 @@
 }
 
 - (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode
-                                            formatId:(NSString *)formatId
+                                         formatId:(NSString *)formatId
 {
     ZoomRange selected = [self getZoomLevelsForAppMode:appMode];
     ZoomRange supported = [self supportedZoomLevelsForFormatId:formatId];
@@ -148,24 +148,23 @@
 
 - (ZoomRange)supportedZoomLevelsForFormatId:(NSString *)formatId
 {
-    NSValue *cached = _supportedZoomByFormatId[formatId];
+    NSString *key = formatId ?: GridFormatWrapper.defaultFormatId;
+    NSValue *cached = _supportedZoomByFormatId[key];
     if (cached)
     {
         ZoomRange r;
         [cached getValue:&r];
         return r;
     }
-    ZoomRange calculated = [self calculateSupportedZoomLevelsForFormatId:formatId];
+    ZoomRange calculated = [self calculateSupportedZoomLevelsForFormatId:key];
     NSValue *value = [NSValue valueWithBytes:&calculated objCType:@encode(ZoomRange)];
-    _supportedZoomByFormatId[formatId] = value;
+    _supportedZoomByFormatId[key] = value;
     return calculated;
 }
 
 - (ZoomRange)calculateSupportedZoomLevelsForFormatId:(NSString *)formatId
 {
     CoordinateGridFormatInfo *info = [CoordinateGridFormatBridge resolveInfo:formatId];
-    int32_t minZoom = 1;
-    int32_t maxZoom = (int32_t)_supportedMaxZoom;
 
     OsmAnd::GridConfiguration gridConfiguration;
     auto proj = OACoreProjectionForRaw(info.projectionRaw);
@@ -177,15 +176,12 @@
     gridConfiguration.setProjectionParameters();
 
     OsmAnd::GridParameters params = gridConfiguration.gridParameters[0];
-    minZoom = (int32_t)params.minZoom;
 
-    int maxFloat = (int)params.maxZoomForFloat;
-    int maxMixed = (int)params.maxZoomForMixed;
-    int fromParams = MAX(maxFloat, maxMixed);
-    if (fromParams > 0)
-        maxZoom = MIN(maxZoom, fromParams);
+    int32_t maxZoom = (int32_t)_supportedMaxZoom;
+    if (info.maxZoom != nil)
+        maxZoom = MIN(maxZoom, info.maxZoom.intValue);
 
-    return (ZoomRange){ .min = minZoom, .max = maxZoom };
+    return (ZoomRange){ .min = (int32_t)params.minZoom, .max = maxZoom };
 }
 
 - (ZoomRange)zoomLevels

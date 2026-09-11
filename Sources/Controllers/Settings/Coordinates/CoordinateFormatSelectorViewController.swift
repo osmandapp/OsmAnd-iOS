@@ -59,18 +59,6 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
     @objc static func present(from presenter: UIViewController,
                               selectedFormatId: String?,
                               appMode: OAApplicationMode,
-                              delegate: CoordinateFormatSelectorDelegate?) {
-        present(from: presenter,
-                selectedFormatId: selectedFormatId,
-                appMode: appMode,
-                delegate: delegate,
-                showSelectOther: true,
-                gridFormatsOnly: false)
-    }
-    
-    @objc static func present(from presenter: UIViewController,
-                              selectedFormatId: String?,
-                              appMode: OAApplicationMode,
                               delegate: CoordinateFormatSelectorDelegate?,
                               showSelectOther: Bool = true,
                               gridFormatsOnly: Bool = false) {
@@ -126,12 +114,13 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
 
+        let primaryId = storage.getPrimaryId(appMode)
         let preferredSection = tableData.createNewSection()
-        for (index, format) in preferredFormats.enumerated() {
+        for format in preferredFormats {
             appendFormatRow(format,
                             to: preferredSection,
                             selected: format.id == selectedFormatId,
-                            primary: index == 0)
+                            primary: format.id == primaryId)
         }
 
         if !recentFormats.isEmpty {
@@ -260,14 +249,17 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
     private func reloadFormats() {
         var preferredIds = storage.preferredIds(appMode)
         var recentIds = storage.getRecentIds().filter { !preferredIds.contains($0) }
+        var canShowSelected = true
 
         if gridFormatsOnly {
             let provider = CoordinateFormatHelper.gridFormatProvider
             preferredIds = provider.filterSupportedIds(preferredIds)
             recentIds = provider.filterSupportedIds(recentIds)
+            canShowSelected = provider.isSupported(selectedFormatId)
         }
-        
-        if !preferredIds.contains(selectedFormatId),
+
+        if canShowSelected,
+           !preferredIds.contains(selectedFormatId),
            !recentIds.contains(selectedFormatId) {
             recentIds.insert(selectedFormatId, at: 0)
         }
@@ -291,35 +283,40 @@ final class CoordinateFormatSelectorRouter: NSObject {
                                  appMode: OAApplicationMode,
                                  excludedIds: [String],
                                  onSelected: @escaping (String) -> Void) {
-        let addVC = CoordinatesFormatAddViewController(appMode: appMode, excludedIds: excludedIds, focusSearch: true)
-        addVC.onFormatAdded = { id in
-            OAAppSettings.sharedManager()
-                .coordinateFormatSettingsStorage
-                .addRecentId(id)
-
-            presenter.dismiss(animated: true) {
-                onSelected(id)
-            }
-        }
-
-        let navVC = UINavigationController(rootViewController: addVC)
-        navVC.modalPresentationStyle = .pageSheet
-        presenter.present(navVC, animated: true)
+        present(from: presenter,
+                appMode: appMode,
+                excludedIds: excludedIds,
+                addMode: .preferred,
+                focusSearch: true,
+                onSelected: onSelected)
     }
-    
+
     @objc static func presentGridAdd(from presenter: UIViewController,
                                      appMode: OAApplicationMode,
                                      onSelected: @escaping (String) -> Void) {
-        
         let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
         let provider = CoordinateFormatHelper.gridFormatProvider
-        var excludedIds = storage.preferredIds(appMode) + storage.getRecentIds()
-        excludedIds = provider.filterSupportedIds(excludedIds)
-        
+        let excludedIds = provider.filterSupportedIds(storage.preferredIds(appMode) + storage.getRecentIds())
+
+        present(from: presenter,
+                appMode: appMode,
+                excludedIds: excludedIds,
+                addMode: .gridSelection,
+                focusSearch: false,
+                onSelected: onSelected)
+    }
+
+    private static func present(from presenter: UIViewController,
+                                appMode: OAApplicationMode,
+                                excludedIds: [String],
+                                addMode: CoordinatesFormatAddViewController.AddMode,
+                                focusSearch: Bool,
+                                onSelected: @escaping (String) -> Void) {
         let addVC = CoordinatesFormatAddViewController(
             appMode: appMode,
             excludedIds: excludedIds,
-            addMode: .gridSelection
+            addMode: addMode,
+            focusSearch: focusSearch
         )
         addVC.onFormatAdded = { id in
             OAAppSettings.sharedManager()
@@ -329,6 +326,7 @@ final class CoordinateFormatSelectorRouter: NSObject {
                 onSelected(id)
             }
         }
+
         let navVC = UINavigationController(rootViewController: addVC)
         navVC.modalPresentationStyle = .pageSheet
         presenter.present(navVC, animated: true)

@@ -225,12 +225,33 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         tblView?.reloadData()
     }
     
+    private func currentGridFormatTitle() -> String {
+        let id = coordinatesGridSettings.resolvedGridFormatId(forAppMode: settings.applicationMode.get())
+            ?? CoordinateFormatIds.builtinDdd
+        return CoordinateFormatHelper.resolve([id]).first?.title ?? localizedString("dd_ddddd_format")
+    }
+
+    private func applyGridFormat(_ formatId: String) {
+        guard let resolved = CoordinateFormatHelper.gridFormatProvider.resolve(formatId) else {
+            let title = CoordinateFormatHelper.resolve([formatId]).first?.title ?? formatId
+            OAUtilities.showToast(title,
+                                  details: localizedString("shared_string_unavailable"),
+                                  duration: 4,
+                                  in: OARootViewController.instance().view)
+            return
+        }
+
+        coordinatesGridSettings.setGridFormatId(resolved.id, forAppMode: settings.applicationMode.get())
+        settings.coordinateFormatSettingsStorage.addRecentId(resolved.id)
+        updateData()
+    }
+
     private func presentFormatSelector() {
         guard let presenter = vwController else { return }
-        
+
         let appMode = settings.applicationMode.get()
         let selectedId = coordinatesGridSettings.gridFormatId(forAppMode: appMode)
-        
+
         CoordinateFormatSelectorViewController.present(
             from: presenter,
             selectedFormatId: selectedId,
@@ -240,7 +261,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             gridFormatsOnly: true
         )
     }
-    
+
     private func createStateSelectionMenu(for key: String) -> UIMenu {
         if key == RowKey.labelsPositionRowKey.rawValue {
             let actions = GridLabelsPosition.allCases.map { pos in
@@ -307,33 +328,12 @@ extension MapSettingsCoordinatesGridScreen: CoordinateFormatSelectorDelegate {
 
     func coordinateFormatSelectorDidRequestOtherFormat(_ selector: CoordinateFormatSelectorViewController) {
         guard let presenter = vwController else { return }
-        let appMode = settings.applicationMode.get()
+
         CoordinateFormatSelectorRouter.presentGridAdd(
             from: presenter,
-            appMode: appMode
+            appMode: settings.applicationMode.get()
         ) { [weak self] id in
             self?.applyGridFormat(id)
         }
-    }
-
-    private func applyGridFormat(_ formatId: String) {
-        let appMode = settings.applicationMode.get()
-        guard let resolved = CoordinateFormatHelper.gridFormatProvider.resolve(formatId) else {
-            return
-        }
-        coordinatesGridSettings.setGridFormatId(resolved.id, forAppMode: appMode)
-        settings.coordinateFormatSettingsStorage.addRecentId(resolved.id)
-        updateData()
-    }
-
-    private func currentGridFormatTitle() -> String {
-        let appMode = settings.applicationMode.get()
-        let id = coordinatesGridSettings.resolvedGridFormatId(forAppMode: appMode)
-            ?? CoordinateFormatIds.builtinDdd
-        if let title = CoordinateFormatHelper.resolve([id]).first?.title {
-            return title
-        }
-        return GridFormat.from(formatId: id)?.title
-            ?? localizedString("dd_ddddd_format")
     }
 }

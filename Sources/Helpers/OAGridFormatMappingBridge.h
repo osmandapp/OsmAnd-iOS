@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (int32_t)decimalFormatRaw;
 + (nullable NSNumber *)projectionRawForEpsgMethodCode:(int32_t)methodCode;
 + (nullable NSNumber *)granularityForProjectionRaw:(int32_t)projectionRaw;
++ (nullable NSNumber *)maxZoomForProjectionRaw:(int32_t)projectionRaw;
 
 @end
 

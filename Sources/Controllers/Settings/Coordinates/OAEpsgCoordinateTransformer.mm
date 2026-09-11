@@ -27,8 +27,18 @@
 
 @implementation OAEpsgCoordinateTransformer
 {
-    std::unordered_map<int, std::unique_ptr<OsmAnd::CoordinateTransformer>> _transformers;
+    std::unordered_map<int64_t, std::unique_ptr<OsmAnd::CoordinateTransformer>> _transformers;
     NSLock *_lock;
+}
+
++ (NSString *)projResourcesPath
+{
+    static NSString *path;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        path = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/proj"];
+    });
+    return path;
 }
 
 + (instancetype)sharedInstance
@@ -51,11 +61,17 @@
 
 - (OsmAnd::CoordinateTransformer *)transformerForCode:(int)code
 {
-    if (code <= 0)
+    return [self transformerForCode:code operationCode:0];
+}
+
+- (OsmAnd::CoordinateTransformer *)transformerForCode:(int)code operationCode:(int)operationCode
+{
+    if (code <= 0 || operationCode < 0)
         return nullptr;
 
+    const int64_t key = ((int64_t)code << 32) | (uint32_t)operationCode;
     [_lock lock];
-    auto it = _transformers.find(code);
+    auto it = _transformers.find(key);
     if (it != _transformers.end())
     {
         auto *existing = it->second.get();
@@ -63,10 +79,10 @@
         return existing;
     }
 
-    NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"];
-    auto created = std::make_unique<OsmAnd::CoordinateTransformer>(QString::fromNSString(path), code);
+    auto created = std::make_unique<OsmAnd::CoordinateTransformer>(
+        QString::fromNSString([OAEpsgCoordinateTransformer projResourcesPath]), code, operationCode);
     auto *ptr = created.get();
-    _transformers[code] = std::move(created);
+    _transformers[key] = std::move(created);
     [_lock unlock];
     return ptr;
 }
@@ -102,15 +118,14 @@
 
 - (OAEpsgGridConstants *)constantsForCode:(NSInteger)epsgCode projectionRaw:(NSInteger)projectionRaw
 {
-    if (epsgCode <= 0)
+    auto *transformer = [self transformerForCode:(int)epsgCode];
+    if (!transformer)
         return nil;
 
-    NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"];
-    OsmAnd::CoordinateTransformer transformer(QString::fromNSString(path), (int)epsgCode);
     auto projection = static_cast<OsmAnd::GridConfiguration::Projection>(projectionRaw);
 
     OsmAnd::PointD lonBounds, latBounds, semiMajor, refLonLat, falseEN, scaleFactor;
-    if (!transformer.getConstants(projection, lonBounds, latBounds, semiMajor, refLonLat, falseEN, scaleFactor))
+    if (!transformer->getConstants(projection, lonBounds, latBounds, semiMajor, refLonLat, falseEN, scaleFactor))
         return nil;
 
     if (!(std::isfinite(lonBounds.x) && std::isfinite(lonBounds.y) &&
@@ -134,14 +149,15 @@
 - (OAEpsgEllipsoidParameters *)ellipsoidParametersForCode:(NSInteger)epsgCode
                                             operationCode:(NSInteger)operationCode
 {
-    if (epsgCode <= 0 || operationCode <= 0)
+    if (operationCode <= 0)
         return nil;
 
-    NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"];
-    OsmAnd::CoordinateTransformer transformer(QString::fromNSString(path), (int)epsgCode, (int)operationCode);
+    auto *transformer = [self transformerForCode:(int)epsgCode operationCode:(int)operationCode];
+    if (!transformer)
+        return nil;
 
     OsmAnd::PointD tXY, tZW, rXY, rZScale;
-    if (!transformer.getEllipsoidParameters(tXY, tZW, rXY, rZScale))
+    if (!transformer->getEllipsoidParameters(tXY, tZW, rXY, rZScale))
         return nil;
 
     OAEpsgEllipsoidParameters *p = [OAEpsgEllipsoidParameters new];

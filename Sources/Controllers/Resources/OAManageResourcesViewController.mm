@@ -83,16 +83,17 @@ struct RegionResources
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > outdatedResources;
 };
 
-static BOOL ResourceMatchesRegion(OAWorldRegion *region,
-                                  const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &resource,
+// The region-dependent part of the match is resolved by the caller, since this runs once per region-resource pair
+static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
+                                  const OsmAnd::ResourcesManager::Resource &resource,
                                   const QString &downloadsIdPrefix,
                                   const QString &acceptedExtension)
 {
-    if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && resource->type == OsmAndResourceType::StarMap)
+    if (isTravelRegion && resource.type == OsmAndResourceType::StarMap)
         return YES;
     if (!acceptedExtension.isEmpty())
-        return resource->id.endsWith(acceptedExtension);
-    return resource->id.startsWith(downloadsIdPrefix);
+        return resource.id.endsWith(acceptedExtension);
+    return resource.id.startsWith(downloadsIdPrefix);
 }
 
 @implementation OAManageResourcesViewController
@@ -762,13 +763,84 @@ static BOOL _repositoryUpdated = NO;
         _searchableWorldwideRegionItems = [NSMutableArray array];
     
     NSArray<OAWorldRegion *> *mergedRegions = [app.worldRegion.flattenedSubregions arrayByAddingObject:app.worldRegion];
-    for (OAWorldRegion *region in mergedRegions)
+    const int regionsCount = (int) mergedRegions.count;
+    NSString *travelRegionId = OsmAnd::WorldRegions::TravelRegionId.toNSString();
+
+    QVector< QString > regionPrefixes(regionsCount);
+    QVector< QString > regionExtensions(regionsCount);
+    QVector< bool > regionIsTravel(regionsCount);
+
+    // Resource ids are '<download name>.<suffix>' and downloadsIdPrefix is '<download name>.',
+    // so for such regions the prefix match is an exact lookup by the id up to its first dot.
+    // Regions matched by extension or by a partial prefix (world, others, custom) stay on the scan path.
+    QHash< QString, QVector<int> > regionsByDownloadPrefix;
+    QVector< int > scannedRegions;
+
+    for (int i = 0; i < regionsCount; i++)
     {
+        OAWorldRegion *region = mergedRegions[i];
+        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
+        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        const bool isTravel = [region.regionId isEqualToString:travelRegionId];
+
+        regionPrefixes[i] = downloadsIdPrefix;
+        regionExtensions[i] = acceptedExtension;
+        regionIsTravel[i] = isTravel;
+
+        if (!doInit)
+            continue;
+
+        if (!isTravel && acceptedExtension.isEmpty()
+            && downloadsIdPrefix.endsWith(QLatin1Char('.')) && downloadsIdPrefix.count(QLatin1Char('.')) == 1)
+        {
+            regionsByDownloadPrefix[downloadsIdPrefix].append(i);
+        }
+        else
+        {
+            scannedRegions.append(i);
+        }
+    }
+
+    QVector< QList< std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > > repositoryResourcesByRegion;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > deletedResources;
+    if (doInit)
+        repositoryResourcesByRegion.resize(regionsCount);
+
+    for (const auto& resource : _resourcesInRepository)
+    {
+        if (resource->isDeleted)
+            deletedResources.append(resource);
+
+        if (!doInit)
+            continue;
+
+        const auto dotIndex = resource->id.indexOf(QLatin1Char('.'));
+        if (dotIndex != -1)
+        {
+            const auto citRegions = regionsByDownloadPrefix.constFind(resource->id.left(dotIndex + 1));
+            if (citRegions != regionsByDownloadPrefix.cend())
+            {
+                for (const int regionIndex : *citRegions)
+                    repositoryResourcesByRegion[regionIndex].append(resource);
+            }
+        }
+        for (const int regionIndex : scannedRegions)
+        {
+            if (ResourceMatchesRegion(regionIsTravel.at(regionIndex), *resource, regionPrefixes.at(regionIndex), regionExtensions.at(regionIndex)))
+                repositoryResourcesByRegion[regionIndex].append(resource);
+        }
+    }
+
+    for (int regionIndex = 0; regionIndex < regionsCount; regionIndex++)
+    {
+        OAWorldRegion *region = mergedRegions[regionIndex];
+
         if (initWorldwideRegionItems)
             [_searchableWorldwideRegionItems addObject:region];
         
-        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
-        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        const BOOL isTravelRegion = regionIsTravel.at(regionIndex);
+        const QString &downloadsIdPrefix = regionPrefixes.at(regionIndex);
+        const QString &acceptedExtension = regionExtensions.at(regionIndex);
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -784,7 +856,7 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+                if (ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                     regionResources.allResources.remove(resource->id);
             }
             for (const auto& resource : regionResources.outdatedResources)
@@ -804,7 +876,7 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+            if (!ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                 continue;
             
             regionResources.allResources.insert(resource->id, resource);
@@ -814,7 +886,7 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+            if (!ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                 continue;
 
             if (!regionResources.allResources.contains(resource->id))
@@ -827,11 +899,8 @@ static BOOL _repositoryUpdated = NO;
         {
             NSMutableArray *typesArray = [NSMutableArray array];
             BOOL hasSrtm = NO;
-            for (const auto& resource : _resourcesInRepository)
+            for (const auto& resource : repositoryResourcesByRegion.at(regionIndex))
             {
-                if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
-                    continue;
-                
                 switch (resource->type)
                 {
                     case OsmAndResourceType::MapRegion:
@@ -884,9 +953,9 @@ static BOOL _repositoryUpdated = NO;
         }
         
         // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id
-        for (const auto& resource : _resourcesInRepository)
+        for (const auto& resource : deletedResources)
         {
-            if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
+            if (regionResources.allResources.contains(resource->id))
             {
                 const auto& unsupportedResource = regionResources.allResources.value(resource->id);
                 if (unsupportedResource->type != OsmAndResourceType::DeletedMap)
@@ -1890,17 +1959,22 @@ static BOOL _repositoryUpdated = NO;
     NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD show:YES");
     [_refreshRepositoryProgressHUD show:YES];
     NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated start");
-    [OAOcbfHelper downloadOcbfIfUpdated:^{
+    [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
         NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated end");
-        [_app loadWorldRegions];
-        self.region = _app.worldRegion;
-        [_app startRepositoryUpdateAsync:NO];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD hide:YES");
-            [_refreshRepositoryProgressHUD hide:YES];
-            [self updateContent];
-            [_app.worldRegion buildResourceGroupItem];
-            _updateButton.enabled = YES;
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+            // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed
+            if (ocbfUpdated)
+                [_app loadWorldRegions];
+            [_app startRepositoryUpdateAsync:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD hide:YES");
+                if (ocbfUpdated)
+                    self.region = _app.worldRegion;
+                [_refreshRepositoryProgressHUD hide:YES];
+                [self updateContent];
+                [_app.worldRegion buildResourceGroupItem];
+                _updateButton.enabled = YES;
+            });
         });
     }];
 }

@@ -717,9 +717,10 @@ typedef enum
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated start");
-        [OAOcbfHelper downloadOcbfIfUpdated:^{
+        [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
             NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated end");
-            [_app loadWorldRegions];
+            if (ocbfUpdated)
+                [_app loadWorldRegions];
             [_app startRepositoryUpdateAsync:NO];
         }];
     });

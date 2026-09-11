@@ -8,6 +8,7 @@
 
 #import "OACoordinatesGridSettings.h"
 #import "OAAppSettings.h"
+#import "OAGridFormatMapping.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapRendererState.h>
@@ -167,8 +168,8 @@
     int32_t maxZoom = (int32_t)_supportedMaxZoom;
 
     OsmAnd::GridConfiguration gridConfiguration;
-    auto proj = static_cast<OsmAnd::GridConfiguration::Projection>(info.projectionRaw);
-    auto form = static_cast<OsmAnd::GridConfiguration::Format>(info.formatRaw);
+    auto proj = OACoreProjectionForRaw(info.projectionRaw);
+    auto form = OACoreFormatForRaw(info.formatRaw);
     gridConfiguration.setPrimaryProjection(proj);
     gridConfiguration.setSecondaryProjection(proj);
     gridConfiguration.setPrimaryFormat(form);

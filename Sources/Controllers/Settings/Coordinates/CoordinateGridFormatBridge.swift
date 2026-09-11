@@ -40,8 +40,8 @@ final class CoordinateGridFormatInfo: NSObject {
 
     init(from format: CoordinateGridFormat) {
         formatId = format.id
-        projectionRaw = format.projection.rawValue
-        formatRaw = format.format.rawValue
+        projectionRaw = format.projectionRaw
+        formatRaw = format.formatRaw
         needSuffixes = format.needSuffixes
         if let g = format.granularity {
             granularity = NSNumber(value: g)

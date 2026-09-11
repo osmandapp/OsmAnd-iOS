@@ -9,6 +9,7 @@
 #import "OACoordinatesGridLayer.h"
 #import "OAAppSettings.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAGridFormatMapping.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Map/GridMarksProvider.h>
 #import "OANativeUtilities.h"
@@ -240,8 +241,8 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     if (!info)
         info = [CoordinateGridFormatBridge resolveInfo:_cachedGridFormatId];
 
-    auto format = static_cast<OsmAnd::GridConfiguration::Format>(info.formatRaw);
-    auto secondaryProjection = static_cast<OsmAnd::GridConfiguration::Projection>(info.projectionRaw);
+    auto format = OACoreFormatForRaw(info.formatRaw);
+    auto secondaryProjection = OACoreProjectionForRaw(info.projectionRaw);
 
     OsmAnd::ZoomLevel minZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.min);
     OsmAnd::ZoomLevel maxZoom = static_cast<OsmAnd::ZoomLevel>(_cachedZoomLimits.max);

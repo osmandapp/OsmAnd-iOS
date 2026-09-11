@@ -45,34 +45,6 @@ enum GridFormat: Int32, CaseIterable {
         }
     }
     
-    func projection() -> OAProjection {
-        switch self {
-        case .dms, .dm, .digital:
-            return .wgs84
-        case .olc:
-            return .olc
-        case .maidenhead:
-            return .mls
-        case .swissGrid, .swissGridPlus:
-            return .homv2
-        case .utm:
-            return .utm
-        case .mgrs:
-            return .mgrs
-        }
-    }
-    
-    func getFormat() -> OAFormat {
-        switch self {
-        case .dms:
-            return .dms
-        case .dm:
-            return .dm
-        case .digital, .utm, .olc, .mgrs, .swissGrid, .swissGridPlus, .maidenhead:
-            return .decimal
-        }
-    }
-    
     var needSuffixes: Bool {
         switch self {
         case .utm, .olc, .mgrs, .swissGrid, .swissGridPlus, .maidenhead:
@@ -181,26 +153,6 @@ enum GridLabelsPosition: Int32, CaseIterable {
     }
 }
 
-@objc
-enum OAProjection: Int32 {
-    case wgs84 = 0
-    case olc = 1
-    case mls = 2
-    case homv2 = 3
-    case ostereo = 4
-    case tm = 5
-    case utm = 6
-    case mgrs = 7
-    case mercator = 8
-}
-
-@objc
-enum OAFormat: Int32 {
-    case decimal = 0
-    case dms
-    case dm
-}
-
 @objcMembers
 final class GridFormatWrapper: NSObject {
     static func gridFormatRaw(forGeoFormat geoFormatId: Int32) -> NSNumber {
@@ -218,14 +170,6 @@ final class GridFormatWrapper: NSObject {
     
     static func formatId(forRaw raw: Int32) -> String {
         GridFormat(rawValue: raw)?.formatId ?? CoordinateFormatIds.builtinDdd
-    }
-    
-    static func projection(for format: GridFormat) -> OAProjection {
-        format.projection()
-    }
-    
-    static func getFormat(for format: GridFormat) -> OAFormat {
-        format.getFormat()
     }
     
     static func needSuffixesForFormat(_ format: GridFormat) -> Bool {

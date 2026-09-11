@@ -1507,6 +1507,7 @@
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
 		C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */; };
+		C506111C2DB9678300E8F204 /* OAGridFormatMappingBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */; };
 		C50867882D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */; };
 		C50867892D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */; };
 		C508678C2D9D5E32000B7219 /* SegmentTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C508678B2D9D5E32000B7219 /* SegmentTextTableViewCell.xib */; };
@@ -5560,6 +5561,9 @@
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
 		C50611162DB9678300E8F204 /* OACoordinatesGridSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesGridSettings.h; sourceTree = "<group>"; };
 		C50611172DB9678300E8F204 /* OACoordinatesGridSettings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesGridSettings.mm; sourceTree = "<group>"; };
+		C50611192DB9678300E8F204 /* OAGridFormatMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMapping.h; sourceTree = "<group>"; };
+		C506111A2DB9678300E8F204 /* OAGridFormatMappingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGridFormatMappingBridge.h; sourceTree = "<group>"; };
+		C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGridFormatMappingBridge.mm; sourceTree = "<group>"; };
 		C50867862D9D4FB7000B7219 /* SegmentImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesTableViewCell.swift; sourceTree = "<group>"; };
 		C50867872D9D4FB7000B7219 /* SegmentImagesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesTableViewCell.xib; sourceTree = "<group>"; };
 		C508678A2D9D5E32000B7219 /* SegmentTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTextTableViewCell.swift; sourceTree = "<group>"; };
@@ -14655,6 +14659,9 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				DA5A809626C563A500F274C7 /* OAGPXUIHelper.h */,
 				DA5A80D926C563A600F274C7 /* OAGPXUIHelper.mm */,
+				C50611192DB9678300E8F204 /* OAGridFormatMapping.h */,
+				C506111A2DB9678300E8F204 /* OAGridFormatMappingBridge.h */,
+				C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
 				DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */,
 				DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */,
@@ -19453,6 +19460,7 @@
 				46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */,
+				C506111C2DB9678300E8F204 /* OAGridFormatMappingBridge.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
 				81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */,
 				C5817F1F2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift in Sources */,

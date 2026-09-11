@@ -41,16 +41,13 @@ struct CoordinateGridProjectionParameters {
 
 struct CoordinateGridFormat {
     let id: String
-    let projection: OAProjection
-    let format: OAFormat
+    let projectionRaw: Int32
+    let formatRaw: Int32
     let needSuffixes: Bool
     let projectionParameters: CoordinateGridProjectionParameters?
 
     var granularity: Float? {
-        switch projection {
-        case .olc, .mls: return 3.0
-        default: return nil
-        }
+        OAGridFormatMappingBridge.granularity(forProjectionRaw: projectionRaw)?.floatValue
     }
 }
 

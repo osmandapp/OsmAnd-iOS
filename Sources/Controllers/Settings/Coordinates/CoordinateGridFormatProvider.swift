@@ -14,10 +14,6 @@ final class CoordinateGridFormatProvider {
     private var unsupportedFormats = Set<String>()
     private let lock = NSLock()
 
-    private static let transverseMercator = 9807
-    private static let obliqueStereographic = 9809
-    private static let hotineObliqueMercatorV2 = 9815
-
     init(repository: EpsgCatalogRepository = .shared) {
         self.repository = repository
     }
@@ -38,8 +34,8 @@ final class CoordinateGridFormatProvider {
             resolved = builtIn.map {
                 CoordinateGridFormat(
                     id: normalizedId,
-                    projection: $0.projection(),
-                    format: $0.getFormat(),
+                    projectionRaw: OAGridFormatMappingBridge.projectionRaw(forGridFormatRaw: $0.rawValue),
+                    formatRaw: OAGridFormatMappingBridge.formatRaw(forGridFormatRaw: $0.rawValue),
                     needSuffixes: $0.needSuffixes,
                     projectionParameters: nil
                 )
@@ -95,14 +91,15 @@ final class CoordinateGridFormatProvider {
         builtIn: GridFormat?
     ) -> CoordinateGridFormat? {
         guard let definition = repository.getGridDefinition(epsgCode),
-              let projection = projection(forMethod: definition.projectionMethodCode),
-              let params = resolveProjectionParameters(definition, projection: projection) else {
+              let projectionRaw = OAGridFormatMappingBridge
+                  .projectionRaw(forEpsgMethodCode: Int32(definition.projectionMethodCode))?.int32Value,
+              let params = resolveProjectionParameters(definition, projectionRaw: projectionRaw) else {
             return nil
         }
         return CoordinateGridFormat(
             id: formatId,
-            projection: projection,
-            format: .decimal,
+            projectionRaw: projectionRaw,
+            formatRaw: OAGridFormatMappingBridge.decimalFormatRaw(),
             needSuffixes: builtIn?.needSuffixes ?? false,
             projectionParameters: params
         )
@@ -110,9 +107,9 @@ final class CoordinateGridFormatProvider {
 
     private func resolveProjectionParameters(
         _ definition: EpsgGridDefinition,
-        projection: OAProjection
+        projectionRaw: Int32
     ) -> CoordinateGridProjectionParameters? {
-        guard let constants = readProjectionConstants(definition.epsgCode, projection: projection) else {
+        guard let constants = readProjectionConstants(definition.epsgCode, projectionRaw: projectionRaw) else {
             return nil
         }
         if definition.usesWgs84 {
@@ -128,10 +125,10 @@ final class CoordinateGridFormatProvider {
 
     private func readProjectionConstants(
         _ epsgCode: Int,
-        projection: OAProjection
+        projectionRaw: Int32
     ) -> CoordinateGridProjectionConstants? {
         guard let c = OAEpsgCoordinateTransformer.sharedInstance()
-            .constants(forCode: epsgCode, projectionRaw: Int(projection.rawValue)) else {
+            .constants(forCode: epsgCode, projectionRaw: Int(projectionRaw)) else {
             return nil
         }
         return CoordinateGridProjectionConstants(
@@ -160,14 +157,6 @@ final class CoordinateGridFormatProvider {
         )
     }
 
-    private func projection(forMethod methodCode: Int) -> OAProjection? {
-        switch methodCode {
-        case Self.transverseMercator: return .tm
-        case Self.obliqueStereographic: return .ostereo
-        case Self.hotineObliqueMercatorV2: return .homv2
-        default: return nil
-        }
-    }
 }
 
 private struct CoordinateGridProjectionConstants {

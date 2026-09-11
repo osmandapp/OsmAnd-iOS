@@ -8,6 +8,58 @@
 
 import OsmAndShared
 
+private final class IndexingProgressRingView: UIView {
+    private let trackLayer = CAShapeLayer()
+    private let progressLayer = CAShapeLayer()
+
+    var progress: CGFloat = 0 {
+        didSet { progressLayer.strokeEnd = min(max(progress, 0), 1) }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        for shape in [trackLayer, progressLayer] {
+            shape.fillColor = nil
+            shape.lineWidth = 3
+            shape.lineCap = .round
+            layer.addSublayer(shape)
+        }
+        progressLayer.strokeEnd = 0
+        applyColors()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let inset = trackLayer.lineWidth / 2
+        let radius = min(bounds.width, bounds.height) / 2 - inset
+        // Starts at twelve o'clock and fills clockwise, so strokeEnd maps straight to progress.
+        let path = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY),
+                                radius: max(radius, 0),
+                                startAngle: -.pi / 2,
+                                endAngle: 1.5 * .pi,
+                                clockwise: true).cgPath
+        for shape in [trackLayer, progressLayer] {
+            shape.frame = bounds
+            shape.path = path
+        }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // CGColor does not follow a dynamic colour on its own.
+        applyColors()
+    }
+
+    private func applyColors() {
+        trackLayer.strokeColor = UIColor.iconColorDisabled.cgColor
+        progressLayer.strokeColor = UIColor.iconColorActive.cgColor
+    }
+}
+
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
 }
@@ -64,16 +116,19 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private let isVisibleKey = "isVisibleKey"
     private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     private let trackSortDescrKey = "trackSortDescrKey"
+    private let calculatingStatsKey = "calculatingStatsKey"
 
     private var tableData = OATableDataModel()
     private var asyncLoader: TrackFolderLoaderTask?
     private var hasReceivedFirstBatch = false
     private var isLoadingInProgress = false
-    private weak var indexingHeaderRow: UIView?
-    private weak var indexingHeaderIndicator: UIActivityIndicatorView?
-    private weak var indexingHeaderLabel: UILabel?
+    private weak var indexingRing: IndexingProgressRingView?
     private var indexingProgressTimer: Timer?
+    private var loaderRefreshTimer: Timer?
+    private var lastLoaderRefreshTime: TimeInterval = 0
+    private static let loaderRefreshInterval: TimeInterval = 0.5
     private var cachedIndexingRemaining = 0
+    private var cachedIndexingTotal = 0
     private var indexingCountSeeded = false
 
     private var recCell: OATwoButtonsTableViewCell?
@@ -202,73 +257,67 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func isIndexingInProgress() -> Bool {
         let helper = GpxDbHelper.shared
         guard helper.isReading() || helper.isFilesystemReconciliationRunning() else {
+            cachedIndexingRemaining = 0
+            cachedIndexingTotal = 0
+            indexingCountSeeded = false
             return false
         }
-        if !indexingCountSeeded, let remaining = indexingRemainingCount() {
-            cachedIndexingRemaining = remaining
+        if !indexingCountSeeded, let counts = indexingCounts() {
+            cachedIndexingRemaining = max(0, counts.total - counts.done)
+            cachedIndexingTotal = counts.total
             indexingCountSeeded = true
         }
         return cachedIndexingRemaining > 0
     }
 
-    private func refreshIndexingHeader() {
-        guard let header = tableView.tableHeaderView else { return }
-        applyIndexingHeaderState(to: header)
-    }
-
-    private func applyIndexingHeaderState(to header: UIView) {
-        let helper = GpxDbHelper.shared
-        if !(helper.isReading() || helper.isFilesystemReconciliationRunning()) {
-            cachedIndexingRemaining = 0
-            indexingCountSeeded = false
-        }
-        let indexing = isIndexingInProgress()
-        indexingHeaderRow?.isHidden = !indexing
-        if indexing {
-            indexingHeaderIndicator?.startAnimating()
-            indexingHeaderLabel?.text = indexingHeaderText(remaining: cachedIndexingRemaining)
+    private func refreshIndexingRow() {
+        if isIndexingInProgress() {
             startIndexingProgressTimer()
         } else {
-            indexingHeaderIndicator?.stopAnimating()
             stopIndexingProgressTimer()
         }
-        let width = max(tableView.frame.width, view.frame.width)
-        let fitted = header.systemLayoutSizeFitting(CGSize(width: width, height: 0),
-                                                    withHorizontalFittingPriority: .required,
-                                                    verticalFittingPriority: .fittingSizeLevel)
-        let height = ceil(fitted.height)
-        if abs(header.frame.height - height) > 0.5 || abs(header.frame.width - width) > 0.5 {
-            header.frame = CGRect(x: 0, y: 0, width: width, height: height)
-            tableView.tableHeaderView = header
-        }
+        updateIndexingRingProgress()
     }
 
-    private func indexingHeaderText(remaining: Int) -> String {
-        let base = localizedString("tracks_stats_are_being_calculated")
-
-        guard !isLoadingInProgress, remaining > 0 else {
-            return base
-        }
-        return String(format: localizedString("tracks_stats_are_being_calculated_left"),
-                      base, NumberFormatter.localizedCount(remaining))
+    private func updateIndexingRingProgress() {
+        let done = max(0, cachedIndexingTotal - cachedIndexingRemaining)
+        indexingRing?.progress = cachedIndexingTotal > 0 ? CGFloat(done) / CGFloat(cachedIndexingTotal) : 0
     }
 
-    private func indexingRemainingCount() -> Int? {
+    private func addCalculatingStatsSectionIfNeeded() {
+        guard !tableView.isEditing, isIndexingInProgress() else { return }
+        let section = OATableSectionData()
+        section.key = calculatingStatsKey
+        let row = section.createNewRow()
+        row.cellType = OASimpleTableViewCell.reuseIdentifier
+        row.key = calculatingStatsKey
+        row.title = localizedString("tracks_stats_are_being_calculated")
+        tableData.addSection(section, at: 0)
+    }
+
+    private func indexingCounts() -> (done: Int, total: Int)? {
         guard let root = rootFolder else { return nil }
         let items = root.getFlattenedTrackItems()
         guard !items.isEmpty else { return nil }
         let done = items.reduce(into: 0) { count, item in
             if item.dataItem != nil { count += 1 }
         }
-        return max(0, items.count - done)
+        return (done, items.count)
     }
 
     private func startIndexingProgressTimer() {
         guard indexingProgressTimer == nil, view.window != nil else { return }
         let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
             guard let self else { return }
-            self.cachedIndexingRemaining = self.indexingRemainingCount() ?? 0
-            self.refreshIndexingHeader()
+            let counts = self.indexingCounts()
+            self.cachedIndexingRemaining = max(0, (counts?.total ?? 0) - (counts?.done ?? 0))
+            self.cachedIndexingTotal = counts?.total ?? 0
+            if self.isIndexingInProgress() {
+                self.updateIndexingRingProgress()
+            } else {
+                self.stopIndexingProgressTimer()
+                self.updateData()
+            }
         }
         RunLoop.main.add(timer, forMode: .common)
         indexingProgressTimer = timer
@@ -322,7 +371,35 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         return isSmartFolder || getTrackFolderByPath(currentFolderPath) != nil
     }
 
-    private func propagateLoaderRefresh() {
+    // The loader reports a batch every few files and each refresh rebuilds the whole table
+    // model, so progress updates are coalesced. The final callbacks force one through.
+    private func propagateLoaderRefresh(force: Bool = false) {
+        if force {
+            loaderRefreshTimer?.invalidate()
+            loaderRefreshTimer = nil
+            performLoaderRefresh()
+            return
+        }
+
+        guard loaderRefreshTimer == nil else { return }
+
+        let elapsed = ProcessInfo.processInfo.systemUptime - lastLoaderRefreshTime
+        if elapsed >= Self.loaderRefreshInterval {
+            performLoaderRefresh()
+            return
+        }
+
+        let timer = Timer(timeInterval: Self.loaderRefreshInterval - elapsed, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            self.loaderRefreshTimer = nil
+            self.performLoaderRefresh()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        loaderRefreshTimer = timer
+    }
+
+    private func performLoaderRefresh() {
+        lastLoaderRefreshTime = ProcessInfo.processInfo.systemUptime
         refreshTracksListFromLoader()
         guard let top = navigationController?.viewControllers.last as? TracksViewController,
               top !== self else {
@@ -368,16 +445,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         navigationItem.searchController = nil
         definesPresentationContext = true
         reloadTableViewOnAppearIfNeeded()
-        refreshIndexingHeader()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        refreshIndexingHeader()
+        refreshIndexingRow()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         stopIndexingProgressTimer()
+        loaderRefreshTimer?.invalidate()
+        loaderRefreshTimer = nil
         if !isRootFolder {
             navigationItem.searchController = nil
         }
@@ -388,6 +462,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     deinit {
         asyncLoader?.cancel()
         indexingProgressTimer?.invalidate()
+        loaderRefreshTimer?.invalidate()
         unregisterNotificationsAndObservers()
     }
     
@@ -475,7 +550,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         generateData(isEditing: isEditing)
         tableView.reloadData()
         setupTableFooter(isEditing: isEditing)
-        refreshIndexingHeader()
+        refreshIndexingRow()
     }
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
@@ -662,6 +737,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
             }
         }
+
+        addCalculatingStatsSectionIfNeeded()
 
         let lastNonEmptySection = mainSection.rowCount() > 0 ? mainSection : recordingTracksSection
         if let lastNonEmptySection, lastNonEmptySection.rowCount() > 0 {
@@ -932,37 +1009,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         sortFilterRow.addSubview(sortButton)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
         sortButton.translatesAutoresizingMaskIntoConstraints = false
-
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.color = .iconColorSecondary
-        let indexingLabel = UILabel()
-        indexingLabel.font = .preferredFont(forTextStyle: .subheadline)
-        indexingLabel.textColor = .textColorSecondary
-        indexingLabel.numberOfLines = 0
-        indexingLabel.textAlignment = .center
-        indexingLabel.adjustsFontForContentSizeCategory = true
-        indexingLabel.text = localizedString("tracks_stats_are_being_calculated")
-        let indexingStrip = UIStackView(arrangedSubviews: [indicator, indexingLabel])
-        indexingStrip.axis = .vertical
-        indexingStrip.alignment = .center
-        indexingStrip.spacing = 12
-        indexingStrip.translatesAutoresizingMaskIntoConstraints = false
-
-        let indexingRow = UIView()
-        indexingRow.isHidden = true
-        indexingRow.addSubview(indexingStrip)
-
-        let vStack = UIStackView(arrangedSubviews: [sortFilterRow, indexingRow])
-        vStack.axis = .vertical
-        vStack.spacing = 8
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        headerView.addSubview(vStack)
+        sortFilterRow.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(sortFilterRow)
 
         NSLayoutConstraint.activate([
-            vStack.topAnchor.constraint(equalTo: headerView.topAnchor),
-            vStack.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-            vStack.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
-            vStack.trailingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.trailingAnchor),
+            sortFilterRow.topAnchor.constraint(equalTo: headerView.topAnchor),
+            sortFilterRow.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            sortFilterRow.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
+            sortFilterRow.trailingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.trailingAnchor),
 
             sortFilterRow.heightAnchor.constraint(equalToConstant: 44),
             filterButton.trailingAnchor.constraint(equalTo: sortFilterRow.trailingAnchor),
@@ -971,21 +1025,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             sortButton.leadingAnchor.constraint(equalTo: sortFilterRow.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: sortFilterRow.topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: sortFilterRow.bottomAnchor),
-            sortButton.trailingAnchor.constraint(lessThanOrEqualTo: filterButton.leadingAnchor),
-
-            indexingRow.heightAnchor.constraint(greaterThanOrEqualToConstant: 32),
-            indexingStrip.centerXAnchor.constraint(equalTo: indexingRow.centerXAnchor),
-            indexingStrip.topAnchor.constraint(equalTo: indexingRow.topAnchor),
-            
-            indexingStrip.bottomAnchor.constraint(equalTo: indexingRow.bottomAnchor, constant: -16),
-            indexingStrip.leadingAnchor.constraint(greaterThanOrEqualTo: indexingRow.leadingAnchor),
-            indexingStrip.trailingAnchor.constraint(lessThanOrEqualTo: indexingRow.trailingAnchor)
+            sortButton.trailingAnchor.constraint(lessThanOrEqualTo: filterButton.leadingAnchor)
         ])
-
-        indexingHeaderRow = indexingRow
-        indexingHeaderIndicator = indicator
-        indexingHeaderLabel = indexingLabel
-        applyIndexingHeaderState(to: headerView)
 
         return headerView
     }
@@ -2539,6 +2580,19 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     cell.descriptionLabel.text = item.descr
                 }
                 cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
+                if item.key == calculatingStatsKey {
+                    cell.descriptionVisibility(false)
+                    cell.leftIconVisibility(false)
+                    cell.accessoryType = .none
+                    cell.selectionStyle = .none
+                    let ring = (cell.accessoryView as? IndexingProgressRingView)
+                        ?? IndexingProgressRingView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+                    cell.accessoryView = ring
+                    indexingRing = ring
+                    updateIndexingRingProgress()
+                    outCell = cell
+                    return outCell ?? UITableViewCell()
+                }
                 cell.descriptionVisibility(true)
                 cell.leftIconVisibility(true)
                 cell.accessoryView = nil
@@ -2596,6 +2650,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func updateEditingAppearance(_ cell: OASimpleTableViewCell, item: OATableRowData, isEditing: Bool) {
+        if item.key == calculatingStatsKey {
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
+            return
+        }
         cell.selectionStyle = isEditing ? .default : .none
         cell.accessoryType = isEditing ? .none : .disclosureIndicator
         let selectableKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey, organizedGroupKey]
@@ -2618,6 +2677,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !isEditFilterActive else { return }
         let item = tableData.item(for: indexPath)
+        if item.key == calculatingStatsKey {
+            tableView.deselectRow(at: indexPath, animated: false)
+            return
+        }
         if tableView.isEditing {
             if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
@@ -2703,8 +2766,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        tableData.item(for: indexPath).key != calculatingStatsKey
+    }
+
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        true
+        tableData.item(for: indexPath).key != calculatingStatsKey
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -3059,7 +3126,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         onLoadFinished(folder: folder, endRefresh: true)
-        propagateLoaderRefresh()
+        propagateLoaderRefresh(force: true)
     }
 
     func loadTracksFinished(folder: TrackFolder) {
@@ -3067,7 +3134,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)
-        propagateLoaderRefresh()
+        propagateLoaderRefresh(force: true)
     }
 
     func tracksLoaded(folder: TrackFolder) {

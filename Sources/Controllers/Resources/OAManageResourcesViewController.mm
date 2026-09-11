@@ -958,6 +958,9 @@ static BOOL _repositoryUpdated = NO;
     
     for (const auto& resource_ : regionResources.allResources)
     {
+        if (resource_->type == OsmAndResourceType::DeletedMap)
+            continue;
+
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
@@ -1405,7 +1408,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAResourceItem *item in _regionMapItems)
     {
-        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMap)
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
         {
             [_regionMapItems removeObject:item];
             break;

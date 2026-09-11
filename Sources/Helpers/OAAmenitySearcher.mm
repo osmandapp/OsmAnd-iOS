@@ -1457,6 +1457,32 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
         OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
         searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+        // Without a category filter the core decodes every amenity in the bbox and the accept
+        // block rejects almost all of them one by one.
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+        if (acceptedTypes.count > 0)
+        {
+            auto categoriesFilter = QHash<QString, QStringList>();
+            for (OAPOICategory *category in acceptedTypes.keyEnumerator)
+            {
+                NSMutableSet<NSString *> *subcategories = [acceptedTypes objectForKey:category];
+                QString categoryName = QString::fromNSString(category.name);
+                if (subcategories != [OAPOIBaseType nullSet] && subcategories.count > 0)
+                {
+                    QStringList subcatList;
+                    for (NSString *subcategory in subcategories)
+                        subcatList.push_back(QString::fromNSString(subcategory));
+
+                    categoriesFilter.insert(categoryName, subcatList);
+                }
+                else
+                {
+                    categoriesFilter.insert(categoryName, QStringList());
+                }
+            }
+            searchCriteria->categoriesFilter = categoriesFilter;
+        }
+
         NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
         search->performSearch(*searchCriteria,

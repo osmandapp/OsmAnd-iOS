@@ -124,6 +124,7 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
 + (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters;
 + (NSArray<OAPOI *> *)filterCityCandidates:(NSArray<OAPOI *> *)candidates radiusMeters:(int)radiusMeters ofLat:(double)lat lon:(double)lon;
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon;
 
 @end
 
@@ -425,38 +426,57 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
 + (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
 {
-    OAPOI *nearestCity = nil;
+    // Only the OBF lookup needs serialising. Filtering and sorting are pure computation over
+    // an immutable array, so they run unlocked.
+    NSArray<OAPOI *> *regionCandidates = [self cityCandidatesForCellAt:latLon];
+    if (regionCandidates.count == 0)
+        return nil;
+
+    NSArray<OAPOI *> *inRange = [self filterCityCandidates:regionCandidates
+                                             radiusMeters:kNearestCityQueryRadiusMeters
+                                                    ofLat:latLon.latitude
+                                                      lon:latLon.longitude];
+    if (inRange.count == 0)
+        return nil;
+
+    return [self sortAmenities:inRange cityTypes:OAGPXNearestCitySubTypes() latLon:latLon].firstObject;
+}
+
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon
+{
+    NSCache<NSString *, NSArray<OAPOI *> *> *cache = OAGPXNearestCityCandidatesCache();
+    NSString *cellKey = OAGPXNearestCityCellKey(latLon);
+
+    // NSCache is thread-safe, so a warm cell never takes the lock.
+    NSArray<OAPOI *> *candidates = [cache objectForKey:cellKey];
+    if (candidates)
+        return candidates;
+
     NSLock *lock = OAGPXNearestCitySearchLock();
     [lock lock];
     @try
     {
-        try
+        // Another thread may have filled the cell while we waited.
+        candidates = [cache objectForKey:cellKey];
+        if (!candidates)
         {
-            NSCache<NSString *, NSArray<OAPOI *> *> *cache = OAGPXNearestCityCandidatesCache();
-            NSString *cellKey = OAGPXNearestCityCellKey(latLon);
-            NSArray<OAPOI *> *regionCandidates = [cache objectForKey:cellKey];
-            if (!regionCandidates)
+            try
             {
                 CLLocationCoordinate2D cellCenter = OAGPXNearestCityCellCenter(latLon);
-                regionCandidates = [self findCityCandidatesAroundLat:cellCenter.latitude
-                                                                 lon:cellCenter.longitude
-                                                        radiusMeters:kNearestCityRegionRadiusMeters];
-                [cache setObject:regionCandidates forKey:cellKey];
+                candidates = [self findCityCandidatesAroundLat:cellCenter.latitude
+                                                          lon:cellCenter.longitude
+                                                 radiusMeters:kNearestCityRegionRadiusMeters];
+                // Only on a normal return, so a failed lookup is retried instead of cached.
+                [cache setObject:candidates forKey:cellKey];
             }
-            NSArray<OAPOI *> *inRange = [self filterCityCandidates:regionCandidates
-                                                     radiusMeters:kNearestCityQueryRadiusMeters
-                                                            ofLat:latLon.latitude
-                                                              lon:latLon.longitude];
-            if (inRange.count > 0)
-                nearestCity = [self sortAmenities:inRange cityTypes:OAGPXNearestCitySubTypes() latLon:latLon].firstObject;
-        }
-        catch (const std::exception &ex)
-        {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
-        }
-        catch (...)
-        {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            catch (const std::exception &ex)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+            }
+            catch (...)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            }
         }
     }
     @catch (NSException *exception)
@@ -467,7 +487,7 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
     {
         [lock unlock];
     }
-    return nearestCity;
+    return candidates ?: @[];
 }
 
 + (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
@@ -481,11 +501,24 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
     NSArray<NSString *> *cityTypes = OAGPXNearestCitySubTypes();
 
+    // City subtypes live in the "administrative" category; declaring it lets the core skip the
+    // rest at the OBF index. Subcategories stay empty so the accept block still decides.
     OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
         return [cityTypes containsObject:subcategory];
     } emptyFunction:^BOOL{
         return NO;
-    } getTypesFunction:nil];
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
+        OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+        OAPOICategory *administrative = [poiHelper getPoiCategoryByName:@"administrative"];
+        // getPoiCategoryByName: falls back to "other" rather than nil, which would silently
+        // narrow the search to the wrong category.
+        if (!administrative || administrative == poiHelper.otherPoiCategory)
+            return nil;
+
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [NSMapTable strongToStrongObjectsMapTable];
+        [types setObject:[NSMutableSet set] forKey:administrative];
+        return types;
+    }];
 
     NSArray<OAPOI *> *amenities = [OAAmenitySearcher findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
     return amenities ?: @[];

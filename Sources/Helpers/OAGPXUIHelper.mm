@@ -31,7 +31,14 @@
 #import "OAResourcesInstaller.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/QuadTree.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/ObfAddressSectionInfo.h>
 #include <exception>
+
 
 #define SECOND_IN_MILLIS 1000L
 
@@ -124,6 +131,8 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
 + (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters;
 + (NSArray<OAPOI *> *)filterCityCandidates:(NSArray<OAPOI *> *)candidates radiusMeters:(int)radiusMeters ofLat:(double)lat lon:(double)lon;
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon;
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon;
 
 @end
 
@@ -423,40 +432,228 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
         [gpxFile setGradientColorPaletteGradientColorPaletteName:gpxItem.gradientPaletteName];
 }
 
-+ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
+// Settlements are read out of the address section once per map and kept in a quadtree for the
+// session, so every later lookup is an in-memory box query.
+
+static const int kNearestCityAddressRadiusMeters = 50 * 1000;
+
+typedef OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> OAGPXCityQuadTreeType;
+
+static NSLock *OAGPXNearestCityAddressLock()
 {
-    OAPOI *nearestCity = nil;
-    NSLock *lock = OAGPXNearestCitySearchLock();
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    return lock;
+}
+
+static std::shared_ptr<OAGPXCityQuadTreeType> &OAGPXCityQuadTree()
+{
+    static std::shared_ptr<OAGPXCityQuadTreeType> tree =
+        std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+    return tree;
+}
+
+static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
+{
+    static NSMutableSet<NSString *> *loaded;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loaded = [NSMutableSet set];
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                         object:nil
+                                                          queue:nil
+                                                     usingBlock:^(NSNotification * _Nonnull note) {
+            NSLock *lock = OAGPXNearestCityAddressLock();
+            [lock lock];
+            [loaded removeAllObjects];
+            OAGPXCityQuadTree() = std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+            [lock unlock];
+        }];
+    });
+    return loaded;
+}
+
++ (NSString *)searchNearestCityName:(CLLocationCoordinate2D)latLon
+{
+    NSString *fromAddress = [self nearestCityNameFromAddressIndex:latLon];
+    if (fromAddress)
+        return fromAddress;
+
+    OAPOI *poi = [self searchNearestCity:latLon];
+    return poi.name ?: @"";
+}
+
+/// nil = no map here carries address data, caller falls back to POI. @"" = read, nothing in range.
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    const OsmAnd::AreaI bbox31 = (OsmAnd::AreaI) OsmAnd::Utilities::boundingBox31FromAreaInMeters(
+        kNearestCityAddressRadiusMeters, point31);
+
+    QList<std::shared_ptr<const OsmAnd::StreetGroup>> cities;
+    BOOL covered = NO;
+
+    NSLock *lock = OAGPXNearestCityAddressLock();
     [lock lock];
     @try
     {
         try
         {
-            NSCache<NSString *, NSArray<OAPOI *> *> *cache = OAGPXNearestCityCandidatesCache();
-            NSString *cellKey = OAGPXNearestCityCellKey(latLon);
-            NSArray<OAPOI *> *regionCandidates = [cache objectForKey:cellKey];
-            if (!regionCandidates)
+            NSMutableSet<NSString *> *loaded = OAGPXLoadedCityResourceIds();
+            const auto &obfsCollection = app.resourcesManager->obfsCollection;
+            for (const auto &resource : app.resourcesManager->getLocalResources())
             {
-                CLLocationCoordinate2D cellCenter = OAGPXNearestCityCellCenter(latLon);
-                regionCandidates = [self findCityCandidatesAroundLat:cellCenter.latitude
-                                                                 lon:cellCenter.longitude
-                                                        radiusMeters:kNearestCityRegionRadiusMeters];
-                [cache setObject:regionCandidates forKey:cellKey];
+                // Other resource kinds carry a different Metadata subclass; casting those
+                // statically yields a bogus pointer that crashes on dereference.
+                if (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion
+                    && resource->type != OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                    continue;
+
+                const auto obfMetadata = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(resource->metadata);
+                if (!obfMetadata || !obfMetadata->obfFile || !obfMetadata->obfFile->obfInfo)
+                    continue;
+
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                // As in OASearchPhrase.getOfflineIndexes: the address flag is not set on every
+                // map, so coverage is probed with the POI mask.
+                if (!obfMetadata->obfFile->obfInfo->containsDataFor(&queryBbox31,
+                                                                   OsmAnd::MinZoomLevel,
+                                                                   OsmAnd::MaxZoomLevel,
+                                                                   OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)))
+                    continue;
+
+                covered = YES;
+                NSString *resourceId = resource->id.toNSString();
+                if ([loaded containsObject:resourceId])
+                    continue;
+
+                [loaded addObject:resourceId];
+                const auto dataInterface = obfsCollection->obtainDataInterface({resource});
+                QList<std::shared_ptr<const OsmAnd::StreetGroup>> groups;
+                dataInterface->loadStreetGroups(&groups, nullptr,
+                    OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
+
+                for (const auto &group : groups)
+                {
+                    // bbox31 is optional on a street group.
+                    OsmAnd::AreaI area(group->position31.y, group->position31.x, group->position31.y, group->position31.x);
+                    if (group->bbox31.size() >= 4)
+                    {
+                        // bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                        area = OsmAnd::AreaI(group->bbox31.at(1), group->bbox31.at(0), group->bbox31.at(3), group->bbox31.at(2));
+                    }
+                    OAGPXCityQuadTree()->insert(group, area);
+                }
             }
-            NSArray<OAPOI *> *inRange = [self filterCityCandidates:regionCandidates
-                                                     radiusMeters:kNearestCityQueryRadiusMeters
-                                                            ofLat:latLon.latitude
-                                                              lon:latLon.longitude];
-            if (inRange.count > 0)
-                nearestCity = [self sortAmenities:inRange cityTypes:OAGPXNearestCitySubTypes() latLon:latLon].firstObject;
+
+            if (covered)
+            {
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                OAGPXCityQuadTree()->query(queryBbox31, cities);
+            }
         }
         catch (const std::exception &ex)
         {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %s", ex.what());
         }
         catch (...)
         {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: unknown C++ exception");
+        }
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %@ %@", exception.name, exception.reason);
+    }
+    @finally
+    {
+        [lock unlock];
+    }
+
+    if (covered)
+
+    if (!covered)
+        return nil;
+    if (cities.isEmpty())
+        return @"";
+
+    // Distance weighted by the settlement's own radius.
+    std::shared_ptr<const OsmAnd::StreetGroup> nearest;
+    double nearestWeight = 0;
+    for (const auto &city : cities)
+    {
+        OsmAnd::LatLon cityLatLon = OsmAnd::Utilities::convert31ToLatLon(city->position31);
+        CGFloat radius = [OACity getRadius:[OACity getTypeStr:(EOACityType) city->type]];
+        if (radius <= 0)
+            radius = 1000.;
+        double weight = OsmAnd::Utilities::distance(cityLatLon.longitude, cityLatLon.latitude,
+                                                    latLon.longitude, latLon.latitude) / radius;
+        if (!nearest || weight < nearestWeight)
+        {
+            nearest = city;
+            nearestWeight = weight;
+        }
+    }
+    return nearest ? nearest->nativeName.toNSString() : @"";
+}
+
++ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
+{
+    // Only the OBF lookup needs serialising. Filtering and sorting are pure computation over
+    // an immutable array, so they run unlocked.
+    NSArray<OAPOI *> *regionCandidates = [self cityCandidatesForCellAt:latLon];
+    if (regionCandidates.count == 0)
+        return nil;
+
+    NSArray<OAPOI *> *inRange = [self filterCityCandidates:regionCandidates
+                                             radiusMeters:kNearestCityQueryRadiusMeters
+                                                    ofLat:latLon.latitude
+                                                      lon:latLon.longitude];
+    if (inRange.count == 0)
+        return nil;
+
+    return [self sortAmenities:inRange cityTypes:OAGPXNearestCitySubTypes() latLon:latLon].firstObject;
+}
+
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon
+{
+    NSCache<NSString *, NSArray<OAPOI *> *> *cache = OAGPXNearestCityCandidatesCache();
+    NSString *cellKey = OAGPXNearestCityCellKey(latLon);
+
+    // NSCache is thread-safe, so a warm cell never takes the lock.
+    NSArray<OAPOI *> *candidates = [cache objectForKey:cellKey];
+    if (candidates)
+        return candidates;
+
+    NSLock *lock = OAGPXNearestCitySearchLock();
+    [lock lock];
+    @try
+    {
+        // Another thread may have filled the cell while we waited.
+        candidates = [cache objectForKey:cellKey];
+        if (!candidates)
+        {
+            try
+            {
+                CLLocationCoordinate2D cellCenter = OAGPXNearestCityCellCenter(latLon);
+                candidates = [self findCityCandidatesAroundLat:cellCenter.latitude
+                                                          lon:cellCenter.longitude
+                                                 radiusMeters:kNearestCityRegionRadiusMeters];
+                // Only on a normal return, so a failed lookup is retried instead of cached.
+                [cache setObject:candidates forKey:cellKey];
+            }
+            catch (const std::exception &ex)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+            }
+            catch (...)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            }
         }
     }
     @catch (NSException *exception)
@@ -467,7 +664,7 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
     {
         [lock unlock];
     }
-    return nearestCity;
+    return candidates ?: @[];
 }
 
 + (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
@@ -481,11 +678,24 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
     NSArray<NSString *> *cityTypes = OAGPXNearestCitySubTypes();
 
+    // City subtypes live in the "administrative" category; declaring it lets the core skip the
+    // rest at the OBF index. Subcategories stay empty so the accept block still decides.
     OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
         return [cityTypes containsObject:subcategory];
     } emptyFunction:^BOOL{
         return NO;
-    } getTypesFunction:nil];
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
+        OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+        OAPOICategory *administrative = [poiHelper getPoiCategoryByName:@"administrative"];
+        // getPoiCategoryByName: falls back to "other" rather than nil, which would silently
+        // narrow the search to the wrong category.
+        if (!administrative || administrative == poiHelper.otherPoiCategory)
+            return nil;
+
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [NSMapTable strongToStrongObjectsMapTable];
+        [types setObject:[NSMutableSet set] forKey:administrative];
+        return types;
+    }];
 
     NSArray<OAPOI *> *amenities = [OAAmenitySearcher findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
     return amenities ?: @[];

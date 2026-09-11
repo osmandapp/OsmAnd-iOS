@@ -78,6 +78,19 @@ final class SensorTextWidget: OASimpleWidget {
         true
     }
 
+    override func copySettings(from fromAppMode: OAApplicationMode,
+                               appMode toAppMode: OAApplicationMode,
+                               customId: String?) {
+        super.copySettings(from: fromAppMode, appMode: toAppMode, customId: customId)
+        if let sourceDevicePreference = deviceIdPref,
+           let targetDevicePreference = registerSensorDevicePref(customId: customId) {
+            targetDevicePreference.set(sourceDevicePreference.get(fromAppMode), mode: toAppMode)
+        }
+        if let targetVisualizationPreference = registerVisualizationModePref(customId: customId) {
+            targetVisualizationPreference.set(visualizationModePref.get(fromAppMode), mode: toAppMode)
+        }
+    }
+
     override func getSettingsData(_ appMode: OAApplicationMode,
                                   widgetConfigurationParams: [String: Any]?,
                                   isCreate: Bool) -> OATableDataModel? {

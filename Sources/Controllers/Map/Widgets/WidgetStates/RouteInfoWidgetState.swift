@@ -88,6 +88,14 @@ final class RouteInfoWidgetState: OAWidgetState {
         Self.registerDisplayPriorityPreferenceWith(customId: customId).set(displayPriorityPref.get(appMode), mode: appMode)
         Self.registerShowExpandButtonPreferenceWith(customId: customId).set(showExpandButtonPref.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerDefaultViewPreferenceWith(customId: customId).set(defaultViewPref.get(fromAppMode), mode: toAppMode)
+        Self.registerDisplayPriorityPreferenceWith(customId: customId).set(displayPriorityPref.get(fromAppMode), mode: toAppMode)
+        Self.registerShowExpandButtonPreferenceWith(customId: customId).set(showExpandButtonPref.get(fromAppMode), mode: toAppMode)
+    }
     
     private static func registerDefaultViewPreferenceWith(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDefaultView {
         var prefId = Self.defaultViewId

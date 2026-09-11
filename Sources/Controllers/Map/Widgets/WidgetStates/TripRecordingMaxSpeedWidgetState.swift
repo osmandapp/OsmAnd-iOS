@@ -68,6 +68,12 @@ final class TripRecordingMaxSpeedWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(maxSpeedModePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId: customId).set(maxSpeedModePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getMaxSpeedModePreference() -> OACommonTripRecordingMaxSpeedMode {
         maxSpeedModePreference

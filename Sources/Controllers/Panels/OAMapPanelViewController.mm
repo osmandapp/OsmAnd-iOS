@@ -1048,7 +1048,7 @@ typedef enum
 //
 //    [self removeGestureRecognizers];
     
-    OAConfigureScreenViewController *vc = [[OAConfigureScreenViewController alloc] init];
+    ConfigureScreenViewController *vc = [[ConfigureScreenViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
     
 //    _dashboard = [[OAConfigureMenuViewController alloc] init];

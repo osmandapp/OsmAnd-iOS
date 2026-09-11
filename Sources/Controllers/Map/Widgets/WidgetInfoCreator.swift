@@ -13,9 +13,24 @@ import Foundation
 class WidgetInfoCreator: NSObject {
     
     let appMode: OAApplicationMode
+    let screenLayoutMode: ScreenLayoutMode
+    private let preferenceLayoutMode: NSNumber?
     
-    init(appMode: OAApplicationMode) {
+    convenience init(appMode: OAApplicationMode, screenLayoutMode: ScreenLayoutMode) {
+        let preferenceLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? NSNumber(value: screenLayoutMode.rawValue)
+            : nil
+        self.init(appMode: appMode,
+                  screenLayoutMode: screenLayoutMode,
+                  preferenceLayoutMode: preferenceLayoutMode)
+    }
+
+    init(appMode: OAApplicationMode,
+         screenLayoutMode: ScreenLayoutMode,
+         preferenceLayoutMode: NSNumber?) {
         self.appMode = appMode
+        self.screenLayoutMode = screenLayoutMode
+        self.preferenceLayoutMode = preferenceLayoutMode
     }
     
     func createWidgetInfo(factory: MapWidgetsFactory, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
@@ -29,7 +44,7 @@ class WidgetInfoCreator: NSObject {
     func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let widget = factory.createMapWidget(customId: key, widgetType: widgetType, widgetParams: widgetParams)
         if let widget = widget {
-            let panel = widgetType.getPanel(key, appMode: appMode)
+            let panel = widgetType.panel(key, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
             return createCustomWidgetInfo(widgetId: key, widget: widget, widgetType: widgetType, panel: panel)
         }
         return nil
@@ -41,17 +56,17 @@ class WidgetInfoCreator: NSObject {
         }
         
         let widgetId = widgetType.id
-        let panel = widgetType.getPanel(widgetId, appMode: appMode)
-        let page = panel.getWidgetPage(widgetId, appMode: appMode)
-        let order = panel.getWidgetOrder(widgetId, appMode: appMode)
+        let panel = widgetType.panel(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let page = panel.widgetPage(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let order = panel.widgetOrder(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
         
         return createWidgetInfo(widgetId: widgetId, widget: widget, iconName: widgetType.iconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     
     func createExternalWidget(widgetId: String, widget: OABaseWidgetView, settingsIconName: String, message: String?, defaultPanel: WidgetsPanel, order: Int) -> MapWidgetInfo {
         let panel = getExternalWidgetPanel(widgetId: widgetId, defaultPanel: defaultPanel)
-        let page = panel.getWidgetPage(widgetId, appMode: appMode)
-        let savedOrder = panel.getWidgetOrder(widgetId, appMode: appMode)
+        let page = panel.widgetPage(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let savedOrder = panel.widgetOrder(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
         
         var updatedOrder = order
         if savedOrder != WidgetsPanel.DEFAULT_ORDER {
@@ -62,8 +77,8 @@ class WidgetInfoCreator: NSObject {
     }
     
     private func getExternalWidgetPanel(widgetId: String, defaultPanel: WidgetsPanel) -> WidgetsPanel {
-        let storedInLeftPanel = WidgetsPanel.leftPanel.getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
-        let storedInRightPanel = WidgetsPanel.rightPanel.getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
+        let storedInLeftPanel = WidgetsPanel.leftPanel.widgetOrder(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode) != WidgetsPanel.DEFAULT_ORDER
+        let storedInRightPanel = WidgetsPanel.rightPanel.widgetOrder(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode) != WidgetsPanel.DEFAULT_ORDER
         
         if storedInLeftPanel {
             return WidgetsPanel.leftPanel
@@ -74,19 +89,19 @@ class WidgetInfoCreator: NSObject {
     }
     
     func createCustomWidgetInfo(widgetId: String, widget: OABaseWidgetView, widgetType: WidgetType, panel: WidgetsPanel) -> MapWidgetInfo {
-        let page = panel.getWidgetPage(widgetId, appMode: appMode)
-        let order = panel.getWidgetOrder(widgetId, appMode: appMode)
+        let page = panel.widgetPage(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let order = panel.widgetOrder(widgetId, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
         return createWidgetInfo(widgetId: widgetId, widget: widget, iconName: widgetType.iconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     
     func createWidgetInfo(widgetId: String, widget: OABaseWidgetView, iconName: String, message: String?, page: Int, order: Int, widgetPanel: WidgetsPanel) -> MapWidgetInfo {
         if let simpleWidget = widget as? OASimpleWidget {
-            return SimpleWidgetInfo(key: widgetId, simpleWidget: simpleWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+            return SimpleWidgetInfo(key: widgetId, simpleWidget: simpleWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel, appMode: appMode, screenLayoutMode: screenLayoutMode)
         }
         if let textInfoWidget = widget as? OATextInfoWidget {
-            return SideWidgetInfo(key: widgetId, textWidget: textInfoWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+            return SideWidgetInfo(key: widgetId, textWidget: textInfoWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel, appMode: appMode, screenLayoutMode: screenLayoutMode)
         } else {
-            return CenterWidgetInfo(key: widgetId, widget: widget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+            return CenterWidgetInfo(key: widgetId, widget: widget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel, appMode: appMode, screenLayoutMode: screenLayoutMode)
         }
     }
 }

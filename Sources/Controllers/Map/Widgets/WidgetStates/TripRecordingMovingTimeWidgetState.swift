@@ -68,6 +68,12 @@ final class TripRecordingMovingTimeWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(movingTimeModePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId: customId).set(movingTimeModePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getMovingTimeModePreference() -> OACommonTripRecordingMovingTimeMode {
         movingTimeModePreference

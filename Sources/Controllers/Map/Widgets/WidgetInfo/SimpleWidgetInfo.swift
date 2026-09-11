@@ -18,15 +18,20 @@ class SimpleWidgetInfo: MapWidgetInfo {
          message: String,
          page: Int,
          order: Int,
-         widgetPanel: WidgetsPanel) {
-        super.init(key: key, widget: simpleWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
+         widgetPanel: WidgetsPanel,
+         appMode: OAApplicationMode,
+         screenLayoutMode: ScreenLayoutMode) {
+        super.init(key: key, widget: simpleWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel, appMode: appMode, screenLayoutMode: screenLayoutMode)
 
         simpleWidget.setContentTitle(getWidgetTitle())
     }
 
-    override func getUpdatedPanel() -> WidgetsPanel {
-        if let widgetType = getWidgetType() {
-            return widgetType.getPanel(key, appMode: OAAppSettings.sharedManager().applicationMode.get())
+    override func getUpdatedPanel(_ appMode: OAApplicationMode,
+                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
+        if let widgetType = widgetType() {
+            return widgetType.panel(key,
+                                    appMode: appMode,
+                                    screenLayoutMode: screenLayoutMode)
         }
         return widgetPanel
     }

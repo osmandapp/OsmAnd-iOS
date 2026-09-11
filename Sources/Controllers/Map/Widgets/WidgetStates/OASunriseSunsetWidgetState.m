@@ -38,7 +38,7 @@
     return self;
 }
 
-- (OAWidgetType *)getWidgetType
+- (OAWidgetType *)widgetType
 {
     return _widgetType;
 }
@@ -137,6 +137,14 @@
 - (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId
 {
     [[self registerPreference:customId widgetParams:nil] set:[_preference get:appMode] mode:appMode];
+}
+
+- (void)copyPrefsFromMode:(OAApplicationMode *)fromAppMode
+                  appMode:(OAApplicationMode *)appMode
+                 customId:(NSString *)customId
+{
+    [[self registerPreference:customId widgetParams:nil] set:[_preference get:fromAppMode] mode:appMode];
+    [[self registerSunPositionPreference:customId widgetParams:nil] set:[_sunPositionPreference get:fromAppMode] mode:appMode];
 }
 
 - (NSString *)getPrefId {

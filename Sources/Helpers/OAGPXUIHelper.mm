@@ -31,6 +31,12 @@
 #import "OAResourcesInstaller.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/QuadTree.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/ObfAddressSectionInfo.h>
 #include <exception>
 
 #define SECOND_IN_MILLIS 1000L
@@ -124,6 +130,7 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
 + (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters;
 + (NSArray<OAPOI *> *)filterCityCandidates:(NSArray<OAPOI *> *)candidates radiusMeters:(int)radiusMeters ofLat:(double)lat lon:(double)lon;
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon;
 
 @end
 
@@ -421,6 +428,175 @@ static NSArray<NSString *> *OAGPXNearestCitySubTypes()
 
     if (gpxItem.gradientPaletteName && gpxItem.gradientPaletteName.length > 0)
         [gpxFile setGradientColorPaletteGradientColorPaletteName:gpxItem.gradientPaletteName];
+}
+
+// Settlements are read out of the address section once per map and kept in a quadtree for the
+// session, so every later lookup is an in-memory box query.
+
+static const int kNearestCityAddressRadiusMeters = 50 * 1000;
+
+typedef OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> OAGPXCityQuadTreeType;
+
+static NSLock *OAGPXNearestCityAddressLock()
+{
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    return lock;
+}
+
+static std::shared_ptr<OAGPXCityQuadTreeType> &OAGPXCityQuadTree()
+{
+    static std::shared_ptr<OAGPXCityQuadTreeType> tree =
+        std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+    return tree;
+}
+
+static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
+{
+    static NSMutableSet<NSString *> *loaded;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loaded = [NSMutableSet set];
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                         object:nil
+                                                          queue:nil
+                                                     usingBlock:^(NSNotification * _Nonnull note) {
+            NSLock *lock = OAGPXNearestCityAddressLock();
+            [lock lock];
+            [loaded removeAllObjects];
+            OAGPXCityQuadTree() = std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+            [lock unlock];
+        }];
+    });
+    return loaded;
+}
+
++ (NSString *)searchNearestCityName:(CLLocationCoordinate2D)latLon
+{
+    NSString *fromAddress = [self nearestCityNameFromAddressIndex:latLon];
+    if (fromAddress)
+        return fromAddress;
+
+    OAPOI *poi = [self searchNearestCity:latLon];
+    return poi.name ?: @"";
+}
+
+/// nil = no map here carries address data, caller falls back to POI. @"" = read, nothing in range.
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    const OsmAnd::AreaI bbox31 = (OsmAnd::AreaI) OsmAnd::Utilities::boundingBox31FromAreaInMeters(
+        kNearestCityAddressRadiusMeters, point31);
+
+    QList<std::shared_ptr<const OsmAnd::StreetGroup>> cities;
+    BOOL covered = NO;
+
+    NSLock *lock = OAGPXNearestCityAddressLock();
+    [lock lock];
+    @try
+    {
+        try
+        {
+            NSMutableSet<NSString *> *loaded = OAGPXLoadedCityResourceIds();
+            const auto &obfsCollection = app.resourcesManager->obfsCollection;
+            for (const auto &resource : app.resourcesManager->getLocalResources())
+            {
+                // Other resource kinds carry a different Metadata subclass; casting those
+                // statically yields a bogus pointer that crashes on dereference.
+                if (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion
+                    && resource->type != OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                    continue;
+
+                const auto obfMetadata = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(resource->metadata);
+                if (!obfMetadata || !obfMetadata->obfFile || !obfMetadata->obfFile->obfInfo)
+                    continue;
+
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                // As in OASearchPhrase.getOfflineIndexes: the address flag is not set on every
+                // map, so coverage is probed with the POI mask.
+                if (!obfMetadata->obfFile->obfInfo->containsDataFor(&queryBbox31,
+                                                                   OsmAnd::MinZoomLevel,
+                                                                   OsmAnd::MaxZoomLevel,
+                                                                   OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)))
+                    continue;
+
+                covered = YES;
+                NSString *resourceId = resource->id.toNSString();
+                if ([loaded containsObject:resourceId])
+                    continue;
+
+                [loaded addObject:resourceId];
+                const auto dataInterface = obfsCollection->obtainDataInterface({resource});
+                QList<std::shared_ptr<const OsmAnd::StreetGroup>> groups;
+                dataInterface->loadStreetGroups(&groups, nullptr,
+                    OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
+
+                for (const auto &group : groups)
+                {
+                    // bbox31 is optional on a street group.
+                    OsmAnd::AreaI area(group->position31.y, group->position31.x, group->position31.y, group->position31.x);
+                    if (group->bbox31.size() >= 4)
+                    {
+                        // bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                        area = OsmAnd::AreaI(group->bbox31.at(1), group->bbox31.at(0), group->bbox31.at(3), group->bbox31.at(2));
+                    }
+                    OAGPXCityQuadTree()->insert(group, area);
+                }
+            }
+
+            if (covered)
+            {
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                OAGPXCityQuadTree()->query(queryBbox31, cities);
+            }
+        }
+        catch (const std::exception &ex)
+        {
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %s", ex.what());
+        }
+        catch (...)
+        {
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: unknown C++ exception");
+        }
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %@ %@", exception.name, exception.reason);
+    }
+    @finally
+    {
+        [lock unlock];
+    }
+
+    if (covered)
+
+    if (!covered)
+        return nil;
+    if (cities.isEmpty())
+        return @"";
+
+    // Distance weighted by the settlement's own radius.
+    std::shared_ptr<const OsmAnd::StreetGroup> nearest;
+    double nearestWeight = 0;
+    for (const auto &city : cities)
+    {
+        OsmAnd::LatLon cityLatLon = OsmAnd::Utilities::convert31ToLatLon(city->position31);
+        CGFloat radius = [OACity getRadius:[OACity getTypeStr:(EOACityType) city->type]];
+        if (radius <= 0)
+            radius = 1000.;
+        double weight = OsmAnd::Utilities::distance(cityLatLon.longitude, cityLatLon.latitude,
+                                                    latLon.longitude, latLon.latitude) / radius;
+        if (!nearest || weight < nearestWeight)
+        {
+            nearest = city;
+            nearestWeight = weight;
+        }
+    }
+    return nearest ? nearest->nativeName.toNSString() : @"";
 }
 
 + (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon

@@ -5,7 +5,7 @@
 "route_stops_before" = "%@ محطة توقف قبل";
 "transport_Routes" = "طرق";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
-"transport_nearby_routes" = "في غضون";
+"transport_nearby_routes" = "الفئة";
 "shared_string_control_stop" = "إيقاف";
 "cancel_navigation" = "إيقاف التوجيه";
 "intermediate_items_sort_by_distance" = "فرز من الباب إلى الباب";

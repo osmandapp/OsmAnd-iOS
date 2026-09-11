@@ -85,6 +85,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     OAAutoObserverProxy* _locationServicesStatusObserver;
 
     BOOL _driveModeActive;
+    BOOL _hudButtonsVisible;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -136,6 +137,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) commonInit
 {
     _mapHudType = EOAMapHudBrowse;
+    _hudButtonsVisible = YES;
     
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
@@ -1269,7 +1271,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    BOOL needShow = _compassButton.alpha == 0.0 && showCompass;
+    BOOL needShow = _compassButton.alpha == 0.0 && showCompass && _hudButtonsVisible;
     BOOL needHide = _compassButton.alpha == 1.0 && !showCompass;
     if (needShow)
         [self showCompass];
@@ -1847,11 +1849,16 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
+    _hudButtonsVisible = isButtonsVisible;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
         _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
-        _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
+        BOOL showCompassButton = [self shouldShowCompass] && isButtonsVisible;
+        _compassButton.alpha = showCompassButton ? 1. : 0.;
+        if (showCompassButton)
+            _compassButton.hidden = NO;
+
         _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         

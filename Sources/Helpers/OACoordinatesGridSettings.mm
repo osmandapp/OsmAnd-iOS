@@ -8,6 +8,7 @@
 
 #import "OACoordinatesGridSettings.h"
 #import "OAAppSettings.h"
+#import "OAGridFormatMapping.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapRendererState.h>
@@ -167,12 +168,10 @@
 {
     int32_t minZoom = 1;
     OsmAnd::GridConfiguration gridConfiguration;
-    OAProjection proj = [GridFormatWrapper projectionFor:gridFormat];
-    auto cppProj = static_cast<OsmAnd::GridConfiguration::Projection>(proj);
+    auto cppProj = OACoreProjectionForGridFormat(gridFormat);
     gridConfiguration.setPrimaryProjection(cppProj);
     gridConfiguration.setSecondaryProjection(cppProj);
-    OAFormat format = [GridFormatWrapper getFormatFor:gridFormat];
-    auto cppForm = static_cast<OsmAnd::GridConfiguration::Format>(format);
+    auto cppForm = OACoreFormatForGridFormat(gridFormat);
     gridConfiguration.setPrimaryFormat(cppForm);
     gridConfiguration.setSecondaryFormat(cppForm);
     gridConfiguration.setProjectionParameters();

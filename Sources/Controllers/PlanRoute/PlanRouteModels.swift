@@ -297,6 +297,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var defaultMode: OAApplicationMode? { get }
     var isTrackReadyToCalculate: Bool { get }
     var isApproximationNeeded: Bool { get }
+    var shouldRequestApproximationBeforeNavigation: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
     var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
@@ -330,12 +331,14 @@ protocol PlanRouteSaveDataSource: AnyObject {
     func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func appendToTrack(filePath: String, onComplete: @escaping (Bool) -> Void)
-    func enterNavigation()
+    func enterNavigation(followTrackMode: Bool) -> EOAPlanRouteNavigationResult
+    func applyAttachedTrackToNavigation(beforeTransition: () -> Void) -> EOAPlanRouteNavigationResult
 }
 
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {
 
     var mode: PlanRouteMode { get }
+    var sourceFilePath: String? { get }
     var editTrackFolder: String? { get }
     var hasChanges: Bool { get }
     var hasPoints: Bool { get }
@@ -345,12 +348,14 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var presenterViewController: UIViewController? { get set }
     var onDataChanged: (() -> Void)? { get set }
     var onRouteInfoChanged: (() -> Void)? { get set }
+    var onApproximationApplied: (() -> Void)? { get set }
     var onApproximationPopupDismissed: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }
 
     func setCrosshairPosition(screenPoint: CGPoint)
+    func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat)
     func applyPointEdit()
     func cancelPointEdit()
     func addAnotherPoint()

@@ -574,8 +574,6 @@ static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
         [lock unlock];
     }
 
-    if (covered)
-
     if (!covered)
         return nil;
     if (cities.isEmpty())

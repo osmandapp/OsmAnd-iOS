@@ -4552,3 +4552,5 @@
 "osm_edits_empty_state_title" = "Ingen ventende kortredigeringer";
 "osm_edits_empty_state_description" = "De ændringer, du foretager i OsmAnd, vises her, inden de uploades til OpenStreetMap";
 "carplay_trip_via_point" = "Via %@";
+"tracks_stats_are_being_calculated" = "Statistikker for spor beregnes i øjeblikket...";
+"tracks_stats_are_being_calculated_left" = "%1$@ %2$@ tilbage";

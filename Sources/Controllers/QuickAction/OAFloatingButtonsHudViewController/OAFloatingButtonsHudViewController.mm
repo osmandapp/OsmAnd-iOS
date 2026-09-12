@@ -404,16 +404,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
 - (void)restorePinPosition
 {
-    BOOL isLandscape = OAUtilities.isLandscape;
+    auto centerPixel = [OARootViewController instance].mapPanel.mapViewController.mapView.getCenterPixel;
     CGRect pinFrame = _quickActionPin.frame;
-    CGFloat width = isLandscape ? DeviceScreenWidth * 1.5 : DeviceScreenWidth;
-    CGFloat originX = width / 2 - pinFrame.size.width / 2;
-    CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
-    if (!isnan(originX) && !isnan(originY))
-    {
-        pinFrame.origin = CGPointMake(originX, originY);
-        _quickActionPin.frame = pinFrame;
-    }
+    pinFrame.origin = CGPointMake(centerPixel.x / UIScreen.mainScreen.scale - pinFrame.size.width / 2, centerPixel.y / UIScreen.mainScreen.scale - pinFrame.size.height);
+    _quickActionPin.frame = pinFrame;
 }
 
 - (void)updateColors
@@ -510,8 +504,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL isLandscape = [OAUtilities isLandscape];
-    [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale
-                                                y:isLandscape ? kViewportScale : (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight];
+    if (isLandscape || _cachedYViewPort > kViewportScale)
+        [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale y:kViewportScale];
 }
 
 - (void)restoreMapViewPort
@@ -526,6 +520,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         [self setupQuickActionBtnVisibility:quickActionButton];
     }
     [self setupMap3dModeButtonVisibility];
+    [self restorePinPosition];
 }
 
 - (void)updateButtonsAppearance

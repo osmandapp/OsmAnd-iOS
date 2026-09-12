@@ -262,10 +262,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
 - (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text
 {
-    if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
-    {
-        return YES;
-    }
     OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_EQUALS_FROM_SPACE];
     return [matcher matches:text];
 }

@@ -15,3 +15,9 @@ xcuserdata
 *.xcscmblueprint
 /build
 qt-ios-prebuilt.zip*
+
+# Prebuilt ANGLE frameworks and the upstream Khronos/ANGLE headers they go with -
+# fetched by prepare.sh, not stored in the repository
+/libEGL.xcframework/
+/libGLESv2.xcframework/
+/Libraries/ANGLE/include/

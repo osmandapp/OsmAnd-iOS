@@ -1912,6 +1912,7 @@
 "shared_string_development" = "Development";
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
+"routing_engine_shared" = "Route with OsmAndShared";
 "auto_zoom_smooth" = "Smooth";
 "auto_zoom_discrete" = "Discrete";
 "osmand_depelopment_simulate_location_section" = "Simulate";

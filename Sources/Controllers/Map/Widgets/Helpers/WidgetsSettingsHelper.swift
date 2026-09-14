@@ -237,9 +237,13 @@ class WidgetsSettingsHelper: NSObject {
             storedWidgetInfos.append(widgetInfo)
         }
         return storedWidgetInfos.enumerated().sorted {
-            $0.element.pageIndex == $1.element.pageIndex
-                ? $0.offset < $1.offset
-                : $0.element.pageIndex < $1.element.pageIndex
+            if $0.element.pageIndex != $1.element.pageIndex {
+                return $0.element.pageIndex < $1.element.pageIndex
+            }
+            if $0.element.priority != $1.element.priority {
+                return $0.element.priority < $1.element.priority
+            }
+            return $0.offset < $1.offset
         }.map(\.element)
     }
 

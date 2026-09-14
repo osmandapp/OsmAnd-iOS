@@ -19,6 +19,9 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     var onClose: (() -> Void)?
     var onSave: (() -> Void)?
 
+    var closeButtonSourceView: UIView { closeButton }
+    var optionsButtonSourceView: UIView { optionsButton }
+
     var titleText: String? {
         didSet { titleLabel.text = titleText }
     }

@@ -1018,6 +1018,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.hide()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = topToolbar.closeButtonSourceView
+        alert.popoverPresentationController?.sourceRect = topToolbar.closeButtonSourceView.bounds
         present(alert, animated: true)
     }
 
@@ -1181,6 +1183,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.dataProvider.clearAllPoints()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = topToolbar.optionsButtonSourceView
+        alert.popoverPresentationController?.sourceRect = topToolbar.optionsButtonSourceView.bounds
         present(alert, animated: true)
     }
 

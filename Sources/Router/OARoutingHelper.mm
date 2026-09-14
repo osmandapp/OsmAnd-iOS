@@ -1040,6 +1040,26 @@ static BOOL _isDeviatedFromRoute = false;
 	return [_provider getRoutingEnvironment:mode start:start end:end];
 }
 
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder
+{
+	return [_provider generateSharedGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
+}
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	return [_provider calculateSharedGpxApproximation:env
+                                                gctx:gctx
+                                              points:points
+                               useExternalTimestamps:useExternalTimestamps
+                                       resultMatcher:resultMatcher];
+}
+
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
 {
 	return [_provider generateGpxPoints:env gctx:gctx locationsHolder:locationsHolder];

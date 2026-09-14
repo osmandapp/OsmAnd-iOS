@@ -23,6 +23,7 @@
 #include <OsmAndCore.h>
 
 @class OASGpxFile, OARouteCalculationResult, OAApplicationMode, OALocationsHolder, OAGpxRouteApproximation;
+@class OASBinaryMapIndexReader, OASGpxPoint, OASGpxRouteApproximation, OASRoutePlannerFrontEnd, OASRoutingContext;
 struct RoutingConfiguration;
 struct RoutingConfigurationBuilder;
 struct GeneralRouter;
@@ -39,7 +40,12 @@ struct PrecalculatedRouteDirection;
 @property (nonatomic, readonly) std::shared_ptr<RoutingContext> complexCtx;
 @property (nonatomic, readonly) std::shared_ptr<PrecalculatedRouteDirection> precalculated;
 
+/** The OsmAndShared planner and the context it searches in, when OsmAndShared is the planner. */
+@property (nonatomic, readonly) OASRoutePlannerFrontEnd *sharedRouter;
+@property (nonatomic, readonly) OASRoutingContext *sharedCtx;
+
 - (instancetype)initWithRouter:(std::shared_ptr<RoutePlannerFrontEnd>)router context:(std::shared_ptr<RoutingContext>)ctx complextCtx:(std::shared_ptr<RoutingContext>)complexCtx precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated;
+- (instancetype)initWithSharedRouter:(OASRoutePlannerFrontEnd *)router context:(OASRoutingContext *)ctx;
 
 @end
 
@@ -127,6 +133,17 @@ struct PrecalculatedRouteDirection;
                                                    locationsHolder:(OALocationsHolder *)locationsHolder
                                               useExternalTimestamps:(BOOL)useExternalTimestamps
                                                      resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+
+/** The OsmAndShared twins of the two above, for a routing environment that carries its planner. */
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder;
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 + (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
                                                    gpxFile:(OASGpxFile *)gpxFile

@@ -15,10 +15,12 @@
 #include "CommonCollections.h"
 #include "commonOsmAndCore.h"
 
+struct GpxPoint;
+struct GpxRouteApproximation;
 struct RouteSegmentResult;
 struct TurnType;
 
-@class OASRouteSegmentResult, OASTurnType;
+@class OAGpxRouteApproximation, OASRouteSegmentResult, OASTurnType;
 
 @interface OACppRouteConverter : NSObject
 
@@ -32,6 +34,14 @@ struct TurnType;
  * reads them.
  */
 + (NSArray<OASRouteSegmentResult *> *) toSharedSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments;
+
+/**
+ * The track the C++ approximation attached to the roads underneath it, as the shared model the
+ * editing context is built on: the points it kept and the roads of the whole track, sharing the
+ * roads between them. The search's own state on a point - the road segment it sits on and the way
+ * back from it - does not come over; nothing outside the approximation reads it.
+ */
++ (OAGpxRouteApproximation *) toSharedApproximation:(const std::shared_ptr<GpxRouteApproximation> &)approximation;
 
 /** One manoeuvre, for the places that still take it off a C++ segment. */
 + (OASTurnType *) toSharedTurnType:(const std::shared_ptr<TurnType> &)turnType;

@@ -6,7 +6,11 @@
 #import "OACppRouteConverter.h"
 #import "OsmAndSharedWrapper.h"
 
+#import "OAGpxRouteApproximation.h"
+
 #include <routeSegmentResult.h>
+#include <routeSegment.h>
+#include <gpxRouteApproximation.h>
 #include <binaryRead.h>
 #include <routeTypeRule.h>
 #include <turnType.h>
@@ -156,33 +160,38 @@ static OASKotlinArray<OASKotlinIntArray *> * toIntArrays(const std::vector<std::
                           isPossibleRightTurn:turnType->isPossibleRightTurn()];
 }
 
++ (OASRouteDataObject *) toSharedRoad:(const std::shared_ptr<RouteDataObject> &)road
+                         regionsCache:(OARegionCache &)regions
+                           roadsCache:(OARoadCache &)roads
+{
+    if (!road)
+        return nil;
+
+    auto cachedRoad = roads.find(road.get());
+    if (cachedRoad != roads.end())
+        return cachedRoad->second;
+
+    OASRouteRegion *region = nil;
+    if (road->region)
+    {
+        auto cached = regions.find(road->region.get());
+        if (cached != regions.end())
+            region = cached->second;
+        else
+            regions[road->region.get()] = region = [self toSharedRegion:road->region];
+    }
+
+    OASRouteDataObject *res = [self toSharedObject:road region:region];
+    roads[road.get()] = res;
+    return res;
+}
+
 + (OASRouteSegmentResult *) toSharedSegment:(const std::shared_ptr<RouteSegmentResult> &)segment
                                regionsCache:(OARegionCache &)regions
                                  roadsCache:(OARoadCache &)roads
                         withAttachedRoutes:(BOOL)withAttachedRoutes
 {
-    OASRouteDataObject *object = nil;
-    if (segment->object)
-    {
-        auto road = roads.find(segment->object.get());
-        if (road != roads.end())
-        {
-            object = road->second;
-        }
-        else
-        {
-            OASRouteRegion *region = nil;
-            if (segment->object->region)
-            {
-                auto cached = regions.find(segment->object->region.get());
-                if (cached != regions.end())
-                    region = cached->second;
-                else
-                    regions[segment->object->region.get()] = region = [self toSharedRegion:segment->object->region];
-            }
-            roads[segment->object.get()] = object = [self toSharedObject:segment->object region:region];
-        }
-    }
+    OASRouteDataObject *object = [self toSharedRoad:segment->object regionsCache:regions roadsCache:roads];
 
     OASRouteSegmentResult *res = [[OASRouteSegmentResult alloc] initWithRouteObject:object
                                                                     startPointIndex:segment->getStartPointIndex()
@@ -217,14 +226,59 @@ static OASKotlinArray<OASKotlinIntArray *> * toIntArrays(const std::vector<std::
 }
 
 + (NSArray<OASRouteSegmentResult *> *) toSharedSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments
+                                           regionsCache:(OARegionCache &)regions
+                                             roadsCache:(OARoadCache &)roads
 {
-    OARegionCache regions;
-    OARoadCache roads;
     NSMutableArray<OASRouteSegmentResult *> *res = [NSMutableArray arrayWithCapacity:segments.size()];
     for (const auto &segment : segments)
         [res addObject:[self toSharedSegment:segment regionsCache:regions roadsCache:roads withAttachedRoutes:YES]];
 
     return res;
+}
+
++ (NSArray<OASRouteSegmentResult *> *) toSharedSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments
+{
+    OARegionCache regions;
+    OARoadCache roads;
+    return [self toSharedSegments:segments regionsCache:regions roadsCache:roads];
+}
+
++ (OASGpxPoint *) toSharedGpxPoint:(const std::shared_ptr<GpxPoint> &)point
+                      regionsCache:(OARegionCache &)regions
+                        roadsCache:(OARoadCache &)roads
+{
+    OASGpxPoint *res = [[OASGpxPoint alloc] init];
+    res.ind = point->ind;
+    res.loc = [[OASKLatLon alloc] initWithLatitude:point->lat longitude:point->lon];
+    // the same numbers the approximation puts there, but the C++ point leaves them unset until a
+    // search touches it, so they are taken from the coordinates rather than read back
+    res.x31 = get31TileNumberX(point->lon);
+    res.y31 = get31TileNumberY(point->lat);
+    res.cumDist = point->cumDist;
+    res.targetInd = point->targetInd;
+    res.straightLine = point->straightLine;
+    res.track = [self toSharedRoad:point->object regionsCache:regions roadsCache:roads];
+    res.routeToTarget = [[self toSharedSegments:point->routeToTarget regionsCache:regions roadsCache:roads] mutableCopy];
+    return res;
+}
+
++ (OAGpxRouteApproximation *) toSharedApproximation:(const std::shared_ptr<GpxRouteApproximation> &)approximation
+{
+    if (approximation == nullptr)
+        return nil;
+
+    // The roads the track ends up on are shared between the final points and the whole route, so
+    // both are converted together and off one cache, the way the reader would hand them out.
+    OARegionCache regions;
+    OARoadCache roads;
+    NSMutableArray<OASGpxPoint *> *finalPoints = [NSMutableArray arrayWithCapacity:approximation->finalPoints.size()];
+    for (const auto &point : approximation->finalPoints)
+        [finalPoints addObject:[self toSharedGpxPoint:point regionsCache:regions roadsCache:roads]];
+
+    return [[OAGpxRouteApproximation alloc] initWithFinalPoints:finalPoints
+                                                      fullRoute:[self toSharedSegments:approximation->fullRoute
+                                                                          regionsCache:regions
+                                                                            roadsCache:roads]];
 }
 
 @end

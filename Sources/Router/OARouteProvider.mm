@@ -1207,7 +1207,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 
             if (useExternalTimestamps)
                 OAApplyExternalTimestamps(approximation, locationsHolder);
-            OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+            OAGpxRouteApproximation *approx = [OACppRouteConverter toSharedApproximation:approximation];
             [resultMatcher publish:approx];
             return true;
         };

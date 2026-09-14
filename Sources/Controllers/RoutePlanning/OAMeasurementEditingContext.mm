@@ -17,7 +17,6 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationParams.h"
 #import "OARouteExporter.h"
-#import "OACppRouteConverter.h"
 #import "OAGpxRouteApproximation.h"
 #import "OANativeUtilities.h"
 #import "OsmAndSharedWrapper.h"
@@ -152,7 +151,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
 - (void)removeUnusedRoadSegmentData;
 - (void)updateSegmentsForSnap:(BOOL)both;
-- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index;
+- (BOOL)needDuplicatePoint:(NSArray<OASGpxPoint *> *)gpxPoints index:(NSInteger)index;
 @end
 
 @implementation OAMeasurementEditingContext
@@ -1070,23 +1069,21 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
 {
-	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->fullRoute.size() == 0)
+	if (gpxApproximation == nil || gpxApproximation.finalPoints.count == 0 || gpxApproximation.fullRoute.count == 0)
 		return nil;
 	
 	NSMutableArray<OASWptPt *> *routePoints = [NSMutableArray array];
 	int64_t initialTimestamp = originalPoints.count == 0 ? 0 : originalPoints.firstObject.time;
 	OAGpxTimeCalculator *timeCalculator = [[OAGpxTimeCalculator alloc]
 		initWithInitialTimestamp:initialTimestamp];
-	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
-	for (NSInteger i = 0; i < gpxPoints.size(); i++)
+	NSArray<OASGpxPoint *> *gpxPoints = gpxApproximation.finalPoints;
+	for (NSInteger i = 0; i < gpxPoints.count; i++)
 	{
-		const auto& gp1 = gpxPoints[i];
+		OASGpxPoint *gp1 = gpxPoints[i];
 		BOOL lastGpxPoint = [self isLastGpxPoint:gpxPoints index:i];
 		NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-		// The approximation still runs on the C++ planner, so its segments become the shared ones
-		// the rest of the editing context is built on here.
 		NSMutableArray<OASRouteSegmentResult *> *segments = [NSMutableArray array];
-		for (OASRouteSegmentResult *seg in [OACppRouteConverter toSharedSegments:gp1->routeToTarget])
+		for (OASRouteSegmentResult *seg in gp1.routeToTarget)
 		{
 			if ([seg getStartPointIndex] != [seg getEndPointIndex])
 				[segments addObject:seg];
@@ -1101,8 +1098,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 		if (points.count > 0)
 		{
 			OASWptPt *wp1 = [[OASWptPt alloc] init];
-			wp1.lat = gp1->lat;
-			wp1.lon = gp1->lon;
+			wp1.lat = gp1.loc.latitude;
+			wp1.lon = gp1.loc.longitude;
 			[wp1 setProfileTypeProfileType:mode.stringKey];
 			[routePoints addObject:wp1];
 			OASWptPt *wp2 = [[OASWptPt alloc] init];
@@ -1115,9 +1112,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 			}
 			else
 			{
-				const auto& gp2 = gpxPoints[i + 1];
-				wp2.lat = gp2->lat;
-				wp2.lon = gp2->lon;
+				OASGpxPoint *gp2 = gpxPoints[i + 1];
+				wp2.lat = gp2.loc.latitude;
+				wp2.lon = gp2.loc.longitude;
 			}
 			[wp2 setProfileTypeProfileType:mode.stringKey];
 			NSArray<OASWptPt *> *pair = @[wp1, wp2];
@@ -1136,14 +1133,14 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	return routePoints;
 }
 
-- (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index
+- (BOOL)needDuplicatePoint:(NSArray<OASGpxPoint *> *)gpxPoints index:(NSInteger)index
 {
-	if (index == gpxPoints.size() - 1)
+	if (index == gpxPoints.count - 1)
 		return NO;
-	const auto& routeToTarget = gpxPoints[index]->routeToTarget;
-	const auto& nextRouteToTarget = gpxPoints[index + 1]->routeToTarget;
-	return !routeToTarget.empty() && !nextRouteToTarget.empty()
-		&& routeToTarget.back()->getEndPoint().isEquals(nextRouteToTarget.front()->getStartPoint());
+	NSArray<OASRouteSegmentResult *> *routeToTarget = gpxPoints[index].routeToTarget;
+	NSArray<OASRouteSegmentResult *> *nextRouteToTarget = gpxPoints[index + 1].routeToTarget;
+	return routeToTarget.count > 0 && nextRouteToTarget.count > 0
+		&& [[routeToTarget.lastObject getEndPoint] isEqual:[nextRouteToTarget.firstObject getStartPoint]];
 }
 
 - (void) replacePoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
@@ -1179,21 +1176,20 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	}
 }
 
-- (BOOL) isLastGpxPoint:(std::vector<SHARED_PTR<GpxPoint>>)gpxPoints index:(NSInteger)index
+- (BOOL) isLastGpxPoint:(NSArray<OASGpxPoint *> *)gpxPoints index:(NSInteger)index
 {
-	if (index == gpxPoints.size() - 1)
+	if (index == gpxPoints.count - 1)
 	{
 		return YES;
 	}
 	else
 	{
-		for (NSInteger i = index + 1; i < gpxPoints.size(); i++)
+		for (NSInteger i = index + 1; i < gpxPoints.count; i++)
 		{
-			const auto& gp = gpxPoints[i];
-			for (NSInteger k = 0; k < gp->routeToTarget.size(); k++)
+			OASGpxPoint *gp = gpxPoints[i];
+			for (OASRouteSegmentResult *seg in gp.routeToTarget)
 			{
-				const auto& seg = gp->routeToTarget[k];
-				if (seg->getStartPointIndex() != seg->getEndPointIndex())
+				if ([seg getStartPointIndex] != [seg getEndPointIndex])
 				{
 					return NO;
 				}

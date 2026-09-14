@@ -210,6 +210,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     func reloadData() {
         guard isViewLoaded else { return }
+        trackChartHelper?.invalidateRouteDistanceLayout()
         let isElevationCalculating = dataSource?.isCalculatingElevation ?? false
         let isRouteCalculating = dataSource?.isCalculatingRoute ?? false
         if wasCalculatingElevation && !isElevationCalculating {

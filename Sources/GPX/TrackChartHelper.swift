@@ -48,6 +48,10 @@ final class TrackChartHelper: NSObject {
     private var trackChartPoints: TrackChartPoints?
     private var chartHighlightPos: Double = -1
     private var xAxisPoints = [CLLocation]()
+    private var cachedDistanceLayoutAnalysis: GpxTrackAnalysis?
+    private var cachedDistanceLayoutPointCount = 0
+    private var cachedDistanceLayoutTotalDistance: Double = -1
+    @nonobjc private var cachedDistanceLayout: GpxUIHelper.RouteChartDistanceLayout?
 
     init(gpxDoc: GpxFile) {
         self.gpxDoc = gpxDoc
@@ -85,6 +89,13 @@ final class TrackChartHelper: NSObject {
                                     pointsAnalyser: nil,
                                     splitSegments: splitSegments)
         return analysis
+    }
+
+    func invalidateRouteDistanceLayout() {
+        cachedDistanceLayoutAnalysis = nil
+        cachedDistanceLayoutPointCount = 0
+        cachedDistanceLayoutTotalDistance = -1
+        cachedDistanceLayout = nil
     }
 
     func changeChartTypes(_ types: [Int],
@@ -356,7 +367,7 @@ final class TrackChartHelper: NSObject {
             let endDistance = endPos * axisDivisor
             if useAccumulatedDistanceForGeneralSegment, segment.isGeneralSegment() {
                 let points = segment.points.compactMap { $0 as? WptPt }
-                let distanceLayout = GpxUIHelper.routeChartDistanceLayout(analysis: analysis)
+                let distanceLayout = routeDistanceLayout(for: analysis)
                 let usesAnalysisDistances = distanceLayout?.pointDistances.count == points.count
                 var pointDistances = usesAnalysisDistances ? distanceLayout?.pointDistances ?? [] : [Double]()
                 if !usesAnalysisDistances {
@@ -437,6 +448,21 @@ final class TrackChartHelper: NSObject {
         return KQuadRect(left: left, top: top, right: right, bottom: bottom)
     }
 
+    @nonobjc private func routeDistanceLayout(for analysis: GpxTrackAnalysis) -> GpxUIHelper.RouteChartDistanceLayout? {
+        let pointCount = analysis.pointAttributes.count
+        let totalDistance = Double(analysis.totalDistance)
+        if cachedDistanceLayoutAnalysis === analysis,
+           cachedDistanceLayoutPointCount == pointCount,
+           cachedDistanceLayoutTotalDistance == totalDistance {
+            return cachedDistanceLayout
+        }
+        cachedDistanceLayoutAnalysis = analysis
+        cachedDistanceLayoutPointCount = pointCount
+        cachedDistanceLayoutTotalDistance = totalDistance
+        cachedDistanceLayout = GpxUIHelper.routeChartDistanceLayout(analysis: analysis)
+        return cachedDistanceLayout
+    }
+
     private func getLocationAtPos(_ chart: LineChartView,
                                   pos: Double,
                                   analysis: GpxTrackAnalysis,
@@ -459,6 +485,9 @@ final class TrackChartHelper: NSObject {
                           joinSegments: Bool,
                           useAccumulatedDistanceForGeneralSegment: Bool) -> CLLocation? {
         guard let gpxDoc else { return nil }
+        let distanceLayout = useAccumulatedDistanceForGeneralSegment && segment.isGeneralSegment() && axisType == .distance
+            ? routeDistanceLayout(for: analysis)
+            : nil
         return GpxUtils.location(at: Float(position),
                                  axisType: axisType,
                                  axisDivisor: axisDivisor,
@@ -466,7 +495,8 @@ final class TrackChartHelper: NSObject {
                                  analysis: analysis,
                                  segment: segment,
                                  joinSegments: joinSegments,
-                                 useAccumulatedDistanceForGeneralSegment: useAccumulatedDistanceForGeneralSegment)
+                                 useAccumulatedDistanceForGeneralSegment: useAccumulatedDistanceForGeneralSegment,
+                                 distanceLayout: distanceLayout)
     }
 
     private func prepareTrackChartPoints(analysis: GpxTrackAnalysis,

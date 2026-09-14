@@ -52,7 +52,8 @@ final class GpxUtils: NSObject {
                                   analysis: GpxTrackAnalysis,
                                   segment: TrkSegment,
                                   joinSegments: Bool,
-                                  useAccumulatedDistanceForGeneralSegment: Bool) -> CLLocation? {
+                                  useAccumulatedDistanceForGeneralSegment: Bool,
+                                  distanceLayout: GpxUIHelper.RouteChartDistanceLayout? = nil) -> CLLocation? {
         let point: WptPt?
         if axisType == .time || axisType == .timeOfDay {
             point = getSegmentPointByTime(segment,
@@ -65,7 +66,7 @@ final class GpxUtils: NSObject {
             if useAccumulatedDistanceForGeneralSegment,
                segment.isGeneralSegment(),
                joinSegments,
-               let distanceLayout = GpxUIHelper.routeChartDistanceLayout(analysis: analysis) {
+               let distanceLayout = distanceLayout ?? GpxUIHelper.routeChartDistanceLayout(analysis: analysis) {
                 point = generalSegmentPointByDistance(segment,
                                                       pointDistances: distanceLayout.pointDistances,
                                                       totalDistance: distanceLayout.totalDistance,

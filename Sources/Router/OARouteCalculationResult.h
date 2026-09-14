@@ -20,6 +20,7 @@
 #include "commonOsmAndCore.h"
 
 @class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect, OASTurnType, OASRouteSegmentResult;
+@class OAMissingMapsResult;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -53,8 +54,8 @@
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 @property (nonatomic) NSArray<OAWorldRegion *> * potentiallyUsedMaps;
 
-@property (nonatomic) NSArray<CLLocation *> * missingMapsPoints;
-@property (nonatomic) std::shared_ptr<RoutingContext> missingMapsRoutingContext;
+/** What the missing maps check found, for the required maps screen; nil when nothing is missing. */
+@property (nonatomic, readonly) OAMissingMapsResult *missingMapsResult;
 
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
@@ -116,7 +117,6 @@
 - (void)setMissingMaps:(NSArray<OAWorldRegion *> *)missingMaps
           mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
               usedMaps:(NSArray<OAWorldRegion *> *)usedMaps
-                   ctx:(std::shared_ptr<RoutingContext>)ctx
-                points:(NSArray<CLLocation *> *)points;
+                result:(OAMissingMapsResult *)result;
 
 @end

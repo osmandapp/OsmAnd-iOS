@@ -18,7 +18,7 @@
 #include <OsmAndCore.h>
 #include <routeCalculationProgress.h>
 
-@class OARouteCalculationResult, OAWalkingRouteSegment, OAApplicationMode;
+@class OARouteCalculationResult, OAWalkingRouteSegment, OAApplicationMode, OAMissingMapsResult;
 
 @protocol OARouteCalculationResultListener <NSObject>
 
@@ -50,11 +50,17 @@
 @property (nonatomic) BOOL inSnapToRoadMode;
 
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+
+/** What the missing maps check found before the route was calculated; nil while it has found nothing. */
+@property (nonatomic) OAMissingMapsResult *missingMapsResult;
 @property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
 @property (nonatomic) id<OARouteCalculationResultListener> resultListener;
 
 @property (nonatomic) OAWalkingRouteSegment *walkingRouteSegment;
 
 - (BOOL) recheckRouteNearestPoint;
+
+/** Keeps what a part of the route found, so the whole route reports it once. */
+- (void) takeMissingMapsResultFrom:(OARouteCalculationParams *)params;
 
 @end

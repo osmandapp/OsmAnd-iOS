@@ -18,11 +18,10 @@
 
 #include "CommonCollections.h"
 #include "commonOsmAndCore.h"
-#include <turnType.h>
 
 struct RouteSegmentResult;
 
-@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
+@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect, OASTurnType;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -71,7 +70,7 @@ struct RouteSegmentResult;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment;
 - (QuadRect *) getLocationsRect;
-+ (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
++ (NSString *) toString:(OASTurnType *)type shortName:(BOOL)shortName;
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations;
 - (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations;

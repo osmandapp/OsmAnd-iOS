@@ -15,6 +15,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"
+#import "OsmAndSharedWrapper.h"
 
 #include "routeSegmentResult.h"
 #include <OsmAndCore/Utilities.h>
@@ -68,7 +69,7 @@
 - (BOOL)setupNextTurnStreetName:(OANextDirectionInfo *)info
 {
     BOOL isSet = NO;
-    if (info.directionInfo && !info.directionInfo.turnType->isSkipToSpeak()) {
+    if (info.directionInfo && !info.directionInfo.turnType.isSkipToSpeak) {
         NSString *name = info.directionInfo.streetName;
         NSString *ref = info.directionInfo.ref;
         NSString *destinationName = info.directionInfo.destinationName;
@@ -86,7 +87,7 @@
         _text = [OARoutingHelperUtils formatStreetName:name ref:ref destination:destinationName towards:@"" shields:_shields];
         _turnType = info.directionInfo.turnType;
         if (!_turnType)
-            _turnType = TurnType::ptrValueOf(TurnType::C, false);
+            _turnType = [OASTurnType.companion valueOfValue:OASTurnType.companion.C leftSide:NO];
         
         OAExitInfo *exitInfo = info.directionInfo.exitInfo;
         if (exitInfo)
@@ -123,7 +124,7 @@
         [self setupNextRoadStreetName:routingHelper];
     
     if (!showNextTurn)
-        _turnType = nullptr;
+        _turnType = nil;
     if (!_turnType)
         _showMarker = YES;
 }
@@ -138,7 +139,7 @@
     OACurrentStreetName *otherName = (OACurrentStreetName *) object;
     if (![self.text isEqualToString:otherName.text])
         return NO;
-    if (self.turnType && otherName.turnType && self.turnType->getValue() != otherName.turnType->getValue())
+    if (self.turnType && otherName.turnType && self.turnType.value != otherName.turnType.value)
         return NO;
     if (self.showMarker != otherName.showMarker)
         return NO;
@@ -153,7 +154,7 @@
 - (NSUInteger) hash
 {
     NSUInteger result = [self.text hash];
-    result = 31 * result + (self.turnType ? self.turnType->getValue() : 0.);
+    result = 31 * result + (self.turnType ? self.turnType.value : 0.);
     result = 31 * result + (self.showMarker ? 1 : 0);
     result = 31 * result + [self.shields hash];
     result = 31 * result + [self.exitRef hash];
@@ -182,7 +183,7 @@
     if (rs)
     {
         _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
-        _turnType = TurnType::ptrValueOf(TurnType::C, false);
+        _turnType = [OASTurnType.companion valueOfValue:OASTurnType.companion.C leftSide:NO];
         _shields = [RoadShield createShields:rs->object];
     }
 }

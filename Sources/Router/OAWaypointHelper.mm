@@ -28,6 +28,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARouteDirectionInfo.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <binaryRead.h>
 
@@ -424,7 +425,7 @@
                                         break;
                                     case AIT_PEDESTRIAN:
                                         announceRadius = (nextRoute != nil
-                                                          && nextRoute.turnType->isRoundAbout()
+                                                          && [nextRoute.turnType isRoundAbout]
                                                           && kIterator != 0)
                                                           ? kStateShortAlarmAnnounce
                                                           : kStateLongAlarmAnnounce;

@@ -217,13 +217,13 @@ std::string preferredLanguage;
         {
             [self playMakeTurn:currentSegment routeDirectionInfo:next nextDirectionInfo:nil];
         }
-        if (!next.turnType->goAhead() && [self isTargetPoint:nextNextInfo] && nextNextInfo != nil)
+        if (![next.turnType goAhead] && [self isTargetPoint:nextNextInfo] && nextNextInfo != nil)
         {   // !goAhead() avoids isolated "and arrive.." prompt, as goAhead() is not pronounced
             if (![_atd isTurnStateNotPassed:0 dist:nextNextInfo.distanceTo turnType:kStateTurnIn])
             {
                 // Issue #2865: Ensure a distance associated with the destination arrival is always announced, either here, or in subsequent "Turn in" prompt
                 // Distance fon non-straights already announced in "Turn (now)"'s nextnext  code above
-                if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && nextNextInfo.directionInfo.turnType->goAhead())
+                if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && [nextNextInfo.directionInfo.turnType goAhead])
                 {
                     [self playThen];
                     [self playGoAhead:nextNextInfo.distanceTo next:next streetName:[NSMutableDictionary new]];
@@ -265,7 +265,7 @@ std::string preferredLanguage;
     {
         if (repeat || [_atd isTurnStateNotPassed:0 dist:dist turnType:kStatePrepareTurn])
         {
-            if (!repeat && (next.turnType->keepLeft() || next.turnType->keepRight()))
+            if (!repeat && ([next.turnType keepLeft] || [next.turnType keepRight]))
             {
                 // Do not play prepare for keep left/right
             }
@@ -320,11 +320,11 @@ std::string preferredLanguage;
                 [play turn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
             }
             suppressDest = YES;
-        } else if (next.turnType->isRoundAbout()) {
-            [play roundAbout:dist angle:next.turnType->getTurnAngle() exit:next.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+        } else if ([next.turnType isRoundAbout]) {
+            [play roundAbout:dist angle:next.turnType.turnAngle exit:next.turnType.exitOut streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
             // Other than in prepareTurn, in prepareRoundabout we do not announce destination, so we can repeat it one more time
             suppressDest = false;
-        } else if (next.turnType->getValue() == TurnType::TU || next.turnType->getValue() == TurnType::TRU) {
+        } else if (next.turnType.value == OASTurnType.companion.TU || next.turnType.value == OASTurnType.companion.TRU) {
             [play makeUT:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
             suppressDest = true;
         } else {
@@ -332,16 +332,16 @@ std::string preferredLanguage;
         }
         // 'then keep' preparation for next after next. (Also announces an interim straight segment, which is not pronounced above.)
         if (pronounceNextNext != nil) {
-            std::shared_ptr<TurnType> t = pronounceNextNext.turnType;
+            OASTurnType *t = pronounceNextNext.turnType;
             isPlay = true;
-            if (t->getValue() != TurnType::C && next.turnType->getValue() == TurnType::C) {
+            if (t.value != OASTurnType.companion.C && next.turnType.value == OASTurnType.companion.C) {
                 [play goAhead:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
             }
-            if (t->getValue() == TurnType::TL || t->getValue() == TurnType::TSHL || t->getValue() == TurnType::TSLL
-                || t->getValue() == TurnType::TU || t->getValue() == TurnType::KL ) {
+            if (t.value == OASTurnType.companion.TL || t.value == OASTurnType.companion.TSHL || t.value == OASTurnType.companion.TSLL
+                || t.value == OASTurnType.companion.TU || t.value == OASTurnType.companion.KL ) {
                 [[play then] bearLeft:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
-            } else if (t->getValue() == TurnType::TR || t->getValue() == TurnType::TSHR || t->getValue() == TurnType::TSLR
-                       || t->getValue() == TurnType::TRU || t->getValue() == TurnType::KR) {
+            } else if (t.value == OASTurnType.companion.TR || t.value == OASTurnType.companion.TSHR || t.value == OASTurnType.companion.TSLR
+                       || t.value == OASTurnType.companion.TRU || t.value == OASTurnType.companion.KR) {
                 [[play then] bearRight:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             }
         }
@@ -359,10 +359,10 @@ std::string preferredLanguage;
         if (tParam != nil) {
 //            notifyOnVoiceMessage();
             [[play prepareTurn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
-        } else if (next.turnType->isRoundAbout()) {
+        } else if ([next.turnType isRoundAbout]) {
 //            notifyOnVoiceMessage();
-            [[play prepareRoundAbout:dist exit:next.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
-        } else if (next.turnType->getValue() == TurnType::TU || next.turnType->getValue() == TurnType::TRU) {
+            [[play prepareRoundAbout:dist exit:next.turnType.exitOut streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
+        } else if (next.turnType.value == OASTurnType.companion.TU || next.turnType.value == OASTurnType.companion.TRU) {
 //            notifyOnVoiceMessage();
             [[play prepareMakeUT:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
         }
@@ -374,7 +374,7 @@ std::string preferredLanguage;
     OARouteDirectionInfo *next = nextInfo.directionInfo;
     if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat))
     {
-        if (next.turnType->goAhead())
+        if ([next.turnType goAhead])
         {
             [self playGoAhead:nextInfo.distanceTo next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             [self playAndArriveAtDestination:nextInfo];
@@ -449,12 +449,12 @@ std::string preferredLanguage;
             {
                 [play turn:tParam streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
             }
-        } else if (nextInfo.turnType->isRoundAbout()) {
-            [play roundAbout:nextInfo.turnType->getTurnAngle() exit:nextInfo.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
-        } else if (nextInfo.turnType->getValue() == TurnType::TU || nextInfo.turnType->getValue() == TurnType::TRU) {
+        } else if ([nextInfo.turnType isRoundAbout]) {
+            [play roundAbout:nextInfo.turnType.turnAngle exit:nextInfo.turnType.exitOut streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
+        } else if (nextInfo.turnType.value == OASTurnType.companion.TU || nextInfo.turnType.value == OASTurnType.companion.TRU) {
             [play makeUT:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
 //          Do not announce goAheads
-        } else if (nextInfo.turnType->getValue() == TurnType::C) {
+        } else if (nextInfo.turnType.value == OASTurnType.companion.C) {
                 [play goAhead];
         } else {
             isplay = false;
@@ -463,7 +463,7 @@ std::string preferredLanguage;
         if ((nextNextInfo != nil) && (nextNextInfo.directionInfo != nil)) {
 
             // This case only needed should we want a prompt at the end of straight segments (equivalent of makeTurn) when nextNextInfo should be announced again there.
-            if (nextNextInfo.directionInfo.turnType->getValue() != TurnType::C && nextInfo.turnType->getValue() == TurnType::C) {
+            if (nextNextInfo.directionInfo.turnType.value != OASTurnType.companion.C && nextInfo.turnType.value == OASTurnType.companion.C) {
                 [play goAhead];
                 isplay = true;
             }
@@ -476,12 +476,12 @@ std::string preferredLanguage;
                     [play turn:t2Param dist:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
                 }
             }
-            else if (nextNextInfo.directionInfo.turnType->isRoundAbout()) {
+            else if ([nextNextInfo.directionInfo.turnType isRoundAbout]) {
                 if (isplay) {
                     [play then];
-                    [play roundAbout:nextNextInfo.distanceTo angle:nextNextInfo.directionInfo.turnType->getTurnAngle() exit:nextNextInfo.directionInfo.turnType->getExitOut() streetName:[NSMutableDictionary new]];
+                    [play roundAbout:nextNextInfo.distanceTo angle:nextNextInfo.directionInfo.turnType.turnAngle exit:nextNextInfo.directionInfo.turnType.exitOut streetName:[NSMutableDictionary new]];
                 }
-            } else if (nextNextInfo.directionInfo.turnType->getValue() == TurnType::TU) {
+            } else if (nextNextInfo.directionInfo.turnType.value == OASTurnType.companion.TU) {
                 if (isplay) {
                     [play then];
                     [play makeUT:nextNextInfo.distanceTo streetName:[NSMutableArray new]];
@@ -532,23 +532,23 @@ std::string preferredLanguage;
     return currentStatus <= statusToCheck;
 }
 
-- (NSString *) getTurnType:(std::shared_ptr<TurnType>) turnType
+- (NSString *) getTurnType:(OASTurnType *) turnType
 {
-    if (TurnType::TL == turnType->getValue()) {
+    if (OASTurnType.companion.TL == turnType.value) {
         return A_LEFT;
-    } else if (TurnType::TSHL == turnType->getValue()) {
+    } else if (OASTurnType.companion.TSHL == turnType.value) {
         return A_LEFT_SH;
-    } else if (TurnType::TSLL == turnType->getValue()) {
+    } else if (OASTurnType.companion.TSLL == turnType.value) {
         return A_LEFT_SL;
-    } else if (TurnType::TR == turnType->getValue()) {
+    } else if (OASTurnType.companion.TR == turnType.value) {
         return A_RIGHT;
-    } else if (TurnType::TSHR == turnType->getValue()) {
+    } else if (OASTurnType.companion.TSHR == turnType.value) {
         return A_RIGHT_SH;
-    } else if (TurnType::TSLR == turnType->getValue()) {
+    } else if (OASTurnType.companion.TSLR == turnType.value) {
         return A_RIGHT_SL;
-    } else if (TurnType::KL == turnType->getValue()) {
+    } else if (OASTurnType.companion.KL == turnType.value) {
         return A_LEFT_KEEP;
-    } else if (TurnType::KR == turnType->getValue()) {
+    } else if (OASTurnType.companion.KR == turnType.value) {
         return A_RIGHT_KEEP;
     }
     return nil;

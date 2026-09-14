@@ -40,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 struct GpxPoint;
 struct GpxRouteApproximation;
-struct RouteSegmentResult;
 
 @interface OARoutingHelper : NSObject
 

@@ -238,17 +238,17 @@
 
 - (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                        attrName:(NSString *)attrName
-                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                  segmentResult:(NSArray<OASRouteSegmentResult *> *)segs
                       locations:(NSArray<CLLocation *> *)locations
 {
     const auto& env = [OsmAndApp instance].defaultRenderer;
     OARouteStatisticsComputer *statsComputer = [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:env];
     int firstSegmentLocationIdx = [self getIdxOfFirstSegmentLocation:locations routeSegments:segs];
-    for (NSInteger i = 0; i < segs.size(); i++)
+    for (NSInteger i = 0; i < (NSInteger) segs.count; i++)
     {
-        const auto& segment = segs[i];
+        OASRouteSegmentResult *segment = segs[i];
         OARouteSegmentWithIncline *routeSeg = [[OARouteSegmentWithIncline alloc] init];
-        routeSeg.obj = segment->object;
+        routeSeg.obj = [segment getObject];
         OARouteSegmentAttribute *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
         OsmAnd::ColorARGB color((int)attribute.color);
 //        color = color == 0 ? RouteColorize.LIGHT_GREY : color;
@@ -261,13 +261,13 @@
             }
         }
 
-        int pointsSize = abs(segment->getStartPointIndex() - segment->getEndPointIndex());
+        int pointsSize = abs([segment getStartPointIndex] - [segment getEndPointIndex]);
         for (int j = 0; j < pointsSize; j++)
         {
             colors.push_back(color);
         }
 
-        if (i == segs.size() - 1)
+        if (i == (NSInteger) segs.count - 1)
         {
             int start = colors.size();
             for (int j = start; j < locations.count; j++)
@@ -279,17 +279,17 @@
 }
 
 - (int) getIdxOfFirstSegmentLocation:(NSArray<CLLocation *> *)locations
-                       routeSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)routeSegments
+                       routeSegments:(NSArray<OASRouteSegmentResult *> *)routeSegments
 {
     int locationsIdx = 0;
-    if (routeSegments.size() == 0)
+    if (routeSegments.count == 0)
         return locationsIdx;
-    const auto& segmentStartPoint = routeSegments[0]->getStartPoint();
+    OASKLatLon *segmentStartPoint = [routeSegments[0] getStartPoint];
     while (locationsIdx < locations.count)
     {
         CLLocation *location = locations[locationsIdx];
-        if (location.coordinate.latitude == segmentStartPoint.lat
-            && location.coordinate.longitude == segmentStartPoint.lon)
+        if (location.coordinate.latitude == segmentStartPoint.latitude
+            && location.coordinate.longitude == segmentStartPoint.longitude)
         {
             break;
         }

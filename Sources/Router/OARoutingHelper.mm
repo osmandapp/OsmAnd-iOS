@@ -454,12 +454,12 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+- (OASRouteSegmentResult *) getCurrentSegmentResult
 {
     return [_route getCurrentSegmentResult];
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+- (OASRouteSegmentResult *) getNextStreetSegmentResult
 {
     return [_route getNextStreetSegmentResult];
 }
@@ -890,7 +890,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart
 {
     return [_route getUpcomingTunnel:distToStart];
 }
@@ -1181,11 +1181,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
     
     NSArray<CLLocation *> *locations = route.getImmutableAllLocations;
-    auto originalRoute = route.getOriginalRoute;
+    NSArray<OASRouteSegmentResult *> *originalRoute = route.getOriginalRoute;
     OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name
                                                                route:originalRoute
                                                            locations:locations
-                                                   routePointIndexes:{}
+                                                   routePointIndexes:@[]
                                                               points:points
                                                   preserveTimestamps:NO];
     return [exporter exportRoute];

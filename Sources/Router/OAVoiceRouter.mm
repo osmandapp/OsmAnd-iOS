@@ -302,7 +302,7 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playMakeTurnIn:(std::shared_ptr<RouteSegmentResult>) currentSegment info:(OARouteDirectionInfo *) next dist:(int) dist nextInfo:(OARouteDirectionInfo *) pronounceNextNext
+- (void) playMakeTurnIn:(OASRouteSegmentResult *) currentSegment info:(OARouteDirectionInfo *) next dist:(int) dist nextInfo:(OARouteDirectionInfo *) pronounceNextNext
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
     if (play != nil) {
@@ -351,7 +351,7 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playPrepareTurn:(std::shared_ptr<RouteSegmentResult>) currentSegment next:(OARouteDirectionInfo *) next dist:(int) dist
+- (void) playPrepareTurn:(OASRouteSegmentResult *) currentSegment next:(OARouteDirectionInfo *) next dist:(int) dist
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
     if (play != nil) {
@@ -369,7 +369,7 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playGoAndArriveAtDestination:(BOOL) repeat nextInfo:(OANextDirectionInfo *) nextInfo currSegment:(std::shared_ptr<RouteSegmentResult>) currentSegment
+- (void) playGoAndArriveAtDestination:(BOOL) repeat nextInfo:(OANextDirectionInfo *) nextInfo currSegment:(OASRouteSegmentResult *) currentSegment
 {
     OARouteDirectionInfo *next = nextInfo.directionInfo;
     if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat))
@@ -431,7 +431,7 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playMakeTurn:(std::shared_ptr<RouteSegmentResult>)currentSegment routeDirectionInfo: (OARouteDirectionInfo *)nextInfo nextDirectionInfo:(OANextDirectionInfo *)nextNextInfo
+- (void) playMakeTurn:(OASRouteSegmentResult *)currentSegment routeDirectionInfo: (OARouteDirectionInfo *)nextInfo nextDirectionInfo:(OANextDirectionInfo *)nextNextInfo
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
     if (play != nil)
@@ -658,7 +658,7 @@ std::string preferredLanguage;
     return false;
 }
 
-- (NSMutableDictionary *) getSpeakableStreetName:(std::shared_ptr<RouteSegmentResult>) currentSegment routeDirectionInfo:(OARouteDirectionInfo *)next includeDestination:(BOOL) includeDest
+- (NSMutableDictionary *) getSpeakableStreetName:(OASRouteSegmentResult *) currentSegment routeDirectionInfo:(OARouteDirectionInfo *)next includeDestination:(BOOL) includeDest
 {
     // TODO check for announcement settings if we should anounce streeet names
     NSMutableDictionary *result = [NSMutableDictionary new];
@@ -679,15 +679,19 @@ std::string preferredLanguage;
         if (currentSegment != nil) {
             // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
             if (includeDest == true) {
-                const auto& obj = currentSegment->object;
-                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
-                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit.get).c_str()]];
-                result[@"fromDest"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
+                OASRouteDataObject *obj = [currentSegment getObject];
+                NSString *lang = [NSString stringWithUTF8String:preferredLanguage.c_str()];
+                BOOL transliterate = _settings.settingMapLanguageTranslit.get;
+                BOOL forward = [currentSegment isForwardDirection];
+                result[@"fromRef"] = [self getSpeakablePointName:[obj getRefLang:lang transliterate:transliterate direction:forward]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[obj getNameLang:lang transliterate:transliterate]];
+                result[@"fromDest"] = [self getSpeakablePointName:[obj getDestinationNameLang:lang transliterate:transliterate direction:forward]];
             } else {
-                std::string val = std::string("en");
-                const auto& obj = currentSegment->object;
-                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit.get, currentSegment->isForwardDirection()).c_str()]];
-                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit.get).c_str()]];
+                OASRouteDataObject *obj = [currentSegment getObject];
+                NSString *lang = [NSString stringWithUTF8String:preferredLanguage.c_str()];
+                BOOL transliterate = _settings.settingMapLanguageTranslit.get;
+                result[@"fromRef"] = [self getSpeakablePointName:[obj getRefLang:lang transliterate:transliterate direction:[currentSegment isForwardDirection]]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[obj getNameLang:lang transliterate:transliterate]];
                 result[@"fromDest"] = @"";
             }
         }

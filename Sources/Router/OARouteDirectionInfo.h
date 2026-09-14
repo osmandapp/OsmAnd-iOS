@@ -11,11 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "OAExitInfo.h"
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-#include <binaryRead.h>
-
-@class OAExitInfo, OASTurnType;
+@class OAExitInfo, OASTurnType, OASRouteDataObject;
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -36,7 +32,7 @@
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* streetName;
 @property (nonatomic) NSString* destinationName;
-@property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
+@property (nonatomic) OASRouteDataObject *routeDataObject;
 @property (nonatomic) OAExitInfo *exitInfo;
 @property (nonatomic) NSString* destinationRef;
 

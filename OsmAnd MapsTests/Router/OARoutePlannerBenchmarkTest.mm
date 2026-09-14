@@ -117,7 +117,7 @@ static double footprintMb()
     return 0;
 }
 
-- (NSString *)runCpp:(const BenchRoute &)route map:(NSString *)map
+- (NSString *)runCpp:(const BenchRoute &)route map:(NSString *)map hh:(BOOL)hh
 {
     // as OARouteProvider.checkInitialized opens a map for the C++ router; the reader stays open across the rounds
     std::string mapPath(map.UTF8String);
@@ -130,6 +130,12 @@ static double footprintMb()
         CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
         RoutePlannerFrontEnd router;
         router.CALCULATE_MISSING_MAPS = false;
+        if (hh)
+        {
+            // as OARouteProvider does unless "old routing" is on; only HH, so a fallback to A* would show as an error
+            router.setDefaultRoutingConfig();
+            router.USE_ONLY_HH_ROUTING = true;
+        }
         MAP_STR_STR params;
         auto cf = _cppBuilder->build("car", MEMORY_LIMIT_MB, params);
         auto ctx = router.buildRoutingContext(cf, RouteCalculationMode::COMPLEX);
@@ -157,7 +163,7 @@ static double footprintMb()
     return [NSString stringWithFormat:@"%8.1f %@", best, line];
 }
 
-- (NSString *)runShared:(const BenchRoute &)route map:(NSString *)map
+- (NSString *)runShared:(const BenchRoute &)route map:(NSString *)map hh:(BOOL)hh
 {
     NSArray<OASBinaryMapIndexReader *> *readers = @[[[OASBinaryMapIndexReader alloc] initWithFilePath:map]];
     double best = 1e18;
@@ -170,6 +176,12 @@ static double footprintMb()
         OASRoutingConfiguration *config = [_sharedBuilder buildRouter:@"car" memoryLimits:limits
                                                                params:(OASMutableDictionary<NSString *, NSString *> *) [NSMutableDictionary dictionary]];
         OASRoutePlannerFrontEnd *fe = [[OASRoutePlannerFrontEnd alloc] init];
+        OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = NO;
+        if (hh)
+        {
+            [fe setDefaultHHRoutingConfig];
+            [fe setUseOnlyHHRoutingUseOnlyHHRouting:YES];
+        }
         OASRoutingContext *ctx = [fe buildRoutingContextConfig:config map:readers rm:nil];
         OASRouteCalcResult *result = [fe searchRouteCtx:ctx
                                                   start:[[OASKLatLon alloc] initWithLatitude:route.startLat longitude:route.startLon]
@@ -202,10 +214,10 @@ static double footprintMb()
 - (void)testBenchmarkRoutes
 {
     NSMutableString *report = [NSMutableString string];
-    [report appendFormat:@"\n### route planner in the app on %@ (%@): C++ router as OARouteProvider drives it, shared planner; %d warmup / %d measured, best time\n",
+    [report appendFormat:@"\n### route planner in the app on %@ (%@): C++ router as OARouteProvider drives it, shared planner, each A* and HH; %d warmup / %d measured, best time\n",
      [UIDevice currentDevice].model, [NSProcessInfo processInfo].operatingSystemVersionString, WARMUP_ROUNDS, MEASURED_ROUNDS];
     [report appendFormat:@"  maps: %@\n", [[_obfFiles valueForKey:@"lastPathComponent"] componentsJoinedByString:@", "]];
-    [report appendFormat:@"  %-30s %-6s %8s %9s %8s %9s %7s %11s\n", "route", "by", "ms", "segments", "km", "visited", "tiles", "footprint"];
+    [report appendFormat:@"  %-30s %-10s %8s %9s %8s %9s %7s %11s\n", "route", "by", "ms", "segments", "km", "visited", "tiles", "footprint"];
     for (const BenchRoute &route : ROUTES)
     {
         NSString *map = [self mapFor:route];
@@ -214,14 +226,20 @@ static double footprintMb()
             [report appendFormat:@"  %-30s map not found: %s\n", route.name, route.map];
             continue;
         }
-        NSString *cpp = [self runCpp:route map:map];
-        [report appendFormat:@"  %-30s %-6s %@\n", route.name, "cpp", cpp];
-        NSString *shared = [self runShared:route map:map];
-        [report appendFormat:@"  %-30s %-6s %@\n", route.name, "shared", shared];
+        NSString *cpp = [self runCpp:route map:map hh:NO];
+        [report appendFormat:@"  %-30s %-10s %@\n", route.name, "cpp", cpp];
+        NSString *shared = [self runShared:route map:map hh:NO];
+        [report appendFormat:@"  %-30s %-10s %@\n", route.name, "shared", shared];
+        NSString *cppHH = [self runCpp:route map:map hh:YES];
+        [report appendFormat:@"  %-30s %-10s %@\n", route.name, "cpp hh", cppHH];
+        NSString *sharedHH = [self runShared:route map:map hh:YES];
+        [report appendFormat:@"  %-30s %-10s %@\n", route.name, "shared hh", sharedHH];
         // NSLog from the test host reaches nothing when the host runs on the Mac; the result bundle keeps
         // activity titles and attachments: xcrun xcresulttool get test-results activities --path <xcresult>
         for (NSString *line in @[[NSString stringWithFormat:@"BENCH %s cpp %@", route.name, cpp],
-                                 [NSString stringWithFormat:@"BENCH %s shared %@", route.name, shared]])
+                                 [NSString stringWithFormat:@"BENCH %s shared %@", route.name, shared],
+                                 [NSString stringWithFormat:@"BENCH %s cpp-hh %@", route.name, cppHH],
+                                 [NSString stringWithFormat:@"BENCH %s shared-hh %@", route.name, sharedHH]])
             [XCTContext runActivityNamed:line block:^(id<XCTActivity> _Nonnull activity) {}];
     }
     XCTAttachment *attachment = [XCTAttachment attachmentWithString:report];

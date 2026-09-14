@@ -3145,6 +3145,7 @@
 		A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */; };
 		C1A55E0B77300000000000A1 /* OASharedRoutingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */; };
 		C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */; };
+		C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
@@ -3425,6 +3426,7 @@
 		FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */; };
 		FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */; };
 		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
+		C1A55E0B77300000000000C3 /* OAMissingMapsResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
 		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
@@ -8134,6 +8136,7 @@
 		693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultTest.mm; sourceTree = "<group>"; };
 		C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRoutingTest.mm; sourceTree = "<group>"; };
 		C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedGpxApproximationTest.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedMissingMapsTest.mm; sourceTree = "<group>"; };
 		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
@@ -8463,6 +8466,8 @@
 		FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIMenu+Extension.swift"; sourceTree = "<group>"; };
 		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
 		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000C1 /* OAMissingMapsResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMissingMapsResult.h; sourceTree = "<group>"; };
+		C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMissingMapsResult.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
 		FA359EE42ADF026D0001C11D /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
@@ -14872,6 +14877,7 @@
 				693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */,
 				C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */,
 				C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */,
+				C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */,
 				DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */,
 			);
 			path = Router;
@@ -15209,6 +15215,8 @@
 			children = (
 				FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */,
 				FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */,
+				C1A55E0B77300000000000C1 /* OAMissingMapsResult.h */,
+				C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */,
 			);
 			path = MissingMapsCalculator;
 			sourceTree = "<group>";
@@ -19049,6 +19057,7 @@
 				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
 				FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */,
+				C1A55E0B77300000000000C3 /* OAMissingMapsResult.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
 				CE8215E52FFF6376002A8617 /* StarMapArControlCard.swift in Sources */,
 				326087132F3251B00038A34B /* PoiAdditionalUiRules.swift in Sources */,
@@ -19709,6 +19718,7 @@
 				A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */,
 				C1A55E0B77300000000000A1 /* OASharedRoutingTest.mm in Sources */,
 				C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */,
+				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,

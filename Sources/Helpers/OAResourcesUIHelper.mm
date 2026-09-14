@@ -36,6 +36,7 @@
 #import "OAAppVersion.h"
 #import "OAAppData.h"
 #import "OARouteCalculationResult.h"
+#import "OAMissingMapsResult.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -2485,13 +2486,14 @@ includeHidden:(BOOL)includeHidden
     
     NSMutableString *pointsString = [NSMutableString string];
     
-    for (CLLocation *l in routeCalculationResult.missingMapsPoints) {
+    OAMissingMapsResult *missingMapsResult = routeCalculationResult.missingMapsResult;
+    for (CLLocation *l in missingMapsResult.points) {
         [pointsString appendString:[NSString stringWithFormat:@"&%@", [self formatPointString:l]]];
     }
     
     NSString *routeMode = @"car";
-    GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
-    if (profile == GeneralRouterProfile::BICYCLE || profile == GeneralRouterProfile::PEDESTRIAN)
+    NSString *profile = missingMapsResult.profile;
+    if ([profile isEqualToString:@"bicycle"] || [profile isEqualToString:@"pedestrian"])
     {
         routeMode = @"bicycle";
     }

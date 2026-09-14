@@ -150,8 +150,6 @@ struct PrecalculatedRouteDirection;
                                           segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                            selectedSegment:(NSInteger)selectedSegment;
 
-- (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
-                           targets:(NSArray<CLLocation *> *)targets;
 - (MissingMapsCalculator *)missingMapsCalculator;
 
 @end

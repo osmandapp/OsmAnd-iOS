@@ -25,6 +25,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
+#import "OAMissingMapsResult.h"
 #import "OARTargetPoint.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
@@ -1036,18 +1037,16 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             {
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
-            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting])
+            params.missingMapsResult = [_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting];
+            if (params.missingMapsResult)
             {
-                NSString *missingMapsErrorMessage = ctx->progress != nullptr && ctx->progress->missingMapsCalculationResult != nullptr
-                    ? [NSString stringWithUTF8String:ctx->progress->missingMapsCalculationResult->getErrorMessage().c_str()]
-                    : @"";
                 if (router->CONTINUE_ON_MISSING_MAPS)
                 {
-                    NSLog(@"%@", missingMapsErrorMessage);
+                    NSLog(@"%@", [params.missingMapsResult getErrorMessage]);
                 }
                 else
                 {
-                    return [[OARouteCalculationResult alloc] initWithErrorMessage:missingMapsErrorMessage];
+                    return [[OARouteCalculationResult alloc] initWithErrorMessage:[params.missingMapsResult getErrorMessage]];
                 }
             }
         }
@@ -1358,6 +1357,8 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
     to->requestPrivateAccessRouting = from.requestPrivateAccessRouting;
     to->visitedSegments = from.visitedSegments;
     to->loadedTiles = from.loadedTiles;
+    // the missing maps banner and the CarPlay alert read the routing status off this object
+    to->setFastRoutingStatusOrdinal([[from getFastRoutingStatus] ordinal]);
 
     const float initialProgress = 0.01f; // RouteCalculationProgress::INITIAL_PROGRESS, private on both sides
     const float total = 1000;
@@ -1523,7 +1524,9 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
 {
     [self checkInitializedForParams:params];
 
-    return [self calcSharedRouteImpl:params calcGPXRoute:calcGPXRoute readers:[self sharedRouteReaders]];
+    OARouteCalculationResult *result = [self calcSharedRouteImpl:params calcGPXRoute:calcGPXRoute readers:[self sharedRouteReaders]];
+    [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
+    return result;
 }
 
 - (OARouteCalculationResult *) calcSharedRouteImpl:(OARouteCalculationParams *)params
@@ -1542,8 +1545,8 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
 
     OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
     [router setUseFastRecalculationUse:settings.useFastRecalculation];
-    // The check itself is not on OsmAndShared yet - it reads the C++ reader registry - but the flag
-    // also tells the HH planner how strictly to group the maps it uses, so it keeps its value.
+    // Whether the maps the route needs are checked below, and how strictly the HH planner groups
+    // the maps it uses.
     OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
     if (![settings.useOldRouting get])
         [router setDefaultHHRoutingConfig];
@@ -1595,6 +1598,26 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
     [self calculateSharedRegionsWithAllRoutePoints:ctx start:params.start targets:targets];
     if (complexCtx)
         [self calculateSharedRegionsWithAllRoutePoints:complexCtx start:params.start targets:targets];
+
+    // java checks the maps inside the planner, which reads the region index through the host; here
+    // the host runs the check itself, and the planner learns the answer from the routing status the
+    // HH search reads out of the progress. Both contexts share that progress.
+    if (OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS)
+    {
+        if (!_missingMapsCalculator)
+            _missingMapsCalculator = [MissingMapsCalculator new];
+
+        params.missingMapsResult = [_missingMapsCalculator checkIfThereAreMissingSharedMaps:ctx
+                                                                                      start:params.start
+                                                                                    targets:targets
+                                                                            checkHHEditions:![settings.useOldRouting get]];
+        if (params.missingMapsResult)
+        {
+            // the route is calculated anyway, as it is on the C++ planner, where iOS never sets
+            // CONTINUE_ON_MISSING_MAPS to false; the outcome waits for the required maps screen
+            NSLog(@"%@", [params.missingMapsResult getErrorMessage]);
+        }
+    }
 
     const auto cppProgress = params.calculationProgress;
     dispatch_source_t publisher = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
@@ -1772,7 +1795,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
             inters = [NSArray arrayWithArray:params.intermediates];
 
         OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
-        [_missingMapsCalculator attachToRouteCalculationResult:result progress:env.ctx->progress];
+        [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
 
         return result;
     }
@@ -1810,7 +1833,9 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
     if (routeService == STRAIGHT || routeService == DIRECT_TO || connectRtePts)
         return [self findStraightRoute:rp];
     
-    return [self findVectorMapsRoute:rp calcGPXRoute:NO];
+    OARouteCalculationResult *res = [self findVectorMapsRoute:rp calcGPXRoute:NO];
+    [routeParams takeMissingMapsResultFrom:rp];
+    return res;
 }
 
 - (NSInteger) findClosestIntermediate:(OARouteCalculationParams *)params intermediates:(NSArray<CLLocation *> *)intermediates
@@ -1900,6 +1925,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
     catch (NSException *e)
     {
     }
+    [params takeMissingMapsResultFrom:newParams];
     return newRes;
 }
 
@@ -2049,6 +2075,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
             params.mode = appMode;
             params.calculationProgress = routeParams.calculationProgress;
             OARouteCalculationResult *result = [self findOfflineRouteSegment:params start:start end:end];
+            [routeParams takeMissingMapsResultFrom:params];
             NSArray<CLLocation *> *locations = result.getRouteLocations;
             NSArray<OASRouteSegmentResult *> *route = result.getOriginalRoute;
             if (route.count == 0)

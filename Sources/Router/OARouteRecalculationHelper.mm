@@ -344,10 +344,10 @@
 
 - (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result
 {
-    if (_lastTask != nil && _lastTask.params.calculationProgress != nullptr)
+    if (_lastTask != nil && _lastTask.params.missingMapsResult != nil)
     {
         MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
-        [missingMapsCalculator attachToRouteCalculationResult:result progress:_lastTask.params.calculationProgress];
+        [missingMapsCalculator attachResult:_lastTask.params.missingMapsResult toRouteCalculationResult:result];
     }
 }
 
@@ -464,11 +464,10 @@
 - (void)configureNewRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
 {
     if ((result.missingMaps.count == 0 && result.mapsToUpdate.count == 0)
-        && _params.calculationProgress != nullptr
-        && _params.calculationProgress->missingMapsCalculationResult != nullptr)
+        && _params.missingMapsResult != nil)
     {
         MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
-        [missingMapsCalculator attachToRouteCalculationResult:result progress:_params.calculationProgress];
+        [missingMapsCalculator attachResult:_params.missingMapsResult toRouteCalculationResult:result];
     }
     if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
     {

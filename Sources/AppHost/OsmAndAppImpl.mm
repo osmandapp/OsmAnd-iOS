@@ -72,6 +72,7 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
 #include <OsmAndCore/Search/CommonWords.h>

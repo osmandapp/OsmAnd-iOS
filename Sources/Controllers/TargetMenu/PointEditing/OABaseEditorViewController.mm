@@ -413,7 +413,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void) setupIconHandler
 {
-    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:!self.isNewItem];
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:YES];
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
@@ -678,12 +678,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
-    if (_isNewItem)
-        return;
-    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+    if (_isNewItem)
+        return;
+
     if ([category isEqualToString: @"original"])
     {
         OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];

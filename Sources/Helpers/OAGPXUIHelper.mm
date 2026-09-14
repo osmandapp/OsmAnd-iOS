@@ -28,8 +28,15 @@
 #import "OARouteKey.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersion.h"
+#import "OAResourcesInstaller.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/QuadTree.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/ObfAddressSectionInfo.h>
 #include <exception>
 
 #define SECOND_IN_MILLIS 1000L
@@ -42,6 +49,65 @@ static NSLock *OAGPXNearestCitySearchLock()
         lock = [NSLock new];
     });
     return lock;
+}
+
+static NSCache<NSString *, NSArray<OAPOI *> *> *OAGPXNearestCityCandidatesCache()
+{
+    static NSCache<NSString *, NSArray<OAPOI *> *> *cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = [NSCache new];
+        cache.countLimit = 64;
+
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                         object:nil
+                                                          queue:nil
+                                                     usingBlock:^(NSNotification * _Nonnull note) {
+            [cache removeAllObjects];
+        }];
+    });
+    return cache;
+}
+
+static const double kNearestCityCellDeg = 0.5;
+static const int kNearestCityRegionRadiusMeters = 120 * 1000;
+static const int kNearestCityQueryRadiusMeters = 50 * 1000;
+
+static NSString *OAGPXNearestCityCellKey(CLLocationCoordinate2D latLon)
+{
+    return [NSString stringWithFormat:@"%ld_%ld",
+            (long) floor(latLon.latitude / kNearestCityCellDeg),
+            (long) floor(latLon.longitude / kNearestCityCellDeg)];
+}
+
+static CLLocationCoordinate2D OAGPXNearestCityCellCenter(CLLocationCoordinate2D latLon)
+{
+    return CLLocationCoordinate2DMake(
+        (floor(latLon.latitude / kNearestCityCellDeg) + 0.5) * kNearestCityCellDeg,
+        (floor(latLon.longitude / kNearestCityCellDeg) + 0.5) * kNearestCityCellDeg);
+}
+
+static NSArray<NSString *> *OAGPXNearestCitySubTypes()
+{
+    static NSArray<NSString *> *types;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        types = @[
+            [OACity getTypeStr:CITY_TYPE_CITY],
+            [OACity getTypeStr:CITY_TYPE_TOWN],
+            [OACity getTypeStr:CITY_TYPE_VILLAGE],
+            [OACity getTypeStr:CITY_TYPE_HAMLET],
+            [OACity getTypeStr:CITY_TYPE_SUBURB],
+            [OACity getTypeStr:CITY_TYPE_BOUNDARY],
+            [OACity getTypeStr:CITY_TYPE_POSTCODE],
+            [OACity getTypeStr:CITY_TYPE_BOROUGH],
+            [OACity getTypeStr:CITY_TYPE_DISTRICT],
+            [OACity getTypeStr:CITY_TYPE_NEIGHBOURHOOD],
+            [OACity getTypeStr:CITY_TYPE_CENSUS]
+        ];
+    });
+    return types;
 }
 
 @implementation OAGpxFileInfo
@@ -60,9 +126,69 @@ static NSLock *OAGPXNearestCitySearchLock()
 @end
 
 
+// Settlements are read out of the address section once per map and kept in a quadtree for the
+// session, so every later lookup is an in-memory box query.
+
+static const int kNearestCityAddressRadiusMeters = 50 * 1000;
+
+typedef OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> OAGPXCityQuadTreeType;
+
+static NSLock *OAGPXNearestCityAddressLock()
+{
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    return lock;
+}
+
+static std::shared_ptr<OAGPXCityQuadTreeType> &OAGPXCityQuadTree()
+{
+    static std::shared_ptr<OAGPXCityQuadTreeType> tree =
+        std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+    return tree;
+}
+
+// Resources whose address section has already been read into the quadtree.
+static NSMutableSet<NSString *> *OAGPXLoadedCityResourceIds()
+{
+    static NSMutableSet<NSString *> *loaded;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        loaded = [NSMutableSet set];
+    });
+    return loaded;
+}
+
+// Of those, the ones that turned out to carry settlements at all.
+static NSMutableSet<NSString *> *OAGPXCityResourceIdsWithAddressData()
+{
+    static NSMutableSet<NSString *> *withAddressData;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        withAddressData = [NSMutableSet set];
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                         object:nil
+                                                          queue:nil
+                                                     usingBlock:^(NSNotification * _Nonnull note) {
+            NSLock *lock = OAGPXNearestCityAddressLock();
+            [lock lock];
+            [OAGPXLoadedCityResourceIds() removeAllObjects];
+            [withAddressData removeAllObjects];
+            OAGPXCityQuadTree() = std::make_shared<OAGPXCityQuadTreeType>(OsmAnd::AreaI::largestPositive(), 12u);
+            [lock unlock];
+        }];
+    });
+    return withAddressData;
+}
+
 @interface OAGPXUIHelper() <UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate>
 
-+ (OAPOI *)performNearestCitySearch:(CLLocationCoordinate2D)latLon;
++ (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters;
++ (NSArray<OAPOI *> *)filterCityCandidates:(NSArray<OAPOI *> *)candidates radiusMeters:(int)radiusMeters ofLat:(double)lat lon:(double)lon;
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon;
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon;
 
 @end
 
@@ -362,24 +488,191 @@ static NSLock *OAGPXNearestCitySearchLock()
         [gpxFile setGradientColorPaletteGradientColorPaletteName:gpxItem.gradientPaletteName];
 }
 
-+ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
++ (NSString *)searchNearestCityName:(CLLocationCoordinate2D)latLon
 {
-    OAPOI *nearestCity = nil;
-    NSLock *lock = OAGPXNearestCitySearchLock();
+    NSString *fromAddress = [self nearestCityNameFromAddressIndex:latLon];
+    if (fromAddress)
+        return fromAddress;
+
+    OAPOI *poi = [self searchNearestCity:latLon];
+    return poi.name ?: @"";
+}
+
+/// nil = no map here carries address data, caller falls back to POI. @"" = read, nothing in range.
++ (NSString *)nearestCityNameFromAddressIndex:(CLLocationCoordinate2D)latLon
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    const OsmAnd::AreaI bbox31 = (OsmAnd::AreaI) OsmAnd::Utilities::boundingBox31FromAreaInMeters(
+        kNearestCityAddressRadiusMeters, point31);
+
+    QList<std::shared_ptr<const OsmAnd::StreetGroup>> cities;
+    BOOL covered = NO;
+
+    NSLock *lock = OAGPXNearestCityAddressLock();
     [lock lock];
     @try
     {
         try
         {
-            nearestCity = [self performNearestCitySearch:latLon];
+            NSMutableSet<NSString *> *loaded = OAGPXLoadedCityResourceIds();
+            NSMutableSet<NSString *> *withAddressData = OAGPXCityResourceIdsWithAddressData();
+            const auto &obfsCollection = app.resourcesManager->obfsCollection;
+            for (const auto &resource : app.resourcesManager->getLocalResources())
+            {
+                // Other resource kinds carry a different Metadata subclass; casting those
+                // statically yields a bogus pointer that crashes on dereference.
+                if (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion
+                    && resource->type != OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                    continue;
+
+                const auto obfMetadata = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(resource->metadata);
+                if (!obfMetadata || !obfMetadata->obfFile || !obfMetadata->obfFile->obfInfo)
+                    continue;
+
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                // As in OASearchPhrase.getOfflineIndexes: the address flag is not set on every
+                // map, so coverage is probed with the POI mask.
+                if (!obfMetadata->obfFile->obfInfo->containsDataFor(&queryBbox31,
+                                                                   OsmAnd::MinZoomLevel,
+                                                                   OsmAnd::MaxZoomLevel,
+                                                                   OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)))
+                    continue;
+
+                NSString *resourceId = resource->id.toNSString();
+                if (![loaded containsObject:resourceId])
+                {
+                    [loaded addObject:resourceId];
+                    const auto dataInterface = obfsCollection->obtainDataInterface({resource});
+                    QList<std::shared_ptr<const OsmAnd::StreetGroup>> groups;
+                    dataInterface->loadStreetGroups(&groups, nullptr,
+                        OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
+
+                    if (!groups.isEmpty())
+                        [withAddressData addObject:resourceId];
+
+                    for (const auto &group : groups)
+                    {
+                        // bbox31 is optional on a street group.
+                        OsmAnd::AreaI area(group->position31.y, group->position31.x, group->position31.y, group->position31.x);
+                        if (group->bbox31.size() >= 4)
+                        {
+                            // bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
+                            area = OsmAnd::AreaI(group->bbox31.at(1), group->bbox31.at(0), group->bbox31.at(3), group->bbox31.at(2));
+                        }
+                        OAGPXCityQuadTree()->insert(group, area);
+                    }
+                }
+
+                // Probing coverage with the POI mask only says a map is here, not that it has an
+                // address section. Without this the POI fallback could never run and a track in
+                // such an area would silently get an empty name.
+                if ([withAddressData containsObject:resourceId])
+                    covered = YES;
+            }
+
+            if (covered)
+            {
+                OsmAnd::AreaI queryBbox31 = bbox31;
+                OAGPXCityQuadTree()->query(queryBbox31, cities);
+            }
         }
         catch (const std::exception &ex)
         {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %s", ex.what());
         }
         catch (...)
         {
-            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: unknown C++ exception");
+        }
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"[ERROR] -> OAGPXUIHelper -> nearestCityNameFromAddressIndex failed: %@ %@", exception.name, exception.reason);
+    }
+    @finally
+    {
+        [lock unlock];
+    }
+
+    if (!covered)
+        return nil;
+    if (cities.isEmpty())
+        return @"";
+
+    // Distance weighted by the settlement's own radius.
+    std::shared_ptr<const OsmAnd::StreetGroup> nearest;
+    double nearestWeight = 0;
+    for (const auto &city : cities)
+    {
+        OsmAnd::LatLon cityLatLon = OsmAnd::Utilities::convert31ToLatLon(city->position31);
+        CGFloat radius = [OACity getRadius:[OACity getTypeStr:(EOACityType) city->type]];
+        if (radius <= 0)
+            radius = 1000.;
+        double weight = OsmAnd::Utilities::distance(cityLatLon.longitude, cityLatLon.latitude,
+                                                    latLon.longitude, latLon.latitude) / radius;
+        if (!nearest || weight < nearestWeight)
+        {
+            nearest = city;
+            nearestWeight = weight;
+        }
+    }
+    return nearest ? nearest->nativeName.toNSString() : @"";
+}
+
++ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
+{
+    // Only the OBF lookup needs serialising. Filtering and sorting are pure computation over
+    // an immutable array, so they run unlocked.
+    NSArray<OAPOI *> *regionCandidates = [self cityCandidatesForCellAt:latLon];
+    if (regionCandidates.count == 0)
+        return nil;
+
+    NSArray<OAPOI *> *inRange = [self filterCityCandidates:regionCandidates
+                                             radiusMeters:kNearestCityQueryRadiusMeters
+                                                    ofLat:latLon.latitude
+                                                      lon:latLon.longitude];
+    if (inRange.count == 0)
+        return nil;
+
+    return [self sortAmenities:inRange cityTypes:OAGPXNearestCitySubTypes() latLon:latLon].firstObject;
+}
+
++ (NSArray<OAPOI *> *)cityCandidatesForCellAt:(CLLocationCoordinate2D)latLon
+{
+    NSCache<NSString *, NSArray<OAPOI *> *> *cache = OAGPXNearestCityCandidatesCache();
+    NSString *cellKey = OAGPXNearestCityCellKey(latLon);
+
+    // NSCache is thread-safe, so a warm cell never takes the lock.
+    NSArray<OAPOI *> *candidates = [cache objectForKey:cellKey];
+    if (candidates)
+        return candidates;
+
+    NSLock *lock = OAGPXNearestCitySearchLock();
+    [lock lock];
+    @try
+    {
+        // Another thread may have filled the cell while we waited.
+        candidates = [cache objectForKey:cellKey];
+        if (!candidates)
+        {
+            try
+            {
+                CLLocationCoordinate2D cellCenter = OAGPXNearestCityCellCenter(latLon);
+                candidates = [self findCityCandidatesAroundLat:cellCenter.latitude
+                                                          lon:cellCenter.longitude
+                                                 radiusMeters:kNearestCityRegionRadiusMeters];
+                // Only on a normal return, so a failed lookup is retried instead of cached.
+                [cache setObject:candidates forKey:cellKey];
+            }
+            catch (const std::exception &ex)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+            }
+            catch (...)
+            {
+                NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+            }
         }
     }
     @catch (NSException *exception)
@@ -390,40 +683,62 @@ static NSLock *OAGPXNearestCitySearchLock()
     {
         [lock unlock];
     }
-    return nearestCity;
+    return candidates ?: @[];
 }
 
-+ (OAPOI *)performNearestCitySearch:(CLLocationCoordinate2D)latLon
++ (NSArray<OAPOI *> *)findCityCandidatesAroundLat:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
 {
-    OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
-    const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(50 * 1000, pointI);
+    OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, pointI);
     const auto top = OsmAnd::Utilities::get31LatitudeY(rect.top());
     const auto left = OsmAnd::Utilities::get31LongitudeX(rect.left());
     const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
     const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
 
-    NSArray<NSString *> *cityTypes = @[
-        [OACity getTypeStr:CITY_TYPE_CITY],
-        [OACity getTypeStr:CITY_TYPE_TOWN],
-        [OACity getTypeStr:CITY_TYPE_VILLAGE],
-        [OACity getTypeStr:CITY_TYPE_HAMLET],
-        [OACity getTypeStr:CITY_TYPE_SUBURB],
-        [OACity getTypeStr:CITY_TYPE_BOUNDARY],
-        [OACity getTypeStr:CITY_TYPE_POSTCODE],
-        [OACity getTypeStr:CITY_TYPE_BOROUGH],
-        [OACity getTypeStr:CITY_TYPE_DISTRICT],
-        [OACity getTypeStr:CITY_TYPE_NEIGHBOURHOOD],
-        [OACity getTypeStr:CITY_TYPE_CENSUS]
-    ];
+    NSArray<NSString *> *cityTypes = OAGPXNearestCitySubTypes();
 
+    // City subtypes live in the "administrative" category; declaring it lets the core skip the
+    // rest at the OBF index. Subcategories stay empty so the accept block still decides.
     OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
         return [cityTypes containsObject:subcategory];
     } emptyFunction:^BOOL{
         return NO;
-    } getTypesFunction:nil];
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
+        OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+        OAPOICategory *administrative = [poiHelper getPoiCategoryByName:@"administrative"];
+        // getPoiCategoryByName: falls back to "other" rather than nil, which would silently
+        // narrow the search to the wrong category.
+        if (!administrative || administrative == poiHelper.otherPoiCategory)
+            return nil;
+
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [NSMapTable strongToStrongObjectsMapTable];
+        [types setObject:[NSMutableSet set] forKey:administrative];
+        return types;
+    }];
 
     NSArray<OAPOI *> *amenities = [OAAmenitySearcher findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
-    return amenities.count > 0 ? [self sortAmenities:amenities cityTypes:cityTypes latLon:latLon].firstObject : nil;
+    return amenities ?: @[];
+}
+
++ (NSArray<OAPOI *> *)filterCityCandidates:(NSArray<OAPOI *> *)candidates radiusMeters:(int)radiusMeters ofLat:(double)lat lon:(double)lon
+{
+    if (candidates.count == 0)
+        return candidates;
+
+    OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, pointI);
+    const double top = OsmAnd::Utilities::get31LatitudeY(rect.top());
+    const double left = OsmAnd::Utilities::get31LongitudeX(rect.left());
+    const double bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
+    const double right = OsmAnd::Utilities::get31LongitudeX(rect.right());
+
+    NSMutableArray<OAPOI *> *result = [NSMutableArray arrayWithCapacity:candidates.count];
+    for (OAPOI *poi in candidates)
+    {
+        if (poi.latitude <= top && poi.latitude >= bottom && poi.longitude >= left && poi.longitude <= right)
+            [result addObject:poi];
+    }
+    return result;
 }
 
 + (NSArray<OAPOI *> *)sortAmenities:(NSArray<OAPOI *> *)amenities cityTypes:(NSArray<NSString *> *)cityTypes latLon:(CLLocationCoordinate2D)latLon
@@ -515,8 +830,8 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
                  openTrack:(BOOL)openTrack
                  trackItem:(OASTrackItem *)trackItem
 {
-    NSString *gpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:trackItem.dataItem.gpxFilePath];
-    
+    NSString *gpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:trackItem.gpxFilePath];
+
     OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
     OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
     if (gpxFile)
@@ -537,12 +852,12 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
                    gpxFile:(OASGpxFile *)gpxFile
   updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 {
-    NSString *oldPath = trackItem.dataItem.gpxFilePath;
+    NSString *oldPath = trackItem.gpxFilePath;
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = trackItem.dataItem.gpxFileName;
+    NSString *newName = trackItem.gpxFileName;
     
     NSString *subfolderPath = OsmAndApp.instance.gpxPath;
     for (NSString *component in [newFolder pathComponents])
@@ -570,29 +885,20 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
-        if (trackItem.dataItem)
+        [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:trackItem.getFile];
+        NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
+        OASKFile *sourceFile = trackItem.getFile ?: [[OASKFile alloc] initWithFilePath:sourcePath];
+        OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newStoringFullPath];
+        if ([sourceFile renameToToFile:newFile])
         {
-            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:trackItem.getFile];
-            NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
-            OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newStoringFullPath];
-            BOOL result = [trackItem.dataItem.file renameToToFile:newFile];
-            if (result)
+            if (![gpxDatabase renameCurrentFile:sourceFile newFile:newFile])
+                [[OASGpxDbHelper shared] renameCurrentFile:sourceFile newFile:newFile];
+            OASTrackItem *movedItem = [[OASTrackItem alloc] initWithFile:newFile];
+            movedItem.dataItem = [gpxDatabase getGPXItem:newStoringFullPath];
+            [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:movedItem];
+            if (updatedTrackItemСallback)
             {
-                BOOL renameCurrentFileResult = [gpxDatabase renameCurrentFile:trackItem.dataItem.file newFile:newFile];
-                if (renameCurrentFileResult)
-                {
-                    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newStoringFullPath];
-                    if (gpx)
-                    {
-                        trackItem = [[OASTrackItem alloc] initWithFile:newFile];
-                        trackItem.dataItem = gpx;
-                        [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];
-                        if (updatedTrackItemСallback)
-                        {
-                            updatedTrackItemСallback(trackItem);
-                        }
-                    }
-                }
+                updatedTrackItemСallback(movedItem);
             }
         }
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
@@ -653,6 +959,13 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     [self renameTrack:gpx doc:gpxFile newName:newName hostVC:hostVC updatedTrackItemСallback:nil];
 }
 
+- (void)renameTrackItem:(OASTrackItem *)trackItem newName:(NSString *)newName hostVC:(UIViewController*)hostVC
+{
+    OASKFile *file = trackItem.getFile ?: [[OASKFile alloc] initWithFilePath:trackItem.path];
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    [self renameTrack:trackItem.dataItem doc:gpxFile newName:newName hostVC:hostVC updatedTrackItemСallback:nil];
+}
+
 - (void)renameTrack:(OASGpxDataItem *)gpx
                 doc:(OASGpxFile *)doc
             newName:(NSString *)newName
@@ -661,40 +974,43 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 {
     if ([newName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0)
     {
-        NSString *oldFilePath = gpx.gpxFilePath;
-        NSString *oldPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *gpxRoot = OsmAndApp.instance.gpxPath;
+        NSString *oldPath = gpx ? [gpxRoot stringByAppendingPathComponent:gpx.gpxFilePath] : doc.path;
+        if (oldPath.length == 0)
+        {
+            [self showAlertWithText:OALocalizedString(@"empty_filename") inViewController:hostVC];
+            return;
+        }
+        OASKFile *sourceFile = gpx ? gpx.file : [[OASKFile alloc] initWithFilePath:oldPath];
+        NSString *oldFilePath = [oldPath hasPrefix:[gpxRoot stringByAppendingString:@"/"]]
+            ? [oldPath substringFromIndex:gpxRoot.length + 1]
+            : oldPath.lastPathComponent;
         NSString *newFileName = [[newName stringByAppendingPathExtension:@"gpx"] decomposedStringWithCanonicalMapping];
-        NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName]; // 2023-10-22_11-34_Sun 2.gpx
-        NSString *newPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFilePath];
+        NSString *newFilePath = [[oldFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName]; // 2023-10-22_11-34_Sun 2.gpx
+        NSString *newPath = [gpxRoot stringByAppendingPathComponent:newFilePath];
         if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
         {
-            gpx.gpxFileName = newFileName;
-            
+            if (gpx)
+                gpx.gpxFileName = newFileName;
+
             OASKFile *newFile = [[OASKFile alloc] initWithFilePath:newPath];
-            BOOL renameToFileResult = [gpx.file renameToToFile:newFile];
+            BOOL renameToFileResult = [sourceFile renameToToFile:newFile];
             if (!renameToFileResult)
             {
                 NSLog(@"[ERROR] -> OAGPXUIHelper -> renameToFileResult is fail");
                 return;
             }
-            BOOL renameCurrentFileResult = [[OAGPXDatabase sharedDb] renameCurrentFile:gpx.file newFile:newFile];
-            if (!renameCurrentFileResult)
-            {
-                NSLog(@"[ERROR] -> OAGPXUIHelper -> renameCurrentFileResult is fail");
-                return;
-            }
 
-            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
-            if (gpx)
+            if (![[OAGPXDatabase sharedDb] renameCurrentFile:sourceFile newFile:newFile])
+                [[OASGpxDbHelper shared] renameCurrentFile:sourceFile newFile:newFile];
+
+            OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:newFile];
+            trackItem.dataItem = [[OAGPXDatabase sharedDb] getGPXItem:newPath];
+            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:[[OASKFile alloc] initWithFilePath:oldPath]];
+            [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];
+            if (updatedTrackItemСallback)
             {
-                OASTrackItem *trackItem = [[OASTrackItem alloc] initWithFile:newFile];
-                trackItem.dataItem = gpx;
-                [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:[[OASKFile alloc] initWithFilePath:oldPath]];
-                [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];
-                if (updatedTrackItemСallback)
-                {
-                    updatedTrackItemСallback(trackItem);
-                }
+                updatedTrackItemСallback(trackItem);
             }
 
             OASMetadata *metadata;

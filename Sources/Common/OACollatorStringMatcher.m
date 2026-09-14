@@ -148,6 +148,9 @@ static NSCharacterSet * _APOSTROPHES;
  * Checks if string starts with another string.
  * Special check try to find as well in the middle of name
  *
+ * Both arguments must already be lowercased and aligned (see +lowercaseAndAlignChars:);
+ * +cmatches: is the only caller and does that once for both strings.
+ *
  * @param fullTextP
  * @param theStart
  * @param fullText
@@ -155,12 +158,10 @@ static NSCharacterSet * _APOSTROPHES;
  */
 + (BOOL) cstartsWith:(NSString *)fullTextP theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
-    // FUTURE: This is not effective code, it runs on each comparision
-    // It would be more efficient to normalize all strings in file and normalize search string before collator
-    theStart = [self alignChars:theStart];
+    // Both strings arrive normalized from +cmatches: (as in the Java original, where
+    // cstartsWith() does no normalization of its own), so only hyphens are folded here.
     theStart = [self replaceHyphen:theStart replacement:@(" ")];
-    NSString *searchIn = [self lowercaseAndAlignChars:fullTextP];
-    searchIn = [self replaceHyphen:searchIn replacement:@(" ")];
+    NSString *searchIn = [self replaceHyphen:fullTextP replacement:@(" ")];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;

@@ -578,14 +578,14 @@ private extension SelectPointsViewController {
             return
         }
 
-        let meters = OADistanceAndDirectionsUpdater.getDistanceFrom(
-            location,
+        let meters = OADistanceAndDirectionsUpdater.distance(
+            from: location,
             toDestinationLatitude: point.lat,
             destinationLongitude: point.lon
         )
         item.distanceMeters = Double(meters)
         item.distance = OAOsmAndFormatter.getFormattedDistance(Float(meters))
-        item.direction = OADistanceAndDirectionsUpdater.getDirectionAngle(
+        item.direction = OADistanceAndDirectionsUpdater.directionAngle(
             from: location,
             toDestinationLatitude: point.lat,
             destinationLongitude: point.lon

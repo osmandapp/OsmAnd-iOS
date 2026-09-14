@@ -120,9 +120,10 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         if([fName hasPrefix:@"/"]) {
             fName = [fName substringFromIndex:1];
         }
-        return [fName isEqualToString: fileName] ||
-        [fileName hasPrefix:[fName stringByAppendingString:@"/"]];
-        
+        NSString *itemName = fName.precomposedStringWithCanonicalMapping;
+        NSString *archivedName = fileName.precomposedStringWithCanonicalMapping;
+        return [itemName isEqualToString:archivedName] ||
+        [archivedName hasPrefix:[itemName stringByAppendingString:@"/"]];
     }
     return NO;
 }

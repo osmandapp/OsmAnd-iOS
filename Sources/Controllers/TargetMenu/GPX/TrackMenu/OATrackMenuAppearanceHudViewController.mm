@@ -142,6 +142,8 @@ static const NSInteger kColorsSection = 1;
     LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
     
     NSString *_selectedRouteAttributesString;
+
+    BOOL _dataItemPersisted;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx state:(OATrackMenuViewControllerState *)state analysis:(OASGpxTrackAnalysis *)analysis {
@@ -175,6 +177,26 @@ static const NSInteger kColorsSection = 1;
     _settings = [OAAppSettings sharedManager];
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
+
+    _dataItemPersisted = self.gpx.isShowCurrentTrack || self.gpx.dataItem != nil;
+    if (!self.gpx.isShowCurrentTrack && !self.gpx.dataItem)
+    {
+        OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+        OASGpxDataItem *dataItem = [gpxDb getGPXItem:self.gpx.path];
+        if (dataItem)
+        {
+            _dataItemPersisted = YES;
+        }
+        else
+        {
+            OASKFile *file = self.gpx.getFile ?: [[OASKFile alloc] initWithFilePath:self.gpx.path];
+            dataItem = [[OASGpxDataItem alloc] initWithFile:file];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+            if (gpxFile && !gpxFile.error)
+                [dataItem readGpxParamsGpxFile:gpxFile];
+        }
+        self.gpx.dataItem = dataItem;
+    }
     
     BOOL hasColoringType = [self getGPXColoringType].length > 0;
     NSString *coloringType = [self getGPXColoringType];
@@ -1622,15 +1644,17 @@ static const NSInteger kColorsSection = 1;
            
             
         } else {
+            OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *dataItem = weakSelf.gpx.dataItem;
-        
-            // update data in DB
-           [[OAGPXDatabase sharedDb] updateDataItem:dataItem];
-            
+            OASKFile *file = dataItem.file ?: (weakSelf.gpx.getFile ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path]);
+
+            if (_dataItemPersisted && dataItem)
+                [gpxDb updateDataItem:dataItem];
+
             // update data in file on disk
-            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:dataItem.file];
+            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
             [self configureGPXWith:gpxFile];
-            [OASGpxUtilities.shared writeGpxFileFile:dataItem.file gpxFile:gpxFile];
+            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
         }
         
         if (weakSelf.reopeningTrackMenuState)

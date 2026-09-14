@@ -85,6 +85,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     OAAutoObserverProxy* _locationServicesStatusObserver;
 
     BOOL _driveModeActive;
+    BOOL _hudButtonsVisible;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -133,6 +134,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) commonInit
 {
     _mapHudType = EOAMapHudBrowse;
+    _hudButtonsVisible = YES;
     
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
@@ -480,9 +482,19 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isPlanRouteVisible = target == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
     BOOL hasHUD = _mapPanelViewController.scrollableHudViewController != nil;
+    BOOL isSidePanelPlanRoute = isPlanRouteVisible
+        && hasHUD
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    CGFloat sidePanelLeftOffset = 0.0;
+    if (isSidePanelPlanRoute)
+    {
+        CGFloat panelRight = [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth];
+        sidePanelLeftOffset = MAX(0.0, panelRight - self.view.safeAreaInsets.left);
+    }
+    [self.mapHudLayout setExternalLeftOverlay:sidePanelLeftOffset];
     CGFloat leftOffset = kButtonOffset;
     BOOL shouldApply = NO;
-    if (isLandscape)
+    if (isLandscape || isSidePanelPlanRoute)
     {
         if ([_mapPanelViewController isTargetMapRulerNeeds])
         {
@@ -1239,7 +1251,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    BOOL needShow = _compassButton.alpha == 0.0 && showCompass;
+    BOOL needShow = _compassButton.alpha == 0.0 && showCompass && _hudButtonsVisible;
     BOOL needHide = _compassButton.alpha == 1.0 && !showCompass;
     if (needShow)
         [self showCompass];
@@ -1448,6 +1460,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
     BOOL contextMenuMode = self.contextMenuMode;
+    BOOL isSidePanelPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
+        && _mapPanelViewController.scrollableHudViewController
+        && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
+    BOOL shouldIgnoreContextToolbar = isPhoneLandscape && !isSidePanelPlanRoute;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1467,9 +1483,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (isBannerVisible)
         bannerH = self.downloadMapWidget.frame.size.height + self.downloadMapWidget.shadowOffset;
     
-    BOOL ignoreTopSidePanels = !isPhoneLandscape && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
+    BOOL ignoreTopSidePanels = !shouldIgnoreContextToolbar
+        && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
     CGFloat extraTop = 0.0;
-    if (!isPhoneLandscape)
+    if (!shouldIgnoreContextToolbar)
     {
         if (contextMenuMode || isTargetMode)
         {
@@ -1569,8 +1586,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _lastIgnoreBottomSidePanels = ignoreBottomSidePanels;
         _lastExtraBottom = extraBottom;
         [self.mapHudLayout setExternalBottomOverlay:extraBottom ignorePanels:ignoreBottomSidePanels];
-        [self resetToDefaultRulerLayout];
     }
+    if (self.mapHudLayout)
+        [self resetToDefaultRulerLayout];
 }
 
 - (CGFloat) getHudMinTopOffset
@@ -1790,11 +1808,16 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL isButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
+    _hudButtonsVisible = isButtonsVisible;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
         _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
-        _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
+        BOOL showCompassButton = [self shouldShowCompass] && isButtonsVisible;
+        _compassButton.alpha = showCompassButton ? 1. : 0.;
+        if (showCompassButton)
+            _compassButton.hidden = NO;
+
         _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         

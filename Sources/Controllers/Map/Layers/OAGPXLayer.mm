@@ -49,6 +49,79 @@ static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
 static const int START_ZOOM = 7;
 
+namespace
+{
+    // Applies 3D track style either to a line being built or to an existing one
+    template <typename Line>
+    void applyRaisedLineStyle(Line &line,
+                              const QList<float> &heights,
+                              const float elevationScaleFactor,
+                              const QList<OsmAnd::FColorARGB> &colors,
+                              const QList<OsmAnd::FColorARGB> &wallColors,
+                              const OsmAnd::FColorARGB colorARGB,
+                              const EOAGPX3DLineVisualizationPositionType positionType,
+                              const EOAGPX3DLineVisualizationWallColorType wallColorType,
+                              const CGFloat lineWidth)
+    {
+        if (!heights.isEmpty())
+        {
+            line.setElevationScaleFactor(elevationScaleFactor);
+            line.setHeights(heights);
+        }
+
+        line.setColorizationMapping(colors);
+        if (!wallColors.isEmpty())
+            line.setOutlineColorizationMapping(wallColors);
+
+        // configure visibility for Top and Bottom lines
+        switch (positionType)
+        {
+            case EOAGPX3DLineVisualizationPositionTypeTop:
+                line.setElevatedLineVisibility(true);
+                line.setSurfaceLineVisibility(false);
+                break;
+            case EOAGPX3DLineVisualizationPositionTypeBottom:
+                line.setElevatedLineVisibility(false);
+                line.setSurfaceLineVisibility(true);
+                break;
+            case EOAGPX3DLineVisualizationPositionTypeTopBottom:
+                line.setElevatedLineVisibility(true);
+                line.setSurfaceLineVisibility(true);
+                break;
+            default:
+                break;
+        }
+
+        line.setOutlineWidth(lineWidth);
+
+        if (wallColorType != EOAGPX3DLineVisualizationWallColorTypeNone
+            && wallColorType != EOAGPX3DLineVisualizationWallColorTypeSolid)
+        {
+            line.setColorizationScheme(COLORIZATION_GRADIENT);
+
+            if (wallColors.isEmpty())
+            {
+                const BOOL upwardGradient = wallColorType == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+                // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                line.setNearOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 0.0f : 1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                line.setFarOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+            }
+            else
+            {
+                // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
+                // (r,g,b) 0.0f...1.0f
+                line.setOutlineColor(OsmAnd::FColorARGB(1.0f, 1.0f, 1.0f, 1.0f));
+            }
+        }
+        else
+        {
+            // Draw transparent or solid wall
+            line.setOutlineColor(OsmAnd::FColorARGB(wallColorType == EOAGPX3DLineVisualizationWallColorTypeSolid ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+        }
+    }
+}
+
 @interface OAGPXLayer () <OASPaletteRepositoryListener>
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
@@ -924,6 +997,27 @@ colorizationScheme:(int)colorizationScheme
             line->setColorizationMapping(colors);
             line->setColorizationScheme(colorizationScheme);
             line->setShowArrows([gpx isShowArrows]);
+
+            // The recorded track grows point by point, so heights and 3D style have to follow the new points
+            if ([OAGPXDatabase lineVisualizationByTypeForName:gpx.get3DVisualizationType] != EOAGPX3DLineVisualizationByTypeNone)
+            {
+                [self updateCurrentTrackRaisedLine:line
+                                        elevations:elevations
+                                         colorARGB:colorARGB
+                                            colors:colors
+                                 segmentWallColors:segmentWallColors
+                                               gpx:gpx
+                                         lineWidth:lineWidth];
+            }
+            else
+            {
+                line->setHeights(QList<float>());
+                // Add outline for colorized lines
+                const BOOL colorized = !colors.isEmpty() && colorizationScheme != COLORIZATION_NONE;
+                line->setOutlineWidth(colorized ? lineWidth + kOutlineWidth : 0.0);
+                if (colorized)
+                    line->setOutlineColor(kOutlineColor);
+            }
         }
     }
 }
@@ -936,47 +1030,35 @@ colorizationScheme:(int)colorizationScheme
       gpx:(OASGpxFile *)gpx
                   lineWidth:(CGFloat)lineWidth
 {
-    [self configureElevations:elevations elevationScaleFactor:[gpx getAdditionalExaggeration] builder:builder];
-    
-    // for setColorizationMapping use: colors or QList<OsmAnd::FColorARGB>()
-    builder.setColorizationMapping(colors);
-    
-    if (!segmentWallColors.isEmpty())
-    {
-        builder.setOutlineColorizationMapping(segmentWallColors);
-    }
-    
-    // configure visibility for Top and Bottom lines
-    [self configureVisualization3dPositionType:[OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType] builder:builder];
-   
-    builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
-
-    auto visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType];
-    if (visualization3dWallColorType != EOAGPX3DLineVisualizationWallColorTypeNone && visualization3dWallColorType != EOAGPX3DLineVisualizationWallColorTypeSolid)
-    {
-        builder.setColorizationScheme(1);
-
-        if (segmentWallColors.isEmpty())
-        {
-            BOOL upwardGradient = [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType] == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-            // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setNearOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 0.0f : 1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-            // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setFarOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-        }
-        else
-        {
-            // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
-            // (r,g,b) 0.0f...1.0f
-            builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 1.0f, 1.0f, 1.0f));
-        }
-    }
-    else
-    {
-        // Draw transparent or solid wall
-        builder.setOutlineColor(OsmAnd::FColorARGB([OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType] == EOAGPX3DLineVisualizationWallColorTypeSolid ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-    }
+    applyRaisedLineStyle(builder,
+                         [self heightsFromElevations:elevations],
+                         [gpx getAdditionalExaggeration],
+                         colors,
+                         segmentWallColors,
+                         colorARGB,
+                         [OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType],
+                         [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType],
+                         lineWidth);
     return builder;
+}
+
+- (void)updateCurrentTrackRaisedLine:(const std::shared_ptr<OsmAnd::VectorLine> &)line
+                          elevations:(NSArray <NSNumber *>* _Nullable)elevations
+                           colorARGB:(OsmAnd::FColorARGB)colorARGB
+                              colors:(const QList<OsmAnd::FColorARGB> &)colors
+                   segmentWallColors:(const QList<OsmAnd::FColorARGB> &)segmentWallColors
+                                 gpx:(OASGpxFile *)gpx
+                           lineWidth:(CGFloat)lineWidth
+{
+    applyRaisedLineStyle(*line,
+                         [self heightsFromElevations:elevations],
+                         [gpx getAdditionalExaggeration],
+                         colors,
+                         segmentWallColors,
+                         colorARGB,
+                         [OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType],
+                         [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType],
+                         lineWidth);
 }
 
 - (OsmAnd::VectorLineBuilder &)configureRaisedLine:(OsmAnd::VectorLineBuilder &)builder
@@ -1040,17 +1122,23 @@ colorizationScheme:(int)colorizationScheme
         {
             builder.setElevationScaleFactor(elevationScaleFactor);
         }
-        QList<float> heights;
-        for (NSNumber *object in elevations)
-        {
-            double elevation = [object doubleValue];
-            if (!isnan(elevation))
-            {
-                heights.append(elevation);
-            }
-        }
-        builder.setHeights(heights);
+        builder.setHeights([self heightsFromElevations:elevations]);
     }
+}
+
+- (QList<float>)heightsFromElevations:(NSArray <NSNumber *>* _Nullable)elevations
+{
+    QList<float> heights;
+    heights.reserve((int) elevations.count);
+    for (NSNumber *object in elevations)
+    {
+        double elevation = [object doubleValue];
+        if (!isnan(elevation))
+        {
+            heights.append(elevation);
+        }
+    }
+    return heights;
 }
 
 - (void)configureVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)type

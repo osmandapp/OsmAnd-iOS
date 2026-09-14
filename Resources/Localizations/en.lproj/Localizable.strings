@@ -1112,6 +1112,7 @@
 // My Places
 "favorites_item" = "Favorites";
 "shared_string_gpx_tracks" = "Tracks";
+"tracks_stats_are_being_calculated" = "Tracks stats are being calculated...";
 "personal_category_name" = "Personal";
 "shared_string_visible" = "Visible";
 

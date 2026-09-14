@@ -57,7 +57,9 @@
     }
 }
 
-+ (CGFloat)getDirectionAngleFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude
++ (CGFloat)directionAngleFromLocation:(CLLocation *)currentLocation
+                toDestinationLatitude:(CGFloat)destinationLatitude
+                 destinationLongitude:(CGFloat)destinationLongitude
 {
     if (!currentLocation)
         return 0;
@@ -71,7 +73,28 @@
     return directionAngle;
 }
 
-+ (CGFloat)getDistanceFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude
++ (CGFloat)directionAngleFromLocation:(CLLocation *)sourceLocation
+                      sourceDirection:(CLLocationDirection)sourceDirection
+                toDestinationLatitude:(CGFloat)destinationLatitude
+                 destinationLongitude:(CGFloat)destinationLongitude
+{
+    if (!sourceLocation)
+        return 0;
+
+    double bearing;
+    [OALocationServices computeDistanceAndBearing:sourceLocation.coordinate.latitude
+                                             lon1:sourceLocation.coordinate.longitude
+                                             lat2:destinationLatitude
+                                             lon2:destinationLongitude
+                                         distance:nil
+                                   initialBearing:&bearing];
+    CLLocationDirection direction = isnan(sourceDirection) ? 0.0 : sourceDirection;
+    return OsmAnd::Utilities::normalizedAngleDegrees(bearing - direction) * (M_PI / 180);
+}
+
++ (CGFloat)distanceFromLocation:(CLLocation *)currentLocation
+          toDestinationLatitude:(CGFloat)destinationLatitude
+           destinationLongitude:(CGFloat)destinationLongitude
 {
     if (!currentLocation)
         return 0;

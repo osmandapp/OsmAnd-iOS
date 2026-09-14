@@ -296,7 +296,7 @@
     BOOL hasGeneralSegment = !_isCurrentTrack && _doc && [_doc getGeneralTrack] && [_doc getGeneralSegment];
     if (hasGeneralSegment)
     {
-        BOOL joinSegments = _gpx.dataItem.joinSegments;
+        BOOL joinSegments = _gpx.dataItem ? _gpx.joinSegments : [_doc isJoinSegments];
         _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment] joinSegments:joinSegments] : nil;
     }
     else

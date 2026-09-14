@@ -44,6 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon;
 
+/// Nearest settlement name. Reads the address index, falling back to the POI search only where
+/// there is no address data.
++ (NSString *)searchNearestCityName:(CLLocationCoordinate2D)latLon;
+
 - (void) openExportForTrack:(nullable OASGpxDataItem *)gpx
                      gpxDoc:(nullable id)gpxDoc
              isCurrentTrack:(BOOL)isCurrentTrack
@@ -68,6 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) renameTrack:(nullable OASGpxDataItem *)gpx
              newName:(NSString *)newName
               hostVC:(UIViewController*)hostVC;
+
+- (void) renameTrackItem:(OASTrackItem *)trackItem
+                 newName:(NSString *)newName
+                  hostVC:(UIViewController*)hostVC;
 
 - (void) renameTrack:(nullable OASGpxDataItem *)gpx
                  doc:(nullable OASGpxFile *)doc

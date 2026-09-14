@@ -259,14 +259,20 @@
     [self openPlanRoute:NO];
 }
 
-- (void) openPlanRoute:(BOOL)showSnapWarning
+- (void) openPlanRoute:(BOOL)attachToRoads
 {
     if (_gpx)
     {
-        NSString *filePath = _gpx.path;
+        OASGpxFile *gpx = _gpx;
+        NSString *fileName = gpx.path.lastPathComponent.stringByDeletingPathExtension;
         [self dismissViewControllerAnimated:NO completion:^{
-            [[OARootViewController instance].mapPanel closeRouteInfo];
-            [PlanRouteScrollableViewController openExistingTrackWithFilePath:filePath];
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            [mapPanel closeRouteInfo:YES onComplete:^{
+                [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
+                                                                       fileName:fileName ?: @""
+                                                                 sourceFilePath:gpx.path
+                                                                  attachToRoads:attachToRoads];
+            }];
         }];
     }
 }

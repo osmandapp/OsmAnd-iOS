@@ -46,7 +46,8 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
             let formatted = OAOsmAndFormatter.getFormattedDurationShort(Double(timeMoving) / 1000, fullForm: false)
             let isHourOrMore = timeMoving >= Self.oneHourMillis
             let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
-            setText(formatted, subtext: localizedString(unitKey))
+            let isSmallSidePanel = widgetSizeStyle == .small && getPanel()?.isPanelVertical == false
+            setText(formatted, subtext: isSmallSidePanel ? nil : localizedString(unitKey))
         }
         
         updateTitleAndIcon()

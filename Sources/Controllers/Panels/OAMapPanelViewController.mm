@@ -91,6 +91,8 @@
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
 #import "OAEditPointViewController.h"
+#import "OAFavoriteAction.h"
+#import "OAGPXAction.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
@@ -2241,6 +2243,13 @@ typedef enum
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
                                                             poi:poi];
+    NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAFavoriteAction getQuickActionType].stringId];
+    if (quickActionParams)
+    {
+        [controller applyQuickActionParams:quickActionParams];
+        self.targetMenuView.targetPoint.values = nil;
+    }
+
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
@@ -2430,6 +2439,13 @@ typedef enum
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
                                                                             poi:poi];
+    NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId];
+    if (quickActionParams)
+    {
+        [controller applyQuickActionParams:quickActionParams];
+        self.targetMenuView.targetPoint.values = nil;
+    }
+
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
@@ -2527,7 +2543,7 @@ typedef enum
             {
                 gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
                 if (!gpxFile)
-                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:trackItem.dataItem.file];
+                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:([trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path])];
             }
 
             [self displayGpxOnMap:gpxFile];
@@ -3292,7 +3308,7 @@ typedef enum
     _activeTargetObj = targetPoint.targetObj;
     _activeViewControllerState = state;
 
-    _formattedTargetName = item.dataItem ? item.dataItem.gpxFileNameWithoutExtension : @"";
+    _formattedTargetName = item.gpxFileNameWithoutExtension;
     _targetMenuView.isAddressFound = YES;
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
@@ -3589,7 +3605,7 @@ typedef enum
         gpxFile = [OASelectedGPXHelper.instance getGpxFileFor:trackItem.path];
         if (!gpxFile)
         {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:trackItem.dataItem.file.absolutePath];
+            OASKFile *file = [trackItem getFile] ?: [[OASKFile alloc] initWithFilePath:trackItem.path];
             gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
     }
@@ -3597,7 +3613,8 @@ typedef enum
     if (gpxFile)
     {
         OASTrkSegment *segment = [gpxFile getGeneralSegment];
-        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:trackItem.joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
+        BOOL joinSegments = trackItem.dataItem ? trackItem.joinSegments : [gpxFile isJoinSegments];
+        OASGpxTrackAnalysis *analysis = !trackItem.isShowCurrentTrack && [gpxFile getGeneralTrack] && segment ? [TrackChartHelper getAnalysisFor:segment joinSegments:joinSegments] : [gpxFile getAnalysisFileTimestamp:0 fromDistance:nil toDistance:nil pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]];
         state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         if (!segment)
@@ -4762,6 +4779,12 @@ typedef enum
 }
 
 #pragma mark - OAOpenAddTrackDelegate
+
+- (void)onFileSelectionCancelled
+{
+    if (self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId])
+        self.targetMenuView.targetPoint.values = nil;
+}
 
 - (void)onFileSelected:(NSString *)gpxFileName
 {

@@ -144,6 +144,7 @@
 - (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
 - (void) addPoint:(OAFavoriteItem *)point;
+- (BOOL)hasColor;
 
 - (BOOL) isPersonal;
 + (BOOL) isPersonal:(NSString *)name;

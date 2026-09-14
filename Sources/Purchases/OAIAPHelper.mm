@@ -2094,9 +2094,15 @@ static OASubscriptionState *EXPIRED;
 
 - (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId
 {
+    return [self getSubscriptionStateByOrderId:orderId answered:NULL];
+}
+
+- (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId answered:(BOOL *)answered
+{
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"orderId"] = orderId;
     __block NSArray *res;
+    __block BOOL gotAnswer = NO;
     __block BOOL alreadyFinished = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/get" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -2106,6 +2112,7 @@ static OASubscriptionState *EXPIRED;
             NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
             if (!jsonParsingError)
             {
+                gotAnswer = YES;
                 NSDictionary<NSString *, OASubscriptionStateHolder *> *stateHolders = [self parseSubscriptionStates:resultJson];
                 if (stateHolders.count > 0)
                 {
@@ -2123,6 +2130,8 @@ static OASubscriptionState *EXPIRED;
     }];
     if (!alreadyFinished)
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    if (answered)
+        *answered = gotAnswer;
     return res;
 }
 
@@ -2221,8 +2230,14 @@ static OASubscriptionState *EXPIRED;
 
 - (NSString *) getOrderIdByDeviceIdAndToken
 {
+    return [self getOrderIdByDeviceIdAndTokenAnswered:NULL];
+}
+
+- (NSString *) getOrderIdByDeviceIdAndTokenAnswered:(BOOL *)answered
+{
     OAAppSettings *_settings = OAAppSettings.sharedManager;
     __block NSString *orderId = nil;
+    __block BOOL gotAnswer = NO;
     NSString *deviceId = [_settings.backupDeviceId get];
     NSString *accessToken = [_settings.backupAccessToken get];
     if (deviceId.length > 0 && accessToken.length > 0)
@@ -2240,6 +2255,7 @@ static OASubscriptionState *EXPIRED;
                 NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
                 if (!jsonParsingError)
                 {
+                    gotAnswer = YES;
                     orderId = resultJson[@"orderid"];
                     if (resultJson[@"regTime"])
                     {
@@ -2257,6 +2273,8 @@ static OASubscriptionState *EXPIRED;
         if (!alreadyFinished)
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
+    if (answered)
+        *answered = gotAnswer;
     return orderId;
 }
 

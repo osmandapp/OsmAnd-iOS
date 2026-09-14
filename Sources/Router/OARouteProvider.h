@@ -56,9 +56,7 @@ struct PrecalculatedRouteDirection;
 
 @end
 
-@class OASWptPt, OARouteDirectionInfo, OARouteCalculationParams;
-
-struct RouteSegmentResult;
+@class OASWptPt, OARouteDirectionInfo, OARouteCalculationParams, OASRouteSegmentResult;
 
 @interface OAGPXRouteParams : NSObject
 
@@ -75,7 +73,7 @@ struct RouteSegmentResult;
 @property (nonatomic) OAGpxApproximationParams *approximationParams;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
-@property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
+@property (nonatomic) NSArray<OASRouteSegmentResult *> *route;
 @property (nonatomic, readonly) NSArray<OASWptPt *> *routePoints;
     
 @property (nonatomic) BOOL addMissingTurns;
@@ -130,10 +128,10 @@ struct RouteSegmentResult;
                                               useExternalTimestamps:(BOOL)useExternalTimestamps
                                                      resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment;
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment;
 
 - (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets;

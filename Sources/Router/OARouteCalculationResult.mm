@@ -24,7 +24,6 @@
 #import "OACppRouteConverter.h"
 #import "OsmAndSharedWrapper.h"
 
-#include <routeSegmentResult.h>
 
 #define distanceClosestToIntermediate 3000.0
 #define distanceThresholdToIntermediate 25
@@ -39,7 +38,7 @@
     // could not be null and immodifiable!
     NSMutableArray<CLLocation *> *_locations;
     NSMutableArray<OARouteDirectionInfo *> *_directions;
-    std::vector<std::shared_ptr<RouteSegmentResult>> _segments;
+    NSArray<OASRouteSegmentResult *> *_segments;
     NSMutableArray<NSNumber *> *_listDistance;
     NSMutableArray<NSNumber *> *_intermediatePoints;
     
@@ -111,50 +110,50 @@
     return 0;
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+- (OASRouteSegmentResult *) getCurrentSegmentResult
 {
     int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
-    if (cs < _segments.size())
+    if (cs < (int) _segments.count)
         return _segments[cs];
     
-    return nullptr;
+    return nil;
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+- (OASRouteSegmentResult *) getNextStreetSegmentResult
 {
     int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
-    while (cs < _segments.size())
+    while (cs < (int) _segments.count)
     {
-        auto segmentResult = _segments[cs];
-        string name = segmentResult->object->getName();
-        if (!name.empty())
+        OASRouteSegmentResult *segmentResult = _segments[cs];
+        NSString *name = [[segmentResult getObject] getName];
+        if (name.length > 0)
             return segmentResult;
 
         cs++;
     }
-    return nullptr;
+    return nil;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart
 {
     int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
-    if (cs < _segments.size())
+    if (cs < (int) _segments.count)
     {
-        std::shared_ptr<RouteSegmentResult> prev = nullptr;
+        OASRouteSegmentResult *prev = nil;
         BOOL tunnel = NO;
-        while (cs < _segments.size() && distToStart > 0)
+        while (cs < (int) _segments.count && distToStart > 0)
         {
-            auto segment = _segments[cs];
+            OASRouteSegmentResult *segment = _segments[cs];
             if (segment != prev )
             {
-                if (segment->object->tunnel())
+                if ([[segment getObject] tunnel])
                 {
                     tunnel = YES;
                     break;
                 }
                 else
                 {
-                    distToStart -= segment->distance;
+                    distToStart -= [segment getDistance];
                     prev = segment;
                 }
             }
@@ -162,14 +161,14 @@
         }
         if (tunnel)
         {
-            std::vector<std::shared_ptr<RouteSegmentResult>> list;
-            while (cs < _segments.size())
+            NSMutableArray<OASRouteSegmentResult *> *list = [NSMutableArray array];
+            while (cs < (int) _segments.count)
             {
-                auto segment = _segments[cs];
+                OASRouteSegmentResult *segment = _segments[cs];
                 if (segment != prev )
                 {
-                    if (segment->object->tunnel())
-                        list.push_back(segment);
+                    if ([[segment getObject] tunnel])
+                        [list addObject:segment];
                     else
                         break;
                     
@@ -181,14 +180,14 @@
         }
     }
     
-    return std::vector<std::shared_ptr<RouteSegmentResult>>();
+    return @[];
 }
 
 - (float) getCurrentMaxSpeed:(int)profile
 {
-    auto res = [self getCurrentSegmentResult];
+    OASRouteSegmentResult *res = [self getCurrentSegmentResult];
     if (res)
-        return res->object->getMaximumSpeed(res->isForwardDirection(), profile);
+        return [[res getObject] getMaximumSpeedDirection:[res isForwardDirection] profile:profile];
     
     return 0;
 }
@@ -670,30 +669,30 @@
         for (int i = 0; i < _simulatedLocations.count; i++) {
             passedIndexes[i] = false;
         }
-        for (int routeInd = 0; routeInd < _segments.size(); routeInd++)
+        for (int routeInd = 0; routeInd < (int) _segments.count; routeInd++)
         {
-            std::shared_ptr<RouteSegmentResult> s = _segments[routeInd];
-            BOOL plus = s->getStartPointIndex() < s->getEndPointIndex();
-            int i = s->getStartPointIndex();
-            while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
+            OASRouteSegmentResult *s = _segments[routeInd];
+            BOOL plus = [s getStartPointIndex] < [s getEndPointIndex];
+            int i = [s getStartPointIndex];
+            while (i != [s getEndPointIndex] || routeInd == (int) _segments.count - 1)
             {
-                LatLon point = s->getPoint(i);
+                OASKLatLon *point = [s getPointI:i];
                 int k = 0;
                 for (OASimulatedLocation *sd in _simulatedLocations)
                 {
                     if (passedIndexes[k++])
                         continue;
 
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.latitude] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.longitude])
                     {
                         passedIndexes[k - 1] = true;
-                        [sd setHighwayType:[NSString stringWithUTF8String:s->object->getHighway().c_str()]];
-                        [sd setSpeedLimit:s->object->getMaximumSpeed(YES)];
-                        [sd setTrafficLight:s->object->hasTrafficLightAt(i)];
+                        [sd setHighwayType:[[s getObject] getHighway]];
+                        [sd setSpeedLimit:[[s getObject] getMaximumSpeedDirection:YES profile:OASRouteTypeRule.companion.PROFILE_NONE]];
+                        [sd setTrafficLight:[[s getObject] hasTrafficLightAtI:i]];
                     }
                 }
-                if (i == s->getEndPointIndex())
+                if (i == [s getEndPointIndex])
                     break;
 
                 i += plus ? 1 : -1;
@@ -708,34 +707,34 @@
     return [NSArray arrayWithArray:_directions];
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute
 {
     return [self getOriginalRoute:0];
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex
 {
-    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size() includeFirstSegment:YES];
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.count includeFirstSegment:YES];
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment
 {
-    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size() includeFirstSegment:includeFirstSegment];
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.count includeFirstSegment:includeFirstSegment];
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment
 {
-    if (_segments.size() == 0)
-        return std::vector<std::shared_ptr<RouteSegmentResult>>();
+    if (_segments.count == 0)
+        return @[];
     
-    std::vector<std::shared_ptr<RouteSegmentResult>> list;
+    NSMutableArray<OASRouteSegmentResult *> *list = [NSMutableArray array];
     if (includeFirstSegment)
-        list.push_back(_segments[startIndex]);
+        [list addObject:_segments[startIndex]];
     
     for (int i = ++startIndex; i < endIndex; i++)
     {
         if (_segments[i - 1] != _segments[i])
-            list.push_back(_segments[i]);
+            [list addObject:_segments[i]];
     }
     return list;
 }
@@ -1044,7 +1043,7 @@
  * If beginning is too far from start point, then introduce GO Ahead
  * @param end
  */
-- (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
+- (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(NSMutableArray<OASRouteSegmentResult *> *)segs start:(CLLocation *)start end:(CLLocation *)end
 {
     _firstIntroducedPoint = [self introduceFirstPoint:locations directions:directions segments:segs start:start];
     _lastIntroducedPoint = [self introduceLastPoint:locations directions:directions segments:segs end:end];
@@ -1072,22 +1071,22 @@
         
         // Wrong AvgSpeed for the last turn can cause significantly wrong total travel time if calculated route ends on a GPX route segment (then last turn is where GPX is joined again)
         OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:[OASTurnType.companion valueOfValue:type leftSide:NO]];
-        if (!segs.empty())
+        if (segs.count > 0)
         {
-            auto lastSegmentResult = segs[segs.size() - 1];
-            auto routeDataObject = lastSegmentResult->object;
+            OASRouteSegmentResult *lastSegmentResult = segs[segs.count - 1];
+            OASRouteDataObject *routeDataObject = [lastSegmentResult getObject];
             info.routeDataObject = routeDataObject;
             
             NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
             if (!lang)
                 lang = [OAUtilities currentLang];
             
-            auto locale = std::string([lang UTF8String]);
             BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+            BOOL forward = [lastSegmentResult isForwardDirection];
             
-            info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
-            info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
-            info.destinationName = [NSString stringWithUTF8String:routeDataObject->getDestinationName(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
+            info.ref = [routeDataObject getRefLang:lang transliterate:transliterate direction:forward];
+            info.streetName = [routeDataObject getNameLang:lang transliterate:transliterate];
+            info.destinationName = [routeDataObject getDestinationNameLang:lang transliterate:transliterate direction:forward];
         }
         info.distance = 0;
         info.afterLeftTime = 0;
@@ -1096,7 +1095,7 @@
     }
 }
 
-- (CLLocation *) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
+- (CLLocation *) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(NSMutableArray<OASRouteSegmentResult *> *)segs start:(CLLocation *)start
 {
     if (locations.count > 0 && [locations[0] distanceFromLocation:start] > distanceThresholdToIntroduceFirstAndLastPoints)
     {
@@ -1107,9 +1106,9 @@
         
         // add start point
         [locations insertObject:start atIndex:0];
-        if (segs.size() > 0)
+        if (segs.count > 0)
         {
-            segs.insert(segs.begin(), segs[0]);
+            [segs insertObject:segs[0] atIndex:0];
         }
         if (directions && directions.count > 0)
         {
@@ -1137,7 +1136,7 @@
     return NAN;
 }
 
-- (CLLocation *) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
+- (CLLocation *) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(NSMutableArray<OASRouteSegmentResult *> *)segs end:(CLLocation *)end
 {
     if (locations.count > 0)
     {
@@ -1176,9 +1175,9 @@
             }
             // add end point
             [locations addObject:endLocation];
-            if (segs.size() > 0)
+            if (segs.count > 0)
             {
-                segs.push_back(segs[segs.size() - 1]);
+                [segs addObject:segs[segs.count - 1]];
             }
             return endLocation;
         }
@@ -1286,32 +1285,33 @@
     }
 }
 
-+ (void) attachAlarmInfo:(NSMutableArray<OAAlarmInfo *> *)alarms res:(std::shared_ptr<RouteSegmentResult>)res intId:(int)intId locInd:(int)locInd
++ (void) attachAlarmInfo:(NSMutableArray<OAAlarmInfo *> *)alarms res:(OASRouteSegmentResult *)res intId:(int)intId locInd:(int)locInd
 {
-    if (res == nullptr || res->object == nullptr || res->object->pointTypes.size() == 0 || res->object->pointTypes.size() <= intId)
+    OASRouteDataObject *object = res != nil ? [res getObject] : nil;
+    OASKotlinIntArray *pointTypes = [object getPointTypesInd:intId];
+    if (pointTypes == nil || pointTypes.size == 0)
         return;
     
-    const auto& pointTypes = res->object->pointTypes[intId];
-    if (pointTypes.size() > 0)
+    OASRouteRegion *reg = object.region;
+    for (int r = 0; r < pointTypes.size; r++)
     {
-        auto reg = res->object->region;
-        for (int r = 0; r < pointTypes.size(); r++)
-        {
-            auto& typeRule = reg->quickGetEncodingRule(pointTypes[r]);
-            auto x31 = res->object->pointsX[intId];
-            auto y31 = res->object->pointsY[intId];
-            CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
-            OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
-            // For STOP first check if it has directional info
-            if (info) {
-                BOOL forward = res->isForwardDirection();
-                BOOL directionApplicable = res->object->isDirectionApplicable(forward, intId,
-                        info.type == AIT_STOP ? res->getStartPointIndex() : -1, res->getEndPointIndex());
-                if (!directionApplicable) {
-                    continue;
-                }
-                [alarms addObject:info];
+        OASRouteTypeRule *typeRule = [reg quickGetEncodingRuleId:[pointTypes getIndex:r]];
+        if (typeRule == nil)
+            continue;
+        
+        int x31 = [object getPoint31XTileI:intId];
+        int y31 = [object getPoint31YTileI:intId];
+        CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
+        OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
+        // For STOP first check if it has directional info
+        if (info) {
+            BOOL forward = [res isForwardDirection];
+            BOOL directionApplicable = [object isDirectionApplicableDirection:forward ind:intId
+                    startPointInd:info.type == AIT_STOP ? [res getStartPointIndex] : -1 endPointInd:[res getEndPointIndex]];
+            if (!directionApplicable) {
+                continue;
             }
+            [alarms addObject:info];
         }
     }
 }
@@ -1377,34 +1377,35 @@
 /**
  * PREPARATION
  */
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) convertVectorResult:(NSMutableArray<OARouteDirectionInfo *> *)directions locations:(NSMutableArray<CLLocation *> *)locations list:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list alarms:(NSMutableArray<OAAlarmInfo *> *)alarms
++ (NSMutableArray<OASRouteSegmentResult *> *) convertVectorResult:(NSMutableArray<OARouteDirectionInfo *> *)directions locations:(NSMutableArray<CLLocation *> *)locations list:(NSArray<OASRouteSegmentResult *> *)list alarms:(NSMutableArray<OAAlarmInfo *> *)alarms
 {
     float prevDirectionTime = 0;
     float prevDirectionDistance = 0;
-    double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
-    std::vector<std::shared_ptr<RouteSegmentResult>> segmentsToPopulate;
+    double lastHeight = OASRouteDataObject.companion.HEIGHT_UNDEFINED;
+    NSMutableArray<OASRouteSegmentResult *> *segmentsToPopulate = [NSMutableArray array];
     OAAlarmInfo *tunnelAlarm = nil;
-    for (int routeInd = 0; routeInd < list.size(); routeInd++)
+    for (int routeInd = 0; routeInd < (int) list.count; routeInd++)
     {
-        auto s = list[routeInd];
-        const auto& vls = s->object->calculateHeightArray();
-        BOOL plus = s->getStartPointIndex() < s->getEndPointIndex();
-        int i = s->getStartPointIndex();
+        OASRouteSegmentResult *s = list[routeInd];
+        OASRouteDataObject *object = [s getObject];
+        OASKotlinFloatArray *vls = [object calculateHeightArrayCurrentLocation:nil];
+        BOOL plus = [s getStartPointIndex] < [s getEndPointIndex];
+        int i = [s getStartPointIndex];
         int prevLocationSize = (int)locations.count;
-        if (s->object->tunnel())
+        if ([object tunnel])
         {
             if (!tunnelAlarm)
             {
-                auto lat = get31LatitudeY(s->object->pointsY[i]);
-                auto lon = get31LongitudeX(s->object->pointsX[i]);
+                auto lat = get31LatitudeY([object getPoint31YTileI:i]);
+                auto lon = get31LongitudeX([object getPoint31XTileI:i]);
                 tunnelAlarm = [[OAAlarmInfo alloc] initWithType:AIT_TUNNEL locationIndex:prevLocationSize];
                 tunnelAlarm.coordinate = CLLocationCoordinate2DMake(lat, lon);
-                tunnelAlarm.floatValue = s->distance;
+                tunnelAlarm.floatValue = [s getDistance];
                 [alarms addObject:tunnelAlarm];
             }
             else
             {
-                tunnelAlarm.floatValue = tunnelAlarm.floatValue + s->distance;
+                tunnelAlarm.floatValue = tunnelAlarm.floatValue + [s getDistance];
             }
         }
         else
@@ -1414,23 +1415,23 @@
 
             tunnelAlarm = nil;
         }
-        bool lastSegment = routeInd + 1 == list.size();
-        const auto nextSegment = lastSegment ? nullptr : list[routeInd + 1];
-        bool gapAfter = nextSegment != nullptr && !nextSegment->continuesBeyondRouteSegment(s);
+        BOOL lastSegment = routeInd + 1 == (int) list.count;
+        OASRouteSegmentResult *nextSegment = lastSegment ? nil : list[routeInd + 1];
+        BOOL gapAfter = nextSegment != nil && ![nextSegment continuesBeyondRouteSegmentSegment:s];
         while (true)
         {
-            if (i == s->getEndPointIndex() && !gapAfter && !lastSegment)
+            if (i == [s getEndPointIndex] && !gapAfter && !lastSegment)
                 break;
-            auto lat = get31LatitudeY(s->object->pointsY[i]);
-            auto lon = get31LongitudeX(s->object->pointsX[i]);
-            float speed = s->segmentSpeed;
+            auto lat = get31LatitudeY([object getPoint31YTileI:i]);
+            auto lon = get31LongitudeX([object getPoint31XTileI:i]);
+            float speed = [s getSegmentSpeed];
             
             NSNumber *alt = nil;
-            if (vls.size() > 0 && i * 2 + 1 < vls.size())
+            if (vls.size > 0 && i * 2 + 1 < vls.size)
             {
-                float h = vls[2 * i + 1];
+                float h = [vls getIndex:2 * i + 1];
                 alt = @(h);
-                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && locations.count > 0)
+                if (lastHeight == OASRouteDataObject.companion.HEIGHT_UNDEFINED && locations.count > 0)
                 {
                     
                     for (int i = 0; i < locations.count; i++)
@@ -1447,8 +1448,8 @@
             [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:speed timestamp:[NSDate date]]];
 
             [self.class attachAlarmInfo:alarms res:s intId:i locInd:(int)locations.count];
-            segmentsToPopulate.push_back(s);
-            if (i == s->getEndPointIndex())
+            [segmentsToPopulate addObject:s];
+            if (i == [s getEndPointIndex])
                 break;
             
             if (plus)
@@ -1456,7 +1457,7 @@
             else
                 i--;
         }
-        OASTurnType *turn = [OACppRouteConverter toSharedTurnType:s->turnType];
+        OASTurnType *turn = [s getTurnType];
         
         if (turn)
         {
@@ -1464,43 +1465,44 @@
             NSString *actualExitName = nil;
             NSString *currentExitRef = nil;
             NSString *currentExitName = nil;
-            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:s->segmentSpeed turnType:turn];
-            if (routeInd < list.size())
+            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:[s getSegmentSpeed] turnType:turn];
+            if (routeInd < (int) list.count)
             {
                 int lind = routeInd;
                 if ([turn isRoundAbout])
                 {
                     int roundAboutEnd = prevLocationSize ;
                     // take next name for roundabout (not roundabout name)
-                    while (lind < list.size() - 1 && list[lind]->object->roundabout())
+                    while (lind < (int) list.count - 1 && [[list[lind] getObject] roundabout])
                     {
-                        roundAboutEnd += abs(list[lind]->getEndPointIndex() - list[lind]->getStartPointIndex());
+                        roundAboutEnd += abs([list[lind] getEndPointIndex] - [list[lind] getStartPointIndex]);
                         lind++;
                     }
                     // Consider roundabout end.
                     info.routeEndPointOffset = roundAboutEnd;
                 }
-                auto current = (routeInd == lind) ? s : list[lind];
+                OASRouteSegmentResult *current = (routeInd == lind) ? s : list[lind];
+                OASRouteDataObject *currentObject = [current getObject];
                 
                 NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
                 if (!lang)
                     lang = [OAUtilities currentLang];
                 
-                auto locale = std::string([lang UTF8String]);
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+                BOOL currentForward = [current isForwardDirection];
                 
-                info.streetName = [NSString stringWithUTF8String:current->getStreetName(locale, transliterate, list, routeInd).c_str()];
-                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd, false).c_str()];
-                info.destinationRef = [NSString stringWithUTF8String:current->object->getDestinationRef(current->isForwardDirection()).c_str()];
+                info.streetName = [current getStreetNameLang:lang transliterate:transliterate list:list routeInd:routeInd];
+                info.destinationName = [current getDestinationNameLang:lang transliterate:transliterate list:list routeInd:routeInd withRef:NO];
+                info.destinationRef = [currentObject getDestinationRefLang:lang transliterate:transliterate direction:currentForward];
                 
-                std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
-                std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
-                currentExitRef = [NSString stringWithUTF8String:current->object->getExitRef().c_str()];
-                currentExitName = [NSString stringWithUTF8String:current->object->getExitName().c_str()];
+                OASRouteDataObject *rdoWithShield = nil;
+                OASRouteDataObject *rdoWithoutShield = nil;
+                currentExitRef = [currentObject getExitRef];
+                currentExitName = [currentObject getExitName];
                 currentExitRef = currentExitRef.length > 0 ? currentExitRef : nil;
                 currentExitName = currentExitName.length > 0 ? currentExitName : nil;
                 
-                if (s->hasExitInfo())
+                if ([s hasExitInfo])
                 {
                     OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
                     actualExitRef = currentExitRef;
@@ -1511,28 +1513,27 @@
                     if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
                     {
                         // set ref and road name (or shield icon) from previous segment because exit point is not consist of highway ref
-                        std::shared_ptr<RouteSegmentResult> previous;
-                        previous = list[routeInd - 1];
-                        rdoWithoutShield = previous->object;
-                        info.ref = [NSString stringWithUTF8String:previous->getRef(locale, transliterate).c_str()];
+                        OASRouteSegmentResult *previous = list[routeInd - 1];
+                        rdoWithoutShield = [previous getObject];
+                        info.ref = [previous getRefLang:lang transliterate:transliterate];
                         info.ref = info.ref.length > 0 ? info.ref : nil;
                         if (info.ref) {
-                            rdoWithShield = previous->getObjectWithShield(list, lind);
+                            rdoWithShield = [previous getObjectWithShieldList:list routeInd:lind];
                         }
                     }
                 }
                 
                 if (!info.ref)
                 {
-                    NSString *ref = [NSString stringWithUTF8String:current->object->getRef(locale, transliterate, current->isForwardDirection()).c_str()];
-                    NSString *destRef = [NSString stringWithUTF8String:current->object->getDestinationRef(current->isForwardDirection()).c_str()];
+                    NSString *ref = [currentObject getRefLang:lang transliterate:transliterate direction:currentForward];
+                    NSString *destRef = [currentObject getDestinationRefLang:lang transliterate:transliterate direction:currentForward];
                     ref = ref.length > 0 ? ref : nil;
                     destRef = destRef.length > 0 ? destRef : nil;
-                    rdoWithoutShield = current->object;
+                    rdoWithoutShield = currentObject;
                     if (ref && ![ref isEqualToString:destRef])
                     {
                         info.ref = ref;
-                        rdoWithShield = current->getObjectWithShield(list, lind);
+                        rdoWithShield = [current getObjectWithShieldList:list routeInd:lind];
                     }
                 }
                 
@@ -1547,14 +1548,13 @@
             
             NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:[info getDestinationRefAndName] towards:OALocalizedString(@"towards")]] trim];
                         
-            if (s->object->pointNames.size() > s->getStartPointIndex())
+            OASKotlinArray<NSString *> *pointNames = [object getPointNamesInd:[s getStartPointIndex]];
             {
-                const auto& pointNames = s->object->pointNames[s->getStartPointIndex()];
-                if (!pointNames.empty())
+                if (pointNames != nil && pointNames.size > 0)
                 {
-                    for (int t = 0; t < pointNames.size(); t++)
+                    for (int t = 0; t < pointNames.size; t++)
                     {
-                        NSString *pointName = [NSString stringWithUTF8String:pointNames[t].c_str()];
+                        NSString *pointName = [pointNames getIndex:t];
                         if (pointName.length == 0
                             || [pointName isEqualToString:currentExitRef]
                             || [pointName isEqualToString:currentExitName])
@@ -1578,8 +1578,8 @@
             }
             [directions addObject:info];
         }
-        prevDirectionDistance += s->distance;
-        prevDirectionTime += s->segmentTime;
+        prevDirectionDistance += [s getDistance];
+        prevDirectionTime += [s getSegmentTime];
     }
     if (directions.count > 0 && prevDirectionTime > 0 && prevDirectionDistance > 0)
     {
@@ -1611,12 +1611,12 @@
             [self removeUnnecessaryGoAhead:localDirections];
             [self.class addMissingTurnsToRoute:locations originalDirections:localDirections mode:params.mode leftSide:params.leftSide useLocationTime:(params.gpxRoute && params.gpxRoute.calculatedRouteTimeSpeed)];
             // if there is no closest points to start - add it
-            std::vector<std::shared_ptr<RouteSegmentResult>> segs;
+            NSMutableArray<OASRouteSegmentResult *> *segs = [NSMutableArray array];
             [self introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
         }
         _appMode = params.mode;
         _locations = locations;
-        _segments = std::vector<std::shared_ptr<RouteSegmentResult>>();
+        _segments = @[];
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _alarmInfo = [NSMutableArray array];
@@ -1635,7 +1635,7 @@
     return self;
 }
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation
+- (instancetype) initWithSegmentResults:(NSArray<OASRouteSegmentResult *> *)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation
 {
     self = [[OARouteCalculationResult alloc] init];
     if (self)
@@ -1649,7 +1649,7 @@
         _intermediatePoints = [NSMutableArray arrayWithObject:@(0) count:!intermediates ? 0 : intermediates.count];
         NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
-        std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
+        NSMutableArray<OASRouteSegmentResult *> *segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
         if (calculateFirstAndLastPoint)
             [self introduceFirstPointAndLastPoint:locations directions:computeDirections segs:segments start:start end:end];
         

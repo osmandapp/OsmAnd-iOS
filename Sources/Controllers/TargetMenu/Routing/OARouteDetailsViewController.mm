@@ -352,8 +352,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 }
 
 - (void)populateStatistics:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    const auto& originalRoute = self.routingHelper.getRoute.getOriginalRoute;
-    if (!originalRoute.empty())
+    NSArray<OASRouteSegmentResult *> *originalRoute = self.routingHelper.getRoute.getOriginalRoute;
+    if (originalRoute.count > 0)
     {
         NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
         

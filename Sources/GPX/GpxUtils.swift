@@ -53,7 +53,8 @@ final class GpxUtils: NSObject {
                                   segment: TrkSegment,
                                   joinSegments: Bool,
                                   useAccumulatedDistanceForGeneralSegment: Bool,
-                                  distanceLayout: GpxUIHelper.RouteChartDistanceLayout? = nil) -> CLLocation? {
+                                  distanceLayout: GpxUIHelper.RouteChartDistanceLayout? = nil,
+                                  routePoints: [WptPt]? = nil) -> CLLocation? {
         let point: WptPt?
         if axisType == .time || axisType == .timeOfDay {
             point = getSegmentPointByTime(segment,
@@ -67,7 +68,7 @@ final class GpxUtils: NSObject {
                segment.isGeneralSegment(),
                joinSegments,
                let distanceLayout = distanceLayout ?? GpxUIHelper.routeChartDistanceLayout(analysis: analysis) {
-                point = generalSegmentPointByDistance(segment,
+                point = generalSegmentPointByDistance(routePoints ?? segment.points.compactMap { $0 as? WptPt },
                                                       pointDistances: distanceLayout.pointDistances,
                                                       totalDistance: distanceLayout.totalDistance,
                                                       distanceToPoint: distance)
@@ -233,11 +234,10 @@ final class GpxUtils: NSObject {
         return nil
     }
 
-    private static func generalSegmentPointByDistance(_ segment: TrkSegment,
+    private static func generalSegmentPointByDistance(_ points: [WptPt],
                                                       pointDistances: [Double],
                                                       totalDistance: Double,
                                                       distanceToPoint: Float) -> WptPt? {
-        let points = segment.points.compactMap { $0 as? WptPt }
         guard let firstPoint = points.first,
               let lastPoint = points.last else { return nil }
         let usesAnalysisDistances = points.count == pointDistances.count

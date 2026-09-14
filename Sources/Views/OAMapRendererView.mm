@@ -935,14 +935,14 @@ forcedUpdate:(BOOL)forcedUpdate
         [self releaseRenderAndFrameBuffers];
 }
 
-- (void) allocateRenderAndFrameBuffers
+- (BOOL) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
 
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current context"];
-        return;
+        return NO;
     }
 
     glGenFramebuffers(1, &_framebuffer);
@@ -950,11 +950,27 @@ forcedUpdate:(BOOL)forcedUpdate
 
     glGenRenderbuffers(1, &_colorRenderBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
-    [_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 
+    // Layer provides no drawable while it is offscreen or under memory pressure
+    if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
+    {
+        OALog(@"[OAMapRendererView %p] Failed to attach drawable to color renderbuffer 0x%08x", self, glGetError());
+        [self releaseRenderAndFrameBuffers];
+        return NO;
+    }
+
+    _viewSize.x = 0;
+    _viewSize.y = 0;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_viewSize.x);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
+
+    if (_viewSize.x <= 0 || _viewSize.y <= 0)
+    {
+        OALog(@"[OAMapRendererView %p] Drawable has empty size", self);
+        [self releaseRenderAndFrameBuffers];
+        return NO;
+    }
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
 
@@ -1015,13 +1031,18 @@ forcedUpdate:(BOOL)forcedUpdate
     GLuint activeFramebuffer = useMSAA ? _msaaFramebuffer : _framebuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, activeFramebuffer);
 
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    const GLenum framebufferStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (framebufferStatus != GL_FRAMEBUFFER_COMPLETE)
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to make complete framebuffer (status 0x%08x) 0x%08x", glCheckFramebufferStatus(GL_FRAMEBUFFER), glGetError()];
+        OALog(@"[OAMapRendererView %p] Failed to make complete framebuffer (status 0x%08x) 0x%08x",
+              self, framebufferStatus, glGetError());
+        [self releaseRenderAndFrameBuffers];
+        return NO;
     }
 
     validateGL();
+
+    return YES;
 }
 
 - (void) releaseRenderAndFrameBuffers
@@ -1126,8 +1147,9 @@ forcedUpdate:(BOOL)forcedUpdate
                   (int)self.bounds.size.height);
             return;
         }
-        // Allocate new buffers
-        [self allocateRenderAndFrameBuffers];
+        // Allocate new buffers, retry on next frame if drawable is not ready yet
+        if (![self allocateRenderAndFrameBuffers])
+            return;
 
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);

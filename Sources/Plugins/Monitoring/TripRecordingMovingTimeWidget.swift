@@ -36,6 +36,10 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func storedWidgetState() -> OAWidgetState? {
+        widgetState
+    }
     
     @discardableResult override func updateInfo() -> Bool {
         super.updateInfo()

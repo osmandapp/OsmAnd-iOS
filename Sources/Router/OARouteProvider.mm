@@ -467,6 +467,16 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return self;
 }
 
+- (instancetype)initWithSharedRouter:(OASRoutePlannerFrontEnd *)router context:(OASRoutingContext *)ctx
+{
+    self = [super init];
+    if (self) {
+        _sharedRouter = router;
+        _sharedCtx = ctx;
+    }
+    return self;
+}
+
 @end
 
 
@@ -487,6 +497,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     // be holding when the installed maps change.
     NSMutableDictionary<NSString *, OASBinaryMapIndexReader *> *_sharedReaders;
     NSMutableArray<OASBinaryMapIndexReader *> *_staleSharedReaders;
+
+    // The OsmAndShared routing environments still in use: a track approximation keeps one for as
+    // long as its screen is open, and its readers have to outlive a change of the installed maps.
+    NSHashTable<OARoutingEnvironment *> *_liveSharedEnvironments;
 }
 
 - (instancetype)init
@@ -498,6 +512,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         _nativeRoutingLock = [[NSObject alloc] init];
         _sharedReaders = [NSMutableDictionary dictionary];
         _staleSharedReaders = [NSMutableArray array];
+        _liveSharedEnvironments = [NSHashTable weakObjectsHashTable];
         
         [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(
                                                                                      reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -1170,7 +1185,32 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 	params.mode = mode;
 	params.start = start;
 	params.end = end;
+	if ([[OAAppSettings sharedManager].useSharedRouting get])
+		return [self calculateSharedRoutingEnvironment:params];
+
 	return [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+}
+
+// Opens the obf files the route runs over, so that both planners search the same maps.
+- (void) checkInitializedForParams:(OARouteCalculationParams *)params
+{
+    int leftX = get31TileNumberX(params.start.coordinate.longitude);
+    int rightX = leftX;
+    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
+    int topY = bottomY;
+    for (CLLocation *l in params.intermediates)
+    {
+        leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
+        rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
+        bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
+        topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
+    }
+    leftX = MIN(get31TileNumberX(params.end.coordinate.longitude), leftX);
+    rightX = MAX(get31TileNumberX(params.end.coordinate.longitude), rightX);
+    bottomY = MAX(get31TileNumberY(params.end.coordinate.latitude), bottomY);
+    topY = MIN(get31TileNumberY(params.end.coordinate.latitude), topY);
+
+    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
 }
 
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(SHARED_PTR<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
@@ -1255,28 +1295,8 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
     // BUILD context
     // check loaded files
-    int leftX = get31TileNumberX(params.start.coordinate.longitude);
-    int rightX = leftX;
-    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
-    int topY = bottomY;
-    if (params.intermediates)
-    {
-        for (CLLocation *l in params.intermediates)
-        {
-            leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-            rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-            bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-            topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-        }
-    }
-    CLLocation *l = params.end;
-    leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-    rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-    bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-    topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-    
-    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
-    
+    [self checkInitializedForParams:params];
+
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
     
     std:shared_ptr<RoutingContext> complexCtx = nullptr;
@@ -1357,9 +1377,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
 {
     @synchronized (self)
     {
-        for (OASBinaryMapIndexReader *reader in _staleSharedReaders)
-            [reader close];
-        [_staleSharedReaders removeAllObjects];
+        [self closeStaleSharedReaders];
 
         NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray array];
         for (NSString *path in [_nativeFiles.allObjects sortedArrayUsingSelector:@selector(compare:)])
@@ -1377,6 +1395,35 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
         }
         return readers;
     }
+}
+
+// The readers left over from a change of the installed maps. A routing environment that is still in
+// use holds its own - a track being approximated searches over them between one calculation and the
+// next - and reading through a closed reader throws inside OsmAndShared, where the exception cannot
+// be caught, so those are kept until the environment is gone. Both locks are held here: the routing
+// one by the caller, which keeps a running search away, and this object's, which guards the two
+// collections.
+- (void) closeStaleSharedReaders
+{
+    if (_staleSharedReaders.count == 0)
+        return;
+
+    NSMutableArray<OASBinaryMapIndexReader *> *inUse = [NSMutableArray array];
+    for (OARoutingEnvironment *env in _liveSharedEnvironments)
+    {
+        if (env.sharedCtx)
+            [inUse addObjectsFromArray:[env.sharedCtx getMaps]];
+    }
+
+    NSMutableArray<OASBinaryMapIndexReader *> *kept = [NSMutableArray array];
+    for (OASBinaryMapIndexReader *reader in _staleSharedReaders)
+    {
+        if ([inUse indexOfObjectIdenticalTo:reader] == NSNotFound)
+            [reader close];
+        else
+            [kept addObject:reader];
+    }
+    _staleSharedReaders = kept;
 }
 
 - (OASRoutingConfiguration *) buildSharedRoutingConfig:(OASRoutingConfigurationBuilder *)builder
@@ -1474,24 +1521,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
 
 - (OARouteCalculationResult *) findSharedRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
 {
-    // check loaded files
-    int leftX = get31TileNumberX(params.start.coordinate.longitude);
-    int rightX = leftX;
-    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
-    int topY = bottomY;
-    for (CLLocation *l in params.intermediates)
-    {
-        leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-        rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-        bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-        topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-    }
-    leftX = MIN(get31TileNumberX(params.end.coordinate.longitude), leftX);
-    rightX = MAX(get31TileNumberX(params.end.coordinate.longitude), rightX);
-    bottomY = MAX(get31TileNumberY(params.end.coordinate.latitude), bottomY);
-    topY = MIN(get31TileNumberY(params.end.coordinate.latitude), topY);
-
-    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+    [self checkInitializedForParams:params];
 
     return [self calcSharedRouteImpl:params calcGPXRoute:calcGPXRoute readers:[self sharedRouteReaders]];
 }
@@ -1624,6 +1654,93 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
                                                                mode:params.mode
                                          calculateFirstAndLastPoint:YES
                                                  initialCalculation:params.initialCalculation];
+}
+
+#pragma mark - OsmAndShared gpx approximation
+
+// The twin of calculateRoutingEnvironment: - the same configuration and the same files, read by
+// OsmAndShared. The track approximation is its only caller and it searches from no start to no
+// target, so there is neither a complex context nor a precalculated direction to build.
+- (OARoutingEnvironment *) calculateSharedRoutingEnvironment:(OARouteCalculationParams *)params
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+
+    OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
+    OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
+    if (!generalRouter)
+        return nil;
+
+    OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
+
+    // the environment outlives this call and keeps searching over these readers, so it is built
+    // where no other search is running and where the readers cannot be closed underneath it
+    @synchronized (_nativeRoutingLock)
+    {
+        [self checkInitializedForParams:params];
+
+        OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
+        [router setUseFastRecalculationUse:settings.useFastRecalculation];
+        OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+
+        OASRoutingContext *ctx = [router buildRoutingContextConfig:cf
+                                                               map:[self sharedRouteReaders]
+                                                                rm:OASRouteCalculationMode.normal];
+        ctx.leftSideNavigation = params.leftSide;
+
+        OARoutingEnvironment *env = [[OARoutingEnvironment alloc] initWithSharedRouter:router context:ctx];
+        @synchronized (self)
+        {
+            [_liveSharedEnvironments addObject:env];
+        }
+        return env;
+    }
+}
+
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder
+{
+    if (!env.sharedRouter || !gctx || locationsHolder.size == 0)
+        return @[];
+
+    // the times come along with the points: OsmAndShared reads the track's own timestamps off them
+    // where the C++ side is handed the locations again afterwards
+    NSMutableArray<OASKLatLon *> *locations = [NSMutableArray arrayWithCapacity:locationsHolder.size];
+    OASKotlinLongArray *times = [OASKotlinLongArray arrayWithSize:(int32_t) locationsHolder.size];
+    for (NSInteger i = 0; i < locationsHolder.size; i++)
+    {
+        [locations addObject:[[OASKLatLon alloc] initWithLatitude:[locationsHolder getLatitude:i]
+                                                        longitude:[locationsHolder getLongitude:i]]];
+        [times setIndex:(int32_t) i value:[locationsHolder timeAtIndex:i]];
+    }
+    return [env.sharedRouter generateGpxPointsGctx:gctx locations:locations times:times];
+}
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    if (!env.sharedRouter || !gctx || !gctx.ctx.calculationProgress || points.count == 0)
+    {
+        [resultMatcher publish:nil];
+        return nil;
+    }
+
+    @synchronized (_nativeRoutingLock)
+    {
+        [env.sharedRouter setUseGeometryBasedApproximationEnabled:YES];
+        OASGpxRouteApproximation *result = [env.sharedRouter searchGpxRouteGctx:gctx
+                                                                     gpxPoints:points
+                                                                 resultMatcher:nil
+                                                         useExternalTimestamps:useExternalTimestamps];
+        // what the search's own result matcher would publish: nothing of a cancelled approximation
+        BOOL cancelled = gctx.ctx.calculationProgress.isCancelled;
+        [resultMatcher publish:cancelled ? nil : [[OAGpxRouteApproximation alloc] initWithApproximation:result]];
+        return gctx;
+    }
 }
 
 - (void) runSyncWithNativeRouting:(void (^)(void))runBlock

@@ -456,19 +456,6 @@ class GpxUIHelper: NSObject {
         chartView.data = LineChartData(dataSets: dataSets)
     }
 
-    static func refreshBarChart(chartView: HorizontalBarChartView,
-                                statistics: OARouteStatistics,
-                                analysis: GpxTrackAnalysis,
-                                calcWithoutGaps: Bool,
-                                nightMode: Bool) {
-        refreshBarChart(chartView: chartView,
-                        statistics: statistics,
-                        analysis: analysis,
-                        calcWithoutGaps: calcWithoutGaps,
-                        distanceLayout: nil,
-                        nightMode: nightMode)
-    }
-
     static func refreshRouteBarChart(chartView: HorizontalBarChartView,
                                      statistics: OARouteStatistics,
                                      analysis: GpxTrackAnalysis,

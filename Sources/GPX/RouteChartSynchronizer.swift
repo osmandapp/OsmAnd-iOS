@@ -170,6 +170,8 @@ final class RouteChartSynchronizer: NSObject {
 
     func syncHighlight(_ highlight: Highlight, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atValue: highlight.x, in: sourceChart) else { return }
+        applySelectionToPrimaryChart(callDelegate: false)
+        sourceChart.lastHighlighted = highlight
         applySelectionToBarCharts()
         notifyStateChanged()
     }

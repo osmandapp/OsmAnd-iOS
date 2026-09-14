@@ -1720,7 +1720,7 @@
 "res_online_name_descr" = "Forneça o nome para a origem online";
 "res_edit_map_source" = "Editar origem do mapa";
 "res_confirmation_clear_cache" = "Tem a certeza que quer limpar a cache de %@?";
-"res_confirmation_delete" = "Tem a certeza que quer eliminar %s?";
+"res_confirmation_delete" = "Tem a certeza que quer eliminar %@?";
 "segments_count" = "Segmento %d";
 "track_multiple_segments_select" = "%@ tem mais do que um segmento. Selecione uma parte do trilho que quer usar para navegação.";
 "select_segment" = "Selecionar segmento";

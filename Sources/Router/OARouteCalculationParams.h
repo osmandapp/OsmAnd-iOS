@@ -16,9 +16,9 @@
 #import "OARoutingHelper.h"
 
 #include <OsmAndCore.h>
-#include <routeCalculationProgress.h>
 
 @class OARouteCalculationResult, OAWalkingRouteSegment, OAApplicationMode, OAMissingMapsResult;
+@class OASRouteCalculationProgress;
 
 @protocol OARouteCalculationResultListener <NSObject>
 
@@ -49,7 +49,7 @@
 @property (nonatomic) BOOL initialCalculation;
 @property (nonatomic) BOOL inSnapToRoadMode;
 
-@property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+@property (nonatomic) OASRouteCalculationProgress *calculationProgress;
 
 /** What the missing maps check found before the route was calculated; nil while it has found nothing. */
 @property (nonatomic) OAMissingMapsResult *missingMapsResult;

@@ -26,6 +26,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
 #import "OACppRouteConverter.h"
+#import "OACppRouteCalculationProgress.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <routePlannerFrontEnd.h>
@@ -192,7 +193,7 @@
                                             longitude:[testCase[@"endPoint"][@"longitude"] doubleValue]];
     params.mode = [OAApplicationMode CAR];
     params.leftSide = NO;
-    params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+    params.calculationProgress = [[OASRouteCalculationProgress alloc] init];
     return params;
 }
 
@@ -213,7 +214,7 @@
         router->setDefaultRoutingConfig();
 
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
-    ctx->progress = params.calculationProgress;
+    ctx->progress = std::make_shared<OACppRouteCalculationProgress>(params.calculationProgress);
     ctx->leftSideNavigation = params.leftSide;
     ctx->setConditionalTime(cf->routeCalculationTime);
 
@@ -222,7 +223,7 @@
         && !router->getRecalculationEnd(ctx.get()))
     {
         complexCtx = router->buildRoutingContext(cf, RouteCalculationMode::COMPLEX);
-        complexCtx->progress = params.calculationProgress;
+        complexCtx->progress = ctx->progress;
         complexCtx->leftSideNavigation = params.leftSide;
         complexCtx->setConditionalTime(cf->routeCalculationTime);
     }

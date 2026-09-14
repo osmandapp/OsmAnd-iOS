@@ -172,7 +172,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     BOOL _insertIntermediates;
     BOOL _batchPointUpdates;
     
-    std::shared_ptr<RouteCalculationProgress> _calculationProgress;
+    OASRouteCalculationProgress *_calculationProgress;
 }
 
 + (void) initialize
@@ -800,7 +800,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
     id<OASnapToRoadProgressDelegate> progressDelegate = self.progressDelegate;
     BOOL canStartCalculation = !routingHelper.isRouteBeingCalculated
-        || (_calculationProgress != nullptr && _calculationProgress->isCancelled());
+        || _calculationProgress.isCancelled;
     if (progressDelegate != nil && canStartCalculation)
     {
         OARouteCalculationParams *params = [self getParams:YES];
@@ -1274,8 +1274,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         if (weakSelf.progressDelegate)
             [weakSelf.progressDelegate hideProgressBar];
     });
-    if (_calculationProgress != nullptr)
-        _calculationProgress->cancelled = true;
+    _calculationProgress.isCancelled = YES;
 }
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
@@ -1305,7 +1304,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     [OARoutingHelper applyApplicationSettings:params appMode:appMode];
     params.mode = appMode;
     
-    _calculationProgress = std::make_shared<RouteCalculationProgress>();
+    _calculationProgress = [[OASRouteCalculationProgress alloc] init];
     params.calculationProgress = _calculationProgress;
     params.calculationProgressCallback = self;
 

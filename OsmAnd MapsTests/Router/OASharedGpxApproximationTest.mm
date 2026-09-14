@@ -25,6 +25,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
 #import "OACppRouteConverter.h"
+#import "OACppRouteCalculationProgress.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <routePlannerFrontEnd.h>
@@ -178,7 +179,7 @@ static const float kPointApproximation = 50;
                                             longitude:[testCase[@"endPoint"][@"longitude"] doubleValue]];
     params.mode = [OAApplicationMode CAR];
     params.leftSide = NO;
-    params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+    params.calculationProgress = [[OASRouteCalculationProgress alloc] init];
     return params;
 }
 
@@ -194,7 +195,7 @@ static const float kPointApproximation = 50;
     auto router = std::make_shared<RoutePlannerFrontEnd>();
     router->CALCULATE_MISSING_MAPS = false;
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
-    ctx->progress = params.calculationProgress;
+    ctx->progress = std::make_shared<OACppRouteCalculationProgress>(params.calculationProgress);
     ctx->setConditionalTime(cf->routeCalculationTime);
 
     vector<int> intX;

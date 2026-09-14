@@ -30,6 +30,7 @@
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
 #import "OACppRouteConverter.h"
+#import "OACppRouteCalculationProgress.h"
 #import "OAGpxApproximationHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWorldRegion.h"
@@ -1080,6 +1081,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
         }
         
+        // the router raises this on its own progress as the search starts, and the route screen reads
+        // it off the shared one; a search that ends before anything is polled publishes it here
+        if (ctx->progress != nullptr && ctx->progress->requestPrivateAccessRouting)
+            params.calculationProgress.requestPrivateAccessRouting = YES;
+
         if (result.empty())
         {
             if (ctx->progress->segmentNotFound == 0)
@@ -1300,8 +1306,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     
     std:shared_ptr<RoutingContext> complexCtx = nullptr;
     BOOL complex = !skipComplex && [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
+    const auto progress = std::make_shared<OACppRouteCalculationProgress>(params.calculationProgress);
     ctx->leftSideNavigation = params.leftSide;
-    ctx->progress = params.calculationProgress;
+    ctx->progress = progress;
     ctx->setConditionalTime(cf->routeCalculationTime);
     if (params.previousToRecalculate && params.onlyStartPointChanged)
     {
@@ -1319,7 +1326,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     if (complex)
     {
         complexCtx = router->buildRoutingContext(cf, RouteCalculationMode::COMPLEX);
-        complexCtx->progress = params.calculationProgress;
+        complexCtx->progress = progress;
         complexCtx->leftSideNavigation = params.leftSide;
         complexCtx->previouslyCalculatedRoute = ctx->previouslyCalculatedRoute;
         complexCtx->setConditionalTime(cf->routeCalculationTime);
@@ -1338,37 +1345,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
             return YES;
     }
     return NO;
-}
-
-// While a route is calculated by OsmAndShared, the progress bar still reads the C++ object the
-// calculation params carry, so what the shared search reports is copied into it. Both objects
-// compute the same percentage from the same fields, but the shared one keeps its HH fields
-// private, so the percentage is read out of it and the C++ fields are set to numbers that produce
-// it again: one iteration, and a distance that is the square root of the progress across an
-// arbitrary total. This goes when the params carry the shared progress object itself.
-static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std::shared_ptr<RouteCalculationProgress> &to)
-{
-    if (!from || to == nullptr)
-        return;
-
-    if (to->isCancelled())
-        from.isCancelled = YES;
-
-    to->requestPrivateAccessRouting = from.requestPrivateAccessRouting;
-    to->visitedSegments = from.visitedSegments;
-    to->loadedTiles = from.loadedTiles;
-    // the missing maps banner and the CarPlay alert read the routing status off this object
-    to->setFastRoutingStatusOrdinal([[from getFastRoutingStatus] ordinal]);
-
-    const float initialProgress = 0.01f; // RouteCalculationProgress::INITIAL_PROGRESS, private on both sides
-    const float total = 1000;
-    float pr = ([from getLinearProgress] / 100.0f - initialProgress) / (1 - initialProgress);
-    pr = MAX(0.0f, MIN(1.0f, pr));
-    to->totalIterations = 1;
-    to->iteration = 0;
-    to->totalEstimatedDistance = total;
-    to->distanceFromBegin = total * 1.35f * sqrtf(pr);
-    to->distanceFromEnd = 0;
 }
 
 // The obf files the route covers, as OsmAndShared readers. Creating one reads the file's index, so
@@ -1564,7 +1540,7 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
     }
 
     // BUILD context
-    OASRouteCalculationProgress *progress = [[OASRouteCalculationProgress alloc] init];
+    OASRouteCalculationProgress *progress = params.calculationProgress ?: [[OASRouteCalculationProgress alloc] init];
     OASRoutingContext *ctx = [router buildRoutingContextConfig:cf map:readers rm:OASRouteCalculationMode.normal];
     ctx.calculationProgress = progress;
     ctx.leftSideNavigation = params.leftSide;
@@ -1619,15 +1595,6 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
         }
     }
 
-    const auto cppProgress = params.calculationProgress;
-    dispatch_source_t publisher = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
-                                                         dispatch_get_global_queue(QOS_CLASS_UTILITY, 0));
-    dispatch_source_set_timer(publisher, DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC, 10 * NSEC_PER_MSEC);
-    dispatch_source_set_event_handler(publisher, ^{
-        OAPublishSharedProgress(progress, cppProgress);
-    });
-    dispatch_resume(publisher);
-
     OASRouteCalcResult *result;
     OASRoutingContext *usedCtx;
     if (complexCtx)
@@ -1642,9 +1609,6 @@ static void OAPublishSharedProgress(OASRouteCalculationProgress *from, const std
         result = [router searchRouteCtx:ctx start:st end:en intermediates:inters];
         usedCtx = ctx;
     }
-
-    dispatch_source_cancel(publisher);
-    OAPublishSharedProgress(progress, cppProgress);
 
     NSArray<OASRouteSegmentResult *> *list = [result getList];
     if (list.count == 0)

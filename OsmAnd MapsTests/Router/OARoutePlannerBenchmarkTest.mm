@@ -5,8 +5,11 @@
 //  The same routes calculated two ways inside the app: by the C++ router the app uses today, the
 //  way OARouteProvider drives it, and by the OsmAndShared planner. Prints wall time, segments,
 //  distance, the segments the search settled, the tiles it loaded and the process footprint after
-//  each, so the two can be put side by side on the device the app runs on. The report lands in the
-//  result bundle (activity titles and an attachment), since the host's log goes nowhere on the Mac.
+//  each, so the two can be put side by side on the device the app runs on. A second table takes
+//  the same routes as tracks - the route's road points thinned to the spacing of a recorded track -
+//  and attaches them back to the roads by both, the routing-based and the geometry-based way. The
+//  report lands in the result bundle (activity titles and an attachment), since the host's log goes
+//  nowhere on the Mac.
 //
 //  The maps are the app's installed regional obf files the routes name, one per route, opened the
 //  way OARouteProvider opens them; the profile is the car one from the app's own routing.xml, the
@@ -30,6 +33,8 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <routePlannerFrontEnd.h>
+#include <gpxRouteApproximation.h>
+#include <routeSegment.h>
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
@@ -42,6 +47,8 @@
 static const int MEMORY_LIMIT_MB = 256;
 static const int WARMUP_ROUNDS = 1;
 static const int MEASURED_ROUNDS = 2;
+static const double TRACK_SPACING_M = 15; // a point a second at 55 km/h
+static const double TRACK_OFFSET_LAT = 0.00002, TRACK_OFFSET_LON = 0.00003; // ~2 m north and ~2 m east
 
 typedef struct {
     const char *name;
@@ -211,6 +218,124 @@ static double footprintMb()
     return [NSString stringWithFormat:@"%8.1f %@", best, line];
 }
 
+// The route by the C++ router, its road points thinned to the spacing of a recorded track and moved a couple of
+// metres off the road: a recording never lies on the road's own nodes, and on a node several roads are the same
+// distance away, where the planners pick by the order they met the roads in - which differs between them.
+- (std::vector<std::pair<double, double>>)trackFor:(const BenchRoute &)route map:(NSString *)map
+{
+    std::string mapPath(map.UTF8String);
+    cacheBinaryMapFileIfNeeded(mapPath, true);
+    initBinaryMapFile(mapPath, false, true);
+    RoutePlannerFrontEnd router;
+    router.CALCULATE_MISSING_MAPS = false;
+    MAP_STR_STR params;
+    auto cf = _cppBuilder->build("car", MEMORY_LIMIT_MB, params);
+    auto ctx = router.buildRoutingContext(cf, RouteCalculationMode::COMPLEX);
+    ctx->progress = std::make_shared<RouteCalculationProgress>();
+    ctx->setConditionalTime(cf->routeCalculationTime);
+    std::vector<int> intX, intY;
+    auto result = router.searchRoute(ctx,
+                                     get31TileNumberX(route.startLon), get31TileNumberY(route.startLat),
+                                     get31TileNumberX(route.endLon), get31TileNumberY(route.endLat),
+                                     intX, intY);
+    std::vector<std::pair<double, double>> track;
+    std::pair<double, double> last;
+    bool any = false;
+    for (const auto &r : result)
+    {
+        int step = r->getStartPointIndex() < r->getEndPointIndex() ? 1 : -1;
+        for (int i = r->getStartPointIndex(); ; i += step)
+        {
+            last = std::make_pair(get31LatitudeY(r->object->pointsY[i]) + TRACK_OFFSET_LAT, get31LongitudeX(r->object->pointsX[i]) + TRACK_OFFSET_LON);
+            any = true;
+            if (track.empty() || getDistance(track.back().first, track.back().second, last.first, last.second) >= TRACK_SPACING_M)
+                track.push_back(last);
+            if (i == r->getEndPointIndex())
+                break;
+        }
+    }
+    if (any && track.back() != last)
+        track.push_back(last);
+    closeBinaryMapFile(mapPath);
+    return track;
+}
+
+- (NSString *)runCppApproximation:(const BenchRoute &)route map:(NSString *)map
+                            track:(const std::vector<std::pair<double, double>> &)track geometry:(BOOL)geometry
+{
+    std::string mapPath(map.UTF8String);
+    cacheBinaryMapFileIfNeeded(mapPath, true);
+    initBinaryMapFile(mapPath, false, true);
+    double best = 1e18;
+    NSString *line = @"";
+    for (int round = 0; round < WARMUP_ROUNDS + MEASURED_ROUNDS; round++)
+    {
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        RoutePlannerFrontEnd router;
+        router.CALCULATE_MISSING_MAPS = false;
+        router.setUseGeometryBasedApproximation(geometry);
+        MAP_STR_STR params;
+        auto cf = _cppBuilder->build("car", MEMORY_LIMIT_MB, params);
+        auto ctx = router.buildRoutingContext(cf, RouteCalculationMode::NORMAL);
+        ctx->progress = std::make_shared<RouteCalculationProgress>();
+        ctx->setConditionalTime(cf->routeCalculationTime);
+        auto gctx = std::make_shared<GpxRouteApproximation>(ctx.get());
+        auto points = router.generateGpxPoints(gctx, track);
+        router.searchGpxRoute(gctx, points);
+        double ms = (CFAbsoluteTimeGetCurrent() - start) * 1000.0;
+        if (round >= WARMUP_ROUNDS && ms < best)
+        {
+            best = ms;
+            double km = 0;
+            for (const auto &r : gctx->fullRoute)
+                km += r->distance;
+            line = [NSString stringWithFormat:@"%9lu %8.1f %8lu %9d %7d %8.0f MB", (unsigned long) gctx->fullRoute.size(), km / 1000,
+                    (unsigned long) points.size(), ctx->progress->visitedSegments, ctx->progress->loadedTiles, footprintMb()];
+        }
+    }
+    closeBinaryMapFile(mapPath);
+    return [NSString stringWithFormat:@"%8.1f %@", best, line];
+}
+
+- (NSString *)runSharedApproximation:(const BenchRoute &)route map:(NSString *)map
+                               track:(const std::vector<std::pair<double, double>> &)track geometry:(BOOL)geometry
+{
+    NSArray<OASBinaryMapIndexReader *> *readers = @[[[OASBinaryMapIndexReader alloc] initWithFilePath:map]];
+    NSMutableArray<OASKLatLon *> *locations = [NSMutableArray arrayWithCapacity:track.size()];
+    for (const auto &p : track)
+        [locations addObject:[[OASKLatLon alloc] initWithLatitude:p.first longitude:p.second]];
+    double best = 1e18;
+    NSString *line = @"";
+    for (int round = 0; round < WARMUP_ROUNDS + MEASURED_ROUNDS; round++)
+    {
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        OASRoutingConfigurationRoutingMemoryLimits *limits =
+            [[OASRoutingConfigurationRoutingMemoryLimits alloc] initWithMemoryLimitMb:MEMORY_LIMIT_MB nativeMemoryLimitMb:MEMORY_LIMIT_MB];
+        OASRoutingConfiguration *config = [_sharedBuilder buildRouter:@"car" memoryLimits:limits
+                                                               params:(OASMutableDictionary<NSString *, NSString *> *) [NSMutableDictionary dictionary]];
+        OASRoutePlannerFrontEnd *fe = [[OASRoutePlannerFrontEnd alloc] init];
+        OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = NO;
+        [fe setUseGeometryBasedApproximationEnabled:geometry];
+        OASRoutingContext *ctx = [fe buildRoutingContextConfig:config map:readers rm:OASRouteCalculationMode.normal];
+        OASGpxRouteApproximation *gctx = [[OASGpxRouteApproximation alloc] initWithCtx:ctx];
+        NSArray<OASGpxPoint *> *points = [fe generateGpxPointsGctx:gctx locations:locations times:nil];
+        OASGpxRouteApproximation *res = [fe searchGpxRouteGctx:gctx gpxPoints:points resultMatcher:nil useExternalTimestamps:NO];
+        double ms = (CFAbsoluteTimeGetCurrent() - start) * 1000.0;
+        if (round >= WARMUP_ROUNDS && ms < best)
+        {
+            best = ms;
+            double km = 0;
+            for (OASRouteSegmentResult *s in res.fullRoute)
+                km += [s getDistance];
+            line = [NSString stringWithFormat:@"%9lu %8.1f %8lu %9d %7d %8.0f MB", (unsigned long) res.fullRoute.count, km / 1000,
+                    (unsigned long) points.count, ctx.calculationProgress.visitedSegments, ctx.calculationProgress.loadedTiles, footprintMb()];
+        }
+    }
+    for (OASBinaryMapIndexReader *reader in readers)
+        [reader close];
+    return [NSString stringWithFormat:@"%8.1f %@", best, line];
+}
+
 - (void)testBenchmarkRoutes
 {
     NSMutableString *report = [NSMutableString string];
@@ -241,6 +366,26 @@ static double footprintMb()
                                  [NSString stringWithFormat:@"BENCH %s cpp-hh %@", route.name, cppHH],
                                  [NSString stringWithFormat:@"BENCH %s shared-hh %@", route.name, sharedHH]])
             [XCTContext runActivityNamed:line block:^(id<XCTActivity> _Nonnull activity) {}];
+    }
+    [report appendFormat:@"\n### gpx approximation in the app on %@ (%@): C++ and shared, each routing-based and geometry-based; %d warmup / %d measured, best time\n",
+     [UIDevice currentDevice].model, [NSProcessInfo processInfo].operatingSystemVersionString, WARMUP_ROUNDS, MEASURED_ROUNDS];
+    [report appendFormat:@"  %-30s %-14s %8s %9s %8s %8s %9s %7s %11s\n", "route", "by", "ms", "segments", "km", "points", "visited", "tiles", "footprint"];
+    for (const BenchRoute &route : ROUTES)
+    {
+        NSString *map = [self mapFor:route];
+        if (!map)
+            continue;
+        std::vector<std::pair<double, double>> track = [self trackFor:route map:map];
+        for (BOOL geometry : {NO, YES})
+        {
+            NSString *cpp = [self runCppApproximation:route map:map track:track geometry:geometry];
+            [report appendFormat:@"  %-30s %-14s %@\n", route.name, geometry ? "cpp gpx geo" : "cpp gpx", cpp];
+            NSString *shared = [self runSharedApproximation:route map:map track:track geometry:geometry];
+            [report appendFormat:@"  %-30s %-14s %@\n", route.name, geometry ? "shared gpx geo" : "shared gpx", shared];
+            for (NSString *line in @[[NSString stringWithFormat:@"BENCH %s %s %@", route.name, geometry ? "cpp-gpx-geo" : "cpp-gpx", cpp],
+                                     [NSString stringWithFormat:@"BENCH %s %s %@", route.name, geometry ? "shared-gpx-geo" : "shared-gpx", shared]])
+                [XCTContext runActivityNamed:line block:^(id<XCTActivity> _Nonnull activity) {}];
+        }
     }
     XCTAttachment *attachment = [XCTAttachment attachmentWithString:report];
     attachment.name = @"route planner benchmark";

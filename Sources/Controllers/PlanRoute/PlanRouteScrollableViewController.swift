@@ -456,7 +456,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     func reloadData() {
         let routeInfo = dataProvider.routeInfo
         topPartView.configure(with: routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
-        updateTopToolbar()
         bottomToolbar.isUndoEnabled = dataProvider.canUndo
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         mapToolbar.isUndoEnabled = dataProvider.canUndo
@@ -508,7 +507,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func reloadRouteInfo() {
         guard isViewLoaded else { return }
         topPartView.configure(with: dataProvider.routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
-        updateTopToolbar()
     }
 
     private func setupSheet() {
@@ -662,7 +660,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setupTopToolbar() {
         topToolbar.titleText = dataProvider.mode.title
-        updateTopToolbar()
+        topToolbar.isSaveButtonVisible = true
+        topToolbar.isSaveButtonEnabled = true
+        topToolbar.optionsMenu = makeOptionsMenu()
         topToolbar.onClose = { [weak self] in
             self?.handleClose()
         }
@@ -1329,6 +1329,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.hide()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = topToolbar.closeButtonSourceView
+        alert.popoverPresentationController?.sourceRect = topToolbar.closeButtonSourceView.bounds
         present(alert, animated: true)
     }
 
@@ -1492,6 +1494,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.dataProvider.clearAllPoints()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = topToolbar.optionsButtonSourceView
+        alert.popoverPresentationController?.sourceRect = topToolbar.optionsButtonSourceView.bounds
         present(alert, animated: true)
     }
 

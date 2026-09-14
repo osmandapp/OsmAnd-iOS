@@ -601,7 +601,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)settingsItem;
             OAApplicationModeBean *bean = [profileItem modeBean];
-            if ([bean.stringKey isEqualToString:modeBean.stringKey] && [bean.userProfileName isEqualToString:modeBean.userProfileName])
+            BOOL sameKey = bean.stringKey == modeBean.stringKey || [bean.stringKey isEqualToString:modeBean.stringKey];
+            BOOL sameName = bean.userProfileName == modeBean.userProfileName || [bean.userProfileName isEqualToString:modeBean.userProfileName];
+            if (sameKey && sameName)
                 return profileItem;
         }
     }
@@ -740,7 +742,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             else
             {
-                [result addObject:[self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems]];
+                OAProfileSettingsItem *profileItem = [self getBaseProfileSettingsItem:modeBean settingsItems:settingsItems];
+                if (profileItem)
+                    [result addObject:profileItem];
             }
         }
     }

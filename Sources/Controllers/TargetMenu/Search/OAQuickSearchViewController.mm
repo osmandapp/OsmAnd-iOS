@@ -1278,6 +1278,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             CLLocation *latLon = [[selfWeak.searchUICore getSearchSettings] getOriginalLocation];
             OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+            navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
             [selfWeak presentViewController:navigationController animated:YES completion:nil];
 
         }]];

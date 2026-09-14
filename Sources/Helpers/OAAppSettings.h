@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
+@class CoordinateFormatSettingsStorage;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
@@ -42,8 +43,6 @@ static const NSInteger MAP_GEO_FORMAT_SECONDS = 2;
 static const NSInteger MAP_GEO_UTM_FORMAT = 3;
 static const NSInteger MAP_GEO_OLC_FORMAT = 4;
 static const NSInteger MAP_GEO_MGRS_FORMAT = 5;
-static const NSInteger SWISS_GRID_FORMAT = 6;
-static const NSInteger SWISS_GRID_PLUS_FORMAT = 7;
 
 static const NSInteger ROTATE_MAP_NONE = 0;
 static const NSInteger ROTATE_MAP_BEARING = 1;
@@ -998,6 +997,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
+@property (nonatomic, readonly) CoordinateFormatSettingsStorage *coordinateFormatSettingsStorage;
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;

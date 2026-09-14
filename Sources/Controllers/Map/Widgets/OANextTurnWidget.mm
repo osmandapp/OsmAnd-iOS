@@ -503,10 +503,14 @@
 
 - (void) adjustViewSize
 {
+    if (_isPanelVertical || self.isSimpleLayout || self.isVerticalStackImageTitleSubtitleLayout)
+        return;
+
     [super adjustViewSize];
     self.topTextAnchor.constant = _horisontalMini ? 5 : self.topView.frame.size.height + 5;
     CGRect rect = self.frame;
-    rect.size.height += self.textView.frame.origin.y - 5;
+    // The label's frame may still contain its position from the previous layout pass.
+    rect.size.height += self.topTextAnchor.constant - 5;
     self.frame = rect;
 }
 

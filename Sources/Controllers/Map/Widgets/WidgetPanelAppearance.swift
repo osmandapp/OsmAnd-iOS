@@ -53,6 +53,22 @@ enum WidgetPanelIconMode: String, CaseIterable {
         case .off: localizedString("shared_string_off")
         }
     }
+
+    var icon: UIImage? {
+        switch self {
+        case .original: nil
+        case .off: .icCustomWidgetIconOff
+        case .on: .icCustomInfo
+        }
+    }
+
+    var rowIcon: UIImage {
+        icon ?? .icCustomInfo
+    }
+
+    var iconTintColor: UIColor {
+        self == .off ? .iconColorDefault : .iconColorActive
+    }
 }
 
 enum WidgetPanelTextColorKind: String {

@@ -198,7 +198,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         case .icon:
             let mode = appearanceSettings.iconMode(for: selectedPanel)
             cell.configure(title: title,
-                           preview: .image(.icCustomInfo, .iconColorActive),
+                           preview: .image(mode.rowIcon, mode.iconTintColor),
                            value: mode.title,
                            menu: createIconMenu())
         case .primaryTextColor:
@@ -306,6 +306,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         let selectedMode = appearanceSettings.iconMode(for: selectedPanel)
         let actions = WidgetPanelIconMode.allCases.map { mode in
             UIAction(title: mode.title,
+                     image: mode.icon?.resizedMenuImage(),
                      state: mode == selectedMode ? .on : .off) { [weak self] _ in
                 guard let self else { return }
                 appearanceSettings.setIconMode(mode, for: selectedPanel)

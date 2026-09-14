@@ -359,7 +359,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     func reloadData() {
         let routeInfo = dataProvider.routeInfo
         topPartView.configure(with: routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
-        updateTopToolbar()
         bottomToolbar.isUndoEnabled = dataProvider.canUndo
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
         updateRouteTypeButton()
@@ -409,7 +408,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func reloadRouteInfo() {
         guard isViewLoaded else { return }
         topPartView.configure(with: dataProvider.routeInfo, isCalculatingRoute: dataProvider.isCalculatingRoute)
-        updateTopToolbar()
     }
 
     private func setupSheet() {
@@ -526,7 +524,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setupTopToolbar() {
         topToolbar.titleText = dataProvider.mode.title
-        updateTopToolbar()
+        topToolbar.isSaveButtonVisible = true
+        topToolbar.isSaveButtonEnabled = true
+        topToolbar.optionsMenu = makeOptionsMenu()
         topToolbar.onClose = { [weak self] in
             self?.handleClose()
         }
@@ -541,12 +541,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             topToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             topToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: PlanRouteTopToolbarView.contentHeight)
         ])
-    }
-
-    private func updateTopToolbar() {
-        topToolbar.isSaveButtonVisible = true
-        topToolbar.isSaveButtonEnabled = true
-        topToolbar.optionsMenu = makeOptionsMenu()
     }
 
     private func updateCrosshairImage() {

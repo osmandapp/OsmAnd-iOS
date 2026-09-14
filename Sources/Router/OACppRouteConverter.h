@@ -16,8 +16,9 @@
 #include "commonOsmAndCore.h"
 
 struct RouteSegmentResult;
+struct TurnType;
 
-@class OASRouteSegmentResult;
+@class OASRouteSegmentResult, OASTurnType;
 
 @interface OACppRouteConverter : NSObject
 
@@ -31,5 +32,8 @@ struct RouteSegmentResult;
  * reads them.
  */
 + (NSArray<OASRouteSegmentResult *> *) toSharedSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)segments;
+
+/** One manoeuvre, for the places that still take it off a C++ segment. */
++ (OASTurnType *) toSharedTurnType:(const std::shared_ptr<TurnType> &)turnType;
 
 @end

@@ -21,6 +21,8 @@
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
 #import "CLLocation+Extension.h"
+#import "OACppRouteConverter.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <routeSegmentResult.h>
 
@@ -314,7 +316,7 @@
             while (nextInd < _directions.count)
             {
                 OARouteDirectionInfo *i = _directions[nextInd];
-                if (i.turnType && !i.turnType->isSkipToSpeak())
+                if (i.turnType && !i.turnType.isSkipToSpeak)
                     break;
                 
                 nextInd++;
@@ -359,7 +361,7 @@
             while (nextInd < _directions.count)
             {
                 OARouteDirectionInfo *i = _directions[nextInd];
-                if (i.turnType && !i.turnType->isSkipToSpeak())
+                if (i.turnType && !i.turnType.isSkipToSpeak)
                     break;
                 
                 nextInd++;
@@ -398,7 +400,7 @@
                 //					if(p == null || !i.getTurnType().isSkipToSpeak() ||
                 //							(!Algorithms.objectEquals(p.getRef(), i.getRef()) &&
                 //									!Algorithms.objectEquals(p.getStreetName(), i.getStreetName()))) {
-                if (!p || (i.turnType && !i.turnType->isSkipToSpeak()))
+                if (!p || (i.turnType && !i.turnType.isSkipToSpeak))
                 {
                     p = [[OARouteDirectionInfo alloc] initWithAverageSpeed:i.averageSpeed turnType:i.turnType];
                     p.routePointOffset = i.routePointOffset;
@@ -611,7 +613,7 @@
         while (nextInd < _directions.count)
         {
             OARouteDirectionInfo *i = _directions[nextInd];
-            if (i.turnType && !i.turnType->isSkipToSpeak())
+            if (i.turnType && !i.turnType.isSkipToSpeak)
             {
                 break;
             }
@@ -777,7 +779,7 @@
         for (int i = 1; i < directions.count;)
         {
             OARouteDirectionInfo *r = directions[i];
-            if (r.turnType->getValue() == TurnType::C)
+            if (r.turnType.value == OASTurnType.companion.C)
             {
                 OARouteDirectionInfo *prev = directions[i - 1];
                 prev.averageSpeed = ((prev.distance + r.distance) / (prev.distance / prev.averageSpeed + r.distance / r.averageSpeed));
@@ -824,7 +826,7 @@
         startSpeed = [locations[1] distanceFromLocation:prevLoc] / ([locations[1].timestamp timeIntervalSince1970] - [prevLoc.timestamp timeIntervalSince1970]);
     }
     
-    OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:startSpeed turnType:TurnType::ptrStraight()];
+    OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:startSpeed turnType:[OASTurnType.companion straight]];
     previousInfo.routePointOffset = 0;
     previousInfo.descriptionRoute = OALocalizedString(@"route_head");
     [computeDirections addObject:previousInfo];
@@ -855,7 +857,7 @@
             startTurnPoint = i;
         }
         
-        std::shared_ptr<TurnType> type = nullptr;
+        OASTurnType *type = nil;
         NSString *description = nil;
         float delta = previousBearing - bearing;
         while (delta < 0)
@@ -881,69 +883,69 @@
         {
             if (delta < 60)
             {
-                type = TurnType::ptrValueOf(TurnType::TSLL, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSLL leftSide:leftSide];
                 description = OALocalizedString(@"route_tsll");
             }
             else if (delta < 120)
             {
-                type = TurnType::ptrValueOf(TurnType::TL, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TL leftSide:leftSide];
                 description = OALocalizedString(@"route_tl");
             }
             else if (delta < 150)
             {
-                type = TurnType::ptrValueOf(TurnType::TSHL, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSHL leftSide:leftSide];
                 description = OALocalizedString(@"route_tshl");
             }
             else if (delta < 180)
             {
                 if (leftSide)
                 {
-                    type = TurnType::ptrValueOf(TurnType::TSHL, leftSide);
+                    type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSHL leftSide:leftSide];
                     description = OALocalizedString(@"route_tshl");
                 }
                 else
                 {
-                    type = TurnType::ptrValueOf(TurnType::TU, leftSide);
+                    type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TU leftSide:leftSide];
                     description = OALocalizedString(@"route_tu");
                 }
             }
             else if (delta == 180)
             {
-                type = TurnType::ptrValueOf(TurnType::TU, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TU leftSide:leftSide];
                 description = OALocalizedString(@"route_tu");
             }
             else if (delta < 210)
             {
                 if(leftSide)
                 {
-                    type = TurnType::ptrValueOf(TurnType::TU, leftSide);
+                    type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TU leftSide:leftSide];
                     description = OALocalizedString(@"route_tu");
                 }
                 else
                 {
                     description = OALocalizedString(@"route_tshr");
-                    type = TurnType::ptrValueOf(TurnType::TSHR, leftSide);
+                    type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSHR leftSide:leftSide];
                 }
             }
             else if (delta < 240)
             {
                 description = OALocalizedString(@"route_tshr");
-                type = TurnType::ptrValueOf(TurnType::TSHR, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSHR leftSide:leftSide];
             }
             else if (delta < 300)
             {
                 description = OALocalizedString(@"route_tr");
-                type = TurnType::ptrValueOf(TurnType::TR, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TR leftSide:leftSide];
             }
             else
             {
                 description = OALocalizedString(@"route_tslr");
-                type = TurnType::ptrValueOf(TurnType::TSLR, leftSide);
+                type = [OASTurnType.companion valueOfValue:OASTurnType.companion.TSLR leftSide:leftSide];
             }
             
             // calculate for previousRoute
             previousInfo.distance = [listDistance[previousLocation] intValue] - [listDistance[i] intValue];
-            type->setTurnAngle(360 - delta);
+            type.turnAngle = 360 - delta;
             CLLocation *strictPrevious = locations[prevStrictLocation];
             if (useLocationTime && [current.timestamp timeIntervalSince1970] > 0 &&
                 [strictPrevious.timestamp timeIntervalSince1970] > 0 &&
@@ -1057,7 +1059,7 @@
     OARouteDirectionInfo *lastDirInf = directions.count > 0 ? directions[directions.count - 1] : nil;
     if ((!lastDirInf || lastDirInf.routePointOffset < locations.count - 1) && locations.count - 1 > 0)
     {
-        int type = TurnType::C;
+        int type = OASTurnType.companion.C;
         CLLocation *prevLast = locations[locations.count - 2];
         double lastBearing = [prevLast bearingTo:locations[locations.count - 1]];
         
@@ -1066,10 +1068,10 @@
         
         double diff = degreesDiff(lastBearing, bearingToEnd);
         if(abs(diff) > 10)
-            type = diff > 0 ? TurnType::KL : TurnType::KR;
+            type = diff > 0 ? OASTurnType.companion.KL : OASTurnType.companion.KR;
         
         // Wrong AvgSpeed for the last turn can cause significantly wrong total travel time if calculated route ends on a GPX route segment (then last turn is where GPX is joined again)
-        OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:TurnType::ptrValueOf(type, false)];
+        OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:[OASTurnType.companion valueOfValue:type leftSide:NO]];
         if (!segs.empty())
         {
             auto lastSegmentResult = segs[segs.size() - 1];
@@ -1115,7 +1117,7 @@
             {
                 i.routePointOffset++;
             }
-            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:directions[0].averageSpeed turnType:TurnType::ptrStraight()];
+            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:directions[0].averageSpeed turnType:[OASTurnType.companion straight]];
             info.routePointOffset = 0;
             // info.setDescriptionRoute(ctx.getString( R.string.route_head));//; //$NON-NLS-1$
             [directions insertObject:info atIndex:0];
@@ -1149,7 +1151,7 @@
             {
                 if (locations.count > 2)
                 {
-                    int type = TurnType::C;
+                    int type = OASTurnType.companion.C;
                     CLLocation *prevLast = locations[locations.count - 2];
                     double lastBearing = [prevLast bearingTo:lastFoundLocation];
                     double bearingToEnd = [lastFoundLocation bearingTo:endLocation];
@@ -1158,16 +1160,16 @@
                     {
                         if (abs(diff) < 60)
                         {
-                            type = diff > 0 ? TurnType::TSLL : TurnType::TSLR;
+                            type = diff > 0 ? OASTurnType.companion.TSLL : OASTurnType.companion.TSLR;
                         }
                         else
                         {
-                            type = diff > 0 ? TurnType::TL : TurnType::TR;
+                            type = diff > 0 ? OASTurnType.companion.TL : OASTurnType.companion.TR;
                         }
                     }
 
                     OARouteDirectionInfo *lastDirInf = directions[directions.count - 1];
-                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:std::make_shared<TurnType>(TurnType::valueOf(type, false))];
+                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:[OASTurnType.companion valueOfValue:type leftSide:NO]];
                     info.routePointOffset = (int) locations.count - 1;
                     [directions addObject:info];
                 }
@@ -1267,7 +1269,7 @@
                 {
                     OARouteDirectionInfo *toSplit = localDirections[currentDirection];
                     // intermediate point should split using average speed from its actual (previous) segment
-                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[MAX(0, currentDirection - 1)].averageSpeed turnType:TurnType::ptrStraight()];
+                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[MAX(0, currentDirection - 1)].averageSpeed turnType:[OASTurnType.companion straight]];
                     info.ref = toSplit.ref;
                     info.streetName = toSplit.streetName;
                     info.routeDataObject = toSplit.routeDataObject;
@@ -1338,36 +1340,36 @@
     return left == 0 && right == 0 ? nil : [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
 }
 
-+ (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName
++ (NSString *) toString:(OASTurnType *)type shortName:(BOOL)shortName
 {
-    if (type->isRoundAbout())
+    if ([type isRoundAbout])
     {
         if (shortName)
-            return [NSString stringWithFormat:OALocalizedString(@"route_roundabout_short"), type->getExitOut()];
+            return [NSString stringWithFormat:OALocalizedString(@"route_roundabout_short"), type.exitOut];
         else
-            return [NSString stringWithFormat:OALocalizedString(@"route_roundabout"), type->getExitOut()];
+            return [NSString stringWithFormat:OALocalizedString(@"route_roundabout"), type.exitOut];
     }
-    else if (type->getValue() == TurnType::C)
+    else if (type.value == OASTurnType.companion.C)
         return OALocalizedString(@"route_head");
-    else if (type->getValue() == TurnType::TSLL)
+    else if (type.value == OASTurnType.companion.TSLL)
         return OALocalizedString(@"route_tsll");
-    else if (type->getValue() == TurnType::TL)
+    else if (type.value == OASTurnType.companion.TL)
         return OALocalizedString(@"route_tl");
-    else if (type->getValue() == TurnType::TSHL)
+    else if (type.value == OASTurnType.companion.TSHL)
         return OALocalizedString(@"route_tshl");
-    else if (type->getValue() == TurnType::TSLR)
+    else if (type.value == OASTurnType.companion.TSLR)
         return OALocalizedString(@"route_tslr");
-    else if (type->getValue() == TurnType::TR)
+    else if (type.value == OASTurnType.companion.TR)
         return OALocalizedString(@"route_tr");
-    else if (type->getValue() == TurnType::TSHR)
+    else if (type.value == OASTurnType.companion.TSHR)
         return OALocalizedString(@"route_tshr");
-    else if (type->getValue() == TurnType::TU)
+    else if (type.value == OASTurnType.companion.TU)
         return OALocalizedString(@"route_tu");
-    else if (type->getValue() == TurnType::TRU)
+    else if (type.value == OASTurnType.companion.TRU)
         return OALocalizedString(@"route_tu");
-    else if (type->getValue() == TurnType::KL)
+    else if (type.value == OASTurnType.companion.KL)
         return OALocalizedString(@"route_kl");
-    else if (type->getValue() == TurnType::KR)
+    else if (type.value == OASTurnType.companion.KR)
         return OALocalizedString(@"route_kr");
     return @"";
 }
@@ -1454,7 +1456,7 @@
             else
                 i--;
         }
-        auto turn = s->turnType;
+        OASTurnType *turn = [OACppRouteConverter toSharedTurnType:s->turnType];
         
         if (turn)
         {
@@ -1466,7 +1468,7 @@
             if (routeInd < list.size())
             {
                 int lind = routeInd;
-                if (turn->isRoundAbout())
+                if ([turn isRoundAbout])
                 {
                     int roundAboutEnd = prevLocationSize ;
                     // take next name for roundabout (not roundabout name)

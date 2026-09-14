@@ -12,17 +12,16 @@
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
-#include <turnType.h>
 #include <binaryRead.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OANextDirectionInfo, RoadShield, OARoutingHelper;
+@class OANextDirectionInfo, RoadShield, OARoutingHelper, OASTurnType;
 
 @interface OACurrentStreetName : NSObject
 
 @property (nonatomic) NSString *text;
-@property (nonatomic) std::shared_ptr<TurnType> turnType;
+@property (nonatomic, nullable) OASTurnType *turnType;
 @property (nonatomic, assign) BOOL showMarker; // turn type has priority over showMarker
 @property (nonatomic) NSArray<RoadShield *> *shields;
 @property (nonatomic) NSString *exitRef;

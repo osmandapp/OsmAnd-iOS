@@ -660,20 +660,20 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         avgSpeed = defSpeed;
                 }
                 NSString *stype = [OARouteProvider getExtensionValue:item.extensions key:@"turn"];
-                std::shared_ptr<TurnType> turnType = nullptr;
+                OASTurnType *turnType;
                 if (stype)
-                    turnType = std::make_shared<TurnType>(TurnType::fromString([[stype uppercaseString] UTF8String], leftSide));
+                    turnType = [OASTurnType.companion fromStringS:[stype uppercaseString] leftSide:leftSide];
                 else
-                    turnType = TurnType::ptrStraight();
+                    turnType = [OASTurnType.companion straight];
                 
                 NSString *sturn = [OARouteProvider getExtensionValue:item.extensions key:@"turn-angle"];
                 if (sturn)
-                    turnType->setTurnAngle([sturn floatValue]);
+                    turnType.turnAngle = [sturn floatValue];
                 
                 NSString *slanes = [OARouteProvider getExtensionValue:item.extensions key:@"lanes"];
                 if (slanes)
                 {
-                    turnType->setLanes([self stringToIntVector:slanes]);
+                    turnType.lanes = [self stringToIntArray:slanes];
                 }
                 
                 OARouteDirectionInfo *dirInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:avgSpeed turnType:turnType];
@@ -693,7 +693,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                 if (sdest && ![@"null" isEqualToString:sdest])
                     dirInfo.destinationName = sdest;
                 
-                if (previous && TurnType::C != previous.turnType->getValue() && !osmandRouter)
+                if (previous && OASTurnType.companion.C != previous.turnType.value && !osmandRouter)
                 {
                     // calculate angle
                     if (previous.routePointOffset > 0)
@@ -701,7 +701,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
                         float paz = bearing;
                         float caz;
-                        if (previous.turnType->isRoundAbout() && dirInfo.routePointOffset < (int) res.count - 1)
+                        if ([previous.turnType isRoundAbout] && dirInfo.routePointOffset < (int) res.count - 1)
                         {
                             bearing = [res[previous.routePointOffset] bearingTo:res[previous.routePointOffset + 1]];
                             caz = bearing;
@@ -720,8 +720,8 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         // that magic number helps to fix some errors for turn
                         angle += 75;
                         
-                        if (previous.turnType->getTurnAngle() < 0.5f) {
-                            previous.turnType->setTurnAngle(angle);
+                        if (previous.turnType.turnAngle < 0.5f) {
+                            previous.turnType.turnAngle = angle;
                         }
                     }
                 }
@@ -734,7 +734,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         }
     }
     
-    if (previous && TurnType::C != previous.turnType->getValue())
+    if (previous && OASTurnType.companion.C != previous.turnType.value)
     {
         // calculate angle
         if (previous.routePointOffset > 0 && previous.routePointOffset < (int) res.count - 1)
@@ -749,19 +749,20 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             if (angle < 0)
                 angle += 360;
             
-            if (previous.turnType->getTurnAngle() < 0.5f)
-                previous.turnType->setTurnAngle(angle);
+            if (previous.turnType.turnAngle < 0.5f)
+                previous.turnType.turnAngle = angle;
         }
     }
     return directions;
 }
 
-+ (std::vector<int>) stringToIntVector:(NSString *)str
++ (OASKotlinIntArray *) stringToIntArray:(NSString *)str
 {
-    vector<int> res;
     NSArray<NSString *> *components = [str componentsSeparatedByString:@","];
-    for (NSString *component in components)
-        res.push_back(component.intValue);
+    OASKotlinIntArray *res = [OASKotlinIntArray arrayWithSize:(int) components.count];
+    for (int i = 0; i < (int) components.count; i++)
+        [res setIndex:i value:components[i].intValue];
+
     return res;
 }
 
@@ -1536,7 +1537,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             [points removeObjectAtIndex:0];
             if(lastAdded && [lastAdded.provider isEqualToString:@"pnt"])
             {
-                OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:TurnType::ptrStraight()];
+                OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:[OASTurnType.companion straight]];
                 previousInfo.routePointOffset = (int) segments.count;
                 [previousInfo setDescriptionRoute:OALocalizedString(@"route_head")];
                 [computeDirections addObject:previousInfo];

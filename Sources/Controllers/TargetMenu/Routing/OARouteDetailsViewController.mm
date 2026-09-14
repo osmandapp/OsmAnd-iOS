@@ -34,7 +34,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
+#import "OATurnDrawable+TurnType.h"
 #import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
@@ -163,8 +163,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
-    const auto turnType = model.turnType;
-    [turnDrawable setTurnType:turnType];
+    [turnDrawable setTurnType:model.turnType];
     turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
     
     CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
@@ -175,12 +174,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [cell setLeftTurnIconDrawable:turnDrawable];
     [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
     
-    vector<int> lanes = model.turnType->getLanes();
-    if (lanes.size() > 0)
+    OASKotlinIntArray *lanes = model.turnType.lanes;
+    if (lanes != nil && lanes.size > 0)
     {
         OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
         _lanesDrawable.boldStroke = NO;
-        [_lanesDrawable setLanes:lanes];
+        [_lanesDrawable setTurnLanes:lanes];
         [_lanesDrawable updateBounds];
         _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
         [_lanesDrawable setNeedsDisplay];

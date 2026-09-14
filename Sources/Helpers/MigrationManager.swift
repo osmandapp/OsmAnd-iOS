@@ -134,14 +134,31 @@ final class MigrationManager: NSObject {
 
     private func migrateTransparentWidgets() {
         let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
-        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
-            let value = legacyPreference.get(appMode)
-            var preferences = [settings.transparentWidgets(nil)]
-            ScreenLayoutMode.allCases.forEach {
-                preferences.append(settings.transparentWidgets(NSNumber(value: $0.rawValue)))
+        let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+        for appMode in OAApplicationMode.allPossibleValues() {
+            if legacyPreference.isSet(for: appMode) {
+                let value = legacyPreference.get(appMode)
+                for layoutMode in layoutModes {
+                    let preference = settings.transparentWidgets(
+                        layoutMode.map { NSNumber(value: $0.rawValue) }
+                    )
+                    if !preference.isSet(for: appMode) {
+                        preference.set(value, mode: appMode)
+                    }
+                }
             }
-            for preference in preferences where !preference.isSet(for: appMode) {
-                preference.set(value, mode: appMode)
+
+            for layoutMode in layoutModes {
+                let preference = settings.transparentWidgets(
+                    layoutMode.map { NSNumber(value: $0.rawValue) }
+                )
+                guard preference.isSet(for: appMode), preference.get(appMode) else { continue }
+
+                let appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                                        layoutMode: layoutMode)
+                for panel in WidgetsPanel.values {
+                    appearanceSettings.setBackgroundMode(.transparent, for: panel)
+                }
             }
         }
     }

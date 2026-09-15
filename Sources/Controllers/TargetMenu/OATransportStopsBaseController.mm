@@ -19,6 +19,7 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/ObfTransportSectionInfo.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
 
 static NSInteger const ROUNDING_ERROR = 3;
@@ -26,6 +27,22 @@ static NSInteger const SHOW_STOPS_RADIUS_METERS_UI = 150;
 static NSInteger const SHOW_STOPS_RADIUS_METERS = SHOW_STOPS_RADIUS_METERS_UI * 6 / 5;
 static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
+
+// Same normalization Android sorts obf files by, see Algorithms.simplifyFileName
+static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::TransportStop>& stop)
+{
+    if (!stop->obfSection)
+        return QString();
+
+    auto name = stop->obfSection->name.toLower();
+    const auto dotIndex = name.indexOf(QLatin1Char('.'));
+    if (dotIndex != -1)
+        name = name.left(dotIndex);
+    if (name.endsWith(QLatin1String("_2")))
+        name.chop(2);
+
+    return name;
+}
 
 @implementation OATransportStopsBaseController
 
@@ -95,10 +112,8 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(self.getLocation);
     auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS : SHOW_STOPS_RADIUS_METERS, point31);
-    searchCriteria->bbox31 = bbox31;
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -113,14 +128,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     }
     else
     {
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
-    NSMutableArray<OATransportStop *> *stops = [NSMutableArray array];
-    search->performSearch(*searchCriteria,
-                          [stops]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-                                [stops addObject:[[OATransportStop alloc] initWithStop:((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop]];
-                          });
+        NSMutableArray<OATransportStop *> *stops = [self searchTransportStopsIn:bbox31];
 
         if (self.transportStop && !isSubwayEntrance)
         {
@@ -239,25 +247,127 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
 - (NSArray<OATransportStop *> *) findTransportStopsAt:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
 {
-    NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
-    
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, point31);
-    
+    const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, point31);
+    return [self searchTransportStopsIn:bbox31];
+}
+
+// A stop comes back once per obf that covers the area, live update files included. Merge the
+// copies the way Android does: the route ids stored next to the route offsets tell what a copy
+// adds, so every distinct route is read once instead of once per file.
+- (NSMutableArray<OATransportStop *> *) searchTransportStopsIn:(const OsmAnd::AreaI &)bbox31
+{
+    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria> searchCriteria(new OsmAnd::TransportStopsInAreaSearch::Criteria);
+    searchCriteria->bbox31 = bbox31;
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+
+    QList< std::shared_ptr<const OsmAnd::TransportStop> > foundStops;
     search->performSearch(*searchCriteria,
-                          [self, transportStops]
+                          [&foundStops]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-        const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-        OATransportStop *stop = [[OATransportStop alloc] initWithStop:transportStop];
-        [transportStops addObject:stop];
+        foundStops.push_back(((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop);
     });
-    
-    return transportStops;
+
+    // Files come back in QHash order, which is arbitrary, so the copy that ends up representing a
+    // stop would differ between runs. Android sorts by file name descending, putting live updates
+    // before the region map, so order the copies the same way before merging them.
+    std::stable_sort(foundStops.begin(), foundStops.end(),
+                     [](const std::shared_ptr<const OsmAnd::TransportStop>& l,
+                        const std::shared_ptr<const OsmAnd::TransportStop>& r)
+                     {
+        return transportSectionSortKey(l) > transportSectionSortKey(r);
+    });
+
+    const int zoomShift = 31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM;
+    const auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> zoomShift, bbox31.left() >> zoomShift, bbox31.bottom() >> zoomShift, bbox31.right() >> zoomShift);
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+
+    QList<uint64_t> stopIds;
+    QHash<uint64_t, OATransportStop *> stopsById;
+    QHash<uint64_t, QSet<uint64_t>> knownRouteIds;
+    QHash<uint64_t, QSet<uint64_t>> deletedRouteIds;
+    QHash<uint64_t, QList< std::shared_ptr<const OsmAnd::TransportRoute> >> routesById;
+    QSet<uint64_t> deletedStopIds;
+
+    for (const auto& stop : foundStops)
+    {
+        if (stop->isMissingStop())
+            continue;
+
+        const uint64_t stopId = stop->id.id;
+        for (const auto routeId : stop->deletedRoutesIds)
+            deletedRouteIds[stopId].insert(routeId);
+
+        if (stop->isDeleted())
+        {
+            deletedStopIds.insert(stopId);
+            continue;
+        }
+
+        QVector<uint32_t> pointersToRead;
+        if (!stopsById.contains(stopId))
+        {
+            stopIds.push_back(stopId);
+            stopsById.insert(stopId, [[OATransportStop alloc] initWithStop:stop]);
+            for (const auto routeId : stop->routesIds)
+                knownRouteIds[stopId].insert(routeId);
+            pointersToRead = stop->referencesToRoutes;
+        }
+        else if (stop->routesIds.size() == stop->referencesToRoutes.size())
+        {
+            for (int i = 0; i < stop->routesIds.size(); i++)
+            {
+                const auto routeId = stop->routesIds[i];
+                if (!knownRouteIds[stopId].contains(routeId) && !deletedRouteIds[stopId].contains(routeId))
+                {
+                    knownRouteIds[stopId].insert(routeId);
+                    pointersToRead.push_back(stop->referencesToRoutes[i]);
+                }
+            }
+        }
+        else
+        {
+            // written before 08/2019, there are no route ids to compare against
+            pointersToRead = stop->referencesToRoutes;
+        }
+
+        if (pointersToRead.isEmpty())
+            continue;
+
+        QList< std::shared_ptr<const OsmAnd::TransportRoute> > routes;
+        auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
+        dataInterface->getTransportRoutes(stop, pointersToRead, &routes, stringTable.get(), nullptr, nullptr, true);
+        for (const auto& route : routes)
+        {
+            knownRouteIds[stopId].insert(route->id.id);
+            routesById[stopId].push_back(route);
+        }
+    }
+
+    NSMutableArray<OATransportStop *> *stops = [NSMutableArray arrayWithCapacity:stopIds.size()];
+    for (const auto stopId : stopIds)
+    {
+        if (deletedStopIds.contains(stopId))
+            continue;
+
+        const auto& deletedIds = deletedRouteIds[stopId];
+        QList< std::shared_ptr<const OsmAnd::TransportRoute> > routes;
+        for (const auto& route : routesById[stopId])
+        {
+            if (!deletedIds.contains(route->id.id))
+                routes.push_back(route);
+        }
+
+        OATransportStop *stop = stopsById[stopId];
+        [stop setRoutes:routes];
+        [stops addObject:stop];
+    }
+
+    return stops;
 }
 
 - (OATransportStopAggregated *) processTransportStopsForAmenity:(NSArray<OATransportStop *> *)transportStops amenity:(OAPOI *)amenity
@@ -384,36 +494,38 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
 - (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface transportStop:(OATransportStop *)transportStop lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance otherRoutes:(NSMutableArray<OATransportStopRoute *> *)otherRoutes
 {
-    QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
-    auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
-
-    if (dataInterface->getTransportRoutes([transportStop getStopObject], &rts, stringTable.get()))
+    QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts = [transportStop getRoutes];
+    if (rts.isEmpty())
     {
-        for (auto rs : rts)
-        {
-            OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
-            r.route = rs;
-            OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
-            if ([self.class checkSameRoute:routes withRoute:rs] || [self.class checkSameRoute:otherRoutes withRoute:rs]) {
-                continue;
-            }
-            r.type = t;
-            r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
-            r.stop = transportStop;
-            if (self.transportStop && !isSubwayEntrance)
-            {
-                r.refStop = self.transportStop;
-            }
-            else if ([OAUtilities isCoordEqual:self.getLocation.latitude srcLon:self.getLocation.longitude destLat:transportStop.latitude destLon:transportStop.longitude]
-                     || (isSubwayEntrance && t.type == TST_SUBWAY))
-            {
-                r.refStop = transportStop;
-            }
-            
-            r.distance = dist;
-            [r initStopIndex];
-            [routes addObject:r];
+        // the stop did not come from searchTransportStopsIn:, so its routes are not loaded yet
+        auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
+        dataInterface->getTransportRoutes([transportStop getStopObject], &rts, stringTable.get(), nullptr, nullptr, true);
+    }
+
+    for (auto rs : rts)
+    {
+        OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
+        r.route = rs;
+        OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
+        if ([self.class checkSameRoute:routes withRoute:rs] || [self.class checkSameRoute:otherRoutes withRoute:rs]) {
+            continue;
         }
+        r.type = t;
+        r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
+        r.stop = transportStop;
+        if (self.transportStop && !isSubwayEntrance)
+        {
+            r.refStop = self.transportStop;
+        }
+        else if ([OAUtilities isCoordEqual:self.getLocation.latitude srcLon:self.getLocation.longitude destLat:transportStop.latitude destLon:transportStop.longitude]
+                 || (isSubwayEntrance && t.type == TST_SUBWAY))
+        {
+            r.refStop = transportStop;
+        }
+
+        r.distance = dist;
+        [r initStopIndex];
+        [routes addObject:r];
     }
 }
 

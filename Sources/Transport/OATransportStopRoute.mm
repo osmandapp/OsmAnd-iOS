@@ -21,7 +21,11 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/Data/TransportStop.h>
+
+static const int kRouteGeometrySearchRadiusMeters = 100;
 
 NSArray<NSString *> *const OATransportStopRouteArrowChars = @[@"=>", @" - "];
 NSString *const OATransportStopRouteArrow = @" → ";
@@ -190,6 +194,24 @@ NSString *const OATransportStopRouteArrow = @" → ";
     res.distance = self.distance;
     res.showWholeRoute = self. showWholeRoute;
     return res;
+}
+
+// Routes are read for the menu without geometry, it is only needed to draw the route on the map
+- (void) loadGeometryIfNeeded
+{
+    if (_route == nullptr || !_route->forwardWays31.isEmpty() || !_route->obfSection || !_stop)
+        return;
+
+    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_stop.latitude, _stop.longitude));
+    const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kRouteGeometrySearchRadiusMeters, point31);
+    const int zoomShift = 31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM;
+    const auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> zoomShift, bbox31.left() >> zoomShift, bbox31.bottom() >> zoomShift, bbox31.right() >> zoomShift);
+
+    const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+    const auto route = dataInterface->getTransportRouteWithGeometry(_route);
+    if (route)
+        _route = route;
 }
 
 - (void) initStopIndex

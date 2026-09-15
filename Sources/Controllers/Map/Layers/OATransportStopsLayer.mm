@@ -106,6 +106,7 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
     _stopRouteColor = [stopRoute getColor:NO];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [stopRoute loadGeometryIfNeeded];
         [self doShowStopsOnMap];
     });
 }

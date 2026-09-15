@@ -499,6 +499,11 @@ static char kMapSourceUpdateQueueKey;
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
 
+    // Apply screen-dependent limits here so OAAppData initialization does not wait for the main queue.
+    int minValidZoom = [OAZoom getMinValidZoom];
+    if (_app.data.mapLastViewedState.zoom < minValidZoom)
+        _app.data.mapLastViewedState.zoom = minValidZoom;
+
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     if (_app.initialURLMapState)
     {
@@ -514,7 +519,7 @@ static char kMapSourceUpdateQueueKey;
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
 
-        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
+        float zoom = _app.data.mapLastViewedState.zoom;
         _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;

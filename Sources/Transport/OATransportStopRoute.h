@@ -36,6 +36,8 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 - (UIColor *) getColor:(BOOL)nightMode;
 - (NSString *) getTypeStr;
 
+- (void) loadGeometryIfNeeded;
+
 - (void) initStopIndex;
 - (int) getStopIndex;
 - (void) setStopIndex:(int)stopIndex;

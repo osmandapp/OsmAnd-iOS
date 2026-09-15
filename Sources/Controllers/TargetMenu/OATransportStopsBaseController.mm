@@ -19,6 +19,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/ObfInfo.h>
+#include <OsmAndCore/Data/ObfTransportSectionInfo.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
 
 static NSInteger const ROUNDING_ERROR = 3;
@@ -95,10 +97,8 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(self.getLocation);
     auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS : SHOW_STOPS_RADIUS_METERS, point31);
-    searchCriteria->bbox31 = bbox31;
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -113,14 +113,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     }
     else
     {
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
-    NSMutableArray<OATransportStop *> *stops = [NSMutableArray array];
-    search->performSearch(*searchCriteria,
-                          [stops]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-                                [stops addObject:[[OATransportStop alloc] initWithStop:((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop]];
-                          });
+        NSMutableArray<OATransportStop *> *stops = [self searchTransportStopsIn:bbox31];
 
         if (self.transportStop && !isSubwayEntrance)
         {
@@ -239,25 +232,60 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
 - (NSArray<OATransportStop *> *) findTransportStopsAt:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
 {
-    NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
-    
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, point31);
-    
+    const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radiusMeters, point31);
+    return [self searchTransportStopsIn:bbox31];
+}
+
+// Every obf covering the area returns its own copy of the same stop, and a live update file
+// carries a copy of the region transport data too, so with live updates enabled the stop comes
+// back once per file and its routes get read again for each copy. Keep a single copy per stop id.
+// A live update writes its transport section without diffing, so it holds only the routes of the
+// objects that changed in that period - the region map is the complete one and wins the tie.
+- (NSMutableArray<OATransportStop *> *) searchTransportStopsIn:(const OsmAnd::AreaI &)bbox31
+{
+    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria> searchCriteria(new OsmAnd::TransportStopsInAreaSearch::Criteria);
+    searchCriteria->bbox31 = bbox31;
+
     OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(app.resourcesManager->obfsCollection);
+
+    // rank is (comes from a region map, creation timestamp), bigger wins
+    typedef QPair<int, uint64_t> StopRank;
+    QList< std::shared_ptr<const OsmAnd::TransportStop> > uniqueStops;
+    QHash<uint64_t, int> indexByStopId;
+    QHash<uint64_t, StopRank> rankByStopId;
     search->performSearch(*searchCriteria,
-                          [self, transportStops]
+                          [&uniqueStops, &indexByStopId, &rankByStopId]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-        const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-        OATransportStop *stop = [[OATransportStop alloc] initWithStop:transportStop];
-        [transportStops addObject:stop];
+        const auto& transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
+        StopRank rank(0, 0);
+        if (transportStop->obfSection)
+        {
+            if (const auto obfInfo = transportStop->obfSection->container.lock())
+                rank = StopRank(obfInfo->isLiveUpdate ? 0 : 1, obfInfo->creationTimestamp);
+        }
+        const uint64_t stopId = transportStop->id.id;
+        const auto citIndex = indexByStopId.constFind(stopId);
+        if (citIndex == indexByStopId.cend())
+        {
+            indexByStopId.insert(stopId, uniqueStops.size());
+            rankByStopId.insert(stopId, rank);
+            uniqueStops.push_back(transportStop);
+        }
+        else if (rank > rankByStopId.value(stopId))
+        {
+            rankByStopId.insert(stopId, rank);
+            uniqueStops[*citIndex] = transportStop;
+        }
     });
-    
-    return transportStops;
+
+    NSMutableArray<OATransportStop *> *stops = [NSMutableArray arrayWithCapacity:uniqueStops.size()];
+    for (const auto& transportStop : uniqueStops)
+        [stops addObject:[[OATransportStop alloc] initWithStop:transportStop]];
+
+    return stops;
 }
 
 - (OATransportStopAggregated *) processTransportStopsForAmenity:(NSArray<OATransportStop *> *)transportStops amenity:(OAPOI *)amenity
@@ -387,7 +415,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
     auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
 
-    if (dataInterface->getTransportRoutes([transportStop getStopObject], &rts, stringTable.get()))
+    if (dataInterface->getTransportRoutes([transportStop getStopObject], &rts, stringTable.get(), nullptr, nullptr, true))
     {
         for (auto rs : rts)
         {

@@ -12,6 +12,8 @@
 #import "OARoadSegmentData.h"
 #import "OARemovePointCommand.h"
 #import "OASplitPointsCommand.h"
+#import "OAReversePointsCommand.h"
+#import "OAJoinPointsCommand.h"
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #import <objc/runtime.h>
@@ -376,6 +378,41 @@
     XCTAssertTrue(self.context.commandManager.canUndo);
     [self.bridge undo];
     [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)verifyRoadGeometryHistoryForCommand:(OAMeasurementModeCommand *)command
+{
+    NSArray *pair = @[self.original[0], self.original[1]];
+    OARoadSegmentData *data = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
+                                                               start:pair[0] end:pair[1] points:pair segments:{}];
+    self.context.roadSegmentData[pair] = data;
+    BOOL hadGap = self.original[3].isGap;
+    XCTAssertTrue([self.context.commandManager execute:command]);
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        [self.bridge undo];
+        XCTAssertEqual(self.context.roadSegmentData.count, 1);
+        XCTAssertEqual(self.context.roadSegmentData[pair], data);
+        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:pair]);
+        [self assertFinishedPoints:[self latitudes:self.original]];
+        XCTAssertEqual(self.context.getPoints[3].isGap, hadGap);
+        [self.bridge redo];
+        if ([command isKindOfClass:OAJoinPointsCommand.class])
+            XCTAssertFalse(self.context.getPoints[3].isGap);
+    }
+}
+
+- (void)testReverseUndoRestoresRoadGeometryAcrossRepeatedCycles
+{
+    [self verifyRoadGeometryHistoryForCommand:[[OAReversePointsCommand alloc] initWithLayer:self.layer]];
+}
+
+- (void)testJoinUndoRestoresRoadGeometryAcrossRepeatedCycles
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    self.context.selectedPointPosition = 3;
+    [self verifyRoadGeometryHistoryForCommand:[[OAJoinPointsCommand alloc] initWithLayer:self.layer]];
 }
 
 @end

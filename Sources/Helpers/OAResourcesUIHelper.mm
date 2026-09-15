@@ -2091,7 +2091,7 @@ includeHidden:(BOOL)includeHidden
         }
 
         if (block)
-            block();
+            dispatch_async(dispatch_get_main_queue(), block);
     };
 
     if (progressHUD)
@@ -2103,7 +2103,10 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        proc();
+        // Uninstalling waits for renderer threads to release the resource, so never run it on the main thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            proc();
+        });
     }
 }
 

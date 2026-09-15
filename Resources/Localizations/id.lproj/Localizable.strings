@@ -4533,3 +4533,4 @@
 "calculating_elevation_terrain_maps_description" = "Mengambil data ketinggian dari peta medan.";
 "recalculate_elevation" = "Hitung ulang elevasi";
 "average_speed" = "Kecepatan rata-rata";
+"tracks_stats_are_being_calculated" = "Statistik trek sedang dihitung...";

@@ -374,28 +374,9 @@ final class TrackChartHelper: NSObject {
             if useAccumulatedDistanceForGeneralSegment, segment.isGeneralSegment() {
                 let points = routePoints(for: segment)
                 let distanceLayout = routeDistanceLayout(for: analysis)
-                let usesAnalysisDistances = distanceLayout?.pointDistances.count == points.count
-                var pointDistances = usesAnalysisDistances ? distanceLayout?.pointDistances ?? [] : [Double]()
-                if !usesAnalysisDistances {
-                    pointDistances = Array(repeating: 0, count: points.count)
-                    if points.count > 1 {
-                        for index in 1..<points.count {
-                            let previousPoint = points[index - 1]
-                            let currentPoint = points[index]
-                            pointDistances[index] = pointDistances[index - 1]
-                                + OAMapUtils.getDistance(previousPoint.lat,
-                                                        lon1: previousPoint.lon,
-                                                        lat2: currentPoint.lat,
-                                                        lon2: currentPoint.lon)
-                        }
-                    }
-                    if let geometryTotal = pointDistances.last,
-                       geometryTotal > 0,
-                       let canonicalTotal = distanceLayout?.totalDistance {
-                        let scale = canonicalTotal / geometryTotal
-                        pointDistances = pointDistances.map { $0 * scale }
-                    }
-                }
+                let pointDistances = GpxUtils.routePointDistances(points,
+                                                                 analysisDistances: distanceLayout?.pointDistances,
+                                                                 totalDistance: distanceLayout?.totalDistance)
                 var hasBounds = false
                 let includePoint: (WptPt) -> Void = { point in
                     if hasBounds {

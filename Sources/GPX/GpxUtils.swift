@@ -212,6 +212,31 @@ final class GpxUtils: NSObject {
         return kCLLocationCoordinate2DInvalid
     }
 
+    @nonobjc static func routePointDistances(_ points: [WptPt],
+                                             analysisDistances: [Double]?,
+                                             totalDistance: Double?) -> [Double] {
+        if let analysisDistances, analysisDistances.count == points.count {
+            return analysisDistances
+        }
+        var distances = Array(repeating: 0.0, count: points.count)
+        if points.count > 1 {
+            for index in 1..<points.count {
+                let previousPoint = points[index - 1]
+                let currentPoint = points[index]
+                distances[index] = distances[index - 1]
+                    + OAMapUtils.getDistance(previousPoint.lat,
+                                            lon1: previousPoint.lon,
+                                            lat2: currentPoint.lat,
+                                            lon2: currentPoint.lon)
+            }
+        }
+        if let geometryTotal = distances.last, geometryTotal > 0, let totalDistance {
+            let scale = totalDistance / geometryTotal
+            distances = distances.map { $0 * scale }
+        }
+        return distances
+    }
+
     private static func getSegmentPointByTime(_ segment: TrkSegment,
                                               timeToPoint: Float,
                                               passedSegmentsTime: Int64,
@@ -240,24 +265,9 @@ final class GpxUtils: NSObject {
                                                       distanceToPoint: Float) -> WptPt? {
         guard let firstPoint = points.first,
               let lastPoint = points.last else { return nil }
-        let usesAnalysisDistances = points.count == pointDistances.count
-        var resolvedDistances = pointDistances
-        if !usesAnalysisDistances {
-            resolvedDistances = Array(repeating: 0, count: points.count)
-            if points.count > 1 {
-                for index in 1..<points.count {
-                    resolvedDistances[index] = resolvedDistances[index - 1]
-                        + OAMapUtils.getDistance(points[index - 1].lat,
-                                                lon1: points[index - 1].lon,
-                                                lat2: points[index].lat,
-                                                lon2: points[index].lon)
-                }
-            }
-            if let geometryTotal = resolvedDistances.last, geometryTotal > 0 {
-                let scale = totalDistance / geometryTotal
-                resolvedDistances = resolvedDistances.map { $0 * scale }
-            }
-        }
+        let resolvedDistances = routePointDistances(points,
+                                                    analysisDistances: pointDistances,
+                                                    totalDistance: totalDistance)
         let targetDistance = Double(distanceToPoint)
         if targetDistance <= resolvedDistances[0] {
             return firstPoint

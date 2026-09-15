@@ -557,7 +557,7 @@ static double const TILT_ANIMATION_TIME = 0.4;
         if (userZoomAnimation)
             animateZoom = NO;
         
-        if (!animateZoom && ![self isQuickActionsSheetVisible])
+        if (!animateZoom)
             zoomAnimation = nullptr;
         if (zoomAnimation)
         {

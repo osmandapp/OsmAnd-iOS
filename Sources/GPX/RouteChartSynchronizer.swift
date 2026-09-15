@@ -56,6 +56,7 @@ final class RouteChartSynchronizer: NSObject {
 
     private let barCharts = NSHashTable<HorizontalBarChartView>.weakObjects()
     private weak var primaryChart: ElevationChart?
+    private var primarySelectionDataSet: ChartDataSetProtocol?
     private var primaryXAxisType: GPXDataSetAxisType?
     private var primaryXAxisRange: ClosedRange<Double>?
     private var primaryXAxisDivisor: Double?
@@ -109,6 +110,7 @@ final class RouteChartSynchronizer: NSObject {
             selectedXAxisValue = nil
             visibleXAxisRange = nil
         }
+        primarySelectionDataSet = dataSet
         primaryXAxisType = xAxisType
         primaryXAxisRange = horizontalRange(for: chart)
         primaryXAxisDivisor = dataSet?.getDivX()
@@ -190,8 +192,10 @@ final class RouteChartSynchronizer: NSObject {
             targetCharts.forEach { applyNormalizedVisibleRange(visibleRange, to: $0) }
         }
         adjustSelectionToVisibleRange()
+        resolveSelectionWithoutPrimaryChart()
+        let notifiedDelegate = applySelectionToPrimaryChart(callDelegate: true)
         applySelectionToBarCharts()
-        if !applySelectionToPrimaryChart(callDelegate: true) {
+        if !notifiedDelegate {
             notifyStateChanged()
         }
     }
@@ -215,6 +219,7 @@ final class RouteChartSynchronizer: NSObject {
             clearHighlight(in: primaryChart)
         }
         primaryChart = nil
+        primarySelectionDataSet = nil
         primaryXAxisType = nil
         primaryXAxisRange = nil
         primaryXAxisDivisor = nil
@@ -228,8 +233,10 @@ final class RouteChartSynchronizer: NSObject {
 
     private func selectPrimaryChart(atX touchX: CGFloat, sourceChart: BarLineChartViewBase) {
         guard updateSelection(atX: touchX, in: sourceChart) else { return }
+        resolveSelectionWithoutPrimaryChart()
+        let notifiedDelegate = applySelectionToPrimaryChart(callDelegate: true)
         applySelectionToBarCharts()
-        if !applySelectionToPrimaryChart(callDelegate: true) {
+        if !notifiedDelegate {
             notifyStateChanged()
         }
     }
@@ -327,6 +334,19 @@ final class RouteChartSynchronizer: NSObject {
         } else if let visibleProgressRange {
             applyNormalizedVisibleRange(visibleProgressRange, to: chart)
         }
+    }
+
+    private func resolveSelectionWithoutPrimaryChart() {
+        guard primaryChart == nil,
+              usesDistanceXAxis,
+              let selectedXAxisValue,
+              let primaryXAxisRange,
+              let dataSet = primarySelectionDataSet,
+              dataSet.isHighlightEnabled,
+              let entry = dataSet.entryForXValue(selectedXAxisValue, closestToY: .nan, rounding: .closest),
+              entry.x.isFinite else { return }
+        self.selectedXAxisValue = entry.x
+        selectedProgress = normalizedProgress(for: entry.x, range: primaryXAxisRange)
     }
 
     @discardableResult

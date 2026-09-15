@@ -504,8 +504,9 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL isLandscape = [OAUtilities isLandscape];
+    [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale];
     if (isLandscape || _cachedYViewPort > kViewportScale)
-        [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale y:kViewportScale];
+        [mapPanel.mapViewController setViewportScaleY:kViewportScale];
 }
 
 - (void)restoreMapViewPort

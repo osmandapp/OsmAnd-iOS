@@ -535,7 +535,7 @@
     }
 }
 
-- (void) drawRouteSegments
+- (void)drawRouteSegments
 {
     NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
     NSArray<OASTrkSegment *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
@@ -558,6 +558,12 @@
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
         [self drawLines:afterPoints collection:_collection lineId:lineId++];
+    }
+    const auto lines = _collection->getLines();
+    for (const auto &line : lines)
+    {
+        if (line->lineId >= lineId)
+            _collection->removeLine(line);
     }
 }
 

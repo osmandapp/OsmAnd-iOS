@@ -1306,13 +1306,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getAllPoints.count)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeBefore]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1322,13 +1321,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getAllPoints.count)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAfter]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -2198,6 +2196,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
+        return;
+    if (ctx.originalPointToMove != nil || ctx.isInAddPointMode)
         return;
 
     NSInteger hitIndex = [layer findNearestPointToCoordinate:coordinate];

@@ -7,6 +7,7 @@
 //
 
 #import "OARemovePointCommand.h"
+#import <OsmAndShared/OsmAndShared.h>
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
 
@@ -14,6 +15,7 @@
 {
     NSInteger _position;
     OASWptPt *_point;
+    NSString *_previousPointProfile;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer position:(NSInteger)position
@@ -27,14 +29,29 @@
 
 - (BOOL)execute
 {
-    _point = [self.getEditingCtx removePoint:_position updateSnapToRoad:YES];
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    if (_position < 0 || _position >= points.count)
+        return NO;
+    if (_position > 0)
+        _previousPointProfile = [points[_position - 1].getProfileType copy];
+    _point = [ctx removePoint:_position updateSnapToRoad:YES];
     [self.measurementLayer updateLayer];
     return YES;
 }
 
 - (void)undo
 {
-    [self.getEditingCtx addPoint:_position pt:_point];
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    if (_position > 0)
+    {
+        OASWptPt *previousPoint = ctx.getPoints[_position - 1];
+        if (_previousPointProfile != nil)
+            [previousPoint setProfileTypeProfileType:_previousPointProfile];
+        else
+            [previousPoint removeProfileType];
+    }
+    [ctx addPoint:_position pt:_point];
     [self.measurementLayer updateLayer];
     [self.measurementLayer moveMapToPoint:_position];
 }

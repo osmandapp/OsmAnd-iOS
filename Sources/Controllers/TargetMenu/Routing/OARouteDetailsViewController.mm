@@ -934,6 +934,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)chartValueNothingSelected:(ChartViewBase *)chartView
 {
+    if (chartView != self.statisticsChart)
+        return;
+
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
     [_chartSynchronizer clearSynchronizedHighlights];
 }

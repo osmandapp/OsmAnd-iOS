@@ -4515,3 +4515,5 @@
 "osm_edits_empty_state_title" = "Nincsenek függőben lévő térképszerkesztések";
 "osm_edits_empty_state_description" = "Az OsmAnd-ban végzett módosításai itt fognak megjelenni, mielőtt feltöltené azokat az OpenStreetMap-re";
 "carplay_trip_via_point" = "Ezen keresztül: %@";
+"tracks_stats_are_being_calculated" = "A nyomvonalak statisztikáinak kiszámítása folyamatban van…";
+"tracks_stats_are_being_calculated_left" = "%1$@ %2$@ van hátra";

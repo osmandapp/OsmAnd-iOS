@@ -1583,6 +1583,11 @@ static NSOperationQueue *_favQueue;
         [point setBackgroundIcon:_backgroundType];
 }
 
+- (BOOL)hasColor
+{
+    return _color != nil && [_color toRGBNumber] != 0;
+}
+
 - (UIColor *) color
 {
     if (_color != nil && [_color toRGBNumber] != 0)

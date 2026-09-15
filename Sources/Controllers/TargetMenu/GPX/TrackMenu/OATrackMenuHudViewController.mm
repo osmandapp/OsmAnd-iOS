@@ -984,9 +984,13 @@
     _pushedNewScreen = YES;
     OATrackMenuViewControllerState *state = [self getCurrentState];
     state.openedFromTrackMenu = YES;
-    NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+    OASGpxFile *currentTrack = self.isCurrentTrack ? self.doc : nil;
+    NSString *absolutePath = currentTrack == nil ? [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
     [self hide:YES duration:.2 onComplete:^{
-        [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath trackMenuState:state];
+        if (currentTrack != nil)
+            [PlanRouteScrollableViewController openCurrentTrackWithGpxFile:currentTrack trackMenuState:state];
+        else
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath trackMenuState:state];
     }];
 }
 

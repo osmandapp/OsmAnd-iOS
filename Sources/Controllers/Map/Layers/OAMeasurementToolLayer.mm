@@ -535,6 +535,18 @@
     }
 }
 
+#if DEBUG
+- (void)prepareRouteLinesForTesting
+{
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+}
+
+- (NSUInteger)routeLineCountForTesting
+{
+    return _collection ? _collection->getLines().size() : 0;
+}
+#endif
+
 - (void) drawRouteSegments
 {
     NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;

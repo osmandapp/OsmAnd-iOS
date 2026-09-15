@@ -2,7 +2,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <OsmAndShared/OsmAndShared.h>
 #import "OAApplicationMode.h"
-#import "OAAppDelegate.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAMeasurementToolLayer.h"
@@ -14,9 +13,6 @@
 #import "OASplitPointsCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAJoinPointsCommand.h"
-#include <OsmAndCore/Map/VectorLinesCollection.h>
-#include <OsmAndCore/Map/VectorLine.h>
-#import <objc/runtime.h>
 
 @interface OAMeasurementToolLayer (HistoryTesting)
 - (void)drawRouteSegments;
@@ -233,34 +229,18 @@
 
 - (void)testRendererRemovesLinesAfterJoiningEditingHalves
 {
-    OAAppDelegate *appDelegate = (OAAppDelegate *)UIApplication.sharedApplication.delegate;
-    NSPredicate *ready = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
-        return !appDelegate.isAppInitializing;
-    }];
-    XCTNSPredicateExpectation *initialized = [[XCTNSPredicateExpectation alloc] initWithPredicate:ready object:nil];
-    if ([XCTWaiter waitForExpectations:@[initialized] timeout:60] != XCTWaiterResultCompleted)
-    {
-        XCTFail(@"Test host initialization did not complete");
-        return;
-    }
     OAMeasurementToolLayer *renderLayer = [[OAMeasurementToolLayer alloc] init];
     renderLayer.editingCtx = self.context;
-    [renderLayer initLayer];
+    [renderLayer prepareRouteLinesForTesting];
     [self.context splitSegments:4];
     [renderLayer drawRouteSegments];
-    Ivar ivar = class_getInstanceVariable(OAMeasurementToolLayer.class, "_collection");
-    XCTAssertNotEqual(ivar, nullptr);
-    if (!ivar)
-        return;
-    auto collection = reinterpret_cast<std::shared_ptr<OsmAnd::VectorLinesCollection> *>(
-        reinterpret_cast<uint8_t *>((__bridge void *)renderLayer) + ivar_getOffset(ivar));
-    XCTAssertEqual((*collection)->getLines().size(), 2);
+    XCTAssertEqual(renderLayer.routeLineCountForTesting, 2);
     [self.context splitSegments:8];
     [renderLayer drawRouteSegments];
-    XCTAssertEqual((*collection)->getLines().size(), 1);
+    XCTAssertEqual(renderLayer.routeLineCountForTesting, 1);
     [self.context clearSegments];
     [renderLayer drawRouteSegments];
-    XCTAssertEqual((*collection)->getLines().size(), 0);
+    XCTAssertEqual(renderLayer.routeLineCountForTesting, 0);
 }
 
 - (void)testDeletingGapEndpointUndoRestoresOnlyOriginalGap

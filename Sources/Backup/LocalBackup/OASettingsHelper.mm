@@ -571,14 +571,21 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
 
-    [settingsToOperate enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull obj, BOOL * _Nonnull stop) {
+    // Follow the declared order of the types: enumerating settingsToOperate would give hash order,
+    // which differs from run to run
+    for (OAExportSettingsType *type in OAExportSettingsType.getAllValues)
+    {
+        NSArray *typeItems = settingsToOperate[type];
+        if (!typeItems)
+            continue;
+
         if (type.isSettingsCategory)
-            settingsItems[type] = obj;
+            settingsItems[type] = typeItems;
         else if (type.isMyPlacesCategory)
-            myPlacesItems[type] = obj;
+            myPlacesItems[type] = typeItems;
         else if (type.isResourcesCategory)
-            resourcesItems[type] = obj;
-    }];
+            resourcesItems[type] = typeItems;
+    }
 
     MutableOrderedDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *exportMap = [MutableOrderedDictionary new];
     if (settingsItems.count > 0 || addEmptyItems)

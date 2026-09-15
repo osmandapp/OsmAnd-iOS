@@ -395,6 +395,14 @@
     [self verifyRoadGeometryHistoryForCommand:[[OAJoinPointsCommand alloc] initWithLayer:self.layer]];
 }
 
+- (void)testJoinFromNextSegmentUndoRestoresRoadGeometryAcrossRepeatedCycles
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    self.context.selectedPointPosition = 4;
+    [self verifyRoadGeometryHistoryForCommand:[[OAJoinPointsCommand alloc] initWithLayer:self.layer]];
+}
+
 - (void)testDeleteUndoWithShortenedBeforeHalfDoesNotThrow
 {
     [self.bridge deletePointAtIndex:6];
@@ -426,6 +434,19 @@
 - (void)testTrimAfterRejectsIndexInAfterHalf
 {
     [self verifyTrimRejectsIndexInAfterHalf:NO];
+}
+
+- (void)testSegmentBoundarySelectionRecognizesBothSegments
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    for (NSInteger index = 0; index < self.original.count; index++)
+    {
+        XCTAssertEqual([self.context isFirstPointSelected:index outer:NO], index == 0 || index == 4);
+        XCTAssertEqual([self.context isLastPointSelected:index outer:NO], index == 3 || index == 7);
+    }
+    XCTAssertFalse([self.context isFirstPointSelected:-1 outer:NO]);
+    XCTAssertFalse([self.context isLastPointSelected:8 outer:NO]);
 }
 
 @end

@@ -120,12 +120,6 @@ final class TravelGpx : TravelArticle {
     }
     
     func getRouteType() -> String? {
-        if let amenitySubType, amenitySubType.hasPrefix(ROUTES_PREFIX) {
-            return amenitySubType
-                .replacingOccurrences(of: ROUTES_PREFIX, with: "")
-                .components(separatedBy: ";")
-                .first
-        }
-        return nil
+        TravelRouteIdentity.routeType(from: amenitySubType)
     }
 }

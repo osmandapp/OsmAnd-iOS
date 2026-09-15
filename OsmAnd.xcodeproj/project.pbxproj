@@ -3612,6 +3612,9 @@
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
+		293500010000000000000001 /* TravelRouteIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293500010000000000000004 /* TravelRouteIdentity.swift */; };
+		293500010000000000000002 /* TravelRouteIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293500010000000000000004 /* TravelRouteIdentity.swift */; };
+		293500010000000000000003 /* TravelRouteIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293500010000000000000005 /* TravelRouteIdentityTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8664,6 +8667,8 @@
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		FBE1901A4990A9A6519E879E /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ur; path = ur.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		293500010000000000000004 /* TravelRouteIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRouteIdentity.swift; sourceTree = "<group>"; };
+		293500010000000000000005 /* TravelRouteIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRouteIdentityTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -8912,6 +8917,7 @@
 				320F71262A823FB20071C0E7 /* PopularArticles.swift */,
 				320F71282A8251730071C0E7 /* TravelArticle.swift */,
 				320F71332A863A8E0071C0E7 /* TravelGpx.swift */,
+				293500010000000000000004 /* TravelRouteIdentity.swift */,
 				320F712D2A862BC90071C0E7 /* TravelHelper.swift */,
 				320F712F2A862C660071C0E7 /* TravelLocalDataHelper.swift */,
 				320F71232A823E210071C0E7 /* TravelObfHelper.swift */,
@@ -14826,6 +14832,7 @@
 				FAB6243D2E0953580048965E /* Managers */,
 				D1C571200000000000000006 /* Panels */,
 				D1C573500000000000000003 /* PlanRoute */,
+				293500010000000000000006 /* TravelGuides */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -15764,6 +15771,14 @@
 				FAF6C89E2AD014C800A3ED94 /* Theme.swift */,
 			);
 			path = ThemeManager;
+			sourceTree = "<group>";
+		};
+		293500010000000000000006 /* TravelGuides */ = {
+			isa = PBXGroup;
+			children = (
+				293500010000000000000005 /* TravelRouteIdentityTests.swift */,
+			);
+			path = TravelGuides;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -18621,6 +18636,7 @@
 				321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */,
 				32629E092F3B5C4A00C8DF9F /* SearchTravelArticlesTask.swift in Sources */,
 				320F71342A863A8E0071C0E7 /* TravelGpx.swift in Sources */,
+				293500010000000000000001 /* TravelRouteIdentity.swift in Sources */,
 				DA5A815E26C563A700F274C7 /* OAMonitoringPlugin.mm in Sources */,
 				32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */,
 				C5A466BA2D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift in Sources */,
@@ -19696,6 +19712,8 @@
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,
 				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,
 				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,
+				293500010000000000000002 /* TravelRouteIdentity.swift in Sources */,
+				293500010000000000000003 /* TravelRouteIdentityTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

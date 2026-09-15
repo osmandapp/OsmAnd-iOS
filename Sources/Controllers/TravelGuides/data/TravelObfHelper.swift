@@ -122,7 +122,7 @@ final class TravelObfHelper: NSObject {
     }
     
     func isTravelGpxTags(_ tags: [String: String]) -> Bool {
-        return tags[ROUTE_ID] != nil && tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
+        TravelRouteIdentity.isTravelGpx(tags: tags)
     }
     
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {

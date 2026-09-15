@@ -719,8 +719,13 @@ typedef enum
         NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated start");
         [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
             NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated end");
-            if (ocbfUpdated)
-                [_app loadWorldRegions];
+            OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
+            if (reloadedWorldRegion)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_app applyWorldRegions:reloadedWorldRegion];
+                });
+            }
             [_app startRepositoryUpdateAsync:NO];
         }];
     });

@@ -415,4 +415,37 @@
     [self verifyRoadGeometryHistoryForCommand:[[OAJoinPointsCommand alloc] initWithLayer:self.layer]];
 }
 
+- (void)testDeleteUndoWithShortenedBeforeHalfDoesNotThrow
+{
+    [self.bridge deletePointAtIndex:6];
+    [self.context splitSegments:2];
+    XCTAssertNoThrow([self.bridge undo]);
+}
+
+- (void)verifyTrimRejectsIndexInAfterHalf:(BOOL)before
+{
+    [self.context splitSegments:3];
+    self.context.selectedPointPosition = 1;
+    if (before)
+        [self.bridge trimBeforeIndex:4];
+    else
+        [self.bridge trimAfterIndex:4];
+    XCTAssertEqual(self.context.getBeforePoints.count, 3);
+    XCTAssertEqual(self.context.getAfterPoints.count, 5);
+    XCTAssertEqual(self.context.selectedPointPosition, 1);
+    XCTAssertEqualObjects([self latitudes:self.context.getAllPoints], [self latitudes:self.original]);
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    XCTAssertFalse(self.context.hasChanges);
+}
+
+- (void)testTrimBeforeRejectsIndexInAfterHalf
+{
+    [self verifyTrimRejectsIndexInAfterHalf:YES];
+}
+
+- (void)testTrimAfterRejectsIndexInAfterHalf
+{
+    [self verifyTrimRejectsIndexInAfterHalf:NO];
+}
+
 @end

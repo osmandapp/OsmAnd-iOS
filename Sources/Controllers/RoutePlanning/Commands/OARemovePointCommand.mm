@@ -43,7 +43,7 @@
 - (void)undo
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
-    if (_position > 0)
+    if (_position > 0 && _position <= ctx.getPointsCount)
     {
         OASWptPt *previousPoint = ctx.getPoints[_position - 1];
         if (_previousPointProfile != nil)

@@ -1306,7 +1306,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || index < 0 || index >= ctx.getAllPoints.count)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
@@ -1321,7 +1321,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || index < 0 || index >= ctx.getAllPoints.count)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;

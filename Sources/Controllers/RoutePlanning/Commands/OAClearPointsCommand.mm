@@ -29,12 +29,14 @@
     return self;
 }
 
-- (BOOL)execute
+- (BOOL) execute
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
+    if (ctx == nil)
+        return NO;
     _pointPosition = ctx.selectedPointPosition;
-    if (ctx == nil || (_clearMode != EOAClearPointsModeAll
-        && (_pointPosition < 0 || _pointPosition >= ctx.getAllPoints.count)))
+    if (_clearMode != EOAClearPointsModeAll
+        && (_pointPosition < 0 || _pointPosition >= ctx.getAllPoints.count))
         return NO;
     _points = [ctx.getAllPoints copy];
     _roadSegmentData = [ctx.roadSegmentData copy];
@@ -42,7 +44,7 @@
     return YES;
 }
 
-- (void)executeCommand
+- (void) executeCommand
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     switch (_clearMode) {
@@ -70,7 +72,7 @@
     }
 }
 
-- (void)undo
+- (void) undo
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     [ctx clearSegments];

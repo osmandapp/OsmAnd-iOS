@@ -535,7 +535,7 @@
     }
 }
 
-- (void)drawRouteSegments
+- (void) drawRouteSegments
 {
     NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
     NSArray<OASTrkSegment *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;

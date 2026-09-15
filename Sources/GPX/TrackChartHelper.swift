@@ -203,6 +203,8 @@ final class TrackChartHelper: NSObject {
                                         segment: segment)
             if let location {
                 trackChartPoints?.highlightedPoint = location.coordinate
+            } else if (chart.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet)?.includesSegmentGaps == true {
+                trackChartPoints?.highlightedPoint = kCLLocationCoordinate2DInvalid
             }
             if let trackChartPoints {
                 delegate?.showCurrentHighlitedLocation(trackChartPoints)
@@ -261,9 +263,7 @@ final class TrackChartHelper: NSObject {
                                 segment: segment,
                                 joinSegments: state.includesSegmentGaps,
                                 useAccumulatedDistanceForGeneralSegment: state.includesSegmentGaps)
-        if let location {
-            trackChartPoints?.highlightedPoint = location.coordinate
-        }
+        trackChartPoints?.highlightedPoint = location?.coordinate ?? kCLLocationCoordinate2DInvalid
         if let trackChartPoints {
             delegate?.showCurrentHighlitedLocation(trackChartPoints)
         }
@@ -374,9 +374,10 @@ final class TrackChartHelper: NSObject {
             if useAccumulatedDistanceForGeneralSegment, segment.isGeneralSegment() {
                 let points = routePoints(for: segment)
                 let distanceLayout = routeDistanceLayout(for: analysis)
-                let pointDistances = GpxUtils.routePointDistances(points,
-                                                                 analysisDistances: distanceLayout?.pointDistances,
-                                                                 totalDistance: distanceLayout?.totalDistance)
+                guard let pointDistances = GpxUtils.routePointDistances(points,
+                                                                       analysisDistances: distanceLayout?.pointDistances) else {
+                    return KQuadRect(left: 0, top: 0, right: 0, bottom: 0)
+                }
                 var hasBounds = false
                 let includePoint: (WptPt) -> Void = { point in
                     if hasBounds {

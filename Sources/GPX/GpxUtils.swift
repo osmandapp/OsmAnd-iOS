@@ -70,7 +70,6 @@ final class GpxUtils: NSObject {
                let distanceLayout = distanceLayout ?? GpxUIHelper.routeChartDistanceLayout(analysis: analysis) {
                 point = generalSegmentPointByDistance(routePoints ?? segment.points.compactMap { $0 as? WptPt },
                                                       pointDistances: distanceLayout.pointDistances,
-                                                      totalDistance: distanceLayout.totalDistance,
                                                       distanceToPoint: distance)
             } else {
                 point = getSegmentPointByDistance(segment,
@@ -213,28 +212,9 @@ final class GpxUtils: NSObject {
     }
 
     @nonobjc static func routePointDistances(_ points: [WptPt],
-                                             analysisDistances: [Double]?,
-                                             totalDistance: Double?) -> [Double] {
-        if let analysisDistances, analysisDistances.count == points.count {
-            return analysisDistances
-        }
-        var distances = Array(repeating: 0.0, count: points.count)
-        if points.count > 1 {
-            for index in 1..<points.count {
-                let previousPoint = points[index - 1]
-                let currentPoint = points[index]
-                distances[index] = distances[index - 1]
-                    + OAMapUtils.getDistance(previousPoint.lat,
-                                            lon1: previousPoint.lon,
-                                            lat2: currentPoint.lat,
-                                            lon2: currentPoint.lon)
-            }
-        }
-        if let geometryTotal = distances.last, geometryTotal > 0, let totalDistance {
-            let scale = totalDistance / geometryTotal
-            distances = distances.map { $0 * scale }
-        }
-        return distances
+                                             analysisDistances: [Double]?) -> [Double]? {
+        guard let analysisDistances, analysisDistances.count == points.count else { return nil }
+        return analysisDistances
     }
 
     private static func getSegmentPointByTime(_ segment: TrkSegment,
@@ -261,13 +241,11 @@ final class GpxUtils: NSObject {
 
     private static func generalSegmentPointByDistance(_ points: [WptPt],
                                                       pointDistances: [Double],
-                                                      totalDistance: Double,
                                                       distanceToPoint: Float) -> WptPt? {
         guard let firstPoint = points.first,
               let lastPoint = points.last else { return nil }
-        let resolvedDistances = routePointDistances(points,
-                                                    analysisDistances: pointDistances,
-                                                    totalDistance: totalDistance)
+        guard let resolvedDistances = routePointDistances(points,
+                                                          analysisDistances: pointDistances) else { return nil }
         let targetDistance = Double(distanceToPoint)
         if targetDistance <= resolvedDistances[0] {
             return firstPoint

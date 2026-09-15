@@ -35,8 +35,8 @@ class SideWidgetInfo: MapWidgetInfo {
         return externalProviderPackage
     }
     
-    override func getUpdatedPanel(_ appMode: OAApplicationMode,
-                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
+    override func updatedPanel(_ appMode: OAApplicationMode,
+                               screenLayoutMode: NSNumber?) -> WidgetsPanel {
         let widgetType = widgetType()
         if let widgetType {
             if widgetType.defaultPanel == .leftPanel,

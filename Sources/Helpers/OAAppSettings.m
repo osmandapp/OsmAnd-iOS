@@ -6175,13 +6175,13 @@ static NSString *kOfflineKey = @"OFFLINE";
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
         
         // Widgets
-        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
-        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
-        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[WidgetsPanel leftPanel] originalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[WidgetsPanel rightPanel] originalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[WidgetsPanel topPanel] originalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[WidgetsPanel bottomPanel] originalOrder]]];
 
-        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[WidgetsPanel topPanel] originalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[WidgetsPanel bottomPanel] originalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
@@ -7257,27 +7257,27 @@ static NSString *kOfflineKey = @"OFFLINE";
                                        screenLayoutMode:screenLayoutMode];
 }
 
-- (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
+- (OACommonListOfStringList *)widgetPanelOrder:(WidgetsPanel *)panel
                               screenLayoutMode:(NSNumber *)screenLayoutMode
 {
     OACommonListOfStringList *preference;
     NSString *preferenceKey;
-    if (panel == OAWidgetsPanel.leftPanel)
+    if (panel == WidgetsPanel.leftPanel)
     {
         preference = _leftWidgetPanelOrder;
         preferenceKey = leftWidgetPanelOrderKey;
     }
-    else if (panel == OAWidgetsPanel.rightPanel)
+    else if (panel == WidgetsPanel.rightPanel)
     {
         preference = _rightWidgetPanelOrder;
         preferenceKey = rightWidgetPanelOrderKey;
     }
-    else if (panel == OAWidgetsPanel.topPanel)
+    else if (panel == WidgetsPanel.topPanel)
     {
         preference = _topWidgetPanelOrder;
         preferenceKey = topWidgetPanelOrderOldKey;
     }
-    else if (panel == OAWidgetsPanel.bottomPanel)
+    else if (panel == WidgetsPanel.bottomPanel)
     {
         preference = _bottomWidgetPanelOrder;
         preferenceKey = bottomWidgetPanelOrderKeyOld;

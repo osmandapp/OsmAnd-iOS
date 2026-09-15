@@ -118,7 +118,7 @@
             ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
             : nil;
         NSString *widgetId = customId.length > 0 ? customId : type.id;
-        OAWidgetsPanel *panel = [type panel:widgetId
+        WidgetsPanel *panel = [type panel:widgetId
                                   appMode:appMode
                          screenLayoutMode:screenLayoutMode];
         _isPanelVertical = [panel isPanelVertical];
@@ -515,7 +515,7 @@
     return !_isPanelVertical;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
+- (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
 {
     return false;
 }

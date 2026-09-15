@@ -319,7 +319,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         {
             [widgetInfo.widget updateColors:state];
         }
-        for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
+        for (WidgetsPanel *panel in WidgetsPanel.values)
         {
             for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
@@ -746,7 +746,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     // We will normalize them to a single size: all widgets will adopt the size
     // that occurs most frequently in the row.
     [WidgetUtils applyMostFrequentStyleForPagedWidgetsWithAppMode:[[OAAppSettings sharedManager].applicationMode get]
-                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
+                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]];
 }
 
 - (void) recreateControls
@@ -801,10 +801,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     [self updateWidgetsInfo];
 
-    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
-    [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];
-    [self recreateWidgetsPanel:_leftPanelController panel:OAWidgetsPanel.leftPanel appMode:appMode];
-    [self recreateWidgetsPanel:_rightPanelController panel:OAWidgetsPanel.rightPanel appMode:appMode];
+    [self recreateWidgetsPanel:_topPanelController panel:WidgetsPanel.topPanel appMode:appMode];
+    [self recreateWidgetsPanel:_bottomPanelController panel:WidgetsPanel.bottomPanel appMode:appMode];
+    [self recreateWidgetsPanel:_leftPanelController panel:WidgetsPanel.leftPanel appMode:appMode];
+    [self recreateWidgetsPanel:_rightPanelController panel:WidgetsPanel.rightPanel appMode:appMode];
 
     _themeId = -1;
     [self updateColorShadowsOfText];
@@ -815,10 +815,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
     [_mapWidgetRegistry updateWidgetsInfo:appMode];
-    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
+    [self recreateWidgetsPanel:_topPanelController panel:WidgetsPanel.topPanel appMode:appMode];
 }
 
-- (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(OAWidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
+- (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(WidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
 {
     if (container)
     {

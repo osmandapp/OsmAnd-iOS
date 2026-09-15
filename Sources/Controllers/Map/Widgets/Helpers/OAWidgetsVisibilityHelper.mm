@@ -144,7 +144,7 @@
     OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
     NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry widgetsForPanel:appMode
                                                                                  filterModes:kWidgetModeEnabled
-                                                                                      panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]
+                                                                                      panels:@[WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]
                                                                                   layoutMode:layoutMode];
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
     {

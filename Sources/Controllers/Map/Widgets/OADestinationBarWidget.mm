@@ -141,7 +141,7 @@
     [self startLocationUpdate];
 }
 
-- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+- (void)detachView:(WidgetsPanel *)widgetsPanel
 {
     [self stopLocationUpdate];
 

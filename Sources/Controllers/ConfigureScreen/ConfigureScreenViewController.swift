@@ -173,7 +173,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 let row = widgetsSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.title = panel.title
-                row.iconName = panel.iconName(for: screenLayoutMode)
+                row.icon = panel.icon(for: screenLayoutMode)
                 row.setObj(panel, forKey: "panel")
                 row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode?.getProfileColor()
                 row.descr = String(widgetsCount)
@@ -187,7 +187,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         panelsLayoutRow.key = RawKey.panelsLayout.rawValue
         panelsLayoutRow.title = localizedString("panels_layout")
         panelsLayoutRow.descr = panelsLayoutMode.title
-        panelsLayoutRow.iconName = panelsLayoutMode.iconName(for: screenLayoutMode)
+        panelsLayoutRow.icon = panelsLayoutMode.icon(for: screenLayoutMode)
         panelsLayoutRow.iconTintColor = appMode.getProfileColor()
         panelsLayoutRow.cellType = OAValueTableViewCell.reuseIdentifier
         panelsLayoutRow.accessibilityLabel = panelsLayoutRow.title
@@ -428,15 +428,15 @@ extension ConfigureScreenViewController {
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.image = item.icon?.withRenderingMode(.alwaysTemplate) ?? UIImage.templateImageNamed(item.iconName)
                 if item.key == RawKey.distanceByTap.rawValue {
                     let selected = item.bool(forKey: selectedKey)
                     cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
                 } else {
                     cell.leftIconView.tintColor = iconTintColor
                 }
-            } else if let iconName = item.iconName {
-                cell.leftIconView.image = UIImage(named: iconName)
+            } else {
+                cell.leftIconView.image = item.icon ?? item.iconName.flatMap { UIImage(named: $0) }
             }
             applyAccessibility(cell, item)
             applySeparatorInsets(cell, isCustomLeftSeparatorInset: item.bool(forKey: "isCustomLeftSeparatorInset"))

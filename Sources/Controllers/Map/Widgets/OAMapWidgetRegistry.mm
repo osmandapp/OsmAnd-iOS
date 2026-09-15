@@ -24,7 +24,7 @@
 
 @implementation OAMapWidgetRegistry
 {
-    NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *_allWidgets;
+    NSMutableDictionary<WidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *_allWidgets;
     OAAppSettings *_settings;
     OAApplicationMode *_cachedAppMode;
     ScreenLayoutMode _cachedScreenLayoutMode;
@@ -66,7 +66,7 @@
     return self;
 }
 
-- (void) populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel
+- (void)populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(WidgetsPanel *)widgetPanel
 {
     NSMutableArray<NSMutableArray<OABaseWidgetView *> *> *widgetsToShow = [NSMutableArray array];
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
@@ -76,7 +76,7 @@
     NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:mode
                                                               screenLayoutMode:screenLayoutMode];
     NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self pagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels) screenLayoutMode:screenLayoutMode];
-    if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
+    if (weatherToolbarVisible && widgetPanel == WidgetsPanel.rightPanel)
     {
         pagedWidgets = @[];
     }
@@ -139,12 +139,12 @@
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *) getLeftWidgets
 {
-    return [self widgetsForPanel:OAWidgetsPanel.leftPanel];
+    return [self widgetsForPanel:WidgetsPanel.leftPanel];
 }
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *) getRightWidgets
 {
-    return [self widgetsForPanel:OAWidgetsPanel.rightPanel];
+    return [self widgetsForPanel:WidgetsPanel.rightPanel];
 }
 
 - (BOOL) isAnyWeatherWidgetVisible
@@ -286,11 +286,11 @@
 
 - (void) reorderWidgets:(NSArray<OAMapWidgetInfo *> *)widgetInfos
 {
-    NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *newAllWidgets = [NSMutableDictionary dictionary];
+    NSMutableDictionary<WidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *newAllWidgets = [NSMutableDictionary dictionary];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
         NSNumber *layoutMode = [_settings.useSeparateLayouts get:widget.appMode] ? @(widget.screenLayoutMode) : nil;
-        OAWidgetsPanel *panel = [widget getUpdatedPanel];
+        WidgetsPanel *panel = [widget updatedPanel];
         widget.pageIndex = [panel widgetPage:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         widget.priority = [panel widgetOrder:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         
@@ -367,7 +367,7 @@
 }
 
 - (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
-                                                               panel:(OAWidgetsPanel *)panel
+                                                               panel:(WidgetsPanel *)panel
                                                          filterModes:(NSInteger)filterModes
 {
     return [self pagedWidgetsForPanel:appMode
@@ -377,7 +377,7 @@
 }
 
 - (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
-                                                               panel:(OAWidgetsPanel *)panel
+                                                               panel:(WidgetsPanel *)panel
                                                          filterModes:(NSInteger)filterModes
                                                     screenLayoutMode:(int)screenLayoutMode
 {
@@ -399,7 +399,7 @@
 
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
                                                 filterModes:(NSInteger)filterModes
-                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
+                                                     panels:(NSArray<WidgetsPanel *> *)panels
                                                  layoutMode:(NSNumber *)layoutMode
 {
     NSArray<OAMapWidgetInfo *> *widgetInfos = [self widgetsForAppMode:appMode layoutMode:layoutMode];
@@ -414,15 +414,15 @@
                                                     appMode:(OAApplicationMode *)appMode
                                                  layoutMode:(NSNumber *)layoutMode
                                                 filterModes:(NSInteger)filterModes
-                                                     panels:(NSArray<OAWidgetsPanel *> *)panels
+                                                     panels:(NSArray<WidgetsPanel *> *)panels
 {
     NSMutableArray<Class> *includedWidgetTypes = [NSMutableArray array];
-    if ([panels containsObject:OAWidgetsPanel.leftPanel] || [panels containsObject:OAWidgetsPanel.rightPanel])
+    if ([panels containsObject:WidgetsPanel.leftPanel] || [panels containsObject:WidgetsPanel.rightPanel])
     {
         [includedWidgetTypes addObject:OASideWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
     }
-    if ([panels containsObject:OAWidgetsPanel.topPanel] || [panels containsObject:OAWidgetsPanel.bottomPanel])
+    if ([panels containsObject:WidgetsPanel.topPanel] || [panels containsObject:WidgetsPanel.bottomPanel])
     {
         [includedWidgetTypes addObject:OACenterWidgetInfo.class];
         [includedWidgetTypes addObject:OASimpleWidgetInfo.class];
@@ -444,7 +444,7 @@
             BOOL passEnabled = !enabledMode || [widget isEnabledForAppMode:appMode widgetsVisibility:widgetsVisibility];
             BOOL passAvailable = !availableMode || [OAWidgetsAvailabilityHelper isWidgetAvailableWithWidgetId:widget.key appMode:appMode];
             BOOL defaultAvailable = !defaultMode || !widget.isCustomWidget;
-            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:[widget getUpdatedPanel:appMode
+            BOOL passMatchedPanels = !matchingPanelsMode || [panels containsObject:[widget updatedPanel:appMode
                                                                         screenLayoutMode:layoutMode]];
             BOOL passTypeAllowed = [widget widgetType] == nil || [[widget widgetType] isAllowed];
             BOOL passPanelAllowed = [widget widgetType] == nil || [[widget widgetType] isPanelsAllowed:panels];
@@ -461,7 +461,7 @@
     return [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
 }
 
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAWidgetsPanel *)panel
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(WidgetsPanel *)panel
 {
     NSMutableOrderedSet<OAMapWidgetInfo *> *widgets = _allWidgets[panel];
     if (widgets == nil)

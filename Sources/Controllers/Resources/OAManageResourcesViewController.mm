@@ -73,6 +73,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
++ (void)prepareDataLocked;
+
 @end
 
 struct RegionResources
@@ -88,6 +90,8 @@ static BOOL ResourceMatchesRegion(OAWorldRegion *region,
                                   const QString &downloadsIdPrefix,
                                   const QString &acceptedExtension)
 {
+    if (!resource)
+        return NO;
     if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && resource->type == OsmAndResourceType::StarMap)
         return YES;
     if (!acceptedExtension.isEmpty())
@@ -207,12 +211,34 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 static BOOL _lackOfResources = NO;
 static BOOL _repositoryUpdated = NO;
 
+// Shared by every controller and the class-method callers. Never hold this lock across UI work.
+static NSObject *ResourcesCacheLock()
+{
+    static NSObject *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [[NSObject alloc] init];
+    });
+    return lock;
+}
+
+static BOOL CopyResourcesForRegion(OAWorldRegion *region, RegionResources &resources)
+{
+    @synchronized(ResourcesCacheLock())
+    {
+        const auto it = _resourcesByRegions.constFind(region);
+        if (it == _resourcesByRegions.cend())
+            return NO;
+        resources = *it;
+        return YES;
+    }
+}
+
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
-    const auto citRegionResources = _resourcesByRegions.constFind(region);
-    if (citRegionResources == _resourcesByRegions.cend())
+    RegionResources regionResources;
+    if (!CopyResourcesForRegion(region, regionResources))
         return nil;
-    const auto& regionResources = *citRegionResources;
     
     NSMutableArray<NSString *> *res = [NSMutableArray array];
     for (const auto& resource : regionResources.repositoryResources)
@@ -713,11 +739,14 @@ static BOOL _repositoryUpdated = NO;
 {
     @synchronized(_dataLock)
     {
-        if (_doDataUpdateReload)
-            _resourcesByRegions.clear();
-        
-        if (_doDataUpdate || _resourcesByRegions.count() == 0 || _lackOfResources)
-            [OAManageResourcesViewController prepareData];
+        @synchronized(ResourcesCacheLock())
+        {
+            if (_doDataUpdateReload)
+                _resourcesByRegions.clear();
+
+            if (_doDataUpdate || _resourcesByRegions.count() == 0 || _lackOfResources)
+                [OAManageResourcesViewController prepareData];
+        }
 
         if (![self.region isKindOfClass:OACustomRegion.class])
             [self collectSubregionsDataAndItems];
@@ -733,10 +762,22 @@ static BOOL _repositoryUpdated = NO;
 
 + (BOOL) lackOfResources
 {
-    return _lackOfResources;
+    @synchronized(ResourcesCacheLock())
+    {
+        return _lackOfResources;
+    }
 }
 
 + (void) prepareData
+{
+    @synchronized(ResourcesCacheLock())
+    {
+        [self prepareDataLocked];
+    }
+}
+
+// Caller holds ResourcesCacheLock for the entire cache rebuild.
++ (void) prepareDataLocked
 {
     _lackOfResources = NO;
     
@@ -789,11 +830,15 @@ static BOOL _repositoryUpdated = NO;
             }
             for (const auto& resource : regionResources.outdatedResources)
             {
+                if (!resource)
+                    continue;
                 regionResPrevious.outdatedResources.insert(resource->id, resource);
                 regionResources.allResources.remove(resource->id);
             }
             for (const auto& resource : regionResources.localResources)
             {
+                if (!resource)
+                    continue;
                 regionResPrevious.localResources.insert(resource->id, resource);
                 regionResources.allResources.remove(resource->id);
             }
@@ -875,21 +920,33 @@ static BOOL _repositoryUpdated = NO;
         else
         {
             for (const auto& resource : regionResPrevious.outdatedResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
 
             for (const auto& resource : regionResPrevious.localResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
         }
         
         // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id
         for (const auto& resource : _resourcesInRepository)
         {
-            if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
+            if (resource && regionResources.allResources.contains(resource->id) && resource->isDeleted)
             {
                 const auto& unsupportedResource = regionResources.allResources.value(resource->id);
-                if (unsupportedResource->type != OsmAndResourceType::DeletedMap)
+                if (!unsupportedResource || unsupportedResource->type != OsmAndResourceType::DeletedMap)
                 {
                     regionResources.allResources.remove(resource->id);
                     regionResources.allResources.insert(resource->id, resource);
@@ -943,10 +1000,9 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)collectSubregionItemsFromRegularRegion:(OAWorldRegion *)region
 {
-    const auto citRegionResources = _resourcesByRegions.constFind(region);
-    if (citRegionResources == _resourcesByRegions.cend())
+    RegionResources regionResources;
+    if (!CopyResourcesForRegion(region, regionResources))
         return;
-    const auto& regionResources = *citRegionResources;
 
     BOOL nauticalRegion = region == self.region && [region.regionId isEqualToString:_nauticalRegionId];
     BOOL travelRegion = region == self.region && [region.regionId isEqualToString:_travelRegionId];
@@ -1198,10 +1254,9 @@ static BOOL _repositoryUpdated = NO;
 
 - (OAResourceItem *) collectWorldSeamarksItem
 {
-    const auto citRegionResources = _resourcesByRegions.constFind(_app.worldRegion);
-    if (citRegionResources == _resourcesByRegions.cend())
+    RegionResources regionResources;
+    if (!CopyResourcesForRegion(_app.worldRegion, regionResources))
         return nil;
-    const auto& regionResources = *citRegionResources;
         
     for (const auto& resource_ : regionResources.allResources)
     {
@@ -1286,8 +1341,17 @@ static BOOL _repositoryUpdated = NO;
     [_localTerrainMapSources removeAllObjects];
     _outdatedMapsCount = 0;
     _totalOutdatedSize = 0;
-    for (const auto& outdatedResource : _outdatedResources)
+    decltype(_outdatedResources) outdatedResources;
+    decltype(_localResources) localResources;
+    @synchronized(ResourcesCacheLock())
     {
+        outdatedResources = _outdatedResources;
+        localResources = _localResources;
+    }
+    for (const auto& outdatedResource : outdatedResources)
+    {
+        if (!outdatedResource)
+            continue;
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
                                                           thatContainsResource:outdatedResource->id];
         if (!match)
@@ -1334,8 +1398,10 @@ static BOOL _repositoryUpdated = NO;
     _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
     
     _totalInstalledSize = 0;
-    for (const auto& localResource : _localResources)
+    for (const auto& localResource : localResources)
     {
+        if (!localResource)
+            continue;
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
                                                           thatContainsResource:localResource->id];
 
@@ -1632,7 +1698,11 @@ static BOOL _repositoryUpdated = NO;
         [self.view addSpinner];
 
         // Select where to look
-        NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
+        NSArray<OAWorldRegion *> *searchableContent;
+        @synchronized(ResourcesCacheLock())
+        {
+            searchableContent = [_searchableWorldwideRegionItems copy];
+        }
 
         // Search through subregions:
         NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
@@ -1839,10 +1909,9 @@ static BOOL _repositoryUpdated = NO;
             [results addObject:region];
 
         // Get all resources that are direct children of current region
-        const auto citRegionResources = _resourcesByRegions.constFind(region);
-        if (citRegionResources == _resourcesByRegions.cend())
+        RegionResources regionResources;
+        if (!CopyResourcesForRegion(region, regionResources))
             continue;
-        const auto& regionResources = *citRegionResources;
 
         // Create items for each resource found
         NSMutableArray *resourceItems = [NSMutableArray array];

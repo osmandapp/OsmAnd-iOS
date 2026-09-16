@@ -874,13 +874,26 @@ static BOOL _repositoryUpdated = NO;
         }
         else
         {
+            // A removed resource may be absent from the repository, and value() returns a null pointer for it
             for (const auto& resource : regionResPrevious.outdatedResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
 
             for (const auto& resource : regionResPrevious.localResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
         }
         
         // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id

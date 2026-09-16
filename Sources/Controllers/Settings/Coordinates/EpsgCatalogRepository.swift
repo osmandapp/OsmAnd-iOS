@@ -17,6 +17,7 @@ final class EpsgCatalogRepository {
     private static let defaultSearchLimit = 50
     private static let maxQueryLimit = 5000
 
+    private static let metreUomCode = 9001
     private static let supportedProjectionMethods = "'9807', '9809', '9815'"
     private static let supportedHelmertMethods = "'9603', '9606', '9607'"
     private static let maxTransformCandidates = 16
@@ -52,17 +53,72 @@ final class EpsgCatalogRepository {
         AND area_extent.west_lon > area_extent.east_lon)
         """
 
+    private static let metricAxesFilter = """
+        AND EXISTS (SELECT 1 FROM axis metric_axis \
+        WHERE metric_axis.coordinate_system_auth_name = crs.coordinate_system_auth_name \
+        AND metric_axis.coordinate_system_code = crs.coordinate_system_code \
+        AND metric_axis.uom_auth_name = 'EPSG' AND CAST(metric_axis.uom_code AS INTEGER) = \(metreUomCode)) \
+        AND NOT EXISTS (SELECT 1 FROM axis other_axis \
+        WHERE other_axis.coordinate_system_auth_name = crs.coordinate_system_auth_name \
+        AND other_axis.coordinate_system_code = crs.coordinate_system_code \
+        AND (IFNULL(other_axis.uom_auth_name, '') <> 'EPSG' \
+        OR IFNULL(CAST(other_axis.uom_code AS INTEGER), 0) <> \(metreUomCode)))
+        """
+
     private static let gridSupportedFilter = """
         WHERE crs.auth_name = 'EPSG' AND IFNULL(crs.deprecated, 0) = 0 \
         AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(supportedProjectionMethods)) \
         \(supportedAreaFilter) \
+        \(metricAxesFilter) \
         AND ((crs.geodetic_crs_auth_name = 'EPSG' AND crs.geodetic_crs_code = '4326') \
         OR EXISTS (SELECT 1 FROM helmert_transformation h \
+        JOIN usage grid_usage ON grid_usage.object_table_name = 'helmert_transformation' \
+        AND grid_usage.object_auth_name = h.auth_name AND grid_usage.object_code = h.code \
+        JOIN extent grid_extent ON grid_extent.auth_name = grid_usage.extent_auth_name \
+        AND grid_extent.code = grid_usage.extent_code AND IFNULL(grid_extent.deprecated, 0) = 0 \
         WHERE h.auth_name = 'EPSG' AND IFNULL(h.deprecated, 0) = 0 \
         AND h.source_crs_auth_name = crs.geodetic_crs_auth_name \
         AND h.source_crs_code = crs.geodetic_crs_code \
         AND h.target_crs_auth_name = 'EPSG' AND h.target_crs_code = '4326' \
-        AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(supportedHelmertMethods))))
+        AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(supportedHelmertMethods)) \
+        AND EXISTS (SELECT 1 FROM usage crs_usage \
+        JOIN extent crs_extent ON crs_extent.auth_name = crs_usage.extent_auth_name \
+        AND crs_extent.code = crs_usage.extent_code AND IFNULL(crs_extent.deprecated, 0) = 0 \
+        WHERE crs_usage.object_table_name = 'projected_crs' \
+        AND crs_usage.object_auth_name = crs.auth_name AND crs_usage.object_code = crs.code \
+        AND grid_extent.south_lat <= crs_extent.north_lat \
+        AND grid_extent.north_lat >= crs_extent.south_lat \
+        AND (CASE WHEN grid_extent.west_lon <= grid_extent.east_lon \
+        THEN grid_extent.west_lon <= crs_extent.east_lon AND grid_extent.east_lon >= crs_extent.west_lon \
+        ELSE grid_extent.west_lon <= crs_extent.east_lon \
+        OR grid_extent.east_lon >= crs_extent.west_lon END))))
+        """
+
+    private static let crsAreaOfUse = """
+        WITH crs_area AS (\
+        SELECT MIN(e.south_lat) south, MAX(e.north_lat) north, \
+        MIN(e.west_lon) west, MAX(e.east_lon) east, \
+        MAX(MAX(e.north_lat) - MIN(e.south_lat), 0.0) * MAX(MAX(e.east_lon) - MIN(e.west_lon), 0.0) area \
+        FROM usage u \
+        JOIN extent e ON e.auth_name = u.extent_auth_name AND e.code = u.extent_code \
+        WHERE u.object_table_name = 'projected_crs' AND u.object_auth_name = 'EPSG' AND u.object_code = ? \
+        AND IFNULL(e.deprecated, 0) = 0 AND e.west_lon <= e.east_lon)
+        """
+
+    private static let transformationIntersects = """
+        MAX(CASE WHEN he.south_lat <= a.north AND he.north_lat >= a.south \
+        AND (CASE WHEN he.west_lon <= he.east_lon \
+        THEN he.west_lon <= a.east AND he.east_lon >= a.west \
+        ELSE he.west_lon <= a.east OR he.east_lon >= a.west END) THEN 1 ELSE 0 END)
+        """
+
+    private static let transformationOverlap = """
+        IFNULL(SUM(\
+        MAX(0.0, MIN(he.north_lat, a.north) - MAX(he.south_lat, a.south)) * \
+        (CASE WHEN he.west_lon <= he.east_lon \
+        THEN MAX(0.0, MIN(he.east_lon, a.east) - MAX(he.west_lon, a.west)) \
+        ELSE MAX(0.0, MIN(180.0, a.east) - MAX(he.west_lon, a.west)) \
+        + MAX(0.0, MIN(he.east_lon, a.east) - MAX(-180.0, a.west)) END)), 0.0)
         """
 
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
@@ -197,6 +253,7 @@ final class EpsgCatalogRepository {
             WHERE crs.auth_name = 'EPSG' AND crs.code = ? AND IFNULL(crs.deprecated, 0) = 0 \
             AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(Self.supportedProjectionMethods)) \
             \(Self.supportedAreaFilter) \
+            \(Self.metricAxesFilter) \
             ORDER BY CAST(c.method_code AS INTEGER), c.code \
             LIMIT 1
             """
@@ -228,7 +285,12 @@ final class EpsgCatalogRepository {
         if usesWgs84 {
             transforms = []
         } else {
-            guard let queried = queryTransformationCodes(db, baseAuth: baseAuth, baseCode: baseCode) else {
+            guard let queried = queryTransformationCodes(
+                db,
+                crsCode: code,
+                baseAuth: baseAuth,
+                baseCode: baseCode
+            ) else {
                 return nil
             }
             if queried.isEmpty {
@@ -313,24 +375,39 @@ final class EpsgCatalogRepository {
 
     private func queryTransformationCodes(
         _ db: OpaquePointer?,
+        crsCode: Int,
         baseAuth: String,
         baseCode: String
     ) -> [Int]? {
         let sql = """
-            SELECT h.code FROM helmert_transformation h \
+            \(Self.crsAreaOfUse), \
+            candidates AS (\
+            SELECT h.code code, h.accuracy accuracy, a.area crs_area, \
+            CASE WHEN lower(IFNULL(h.description, '')) LIKE '%replaced by%' THEN 1 ELSE 0 END superseded, \
+            \(Self.transformationIntersects) intersects, \
+            \(Self.transformationOverlap) overlap \
+            FROM helmert_transformation h \
+            CROSS JOIN crs_area a \
+            LEFT JOIN usage hu ON hu.object_table_name = 'helmert_transformation' \
+            AND hu.object_auth_name = h.auth_name AND hu.object_code = h.code \
+            LEFT JOIN extent he ON he.auth_name = hu.extent_auth_name AND he.code = hu.extent_code \
+            AND IFNULL(he.deprecated, 0) = 0 \
             WHERE h.auth_name = 'EPSG' AND IFNULL(h.deprecated, 0) = 0 \
             AND h.source_crs_auth_name = ? AND h.source_crs_code = ? \
             AND h.target_crs_auth_name = 'EPSG' AND h.target_crs_code = '4326' \
             AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(Self.supportedHelmertMethods)) \
-            ORDER BY CASE WHEN lower(IFNULL(h.description, '')) LIKE '%replaced by%' THEN 1 ELSE 0 END, \
-            CASE WHEN h.accuracy IS NULL THEN 1 ELSE 0 END, h.accuracy, CAST(h.code AS INTEGER) \
+            GROUP BY h.code, h.accuracy, h.description, a.area) \
+            SELECT code FROM candidates WHERE intersects = 1 \
+            ORDER BY IFNULL(ROUND(overlap / NULLIF(crs_area, 0.0), 1), 0.0) DESC, \
+            superseded, CASE WHEN accuracy IS NULL THEN 1 ELSE 0 END, accuracy, CAST(code AS INTEGER) \
             LIMIT \(Self.maxTransformCandidates)
             """
         var stmt: OpaquePointer?
         guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
         defer { sqlite3_finalize(stmt) }
-        sqlite3_bind_text(stmt, 1, baseAuth, -1, transient)
-        sqlite3_bind_text(stmt, 2, baseCode, -1, transient)
+        sqlite3_bind_text(stmt, 1, String(crsCode), -1, transient)
+        sqlite3_bind_text(stmt, 2, baseAuth, -1, transient)
+        sqlite3_bind_text(stmt, 3, baseCode, -1, transient)
 
         var result = [Int]()
         while true {

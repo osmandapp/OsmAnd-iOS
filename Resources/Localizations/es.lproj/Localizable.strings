@@ -1408,7 +1408,7 @@
 "routing_attr_avoid_bus_description" = "Evita usar autobuses y trolebuses";
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_surface_sett_name" = "Adoquín";
-"rendering_value_americanRoadAtlas_name" = "Estilo vial estadounidense";
+"rendering_value_americanRoadAtlas_name" = "Atlas de carreteras estadounidense";
 "rendering_attr_hideAccess_name" = "Restricciones de acceso";
 "rendering_attr_piste_difficulty_easy_name" = "Fácil";
 "rendering_value_thin_name" = "Fino";
@@ -1456,7 +1456,7 @@
 "routing_attr_piste_type_skitour_name" = "Esquí de travesía";
 "rendering_attr_roadStyle_name" = "Estilo vial";
 "rendering_attr_hideText_name" = "Textos";
-"rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
+"rendering_value_germanRoadAtlas_name" = "Atlas de carreteras alemán";
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
 "rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
@@ -1464,7 +1464,7 @@
 "map_settings_install_maps" = "Elige los mapas a instalar o actualizar";
 "map_settings_install_more" = "Instalar más...";
 "available_map_styles" = "Estilos de mapas disponibles";
-"res_confirmation_delete" = "¿Borrar «%@»?";
+"res_confirmation_delete" = "¿Confirma que quiere eliminar «%@»?";
 "shared_string_maximum" = "Máximo";
 "available_map_sources" = "Repositorios de mapas disponibles";
 "stats_select_graph_data" = "Elegir datos del gráfico";

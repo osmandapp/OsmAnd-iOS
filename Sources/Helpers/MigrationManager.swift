@@ -113,10 +113,6 @@ final class MigrationManager: NSObject {
                 migrateAstronomyPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
             }
-            if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
-                migrateCarPlayMapAppearanceMode()
-                defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
-            }
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
@@ -691,14 +687,6 @@ final class MigrationManager: NSObject {
         }
     }
     
-    private func migrateCarPlayMapAppearanceMode() {
-        let current = settings.applicationMode.get()
-        let firstCar = CarPlayService.shared.firstCarMode()
-        let resolved = settings.isCarPlayModeDefault.get() ? (current.isDerivedRouting(from: .car()) ? current : firstCar) : settings.carPlayMode.get()
-
-        settings.carPlayMapAppearanceMode.set(settings.appearanceMode.get(resolved))
-    }
-
     private func migrateTracksSortModeKeysAndFormat() {
         let validValues = Set(TracksSortMode.allCases.map(\.value))
         var tracksSortModes = settings.getTracksSortModes()

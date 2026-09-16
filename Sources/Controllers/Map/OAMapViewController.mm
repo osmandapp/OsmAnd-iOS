@@ -84,6 +84,7 @@
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
 #include <OpenGLES/ES2/gl.h>
+#include <atomic>
 #include <QtMath>
 #include <QStandardPaths>
 #include <OsmAndCore.h>
@@ -184,6 +185,7 @@ static char kMapSourceUpdateQueueKey;
     
     dispatch_queue_t _mapSourceUpdateQueue;
     BOOL _mapSourceInvalidated;
+    std::atomic_bool _gpxTracksRefreshScheduled;
     NSInteger _lastMapLocaleLanguageZoom;
     CGFloat _contentScaleFactor;
     
@@ -2306,7 +2308,13 @@ static char kMapSourceUpdateQueueKey;
 
 - (void) onUpdateGpxTracks
 {
+    // Every finished track load fires this, so a burst of N tracks used to queue N full rebuilds
+    if (_gpxTracksRefreshScheduled.exchange(true))
+        return;
+
     dispatch_async(dispatch_get_main_queue(), ^{
+        // Cleared before the rebuild, so an update arriving during it still schedules the next one
+        _gpxTracksRefreshScheduled.store(false);
         if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;

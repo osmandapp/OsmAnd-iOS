@@ -291,28 +291,33 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
     QHash<uint64_t, QSet<uint64_t>> knownRouteIds;
     QHash<uint64_t, QSet<uint64_t>> deletedRouteIds;
     QHash<uint64_t, QList< std::shared_ptr<const OsmAnd::TransportRoute> >> routesById;
-    QSet<uint64_t> deletedStopIds;
+    QSet<uint64_t> droppedStopIds;
 
     for (const auto& stop : foundStops)
     {
-        if (stop->isMissingStop())
+        const uint64_t stopId = stop->id.id;
+        // Copies come newest first, so what an older one deletes may not undo what a newer one
+        // already supplied: deletions only keep older copies from adding a route back
+        const bool isNewestCopy = !stopsById.contains(stopId);
+        if (!isNewestCopy && (droppedStopIds.contains(stopId) || stop->isDeleted() || stop->isMissingStop()))
             continue;
 
-        const uint64_t stopId = stop->id.id;
         for (const auto routeId : stop->deletedRoutesIds)
             deletedRouteIds[stopId].insert(routeId);
 
-        if (stop->isDeleted())
-        {
-            deletedStopIds.insert(stopId);
-            continue;
-        }
-
         QVector<uint32_t> pointersToRead;
-        if (!stopsById.contains(stopId))
+        if (isNewestCopy)
         {
             stopIds.push_back(stopId);
             stopsById.insert(stopId, [[OATransportStop alloc] initWithStop:stop]);
+
+            // the newest copy decides whether the stop is gone or only a placeholder
+            if (stop->isDeleted() || stop->isMissingStop())
+            {
+                droppedStopIds.insert(stopId);
+                continue;
+            }
+
             for (const auto routeId : stop->routesIds)
                 knownRouteIds[stopId].insert(routeId);
             pointersToRead = stop->referencesToRoutes;
@@ -343,6 +348,9 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
         dataInterface->getTransportRoutes(stop, pointersToRead, &routes, stringTable.get(), nullptr, nullptr, true);
         for (const auto& route : routes)
         {
+            if (!isNewestCopy && deletedRouteIds[stopId].contains(route->id.id))
+                continue;
+
             knownRouteIds[stopId].insert(route->id.id);
             routesById[stopId].push_back(route);
         }
@@ -351,19 +359,11 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
     NSMutableArray<OATransportStop *> *stops = [NSMutableArray arrayWithCapacity:stopIds.size()];
     for (const auto stopId : stopIds)
     {
-        if (deletedStopIds.contains(stopId))
+        if (droppedStopIds.contains(stopId))
             continue;
 
-        const auto& deletedIds = deletedRouteIds[stopId];
-        QList< std::shared_ptr<const OsmAnd::TransportRoute> > routes;
-        for (const auto& route : routesById[stopId])
-        {
-            if (!deletedIds.contains(route->id.id))
-                routes.push_back(route);
-        }
-
         OATransportStop *stop = stopsById[stopId];
-        [stop setRoutes:routes];
+        [stop setRoutes:routesById[stopId]];
         [stops addObject:stop];
     }
 

@@ -196,11 +196,12 @@ NSString *const OATransportStopRouteArrow = @" → ";
     return res;
 }
 
-// Routes are read for the menu without geometry, it is only needed to draw the route on the map
-- (void) loadGeometryIfNeeded
+// Routes are read for the menu without geometry, it is only needed to draw the route on the map.
+// Returns the route to draw rather than replacing _route, which readers on other threads hold.
+- (std::shared_ptr<const OsmAnd::TransportRoute>) routeWithGeometry
 {
     if (_route == nullptr || !_route->forwardWays31.isEmpty() || !_route->obfSection || !_stop)
-        return;
+        return _route;
 
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_stop.latitude, _stop.longitude));
     const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kRouteGeometrySearchRadiusMeters, point31);
@@ -210,8 +211,7 @@ NSString *const OATransportStopRouteArrow = @" → ";
     const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
     const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
     const auto route = dataInterface->getTransportRouteWithGeometry(_route);
-    if (route)
-        _route = route;
+    return route ? route : _route;
 }
 
 - (void) initStopIndex

@@ -49,6 +49,7 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
     std::shared_ptr<OsmAnd::TransportStopSymbolsProvider> _transportStopSymbolsProvider;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
     OATransportStopRoute *_stopRoute;
+    std::shared_ptr<const OsmAnd::TransportRoute> _stopRouteGeometry;
     UIColor *_stopRouteColor;
 }
 
@@ -106,7 +107,10 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
     _stopRouteColor = [stopRoute getColor:NO];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [stopRoute loadGeometryIfNeeded];
+        const auto routeGeometry = [stopRoute routeWithGeometry];
+        [self.mapViewController runWithRenderSync:^{
+            _stopRouteGeometry = routeGeometry;
+        }];
         [self doShowStopsOnMap];
     });
 }
@@ -128,7 +132,8 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
             [c getRed:&r green:&g blue:&b alpha:&a];
             const auto& color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
             
-            for (const auto& points : _stopRoute.route->forwardWays31)
+            const auto& route = _stopRouteGeometry ? _stopRouteGeometry : _stopRoute.route;
+            for (const auto& points : route->forwardWays31)
             {
                 if (points.size() > 1)
                 {
@@ -152,7 +157,8 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
 
         CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
 
-        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, self.pointsOrder - 1000, _stopRoute.route, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, textSize)));
+        const auto& symbolsRoute = _stopRouteGeometry ? _stopRouteGeometry : (_stopRoute ? _stopRoute.route : nullptr);
+        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, self.pointsOrder - 1000, symbolsRoute, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, textSize)));
 
         [self.mapView addTiledSymbolsProvider:_transportStopSymbolsProvider];
     }];
@@ -164,6 +170,7 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.mapViewController runWithRenderSync:^{
+            _stopRouteGeometry.reset();
             [self.mapView removeKeyedSymbolsProvider:_linesCollection];
             _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
             

@@ -29,6 +29,9 @@
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
 
+// Milliseconds each teardown wait in the renderer may spend before the worker is abandoned
+static const int kTeardownWaitTime = 500;
+
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -808,6 +811,10 @@ forcedUpdate:(BOOL)forcedUpdate
     rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
     rendererSetup.gpuWorkerThreadEnabled = true;
     rendererSetup.displayDensityFactor = _displayDensityFactor;
+    // releaseContext: runs from applicationWillTerminate:, where the whole shutdown has about five
+    // seconds. Three teardown waits are bounded by this value, on top of the two seconds
+    // postReleaseRendering already spends waiting for the GPU sync stage.
+    rendererSetup.maxTeardownWaitTime = kTeardownWaitTime;
     const auto capturedWorkerContext = _glWorkerContext;
     rendererSetup.gpuWorkerThreadPrologue =
         [capturedWorkerContext]

@@ -53,6 +53,8 @@
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
 
 static const NSTimeInterval kCheckUpdatesInterval = 3600;
+// Milliseconds the Qt application thread is given to finish before shutdown moves on without it
+static const int kCoreReleaseWaitTime = 1000;
 
 NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateStateNotification";
 
@@ -425,8 +427,9 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
-    // Release OsmAnd core
-    OsmAnd::ReleaseCore();
+    // Release OsmAnd core. The Qt application thread is given a deadline for the same reason as the
+    // renderer's workers: the process is on its way out and being killed here costs a crash report.
+    OsmAnd::ReleaseCore(kCoreReleaseWaitTime);
 
     // Deconfigure device
     UIDevice* device = [UIDevice currentDevice];

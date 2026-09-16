@@ -771,7 +771,8 @@ static NSOperationQueue *_favQueue;
     updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately
 {
-    if (updatePoints)
+    // Original removes the group override while preserving each point's icon.
+    if (updatePoints && iconName.length > 0)
         for (OAFavoriteItem *point in group.points)
             [point setIcon:iconName];
 
@@ -1561,10 +1562,6 @@ static NSOperationQueue *_favQueue;
     UIColor *pointColor = [point getInternalColor];
     if ((_color == nil || [_color toRGBNumber] == 0) && pointColor)
         _color = pointColor;
-
-    NSString *pointIcon = [point getInternalIcon];
-    if (_iconName.length == 0 && pointIcon.length > 0)
-        _iconName = pointIcon;
 
     NSString *pointBackground = [point getInternalBackgroundIcon];
     if (_backgroundType.length == 0 && pointBackground.length > 0)

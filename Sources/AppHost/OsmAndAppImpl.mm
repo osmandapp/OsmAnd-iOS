@@ -1253,10 +1253,21 @@
     return _resourcesManager->uninstallResource(QString::fromNSString(fileId));
 }
 
-- (void) loadWorldRegions
+- (OAWorldRegion *) readWorldRegions
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
-    _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
+    return [OAWorldRegion loadFrom:ocbfPathLib];
+}
+
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion
+{
+    if (worldRegion)
+        _worldRegion = worldRegion;
+}
+
+- (void) loadWorldRegions
+{
+    [self applyWorldRegions:[self readWorldRegions]];
 }
 
 - (void) addRegionNamesToCommonWords

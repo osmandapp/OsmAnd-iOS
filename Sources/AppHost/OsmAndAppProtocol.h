@@ -60,6 +60,9 @@
 @property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
 @property(readonly) OAObservable* backgroundStateObservable;
 
+// Split so that callers can read the tree off the main thread and publish it there together with dependent state
+- (OAWorldRegion *) readWorldRegions;
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion;
 - (void) loadWorldRegions;
 
 - (void) saveDataToPermamentStorage;

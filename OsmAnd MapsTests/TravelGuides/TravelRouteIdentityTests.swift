@@ -40,6 +40,14 @@ final class TravelRouteIdentityTests: XCTestCase {
         XCTAssertTrue(TravelRouteIdentity.isTravelGpx(tags: ["route_id": "", "route_type": ""]))
     }
 
+    func testTravelGpxClassificationDoesNotRequirePositiveOsmId() {
+        for routeId in ["collection", "O0", "O-1", "OSM7700604"] {
+            XCTAssertLessThanOrEqual(TravelRouteIdentity.osmRouteId(from: routeId), 0, routeId)
+            XCTAssertTrue(TravelRouteIdentity.isTravelGpx(tags: ["route_id": routeId, "route": "segment"]), routeId)
+            XCTAssertTrue(TravelRouteIdentity.isTravelGpx(tags: ["route_id": routeId, "route_type": "hiking"]), routeId)
+        }
+    }
+
     func testFirstMatchingSubtypeInOriginalOrder() {
         XCTAssertEqual(TravelRouteIdentity.routeType(from: "routes_hiking"), "hiking")
         XCTAssertEqual(TravelRouteIdentity.routeType(from: "route_track;routes_hiking;routes_cycling"), "hiking")

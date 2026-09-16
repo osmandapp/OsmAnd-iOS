@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (OASGpxDataItem *)addGPXFileToDBIfNeeded:(NSString *)filePath;
 - (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove;
 - (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath;
+// Does not schedule a re-read, so it costs no file access. The item returned is the same either way.
+- (OASGpxDataItem *_Nullable)getCachedGPXItem:(NSString *)filePath;
 
 - (BOOL)updateDataItem:(OASGpxDataItem *_Nonnull)item;
 - (BOOL)renameCurrentFile:(OASKFile *)currentFile newFile:(OASKFile *)newFile;

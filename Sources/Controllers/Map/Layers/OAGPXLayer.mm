@@ -145,6 +145,7 @@ namespace
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
+    NSInteger _splitGeneration;
     QList<OsmAnd::PointI> _startFinishPoints;
     QList<int> _startFinishExtraIds;
     QList<float> _startFinishPointsElevations;
@@ -192,7 +193,7 @@ namespace
     [super resetLayer];
 
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
-    [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+    [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -1186,9 +1187,10 @@ colorizationScheme:(int)colorizationScheme
 
     NSBlockOperation* operation = [[NSBlockOperation alloc] init];
     __weak NSBlockOperation* weakOperation = operation;
-    OAAtomicInteger *splitCounter = _splitCounter;
+    // Operations run concurrently, so they carry the generation instead of reading layer state off-thread
+    const NSInteger generation = [self currentSplitGeneration];
     [operation addExecutionBlock:^{
-        if (splitCounter != _splitCounter || weakOperation.isCancelled)
+        if (weakOperation.isCancelled || ![self isSplitGenerationActual:generation])
             return;
         OASGpxFile *document = doc;
         NSArray<OASGpxTrackAnalysis *> *splitData = nil;
@@ -1229,7 +1231,7 @@ colorizationScheme:(int)colorizationScheme
             QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
             for (NSInteger i = 1; i < splitData.count; i++)
             {
-                if (splitCounter != _splitCounter || weakOperation.isCancelled)
+                if (weakOperation.isCancelled)
                     break;
                 OASGpxTrackAnalysis *seg = splitData[i];
                 double metricStartValue = splitData[i - 1].metricEnd;
@@ -1272,12 +1274,12 @@ colorizationScheme:(int)colorizationScheme
                     splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, 0, splitElevation));
                 }
             }
-            if (splitCounter == _splitCounter && !weakOperation.isCancelled)
-                [self appendSplitLabels:splitLabels];
+            if (!weakOperation.isCancelled)
+                [self appendSplitLabels:splitLabels generation:generation];
         }
-        if (splitCounter == _splitCounter && !weakOperation.isCancelled)
+        if (!weakOperation.isCancelled)
         {
-            int counter = [self decrementSplitCounter];
+            const int counter = [self decrementSplitCounterForGeneration:generation];
             if (counter == 0)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -1300,11 +1302,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
     _elevationScaleFactor = kGpxExaggerationDefScale;
-    if (_startFinishProvider)
-    {
-        [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
-        _startFinishProvider = nullptr;
-    }
+    [self removeStartFinishProvider];
     
     QList<OsmAnd::PointI> startFinishPoints;
     QList<float> startFinishPointsElevations;
@@ -1487,6 +1485,18 @@ colorizationScheme:(int)colorizationScheme
     [_splitLabelsQueue setSuspended:NO];
 }
 
+- (void) removeStartFinishProvider
+{
+    @synchronized(_splitLock)
+    {
+        if (_startFinishProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+            _startFinishProvider = nullptr;
+        }
+    }
+}
+
 - (void) refreshStartFinishProvider
 {
     @synchronized(_splitLock)
@@ -1522,7 +1532,24 @@ colorizationScheme:(int)colorizationScheme
 {
     @synchronized(_splitLock)
     {
+        _splitGeneration++;
         _splitCounter = [OAAtomicInteger atomicInteger:0];
+    }
+}
+
+- (NSInteger) currentSplitGeneration
+{
+    @synchronized(_splitLock)
+    {
+        return _splitGeneration;
+    }
+}
+
+- (BOOL) isSplitGenerationActual:(NSInteger)generation
+{
+    @synchronized(_splitLock)
+    {
+        return _splitGeneration == generation;
     }
 }
 
@@ -1534,10 +1561,14 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (int) decrementSplitCounter
+// Returns the number of pending operations, or -1 when the generation is already stale
+- (int) decrementSplitCounterForGeneration:(NSInteger)generation
 {
     @synchronized(_splitLock)
     {
+        if (_splitGeneration != generation)
+            return -1;
+
         return [_splitCounter decrementAndGet];
     }
 }
@@ -1583,9 +1614,13 @@ colorizationScheme:(int)colorizationScheme
 }
 
 - (void) appendSplitLabels:(QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> &)splitLabels
+                generation:(NSInteger)generation
 {
     @synchronized(_splitLock)
     {
+        if (_splitGeneration != generation)
+            return;
+
         _splitLabels.append(splitLabels);
     }
 }

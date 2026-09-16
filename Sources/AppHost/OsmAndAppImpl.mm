@@ -72,6 +72,7 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
 #include <OsmAndCore/Search/CommonWords.h>
@@ -951,7 +952,7 @@
 
 - (void) instantiateWeatherResourcesManager
 {
-    QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
+    QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings;
     _resourcesManager->instantiateWeatherResourcesManager(
         bandSettings,
         QString::fromNSString(_weatherForecastPath),
@@ -960,6 +961,8 @@
         [UIScreen mainScreen].scale,
         std::make_shared<OAWeatherWebClient>()
     );
+    // tile tasks may start before the first map source update
+    _resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
 }
 
 - (std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultRenderer
@@ -1250,10 +1253,21 @@
     return _resourcesManager->uninstallResource(QString::fromNSString(fileId));
 }
 
-- (void) loadWorldRegions
+- (OAWorldRegion *) readWorldRegions
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
-    _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
+    return [OAWorldRegion loadFrom:ocbfPathLib];
+}
+
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion
+{
+    if (worldRegion)
+        _worldRegion = worldRegion;
+}
+
+- (void) loadWorldRegions
+{
+    [self applyWorldRegions:[self readWorldRegions]];
 }
 
 - (void) addRegionNamesToCommonWords

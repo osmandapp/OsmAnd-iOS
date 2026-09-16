@@ -707,7 +707,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (BOOL) isBorderPointSelected:(NSInteger) selectedPointPosition first:(BOOL)first
 {
     NSArray<OASWptPt *> *points = [self getPoints];
-    if (selectedPointPosition < 0 || points.count < selectedPointPosition)
+    if (selectedPointPosition < 0 || selectedPointPosition >= (NSInteger)points.count)
         return NO;
 
     OASWptPt *selectedPoint = points[selectedPointPosition];

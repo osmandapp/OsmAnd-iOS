@@ -1616,6 +1616,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     
     if (gpxRouteResult.size() > 0)
     {
+        if (!gpxParams.calculatedRouteTimeSpeed)
+            [self calculateGpxRouteTimeSpeed:routeParams gpxRouteResult:gpxRouteResult];
+
         if (calcWholeRoute && !calculateOsmAndRouteParts)
         {
             return [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
@@ -1738,12 +1741,18 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return [[OARouteCalculationResult alloc] initWithLocations:gpxRoute directions:gpxDirections params:routeParams waypoints:gpxParams.wpt addMissingTurns:routeParams.gpxRoute.addMissingTurns];
 }
 
-- (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)gpxRouteResult
+- (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)gpxRouteResult
 {
-    OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
-    if (env)
+    if (gpxRouteResult.empty())
+        return;
+
+    @synchronized (_nativeRoutingLock)
     {
-        calculateTimeSpeed(env.ctx.get(), gpxRouteResult);
+        OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+        if (env && env.ctx != nullptr && env.ctx->config != nullptr)
+        {
+            calculateTimeSpeed(env.ctx.get(), gpxRouteResult);
+        }
     }
 }
 

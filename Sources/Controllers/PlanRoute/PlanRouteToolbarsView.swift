@@ -19,6 +19,9 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     var onClose: (() -> Void)?
     var onSave: (() -> Void)?
 
+    var closeButtonSourceView: UIView { closeButton }
+    var optionsButtonSourceView: UIView { optionsButton }
+
     var titleText: String? {
         didSet { titleLabel.text = titleText }
     }
@@ -91,6 +94,8 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
+        saveButton.tintAdjustmentMode = .normal
+        
         let trailingStack = UIStackView(arrangedSubviews: [optionsButton, saveButton])
         trailingStack.spacing = Self.buttonSpacing
         trailingStack.alignment = .center

@@ -135,6 +135,7 @@ static inline double normalizeDouble(double v)
 
 + (nullable UIImage *) imageNamedOrMxIcon:(nullable NSString *)name;
 + (nullable UIImage *) templateImageNamed:(nullable NSString *)imageName;
++ (nullable UIImage *)imageNamed:(nullable NSString *)imageName template:(BOOL)useTemplateRendering;
 + (nullable UIImage *) rtlImageNamed:(nullable NSString *)imageName;
 + (nullable UIImage *) svgImageNamed:(NSString *)path;
 + (nullable UIImage *) mapSvgImageNamed:(NSString *)name;

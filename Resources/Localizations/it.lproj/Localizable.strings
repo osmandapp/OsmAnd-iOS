@@ -3337,8 +3337,8 @@
 "rendering_value_pale_name" = "Chiaro";
 "map_settings_weather_temp_air" = "Temperatura dell'aria";
 "map_settings_weather_temp_water" = "Temperatura dell'acqua";
-"rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per motocross";
-"rendering_attr_showDirtbikeTrails_name" = "Sentieri per motocross";
+"rendering_attr_showDirtbikeTrails_description" = "Mostra percorsi per moto da enduro";
+"rendering_attr_showDirtbikeTrails_name" = "Sentieri per moto da enduro";
 "resting_navigation_position" = "Posizione di riposo e navigazione";
 "location_radius_description" = "Mostra l\'area circolare che rappresenta la precisione della tua posizione attuale";
 "navigation_position_icon_summary" = "Icona visualizzata durante la navigazione o lo spostamento.";
@@ -3831,8 +3831,8 @@
 "rendering_attr_shellsStyle_description" = "Stile per le conchiglie sul fondale marino";
 "rendering_attr_showLNAMmarker_name" = "Marcatori ENC";
 "rendering_attr_showLNAMmarker_description" = "Mostra i marcatori ENC";
-"rendering_attr_spotSize_name" = "Dimensioni punto profondità";
-"rendering_attr_spotSize_description" = "Dimensioni punto profondità";
+"rendering_attr_spotSize_name" = "Dimensione dei punti di profondità";
+"rendering_attr_spotSize_description" = "Dimensione dei punti di profondità";
 "copy_link" = "Copia link";
 "efficient_grid" = "Griglia efficiente";
 "routing_attr_weightrating_name" = "Peso massimo a pieno carico";

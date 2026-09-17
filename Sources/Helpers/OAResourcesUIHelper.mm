@@ -1189,9 +1189,11 @@ includeHidden:(BOOL)includeHidden
     if (mapRegions.count > 0)
     {
         sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSNumber *first = @([(OAWorldRegion *) a getArea]);
-            NSNumber *second = @([(OAWorldRegion *) b getArea]);
-            return [first compare:second];
+            double first = [(OAWorldRegion *) a getArea];
+            double second = [(OAWorldRegion *) b getArea];
+            if (first < second)
+                return NSOrderedAscending;
+            return first > second ? NSOrderedDescending : NSOrderedSame;
         }];
 
         for (OAWorldRegion *region in sortedSelectedRegions)
@@ -2089,7 +2091,7 @@ includeHidden:(BOOL)includeHidden
         }
 
         if (block)
-            block();
+            dispatch_async(dispatch_get_main_queue(), block);
     };
 
     if (progressHUD)
@@ -2101,7 +2103,10 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        proc();
+        // Uninstalling waits for renderer threads to release the resource, so never run it on the main thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            proc();
+        });
     }
 }
 

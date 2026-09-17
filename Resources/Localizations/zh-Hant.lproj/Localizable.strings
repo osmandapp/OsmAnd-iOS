@@ -4112,3 +4112,17 @@
 "no_crashes_recorded" = "還沒有記錄到當機紀錄";
 "share_crash_log" = "分享當機紀錄";
 "crash_report_prompt_title" = "OsmAnd 遇到非預期的錯誤。";
+"shared_string_send" = "傳送";
+"send_current_app_log" = "傳送目前 app 操作記錄";
+"send_current_app_log_descr" = "從 app 開始使用後";
+"crash_report_prompt_description" = "請傳送當機報告來協助我們改善 app，你的當機報告能夠幫助我們識別問題與修正錯誤。";
+"show_all_tracks_on_the_map" = "在地圖上顯示所有軌跡";
+"sort_by_nearest_to_current_location" = "最近到目前位置";
+"sort_by_nearest_to_map_center" = "最近到地圖中心";
+"shared_string_disabled" = "關閉";
+"shared_string_pinned" = "釘選";
+"delete_groups_confirmation" = "刪除群組？";
+"add_to_track" = "新增到軌跡";
+"unpin_folder" = "取消釘選資料夾";
+"pin_folder" = "釘選資料夾";
+"no_search_results" = "沒有結果";

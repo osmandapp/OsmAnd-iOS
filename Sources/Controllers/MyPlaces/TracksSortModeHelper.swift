@@ -94,6 +94,19 @@ protocol SortableFolder {
 }
 
 @objc final class TracksSortModeHelper: NSObject {
+    private static var footnoteAttributesCache: [NSAttributedString.Key: Any] = [:]
+    private static var footnoteAttributesCategory: UIContentSizeCategory?
+
+    private static func footnoteAttributes() -> [NSAttributedString.Key: Any] {
+        let category = UITraitCollection.current.preferredContentSizeCategory
+        if footnoteAttributesCategory != category {
+            footnoteAttributesCache = [.font: UIFont.preferredFont(forTextStyle: .footnote),
+                                       .foregroundColor: UIColor.textColorSecondary]
+            footnoteAttributesCategory = category
+        }
+        return footnoteAttributesCache
+    }
+
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -227,16 +240,18 @@ protocol SortableFolder {
     }
     
     @objc static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
-        let date = TracksSortModeHelper.dateFormatter.string(from: track.lastModifiedTime)
-        let creationDate = TracksSortModeHelper.dateFormatter.string(from: track.creationDate)
+        // Called once per row while the list is rebuilt, so nothing here is computed before the
+        // branch that needs it - the date formatters in particular.
+        let analysis = track.getAnalysis()
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")
-        let duration = track.getAnalysis()?.getDurationInSeconds() ?? 0
+        let duration = analysis?.getDurationInSeconds() ?? 0
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(duration), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = NumberFormatter.localizedCount(track.wptPoints)
         let fullString = NSMutableAttributedString()
-        let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
-        let detailsText = "\(distance) • \(time) • \(waypointCount)"
-        let detailsString = NSAttributedString(string: detailsText, attributes: defaultAttributes)
+        let defaultAttributes = footnoteAttributes()
+        func detailsString() -> NSAttributedString {
+            NSAttributedString(string: "\(distance) • \(time) • \(waypointCount)", attributes: defaultAttributes)
+        }
         switch sortMode {
         case .nearestToCurrentLocation, .nearestToMapCenter:
             let distanceToTrack: String
@@ -249,7 +264,7 @@ protocol SortableFolder {
             }
             
             var directionAngle: CGFloat = 0.0
-            if let analysis = track.getAnalysis(), let start = analysis.getLatLonStart() {
+            if let analysis, let start = analysis.getLatLonStart() {
                 if sortMode.isMapCenterDistanceOriented {
                     let mapViewController = OARootViewController.instance().mapPanel.mapViewController
                     directionAngle = OADistanceAndDirectionsUpdater.directionAngle(
@@ -279,19 +294,21 @@ protocol SortableFolder {
             let cityString = NSAttributedString(string: "\(cityName) | ", attributes: defaultAttributes)
             fullString.append(directionAttributedString)
             fullString.append(cityString)
-            fullString.append(detailsString)
+            fullString.append(detailsString())
         case .lastModified:
+            let date = TracksSortModeHelper.dateFormatter.string(from: track.lastModifiedTime)
             let dateString = NSAttributedString(string: "\(date) | ", attributes: defaultAttributes)
             fullString.append(dateString)
-            fullString.append(detailsString)
+            fullString.append(detailsString())
         case .nameAZ, .nameZA:
-            fullString.append(detailsString)
+            fullString.append(detailsString())
         case .newestDateFirst, .oldestDateFirst:
+            let creationDate = TracksSortModeHelper.dateFormatter.string(from: track.creationDate)
             let dateString = NSAttributedString(string: "\(creationDate) | ", attributes: defaultAttributes)
             fullString.append(dateString)
-            fullString.append(detailsString)
+            fullString.append(detailsString())
         case .longestDistanceFirst, .shortestDistanceFirst:
-            fullString.append(detailsString)
+            fullString.append(detailsString())
         case .longestDurationFirst, .shorterDurationFirst:
             let durationFirstDetailsString = NSAttributedString(string: "\(time) • \(distance) • \(waypointCount)", attributes: defaultAttributes)
             fullString.append(durationFirstDetailsString)

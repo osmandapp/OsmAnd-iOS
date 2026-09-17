@@ -1312,7 +1312,7 @@ colorizationScheme:(int)colorizationScheme
     for (NSString *key in _gpxFiles.allKeys) {
         NSString *path = key;
         
-        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
+        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getCachedGPXItem:path];
         
         OASGpxFile *gpxFile = [_gpxFiles objectForKey:key];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];

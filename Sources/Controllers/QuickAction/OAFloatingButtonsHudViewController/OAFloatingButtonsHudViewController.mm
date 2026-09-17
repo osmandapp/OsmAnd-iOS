@@ -25,6 +25,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "GeneratedAssetSymbols.h"
 
 static CGFloat const kHudQuickActionButtonHeight = 48.0;
 static NSInteger const kQuickActionSlashTag = -1;
@@ -425,49 +426,82 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     [self onMap3dModeUpdated];
 }
 
+- (void)refreshQuickActionButtons
+{
+    BOOL forceUpdate = _isActionsViewVisible;
+    if (forceUpdate)
+        [self hideActionsSheetAnimated:nil];
+
+    BOOL appearanceChanged = NO;
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    {
+        if (quickActionButton.hidden)
+            continue;
+
+        if ([self updateQuickActionButton:quickActionButton forceUpdate:forceUpdate])
+        {
+            appearanceChanged = YES;
+            [self setupButtonRotation:quickActionButton];
+        }
+    }
+    if (appearanceChanged)
+        [_mapHudController.mapHudLayout updateButtons];
+}
+
 - (void)updateQuickActionButtonColors:(OAHudButton *)quickActionButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [quickActionButton updateColorsForPressedState:NO];
-
-        QuickActionButtonState *quickActionButtonState = nil;
-        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
-            quickActionButtonState = ((QuickActionButtonState *) quickActionButton.buttonState);
-
-        if (_isActionsViewVisible && _actionsView && [_actionsView.buttonState.id isEqualToString:quickActionButtonState.id])
-        {
-            [quickActionButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner"] forState:UIControlStateNormal];
-        }
-        else
-        {
-            [quickActionButton setCustomAppearanceParams:[quickActionButtonState createAppearanceParams]];
-            if (quickActionButtonState && [quickActionButtonState isSingleAction])
-            {
-                if (![quickActionButtonState.quickActions.firstObject isActionWithSlash])
-                {
-                    for (UIView *subview in quickActionButton.imageView.subviews)
-                    {
-                        if (subview.tag == kQuickActionSlashTag || subview.tag == kQuickActionSlashBackgroundTag)
-                            [subview removeFromSuperview];
-                    }
-                }
-                else
-                {
-                    CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
-                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"]];
-                    background.tag = kQuickActionSlashBackgroundTag;
-                    background.frame = frame;
-                    [background setTintColor:!_settings.isAppMapNightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
-                    [quickActionButton.imageView addSubview:background];
-
-                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"]];
-                    slash.tag = kQuickActionSlashTag;
-                    slash.frame = frame;
-                    [quickActionButton.imageView addSubview:slash];
-                }
-            }
-        }
+        [self updateQuickActionButton:quickActionButton forceUpdate:YES];
     });
+}
+
+- (BOOL)updateQuickActionButton:(OAHudButton *)quickActionButton forceUpdate:(BOOL)forceUpdate
+{
+    QuickActionButtonState *quickActionButtonState = nil;
+    if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
+        quickActionButtonState = ((QuickActionButtonState *) quickActionButton.buttonState);
+
+    if (!quickActionButtonState)
+        return NO;
+
+    BOOL sheetVisible = _isActionsViewVisible && _actionsView && [_actionsView.buttonState.id isEqualToString:quickActionButtonState.id];
+    BOOL showSlash = !sheetVisible && [quickActionButtonState isSingleAction] && [quickActionButtonState.quickActions.firstObject isActionWithSlash];
+    BOOL hasSlash = [quickActionButton.imageView viewWithTag:kQuickActionSlashTag] != nil;
+    if (!forceUpdate && ![quickActionButton needsAppearanceUpdate] && showSlash == hasSlash)
+        return NO;
+
+    [quickActionButton updateColorsForPressedState:NO];
+    for (UIView *subview in quickActionButton.imageView.subviews)
+    {
+        if (subview.tag == kQuickActionSlashTag || subview.tag == kQuickActionSlashBackgroundTag)
+            [subview removeFromSuperview];
+    }
+
+    if (sheetVisible)
+    {
+        [quickActionButton setImage:[UIImage templateImageNamed:ACImageNameIcActionCloseBanner] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [quickActionButton setCustomAppearanceParams:[quickActionButtonState createAppearanceParams]];
+        if (showSlash)
+        {
+            CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
+            UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom]];
+            background.tag = kQuickActionSlashBackgroundTag;
+            background.frame = frame;
+            [background setTintColor:!_settings.isAppMapNightMode ?
+             [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light :
+             [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark];
+            [quickActionButton.imageView addSubview:background];
+
+            UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop]];
+            slash.tag = kQuickActionSlashTag;
+            slash.frame = frame;
+            [quickActionButton.imageView addSubview:slash];
+        }
+    }
+    return YES;
 }
 
 - (void)createQuickActionButtons
@@ -552,6 +586,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     CGFloat initialAlpha = quickActionButton.alpha;
     if (!hideQuickButton)
     {
+        if (hiddenWillChange || initialAlpha <= 0.01)
+            [self updateQuickActionButton:quickActionButton forceUpdate:YES];
         quickActionButton.hidden = NO;
         if (hiddenWillChange || initialAlpha <= 0.01)
             [_mapHudController.mapHudLayout updateButtons];
@@ -701,17 +737,17 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
 #pragma mark - OAUserInteractionPassThroughDelegate
 
-- (BOOL)isTouchEventAllowedForView:(UIView *)view { 
+- (BOOL)isTouchEventAllowedForView:(UIView *)view {
     if ([view isKindOfClass:[OAHudButton class]])
     {
         OAHudButton *quickActionButton = (OAHudButton *)view;
         if ([quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
         {
             QuickActionButtonState *buttonState = (QuickActionButtonState *)quickActionButton.buttonState;
-            OAQuickAction *quickAction = buttonState.quickActions.firstObject;
-            if (quickAction)
+            for (OAQuickAction *quickAction in buttonState.quickActions)
             {
-                return [quickAction isKindOfClass:[LockScreenAction class]];
+                if ([quickAction isKindOfClass:[LockScreenAction class]])
+                    return YES;
             }
         }
     }

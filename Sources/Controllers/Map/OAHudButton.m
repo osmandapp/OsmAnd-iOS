@@ -122,6 +122,11 @@ static CGFloat const kShadowRadius = 6;
     [self updateContent];
 }
 
+- (BOOL)needsAppearanceUpdate
+{
+    return ![_appearanceParams isEqual:[self appearanceParams]];
+}
+
 - (BOOL)isGlass
 {
     if (@available(iOS 26.0, *))
@@ -294,6 +299,9 @@ static CGFloat const kShadowRadius = 6;
 - (void)updateSize
 {
     CGFloat size = (CGFloat)[self size];
+    if (CGSizeEqualToSize(self.bounds.size, CGSizeMake(size, size)))
+        return;
+
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size, size);
 }
 

@@ -287,6 +287,7 @@ static char kMapSourceUpdateQueueKey;
     _webClient = std::make_shared<OAWebClient>();
     _mapSourceUpdateQueue = dispatch_queue_create("net.osmand.maps.map-source-update", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_mapSourceUpdateQueue, &kMapSourceUpdateQueueKey, &kMapSourceUpdateQueueKey, NULL);
+    _gpxTracksRefreshScheduled = false;
     _lastMapLocaleLanguageZoom = NSNotFound;
 
     _moveTouchLocations = [NSMutableArray array];

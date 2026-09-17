@@ -229,8 +229,17 @@ namespace
     
     [self.mapViewController runWithRenderSync:^{
         NSDictionary<NSString *, OASGpxFile *> *gpxFiles = [_gpxFiles copy];
+        [self dropCachedColors];
         [self refreshGpxTracks:gpxFiles reset:YES];
     }];
+}
+
+// An edited palette keeps its name and leaves the documents untouched, so neither
+// dropCachedTracksChangedIn: nor the palette check in refreshGpxTracks sees that the colors expired
+- (void)dropCachedColors
+{
+    _cachedColors.clear();
+    _cachedWallColors.clear();
 }
 
 - (BOOL)isRoutePaletteChangeEvent:(OASPaletteChangeEvent *)event

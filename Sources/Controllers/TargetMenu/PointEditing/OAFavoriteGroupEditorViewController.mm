@@ -180,7 +180,7 @@
 
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
-    if (![self.editIconName isEqual:_favoriteGroup.iconName])
+    if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
                           updatePoints:updatePoints

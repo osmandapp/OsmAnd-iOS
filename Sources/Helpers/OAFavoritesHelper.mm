@@ -11,6 +11,8 @@
 #import "OsmAndApp.h"
 #import "OALocationPoint.h"
 #import "OAFavoriteItem.h"
+#import "OAAmenitySearcher.h"
+#import "OABasePointEditingHandler.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -771,10 +773,27 @@ static NSOperationQueue *_favQueue;
     updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately
 {
-    // Original removes the group override while preserving each point's icon.
-    if (updatePoints && iconName.length > 0)
+    if (updatePoints)
+    {
         for (OAFavoriteItem *point in group.points)
-            [point setIcon:iconName];
+        {
+            NSString *pointIconName = iconName;
+            if (iconName.length == 0)
+            {
+                // Original restores the POI icon or clears the point's explicit icon.
+                pointIconName = nil;
+                NSString *originName = [point getAmenityOriginName];
+                if (originName.length > 0)
+                {
+                    OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
+                                                                lat:[point getLatitude]
+                                                                lon:[point getLongitude]];
+                    pointIconName = [OABasePointEditingHandler getPoiIconName:poi];
+                }
+            }
+            [point setIcon:pointIconName.length > 0 ? pointIconName : nil];
+        }
+    }
 
     if (updateGroupIcon)
         group.iconName = iconName;

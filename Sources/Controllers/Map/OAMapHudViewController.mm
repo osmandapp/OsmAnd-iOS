@@ -646,6 +646,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return _overlayUnderlayView && _overlayUnderlayView.superview != nil;
 }
 
+- (BOOL)isQuickActionsSheetVisible
+{
+    return [_floatingButtonsController isActionSheetVisible];
+}
+
 - (void) updateOverlayUnderlayView
 {
     BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [_settings getOverlayOpacitySliderVisibility];

@@ -95,6 +95,7 @@
 - (void)setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget navBar:(WeatherNavigationBarView *)navBar;
 
 - (BOOL) isOverlayUnderlayViewVisible;
+- (BOOL)isQuickActionsSheetVisible;
 - (void) updateOverlayUnderlayView;
 
 - (void) updateTopControlsVisibility:(BOOL)animated;

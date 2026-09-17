@@ -153,6 +153,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
 - (void)cancelAllAnimations;
+- (void)cancelAutoZoomAnimation;
 
 - (void)correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31

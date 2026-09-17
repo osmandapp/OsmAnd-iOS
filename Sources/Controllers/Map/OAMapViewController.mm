@@ -2159,6 +2159,12 @@ static char kMapSourceUpdateQueueKey;
     [_mapView cancelAllAnimations];
 }
 
+- (void)cancelAutoZoomAnimation
+{
+    if (self.mapViewLoaded)
+        _mapView.mapAnimator->cancelCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+}
+
 - (float) calculateMapRuler
 {
     if (!self.mapViewLoaded)

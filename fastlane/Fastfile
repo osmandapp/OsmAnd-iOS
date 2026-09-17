@@ -1,0 +1,104 @@
+# OsmAnd Maps – App Store Connect automation.
+#
+# The build itself stays in xcodebuild (see .github/workflows). Fastlane is used only for
+# what altool cannot do: uploading localized release notes together with the build.
+#
+# Release notes are not written here – they are the in-app "What's new" strings
+# (ios_release_<major>_<minor> in Resources/Localizations/*/Localizable.strings), already
+# translated by the community. Scripts/generate_release_notes.rb converts them into the
+# fastlane/metadata layout deliver expects.
+#
+# Authentication: an App Store Connect API key (ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_P8) is
+# used when present. Otherwise it falls back to the Apple ID + app-specific password already
+# stored in the repository secrets (FASTLANE_USER / FASTLANE_PASSWORD).
+
+require 'shellwords'
+
+default_platform(:ios)
+
+DEFAULT_IPA = "OsmAnd Maps.ipa"
+
+# The repository root, whatever directory fastlane was started from.
+def repo_root
+  folder = FastlaneCore::FastlaneFolder.path
+  folder ? File.expand_path('..', folder) : Dir.pwd
+end
+
+def resolve_ipa(options)
+  path = options[:ipa] || ENV['IPA_PATH'] || File.join(repo_root, DEFAULT_IPA)
+  path = File.expand_path(path, repo_root)
+  UI.user_error!("IPA not found at #{path}") unless File.exist?(path)
+  path
+end
+
+def resolve_version(options)
+  version = options[:version] || ENV['RELEASE_IOS_VERSION']
+  UI.user_error!('Pass version:5.4.0 or set RELEASE_IOS_VERSION') if version.to_s.strip.empty?
+  version.to_s.strip
+end
+
+# Uses the API key when the secrets are configured; pilot/deliver fall back to
+# FASTLANE_USER / FASTLANE_PASSWORD otherwise.
+def authenticate
+  return nil if ENV['ASC_KEY_ID'].to_s.empty?
+
+  app_store_connect_api_key(
+    key_id: ENV['ASC_KEY_ID'],
+    issuer_id: ENV['ASC_ISSUER_ID'],
+    key_content: ENV['ASC_KEY_P8'],
+    is_key_content_base64: true,
+    in_house: false
+  )
+end
+
+platform :ios do
+  desc 'Generate localized release notes from the in-app "What\'s new" strings'
+  lane :release_notes do |options|
+    version = resolve_version(options)
+    sh("cd #{repo_root.shellescape} && Scripts/generate_release_notes.rb #{version.shellescape} fastlane/metadata")
+  end
+
+  desc 'Upload the IPA to TestFlight with the release notes as "What to Test"'
+  lane :beta do |options|
+    version = resolve_version(options)
+    ipa = resolve_ipa(options)
+    api_key = authenticate
+    release_notes(version: version)
+
+    changelog = File.read(File.join(repo_root, 'fastlane', 'metadata', 'en-US', 'release_notes.txt'))
+
+    upload_to_testflight(
+      api_key: api_key,
+      ipa: ipa,
+      app_identifier: 'net.osmand.maps',
+      changelog: changelog,
+      # Setting "What to Test" requires the build to finish processing first.
+      skip_waiting_for_build_processing: false,
+      distribute_external: false,
+      notify_external_testers: false
+    )
+  end
+
+  desc 'Push localized release notes for a version to App Store Connect (no binary upload)'
+  lane :release do |options|
+    version = resolve_version(options)
+    api_key = authenticate
+    release_notes(version: version)
+
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: 'net.osmand.maps',
+      app_version: version,
+      metadata_path: File.join(repo_root, 'fastlane', 'metadata'),
+      # Only release notes are managed here; everything else stays as it is in App Store Connect.
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_app_version_update: false,
+      overwrite_screenshots: false,
+      submit_for_review: options[:submit_for_review].to_s == 'true',
+      automatic_release: false,
+      precheck_include_in_app_purchases: false,
+      force: true
+    )
+  end
+end

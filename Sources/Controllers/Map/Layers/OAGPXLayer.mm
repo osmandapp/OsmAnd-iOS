@@ -192,6 +192,7 @@ namespace
 {
     [super resetLayer];
 
+    [self cancelSplitLabels];
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
     [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
@@ -1283,7 +1284,10 @@ colorizationScheme:(int)colorizationScheme
             if (counter == 0)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self refreshStartFinishProvider];
+                    // The generation can be bumped between this dispatch and the block running,
+                    // and rebuilding then would restore a provider that was just removed
+                    if ([self isSplitGenerationActual:generation])
+                        [self refreshStartFinishProvider];
                 });
             }
         }
@@ -1495,6 +1499,15 @@ colorizationScheme:(int)colorizationScheme
             _startFinishProvider = nullptr;
         }
     }
+}
+
+// Retires the pending operations, so that none of them can append to the labels or rebuild the
+// provider afterwards
+- (void) cancelSplitLabels
+{
+    [_splitLabelsQueue cancelAllOperations];
+    [self resetSplitCounter];
+    [self clearSplitLabels];
 }
 
 - (void) refreshStartFinishProvider

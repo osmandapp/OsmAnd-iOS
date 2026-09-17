@@ -6887,7 +6887,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
-        _keepScreenOn = [[OACommonInteger withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeSystemDefault] makeProfile];
+        _keepScreenOn = [[OACommonInteger withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeDuringNavigation] makeProfile];
+        [_keepScreenOn setModeDefaultValue:@(EOAKeepScreenOnModeSystemDefault) mode:OAApplicationMode.DEFAULT];
         [_profilePreferences setObject:_keepScreenOn forKey:keepScreenOnKey];
         
         _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];

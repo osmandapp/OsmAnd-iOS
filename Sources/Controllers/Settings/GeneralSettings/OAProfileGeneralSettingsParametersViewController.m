@@ -10,7 +10,6 @@
 #import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -898,7 +897,6 @@
         keepScreenOnMode = EOAKeepScreenOnModeAlways;
 
     [_settings.keepScreenOn set:keepScreenOnMode mode:self.appMode];
-    [[OARoutingHelper sharedInstance] updateScreenTurnOff];
 }
 
 - (void)selectDisplayPosition:(int)idx

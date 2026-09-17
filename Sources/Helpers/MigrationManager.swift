@@ -24,6 +24,7 @@ final class MigrationManager: NSObject {
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
         case migrateTracksSortModeKeysAndFormat
+        case migrateKeepScreenOnMode
     }
     
     private struct HudMigrationScenario {
@@ -113,6 +114,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateKeepScreenOnMode.rawValue) {
+                migrateKeepScreenOnMode()
+                defaults.set(true, forKey: MigrationKey.migrateKeepScreenOnMode.rawValue)
             }
         }
     }
@@ -636,6 +641,12 @@ final class MigrationManager: NSObject {
 
         if !validValues.contains(searchSortMode), let value = valuesByLocalizedTitle[searchSortMode] {
             settings.searchTracksSortModes.set(value)
+        }
+    }
+
+    private func migrateKeepScreenOnMode() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            settings.keepScreenOn.set(Int32(EOAKeepScreenOnMode.always.rawValue), mode: appMode)
         }
     }
 

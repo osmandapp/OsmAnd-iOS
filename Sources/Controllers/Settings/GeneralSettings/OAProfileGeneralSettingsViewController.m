@@ -304,7 +304,7 @@
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"keep_screen_on"),
         @"value" : keepScreenOnValue,
-        @"icon" : ACImageNameIcCustomMapModeAppThemeFilled,
+        @"icon" : ACImageNameIcCustomDisplayLight,
         @"key" : @"keep_screen_on"
     }];
     [regionsArr addObject:@{

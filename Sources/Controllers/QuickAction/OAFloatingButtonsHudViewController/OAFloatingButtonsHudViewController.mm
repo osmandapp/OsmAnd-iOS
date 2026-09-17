@@ -659,7 +659,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         [self adjustMapViewPort];
     }];
     [self restorePinPosition];
-    [OARootViewController instance].mapPanel.mapViewController.mapView.mapAnimator->cancelCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    [[OARootViewController instance].mapPanel.mapViewController cancelAutoZoomAnimation];
     _isActionsViewVisible = YES;
     [_mapHudController updateControlsLayout:YES];
     [self updateQuickActionButtonColors:quickActionButton];

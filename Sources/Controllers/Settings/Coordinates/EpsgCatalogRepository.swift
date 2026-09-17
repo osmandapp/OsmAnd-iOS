@@ -18,6 +18,8 @@ final class EpsgCatalogRepository {
     private static let maxQueryLimit = 5000
 
     private static let metreUomCode = 9001
+    private static let supportedParameterUnits = "9001, 9102, 9110, 9122, 9201"
+    private static let singleTransformationCoverage = 0.99
     private static let supportedProjectionMethods = "'9807', '9809', '9815'"
     private static let supportedHelmertMethods = "'9603', '9606', '9607'"
     private static let maxTransformCandidates = 16
@@ -34,7 +36,9 @@ final class EpsgCatalogRepository {
         """
 
     private static let gridBaseSelect = """
-        SELECT crs.code, crs.name, group_concat(DISTINCT e.name), crs.deprecated \
+        SELECT crs.code, crs.name, group_concat(DISTINCT e.name), crs.deprecated, \
+        crs.geodetic_crs_auth_name, crs.geodetic_crs_code, \
+        MIN(e.west_lon), MIN(e.south_lat), MAX(e.east_lon), MAX(e.north_lat) \
         FROM projected_crs crs \
         JOIN conversion c ON c.auth_name = crs.conversion_auth_name AND c.code = crs.conversion_code \
         LEFT JOIN usage u ON u.object_table_name = 'projected_crs' \
@@ -65,11 +69,16 @@ final class EpsgCatalogRepository {
         OR IFNULL(CAST(other_axis.uom_code AS INTEGER), 0) <> \(metreUomCode)))
         """
 
+    private static let parameterUnitsFilter = (1...7)
+        .map { "AND CAST(IFNULL(c.param\($0)_uom_code, \(metreUomCode)) AS INTEGER) IN (\(supportedParameterUnits))" }
+        .joined(separator: " ")
+
     private static let gridSupportedFilter = """
         WHERE crs.auth_name = 'EPSG' AND IFNULL(crs.deprecated, 0) = 0 \
         AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(supportedProjectionMethods)) \
         \(supportedAreaFilter) \
         \(metricAxesFilter) \
+        \(parameterUnitsFilter) \
         AND ((crs.geodetic_crs_auth_name = 'EPSG' AND crs.geodetic_crs_code = '4326') \
         OR EXISTS (SELECT 1 FROM helmert_transformation h \
         JOIN usage grid_usage ON grid_usage.object_table_name = 'helmert_transformation' \
@@ -103,6 +112,19 @@ final class EpsgCatalogRepository {
         JOIN extent e ON e.auth_name = u.extent_auth_name AND e.code = u.extent_code \
         WHERE u.object_table_name = 'projected_crs' AND u.object_auth_name = 'EPSG' AND u.object_code = ? \
         AND IFNULL(e.deprecated, 0) = 0 AND e.west_lon <= e.east_lon)
+        """
+
+    private static let transformationAreaSelect = """
+        SELECT h.code, h.source_crs_auth_name, h.source_crs_code, \
+        he.west_lon, he.south_lat, he.east_lon, he.north_lat \
+        FROM helmert_transformation h \
+        JOIN usage hu ON hu.object_table_name = 'helmert_transformation' \
+        AND hu.object_auth_name = h.auth_name AND hu.object_code = h.code \
+        JOIN extent he ON he.auth_name = hu.extent_auth_name AND he.code = hu.extent_code \
+        AND IFNULL(he.deprecated, 0) = 0 \
+        WHERE h.auth_name = 'EPSG' AND IFNULL(h.deprecated, 0) = 0 \
+        AND h.target_crs_auth_name = 'EPSG' AND h.target_crs_code = '4326' \
+        AND h.method_auth_name = 'EPSG' AND h.method_code IN (\(supportedHelmertMethods))
         """
 
     private static let transformationIntersects = """
@@ -254,6 +276,7 @@ final class EpsgCatalogRepository {
             AND c.method_auth_name = 'EPSG' AND c.method_code IN (\(Self.supportedProjectionMethods)) \
             \(Self.supportedAreaFilter) \
             \(Self.metricAxesFilter) \
+            \(Self.parameterUnitsFilter) \
             ORDER BY CAST(c.method_code AS INTEGER), c.code \
             LIMIT 1
             """
@@ -294,6 +317,14 @@ final class EpsgCatalogRepository {
                 return nil
             }
             if queried.isEmpty {
+                markUnsupported(code)
+                return nil
+            }
+            guard let crsArea = queryCrsArea(db, crsCode: code),
+                  let areas = queryTransformationAreas(db, baseAuth: baseAuth, baseCode: baseCode) else {
+                return nil
+            }
+            guard hasSingleApplicableTransformation(crsArea: crsArea, operationAreas: areas) else {
                 markUnsupported(code)
                 return nil
             }
@@ -352,7 +383,7 @@ final class EpsgCatalogRepository {
             Self.gridBaseSelect,
             Self.gridSupportedFilter,
             queryFilter,
-            "GROUP BY crs.code, crs.name, crs.deprecated",
+            "GROUP BY crs.code, crs.name, crs.deprecated, crs.geodetic_crs_auth_name, crs.geodetic_crs_code",
             orderBy,
             "LIMIT ?"
         ].filter { !$0.isEmpty }.joined(separator: " ")
@@ -370,7 +401,19 @@ final class EpsgCatalogRepository {
             }
         }
         bindLimit(stmt, index: bindIndex, limit: limit)
-        return readAll(stmt)
+
+        var rows = [(format: CoordinateFormat, baseKey: String?, area: EpsgArea?)]()
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            rows.append((readFormat(stmt), readBaseKey(stmt), readGridArea(stmt)))
+        }
+        guard rows.contains(where: { $0.baseKey != nil }) else { return rows.map(\.format) }
+
+        guard let areasByBase = queryTransformationAreas(db) else { return [] }
+        return rows.filter { row in
+            guard let baseKey = row.baseKey else { return true }
+            guard let crsArea = row.area, let areas = areasByBase[baseKey] else { return false }
+            return hasSingleApplicableTransformation(crsArea: crsArea, operationAreas: areas)
+        }.map(\.format)
     }
 
     private func queryTransformationCodes(
@@ -419,6 +462,79 @@ final class EpsgCatalogRepository {
             }
         }
         return result
+    }
+
+    private func queryCrsArea(_ db: OpaquePointer?, crsCode: Int) -> EpsgArea? {
+        let sql = """
+            SELECT MIN(e.west_lon), MIN(e.south_lat), MAX(e.east_lon), MAX(e.north_lat) \
+            FROM usage u \
+            JOIN extent e ON e.auth_name = u.extent_auth_name AND e.code = u.extent_code \
+            WHERE u.object_table_name = 'projected_crs' AND u.object_auth_name = 'EPSG' \
+            AND u.object_code = ? AND IFNULL(e.deprecated, 0) = 0 AND e.west_lon <= e.east_lon
+            """
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+        defer { sqlite3_finalize(stmt) }
+        sqlite3_bind_text(stmt, 1, String(crsCode), -1, transient)
+        guard sqlite3_step(stmt) == SQLITE_ROW else { return nil }
+        return readArea(stmt, offset: 0)
+    }
+
+    private func queryTransformationAreas(
+        _ db: OpaquePointer?,
+        baseAuth: String,
+        baseCode: String
+    ) -> [Int: [EpsgArea]]? {
+        let sql = Self.transformationAreaSelect + " " + """
+            AND h.source_crs_auth_name = ? AND h.source_crs_code = ?
+            """
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+        defer { sqlite3_finalize(stmt) }
+        sqlite3_bind_text(stmt, 1, baseAuth, -1, transient)
+        sqlite3_bind_text(stmt, 2, baseCode, -1, transient)
+
+        var result = [Int: [EpsgArea]]()
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            guard let op = columnString(stmt, 0), let code = Int(op),
+                  let area = readArea(stmt, offset: 3) else { continue }
+            result[code, default: []].append(contentsOf: area.split())
+        }
+        return result
+    }
+
+    private func queryTransformationAreas(_ db: OpaquePointer?) -> [String: [Int: [EpsgArea]]]? {
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, Self.transformationAreaSelect, -1, &stmt, nil) == SQLITE_OK else { return nil }
+        defer { sqlite3_finalize(stmt) }
+
+        var result = [String: [Int: [EpsgArea]]]()
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            guard let op = columnString(stmt, 0), let code = Int(op),
+                  let auth = columnString(stmt, 1), let base = columnString(stmt, 2),
+                  let area = readArea(stmt, offset: 3) else { continue }
+            result["\(auth):\(base)", default: [:]][code, default: []].append(contentsOf: area.split())
+        }
+        return result
+    }
+
+    private func hasSingleApplicableTransformation(
+        crsArea: EpsgArea,
+        operationAreas: [Int: [EpsgArea]]
+    ) -> Bool {
+        var inside = [Int: [EpsgArea]]()
+        for (code, areas) in operationAreas {
+            let clipped = areas.compactMap { $0.clipped(to: crsArea) }
+            if !clipped.isEmpty {
+                inside[code] = clipped
+            }
+        }
+        guard !inside.isEmpty else { return false }
+
+        let covered = EpsgArea.unionArea(inside.values.flatMap { $0 })
+        guard covered > 0 else { return false }
+        let best = inside.values.map { EpsgArea.unionArea($0) }.max() ?? 0
+        return best >= covered * Self.singleTransformationCoverage
     }
 
     private func markUnsupported(_ code: Int) {
@@ -470,6 +586,28 @@ final class EpsgCatalogRepository {
         return .epsg(code: code, title: name, subtitle: area, isDeprecated: deprecated)
     }
 
+    private func readBaseKey(_ stmt: OpaquePointer?) -> String? {
+        guard let auth = columnString(stmt, 4), let code = columnString(stmt, 5),
+              !(auth == "EPSG" && code == "4326") else { return nil }
+        return "\(auth):\(code)"
+    }
+
+    private func readGridArea(_ stmt: OpaquePointer?) -> EpsgArea? {
+        readArea(stmt, offset: 6)
+    }
+
+    private func readArea(_ stmt: OpaquePointer?, offset: Int32) -> EpsgArea? {
+        for index in offset..<(offset + 4) where sqlite3_column_type(stmt, index) == SQLITE_NULL {
+            return nil
+        }
+        return EpsgArea(
+            west: sqlite3_column_double(stmt, offset),
+            south: sqlite3_column_double(stmt, offset + 1),
+            east: sqlite3_column_double(stmt, offset + 2),
+            north: sqlite3_column_double(stmt, offset + 3)
+        )
+    }
+
     private func columnString(_ stmt: OpaquePointer?, _ index: Int32) -> String? {
         guard sqlite3_column_type(stmt, index) != SQLITE_NULL,
               let cString = sqlite3_column_text(stmt, index) else { return nil }
@@ -495,5 +633,55 @@ final class EpsgCatalogRepository {
     private func bindLimit(_ stmt: OpaquePointer?, index: Int32, limit: Int) {
         let clamped = min(max(limit, 1), Self.maxQueryLimit)
         sqlite3_bind_int(stmt, index, Int32(clamped))
+    }
+}
+
+private struct EpsgArea {
+    let west: Double
+    let south: Double
+    let east: Double
+    let north: Double
+
+    func split() -> [EpsgArea] {
+        guard west > east else { return [self] }
+        return [
+            EpsgArea(west: west, south: south, east: 180.0, north: north),
+            EpsgArea(west: -180.0, south: south, east: east, north: north)
+        ]
+    }
+
+    func clipped(to other: EpsgArea) -> EpsgArea? {
+        let clipped = EpsgArea(
+            west: max(west, other.west),
+            south: max(south, other.south),
+            east: min(east, other.east),
+            north: min(north, other.north)
+        )
+        return clipped.east > clipped.west && clipped.north > clipped.south ? clipped : nil
+    }
+
+    static func unionArea(_ areas: [EpsgArea]) -> Double {
+        let edges = Set(areas.flatMap { [$0.west, $0.east] }).sorted()
+        var total = 0.0
+        for (left, right) in zip(edges, edges.dropFirst()) where right > left {
+            let spans = areas
+                .filter { $0.west <= left && $0.east >= right }
+                .map { ($0.south, $0.north) }
+                .sorted { $0.0 < $1.0 }
+            guard var start = spans.first?.0, var end = spans.first?.1 else { continue }
+            var covered = 0.0
+            for span in spans.dropFirst() {
+                if span.0 > end {
+                    covered += end - start
+                    start = span.0
+                    end = span.1
+                } else {
+                    end = max(end, span.1)
+                }
+            }
+            covered += end - start
+            total += covered * (right - left)
+        }
+        return total
     }
 }

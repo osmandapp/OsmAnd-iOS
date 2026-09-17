@@ -225,6 +225,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAGridFormatMappingBridge.h"
 #import "OAAddQuickActionViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OABottomSheetViewController.h"

@@ -772,33 +772,77 @@ static NSOperationQueue *_favQueue;
        updatePoints:(BOOL)updatePoints
     updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately
+         completion:(void (^)(void))completion
 {
-    if (updatePoints)
+    NSArray<OAFavoriteItem *> *points = [group.points copy];
+    if (!updatePoints || iconName.length > 0 || points.count == 0)
     {
-        for (OAFavoriteItem *point in group.points)
+        if (updatePoints)
         {
-            NSString *pointIconName = iconName;
-            if (iconName.length == 0)
-            {
-                // Original restores the POI icon or clears the point's explicit icon.
-                pointIconName = nil;
-                NSString *originName = [point getAmenityOriginName];
-                if (originName.length > 0)
-                {
-                    OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
-                                                                lat:[point getLatitude]
-                                                                lon:[point getLongitude]];
-                    pointIconName = [OABasePointEditingHandler getPoiIconName:poi];
-                }
-            }
-            [point setIcon:pointIconName.length > 0 ? pointIconName : nil];
+            for (OAFavoriteItem *point in points)
+                [point setIcon:iconName];
         }
+        [self finishUpdateGroup:group
+                       iconName:iconName
+                updateGroupIcon:updateGroupIcon
+                saveImmediately:saveImmediately
+                     completion:completion];
+        return;
     }
 
+    // Capture lookup inputs before leaving the main thread; do not read mutable favorites in the worker.
+    NSMutableArray<NSString *> *originNames = [NSMutableArray arrayWithCapacity:points.count];
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.count];
+    for (OAFavoriteItem *point in points)
+    {
+        [originNames addObject:[[point getAmenityOriginName] copy] ?: @""];
+        [locations addObject:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]];
+    }
+
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSMutableArray<NSString *> *iconNames = [NSMutableArray arrayWithCapacity:originNames.count];
+        for (NSUInteger i = 0; i < originNames.count; i++)
+        {
+            @autoreleasepool
+            {
+                NSString *pointIconName = nil;
+                NSString *originName = originNames[i];
+                if (originName.length > 0)
+                {
+                    CLLocationCoordinate2D coordinate = locations[i].coordinate;
+                    OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
+                                                                lat:coordinate.latitude
+                                                                lon:coordinate.longitude];
+                    pointIconName = [OABasePointEditingHandler getPoiIconName:poi];
+                }
+                [iconNames addObject:pointIconName ?: @""];
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (NSUInteger i = 0; i < points.count; i++)
+                [points[i] setIcon:iconNames[i].length > 0 ? iconNames[i] : nil];
+            [self finishUpdateGroup:group
+                           iconName:iconName
+                    updateGroupIcon:updateGroupIcon
+                    saveImmediately:saveImmediately
+                         completion:completion];
+        });
+    });
+}
+
++ (void)finishUpdateGroup:(OAFavoriteGroup *)group
+                iconName:(NSString *)iconName
+         updateGroupIcon:(BOOL)updateGroupIcon
+         saveImmediately:(BOOL)saveImmediately
+              completion:(void (^)(void))completion
+{
     if (updateGroupIcon)
         group.iconName = iconName;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
+    if (completion)
+        completion();
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group

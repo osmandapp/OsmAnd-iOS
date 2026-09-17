@@ -25,12 +25,17 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
+#import "OAMissingMapsResult.h"
 #import "OARTargetPoint.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
+#import "OACppRouteConverter.h"
+#import "OACppRouteCalculationProgress.h"
 #import "OAGpxApproximationHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWorldRegion.h"
+#import "OAAvoidSpecificRoads.h"
+#import "OAAvoidRoadInfo.h"
 
 #include <exception>
 #include <new>
@@ -160,16 +165,16 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                                                  defSpeed:(float)defSpeed
                                           selectedSegment:(NSInteger)selectedSegment;
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment;
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment;
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment
-                                                                leftSide:(BOOL)leftSide;
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment
+                                                  leftSide:(BOOL)leftSide;
 
 + (void) collectSegmentPointsFromGpx:(OASGpxFile *)gpxFile points:(NSMutableArray<CLLocation *> *)points
                     segmentEndPoints:(NSMutableArray<CLLocation *> *)segmentEndPoints
@@ -301,7 +306,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             _routePoints = [[_routePoints reverseObjectEnumerator] allObjects];
             _segmentEndPoints = [[_segmentEndPoints reverseObjectEnumerator] allObjects];
         }
-        _addMissingTurns = _route.empty();
+        _addMissingTurns = _route.count == 0;
     }
     else if ([_gpxFile isCloudmadeRouteFile] || [OSMAND_ROUTER isEqualToString:_gpxFile.author])
     {
@@ -464,6 +469,16 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return self;
 }
 
+- (instancetype)initWithSharedRouter:(OASRoutePlannerFrontEnd *)router context:(OASRoutingContext *)ctx
+{
+    self = [super init];
+    if (self) {
+        _sharedRouter = router;
+        _sharedCtx = ctx;
+    }
+    return self;
+}
+
 @end
 
 
@@ -473,6 +488,21 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     MissingMapsCalculator *_missingMapsCalculator;
     NSObject *_nativeRoutingLock;
     OAWorldRegion *_or;
+
+    // The last route the C++ router produced, and the result built from it. The router takes its own
+    // segments back when only the start point moved, and the result no longer carries them; both go
+    // when the C++ router does.
+    OARouteCalculationResult *_previousCppResult;
+    std::vector<std::shared_ptr<RouteSegmentResult>> _previousCppRoute;
+
+    // The OsmAndShared readers of the files in _nativeFiles, and the ones a running search may still
+    // be holding when the installed maps change.
+    NSMutableDictionary<NSString *, OASBinaryMapIndexReader *> *_sharedReaders;
+    NSMutableArray<OASBinaryMapIndexReader *> *_staleSharedReaders;
+
+    // The OsmAndShared routing environments still in use: a track approximation keeps one for as
+    // long as its screen is open, and its readers have to outlive a change of the installed maps.
+    NSHashTable<OARoutingEnvironment *> *_liveSharedEnvironments;
 }
 
 - (instancetype)init
@@ -482,6 +512,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     {
         _nativeFiles = [NSMutableSet set];
         _nativeRoutingLock = [[NSObject alloc] init];
+        _sharedReaders = [NSMutableDictionary dictionary];
+        _staleSharedReaders = [NSMutableArray array];
+        _liveSharedEnvironments = [NSHashTable weakObjectsHashTable];
         
         [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(
                                                                                      reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -501,6 +534,8 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     @synchronized(self)
     {
         _nativeFiles = [NSMutableSet set];
+        [_staleSharedReaders addObjectsFromArray:_sharedReaders.allValues];
+        [_sharedReaders removeAllObjects];
     }
 }
 
@@ -510,11 +545,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 
 }
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment
-                                                                leftSide:(BOOL)leftSide
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment
+                                                  leftSide:(BOOL)leftSide
 {
     NSArray<OASTrkSegment *> *segments = [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
@@ -535,10 +570,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
 }
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment
 {
     return [self parseOsmAndGPXRoute:points gpxFile:gpxFile segmentEndpoints:segmentEndpoints selectedSegment:selectedSegment leftSide:false];
 }
@@ -660,20 +695,20 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         avgSpeed = defSpeed;
                 }
                 NSString *stype = [OARouteProvider getExtensionValue:item.extensions key:@"turn"];
-                std::shared_ptr<TurnType> turnType = nullptr;
+                OASTurnType *turnType;
                 if (stype)
-                    turnType = std::make_shared<TurnType>(TurnType::fromString([[stype uppercaseString] UTF8String], leftSide));
+                    turnType = [OASTurnType.companion fromStringS:[stype uppercaseString] leftSide:leftSide];
                 else
-                    turnType = TurnType::ptrStraight();
+                    turnType = [OASTurnType.companion straight];
                 
                 NSString *sturn = [OARouteProvider getExtensionValue:item.extensions key:@"turn-angle"];
                 if (sturn)
-                    turnType->setTurnAngle([sturn floatValue]);
+                    turnType.turnAngle = [sturn floatValue];
                 
                 NSString *slanes = [OARouteProvider getExtensionValue:item.extensions key:@"lanes"];
                 if (slanes)
                 {
-                    turnType->setLanes([self stringToIntVector:slanes]);
+                    turnType.lanes = [self stringToIntArray:slanes];
                 }
                 
                 OARouteDirectionInfo *dirInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:avgSpeed turnType:turnType];
@@ -693,7 +728,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                 if (sdest && ![@"null" isEqualToString:sdest])
                     dirInfo.destinationName = sdest;
                 
-                if (previous && TurnType::C != previous.turnType->getValue() && !osmandRouter)
+                if (previous && OASTurnType.companion.C != previous.turnType.value && !osmandRouter)
                 {
                     // calculate angle
                     if (previous.routePointOffset > 0)
@@ -701,7 +736,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
                         float paz = bearing;
                         float caz;
-                        if (previous.turnType->isRoundAbout() && dirInfo.routePointOffset < (int) res.count - 1)
+                        if ([previous.turnType isRoundAbout] && dirInfo.routePointOffset < (int) res.count - 1)
                         {
                             bearing = [res[previous.routePointOffset] bearingTo:res[previous.routePointOffset + 1]];
                             caz = bearing;
@@ -720,8 +755,8 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                         // that magic number helps to fix some errors for turn
                         angle += 75;
                         
-                        if (previous.turnType->getTurnAngle() < 0.5f) {
-                            previous.turnType->setTurnAngle(angle);
+                        if (previous.turnType.turnAngle < 0.5f) {
+                            previous.turnType.turnAngle = angle;
                         }
                     }
                 }
@@ -734,7 +769,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         }
     }
     
-    if (previous && TurnType::C != previous.turnType->getValue())
+    if (previous && OASTurnType.companion.C != previous.turnType.value)
     {
         // calculate angle
         if (previous.routePointOffset > 0 && previous.routePointOffset < (int) res.count - 1)
@@ -749,19 +784,20 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             if (angle < 0)
                 angle += 360;
             
-            if (previous.turnType->getTurnAngle() < 0.5f)
-                previous.turnType->setTurnAngle(angle);
+            if (previous.turnType.turnAngle < 0.5f)
+                previous.turnType.turnAngle = angle;
         }
     }
     return directions;
 }
 
-+ (std::vector<int>) stringToIntVector:(NSString *)str
++ (OASKotlinIntArray *) stringToIntArray:(NSString *)str
 {
-    vector<int> res;
     NSArray<NSString *> *components = [str componentsSeparatedByString:@","];
-    for (NSString *component in components)
-        res.push_back(component.intValue);
+    OASKotlinIntArray *res = [OASKotlinIntArray arrayWithSize:(int) components.count];
+    for (int i = 0; i < (int) components.count; i++)
+        [res setIndex:i value:components[i].intValue];
+
     return res;
 }
 
@@ -1002,18 +1038,16 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             {
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
-            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting])
+            params.missingMapsResult = [_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting];
+            if (params.missingMapsResult)
             {
-                NSString *missingMapsErrorMessage = ctx->progress != nullptr && ctx->progress->missingMapsCalculationResult != nullptr
-                    ? [NSString stringWithUTF8String:ctx->progress->missingMapsCalculationResult->getErrorMessage().c_str()]
-                    : @"";
                 if (router->CONTINUE_ON_MISSING_MAPS)
                 {
-                    NSLog(@"%@", missingMapsErrorMessage);
+                    NSLog(@"%@", [params.missingMapsResult getErrorMessage]);
                 }
                 else
                 {
-                    return [[OARouteCalculationResult alloc] initWithErrorMessage:missingMapsErrorMessage];
+                    return [[OARouteCalculationResult alloc] initWithErrorMessage:[params.missingMapsResult getErrorMessage]];
                 }
             }
         }
@@ -1047,6 +1081,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
         }
         
+        // the router raises this on its own progress as the search starts, and the route screen reads
+        // it off the shared one; a search that ends before anything is polled publishes it here
+        if (ctx->progress != nullptr && ctx->progress->requestPrivateAccessRouting)
+            params.calculationProgress.requestPrivateAccessRouting = YES;
+
         if (result.empty())
         {
             if (ctx->progress->segmentNotFound == 0)
@@ -1083,7 +1122,12 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             if (ctx->progress)
                 routingTime = ctx->progress->routingCalculatedTime;
             
-            return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES initialCalculation:params.initialCalculation];
+            OARouteCalculationResult *res = [[OARouteCalculationResult alloc] initWithSegmentResults:[OACppRouteConverter toSharedSegments:result] start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES initialCalculation:params.initialCalculation];
+            // The C++ router takes the previous route back as its own segments when only the start
+            // moved, so the one it just produced is kept beside the result built from it.
+            _previousCppResult = res;
+            _previousCppRoute = result;
+            return res;
         }
     }
     catch (const std::bad_alloc &e)
@@ -1146,7 +1190,32 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 	params.mode = mode;
 	params.start = start;
 	params.end = end;
+	if ([[OAAppSettings sharedManager].useSharedRouting get])
+		return [self calculateSharedRoutingEnvironment:params];
+
 	return [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+}
+
+// Opens the obf files the route runs over, so that both planners search the same maps.
+- (void) checkInitializedForParams:(OARouteCalculationParams *)params
+{
+    int leftX = get31TileNumberX(params.start.coordinate.longitude);
+    int rightX = leftX;
+    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
+    int topY = bottomY;
+    for (CLLocation *l in params.intermediates)
+    {
+        leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
+        rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
+        bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
+        topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
+    }
+    leftX = MIN(get31TileNumberX(params.end.coordinate.longitude), leftX);
+    rightX = MAX(get31TileNumberX(params.end.coordinate.longitude), rightX);
+    bottomY = MAX(get31TileNumberY(params.end.coordinate.latitude), bottomY);
+    topY = MIN(get31TileNumberY(params.end.coordinate.latitude), topY);
+
+    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
 }
 
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(SHARED_PTR<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
@@ -1183,7 +1252,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 
             if (useExternalTimestamps)
                 OAApplyExternalTimestamps(approximation, locationsHolder);
-            OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+            OAGpxRouteApproximation *approx = [OACppRouteConverter toSharedApproximation:approximation];
             [resultMatcher publish:approx];
             return true;
         };
@@ -1231,42 +1300,22 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
     // BUILD context
     // check loaded files
-    int leftX = get31TileNumberX(params.start.coordinate.longitude);
-    int rightX = leftX;
-    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
-    int topY = bottomY;
-    if (params.intermediates)
-    {
-        for (CLLocation *l in params.intermediates)
-        {
-            leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-            rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-            bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-            topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-        }
-    }
-    CLLocation *l = params.end;
-    leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-    rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-    bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-    topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-    
-    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
-    
+    [self checkInitializedForParams:params];
+
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
     
     std:shared_ptr<RoutingContext> complexCtx = nullptr;
     BOOL complex = !skipComplex && [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
+    const auto progress = std::make_shared<OACppRouteCalculationProgress>(params.calculationProgress);
     ctx->leftSideNavigation = params.leftSide;
-    ctx->progress = params.calculationProgress;
+    ctx->progress = progress;
     ctx->setConditionalTime(cf->routeCalculationTime);
     if (params.previousToRecalculate && params.onlyStartPointChanged)
     {
         int currentRoute = params.previousToRecalculate.currentRoute;
-        const auto& originalRoute = [params.previousToRecalculate getOriginalRoute];
-        if (currentRoute < originalRoute.size())
+        if (params.previousToRecalculate == _previousCppResult && currentRoute < (int) _previousCppRoute.size())
         {
-            std::vector<std::shared_ptr<RouteSegmentResult>> prevCalcRoute(originalRoute.begin() + currentRoute, originalRoute.end());
+            std::vector<std::shared_ptr<RouteSegmentResult>> prevCalcRoute(_previousCppRoute.begin() + currentRoute, _previousCppRoute.end());
             ctx->previouslyCalculatedRoute = prevCalcRoute;
         }
     }
@@ -1277,13 +1326,408 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     if (complex)
     {
         complexCtx = router->buildRoutingContext(cf, RouteCalculationMode::COMPLEX);
-        complexCtx->progress = params.calculationProgress;
+        complexCtx->progress = progress;
         complexCtx->leftSideNavigation = params.leftSide;
         complexCtx->previouslyCalculatedRoute = ctx->previouslyCalculatedRoute;
         complexCtx->setConditionalTime(cf->routeCalculationTime);
     }
     
     return [[OARoutingEnvironment alloc] initWithRouter:router context:ctx complextCtx:complexCtx precalculated:precalculated];
+}
+
+#pragma mark - OsmAndShared routing
+
+static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *profile)
+{
+    for (int i = 0; i < profiles.size; i++)
+    {
+        if ([[profiles getIndex:i] isEqualToString:profile])
+            return YES;
+    }
+    return NO;
+}
+
+// The obf files the route covers, as OsmAndShared readers. Creating one reads the file's index, so
+// they are kept open until the installed maps change; the ones a search may still be holding are
+// closed here, on the routing thread, rather than under it.
+- (NSArray<OASBinaryMapIndexReader *> *) sharedRouteReaders
+{
+    @synchronized (self)
+    {
+        [self closeStaleSharedReaders];
+
+        NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray array];
+        for (NSString *path in [_nativeFiles.allObjects sortedArrayUsingSelector:@selector(compare:)])
+        {
+            OASBinaryMapIndexReader *reader = _sharedReaders[path];
+            if (!reader)
+            {
+                if (![NSFileManager.defaultManager fileExistsAtPath:path])
+                    continue;
+                reader = [[OASBinaryMapIndexReader alloc] initWithFilePath:path];
+                _sharedReaders[path] = reader;
+            }
+            if ([reader containsRouteData])
+                [readers addObject:reader];
+        }
+        return readers;
+    }
+}
+
+// The readers left over from a change of the installed maps. A routing environment that is still in
+// use holds its own - a track being approximated searches over them between one calculation and the
+// next - and reading through a closed reader throws inside OsmAndShared, where the exception cannot
+// be caught, so those are kept until the environment is gone. Both locks are held here: the routing
+// one by the caller, which keeps a running search away, and this object's, which guards the two
+// collections.
+- (void) closeStaleSharedReaders
+{
+    if (_staleSharedReaders.count == 0)
+        return;
+
+    NSMutableArray<OASBinaryMapIndexReader *> *inUse = [NSMutableArray array];
+    for (OARoutingEnvironment *env in _liveSharedEnvironments)
+    {
+        if (env.sharedCtx)
+            [inUse addObjectsFromArray:[env.sharedCtx getMaps]];
+    }
+
+    NSMutableArray<OASBinaryMapIndexReader *> *kept = [NSMutableArray array];
+    for (OASBinaryMapIndexReader *reader in _staleSharedReaders)
+    {
+        if ([inUse indexOfObjectIdenticalTo:reader] == NSNotFound)
+            [reader close];
+        else
+            [kept addObject:reader];
+    }
+    _staleSharedReaders = kept;
+}
+
+- (OASRoutingConfiguration *) buildSharedRoutingConfig:(OASRoutingConfigurationBuilder *)builder
+                                                params:(OARouteCalculationParams *)params
+                                         generalRouter:(OASGeneralRouter *)generalRouter
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OASGeneralRouterCompanion *routerNames = OASGeneralRouter.companion;
+    NSString *derivedProfile = params.mode.getDerivedProfile;
+    NSMutableDictionary<NSString *, NSString *> *paramsR = [NSMutableDictionary dictionary];
+    NSDictionary<NSString *, OASGeneralRouterRoutingParameter *> *routerParams = [generalRouter getParameters];
+    for (NSString *key in routerParams)
+    {
+        OASGeneralRouterRoutingParameter *pr = routerParams[key];
+        // the parameters of the derived profile, as RoutingHelperUtils.getParametersForDerivedProfile picks them
+        OASKotlinArray<NSString *> *profiles = [pr getProfiles];
+        if (profiles && !OAProfilesContain(profiles, derivedProfile))
+            continue;
+
+        NSString *vl = nil;
+        if ([key isEqualToString:routerNames.USE_SHORTEST_WAY])
+        {
+            vl = [settings.fastRouteMode get:params.mode] ? nil : @"true";
+        }
+        else if ([[pr getType] isEqual:OASGeneralRouterRoutingParameterType.boolean])
+        {
+            OACommonBoolean *pref = [settings getCustomRoutingBooleanProperty:key defaultValue:[pr getDefaultBoolean]];
+            vl = [pref get:params.mode] ? @"true" : nil;
+        }
+        else // NUMERIC
+        {
+            OACommonString *pref = [settings getCustomRoutingProperty:key defaultValue:[pr getDefaultString]];
+            NSString *s = [pref get:params.mode];
+            if (s.doubleValue != 0 || [pr getDefaultNumeric] != 0)
+                vl = s;
+        }
+
+        if (vl.length > 0)
+            paramsR[key] = vl;
+    }
+    double defaultSpeed = params.mode.getDefaultSpeed;
+    if (defaultSpeed > 0)
+        paramsR[routerNames.DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed];
+    double minSpeed = params.mode.getMinSpeed;
+    if (minSpeed > 0)
+        paramsR[routerNames.MIN_SPEED] = [NSString stringWithFormat:@"%f", minSpeed];
+    double maxSpeed = params.mode.getMaxSpeed;
+    if (maxSpeed > 0)
+        paramsR[routerNames.MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed];
+
+    // the roads to avoid live on the C++ configs, which the app fills as they are added and removed
+    [builder clearImpassableRoadLocations];
+    for (OAAvoidRoadInfo *roadInfo in [OAAvoidSpecificRoads instance].getImpassableRoads)
+    {
+        if (roadInfo.roadId != 0)
+            [builder addImpassableRoadRouteId:roadInfo.roadId];
+    }
+
+    float mb = (1 << 20);
+    int memoryLimit = (int) (0.1 * (NSProcessInfo.processInfo.physicalMemory / mb));
+    OASRoutingConfigurationRoutingMemoryLimits *memoryLimits =
+        [[OASRoutingConfigurationRoutingMemoryLimits alloc] initWithMemoryLimitMb:memoryLimit nativeMemoryLimitMb:memoryLimit];
+
+    NSString *routingProfile = [derivedProfile isEqualToString:@"default"] ? params.mode.getRoutingProfile : derivedProfile;
+    OASDouble *direction = params.start.course >= 0.0 ? [OASDouble numberWithDouble:params.start.course / 180.0 * M_PI] : nil;
+    OASRoutingConfiguration *cf = [builder buildRouter:routingProfile
+                                             direction:direction
+                                          memoryLimits:memoryLimits
+                                                params:(OASMutableDictionary<NSString *, NSString *> *) paramsR];
+    if ([settings.enableTimeConditionalRouting get:params.mode])
+        cf.routeCalculationTime = (int64_t) (NSDate.date.timeIntervalSince1970 * 1000); // java reads the conditions off a millisecond clock
+    return cf;
+}
+
+- (void) calculateSharedRegionsWithAllRoutePoints:(OASRoutingContext *)ctx
+                                            start:(CLLocation *)start
+                                          targets:(NSArray<CLLocation *> *)targets
+{
+    NSMutableDictionary<NSString *, NSNumber *> *regionCounter = [NSMutableDictionary dictionary];
+    [self getRegionsOfPoint:start regionCounter:regionCounter];
+    for (CLLocation *loc in targets)
+        [self getRegionsOfPoint:loc regionCounter:regionCounter];
+
+    int allPoints = 1 + (int) targets.count;
+    NSMutableArray<NSString *> *result = [NSMutableArray array];
+    for (NSString *region in regionCounter)
+    {
+        if (regionCounter[region].intValue == allPoints)
+            [result addObject:region];
+    }
+    ctx.regionsCoveringStartAndTargets = [OASKotlinArray arrayWithSize:(int32_t) result.count init:^id(OASInt *index) {
+        return result[index.intValue];
+    }];
+}
+
+- (OARouteCalculationResult *) findSharedRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
+{
+    [self checkInitializedForParams:params];
+
+    OARouteCalculationResult *result = [self calcSharedRouteImpl:params calcGPXRoute:calcGPXRoute readers:[self sharedRouteReaders]];
+    [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
+    return result;
+}
+
+- (OARouteCalculationResult *) calcSharedRouteImpl:(OARouteCalculationParams *)params
+                                      calcGPXRoute:(BOOL)calcGPXRoute
+                                           readers:(NSArray<OASBinaryMapIndexReader *> *)readers
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OsmAndAppInstance app = [OsmAndApp instance];
+
+    OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
+    OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
+    if (!generalRouter)
+        return [self applicationModeNotSupported:params];
+
+    OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
+
+    OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
+    [router setUseFastRecalculationUse:settings.useFastRecalculation];
+    // Whether the maps the route needs are checked below, and how strictly the HH planner groups
+    // the maps it uses.
+    OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+    if (![settings.useOldRouting get])
+        [router setDefaultHHRoutingConfig];
+
+    OASPrecalculatedRouteDirection *precalculated = nil;
+    if (calcGPXRoute)
+    {
+        NSArray<CLLocation *> *sublist = [self findStartAndEndLocationsFromRoute:params.gpxRoute.points startLoc:params.start endLoc:params.end startI:nil endI:nil];
+        NSArray<OASKLatLon *> *latLons = [self.class coordsToLatLons:sublist];
+        OASKotlinArray<OASKLatLon *> *ls = [OASKotlinArray arrayWithSize:(int32_t) latLons.count init:^id(OASInt *index) {
+            return latLons[index.intValue];
+        }];
+        precalculated = [OASPrecalculatedRouteDirection.companion buildLs:ls maxSpeed:[generalRouter getMaxSpeed]];
+        [precalculated setFollowNextFollowNext:YES];
+    }
+
+    // BUILD context
+    OASRouteCalculationProgress *progress = params.calculationProgress ?: [[OASRouteCalculationProgress alloc] init];
+    OASRoutingContext *ctx = [router buildRoutingContextConfig:cf map:readers rm:OASRouteCalculationMode.normal];
+    ctx.calculationProgress = progress;
+    ctx.leftSideNavigation = params.leftSide;
+    ctx.publicTransport = params.inPublicTransportMode;
+    ctx.startTransportStop = params.startTransportStop;
+    ctx.targetTransportStop = params.targetTransportStop;
+    if (params.previousToRecalculate && params.onlyStartPointChanged)
+    {
+        int currentRoute = params.previousToRecalculate.currentRoute;
+        NSArray<OASRouteSegmentResult *> *originalRoute = [params.previousToRecalculate getOriginalRoute];
+        if (currentRoute < (int) originalRoute.count)
+            ctx.previouslyCalculatedRoute = [originalRoute subarrayWithRange:NSMakeRange(currentRoute, originalRoute.count - currentRoute)];
+    }
+
+    BOOL complex = [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting
+        && !precalculated && ![router getRecalculationEndCtx:ctx];
+    OASRoutingContext *complexCtx = nil;
+    if (complex)
+    {
+        complexCtx = [router buildRoutingContextConfig:cf map:readers rm:OASRouteCalculationMode.complex_];
+        complexCtx.calculationProgress = progress;
+        complexCtx.leftSideNavigation = params.leftSide;
+        complexCtx.previouslyCalculatedRoute = ctx.previouslyCalculatedRoute;
+    }
+
+    OASKLatLon *st = [[OASKLatLon alloc] initWithLatitude:params.start.coordinate.latitude longitude:params.start.coordinate.longitude];
+    OASKLatLon *en = [[OASKLatLon alloc] initWithLatitude:params.end.coordinate.latitude longitude:params.end.coordinate.longitude];
+    NSArray<OASKLatLon *> *inters = params.intermediates ? [self.class coordsToLatLons:params.intermediates] : @[];
+    NSArray<CLLocation *> *targets = params.intermediates.count > 0
+        ? [params.intermediates arrayByAddingObject:params.end] : @[params.end];
+    [self calculateSharedRegionsWithAllRoutePoints:ctx start:params.start targets:targets];
+    if (complexCtx)
+        [self calculateSharedRegionsWithAllRoutePoints:complexCtx start:params.start targets:targets];
+
+    // java checks the maps inside the planner, which reads the region index through the host; here
+    // the host runs the check itself, and the planner learns the answer from the routing status the
+    // HH search reads out of the progress. Both contexts share that progress.
+    if (OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS)
+    {
+        if (!_missingMapsCalculator)
+            _missingMapsCalculator = [MissingMapsCalculator new];
+
+        params.missingMapsResult = [_missingMapsCalculator checkIfThereAreMissingSharedMaps:ctx
+                                                                                      start:params.start
+                                                                                    targets:targets
+                                                                            checkHHEditions:![settings.useOldRouting get]];
+        if (params.missingMapsResult)
+        {
+            // the route is calculated anyway, as it is on the C++ planner, where iOS never sets
+            // CONTINUE_ON_MISSING_MAPS to false; the outcome waits for the required maps screen
+            NSLog(@"%@", [params.missingMapsResult getErrorMessage]);
+        }
+    }
+
+    OASRouteCalcResult *result;
+    OASRoutingContext *usedCtx;
+    if (complexCtx)
+    {
+        // java falls back to the normal context when the complex search throws; a Kotlin exception
+        // does not reach Objective-C, so there is nothing to fall back after
+        result = [router searchRouteCtx:complexCtx start:st end:en intermediates:inters routeDirectionArg:precalculated];
+        usedCtx = complexCtx;
+    }
+    else
+    {
+        result = [router searchRouteCtx:ctx start:st end:en intermediates:inters];
+        usedCtx = ctx;
+    }
+
+    NSArray<OASRouteSegmentResult *> *list = [result getList];
+    if (list.count == 0)
+    {
+        if (progress.segmentNotFound == 0)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"starting_point_too_far")];
+        else if (progress.segmentNotFound == (int) inters.count + 1)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"ending_point_too_far")];
+        else if (progress.segmentNotFound > 0)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:OALocalizedString(@"ending_point_too_far"), progress.segmentNotFound]];
+        else if (progress.directSegmentQueueSize == 0)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from start point (%f km)", progress.distanceFromBegin / 1000]];
+        else if (progress.reverseSegmentQueueSize == 0)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from end point (%f km)", progress.distanceFromEnd / 1000]];
+        else if (progress.isCancelled)
+            return [self interrupted];
+        else if ([result getError_].length > 0)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:[result getError_]];
+
+        // something really strange better to see that message on the scren
+        return [self emptyResult];
+    }
+    return [[OARouteCalculationResult alloc] initWithSegmentResults:list
+                                                              start:params.start
+                                                                end:params.end
+                                                      intermediates:params.intermediates
+                                                           leftSide:params.leftSide
+                                                        routingTime:usedCtx.routingTime
+                                                          waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt
+                                                               mode:params.mode
+                                         calculateFirstAndLastPoint:YES
+                                                 initialCalculation:params.initialCalculation];
+}
+
+#pragma mark - OsmAndShared gpx approximation
+
+// The twin of calculateRoutingEnvironment: - the same configuration and the same files, read by
+// OsmAndShared. The track approximation is its only caller and it searches from no start to no
+// target, so there is neither a complex context nor a precalculated direction to build.
+- (OARoutingEnvironment *) calculateSharedRoutingEnvironment:(OARouteCalculationParams *)params
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+
+    OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
+    OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
+    if (!generalRouter)
+        return nil;
+
+    OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
+
+    // the environment outlives this call and keeps searching over these readers, so it is built
+    // where no other search is running and where the readers cannot be closed underneath it
+    @synchronized (_nativeRoutingLock)
+    {
+        [self checkInitializedForParams:params];
+
+        OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
+        [router setUseFastRecalculationUse:settings.useFastRecalculation];
+        OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+
+        OASRoutingContext *ctx = [router buildRoutingContextConfig:cf
+                                                               map:[self sharedRouteReaders]
+                                                                rm:OASRouteCalculationMode.normal];
+        ctx.leftSideNavigation = params.leftSide;
+
+        OARoutingEnvironment *env = [[OARoutingEnvironment alloc] initWithSharedRouter:router context:ctx];
+        @synchronized (self)
+        {
+            [_liveSharedEnvironments addObject:env];
+        }
+        return env;
+    }
+}
+
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder
+{
+    if (!env.sharedRouter || !gctx || locationsHolder.size == 0)
+        return @[];
+
+    // the times come along with the points: OsmAndShared reads the track's own timestamps off them
+    // where the C++ side is handed the locations again afterwards
+    NSMutableArray<OASKLatLon *> *locations = [NSMutableArray arrayWithCapacity:locationsHolder.size];
+    OASKotlinLongArray *times = [OASKotlinLongArray arrayWithSize:(int32_t) locationsHolder.size];
+    for (NSInteger i = 0; i < locationsHolder.size; i++)
+    {
+        [locations addObject:[[OASKLatLon alloc] initWithLatitude:[locationsHolder getLatitude:i]
+                                                        longitude:[locationsHolder getLongitude:i]]];
+        [times setIndex:(int32_t) i value:[locationsHolder timeAtIndex:i]];
+    }
+    return [env.sharedRouter generateGpxPointsGctx:gctx locations:locations times:times];
+}
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+    if (!env.sharedRouter || !gctx || !gctx.ctx.calculationProgress || points.count == 0)
+    {
+        [resultMatcher publish:nil];
+        return nil;
+    }
+
+    @synchronized (_nativeRoutingLock)
+    {
+        [env.sharedRouter setUseGeometryBasedApproximationEnabled:YES];
+        OASGpxRouteApproximation *result = [env.sharedRouter searchGpxRouteGctx:gctx
+                                                                     gpxPoints:points
+                                                                 resultMatcher:nil
+                                                         useExternalTimestamps:useExternalTimestamps];
+        // what the search's own result matcher would publish: nothing of a cancelled approximation
+        BOOL cancelled = gctx.ctx.calculationProgress.isCancelled;
+        [resultMatcher publish:cancelled ? nil : [[OAGpxRouteApproximation alloc] initWithApproximation:result]];
+        return gctx;
+    }
 }
 
 - (void) runSyncWithNativeRouting:(void (^)(void))runBlock
@@ -1299,6 +1743,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 {
     @synchronized (_nativeRoutingLock)
     {
+        if ([[OAAppSettings sharedManager].useSharedRouting get])
+            return [self findSharedRoute:params calcGPXRoute:calcGPXRoute];
+
         OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:calcGPXRoute skipComplex:NO];
 
         if (!env)
@@ -1312,7 +1759,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             inters = [NSArray arrayWithArray:params.intermediates];
 
         OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
-        [_missingMapsCalculator attachToRouteCalculationResult:result progress:env.ctx->progress];
+        [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
 
         return result;
     }
@@ -1350,7 +1797,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     if (routeService == STRAIGHT || routeService == DIRECT_TO || connectRtePts)
         return [self findStraightRoute:rp];
     
-    return [self findVectorMapsRoute:rp calcGPXRoute:NO];
+    OARouteCalculationResult *res = [self findVectorMapsRoute:rp calcGPXRoute:NO];
+    [routeParams takeMissingMapsResultFrom:rp];
+    return res;
 }
 
 - (NSInteger) findClosestIntermediate:(OARouteCalculationParams *)params intermediates:(NSArray<CLLocation *> *)intermediates
@@ -1440,6 +1889,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     catch (NSException *e)
     {
     }
+    [params takeMissingMapsResultFrom:newParams];
     return newRes;
 }
 
@@ -1536,7 +1986,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             [points removeObjectAtIndex:0];
             if(lastAdded && [lastAdded.provider isEqualToString:@"pnt"])
             {
-                OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:TurnType::ptrStraight()];
+                OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:[OASTurnType.companion straight]];
                 previousInfo.routePointOffset = (int) segments.count;
                 [previousInfo setDescriptionRoute:OALocalizedString(@"route_head")];
                 [computeDirections addObject:previousInfo];
@@ -1552,13 +2002,12 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return [[OARouteCalculationResult alloc] initWithLocations:segments directions:computeDirections params:routeParams waypoints:nil addMissingTurns:routeParams.extraIntermediates];
 }
 
-+ (std::vector<std::pair<double, double>>) coordsToLocations:(NSArray<CLLocation *> *)points
++ (NSArray<OASKLatLon *> *) coordsToLatLons:(NSArray<CLLocation *> *)points
 {
-    std::vector<std::pair<double, double>> res;
+    NSMutableArray<OASKLatLon *> *res = [NSMutableArray arrayWithCapacity:points.count];
     for (CLLocation *pt in points)
-    {
-        res.push_back({pt.coordinate.latitude, pt.coordinate.longitude});
-    }
+        [res addObject:[[OASKLatLon alloc] initWithLatitude:pt.coordinate.latitude longitude:pt.coordinate.longitude]];
+
     return res;
 }
 
@@ -1568,11 +2017,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     BOOL calcWholeRoute = gpxParams.passWholeRoute && (routeParams.previousToRecalculate == nil || !routeParams.onlyStartPointChanged);
     BOOL calculateOsmAndRouteParts = gpxParams.calculateOsmAndRouteParts;
     BOOL reverseRoutePoints = gpxParams.reverse && gpxParams.routePoints.count > 1;
-    auto gpxRouteResult = routeParams.gpxRoute.route;
+    NSArray<OASRouteSegmentResult *> *gpxRouteResult = routeParams.gpxRoute.route;
     if (reverseRoutePoints)
     {
         NSMutableArray<CLLocation *> *gpxRouteLocations = [NSMutableArray new];
-        std::vector<std::shared_ptr<RouteSegmentResult>> gpxRoute;
+        NSMutableArray<OASRouteSegmentResult *> *gpxRoute = [NSMutableArray array];
         OASWptPt *firstGpxPoint = gpxParams.routePoints.firstObject;
         CLLocation *start = [[CLLocation alloc] initWithLatitude:firstGpxPoint.getLatitude longitude:firstGpxPoint.getLongitude];
         
@@ -1590,22 +2039,24 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             params.mode = appMode;
             params.calculationProgress = routeParams.calculationProgress;
             OARouteCalculationResult *result = [self findOfflineRouteSegment:params start:start end:end];
+            [routeParams takeMissingMapsResultFrom:params];
             NSArray<CLLocation *> *locations = result.getRouteLocations;
-            auto route = result.getOriginalRoute;
-            if (route.size() == 0)
+            NSArray<OASRouteSegmentResult *> *route = result.getOriginalRoute;
+            if (route.count == 0)
             {
                 if (locations.count == 0)
                 {
                     CLLocation *endLoc = [[CLLocation alloc] initWithLatitude:end.coordinate.latitude longitude:end.coordinate.longitude];
                     locations = @[start, endLoc];
                 }
-                route = { RoutePlannerFrontEnd::generateStraightLineSegment(routeParams.mode.getDefaultSpeed, [self.class coordsToLocations:locations]) };
+                route = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:routeParams.mode.getDefaultSpeed
+                                                                                             points:[self.class coordsToLatLons:locations]]];
             }
             [gpxRouteLocations addObjectsFromArray:locations];
             if (gpxRouteLocations.count > 0)
                 [gpxRouteLocations removeLastObject];
             
-            gpxRoute.insert(gpxRoute.end(), route.begin(), route.end());
+            [gpxRoute addObjectsFromArray:route];
             
             start = [[CLLocation alloc] initWithLatitude:end.coordinate.latitude longitude:end.coordinate.longitude];
         }
@@ -1614,7 +2065,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         gpxRouteResult = gpxRoute;
     }
     
-    if (gpxRouteResult.size() > 0)
+    if (gpxRouteResult.count > 0)
     {
         if (calcWholeRoute && !calculateOsmAndRouteParts)
         {
@@ -1626,9 +2077,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         CLLocation *nearestGpxLocation = nil;
         CLLocation *gpxLastLocation = gpxRouteLocations.count > 0 ? gpxRouteLocations.lastObject : nil;
         
-        std::vector<std::shared_ptr<RouteSegmentResult>> firstSegmentRoute;
-        std::vector<std::shared_ptr<RouteSegmentResult>> lastSegmentRoute;
-        std::vector<std::shared_ptr<RouteSegmentResult>> gpxRoute;
+        NSArray<OASRouteSegmentResult *> *firstSegmentRoute = @[];
+        NSArray<OASRouteSegmentResult *> *lastSegmentRoute = @[];
+        NSArray<OASRouteSegmentResult *> *gpxRoute = @[];
         
         if (nearestGpxPointInd > 0)
         {
@@ -1648,10 +2099,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             if (nearestGpxPointInd > 0)
             {
                 gpxRoute = [result getOriginalRoute:(int)nearestGpxPointInd includeFirstSegment:NO];
-                if (gpxRoute.size() > 0)
+                if (gpxRoute.count > 0)
                 {
-                    LatLon startPoint = gpxRoute[0]->getStartPoint();
-                    nearestGpxLocation = [[CLLocation alloc] initWithLatitude:startPoint.lat longitude:startPoint.lon];
+                    OASKLatLon *startPoint = [gpxRoute[0] getStartPoint];
+                    nearestGpxLocation = [[CLLocation alloc] initWithLatitude:startPoint.latitude longitude:startPoint.longitude];
                 }
                 else
                 {
@@ -1679,20 +2130,14 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             OARouteCalculationResult *lastSegmentResult = [self findOfflineRouteSegment:routeParams start:gpxLastLocation end:routeParams.end];
             lastSegmentRoute = lastSegmentResult.getOriginalRoute;
         }
-        std::vector<std::shared_ptr<RouteSegmentResult>> newGpxRoute;
-        if (firstSegmentRoute.size() > 0)
-        {
-            newGpxRoute.insert(newGpxRoute.end(), firstSegmentRoute.begin(), firstSegmentRoute.end());
-        }
-        newGpxRoute.insert(newGpxRoute.end(), gpxRoute.begin(), gpxRoute.end());
-        if (lastSegmentRoute.size() > 0)
-        {
-            newGpxRoute.insert(newGpxRoute.end(), lastSegmentRoute.begin(), lastSegmentRoute.end());
-        }
+        NSMutableArray<OASRouteSegmentResult *> *newGpxRoute = [NSMutableArray array];
+        [newGpxRoute addObjectsFromArray:firstSegmentRoute];
+        [newGpxRoute addObjectsFromArray:gpxRoute];
+        [newGpxRoute addObjectsFromArray:lastSegmentRoute];
         
         if ([routeParams recheckRouteNearestPoint])
         {
-            newGpxRoute = [self checkNearestSegmentOnRecalculate:routeParams.previousToRecalculate segments:newGpxRoute startLocation:routeParams.start];
+            newGpxRoute = [[self checkNearestSegmentOnRecalculate:routeParams.previousToRecalculate segments:newGpxRoute startLocation:routeParams.start] mutableCopy];
         }
         
         return [[OARouteCalculationResult alloc] initWithSegmentResults:newGpxRoute start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
@@ -1738,18 +2183,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return [[OARouteCalculationResult alloc] initWithLocations:gpxRoute directions:gpxDirections params:routeParams waypoints:gpxParams.wpt addMissingTurns:routeParams.gpxRoute.addMissingTurns];
 }
 
-- (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)gpxRouteResult
+- (NSArray<OASRouteSegmentResult *> *) findRouteWithIntermediateSegments:(OARouteCalculationParams *)routeParams result:(OARouteCalculationResult *)result gpxRouteLocations:(NSArray<CLLocation *> *)gpxRouteLocations segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints nearestGpxPointInd:(NSInteger)nearestGpxPointInd
 {
-    OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
-    if (env)
-    {
-        calculateTimeSpeed(env.ctx.get(), gpxRouteResult);
-    }
-}
-
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) findRouteWithIntermediateSegments:(OARouteCalculationParams *)routeParams result:(OARouteCalculationResult *)result gpxRouteLocations:(NSArray<CLLocation *> *)gpxRouteLocations segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints nearestGpxPointInd:(NSInteger)nearestGpxPointInd
-{
-    std::vector<std::shared_ptr<RouteSegmentResult>> newGpxRoute;
+    NSMutableArray<OASRouteSegmentResult *> *newGpxRoute = [NSMutableArray array];
     
     NSInteger lastIndex = nearestGpxPointInd;
     for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1; i += 2)
@@ -1764,21 +2200,15 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         NSInteger indexPrev = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:prevSegmentPoint calculateOsmAndRouteParts:NO];
         if (indexPrev != -1 && indexPrev > nearestGpxPointInd && indexNew != -1)
         {
-            const auto& origRoute = [result getOriginalRoute:(int)lastIndex endIndex:(int)indexPrev includeFirstSegment:YES];
-            if (origRoute.size() > 0)
-                newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
+            [newGpxRoute addObjectsFromArray:[result getOriginalRoute:(int)lastIndex endIndex:(int)indexPrev includeFirstSegment:YES]];
             lastIndex = indexNew;
             
             CLLocation *end = [[CLLocation alloc] initWithLatitude:newSegmentPoint.coordinate.latitude longitude:newSegmentPoint.coordinate.longitude];
             OARouteCalculationResult *newRes = [self findOfflineRouteSegment:routeParams start:prevSegmentPoint end:end];
-            const auto& segmentResults = newRes.getOriginalRoute;
-            if (segmentResults.size() > 0)
-                newGpxRoute.insert(newGpxRoute.end(), segmentResults.begin(), segmentResults.end());
+            [newGpxRoute addObjectsFromArray:newRes.getOriginalRoute];
         }
     }
-    const auto& origRoute = [result getOriginalRoute:(int)lastIndex];
-    if (origRoute.size() > 0)
-        newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
+    [newGpxRoute addObjectsFromArray:[result getOriginalRoute:(int)lastIndex]];
     
     return newGpxRoute;
 }
@@ -1964,9 +2394,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     return NO;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) checkNearestSegmentOnRecalculate:(OARouteCalculationResult *)previousRoute
-                                                                             segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
-                                                                        startLocation:(CLLocation *)startLocation
+- (NSArray<OASRouteSegmentResult *> *) checkNearestSegmentOnRecalculate:(OARouteCalculationResult *)previousRoute
+                                                              segments:(NSArray<OASRouteSegmentResult *> *)segments
+                                                         startLocation:(CLLocation *)startLocation
 {
     CGFloat previousDistanceToFinish = [previousRoute getRouteDistanceToFinish:0];
     CGFloat searchDistance = previousDistanceToFinish + NEAREST_POINT_EXTRA_SEARCH_DISTANCE;
@@ -1976,17 +2406,17 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
 
     NSInteger nearestSegmentIndex = 0;
 
-    for (NSInteger segmentIndex = segments.size() - 1; segmentIndex >= 0 && checkedDistance < searchDistance; segmentIndex--) {
-        const auto& segment = segments[segmentIndex];
-        int step = segment->isForwardDirection() ? -1 : 1;
-        int startIndex = segment->getEndPointIndex() + step;
-        int endIndex = segment->getStartPointIndex() + step;
+    for (NSInteger segmentIndex = (NSInteger) segments.count - 1; segmentIndex >= 0 && checkedDistance < searchDistance; segmentIndex--) {
+        OASRouteSegmentResult *segment = segments[segmentIndex];
+        int step = [segment isForwardDirection] ? -1 : 1;
+        int startIndex = [segment getEndPointIndex] + step;
+        int endIndex = [segment getStartPointIndex] + step;
 
         for (int index = startIndex; index != endIndex && checkedDistance < searchDistance; index += step) {
-            LatLon prevRoutePoint = segment->getPoint(index);
-            LatLon nextRoutePoint = segment->getPoint(index - step);
-            CLLocation *prevRouteLocation = [[CLLocation alloc] initWithLatitude:prevRoutePoint.lat longitude:prevRoutePoint.lon];
-            CLLocation *nextRouteLocation = [[CLLocation alloc] initWithLatitude:nextRoutePoint.lat longitude:nextRoutePoint.lon];
+            OASKLatLon *prevRoutePoint = [segment getPointI:index];
+            OASKLatLon *nextRoutePoint = [segment getPointI:index - step];
+            CLLocation *prevRouteLocation = [[CLLocation alloc] initWithLatitude:prevRoutePoint.latitude longitude:prevRoutePoint.longitude];
+            CLLocation *nextRouteLocation = [[CLLocation alloc] initWithLatitude:nextRoutePoint.latitude longitude:nextRoutePoint.longitude];
             CGFloat distance = [OAMapUtils getOrthogonalDistance:startLocation fromLocation:prevRouteLocation toLocation:nextRouteLocation];
             
             if (distance < MIN(minDistance, MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)) {
@@ -2000,7 +2430,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     
     return nearestSegmentIndex == 0
         ? segments
-        : std::vector<std::shared_ptr<RouteSegmentResult>>(segments.cbegin() + (int) nearestSegmentIndex, segments.cend());
+        : [segments subarrayWithRange:NSMakeRange(nearestSegmentIndex, segments.count - nearestSegmentIndex)];
 }
 
 - (NSInteger) findNearestPointIndexOnRecalculate:(OARouteCalculationResult *)previousRoute

@@ -1840,6 +1840,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
@@ -1930,6 +1931,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;

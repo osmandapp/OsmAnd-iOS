@@ -831,6 +831,12 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
 }
 
+- (void)recreateWidgetsPanel:(OAWidgetsPanel *)panel
+{
+    OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
+    [self recreateWidgetsPanel:[self controllerForPanel:panel] panel:panel appMode:appMode];
+}
+
 - (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(OAWidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
 {
     if (container)

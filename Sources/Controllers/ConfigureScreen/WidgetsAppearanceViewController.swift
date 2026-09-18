@@ -293,10 +293,12 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
             UIAction(title: mode.title,
                      image: mode.icon?.resizedMenuImage(),
                      state: mode == selectedMode ? .on : .off) { [weak self] _ in
-                guard let self else { return }
-                appearanceSettings.setSizeMode(mode, for: selectedPanel)
-                applySizeMode(mode)
-                recreateWidgetsAndRefresh(row: .size)
+                OAAppSettings.performBatchedPreferenceNotifications { [weak self]  in
+                    guard let self else { return }
+                    appearanceSettings.setSizeMode(mode, for: selectedPanel)
+                    applySizeMode(mode)
+                }
+                self?.recreateWidgetsAndRefresh(row: .size)
             }
         }
         return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
@@ -308,10 +310,12 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
             UIAction(title: mode.title,
                      image: mode.icon?.resizedMenuImage(),
                      state: mode == selectedMode ? .on : .off) { [weak self] _ in
-                guard let self else { return }
-                appearanceSettings.setIconMode(mode, for: selectedPanel)
-                applyIconMode(mode)
-                recreateWidgetsAndRefresh(row: .icon)
+                OAAppSettings.performBatchedPreferenceNotifications { [weak self] in
+                    guard let self else { return }
+                    appearanceSettings.setIconMode(mode, for: selectedPanel)
+                    applyIconMode(mode)
+                }
+                self?.recreateWidgetsAndRefresh(row: .icon)
             }
         }
         return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
@@ -387,7 +391,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func recreateWidgetsAndReload() {
         previewView.preserveCurrentPage()
-        OARootViewController.instance().mapPanel.recreateControls()
+        recreateSelectedPanel()
         reloadScreenData()
         DispatchQueue.main.async { [weak self] in
             self?.reloadPreview()
@@ -396,7 +400,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func recreateWidgetsAndRefresh(row: RowKey) {
         previewView.preserveCurrentPage()
-        OARootViewController.instance().mapPanel.recreateControls()
+        recreateSelectedPanel()
         let rows: [RowKey] = row == .backgroundColor
             ? [.primaryTextColor, .secondaryTextColor, .backgroundColor]
             : [row]
@@ -404,6 +408,11 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         DispatchQueue.main.async { [weak self] in
             self?.reloadPreview()
         }
+    }
+
+    private func recreateSelectedPanel() {
+        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            .recreateWidgetsPanel(selectedPanel)
     }
 
     private func reloadScreenData() {

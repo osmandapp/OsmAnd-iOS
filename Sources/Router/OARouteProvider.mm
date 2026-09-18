@@ -1610,10 +1610,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         usedCtx = ctx;
     }
 
-    // java throws InterruptedException out of the search and android answers interrupted() where this
-    // stands; the shared planner cannot throw across the Objective-C boundary and comes back with the
-    // reason instead, so a cancelled calculation is recognised here, before the diagnostics below read
-    // a progress that a cancelled search never filled
     if (progress.isCancelled)
         return [self interrupted];
 

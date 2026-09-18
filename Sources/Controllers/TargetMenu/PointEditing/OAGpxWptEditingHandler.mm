@@ -178,7 +178,19 @@
             [map setObject:categories forKey:title];
         }
     }];
-    return map.objectEnumerator.allObjects;
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *groups = [NSMutableArray new];
+    for (NSDictionary<NSString *, NSString *> *category in map.objectEnumerator)
+    {
+        NSMutableDictionary<NSString *, NSString *> *group = [category mutableCopy];
+        int color = _gpxDocument.pointsGroups[group[@"title"]].color;
+        if (color == 0)
+            color = [UIColor toNumberFromString:group[@"color"]];
+        if (color == 0)
+            color = [[OADefaultFavorite getDefaultColor] toARGBNumber];
+        group[@"color"] = UIColorFromARGB(color).toHexARGBString;
+        [groups addObject:group];
+    }
+    return groups;
 }
 
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
@@ -226,45 +238,12 @@
     return groups;
 }
 
-- (NSDictionary<NSString *, NSString *> *)getWaypointCategoriesWithColors:(BOOL)withDefaultCategory
-{
-    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
-    for (OASWptPt *point in _gpxDocument.getPointsList)
-    {
-        NSString *title = point.category == nil ? @"" : point.category;
-        NSString *color = point.category == nil ? @"" : UIColorFromARGB([point getColor]).toHexARGBString;
-        BOOL emptyCategory = title.length == 0;
-        if (!emptyCategory)
-        {
-            NSString *existingColor = categories[title];
-            if (!existingColor || (existingColor.length == 0 && color.length != 0))
-                categories[title] = color;
-        }
-        else if (withDefaultCategory)
-        {
-            categories[title] = color;
-        }
-    }
-    [_gpxDocument.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString *key, OASGpxUtilitiesPointsGroup *group, BOOL *stop) {
-        if (key.length > 0 && categories[key] == nil)
-            categories[key] = UIColorFromARGB(group.color).toHexARGBString;
-    }];
-    return categories;
-}
-
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors
 {
-    NSDictionary<NSString *, NSString *> *groups = [self getWaypointCategoriesWithColors:NO];
-
-    if (_newGroupTitle)
-    {
-        NSMutableDictionary<NSString *, NSString *> *newGroups = [NSMutableDictionary dictionaryWithDictionary:groups];
-        newGroups[@"title"] = _newGroupTitle;
-        newGroups[@"color"] = _newGroupColor.toHexARGBString;
-        groups = newGroups;
-    }
-
-    return groups;
+    NSMutableDictionary<NSString *, NSString *> *colors = [NSMutableDictionary new];
+    for (NSDictionary<NSString *, NSString *> *group in [self getGroups])
+        colors[group[@"title"]] = group[@"color"];
+    return colors;
 }
 
 - (NSString *)getName

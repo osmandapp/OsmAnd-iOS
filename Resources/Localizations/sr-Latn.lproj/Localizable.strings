@@ -4552,3 +4552,5 @@
 "osm_edits_empty_state_title" = "Nema izmena mape na čekanju";
 "osm_edits_empty_state_description" = "Promene koje napravite u OsmAndu će se pojaviti ovde pre nego što se otpreme na OpenStreetMap";
 "carplay_trip_via_point" = "Preko %@";
+"tracks_stats_are_being_calculated" = "Statistika putanja se izračunava...";
+"tracks_stats_are_being_calculated_left" = "%1$@ %2$@ je preostalo";

@@ -8,21 +8,20 @@
 
 import Foundation
 
-@objc(OAWidgetsPanel)
 @objcMembers
 class WidgetsPanel: NSObject, NSCopying {
     
-    static let leftPanel = WidgetsPanel("ic_custom_screen_side_left",
-                                       landscapeIconName: "ic_custom_screen_side_left_landscape",
+    static let leftPanel = WidgetsPanel(.icCustomScreenSideLeft,
+                                       landscapeIcon: .icCustomScreenSideLeftLandscape,
                                        title: localizedString("map_widget_left"))
-    static let rightPanel = WidgetsPanel("ic_custom_screen_side_right",
-                                        landscapeIconName: "ic_custom_screen_side_right_landscape",
+    static let rightPanel = WidgetsPanel(.icCustomScreenSideRight,
+                                        landscapeIcon: .icCustomScreenSideRightLandscape,
                                         title: localizedString("map_widget_right"))
-    static let topPanel = WidgetsPanel("ic_custom_screen_side_top",
-                                      landscapeIconName: "ic_custom_screen_side_top_landscape",
+    static let topPanel = WidgetsPanel(.icCustomScreenSideTop,
+                                      landscapeIcon: .icCustomScreenSideTopLandscape,
                                       title: localizedString("top_widgets_panel"))
-    static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom",
-                                         landscapeIconName: "ic_custom_screen_side_bottom_landscape",
+    static let bottomPanel = WidgetsPanel(.icCustomScreenSideBottom,
+                                         landscapeIcon: .icCustomScreenSideBottomLandscape,
                                          title: localizedString("bottom_widgets_panel"))
     
     static let values: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
@@ -44,24 +43,25 @@ class WidgetsPanel: NSObject, NSCopying {
     private static var ORIGINAL_BOTTOM_ORDER = getOrderIds(.bottomPanel)
     
     let title: String
-    let iconName: String
-    let landscapeIconName: String
-
+    
     var isPanelVertical: Bool {
         self == .topPanel || self == .bottomPanel
     }
+    
+    private let portraitIcon: UIImage
+    private let landscapeIcon: UIImage
 
-    internal required init(_ iconName: String, landscapeIconName: String, title: String) {
+    internal required init(_ portraitIcon: UIImage, landscapeIcon: UIImage, title: String) {
         self.title = title
-        self.iconName = iconName
-        self.landscapeIconName = landscapeIconName
+        self.portraitIcon = portraitIcon
+        self.landscapeIcon = landscapeIcon
     }
 
-    func iconName(for screenLayoutMode: ScreenLayoutMode) -> String {
-        screenLayoutMode.isPortrait ? iconName : landscapeIconName
+    func icon(for screenLayoutMode: ScreenLayoutMode) -> UIImage {
+        screenLayoutMode.isPortrait ? portraitIcon : landscapeIcon
     }
 
-    func getOriginalOrder() -> [String] {
+    func originalOrder() -> [String] {
         if self == .leftPanel {
             return WidgetsPanel.ORIGINAL_LEFT_ORDER
         } else if self == .rightPanel {
@@ -74,7 +74,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func getOriginalWidgetOrder(widgetId: String) -> Int {
-        let order = getOriginalOrder().firstIndex(of: widgetId)
+        let order = originalOrder().firstIndex(of: widgetId)
         return order ?? WidgetsPanel.DEFAULT_ORDER
     }
     

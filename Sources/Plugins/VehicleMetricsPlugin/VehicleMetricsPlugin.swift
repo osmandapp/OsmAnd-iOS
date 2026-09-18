@@ -47,7 +47,8 @@ final class VehicleMetricsPlugin: OAPlugin {
                                         preferenceLayoutMode: delegate.preferenceLayoutMode)
         let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption, .OBDAltBatteryVoltage]
         for widgetType in widgetTypeArray {
-            guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams), let info = creator.createWidgetInfo(widget: widget) else { continue }
+            let params = creator.widgetParams(for: widgetType, widgetParams: widgetParams as? [String: Any])
+            guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: params), let info = creator.createWidgetInfo(widget: widget) else { continue }
             delegate.addWidget(info)
         }
     }

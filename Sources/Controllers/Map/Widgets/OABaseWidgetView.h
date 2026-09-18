@@ -10,7 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState, OATableRowData, WidgetConfigurationViewController, OAMapWidgetInfo;
+extern NSString * const kWidgetPanelKey;
+
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, WidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState, OATableRowData, WidgetConfigurationViewController, OAMapWidgetInfo;
 
 @protocol OAWidgetListener <NSObject>
 
@@ -26,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OABaseWidgetView : UIView
 
 @property (nonatomic, nullable) OAWidgetType *widgetType;
+@property (nonatomic, nullable) WidgetsPanel *panel;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 @property (nonatomic, assign) BOOL isSimpleLayout;
 @property (nonatomic, assign) BOOL isVerticalStackImageTitleSubtitleLayout;
@@ -61,14 +64,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode *)appMode
                      widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
                                       isCreate:(BOOL)isCreate;
-- (nullable OATableDataModel *)getSettingsDataForSimpleWidget:(OAApplicationMode *)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams;
+- (nullable OATableDataModel *)settingsDataForSimpleWidget:(OAApplicationMode *)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams;
 - (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController;
 
 - (void)showBottomSeparator:(BOOL)show;
 - (void)showRightSeparator:(BOOL)show;
 - (void)adjustViewSize;
 - (void)attachView:(UIView *)container specialContainer:(nullable UIView *)specialContainer order:(NSInteger)order followingWidgets:(nullable NSArray<OABaseWidgetView *> *)followingWidgets;
-- (void)detachView:(OAWidgetsPanel *)widgetsPanel;
+- (void)detachView:(WidgetsPanel *)widgetsPanel;
 
 @end
 

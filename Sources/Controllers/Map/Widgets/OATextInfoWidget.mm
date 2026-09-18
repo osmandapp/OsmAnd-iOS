@@ -764,7 +764,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     _iconValueSpacingConstraint.constant = contentSpacing;
     _valuePlaceholderSpacingConstraint.constant = contentSpacing;
     
-    if (![[self getWidgetPanel] isPanelVertical])
+    if (![[self widgetPanel] isPanelVertical])
     {
         self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
         [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
@@ -1047,7 +1047,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     label.outlineWidth = 0.0;
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+- (OATableDataModel *_Nullable)settingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -1075,7 +1075,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     return data;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+- (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     if ([widgetsPanel isPanelVertical])
         return YES;
@@ -1089,6 +1089,16 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 {
     _appMode = appMode;
     _customId = id;
+    self.panel = widgetParams[kWidgetPanelKey];
+    if (!self.panel)
+    {
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
+        self.panel = [self.widgetType panel:id.length > 0 ? id : self.widgetType.id
+                                   appMode:appMode
+                          screenLayoutMode:screenLayoutMode];
+    }
     _showIconPref = [self registerShowIconPref:id];
     self.widgetSizePref = [self registerWidgetSizePref:id];
     
@@ -1110,10 +1120,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
 }
 
-- (OAWidgetsPanel *)getWidgetPanel
+- (WidgetsPanel *)widgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [self widgetInfo];
-    return widgetInfo.widgetPanel;
+    return self.panel;
 }
 
 - (OAMapWidgetInfo *)widgetInfo
@@ -1128,17 +1137,8 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    OAApplicationMode *appMode = [self getAppMode];
-    NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
-        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
-        : nil;
-    NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
-    OAWidgetsPanel *storedPanel = [self.widgetType panel:widgetId
-                                                appMode:appMode
-                                       screenLayoutMode:screenLayoutMode];
-    BOOL verticalPanel = [[self getWidgetPanel] isPanelVertical] || storedPanel.isPanelVertical;
     return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
-                                                                   defValue:verticalPanel ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+                                                                   defValue:self.panel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

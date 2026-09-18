@@ -34,7 +34,8 @@ class WidgetInfoCreator: NSObject {
     }
     
     func createWidgetInfo(factory: MapWidgetsFactory, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
-        let mapWidget = factory.createMapWidget(widgetType: widgetType, widgetParams: widgetParams)
+        let panel = widgetType.panel(widgetType.id, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let mapWidget = factory.createMapWidget(widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
         if let mapWidget {
             return createWidgetInfo(widget: mapWidget)
         }
@@ -42,12 +43,18 @@ class WidgetInfoCreator: NSObject {
     }
     
     func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
-        let widget = factory.createMapWidget(customId: key, widgetType: widgetType, widgetParams: widgetParams)
+        let panel = widgetType.panel(key, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        let widget = factory.createMapWidget(customId: key, widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
         if let widget = widget {
-            let panel = widgetType.panel(key, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
             return createCustomWidgetInfo(widgetId: key, widget: widget, widgetType: widgetType, panel: panel)
         }
         return nil
+    }
+
+    func widgetParams(for widgetType: WidgetType, widgetParams: [String: Any]?) -> [String: Any] {
+        var params = widgetParams ?? [:]
+        params[kWidgetPanelKey] = widgetType.panel(widgetType.id, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
+        return params
     }
     
     func createWidgetInfo(widget: OABaseWidgetView) -> MapWidgetInfo? {

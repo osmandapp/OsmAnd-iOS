@@ -79,10 +79,9 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
     return _isForceUpdate;
 }
 
-- (void)copySettings:(OAApplicationMode *)appMode customId:(NSString *)customId
+- (OAWidgetState *)storedWidgetState
 {
-    [super copySettings:appMode customId:customId];
-    [_widgetState copyPrefs:appMode customId:customId];
+    return _widgetState;
 }
 
 - (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode

@@ -33,7 +33,11 @@ class MapWidgetInfo: NSObject, Comparable {
     let appMode: OAApplicationMode
     let screenLayoutMode: ScreenLayoutMode
     
-    var widgetPanel: WidgetsPanel
+    var widgetPanel: WidgetsPanel {
+        didSet {
+            widget.panel = widgetPanel
+        }
+    }
     var priority: Int
     var pageIndex: Int
     
@@ -60,6 +64,7 @@ class MapWidgetInfo: NSObject, Comparable {
         self.pageIndex = page
         self.priority = order
         self.widgetPanel = widgetPanel
+        widget.panel = widgetPanel
     }
     
     func isCustomWidget() -> Bool {
@@ -231,15 +236,15 @@ class MapWidgetInfo: NSObject, Comparable {
         nil
     }
     
-    func getUpdatedPanel() -> WidgetsPanel {
+    func updatedPanel() -> WidgetsPanel {
         let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
             ? NSNumber(value: self.screenLayoutMode.rawValue)
             : nil
-        return getUpdatedPanel(appMode, screenLayoutMode: screenLayoutMode)
+        return updatedPanel(appMode, screenLayoutMode: screenLayoutMode)
     }
 
-    func getUpdatedPanel(_ appMode: OAApplicationMode,
-                         screenLayoutMode: NSNumber?) -> WidgetsPanel {
+    func updatedPanel(_ appMode: OAApplicationMode,
+                      screenLayoutMode: NSNumber?) -> WidgetsPanel {
         fatalError("Subclass must override")
     }
     
@@ -269,8 +274,8 @@ class MapWidgetInfo: NSObject, Comparable {
         widget.getSettingsData(appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
     }
     
-    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, _ widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
-        widget.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams)
+    func settingsDataForSimpleWidget(_ appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, _ widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
+        widget.settingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams)
     }
     
     func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {

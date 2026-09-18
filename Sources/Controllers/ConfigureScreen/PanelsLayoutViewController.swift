@@ -82,7 +82,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
         let previewRow = previewSection.createNewRow()
         previewRow.key = previewKey
         previewRow.cellType = ImageHeaderCell.reuseIdentifier
-        previewRow.iconName = selectedMode.imageName(for: screenLayoutMode)
+        previewRow.icon = selectedMode.image(for: screenLayoutMode)
 
         let modesSection = tableData.createNewSection()
         for mode in PanelsLayoutMode.allCases {
@@ -99,7 +99,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageHeaderCell.reuseIdentifier, for: indexPath) as? ImageHeaderCell else {
                 return UITableViewCell()
             }
-            cell.backgroundImageView.image = UIImage(named: item.iconName ?? "")
+            cell.backgroundImageView.image = item.icon
             cell.backgroundImageView.backgroundColor = .groupBg
             cell.backgroundImageView.contentMode = .center
             cell.backgroundImageView.layer.cornerRadius = previewCornerRadius

@@ -11,6 +11,8 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+NSString * const kWidgetPanelKey = @"widgetPanel";
+
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;
@@ -175,7 +177,7 @@
     return nil;
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
+- (OATableDataModel *_Nullable)settingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
 {
     return nil;
 }
@@ -229,7 +231,7 @@
     //[container addSubview:self];
 }
 
-- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+- (void)detachView:(WidgetsPanel *)widgetsPanel
 {
     // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
     //if (self.superview)

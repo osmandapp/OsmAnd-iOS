@@ -32,11 +32,13 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     override func generateData() {
         let section = tableData.createNewSection()
         let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        guard !sortedWidgets.isEmpty else { return }
+        let settings = OAAppSettings.sharedManager()
+        let appMode = settings.applicationMode.get()
+        let layoutMode = settings.useSeparateLayouts.get(appMode) ? NSNumber(value: screenLayoutMode.rawValue) : nil
+        let widgetInfos: [MapWidgetInfo] = widgetRegistry.widgets(forAppMode: appMode, layoutMode: layoutMode)
         for widget in sortedWidgets {
-            let widgetInfo = widgetRegistry.widgetInfo(for: widget,
-                                                       appMode: OAAppSettings.sharedManager().applicationMode.get(),
-                                                       screenLayoutMode: screenLayoutMode.rawValue)
-            guard let widgetInfo else { continue }
+            guard let widgetInfo = widgetInfos.first(where: { $0.widgetType() == widget && !$0.isCustomWidget() }) else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()
             var title = widgetInfo.getTitle()

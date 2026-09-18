@@ -18,7 +18,7 @@ final class WidgetUtils: NSObject {
             return nil
         }
         let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
-        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, widgetParams: widgetParams) else {
+        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, appMode: selectedAppMode, panel: panel, widgetParams: widgetParams) else {
             return nil
         }
         let creator = WidgetInfoCreator(appMode: selectedAppMode, screenLayoutMode: screenLayoutMode)

@@ -237,9 +237,13 @@ class WidgetsSettingsHelper: NSObject {
             storedWidgetInfos.append(widgetInfo)
         }
         return storedWidgetInfos.enumerated().sorted {
-            $0.element.pageIndex == $1.element.pageIndex
-                ? $0.offset < $1.offset
-                : $0.element.pageIndex < $1.element.pageIndex
+            if $0.element.pageIndex != $1.element.pageIndex {
+                return $0.element.pageIndex < $1.element.pageIndex
+            }
+            if $0.element.priority != $1.element.priority {
+                return $0.element.priority < $1.element.priority
+            }
+            return $0.offset < $1.offset
         }.map(\.element)
     }
 
@@ -292,7 +296,7 @@ class WidgetsSettingsHelper: NSObject {
                                            screenLayoutMode: NSNumber?,
                                            widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let duplicateWidgetId = WidgetType.getDuplicateWidgetId(widgetType: widgetType)
-        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, widgetParams: widgetParams)
+        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
         if let duplicateWidget {
             let widgetScreenLayoutMode = screenLayoutMode
                 .flatMap { ScreenLayoutMode(rawValue: $0.int32Value) }

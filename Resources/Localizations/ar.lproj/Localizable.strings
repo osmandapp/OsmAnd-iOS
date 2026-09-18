@@ -4548,3 +4548,5 @@
 "recalculate_elevation" = "إعادة حساب الارتفاع";
 "average_speed" = "متوسط السرعة";
 "carplay_trip_via_point" = "عبر%@";
+"tracks_stats_are_being_calculated" = "يتم حالياً حساب إحصائيات المسارات...";
+"tracks_stats_are_being_calculated_left" = "%1$@ %2$@ متبقي";

@@ -7117,6 +7117,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_sphericalMap forKey:@"spherical_map"];
 
         [self registerWidgetLayoutPreferences];
+        [WidgetPanelAppearancePreferencesRegistrar registerAllPreferencesWith:self];
         
         [self fetchImpassableRoads];
 

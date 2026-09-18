@@ -36,6 +36,22 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     weak var delegate: WidgetPanelColorViewControllerDelegate?
 
+    override var initialMenuHeight: CGFloat {
+        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+            return min(OAUtilities.calculateScreenHeight() * 0.75,
+                       OAUtilities.calculateScreenHeight() - view.safeAreaInsets.top)
+        }
+        return Constants.portraitMenuHeight
+    }
+
+    override var supportsFullScreen: Bool {
+        false
+    }
+
+    override var useGestureRecognizer: Bool {
+        false
+    }
+
     private let appMode: OAApplicationMode
     private let panel: WidgetsPanel
     private let layoutMode: ScreenLayoutMode?
@@ -65,26 +81,6 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private var isApplied = false
     private var didRestoreNavigation = false
     private var hiddenMapControlStates: [(view: UIView, wasHidden: Bool)] = []
-
-    override var initialMenuHeight: CGFloat {
-        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
-            return min(OAUtilities.calculateScreenHeight() * 0.75,
-                       OAUtilities.calculateScreenHeight() - view.safeAreaInsets.top)
-        }
-        return Constants.portraitMenuHeight
-    }
-
-    override var supportsFullScreen: Bool {
-        false
-    }
-
-    override var useGestureRecognizer: Bool {
-        false
-    }
-
-    override func isLeftSidePresentation() -> Bool {
-        false
-    }
 
     private var isColorSelectionAvailable: Bool {
         target != .background || OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
@@ -175,6 +171,10 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
               traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
         updateFloatingButtonsBlur()
         tableView.reloadData()
+    }
+
+    override func isLeftSidePresentation() -> Bool {
+        false
     }
 
     override func getToolbarHeight() -> CGFloat {

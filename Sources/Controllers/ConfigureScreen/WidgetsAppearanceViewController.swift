@@ -27,10 +27,10 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                    UIImage(resource: .icCustom20ScreenSideLandscapeRight),
                    UIImage(resource: .icCustom20ScreenSideLandscapeTop),
                    UIImage(resource: .icCustom20ScreenSideLandscapeBottom)]
-                : [UIImage(named: "ic_custom20_screen_side_left")!,
-                   UIImage(named: "ic_custom20_screen_side_right")!,
-                   UIImage(named: "ic_custom20_screen_side_top")!,
-                   UIImage(named: "ic_custom20_screen_side_bottom")!]
+                : [.icCustom20ScreenSideLeft,
+                   .icCustom20ScreenSideRight,
+                   .icCustom20ScreenSideTop,
+                   .icCustom20ScreenSideBottom]
         }
     }
 
@@ -54,7 +54,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
             : nil
         selectedPanel = initialPanel
         appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
-                                                            layoutMode: appearanceLayoutMode)
+                                                           layoutMode: appearanceLayoutMode)
         super.init()
     }
 
@@ -192,7 +192,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         case .size:
             let mode = appearanceSettings.sizeMode(for: selectedPanel)
             cell.configure(title: title,
-                           preview: .image(mode.icon, .iconColorActive),
+                           preview: .image(mode.rowIcon, .iconColorActive),
                            value: mode.title,
                            menu: createSizeMenu())
         case .icon:
@@ -291,7 +291,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         let selectedMode = appearanceSettings.sizeMode(for: selectedPanel)
         let actions = WidgetPanelSizeMode.allCases.map { mode in
             UIAction(title: mode.title,
-                     image: mode.icon,
+                     image: mode.icon?.resizedMenuImage(),
                      state: mode == selectedMode ? .on : .off) { [weak self] _ in
                 guard let self else { return }
                 appearanceSettings.setSizeMode(mode, for: selectedPanel)
@@ -299,7 +299,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                 recreateWidgetsAndRefresh(row: .size)
             }
         }
-        return UIMenu(options: .singleSelection, children: actions)
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
     }
 
     private func createIconMenu() -> UIMenu {
@@ -314,7 +314,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                 recreateWidgetsAndRefresh(row: .icon)
             }
         }
-        return UIMenu(options: .singleSelection, children: actions)
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
     }
 
     private func createTextColorMenu(kind: WidgetPanelTextColorKind) -> UIMenu {
@@ -333,7 +333,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                 }
             }
         }
-        return UIMenu(options: .singleSelection, children: actions)
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
     }
 
     private func createBackgroundMenu() -> UIMenu {
@@ -350,7 +350,16 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                 }
             }
         }
-        return UIMenu(options: .singleSelection, children: actions)
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
+    }
+
+    private func createSingleSelectionMenu(actions: [UIAction], dividerBefore index: Int) -> UIMenu {
+        guard index > 0, index < actions.count else {
+            return UIMenu(options: .singleSelection, children: actions)
+        }
+        let firstSection = UIMenu(options: .displayInline, children: Array(actions[..<index]))
+        let secondSection = UIMenu(options: .displayInline, children: Array(actions[index...]))
+        return UIMenu(options: .singleSelection, children: [firstSection, secondSection])
     }
 
     private func showColorScreen(target: WidgetPanelColorTarget) {
@@ -525,7 +534,7 @@ private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNa
         let profileSection = tableData.createNewSection()
         let profileRow = profileSection.createNewRow()
         profileRow.key = RowKey.profile.rawValue
-        profileRow.title = localizedString("copy_from_other_profile")
+        profileRow.title = localizedString("another_profile")
         profileRow.icon = .icCustomCopy
         profileRow.accessibilityLabel = profileRow.title
 
@@ -601,6 +610,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalParent: UIViewController?
         let originalDelegate: WidgetPanelDelegate?
         let originalCurrentPageChangedHandler: (() -> Void)?
+        let originalWidgetPagesChangedHandler: (() -> Void)?
         let view: UIView
         let originalSuperview: UIView?
         let originalContainerSize: CGSize
@@ -619,7 +629,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let pageContainerCornerRadius: CGFloat
         let pageContainerMaskedCorners: CACornerMask
         let pageContainerSizeConstraints: [(constraint: NSLayoutConstraint, constant: CGFloat)]
-        let excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
+        var excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
         let disabledLongPressRecognizers: [UILongPressGestureRecognizer]
         let removedContextMenuInteractions: [(view: UIView, interaction: UIContextMenuInteraction)]
 
@@ -639,6 +649,15 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private var selectedPageIndexes: [ObjectIdentifier: Int] = [:]
 
     private weak var pendingParentViewController: UIViewController?
+
+    private var isPageTransitionInProgress: Bool {
+        guard let pageScrollView = hostedState?.controller.pageViewController?.scrollView else {
+            return false
+        }
+        return pageScrollView.isTracking
+            || pageScrollView.isDragging
+            || pageScrollView.isDecelerating
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -726,6 +745,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         panelSizeUpdateGeneration += 1
         state.controller.delegate = nil
         state.controller.onCurrentPageChanged = state.originalCurrentPageChangedHandler
+        state.controller.onWidgetPagesChanged = state.originalWidgetPagesChangedHandler
         state.disabledLongPressRecognizers.forEach { $0.isEnabled = true }
         state.removedContextMenuInteractions.forEach { $0.view.addInteraction($0.interaction) }
         state.controller.view.bounds = state.bounds
@@ -777,6 +797,11 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             hudViewController.updateDependentButtonsVisibility()
         }
     }
+    
+    func onPanelSizeChanged() {
+        guard !isMeasuringPanelSize, !isPageTransitionInProgress else { return }
+        schedulePanelSizeUpdate()
+    }
 
     private func hostWidgets(for panel: WidgetsPanel,
                              appMode: OAApplicationMode,
@@ -801,10 +826,12 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalLayoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
             ? .default(forAppMode: appMode)
             : nil
-        let previewAppearance = WidgetPanelAppearanceResolver.resolve(panel: panel,
-                                                                       appMode: appMode,
-                                                                       layoutMode: layoutMode,
-                                                                       nightMode: nightMode)
+        let previewAppearance = WidgetPanelAppearanceResolver.resolve(
+            panel: panel,
+            appMode: appMode,
+            layoutMode: layoutMode,
+            nightMode: nightMode
+        )
         applyAppearance(previewAppearance,
                         to: controller,
                         using: mapInfoController)
@@ -824,6 +851,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalParent = controller.parent
         let originalDelegate = controller.delegate
         let originalCurrentPageChangedHandler = controller.onCurrentPageChanged
+        let originalWidgetPagesChangedHandler = controller.onWidgetPagesChanged
         var originalContainerSize = originalSuperview?.bounds.size ?? controller.view.bounds.size
         if originalContainerSize.width <= 0 {
             originalContainerSize.width = controller.view.bounds.width
@@ -866,6 +894,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                                      originalParent: originalParent,
                                      originalDelegate: originalDelegate,
                                      originalCurrentPageChangedHandler: originalCurrentPageChangedHandler,
+                                     originalWidgetPagesChangedHandler: originalWidgetPagesChangedHandler,
                                      view: controller.view,
                                      originalSuperview: originalSuperview,
                                      originalContainerSize: originalContainerSize,
@@ -900,6 +929,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             guard let self, let controller else { return }
             self.selectedPageIndexes[ObjectIdentifier(panel)] = controller.currentIndex
             self.schedulePanelSizeUpdate()
+        }
+        controller.onWidgetPagesChanged = { [weak self] in
+            originalWidgetPagesChangedHandler?()
+            self?.refreshExcludedWidgets()
         }
         controller.view.isHidden = false
         controller.view.alpha = 1
@@ -986,20 +1019,6 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         return result
     }
 
-    func onPanelSizeChanged() {
-        guard !isMeasuringPanelSize, !isPageTransitionInProgress else { return }
-        schedulePanelSizeUpdate()
-    }
-
-    private var isPageTransitionInProgress: Bool {
-        guard let pageScrollView = hostedState?.controller.pageViewController?.scrollView else {
-            return false
-        }
-        return pageScrollView.isTracking
-            || pageScrollView.isDragging
-            || pageScrollView.isDecelerating
-    }
-
     private func schedulePanelSizeUpdate() {
         guard hostedState != nil else { return }
         panelSizeUpdateGeneration += 1
@@ -1016,6 +1035,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         guard !isMeasuringPanelSize, var state = hostedState else { return }
         panelSizeUpdateGeneration += 1
         isMeasuringPanelSize = true
+        excludePreviewOnlyWidgets(in: &state)
         let panelContentSize = state.controller.calculateContentSize()
         state.controller.pageControl.isHidden = state.pageControlHidden
         state.controller.pageControlHeightConstraint.constant = state.pageControlHeight
@@ -1029,6 +1049,23 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             layoutHostedPanel()
         }
         isMeasuringPanelSize = false
+    }
+
+    private func excludePreviewOnlyWidgets(in state: inout HostedPanelState) {
+        var trackedWidgets = Set(state.excludedWidgets.map { ObjectIdentifier($0.widget) })
+        for widget in state.controller.widgetPages.flatMap({ $0 }) where widget is CoordinatesBaseWidget {
+            if trackedWidgets.insert(ObjectIdentifier(widget)).inserted {
+                state.excludedWidgets.append((widget: widget, isHidden: widget.isHidden))
+            }
+            widget.isHidden = true
+        }
+    }
+
+    private func refreshExcludedWidgets() {
+        guard var state = hostedState else { return }
+        excludePreviewOnlyWidgets(in: &state)
+        hostedState = state
+        schedulePanelSizeUpdate()
     }
 
     private func disableLongPressRecognizers(in rootView: UIView) -> [UILongPressGestureRecognizer] {

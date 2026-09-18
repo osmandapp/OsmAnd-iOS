@@ -11,8 +11,8 @@ protocol WidgetPanelDelegate: AnyObject {
     func onPanelSizeChanged()
 }
 
-@objc(OAWidgetPanelViewController)
 @objcMembers
+@objc(OAWidgetPanelViewController)
 final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private static let controlHeight: CGFloat = 16
     private static let contentHeight: CGFloat = 34
@@ -40,6 +40,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     var specialPanelController: WidgetPanelViewController?
     var currentActiveController: UIViewController?
     @nonobjc var onCurrentPageChanged: (() -> Void)?
+    @nonobjc var onWidgetPagesChanged: (() -> Void)?
+    
+    weak var delegate: WidgetPanelDelegate?
     
     var pageViewController: UIPageViewController! {
         didSet {
@@ -51,8 +54,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         guard let vc = pageViewController.viewControllers?.first else { return 0 }
         return pages.firstIndex(of: vc) ?? 0
     }
-    
-    weak var delegate: WidgetPanelDelegate?
     
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
@@ -99,10 +100,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         delegate?.onPanelSizeChanged()
-    }
-    
-    deinit {
-        dayNightObserver.detach()
     }
     
     // MARK: - Public Functions
@@ -197,6 +194,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         currentActiveController = currentVisibleViewController(in: pageViewController)
         
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
+        onWidgetPagesChanged?()
     }
     
     func hasWidgets() -> Bool {
@@ -329,6 +327,10 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
                 self.onCurrentPageChanged?()
             }
         }
+    }
+
+    deinit {
+        dayNightObserver.detach()
     }
 }
 

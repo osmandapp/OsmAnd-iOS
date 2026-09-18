@@ -1610,6 +1610,13 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         usedCtx = ctx;
     }
 
+    // java throws InterruptedException out of the search and android answers interrupted() where this
+    // stands; the shared planner cannot throw across the Objective-C boundary and comes back with the
+    // reason instead, so a cancelled calculation is recognised here, before the diagnostics below read
+    // a progress that a cancelled search never filled
+    if (progress.isCancelled)
+        return [self interrupted];
+
     NSArray<OASRouteSegmentResult *> *list = [result getList];
     if (list.count == 0)
     {
@@ -1623,8 +1630,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from start point (%f km)", progress.distanceFromBegin / 1000]];
         else if (progress.reverseSegmentQueueSize == 0)
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from end point (%f km)", progress.distanceFromEnd / 1000]];
-        else if (progress.isCancelled)
-            return [self interrupted];
         else if ([result getError_].length > 0)
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[result getError_]];
 

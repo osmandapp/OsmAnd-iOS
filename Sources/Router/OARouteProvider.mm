@@ -1610,6 +1610,9 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         usedCtx = ctx;
     }
 
+    if (progress.isCancelled)
+        return [self interrupted];
+
     NSArray<OASRouteSegmentResult *> *list = [result getList];
     if (list.count == 0)
     {
@@ -1623,8 +1626,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from start point (%f km)", progress.distanceFromBegin / 1000]];
         else if (progress.reverseSegmentQueueSize == 0)
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from end point (%f km)", progress.distanceFromEnd / 1000]];
-        else if (progress.isCancelled)
-            return [self interrupted];
         else if ([result getError_].length > 0)
             return [[OARouteCalculationResult alloc] initWithErrorMessage:[result getError_]];
 

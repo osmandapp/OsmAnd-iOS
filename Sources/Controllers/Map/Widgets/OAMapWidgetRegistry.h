@@ -35,6 +35,13 @@
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget;
 
 - (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                     layoutMode:(nullable NSNumber *)layoutMode;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)filteredWidgets:(NSArray<OAMapWidgetInfo *> *)widgetInfos
+                                                  appMode:(OAApplicationMode *)appMode
+                                               layoutMode:(nullable NSNumber *)layoutMode
+                                              filterModes:(NSInteger)filterModes
+                                                   panels:(NSArray<WidgetsPanel *> *)panels;
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
                                                 filterModes:(NSInteger)filterModes
                                                      panels:(NSArray<WidgetsPanel *> *)panels

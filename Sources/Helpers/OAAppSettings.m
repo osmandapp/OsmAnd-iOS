@@ -1637,8 +1637,10 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 - (instancetype)copyWithKey:(NSString *)key
 {
-    NSAssert(NO, @"%@ must override %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return nil;
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"%@ must override %@",
+                                         NSStringFromClass(self.class), NSStringFromSelector(_cmd)]
+                               userInfo:nil];
 }
 
 - (OACommonPreference *)setupCopy:(OACommonPreference *)copy

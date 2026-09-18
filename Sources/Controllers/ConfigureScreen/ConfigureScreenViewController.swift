@@ -168,8 +168,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         let visibleWidgetPanels = !isSharedLandscapeLayout ? WidgetsPanel.values : []
         if !visibleWidgetPanels.isEmpty {
             widgetsSection.footerText = localizedString("widget_panels_descr")
+            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+            let widgetInfos: [MapWidgetInfo] = widgetRegistry.widgets(forAppMode: appMode, layoutMode: preferenceLayoutMode)
             for panel in visibleWidgetPanels {
-                let widgetsCount = getWidgetsCount(panel: panel)
+                let widgetsCount = widgetsCount(panel: panel, widgetInfos: widgetInfos)
                 let row = widgetsSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.title = panel.title
@@ -274,15 +276,14 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         }
     }
 
-    func getWidgetsCount(panel: WidgetsPanel) -> Int {
+    func widgetsCount(panel: WidgetsPanel, widgetInfos: [MapWidgetInfo]) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry.widgets(forPanel: appMode,
-                                      filterModes: filter,
-                                      panels: [panel],
-                                      layoutMode: screenElementsMode.usesSeparateLayouts
-                                                     ? NSNumber(value: screenLayoutMode.rawValue)
-                                                     : nil).count
+        return widgetRegistry.filteredWidgets(widgetInfos,
+                                              appMode: appMode,
+                                              layoutMode: preferenceLayoutMode,
+                                              filterModes: filter,
+                                              panels: [panel]).count
     }
     
     // MARK: AppModeSelectionDelegate

@@ -1568,6 +1568,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *userUUID;
 @property (nonatomic) OACommonLong *userIosIdExpiredTime;
 @property (nonatomic) OACommonBoolean *useOldRouting;
+@property (nonatomic) OACommonBoolean *useSharedRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;

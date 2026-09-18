@@ -15,4 +15,10 @@
     return self.previousToRecalculate && self.onlyStartPointChanged && self.start && self.gpxRoute;
 }
 
+- (void) takeMissingMapsResultFrom:(OARouteCalculationParams *)params
+{
+    if (!self.missingMapsResult)
+        self.missingMapsResult = params.missingMapsResult;
+}
+
 @end

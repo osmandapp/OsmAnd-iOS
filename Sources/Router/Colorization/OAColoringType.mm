@@ -196,7 +196,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     
     if ([self isRouteInfoAttribute])
     {
-        return !route.getOriginalRoute.empty() && [self isAttributeAvailableForDrawing:route.getOriginalRoute attributeName:attributeName];
+        return route.getOriginalRoute.count > 0 && [self isAttributeAvailableForDrawing:route.getOriginalRoute attributeName:attributeName];
     }
     
     return YES;
@@ -222,8 +222,8 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     
     if ([self isRouteInfoAttribute])
     {
-        const auto routeSegments = [self getRouteSegmentsInTrack:selectedGpxFile];
-        if (routeSegments.empty())
+        NSArray<OASRouteSegmentResult *> *routeSegments = [self getRouteSegmentsInTrack:selectedGpxFile];
+        if (routeSegments.count == 0)
             return NO;
         return [self isAttributeAvailableForDrawing:routeSegments attributeName:attributeName];
     }
@@ -239,29 +239,27 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
+- (NSArray<OASRouteSegmentResult *> *) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
 {
     if (!gpxFile.isOsmAndOrigin)
-        return {};
+        return @[];
     
-    std::vector<std::shared_ptr<RouteSegmentResult>> routeSegments;
+    NSMutableArray<OASRouteSegmentResult *> *routeSegments = [NSMutableArray array];
     for (NSInteger i = 0; i < [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO].count; i++)
     {
         OASTrkSegment *segment = [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO][i];
         if (segment.hasRoute)
         {
-            const auto rt = [OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i];
-            if (!rt.empty())
-                routeSegments.insert(routeSegments.end(), rt.begin(), rt.end());
+            [routeSegments addObjectsFromArray:[OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i]];
         }
     }
     return routeSegments;
 }
 
-- (BOOL) isAttributeAvailableForDrawing:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)routeSegments
+- (BOOL) isAttributeAvailableForDrawing:(NSArray<OASRouteSegmentResult *> *)routeSegments
                           attributeName:(NSString *)attributeName
 {
-    if (routeSegments.empty() || attributeName.length == 0)
+    if (routeSegments.count == 0 || attributeName.length == 0)
         return NO;
     
     NSArray<OARouteStatistics *> *stats = [OARouteStatisticsHelper calculateRouteStatistic:routeSegments attributeNames:@[attributeName]];

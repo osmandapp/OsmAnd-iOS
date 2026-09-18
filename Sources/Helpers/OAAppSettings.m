@@ -488,6 +488,7 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
+static NSString * const useSharedRoutingKey = @"useSharedRoutingKey";
 static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
@@ -7103,6 +7104,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
+        
+        _useSharedRouting = [[[OACommonBoolean withKey:useSharedRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useSharedRouting forKey:@"use_shared_routing"];
         
         _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];

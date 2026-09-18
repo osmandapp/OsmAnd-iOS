@@ -13,6 +13,7 @@
 #import "OALocationServices.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -802,6 +803,9 @@ static double const TILT_ANIMATION_TIME = 0.4;
 - (BOOL) shouldAutoZoom:(CLLocation *)location autoZoomFrequency:(int)autoZoomFrequency
 {
     if (![_settings.autoZoomMap get] || location.speed <= 0)
+        return NO;
+
+    if ([[OARootViewController instance].mapPanel.hudViewController isQuickActionsSheetVisible])
         return NO;
     
     NSTimeInterval now = [[NSDate now] timeIntervalSince1970];

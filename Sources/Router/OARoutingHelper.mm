@@ -454,12 +454,12 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+- (OASRouteSegmentResult *) getCurrentSegmentResult
 {
     return [_route getCurrentSegmentResult];
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+- (OASRouteSegmentResult *) getNextStreetSegmentResult
 {
     return [_route getNextStreetSegmentResult];
 }
@@ -890,7 +890,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart
 {
     return [_route getUpcomingTunnel:distToStart];
 }
@@ -1040,6 +1040,26 @@ static BOOL _isDeviatedFromRoute = false;
 	return [_provider getRoutingEnvironment:mode start:start end:end];
 }
 
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder
+{
+	return [_provider generateSharedGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
+}
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	return [_provider calculateSharedGpxApproximation:env
+                                                gctx:gctx
+                                              points:points
+                               useExternalTimestamps:useExternalTimestamps
+                                       resultMatcher:resultMatcher];
+}
+
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
 {
 	return [_provider generateGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
@@ -1181,11 +1201,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
     
     NSArray<CLLocation *> *locations = route.getImmutableAllLocations;
-    auto originalRoute = route.getOriginalRoute;
+    NSArray<OASRouteSegmentResult *> *originalRoute = route.getOriginalRoute;
     OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name
                                                                route:originalRoute
                                                            locations:locations
-                                                   routePointIndexes:{}
+                                                   routePointIndexes:@[]
                                                               points:points
                                                   preserveTimestamps:NO];
     return [exporter exportRoute];

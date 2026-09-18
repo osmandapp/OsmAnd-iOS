@@ -1,5 +1,5 @@
 //
-//  OATurnDrawable+cpp.h
+//  OATurnDrawable+TurnType.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 28/05/24.
@@ -10,9 +10,11 @@
 #import "OATurnPathHelper.h"
 #import <Foundation/Foundation.h>
 
-@interface OATurnDrawable(cpp)
+@class OASTurnType;
 
-- (std::shared_ptr<TurnType>) turnType;
-- (BOOL) setTurnType:(std::shared_ptr<TurnType>)turnType;
+@interface OATurnDrawable(TurnType)
+
+- (OASTurnType *) turnType;
+- (BOOL) setTurnType:(OASTurnType *)turnType;
 
 @end

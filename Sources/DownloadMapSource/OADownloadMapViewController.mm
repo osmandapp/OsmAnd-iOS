@@ -178,7 +178,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return nil;
 }
 
-- (NSString *) getCommonTypeStr
+- (NSString *)getCommonTypeStr
 {
     return @"";
 }

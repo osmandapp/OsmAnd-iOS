@@ -12,6 +12,8 @@
 #import "OAFavoritesHelper.h"
 #import "OAPOI.h"
 #import "OsmAndApp.h"
+#import "OAEntity.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -56,12 +58,45 @@
         [_favorite setIcon:_iconName];
         [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
+        [self setOsmUrl:poi];
         
         NSString *originName = poi.toStringEn;
         if (originName.length > 0)
             [_favorite setAmenityOriginName:originName];
     }
     return self;
+}
+
+- (void)setOsmUrl:(OAPOI *)poi
+{
+    if (![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+        return;
+    
+    id object = poi ?: [OARootViewController.instance.mapPanel getCurrentTargetPoint].targetObj;
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        object = ((BaseDetailsObject *) object).syntheticAmenity;
+    }
+    else if ([object isKindOfClass:OAOpenStreetMapPoint.class])
+    {
+        OAEntity *entity = ((OAOpenStreetMapPoint *) object).getEntity;
+        if (entity.getId <= 0)
+            return;
+        
+        OAPOI *requestPoi = [[OAPOI alloc] init];
+        requestPoi.latitude = _favorite.getLatitude;
+        requestPoi.longitude = _favorite.getLongitude;
+        requestPoi.obfId = [ObfConstants createMapObjectIdFromOsmId:entity.getId type:[OAEntity stringTypeOf:entity]];
+        OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestPoi];
+        object = [OAAmenitySearcher.sharedInstance searchDetailedObjectWithRequest:request].syntheticAmenity;
+    }
+    
+    if ([object isKindOfClass:OAPOI.class] || [object isKindOfClass:OARenderedObject.class])
+    {
+        NSString *url = [ObfConstants getOsmUrlForId:object];
+        if (url.length > 0)
+            [_favorite setExtensions:@{OASGpxUtilities.shared.OSM_URL_EXTENSION: url}];
+    }
 }
 
 - (void) commonInit

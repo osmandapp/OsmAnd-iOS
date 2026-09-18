@@ -2098,13 +2098,23 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (CGFloat) getStatusBarHeight
 {
-    __block CGFloat height = 0.0;
-    dispatch_block_t onMain = ^{
-        UIStatusBarManager *manager = UIApplication.sharedApplication.mainWindow.windowScene.statusBarManager;
-        height = manager ? manager.statusBarFrame.size.height : 0.0;
-    };
-    NSThread.isMainThread ? onMain() : dispatch_sync(dispatch_get_main_queue(), onMain);
-    return height;
+    if ([NSThread isMainThread])
+    {
+        return [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+    else
+    {
+        __block CGFloat height = 20.0;
+        dispatch_block_t onMain = ^{
+            height = [UIApplication sharedApplication].statusBarFrame.size.height;
+        };
+        if ([NSThread isMainThread])
+            onMain();
+        else
+            dispatch_sync(dispatch_get_main_queue(), onMain);
+        
+        return height;
+    }
 }
 
 + (CGFloat) getTopMargin

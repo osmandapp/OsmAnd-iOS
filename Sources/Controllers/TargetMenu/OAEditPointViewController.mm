@@ -1572,7 +1572,16 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
+        NSString *color = [(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName];
+        if (color)
+        {
+            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:color]];
+            if ([_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems] == NSNotFound)
+            {
+                _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+                [_colorCollectionHandler generateData:@[_sortedColorItems]];
+            }
+        }
     }
 
     if ([self.groupTitle isEqualToString:@""])

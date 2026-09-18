@@ -173,7 +173,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
                              OAWidgetType.temperature];
     for (OAWidgetType *widgetType in widgetTypeArray)
     {
-        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode widgetParams:widgetParams]]];
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:widgetType widgetParams:widgetParams]]]];
     }
 }
 

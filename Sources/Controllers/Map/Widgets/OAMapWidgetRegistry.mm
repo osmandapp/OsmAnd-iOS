@@ -291,6 +291,7 @@
     {
         NSNumber *layoutMode = [_settings.useSeparateLayouts get:widget.appMode] ? @(widget.screenLayoutMode) : nil;
         WidgetsPanel *panel = [widget updatedPanel];
+        widget.widgetPanel = panel;
         widget.pageIndex = [panel widgetPage:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         widget.priority = [panel widgetOrder:widget.key appMode:widget.appMode screenLayoutMode:layoutMode];
         

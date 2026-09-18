@@ -109,7 +109,7 @@
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
                                                             screenLayoutMode:delegate.screenLayoutMode
                                                         preferenceLayoutMode:delegate.preferenceLayoutMode];
-    OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.mapillary widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:widget]];
 }
 

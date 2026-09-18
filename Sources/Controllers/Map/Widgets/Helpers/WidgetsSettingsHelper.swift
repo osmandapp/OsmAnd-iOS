@@ -296,7 +296,7 @@ class WidgetsSettingsHelper: NSObject {
                                            screenLayoutMode: NSNumber?,
                                            widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let duplicateWidgetId = WidgetType.getDuplicateWidgetId(widgetType: widgetType)
-        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, widgetParams: widgetParams)
+        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
         if let duplicateWidget {
             let widgetScreenLayoutMode = screenLayoutMode
                 .flatMap { ScreenLayoutMode(rawValue: $0.int32Value) }

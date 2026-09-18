@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString * const kWidgetPanelKey;
+
 @class OABaseWidgetView, OAWidgetType, OAWidgetState, WidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState, OATableRowData, WidgetConfigurationViewController, OAMapWidgetInfo;
 
 @protocol OAWidgetListener <NSObject>
@@ -26,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OABaseWidgetView : UIView
 
 @property (nonatomic, nullable) OAWidgetType *widgetType;
+@property (nonatomic, nullable) WidgetsPanel *panel;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 @property (nonatomic, assign) BOOL isSimpleLayout;
 @property (nonatomic, assign) BOOL isVerticalStackImageTitleSubtitleLayout;

@@ -1021,6 +1021,16 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 {
     _appMode = appMode;
     _customId = id;
+    self.panel = widgetParams[kWidgetPanelKey];
+    if (!self.panel)
+    {
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
+        self.panel = [self.widgetType panel:id.length > 0 ? id : self.widgetType.id
+                                   appMode:appMode
+                          screenLayoutMode:screenLayoutMode];
+    }
     _showIconPref = [self registerShowIconPref:id];
     self.widgetSizePref = [self registerWidgetSizePref:id];
     
@@ -1044,8 +1054,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (WidgetsPanel *)widgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [self widgetInfo];
-    return widgetInfo.widgetPanel;
+    return self.panel;
 }
 
 - (OAMapWidgetInfo *)widgetInfo
@@ -1060,17 +1069,8 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    OAApplicationMode *appMode = [self getAppMode];
-    NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
-        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
-        : nil;
-    NSString *widgetId = customId.length > 0 ? customId : self.widgetType.id;
-    WidgetsPanel *storedPanel = [self.widgetType panel:widgetId
-                                               appMode:appMode
-                                      screenLayoutMode:screenLayoutMode];
-    BOOL verticalPanel = [[self widgetPanel] isPanelVertical] || storedPanel.isPanelVertical;
     return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
-                                                                   defValue:verticalPanel ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+                                                                   defValue:self.panel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

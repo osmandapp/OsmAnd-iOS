@@ -1006,7 +1006,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     // Finish the current UIKit layout pass before recalculating widget constraints.
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
-    [self performSelector:@selector(layoutWidgets) withObject:nil afterDelay:0];
+    [self performSelector:@selector(layoutWidgets)
+               withObject:nil
+               afterDelay:0
+                  inModes:@[NSRunLoopCommonModes]];
 }
 
 @end

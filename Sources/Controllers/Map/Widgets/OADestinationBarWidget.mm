@@ -141,7 +141,7 @@
     [self startLocationUpdate];
 }
 
-- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+- (void)detachView:(WidgetsPanel *)widgetsPanel
 {
     [self stopLocationUpdate];
 
@@ -386,7 +386,7 @@
     BOOL isCompactPortrait = isPortrait && _settings.isCompactPanelsLayout && ![OAUtilities isiOSAppOnMac];
     BOOL useMultipleRows = isCompactPortrait
         ? _destinationCells.count > 1
-        : isPortrait && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad;
+        : isPortrait && ![OAUtilities isIPad];
     if (useMultipleRows)
     {
         _singleLineMode = NO;

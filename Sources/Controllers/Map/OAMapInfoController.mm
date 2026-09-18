@@ -320,7 +320,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
             [widgetInfo.widget updateColors:state];
         }
         OAApplicationMode *appMode = _settings.applicationMode.get;
-        for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
+        for (WidgetsPanel *panel in WidgetsPanel.values)
         {
             ResolvedWidgetPanelAppearance *appearance =
                 [WidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
@@ -416,7 +416,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
 {
-    OAWidgetsPanel *panel = view == _topShadowContainerView ? OAWidgetsPanel.topPanel : OAWidgetsPanel.bottomPanel;
+    WidgetsPanel *panel = view == _topShadowContainerView ? WidgetsPanel.topPanel : WidgetsPanel.bottomPanel;
     ResolvedWidgetPanelAppearance *appearance =
         [WidgetPanelAppearanceResolver resolveForPanel:panel
                                                appMode:_settings.applicationMode.get
@@ -499,6 +499,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         rightPanelWidth = rightSize.width + (_rightPanelController.view.layer.borderWidth * 2);
     }
 
+    CGSize topSize = hasTopWidgets ? [_topPanelController calculateContentSize] : CGSizeZero;
+    CGSize bottomSize = hasBottomWidgets ? [_bottomPanelController calculateContentSize] : CGSizeZero;
+    BOOL topPanelAboveSidePanels = NO;
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
     // Device orientation does not describe the window layout of an iPad app running on Mac.
     BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape] && ![OAUtilities isiOSAppOnMac];
@@ -529,6 +532,16 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         topPanelWidth = MAX(0, availableWidth - topLeftMargin - topRightMargin);
         topPanelCenterX = (topLeftMargin - topRightMargin) / 2;
         bottomPanelWidth = MAX(0, availableWidth - bottomHorizontalMargin * 2);
+        // A compact gap can be narrower than the required padding/icons of a widget row.
+        // In that case use a full-width row and keep the side panels below the top panel.
+        if (hasTopWidgets && topPanelWidth < topSize.width)
+        {
+            topPanelWidth = availableWidth;
+            topPanelCenterX = 0;
+            topPanelAboveSidePanels = YES;
+        }
+        if (hasBottomWidgets && bottomPanelWidth < bottomSize.width)
+            bottomPanelWidth = availableWidth;
     }
     else
     {
@@ -544,7 +557,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     if (hasTopWidgets)
     {
-        _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
+        _mapHudViewController.topWidgetsViewHeightConstraint.constant = topSize.height;
         _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
         
         [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
@@ -581,7 +594,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = bottomPanelWidth;
     if (hasBottomWidgets)
     {
-        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = bottomSize.height;
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
         
         [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
@@ -621,7 +634,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
     if (isCompactPortrait)
     {
-        leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
+        leftRightWidgetsViewTopConstraintConstant = !topPanelAboveSidePanels && _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
             ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant + kWidgetsTopPadding
             : kWidgetsTopPadding;
     }
@@ -759,7 +772,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     // We will normalize them to a single size: all widgets will adopt the size
     // that occurs most frequently in the row.
     [WidgetUtils applyMostFrequentStyleForPagedWidgetsWithAppMode:[[OAAppSettings sharedManager].applicationMode get]
-                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
+                                                      filterModes:KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels panels:@[WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]];
 }
 
 - (void) recreateControls
@@ -814,10 +827,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     [self updateWidgetsInfo];
 
-    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
-    [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];
-    [self recreateWidgetsPanel:_leftPanelController panel:OAWidgetsPanel.leftPanel appMode:appMode];
-    [self recreateWidgetsPanel:_rightPanelController panel:OAWidgetsPanel.rightPanel appMode:appMode];
+    [self recreateWidgetsPanel:_topPanelController panel:WidgetsPanel.topPanel appMode:appMode];
+    [self recreateWidgetsPanel:_bottomPanelController panel:WidgetsPanel.bottomPanel appMode:appMode];
+    [self recreateWidgetsPanel:_leftPanelController panel:WidgetsPanel.leftPanel appMode:appMode];
+    [self recreateWidgetsPanel:_rightPanelController panel:WidgetsPanel.rightPanel appMode:appMode];
 
     _themeId = -1;
     [self updateColorShadowsOfText];
@@ -828,16 +841,16 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
     [_mapWidgetRegistry updateWidgetsInfo:appMode];
-    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
+    [self recreateWidgetsPanel:_topPanelController panel:WidgetsPanel.topPanel appMode:appMode];
 }
 
-- (void)recreateWidgetsPanel:(OAWidgetsPanel *)panel
+- (void)recreateWidgetsPanel:(WidgetsPanel *)panel
 {
     OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
     [self recreateWidgetsPanel:[self controllerForPanel:panel] panel:panel appMode:appMode];
 }
 
-- (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(OAWidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
+- (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(WidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
 {
     if (container)
     {
@@ -918,13 +931,13 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     }
 }
 
-- (OAWidgetPanelViewController *)controllerForPanel:(OAWidgetsPanel *)panel
+- (OAWidgetPanelViewController *)controllerForPanel:(WidgetsPanel *)panel
 {
-    if (panel == OAWidgetsPanel.leftPanel)
+    if (panel == WidgetsPanel.leftPanel)
         return _leftPanelController;
-    if (panel == OAWidgetsPanel.rightPanel)
+    if (panel == WidgetsPanel.rightPanel)
         return _rightPanelController;
-    if (panel == OAWidgetsPanel.topPanel)
+    if (panel == WidgetsPanel.topPanel)
         return _topPanelController;
     return _bottomPanelController;
 }

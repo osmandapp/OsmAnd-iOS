@@ -113,10 +113,6 @@ final class MigrationManager: NSObject {
                 migrateAstronomyPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
             }
-            if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
-                migrateTracksSortModeKeysAndFormat()
-                defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
-            }
             if !defaults.bool(forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue) {
                 migrateWidgetLayoutPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
@@ -124,6 +120,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgets.rawValue) {
                 migrateTransparentWidgets()
                 defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
+                migrateTracksSortModeKeysAndFormat()
+                defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
             }
         }
     }

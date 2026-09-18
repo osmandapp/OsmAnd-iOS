@@ -1480,7 +1480,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
         _bottomBarView.backgroundColor =
-            [WidgetPanelAppearanceResolver resolveForPanel:OAWidgetsPanel.bottomPanel
+            [WidgetPanelAppearanceResolver resolveForPanel:WidgetsPanel.bottomPanel
                                                    appMode:_settings.applicationMode.get
                                                  nightMode:_settings.isAppMapNightMode].backgroundColor;
 }
@@ -1699,7 +1699,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = [WidgetPanelAppearanceResolver resolveForPanel:OAWidgetsPanel.topPanel
+        statusBarColor = [WidgetPanelAppearanceResolver resolveForPanel:WidgetsPanel.topPanel
                                                                 appMode:_settings.applicationMode.get
                                                               nightMode:isNight].backgroundColor;
     if (!statusBarColor)

@@ -98,7 +98,13 @@ final class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
             updateSimpleWidget()
-            let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            // Compress optional label widths, but preserve required padding and icon widths.
+            let fittingSize = stackView.systemLayoutSizeFitting(
+                UIView.layoutFittingCompressedSize,
+                withHorizontalFittingPriority: UILayoutPriority(999),
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            width = fittingSize.width
             height = fittingSize.height
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })

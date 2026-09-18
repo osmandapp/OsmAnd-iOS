@@ -19,15 +19,15 @@ protocol MapButtonsDelegate: AnyObject {
 class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeSelectionDelegate, WidgetStateDelegate, MapButtonsDelegate {
 
     private enum RawKey: String {
-        case screenElements = "screen_elements"
-        case panelsLayout = "panels_layout"
+        case screenElements
+        case panelsLayout
+        case appearance
+        case transparentWidgets
         case customButtons
         case defaultButtons
-        case positionOnMap = "position_on_map"
-        case distanceByTap = "map_widget_distance_by_tap"
-        case speedometer = "shared_string_speedometer"
-        case selectedKey = "selected"
-        case appearanceRowKey = "appearance"
+        case positionOnMap
+        case distanceByTap
+        case speedometer
     }
 
     private let selectedKey = "selected"
@@ -166,12 +166,14 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         let visibleWidgetPanels = !isSharedLandscapeLayout ? WidgetsPanel.values : []
         if !visibleWidgetPanels.isEmpty {
             widgetsSection.footerText = localizedString("widget_panels_descr")
+            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+            let widgetInfos: [MapWidgetInfo] = widgetRegistry.widgets(forAppMode: appMode, layoutMode: preferenceLayoutMode)
             for panel in visibleWidgetPanels {
-                let widgetsCount = getWidgetsCount(panel: panel)
+                let widgetsCount = widgetsCount(panel: panel, widgetInfos: widgetInfos)
                 let row = widgetsSection.createNewRow()
                 row.cellType = OAValueTableViewCell.reuseIdentifier
                 row.title = panel.title
-                row.iconName = panel.iconName(for: screenLayoutMode)
+                row.icon = panel.icon(for: screenLayoutMode)
                 row.setObj(panel, forKey: "panel")
                 row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode?.getProfileColor()
                 row.descr = String(widgetsCount)
@@ -186,7 +188,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         panelsLayoutRow.key = RawKey.panelsLayout.rawValue
         panelsLayoutRow.title = localizedString("panels_layout")
         panelsLayoutRow.descr = panelsLayoutMode.title
-        panelsLayoutRow.iconName = panelsLayoutMode.iconName(for: screenLayoutMode)
+        panelsLayoutRow.icon = panelsLayoutMode.icon(for: screenLayoutMode)
         panelsLayoutRow.iconTintColor = appMode.getProfileColor()
         panelsLayoutRow.cellType = OAValueTableViewCell.reuseIdentifier
         panelsLayoutRow.accessibilityLabel = panelsLayoutRow.title
@@ -196,7 +198,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         }
         
         let appearanceRow = widgetsSection.createNewRow()
-        appearanceRow.key = RawKey.appearanceRowKey.rawValue
+        appearanceRow.key = RawKey.appearance.rawValue
         appearanceRow.title = localizedString("shared_string_appearance")
         appearanceRow.icon = UIImage.templateImageNamed("ic_custom_appearance")
         appearanceRow.iconTintColor = appMode.getProfileColor()
@@ -273,15 +275,14 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         }
     }
 
-    func getWidgetsCount(panel: WidgetsPanel) -> Int {
+    func widgetsCount(panel: WidgetsPanel, widgetInfos: [MapWidgetInfo]) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-        return widgetRegistry.widgets(forPanel: appMode,
-                                      filterModes: filter,
-                                      panels: [panel],
-                                      layoutMode: screenElementsMode.usesSeparateLayouts
-                                                     ? NSNumber(value: screenLayoutMode.rawValue)
-                                                     : nil).count
+        return widgetRegistry.filteredWidgets(widgetInfos,
+                                              appMode: appMode,
+                                              layoutMode: preferenceLayoutMode,
+                                              filterModes: filter,
+                                              panels: [panel]).count
     }
     
     // MARK: AppModeSelectionDelegate
@@ -427,7 +428,7 @@ extension ConfigureScreenViewController {
             cell.valueLabel.text = item.descr
             cell.titleLabel.text = item.title
             if let iconTintColor = item.iconTintColor {
-                cell.leftIconView.image = item.icon ?? UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.image = item.icon?.withRenderingMode(.alwaysTemplate) ?? UIImage.templateImageNamed(item.iconName)
                 if item.key == RawKey.distanceByTap.rawValue {
                     let selected = item.bool(forKey: selectedKey)
                     cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
@@ -502,7 +503,7 @@ extension ConfigureScreenViewController {
             let vc = DistanceByTapViewController()
             vc.delegate = self
             show(vc)
-        } else if data.key == RawKey.appearanceRowKey.rawValue {
+        } else if data.key == RawKey.appearance.rawValue {
             show(WidgetsAppearanceViewController(appMode: appMode,
                                                  layoutMode: screenLayoutMode))
         } else if data.key == RawKey.panelsLayout.rawValue {

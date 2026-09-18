@@ -26,8 +26,8 @@ class SimpleWidgetInfo: MapWidgetInfo {
         simpleWidget.setContentTitle(getWidgetTitle())
     }
 
-    override func getUpdatedPanel(_ appMode: OAApplicationMode,
-                                  screenLayoutMode: NSNumber?) -> WidgetsPanel {
+    override func updatedPanel(_ appMode: OAApplicationMode,
+                               screenLayoutMode: NSNumber?) -> WidgetsPanel {
         if let widgetType = widgetType() {
             return widgetType.panel(key,
                                     appMode: appMode,

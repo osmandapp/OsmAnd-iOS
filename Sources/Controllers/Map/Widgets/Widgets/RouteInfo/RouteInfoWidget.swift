@@ -119,8 +119,8 @@ final class RouteInfoWidget: OASimpleWidget {
         forceUpdateView()
     }
     
-    override func getSettingsData(forSimpleWidget appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
-        guard let data = super.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams) else {
+    override func settingsData(forSimpleWidget appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
+        guard let data = super.settingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams) else {
             return nil
         }
         let showExpandButtonRow = data.sectionData(for: 0).createNewRow()

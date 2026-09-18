@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory, OAWidgetsPanel;
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory, WidgetsPanel;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
@@ -1263,7 +1263,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (BOOL)isTransparentWidgets;
 - (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode;
 - (OACommonStringList *)customWidgetKeys:(nullable NSNumber *)screenLayoutMode;
-- (OACommonListOfStringList *)widgetPanelOrder:(OAWidgetsPanel *)panel
+- (OACommonListOfStringList *)widgetPanelOrder:(WidgetsPanel *)panel
                               screenLayoutMode:(nullable NSNumber *)screenLayoutMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;

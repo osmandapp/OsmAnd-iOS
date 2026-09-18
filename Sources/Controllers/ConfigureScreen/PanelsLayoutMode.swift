@@ -37,29 +37,29 @@
         }
     }
 
-    func iconName(for screenLayoutMode: ScreenLayoutMode) -> String {
+    func icon(for screenLayoutMode: ScreenLayoutMode) -> UIImage {
         switch (screenLayoutMode, self) {
         case (.portrait, .wide):
-            "ic_custom_panels_layout_portrait_wide"
+            .icCustomPanelsLayoutPortraitWide
         case (.portrait, .compact):
-            "ic_custom_panels_layout_portrait_compact"
+            .icCustomPanelsLayoutPortraitCompact
         case (.landscape, .wide):
-            "ic_custom_panels_layout_landscape_wide"
+            .icCustomPanelsLayoutLandscapeWide
         case (.landscape, .compact):
-            "ic_custom_panels_layout_landscape_compact"
+            .icCustomPanelsLayoutLandscapeCompact
         }
     }
 
-    func imageName(for screenLayoutMode: ScreenLayoutMode) -> String {
+    func image(for screenLayoutMode: ScreenLayoutMode) -> UIImage {
         switch (screenLayoutMode, self) {
         case (.portrait, .wide):
-            "img_panels_layout_portrait_wide"
+            .imgPanelsLayoutPortraitWide
         case (.portrait, .compact):
-            "img_panels_layout_portrait_compact"
+            .imgPanelsLayoutPortraitCompact
         case (.landscape, .wide):
-            "img_panels_layout_landscape_wide"
+            .imgPanelsLayoutLandscapeWide
         case (.landscape, .compact):
-            "img_panels_layout_landscape_compact"
+            .imgPanelsLayoutLandscapeCompact
         }
     }
 }

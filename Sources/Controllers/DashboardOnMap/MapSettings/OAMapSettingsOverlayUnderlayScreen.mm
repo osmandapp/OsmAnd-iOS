@@ -321,7 +321,7 @@ static NSInteger kButtonsSection;
         {
             cell.titleLabel.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
-            NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            NSString *imgName = _isEnabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
             cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
             [cell leftIconVisibility:YES];

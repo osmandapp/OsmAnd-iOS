@@ -16,6 +16,7 @@
 @implementation OAFavoriteGroupEditorViewController
 {
     OAFavoriteGroup *_favoriteGroup;
+    BOOL _isSaving;
 }
 
 #pragma mark - Initialization
@@ -75,6 +76,9 @@
 
 - (void)onRightNavbarButtonPressed
 {
+    if (_isSaving)
+        return;
+
     if (self.isNewItem)
     {
         [self addPointsGroup];
@@ -120,6 +124,9 @@
 
 - (void)onLeftNavbarButtonPressed
 {
+    if (_isSaving)
+        return;
+
     if (self.isNewItem || ![self isAppearanceChanged])
     {
         [super onLeftNavbarButtonPressed];
@@ -134,6 +141,17 @@
         
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return !_isSaving && [super onGestureRecognizerShouldBegin:gestureRecognizer];
+}
+
+- (void)dismissViewController
+{
+    if (!_isSaving)
+        [super dismissViewController];
 }
 
 #pragma mark - Additions
@@ -168,7 +186,6 @@
 
 - (void)addPointsGroup
 {
-    [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
     [self dismissViewController];
     if (self.delegate)
     {
@@ -181,13 +198,37 @@
 
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
-    if (![self.editIconName isEqual:_favoriteGroup.iconName])
+    if (_isSaving)
+        return;
+
+    [self beginSaving];
+    if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
+    {
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
                           updatePoints:updatePoints
                        updateGroupIcon:updateGroupValues
-                       saveImmediately:NO];
-    
+                       saveImmediately:NO
+                            completion:^{
+            [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+        }];
+    }
+    else
+    {
+        [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+    }
+}
+
+- (void)beginSaving
+{
+    _isSaving = YES;
+    [self.view endEditing:YES];
+    self.modalInPresentation = YES;
+    self.view.userInteractionEnabled = NO;
+}
+
+- (void)finishEditingPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
+{
     [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
 
     if (![self.editColor isEqual:_favoriteGroup.color])
@@ -210,6 +251,11 @@
 
     [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
+
+    self.view.userInteractionEnabled = YES;
+    self.modalInPresentation = NO;
+    _isSaving = NO;
+
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];
     [self dismissViewController];

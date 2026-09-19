@@ -413,7 +413,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void) setupIconHandler
 {
-    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:!self.isNewItem];
+    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] initWithIsFavoriteList:YES];
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
@@ -421,7 +421,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = self.editColor;
     
-    OAFavoriteGroup *group = [self existingGroupFor:self.editName];
+    // A new folder has no points; its empty name can match the default favorites group.
+    OAFavoriteGroup *group = _isNewItem ? nil : [self existingGroupFor:self.editName];
     if (group)
     {
         NSMutableArray *iconNames = [NSMutableArray array];
@@ -437,13 +438,9 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [_poiIconCollectionHandler setIconSizeWithSize:24];
     [_poiIconCollectionHandler setSpacingWithSpacing:9];
     
-    if (!_isNewItem && self.editIconName)
-        _selectedIconName = self.editIconName;
-    else
-    {
-        _selectedIconName = [self getDefaultIconName];
-        self.editIconName = _selectedIconName;
-    }
+    // An empty icon means Original, including the initial selection for a new folder.
+    _selectedIconName = self.editIconName ?: @"";
+    self.editIconName = _selectedIconName;
     [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
@@ -481,23 +478,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     
     _shapesCollectionHandler.selectedCatagoryKey = _backgroundIconNames[_selectedBackgroundIndex];
     [_shapesCollectionHandler setupDefaultCategory];
-}
-
-- (NSString *)getPreselectedIconName
-{
-    return (!_isNewItem) ? nil : self.editIconName;
-}
-
-- (NSString *)getDefaultIconName
-{
-    NSString *preselectedIconName = [self getPreselectedIconName];
-    if (preselectedIconName && preselectedIconName.length > 0)
-        return preselectedIconName;
-    else if (self.editIconName && self.editIconName.length > 0)
-        return self.editIconName;
-    else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
-        return _poiIconCollectionHandler.lastUsedIcons[0];
-    return DEFAULT_ICON_NAME_KEY;
 }
 
 - (OrderedDictionary<NSString *, NSArray<NSString *> *> *)loadOrderedJSON
@@ -599,7 +579,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
     return !groupExist
             || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-            || ![self.editIconName isEqual:groupExist.iconName]
+            || ![self.editIconName isEqualToString:groupExist.iconName ?: @""]
             || ![self.editColor isEqual:groupExist.color];
 }
 
@@ -678,20 +658,15 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
-    if (_isNewItem)
-        return;
-    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    if ([category isEqualToString: @"original"])
+
+    if ([category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY])
     {
-        OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
-        if (groupExist)
-        {
-            _selectedIconName = groupExist.iconName;
-            self.editIconName = _selectedIconName;
-        }
+        _selectedIconName = @"";
+        self.editIconName = _selectedIconName;
+        _wasChanged = YES;
     }
     [self changeSaveButtonAvailabilityWithGroup];
 }

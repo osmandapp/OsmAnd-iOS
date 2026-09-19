@@ -525,7 +525,7 @@
 "clear_all_intermediates" = "Cancella tutte le destinazioni intermedie";
 "shared_string_options" = "Opzioni";
 "make_as_start_point" = "Usalo come punto di partenza";
-"open_till" = "Aperto sino alle";
+"open_till" = "Aperto fino alle";
 "road_blocked" = "Strada bloccata";
 "shared_string_road" = "Strada";
 "cancel_navigation" = "Interrompere la navigazione";

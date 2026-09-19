@@ -106,6 +106,7 @@
 #import "OADiscountToolbarViewController.h"
 #import "OAPluginsHelper.h"
 #import "OAApplicationMode.h"
+#import <MBProgressHUD.h>
 #import "OARouteKey.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -198,6 +199,8 @@ typedef enum
     OACarPlayActiveViewController *_carPlayActiveController;
 
     BOOL _isNewContextMenuStillEnabled;
+
+    MBProgressHUD *_gpxProgress;
 
     ContextMenuPresentationCoordinator *_contextMenuPresentationCoordinator;
     UIView *_contextMenuPresentationUITestStateView;
@@ -1621,6 +1624,40 @@ typedef enum
         }
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
+}
+
+- (void) setupProgress
+{
+    _gpxProgress = [[MBProgressHUD alloc] initWithView:self.view];
+    _gpxProgress.minShowTime = .3;
+    _gpxProgress.removeFromSuperViewOnHide = YES;
+    _gpxProgress.labelText = OALocalizedString(@"shared_string_loading");
+    _gpxProgress.labelFont = [UIFont scaledSystemFontOfSize:22. weight:UIFontWeightSemibold];
+    _gpxProgress.detailsLabelText = OALocalizedString(@"shared_string_cancel");
+    _gpxProgress.detailsLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
+    _gpxProgress.detailsLabelColor = UIColor.blackColor;
+    _gpxProgress.labelColor = UIColor.blackColor;
+    _gpxProgress.activityIndicatorColor = UIColor.blackColor;
+    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];
+    _gpxProgress.color = UIColor.whiteColor;
+    [self.view addSubview:_gpxProgress];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideProgress)];
+    [_gpxProgress addGestureRecognizer:tap];
+}
+
+- (void) showProgress
+{
+    if (!_gpxProgress)
+        [self setupProgress];
+    
+    [_gpxProgress show:YES];
+}
+
+- (void)hideProgress
+{
+    [_gpxProgress hide:YES];
+    _gpxProgress = nil;
+    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.whiteColor];
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint

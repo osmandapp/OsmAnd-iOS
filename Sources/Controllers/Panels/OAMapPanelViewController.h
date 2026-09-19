@@ -225,6 +225,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showDestinations;
 
+- (void) showProgress;
+- (void) hideProgress;
+
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
 - (void) showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude;

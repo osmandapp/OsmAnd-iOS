@@ -212,9 +212,8 @@ final class TravelObfHelper: NSObject {
 
         let params = OAGpxApproximationParams()
         params.appMode = mode
-        let approximator = OAGpxApproximationHelper(locations: [],
-                                                    initialAppMode: mode,
-                                                    initialThreshold: Float(params.distanceThreshold))
+        let approximator: OAGpxApproximationHelper =
+            OAGpxApproximationHelper(appMode: mode, threshold: Float(params.distanceThreshold))
         guard let approximated = approximator.approximateGpxSync(gpxFile, params: params),
               approximated !== gpxFile else {
             return

@@ -29,7 +29,12 @@ final class TravelObfHelper: NSObject {
 
     private let localDataHelper = TravelLocalDataHelper.shared
 
-    private var helper: OsmAndShared.TravelObfHelper { SharedTravel.helper }
+    /// Runs `work` against the shared helper with the obf readers held open, so that a change of
+    /// the installed maps in the middle of a read does not close the file being read. Every call
+    /// that touches an obf goes through here.
+    private func reading<T>(_ work: (OsmAndShared.TravelObfHelper) -> T) -> T {
+        SharedObfReaders.shared.withReadersHeld { work(SharedTravel.helper) }
+    }
 
     private override init() {
         super.init()
@@ -44,25 +49,25 @@ final class TravelObfHelper: NSObject {
     }
 
     func initializeDataToDisplay(resetData: Bool) {
-        helper.initializeDataToDisplay(resetData: resetData)
+        reading { $0.initializeDataToDisplay(resetData: resetData) }
     }
 
     /// One more page of popular articles. The shared helper keeps the radius it has reached, so
     /// asking again without resetting widens the search.
     func loadPopularArticles() {
-        helper.initializeDataToDisplay(resetData: false)
+        reading { $0.initializeDataToDisplay(resetData: false) }
     }
 
     func getPopularArticles() -> [TravelArticle] {
-        helper.getPopularArticles().map { SharedTravelArticles.toApp($0) }
+        reading { $0.getPopularArticles() }.map { SharedTravelArticles.toApp($0) }
     }
 
     func isAnyTravelBookPresent() -> Bool {
-        helper.isAnyTravelBookPresent()
+        reading { $0.isAnyTravelBookPresent() }
     }
 
     func isTravelGpxTags(_ tags: [String: String]) -> Bool {
-        helper.isTravelGpxTags(tags: tags)
+        SharedTravel.helper.isTravelGpxTags(tags: tags) // reads tags, not a file
     }
 
     // MARK: - Search
@@ -72,16 +77,17 @@ final class TravelObfHelper: NSObject {
     /// Raising the request number first makes the search that is still running for the previous
     /// keystroke give up where it stands, instead of reading every travel file to the end.
     func search(searchQuery: String) -> [TravelSearchResult] {
-        let reqNumber = helper.requestNumber &+ 1
-        helper.requestNumber = reqNumber
-        return helper.search(searchQuery: searchQuery, reqNumber: reqNumber)
-            .map { SharedTravelArticles.toApp($0) }
+        return reading { helper in
+            let reqNumber = helper.requestNumber &+ 1
+            helper.requestNumber = reqNumber
+            return helper.search(searchQuery: searchQuery, reqNumber: reqNumber)
+        }.map { SharedTravelArticles.toApp($0) }
     }
 
     /// The tree of parent and child articles shown in the article's navigation screen.
     func getNavigationMap(article: TravelArticle) -> [TravelSearchResult: [TravelSearchResult]] {
         var res = [TravelSearchResult: [TravelSearchResult]]()
-        let navigationMap = helper.getNavigationMap(article: SharedTravelArticles.toShared(article))
+        let navigationMap = reading { $0.getNavigationMap(article: SharedTravelArticles.toShared(article)) }
         for (header, children) in navigationMap {
             res[SharedTravelArticles.toApp(header)] = children.map { SharedTravelArticles.toApp($0) }
         }
@@ -106,7 +112,7 @@ final class TravelObfHelper: NSObject {
         guard !routeId.isEmpty else { return nil }
 
         let latLon = KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        guard let found = helper.searchTravelGpx(location: latLon, routeId: routeId) else {
+        guard let found = reading({ $0.searchTravelGpx(location: latLon, routeId: routeId) }) else {
             NSLog("searchTravelGpx(%f %f, %@) failed", location.coordinate.latitude, location.coordinate.longitude, routeId)
             return nil
         }
@@ -120,21 +126,21 @@ final class TravelObfHelper: NSObject {
         guard !osmRouteTypeNames.isEmpty else { return [] }
 
         let latLon = KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        return helper.searchTravelGpxByRouteTypes(location: latLon, osmRouteTypeTags: osmRouteTypeNames)
+        return reading { $0.searchTravelGpxByRouteTypes(location: latLon, osmRouteTypeTags: osmRouteTypeNames) }
             .compactMap { SharedTravelArticles.toApp($0) as? TravelGpx }
     }
 
     // MARK: - Articles
 
     func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        let found = helper.getArticleById(articleId: SharedTravelArticles.toShared(articleId),
-                                          lang: lang,
-                                          readGpx: false)
+        let found = reading { $0.getArticleById(articleId: SharedTravelArticles.toShared(articleId),
+                                                lang: lang,
+                                                readGpx: false) }
         return converted(found, lang: lang, readGpx: readGpx, callback: callback)
     }
 
     func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        let found = helper.getArticleByTitle(title: title, lang: lang, readGpx: false)
+        let found = reading { $0.getArticleByTitle(title: title, lang: lang, readGpx: false) }
         return converted(found, lang: lang, readGpx: readGpx, callback: callback)
     }
 
@@ -144,23 +150,23 @@ final class TravelObfHelper: NSObject {
     }
 
     func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle? {
-        guard let found = helper.findSavedArticle(savedArticle: SharedTravelArticles.toShared(savedArticle)) else {
+        guard let found = reading({ $0.findSavedArticle(savedArticle: SharedTravelArticles.toShared(savedArticle)) }) else {
             return nil
         }
         return SharedTravelArticles.toApp(found)
     }
 
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
-        guard let found = helper.getArticleId(title: title, lang: lang) else { return nil }
+        guard let found = reading({ $0.getArticleId(title: title, lang: lang) }) else { return nil }
         return SharedTravelArticles.toApp(found)
     }
 
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
-        helper.getArticleLangs(articleId: SharedTravelArticles.toShared(articleId))
+        reading { $0.getArticleLangs(articleId: SharedTravelArticles.toShared(articleId)) }
     }
 
     func getArticleByLangs(articleId: TravelArticleIdentifier) -> [String: TravelArticle] {
-        helper.getArticleByLangs(articleId: SharedTravelArticles.toShared(articleId))
+        reading { $0.getArticleByLangs(articleId: SharedTravelArticles.toShared(articleId)) }
             .mapValues { SharedTravelArticles.toApp($0) }
     }
 
@@ -190,7 +196,7 @@ final class TravelObfHelper: NSObject {
     }
 
     func buildGpxFile(article: TravelArticle) -> OAGPXDocumentAdapter? {
-        guard let gpxFile = helper.readGpxFile(article: SharedTravelArticles.toShared(article)) else {
+        guard let gpxFile = reading({ $0.readGpxFile(article: SharedTravelArticles.toShared(article)) }) else {
             return nil
         }
         let adapter = OAGPXDocumentAdapter()
@@ -242,7 +248,7 @@ final class TravelObfHelper: NSObject {
     }
 
     func getWikivoyageFileName() -> String? {
-        helper.getWikivoyageFileName()
+        reading { $0.getWikivoyageFileName() }
     }
 
     func saveOrRemoveArticle(article: TravelArticle, save: Bool) {

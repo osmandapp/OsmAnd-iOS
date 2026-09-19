@@ -1512,6 +1512,10 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OsmAndAppInstance app = [OsmAndApp instance];
 
+    // the hub-graph edges a long route frees before its detailed phase are collected at once, rather
+    // than when the heap next outgrows what is live in it
+    OASHHRoutePlanner.companion.COLLECT_GARBAGE_AFTER_FREEING_EDGES = YES;
+
     OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
     OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
     if (!generalRouter)

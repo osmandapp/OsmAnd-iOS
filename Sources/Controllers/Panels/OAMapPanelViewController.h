@@ -229,8 +229,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
 - (void) showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude;
 
-- (void) showProgress;
-- (void) hideProgress;
 
 - (void) openSearch;
 - (void) openSearch:(nullable NSObject *)object location:(nullable CLLocation *)location;

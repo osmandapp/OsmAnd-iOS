@@ -108,8 +108,6 @@
 #import "OAApplicationMode.h"
 #import "OARouteKey.h"
 #import "OAObservable.h"
-#import "OANetworkRouteSelectionTask.h"
-#import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
@@ -201,7 +199,6 @@ typedef enum
 
     BOOL _isNewContextMenuStillEnabled;
 
-    MBProgressHUD *_gpxProgress;
     ContextMenuPresentationCoordinator *_contextMenuPresentationCoordinator;
     UIView *_contextMenuPresentationUITestStateView;
 }
@@ -1626,46 +1623,6 @@ typedef enum
     }
 }
 
-- (void) setupNetworkGpxProgress
-{
-    _gpxProgress = [[MBProgressHUD alloc] initWithView:self.view];
-    _gpxProgress.minShowTime = .3;
-    _gpxProgress.removeFromSuperViewOnHide = YES;
-    _gpxProgress.labelText = OALocalizedString(@"shared_string_loading");
-    _gpxProgress.labelFont = [UIFont scaledSystemFontOfSize:22. weight:UIFontWeightSemibold];
-    _gpxProgress.detailsLabelText = OALocalizedString(@"shared_string_cancel");
-    _gpxProgress.detailsLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
-    _gpxProgress.detailsLabelColor = UIColor.blackColor;
-    _gpxProgress.labelColor = UIColor.blackColor;
-    _gpxProgress.activityIndicatorColor = UIColor.blackColor;
-    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];
-    _gpxProgress.color = UIColor.whiteColor;
-    [self.view addSubview:_gpxProgress];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onCancelNetworkGPX)];
-    [_gpxProgress addGestureRecognizer:tap];
-}
-
-- (void) showProgress
-{
-    if (!_gpxProgress)
-        [self setupNetworkGpxProgress];
-    
-    [_gpxProgress show:YES];
-}
-
-- (void)hideProgress
-{
-    [_gpxProgress hide:YES];
-    _gpxProgress = nil;
-    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.whiteColor];
-}
-
-- (void) onCancelNetworkGPX
-{
-    OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
-    [networkRouteSelectionLayer onCancelNetworkGPX];
-}
-
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     [self showContextMenu:targetPoint selectedObject:nil];
@@ -1720,16 +1677,6 @@ typedef enum
                                                                           openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]
                                analysis:nil];
         }
-    }
-    else if (targetPoint.type == OATargetNetworkGPX)
-    {
-        OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
-        
-        NSArray<NSNumber *> *area31 = targetPoint.values[@"area"];
-        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].intValue, area31[1].intValue)];
-        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].intValue, area31[3].intValue)];
-        OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-        [networkRouteSelectionLayer showMenuAction:@[targetPoint.targetObj, rect]];
     }
     else
     {

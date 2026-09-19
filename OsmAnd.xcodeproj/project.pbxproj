@@ -493,7 +493,6 @@
 		325D713D2A1B71EB00F81ECE /* ic_custom_arrow_direction@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D71392A1B71EA00F81ECE /* ic_custom_arrow_direction@3x.png */; };
 		325D713E2A1B71EB00F81ECE /* ic_custom_marker_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D713A2A1B71EA00F81ECE /* ic_custom_marker_remove@2x.png */; };
 		325D713F2A1B71EB00F81ECE /* ic_custom_arrow_direction@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D713B2A1B71EA00F81ECE /* ic_custom_arrow_direction@2x.png */; };
-		325DAE6E2DFFF941002CB022 /* OANetworkRouteSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */; };
 		325FDBAC2E8E9854006E7C07 /* AmenityUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */; };
 		325FDBAE2E8E9AED006E7C07 /* AdditionalInfoBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */; };
 		326087072F323A040038A34B /* AmenityInfoRowParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */; };
@@ -2144,7 +2143,6 @@
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
 		DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA35963129B0A00A009DF4D6 /* OARouteKey.mm */; };
-		DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */; };
 		DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */; };
 		DA3DBC2E2976E631003803D8 /* OATransportStopsBaseController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3DBC2D2976E631003803D8 /* OATransportStopsBaseController.mm */; };
 		DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */; };
@@ -4271,8 +4269,6 @@
 		325D71392A1B71EA00F81ECE /* ic_custom_arrow_direction@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_direction@3x.png"; path = "Resources/Icons/ic_custom_arrow_direction@3x.png"; sourceTree = "<group>"; };
 		325D713A2A1B71EA00F81ECE /* ic_custom_marker_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_marker_remove@2x.png"; path = "Resources/Icons/ic_custom_marker_remove@2x.png"; sourceTree = "<group>"; };
 		325D713B2A1B71EA00F81ECE /* ic_custom_arrow_direction@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_direction@2x.png"; path = "Resources/Icons/ic_custom_arrow_direction@2x.png"; sourceTree = "<group>"; };
-		325DAE6C2DFFF936002CB022 /* OANetworkRouteSelectionLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkRouteSelectionLayer.h; sourceTree = "<group>"; };
-		325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteSelectionLayer.mm; sourceTree = "<group>"; };
 		325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityUIHelper.swift; sourceTree = "<group>"; };
 		325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInfoBundle.swift; sourceTree = "<group>"; };
 		326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityInfoRowParams.swift; sourceTree = "<group>"; };
@@ -6378,8 +6374,6 @@
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
 		DA35963029B0A00A009DF4D6 /* OARouteKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteKey.h; sourceTree = "<group>"; };
 		DA35963129B0A00A009DF4D6 /* OARouteKey.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteKey.mm; sourceTree = "<group>"; };
-		DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkRouteSelectionTask.h; sourceTree = "<group>"; };
-		DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteSelectionTask.mm; sourceTree = "<group>"; };
 		DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapPresentationEnvironment.h; sourceTree = "<group>"; };
 		DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPresentationEnvironment.mm; sourceTree = "<group>"; };
 		DA3DBC2C2976E631003803D8 /* OATransportStopsBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopsBaseController.h; sourceTree = "<group>"; };
@@ -12550,8 +12544,6 @@
 				320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */,
 				DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */,
 				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.m */,
-				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
-				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
 				05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */,
 				05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */,
@@ -13908,8 +13900,6 @@
 				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
 				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
 				323B501E2C8DDF14002BDF31 /* OAMyPositionLayerState.h */,
-				325DAE6C2DFFF936002CB022 /* OANetworkRouteSelectionLayer.h */,
-				325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */,
 				DA5A7EE526C563A400F274C7 /* OAOsmBugsLayer.h */,
 				DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */,
 				DA5A7ED526C563A400F274C7 /* OAOsmEditsLayer.h */,
@@ -18844,7 +18834,6 @@
 				328EE35D2E172146003CDB48 /* MapSelectionResult.swift in Sources */,
 				DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */,
 				DA5A84E026C563A900F274C7 /* OAMapSettingsMapillaryScreen.mm in Sources */,
-				325DAE6E2DFFF941002CB022 /* OANetworkRouteSelectionLayer.mm in Sources */,
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
@@ -19501,7 +19490,6 @@
 				DA775B8D27E618070081B9C1 /* OABackupInfo.mm in Sources */,
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */,
-				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				325FDBAC2E8E9854006E7C07 /* AmenityUIHelper.swift in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */,

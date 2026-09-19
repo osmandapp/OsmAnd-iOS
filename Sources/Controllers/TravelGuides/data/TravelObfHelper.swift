@@ -7,46 +7,34 @@
 //
 
 import Foundation
+import OsmAndShared
 
+/// The travel guides, read out of the installed obf files.
+///
+/// The searching and the gpx building live in OsmAndShared now; what is left here is the app's side
+/// of it: its own article model, which the screens are written against, and the background task with
+/// the spinner that the shared helper has no notion of.
 @objc(OATravelObfHelper)
 @objcMembers
 final class TravelObfHelper: NSObject {
-    
+
     static let shared = TravelObfHelper()
-    
-    let WORLD_WIKIVOYAGE_FILE_NAME = "World_wikivoyage.travel.obf"
+
+    // Read by TravelGpx when the map layers build one out of an amenity they found themselves.
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
-    let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
-    let MAX_SEARCH_RADIUS = 800 * 1000
-    let TRAVEL_GPX_SEARCH_RADIUS = 10 * 1000 // Ref: POI_SEARCH_POINTS_INTERVAL_M in tools
-    
     let TRAVEL_GPX_CONVERT_FIRST_LETTER: Character = "A"
     let TRAVEL_GPX_CONVERT_FIRST_DIST = 5000
     let TRAVEL_GPX_CONVERT_MULT_1 = 2
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
-    
-    static let TAG_URL = "url"
-    static let TAG_URL_TEXT = "url_text"
-    static let WPT_EXTRA_TAGS = "wpt_extra_tags"
-    static let METADATA_EXTRA_TAGS = "metadata_extra_tags"
-    static let EXTENSIONS_EXTRA_TAGS = "extensions_extra_tags"
-    
-    private let MAX_ALLOWED_RADIUS = Int(Int32.max)
-    
-    private let cachedArticles = ConcurrentDictionary<Int, [String: TravelArticle]>()
-    private let localDataHelper: TravelLocalDataHelper
-    
-    private var popularArticles = PopularArticles()
-    private var searchRadius: Int
-    private var foundAmenitiesIndex: Int = 0
-    private var foundAmenities: [OAFoundAmenity] = []
-    private let lock = NSLock()
-    
+
+    private let localDataHelper = TravelLocalDataHelper.shared
+
+    private var helper: OsmAndShared.TravelObfHelper { SharedTravel.helper }
+
     private override init() {
-        localDataHelper = TravelLocalDataHelper.shared
-        searchRadius = ARTICLE_SEARCH_RADIUS
+        super.init()
     }
-    
+
     func getBookmarksHelper() -> TravelLocalDataHelper {
         localDataHelper
     }
@@ -54,838 +42,163 @@ final class TravelObfHelper: NSObject {
     func initializeDataOnAppStartup() {
         //override
     }
-    
+
     func initializeDataToDisplay(resetData: Bool) {
-        lock.lock()
-        if resetData {
-            foundAmenities.removeAll()
-            foundAmenitiesIndex = 0
-            popularArticles.clear()
-            searchRadius = ARTICLE_SEARCH_RADIUS
-        }
-        localDataHelper.refreshCachedData()
-        lock.unlock()
-        loadPopularArticles()
+        helper.initializeDataToDisplay(resetData: resetData)
     }
-    
+
+    /// One more page of popular articles. The shared helper keeps the radius it has reached, so
+    /// asking again without resetting widens the search.
     func loadPopularArticles() {
-        defer { lock.unlock() }
-        lock.lock()
-        let lang = OAUtilities.currentLang()
-        let popularArticles = PopularArticles(artcles: popularArticles)
-        if isAnyTravelBookPresent() {
-            var articlesLimitReached = false
-            repeat {
-                if foundAmenities.count - foundAmenitiesIndex < PopularArticles.ARTICLES_PER_PAGE {
-                    guard let location = OATravelGuidesHelper.getMapCenter() else {continue}
-                    
-                    for reader in getReaders() {
-                        if let lang {
-                            foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang) )
-                        }
-                        foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
-                    }
-                    
-                    if foundAmenities.isEmpty {
-                        // In rare cases, amenity could be nil
-                        foundAmenities.removeAll { $0.amenity == nil }
-                        foundAmenities.sort { a, b in
-                            let d1 = location.distance(from: CLLocation(latitude: a.amenity.latitude, longitude: a.amenity.longitude))
-                            let d2 = location.distance(from: CLLocation(latitude: b.amenity.latitude, longitude: b.amenity.longitude))
-                            return d1 < d2
-                        }
-                    }
-                }
-                searchRadius = min(searchRadius * 2, MAX_ALLOWED_RADIUS)
-                while foundAmenitiesIndex < foundAmenities.count - 1 {
-                    let fileAmenity = foundAmenities[foundAmenitiesIndex]
-                    if let file = fileAmenity.file {
-                        if let amenity = fileAmenity.amenity, let name = amenity.getName(lang, transliterate: false), name.length > 0 {
-                            let routeId = amenity.getAdditionalInfo(ROUTE_ID) ?? ""
-                            if !popularArticles.containsByRouteId(routeId: routeId) {
-                                if let lang, let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang, readPoints: false, callback: nil) {
-                                    if !popularArticles.contains(article: article) {
-                                        if !popularArticles.add(article: article) {
-                                            articlesLimitReached = true
-                                            break
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    foundAmenitiesIndex += 1
-                }
-            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS)
-        }
-        self.popularArticles = popularArticles
+        helper.initializeDataToDisplay(resetData: false)
     }
-    
+
+    func getPopularArticles() -> [TravelArticle] {
+        helper.getPopularArticles().map { SharedTravelArticles.toApp($0) }
+    }
+
+    func isAnyTravelBookPresent() -> Bool {
+        helper.isAnyTravelBookPresent()
+    }
+
     func isTravelGpxTags(_ tags: [String: String]) -> Bool {
-        return tags[ROUTE_ID] != nil && tags[ROUTE_TAG] == "segment" || tags[TravelGpx.ROUTE_TYPE] != nil
+        helper.isTravelGpxTags(tags: tags)
     }
-    
-    func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
-        var foundAmenities = [OAFoundAmenity]()
-        var searchRadius = ARTICLE_SEARCH_RADIUS
-        var travelGpx: TravelGpx?
-        
-        repeat {
-            
-            for reader in getReaders() {
-                if let filter {
-                    foundAmenities.append(contentsOf: searchAmenity(lat: latLon.latitude, lon: latLon.longitude, reader: reader, searchRadius: searchRadius, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
-                }
-            }
-            
-            if !foundAmenities.isEmpty {
-                for foundGpx in foundAmenities {
-                    if let amenity = foundGpx.amenity {
-                        if amenity.getRouteId() == filter ||
-                            amenity.name == filter ||
-                            amenity.getRef() == ref {
-                            travelGpx = getTravelGpx(file: foundGpx.file!, amenity: amenity)
-                            break
-                        }
-                    }
-                }
-            }
-            searchRadius *= 2
-        } while travelGpx == nil && searchRadius < MAX_SEARCH_RADIUS
-        return travelGpx
+
+    // MARK: - Search
+
+    /// Articles whose name starts with `searchQuery`, in the app language and then in english.
+    ///
+    /// Raising the request number first makes the search that is still running for the previous
+    /// keystroke give up where it stands, instead of reading every travel file to the end.
+    func search(searchQuery: String) -> [TravelSearchResult] {
+        let reqNumber = helper.requestNumber &+ 1
+        helper.requestNumber = reqNumber
+        return helper.search(searchQuery: searchQuery, reqNumber: reqNumber)
+            .map { SharedTravelArticles.toApp($0) }
     }
-    
-    func searchAmenity(lat: Double, lon: Double, reader: String, searchRadius: Int, zoom: Int, searchFilter: String, lang: String?) -> [OAFoundAmenity] {
-        guard let safeRadius = Int32(exactly: searchRadius) else {
-            NSLog("Invalid radius: \(searchRadius)")
-            return []
+
+    /// The tree of parent and child articles shown in the article's navigation screen.
+    func getNavigationMap(article: TravelArticle) -> [TravelSearchResult: [TravelSearchResult]] {
+        var res = [TravelSearchResult: [TravelSearchResult]]()
+        let navigationMap = helper.getNavigationMap(article: SharedTravelArticles.toShared(article))
+        for (header, children) in navigationMap {
+            res[SharedTravelArticles.toApp(header)] = children.map { SharedTravelArticles.toApp($0) }
         }
-        
-        var results: [OAFoundAmenity] = []
-        func publish(poi: OAPOI?) -> Bool {
-            if let poi {
-                if lang == nil {
-                    results.append(OAFoundAmenity(file: reader, amenity: poi))
-                }
-                if let lang, poi.getNamesMap(true).keys.contains(lang) {
-                    results.append(OAFoundAmenity(file: reader, amenity: poi))
-                }
-            }
-            return false
-        }
-        
-        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: safeRadius, searchFilters: [searchFilter], publish: publish)
-        return results
+        return res
     }
-    
+
+    /// Whether a route subtype passes a travel filter. Called from the amenity searcher, which does
+    /// its own reading through OsmAndCore and only needs the rule.
     func searchFilterShouldAccept(_ subcategory: String?, filterSubcategories: [String]?) -> Bool {
         guard let subcategory, let filterSubcategories else { return false }
-    
+
         return filterSubcategories.contains {
             // include routes:routes_xxx with routes:route_track filter
             $0 == subcategory ||
             ($0 == ROUTE_TRACK && subcategory.hasPrefix(ROUTES_PREFIX))
         }
     }
-    
-    func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article: TravelArticle?
-        var articles: [String: TravelArticle]? = [:]
-        guard let file else {return nil}
-        if amenity.isRouteTrack() {
-            articles = readRoutePoint(file: file, amenity: amenity)
-        } else {
-            articles = readArticles(file: file, amenity: amenity)
-        }
-        if let articles, !articles.isEmpty {
-            var i = articles.values.makeIterator()
-            if let next = i.next() {
-                let newArticleId = next.generateIdentifier()
-                cachedArticles.setValue(articles, forKey: newArticleId.hashValue)
-                article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
-            }
-        }
-        return article
-    }
-    
-    func readRoutePoint(file: String, amenity: OAPOI) -> [String : TravelArticle] {
-        var articles: [String: TravelArticle] = [:]
-        let res = getTravelGpx(file: file, amenity: amenity)
-        articles[""] = res
-        return articles
-    }
-    
-    func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
-        let travelGpx = TravelGpx(amenity: amenity)
-        travelGpx.file = file
-        travelGpx.title = amenity.name
-        travelGpx.lat = amenity.latitude
-        travelGpx.lon = amenity.longitude
-        travelGpx.descr = amenity.getTagContent(DESCRIPTION_TAG)
 
-        travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
-        travelGpx.user = amenity.getTagContent(TravelGpx.USER)
-        travelGpx.activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
-        travelGpx.ref = amenity.getRef()
-        
-        travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE) ?? "") ?? 0
-        travelGpx.diffElevationUp = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_UP) ?? "") ?? 0
-        travelGpx.diffElevationDown = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_DOWN) ?? "") ?? 0
-        travelGpx.maxElevation = Double(amenity.getTagContent(TravelGpx.MAX_ELEVATION) ?? "") ?? 0
-        travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION) ?? "") ?? 0
-        travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION) ?? "") ?? 0
+    /// The track carrying `routeId`, looked for around `location`. Used when a route is tapped on
+    /// the map and nothing but its id is known.
+    func searchTravelGpx(location: CLLocation, routeId: String) -> TravelGpx? {
+        guard !routeId.isEmpty else { return nil }
 
-        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
-            OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
-        }
-        return travelGpx
-    }
-    
-    func getSearchFilter(filterSubcategoryies: [String]) -> OASearchPoiTypeFilter {
-        return OASearchPoiTypeFilter { type, subcategory in
-            for filterSubcategory in filterSubcategoryies {
-                return filterSubcategory == filterSubcategory
-            }
-            return false
-        } emptyFunction: {
-            return false
-        } getTypesFunction: {
+        let latLon = KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        guard let found = helper.searchTravelGpx(location: latLon, routeId: routeId) else {
+            NSLog("searchTravelGpx(%f %f, %@) failed", location.coordinate.latitude, location.coordinate.longitude, routeId)
             return nil
         }
+        return SharedTravelArticles.toApp(found) as? TravelGpx
     }
-    
-    func readArticles(file: String, amenity: OAPOI) -> [String: TravelArticle] {
-        var articles: [String: TravelArticle] = [:]
-        let langs = getLanguages(amenity: amenity)
-        for lang in langs {
-            articles[lang] = readArticle(file: file, amenity: amenity, lang: lang)
-        }
-        return articles
-    }
-    
-    func readArticle(file: String, amenity: OAPOI, lang: String) -> TravelArticle {
-        let res = TravelArticle()
-        res.file = file
-        var title = amenity.getName(lang, transliterate: false)
-        if title == nil || (title ?? "").isEmpty {
-            title = amenity.getName("en", transliterate: false)
-            if title == nil || (title ?? "").isEmpty {
-                title = amenity.name
-            }
-        }
-        res.title = title
-        res.content = amenity.getDescription(lang)
-        res.isPartOf = amenity.getTagContent(IS_PART, lang:lang) ?? ""
-        res.isParentOf = amenity.getTagContent(IS_PARENT_OF, lang:lang) ?? ""
-        res.lat = amenity.latitude
-        res.lon = amenity.longitude
-        res.imageTitle = amenity.getTagContent(IMAGE_TITLE) ?? ""
-        res.routeId = amenity.getTagContent(ROUTE_ID) ?? ""
-        res.routeSource = amenity.getTagContent(ROUTE_SOURCE) ?? ""
-        res.originalId = 0
-        res.lang = lang
-        res.contentsJson = amenity.getLocalizedContent(CONTENT_JSON, lang:lang) ?? ""
-        res.aggregatedPartOf = amenity.getStrictTagContent(IS_AGGR_PART, lang: lang)
-        return res
-    }
-    
-    func isAnyTravelBookPresent() -> Bool {
-        !getReaders().isEmpty
-    }
-    
-    func search(searchQuery: String) -> [TravelSearchResult] {
-        let appLang = OAUtilities.currentLang() ?? ""
-        let res = searchWithLang(searchQuery: searchQuery, appLang: appLang)
-        if res.isEmpty {
-            return searchWithLang(searchQuery: searchQuery, appLang: "en")
-        }
-        return res
-    }
-    
-    func searchWithLang(searchQuery: String, appLang: String) -> [TravelSearchResult] {
-        var res = [TravelSearchResult]()
-        
-        var amenities = [OAPOI]()
-        var amenityMap = [String: [OAPOI]]()
-        
-        func publishCallback(amenity: OAPOI?) -> Bool {
-            if let amenity {
-                amenities.append(amenity)
-            }
-            return false
-        }
-        
-        for reader in getReaders() {
-            amenities = [OAPOI]()
-            OATravelGuidesHelper.searchAmenity(searchQuery, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: -1, lon: -1, reader: reader, publish: publishCallback)
-            if !amenities.isEmpty {
-                amenityMap[reader] = Array(amenities)
-            }
-        }
-        
-        if !amenityMap.isEmpty {
-            let appLangEn = appLang == "en"
-            for entry in amenityMap {
-                let file = entry.key
-                for amenity in entry.value {
-                    let nameLangs = getLanguages(amenity: amenity)
-                    if nameLangs.contains(appLang) || appLang.length == 0 {
-                        let article = readArticle(file: file, amenity: amenity, lang: appLang)
-                        var langs = Array(nameLangs)
-                        
-                        langs = langs.sorted(by: { a, b in
-                            var l1 = a
-                            var l2 = b
-                            if l1 == appLang {
-                                l1 = "1"
-                            }
-                            if l2 == appLang {
-                                l2 = "1"
-                            }
-                            if !appLangEn {
-                                if l1 == "en" {
-                                    l1 = "2"
-                                }
-                                if l2 == "en" {
-                                    l2 = "2"
-                                }
-                            }
-                            return l1 < l2
-                        })
-                        
-                        let r = TravelSearchResult(arcticle: article, langs: langs)
-                        res.append(r)
-                        
-                        cacheTravelArticles(file: file, amenity: amenity, lang: appLang, readPoints: false, callback: nil)
-                    }
-                }
-            }
-            res = sortSearchResults(results: res, searchQuery: searchQuery)
-        }
-        return res
-    }
-    
-    func getLanguages(amenity: OAPOI) -> Set<String> {
-        var langs: Set<String> = []
-        let descrStart = DESCRIPTION_TAG + ":"
-        let partStart = IS_PART + ":"
-        for case let infoTag as String in amenity.getAdditionalInfo().allKeys {
-            if infoTag.hasPrefix(descrStart) {
-                if infoTag.length > descrStart.length {
-                    langs.insert( infoTag.substring(from: descrStart.length) )
-                }
-            } else if infoTag.hasPrefix(partStart) {
-                if infoTag.length > partStart.length {
-                    langs.insert( infoTag.substring(from: partStart.length) )
-                }
-            }
-        }
-        return langs
-    }
-    
-    func sortSearchResults(results: [TravelSearchResult], searchQuery: String) -> [TravelSearchResult] {
-        var sortedResults = results
-        let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
-        let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
-        sortedResults.sort { (sr1, sr2) -> Bool in
-            let titleA = sr1.getArticleTitle() ?? ""
-            let titleB = sr2.getArticleTitle() ?? ""
-            let titleAContainsQuery = collatorContains.matches(titleA)
-            let titleBContainsQuery = collatorContains.matches(titleB)
-            if collatorEquals.matches(titleA) {
-                return true
-            }
-            if  collatorEquals.matches(titleB) {
-                return false
-            }
-            if titleAContainsQuery && titleBContainsQuery {
-                return titleA < titleB
-            }
-            if titleAContainsQuery {
-                return true
-            }
-            if titleBContainsQuery {
-                return false
-            }
-            if titleA == titleB {
-                return sr1.isPartOf ?? "" < sr2.isPartOf ?? ""
-            }
-            return titleA < titleB
-        }
-        return sortedResults
-    }
-    
-    func getPopularArticles() -> [TravelArticle] {
-        popularArticles.getArticles()
-    }
-    
-    func getNavigationMap(article: TravelArticle) -> [TravelSearchResult: [TravelSearchResult]] {
-        guard let lang = article.lang else { return [:] }
-        guard let title = article.title else { return [:] }
-        if lang.isEmpty || title.isEmpty {
-            return [:]
-        }
-        
-        var parts = [String]()
-        if let aggregatedPartOf = article.aggregatedPartOf {
-            if !aggregatedPartOf.isEmpty {
-                let originalParts = aggregatedPartOf.split(separator: ",")
-                if originalParts.count > 1 {
-                    parts = [String].init(repeating: "", count: originalParts.count)
-                    for i in 0..<originalParts.count {
-                        parts[i] = String(originalParts[originalParts.count - i - 1])
-                    }
-                } else {
-                    parts = originalParts.map { String($0) }
-                }
-            }
-        } else {
-            parts = []
-        }
-        
-        var navMap = [String: [TravelSearchResult]]()
-        var headers = [String]()
-        var headerObjs = [String: TravelSearchResult]()
-        if !parts.isEmpty {
-            headers.append(contentsOf: parts)
-            if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
-                headers.append(title)
-            }
-        }
-        
-        for var header in headers {
-            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
-            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
-            navMap[header] = [TravelSearchResult]()
-            if let unseparatedText = parentArticle.isParentOf {
-                let isParentOf = unseparatedText.split(separator: ";")
-                for childSubsequence in isParentOf {
-                    let childTitle = String(childSubsequence)
-                    if !childTitle.isEmpty {
-                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [parentLang])
-                        var resultList = navMap[header]
-                        if resultList == nil {
-                            resultList = []
-                        }
-                        resultList!.append(searchResult)
-                        navMap[header] = resultList
-                        if headers.contains(childTitle) {
-                            headerObjs[childTitle] = searchResult
-                        }
-                    }
-                }
-            }
-        }
-        
-        var res: [TravelSearchResult: [TravelSearchResult]] = [:]
-        for var header in headers {
-            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
-            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
-            var searchResult = headerObjs[header]
-            var results = navMap[header]
-            if results != nil {
-                results = sortSearchResults(results: results!, searchQuery: header)
-                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: [parentLang])
-                searchResult = searchResult != nil ? searchResult : emptyResult
-                res[searchResult!] = results
-            }
-        }
-        
-        return res
-    }
-    
-    func getParentArticleByTitle(title: String, lang: String, lat: Double, lon: Double) -> TravelArticle? {
-        var article: TravelArticle?
-        var amenities = [OAPOI]()
-        
-        for reader in getReaders() {
-            OATravelGuidesHelper.searchAmenity(title, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: lat, lon: lon, reader: reader) { amenity in
-                if let amenity, title == amenity.getName(lang, transliterate: false) {
-                    amenities.append(amenity)
-                    return true
-                }
-                return false
-            }
-            
-            if !amenities.isEmpty {
-                article = readArticle(file: reader, amenity: amenities[0], lang: lang)
-            }
-        }
-    
-        return article
-    }
-    
+    // MARK: - Articles
+
     func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article = getCachedArticle(articleId: articleId, lang: lang, readGpx: readGpx, callback: callback)
-        if article == nil {
-            article = localDataHelper.getSavedArticle(file: articleId.file ?? "", routeId: articleId.routeId ?? "", lang: lang ?? "")
-            if let article {
-                callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
-            }
+        let found = helper.getArticleById(articleId: SharedTravelArticles.toShared(articleId),
+                                          lang: lang,
+                                          readGpx: false)
+        return converted(found, lang: lang, readGpx: readGpx, callback: callback)
+    }
+
+    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
+        let found = helper.getArticleByTitle(title: title, lang: lang, readGpx: false)
+        return converted(found, lang: lang, readGpx: readGpx, callback: callback)
+    }
+
+    func getArticleBy(title: String, lang: String) -> TravelArticle? {
+        localDataHelper.getArticle(title: title, lang: lang)
+            ?? getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil)
+    }
+
+    func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle? {
+        guard let found = helper.findSavedArticle(savedArticle: SharedTravelArticles.toShared(savedArticle)) else {
+            return nil
+        }
+        return SharedTravelArticles.toApp(found)
+    }
+
+    func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
+        guard let found = helper.getArticleId(title: title, lang: lang) else { return nil }
+        return SharedTravelArticles.toApp(found)
+    }
+
+    func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
+        helper.getArticleLangs(articleId: SharedTravelArticles.toShared(articleId))
+    }
+
+    func getArticleByLangs(articleId: TravelArticleIdentifier) -> [String: TravelArticle] {
+        helper.getArticleByLangs(articleId: SharedTravelArticles.toShared(articleId))
+            .mapValues { SharedTravelArticles.toApp($0) }
+    }
+
+    /// The shared helper can build the gpx file itself, but it does it on the thread that asked, and
+    /// these calls come from the screens. The file is built in the background instead, the way the
+    /// travel screens expect: a spinner while it runs, the article handed back through the callback.
+    private func converted(_ found: OsmAndShared.TravelArticle?, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
+        guard let found else { return nil }
+
+        let article = SharedTravelArticles.toApp(found)
+        if readGpx && (!(lang ?? "").isEmpty || article is TravelGpx) {
+            readGpxFile(article: article, callback: callback)
         }
         return article
     }
-    
-    func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article: TravelArticle? = nil
-        let articles = cachedArticles.getValue(forKey: articleId.hashValue)
-        if let articles {
-            if lang == nil || lang!.length == 0 {
-                let ac = articles.values
-                if !ac.isEmpty {
-                    var it = ac.makeIterator()
-                    article = it.next()
-                }
-            } else {
-                article = articles[lang!]
-                if article == nil {
-                    article = articles[""]
-                }
-            }
-        }
-        if article == nil && articles == nil {
-            article = findArticleById(articleId: articleId, lang: lang, readGpx: readGpx, callback: callback)
-        }
-        if article != nil && readGpx && (lang != nil && lang!.length > 0) || article is TravelGpx {
-            readGpxFile(article: article!, callback: callback)
-        }
-        return article
-    }
-    
+
+    // MARK: - Gpx files
+
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
-        if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
+        if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false {
             callback?.isGpxReading = true
-            let readers = getTravelGpxRepositories()
-            let task = GpxFileReader(article: article, callback: callback, readers: readers)
-            task.execute()
+            GpxFileReader(article: article, callback: callback).execute()
         } else if callback != nil && article.gpxFileRead {
             callback?.isGpxReading = false
             callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
         }
     }
-    
-    func getTravelGpxRepositories() -> [String] {
-        OAAmenitySearcher.sharedInstance().getAmenityRepositories(true)
-    }
-    
-    func findArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article: TravelArticle? = nil
-        let isDbArticle = articleId.file != nil && articleId.file!.hasSuffix(BINARY_WIKIVOYAGE_MAP_INDEX_EXT)
-        var amenities: [OAPOI] = []
-        
-        for reader in getReaders() {
-            if articleId.file != nil && articleId.file != reader && !isDbArticle {
-                continue
-            }
-            
-            func publishCallback(amenity: OAPOI?) -> Bool {
-                var done = false
-                if let amenity {
-                    if articleId.routeId == amenity.getTagContent(ROUTE_ID) || isDbArticle {
-                        amenities.append(amenity)
-                        done =  true
-                    }
-                }
-                return done
-            }
-            
-            if !articleId.lat.isNaN {
-                if articleId.title != nil && articleId.title!.length > 0 {
-                    let title = articleId.title ?? ""
-                    OATravelGuidesHelper.searchAmenity(title, categoryNames:[ROUTE_ARTICLE], radius:Int32(ARTICLE_SEARCH_RADIUS), lat:articleId.lat, lon:articleId.lon, reader: reader, publish:publishCallback)
-                } else {
-                    OATravelGuidesHelper.searchAmenity(articleId.lat, lon: articleId.lon, reader: reader, radius: Int32(ARTICLE_SEARCH_RADIUS), searchFilters: [ROUTE_ARTICLE], publish:publishCallback)
-                    
-                }
-            } else {
-                OATravelGuidesHelper.searchAmenity(Double.nan, lon: Double.nan, reader: reader, radius: -1, searchFilters: [ROUTE_ARTICLE], publish:publishCallback)
-            }
-            
-            if !amenities.isEmpty {
-                article = cacheTravelArticles(file: reader, amenity: amenities[0], lang: lang, readPoints: readGpx, callback: callback)
-            }
-        }
-        return article
-    }
-    
 
-    func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle? {
-        var amenities: [(String, OAPOI)] = []
-        var article: TravelArticle? = nil
-        let articleId = savedArticle.generateIdentifier()
-        let lang = savedArticle.lang ?? ""
-        let lastModified = savedArticle.lastModified
-        let finalArticleId = articleId
-        
-        amenities = findSavedArticlesForWholeWorld(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
-        
-        if amenities.isEmpty && articleId.title != nil && articleId.title!.length > 0 {
-            amenities = findSavedArticlesInAreaByName(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
-        }
-        
-        if amenities.isEmpty {
-            amenities = findSavedArticlesInAreaByRouteId(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
-        }
-        
-        if !amenities.isEmpty {
-            article = cacheTravelArticles(file: amenities[0].0, amenity: amenities[0].1, lang: lang, readPoints: false, callback: nil)
-        }
-        return article
-    }
-    
-    private func findSavedArticlesForWholeWorld(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOI)] {
-        var amenities: [(String, OAPOI)] = []
-        
-        var filterFunction: ((OAPOI?) -> Bool)? = nil
-        var lat: Double = -1
-        var lon: Double = -1
-        var radius: Int = -1
-        for reader in getReaders() {
-            var resorceLastModified = getLastModifiedForResource(filename: reader)
-            resorceLastModified = (resorceLastModified != nil) ? resorceLastModified : 0
-            if articleId.file != nil && articleId.file == reader {
-                if lastModified == resorceLastModified {
-                    lat = articleId.lat
-                    lon = articleId.lon
-                    radius = ARTICLE_SEARCH_RADIUS
-                    
-                    func publish(poi: OAPOI?) -> Bool {
-                        if let poi {
-                            let routeId = poi.getTagContent(ROUTE_ID) ?? ""
-                            if finalArticleId.routeId == routeId {
-                                amenities.append((reader, poi))
-                                return true
-                            }
-                        }
-                        return false
-                    }
-                    filterFunction = publish
-                } else {
-                    lat = articleId.lat
-                    lon = articleId.lon
-                    radius = ARTICLE_SEARCH_RADIUS / 10
-                    
-                    func publish(poi: OAPOI?) -> Bool {
-                        if let poi {
-                            let name = poi.getName(lang, transliterate: false) ?? ""
-                            if finalArticleId.title == name {
-                                amenities.append((reader, poi))
-                                return true
-                            }
-                        }
-                        return false
-                    }
-                    filterFunction = publish
-                }
-            }
-            
-            if let filterFunction {
-                if !articleId.lat.isNaN {
-                    if articleId.title != nil && articleId.title!.length > 0 {
-                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                    } else {
-                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
-                    }
-                } else {
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
-                }
-                break
-            }
-        }
-        return amenities
-    }
-    
-    private func findSavedArticlesInAreaByName(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOI)] {
-        var amenities: [(String, OAPOI)] = []
-        for reader in getReaders() {
-            let lat = articleId.lat
-            let lon = articleId.lon
-            let radius = SAVED_ARTICLE_SEARCH_RADIUS
-            
-            func publish(poi: OAPOI?) -> Bool {
-                if let poi {
-                    let name = poi.getName(lang, transliterate: false) ?? ""
-                    if finalArticleId.title == name {
-                        amenities.append((reader, poi))
-                        return true
-                    }
-                }
-                return false
-            }
-            let filterFunction = publish
-            
-            if !articleId.lat.isNaN {
-                OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-            } else {
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
-            }
-        }
-        return amenities
-    }
-    
-    private func findSavedArticlesInAreaByRouteId(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOI)] {
-        var amenities: [(String, OAPOI)] = []
-        for reader in getReaders() {
-            let lat = articleId.lat
-            let lon = articleId.lon
-            let radius = SAVED_ARTICLE_SEARCH_RADIUS
-            
-            func publish(poi: OAPOI?) -> Bool {
-                if let poi {
-                    let routeId = poi.getTagContent(ROUTE_ID) ?? ""
-                    let routeSource = poi.getTagContent(ROUTE_SOURCE) ?? ""
-                    if finalArticleId.routeId == routeId && finalArticleId.routeSource == routeSource {
-                        amenities.append((reader, poi))
-                        return true
-                    }
-                }
-                return false
-            }
-            let filterFunction = publish
-            
-            if !articleId.lat.isNaN {
-                if articleId.title != nil && articleId.title!.length > 0 {
-                    OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                } else {
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
-                }
-            } else {
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
-            }
-            break
-        }
-        return amenities
-    }
-    
-    func getLastModifiedForResource(filename: String) -> Double? {
-        let dirPath = OsmAndApp.swiftInstance().documentsPath + "/Resources"
-        let filePath = dirPath + "/" + filename
-        do {
-            let attr = try FileManager.default.attributesOfItem(atPath: filePath)
-            let date = attr[FileAttributeKey.modificationDate] as? Date
-            return (date != nil) ? date!.timeIntervalSince1970 : nil
-        } catch {
+    func buildGpxFile(article: TravelArticle) -> OAGPXDocumentAdapter? {
+        guard let gpxFile = helper.readGpxFile(article: SharedTravelArticles.toShared(article)) else {
             return nil
         }
+        let adapter = OAGPXDocumentAdapter()
+        adapter.object = gpxFile
+        return adapter
     }
 
-    func getArticleBy(title: String, lang: String) -> TravelArticle? {
-        guard let article = localDataHelper.getArticle(title: title, lang: lang) else {
-            return getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil)
-        }
-        return article
-    }
-
-    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        getArticleByTitle(title: title, rect: QuadRect(), lang: lang, readGpx: readGpx, callback: callback)
-    }
-
-    func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article: TravelArticle? = nil
-        var amenities: [OAPOI] = []
-        var x: Int32 = 0
-        var y: Int32 = 0
-        var left: Int32 = 0
-        var right: Int32 = Int32.max
-        var top: Int32 = 0
-        var bottom: Int32 = Int32.max
-        if rect.height() > 0 && rect.width() > 0 {
-            x = Int32(rect.centerX())
-            y = Int32(rect.centerY())
-            left = Int32(rect.left)
-            right = Int32(rect.right)
-            top = Int32(rect.top)
-            bottom = Int32(rect.bottom)
-        }
-        
-        for reader in getReaders() {
-            OATravelGuidesHelper.searchAmenity(title, x: x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilters: [ROUTE_ARTICLE]) { amenity in
-                if let amenity, title == amenity.getName(lang, transliterate: false) {
-                    amenities.append(amenity)
-                    return true
-                }
-                return false
-            }
-            if !amenities.isEmpty {
-                article = cacheTravelArticles(file: reader, amenity: amenities[0], lang: lang, readPoints: readGpx, callback: callback)
-                break
-            }
-        }
-        return article
-    }
-    
-    func getReaders() -> [String] {
-        OATravelGuidesHelper.getTravelGuidesObfList()
-    }
-    
-    func getAllReaders() -> [String] {
-        OATravelGuidesHelper.getAllObfList()
-    }
-    
-    func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
-        var a: TravelArticle? = nil
-        for articles in cachedArticles.getAllValues() {
-            for article in articles.values {
-                if article.title == title {
-                    a = article
-                    break
-                }
-            }
-        }
-        if a == nil {
-            if let article = getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil) {
-                a = article
-            }
-        }
-        return a != nil ? a!.generateIdentifier() : nil
-    }
-    
-    func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
-        Array(getArticleByLangs(articleId: articleId).keys)
-    }
-    
-    func getArticleByLangs(articleId: TravelArticleIdentifier) -> [String: TravelArticle] {
-        var res = [String: TravelArticle]()
-        if let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil) {
-            if let articles = cachedArticles.getValue(forKey: article.generateIdentifier().hashValue) {
-                for entry in articles {
-                    res[entry.key] = entry.value
-                }
-            }
-        } else {
-            let articles = localDataHelper.getSavedArticles(file: articleId.file ?? "", routeId: articleId.routeId ?? "")
-            for a in articles {
-                if let articleLang = a.lang {
-                    res[articleLang] = a
-                }
-            }
-        }
-        return res
-    }
-    
     func getGPXName(article: TravelArticle) -> String {
-        let title = article.title ?? ""
-        return title
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "'/'", with: "_")
-            .replacingOccurrences(of: "\"", with: "_") + ".gpx"
+        article.getGpxFileName() + GPX_FILE_EXT
     }
-    
+
     func createGpxFile(article: TravelArticle) -> String {
-        let fileName = getGPXName(article: article)
-        return OATravelGuidesHelper.createGpxFile(article, fileName: fileName)
+        OATravelGuidesHelper.createGpxFile(article, fileName: getGPXName(article: article))
     }
-    
-    func getSelectedTravelBookName() -> String? {
-        nil
-    }
-    
+
     func getWikivoyageFileName() -> String? {
-        WORLD_WIKIVOYAGE_FILE_NAME
+        helper.getWikivoyageFileName()
     }
-    
+
     func saveOrRemoveArticle(article: TravelArticle, save: Bool) {
         if save {
             localDataHelper.addArticleToSaved(article: article)
@@ -893,15 +206,11 @@ final class TravelObfHelper: NSObject {
             localDataHelper.removeArticleFromSaved(article: article)
         }
     }
-    
-    func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
-        OATravelGuidesHelper.buildGpxFile(readers, article: article)
-    }
-    
+
     func createTitle(name: String) -> String {
         OAUtilities.capitalizeFirstLetter(name) ?? ""
     }
-    
+
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon: CLLocation, adjustMapPosition: Bool) {
         let callback = OpenTrackMenuDelegate()
         callback.gpxFileName = gpxFileName
@@ -938,16 +247,16 @@ final private class OpenTrackMenuDelegate: GpxReadDelegate {
     }
 }
 
+/// Builds an article's gpx file off the screen thread. Reading every travel file for the segments of
+/// one route takes seconds on a large one.
 final class GpxFileReader {
     
     var article: TravelArticle?
     var callback: GpxReadDelegate?
-    var readers: [String]?
     
-    init(article: TravelArticle, callback: GpxReadDelegate?, readers: [String]) {
+    init(article: TravelArticle, callback: GpxReadDelegate?) {
         self.article = article
         self.callback = callback
-        self.readers = readers
     }
     
     func execute() {
@@ -968,10 +277,8 @@ final class GpxFileReader {
     }
     
     func doInBackground() -> OAGPXDocumentAdapter? {
-        if let readers, let article {
-            return TravelObfHelper.shared.buildGpxFile(readers: readers, article: article)
-        }
-        return nil
+        guard let article else { return nil }
+        return TravelObfHelper.shared.buildGpxFile(article: article)
     }
     
     func onPostExecute(gpxFile: OAGPXDocumentAdapter?) {

@@ -356,7 +356,7 @@ static int TILE_SIZE = 256;
 
 - (void)addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId
 {
-    OATravelGpx *travelGpx = [OATravelGuidesHelper searchTravelGpx:result.pointLatLon routeId:routeId];
+    OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLocation:result.pointLatLon routeId:routeId];
     if (travelGpx && [self isUniqueTravelGpx:result.allObjects travelGpx:travelGpx])
     {
         OASWptPt *selectedPoint = [[OASWptPt alloc] initWithLat:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];

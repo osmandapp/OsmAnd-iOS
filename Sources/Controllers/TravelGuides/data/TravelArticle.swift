@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OsmAndShared
 
 @objc(OATravelArticle)
 @objcMembers
@@ -40,6 +41,11 @@ class TravelArticle: NSObject {
     
     var routeRadius = -1
     var bbox31: KQuadRect?
+
+    /// The article this one was copied from, kept so that the work that stays in OsmAndShared - the
+    /// gpx build - runs against the object the shared helper filled in, bounding box and all. Nil on
+    /// an article that came from the saved-articles database and has not been matched to a file yet.
+    var sharedArticle: OsmAndShared.TravelArticle?
     
     func hasOsmRouteId() -> Bool {
         if let routeId {

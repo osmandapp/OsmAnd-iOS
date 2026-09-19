@@ -35,13 +35,6 @@
 #import "OAAppVersion.h"
 
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Data/Amenity.h>
-#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-#include <OsmAndCore/Data/ObfMapObject.h>
-#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/ObfDataInterface.h>
-#include <OsmAndCore/Data/BinaryMapObject.h>
 
 @implementation OATravelGuidesHelper
 
@@ -52,35 +45,6 @@
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
     [mapPanel showContextMenu:targetPoint];
-}
-
-+ (NSArray<NSString *> *) getAllObfList
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
-    for (const auto& resource : app.resourcesManager->getLocalResources())
-    {
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel ||
-            resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-        {
-            [obfFilenames addObject:resource->id.toNSString()];
-        }
-    }
-    return obfFilenames;
-}
-
-+ (NSArray<NSString *> *) getTravelGuidesObfList
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
-    for (const auto& resource : app.resourcesManager->getLocalResources())
-    {
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel)
-        {
-            [obfFilenames addObject:resource->id.toNSString()];
-        }
-    }
-    return obfFilenames;
 }
 
 + (CLLocation *) getMapCenter
@@ -181,104 +145,6 @@
 + (NSString *) getSelectedGPXFilePath:(NSString *)fileName
 {
     return [OASelectedGPXHelper.instance getSelectedGPXFilePath:fileName];
-}
-
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader
-{
-    return [self.class searchGpxMapObject:travelGpx bbox31:bbox31 reader:reader useAllObfFiles:NO];
-}
-
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader useAllObfFiles:(BOOL)useAllObfFiles
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
-    std::shared_ptr<const OsmAnd::ObfFile> res;
-    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > result;
-    
-    NSArray<NSString *> *travelObfNames = useAllObfFiles ? [self.class getAllObfList] : [self.class getTravelGuidesObfList];
-    
-    NSString *filename = travelGpx.file;
-        if (!NSStringIsEmpty(filename) || !NSStringIsEmpty(reader))
-    {
-        for (const auto& file : files)
-        {
-            NSString *path = [file->filePath.toNSString() lowercaseString];
-            if ((filename && [path  hasSuffix:[filename lowercaseString]]) ||
-                (reader && [path hasSuffix:[reader lowercaseString]]))
-            {
-                const auto found = [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
-                result.append(found);
-            }
-        }
-    }
-    else
-    {
-        for (const auto& file : files)
-        {
-            NSString *path = [file->filePath.toNSString() lowercaseString];
-            for (NSString *travelObfName in travelObfNames)
-            {
-                if ([path hasSuffix:travelObfName])
-                {
-                    const auto found =  [self.class searchGpxMapObject:travelGpx res:file bbox31:bbox31];
-                    if (found.size() > 0)
-                    {
-                        result.append(found);
-                        return found;
-                    }
-                }
-            }
-        }
-    }
-    return result;
-}
-
-+ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx res:(std::shared_ptr<const OsmAnd::ObfFile>)res bbox31:(OsmAnd::AreaI)bbox31
-{
-    if (bbox31.isEmpty())
-    {
-        OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
-        OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
-        bbox31 = OsmAnd::AreaI(topLeft, bottomRight);
-    }
-    const auto& obfsDataInterface = OsmAndApp.instance.resourcesManager->obfsCollection->obtainDataInterface(res);
-    
-    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
-    QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;
-    auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
-    
-    obfsDataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, nullptr, OsmAnd::ZoomLevel15, &bbox31);
-    
-    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
-    
-    for (const auto& binaryMapObject : loadedBinaryMapObjects)
-    {
-        NSString *ref = @"";
-        NSString *routeId = @"";
-        NSString *name = @"";
-                
-        for (const auto& captionAttributeId : OsmAnd::constOf(binaryMapObject->captionsOrder))
-        {
-            QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
-            const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
-            NSString *stringValue = [value.toNSString() lowercaseString];
-            
-            if (tag == QStringLiteral("ref"))
-                ref = stringValue;
-            if (tag == QStringLiteral("route_id"))
-                routeId = stringValue;
-            if (tag == QStringLiteral("name"))
-                name = stringValue;
-        }
-        if ((travelGpx.ref && travelGpx.routeId && [ref isEqualToString:[travelGpx.ref lowercaseString]] && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
-            (travelGpx.routeId && [routeId isEqualToString:[travelGpx.routeId lowercaseString]]) ||
-            (travelGpx.ref && [ref isEqualToString:[travelGpx.ref lowercaseString]]) ||
-            (travelGpx.title && [name isEqualToString:[travelGpx.title lowercaseString]]))
-        {
-            segmentList.append(binaryMapObject);
-        }
-    }
-    return segmentList;
 }
 
 @end

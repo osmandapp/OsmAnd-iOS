@@ -4341,7 +4341,6 @@
 		328EE35C2E172146003CDB48 /* MapSelectionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSelectionResult.swift; sourceTree = "<group>"; };
 		328EE35E2E172BE9003CDB48 /* OAContextMenuLayer+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAContextMenuLayer+cpp.h"; sourceTree = "<group>"; };
 		328EE3602E1732B1003CDB48 /* OASymbolMapLayer+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OASymbolMapLayer+cpp.h"; sourceTree = "<group>"; };
-		32931B452E1EE3EF00197723 /* OATravelGuidesHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OATravelGuidesHelper+cpp.h"; sourceTree = "<group>"; };
 		32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadGPXFilesTask.h; sourceTree = "<group>"; };
 		3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
 		3296B44F27F878FE00108AF7 /* ic_custom_thermometer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_thermometer@2x.png"; path = "Resources/Icons/ic_custom_thermometer@2x.png"; sourceTree = "<group>"; };
@@ -8931,7 +8930,6 @@
 			isa = PBXGroup;
 			children = (
 				320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */,
-				32931B452E1EE3EF00197723 /* OATravelGuidesHelper+cpp.h */,
 				320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */,
 				32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */,
 				32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */,

@@ -71,6 +71,7 @@
 #import "OAEditColorViewController.h"
 #import "OAResourcesInstaller.h"
 #import "OATravelGuidesHelper.h"
+#import "OAObfFileList.h"
 #import "OAGPXDocumentAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
 #import "SceneDelegate.h"

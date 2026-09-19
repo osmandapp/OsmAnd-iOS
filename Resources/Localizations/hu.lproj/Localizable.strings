@@ -4517,3 +4517,4 @@
 "carplay_trip_via_point" = "Ezen keresztül: %@";
 "tracks_stats_are_being_calculated" = "A nyomvonalak statisztikáinak kiszámítása folyamatban van…";
 "tracks_stats_are_being_calculated_left" = "%1$@ %2$@ van hátra";
+"routing_engine_shared" = "Útvonal az OsmAndShared segítségével";

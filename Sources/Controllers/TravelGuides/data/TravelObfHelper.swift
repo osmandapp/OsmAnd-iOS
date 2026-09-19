@@ -113,6 +113,17 @@ final class TravelObfHelper: NSObject {
         return SharedTravelArticles.toApp(found) as? TravelGpx
     }
 
+    /// The tracks drawn under `location` that carry one of `osmRouteTypeNames`, read out of the map
+    /// section. Used when a route is tapped on the map and the tap carries no route id: what is
+    /// known is which route types the style is drawing.
+    func searchTravelGpx(location: CLLocation, osmRouteTypeNames: Set<String>) -> [TravelGpx] {
+        guard !osmRouteTypeNames.isEmpty else { return [] }
+
+        let latLon = KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        return helper.searchTravelGpxByRouteTypes(location: latLon, osmRouteTypeTags: osmRouteTypeNames)
+            .compactMap { SharedTravelArticles.toApp($0) as? TravelGpx }
+    }
+
     // MARK: - Articles
 
     func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {

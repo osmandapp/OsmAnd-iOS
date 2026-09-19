@@ -27,6 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSArray<NSString *> *)travelAndMapFilePaths;
 
+/**
+ The installed file with this name, by full path, or nil when it is not installed.
+
+ The saved articles keep the bare file name, the obf readers are keyed by path, so the two are
+ matched up here.
+ */
++ (nullable NSString *)pathForFileName:(NSString *)fileName;
+
 @end
 
 NS_ASSUME_NONNULL_END

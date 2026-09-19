@@ -333,7 +333,6 @@
 		32076B1429014678001A86AF /* ic_custom_fps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0E29014677001A86AF /* ic_custom_fps@3x.png */; };
 		320DF4122F4379A200F80CE3 /* OACollapsableTravelGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320DF4112F43799C00F80CE3 /* OACollapsableTravelGuidesView.swift */; };
 		320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71232A823E210071C0E7 /* TravelObfHelper.swift */; };
-		320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71262A823FB20071C0E7 /* PopularArticles.swift */; };
 		320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71282A8251730071C0E7 /* TravelArticle.swift */; };
 		320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */; };
 		320F712E2A862BC90071C0E7 /* TravelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F712D2A862BC90071C0E7 /* TravelHelper.swift */; };
@@ -4056,7 +4055,6 @@
 		320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityExtendedNameFilter.h; sourceTree = "<group>"; };
 		320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityExtendedNameFilter.mm; sourceTree = "<group>"; };
 		320F71232A823E210071C0E7 /* TravelObfHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelObfHelper.swift; sourceTree = "<group>"; };
-		320F71262A823FB20071C0E7 /* PopularArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularArticles.swift; sourceTree = "<group>"; };
 		320F71282A8251730071C0E7 /* TravelArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticle.swift; sourceTree = "<group>"; };
 		320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelGuidesHelper.h; sourceTree = "<group>"; };
 		320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelGuidesHelper.mm; sourceTree = "<group>"; };
@@ -8937,7 +8935,6 @@
 				320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */,
 				32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */,
 				32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */,
-				320F71262A823FB20071C0E7 /* PopularArticles.swift */,
 				320F71282A8251730071C0E7 /* TravelArticle.swift */,
 				320F71332A863A8E0071C0E7 /* TravelGpx.swift */,
 				320F712D2A862BC90071C0E7 /* TravelHelper.swift */,
@@ -19243,7 +19240,6 @@
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
-				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
 				CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */,

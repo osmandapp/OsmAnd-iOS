@@ -24,6 +24,19 @@
     return [self pathsIncludingMapRegions:YES];
 }
 
++ (NSString *)pathForFileName:(NSString *)fileName
+{
+    if (fileName.length == 0)
+        return nil;
+
+    for (NSString *path in [self travelAndMapFilePaths])
+    {
+        if ([path.lastPathComponent isEqualToString:fileName])
+            return path;
+    }
+    return nil;
+}
+
 + (NSArray<NSString *> *)pathsIncludingMapRegions:(BOOL)includeMapRegions
 {
     OsmAndAppInstance app = OsmAndApp.instance;

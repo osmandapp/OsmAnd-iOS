@@ -61,15 +61,15 @@ final class SharedTravelBookmarks: NSObject, TravelBookmarks {
     }
 
     func getSavedArticle(file: KFile?, routeId: String?, lang: String?) -> OsmAndShared.TravelArticle? {
-        guard let routeId, let lang else { return nil }
-        let saved = storage.getSavedArticle(file: file?.name() ?? "", routeId: routeId, lang: lang)
-        return saved.map(SharedTravelArticles.toShared)
+        let saved = storage.getSavedArticle(file: file?.name() ?? "",
+                                            routeId: routeId ?? "",
+                                            lang: lang ?? "")
+        return saved.map { SharedTravelArticles.toShared($0) }
     }
 
     func getSavedArticles(file: KFile?, routeId: String?) -> [OsmAndShared.TravelArticle] {
-        guard let routeId else { return [] }
-        return storage.getSavedArticles(file: file?.name() ?? "", routeId: routeId)
-            .map(SharedTravelArticles.toShared)
+        storage.getSavedArticles(file: file?.name() ?? "", routeId: routeId ?? "")
+            .map { SharedTravelArticles.toShared($0) }
     }
 
     func addArticleToSaved(article: OsmAndShared.TravelArticle) {
@@ -81,14 +81,57 @@ final class SharedTravelBookmarks: NSObject, TravelBookmarks {
     }
 }
 
-/// Copies an article between the app's model and the shared one, field for field.
+/// Copies an article, an identifier and a search result between the app's model and the shared one.
 ///
-/// The two carry the same fields under the same names; they differ in how they name a file - a path
-/// here, a `KFile` there - and in the gpx they hold, which is not copied: it is built from the obf
-/// files, never stored.
+/// The two models carry the same fields under the same names. They differ in two places: a file is
+/// a bare name here, because that is what the saved-articles database holds, and a full path there,
+/// because that is how the obf readers are keyed; and `lastModified` is seconds here and
+/// milliseconds there.
+///
+/// Every converted pair is remembered in both directions, because the objects are not
+/// interchangeable copies. The app hangs the built gpx file off its article, and the shared article
+/// carries a bounding box that no setter exposes and that copying would drop - without it the gpx
+/// build would search every travel file whole.
 enum SharedTravelArticles {
 
+    private static let appBySharedArticle =
+        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>.weakToWeakObjects()
+    private static let lock = NSLock()
+
+    // MARK: - Articles
+
     static func toShared(_ article: TravelArticle) -> OsmAndShared.TravelArticle {
+        if let known = article.sharedArticle {
+            return known
+        }
+        let shared = copyToShared(article)
+        remember(app: article, shared: shared)
+        return shared
+    }
+
+    static func toApp(_ shared: OsmAndShared.TravelArticle) -> TravelArticle {
+        if let known = knownApp(for: shared) {
+            return known
+        }
+        let article = copyToApp(shared)
+        remember(app: article, shared: shared)
+        return article
+    }
+
+    private static func remember(app: TravelArticle, shared: OsmAndShared.TravelArticle) {
+        app.sharedArticle = shared
+        lock.lock()
+        appBySharedArticle.setObject(app, forKey: shared)
+        lock.unlock()
+    }
+
+    private static func knownApp(for shared: OsmAndShared.TravelArticle) -> TravelArticle? {
+        lock.lock()
+        defer { lock.unlock() }
+        return appBySharedArticle.object(forKey: shared)
+    }
+
+    private static func copyToShared(_ article: TravelArticle) -> OsmAndShared.TravelArticle {
         let shared: OsmAndShared.TravelArticle
         if let gpx = article as? TravelGpx {
             let sharedGpx = OsmAndShared.TravelGpx()
@@ -105,7 +148,7 @@ enum SharedTravelArticles {
         } else {
             shared = OsmAndShared.TravelArticle()
         }
-        shared.file = article.file.map { KFile(filePath: $0) }
+        shared.file = sharedFile(named: article.file)
         shared.title = article.title
         shared.content = article.content
         shared.isPartOf = article.isPartOf
@@ -121,12 +164,12 @@ enum SharedTravelArticles {
         shared.contentsJson = article.contentsJson
         shared.aggregatedPartOf = article.aggregatedPartOf
         shared.description_ = article.descr
-        shared.lastModified = Int64(article.lastModified)
+        shared.lastModified = Int64(article.lastModified * 1000)
         shared.routeRadius = Int32(article.routeRadius)
         return shared
     }
 
-    static func toApp(_ shared: OsmAndShared.TravelArticle) -> TravelArticle {
+    private static func copyToApp(_ shared: OsmAndShared.TravelArticle) -> TravelArticle {
         let article: TravelArticle
         if let sharedGpx = shared as? OsmAndShared.TravelGpx {
             let gpx = TravelGpx()
@@ -159,10 +202,48 @@ enum SharedTravelArticles {
         article.contentsJson = shared.contentsJson
         article.aggregatedPartOf = shared.aggregatedPartOf
         article.descr = shared.description_
-        article.lastModified = TimeInterval(shared.lastModified)
+        article.lastModified = TimeInterval(shared.lastModified) / 1000
         article.routeRadius = Int(shared.routeRadius)
         article.bbox31 = shared.getBbox31()
         return article
+    }
+
+    // MARK: - Identifiers and search results
+
+    static func toShared(_ identifier: TravelArticleIdentifier) -> OsmAndShared.TravelArticleIdentifier {
+        OsmAndShared.TravelArticleIdentifier(file: sharedFile(named: identifier.file),
+                                             lat: identifier.lat,
+                                             lon: identifier.lon,
+                                             title: identifier.title,
+                                             routeId: identifier.routeId,
+                                             routeSource: identifier.routeSource)
+    }
+
+    static func toApp(_ identifier: OsmAndShared.TravelArticleIdentifier) -> TravelArticleIdentifier {
+        TravelArticleIdentifier(file: identifier.file?.name(),
+                                lat: identifier.lat,
+                                lon: identifier.lon,
+                                title: identifier.title,
+                                routeId: identifier.routeId,
+                                routeSource: identifier.routeSource)
+    }
+
+    static func toApp(_ result: OsmAndShared.WikivoyageSearchResult) -> TravelSearchResult {
+        let converted = TravelSearchResult(routeId: result.getArticleRouteId() ?? "",
+                                           articleTitle: result.getArticleTitle() ?? "",
+                                           isPartOf: result.isPartOf,
+                                           imageTitle: result.imageTitle,
+                                           langs: result.langs)
+        converted.articleId = toApp(result.articleId)
+        return converted
+    }
+
+    /// The installed file that carries this name, by full path. An uninstalled one keeps its bare
+    /// name: nothing will be found in it either way, and a saved article has to hold on to the name
+    /// its database row was written with.
+    private static func sharedFile(named name: String?) -> KFile? {
+        guard let name, !name.isEmpty else { return nil }
+        return KFile(filePath: OAObfFileList.path(forFileName: name) ?? name)
     }
 }
 

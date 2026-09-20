@@ -14,7 +14,7 @@
 @implementation OAJoinPointsCommand
 {
     NSArray<OASWptPt *> *_points;
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
     NSInteger _pointPosition;
 }
 

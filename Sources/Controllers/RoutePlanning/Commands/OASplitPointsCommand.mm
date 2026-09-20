@@ -15,7 +15,7 @@
 {
     BOOL _after;
     NSArray<OASWptPt *> *_points;
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
     NSInteger _pointPosition;
     NSInteger _splitPointPosition;
     NSString *_pointProfileType;

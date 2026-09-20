@@ -26,6 +26,9 @@
 		05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */; };
 		05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */; };
 		05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */; };
+		F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 731A97689A654400B3FE08E0 /* OAObfFileList.mm */; };
+		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
+		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
 		05DCD5412D50C7EC00C32EBB /* he_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = 05DCD5402D50C7EC00C32EBB /* he_tts.js */; };
 		05DCE548304D88EC005DA649 /* libEGL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE542304D48B5005DA649 /* libEGL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -330,7 +333,6 @@
 		32076B1429014678001A86AF /* ic_custom_fps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0E29014677001A86AF /* ic_custom_fps@3x.png */; };
 		320DF4122F4379A200F80CE3 /* OACollapsableTravelGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320DF4112F43799C00F80CE3 /* OACollapsableTravelGuidesView.swift */; };
 		320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71232A823E210071C0E7 /* TravelObfHelper.swift */; };
-		320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71262A823FB20071C0E7 /* PopularArticles.swift */; };
 		320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71282A8251730071C0E7 /* TravelArticle.swift */; };
 		320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */; };
 		320F712E2A862BC90071C0E7 /* TravelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F712D2A862BC90071C0E7 /* TravelHelper.swift */; };
@@ -3703,6 +3705,10 @@
 		05DACD802C1EC4340023FAD9 /* OAXmlFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAXmlFactory.h; sourceTree = "<group>"; };
 		05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAXmlFactory.m; sourceTree = "<group>"; };
 		05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUtil.swift; sourceTree = "<group>"; };
+		9C102C0285A946359E1BE6A4 /* OAObfFileList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAObfFileList.h; sourceTree = "<group>"; };
+		731A97689A654400B3FE08E0 /* OAObfFileList.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileList.mm; sourceTree = "<group>"; };
+		17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfReaders.swift; sourceTree = "<group>"; };
+		9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTravelContext.swift; sourceTree = "<group>"; };
 		05DCD5402D50C7EC00C32EBB /* he_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = he_tts.js; path = ../resources/voice/he/he_tts.js; sourceTree = "<group>"; };
 		05DCE542304D48B5005DA649 /* libEGL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libEGL.xcframework; sourceTree = "<group>"; };
 		05DCE544304D48BC005DA649 /* libGLESv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libGLESv2.xcframework; sourceTree = "<group>"; };
@@ -4049,7 +4055,6 @@
 		320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityExtendedNameFilter.h; sourceTree = "<group>"; };
 		320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityExtendedNameFilter.mm; sourceTree = "<group>"; };
 		320F71232A823E210071C0E7 /* TravelObfHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelObfHelper.swift; sourceTree = "<group>"; };
-		320F71262A823FB20071C0E7 /* PopularArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularArticles.swift; sourceTree = "<group>"; };
 		320F71282A8251730071C0E7 /* TravelArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticle.swift; sourceTree = "<group>"; };
 		320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelGuidesHelper.h; sourceTree = "<group>"; };
 		320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelGuidesHelper.mm; sourceTree = "<group>"; };
@@ -8930,12 +8935,12 @@
 				320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */,
 				32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */,
 				32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */,
-				320F71262A823FB20071C0E7 /* PopularArticles.swift */,
 				320F71282A8251730071C0E7 /* TravelArticle.swift */,
 				320F71332A863A8E0071C0E7 /* TravelGpx.swift */,
 				320F712D2A862BC90071C0E7 /* TravelHelper.swift */,
 				320F712F2A862C660071C0E7 /* TravelLocalDataHelper.swift */,
 				320F71232A823E210071C0E7 /* TravelObfHelper.swift */,
+				9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */,
 				320F71312A862DE90071C0E7 /* TravelSearchResult.swift */,
 				320F713E2A867D930071C0E7 /* TravelSearchHistoryItem.swift */,
 				327A19852A98D57800F4A027 /* TravelJsonParser.swift */,
@@ -15282,6 +15287,9 @@
 				FA64173A2CA5A57500982297 /* SharedLibExtension.swift */,
 				FAD848992CAD6F950018AF92 /* WptPtExtension.swift */,
 				FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */,
+				9C102C0285A946359E1BE6A4 /* OAObfFileList.h */,
+				731A97689A654400B3FE08E0 /* OAObfFileList.mm */,
+				17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */,
 			);
 			path = SharedLibHelpers;
 			sourceTree = "<group>";
@@ -18519,6 +18527,9 @@
 				DA5A837526C563A800F274C7 /* OARoutePreferencesParameters.mm in Sources */,
 				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
 				05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */,
+				F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */,
+				6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */,
+				50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
 				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
@@ -19229,7 +19240,6 @@
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
-				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
 				CE8215E72FFF6AF9002A8617 /* StarMapPlainButton.swift in Sources */,

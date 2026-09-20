@@ -427,10 +427,14 @@
 
         int minZoom = [parameters[@"minzoom"] intValue];
         int maxZoom = [parameters[@"maxzoom"] intValue];
-        int cachedMax = maxZoom;
-        maxZoom = 17 - minZoom;
-        minZoom = 17 - cachedMax;
-        
+        BOOL inversiveZoom = [parameters[@"inversiveZoom"] boolValue];
+        if (inversiveZoom)
+        {
+            int cachedMax = maxZoom;
+            maxZoom = 17 - minZoom;
+            minZoom = 17 - cachedMax;
+        }
+
         meta.setMinZoom(minZoom);
         meta.setMaxZoom(maxZoom);
         meta.setUrl(QString::fromNSString(parameters[@"url"]));
@@ -441,7 +445,7 @@
         meta.setTimeColumn(QString::fromNSString(parameters[@"timecolumn"]));
         meta.setReferer(QString::fromNSString(parameters[@"referer"]));
         meta.setUserAgent(QString::fromNSString(parameters[@"userAgent"]));
-        meta.setTileNumbering(QString::fromNSString(parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet"));
+        meta.setTileNumbering(QString::fromNSString(parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : (inversiveZoom ? @"BigPlanet" : @"simple")));
         meta.setRandoms(QString::fromNSString(parameters[@"randoms"]));
         meta.setInvertedY([parameters[@"inverted_y"] intValue]);
         

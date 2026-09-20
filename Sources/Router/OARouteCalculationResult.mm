@@ -191,6 +191,15 @@
     return 0;
 }
 
+- (int) getWholeTime
+{
+    int time = 0;
+    for (const auto& segment : [self getOriginalRoute])
+        time += segment->segmentTime;
+
+    return time;
+}
+
 - (int) getWholeDistance
 {
     if (_listDistance.count > 0)

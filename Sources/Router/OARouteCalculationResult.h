@@ -42,6 +42,7 @@ struct RouteSegmentResult;
 @property (nonatomic) NSMutableArray<OAAlarmInfo *> *alarmInfo;
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) NSString *errorMessage;
+// cost of the routing search (includes penalties affecting only the route choice), use getWholeTime to show
 @property (nonatomic, readonly) float routingTime;
 @property (nonatomic, readonly) int currentRoute;
 @property (nonatomic, readonly) CLLocation *firstIntroducedPoint;
@@ -82,6 +83,7 @@ struct RouteSegmentResult;
 - (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (float) getCurrentMaxSpeed:(int)profile;
+- (int) getWholeTime;
 - (int) getWholeDistance;
 - (BOOL) isCalculated;
 - (BOOL) isEmpty;

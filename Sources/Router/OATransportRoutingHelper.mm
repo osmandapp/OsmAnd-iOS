@@ -20,6 +20,7 @@
 #import "OARootViewController.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <ferryRoutingHelper.h>
 #include <transportRoutingObjects.h>
 #include <routingConfiguration.h>
 #include <transportRoutingConfiguration.h>
@@ -223,7 +224,8 @@
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
     MAP_STR_STR paramsRes;
-    auto router = [_app getRouter:params.mode];
+    auto builder = [_app getRoutingConfigForMode:params.mode];
+    auto router = [_app getRouter:builder mode:params.mode];
     string derivedProfile(params.mode.getDerivedProfile.UTF8String);
     auto paramsMap = router->getParameters(derivedProfile);
     for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
@@ -259,7 +261,7 @@
     OARouteProvider *routeProvider = OARoutingHelper.sharedInstance.getRouteProvider;
     vector<SHARED_PTR<TransportRouteResult>> __block res;
     [routeProvider runSyncWithNativeRouting:^{
-        auto cfg = make_shared<TransportRoutingConfiguration>(router, params.params);
+        auto cfg = make_shared<TransportRoutingConfiguration>(builder, router, params.params);
         const auto planner = unique_ptr<TransportRoutePlanner>(new TransportRoutePlanner());
         [self initNativeRouteFiles:params routeProvider:routeProvider];
         auto ctx = unique_ptr<TransportRoutingContext>(new TransportRoutingContext(cfg));
@@ -361,7 +363,6 @@
     });
     
     [_walkingRouteSegments removeAllObjects];
-    [_walkingRouteSegmentsCache removeAllObjects];
     if (routes.size() > 0)
     {
         for (int i = 0; i < routes.size(); i++)
@@ -425,13 +426,60 @@
     }
 }
 
+// public transport router walks straight, so a route is wrong if its real walk needs a ferry
+- (BOOL) hasWalkOverWater:(const SHARED_PTR<TransportRouteResult> &)route
+{
+    SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
+    for (const SHARED_PTR<TransportRouteResultSegment>& segment : route->segments)
+    {
+        if ([self hasFerryCrossing:[self walkFrom:prev to:segment]])
+            return YES;
+
+        prev = segment;
+    }
+    return [self hasFerryCrossing:[self walkFrom:prev to:nullptr]];
+}
+
+- (BOOL) hasFerryCrossing:(OARouteCalculationResult *)walk
+{
+    if (!walk)
+        return NO;
+
+    auto route = [walk getOriginalRoute];
+    return FerryRoutingHelper::hasCrossing(route);
+}
+
+- (OARouteCalculationResult *) walkFrom:(const SHARED_PTR<TransportRouteResultSegment> &)s1
+                                     to:(const SHARED_PTR<TransportRouteResultSegment> &)s2
+{
+    return [_walkingRouteSegments objectForKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:s1],
+                                                 [[OATransportRouteResultSegment alloc] initWithSegment:s2]]];
+}
+
+- (BOOL) removeRoutesWithWalkOverWater:(vector<SHARED_PTR<TransportRouteResult>> &)routes
+{
+    const auto it = std::remove_if(routes.begin(), routes.end(),
+                                   [self](const SHARED_PTR<TransportRouteResult>& r) { return [self hasWalkOverWater:r]; });
+    if (it == routes.end())
+        return NO;
+
+    routes.erase(it, routes.end());
+    return YES;
+}
+
 - (void) main
 {
     NSString *error = nil;
     
     auto res = [self calculateRouteImpl:_params];
     if (res.size() != 0 && !_params.calculationProgress->isCancelled())
-        [self calculateWalkingRoutes:res];
+    {
+        do
+        {
+            [self calculateWalkingRoutes:res];
+        }
+        while (!_params.calculationProgress->isCancelled() && [self removeRoutesWithWalkOverWater:res]);
+    }
 
     if (_params.calculationProgress->isCancelled())
         return;
@@ -596,7 +644,7 @@
             OARouteCalculationResult *walkingRouteSegment = [self getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:segment]];
             if (walkingRouteSegment)
             {
-                res += walkingRouteSegment.routingTime;
+                res += [walkingRouteSegment getWholeTime];
             }
             prevSegment = segment;
         }
@@ -605,7 +653,7 @@
             OARouteCalculationResult *walkingRouteSegment = [self getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segments[segments.size() - 1]] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nullptr]];
             if (walkingRouteSegment)
             {
-                res += walkingRouteSegment.routingTime;
+                res += [walkingRouteSegment getWholeTime];
             }
         }
     }

@@ -321,7 +321,7 @@
             const auto& nextSegment = segments[i + 1];
 
             if (nextSegment != nullptr) {
-                double walkDist = [self getWalkDistance:segment next:nextSegment dist:segment->walkDist];
+                double walkDist = [self getWalkDistance:segment next:nextSegment dist:nextSegment->walkDist];
                 if (walkDist > 0)
                 {
                     NSInteger walkTime = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
@@ -370,7 +370,7 @@
 {
     OARouteCalculationResult *walkingRouteSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:next]];
     if (walkingRouteSegment)
-        return walkingRouteSegment.routingTime;
+        return [walkingRouteSegment getWholeTime];
     return dist / speed;
 }
 

@@ -123,7 +123,7 @@ static UIFont *_shieldFont;
         OARouteCalculationResult *walkingSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:s]];
         if (walkingSegment)
         {
-            float walkTime = walkingSegment.routingTime;
+            float walkTime = [walkingSegment getWholeTime];
             if (walkTime > MIN_WALK_TIME)
             {
                 NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
@@ -181,7 +181,7 @@ static UIFont *_shieldFont;
             walkingSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:s] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nil]];
             if (walkingSegment != nil)
             {
-                float walkTime = walkingSegment.routingTime;
+                float walkTime = [walkingSegment getWholeTime];
                 if (walkTime > MIN_WALK_TIME)
                 {
                     [self drawArrowView:arr];
@@ -301,7 +301,7 @@ static UIFont *_shieldFont;
         OARouteCalculationResult *walkingSegment = [OATransportRoutingHelper.sharedInstance getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:s]];
         if (walkingSegment)
         {
-            float walkTime = walkingSegment.routingTime;
+            float walkTime = [walkingSegment getWholeTime];
             if (walkTime > MIN_WALK_TIME)
             {
                 NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
@@ -327,7 +327,7 @@ static UIFont *_shieldFont;
             walkingSegment = [OATransportRoutingHelper.sharedInstance getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:s] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nil]];
             if (walkingSegment != nil)
             {
-                float walkTime = walkingSegment.routingTime;
+                float walkTime = [walkingSegment getWholeTime];
                 if (walkTime > MIN_WALK_TIME)
                 {
                     title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];

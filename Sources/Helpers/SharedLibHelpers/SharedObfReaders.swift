@@ -83,12 +83,6 @@ final class SharedObfReaders: NSObject {
         return try work()
     }
 
-    /// Drops the readers of files that are no longer installed. Called on its own when the caller
-    /// knows the maps changed before the observable fires.
-    func invalidate() {
-        forgetUninstalledFiles()
-    }
-
     private func repositories(forPaths paths: [String]) -> [AmenityIndexRepository] {
         lock.lock()
         defer { lock.unlock() }

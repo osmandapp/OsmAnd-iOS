@@ -53,6 +53,8 @@
 #import "OARouteColorize.h"
 #import "OAMapStyleSettings.h"
 #import "OAApplicationMode.h"
+#import "OAGpxApproximationHelper.h"
+#import "OAGpxApproximationParams.h"
 #import "OASavingTrackHelper.h"
 #import "OAWeatherBand.h"
 #import "OADayNightHelper.h"

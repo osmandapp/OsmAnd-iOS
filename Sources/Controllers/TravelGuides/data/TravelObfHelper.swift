@@ -198,6 +198,41 @@ final class TravelObfHelper: NSObject {
         return adapter
     }
 
+    /// Fills a route's track with altitudes, which the obf does not carry for it.
+    ///
+    /// A height graph is written only for gpx collections; an OSM route has none, so the track is
+    /// snapped to the roads and the altitudes the routing data holds for them are carried over.
+    /// This is where android takes the profile from as well.
+    func acquireGpxFileHeightData(gpxFile: GpxFile) {
+        let activities = RouteActivityHelper.shared.getActivities()
+        guard let activity = gpxFile.metadata.getRouteActivity(activities: activities),
+              let mode = Self.heightApproximationProfiles[activity.group.id] else {
+            return
+        }
+
+        let params = OAGpxApproximationParams()
+        params.appMode = mode
+        let approximator: OAGpxApproximationHelper =
+            OAGpxApproximationHelper(appMode: mode, threshold: Float(params.distanceThreshold))
+        guard let approximated = approximator.approximateGpxSync(gpxFile, params: params),
+              approximated !== gpxFile else {
+            return
+        }
+        _ = GpxElevationTransfer(readOnlySourceGpxFile: approximated, mutableTargetGpxFile: gpxFile).transfer()
+    }
+
+    /// Which routing profile the track is matched against, by the activity group it belongs to.
+    /// Taken from the `route_type` poi type, `air_sports` excluded because nothing routes there.
+    private static let heightApproximationProfiles: [String: OAApplicationMode] = [
+        "driving": OAApplicationMode.car(),
+        "motorcycling": OAApplicationMode.motorcycle(),
+        "foot": OAApplicationMode.pedestrian(),
+        "winter_sport": OAApplicationMode.ski(),
+        "cycling": OAApplicationMode.bicycle(),
+        "water_sport": OAApplicationMode.boat(),
+        "other": OAApplicationMode.pedestrian()
+    ]
+
     func getGPXName(article: TravelArticle) -> String {
         article.getGpxFileName() + GPX_FILE_EXT
     }
@@ -289,7 +324,12 @@ final class GpxFileReader {
     
     func doInBackground() -> OAGPXDocumentAdapter? {
         guard let article else { return nil }
-        return TravelObfHelper.shared.buildGpxFile(article: article)
+
+        let adapter = TravelObfHelper.shared.buildGpxFile(article: article)
+        if article is TravelGpx, let gpxFile = adapter?.object {
+            TravelObfHelper.shared.acquireGpxFileHeightData(gpxFile: gpxFile)
+        }
+        return adapter
     }
     
     func onPostExecute(gpxFile: OAGPXDocumentAdapter?) {

@@ -198,6 +198,14 @@ final class AverageSpeedWidget: OASimpleWidget {
         Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref.get(appMode), mode: appMode)
         Self.registerSkipStopsPref(customId).set(skipStopsPref.get(appMode), mode: appMode)
     }
+
+    override func copySettings(from fromAppMode: OAApplicationMode,
+                               appMode toAppMode: OAApplicationMode,
+                               customId: String?) {
+        super.copySettings(from: fromAppMode, appMode: toAppMode, customId: customId)
+        Self.registerMeasuredIntervalPref(customId).set(measuredIntervalPref.get(fromAppMode), mode: toAppMode)
+        Self.registerSkipStopsPref(customId).set(skipStopsPref.get(fromAppMode), mode: toAppMode)
+    }
     
     static func registerMeasuredIntervalPref(_ customId: String?,
                                              appMode: OAApplicationMode? = nil,

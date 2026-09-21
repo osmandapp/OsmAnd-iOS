@@ -106,6 +106,8 @@
 
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    // The OsmAndShared routing configs, by the file they were parsed from ("" is the built in one).
+    NSMutableDictionary<NSString *, OASRoutingConfigurationBuilder *> *_sharedRoutingConfigs;
 
     BOOL _isInBackground;
 }
@@ -1051,8 +1053,101 @@
     return builder;
 }
 
+// The OsmAndShared twin of getRoutingConfigForMode:, reading the same files. Only routing behind the
+// OsmAndShared flag asks for it, so a file is parsed when it is first needed rather than at startup.
+- (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode
+{
+    NSString *fileName = nil;
+    NSString *routingProfileKey = [mode getRoutingProfile];
+    if (routingProfileKey.length > 0)
+    {
+        int index = [routingProfileKey indexOf:ROUTING_FILE_EXT];
+        if (index != -1)
+        {
+            NSString *key = [routingProfileKey substringToIndex:index + ROUTING_FILE_EXT.length];
+            if ([NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
+                fileName = key;
+        }
+    }
+    @synchronized (self)
+    {
+        if (!_sharedRoutingConfigs)
+            _sharedRoutingConfigs = [NSMutableDictionary dictionary];
+
+        if (!fileName)
+            return [self sharedDefaultRoutingConfig];
+
+        OASRoutingConfigurationBuilder *builder = _sharedRoutingConfigs[fileName];
+        if (!builder)
+        {
+            OASRoutingConfigurationBuilder *config =
+                [[OASRoutingConfigurationBuilder alloc] initWithDefaultAttributes:[self getSharedDefaultAttributes]];
+            builder = [OASRoutingConfiguration.companion parseFromFileFilePath:[self sharedRoutingFilePath:fileName]
+                                                                     filename:fileName
+                                                                       config:config];
+            _sharedRoutingConfigs[fileName] = builder;
+        }
+        return builder;
+    }
+}
+
+- (OASRoutingConfigurationBuilder *) sharedDefaultRoutingConfig
+{
+    @synchronized (self)
+    {
+        if (!_sharedRoutingConfigs)
+            _sharedRoutingConfigs = [NSMutableDictionary dictionary];
+
+        OASRoutingConfigurationBuilder *builder = _sharedRoutingConfigs[@""];
+        if (!builder)
+        {
+            builder = [OASRoutingConfiguration.companion parseFromFileFilePath:[NSBundle.mainBundle pathForResource:@"routing" ofType:@"xml"]
+                                                                     filename:nil
+                                                                       config:[[OASRoutingConfigurationBuilder alloc] init]];
+            _sharedRoutingConfigs[@""] = builder;
+        }
+        return builder;
+    }
+}
+
+- (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode
+{
+    if (!builder)
+        return nil;
+
+    OASGeneralRouter *router = [builder getRouterRoutingProfileName:[mode getRoutingProfile]];
+    if (!router && mode.parent)
+        router = [builder getRouterRoutingProfileName:mode.parent.stringKey];
+    return router;
+}
+
+- (NSString *) sharedRoutingFilePath:(NSString *)fileName
+{
+    return [[self.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR] stringByAppendingPathComponent:fileName];
+}
+
+- (NSDictionary<NSString *, NSString *> *) getSharedDefaultAttributes
+{
+    NSMutableDictionary<NSString *, NSString *> *defaultAttributes = [NSMutableDictionary dictionary];
+    NSDictionary<NSString *, NSString *> *attributes = [[self sharedDefaultRoutingConfig] getAttributes];
+    for (NSString *key in attributes)
+    {
+        if (![key isEqualToString:@"routerName"])
+            defaultAttributes[key] = attributes[key];
+    }
+    return defaultAttributes;
+}
+
 - (void) loadRoutingFiles
 {
+    @synchronized (self)
+    {
+        // the custom files are read again below; their OsmAndShared twins when they are next asked for
+        OASRoutingConfigurationBuilder *builtIn = _sharedRoutingConfigs[@""];
+        [_sharedRoutingConfigs removeAllObjects];
+        if (builtIn)
+            _sharedRoutingConfigs[@""] = builtIn;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         const auto defaultAttributes = [self getDefaultAttributes];
         UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> customConfigs;

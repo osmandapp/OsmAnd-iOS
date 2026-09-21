@@ -625,8 +625,8 @@
 
 - (void) startLocationSimulation:(CLLocation *)location
 {
-    const auto& tunnel = [_routingHelper getUpcomingTunnel:250];
-    if (!tunnel.empty())
+    NSArray<OASRouteSegmentResult *> *tunnel = [_routingHelper getUpcomingTunnel:250];
+    if (tunnel.count > 0)
     {
         _simulatePosition = [[OASimulationProvider alloc] init];
         [_simulatePosition startSimulation:tunnel currentLocation:location];

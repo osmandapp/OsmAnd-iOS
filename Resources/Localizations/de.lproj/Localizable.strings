@@ -4132,3 +4132,5 @@
 "send_current_app_log" = "Derzeitiges App-Protokoll senden";
 "send_current_app_log_descr" = "Seit App-Start";
 "no_search_results" = "Keine Ergebnisse";
+"panels_layout_wide" = "Breit";
+"panels_layout_compact" = "Kompakt";

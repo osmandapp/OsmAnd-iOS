@@ -314,8 +314,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSTimeInterval duration = 0;
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
-        for (const auto &segment : data.segments)
-            duration += segment->segmentTime;
+        for (OASRouteSegmentResult *segment in data.segments)
+            duration += [segment getSegmentTime];
     }
     return duration;
 }
@@ -2327,14 +2327,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)
         return @[];
 
-    std::vector<std::shared_ptr<RouteSegmentResult>> combined;
+    NSMutableArray<OASRouteSegmentResult *> *combined = [NSMutableArray array];
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
-    {
-        const auto &segs = data.segments;
-        combined.insert(combined.end(), segs.begin(), segs.end());
-    }
+        [combined addObjectsFromArray:data.segments];
 
-    if (combined.empty())
+    if (combined.count == 0)
         return @[];
 
     return [OARouteStatisticsHelper calculateRouteStatistic:combined];

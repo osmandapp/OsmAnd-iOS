@@ -106,19 +106,19 @@
     // Search nearby
     [arr addObject:@{ @"title" : OALocalizedString(@"search_nearby"),
                       @"key" : @"nearby_search",
-                      @"img" : @"ic_custom_search",
+                      @"img" : ACImageNameIcCustomSearch,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     // Download/Update online map
     if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_download_map"),
                           @"key" : @"download_map",
-                          @"img" : @"ic_custom_download",
+                          @"img" : ACImageNameIcCustomDownload,
                           @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
         [arr addObject:@{ @"title" : OALocalizedString(@"update_tile"),
                           @"key" : @"update_map",
-                          @"img" : @"ic_custom_update",
+                          @"img" : ACImageNameIcCustomUpdate,
                           @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     }
     // Change marker position
@@ -126,7 +126,7 @@
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
                           @"key" : @"change_object_posiotion",
-                          @"img" : @"ic_custom_change_object_position",
+                          @"img" : ACImageNameIcCustomChangeObjectPosition,
                           @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     }
     // Plugins
@@ -170,13 +170,13 @@
                     [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"context_menu_item_create_poi") : _targetPoint.type == OATargetOsmEdit ?
                                       OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",
-                                      @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
+                                      @"img" : createNewPoi ? @"ic_action_create_poi" : ACImageNameIcCustomEdit,
                                       @"type" : [OASimpleTableViewCell getCellIdentifier] }];
                     
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"context_menu_item_open_note"),
                                       @"key" : @"addon_edit_poi_create_note",
-                                      @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
+                                      @"img" : editOsmNote ? ACImageNameIcCustomEdit : @"ic_action_add_osm_note",
                                       @"type" : [OASimpleTableViewCell getCellIdentifier]}];
                 }
                 

@@ -281,7 +281,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (!_routingHelper.isPublicTransportMode)
     {
         [_goButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
-        [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
+        [_goButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomNavigationArrow] forState:UIControlStateNormal];
     }
     else
     {
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 @"cell" : [OARightIconTableViewCell getCellIdentifier],
                 @"title" : gpx.gpxFileNameWithoutExtension,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
-                @"img" : @"ic_custom_trip",
+                @"img" : ACImageNameIcCustomTrip,
                 @"item" : gpxFile
             }];
         }
@@ -406,7 +406,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             @"cell" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : destinationBackup.pointDescription.name,
             @"descr" : startBackup ? startBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
-            @"img" : @"ic_custom_point_to_point",
+            @"img" : ACImageNameIcCustomPointToPoint,
             @"key" : @"prev_route"
         }];
         
@@ -1456,7 +1456,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     [cell.imgView setImage:[UIImage imageNamed:@"ic_action_location_color"]];
                     cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
                 }
-                [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_swap"] forState:UIControlStateNormal];
+                [cell.routingCellButton setImage:[UIImage imageNamed:ACImageNameIcCustomSwap] forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -1481,7 +1481,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell setDividerVisibility:YES];
                 cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
                 cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
-                UIImage *image = self.isGpxTrackFollowingMode ? [UIImage imageNamed:@"ic_navbar_close"] : [UIImage imageNamed:@"ic_custom_add"];
+                UIImage *image = self.isGpxTrackFollowingMode ? [UIImage imageNamed:@"ic_navbar_close"] : [UIImage imageNamed:ACImageNameIcCustomAdd];
                 [cell.routingCellButton setImage:image forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1506,7 +1506,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
                 cell.titleLabel.text = OALocalizedString(@"route_via");
                 cell.addressLabel.text = [names componentsJoinedByString:@" "];
-                [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
+                [cell.routingCellButton setImage:[UIImage imageNamed:ACImageNameIcCustomEdit] forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [cell.routingCellButton addTarget:self action:@selector(editDestinationsPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -1536,7 +1536,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:self.isFinishPointFromTrack];
-                [cell.imgView setImage:[UIImage templateImageNamed:@"ic_custom_trip"]];
+                [cell.imgView setImage:[UIImage templateImageNamed:ACImageNameIcCustomTrip]];
                 cell.imgView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
                 cell.titleLabel.text = OALocalizedString(@"follow_track");
                 cell.addressLabel.text = fileName;
@@ -1549,7 +1549,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 {
                     cell.routingCellButton.hidden = NO;
                     cell.routingCellButton.userInteractionEnabled = YES;
-                    [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+                    [cell.routingCellButton setImage:[UIImage imageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
                     [self setupButtonLayout:cell.routingCellButton];
                     [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                     [cell.routingCellButton addTarget:self action:@selector(addFinishDestination) forControlEvents:UIControlEventTouchUpInside];
@@ -2100,7 +2100,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [_missingOrOutdatedMapsView configureWithTitle:OALocalizedString(@"missing_or_outdated_maps_title")
                                            description:OALocalizedString(@"missing_or_outdated_maps_description")
                                            buttonTitle:OALocalizedString(@"shared_string_details")
-                                             leftImage:[UIImage imageNamed:@"ic_custom_download_map"]
+                                             leftImage:[UIImage imageNamed:ACImageNameIcCustomDownloadMap]
                                     leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
     }
     return _missingOrOutdatedMapsView;

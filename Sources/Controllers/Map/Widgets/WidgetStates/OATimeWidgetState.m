@@ -9,6 +9,7 @@
 #import "OATimeWidgetState.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
 #define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
@@ -35,7 +36,7 @@
 
 - (NSString *) getMenuIconId
 {
-    return [_showArrival get] ? @"ic_action_time" : @"ic_action_time_to_distance";
+    return [_showArrival get] ? ACImageNameIcActionTime : @"ic_action_time_to_distance";
 }
 
 - (NSString *) getMenuItemId
@@ -50,7 +51,7 @@
 
 - (NSArray<NSString *> *) getMenuIconIds
 {
-    return @[ @"ic_action_time", @"ic_action_time_to_distance" ];
+    return @[ ACImageNameIcActionTime, @"ic_action_time_to_distance" ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

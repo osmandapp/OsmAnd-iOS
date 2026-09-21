@@ -14,6 +14,7 @@
 #import "OsmAndSharedWrapper.h"
 
 #import <CarPlay/CarPlay.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OACarPlayTracksListController()<OASTrackFolderLoaderTaskLoadTracksListener>
 
@@ -71,7 +72,7 @@
             NSString *folderName = folder == rootFolder ? OALocalizedString(@"shared_string_gpx_tracks") : folder.getName;
             CPListItem *listItem = [[CPListItem alloc] initWithText:folderName
                                                          detailText:@(trackItems.count).stringValue
-                                                              image:[UIImage imageNamed:@"ic_custom_folder"]
+                                                              image:[UIImage imageNamed:ACImageNameIcCustomFolder]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             listItem.userInfo = trackItems;

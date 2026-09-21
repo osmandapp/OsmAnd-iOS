@@ -370,7 +370,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionSelectTarget:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"ic_custom_location_marker"];
+            UIImage *mapImage = [UIImage templateImageNamed:ACImageNameIcCustomLocationMarker];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 
@@ -1274,7 +1274,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [selfWeak.textField becomeFirstResponder];
         }]];
         
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_location_marker"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomLocationMarker] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
             CLLocation *latLon = [[selfWeak.searchUICore getSearchSettings] getOriginalLocation];
             OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];

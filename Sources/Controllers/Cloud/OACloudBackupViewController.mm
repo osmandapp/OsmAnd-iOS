@@ -288,7 +288,7 @@
                 kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"local_changes",
                 kCellTitleKey: OALocalizedString(@"local_changes"),
-                kCellIconNameKey: @"ic_custom_device",
+                kCellIconNameKey: ACImageNameIcCustomDevice,
                 @"value": @(_backup.backupInfo.filteredFilesToUpload.count + _backup.backupInfo.filteredFilesToDelete.count)
             }];
             [collapsableRow addDependentRow:localChangesRow];
@@ -346,7 +346,7 @@
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"cancellBackupPressed",
                 kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
-                kCellIconNameKey: @"ic_custom_cancel"
+                kCellIconNameKey: ACImageNameIcCustomCancel
             };
             [backupRows addRowFromDictionary:cancelCell];
         }
@@ -356,7 +356,7 @@
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSetUpBackupButtonPressed",
                 kCellTitleKey: OALocalizedString(@"sync_now"),
-                kCellIconNameKey: @"ic_custom_update"
+                kCellIconNameKey: ACImageNameIcCustomUpdate
             };
             [backupRows addRowFromDictionary:backupNowCell];
         }
@@ -366,7 +366,7 @@
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onRetryPressed",
                 kCellTitleKey: _status.actionTitle,
-                kCellIconNameKey: @"ic_custom_reset"
+                kCellIconNameKey: ACImageNameIcCustomReset
             };
             [backupRows addRowFromDictionary:retryCell];
         }

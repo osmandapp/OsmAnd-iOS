@@ -1002,7 +1002,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuickSearchResultTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAQuickSearchResultTableViewCell *)[nib objectAtIndex:0];
-            cell.directionIcon.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionIcon.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
             cell.distanceLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -1025,7 +1025,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.distanceLabel.text = item[@"distance"];
                 cell.coordinateLabel.text = [NSString stringWithFormat:@"  •  %@", item[@"coordinates"]];
                 [cell setDesriptionLablesVisible:YES];
-                cell.icon.image = [UIImage templateImageNamed:@"ic_custom_map_pin"];
+                cell.icon.image = [UIImage templateImageNamed:ACImageNameIcCustomMapPin];
                 cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 cell.directionIcon.transform = CGAffineTransformMakeRotation([item[@"direction"] doubleValue]);
             }

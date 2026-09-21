@@ -209,7 +209,7 @@
 
             if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
         }
@@ -236,7 +236,7 @@
 
             [cell.titleView setText:cellData.title];
 
-            [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
+            [cell.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomFolder]];
             cell.leftIconView.tintColor = cellData.tintColor;
 
             cell.arrowIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
@@ -464,7 +464,7 @@
         kCellToggle: @(!cellData.toggle)
     }];
     [cellData setData:@{
-        kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+        kCellRightIconName: cellData.toggle ? ACImageNameIcCustomArrowUp : @"ic_custom_arrow_right"
     }];
     
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:indexPath.section];

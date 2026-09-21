@@ -34,7 +34,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_action_time.png" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ZC-NGY">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_action_time" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ZC-NGY">
                         <rect key="frame" x="140" y="0.0" width="50" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -96,7 +96,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_action_time.png" width="30" height="30"/>
+        <image name="ic_action_time" width="30" height="30"/>
         <image name="ic_custom_route" width="128" height="128"/>
         <image name="ic_prev.png" width="6" height="10.5"/>
         <image name="menu_cell_pointer.png" width="6" height="10.5"/>

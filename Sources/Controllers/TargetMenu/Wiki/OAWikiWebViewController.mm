@@ -485,7 +485,7 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
 
 - (NSString *)getTopButtonIconName
 {
-    return @"ic_custom_export_outlined";
+    return ACImageNameIcCustomExportOutlined;
 }
 
 - (NSString *)getBottomButtonIconName

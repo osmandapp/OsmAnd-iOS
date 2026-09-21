@@ -40,6 +40,7 @@
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAQuickSearchListItem
 {
@@ -158,13 +159,13 @@
                 NSString *iconName;
                 if (filter)
                     iconName = [OAPOIUIFilter getCustomFilterIconName:filter];
-                return iconName && iconName.length > 0 ? iconName : @"ic_custom_search";
+                return iconName && iconName.length > 0 ? iconName : ACImageNameIcCustomSearch;
             }
             else if ([searchResult.object isKindOfClass:OATopIndexFilter.class])
             {
                 return [((OATopIndexFilter *)searchResult.object) getIconResource];
             }
-            return @"ic_custom_search";
+            return ACImageNameIcCustomSearch;
         }
         case EOAObjectTypePoi:
         {
@@ -176,7 +177,7 @@
         }
         case EOAObjectTypeGpxTrack:
         {
-            return @"ic_custom_trip";
+            return ACImageNameIcCustomTrip;
         }
         case EOAObjectTypeFavorite:
         {
@@ -210,7 +211,7 @@
             }
             else
             {
-                return @"ic_custom_marker";
+                return ACImageNameIcCustomMarker;
             }
         }
         case EOAObjectTypeWpt:
@@ -232,13 +233,13 @@
     if ([pd isFavorite])
         return @"ic_custom_favorites";
     else if ([pd isLocation])
-        return @"ic_custom_location_marker";
+        return ACImageNameIcCustomLocationMarker;
     else if ([pd isPoi])
         return @"ic_custom_info";
     else if ([pd isGpxFile] || [pd isGpxPoint])
-        return @"ic_custom_trip";
+        return ACImageNameIcCustomTrip;
     else if ([pd isWpt])
-        return @"ic_custom_marker";
+        return ACImageNameIcCustomMarker;
 //    else if ([pd isAudioNote])
 //        iconId = R.drawable.ic_type_audio;
 //    else if (pd.isVideoNote())

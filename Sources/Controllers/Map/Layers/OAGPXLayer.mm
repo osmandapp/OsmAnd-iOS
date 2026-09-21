@@ -43,6 +43,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 
 static const CGFloat kSpeedToHeightScale = 10.0;
@@ -2052,7 +2053,7 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.type = OATargetGPX;
         targetPoint.targetObj = [obj isKindOfClass:[OASGpxDataItem class]] ? (OASGpxDataItem *)obj : (OASGpxFile *) obj;
 
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
         targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? item.gpxFileNameWithoutExtension :  OALocalizedString(@"shared_string_currently_recording_track");
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

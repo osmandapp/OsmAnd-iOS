@@ -28,6 +28,7 @@
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAGPXWptListViewController () <OAMultiselectableHeaderDelegate>
 {
@@ -280,10 +281,10 @@
 {
     switch (_sortingType) {
         case EPointsSortingTypeGrouped:
-            [button setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:ACImageNameIconDirection] forState:UIControlStateNormal];
             break;
         case EPointsSortingTypeDistance:
-            [button setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:ACImageNameIconDirectionActive] forState:UIControlStateNormal];
             break;
             
         default:
@@ -398,7 +399,7 @@
             
             if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_elevation_chart)])
             {
-                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             }
         }

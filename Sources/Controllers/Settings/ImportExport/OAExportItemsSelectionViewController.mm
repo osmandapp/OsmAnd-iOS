@@ -251,7 +251,7 @@
     {
         OAFavoriteGroup *group = object;
         item[@"title"] = [OAFavoriteGroup getDisplayName:group.name];
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_folder"];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomFolder];
         NSInteger points = group.points.count;
         NSString *itemsDescr = [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"points_count"), points];
         item[@"descr"] = itemsDescr;
@@ -266,7 +266,7 @@
     {
         OADestination *marker = object;
         item[@"title"] = marker.desc ? marker.desc : @"";
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomMarker];
         item[@"color"] = marker.color;
     }
     else if ([object isKindOfClass:QuickActionButtonState.class])
@@ -360,7 +360,7 @@
 {
     item[@"title"] = [filePath.lastPathComponent.stringByDeletingPathExtension stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     item[@"descr"] = [self getTrackDescr:filePath appearanceInfo:appearanceInfo];
-    item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_trip"];
+    item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomTrip];
 }
 
 - (NSString *) getTrackDescr:(NSString *)filePath appearanceInfo:(GpxAppearanceInfo *)appearanceInfo
@@ -539,7 +539,7 @@
             if (selectedAmount > 0)
                 selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
             else
-                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                selectionImage = [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
             [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

@@ -248,7 +248,7 @@
     [super viewDidLoad];
 
     if ([self openedFromMap])
-        [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomCancel] forState:UIControlStateNormal];
     
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
@@ -553,7 +553,7 @@
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
-            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
+            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:ACImageNameIcCustomTrip]
                         title:localizedTitle.length > 0 ? localizedTitle : self.gpx.gpxFileNameWithoutExtension
                   nearestCity:self.gpx.nearestCity];
 
@@ -2054,12 +2054,12 @@
     UIColor *groupColor = UIColorFromARGB([self getWaypointsGroupColor:displayName]);
     BOOL isVisible = [self isWaypointsGroupVisible:displayName];
     
-    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_map_pin_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : ACImageNameIcCustomMapPinOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         BOOL currentVisible = [weakSelf isWaypointsGroupVisible:displayName];
         [weakSelf setWaypointsGroupVisible:displayName show:!currentVisible];
     }];
     
-    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:@"ic_custom_edit"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:ACImageNameIcCustomEdit] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
@@ -2075,7 +2075,7 @@
         [weakSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
     }];
     
-    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
+    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:ACImageNameIcCustomCopy] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
     
     UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:@"ic_custom_trash_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf openConfirmDeleteWaypointsScreen:displayName];
@@ -2565,7 +2565,7 @@
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
             if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
             cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
@@ -2995,7 +2995,7 @@
             kCellToggle: @(!cellData.toggle)
     }];
     [cellData setData:@{
-            kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+            kCellRightIconName: cellData.toggle ? ACImageNameIcCustomArrowUp : @"ic_custom_arrow_right"
     }];
 
     [self.tableView beginUpdates];

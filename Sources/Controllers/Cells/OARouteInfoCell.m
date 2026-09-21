@@ -34,7 +34,7 @@
 {
     _showLegend = !_showLegend;
     
-    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : ACImageNameIcCustomArrowDown)]];
+    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowDown)]];
 }
 
 

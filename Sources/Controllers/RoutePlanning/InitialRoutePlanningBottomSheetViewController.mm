@@ -84,7 +84,7 @@ static const NSUInteger kRecentTracksLimit = 5;
     [actionSection addObject: @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_create_new_route"),
-            @"img" : @"ic_custom_trip",
+            @"img" : ACImageNameIcCustomTrip,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"create_new_route"
         }];

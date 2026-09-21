@@ -209,7 +209,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             OATableRowData *configureMapRow = [section createNewRow];
             configureMapRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             configureMapRow.title = OALocalizedString(@"configure_map");
-            configureMapRow.iconName = @"ic_custom_overlay_map";
+            configureMapRow.iconName = ACImageNameIcCustomOverlayMap;
             configureMapRow.key = [OAMapButtonsHelper TYPE_CONFIGURE_MAP].name;
             
             OATableRowData *interfaceRow = [section createNewRow];
@@ -233,7 +233,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             OATableRowData *navigationRow = [section createNewRow];
             navigationRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             navigationRow.title = OALocalizedString(@"shared_string_navigation");
-            navigationRow.iconName = @"ic_custom_navigation";
+            navigationRow.iconName = ACImageNameIcCustomNavigation;
             navigationRow.key = [OAMapButtonsHelper TYPE_NAVIGATION].name;
             
             OATableRowData *settingsRow = [section createNewRow];
@@ -351,7 +351,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             if (item.secondaryIconName != nil)
             {
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
-                UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
+                UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionBackground];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
                 [cell.leftIconView addSubview:background];

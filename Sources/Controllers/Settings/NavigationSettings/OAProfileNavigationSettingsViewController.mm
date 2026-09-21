@@ -77,7 +77,7 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
-        @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
+        @"icon" : routingData ? routingData.iconName : ACImageNameIcCustomNavigation,
         @"tintColor" : [UIColor colorNamed:ACColorNameIconColorDefault],
         @"key" : @"navigationType",
     }];
@@ -120,7 +120,7 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"detailed_track_guidance"),
         @"value" : OALocalizedString(trackGuidanceValue == EOATrackApproximationManual ? @"ask_every_time" : @"shared_string_always"),
-        @"icon" : @"ic_custom_attach_track",
+        @"icon" : ACImageNameIcCustomAttachTrack,
         @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"key" : @"detailedTrackGuidance",
     }];

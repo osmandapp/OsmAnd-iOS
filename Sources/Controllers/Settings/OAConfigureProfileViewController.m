@@ -197,7 +197,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"general_settings_2"),
         @"descr" : OALocalizedString(@"general_settings_descr"),
-        @"img" : @"left_menu_icon_settings",
+        @"img" : ACImageNameLeftMenuIconSettings,
         @"key" : @"general_settings"
     }];
     if (_appMode != OAApplicationMode.DEFAULT)
@@ -206,7 +206,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
-            @"img" : @"left_menu_icon_navigation",
+            @"img" : ACImageNameLeftMenuIconNavigation,
             @"key" : kNavigationSettings
         }];
     }
@@ -214,14 +214,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"configure_map"),
         @"descr" : OALocalizedString(@"map_look_descr"),
-        @"img" : @"left_menu_icon_map",
+        @"img" : ACImageNameLeftMenuIconMap,
         @"key" : @"configure_map"
     }];
     [profileSettings addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
         @"descr" : OALocalizedString(@"edit_profile_screen_options_subtitle"),
-        @"img" : @"left_menu_configure_screen",
+        @"img" : ACImageNameLeftMenuConfigureScreen,
         @"key" : @"configure_screen"
     }];
     [profileSettings addObject:@{
@@ -252,7 +252,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : tripRec.getName,
-            @"img" : @"ic_custom_trip",
+            @"img" : ACImageNameIcCustomTrip,
             @"key" : kTrackRecordingSettings
         }];
     }
@@ -351,7 +351,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [settingsActions addObject:@{
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"copy_from_other_profile"),
-        @"img" : @"ic_custom_copy",
+        @"img" : ACImageNameIcCustomCopy,
         @"key" : @"copy_profile"
     }];
     
@@ -360,7 +360,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [settingsActions addObject:@{
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"reset_to_default"),
-            @"img" : @"ic_custom_reset",
+            @"img" : ACImageNameIcCustomReset,
             @"key" : @"reset_to_default"
         }];
     }

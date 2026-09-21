@@ -9,6 +9,7 @@
 #import "OATravelSelectionLayer.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATravelSelectionLayer
 
@@ -110,7 +111,7 @@
             targetPoint.type = OATargetGPX;
             targetPoint.targetObj = travelGpx;
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
-            targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+            targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
             targetPoint.title = [travelGpx getGpxFileName];
             targetPoint.sortIndex = (NSInteger)targetPoint.type;
             return targetPoint;

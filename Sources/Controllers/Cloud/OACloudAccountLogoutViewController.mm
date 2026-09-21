@@ -39,7 +39,7 @@
                     @"key": @"user_cell",
                     @"type": [OAValueTableViewCell getCellIdentifier],
                     @"title": [[OAAppSettings sharedManager].backupUserEmail get],
-                    @"icon": @"ic_custom_user_profile"
+                    @"icon": ACImageNameIcCustomUserProfile
             }],
             @[@{
                     @"key": @"logout_cell",

@@ -25,6 +25,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "GeneratedAssetSymbols.h"
 
 static CGFloat const kHudQuickActionButtonHeight = 48.0;
 static NSInteger const kQuickActionSlashTag = -1;
@@ -448,13 +449,13 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                 else
                 {
                     CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
-                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"]];
+                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom]];
                     background.tag = kQuickActionSlashBackgroundTag;
                     background.frame = frame;
                     [background setTintColor:!_settings.isAppMapNightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
                     [quickActionButton.imageView addSubview:background];
 
-                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"]];
+                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop]];
                     slash.tag = kQuickActionSlashTag;
                     slash.frame = frame;
                     [quickActionButton.imageView addSubview:slash];

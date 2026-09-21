@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OABackupStatus
 
@@ -96,7 +97,7 @@ static OABackupStatus *ERROR;
     {
         NO_INTERNET_CONNECTION = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                               statusIconName:@"ic_custom_cloud_done"
-                                                             warningIconName:@"ic_custom_wifi_off"
+                                                             warningIconName:ACImageNameIcCustomWifiOff
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
                                                           warningDescription:OALocalizedString(@"osm_upload_no_internet")
                                                                  actionTitle:OALocalizedString(@"retry")
@@ -111,7 +112,7 @@ static OABackupStatus *ERROR;
     {
         SUBSCRIPTION_EXPIRED = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                             statusIconName:@"ic_custom_cloud_done"
-                                                           warningIconName:@"ic_custom_osmand_pro_logo_colored"
+                                                           warningIconName:ACImageNameIcCustomOsmandProLogoColored
                                                               warningTitle:OALocalizedString(@"backup_error_subscription_was_expired")
                                                         warningDescription:OALocalizedString(@"backup_error_subscription_was_expired_descr")
                                                                actionTitle:OALocalizedString(@"renew_subscription")

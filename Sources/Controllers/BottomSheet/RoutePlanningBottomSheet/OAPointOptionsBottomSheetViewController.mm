@@ -69,7 +69,7 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"move_point"),
-            @"img" : @"ic_custom_change_object_position",
+            @"img" : ACImageNameIcCustomChangeObjectPosition,
             @"key" : @"move_point"
         }
     ]];
@@ -78,14 +78,14 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_point_before"),
-            @"img" : @"ic_custom_add_point_before",
+            @"img" : ACImageNameIcCustomAddPointBefore,
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_point_after"),
-            @"img" : @"ic_custom_add_point_after",
+            @"img" : ACImageNameIcCustomAddPointAfter,
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeAfter)
         }
@@ -96,7 +96,7 @@
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
             @"desc" : [self getDescription:YES],
-            @"img" : @"ic_custom_trim_before",
+            @"img" : ACImageNameIcCustomTrimBefore,
             @"key" : @"trim_before",
             @"value" : @(EOAClearPointsModeBefore)
         },
@@ -104,7 +104,7 @@
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
             @"desc" : [self getDescription:NO],
-            @"img" : @"ic_custom_trim_after",
+            @"img" : ACImageNameIcCustomTrimAfter,
             @"key" : @"trim_after",
             @"value" : @(EOAClearPointsModeAfter)
         }

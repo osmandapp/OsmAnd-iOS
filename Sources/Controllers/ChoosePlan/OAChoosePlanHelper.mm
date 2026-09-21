@@ -176,7 +176,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureCloud:
             return [UIImage imageNamed:@"ic_custom_cloud_upload_colored"];
         case EOAFeatureAdvancedWidgets:
-            return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomProFeaturesColored];
         case EOAFeatureSensors:
             return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
         case EOAFeatureVehicleMetrics:
@@ -198,21 +198,21 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionSouthAmerica:
             return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
         case EOAFeatureCarPlay:
-            return [UIImage imageNamed:@"ic_custom_carplay_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCarplayColored];
         case EOAFeatureCombinedWiki:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikipedia:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikivoyage:
             return [UIImage imageNamed:@"ic_custom_backpack_colored"];
         case EOAFeatureRelief3D:
             return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
         case EOAFeatureTerrain:
-            return [UIImage imageNamed:@"ic_custom_contour_lines_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomContourLinesColored];
         case EOAFeatureNautical:
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
-            return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomUmbrellaColored];
         case EOAFeatureAstronomy:
             return [self getAstronomyIcon];
         default:
@@ -249,21 +249,21 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionSouthAmerica:
             return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
         case EOAFeatureCarPlay:
-            return [UIImage imageNamed:@"ic_custom_carplay_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCarplayColored];
         case EOAFeatureCombinedWiki:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikipedia:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikivoyage:
             return [UIImage imageNamed:@"ic_custom_backpack_colored"];
         case EOAFeatureRelief3D:
             return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
         case EOAFeatureTerrain:
-            return [UIImage imageNamed:@"ic_custom_contour_lines_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomContourLinesColored];
         case EOAFeatureNautical:
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
-            return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomUmbrellaColored];
         case EOAFeatureAstronomy:
             return [self getAstronomyIcon];
         default:

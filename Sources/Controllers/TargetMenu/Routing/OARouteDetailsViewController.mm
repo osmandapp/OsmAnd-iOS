@@ -556,7 +556,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     }
     
     _cancelButton.layer.cornerRadius = 9.;
-    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
+    [self setupButtonAppearance:_startButton iconName:ACImageNameIcCustomNavigationArrow color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

@@ -143,7 +143,7 @@
             @"name" : @"osmand_settings",
             @"title" : OALocalizedString(@"osmand_settings"),
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"left_menu_icon_settings",
+            @"img" : ACImageNameLeftMenuIconSettings,
             @"type" : [OAValueTableViewCell getCellIdentifier]
         },
         @{
@@ -187,14 +187,14 @@
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
-        @"img" : @"ic_custom_add",
+        @"img" : ACImageNameIcCustomAdd,
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"add_profile"
     }];
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"reorder_profiles"),
-        @"img" : @"ic_custom_edit",
+        @"img" : ACImageNameIcCustomEdit,
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"edit_profiles"
     }];

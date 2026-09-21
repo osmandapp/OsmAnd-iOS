@@ -137,7 +137,7 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell reuseIdentifier],
         kCellTitleKey : OSMAND_START,
-        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"]
+        @"icon" : [UIImage imageNamed:ACImageNameIcCustomOsmandProLogoColored]
     }];
 
     [productSection addRowFromDictionary:@{
@@ -248,7 +248,7 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell reuseIdentifier],
         kCellTitleKey : OALocalizedString(_isPromo ? @"promo_subscription" : @"product_title_pro"),
-        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"]
+        @"icon" : [UIImage imageNamed:ACImageNameIcCustomOsmandProLogoColored]
     }];
 
     [productSection addRowFromDictionary:@{

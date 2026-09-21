@@ -992,7 +992,7 @@
             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
             @"hint" : OALocalizedString(@"osm_tag"),
             @"title" : @"",
-            @"img" : @"ic_custom_delete"
+            @"img" : ACImageNameIcCustomDelete
         }];
         [arr addObject:@{
             @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],

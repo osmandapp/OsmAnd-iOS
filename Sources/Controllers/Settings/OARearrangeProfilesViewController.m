@@ -12,6 +12,7 @@
 
 #import "Localization.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAllApplicationProfilesSection 0
 
@@ -150,7 +151,7 @@
         cell.leftIconView.image = [[mode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = [mode getProfileColor];
 
-        NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? @"ic_custom_delete" : @"ic_custom_delete_disable";
+        NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? ACImageNameIcCustomDelete : @"ic_custom_delete_disable";
         [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         cell.leftEditButton.enabled = mode.isCustomProfile;
         cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;

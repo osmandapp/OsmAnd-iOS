@@ -1385,7 +1385,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomPhoto] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;

@@ -167,7 +167,7 @@
 
         if (!self.directionContainerView.hidden)
         {
-            self.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            self.directionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
             self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
@@ -230,7 +230,7 @@
             [self.showHideButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
             [self.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [self.showHideButton addTarget:self action:@selector(onSaveNetworkRoutePressed) forControlEvents:UIControlEventTouchUpInside];
-            [self.showHideButton setImage:[UIImage templateImageNamed:@"ic_custom_download"] forState:UIControlStateNormal];
+            [self.showHideButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomDownload] forState:UIControlStateNormal];
             
             [self.appearanceButton setTitle:OALocalizedString(@"routing_settings")
                                    forState:UIControlStateNormal];
@@ -238,7 +238,7 @@
             [self.appearanceButton addTarget:self
                                       action:@selector(onNavigationPressed:)
                             forControlEvents:UIControlEventTouchUpInside];
-            [self.appearanceButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation.png"] forState:UIControlStateNormal];
+            [self.appearanceButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomNavigation] forState:UIControlStateNormal];
             
         }
     }
@@ -327,7 +327,7 @@
                             @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_range"),
-                    kCellRightIconName: @"ic_small_altitude_range"
+                    kCellRightIconName: ACImageNameIcSmallAltitudeRange
             }]];
         }
 

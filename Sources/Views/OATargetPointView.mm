@@ -726,7 +726,7 @@ static const NSInteger _buttonsCount = 4;
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_edit_fav");
-            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_edit"];
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:ACImageNameIcCustomEdit];
         }
         else
         {
@@ -1425,7 +1425,7 @@ static const NSInteger _buttonsCount = 4;
     if ([_backViewRoute isDirectionRTL])
     {
         _buttonRoute.frame = CGRectMake(leftSafe + kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
-        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
+        [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
@@ -1433,7 +1433,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _buttonShowInfo.frame = CGRectMake(leftSafe + kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
-        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+        [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);

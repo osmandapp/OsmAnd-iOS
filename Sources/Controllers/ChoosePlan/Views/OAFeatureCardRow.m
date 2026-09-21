@@ -90,8 +90,8 @@
 
     if (_type == EOAFeatureCardRowPlan)
     {
-        self.imageViewFirstRightIcon.image = [UIImage imageNamed:@"ic_custom_osmand_maps_plus"];
-        self.imageViewSecondRightIcon.image = [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"];
+        self.imageViewFirstRightIcon.image = [UIImage imageNamed:ACImageNameIcCustomOsmandMapsPlus];
+        self.imageViewSecondRightIcon.image = [UIImage imageNamed:ACImageNameIcCustomOsmandProLogoColored];
     }
     else if (_type == EOAFeatureCardRowSubscription || _type == EOAFeatureCardRowSimple)
     {

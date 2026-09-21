@@ -180,14 +180,14 @@
 	[items addObject:@{
 		@"type" : [OASimpleTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"select_another_track"),
-		@"img" : @"ic_custom_folder",
+		@"img" : ACImageNameIcCustomFolder,
 		@"key" : @"select_another"
 	}];
 	
 	[items addObject:@{
 		@"type" : [OASwitchTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"gpx_option_reverse_route"),
-		@"img" : @"ic_custom_swap",
+		@"img" : ACImageNameIcCustomSwap,
 		@"key" : @"reverse_track"
 	}];
 	
@@ -196,7 +196,7 @@
 		[items addObject:@{
 			@"type" : [OASimpleTableViewCell getCellIdentifier],
 			@"title" : OALocalizedString(@"attach_to_the_roads"),
-			@"img" : @"ic_custom_attach_track",
+			@"img" : ACImageNameIcCustomAttachTrack,
 			@"key" : @"attach_to_roads"
 		}];
 	}

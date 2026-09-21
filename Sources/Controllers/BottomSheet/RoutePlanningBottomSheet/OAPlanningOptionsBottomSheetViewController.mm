@@ -140,14 +140,14 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_navigation"),
-            @"img" : @"left_menu_icon_navigation",
+            @"img" : ACImageNameLeftMenuIconNavigation,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"shared_string_navigation"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"reverse_route"),
-            @"img" : @"ic_custom_swap",
+            @"img" : ACImageNameIcCustomSwap,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"reverse_route"
         }

@@ -58,7 +58,7 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="n1F-q1-ns4"/>
                                 </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip.png" translatesAutoresizingMaskIntoConstraints="NO" id="LqT-JX-834">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip" translatesAutoresizingMaskIntoConstraints="NO" id="LqT-JX-834">
                                 <rect key="frame" x="257" y="20" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="Kqq-7o-zD7"/>
@@ -142,7 +142,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_trip.png" width="30" height="30"/>
+        <image name="ic_custom_trip" width="30" height="30"/>
         <image name="ic_small_distance.png" width="20" height="20"/>
         <image name="ic_small_time_start.png" width="20" height="20"/>
         <image name="ic_small_waypoints.png" width="20" height="20"/>

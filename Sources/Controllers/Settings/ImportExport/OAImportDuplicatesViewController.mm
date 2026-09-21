@@ -288,7 +288,7 @@
                     else if ([file.lowercaseString hasSuffix:GPX_FILE_EXT])
                     {
                         item[@"label"] = fileName;
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomTrip];
                     }
                     else if (type == EOAFileSettingsItemFileSubtypeWikiMap)
                     {
@@ -328,7 +328,7 @@
                 {
                     OADestination *marker = (OADestination *)currentItem;
                     item[@"label"] = marker.desc;
-                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
+                    item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMarker];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }

@@ -18,6 +18,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -576,7 +577,7 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
+            UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionBackground];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
@@ -588,12 +589,12 @@
         if ([action isActionWithSlash])
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"];
+            UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             background.frame = frame;
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
-            UIImage *img = [UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"];
+            UIImage *img = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
             view.frame = frame;
             [resultCell.imageView addSubview:view];

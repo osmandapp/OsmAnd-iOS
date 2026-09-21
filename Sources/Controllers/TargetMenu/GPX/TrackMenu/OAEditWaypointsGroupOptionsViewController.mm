@@ -204,7 +204,7 @@
                     kTableKey: [@"cell_waypoints_group_" stringByAppendingString:groupName],
                     kCellType: [OASwitchTableViewCell getCellIdentifier],
                     kCellTitle: groupName,
-                    kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
+                    kCellLeftIcon: [UIImage templateImageNamed:visible ? ACImageNameIcCustomFolder : @"ic_custom_folder_hidden"],
                     kCellTintColor: visible ? UIColorFromARGB(color) : [UIColor colorNamed:ACColorNameIconColorDisabled],
                     kTableValues: @{
                         @"visible": @(visible),
@@ -237,7 +237,7 @@
     {
         [self changeButtonAvailability:_doneBarButton isEnabled:YES];
         [tableData setData:@{
-            kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
+            kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? ACImageNameIcCustomFolder : @"ic_custom_folder_hidden"],
             kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : [UIColor colorNamed:ACColorNameIconColorDisabled]
         }];
     }

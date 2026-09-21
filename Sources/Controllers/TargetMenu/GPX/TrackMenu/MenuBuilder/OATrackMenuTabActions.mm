@@ -75,7 +75,7 @@
     OAGPXTableCellData *navigationCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_navigation",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_navigation",
+            kCellRightIconName: ACImageNameIcCustomNavigation,
             kCellTitle: OALocalizedString(@"routing_settings")
     }];
     [controlSectionData.subjects addObject:navigationCellData];
@@ -125,7 +125,7 @@
     OAGPXTableCellData *duplicateCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"edit_create_duplicate",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_copy",
+            kCellRightIconName: ACImageNameIcCustomCopy,
             kCellTitle: OALocalizedString(@"duplicate_track"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];
@@ -140,7 +140,7 @@
     OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_edit",
+            kCellRightIconName: ACImageNameIcCustomEdit,
             kCellTitle: OALocalizedString(@"rename_track"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];

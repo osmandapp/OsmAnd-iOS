@@ -675,7 +675,7 @@
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
                         [cell.titleLabel setText:[item getName]];
-                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomTrip];
                         
                     }
                     cell.descriptionLabel.text = nil;

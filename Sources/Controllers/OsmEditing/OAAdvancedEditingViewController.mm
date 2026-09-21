@@ -216,7 +216,7 @@
                                          @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                                          @"hint" : OALocalizedString(@"osm_tag"),
                                          @"value" : key,
-                                         @"img" : @"ic_custom_delete"
+                                         @"img" : ACImageNameIcCustomDelete
                                          },
                                      @{
                                          @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
@@ -247,7 +247,7 @@
 - (void) addTagPair:(NSInteger)index
 {
     [_fieldPairs insertObject:@[
-                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_tag") value:nil image:@"ic_custom_delete"],
+                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_tag") value:nil image:ACImageNameIcCustomDelete],
                                 [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_value") value:nil image:nil]
                                 ] atIndex:index];
 }
@@ -321,7 +321,7 @@
             
             [_fieldPairs setObject:@[
                                      [self getDictionary:tagCellInfo[@"type"]
-                                                    hint:tagCellInfo[@"hint"] value:textView.text image:@"ic_custom_delete"], valueCellInfo
+                                                    hint:tagCellInfo[@"hint"] value:textView.text image:ACImageNameIcCustomDelete], valueCellInfo
                                      ] atIndexedSubscript:indexPath.section];
             if (userInput)
                 [self updateTagHintsSet:textView.text];
@@ -430,7 +430,7 @@
     if (clearedTag)
     {
         _fieldPairs[indexPath.section] = @[
-                                           [self getDictionary:tagCellInfo[@"type"] hint:tagCellInfo[@"hint"] value:nil image:@"ic_custom_delete"],
+                                           [self getDictionary:tagCellInfo[@"type"] hint:tagCellInfo[@"hint"] value:nil image:ACImageNameIcCustomDelete],
                                            valueInfo
                                            ];
     }

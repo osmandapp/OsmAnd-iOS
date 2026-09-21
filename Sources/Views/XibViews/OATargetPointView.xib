@@ -374,7 +374,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                             <color key="tintColor" name="iconColorActive"/>
-                                            <state key="normal" title="GO" image="left_menu_icon_navigation.png">
+                                            <state key="normal" title="GO" image="left_menu_icon_navigation">
                                                 <color key="titleColor" name="textColorActive"/>
                                             </state>
                                             <connections>
@@ -457,7 +457,7 @@
     </objects>
     <resources>
         <image name="ic_close.png" width="10" height="10"/>
-        <image name="left_menu_icon_navigation.png" width="30" height="30"/>
+        <image name="left_menu_icon_navigation" width="30" height="30"/>
         <namedColor name="buttonBgColorSecondary">
             <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

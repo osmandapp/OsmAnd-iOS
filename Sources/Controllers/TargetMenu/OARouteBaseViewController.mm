@@ -127,7 +127,7 @@
         [downhilIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:downhilIcon.string];
 
         NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
-        rangeAttachment.image = [UIImage templateImageNamed:@"ic_small_altitude_range"];
+        rangeAttachment.image = [UIImage templateImageNamed:ACImageNameIcSmallAltitudeRange];
         rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:rangeAttachment]];

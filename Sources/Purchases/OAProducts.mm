@@ -16,6 +16,7 @@
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAFunctionalAddon()
 
@@ -1420,7 +1421,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_osmand_pro_logo_colored";
+    return ACImageNameIcCustomOsmandProLogoColored;
 }
 
 - (NSString *)localizedTitle
@@ -1496,7 +1497,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_osmand_pro_logo_colored";
+    return ACImageNameIcCustomOsmandProLogoColored;
 }
 
 - (NSString *)localizedTitle
@@ -1572,7 +1573,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_osmand_maps_plus";
+    return ACImageNameIcCustomOsmandMapsPlus;
 }
 
 - (NSString *)localizedTitle
@@ -1667,13 +1668,13 @@
 - (NSString *) productIconName
 {
     if (_featurePro)
-        return @"ic_custom_osmand_pro_logo_colored";
+        return ACImageNameIcCustomOsmandProLogoColored;
     else if (_featureLive)
         return @"ic_action_osmand_logo_banner";
     else if (_featureMaps)
-        return @"ic_custom_osmand_maps_plus";
+        return ACImageNameIcCustomOsmandMapsPlus;
     
-    return @"ic_custom_osmand_maps_plus";
+    return ACImageNameIcCustomOsmandMapsPlus;
 }
 
 - (NSString *)localizedTitle
@@ -1888,13 +1889,13 @@
     if (_icon.length > 0)
         return _icon;
     else if (_featurePro)
-        return @"ic_custom_osmand_pro_logo_colored";
+        return ACImageNameIcCustomOsmandProLogoColored;
     else if (_featureContours)
         return @"ic_plugin_contourlines";
     else if (_featureNautical)
         return @"ic_plugin_nautical";
     else
-        return @"ic_custom_osmand_maps_plus";
+        return ACImageNameIcCustomOsmandMapsPlus;
 }
 
 - (NSString *)localizedTitle
@@ -2004,7 +2005,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_osmand_maps_plus";
+    return ACImageNameIcCustomOsmandMapsPlus;
 }
 
 - (NSString *)localizedTitle
@@ -2584,7 +2585,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_carplay_colored";
+    return ACImageNameIcCustomCarplayColored;
 }
 
 @end

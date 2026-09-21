@@ -119,6 +119,7 @@
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
+#import "GeneratedAssetSymbols.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -3831,7 +3832,7 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"ic_custom_location_marker"];
+    targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomLocationMarker];
     targetPoint.toolbarNeeded = NO;
     
     _activeTargetType = targetPoint.type;

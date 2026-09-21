@@ -46,7 +46,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ibV-XB-Tmb" userLabel="Direction Container">
                                                 <rect key="frame" x="0.0" y="0.0" width="57" height="24"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction.png" translatesAutoresizingMaskIntoConstraints="NO" id="o9M-Re-qa6" userLabel="Direction Icon View">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction" translatesAutoresizingMaskIntoConstraints="NO" id="o9M-Re-qa6" userLabel="Direction Icon View">
                                                         <rect key="frame" x="0.0" y="2" width="20" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="20" id="cXb-MS-XnA"/>
@@ -228,7 +228,7 @@
     </objects>
     <resources>
         <image name="ic_custom_location_marker_outlined" width="30" height="30"/>
-        <image name="ic_small_direction.png" width="20" height="20"/>
+        <image name="ic_small_direction" width="20" height="20"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

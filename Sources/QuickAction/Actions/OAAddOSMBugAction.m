@@ -15,6 +15,7 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kMessage = @"message";
 
@@ -35,7 +36,7 @@ static QuickActionType *TYPE;
                  name:OALocalizedString(@"osn_bug_name")]
                 nameAction:OALocalizedString(@"shared_string_add")]
                iconName:@"ic_action_osm_note"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
+              secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
 }

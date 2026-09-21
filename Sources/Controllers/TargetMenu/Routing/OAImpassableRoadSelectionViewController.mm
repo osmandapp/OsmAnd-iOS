@@ -140,7 +140,7 @@
     _selectButton.frame = rightBtnFrame;
     
     [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:[UIColor colorNamed:ACColorNameButtonTextColorSecondary]];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
+    [self setupButtonAppearance:_selectButton iconName:ACImageNameIcCustomAdd color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

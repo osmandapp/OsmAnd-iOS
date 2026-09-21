@@ -11,6 +11,7 @@
 #import "OADayNightHelper.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -36,7 +37,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"map_mode")]
               nameAction:OALocalizedString(@"shared_string_change")]
-              iconName:@"ic_custom_sun"]
+              iconName:ACImageNameIcCustomSun]
              secondaryIconName:@"ic_custom_compound_action_change"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
@@ -54,8 +55,8 @@ static QuickActionType *TYPE;
 - (NSString *)getIconResName
 {
     if (_settings.isAppMapNightMode)
-        return @"ic_custom_sun";
-    return @"ic_custom_moon";
+        return ACImageNameIcCustomSun;
+    return ACImageNameIcCustomMoon;
 }
 
 - (NSString *)getActionText

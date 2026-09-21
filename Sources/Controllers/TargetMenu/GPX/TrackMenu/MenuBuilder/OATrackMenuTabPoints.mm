@@ -137,8 +137,8 @@
                     kCellType: [OASelectionCollapsableCell getCellIdentifier],
                     kCellTitle: groupName,
                     kCellLeftIcon: [UIImage templateImageNamed:[waypointsSectionData.values[@"is_hidden"] boolValue]
-                            ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
-                    kCellRightIconName: @"ic_custom_arrow_up",
+                            ? @"ic_custom_folder_hidden" : ACImageNameIcCustomFolder],
+                    kCellRightIconName: ACImageNameIcCustomArrowUp,
                     kCellToggle: @YES,
                     kCellTintColor: waypointsSectionData.values[@"tint_color"],
                     kTableValues: @{ @"is_rte": @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:groupName]) }
@@ -217,7 +217,7 @@
                 kCellTitle: name,
                 kCellDesc: description,
                 kCellLeftIcon: !isRte ? [waypoint compositeIconWithDefaultColor]
-                        : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
+                        : [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomLocationMarker]
                                                     color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
                 kTableValues: @{
                         @"waypoint": waypoint,
@@ -277,7 +277,7 @@
                     kCellTitle: name,
                     kCellLeftIcon: ![sectionData.subjects.firstObject.values[@"is_rte"] boolValue]
                             ? [waypoint compositeIconWithDefaultColor]
-                            : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
+                            : [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomLocationMarker]
                                                         color:UIColorFromRGB(color_footer_icon_gray)]
             }];
         }
@@ -301,7 +301,7 @@
             [cellData setData:@{
                     kTableKey: [NSString stringWithFormat:@"cell_waypoints_group_%@", cellData.title],
                     kCellLeftIcon: [UIImage templateImageNamed:[sectionData.values[@"is_hidden"] boolValue]
-                            ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
+                            ? @"ic_custom_folder_hidden" : ACImageNameIcCustomFolder],
                     kCellTintColor: sectionData.values[@"tint_color"] 
             }];
             cellData.values[@"is_rte"] = @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:cellData.title]);

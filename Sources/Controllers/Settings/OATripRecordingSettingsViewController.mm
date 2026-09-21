@@ -239,13 +239,13 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                  @"title" : OALocalizedString(@"save_track_to_gpx"),
                  @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
                  @"value" : _settings.saveTrackToGPX,
-                 @"img" : @"ic_custom_navigation",
+                 @"img" : ACImageNameIcCustomNavigation,
                  @"type" : OASwitchTableViewCell.reuseIdentifier },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
-                   @"img" : @"ic_custom_timer",
+                   @"img" : ACImageNameIcCustomTimer,
                    @"type" : OAValueTableViewCell.reuseIdentifier,
                    @"key" : @"nav_interval"
                }
@@ -343,20 +343,20 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                 @{
                     @"type" : OARightIconTableViewCell.reuseIdentifier,
                     @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
-                    @"img" : @"ic_custom_folder",
+                    @"img" : ACImageNameIcCustomFolder,
                     @"name" : @"open_trips"
                 },
                 @{
                     @"type" : OARightIconTableViewCell.reuseIdentifier,
                     @"title" : OALocalizedString(@"reset_plugin_to_default"),
-                    @"img" : @"ic_custom_reset",
+                    @"img" : ACImageNameIcCustomReset,
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
 //                    @"type" : [OARightIconTableViewCell getCellIdentifier],
 //                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
-//                    @"img" : @"ic_custom_folder",
+//                    @"img" : ACImageNameIcCustomFolder,
 //                    @"key" : @"open_trips"
 //                }
             ]];

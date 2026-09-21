@@ -208,7 +208,7 @@
     
     [showSectionData addObject:@{
         @"name": OALocalizedString(@"shared_string_gpx_tracks"),
-        @"image": @"ic_custom_trip",
+        @"image": ACImageNameIcCustomTrip,
         @"value": [NSString stringWithFormat:@"%d", (int)_settings.mapSettingVisibleGpx.get.count],
         @"type": OAValueTableViewCell.reuseIdentifier,
         @"key": @"tracks"
@@ -216,7 +216,7 @@
     
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
-            @"image": @"ic_custom_download_map",
+            @"image": ACImageNameIcCustomDownloadMap,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"show_borders_of_downloaded_maps"
     }];
@@ -401,14 +401,14 @@
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": [DayNightModeWrapper getTitleForType:dayNightMode],
-                @"image": @"ic_custom_sun",
+                @"image": ACImageNameIcCustomSun,
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"mapMode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
                 @"value": [NSNumberFormatter.percentFormatter stringFromNumber:@([_settings.mapDensity get])],
-                @"image": @"ic_custom_magnifier",
+                @"image": ACImageNameIcCustomMagnifier,
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"map_magnifier"
         }];
@@ -490,7 +490,7 @@
         }];
         [topographySectionData addObject:@{
             @"name": OALocalizedString(@"shared_string_terrain"),
-            @"image": @"ic_custom_terrain",
+            @"image": ACImageNameIcCustomTerrain,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"terrain_layer"
@@ -538,14 +538,14 @@
     
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
-            @"image": @"ic_custom_overlay_map",
+            @"image": ACImageNameIcCustomOverlayMap,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
-            @"image": @"ic_custom_underlay_map",
+            @"image": ACImageNameIcCustomUnderlayMap,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"underlay_layer"
@@ -732,7 +732,7 @@
     else if([paramName isEqualToString:kRoadStyleCategory])
         return @"ic_custom_road_style";
     else if([paramName isEqualToString:kDetailsCategory])
-        return @"ic_custom_overlay_map";
+        return ACImageNameIcCustomOverlayMap;
     else if([paramName isEqualToString:kHideCategory])
         return ACImageNameIcCustomHide;
     else if([paramName isEqualToString:TRANSPORT_CATEGORY])
@@ -1126,7 +1126,7 @@
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         
         cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : ACImageNameIcCustomArrowDown];
+        cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowDown];
         if (!group.isOpen && [cell isDirectionRTL])
             cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;
         

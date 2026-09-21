@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = @"OAFavoriteImportViewControllerDidDismissNotification";
 
@@ -132,7 +133,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             cell.titleView.frame = titleFrame;
 
             cell.distanceView.text = @(wptPt.distance).stringValue;
-            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
 //            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             

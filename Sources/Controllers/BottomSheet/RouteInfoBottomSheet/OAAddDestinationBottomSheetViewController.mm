@@ -132,7 +132,7 @@
         @"title": OALocalizedString(@"map_markers"),
         @"key": @"markers",
         @"color": [UIColor colorNamed:ACColorNameIconColorActive],
-        @"img": @"ic_custom_marker"
+        @"img": ACImageNameIcCustomMarker
     }];
 
     NSArray *markers = [_destinationsHelper sortedDestinationsWithoutParking];
@@ -252,7 +252,7 @@
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"swap_points"),
-        @"img" : @"ic_custom_swap",
+        @"img" : ACImageNameIcCustomSwap,
         @"key" : @"swap_points",
         @"round_bottom" : @(YES),
         @"round_top" : @(YES)

@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAProfileGeneralSettingsViewController
 {
@@ -76,17 +77,17 @@
     if ([_settings.appearanceProfileTheme get:self.appMode] == ThemeLight)
     {
         appThemeValue = OALocalizedString(@"shared_string_light");
-        appThemeIcon = @"ic_custom_sun";
+        appThemeIcon = ACImageNameIcCustomSun;
     }
     else if ([_settings.appearanceProfileTheme get:self.appMode] == ThemeDark)
     {
         appThemeValue = OALocalizedString(@"shared_string_dark");
-        appThemeIcon = @"ic_custom_moon";
+        appThemeIcon = ACImageNameIcCustomMoon;
     }
     else
     {
         appThemeValue = OALocalizedString(@"shared_string_system_default");
-        appThemeIcon = @"ic_custom_device";
+        appThemeIcon = ACImageNameIcCustomDevice;
     }
     
     NSString *rotateMapValue;

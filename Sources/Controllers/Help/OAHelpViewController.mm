@@ -87,7 +87,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         [weakSelf sendLogFile];
     }];
     
-    UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:@"ic_custom_clipboard"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:ACImageNameIcCustomClipboard] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf copyBuildVersion];
     }];
     
@@ -149,9 +149,9 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
     
     NSDictionary *specialIcons = @{
-        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"setup"]: @"ic_custom_device_download",
-        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"maps-data"]: @"ic_custom_overlay_map",
-        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"navigation"]: @"ic_custom_navigation",
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"setup"]: ACImageNameIcCustomDeviceDownload,
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"maps-data"]: ACImageNameIcCustomOverlayMap,
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"navigation"]: ACImageNameIcCustomNavigation,
         [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"track-recording-issues"]: @"ic_custom_track_recordable"
     };
     
@@ -254,11 +254,11 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
           @"url": kOsmAndTeam},
         @{@"title": OALocalizedString(@"help_what_is_new"),
           @"descr": [self whatIsNewDescription],
-          @"icon": @"ic_custom_clipboard",
+          @"icon": ACImageNameIcCustomClipboard,
           @"url": kDocsLatestVersion},
         @{@"title": OALocalizedString(@"testFlight"),
           @"descr": OALocalizedString(@"download_install_beta_version"),
-          @"icon": @"ic_custom_download",
+          @"icon": ACImageNameIcCustomDownload,
           @"url": kTestFlight}
     ];
     
@@ -444,7 +444,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     
     if ([item.title isEqualToString:OALocalizedString(@"help_what_is_new")])
     {
-        UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:@"ic_custom_clipboard"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:ACImageNameIcCustomClipboard] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
             [self copyBuildVersion];
         }];
         

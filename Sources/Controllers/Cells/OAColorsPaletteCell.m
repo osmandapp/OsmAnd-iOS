@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "UITableViewCell+getTableView.h"
 #import "OAColorCollectionHandler.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAColorsPaletteCell () <UIGestureRecognizerDelegate>
 
@@ -37,7 +38,7 @@
     self.bottomTitleOffset.constant = 8;
     [self.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [self.rightActionButton addTarget:self action:@selector(onRightButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+    [self.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
     self.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
     self.topLabel.text = OALocalizedString(@"shared_string_color");
     [self.bottomButton setTitle:OALocalizedString(@"shared_string_all_colors") forState:UIControlStateNormal];

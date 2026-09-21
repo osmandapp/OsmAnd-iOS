@@ -208,7 +208,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewControllerMode) {
         {
             [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
             [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
-            [accountCell setIconName:@"ic_custom_user_profile"];
+            [accountCell setIconName:ACImageNameIcCustomUserProfile];
             [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive]) forKey:@"title_color"];
             [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
             [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];

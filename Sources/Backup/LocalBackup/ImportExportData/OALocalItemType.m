@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAExportSettingsCategory.h"
+#import "GeneratedAssetSymbols.h"
 
 static OALocalItemType * MAP_DATA;
 static OALocalItemType * ROAD_DATA;
@@ -95,7 +96,7 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) TERRAIN_DATA
 {
     if (!TERRAIN_DATA)
-        TERRAIN_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"topography_maps") iconName:@"ic_custom_terrain"];
+        TERRAIN_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"topography_maps") iconName:ACImageNameIcCustomTerrain];
     return TERRAIN_DATA;
 }
 
@@ -116,7 +117,7 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) TILES_DATA
 {
     if (!TILES_DATA)
-        TILES_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") iconName:@"ic_custom_overlay_map"];
+        TILES_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") iconName:ACImageNameIcCustomOverlayMap];
     return TILES_DATA;
 }
 
@@ -156,7 +157,7 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) TRACKS
 {
     if (!TRACKS)
-        TRACKS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") iconName:@"ic_custom_trip"];
+        TRACKS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") iconName:ACImageNameIcCustomTrip];
     return TRACKS;
 }
 
@@ -177,14 +178,14 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) ACTIVE_MARKERS
 {
     if (!ACTIVE_MARKERS)
-        ACTIVE_MARKERS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"map_markers") iconName:@"ic_custom_marker"];
+        ACTIVE_MARKERS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"map_markers") iconName:ACImageNameIcCustomMarker];
     return ACTIVE_MARKERS;
 }
 
 + (OALocalItemType *) HISTORY_MARKERS
 {
     if (!HISTORY_MARKERS)
-        HISTORY_MARKERS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"markers_history") iconName:@"ic_custom_marker"];
+        HISTORY_MARKERS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"markers_history") iconName:ACImageNameIcCustomMarker];
     return HISTORY_MARKERS;
 }
 

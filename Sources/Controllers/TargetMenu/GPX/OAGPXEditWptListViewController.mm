@@ -27,6 +27,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAGPXEditWptListViewController ()<OAMultiselectableHeaderDelegate>
 {
@@ -319,7 +320,7 @@
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];
-            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 

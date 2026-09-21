@@ -19,6 +19,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapCreatorHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAFileSettingsItemFileSubtype
 
@@ -241,13 +242,13 @@
         case EOAFileSettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";
         case EOAFileSettingsItemFileSubtypeTerrainMap:
-            return @"ic_custom_terrain";
+            return ACImageNameIcCustomTerrain;
         case EOAFileSettingsItemFileSubtypeNauticalDepth:
             return @"ic_custom_nautical_depth";
         case EOAFileSettingsItemFileSubtypeWikiMap:
             return @"ic_custom_wikipedia";
         case EOAFileSettingsItemFileSubtypeGpx:
-            return @"ic_custom_trip";
+            return ACImageNameIcCustomTrip;
         case EOAFileSettingsItemFileSubtypeVoice:
             return @"ic_custom_sound";
         case EOAFileSettingsItemFileSubtypeTravel:

@@ -49,6 +49,7 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/ObfsCollection.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
+#import "GeneratedAssetSymbols.h"
 
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
@@ -125,7 +126,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_route";
             break;
         case OsmAndResourceType::SqliteFile:
-            imageNamed = @"ic_custom_overlay_map";
+            imageNamed = ACImageNameIcCustomOverlayMap;
             break;
         case OsmAndResourceType::MapStyle:
             imageNamed = @"ic_custom_map_style";
@@ -147,7 +148,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
-            imageNamed = @"ic_custom_terrain";
+            imageNamed = ACImageNameIcCustomTerrain;
             break;
         default:
             imageNamed = @"ic_custom_map";

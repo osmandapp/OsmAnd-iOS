@@ -1328,7 +1328,7 @@ static const NSInteger kColorsSection = 1;
             kTableKey: @"reset",
             kCellType: [OARightIconTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"reset_to_original"),
-            kCellRightIconName: @"ic_custom_reset"
+            kCellRightIconName: ACImageNameIcCustomReset
     }];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{

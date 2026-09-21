@@ -197,7 +197,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellKeyKey : @"zoomLevels",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
-                kCellIconNameKey : @"ic_custom_overlay_map",
+                kCellIconNameKey : ACImageNameIcCustomOverlayMap,
                 kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
                 @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
             }];

@@ -307,7 +307,7 @@
 {
     NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
     BOOL isChecked = self.isChecked;
-    NSString *name = @"ic_custom_trip";
+    NSString *name = ACImageNameIcCustomTrip;
     if ([id isEqualToString:kRouteParamShortWay])
         name = @"ic_custom_fuel";
     else if ([id isEqualToString:kRouteParamAllowPrivate] || [id isEqualToString:kRouteParamAllowPrivateTruck])
@@ -784,7 +784,7 @@
 
 - (UIImage *)getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_trip"];
+    return [UIImage imageNamed:ACImageNameIcCustomTrip];
 }
 
 - (UIColor *)getTintColor
@@ -803,7 +803,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_navigation_arrow"];
+    return [UIImage imageNamed:ACImageNameIcCustomNavigationArrow];
 }
 
 - (NSString *) getCellType

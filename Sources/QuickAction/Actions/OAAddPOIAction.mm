@@ -25,6 +25,7 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kTag = @"key_tag";
 static NSString * const kCategory = @"key_category";
@@ -46,7 +47,7 @@ static QuickActionType *ACTION_TYPE;
                      name:OALocalizedString(@"poi")]
                      nameAction:OALocalizedString(@"shared_string_add")]
                     iconName:@"ic_action_create_poi"]
-                   secondaryIconName:@"ic_custom_compound_action_add"]
+                   secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
                    category:QuickActionTypeCategoryMyPlaces];
 }
 
@@ -151,7 +152,7 @@ static QuickActionType *ACTION_TYPE;
                              @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                              @"hint" : OALocalizedString(@"osm_tag"),
                              @"title" : key,
-                             @"img" : @"ic_custom_delete"
+                             @"img" : ACImageNameIcCustomDelete
                              }];
             [arr addObject:@{
                              @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],

@@ -236,7 +236,7 @@
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"search_history",
                 kCellTitleKey : OALocalizedString(@"shared_string_search_history"),
-                kCellIconNameKey : @"ic_custom_search",
+                kCellIconNameKey : ACImageNameIcCustomSearch,
                 kCellIconTint : (searchHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : searchHistory
@@ -247,7 +247,7 @@
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"navigation_history",
                 kCellTitleKey : OALocalizedString(@"navigation_history"),
-                kCellIconNameKey : @"ic_custom_navigation",
+                kCellIconNameKey : ACImageNameIcCustomNavigation,
                 kCellIconTint : (navigationHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
@@ -258,7 +258,7 @@
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"map_markers_history",
                 kCellTitleKey : OALocalizedString(@"map_markers_history"),
-                kCellIconNameKey : @"ic_custom_marker",
+                kCellIconNameKey : ACImageNameIcCustomMarker,
                 kCellIconTint : (mapMarkersHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : mapMarkersHistory

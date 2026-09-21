@@ -19,6 +19,7 @@
 #import "OAPluginsViewController.h"
 #import "OAColors.h"
 #import "OAChoosePlanHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSMutableArray *activePopups;
 
@@ -378,7 +379,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"option_available_only_by_subscription");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_carplay_colored";
+        iconName = ACImageNameIcCustomCarplayColored;
         popup.okButton.tag = EOAFeatureCarPlay;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];

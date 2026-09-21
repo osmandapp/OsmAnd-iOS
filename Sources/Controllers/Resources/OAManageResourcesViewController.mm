@@ -2809,7 +2809,7 @@ static BOOL _repositoryUpdated = NO;
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+            UIImage *iconImage = [UIImage templateImageNamed:ACImageNameIcCustomDownload];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -2857,7 +2857,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -2889,7 +2889,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];

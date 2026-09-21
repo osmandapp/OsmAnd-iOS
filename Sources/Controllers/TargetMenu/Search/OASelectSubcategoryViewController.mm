@@ -236,7 +236,7 @@
             if (selectedAmount > 0)
                 selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
             else
-                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                selectionImage = [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
             [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

@@ -592,7 +592,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }];
     };
     
-    CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking"]];
+    CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:ACImageNameIcCustomParking]];
     findParking.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -605,7 +605,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }];
     };
     
-    CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_navigation"]];
+    CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:ACImageNameIcCustomNavigation]];
     recalcRoute.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -765,7 +765,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     UIImage *icon;
 
     if (type == EOACarPlayButtonTypePanMap)
-        icon = [UIImage imageNamed:@"ic_custom_change_object_position"];
+        icon = [UIImage imageNamed:ACImageNameIcCustomChangeObjectPosition];
     else if (type == EOACarPlayButtonTypeDismiss)
         title = OALocalizedString(@"shared_string_done");
     else if (type == EOACarPlayButtonTypeDirections)

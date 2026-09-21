@@ -141,7 +141,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!THIN)
     {
         THIN = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_thin_name"
-                                                  icon:@"ic_custom_track_line_thin"
+                                                  icon:ACImageNameIcCustomTrackLineThin
                                               widthKey:@"thin"];
     }
     return THIN;
@@ -152,7 +152,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!MEDIUM)
     {
         MEDIUM = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_medium_name"
-                                                    icon:@"ic_custom_track_line_medium"
+                                                    icon:ACImageNameIcCustomTrackLineMedium
                                                 widthKey:@"medium"];
     }
     return MEDIUM;
@@ -163,7 +163,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!THICK)
     {
         THICK = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_bold_name"
-                                                   icon:@"ic_custom_track_line_bold"
+                                                   icon:ACImageNameIcCustomTrackLineBold
                                                widthKey:@"bold"];
     }
     return THICK;
@@ -693,7 +693,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 kTableKey: @"reset",
                 kCellType: OARightIconTableViewCell.reuseIdentifier,
                 kCellTitle: OALocalizedString(@"reset_to_original"),
-                kCellRightIconName: @"ic_custom_reset"
+                kCellRightIconName: ACImageNameIcCustomReset
         }];
         [resetSectionData.subjects addObject:resetCellData];
     }

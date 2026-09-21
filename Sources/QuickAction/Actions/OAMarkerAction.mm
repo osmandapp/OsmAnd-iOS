@@ -12,6 +12,7 @@
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -30,7 +31,7 @@ static QuickActionType *TYPE;
                  name:OALocalizedString(@"map_marker")]
                 nameAction:OALocalizedString(@"shared_string_add")]
                iconName:@"ic_custom_favorites"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
+              secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
 }

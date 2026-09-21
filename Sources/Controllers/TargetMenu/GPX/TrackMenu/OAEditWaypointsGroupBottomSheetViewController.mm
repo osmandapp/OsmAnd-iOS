@@ -142,7 +142,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"rename",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_edit",
+                kCellRightIconName: ACImageNameIcCustomEdit,
                 kCellTitle: OALocalizedString(@"shared_string_rename")
         }];
         [changeSectionData.subjects addObject:renameCellData];
@@ -161,7 +161,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"copy_to_favorites",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_copy",
+                kCellRightIconName: ACImageNameIcCustomCopy,
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
         }];
         [copyToFavoriteSectionData.subjects addObject:copyToFavoritesCellData];
@@ -206,7 +206,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 {
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
-        UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
+        UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? ACImageNameIcCustomFolder : @"ic_custom_folder_hidden"];
         UIColor *tintColor = _isShown ? _groupColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
         self.leftIconView.image = leftIcon;
         self.leftIconView.tintColor = tintColor;

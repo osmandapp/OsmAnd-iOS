@@ -79,7 +79,7 @@
         availableTitle = [[OALocalizedString(@"shared_string_available_until") stringByAppendingString:@" "]
                 stringByAppendingString:[dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:expireTime]]];
         availableDescription = OALocalizedString(@"enough_contributions_descr");
-        rightIcon = @"ic_custom_download_map";
+        rightIcon = ACImageNameIcCustomDownloadMap;
     }
     else
     {
@@ -112,7 +112,7 @@
                                                                                  NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                                  NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                                      }],
-                    @"right_icon": @"ic_custom_reset",
+                    @"right_icon": ACImageNameIcCustomReset,
                     @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive]
             }
     ]];

@@ -22,6 +22,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
@@ -44,7 +45,7 @@ static QuickActionType *TYPE;
                  name:OALocalizedString(@"shared_string_favorite")]
                 nameAction:OALocalizedString(@"shared_string_add")]
                iconName:@"ic_custom_favorites"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
+              secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
 }
@@ -180,7 +181,7 @@ static QuickActionType *TYPE;
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
-                          @"img" : @"ic_custom_folder"
+                          @"img" : ACImageNameIcCustomFolder
                           },
                       @{
                           @"type" : [OAValueTableViewCell getCellIdentifier],

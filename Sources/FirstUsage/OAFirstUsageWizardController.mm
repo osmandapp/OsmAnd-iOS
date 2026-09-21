@@ -26,7 +26,6 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
-#import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
 #import "OAResourcesUISwiftHelper.h"
@@ -344,7 +343,7 @@ typedef enum
 - (UIMenu *)rightNavButtonMenuItems {
     __weak OAFirstUsageWizardController *weakSelf = self;
     UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_osmand_cloud")
-                                                       image:[UIImage imageNamed:@"ic_custom_restore"]
+                                                       image:[UIImage imageNamed:ACImageNameIcCustomRestore]
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
         UIViewController *controller = OABackupHelper.sharedInstance.isRegistered

@@ -25,6 +25,7 @@
 #import <CarPlay/CarPlay.h>
 
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACarPlayHistoryListController
 {
@@ -84,7 +85,7 @@
             _prevRouteHistoryitem.name = pointToNavigateBackup.pointDescription.name;
             _prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
             _prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
-            _prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
+            _prevRouteHistoryitem.iconName = ACImageNameIcCustomPointToPoint;
             _prevRouteHistoryitem.date = [NSDate date];
             [historyItems addObject:_prevRouteHistoryitem];
         }
@@ -129,7 +130,7 @@
     if (historyItem.hType == OAHistoryTypeParking)
         icon = [UIImage imageNamed:@"ic_parking_pin_small"];
     else if (historyItem.hType == OAHistoryTypeDirection)
-        icon = [UIImage imageNamed:@"ic_custom_marker"];
+        icon = [UIImage imageNamed:ACImageNameIcCustomMarker];
     else if (historyItem.iconName && historyItem.iconName.length > 0)
         icon = [historyItem icon];
     if (!icon)

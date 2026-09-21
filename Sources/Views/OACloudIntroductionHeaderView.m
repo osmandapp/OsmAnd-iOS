@@ -62,14 +62,14 @@
         [view removeFromSuperview];
     }
     [_animatedViews removeAllObjects];
-    NSArray<UIImage *> *myPlacesImages = @[[UIImage imageNamed:@"ic_custom_overlay_map"], [UIImage imageNamed:@"ic_custom_trip"],
+    NSArray<UIImage *> *myPlacesImages = @[[UIImage imageNamed:ACImageNameIcCustomOverlayMap], [UIImage imageNamed:ACImageNameIcCustomTrip],
                                            [UIImage imageNamed:@"ic_custom_settings"], [UIImage imageNamed:@"ic_custom_map_style"],
                                            [UIImage imageNamed:@"ic_custom_info"], [UIImage imageNamed:@"ic_profile_pedestrian"]];
     NSArray<UIImage *> *pluginsImages = @[[UIImage imageNamed:@"ic_custom_contour_lines"], [UIImage imageNamed:@"ic_custom_sound"],
                                           [UIImage imageNamed:@"ic_custom_osm_edits"], [UIImage imageNamed:ACImageNameIcCustomRoutes],
                                           [UIImage imageNamed:@"ic_custom_my_places"]];
     NSArray<UIImage *> *navImages = @[[UIImage imageNamed:@"ic_custom_favorites"], [UIImage imageNamed:@"ic_custom_map_languge"],
-                                      [UIImage imageNamed:@"ic_custom_navigation"], [UIImage imageNamed:@"ic_custom_ruler"],
+                                      [UIImage imageNamed:ACImageNameIcCustomNavigation], [UIImage imageNamed:@"ic_custom_ruler"],
                                       [UIImage imageNamed:@"ic_profile_car"]];
     CGFloat maxY = [self animateBackground:myPlacesImages tintColor:UIColorFromRGB(color_banner_button) startY:0. rightToLeft:YES];
     maxY = [self animateBackground:pluginsImages tintColor:UIColorFromRGB(color_primary_purple) startY:maxY rightToLeft:NO];

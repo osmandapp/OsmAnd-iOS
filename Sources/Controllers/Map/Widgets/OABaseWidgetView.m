@@ -11,6 +11,8 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+NSString * const kWidgetPanelKey = @"widgetPanel";
+
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;

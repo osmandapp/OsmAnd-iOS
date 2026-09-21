@@ -33,7 +33,11 @@ class MapWidgetInfo: NSObject, Comparable {
     let appMode: OAApplicationMode
     let screenLayoutMode: ScreenLayoutMode
     
-    var widgetPanel: WidgetsPanel
+    var widgetPanel: WidgetsPanel {
+        didSet {
+            widget.panel = widgetPanel
+        }
+    }
     var priority: Int
     var pageIndex: Int
     
@@ -60,6 +64,7 @@ class MapWidgetInfo: NSObject, Comparable {
         self.pageIndex = page
         self.priority = order
         self.widgetPanel = widgetPanel
+        widget.panel = widgetPanel
     }
     
     func isCustomWidget() -> Bool {

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOI *)findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point;
 + (OAPOI *)findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names;
 
-- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename;
+- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi;
 
 @end
 

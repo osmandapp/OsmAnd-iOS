@@ -181,7 +181,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
             }
         }
-        
+
         let panelsLayoutPreference = settings.panelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
         let panelsLayoutMode = PanelsLayoutMode(rawValue: panelsLayoutPreference.get(appMode)) ?? .defaultMode
         let panelsLayoutRow = widgetsSection.createNewRow()
@@ -469,7 +469,6 @@ extension ConfigureScreenViewController {
         }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData.item(for: indexPath)
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {

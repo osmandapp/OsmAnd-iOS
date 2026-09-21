@@ -416,11 +416,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
 {
-    WidgetsPanel *panel = view == _topShadowContainerView ? WidgetsPanel.topPanel : WidgetsPanel.bottomPanel;
-    ResolvedWidgetPanelAppearance *appearance =
-        [WidgetPanelAppearanceResolver resolveForPanel:panel
-                                               appMode:_settings.applicationMode.get
-                                             nightMode:_settings.isAppMapNightMode];
     view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
 }
 
@@ -502,6 +497,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     CGSize topSize = hasTopWidgets ? [_topPanelController calculateContentSize] : CGSizeZero;
     CGSize bottomSize = hasBottomWidgets ? [_bottomPanelController calculateContentSize] : CGSizeZero;
     BOOL topPanelAboveSidePanels = NO;
+
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
     // Device orientation does not describe the window layout of an iPad app running on Mac.
     BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape] && ![OAUtilities isiOSAppOnMac];
@@ -1074,7 +1070,11 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     // Finish the current UIKit layout pass before recalculating widget constraints.
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
-    [self performSelector:@selector(layoutWidgets) withObject:nil afterDelay:0];
+
+    [self performSelector:@selector(layoutWidgets)
+               withObject:nil
+               afterDelay:0
+                  inModes:@[NSRunLoopCommonModes]];
 }
 
 @end

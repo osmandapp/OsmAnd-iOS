@@ -23,7 +23,6 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
-        case migrateCarPlayMapAppearanceMode
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
         case migrateTracksSortModeKeysAndFormat

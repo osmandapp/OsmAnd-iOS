@@ -6,7 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@objc enum PanelsLayoutMode: Int32, CaseIterable {
+@objc
+enum PanelsLayoutMode: Int32, CaseIterable {
     case wide
     case compact
     

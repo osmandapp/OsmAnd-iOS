@@ -6,7 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@objc enum ScreenElementsMode: Int32, CaseIterable {
+@objc
+enum ScreenElementsMode: Int32, CaseIterable {
     case shared
     case independent
     

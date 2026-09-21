@@ -207,7 +207,7 @@
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
                                                             screenLayoutMode:delegate.screenLayoutMode
                                                         preferenceLayoutMode:delegate.preferenceLayoutMode];
-    _parkingPlaceControl = (OASimpleWidget *) [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode widgetParams:widgetParams];
+    _parkingPlaceControl = (OASimpleWidget *) [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.parking widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
 }
 

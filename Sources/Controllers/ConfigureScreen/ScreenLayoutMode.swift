@@ -6,10 +6,11 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@objc enum ScreenLayoutMode: Int32, CaseIterable {
+@objc
+enum ScreenLayoutMode: Int32, CaseIterable {
     case portrait
     case landscape
-    
+
     var title: String {
         switch self {
         case .portrait:
@@ -29,12 +30,13 @@
         case .landscape: "landscape"
         }
     }
-
+    
     static func `default`(forAppMode appMode: OAApplicationMode) -> ScreenLayoutMode {
         OAAppSettings.sharedManager().useSeparateLayouts.get(appMode) && OAUtilities.isLandscape()
             ? .landscape
             : .portrait
     }
+    
 }
 
 @objcMembers

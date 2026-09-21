@@ -176,7 +176,7 @@
                 : OALocalizedString(@"shared_string_hide_all"),
                 kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
                 kCellRightIconName: [_tableData.values[@"visible_groups_count"] integerValue] == 0
-                ? @"ic_custom_show" : @"ic_custom_hide",
+                ? ACImageNameIcCustomShow : ACImageNameIcCustomHide,
                 kCellTintColor:[UIColor colorNamed:ACColorNameIconColorActive]
             }];
             [_tableData.subjects addObject:hideShowAllCellData];
@@ -251,7 +251,7 @@
                 ? OALocalizedString(@"shared_string_show_all")
                 : OALocalizedString(@"shared_string_hide_all"),
                 kCellRightIconName: [sectionData.values[@"visible_groups_count"] integerValue] == 0
-                ? @"ic_custom_show" : @"ic_custom_hide"
+                ? ACImageNameIcCustomShow : ACImageNameIcCustomHide
             }];
         }
     }

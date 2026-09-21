@@ -117,7 +117,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         kCellKeyKey : @"terrainStatus",
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(isTerrainEbabled ? @"shared_string_enabled" : @"rendering_value_disabled_name"),
-        kCellIconNameKey : isTerrainEbabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
+        kCellIconNameKey : isTerrainEbabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide,
         kCellIconTintColor : [UIColor colorNamed:isTerrainEbabled ? ACColorNameIconColorSelected : ACColorNameIconColorDisabled],
         @"value" : @(isTerrainEbabled)
     }];

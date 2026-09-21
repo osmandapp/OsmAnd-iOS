@@ -716,7 +716,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     for (OASTrkSegment *segment in segments)
     {
         NSInteger i = [segment.points indexOfObject:selectedPoint];
-        if (i != -1)
+        if (i != NSNotFound)
         {
             NSInteger segmentPosition = selectedPointPosition - count;
             return first ? segmentPosition == 0 : segmentPosition == (NSInteger) segment.points.count - 1;

@@ -117,7 +117,8 @@
                                       chart:cell.chartView
                                    analysis:analysis
                               statsModeCell:nil
-                     overrideIsGeneralTrack:overrideIsGeneralTrack];
+                     overrideIsGeneralTrack:overrideIsGeneralTrack
+                     useRouteDistanceLayout:NO];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -547,7 +548,8 @@
                                               chart:cell.chartView
                                            analysis:sectionData.values[@"analysis_value"]
                                       statsModeCell:nil
-                             overrideIsGeneralTrack:[segment isGeneralSegment]];
+                             overrideIsGeneralTrack:[segment isGeneralSegment]
+                             useRouteDistanceLayout:NO];
             }
         }
     }

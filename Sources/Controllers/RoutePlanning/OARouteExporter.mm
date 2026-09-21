@@ -12,24 +12,21 @@
 #import "OAMapUtils.h"
 #import "OsmAndSharedWrapper.h"
 
-#include <routeSegmentResult.h>
-#include <routeDataBundle.h>
-#include <routeDataResources.h>
 
 @implementation OARouteExporter
 {
     NSString *_name;
-    std::vector<std::shared_ptr<RouteSegmentResult>> _route;
+    NSArray<OASRouteSegmentResult *> *_route;
     NSArray<CLLocation *> *_locations;
-    std::vector<int> _routePointIndexes;
+    NSArray<NSNumber *> *_routePointIndexes;
     NSArray<OASWptPt *> *_points;
     BOOL _preserveTimestamps;
 }
 
 - (instancetype)initWithName:(NSString *)name
-                        route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route
+                        route:(NSArray<OASRouteSegmentResult *> *)route
                     locations:(NSArray<CLLocation *> *)locations
-            routePointIndexes:(std::vector<int>)routePointIndexes
+            routePointIndexes:(NSArray<NSNumber *> *)routePointIndexes
                        points:(NSArray<OASWptPt *> *)points
            preserveTimestamps:(BOOL)preserveTimestamps
 {
@@ -136,29 +133,22 @@
 
 - (OASTrkSegment *)generateRouteSegment
 {
-    std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations], _routePointIndexes);
-    std::vector<std::shared_ptr<RouteDataBundle>> routeItems;
-    if (_route.size() > 0)
+    OASRouteDataResources *resources = [[OASRouteDataResources alloc] initWithLocations:[self toLocations:_locations]
+                                                                     routePointIndexes:[self toRoutePointIndexes:_routePointIndexes]];
+    NSMutableArray<OASRouteDataBundle *> *routeItems = [NSMutableArray array];
+    if (_route.count > 0)
     {
-        for (const auto& sr : _route)
-            sr->collectTypes(resources);
-        for (const auto& sr : _route) {
-            sr->collectNames(resources);
-        }
-        
-        for (const auto& sr : _route)
+        for (OASRouteSegmentResult *sr in _route)
+            [sr collectTypesResources:resources];
+        for (OASRouteSegmentResult *sr in _route)
+            [sr collectNamesResources:resources];
+
+        for (OASRouteSegmentResult *sr in _route)
         {
-            auto itemBundle = std::make_shared<RouteDataBundle>(resources);
-            sr->writeToBundle(itemBundle);
-            routeItems.push_back(itemBundle);
+            OASRouteDataBundle *itemBundle = [[OASRouteDataBundle alloc] initWithResources:resources];
+            [sr writeToBundleBundle:itemBundle];
+            [routeItems addObject:itemBundle];
         }
-    }
-    std::vector<std::shared_ptr<RouteDataBundle>> typeList;
-    for (const auto& rule : resources->insertOrder)
-    {
-        auto typeBundle = std::make_shared<RouteDataBundle>(resources);
-        rule.writeToBundle(typeBundle);
-        typeList.push_back(typeBundle);
     }
     
     OASTrkSegment *trkSegment = [[OASTrkSegment alloc] init];
@@ -189,53 +179,74 @@
     trkSegment.points = newPoints;
     
     NSMutableArray<OASGpxUtilitiesRouteSegment *> *routeSegments = [NSMutableArray new];
-    for (const auto& item : routeItems)
+    for (OASRouteDataBundle *item in routeItems)
         [routeSegments addObject:[self.class getRouteSegmentFromStringBundle:item]];
 
     trkSegment.routeSegments = routeSegments;
-
-    NSMutableArray<OASGpxUtilitiesRouteType *> *routeTypes = [NSMutableArray new];
-    for (const auto& item : typeList)
-        [routeTypes addObject:[self.class getRouteTypefromStringBundle:item]];
-
-    trkSegment.routeTypes = routeTypes;
+    trkSegment.routeTypes = [self.class getRouteTypes:resources];
     return trkSegment;
 }
 
-- (std::vector<Location>) coordinatesToLocationVector:(NSArray<CLLocation *> *)points
+- (NSMutableArray<OASKLocation *> *) toLocations:(NSArray<CLLocation *> *)points
 {
-    std::vector<Location> res;
+    NSMutableArray<OASKLocation *> *res = [NSMutableArray arrayWithCapacity:points.count];
     for (CLLocation *pt in points)
     {
-        Location loc(pt.coordinate.latitude, pt.coordinate.longitude);
+        OASKLocation *loc = [[OASKLocation alloc] initWithProvider:@"" latitude:pt.coordinate.latitude longitude:pt.coordinate.longitude];
         loc.altitude = pt.altitude;
-        res.push_back(loc);
+        [res addObject:loc];
     }
     return res;
 }
 
-+ (OASGpxUtilitiesRouteSegment *) getRouteSegmentFromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+- (NSMutableArray<OASInt *> *) toRoutePointIndexes:(NSArray<NSNumber *> *)indexes
 {
-    OASGpxUtilitiesRouteSegment *s = [[OASGpxUtilitiesRouteSegment alloc] init];
-    s.id = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
-    s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
-    s.startTrackPointIndex = [NSString stringWithUTF8String:bundle->getString("startTrkptIdx", "").c_str()];
-    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
-    s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
-    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
-    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle", "").c_str()];
-    s.types = [NSString stringWithUTF8String:bundle->getString("types", "").c_str()];
-    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes", "").c_str()];
-    s.names = [NSString stringWithUTF8String:bundle->getString("names", "").c_str()];
-    return s;
+    NSMutableArray<OASInt *> *res = [NSMutableArray arrayWithCapacity:indexes.count];
+    for (NSNumber *index in indexes)
+        [res addObject:[OASInt numberWithInt:index.intValue]];
+
+    return res;
 }
 
-+ (OASGpxUtilitiesRouteType *) getRouteTypefromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+/**
+ * The rules the segments collected, in the order the segments refer to them by: the map holds each
+ * rule's index, and going through it by index is what the java exporter's insertion-ordered map
+ * gives it. The tag and value are written straight out - putting them through a bundle first, as
+ * the segments go, would only be putting them in to take them back out.
+ */
++ (NSMutableArray<OASGpxUtilitiesRouteType *> *) getRouteTypes:(OASRouteDataResources *)resources
 {
-    OASGpxUtilitiesRouteType *t = [[OASGpxUtilitiesRouteType alloc] init];
-    t.tag = [NSString stringWithUTF8String:bundle->getString("t", "").c_str()];
-    t.value = [NSString stringWithUTF8String:bundle->getString("v", "").c_str()];
-    return t;
+    NSDictionary<OASRouteTypeRule *, OASInt *> *rules = [resources getRules];
+    NSMutableArray<OASGpxUtilitiesRouteType *> *res = [NSMutableArray arrayWithCapacity:rules.count];
+    for (int i = 0; i < (int) rules.count; i++)
+        [res addObject:[[OASGpxUtilitiesRouteType alloc] init]];
+
+    for (OASRouteTypeRule *rule in rules)
+    {
+        int index = rules[rule].intValue;
+        if (index < 0 || index >= (int) res.count)
+            continue;
+
+        res[index].tag = rule.getTag;
+        res[index].value = rule.getValue ? rule.getValue : @"";
+    }
+    return res;
+}
+
++ (OASGpxUtilitiesRouteSegment *) getRouteSegmentFromStringBundle:(OASRouteDataBundle *)bundle
+{
+    OASGpxUtilitiesRouteSegment *s = [[OASGpxUtilitiesRouteSegment alloc] init];
+    s.id = [bundle getStringKey:@"id" defaultValue:@""];
+    s.length = [bundle getStringKey:@"length" defaultValue:@""];
+    s.startTrackPointIndex = [bundle getStringKey:@"startTrkptIdx" defaultValue:@""];
+    s.segmentTime = [bundle getStringKey:@"segmentTime" defaultValue:@""];
+    s.speed = [bundle getStringKey:@"speed" defaultValue:@""];
+    s.turnType = [bundle getStringKey:@"turnType" defaultValue:@""];
+    s.turnAngle = [bundle getStringKey:@"turnAngle" defaultValue:@""];
+    s.types = [bundle getStringKey:@"types" defaultValue:@""];
+    s.pointTypes = [bundle getStringKey:@"pointTypes" defaultValue:@""];
+    s.names = [bundle getStringKey:@"names" defaultValue:@""];
+    return s;
 }
 
 @end

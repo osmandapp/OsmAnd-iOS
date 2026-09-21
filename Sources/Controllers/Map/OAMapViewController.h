@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint, OASKQuadRect;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -153,6 +153,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
 - (void)cancelAllAnimations;
+- (void)cancelAutoZoomAnimation;
 
 - (void)correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
@@ -246,6 +247,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              analysis:(OASGpxTrackAnalysis *)analysis
               segment:(nullable OASTrkSegment *)segment
      trackChartHelper:(TrackChartHelper *)trackChartHelper;
+
+- (void)fitTrackOnMapWithRect:(OASKQuadRect *)rect
+                     location:(CLLocationCoordinate2D)location
+                     forceFit:(BOOL)forceFit
+             trackChartHelper:(TrackChartHelper *)trackChartHelper
+    NS_SWIFT_NAME(fitTrack(rect:location:forceFit:trackChartHelper:));
 
 - (void)contextMenuDidShow:(id)targetObj;
 - (void)contextMenuDidHide;

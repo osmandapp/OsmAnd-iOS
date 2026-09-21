@@ -30,9 +30,6 @@
 #import "OAPOIHelper+cpp.h"
 #import "OAAmenitySearcher.h"
 #import "OAAmenitySearcher+cpp.h"
-#import "OARouteKey.h"
-#import "OARouteKey+cpp.h" 
-#import "OATravelGuidesHelper+cpp.h"
 #import "OAClickableWayMenuProvider.h"
 #import "OATravelSelectionLayer.h"
 #import "OAAmenitySearcher.h"
@@ -40,7 +37,6 @@
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
-#include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 
@@ -161,7 +157,8 @@ static int TILE_SIZE = 256;
             }
             else
             {
-                result.objectLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
+                CLLocation *clickLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
+                result.objectLatLon = [self snapLatLonToWayGeometry:clickLatLon mapSymbol:symbolInfo.mapSymbol];
             }
             
             if (cppAmenity != nullptr)
@@ -197,40 +194,25 @@ static int TILE_SIZE = 256;
                         BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
                         BOOL isOldOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
-     
-                        BOOL isNewOsmRoute = false; // TODO implement new OSM routes
 
-                        if (isTravelGpx) {
-                            NSString *routeId = tags[@"route_id"];
-                            if (routeId != nil && [routeId hasPrefix:@"O"]) {
-                                if (false) {
-                                    isNewOsmRoute = true;
-                                } else {
-                                    // TODO unhack me
-                                    isTravelGpx = false;
-                                    isOldOsmRoute = true;
-                                    isNewOsmRoute = false;
-                                }
-                            }
-                        }
+                        NSString *routeId = tags[ROUTE_ID];
+                        BOOL isNewOsmRoute = [self.class isNewOsmRoute:routeId isTravelGpx:isTravelGpx];
+                        CLLocation *objectLatLon = result.objectLatLon;
 
-                      //  BOOL isSpecial = isOldOsmRoute || isNewOsmRoute || isTravelGpx || isClickableWay;
-
-                        if (isOldOsmRoute)
+                        if (isNewOsmRoute || isOldOsmRoute)
                         {
-                            const auto selectorFilter = [self createRouteFilter];
-                            [self addOsmRoutesAround:result point:point selectorFilter:selectorFilter];
+                            [self addFilteredOsmRoutes:result location:objectLatLon];
                         }
 
                         if (isClickableWay)
                         {
-                            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
+                            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:objectLatLon obfMapObject:obfMapObject tags:tags];
                             [self addClickableWay:result clickableWay:clickableWay];
                         }
 
                         if (isTravelGpx && !isNewOsmRoute)
                         {
-                            [self addTravelGpx:result routeId: tags[ROUTE_ID]]; // WikiVoyage or User TravelGpx
+                            [self addTravelGpx:result routeId:routeId location:objectLatLon]; // WikiVoyage or User TravelGpx
                         }
 
                         auto onPathMapSymbol =
@@ -354,23 +336,80 @@ static int TILE_SIZE = 256;
     return amenity;
 }
 
-- (void)addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId
+- (void)addTravelGpx:(MapSelectionResult *)result routeId:(NSString *)routeId location:(CLLocation *)location
 {
-    OATravelGpx *travelGpx = [OATravelGuidesHelper searchTravelGpx:result.pointLatLon routeId:routeId];
-    if (travelGpx && [self isUniqueTravelGpx:result.allObjects travelGpx:travelGpx])
-    {
-        OASWptPt *selectedPoint = [[OASWptPt alloc] initWithLat:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
-        SelectedGpxPoint *selectedGpxPoint = [[SelectedGpxPoint alloc] initWithSelectedGpxFile:nil selectedPoint:selectedPoint];
-        
-        OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-        OATravelSelectionLayer *provider = mapVc.mapLayers.travelSelectionLayer;
-
-        [result collect:@[travelGpx, selectedGpxPoint] provider:provider];
-    }
-    else if (!travelGpx)
-    {
+    OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLocation:location routeId:routeId];
+    if (travelGpx)
+        [self collectTravelGpx:result travelGpx:travelGpx location:location];
+    else
         NSLog(@"addTravelGpx() searchTravelGpx() travelGpx is null");
+}
+
+/// The OSM routes drawn under the tap, of the types the style has switched on. A route answers by
+/// its own amenity in the poi section, so there is nothing left to assemble from relations here.
+- (void)addFilteredOsmRoutes:(MapSelectionResult *)result location:(CLLocation *)location
+{
+    NSSet<NSString *> *routeTypeNames = [self createRouteTypesFilter];
+    if (routeTypeNames.count == 0)
+        return;
+
+    NSArray<OATravelGpx *> *found = [OATravelObfHelper.shared searchTravelGpxWithLocation:location osmRouteTypeNames:routeTypeNames];
+    for (OATravelGpx *travelGpx in found)
+    {
+        [self collectTravelGpx:result travelGpx:travelGpx location:location];
     }
+}
+
+- (void)collectTravelGpx:(MapSelectionResult *)result travelGpx:(OATravelGpx *)travelGpx location:(CLLocation *)location
+{
+    if (![self isUniqueTravelGpx:result.allObjects travelGpx:travelGpx])
+        return;
+
+    OASWptPt *selectedPoint = [[OASWptPt alloc] initWithLat:location.coordinate.latitude lon:location.coordinate.longitude];
+    SelectedGpxPoint *selectedGpxPoint = [[SelectedGpxPoint alloc] initWithSelectedGpxFile:nil selectedPoint:selectedPoint];
+
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    OATravelSelectionLayer *provider = mapVc.mapLayers.travelSelectionLayer;
+
+    [result collect:@[travelGpx, selectedGpxPoint] provider:provider];
+}
+
+/// Whether tapping this route should look for a track at all: a v2 route carries its OSM id in
+/// `route_id`, and it is the poi section, not the relation, that answers for it.
++ (BOOL)isNewOsmRoute:(NSString *)routeId isTravelGpx:(BOOL)isTravelGpx
+{
+    if (!isTravelGpx || routeId == nil)
+        return NO;
+
+    return [OASObfConstants.shared getOsmIdFromPrefixedRouteIdRouteId:routeId] > 0;
+}
+
+/// The way's vertex nearest the tap. The route search looks 25 m around the point it is given, and
+/// a tap lands beside the line, not on it.
+- (CLLocation *)snapLatLonToWayGeometry:(CLLocation *)location mapSymbol:(const std::shared_ptr<const OsmAnd::MapSymbol> &)mapSymbol
+{
+    const auto mapObjectSymbolsGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(mapSymbol->groupPtr);
+    if (!mapObjectSymbolsGroup)
+        return location;
+
+    const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObjectSymbolsGroup->mapObject);
+    if (!obfMapObject)
+        return location;
+
+    CLLocation *snapped = location;
+    double minDist = DBL_MAX;
+    for (const auto& point31 : OsmAnd::constOf(obfMapObject->points31))
+    {
+        double lat = OsmAnd::Utilities::get31LatitudeY(point31.y);
+        double lon = OsmAnd::Utilities::get31LongitudeX(point31.x);
+        double dist = OsmAnd::Utilities::distance(location.coordinate.longitude, location.coordinate.latitude, lon, lat);
+        if (dist < minDist)
+        {
+            minDist = dist;
+            snapped = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+        }
+    }
+    return snapped;
 }
 
 - (BOOL)addClickableWay:(MapSelectionResult *)result clickableWay:(ClickableWay *)clickableWay
@@ -463,27 +502,12 @@ static int TILE_SIZE = 256;
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
 }
 
-- (BOOL)addOsmRoutesAround:(MapSelectionResult *)result point:(CGPoint)point selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
+/// The osm route types the style is drawing right now. A route type switched off in Configure map
+/// must not answer a tap, so the click search is given the enabled ones by name.
+- (NSSet<NSString *> *)createRouteTypesFilter
 {
-    if (selectorFilter != nullptr && selectorFilter->typeFilter.isEmpty())
-    {
-        return NO;
-    }
-    
-    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-    OANetworkRouteSelectionLayer *networkRouteSelectionLayer = mapVc.mapLayers.networkRouteSelectionLayer;
-    int searchRadius = [networkRouteSelectionLayer getScaledTouchRadius:[networkRouteSelectionLayer getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-    CLLocation *minLatLon = [mapVc getLatLonFromElevatedPixel:point.x - searchRadius y:point.y - searchRadius];
-    CLLocation *maxLatLon = [mapVc getLatLonFromElevatedPixel:point.x + searchRadius y:point.y + searchRadius];
-    OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:minLatLon.coordinate.longitude top:minLatLon.coordinate.latitude right:maxLatLon.coordinate.longitude bottom:maxLatLon.coordinate.latitude];
-    
-    return [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:selectorFilter];
-}
+    NSMutableSet<NSString *> *routeTypeNames = [NSMutableSet set];
 
-- (OsmAnd::NetworkRouteSelectorFilter *) createRouteFilter
-{
-    const auto routeSelectorFilter = new OsmAnd::NetworkRouteSelectorFilter();
-    
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
@@ -503,56 +527,11 @@ static int TILE_SIZE = 256;
             }
             if (isEnabled)
             {
-                routeSelectorFilter->typeFilter.insert(*osmRouteType);
+                [routeTypeNames addObject:osmRouteType->name.toNSString()];
             }
         }
     }
-    return routeSelectorFilter;
-}
-
-- (BOOL)putRouteGpxToSelected:(MapSelectionResult *)result provider:(id<OAContextMenuProvider>)provider rect:(OASKQuadRect *)rect selectorFilter:(OsmAnd::NetworkRouteSelectorFilter *)selectorFilter
-{
-    OsmAnd::PointI topLeft31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.top, rect.left)];
-    OsmAnd::PointI bottomRight31 = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(rect.bottom, rect.right)];
-    OsmAnd::AreaI area31(topLeft31, bottomRight31);
-    
-    int added = 0;
-    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>([OsmAndApp instance].resourcesManager->obfsCollection);
-    if (selectorFilter != nullptr)
-    {
-        networkRouteSelector->rCtx->setNetworkFilter(*selectorFilter);
-    }
-    
-    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
-    
-    for (auto it = routes.begin(); it != routes.end(); ++it)
-    {
-        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        if ([self isUniqueOsmRoute:result tmpKey:routeKey])
-        {
-            NSArray *pair = @[routeKey, rect];
-            [result collect:pair provider:provider];
-            added++;
-        }
-    }
-    return added > 0;
-}
-
-- (BOOL)isUniqueOsmRoute:(MapSelectionResult *)result tmpKey:(OARouteKey *)tmpKey
-{
-    for (SelectedMapObject *selectedObject in result.allObjects)
-    {
-        id object = selectedObject.object;
-        if ([object isKindOfClass:NSArray.class])
-        {
-            id firstObject = [((NSArray *) object) firstObject];
-            if (firstObject && [firstObject isKindOfClass:OARouteKey.class] && [firstObject isEqual:tmpKey])
-            {
-                return NO;
-            }
-        }
-    }
-    return YES;
+    return routeTypeNames;
 }
 
 - (BOOL)isTransportStop:(NSArray<SelectedMapObject *> *)selectedObjects detail:(BaseDetailsObject *)detail
@@ -718,76 +697,26 @@ static int TILE_SIZE = 256;
     return nil;
 }
 
-- (BOOL)showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
+/// Opens a track found by search or reopened from history straight in the track menu, the way a
+/// tap on the map does. Anything else goes on to the ordinary poi menu.
+- (BOOL)showContextMenuForSearchResult:(OAPOI *)poi
 {
-    // The method is used to handle new->old OSM routes from search results.
-    // After implementing new OSM routes scheme, this method will be refactored.
+    if ([poi isRouteTrack] && ![poi isSuperRoute])
+    {
+        OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
+        [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx
+                                               gpxFileName:[poi getGpxFileName:nil]
+                                                    latLon:[poi getLocation]
+                                         adjustMapPosition:YES];
+        return YES;
+    }
 
-    BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
-    if (!canBeRoute)
-        return NO;
-    
-    MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:CGPointMake(0, 0)];
-    CLLocation *latLon = [poi getLocation];
-    result.objectLatLon = latLon;
-    OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
-    
-    if (filename)
+    if ([_clickableWayHelper isClickableWayAmenity:poi])
     {
-        travelGpx.file = filename;
-        if (![travelGpx.file hasSuffix:@".obf"])
-            [travelGpx.file stringByAppendingPathExtension:@"obf"];
+        [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
+        return YES;
     }
-    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(50, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude)));
-    
-    const auto foundBinaryMapObjects = [OATravelGuidesHelper searchGpxMapObject:travelGpx bbox31:bbox31 reader:nil useAllObfFiles:YES];
-    
-    BOOL osmRoutesAlreadyAdded = NO;
-    for (const auto obfMapObject : foundBinaryMapObjects)
-    {
-        MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
-        BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
-        BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
-        
-        if (isClickableWay)
-        {
-            [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
-            return YES;
-        }
-        if (isOsmRoute || !osmRoutesAlreadyAdded)
-        {
-            OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-            OANetworkRouteSelectionLayer *networkRouteSelectionLayer = mapVc.mapLayers.networkRouteSelectionLayer;
-            int searchRadius = [networkRouteSelectionLayer getScaledTouchRadius:[networkRouteSelectionLayer getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-            OsmAnd::PointI point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.coordinate.latitude, latLon.coordinate.longitude));
-            OsmAnd::AreaI rect31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(AMENITY_SEARCH_RADIUS, point31);
-            OsmAnd::Utilities::get31LatitudeY(rect31.top());
-            OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:OsmAnd::Utilities::get31LongitudeX(rect31.left()) top:OsmAnd::Utilities::get31LatitudeY(rect31.top()) right:OsmAnd::Utilities::get31LongitudeX(rect31.right()) bottom:OsmAnd::Utilities::get31LatitudeY(rect31.bottom())];
-    
-            osmRoutesAlreadyAdded = [self putRouteGpxToSelected:result provider:networkRouteSelectionLayer rect:rect selectorFilter:nil];
-        }
-    }
-    
-    [result groupByOsmIdAndWikidataId];
-    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
-    
-    if ([selectedObjects count] > 0)
-    {
-        NSString *poiName = [poi.name lowercaseString];
-        for (SelectedMapObject *selectedObject in selectedObjects)
-        {
-            if ([selectedObject.object isKindOfClass:NSArray.class])
-            {
-                OARouteKey *routeKey = selectedObject.object[0];
-                NSString *name = [[routeKey getRouteName] lowercaseString];
-                if ([poiName isEqualToString:name])
-                {
-                    [selectedObject.provider showMenuAction:selectedObject];
-                    return YES;
-                }
-            }
-        }
-    }
+
     return NO;
 }
 

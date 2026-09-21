@@ -21,6 +21,9 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 @end
 
 @implementation OAPOIBaseType
+{
+    NSMutableDictionary<NSString *, OAPOIType *> *_poiAdditionalsByKeyName;
+}
 
 - (instancetype)initWithName:(NSString *)name
 {
@@ -102,12 +105,33 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
     return [self isKindOfClass:[OAPOIType class]] && [((OAPOIType *) self) isAdditional];
 }
 
+- (void)setPoiAdditionals:(NSArray<OAPOIType *> *)poiAdditionals
+{
+    _poiAdditionals = poiAdditionals;
+    _poiAdditionalsByKeyName = nil;
+    if (poiAdditionals.count > 0)
+    {
+        _poiAdditionalsByKeyName = [NSMutableDictionary dictionaryWithCapacity:poiAdditionals.count];
+        for (OAPOIType *poiType in poiAdditionals)
+            _poiAdditionalsByKeyName[poiType.name] = poiType;
+    }
+}
+
+- (OAPOIType *)getPoiAdditionalByKeyName:(NSString *)name
+{
+    return name ? _poiAdditionalsByKeyName[name] : nil;
+}
+
 - (void)addPoiAdditional:(OAPOIType *)poiType
 {
     if (!_poiAdditionals)
         _poiAdditionals = @[poiType];
     else
         _poiAdditionals = [_poiAdditionals arrayByAddingObject:poiType];
+
+    if (!_poiAdditionalsByKeyName)
+        _poiAdditionalsByKeyName = [NSMutableDictionary dictionary];
+    _poiAdditionalsByKeyName[poiType.name] = poiType;
     
     if (poiType.poiAdditionalCategory)
     {

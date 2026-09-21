@@ -796,7 +796,14 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                         to: state.controller,
                         using: state.mapInfoController)
         // Size preferences may have changed while hosted; the saved geometry is stale.
-        let restoredContentSize = state.controller.calculateContentSize()
+        var restoredContentSize = previewPanelContentSize(for: state.controller)
+        if state.controller.isHorizontal {
+            // Restore the map's full row width before laying out the unhidden widgets.
+            // A compressed measurement of the still-hosted page can return a width
+            // smaller than the widgets' required padding and icon widths.
+            restoredContentSize.width = max(restoredContentSize.width,
+                                            max(state.originalContainerSize.width, state.frame.width))
+        }
         updatePageContainerSize(restoredContentSize, for: state.controller)
         var restoredFrame = state.frame
         if state.controller.isHorizontal {
@@ -918,7 +925,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalPageContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
         controller.delegate = nil
         excludedWidgets.forEach { $0.widget.isHidden = true }
-        let panelContentSize = controller.calculateContentSize()
+        let panelContentSize = previewPanelContentSize(for: controller)
         let previewContentSize = previewSize(for: panelContentSize,
                                              controller: controller,
                                              originalContainerSize: originalContainerSize)
@@ -986,6 +993,14 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance,
                                  to controller: WidgetPanelViewController,
                                  using mapInfoController: OAMapInfoController) {
+        let widgets = controller.widgetPages.flatMap { $0 }
+        let widgetDelegates = widgets.map { (widget: $0, delegate: $0.delegate) }
+        // Text refreshes notify the panel synchronously. Finish applying all colors
+        // before the preview measures and restores the panel's geometry.
+        widgets.forEach { $0.delegate = nil }
+        defer {
+            widgetDelegates.forEach { $0.widget.delegate = $0.delegate }
+        }
         controller.applyAppearance(appearance)
 
         let textState = OATextState()
@@ -1000,7 +1015,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         textState.leftColor = appearance.backgroundColor
 
         mapInfoController.apply(textState,
-                                toWidgets: controller.widgetPages.flatMap { $0 })
+                                toWidgets: widgets)
     }
 
     private func restoreCurrentPage(in controller: WidgetPanelViewController, for panel: WidgetsPanel) {
@@ -1023,6 +1038,38 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private func hostedPanelContentSize() -> CGSize {
         guard let state = hostedState else { return .zero }
         return state.previewContentSize
+    }
+
+    private func previewPanelContentSize(for controller: WidgetPanelViewController) -> CGSize {
+        guard controller.isHorizontal,
+              controller.pageControl.currentPage >= 0,
+              controller.pageControl.currentPage < controller.pages.count,
+              let page = controller.pages[controller.pageControl.currentPage] as? WidgetPageViewController else {
+            return controller.calculateContentSize()
+        }
+
+        var size = CGSize.zero
+        var visibleRowCount = 0
+        for row in page.simpleWidgetViews {
+            let visibleWidgets = row.filter { !$0.isHidden }
+            guard !visibleWidgets.isEmpty else { continue }
+            visibleRowCount += 1
+            let widgetSizes = visibleWidgets.map {
+                $0.systemLayoutSizeFitting(
+                    UIView.layoutFittingCompressedSize,
+                    withHorizontalFittingPriority: .fittingSizeLevel,
+                    verticalFittingPriority: .fittingSizeLevel
+                )
+            }
+            let itemWidth = max(32, widgetSizes.map(\.width).max() ?? 0)
+            size.width = max(size.width, itemWidth * CGFloat(visibleWidgets.count))
+            size.height += widgetSizes.map(\.height).max() ?? 0
+        }
+        if visibleRowCount > 1 {
+            size.height += CGFloat(visibleRowCount - 1)
+        }
+        size.height = max(size.height, 34)
+        return size
     }
 
     private func updatePageContainerSize(_ size: CGSize, for controller: WidgetPanelViewController) {
@@ -1079,7 +1126,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         isMeasuringPanelSize = true
         defer { isMeasuringPanelSize = false }
         excludePreviewOnlyWidgets(in: &state)
-        let panelContentSize = state.controller.calculateContentSize()
+        let panelContentSize = previewPanelContentSize(for: state.controller)
         updatePageContainerSize(panelContentSize, for: state.controller)
         let newSize = previewSize(for: panelContentSize,
                                   controller: state.controller,

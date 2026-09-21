@@ -28,6 +28,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         static let applyButtonHeight: CGFloat = 44
         static let paletteVerticalInset: CGFloat = 6
         static let navigationContentHeight: CGFloat = 70
+        static let landscapePreviewHeight: CGFloat = 112
         static let navigationBackgroundFirstAlpha: CGFloat = 0.7
         static let navigationBackgroundSecondAlpha: CGFloat = 0.55
     }
@@ -37,11 +38,21 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     weak var delegate: WidgetPanelColorViewControllerDelegate?
 
     override var initialMenuHeight: CGFloat {
+        let viewHeight = view.bounds.height > 0
+            ? view.bounds.height
+            : OAUtilities.calculateScreenHeight()
+        let availableHeight = max(0,
+                                  viewHeight
+                                      - view.safeAreaInsets.top
+                                      - Constants.navigationContentHeight)
+        let previewHeight = traitCollection.verticalSizeClass == .compact
+            ? min(Constants.landscapePreviewHeight, availableHeight * 0.4)
+            : 0
+        let maximumMenuHeight = max(0, availableHeight - previewHeight)
         if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
-            return min(OAUtilities.calculateScreenHeight() * 0.75,
-                       OAUtilities.calculateScreenHeight() - view.safeAreaInsets.top)
+            return min(viewHeight * 0.75, maximumMenuHeight)
         }
-        return Constants.portraitMenuHeight
+        return min(Constants.portraitMenuHeight, maximumMenuHeight)
     }
 
     override var supportsFullScreen: Bool {
@@ -210,8 +221,12 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         tableView.dataSource = self
         tableView.backgroundColor = .viewBg
         tableView.separatorColor = SeparatorAppearance.color
-        tableView.sectionHeaderHeight = 8
+        tableView.sectionHeaderHeight = .leastNormalMagnitude
+        tableView.sectionHeaderTopPadding = 0
         tableView.sectionFooterHeight = 0
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.isScrollEnabled = true
+        tableView.alwaysBounceVertical = true
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         tableView.register(UINib(nibName: SegmentTextTableViewCell.reuseIdentifier, bundle: nil),
                            forCellReuseIdentifier: SegmentTextTableViewCell.reuseIdentifier)
@@ -332,9 +347,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func layoutNavigationBackground() {
-        let isCompactLayout = traitCollection.verticalSizeClass == .compact
-        navigationBackgroundView.isHidden = isCompactLayout
-        guard !isCompactLayout else { return }
+        navigationBackgroundView.isHidden = false
         navigationBackgroundView.frame = CGRect(x: 0,
                                                 y: 0,
                                                 width: view.bounds.width,
@@ -553,6 +566,14 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in _: UITableView) -> Int {
         1
+    }
+
+    func tableView(_: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        section == 0 ? .leastNormalMagnitude : UITableView.automaticDimension
+    }
+
+    func tableView(_: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        section == 0 ? UIView(frame: .zero) : nil
     }
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {

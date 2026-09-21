@@ -532,8 +532,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         topPanelWidth = MAX(0, availableWidth - topLeftMargin - topRightMargin);
         topPanelCenterX = (topLeftMargin - topRightMargin) / 2;
         bottomPanelWidth = MAX(0, availableWidth - bottomHorizontalMargin * 2);
-        // A compact gap can be narrower than the required padding/icons of a widget row.
-        // In that case use a full-width row and keep the side panels below the top panel.
         if (hasTopWidgets && topPanelWidth < topSize.width)
         {
             topPanelWidth = availableWidth;

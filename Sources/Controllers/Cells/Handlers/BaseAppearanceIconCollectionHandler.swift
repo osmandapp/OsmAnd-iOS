@@ -40,12 +40,13 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
     }
     
     override func getSelectedItem() -> Any {
-        if let category = categoriesByKeyName[selectedCatagoryKey],
-           let indexPath = getSelectedIndexPath(),
-           !category.iconKeys.isEmpty {
-           return category.iconKeys[indexPath.row]
+        guard let category = categoriesByKeyName[selectedCatagoryKey],
+              let indexPath = getSelectedIndexPath() else { return "" }
+        if category.iconKeys.indices.contains(indexPath.row) {
+            return category.iconKeys[indexPath.row]
         }
-        return ""
+        // Displayed icons can outlive a category change, and the tapped one is what the user sees
+        return super.getSelectedItem()
     }
     
     func setup() {

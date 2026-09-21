@@ -658,6 +658,9 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getShortFormattedOpeningHours:(OAPOI *)poi
 {
+    if (poi.openingHours.length == 0)
+        return @"";
+
     auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
     if (!parser)
         return @"";

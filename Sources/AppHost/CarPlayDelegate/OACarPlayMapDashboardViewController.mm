@@ -44,7 +44,6 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
-        [_mapVc.mapView limitFrameRefreshRate];
     }
 }
 
@@ -66,8 +65,6 @@
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapVc.mapView resumeRendering];
         [mapPanel.hudViewController.mapInfoController updateLayout];
-        if (![[OAAppSettings sharedManager].batterySavingMode get])
-            [_mapVc.mapView restoreFrameRefreshRate];
     }
 }
 

@@ -8,36 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class OATravelSearchResult, OAPOI, OATravelArticle, OAGPXDocumentAdapter, OASWptPt, OASGpxDataItem, OATravelGpx, MapSelectionResult;
+@class OATravelArticle, OAGPXDocumentAdapter, OASGpxDataItem;
 
-@interface OAFoundAmenity : NSObject
+/**
+ What is left of the travel guides on the app's side: where the map is looking, how an article's
+ text is trimmed, and writing a built gpx file out to disk and into the tracks database.
 
-@property (nonatomic) NSString *file;
-@property (nonatomic) OAPOI *amenity;
-
-- (instancetype) initWithFile:(NSString *)file amenity:(OAPOI *)amenity;
-
-@end
-
-
+ The reading itself - the obf files, the articles, the gpx build - lives in OsmAndShared, behind
+ OATravelObfHelper.
+ */
 @interface OATravelGuidesHelper : NSObject
 
-+ (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
-
-+ (void) searchAmenity:(NSString *)searchQuery categoryNames:(NSArray<NSString *> *)categoryNames radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
-
-+ (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
-
-+ (void) searchAmenity:(NSString *)searchQuery x:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
-
-+ (OATravelGpx *)searchTravelGpx:(CLLocation *)location routeId:(NSString *)routeId;
-
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude;
-
-+ (OASWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
-
-+ (NSArray<NSString *> *) getTravelGuidesObfList;
-+ (NSArray<NSString *> *) getAllObfList;
 
 + (CLLocation *) getMapCenter;
 
@@ -46,8 +28,6 @@
 + (NSString *) normalizeFileUrl:(NSString *)url;
 
 + (NSString *) createGpxFile:(OATravelArticle *)article fileName:(NSString *)fileName;
-
-+ (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article;
 
 + (OASGpxDataItem *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
 

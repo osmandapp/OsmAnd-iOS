@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAPointDescription.h"
 
-#include <routeTypeRule.h>
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAAlarmInfo
 
@@ -44,56 +44,56 @@
     return info;
 }
 
-+ (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate
++ (OAAlarmInfo *) createAlarmInfo:(OASRouteTypeRule *)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate
 {
     OAAlarmInfo *alarmInfo = nil;
-    if ("highway" == ruleType.getTag())
+    if ([@"highway" isEqualToString:ruleType.getTag])
     {
-        if ("speed_camera" == ruleType.getValue())
+        if ([@"speed_camera" isEqualToString:ruleType.getValue])
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_SPEED_CAMERA locationIndex:locInd];
         }
-        else if ("stop" == ruleType.getValue())
+        else if ([@"stop" isEqualToString:ruleType.getValue])
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_STOP locationIndex:locInd];
         }
     }
-    else if ("enforcement" == ruleType.getTag())
+    else if ([@"enforcement" isEqualToString:ruleType.getTag])
     {
-        if ("traffic_signals" == ruleType.getValue())
+        if ([@"traffic_signals" isEqualToString:ruleType.getValue])
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RED_LIGHT_CAMERA locationIndex:locInd];
         }
     }
-    else if ("barrier" == ruleType.getTag())
+    else if ([@"barrier" isEqualToString:ruleType.getTag])
     {
-        if ("toll_booth" == ruleType.getValue())
+        if ([@"toll_booth" isEqualToString:ruleType.getValue])
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TOLL_BOOTH locationIndex:locInd];
         }
-        else if ("border_control" == ruleType.getValue())
+        else if ([@"border_control" isEqualToString:ruleType.getValue])
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_BORDER_CONTROL locationIndex:locInd];
         }
     }
-    else if ("traffic_calming" == ruleType.getTag())
+    else if ([@"traffic_calming" isEqualToString:ruleType.getTag])
     {
-        const auto& v = ruleType.getValue();
-        bool isIslandType = (v == "island") || (v == "choked_island") || (v == "painted_island");
+        NSString *v = ruleType.getValue;
+        BOOL isIslandType = [@"island" isEqualToString:v] || [@"choked_island" isEqualToString:v] || [@"painted_island" isEqualToString:v];
         if (!isIslandType)
         {
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAFFIC_CALMING locationIndex:locInd];
         }
     }
-    else if ("hazard" == (ruleType.getTag()))
+    else if ([@"hazard" isEqualToString:ruleType.getTag])
     {
         alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_HAZARD locationIndex:locInd];
     }
-    else if ("railway" == (ruleType.getTag()) && "level_crossing" == ruleType.getValue())
+    else if ([@"railway" isEqualToString:ruleType.getTag] && [@"level_crossing" isEqualToString:ruleType.getValue])
     {
         alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RAILWAY locationIndex:locInd];
     }
-    else if ("crossing" == (ruleType.getTag()) && "uncontrolled" == ruleType.getValue())
+    else if ([@"crossing" isEqualToString:ruleType.getTag] && [@"uncontrolled" isEqualToString:ruleType.getValue])
     {
         alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_PEDESTRIAN locationIndex:locInd];
     }

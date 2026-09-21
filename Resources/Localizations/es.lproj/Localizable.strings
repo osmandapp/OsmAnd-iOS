@@ -245,7 +245,7 @@
 //inapps
 "plugin_nautical_name" = "Vista náutica";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"osmand_parking_plugin_name" = "Aparcamiento";
+"osmand_parking_plugin_name" = "Posición de aparcamiento";
 "plugin_ski_name" = "Vista invernal";
 "record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
@@ -345,7 +345,7 @@
 "plugins_menu_group" = "Complementos";
 "first_time_continue" = "Después";
 "plugin_nautical_descr" = "Enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, áreas marinas peligrosas, zonas restringidas para navegar o atracar, etc. Para usarlo, descarga los respectivos mapas náuticos y activa el estilo «Mapa náutico» en «Configurar mapa». \n \nSigue leyendo en %@.";
-"osmand_parking_plugin_description" = "Marque dónde está estacionado su automóvil y notifique a su calendario cuándo caducará el parquímetro. Para colocar el marcador, elija un lugar en el mapa, vaya a \"Acciones\" y toque \"Agregar estacionamiento\".";
+"osmand_parking_plugin_description" = "Marque dónde está estacionado su auto y avise a su calendario cuándo vencerá el parquímetro. Para colocar el marcador, elija un lugar en el mapa, vaya a «Acciones» y toque «Añadir aparcamiento».";
 "record_plugin_description" = "Registra tus viajes o entrenamientos y analiza los datos como: velocidad, ascensos y descensos acumulados, perfil de elevación, etc. Los recorridos grabados pueden archivarse, compartirse con amigos, editarse y procesarse posteriormente. \n \nSigue leyendo en %@.";
 "purchases_feature_desc_wikipedia" = "Incluye todos los artículos sin conexión de Wikipedia relacionados al lugar, ayudándote a conocer mejor los puntos visitados en el viaje, con simples pulsaciones en el mapa. No olvides descargar los mapas de Wikipedia de las respectivas regiones.";
 "open_map_settings" = "Abrir ajustes del mapa";

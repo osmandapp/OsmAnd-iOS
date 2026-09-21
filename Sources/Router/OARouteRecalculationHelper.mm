@@ -230,7 +230,7 @@
 
 - (BOOL) updateProgress:(id<OARouteCalculationProgressCallback> __nonnull)callback params:(OARouteCalculationParams *)params
 {
-    auto calculationProgress = params.calculationProgress;
+    OASRouteCalculationProgress *calculationProgress = params.calculationProgress;
     if ([self isRouteBeingCalculated])
     {
         BOOL needUpdateProgress;
@@ -239,8 +239,8 @@
         }
         if (needUpdateProgress)
         {
-            [callback updateProgress:calculationProgress->getLinearProgress()];
-            if (calculationProgress->requestPrivateAccessRouting)
+            [callback updateProgress:[calculationProgress getLinearProgress]];
+            if (calculationProgress.requestPrivateAccessRouting)
                 [callback requestPrivateAccessRouting];
 
             return YES;
@@ -248,7 +248,7 @@
     }
     else
     {
-        if (calculationProgress->requestPrivateAccessRouting)
+        if (calculationProgress.requestPrivateAccessRouting)
             [callback requestPrivateAccessRouting];
 
         [callback finish];
@@ -303,7 +303,7 @@
         BOOL updateProgress = NO;
         if (params.mode.getRouterService == OSMAND)
         {
-            params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+            params.calculationProgress = [[OASRouteCalculationProgress alloc] init];
             [self updateProgressWithDelay:params];
             updateProgress = YES;
         }
@@ -331,23 +331,23 @@
 - (BOOL)hasCurrentMissingMaps
 {
     return _lastTask != nil
-        && _lastTask.params.calculationProgress != nullptr
-        && _lastTask.params.calculationProgress->hasMixedOrMissingMaps();
+        && _lastTask.params.calculationProgress != nil
+        && [_lastTask.params.calculationProgress hasMixedOrMissingMaps];
 }
 
 - (NSInteger)getCurrentFastRoutingComplicationOrdinal
 {
-    return _lastTask != nil && _lastTask.params.calculationProgress != nullptr
-        ? _lastTask.params.calculationProgress->getFastRoutingStatusOrdinal()
+    return _lastTask != nil && _lastTask.params.calculationProgress != nil
+        ? [[_lastTask.params.calculationProgress getFastRoutingStatus] ordinal]
         : -1;
 }
 
 - (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result
 {
-    if (_lastTask != nil && _lastTask.params.calculationProgress != nullptr)
+    if (_lastTask != nil && _lastTask.params.missingMapsResult != nil)
     {
         MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
-        [missingMapsCalculator attachToRouteCalculationResult:result progress:_lastTask.params.calculationProgress];
+        [missingMapsCalculator attachResult:_lastTask.params.missingMapsResult toRouteCalculationResult:result];
     }
 }
 
@@ -377,14 +377,14 @@
         _params = params;
         _paramsChanged = paramsChanged;
         if (!params.calculationProgress)
-            params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+            params.calculationProgress = [[OASRouteCalculationProgress alloc] init];
     }
     return self;
 }
 
 - (void) stopCalculation
 {
-    _params.calculationProgress->cancelled = true;
+    _params.calculationProgress.isCancelled = YES;
 }
 
 - (void) cancel
@@ -399,7 +399,7 @@
     _routeCalcError = nil;
     _routeCalcErrorShort = nil;
     OARouteCalculationResult *res = [_routingHelper.provider calculateRouteImpl:_params];
-    if (_params.calculationProgress->isCancelled())
+    if (_params.calculationProgress.isCancelled)
         return;
 
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && !AFNetworkReachabilityManager.sharedManager.isReachable;
@@ -464,11 +464,10 @@
 - (void)configureNewRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
 {
     if ((result.missingMaps.count == 0 && result.mapsToUpdate.count == 0)
-        && _params.calculationProgress != nullptr
-        && _params.calculationProgress->missingMapsCalculationResult != nullptr)
+        && _params.missingMapsResult != nil)
     {
         MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
-        [missingMapsCalculator attachToRouteCalculationResult:result progress:_params.calculationProgress];
+        [missingMapsCalculator attachResult:_params.missingMapsResult toRouteCalculationResult:result];
     }
     if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
     {

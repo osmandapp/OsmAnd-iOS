@@ -21,7 +21,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
-#import "OARouteKey.h"
 
 @implementation OATargetPointViewCell
 
@@ -88,12 +87,6 @@
                     title = _targetPoint.title;
             }
         }
-        else if (_targetPoint.type == OATargetNetworkGPX)
-        {
-            OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
-            NSString *localizedTitle = routeKey ? routeKey.localizedTitle : @"";
-            title = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
-        }
         else
         {
             title = _targetPoint.title;
@@ -137,19 +130,6 @@
         return;
     }
 
-    if (targetPoint.type == OATargetNetworkGPX)
-    {
-        OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
-        NSString *activityTitle = key.getActivityTypeTitle;
-        
-        NSString *text = activityTitle
-            ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), activityTitle]
-            : OALocalizedString(@"layer_route");
-            
-        self.descriptionView.text = text;
-        return;
-    }
-    
     if (targetPoint.type == OATargetGPX && [targetPoint.targetObj isKindOfClass:OASGpxDataItem.class])
     {
         self.descriptionView.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:(OASGpxDataItem *)targetPoint.targetObj sortMode:TracksSortModeNameAZ includeFolderInfo:YES];

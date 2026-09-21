@@ -25,6 +25,11 @@
 
 - (instancetype)initWithLocations:(NSArray<OALocationsHolder *> *)locations initialAppMode:(OAApplicationMode *)appMode initialThreshold:(float)threshold;
 
+/// For a caller that starts from a gpx file rather than from locations: `approximateGpxSync:params:`
+/// takes the points off the file itself. `OALocationsHolder` is a C++ header, so the initializer
+/// above cannot be reached from Swift.
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode threshold:(float)threshold;
+
 - (void)calculateGpxApproximationAsync;
 - (void)cancelApproximation;
 - (OASGpxFile *)approximateGpxSync:(OASGpxFile *)gpxFile params:(OAGpxApproximationParams *)params;

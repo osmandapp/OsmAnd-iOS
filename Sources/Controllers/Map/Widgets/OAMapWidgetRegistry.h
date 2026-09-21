@@ -24,34 +24,49 @@
 #define kWidgetsCleared @"onWidgetsCleared"
 #define kWidgetsPanelsDidLayoutNotification @"kWidgetsPanelsDidLayoutNotification"
 
-@class OAApplicationMode, OATextInfoWidget, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
+@class OAApplicationMode, OATextInfoWidget, OAMapWidgetInfo, WidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
 
 @interface OAMapWidgetRegistry : NSObject
 
 + (OAMapWidgetRegistry *) sharedInstance;
 
-- (void) populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel;
+- (void)populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(WidgetsPanel *)widgetPanel;
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded;
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget;
 
 - (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAApplicationMode *)appMode
-                                                   filterModes:(NSInteger) filterModes
-                                                        panels:(NSArray<OAWidgetsPanel *> *)panels;
+- (NSArray<OAMapWidgetInfo *> *)widgetsForAppMode:(OAApplicationMode *)appMode
+                                     layoutMode:(nullable NSNumber *)layoutMode;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)filteredWidgets:(NSArray<OAMapWidgetInfo *> *)widgetInfos
+                                                  appMode:(OAApplicationMode *)appMode
+                                               layoutMode:(nullable NSNumber *)layoutMode
+                                              filterModes:(NSInteger)filterModes
+                                                   panels:(NSArray<WidgetsPanel *> *)panels;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(OAApplicationMode *)appMode
+                                                filterModes:(NSInteger)filterModes
+                                                     panels:(NSArray<WidgetsPanel *> *)panels
+                                                 layoutMode:(nullable NSNumber *)layoutMode;
 
 - (void) enableDisableWidgetForMode:(OAApplicationMode *)appMode
                          widgetInfo:(OAMapWidgetInfo *)widgetInfo
                             enabled:(NSNumber *)enabled
                    recreateControls:(BOOL)recreateControls;
 
-- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)getPagedWidgetsForPanel:(OAApplicationMode *)appMode
-                                                                  panel:(OAWidgetsPanel *)panel
-                                                            filterModes:(NSInteger)filterModes;
+- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
+                                                               panel:(WidgetsPanel *)panel
+                                                         filterModes:(NSInteger)filterModes;
+- (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)pagedWidgetsForPanel:(OAApplicationMode *)appMode
+                                                               panel:(WidgetsPanel *)panel
+                                                         filterModes:(NSInteger)filterModes
+                                                    screenLayoutMode:(int)screenLayoutMode;
 
 - (void) registerAllControls;
 - (OAMapWidgetInfo *) getWidgetInfoById:(NSString *)widgetId;
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAWidgetsPanel *)panel;
-- (OAMapWidgetInfo *)getWidgetInfoForType:(OAWidgetType *)widgetType;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)widgetsForPanel:(WidgetsPanel *)panel;
+- (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType;
+- (OAMapWidgetInfo *)widgetInfoForType:(OAWidgetType *)widgetType
+                               appMode:(OAApplicationMode *)appMode
+                      screenLayoutMode:(int)screenLayoutMode;
 - (NSArray<OAMapWidgetInfo *> *)getWidgetInfosForType:(OAWidgetType *)widgetType;
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode;
 
@@ -62,4 +77,3 @@
 - (BOOL) isAnyWeatherWidgetVisible;
 
 @end
-

@@ -218,6 +218,10 @@ class MapWidgetInfo: NSObject, Comparable {
     
     func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
         let widgetsVisibility = getWidgetsVisibility(appMode)
+        return isEnabledForAppMode(appMode, widgetsVisibility: widgetsVisibility)
+    }
+
+    func isEnabledForAppMode(_ appMode: OAApplicationMode, widgetsVisibility: [String]) -> Bool {
         if widgetsVisibility.contains(key) || widgetsVisibility.contains(COLLAPSED_PREFIX + key) {
             return true
         } else if widgetsVisibility.contains(HIDE_PREFIX + key) {

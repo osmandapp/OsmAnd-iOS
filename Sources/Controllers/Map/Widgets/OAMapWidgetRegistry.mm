@@ -145,9 +145,10 @@
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded
 {
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
+    NSArray<NSString *> *widgetsVisibility = [[_settings.mapInfoControls get:mode] componentsSeparatedByString:SETTINGS_SEPARATOR];
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        BOOL enabledForAppMode = [widgetInfo isEnabledForAppMode:mode];
+        BOOL enabledForAppMode = [widgetInfo isEnabledForAppMode:mode widgetsVisibility:widgetsVisibility];
         if (enabledForAppMode || (weatherToolbarVisible && widgetInfo.getWidgetType.group == OAWidgetGroup.weather))
             [widgetInfo.widget updateInfo];
     }

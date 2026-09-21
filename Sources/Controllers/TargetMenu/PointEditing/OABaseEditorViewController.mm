@@ -374,10 +374,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OATextInputFloatingCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [self.tableView beginUpdates];
     cell.inputField.text = @"";
-    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:kInputNameKey])
-        self.editName = @"";
     [self.tableView endUpdates];
+    [self textViewDidChange:cell.inputField.textView];
 }
 
 - (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView

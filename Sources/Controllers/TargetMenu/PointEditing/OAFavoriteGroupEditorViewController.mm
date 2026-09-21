@@ -9,6 +9,7 @@
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #import "Localization.h"
@@ -27,6 +28,7 @@
     
     if (self.isNewItem)
     {
+        self.validatesGroupUniqueness = YES;
         _favoriteGroup = [[OAFavoriteGroup alloc] init];
         _favoriteGroup.name = self.editName;
         _favoriteGroup.color = self.editColor;
@@ -47,7 +49,21 @@
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
 {
-    return [OAFavoritesHelper groupByTrimmedName:[self targetGroupNameForName:name]];
+    NSString *groupName = [self targetGroupNameForName:name];
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (group || !self.isNewItem)
+        return group;
+
+    NSString *languageCode = [OAUtilities currentLang];
+    NSLocale *locale = languageCode.length > 0 ? [NSLocale localeWithLocaleIdentifier:languageCode] : NSLocale.currentLocale;
+    NSString *lowercaseGroupName = [groupName lowercaseStringWithLocale:locale];
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
+    {
+        if ([[[favoriteGroup.name trim] lowercaseStringWithLocale:locale] isEqualToString:lowercaseGroupName]
+            || [[OAFavoriteGroup getDisplayName:favoriteGroup.name] isEqualToString:groupName])
+            return favoriteGroup;
+    }
+    return nil;
 }
 
 - (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group

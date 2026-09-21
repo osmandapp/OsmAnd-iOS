@@ -3085,7 +3085,7 @@ static char kMapSourceUpdateQueueKey;
     if (!self.mapViewLoaded)
         return;
 
-    if ([[OAAppSettings sharedManager].batterySavingMode get])
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || UIApplication.sharedApplication.isCarPlayConnected)
         [_mapView limitFrameRefreshRate];
     else
         [_mapView restoreFrameRefreshRate];

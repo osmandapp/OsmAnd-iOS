@@ -8,6 +8,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAGpxWptItem.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAEditPointViewController (WaypointGroupSelectionTesting)
 - (void)onItemSelected:(NSInteger)index;
@@ -35,6 +36,7 @@
 {
     if ([OsmAndApp instance].initialized)
     {
+        [self preservePalette];
         completion(nil);
     }
     else if (deadline.timeIntervalSinceNow <= 0)
@@ -47,6 +49,37 @@
             [self waitForApplicationUntil:deadline completion:completion];
         });
     }
+}
+
+
+- (void)preservePalette
+{
+    OAGPXAppearanceCollection *appearance = [OAGPXAppearanceCollection sharedInstance];
+    NSArray<OASPaletteItemSolid *> *originalItems = [appearance getAvailableColorsSortingByLastUsed];
+    NSSet *originalIds = [NSSet setWithArray:[originalItems valueForKey:@"id"]];
+    [self addTeardownBlock:^{
+        for (OASPaletteItemSolid *item in [appearance getAvailableColorsSortingByLastUsed])
+        {
+            if (![originalIds containsObject:item.id])
+                [appearance deleteColor:item];
+        }
+        for (OASPaletteItemSolid *item in originalItems)
+            [[OsmAndApp instance].paletteRepository updatePaletteItemItem:item];
+        NSArray *restoredItems = [appearance getAvailableColorsSortingByLastUsed];
+        XCTAssertEqualObjects([NSSet setWithArray:[restoredItems valueForKey:@"id"]], originalIds);
+        XCTAssertEqualObjects([restoredItems valueForKey:@"lastUsedTime"], [originalItems valueForKey:@"lastUsedTime"]);
+    }];
+}
+
+- (UIColor *)unusedColor
+{
+    NSMutableSet *usedColors = [NSMutableSet new];
+    for (OASPaletteItemSolid *item in [[OAGPXAppearanceCollection sharedInstance] getAvailableColorsSortingByLastUsed])
+        [usedColors addObject:@(item.colorInt)];
+    int value = (int)0xFF123456;
+    while ([usedColors containsObject:@(value)])
+        value++;
+    return UIColorFromARGB(value);
 }
 
 - (OAEditPointViewController *)editorWithFile:(OASGpxFile *)file
@@ -115,7 +148,7 @@
 {
     OAEditPointViewController *editor = [self editorWithFile:[[OASGpxFile alloc] initWithAuthor:@"test"]];
     OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
-    UIColor *color = UIColorFromARGB(0xFF123456);
+    UIColor *color = [self unusedColor];
     [handler setGroup:@"New group" color:color save:NO];
     [editor setupGroups];
     [editor setValue:[NSMutableArray new] forKey:@"sortedColorItems"];
@@ -134,4 +167,47 @@
     [self assertColor:UIColor.blueColor editor:editor];
 }
 
+
+- (void)testSameDisplayTitleKeepsCardSelectionAndSavedCategorySeparate
+{
+    NSString *name = OALocalizedString(@"shared_string_waypoints");
+    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    file.pointsGroups[@""] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:@"" backgroundType:@"" color:UIColor.blueColor.toARGBNumber hidden:NO];
+    file.pointsGroups[name] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:name iconName:@"" backgroundType:@"" color:UIColor.greenColor.toARGBNumber hidden:NO];
+    for (NSString *key in @[name, @""])
+    {
+        OAEditPointViewController *editor = [self editorWithFile:file];
+        NSArray *keys = [editor valueForKey:@"waypointGroupKeys"];
+        [editor onItemSelected:[keys indexOfObject:key]];
+        [self assertColor:key.length > 0 ? UIColor.greenColor : UIColor.blueColor editor:editor];
+        XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], key);
+        [editor setValue:nil forKey:@"poiIconCollectionHandler"];
+        [editor onRightNavbarButtonPressed];
+        OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
+        OAGpxWptItem *item = [handler valueForKey:@"gpxWpt"];
+        XCTAssertEqualObjects(item.point.category ?: @"", key);
+    }
+}
+
+- (void)testListDistinguishesSameTitlesAndReselectsCurrentWaypointGroup
+{
+    NSString *name = OALocalizedString(@"shared_string_waypoints");
+    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    file.pointsGroups[name] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:name iconName:@"" backgroundType:@"" color:UIColor.greenColor.toARGBNumber hidden:NO];
+    OAEditPointViewController *editor = [self editorWithFile:file];
+    OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
+    NSArray *groups = [handler getGroups];
+    for (NSInteger index = 0; index < groups.count; index++)
+    {
+        NSString *key = groups[index][@"category"];
+        [editor onGroupSelected:key];
+        [self selectColor:UIColor.blueColor editor:editor];
+        SelectFavoriteGroupViewController *list = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:key gpxWptGroups:groups];
+        list.delegate = (id)editor;
+        [list loadViewIfNeeded];
+        [list onRowSelected:[NSIndexPath indexPathForRow:index inSection:1]];
+        [self assertColor:key.length > 0 ? UIColor.greenColor : [OADefaultFavorite getDefaultColor] editor:editor];
+        XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], key);
+    }
+}
 @end

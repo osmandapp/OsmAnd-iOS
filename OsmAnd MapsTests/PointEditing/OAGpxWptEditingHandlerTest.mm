@@ -33,7 +33,7 @@
     NSUInteger matchingGroups = 0;
     for (NSDictionary<NSString *, NSString *> *group in [handler getGroups])
     {
-        if ([group[@"title"] isEqualToString:name])
+        if ([group[@"category"] isEqualToString:name])
         {
             matchingGroups++;
             XCTAssertEqualObjects(group[@"color"], expectedColor);
@@ -45,7 +45,7 @@
 - (void)testEmptyTrackDefaultGroupUsesPointColor
 {
     OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    [self assertGroup:OALocalizedString(@"shared_string_waypoints")
+    [self assertGroup:@""
                color:[OADefaultFavorite getDefaultColor]
              handler:[self handlerWithFile:file]];
 }
@@ -111,7 +111,31 @@
     OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
     [file addPointPoint:[self pointWithCategory:@"" color:UIColor.redColor]];
     file.pointsGroups[@""].color = [UIColor.blueColor toARGBNumber];
-    [self assertGroup:OALocalizedString(@"shared_string_waypoints") color:UIColor.blueColor handler:[self handlerWithFile:file]];
+    [self assertGroup:@"" color:UIColor.blueColor handler:[self handlerWithFile:file]];
 }
 
+
+- (void)testDefaultAndNamedWaypointsHaveSeparateKeys
+{
+    NSString *name = OALocalizedString(@"shared_string_waypoints");
+    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    file.pointsGroups[@""] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:@"" backgroundType:@"" color:UIColor.blueColor.toARGBNumber hidden:NO];
+    file.pointsGroups[name] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:name iconName:@"" backgroundType:@"" color:UIColor.greenColor.toARGBNumber hidden:NO];
+    OAGpxWptEditingHandler *handler = [self handlerWithFile:file];
+    [self assertGroup:@"" color:UIColor.blueColor handler:handler];
+    [self assertGroup:name color:UIColor.greenColor handler:handler];
+    XCTAssertEqual([handler getGroupsWithColors].count, 2);
+}
+
+- (void)testReturnedCollectionsAndGroupRecordsAreImmutable
+{
+    OAGpxWptEditingHandler *handler = [self handlerWithFile:[[OASGpxFile alloc] initWithAuthor:@"test"]];
+    [handler setValue:@"New group" forKey:@"newGroupTitle"];
+    [handler setValue:UIColor.blueColor forKey:@"newGroupColor"];
+    NSArray *groups = [handler getGroups];
+    XCTAssertFalse([groups isKindOfClass:NSMutableArray.class]);
+    for (NSDictionary *group in groups)
+        XCTAssertFalse([group isKindOfClass:NSMutableDictionary.class]);
+    XCTAssertFalse([[handler getGroupsWithColors] isKindOfClass:NSMutableDictionary.class]);
+}
 @end

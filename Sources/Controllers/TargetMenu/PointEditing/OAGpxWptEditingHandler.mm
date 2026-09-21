@@ -188,9 +188,10 @@
         if (color == 0)
             color = [[OADefaultFavorite getDefaultColor] toARGBNumber];
         group[@"color"] = UIColorFromARGB(color).toHexARGBString;
-        [groups addObject:group];
+        group[@"category"] = group[@"title"];
+        [groups addObject:[group copy]];
     }
-    return groups;
+    return [groups copy];
 }
 
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
@@ -201,6 +202,7 @@
     {
         NSMutableDictionary<NSString *, NSString *> *newGroup = [NSMutableDictionary new];
         newGroup[@"title"] = _newGroupTitle;
+        newGroup[@"category"] = _newGroupTitle;
         newGroup[@"color"] = _newGroupColor.toHexARGBString;
         newGroup[@"count"] = @"0";
 
@@ -228,6 +230,7 @@
     {
         NSMutableDictionary<NSString *, NSString *> *defaultGroup = [NSMutableDictionary new];
         defaultGroup[@"title"] = OALocalizedString(@"shared_string_waypoints");
+        defaultGroup[@"category"] = @"";
         defaultGroup[@"color"] = [OADefaultFavorite getDefaultColor].toHexARGBString;
         defaultGroup[@"count"] = @"0";
         NSMutableArray *newGroups = [groups mutableCopy];
@@ -235,15 +238,18 @@
         groups = newGroups;
     }
 
-    return groups;
+    NSMutableArray *immutableGroups = [NSMutableArray new];
+    for (NSDictionary *group in groups)
+        [immutableGroups addObject:[group copy]];
+    return [immutableGroups copy];
 }
 
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors
 {
     NSMutableDictionary<NSString *, NSString *> *colors = [NSMutableDictionary new];
     for (NSDictionary<NSString *, NSString *> *group in [self getGroups])
-        colors[group[@"title"]] = group[@"color"];
-    return colors;
+        colors[group[@"category"]] = group[@"color"];
+    return [colors copy];
 }
 
 - (NSString *)getName

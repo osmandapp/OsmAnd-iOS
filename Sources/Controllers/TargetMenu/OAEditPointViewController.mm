@@ -1300,13 +1300,14 @@
 {
     _wasChanged = YES;
     NSString *editedGroupName = [name trim];
+    NSString *resolvedIconName = iconName;
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
-        if (existingGroup)
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
+        if (group)
         {
-            editedGroupName = existingGroup.name;
+            editedGroupName = group.name;
         }
         else
         {
@@ -1314,7 +1315,9 @@
                                           color:color
                                        iconName:iconName
                              backgroundIconName:backgroundIconName];
+            group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
+        resolvedIconName = [self iconNameForGroup:group];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1325,9 +1328,9 @@
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName];
     
-    _selectedIconName = iconName;
-    [_poiIconCollectionHandler setIconName:iconName];
-    [self onPoiSelected:iconName];
+    _selectedIconName = resolvedIconName;
+    [_poiIconCollectionHandler setIconName:resolvedIconName];
+    [self onPoiSelected:resolvedIconName];
 
     self.groupTitle = editedGroupName;
     _needToScrollToSelectedColor = YES;

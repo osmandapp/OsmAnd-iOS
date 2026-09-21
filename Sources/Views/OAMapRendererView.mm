@@ -56,6 +56,10 @@
 #   define validateGL()
 #endif
 
+#define kLimitedFrameRate 20.0f
+#define kLimitedFrameInterval (1.0 / kLimitedFrameRate)
+#define kFrameIntervalTolerance 0.001
+
 #define _(name) OAMapRendererView__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -100,6 +104,7 @@
     CGRect prevBounds;
     int _frameId;
     NSTimeInterval _lastUpdateTime;
+    NSTimeInterval _nextFrameDeadline;
     CGPoint _lastImmediateTouchPoint;
 }
 
@@ -160,6 +165,7 @@
 #endif
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
+    _nextFrameDeadline = 0;
     _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
@@ -1434,6 +1440,12 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 
 - (void)render:(CADisplayLink*)displayLink
 {
+    if (_limitFrameRate && _nextFrameDeadline > 0
+        && CACurrentMediaTime() + kFrameIntervalTolerance < _nextFrameDeadline)
+    {
+        return;
+    }
+
     if (![self makeRenderContextCurrent])
     {
         [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
@@ -1597,7 +1609,12 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
             _renderer->resumeGpuWorker();
 #endif
 
-        _frameId++;        
+        _frameId++;
+        const NSTimeInterval presentedTime = CACurrentMediaTime();
+        const NSTimeInterval scheduledTime = _nextFrameDeadline + kLimitedFrameInterval;
+        _nextFrameDeadline = (scheduledTime > presentedTime && scheduledTime - presentedTime <= kLimitedFrameInterval)
+            ? scheduledTime
+            : presentedTime + kLimitedFrameInterval;
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
@@ -1666,6 +1683,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     glFinish();
 
     _displayLink = nil;
+    _nextFrameDeadline = 0;
 
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
@@ -1745,7 +1763,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 - (void)updateFrameRefreshRate
 {
     if (_limitFrameRate)
-    	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(kLimitedFrameRate, kLimitedFrameRate, kLimitedFrameRate);
     else
         _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
 }

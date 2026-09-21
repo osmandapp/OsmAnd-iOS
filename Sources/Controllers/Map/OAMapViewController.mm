@@ -2805,10 +2805,7 @@ static char kMapSourceUpdateQueueKey;
     }
 
     [self runWithRenderSync:^{
-        if ([settings.batterySavingMode get])
-            [_mapView limitFrameRefreshRate];
-        else
-            [_mapView restoreFrameRefreshRate];
+        [self applyFrameRefreshRateLimit];
 
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
@@ -3081,6 +3078,17 @@ static char kMapSourceUpdateQueueKey;
         commit();
     else
         dispatch_sync(dispatch_get_main_queue(), commit);
+}
+
+- (void) applyFrameRefreshRateLimit
+{
+    if (!self.mapViewLoaded)
+        return;
+
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || UIApplication.sharedApplication.isCarPlayConnected)
+        [_mapView limitFrameRefreshRate];
+    else
+        [_mapView restoreFrameRefreshRate];
 }
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable

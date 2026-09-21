@@ -1842,6 +1842,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     }
 
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    OAApplicationMode *appMode = OAApplicationMode.DEFAULT;
+    for (NSInteger i = endPointIndex - 1; i >= startPointIndex; i--)
+    {
+        if (!points[i].isGap)
+        {
+            appMode = [OAApplicationMode valueOfStringKey:points[i].getProfileType def:OAApplicationMode.DEFAULT];
+            break;
+        }
+    }
+    
+    [OAPlanRouteEditingBridge savePreselectedRouteActivity:gpx syncWithEditedProfile:NO appMode:appMode];
     NSString *folderPath = OsmAndApp.instance.gpxPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
 

@@ -2180,8 +2180,18 @@ static const NSInteger kColorsSection = 1;
     if (sender)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:slider.tag & 0x3FF inSection:slider.tag >> 10];
+        if (indexPath.section >= _tableData.count)
+            return;
+
+        OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
+        if (indexPath.row >= sectionData.subjects.count)
+            return;
+
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        OAGPXTableCellData *cellData = [self getCellData:indexPath];
+        if (![cell isKindOfClass:OASegmentSliderTableViewCell.class] || cell.sliderView != slider)
+            return;
+
+        OAGPXTableCellData *cellData = sectionData.subjects[indexPath.row];
 
         [self updateProperty:@(cell.sliderView.selectedMark) tableData:cellData];
 

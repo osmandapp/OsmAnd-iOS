@@ -4554,3 +4554,17 @@
 "carplay_trip_via_point" = "Via %@";
 "tracks_stats_are_being_calculated" = "Statistikker for spor beregnes i øjeblikket...";
 "tracks_stats_are_being_calculated_left" = "%1$@ %2$@ tilbage";
+"screen_elements" = "Skærmelementer";
+"screen_elements_descr" = "Landskab bruger de samme skærmelementer som portræt. Ændringer i den ene orientering gælder for begge.";
+"switch_to_independent" = "Skift til uafhængig";
+"screen_elements_mode_descr" = "Vælg, om portræt og landskab deler de samme skærmelementer eller har hver deres sæt.";
+"screen_elements_shared" = "Delt";
+"screen_elements_independent" = "Uafhængig";
+"copy_from_portrait_layout" = "Kopier fra portrætlayout";
+"copy_from_landscape_layout" = "Kopier fra landskabsformat";
+"panels_layout" = "Layout af paneler";
+"panels_layout_wide" = "Bred";
+"panels_layout_compact" = "Kompakt";
+"panels_layout_wide_descr" = "De øverste og nederste paneler strækker sig over hele skærmens bredde.";
+"panels_layout_compact_descr" = "De øverste og nederste paneler passer ind mellem sidepanelerne og knapperne.";
+"routing_engine_shared" = "Rute med OsmAndShared";

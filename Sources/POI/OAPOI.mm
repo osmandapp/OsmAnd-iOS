@@ -143,6 +143,11 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     [self processValues];
 }
 
+- (BOOL)hasOpeningHours
+{
+    return _openingHours.length > 0;
+}
+
 - (void) processValues
 {
     if (self.values)
@@ -186,7 +191,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             
             if ([key isEqualToString:@"opening_hours"])
             {
-                self.hasOpeningHours = YES;
                 self.openingHours = value;
             }
             
@@ -493,7 +497,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         if ([tag isEqualToString:OPENING_HOURS_TAG])
         {
             self.openingHours = value;
-            self.hasOpeningHours = YES;
         }
     }
 }
@@ -876,10 +879,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             if (subType)
                 amenity.subType = subType;
             if (openingHours)
-            {
                 amenity.openingHours = openingHours;
-                amenity.hasOpeningHours = YES;
-            }
             [amenity setValues:additionalInfo];
         }
     }

@@ -391,7 +391,7 @@
                             ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
                                                  forState:UIControlStateNormal];
                         [weakSelf.showHideButton setImage:[UIImage templateImageNamed:shownTrack
-                                                           ? @"ic_custom_hide" : @"ic_custom_show"]
+                                                           ? ACImageNameIcCustomHide : ACImageNameIcCustomShow]
                                                  forState:UIControlStateNormal];
                     }
                     completion:nil];

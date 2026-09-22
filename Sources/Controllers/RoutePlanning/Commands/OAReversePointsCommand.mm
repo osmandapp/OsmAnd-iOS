@@ -17,7 +17,7 @@
 {
     NSArray<OASWptPt *> *_oldPoints;
     NSArray<OASWptPt *> *_newPoints;
-    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *_oldRoadSegmentData;
     OAApplicationMode *_oldMode;
 }
 
@@ -34,7 +34,7 @@
 {
     OAMeasurementEditingContext *editingCtx = self.getEditingCtx;
     _oldPoints = [NSArray arrayWithArray:editingCtx.getPoints];
-    _oldRoadSegmentData = editingCtx.roadSegmentData;
+    _oldRoadSegmentData = [editingCtx.roadSegmentData copy];
     NSMutableArray<OASWptPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
     
     for (NSInteger i = (NSInteger) _oldPoints.count - 1; i >= 0; i--)
@@ -82,7 +82,7 @@
     [editingCtx clearPoints];
     [editingCtx addPoints:_oldPoints];
     editingCtx.appMode = _oldMode;
-    editingCtx.roadSegmentData = _oldRoadSegmentData;
+    editingCtx.roadSegmentData = [_oldRoadSegmentData mutableCopy];
     [editingCtx updateSegmentsForSnap];
     
 }

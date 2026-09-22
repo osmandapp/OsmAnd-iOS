@@ -48,7 +48,7 @@
 - (void) executeCommand
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
-    _points = [editingCtx.getPoints copy];
+    _points = [editingCtx.getAllPoints copy];
     _roadSegmentData = [editingCtx.roadSegmentData mutableCopy];
     _splitPointPosition = _after ? _pointPosition : _pointPosition - 1;
     _pointProfileType = _splitPointPosition >= 0 && _splitPointPosition < (NSInteger)_points.count

@@ -10,11 +10,14 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
 #import "OAMeasurementEditingContext.h"
+#import <OsmAndShared/OsmAndShared.h>
 
 @implementation OAJoinPointsCommand
 {
     NSArray<OASWptPt *> *_points;
-    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
+    OASWptPt *_gapPoint;
+    NSString *_gapPointProfile;
     NSInteger _pointPosition;
 }
 
@@ -35,7 +38,14 @@
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     _points = [NSArray arrayWithArray:ctx.getPoints];
-    _roadSegmentData = ctx.roadSegmentData;
+    _roadSegmentData = [ctx.roadSegmentData copy];
+    NSInteger gapIndex = -1;
+    if ([ctx isFirstPointSelected:_pointPosition outer:NO])
+        gapIndex = _pointPosition - 1;
+    else if ([ctx isLastPointSelected:_pointPosition outer:NO])
+        gapIndex = _pointPosition;
+    _gapPoint = gapIndex >= 0 && gapIndex < _points.count ? _points[gapIndex] : nil;
+    _gapPointProfile = [_gapPoint.getProfileType copy];
     [ctx joinPoints:_pointPosition];
     [self refreshMap];
 }
@@ -44,7 +54,11 @@
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     [ctx clearSegments];
-    [ctx setRoadSegmentData:_roadSegmentData];
+    if (_gapPointProfile != nil)
+        [_gapPoint setProfileTypeProfileType:_gapPointProfile];
+    else
+        [_gapPoint removeProfileType];
+    [ctx setRoadSegmentData:[_roadSegmentData mutableCopy]];
     [ctx addPoints:_points];
     [self refreshMap];
 }

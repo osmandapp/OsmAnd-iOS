@@ -166,6 +166,12 @@ enum SharedTravelArticles {
         shared.description_ = article.descr
         shared.lastModified = Int64(article.lastModified * 1000)
         shared.routeRadius = Int32(article.routeRadius)
+        if let shortLinkTiles = article.shortLinkTiles {
+            // the box the route covers. Without it the builder falls back to routeRadius, which for
+            // a long route is a thousand kilometres, and every installed file then intersects the
+            // search box and gets read through
+            shared.doInitShortLinkTiles(shortLinkTiles: shortLinkTiles)
+        }
         return shared
     }
 

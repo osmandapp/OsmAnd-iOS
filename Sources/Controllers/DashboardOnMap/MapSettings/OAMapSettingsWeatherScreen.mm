@@ -238,7 +238,7 @@
             BOOL enabled = [item[@"value"] boolValue];
             cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
-            NSString *imgName = enabled ? @"ic_custom_umbrella.png" : @"ic_custom_hide.png";
+            NSString *imgName = enabled ? @"ic_custom_umbrella.png" : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
             cell.leftIconView.tintColor = enabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 

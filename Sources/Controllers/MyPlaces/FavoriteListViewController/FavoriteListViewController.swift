@@ -196,7 +196,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
         let currentTime = Date.now.timeIntervalSince1970
         guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
-        lastDistanceDirectionUpdate = currentTime
+        defer { lastDistanceDirectionUpdate = Date.now.timeIntervalSince1970 }
         if currentSortMode.isDistanceOriented {
             cachedSearchFavoriteItems = nil
             applySnapshot(animatingDifferences: false)

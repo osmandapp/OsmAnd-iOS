@@ -19,7 +19,7 @@
                            start:(OASWptPt *)start
                              end:(OASWptPt *)end
                           points:(NSArray<OASWptPt *> *)points
-                        segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
+                        segments:(NSArray<OASRouteSegmentResult *> *)segments
 {
     self = [super init];
     if (self)
@@ -38,12 +38,10 @@
                         points[i].getLatitude, points[i].getLongitude);
             }
         }
-        else if (segments.size() > 0)
+        else if (segments.count > 0)
         {
-            for (const auto& segment : segments)
-            {
-                distance += segment->distance;
-            }
+            for (OASRouteSegmentResult *segment in segments)
+                distance += [segment getDistance];
         }
         _distance = distance;
     }

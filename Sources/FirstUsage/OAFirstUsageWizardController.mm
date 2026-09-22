@@ -717,9 +717,15 @@ typedef enum
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated start");
-        [OAOcbfHelper downloadOcbfIfUpdated:^{
+        [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
             NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated end");
-            [_app loadWorldRegions];
+            OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
+            if (reloadedWorldRegion)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_app applyWorldRegions:reloadedWorldRegion];
+                });
+            }
             [_app startRepositoryUpdateAsync:NO];
         }];
     });

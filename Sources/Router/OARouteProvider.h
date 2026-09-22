@@ -23,6 +23,7 @@
 #include <OsmAndCore.h>
 
 @class OASGpxFile, OARouteCalculationResult, OAApplicationMode, OALocationsHolder, OAGpxRouteApproximation;
+@class OASBinaryMapIndexReader, OASGpxPoint, OASGpxRouteApproximation, OASRoutePlannerFrontEnd, OASRoutingContext;
 struct RoutingConfiguration;
 struct RoutingConfigurationBuilder;
 struct GeneralRouter;
@@ -39,7 +40,12 @@ struct PrecalculatedRouteDirection;
 @property (nonatomic, readonly) std::shared_ptr<RoutingContext> complexCtx;
 @property (nonatomic, readonly) std::shared_ptr<PrecalculatedRouteDirection> precalculated;
 
+/** The OsmAndShared planner and the context it searches in, when OsmAndShared is the planner. */
+@property (nonatomic, readonly) OASRoutePlannerFrontEnd *sharedRouter;
+@property (nonatomic, readonly) OASRoutingContext *sharedCtx;
+
 - (instancetype)initWithRouter:(std::shared_ptr<RoutePlannerFrontEnd>)router context:(std::shared_ptr<RoutingContext>)ctx complextCtx:(std::shared_ptr<RoutingContext>)complexCtx precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated;
+- (instancetype)initWithSharedRouter:(OASRoutePlannerFrontEnd *)router context:(OASRoutingContext *)ctx;
 
 @end
 
@@ -56,9 +62,7 @@ struct PrecalculatedRouteDirection;
 
 @end
 
-@class OASWptPt, OARouteDirectionInfo, OARouteCalculationParams;
-
-struct RouteSegmentResult;
+@class OASWptPt, OARouteDirectionInfo, OARouteCalculationParams, OASRouteSegmentResult;
 
 @interface OAGPXRouteParams : NSObject
 
@@ -75,7 +79,7 @@ struct RouteSegmentResult;
 @property (nonatomic) OAGpxApproximationParams *approximationParams;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
-@property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
+@property (nonatomic) NSArray<OASRouteSegmentResult *> *route;
 @property (nonatomic, readonly) NSArray<OASWptPt *> *routePoints;
     
 @property (nonatomic) BOOL addMissingTurns;
@@ -130,13 +134,22 @@ struct RouteSegmentResult;
                                               useExternalTimestamps:(BOOL)useExternalTimestamps
                                                      resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OASGpxFile *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment;
+/** The OsmAndShared twins of the two above, for a routing environment that carries its planner. */
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder;
 
-- (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
-                           targets:(NSArray<CLLocation *> *)targets;
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+
++ (NSArray<OASRouteSegmentResult *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                   gpxFile:(OASGpxFile *)gpxFile
+                                          segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                           selectedSegment:(NSInteger)selectedSegment;
+
 - (MissingMapsCalculator *)missingMapsCalculator;
 
 @end

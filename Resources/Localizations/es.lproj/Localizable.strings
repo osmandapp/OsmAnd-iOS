@@ -245,7 +245,7 @@
 //inapps
 "plugin_nautical_name" = "Vista náutica";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"osmand_parking_plugin_name" = "Aparcamiento";
+"osmand_parking_plugin_name" = "Posición de aparcamiento";
 "plugin_ski_name" = "Vista invernal";
 "record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
@@ -345,7 +345,7 @@
 "plugins_menu_group" = "Complementos";
 "first_time_continue" = "Después";
 "plugin_nautical_descr" = "Enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, áreas marinas peligrosas, zonas restringidas para navegar o atracar, etc. Para usarlo, descarga los respectivos mapas náuticos y activa el estilo «Mapa náutico» en «Configurar mapa». \n \nSigue leyendo en %@.";
-"osmand_parking_plugin_description" = "Marque dónde está estacionado su automóvil y notifique a su calendario cuándo caducará el parquímetro. Para colocar el marcador, elija un lugar en el mapa, vaya a \"Acciones\" y toque \"Agregar estacionamiento\".";
+"osmand_parking_plugin_description" = "Marque dónde está estacionado su auto y avise a su calendario cuándo vencerá el parquímetro. Para colocar el marcador, elija un lugar en el mapa, vaya a «Acciones» y toque «Añadir aparcamiento».";
 "record_plugin_description" = "Registra tus viajes o entrenamientos y analiza los datos como: velocidad, ascensos y descensos acumulados, perfil de elevación, etc. Los recorridos grabados pueden archivarse, compartirse con amigos, editarse y procesarse posteriormente. \n \nSigue leyendo en %@.";
 "purchases_feature_desc_wikipedia" = "Incluye todos los artículos sin conexión de Wikipedia relacionados al lugar, ayudándote a conocer mejor los puntos visitados en el viaje, con simples pulsaciones en el mapa. No olvides descargar los mapas de Wikipedia de las respectivas regiones.";
 "open_map_settings" = "Abrir ajustes del mapa";
@@ -1408,7 +1408,7 @@
 "routing_attr_avoid_bus_description" = "Evita usar autobuses y trolebuses";
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_surface_sett_name" = "Adoquín";
-"rendering_value_americanRoadAtlas_name" = "Estilo vial estadounidense";
+"rendering_value_americanRoadAtlas_name" = "Atlas de carreteras estadounidense";
 "rendering_attr_hideAccess_name" = "Restricciones de acceso";
 "rendering_attr_piste_difficulty_easy_name" = "Fácil";
 "rendering_value_thin_name" = "Fino";
@@ -1456,7 +1456,7 @@
 "routing_attr_piste_type_skitour_name" = "Esquí de travesía";
 "rendering_attr_roadStyle_name" = "Estilo vial";
 "rendering_attr_hideText_name" = "Textos";
-"rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
+"rendering_value_germanRoadAtlas_name" = "Atlas de carreteras alemán";
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
 "rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
@@ -1464,7 +1464,7 @@
 "map_settings_install_maps" = "Elige los mapas a instalar o actualizar";
 "map_settings_install_more" = "Instalar más...";
 "available_map_styles" = "Estilos de mapas disponibles";
-"res_confirmation_delete" = "¿Borrar «%@»?";
+"res_confirmation_delete" = "¿Confirma que quiere eliminar «%@»?";
 "shared_string_maximum" = "Máximo";
 "available_map_sources" = "Repositorios de mapas disponibles";
 "stats_select_graph_data" = "Elegir datos del gráfico";
@@ -2947,7 +2947,7 @@
 "upload_poi" = "Subir PDI";
 "shared_string_uploading" = "Subiendo";
 "shared_string_discard_changes" = "Descartar los cambios";
-"ios_release_4_6" = "• Registra y realiza un seguimiento de tus métricas con sensores externos, como la velocidad de la bicicleta, la cadencia de pedaleo, la distancia recorrida en bicicleta, la frecuencia cardíaca y la temperatura.\n• Ahora puedes ver el mapa directamente en el salpicadero de CarPlay\n• Añadido tema nocturno para una experiencia de visualización cómoda en condiciones de poca luz\n• Descubre las guías de viaje de \"Wikivoyage\"\n• Diálogos mejorados para añadir notas y subir notas y POIs a OpenStreetMap\n• Restaura fácilmente la configuración del plugin a los valores predeterminados de instalación con la nueva opción \"Restablecer valores predeterminados\".\n• Se ha añadido la opción \"Orientación de la pantalla\" para establecer la orientación preferida sin cambio automático.\n• Se ha añadido un botón independiente para cambiar el modo 3D directamente en la pantalla de CarPlay\n• Se ha añadido información de elevación mínima y máxima a las rutas de navegación, además de cuesta arriba y cuesta abajo\n• Se ha mejorado la coloración de las vías en el modo Pendiente con un nuevo gradiente simétrico\n • Las carpetas de favoritos ahora almacenan la apariencia predeterminada que se aplica automáticamente a cada punto añadido\n• Corregido el desajuste del punto central de la \"Regla de radio\" con el centro del mapa\n• Añadido el botón \"Leer artículo\" para el menú contextual de los POIs de Wikipedia\n• Corregido problema con la importación de archivos GPX a favoritos\n• Arreglado el problema con el evento de calendario para la posición de aparcamiento\n▪︎ Corregido fallo al eliminar un color de la paleta\n";
+"ios_release_4_6" = "• Registre y realice un seguimiento de sus métricas con sensores externos, como la velocidad, la cadencia, la distancia recorrida, la frecuencia cardíaca y la temperatura\n• Ahora puede ver el mapa directamente en el tablero de CarPlay\n• Se ha añadido un tema nocturno para una experiencia de visualización más cómoda en condiciones de poca luz\n• Descubra guías de viaje de Wikiviajes\n• Se han mejorado los diálogos para añadir notas y cargar notas y puntos de interés en OpenStreetMap\n• Restablezca fácilmente la configuración del complemento a los valores predeterminados de instalación con la nueva opción «Restablecer valores predeterminados».\n• Se ha añadido la opción «Orientación de la pantalla» para establecer su orientación preferida sin cambio automático.\n• Se ha añadido un botón independiente para activar el modo 3D directamente en la pantalla de CarPlay.\n• Se ha añadido información sobre la altitud mínima y máxima a las rutas de navegación, además de las indicaciones de subida y bajada.\n• Se ha mejorado el coloreado de los trayectos en el modo «Pendiente» con un nuevo degradado simétrico\n• Las carpetas de favoritos ahora guardan una apariencia predeterminada que se aplica automáticamente a cada punto añadido\n• Se ha corregido la discrepancia entre el punto central de la «regla de radio» y el centro del mapa\n• Se ha añadido el botón «Leer artículo» al menú contextual de los puntos de interés de Wikipedia\n• Se ha corregido un problema al importar archivos GPX a los favoritos\n• Se ha corregido un problema con el evento del calendario para la posición de aparcamiento\n• Se ha corregido un defecto que provocaba el cierre inesperado de la aplicación al eliminar un color de la paleta\n";
 "article_has_no_points" = "Artículo sin puntos";
 "images" = "Imágenes";
 "shared_string_bookmark" = "Destacar";
@@ -4234,3 +4234,19 @@
 "sort_name_ascending" = "Nombre: A-Z";
 "sort_name_descending" = "Nombre: Z-A";
 "missing_maps_header" = "Mapas desactualizados o faltantes";
+"astro_nebulae" = "Nebulosas";
+"astro_nebulas" = "Nebulosas";
+"astro_type_nebula" = "Nebulosa";
+"ios_release_5_4" = "• Se ha añadido el tipo de visualización «Sombras del terreno»\n• Se ha rediseñado por completo la interfaz de «Mis lugares», añadiendo subcarpetas para los Favoritos y acciones más prácticas\n• Se permite usar mapas que solo incluyen carreteras\n• Se ha ampliado la personalización del perfil añadiendo compatibilidad con todos los iconos de puntos de interés\n• Se ha añadido la configuración de anchura de la bicicleta para evitar carriles bici estrechos\n• Se ha añadido un widget de voltaje para el adaptador OBD-II\n• Se ha mejorado el rendimiento al gestionar un gran número de favoritos\n• Se ha añadido la opción «Pausar audio hablado» para pausar pódcast o audiolibros durante las instrucciones de navegación\n";
+"plugin_ais_tracker_disclaimer" = "DESCARGO DE RESPONSABILIDAD\n\nEste complemento es un proyecto personal y no está pensado para su uso en aplicaciones críticas. No garantiza fiabilidad ni precisión. No confíe en este programa para la navegación, la seguridad de las personas ni ninguna otra operación esencial.";
+"ais_ship_type_towing" = "Remolcador";
+"ais_ship_type_dredging" = "Dragado";
+"ais_ship_type_sailing" = "Velero";
+"ais_ship_type_diving_ops" = "Operaciones de buceo";
+"ais_ship_type_military_ops" = "Operaciones militares";
+"ais_ship_type_pleasure_craft" = "Embarcación de recreo";
+"ais_ship_type_hsc" = "Embarcación de alta velocidad (HSC)";
+"ais_ship_type_hsc_hazard_a" = "HSC, carga peligrosa de categoría A";
+"ais_ship_type_hsc_hazard_b" = "HSC, carga peligrosa de categoría B";
+"ais_ship_type_hsc_hazard_c" = "HSC, carga peligrosa de categoría C";
+"ais_ship_type_hsc_hazard_d" = "HSC, carga peligrosa de categoría D";

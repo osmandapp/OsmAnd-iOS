@@ -1723,11 +1723,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     let allFolders = currentFolder.getSubFolders()
                     selectedFolders = allFolders.map { $0.getDirName(includingSubdirs: false) }
                     selectedTracks = currentFolder.getTrackItems().compactMap({ $0.dataItem }).filter { track in
-                        !selectedFolders.contains(where: { folderName in
-                            track.gpxFilePath.contains(folderName)
-                        })
+                        !isTrack(track, insideSelectedFolderOf: currentFolder)
                     }
-                    
+
                     for row in 0..<tableView.numberOfRows(inSection: 0) {
                         tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: .none)
                     }
@@ -2396,6 +2394,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         settings.saveTracksSortModes(updatedSortModes)
     }
    
+    // Whole path components only: a plain substring test also matched folder names occurring
+    // inside a track's own file name, which left those tracks out of "Select all"
+    private func isTrack(_ track: GpxDataItem, insideSelectedFolderOf currentFolder: TrackFolder) -> Bool {
+        let trackPath = track.gpxFilePath.deletingLastPathComponent()
+        return selectedFolders.contains { folderName in
+            let folderPath = currentFolder.relativePath.appendingPathComponent(folderName)
+            return trackPath == folderPath || trackPath.hasPrefix(folderPath + "/")
+        }
+    }
+
     private func areAllItemsSelected() -> Bool {
         if isSelectionModeInSearch {
             if let allTracks = baseFiltersResult?.values {
@@ -2410,15 +2418,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let allDisplayedTracks = currentFolder.getTrackItems().compactMap { $0.dataItem }
             let allDisplayedFolders = currentFolder.getSubFolders()
             let allTracksSelected = allDisplayedTracks.allSatisfy { track in
-                if selectedTracks.contains(track) {
-                    return true
-                }
-                
-                return selectedFolders.contains { folderName -> Bool in
-                    let folderPath = currentFolder.relativePath.appendingPathComponent(folderName)
-                    let trackPath = track.gpxFilePath.deletingLastPathComponent()
-                    return trackPath.hasPrefix(folderPath)
-                }
+                selectedTracks.contains(track) || isTrack(track, insideSelectedFolderOf: currentFolder)
             }
             
             let allFoldersSelected = allDisplayedFolders.allSatisfy { folder in

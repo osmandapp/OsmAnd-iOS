@@ -71,6 +71,12 @@
 - (void)copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId {
 }
 
+- (void)copyPrefsFromMode:(OAApplicationMode *)fromAppMode
+                  appMode:(OAApplicationMode *)appMode
+                 customId:(NSString *)customId
+{
+}
+
 - (NSString *)getSettingsIconId:(BOOL)nightMode {
     return nil;
 }

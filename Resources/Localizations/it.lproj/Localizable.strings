@@ -525,7 +525,7 @@
 "clear_all_intermediates" = "Cancella tutte le destinazioni intermedie";
 "shared_string_options" = "Opzioni";
 "make_as_start_point" = "Usalo come punto di partenza";
-"open_till" = "Aperto sino alle";
+"open_till" = "Aperto fino alle";
 "road_blocked" = "Strada bloccata";
 "shared_string_road" = "Strada";
 "cancel_navigation" = "Interrompere la navigazione";
@@ -1062,7 +1062,7 @@
 "rendering_attr_surface_grass_paver_name" = "Misto erba pavimento";
 "routing_attr_avoid_tram_name" = "No tram";
 "rendering_attr_surface_paved_name" = "Pavimentato";
-"rendering_attr_pisteRoutes_name" = "Discese e percorsi da sci";
+"rendering_attr_pisteRoutes_name" = "Piste e percorsi per sci";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferisci le strade non pavimentate";
 "rendering_value_default_name" = "Predefinito";
 "routing_attr_avoid_sett_description" = "Evita strade con sampietrini";
@@ -3831,8 +3831,8 @@
 "rendering_attr_shellsStyle_description" = "Stile per le conchiglie sul fondale marino";
 "rendering_attr_showLNAMmarker_name" = "Marcatori ENC";
 "rendering_attr_showLNAMmarker_description" = "Mostra i marcatori ENC";
-"rendering_attr_spotSize_name" = "Dimensioni punto profondità";
-"rendering_attr_spotSize_description" = "Dimensioni punto profondità";
+"rendering_attr_spotSize_name" = "Dimensione dei punti di profondità";
+"rendering_attr_spotSize_description" = "Dimensione dei punti di profondità";
 "copy_link" = "Copia link";
 "efficient_grid" = "Griglia efficiente";
 "routing_attr_weightrating_name" = "Peso massimo a pieno carico";

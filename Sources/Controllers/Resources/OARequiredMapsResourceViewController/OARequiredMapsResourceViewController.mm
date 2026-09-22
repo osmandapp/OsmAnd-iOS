@@ -21,6 +21,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "MissingMapsCalculator.h"
+#import "OAMissingMapsResult.h"
 #import "OARouteCalculationParams.h"
 #import "OAProgressTitleCell.h"
 
@@ -516,9 +517,8 @@
     {
         auto missingMapsCalculator = [MissingMapsCalculator new];
         OARouteCalculationResult *prevRoute = [OARoutingHelper.sharedInstance getRoute];
-        if (prevRoute != nil
-            && prevRoute.missingMapsPoints != nil
-            && prevRoute.missingMapsRoutingContext != nullptr) {
+        OAMissingMapsResult *previousCheck = prevRoute.missingMapsResult;
+        if (previousCheck != nil) {
             _isActiveOnlineCalculateRequest = YES;
             [self selectAllCells:NO];
             [self reloadDataWithAnimated:NO completion:nil];
@@ -532,10 +532,14 @@
                 if (!error && locations.count > 0)
                 {
                     bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
-                    if ([missingMapsCalculator checkIfThereAreMissingMaps:prevRoute.missingMapsRoutingContext start:prevRoute.missingMapsPoints.firstObject targets:locations checkHHEditions:!oldRouting])
+                    OAMissingMapsResult *result = [missingMapsCalculator checkIfThereAreMissingMapsForProfile:previousCheck.profile
+                                                                                                        start:previousCheck.points.firstObject
+                                                                                                      targets:locations
+                                                                                              checkHHEditions:!oldRouting];
+                    if (result != nil)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [missingMapsCalculator attachToRouteCalculationResult:prevRoute progress:prevRoute.missingMapsRoutingContext->progress];
+                            [missingMapsCalculator attachResult:result toRouteCalculationResult:prevRoute];
                             [strongSelf updateRoutingResourcesWithMissingMaps:prevRoute.missingMaps
                                                                  mapsToUpdate:prevRoute.mapsToUpdate
                                                           potentiallyUsedMaps:prevRoute.potentiallyUsedMaps];

@@ -102,27 +102,29 @@
               appMode:(OAApplicationMode *)appMode
          widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
-    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingDistance widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
 
-    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingTime widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
 
-    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingUphill widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
 
-    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingDownhill widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
     
-    OABaseWidgetView *averageSlopeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingAverageSlope customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *averageSlopeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingAverageSlope customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingAverageSlope widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:averageSlopeWidget]];
     
-    OABaseWidgetView *maxSpeedWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMaxSpeed customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *maxSpeedWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMaxSpeed customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingMaxSpeed widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:maxSpeedWidget]];
     
-    OABaseWidgetView *movingTimeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMovingTime customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *movingTimeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMovingTime customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingMovingTime widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:movingTimeWidget]];
 }
 

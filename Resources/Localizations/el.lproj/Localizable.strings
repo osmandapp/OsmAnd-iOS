@@ -257,7 +257,7 @@
 "city_type_city" = "Πόλη";
 "shared_string_speed" = "Ταχύτητα";
 "plugins_menu_group" = "Πρόσθετα";
-"m_s" = "μέτρα/δευτερόλεπτο";
+"m_s" = "μ/δ";
 "access_intermediate_arrival_time" = "Χρόνος άφιξης που μεσολάβησε";
 "shared_string_back" = "Προηγούμενο";
 "weeks_2_4" = "Εβδομάδες";
@@ -320,7 +320,7 @@
 "daynight_mode_auto" = "Ανατολή/δύση";
 "add_gpx_waypoint" = "Προσθήκη σημείου διαδρομής GPX";
 "quick_action_add_poi" = "Προσθήκη ΣΕ";
-"transport_nearby_routes" = "Με";
+"transport_nearby_routes" = "Μέσα σε";
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "road_blocked" = "Αποκλεισμένος δρόμος";
 "shared_string_commit" = "Υποβολή";
@@ -493,7 +493,7 @@
 "speak_cameras" = "Κάμερες ταχύτητας";
 "gpx_option_reverse_route" = "Αντιστροφή κατεύθυνσης ίχνους";
 "shared_string_add_photos" = "Προσθήκη φωτογραφιών";
-"min_km" = "λεπτά/χιλιόμετρο";
+"min_km" = "λεπτά/χλμ";
 "shared_string_current" = "Τρέχον";
 "shared_string_in_name" = "σε %@";
 "wiki_around" = "Κοντινά δημοφιλή μέρη";
@@ -983,7 +983,7 @@
 "special_routing_type" = "Ειδική δρομολόγηση";
 "shared_string_copy" = "Αντιγραφή";
 "shared_string_settings" = "Ρυθμίσεις";
-"base_profile_descr_public_transport" = "Όλοι οι δημόσιοι τύποι μεταφοράς";
+"base_profile_descr_public_transport" = "Μέσα δημόσιας συγκοινωνίας";
 "shared_string_routing" = "Δρομολόγηση";
 "shared_string_import_complete" = "Ολοκλήρωση εισαγωγής";
 "listed_exist" = "Το εισηγμένο %@, υπάρχει ήδη στο OsmAnd.";
@@ -1716,7 +1716,7 @@
 "ant_plus_searching" = "Αναζήτηση";
 "help_article_navigation_routing_pedestrian_routing_name" = "Δρομολόγηση με τα πόδια";
 "longest_duration_first" = "Μεγαλύτερη διάρκεια πρώτη";
-"report_an_issues" = "Αναφέρετε ένα ζήτημα";
+"report_an_issues" = "Αναφέρετε ένα πρόβλημα";
 "determine_location" = "Επιτρέψτε μας να προσδιορίσουμε την τοποθεσία σας";
 "shared_string_explore" = "Εξερεύνηση";
 "shared_string_error" = "Σφάλμα";
@@ -1724,7 +1724,7 @@
 "help_article_search_search_coordinates_name" = "Αναζήτηση συντεταγμένων";
 "duration_ago" = "%@ πριν";
 "shared_string_move" = "Μετακίνηση";
-"travel_card_download_descr" = "Κατεβάστε τους οδηγούς ταξιδιών των βικιταξιδιών για να προβάλετε τα άρθρα για μέρη σε όλον τον κόσμο χωρίς σύνδεση διαδικτύου.";
+"travel_card_download_descr" = "Κατεβάστε τους ταξιδιωτικούς οδηγούς των Βικιταξιδιών για να προβάλετε άρθρα για μέρη σε όλον τον κόσμο χωρίς σύνδεση διαδικτύου.";
 "shared_string_travel_guides" = "Ταξιδιωτικοί οδηγοί";
 "shared_string_deleted" = "Διαγραμμένο";
 "action_cannot_be_undone" = "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
@@ -1755,7 +1755,7 @@
 "help_article_navigation_routing_bicycle_based_routing_name" = "Δρομολόγηση με ποδηλάτο (MTB)";
 "target_elevation" = "Υψόμετρο στόχου";
 "recently_visible" = "Πρόσφατα ορατά %@";
-"download_to_device" = "Λήψη στην συσκευή";
+"download_to_device" = "Λήψη στη συσκευή";
 "help_article_navigation_routing_train_routing_name" = "Δρομολόγηση με τραίνο";
 "map_widget_sunrise_sunset_time_left" = "Χρόνος που απομένει";
 "skip_download" = "Παράλειψη λήψης";
@@ -1766,7 +1766,7 @@
 "delete_folder" = "Διαγραφή φακέλου";
 "simulate_in_progress" = "Σε εξέλιξη";
 "ant_plus_nothing_found_description" = "Βεβαιωθείτε ότι: \n– Το Bluetooth είναι ενεργοποιημένο \n– Ο αισθητήρας είναι ενεργοποιημένος \n– Αυτή η συσκευή βρίσκεται κοντά στον αισθητήρα";
-"help_article_navigation_routing_public_transport_navigation_name" = "Δρομολόγηση με δημόσια μεταφορά";
+"help_article_navigation_routing_public_transport_navigation_name" = "Δρομολόγηση με δημόσια συγκοινωνία";
 "user_guide" = "Οδηγός χρήστη";
 "shared_string_read" = "Ανάγνωση";
 "help_article_navigation_routing_online_routing_name" = "Δρομολόγηση μέσω διαδικτύου";
@@ -1830,7 +1830,7 @@
 "help_article_navigation_setup_route_details_name" = "Λεπτομέρειες διαδρομής";
 "osmand_cloud_delete_account_confirmation" = "Διαγραφή λογαριασμού;";
 "press_again_to_change_the_map_orientation" = "Πατήστε ξανά για να αλλάξετε τον προσανατολισμό του χάρτη";
-"no_travel_guides_data_descr" = "Κατεβάστε τους οδηγούς ταξιδιών των βικιταξιδιών για να προβάλετε τα άρθρα για μέρη σε όλον τον κόσμο χωρίς σύνδεση διαδικτύου.";
+"no_travel_guides_data_descr" = "Κατεβάστε τους ταξιδιωτικούς οδηγούς των Βικιταξιδιών για να προβάλετε άρθρα για μέρη σε όλον τον κόσμο χωρίς σύνδεση διαδικτύου.";
 "bluetooth_found_title" = "Βρέθηκε: %d";
 "shared_string_open_track" = "Άνοιγμα ίχνους";
 "trash_is_empty" = "Ο κάδος είναι άδειος";
@@ -2022,7 +2022,7 @@
 "global_settings_descr" = "Επηρεάζει ολόκληρη την εφαρμογή.";
 "purchases_feature_desc_wikivoyage" = "Εξερευνήστε τα Βικιταξίδια εκτός σύνδεσης. Άρθρα χωρισμένες ανά χώρες και περιοχές και είναι διαθέσιμα σε όλες τις γλώσσες.";
 "you_can_get_feature_as_part_of_pattern" = "Πάρτε το “%@” ως μέρος του %@ πλάνου. Σύγκριση:";
-"osmand_depelopment_simulate_location_section" = "Προσομοίωσε";
+"osmand_depelopment_simulate_location_section" = "Προσομοίωση";
 "osm_edits_all" = "Όλες οι επεξεργασίες";
 "login_footer_full_text" = "Χρειάζεστε βοήθεια; Παρακαλώ επικοινωνήστε μαζί μας στο \nsupport@osmand.net";
 "shared_string_min_height" = "Ελάχιστο ύψος";
@@ -2237,7 +2237,7 @@
 "res_dmap" = "Λεπτομερείς επισκόπηση χάρτη";
 "res_update_all" = "Ενημέρωση όλων";
 "hide_map_center" = "Απόκρυψη συντεταγμένων: κέντρο χάρτη";
-"quick_action_verb_turn_on_off" = "Ενεργοποίηση/απενεργοποίηση";
+"quick_action_verb_turn_on_off" = "Ενεργοποίηση / Απενεργοποίηση";
 "free_favorites_backup" = "Δωρεάν αντίγραφα ασφαλείας αγαπημένων";
 "free_favorites_backup_description" = "Εγγραφείτε στο OsmAnd Cloud για να πάρετε δωρεάν αντίγραφα ασφαλείας για τα αγαπημένα και τις ρυθμίσεις.";
 "profile_icon" = "Εικονίδιο προφίλ";
@@ -2917,7 +2917,7 @@
 "liter_per_hour" = "Λ/ώ";
 "unit_volt" = "V";
 "obd_widget_group" = "Μετρικές Οχήματος";
-"simulate_obd" = "Προσομοιώστε δεδομένα obd";
+"simulate_obd" = "Προσομοίωση δεδομένων obd";
 "shared_string_hour" = "Ώρα";
 "shared_string_volume" = "Όγκος";
 "rpm_unit" = "σαλ";
@@ -3106,7 +3106,7 @@
 "res_uninst_managed_q" = "Θα απεγκαταστήσετε το %@. Μπορείτε να το εγκαταστήσετε ξανά αργότερα από τον κατάλογο.";
 "shared_string_sec" = "δευ";
 "units_sec_short" = "δ";
-"ft_s" = "πόδια/δευτερόλεπτο";
+"ft_s" = "πδ/δ";
 "kg" = "κλ";
 "cannot_add_marker_desc" = "Παρακαλούμε αφαιρέστε τουλάχιστον μια κατεύθυνση και δοκιμάστε ξανά";
 "help_legend_descr" = "Ο οδηγός για τα σύμβολα του χάρτη";
@@ -4197,3 +4197,16 @@
 "send_current_app_log" = "Αποστολή τρέχοντος αρχείου καταγραφής εφαρμογής";
 "send_current_app_log_descr" = "Από όταν ξεκίνησε η εφαρμογή";
 "carplay_trip_via_point" = "Μέσω %@";
+"quarterly_subscription" = "Τριμηνιαία συνδρομή";
+"sett_ext_input_desc" = "Επιλέξτε μια συσκευή όπως ένα γενικό πληκτρολόγιο ή WunderLINQ για εξωτερικά χειριστήρια.";
+"select_to_use_an_external_input_device" = "Για να χρησιμοποιήσετε εξωτερική συσκευή εισόδου με το OsmAnd, επιλέξτε μια από την παραπάνω λίστα ή προσθέστε μια καινούργια";
+"simple_widget_footer" = "Το γραφικό στοιχείο μπορεί να πιάσει το πλήρες πλάτος γραμμής ή απλά μια στήλη.";
+"msg_favorites_skipped_as_existing" = "Αγαπημένα σημεία (%d έχουν παραλειφθεί καθώς ήδη υπάρχουν.";
+"download_images_settings_footer" = "Η λήψη εικόνων είναι ενεργή για οποιοδήποτε δίκτυο. Μπορεί να χρησιμοποιηθούν δεδομένα κινητής τηλεφωνίας.";
+"traffic_warning_red_light_camera" = "Κάμερα κόκκινου φαναριού";
+"routing_engine_shared" = "Δρομολόγηση με OsmAndShared";
+"show_touches" = "Εμφάνιση αγγιγμάτων";
+"simulate_location_movement_speed_original_desc" = "Η ταχύτητα κίνησης της τοποθεσίας κατά τη διάρκεια της προσομοίωσης θα είναι ίση με την ταχύτητα στο επιλεγμένο αρχείο.";
+"simulate_location_movement_speed_x2_desc" = "Η ταχύτητα κίνησης της τοποθεσίας κατά τη διάρκεια της προσομοίωσης θα είναι 2 φορές μεγαλύτερη από την ταχύτητα στο επιλεγμένο αρχείο.";
+"simulate_location_movement_speed_x3_desc" = "Η ταχύτητα κίνησης της τοποθεσίας κατά τη διάρκεια της προσομοίωσης θα είναι 3 φορές μεγαλύτερη από την ταχύτητα στο επιλεγμένο αρχείο.";
+"simulate_location_movement_speed_x4_desc" = "Η ταχύτητα κίνησης της τοποθεσίας κατά τη διάρκεια της προσομοίωσης θα είναι 4 φορές μεγαλύτερη από την ταχύτητα στο επιλεγμένο αρχείο.";

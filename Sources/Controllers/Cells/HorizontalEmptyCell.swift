@@ -107,7 +107,8 @@ final class HorizontalEmptyCell: UITableViewCell {
     func configure(title: String,
                    description: String,
                    icon: UIImage?,
-                   iconTint: UIColor,
+                   iconTint: UIColor?,
+                   isOriginalIcon: Bool = false,
                    actionTitle: String? = nil,
                    isSpinner: Bool = false,
                    containerStyle: ContainerStyle = .grouped,
@@ -117,7 +118,7 @@ final class HorizontalEmptyCell: UITableViewCell {
         titleLabel.accessibilityLabel = [title, description].joined(separator: ". ")
 
         updateContainerStyle(containerStyle)
-        updateTrailingContent(icon: icon, iconTint: iconTint, isSpinner: isSpinner)
+        updateTrailingContent(icon: icon, iconTint: iconTint, isSpinner: isSpinner, isOriginalIcon: isOriginalIcon)
         updateAction(title: actionTitle, action: action)
     }
 
@@ -222,7 +223,7 @@ final class HorizontalEmptyCell: UITableViewCell {
         cardTrailingConstraint?.constant = -inset
     }
 
-    private func updateTrailingContent(icon: UIImage?, iconTint: UIColor, isSpinner: Bool) {
+    private func updateTrailingContent(icon: UIImage?, iconTint: UIColor?, isSpinner: Bool, isOriginalIcon: Bool) {
         spinner.isHidden = !isSpinner
         iconView.isHidden = isSpinner
 
@@ -230,7 +231,7 @@ final class HorizontalEmptyCell: UITableViewCell {
             spinner.startAnimating()
         } else {
             spinner.stopAnimating()
-            iconView.image = icon?.withRenderingMode(.alwaysTemplate)
+            iconView.image = icon?.withRenderingMode(isOriginalIcon ? .alwaysOriginal : .alwaysTemplate)
             iconView.tintColor = iconTint
         }
     }

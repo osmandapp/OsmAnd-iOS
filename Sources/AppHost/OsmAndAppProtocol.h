@@ -10,6 +10,7 @@
 #import "OACommonTypes.h"
 
 @class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable, OASPaletteRepository;
+@class OASGeneralRouter, OASRoutingConfigurationBuilder;
 
 @protocol OAAppearanceProtocol;
 
@@ -60,7 +61,14 @@
 @property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
 @property(readonly) OAObservable* backgroundStateObservable;
 
+// Split so that callers can read the tree off the main thread and publish it there together with dependent state
+- (OAWorldRegion *) readWorldRegions;
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion;
 - (void) loadWorldRegions;
+
+/** The OsmAndShared twin of getRoutingConfigForMode:, from the same routing.xml files. */
+- (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode;
+- (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode;
 
 - (void) saveDataToPermamentStorage;
 

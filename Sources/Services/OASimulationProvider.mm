@@ -11,7 +11,10 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-#include <routeSegmentResult.h>
+#import "OsmAndSharedWrapper.h"
+
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
 
 @implementation OASimulationProvider
 {
@@ -19,13 +22,13 @@
     int _currentSegment;
     std::pair<int, int> _currentPoint;
     CLLocation *_startLocation;
-    vector<std::shared_ptr<RouteSegmentResult>> _roads;
+    NSArray<OASRouteSegmentResult *> *_roads;
     float _minOfMaxSpeedInTunnel;
 }
 
 static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
 
-- (void) startSimulation:(std::vector<std::shared_ptr<RouteSegmentResult>>)roads currentLocation:(CLLocation *)currentLocation
+- (void) startSimulation:(NSArray<OASRouteSegmentResult *> *)roads currentLocation:(CLLocation *)currentLocation
 {
     _roads = roads;
     _startLocation = [currentLocation copy];
@@ -40,20 +43,20 @@ static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
     auto px = OsmAnd::Utilities::get31TileNumberX(currentLocation.coordinate.longitude);
     auto py = OsmAnd::Utilities::get31TileNumberY(currentLocation.coordinate.latitude);
     double dist = 1000;
-    for (int i = 0; i < roads.size(); i++)
+    for (int i = 0; i < (int) roads.count; i++)
     {
-        auto road = roads[i];
-        float tunnelSpeed = road->object->getMaximumSpeed(road->isForwardDirection());
+        OASRouteSegmentResult *road = roads[i];
+        OASRouteDataObject *obj = [road getObject];
+        float tunnelSpeed = [obj getMaximumSpeedDirection:[road isForwardDirection] profile:OASRouteTypeRule.companion.PROFILE_NONE];
         if (tunnelSpeed > 0)
         {
             _minOfMaxSpeedInTunnel = MIN(_minOfMaxSpeedInTunnel, tunnelSpeed);
         }
-        int startPointIndex = MIN(road->getStartPointIndex(), road->getEndPointIndex());
-        int endPointIndex = MAX(road->getEndPointIndex(), road->getStartPointIndex());
+        int startPointIndex = MIN([road getStartPointIndex], [road getEndPointIndex]);
+        int endPointIndex = MAX([road getEndPointIndex], [road getStartPointIndex]);
         for (int j = startPointIndex + 1; j <= endPointIndex; j++)
         {
-            auto obj = road->object;
-            auto proj = getProjectionPoint(px, py, obj->pointsX[j-1], obj->pointsY[j-1], obj->pointsX[j], obj->pointsY[j]);
+            auto proj = getProjectionPoint(px, py, [obj getPoint31XTileI:j - 1], [obj getPoint31YTileI:j - 1], [obj getPoint31XTileI:j], [obj getPoint31YTileI:j]);
             double dd = squareRootDist31(proj.first, proj.second, px, py);
             if (dd < dist)
             {
@@ -77,13 +80,13 @@ static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
     {
         return -1;
     }
-    for (int i = _currentRoad; i < _roads.size(); i++)
+    for (int i = _currentRoad; i < (int) _roads.count; i++)
     {
-        auto road = _roads[i];
+        OASRouteSegmentResult *road = _roads[i];
         BOOL firstRoad = i == _currentRoad;
-        BOOL plus = road->getStartPointIndex() < road->getEndPointIndex();
+        BOOL plus = [road getStartPointIndex] < [road getEndPointIndex];
         int increment = plus ? +1 : -1;
-        int start = road->getStartPointIndex();
+        int start = [road getStartPointIndex];
         if (firstRoad)
         {
                 // first segment is [currentSegment - 1, currentSegment]
@@ -96,14 +99,14 @@ static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
                         start = _currentSegment;
                 }
         }
-        for (int j = start; j != road->getEndPointIndex(); j += increment)
+        for (int j = start; j != [road getEndPointIndex]; j += increment)
         {
-            auto obj = road->object;
-            int st31x = obj->getPoint31XTile(j);
-            int st31y = obj->getPoint31YTile(j);
-            int end31x = obj->getPoint31XTile(j + increment);
-            int end31y = obj->getPoint31YTile(j + increment);
-            BOOL last = i == _roads.size() - 1 && j == road->getEndPointIndex() - increment;
+            OASRouteDataObject *obj = [road getObject];
+            int st31x = [obj getPoint31XTileI:j];
+            int st31y = [obj getPoint31YTileI:j];
+            int end31x = [obj getPoint31XTileI:j + increment];
+            int end31y = [obj getPoint31YTileI:j + increment];
+            BOOL last = i == (int) _roads.count - 1 && j == [road getEndPointIndex] - increment;
             BOOL first = firstRoad && j == start;
             if (first)
             {
@@ -121,7 +124,7 @@ static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
                 int pry = (int) (st31y + (end31y - st31y) * (meters / dd));
                 if (prx == 0 || pry == 0)
                 {
-                    NSLog(@"proceedMeters zero x or y (%d,%d) (%s)", prx, pry, road->toString().c_str());
+                    NSLog(@"proceedMeters zero x or y (%d,%d) (%@)", prx, pry, [road description]);
                     return -1;
                 }
                 *l = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(OsmAnd::Utilities::get31LatitudeY(pry), OsmAnd::Utilities::get31LongitudeX(prx)) altitude:(*l).altitude horizontalAccuracy:0 verticalAccuracy:(*l).verticalAccuracy course:(*l).course speed:(*l).speed timestamp:(*l).timestamp];
@@ -129,7 +132,7 @@ static const float MAX_SPEED_TUNNELS = 27.0f; // 27 m/s, 97.2 kmh, 60.4 mph
             }
             else
             {
-                NSLog(@"proceedMeters break at the end of the road (sx=%d, sy=%d) (%s)", st31x, st31y, road->toString().c_str());
+                NSLog(@"proceedMeters break at the end of the road (sx=%d, sy=%d) (%@)", st31x, st31y, [road description]);
                 break;
             }
         }

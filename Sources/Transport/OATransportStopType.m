@@ -196,6 +196,9 @@
 
 + (OATransportStopType *) findType:(NSString *)typeName
 {
+    if (!typeName)
+        return nil;
+
     NSString *tName = [@"TST_" stringByAppendingString:[typeName uppercaseString]];
     for (NSNumber *tn in [self.class values])
     {
@@ -206,4 +209,3 @@
 }
 
 @end
-

@@ -83,7 +83,7 @@
         if (_cachedMeters <= 20)
         {
             _cachedMeters = 0;
-            [self setText:[[self getWidgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
+            [self setText:[[self widgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
         }
         else
         {

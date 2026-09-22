@@ -155,12 +155,18 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 @end
 
 @implementation OAWptPtPair
+{
+    NSUInteger _hash;
+}
 
 + (instancetype)pairWithFirst:(nullable OASWptPt *)first second:(nullable OASWptPt *)second
 {
     OAWptPtPair *pair = [[OAWptPtPair alloc] init];
     pair->_first = first;
     pair->_second = second;
+    // taken once: WptPt is mutable, and a key whose hash moves after it was stored can no longer be
+    // found in the bucket it went into, so the dictionary could neither reach nor remove it
+    pair->_hash = (first ? first.hash : 0) ^ (second ? second.hash : 0);
     return pair;
 }
 
@@ -179,7 +185,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (NSUInteger)hash
 {
-    return (_first ? _first.hash : 0) ^ (_second ? _second.hash : 0);
+    return _hash;
 }
 
 // a dictionary copies its keys; there is nothing to copy in an immutable pair

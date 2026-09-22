@@ -10,6 +10,7 @@
 #import "OACommonTypes.h"
 
 @class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable, OASPaletteRepository;
+@class OASGeneralRouter, OASRoutingConfigurationBuilder;
 
 @protocol OAAppearanceProtocol;
 
@@ -64,6 +65,10 @@
 - (OAWorldRegion *) readWorldRegions;
 - (void) applyWorldRegions:(OAWorldRegion *)worldRegion;
 - (void) loadWorldRegions;
+
+/** The OsmAndShared twin of getRoutingConfigForMode:, from the same routing.xml files. */
+- (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode;
+- (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode;
 
 - (void) saveDataToPermamentStorage;
 

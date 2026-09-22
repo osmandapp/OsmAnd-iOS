@@ -915,23 +915,23 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return [_widgetRegistry isWidgetVisible:widgetInfo.key];
 }
 
-- (BOOL)isPanelVisible:(OAWidgetsPanel *)widgetsPanel
+- (BOOL)isPanelVisible:(WidgetsPanel *)widgetsPanel
 {
     BOOL isPanelVisible = NO;
     OAMapHudViewController *mapHudViewController = [[OARootViewController instance] mapPanel].hudViewController;
-    if (widgetsPanel == OAWidgetsPanel.topPanel)
+    if (widgetsPanel == WidgetsPanel.topPanel)
     {
         isPanelVisible = [mapHudViewController hasTopWidget];
     }
-    else if (widgetsPanel == OAWidgetsPanel.bottomPanel)
+    else if (widgetsPanel == WidgetsPanel.bottomPanel)
     {
         isPanelVisible = [mapHudViewController hasBottomWidget];
     }
-    else if (widgetsPanel == OAWidgetsPanel.leftPanel)
+    else if (widgetsPanel == WidgetsPanel.leftPanel)
     {
         isPanelVisible = [mapHudViewController hasLeftWidget];
     }
-    else if (widgetsPanel == OAWidgetsPanel.rightPanel)
+    else if (widgetsPanel == WidgetsPanel.rightPanel)
     {
         isPanelVisible = [mapHudViewController hasRightWidget];
     }

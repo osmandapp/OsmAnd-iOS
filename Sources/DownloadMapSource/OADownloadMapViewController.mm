@@ -178,6 +178,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return nil;
 }
 
+- (NSString *)getCommonTypeStr
+{
+    return @"";
+}
+
 - (instancetype) init
 {
     self = [super init];

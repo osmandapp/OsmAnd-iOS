@@ -314,8 +314,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSTimeInterval duration = 0;
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
-        for (const auto &segment : data.segments)
-            duration += segment->segmentTime;
+        for (OASRouteSegmentResult *segment in data.segments)
+            duration += [segment getSegmentTime];
     }
     return duration;
 }
@@ -1306,13 +1306,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeBefore]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1322,13 +1321,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAfter]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -2199,6 +2197,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
         return;
+    if (ctx.originalPointToMove != nil || ctx.isInAddPointMode)
+        return;
 
     NSInteger hitIndex = [layer findNearestPointToCoordinate:coordinate];
     if (hitIndex != -1)
@@ -2327,14 +2327,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)
         return @[];
 
-    std::vector<std::shared_ptr<RouteSegmentResult>> combined;
+    NSMutableArray<OASRouteSegmentResult *> *combined = [NSMutableArray array];
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
-    {
-        const auto &segs = data.segments;
-        combined.insert(combined.end(), segs.begin(), segs.end());
-    }
+        [combined addObjectsFromArray:data.segments];
 
-    if (combined.empty())
+    if (combined.count == 0)
         return @[];
 
     return [OARouteStatisticsHelper calculateRouteStatistic:combined];

@@ -47,6 +47,11 @@ static BOOL OAShouldUseExternalTimestamps(OALocationsHolder *locationsHolder)
     return self;
 }
 
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode threshold:(float)threshold
+{
+    return [self initWithLocations:@[] initialAppMode:appMode initialThreshold:threshold];
+}
+
 - (void)updateAppMode:(OAApplicationMode *)appMode
 {
     _appMode = appMode;

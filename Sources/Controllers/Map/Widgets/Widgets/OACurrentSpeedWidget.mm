@@ -70,7 +70,7 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
     else if (_cachedSpeed != 0)
     {
         _cachedSpeed = 0;
-        [self setText:[[self getWidgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
+        [self setText:[[self widgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
     }
     return false;
 }

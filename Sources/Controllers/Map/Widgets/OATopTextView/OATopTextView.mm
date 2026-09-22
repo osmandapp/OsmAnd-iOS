@@ -15,7 +15,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
+#import "OATurnDrawable+TurnType.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARouteInfoView.h"
@@ -281,7 +281,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     return YES;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -687,8 +687,8 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 + (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield addedShields:(NSMutableArray<RoadShield *> *)addedShields
 {
-    const auto& object = shield.rdo;
-    const auto& tps = object->types;
+    OASRouteDataObject *object = shield.rdo;
+    OASKotlinIntArray *tps = object.types;
     NSString *nameTag = shield.tag;
     NSString *name = shield.value;
     NSMutableString *additional = [shield.additional mutableCopy];
@@ -700,18 +700,23 @@ static int stackViewLeadingToRefViewPadding = 16;
     env->applyTo(textEvaluator);
     OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
     
-    for (int i : tps) {
-        const auto& tp = object->region->quickGetEncodingRule(i);
-        if (tp.getTag() == "highway" || tp.getTag() == "route")
+    for (int k = 0; tps != nil && k < tps.size; k++) {
+        OASRouteTypeRule *tp = [object.region quickGetEncodingRuleId:[tps getIndex:k]];
+        if (tp == nil)
+            continue;
+
+        NSString *tag = tp.getTag;
+        NSString *value = tp.getValue ? tp.getValue : @"";
+        if ([tag isEqualToString:@"highway"] || [tag isEqualToString:@"route"])
         {
             textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 16);
             textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 16);
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromStdString(tp.getTag()));
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromStdString(tp.getValue()));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromNSString(tag));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromNSString(value));
         }
         else
         {
-            [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
+            [additional appendFormat:@"%@=%@;", tag, value];
         }
     }
     
@@ -819,7 +824,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
 }
 
-- (OAWidgetState *)getWidgetState
+- (OAWidgetState *)storedWidgetState
 {
     return _widgetState;
 }

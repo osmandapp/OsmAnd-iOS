@@ -4554,3 +4554,17 @@
 "carplay_trip_via_point" = "Preko %@";
 "tracks_stats_are_being_calculated" = "Statistika putanja se izračunava...";
 "tracks_stats_are_being_calculated_left" = "%1$@ %2$@ je preostalo";
+"screen_elements" = "Elementi ekrana";
+"screen_elements_descr" = "Pejzažni prikaz koristi iste elemente ekrana kao i portretni prikaz. Promene u jednoj orijentaciji primenjuju se na obe.";
+"switch_to_independent" = "Pređi na Nezavisno";
+"screen_elements_mode_descr" = "Izaberite da li će orijentacije „Portret” i „Pejzaž” deliti iste elemente ekrana ili imati zasebne skupove.";
+"screen_elements_shared" = "Podeljeno";
+"screen_elements_independent" = "Nezavisni";
+"copy_from_portrait_layout" = "Kopiraj iz Portret rasporeda";
+"copy_from_landscape_layout" = "Kopiraj iz Pejzaž rasporeda";
+"panels_layout" = "Raspored panela";
+"panels_layout_wide" = "Širok";
+"panels_layout_compact" = "Kompaktan";
+"panels_layout_wide_descr" = "Gornji i donji paneli se protežu celom širinom ekrana.";
+"panels_layout_compact_descr" = "Gornji i donji paneli stoje između bočnih panela i dugmadi.";
+"routing_engine_shared" = "Ruta pomoću OsmAndShared-a";

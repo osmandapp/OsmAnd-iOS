@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OATransportRouteCalculationParams.h"
 #import "OARouteCalculationParams.h"
+#import "OsmAndSharedWrapper.h"
 #import "Localization.h"
 #import "OAWaypointHelper.h"
 #import "QuadRect.h"
@@ -316,7 +317,7 @@
     params.targetTransportStop = walkingRouteSegment.endTransportStop;
     [OARoutingHelper applyApplicationSettings:params appMode:walkingMode];
     params.mode = walkingMode;
-    params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+    params.calculationProgress = [[OASRouteCalculationProgress alloc] init];
     params.calculationProgressCallback = self;
     params.resultListener = self;
     params.walkingRouteSegment = walkingRouteSegment;

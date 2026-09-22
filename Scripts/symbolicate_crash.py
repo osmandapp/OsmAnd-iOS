@@ -395,19 +395,63 @@ def symbolicate(
     )
 
 
+def collect_crash_paths(inputs):
+    crash_paths = []
+    seen = set()
+
+    for input_path in inputs:
+        path = input_path.expanduser().resolve()
+        if not path.exists():
+            raise RuntimeError(
+                f"Crash path does not exist:\n"
+                f"  {path}"
+            )
+
+        if path.is_dir():
+            candidates = sorted(path.glob("*.json"))
+            if not candidates:
+                raise RuntimeError(
+                    f"No JSON crash files found in:\n"
+                    f"  {path}"
+                )
+        elif path.is_file():
+            candidates = [path]
+        else:
+            raise RuntimeError(
+                f"Crash path is not a file or directory:\n"
+                f"  {path}"
+            )
+
+        for candidate in candidates:
+            if candidate not in seen:
+                seen.add(candidate)
+                crash_paths.append(candidate)
+
+    return crash_paths
+
+
+def default_output_path(crash_path: Path):
+    return crash_path.with_name(
+        f"{crash_path.stem}-symbolicated.txt"
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=(
             "Automatically find/download matching "
             "OsmAnd xcarchive and symbolicate "
-            "a MetricKit crash."
+            "one or more MetricKit crashes."
         )
     )
 
     parser.add_argument(
-        "crash",
+        "crashes",
+        nargs="+",
         type=Path,
-        help="Path to MetricKit crash JSON",
+        help=(
+            "MetricKit crash JSON file(s) or a directory containing JSON files"
+        ),
     )
 
     parser.add_argument(
@@ -436,67 +480,94 @@ def main():
 
     check_dependencies()
 
-    crash_path = args.crash.expanduser().resolve()
-
-    if not crash_path.exists():
+    crash_paths = collect_crash_paths(args.crashes)
+    if args.output and len(crash_paths) != 1:
         raise RuntimeError(
-            f"Crash file does not exist:\n"
-            f"  {crash_path}"
+            "--output can only be used when symbolizing exactly one crash. "
+            "Batch output is written next to each source JSON file."
         )
 
     cache_dir = args.cache_dir.expanduser().resolve()
 
-    version, build = load_crash_info(crash_path)
+    log()
+    log("=" * 70)
+    log("OsmAnd MetricKit Crash Symbolication")
+    log("=" * 70)
+    log(f"Crashes found: {len(crash_paths)}")
+
+    crashes_by_build = {}
+    failures = []
+    outputs = []
+
+    for crash_path in crash_paths:
+        try:
+            version, build = load_crash_info(crash_path)
+        except Exception as error:
+            failures.append((crash_path, str(error)))
+            continue
+        crashes_by_build.setdefault((version, build), []).append(crash_path)
+
+    for (version, build), build_crashes in crashes_by_build.items():
+        log()
+        log("-" * 70)
+        log(f"Version {version}, build {build}: {len(build_crashes)} crash(es)")
+
+        try:
+            archive_path = get_archive(
+                args.repo,
+                version,
+                build,
+                cache_dir,
+            )
+        except Exception as error:
+            failures.extend(
+                (crash_path, str(error)) for crash_path in build_crashes
+            )
+            continue
+
+        for crash_path in build_crashes:
+            if args.output:
+                output_path = args.output.expanduser().resolve()
+            else:
+                output_path = default_output_path(crash_path)
+
+            log()
+            log(f"Crash: {crash_path}")
+            log(f"Output: {output_path}")
+            try:
+                symbolicate(
+                    crash_path,
+                    archive_path,
+                    output_path,
+                )
+            except Exception as error:
+                failures.append((crash_path, str(error)))
+                continue
+            outputs.append(output_path)
 
     log()
     log("=" * 70)
-    log("OsmAnd MetricKit Symbolication")
+    log("Summary")
     log("=" * 70)
+    log(f"Symbolicated: {len(outputs)}")
+    log(f"Failed:       {len(failures)}")
 
-    log("Crash:")
-    log(f"  {crash_path}")
+    if outputs:
+        log()
+        log("Symbolicated crashes:")
+        for output_path in outputs:
+            log(f"  {output_path}")
 
-    log("Version:")
-    log(f"  {version}")
-
-    log("Build:")
-    log(f"  {build}")
-
-    archive_path = get_archive(
-        args.repo,
-        version,
-        build,
-        cache_dir,
-    )
-
-    if args.output:
-        output_path = (
-            args.output
-            .expanduser()
-            .resolve()
+    if failures:
+        log()
+        log("Failures:")
+        for crash_path, error in failures:
+            log(f"  {crash_path}")
+            for line in error.splitlines():
+                log(f"    {line}")
+        raise RuntimeError(
+            f"Failed to symbolicate {len(failures)} of {len(crash_paths)} crash(es)."
         )
-    else:
-        output_path = crash_path.with_name(
-            f"{crash_path.stem}-symbolicated.txt"
-        )
-
-    symbolicate(
-        crash_path,
-        archive_path,
-        output_path,
-    )
-
-    log()
-    log("=" * 70)
-    log("Done")
-    log("=" * 70)
-
-    log("Archive:")
-    log(f"  {archive_path}")
-
-    log()
-    log("Symbolicated crash:")
-    log(f"  {output_path}")
 
 
 if __name__ == "__main__":

@@ -31,6 +31,10 @@
 + (OAMapWidgetRegistry *) sharedInstance;
 
 - (void)populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(WidgetsPanel *)widgetPanel;
+- (void)populateControlsContainer:(OAWidgetPanelViewController *)stack
+                              mode:(OAApplicationMode *)mode
+                       widgetPanel:(WidgetsPanel *)widgetPanel
+                  screenLayoutMode:(NSInteger)screenLayoutMode;
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded;
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget;
 

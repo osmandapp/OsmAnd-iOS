@@ -97,15 +97,6 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                                      with coordinator: UIViewControllerTransitionCoordinator) {
         previewView.preserveCurrentPage()
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil) { [weak self] context in
-            guard !context.isCancelled else { return }
-            // OAMapHudViewController recreates all widget panels in its own
-            // transition completion. Run on the next main-loop turn so the
-            // preview measures and shows the newly populated widget page.
-            DispatchQueue.main.async {
-                self?.reloadPreview()
-            }
-        }
     }
 
     override func getTitle() -> String {
@@ -674,6 +665,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private var pendingLayoutMode: ScreenLayoutMode?
     private var panelSizeUpdateGeneration = 0
     private var isMeasuringPanelSize = false
+    private var isPopulatingPreviewWidgets = false
     private var lastLayoutSize: CGSize = .zero
     private var selectedPageIndexes: [ObjectIdentifier: Int] = [:]
 
@@ -812,6 +804,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         pendingLayoutMode = nil
         pendingParentViewController = nil
         guard let state = hostedState else { return }
+        let shouldRestoreMapWidgets = state.previewLayoutMode.map {
+            $0 != ScreenLayoutMode.default(forAppMode: state.appMode)
+        } ?? false
         selectedPageIndexes[ObjectIdentifier(state.panel)] = state.controller.currentIndex
         panelSizeUpdateGeneration += 1
         state.controller.delegate = nil
@@ -887,6 +882,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         }
         state.controller.delegate = state.originalDelegate
         hostedState = nil
+        if shouldRestoreMapWidgets {
+            state.mapInfoController.recreateWidgetsPanel(state.panel)
+        }
         if let hudViewController = state.originalParent as? OAMapHudViewController {
             hudViewController.updateControlsLayout(false)
             hudViewController.updateDependentButtonsVisibility()
@@ -916,6 +914,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             controller = mapInfoController.bottomPanelController
         }
         controller.loadViewIfNeeded()
+        populatePreviewWidgetsIfNeeded(in: controller,
+                                       panel: panel,
+                                       appMode: appMode,
+                                       layoutMode: layoutMode)
         restoreCurrentPage(in: controller, for: panel)
         let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         let originalLayoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
@@ -1037,6 +1039,15 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         controller.onWidgetPagesChanged = { [weak self, weak controller] in
             originalWidgetPagesChangedHandler?()
             guard let self, let controller else { return }
+            if !self.isPopulatingPreviewWidgets {
+                // Map rotation repopulates this live controller for the physical
+                // orientation. Replace it synchronously with the layout being
+                // edited, before UIKit can render the intermediate empty panel.
+                self.populatePreviewWidgetsIfNeeded(in: controller,
+                                                     panel: panel,
+                                                     appMode: appMode,
+                                                     layoutMode: layoutMode)
+            }
             self.restoreCurrentPage(in: controller, for: panel)
             self.refreshExcludedWidgets()
         }
@@ -1047,6 +1058,31 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         layoutHostedPanel()
         controller.delegate = self
         schedulePanelSizeUpdate()
+    }
+
+    private func populatePreviewWidgetsIfNeeded(in controller: WidgetPanelViewController,
+                                                panel: WidgetsPanel,
+                                                appMode: OAApplicationMode,
+                                                layoutMode: ScreenLayoutMode?) {
+        guard !isPopulatingPreviewWidgets,
+              let layoutMode,
+              layoutMode != ScreenLayoutMode.default(forAppMode: appMode) else {
+            return
+        }
+        isPopulatingPreviewWidgets = true
+        defer { isPopulatingPreviewWidgets = false }
+        controller.clearWidgets()
+        OAMapWidgetRegistry.sharedInstance().populateControlsContainer(
+            controller,
+            mode: appMode,
+            widgetPanel: panel,
+            screenLayoutMode: Int(layoutMode.rawValue)
+        )
+        let widgets = controller.widgetPages.flatMap { $0 }
+        let delegates = widgets.map { (widget: $0, delegate: $0.delegate) }
+        widgets.forEach { $0.delegate = nil }
+        widgets.forEach { $0.updateInfo() }
+        delegates.forEach { $0.widget.delegate = $0.delegate }
     }
 
     private func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance,
@@ -1178,11 +1214,23 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         panelSizeUpdateGeneration += 1
         let generation = panelSizeUpdateGeneration
         DispatchQueue.main.async { [weak self] in
-            guard let self,
-                  generation == self.panelSizeUpdateGeneration,
-                  !self.isPageTransitionInProgress else { return }
-            self.updateHostedPanelSize()
+            self?.performPanelSizeUpdate(generation: generation)
         }
+    }
+
+    private func performPanelSizeUpdate(generation: Int) {
+        guard generation == panelSizeUpdateGeneration,
+              hostedState != nil else { return }
+        guard !isPageTransitionInProgress else {
+            // Rotation and setViewControllers(animated: false) can temporarily
+            // leave UIPageViewController in a transition state. Do not lose the
+            // final measurement; retry only while this request is still current.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.performPanelSizeUpdate(generation: generation)
+            }
+            return
+        }
+        updateHostedPanelSize()
     }
 
     private func updateHostedPanelSize() {

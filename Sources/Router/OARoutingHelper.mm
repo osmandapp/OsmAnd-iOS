@@ -173,6 +173,7 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isPauseNavigation

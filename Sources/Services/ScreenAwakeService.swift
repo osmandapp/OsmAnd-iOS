@@ -54,6 +54,8 @@ final class ScreenAwakeService: NSObject {
             let settings = OAAppSettings.sharedManager()
             let routingHelper = OARoutingHelper.sharedInstance()
             let isFollowingMode = routingHelper.isFollowingMode()
+            let isRouteAnimating = OsmAndApp.swiftInstance().locationServices.isRouteAnimating()
+            let isNavigationActive = !routingHelper.isPauseNavigation() && (isFollowingMode || isRouteAnimating)
             let appMode: OAApplicationMode? = isFollowingMode ? routingHelper.getAppMode() : settings.applicationMode.get()
             let keepScreenOnMode: EOAKeepScreenOnMode
             if let appMode {
@@ -66,7 +68,7 @@ final class ScreenAwakeService: NSObject {
             let isForeground = sceneState == .foregroundActive || sceneState == .foregroundInactive
 
             UIApplication.shared.isIdleTimerDisabled = isForeground
-                && (keepScreenOnMode == .always || (keepScreenOnMode == .duringNavigation && isFollowingMode))
+                && (keepScreenOnMode == .always || (keepScreenOnMode == .duringNavigation && isNavigationActive))
         }
     }
 

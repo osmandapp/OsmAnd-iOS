@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OARouteCalculationResult.h"
 #import "CLLocation+Extension.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
@@ -185,6 +186,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     }];
     
     [_routeAnimation start];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (NSArray<NSNumber *> *)getSimulationParams:(NSMutableArray<OASimulatedLocation *> *)directions useLocationTime:(BOOL)useLocationTime
@@ -368,6 +370,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (void) stop
 {
     _routeAnimation = nil;
+    [[ScreenAwakeService shared] updateIdleTimer];
     [_app.simulateRoutingObservable notifyEvent];
 }
 

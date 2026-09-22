@@ -2096,6 +2096,18 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     [self setValue:@(integer) mode:mode];
 }
 
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    if ([self.key isEqualToString:keepScreenOnKey])
+    {
+        // Custom profiles have navigation settings, even when their parent is Browse map.
+        return @(mode == OAApplicationMode.DEFAULT
+                 ? EOAKeepScreenOnModeSystemDefault
+                 : EOAKeepScreenOnModeDuringNavigation);
+    }
+    return [super getProfileDefaultValue:mode];
+}
+
 - (void) resetToDefault
 {
     int defaultValue;
@@ -7148,7 +7160,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
         _keepScreenOn = [[OACommonInteger withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeDuringNavigation] makeProfile];
-        [_keepScreenOn setModeDefaultValue:@(EOAKeepScreenOnModeSystemDefault) mode:OAApplicationMode.DEFAULT];
         [_profilePreferences setObject:_keepScreenOn forKey:keepScreenOnKey];
         
         _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];

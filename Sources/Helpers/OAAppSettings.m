@@ -2096,6 +2096,16 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     [self setValue:@(integer) mode:mode];
 }
 
+- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    // Validate here so copying and importing preferences follow the same rule.
+    if ([self.key isEqualToString:keepScreenOnKey]
+        && mode == OAApplicationMode.DEFAULT
+        && [value isEqual:@(EOAKeepScreenOnModeDuringNavigation)])
+        value = @(EOAKeepScreenOnModeSystemDefault);
+    [super setValue:value mode:mode];
+}
+
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
     if ([self.key isEqualToString:keepScreenOnKey])

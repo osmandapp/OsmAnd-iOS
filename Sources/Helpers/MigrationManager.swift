@@ -699,7 +699,7 @@ final class MigrationManager: NSObject {
 
     private func migrateKeepScreenOnMode() {
         for appMode in OAApplicationMode.allPossibleValues() {
-            settings.keepScreenOn.set(Int32(EOAKeepScreenOnMode.always.rawValue), mode: appMode)
+            settings.keepScreenOn.set(.always, mode: appMode)
         }
     }
 

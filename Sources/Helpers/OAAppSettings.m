@@ -2096,28 +2096,6 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
     [self setValue:@(integer) mode:mode];
 }
 
-- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
-{
-    // Validate here so copying and importing preferences follow the same rule.
-    if ([self.key isEqualToString:keepScreenOnKey]
-        && mode == OAApplicationMode.DEFAULT
-        && [value isEqual:@(EOAKeepScreenOnModeDuringNavigation)])
-        value = @(EOAKeepScreenOnModeSystemDefault);
-    [super setValue:value mode:mode];
-}
-
-- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
-{
-    if ([self.key isEqualToString:keepScreenOnKey])
-    {
-        // Custom profiles have navigation settings, even when their parent is Browse map.
-        return @(mode == OAApplicationMode.DEFAULT
-                 ? EOAKeepScreenOnModeSystemDefault
-                 : EOAKeepScreenOnModeDuringNavigation);
-    }
-    return [super profileDefaultValue:mode];
-}
-
 - (void) resetToDefault
 {
     int defaultValue;
@@ -2140,6 +2118,63 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%d", [self get:mode]];
+}
+
+@end
+
+@implementation OACommonKeepScreenOnMode
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAKeepScreenOnMode)defValue
+{
+    OACommonKeepScreenOnMode *obj = [[OACommonKeepScreenOnMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonKeepScreenOnMode *copy = [OACommonKeepScreenOnMode withKey:key defValue:(EOAKeepScreenOnMode)self.defValue];
+    return (OACommonKeepScreenOnMode *)[self setupCopy:copy];
+}
+
+- (EOAKeepScreenOnMode)get
+{
+    return [super get];
+}
+
+- (EOAKeepScreenOnMode)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAKeepScreenOnMode)value
+{
+    [super set:(int)value];
+}
+
+- (void)set:(EOAKeepScreenOnMode)value mode:(OAApplicationMode *)mode
+{
+    [super set:(int)value mode:mode];
+}
+
+- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    // Validate here so copying and importing preferences follow the same rule.
+    if (mode == OAApplicationMode.DEFAULT && [value isEqual:@(EOAKeepScreenOnModeDuringNavigation)])
+        value = @(EOAKeepScreenOnModeSystemDefault);
+    [super setValue:value mode:mode];
+}
+
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
+{
+    // Custom profiles have navigation settings, even when their parent is Browse map.
+    return @(mode == OAApplicationMode.DEFAULT
+             ? EOAKeepScreenOnModeSystemDefault
+             : EOAKeepScreenOnModeDuringNavigation);
 }
 
 @end
@@ -7169,7 +7204,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
-        _keepScreenOn = [[OACommonInteger withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeDuringNavigation] makeProfile];
+        _keepScreenOn = [[OACommonKeepScreenOnMode withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeDuringNavigation] makeProfile];
         [_profilePreferences setObject:_keepScreenOn forKey:keepScreenOnKey];
         
         _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];

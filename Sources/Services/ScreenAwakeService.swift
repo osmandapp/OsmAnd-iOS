@@ -59,7 +59,7 @@ final class ScreenAwakeService: NSObject {
             let appMode: OAApplicationMode? = isFollowingMode ? routingHelper.getAppMode() : settings.applicationMode.get()
             let keepScreenOnMode: EOAKeepScreenOnMode
             if let appMode {
-                keepScreenOnMode = EOAKeepScreenOnMode(rawValue: Int(settings.keepScreenOn.get(appMode))) ?? .systemDefault
+                keepScreenOnMode = settings.keepScreenOn.get(appMode)
             } else {
                 keepScreenOnMode = .systemDefault
             }

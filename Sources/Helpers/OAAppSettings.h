@@ -479,6 +479,17 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @end
 
+@interface OACommonKeepScreenOnMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAKeepScreenOnMode)defValue;
+
+- (EOAKeepScreenOnMode)get;
+- (EOAKeepScreenOnMode)get:(OAApplicationMode *)mode;
+- (void)set:(EOAKeepScreenOnMode)value;
+- (void)set:(EOAKeepScreenOnMode)value mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonLong : OACommonPreference
 
 @property (nonatomic, readonly) long defValue;
@@ -1019,7 +1030,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
-@property (nonatomic) OACommonInteger *keepScreenOn;
+@property (nonatomic) OACommonKeepScreenOnMode *keepScreenOn;
 @property (nonatomic) OACommonInteger *detailedTrackGuidance;
 @property (nonatomic) OACommonInteger *gpxApproximationDistance;
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center

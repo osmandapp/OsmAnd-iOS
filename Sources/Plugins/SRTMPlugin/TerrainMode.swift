@@ -246,7 +246,7 @@ final class TerrainMode: NSObject {
     func setZoomValues(minZoom: Int32, maxZoom: Int32, mode: OAApplicationMode) {
         self.minZoomPref.set(minZoom, mode: mode)
         self.maxZoomPref.set(maxZoom, mode: mode)
-        self.minZoomPref.getProfileDefaultValue(mode)
+        self.minZoomPref.profileDefaultValue(mode)
     }
 
     func setTransparency(_ transparency: Int32) {

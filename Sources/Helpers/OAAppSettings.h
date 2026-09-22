@@ -429,7 +429,7 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 - (NSObject *)getPrefValue;
 - (NSObject *)getPrefValue:(OAApplicationMode *)mode;
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode;
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode;
 - (void)resetModeToDefault:(OAApplicationMode *)mode;
 - (void)resetToDefault;
 - (void)setValueFromString:(NSString *)strValue appMode:(nullable OAApplicationMode *)mode;

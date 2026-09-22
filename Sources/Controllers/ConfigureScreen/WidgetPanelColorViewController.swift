@@ -9,7 +9,7 @@
 import UIKit
 
 protocol WidgetPanelColorViewControllerDelegate: AnyObject {
-    func widgetPanelColorViewControllerDidFinish()
+    func widgetPanelColorViewControllerDidFinish(pageIndex: Int)
 }
 
 final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
@@ -43,7 +43,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
             : OAUtilities.calculateScreenHeight()
         let availableHeight = max(0,
                                   viewHeight
-                                      - view.safeAreaInsets.top
+                                      - navigationTopInset
                                       - Constants.navigationContentHeight)
         let previewHeight = traitCollection.verticalSizeClass == .compact
             ? min(Constants.landscapePreviewHeight, availableHeight * 0.4)
@@ -101,10 +101,23 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         isNightColorMode ? currentNightColorItem : currentDayColorItem
     }
 
+    private var navigationTopInset: CGFloat {
+        let safeAreaTop = view.safeAreaInsets.top
+        guard let window = view.window,
+              let statusBarManager = window.windowScene?.statusBarManager,
+              !statusBarManager.isStatusBarHidden else { return safeAreaTop }
+        // This HUD can extend under the status bar even when its own safe-area inset is zero.
+        let statusBarInWindow = window.convert(statusBarManager.statusBarFrame, from: window.screen.coordinateSpace)
+        let statusBarInView = view.convert(statusBarInWindow, from: window)
+        guard statusBarInView.intersects(view.bounds) else { return safeAreaTop }
+        return max(safeAreaTop, statusBarInView.maxY - view.bounds.minY)
+    }
+
     init(appMode: OAApplicationMode,
          panel: WidgetsPanel,
          layoutMode: ScreenLayoutMode?,
-         target: WidgetPanelColorTarget) {
+         target: WidgetPanelColorTarget,
+         initialPageIndex: Int) {
         self.appMode = appMode
         self.panel = panel
         self.layoutMode = layoutMode
@@ -127,6 +140,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         }
 
         super.init(nibName: "OABaseScrollableHudViewController", bundle: nil)
+        previewView.setCurrentPageIndex(initialPageIndex, for: panel)
         prepareColors()
     }
 
@@ -163,7 +177,12 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         super.viewDidAppear(animated)
         applyMapTheme()
         DispatchQueue.main.async { [weak self] in
-            self?.reloadPreview()
+            guard let self, self.view.window != nil else { return }
+            // The scrollable HUD performs its first manual layout from
+            // viewWillAppear, before this view is necessarily attached to a window.
+            // Recalculate the navigation inset once the status bar is available.
+            self.doAdditionalLayout()
+            self.reloadPreview()
         }
     }
 
@@ -198,6 +217,12 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         layoutFloatingButtons()
         layoutNavigationBackground()
         layoutPreview()
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        guard viewIfLoaded?.window != nil else { return }
+        doAdditionalLayout()
     }
 
     override func hide() {
@@ -257,7 +282,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     private func configureNavigationBackground() {
         navigationBackgroundView.backgroundColor = .black
-        navigationBackgroundView.isUserInteractionEnabled = false
+        // The root view passes unhandled touches through to the map.
+        // Keep the navigation strip interactive, including its transparent gradient edge.
+        navigationBackgroundView.isUserInteractionEnabled = true
         navigationBackgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
         navigationBackgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
         navigationBackgroundView.layer.mask = navigationBackgroundMaskLayer
@@ -332,7 +359,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func layoutFloatingButtons() {
-        let top = view.safeAreaInsets.top + 8
+        let top = navigationTopInset + 8
         let left = view.safeAreaInsets.left + Constants.floatingButtonInset
         let reservedTrailingButtonOrigin = view.bounds.width - view.safeAreaInsets.right - Constants.floatingButtonInset
             - Constants.floatingButtonSize
@@ -351,7 +378,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         navigationBackgroundView.frame = CGRect(x: 0,
                                                 y: 0,
                                                 width: view.bounds.width,
-                                                height: view.safeAreaInsets.top + Constants.navigationContentHeight)
+                                                height: navigationTopInset + Constants.navigationContentHeight)
         navigationBackgroundMaskLayer.frame = navigationBackgroundView.bounds
         navigationBackgroundMaskLayer.colors = [
             UIColor.black.withAlphaComponent(Constants.navigationBackgroundFirstAlpha).cgColor,
@@ -361,7 +388,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func layoutPreview() {
-        let top = view.safeAreaInsets.top + Constants.navigationContentHeight
+        let top = navigationTopInset + Constants.navigationContentHeight
         previewView.frame = CGRect(x: 0,
                                    y: top,
                                    width: view.bounds.width,
@@ -488,6 +515,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         guard !didRestoreNavigation else { return }
         didRestoreNavigation = true
         isApplied = keepingChanges
+        previewView.preserveCurrentPage()
+        let selectedPageIndex = previewView.currentPageIndex(for: panel)
         previewView.releaseHostedWidgets()
         OADayNightHelper.instance().resetTempMode()
         if !keepingChanges {
@@ -503,7 +532,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                !self.navControllerHistory.isEmpty {
                 navigationController.setViewControllers(self.navControllerHistory, animated: true)
             }
-            self.delegate?.widgetPanelColorViewControllerDidFinish()
+            self.delegate?.widgetPanelColorViewControllerDidFinish(pageIndex: selectedPageIndex)
         }
     }
 

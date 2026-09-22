@@ -93,6 +93,21 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         }
     }
 
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
+        previewView.preserveCurrentPage()
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil) { [weak self] context in
+            guard !context.isCancelled else { return }
+            // OAMapHudViewController recreates all widget panels in its own
+            // transition completion. Run on the next main-loop turn so the
+            // preview measures and shows the newly populated widget page.
+            DispatchQueue.main.async {
+                self?.reloadPreview()
+            }
+        }
+    }
+
     override func getTitle() -> String {
         selectedPanel.title
     }
@@ -366,10 +381,12 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func showColorScreen(target: WidgetPanelColorTarget) {
         guard let navigationController = OARootViewController.instance().navigationController else { return }
+        previewView.preserveCurrentPage()
         let controller = WidgetPanelColorViewController(appMode: appMode,
                                                         panel: selectedPanel,
                                                         layoutMode: appearanceLayoutMode,
-                                                        target: target)
+                                                        target: target,
+                                                        initialPageIndex: previewView.currentPageIndex(for: selectedPanel))
         controller.delegate = self
         controller.navControllerHistory = navigationController.saveCurrentStateForScrollableHud()
         OARootViewController.instance().mapPanel.showScrollableHudViewController(controller)
@@ -599,7 +616,8 @@ extension WidgetsAppearanceViewController: OACopyProfileBottomSheetDelegate {
 }
 
 extension WidgetsAppearanceViewController: WidgetPanelColorViewControllerDelegate {
-    func widgetPanelColorViewControllerDidFinish() {
+    func widgetPanelColorViewControllerDidFinish(pageIndex: Int) {
+        previewView.setCurrentPageIndex(pageIndex, for: selectedPanel)
         reloadScreenData()
     }
 }
@@ -637,6 +655,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         var excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
         var disabledLongPressRecognizers: [UILongPressGestureRecognizer]
         var removedContextMenuInteractions: [(view: UIView, interaction: UIContextMenuInteraction)]
+        var sizeStyleOverrides: [(widget: OATextInfoWidget, style: NSNumber?)]
 
         var previewContentSize: CGSize
     }
@@ -655,6 +674,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private var pendingLayoutMode: ScreenLayoutMode?
     private var panelSizeUpdateGeneration = 0
     private var isMeasuringPanelSize = false
+    private var lastLayoutSize: CGSize = .zero
     private var selectedPageIndexes: [ObjectIdentifier: Int] = [:]
 
     private weak var pendingParentViewController: UIViewController?
@@ -696,6 +716,14 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        let layoutSizeChanged = bounds.size != lastLayoutSize
+        lastLayoutSize = bounds.size
+        if let state = hostedState {
+            selectedPageIndexes[ObjectIdentifier(state.panel)] = state.controller.currentIndex
+            if layoutSizeChanged {
+                schedulePanelSizeUpdate()
+            }
+        }
         if hostedState == nil,
            let pendingPanel,
            let pendingAppMode,
@@ -764,12 +792,27 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         selectedPageIndexes[ObjectIdentifier(panel)] = state.controller.currentIndex
     }
 
+    func currentPageIndex(for panel: WidgetsPanel) -> Int {
+        if let state = hostedState, state.panel == panel {
+            return state.controller.currentIndex
+        }
+        return selectedPageIndexes[ObjectIdentifier(panel)] ?? 0
+    }
+
+    func setCurrentPageIndex(_ index: Int, for panel: WidgetsPanel) {
+        selectedPageIndexes[ObjectIdentifier(panel)] = max(0, index)
+        guard let state = hostedState, state.panel == panel else { return }
+        restoreCurrentPage(in: state.controller, for: panel)
+        schedulePanelSizeUpdate()
+    }
+
     func releaseHostedWidgets() {
         pendingPanel = nil
         pendingAppMode = nil
         pendingLayoutMode = nil
         pendingParentViewController = nil
         guard let state = hostedState else { return }
+        selectedPageIndexes[ObjectIdentifier(state.panel)] = state.controller.currentIndex
         panelSizeUpdateGeneration += 1
         state.controller.delegate = nil
         state.controller.onCurrentPageChanged = state.originalCurrentPageChangedHandler
@@ -786,6 +829,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         state.controller.pageContainerView.layer.cornerRadius = state.pageContainerCornerRadius
         state.controller.pageContainerView.layer.maskedCorners = state.pageContainerMaskedCorners
         state.excludedWidgets.forEach { $0.widget.isHidden = $0.isHidden }
+        applySizeStyleOverrides(state.sizeStyleOverrides, in: state.controller)
         let originalAppearance = WidgetPanelAppearanceResolver.resolve(
             panel: state.panel,
             appMode: state.appMode,
@@ -925,6 +969,18 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalPageContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
         controller.delegate = nil
         excludedWidgets.forEach { $0.widget.isHidden = true }
+        let previewSizeStyle = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
+            .sizeMode(for: panel)
+            .widgetSizeStyle
+            .map { NSNumber(value: $0.rawValue) }
+        let textWidgets = controller.widgetPages
+            .flatMap { $0 }
+            .compactMap { $0 as? OATextInfoWidget }
+        let sizeStyleOverrides = textWidgets.map {
+            (widget: $0, style: $0.previewSizeStyleOverride)
+        }
+        applySizeStyleOverrides(textWidgets.map { (widget: $0, style: previewSizeStyle) },
+                                in: controller)
         let panelContentSize = previewPanelContentSize(for: controller)
         let previewContentSize = previewSize(for: panelContentSize,
                                              controller: controller,
@@ -960,6 +1016,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                                      excludedWidgets: excludedWidgets,
                                      disabledLongPressRecognizers: disabledLongPressRecognizers,
                                      removedContextMenuInteractions: removedContextMenuInteractions,
+                                     sizeStyleOverrides: sizeStyleOverrides,
                                      previewContentSize: previewContentSize)
         hostedState = state
         controller.willMove(toParent: nil)
@@ -977,9 +1034,11 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             self.selectedPageIndexes[ObjectIdentifier(panel)] = controller.currentIndex
             self.schedulePanelSizeUpdate()
         }
-        controller.onWidgetPagesChanged = { [weak self] in
+        controller.onWidgetPagesChanged = { [weak self, weak controller] in
             originalWidgetPagesChangedHandler?()
-            self?.refreshExcludedWidgets()
+            guard let self, let controller else { return }
+            self.restoreCurrentPage(in: controller, for: panel)
+            self.refreshExcludedWidgets()
         }
         controller.view.isHidden = false
         controller.view.alpha = 1
@@ -1057,7 +1116,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             let widgetSizes = visibleWidgets.map {
                 $0.systemLayoutSizeFitting(
                     UIView.layoutFittingCompressedSize,
-                    withHorizontalFittingPriority: .fittingSizeLevel,
+                    // Match WidgetPageViewController: preserve required content
+                    // padding and icon widths instead of forcing a transient
+                    // compressed width (12 pt for some widget hierarchies).
+                    withHorizontalFittingPriority: UILayoutPriority(999),
                     verticalFittingPriority: .fittingSizeLevel
                 )
             }
@@ -1103,7 +1165,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             let containerWidth = originalContainerSize.width > 0
                 ? originalContainerSize.width
                 : bounds.width
-            result.width = max(containerWidth, panelContentSize.width)
+            // Top and bottom panels always occupy the map container width. Their
+            // rows compress widget contents horizontally; the panel itself is not
+            // scaled down when intrinsic widget widths exceed that width.
+            result.width = containerWidth
         }
         return result
     }
@@ -1125,6 +1190,18 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         panelSizeUpdateGeneration += 1
         isMeasuringPanelSize = true
         defer { isMeasuringPanelSize = false }
+        let previewAppearance = WidgetPanelAppearanceResolver.resolve(
+            panel: state.panel,
+            appMode: state.appMode,
+            layoutMode: state.previewLayoutMode,
+            nightMode: OAAppSettings.sharedManager().isAppMapNightMode
+        )
+        // Map recreation and rotation apply the appearance for the physical
+        // orientation. A preview must remain bound to the layout mode it edits.
+        applyAppearance(previewAppearance,
+                        to: state.controller,
+                        using: state.mapInfoController)
+        applyPreviewSizeMode(to: &state)
         excludePreviewOnlyWidgets(in: &state)
         let panelContentSize = previewPanelContentSize(for: state.controller)
         updatePageContainerSize(panelContentSize, for: state.controller)
@@ -1137,6 +1214,52 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             layoutHostedPanel()
             // Complete layout while delegate-driven measurements are suppressed.
             state.view.layoutIfNeeded()
+        }
+    }
+
+    private func applyPreviewSizeMode(to state: inout HostedPanelState) {
+        let previewSizeStyle = WidgetPanelAppearanceSettings(appMode: state.appMode,
+                                                             layoutMode: state.previewLayoutMode)
+            .sizeMode(for: state.panel)
+            .widgetSizeStyle
+            .map { NSNumber(value: $0.rawValue) }
+        var trackedWidgets = Set(state.sizeStyleOverrides.map { ObjectIdentifier($0.widget) })
+        var updates: [(widget: OATextInfoWidget, style: NSNumber?)] = []
+        for case let widget as OATextInfoWidget in state.controller.widgetPages.flatMap({ $0 }) {
+            if trackedWidgets.insert(ObjectIdentifier(widget)).inserted {
+                state.sizeStyleOverrides.append((widget: widget,
+                                                 style: widget.previewSizeStyleOverride))
+            }
+            guard widget.previewSizeStyleOverride != previewSizeStyle else { continue }
+            updates.append((widget: widget, style: previewSizeStyle))
+        }
+        applySizeStyleOverrides(updates, in: state.controller)
+    }
+
+    private func applySizeStyleOverrides(_ updates: [(widget: OATextInfoWidget, style: NSNumber?)],
+                                         in controller: WidgetPanelViewController) {
+        guard !updates.isEmpty else { return }
+        let widgetDelegates = updates.map { (widget: $0.widget, delegate: $0.widget.delegate) }
+        updates.forEach { $0.widget.delegate = nil }
+        defer {
+            widgetDelegates.forEach { $0.widget.delegate = $0.delegate }
+        }
+        updates.forEach {
+            $0.widget.previewSizeStyleOverride = $0.style
+            guard $0.widget.isSimpleLayout else { return }
+            $0.widget.updateHeightConstraint(
+                with: .equal,
+                constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: $0.widget.widgetSizeStyle),
+                priority: .defaultHigh
+            )
+        }
+        // Configure loaded pages only after every row has its new height.
+        // layoutWidgets() updates each page stack height in the same pass, avoiding
+        // a transient mix of (for example) 72 pt rows and the old 144 pt container.
+        // Updating all previously visited pages is also required when restoring the
+        // map, otherwise an off-screen page can keep the preview's typography.
+        for case let page as WidgetPageViewController in controller.pages where page.isViewLoaded {
+            _ = page.layoutWidgets()
         }
     }
 

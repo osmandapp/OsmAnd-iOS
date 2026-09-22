@@ -8,6 +8,10 @@
 
 extension OATextInfoWidget {
     @objc var widgetSizeStyle: EOAWidgetSizeStyle {
+        if let previewSizeStyleOverride,
+           let style = EOAWidgetSizeStyle(rawValue: previewSizeStyleOverride.intValue) {
+            return style
+        }
         guard widgetSizePref != nil else {
             return .medium
         }

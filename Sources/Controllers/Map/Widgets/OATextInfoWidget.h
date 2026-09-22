@@ -45,6 +45,8 @@ extern NSString * const kSizeStylePref;
 @property (nonatomic, strong, nullable) OutlineLabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
 @property (nonatomic, nullable) OACommonWidgetSizeStyle *widgetSizePref;
+/// Temporary size used while the widget is hosted by the appearance preview.
+@property (nonatomic, nullable) NSNumber *previewSizeStyleOverride;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);

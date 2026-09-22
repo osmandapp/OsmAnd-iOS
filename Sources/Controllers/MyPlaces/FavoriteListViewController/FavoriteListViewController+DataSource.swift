@@ -309,7 +309,7 @@ extension FavoriteListViewController {
 
     private func applyDataSourceSnapshot(_ newSnapshot: Snapshot, animatingDifferences: Bool) {
         var snapshot = dataSource.snapshot()
-        guard !snapshot.sectionIdentifiers.isEmpty else {
+        guard !snapshot.sectionIdentifiers.isEmpty, newSnapshot.sectionIdentifiers.contains(where: \.isFolder) else {
             dataSource.apply(newSnapshot, animatingDifferences: animatingDifferences)
             return
         }

@@ -1017,6 +1017,8 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.maxNumberOfRasterMapLayersInBatch = 4;
     rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
+    // releaseContext: runs only from applicationWillTerminate:, so the loaded resources go with the process
+    rendererSetup.leaveResourcesToProcessExit = true;
     // DIAGNOSTIC: set to 0 to upload every GPU resource on the render thread instead of the
     // shared worker context. Uploads are slower, but it removes cross-context sharing from the
     // picture - which is the difference between the EAGLSharegroup this used to rely on and the

@@ -7952,7 +7952,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     for (NSString *filepath in arr)
     {
         NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getCachedGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])

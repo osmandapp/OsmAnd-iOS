@@ -535,6 +535,18 @@
     }
 }
 
+#if DEBUG
+- (void)prepareRouteLinesForTesting
+{
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+}
+
+- (NSUInteger)routeLineCountForTesting
+{
+    return _collection ? _collection->getLines().size() : 0;
+}
+#endif
+
 - (void) drawRouteSegments
 {
     NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
@@ -558,6 +570,12 @@
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
         [self drawLines:afterPoints collection:_collection lineId:lineId++];
+    }
+    const auto lines = _collection->getLines();
+    for (const auto &line : lines)
+    {
+        if (line->lineId >= lineId)
+            _collection->removeLine(line);
     }
 }
 

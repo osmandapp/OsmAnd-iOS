@@ -534,18 +534,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (OAPOIType *) getPoiAdditionalByKey:(OAPOIBaseType *)p name:(NSString *)name
 {
-    NSArray<OAPOIType *> *pp = p.poiAdditionals;
-    if (pp)
-    {
-        for (OAPOIType *pt in pp)
-        {
-            if ([pt.name isEqualToString:name])
-            {
-                return pt;
-            }
-        }
-    }
-    return nil;
+    return [p getPoiAdditionalByKeyName:name];
 }
 
 - (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name

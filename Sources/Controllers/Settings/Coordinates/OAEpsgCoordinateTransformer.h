@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAEpsgCoordinateTransformer : NSObject
 
 + (instancetype)sharedInstance;
++ (NSString *)projResourcesPath;
 
 - (nullable OAEpsgPoint *)fromLonLatWithCode:(NSInteger)epsgCode lon:(double)lon lat:(double)lat;
 - (nullable CLLocation *)toLonLatWithCode:(NSInteger)epsgCode easting:(double)easting northing:(double)northing;

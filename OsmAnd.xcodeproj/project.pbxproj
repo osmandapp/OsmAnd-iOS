@@ -1747,7 +1747,6 @@
 		CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */; };
 		CE7CC394302B11530048D36F /* CoordinateFormatHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */; };
 		CE7CC396302B4EA40048D36F /* CoordinatesFormatAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */; };
-		CE7CC398302B6E940048D36F /* EpsgCatalogRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */; };
 		CE7CC39B302B72160048D36F /* OAEpsgCoordinateTransformer.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */; };
 		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
 		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
@@ -5954,7 +5953,6 @@
 		CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatEditViewController.swift; sourceTree = "<group>"; };
 		CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFormatHelper.swift; sourceTree = "<group>"; };
 		CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesFormatAddViewController.swift; sourceTree = "<group>"; };
-		CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpsgCatalogRepository.swift; sourceTree = "<group>"; };
 		CE7CC399302B71EE0048D36F /* OAEpsgCoordinateTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEpsgCoordinateTransformer.h; sourceTree = "<group>"; };
 		CE7CC39A302B72160048D36F /* OAEpsgCoordinateTransformer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEpsgCoordinateTransformer.mm; sourceTree = "<group>"; };
 		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
@@ -11214,7 +11212,6 @@
 				CE7CC391302AFE620048D36F /* CoordinatesFormatEditViewController.swift */,
 				CE7CC395302B4EA40048D36F /* CoordinatesFormatAddViewController.swift */,
 				CE6DAAF4302E036800F71540 /* CoordinateFormatSelectorViewController.swift */,
-				CE7CC397302B6E940048D36F /* EpsgCatalogRepository.swift */,
 				CE77DB8730405134005BAD75 /* CoordinateFormatTableHeader.swift */,
 				CE7CC393302B11530048D36F /* CoordinateFormatHelper.swift */,
 				CE79CF253025D13600B3BA15 /* CoordinateFormatIds.swift */,
@@ -19057,7 +19054,6 @@
 				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
-				CE7CC398302B6E940048D36F /* EpsgCatalogRepository.swift in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				3279D5132DF99EAA007A5F6E /* OAClickableWayMenuProvider.mm in Sources */,

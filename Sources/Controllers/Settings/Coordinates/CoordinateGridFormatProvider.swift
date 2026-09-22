@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OsmAndShared
 
 final class CoordinateGridFormatProvider {
     private let repository: EpsgCatalogRepository
@@ -14,7 +15,7 @@ final class CoordinateGridFormatProvider {
     private var unsupportedFormats = Set<String>()
     private let lock = NSLock()
 
-    init(repository: EpsgCatalogRepository = .shared) {
+    init(repository: EpsgCatalogRepository = CoordinateFormatHelper.epsgCatalog) {
         self.repository = repository
     }
 
@@ -58,7 +59,7 @@ final class CoordinateGridFormatProvider {
         guard let code = builtIn?.epsgCode?.intValue ?? CoordinateFormatIds.epsgCode(normalizedId) else {
             return builtIn != nil
         }
-        return repository.getGridDefinition(code) != nil
+        return repository.getGridDefinition(code: Int32(code)) != nil
     }
 
     func filterSupportedIds(_ formatIds: [String]) -> [String] {
@@ -87,9 +88,9 @@ final class CoordinateGridFormatProvider {
         epsgCode: Int,
         builtIn: GridFormat?
     ) -> CoordinateGridFormat? {
-        guard let definition = repository.getGridDefinition(epsgCode),
+        guard let definition = repository.getGridDefinition(code: Int32(epsgCode)),
               let projectionRaw = OAGridFormatMappingBridge
-                  .projectionRaw(forEpsgMethodCode: Int32(definition.projectionMethodCode))?.int32Value,
+                  .projectionRaw(forEpsgMethodCode: definition.projectionMethodCode)?.int32Value,
               let params = resolveProjectionParameters(definition, projectionRaw: projectionRaw) else {
             return nil
         }
@@ -106,15 +107,15 @@ final class CoordinateGridFormatProvider {
         _ definition: EpsgGridDefinition,
         projectionRaw: Int32
     ) -> CoordinateGridProjectionParameters? {
-        guard let constants = readProjectionConstants(definition.epsgCode, projectionRaw: projectionRaw) else {
+        guard let constants = readProjectionConstants(Int(definition.epsgCode), projectionRaw: projectionRaw) else {
             return nil
         }
         if definition.usesWgs84 {
             return constants.withEllipsoid(.identity, operationCode: nil)
         }
-        for op in definition.transformationCodes {
-            if let ellipsoid = readEllipsoidParameters(definition.epsgCode, operationCode: op) {
-                return constants.withEllipsoid(ellipsoid, operationCode: op)
+        for operationCode in definition.transformationCodes.map(\.intValue) {
+            if let ellipsoid = readEllipsoidParameters(Int(definition.epsgCode), operationCode: operationCode) {
+                return constants.withEllipsoid(ellipsoid, operationCode: operationCode)
             }
         }
         return nil

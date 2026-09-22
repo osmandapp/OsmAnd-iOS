@@ -54,10 +54,3 @@ struct CoordinateGridFormat {
         OAGridFormatMappingBridge.maxZoom(forProjectionRaw: projectionRaw)?.int32Value
     }
 }
-
-struct EpsgGridDefinition {
-    let epsgCode: Int
-    let projectionMethodCode: Int
-    let usesWgs84: Bool
-    let transformationCodes: [Int]
-}

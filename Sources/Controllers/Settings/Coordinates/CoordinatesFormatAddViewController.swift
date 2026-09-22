@@ -16,6 +16,8 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
 
     private static let infoRowKey = "info"
     private static let formatIdKey = "formatId"
+    private static let listResultsLimit: Int32 = 1000
+    private static let searchResultsLimit: Int32 = 50
 
     var onFormatAdded: ((String) -> Void)?
 
@@ -245,14 +247,14 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         let gridOnly = addMode == .gridSelection
         let work = DispatchWorkItem { [weak self] in
-            let repository = EpsgCatalogRepository.shared
+            let repository = CoordinateFormatHelper.epsgCatalog
             let results: [CoordinateFormat]
             if gridOnly {
-                results = repository.searchGridFormats(trimmed)
+                results = repository.searchGridFormats(query: trimmed, limit: Self.searchResultsLimit)
             } else {
                 results = trimmed.isEmpty
-                    ? repository.listAll()
-                    : repository.search(trimmed)
+                    ? repository.listAll(limit: Self.listResultsLimit)
+                    : repository.search(query: trimmed, limit: Self.searchResultsLimit)
             }
             DispatchQueue.main.async {
                 guard let self else { return }

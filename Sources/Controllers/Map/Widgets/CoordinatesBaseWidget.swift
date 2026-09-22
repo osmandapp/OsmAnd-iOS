@@ -184,7 +184,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         let coordFormat = coordinateFormat(appMode)
         lastLocation = CLLocation(latitude: lat, longitude: lon)
 
-        guard let legacy = coordFormat.legacyFormat else {
+        guard let legacy = coordFormat.legacyFormatValue else {
             showGenericCoordinates(CoordinateFormatHelper.format(coordFormat, lat: lat, lon: lon))
             return
         }

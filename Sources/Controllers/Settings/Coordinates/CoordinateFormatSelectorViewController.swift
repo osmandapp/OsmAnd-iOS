@@ -236,7 +236,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         let row = section.createNewRow()
         row.cellType = OASimpleTableViewCell.reuseIdentifier
         row.title = format.title
-        if let code = format.epsgCode {
+        if let code = format.epsgCodeValue {
             row.descr = "EPSG:\(code)"
         } else {
             row.descr = CoordinateFormatHelper.exampleString(format)

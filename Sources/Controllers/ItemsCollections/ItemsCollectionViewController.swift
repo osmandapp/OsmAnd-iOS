@@ -951,7 +951,9 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
     }
     
     func scrollToIndex(_ index: Int) {
-        guard let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler else { return }
+        guard let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
+              iconCategories.indices.contains(index) else { return }
+        // Browsing must not switch the host: setIconName() does that when an icon is actually picked
         poiIconsDelegate.selectedCatagoryKey = iconCategories[index].key
         selectedChipsIndex = index
         generateData()

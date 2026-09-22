@@ -204,11 +204,20 @@
 
 - (OASGpxDataItem *_Nullable)getGPXItem:(NSString *)filePath
 {
+    return [[OASGpxDbHelper shared] getItemFile:[self gpxFileForPath:filePath]];
+}
+
+- (OASGpxDataItem *_Nullable)getCachedGPXItem:(NSString *)filePath
+{
+    return [[OASGpxDbHelper shared] getItemFile:[self gpxFileForPath:filePath] readIfNeeded:NO];
+}
+
+- (OASKFile *)gpxFileForPath:(NSString *)filePath
+{
     if (![@"current_track" isEqualToString:filePath] && ![filePath containsString:OsmAndApp.instance.gpxPath]) {
         filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:filePath];
     }
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
-    return [[OASGpxDbHelper shared] getItemFile:file];
+    return [[OASKFile alloc] initWithFilePath:filePath];
 }
 
 - (void)removeGpxItem:(OASGpxDataItem *)item withLocalRemove:(BOOL)withLocalRemove

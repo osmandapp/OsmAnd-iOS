@@ -90,8 +90,8 @@ static int DEFAULT_ELO = 900;
 
 @property (nonatomic, nullable) OAPOIType *type; // in android here is category:  private PoiCategory type;
 @property (nonatomic, nullable) NSString *subType;
-@property (nonatomic, assign) BOOL hasOpeningHours;
-@property (nonatomic) NSString *openingHours;
+@property (nonatomic, readonly) BOOL hasOpeningHours;
+@property (nonatomic, nullable) NSString *openingHours;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) BOOL isPlace;
 @property (nonatomic) NSString *buildingNumber;

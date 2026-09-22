@@ -23,8 +23,9 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
-        case migrateCarPlayMapAppearanceMode
         case migrateCoordinateFormatPreferredIds
+        case migrateWidgetLayoutPreferences
+        case migrateTransparentWidgets
         case migrateTracksSortModeKeysAndFormat
         case migrateCoordinateGridFormatIds
     }
@@ -113,9 +114,13 @@ final class MigrationManager: NSObject {
                 migrateAstronomyPreferences()
                 defaults.set(true, forKey: MigrationKey.migrateAstronomyPreferences.rawValue)
             }
-            if !defaults.bool(forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue) {
-                migrateCarPlayMapAppearanceMode()
-                defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
+            if !defaults.bool(forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue) {
+                migrateWidgetLayoutPreferences()
+                defaults.set(true, forKey: MigrationKey.migrateWidgetLayoutPreferences.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgets.rawValue) {
+                migrateTransparentWidgets()
+                defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
             }
             if !defaults.bool(forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue) {
                 settings.coordinateFormatSettingsStorage.migrateFromLegacyIfNeeded()
@@ -136,6 +141,49 @@ final class MigrationManager: NSObject {
         let pref = settings.coordinateGridFormat
         for mode in OAApplicationMode.allPossibleValues() where pref.isSet(for: mode) {
             pref.set(pref.get(mode), mode: mode)
+        }
+    }
+
+    private func migrateTransparentWidgets() {
+        let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
+        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
+            let value = legacyPreference.get(appMode)
+            var preferences = [settings.transparentWidgets(nil)]
+            ScreenLayoutMode.allCases.forEach {
+                preferences.append(settings.transparentWidgets(NSNumber(value: $0.rawValue)))
+            }
+            for preference in preferences where !preference.isSet(for: appMode) {
+                preference.set(value, mode: appMode)
+            }
+        }
+    }
+
+    private func migrateWidgetLayoutPreferences() {
+        let sourceVisibility = settings.mapInfoControls(nil)
+        let sourceCustomKeys = settings.customWidgetKeys(nil)
+        let sourcePanelOrders = WidgetsPanel.values.map { panel in
+            (panel, settings.widgetPanelOrder(panel, screenLayoutMode: nil))
+        }
+        for appMode in OAApplicationMode.allPossibleValues() {
+            for screenLayoutMode in ScreenLayoutMode.allCases {
+                let layoutMode = NSNumber(value: screenLayoutMode.rawValue)
+                let targetVisibility = settings.mapInfoControls(layoutMode)
+                if sourceVisibility.isSet(for: appMode), !targetVisibility.isSet(for: appMode) {
+                    targetVisibility.set(sourceVisibility.get(appMode), mode: appMode)
+                }
+
+                let targetCustomKeys = settings.customWidgetKeys(layoutMode)
+                if sourceCustomKeys.isSet(for: appMode), !targetCustomKeys.isSet(for: appMode) {
+                    targetCustomKeys.set(sourceCustomKeys.get(appMode), mode: appMode)
+                }
+
+                for (panel, sourceOrder) in sourcePanelOrders {
+                    let targetOrder = settings.widgetPanelOrder(panel, screenLayoutMode: layoutMode)
+                    if sourceOrder.isSet(for: appMode), !targetOrder.isSet(for: appMode) {
+                        targetOrder.set(sourceOrder.get(appMode), mode: appMode)
+                    }
+                }
+            }
         }
     }
     
@@ -638,14 +686,6 @@ final class MigrationManager: NSObject {
         }
     }
     
-    private func migrateCarPlayMapAppearanceMode() {
-        let current = settings.applicationMode.get()
-        let firstCar = CarPlayService.shared.firstCarMode()
-        let resolved = settings.isCarPlayModeDefault.get() ? (current.isDerivedRouting(from: .car()) ? current : firstCar) : settings.carPlayMode.get()
-
-        settings.carPlayMapAppearanceMode.set(settings.appearanceMode.get(resolved))
-    }
-
     private func migrateTracksSortModeKeysAndFormat() {
         let validValues = Set(TracksSortMode.allCases.map(\.value))
         var tracksSortModes = settings.getTracksSortModes()

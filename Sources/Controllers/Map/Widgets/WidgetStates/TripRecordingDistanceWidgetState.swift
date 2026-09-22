@@ -68,6 +68,12 @@ final class TripRecordingDistanceWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(distanceModePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId: customId).set(distanceModePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getDistanceModePreference() -> OACommonTripRecordingDistanceMode {
         distanceModePreference

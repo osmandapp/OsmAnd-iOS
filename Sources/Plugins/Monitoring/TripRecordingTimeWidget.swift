@@ -41,7 +41,7 @@ final class TripRecordingTimeWidget: OASimpleWidget {
         if cachedTimeSpan != timeSpan {
             cachedTimeSpan = timeSpan
             let formattedTime = OAOsmAndFormatter.getFormattedDurationShort(Double(timeSpan) / 1000, fullForm: false)
-            let isSmallSidePanel = widgetSizeStyle == .small && getPanel()?.isPanelVertical == false
+            let isSmallSidePanel = widgetSizeStyle == .small && widgetPanel()?.isPanelVertical == false
             let isHourOrMore = timeSpan >= Self.oneHourMillis
             let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
             setText(formattedTime, subtext: isSmallSidePanel ? nil : localizedString(unitKey))

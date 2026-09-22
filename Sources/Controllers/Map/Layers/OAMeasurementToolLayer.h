@@ -42,4 +42,9 @@
 - (void) moveMapToPoint:(NSInteger)pos;
 - (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
 
+#if DEBUG
+- (void)prepareRouteLinesForTesting;
+- (NSUInteger)routeLineCountForTesting;
+#endif
+
 @end

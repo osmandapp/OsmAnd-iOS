@@ -171,10 +171,10 @@
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
 }
 
-+ (void)goToPoint:(OAPOI *)poi searchResult:(OASearchResult *)searchResult preferredZoom:(float)preferredZoom
++ (void)goToPoint:(OAPOI *)poi preferredZoom:(float)preferredZoom
 {
     OAMapSelectionHelper *mapSelectionHelper = [[OAMapSelectionHelper alloc] init];
-    BOOL routeFound = [mapSelectionHelper showContextMenuForSearchResult:poi filename:searchResult ? searchResult.resourceId : nil];
+    BOOL routeFound = [mapSelectionHelper showContextMenuForSearchResult:poi];
     if (routeFound)
         return;
     
@@ -193,7 +193,7 @@
         OAPOI *poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
-            [self.class goToPoint:poi searchResult:nil preferredZoom:preferredZoom];
+            [self.class goToPoint:poi preferredZoom:preferredZoom];
             originFound = YES;
         }
     }
@@ -351,7 +351,7 @@
                             [delegate closeSearch];
                         return;
                     }
-                    [self.class goToPoint:poi searchResult:searchResult preferredZoom:searchResult.preferredZoom];
+                    [self.class goToPoint:poi preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {

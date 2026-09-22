@@ -10,7 +10,8 @@
 
 @interface OAOcbfHelper : NSObject
 
-+ (void) downloadOcbfIfUpdated:(void (^)(void))completionHandler;
+// completionHandler reports whether regions.ocbf actually changed
++ (void) downloadOcbfIfUpdated:(void (^)(BOOL updated))completionHandler;
 + (BOOL) isBundledOcbfNewer;
 
 @end

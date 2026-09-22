@@ -36,6 +36,7 @@
 #import "OAAppVersion.h"
 #import "OAAppData.h"
 #import "OARouteCalculationResult.h"
+#import "OAMissingMapsResult.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -1189,9 +1190,11 @@ includeHidden:(BOOL)includeHidden
     if (mapRegions.count > 0)
     {
         sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSNumber *first = @([(OAWorldRegion *) a getArea]);
-            NSNumber *second = @([(OAWorldRegion *) b getArea]);
-            return [first compare:second];
+            double first = [(OAWorldRegion *) a getArea];
+            double second = [(OAWorldRegion *) b getArea];
+            if (first < second)
+                return NSOrderedAscending;
+            return first > second ? NSOrderedDescending : NSOrderedSame;
         }];
 
         for (OAWorldRegion *region in sortedSelectedRegions)
@@ -2089,7 +2092,7 @@ includeHidden:(BOOL)includeHidden
         }
 
         if (block)
-            block();
+            dispatch_async(dispatch_get_main_queue(), block);
     };
 
     if (progressHUD)
@@ -2101,7 +2104,10 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        proc();
+        // Uninstalling waits for renderer threads to release the resource, so never run it on the main thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            proc();
+        });
     }
 }
 
@@ -2485,13 +2491,14 @@ includeHidden:(BOOL)includeHidden
     
     NSMutableString *pointsString = [NSMutableString string];
     
-    for (CLLocation *l in routeCalculationResult.missingMapsPoints) {
+    OAMissingMapsResult *missingMapsResult = routeCalculationResult.missingMapsResult;
+    for (CLLocation *l in missingMapsResult.points) {
         [pointsString appendString:[NSString stringWithFormat:@"&%@", [self formatPointString:l]]];
     }
     
     NSString *routeMode = @"car";
-    GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
-    if (profile == GeneralRouterProfile::BICYCLE || profile == GeneralRouterProfile::PEDESTRIAN)
+    NSString *profile = missingMapsResult.profile;
+    if ([profile isEqualToString:@"bicycle"] || [profile isEqualToString:@"pedestrian"])
     {
         routeMode = @"bicycle";
     }

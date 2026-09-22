@@ -49,6 +49,79 @@ static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
 static const int START_ZOOM = 7;
 
+namespace
+{
+    // Applies 3D track style either to a line being built or to an existing one
+    template <typename Line>
+    void applyRaisedLineStyle(Line &line,
+                              const QList<float> &heights,
+                              const float elevationScaleFactor,
+                              const QList<OsmAnd::FColorARGB> &colors,
+                              const QList<OsmAnd::FColorARGB> &wallColors,
+                              const OsmAnd::FColorARGB colorARGB,
+                              const EOAGPX3DLineVisualizationPositionType positionType,
+                              const EOAGPX3DLineVisualizationWallColorType wallColorType,
+                              const CGFloat lineWidth)
+    {
+        if (!heights.isEmpty())
+        {
+            line.setElevationScaleFactor(elevationScaleFactor);
+            line.setHeights(heights);
+        }
+
+        line.setColorizationMapping(colors);
+        if (!wallColors.isEmpty())
+            line.setOutlineColorizationMapping(wallColors);
+
+        // configure visibility for Top and Bottom lines
+        switch (positionType)
+        {
+            case EOAGPX3DLineVisualizationPositionTypeTop:
+                line.setElevatedLineVisibility(true);
+                line.setSurfaceLineVisibility(false);
+                break;
+            case EOAGPX3DLineVisualizationPositionTypeBottom:
+                line.setElevatedLineVisibility(false);
+                line.setSurfaceLineVisibility(true);
+                break;
+            case EOAGPX3DLineVisualizationPositionTypeTopBottom:
+                line.setElevatedLineVisibility(true);
+                line.setSurfaceLineVisibility(true);
+                break;
+            default:
+                break;
+        }
+
+        line.setOutlineWidth(lineWidth);
+
+        if (wallColorType != EOAGPX3DLineVisualizationWallColorTypeNone
+            && wallColorType != EOAGPX3DLineVisualizationWallColorTypeSolid)
+        {
+            line.setColorizationScheme(COLORIZATION_GRADIENT);
+
+            if (wallColors.isEmpty())
+            {
+                const BOOL upwardGradient = wallColorType == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+                // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                line.setNearOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 0.0f : 1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                line.setFarOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+            }
+            else
+            {
+                // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
+                // (r,g,b) 0.0f...1.0f
+                line.setOutlineColor(OsmAnd::FColorARGB(1.0f, 1.0f, 1.0f, 1.0f));
+            }
+        }
+        else
+        {
+            // Draw transparent or solid wall
+            line.setOutlineColor(OsmAnd::FColorARGB(wallColorType == EOAGPX3DLineVisualizationWallColorTypeSolid ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+        }
+    }
+}
+
 @interface OAGPXLayer () <OASPaletteRepositoryListener>
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
@@ -72,6 +145,7 @@ static const int START_ZOOM = 7;
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
+    NSInteger _splitGeneration;
     QList<OsmAnd::PointI> _startFinishPoints;
     QList<int> _startFinishExtraIds;
     QList<float> _startFinishPointsElevations;
@@ -118,8 +192,9 @@ static const int START_ZOOM = 7;
 {
     [super resetLayer];
 
+    [self cancelSplitLabels];
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
-    [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+    [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -924,6 +999,27 @@ colorizationScheme:(int)colorizationScheme
             line->setColorizationMapping(colors);
             line->setColorizationScheme(colorizationScheme);
             line->setShowArrows([gpx isShowArrows]);
+
+            // The recorded track grows point by point, so heights and 3D style have to follow the new points
+            if ([OAGPXDatabase lineVisualizationByTypeForName:gpx.get3DVisualizationType] != EOAGPX3DLineVisualizationByTypeNone)
+            {
+                [self updateCurrentTrackRaisedLine:line
+                                        elevations:elevations
+                                         colorARGB:colorARGB
+                                            colors:colors
+                                 segmentWallColors:segmentWallColors
+                                               gpx:gpx
+                                         lineWidth:lineWidth];
+            }
+            else
+            {
+                line->setHeights(QList<float>());
+                // Add outline for colorized lines
+                const BOOL colorized = !colors.isEmpty() && colorizationScheme != COLORIZATION_NONE;
+                line->setOutlineWidth(colorized ? lineWidth + kOutlineWidth : 0.0);
+                if (colorized)
+                    line->setOutlineColor(kOutlineColor);
+            }
         }
     }
 }
@@ -936,47 +1032,35 @@ colorizationScheme:(int)colorizationScheme
       gpx:(OASGpxFile *)gpx
                   lineWidth:(CGFloat)lineWidth
 {
-    [self configureElevations:elevations elevationScaleFactor:[gpx getAdditionalExaggeration] builder:builder];
-    
-    // for setColorizationMapping use: colors or QList<OsmAnd::FColorARGB>()
-    builder.setColorizationMapping(colors);
-    
-    if (!segmentWallColors.isEmpty())
-    {
-        builder.setOutlineColorizationMapping(segmentWallColors);
-    }
-    
-    // configure visibility for Top and Bottom lines
-    [self configureVisualization3dPositionType:[OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType] builder:builder];
-   
-    builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
-
-    auto visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType];
-    if (visualization3dWallColorType != EOAGPX3DLineVisualizationWallColorTypeNone && visualization3dWallColorType != EOAGPX3DLineVisualizationWallColorTypeSolid)
-    {
-        builder.setColorizationScheme(1);
-
-        if (segmentWallColors.isEmpty())
-        {
-            BOOL upwardGradient = [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType] == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-            // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setNearOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 0.0f : 1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-            // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setFarOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-        }
-        else
-        {
-            // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
-            // (r,g,b) 0.0f...1.0f
-            builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 1.0f, 1.0f, 1.0f));
-        }
-    }
-    else
-    {
-        // Draw transparent or solid wall
-        builder.setOutlineColor(OsmAnd::FColorARGB([OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType] == EOAGPX3DLineVisualizationWallColorTypeSolid ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-    }
+    applyRaisedLineStyle(builder,
+                         [self heightsFromElevations:elevations],
+                         [gpx getAdditionalExaggeration],
+                         colors,
+                         segmentWallColors,
+                         colorARGB,
+                         [OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType],
+                         [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType],
+                         lineWidth);
     return builder;
+}
+
+- (void)updateCurrentTrackRaisedLine:(const std::shared_ptr<OsmAnd::VectorLine> &)line
+                          elevations:(NSArray <NSNumber *>* _Nullable)elevations
+                           colorARGB:(OsmAnd::FColorARGB)colorARGB
+                              colors:(const QList<OsmAnd::FColorARGB> &)colors
+                   segmentWallColors:(const QList<OsmAnd::FColorARGB> &)segmentWallColors
+                                 gpx:(OASGpxFile *)gpx
+                           lineWidth:(CGFloat)lineWidth
+{
+    applyRaisedLineStyle(*line,
+                         [self heightsFromElevations:elevations],
+                         [gpx getAdditionalExaggeration],
+                         colors,
+                         segmentWallColors,
+                         colorARGB,
+                         [OAGPXDatabase lineVisualizationPositionTypeForName:gpx.get3DLinePositionType],
+                         [OAGPXDatabase lineVisualizationWallColorTypeForName:gpx.get3DWallColoringType],
+                         lineWidth);
 }
 
 - (OsmAnd::VectorLineBuilder &)configureRaisedLine:(OsmAnd::VectorLineBuilder &)builder
@@ -1040,17 +1124,23 @@ colorizationScheme:(int)colorizationScheme
         {
             builder.setElevationScaleFactor(elevationScaleFactor);
         }
-        QList<float> heights;
-        for (NSNumber *object in elevations)
-        {
-            double elevation = [object doubleValue];
-            if (!isnan(elevation))
-            {
-                heights.append(elevation);
-            }
-        }
-        builder.setHeights(heights);
+        builder.setHeights([self heightsFromElevations:elevations]);
     }
+}
+
+- (QList<float>)heightsFromElevations:(NSArray <NSNumber *>* _Nullable)elevations
+{
+    QList<float> heights;
+    heights.reserve((int) elevations.count);
+    for (NSNumber *object in elevations)
+    {
+        double elevation = [object doubleValue];
+        if (!isnan(elevation))
+        {
+            heights.append(elevation);
+        }
+    }
+    return heights;
 }
 
 - (void)configureVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)type
@@ -1098,9 +1188,10 @@ colorizationScheme:(int)colorizationScheme
 
     NSBlockOperation* operation = [[NSBlockOperation alloc] init];
     __weak NSBlockOperation* weakOperation = operation;
-    OAAtomicInteger *splitCounter = _splitCounter;
+    // Operations run concurrently, so they carry the generation instead of reading layer state off-thread
+    const NSInteger generation = [self currentSplitGeneration];
     [operation addExecutionBlock:^{
-        if (splitCounter != _splitCounter || weakOperation.isCancelled)
+        if (weakOperation.isCancelled || ![self isSplitGenerationActual:generation])
             return;
         OASGpxFile *document = doc;
         NSArray<OASGpxTrackAnalysis *> *splitData = nil;
@@ -1141,7 +1232,7 @@ colorizationScheme:(int)colorizationScheme
             QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
             for (NSInteger i = 1; i < splitData.count; i++)
             {
-                if (splitCounter != _splitCounter || weakOperation.isCancelled)
+                if (weakOperation.isCancelled)
                     break;
                 OASGpxTrackAnalysis *seg = splitData[i];
                 double metricStartValue = splitData[i - 1].metricEnd;
@@ -1184,16 +1275,19 @@ colorizationScheme:(int)colorizationScheme
                     splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, 0, splitElevation));
                 }
             }
-            if (splitCounter == _splitCounter && !weakOperation.isCancelled)
-                [self appendSplitLabels:splitLabels];
+            if (!weakOperation.isCancelled)
+                [self appendSplitLabels:splitLabels generation:generation];
         }
-        if (splitCounter == _splitCounter && !weakOperation.isCancelled)
+        if (!weakOperation.isCancelled)
         {
-            int counter = [self decrementSplitCounter];
+            const int counter = [self decrementSplitCounterForGeneration:generation];
             if (counter == 0)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self refreshStartFinishProvider];
+                    // The generation can be bumped between this dispatch and the block running,
+                    // and rebuilding then would restore a provider that was just removed
+                    if ([self isSplitGenerationActual:generation])
+                        [self refreshStartFinishProvider];
                 });
             }
         }
@@ -1212,11 +1306,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
     _elevationScaleFactor = kGpxExaggerationDefScale;
-    if (_startFinishProvider)
-    {
-        [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
-        _startFinishProvider = nullptr;
-    }
+    [self removeStartFinishProvider];
     
     QList<OsmAnd::PointI> startFinishPoints;
     QList<float> startFinishPointsElevations;
@@ -1224,7 +1314,7 @@ colorizationScheme:(int)colorizationScheme
     for (NSString *key in _gpxFiles.allKeys) {
         NSString *path = key;
         
-        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getGPXItem:path];
+        OASGpxDataItem *gpx = [OAGPXDatabase.sharedDb getCachedGPXItem:path];
         
         OASGpxFile *gpxFile = [_gpxFiles objectForKey:key];
         GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:gpxFile];
@@ -1399,6 +1489,27 @@ colorizationScheme:(int)colorizationScheme
     [_splitLabelsQueue setSuspended:NO];
 }
 
+- (void) removeStartFinishProvider
+{
+    @synchronized(_splitLock)
+    {
+        if (_startFinishProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+            _startFinishProvider = nullptr;
+        }
+    }
+}
+
+// Retires the pending operations, so that none of them can append to the labels or rebuild the
+// provider afterwards
+- (void) cancelSplitLabels
+{
+    [_splitLabelsQueue cancelAllOperations];
+    [self resetSplitCounter];
+    [self clearSplitLabels];
+}
+
 - (void) refreshStartFinishProvider
 {
     @synchronized(_splitLock)
@@ -1434,7 +1545,24 @@ colorizationScheme:(int)colorizationScheme
 {
     @synchronized(_splitLock)
     {
+        _splitGeneration++;
         _splitCounter = [OAAtomicInteger atomicInteger:0];
+    }
+}
+
+- (NSInteger) currentSplitGeneration
+{
+    @synchronized(_splitLock)
+    {
+        return _splitGeneration;
+    }
+}
+
+- (BOOL) isSplitGenerationActual:(NSInteger)generation
+{
+    @synchronized(_splitLock)
+    {
+        return _splitGeneration == generation;
     }
 }
 
@@ -1446,10 +1574,14 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (int) decrementSplitCounter
+// Returns the number of pending operations, or -1 when the generation is already stale
+- (int) decrementSplitCounterForGeneration:(NSInteger)generation
 {
     @synchronized(_splitLock)
     {
+        if (_splitGeneration != generation)
+            return -1;
+
         return [_splitCounter decrementAndGet];
     }
 }
@@ -1495,9 +1627,13 @@ colorizationScheme:(int)colorizationScheme
 }
 
 - (void) appendSplitLabels:(QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> &)splitLabels
+                generation:(NSInteger)generation
 {
     @synchronized(_splitLock)
     {
+        if (_splitGeneration != generation)
+            return;
+
         _splitLabels.append(splitLabels);
     }
 }

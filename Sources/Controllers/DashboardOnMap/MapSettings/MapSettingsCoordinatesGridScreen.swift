@@ -68,7 +68,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         showHideCoordinatesGridRow.cellType = OASwitchTableViewCell.reuseIdentifier
         showHideCoordinatesGridRow.key = RowKey.showHideCoordinatesGridRowKey.rawValue
         showHideCoordinatesGridRow.title = localizedString(isCoordinatesGridEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
-        showHideCoordinatesGridRow.icon = UIImage.templateImageNamed(isCoordinatesGridEnabled ? "ic_custom_show" : "ic_custom_hide")
+        showHideCoordinatesGridRow.icon = isCoordinatesGridEnabled ? .icCustomShow : .icCustomHide
         showHideCoordinatesGridRow.iconTintColor = isCoordinatesGridEnabled ? .iconColorSelected : .iconColorDisabled
         showHideCoordinatesGridRow.setObj(isCoordinatesGridEnabled, forKey: "isEnabled")
         if isCoordinatesGridEnabled {

@@ -63,6 +63,12 @@ final class TripRecordingSlopeWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(averageSlopeModePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId: customId).set(averageSlopeModePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getAverageSlopeModePreference() -> OACommonTripRecordingAverageSlopeMode {
         averageSlopeModePreference

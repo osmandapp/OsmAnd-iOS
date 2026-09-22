@@ -806,6 +806,8 @@ forcedUpdate:(BOOL)forcedUpdate
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.maxNumberOfRasterMapLayersInBatch = 4;
     rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
+    // releaseContext: runs only from applicationWillTerminate:, so the loaded resources go with the process
+    rendererSetup.leaveResourcesToProcessExit = true;
     rendererSetup.gpuWorkerThreadEnabled = true;
     rendererSetup.displayDensityFactor = _displayDensityFactor;
     const auto capturedWorkerContext = _glWorkerContext;

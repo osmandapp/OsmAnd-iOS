@@ -56,9 +56,9 @@
 #   define validateGL()
 #endif
 
-#define kLimitedFrameRate 20.0f
-#define kLimitedFrameInterval (1.0 / kLimitedFrameRate)
-#define kFrameIntervalTolerance 0.001
+static const float kLimitedFrameRate = 20.0f;
+static const NSTimeInterval kLimitedFrameInterval = 1.0 / kLimitedFrameRate;
+static const NSTimeInterval kFrameIntervalTolerance = 0.001;
 
 #define _(name) OAMapRendererView__##name
 #define commonInit _(commonInit)
@@ -1610,11 +1610,10 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 #endif
 
         _frameId++;
-        const NSTimeInterval presentedTime = CACurrentMediaTime();
         const NSTimeInterval scheduledTime = _nextFrameDeadline + kLimitedFrameInterval;
-        _nextFrameDeadline = (scheduledTime > presentedTime && scheduledTime - presentedTime <= kLimitedFrameInterval)
+        _nextFrameDeadline = (scheduledTime > currentTime && scheduledTime - currentTime <= kLimitedFrameInterval)
             ? scheduledTime
-            : presentedTime + kLimitedFrameInterval;
+            : currentTime + kLimitedFrameInterval;
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) getResName:(EOATransportStopType)type;
 
 + (BOOL) isTopType:(EOATransportStopType)type;
-+ (nullable OATransportStopType *) findType:(NSString *)typeName;
++ (nullable OATransportStopType *) findType:(nullable NSString *)typeName;
     
 @end
 

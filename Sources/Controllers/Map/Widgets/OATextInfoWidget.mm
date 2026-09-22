@@ -503,7 +503,21 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (void)setImageHidden:(BOOL)hidden
 {
-    _imageView.hidden = hidden;
+    _imageView.hidden = _panelIconVisibilityOverride
+        ? !_panelIconVisibilityOverride.boolValue
+        : hidden;
+}
+
+- (void)setPanelIconVisibilityOverride:(NSNumber *)panelIconVisibilityOverride
+{
+    _panelIconVisibilityOverride = panelIconVisibilityOverride;
+    if (!_imageView)
+        return;
+
+    if (panelIconVisibilityOverride)
+        _imageView.hidden = !panelIconVisibilityOverride.boolValue;
+    else if (_appMode && _showIconPref)
+        _imageView.hidden = ![_showIconPref get:_appMode];
 }
 
 - (BOOL)setIconForWidgetType:(OAWidgetType *)widgetType

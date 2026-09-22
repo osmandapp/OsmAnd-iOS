@@ -383,13 +383,19 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private func recreateWidgetsAndReload() {
         previewView.preserveCurrentPage()
-        recreateSelectedPanel()
+        recreateAllWidgets()
         reloadScreenData()
     }
 
     private func recreateWidgetsAndRefresh(row: RowKey) {
         previewView.preserveCurrentPage()
-        recreateSelectedPanel()
+        if row == .size {
+            // Moving between Small/Original and Medium/Large changes the widget's
+            // view hierarchy. A panel-only recreation reuses the old hierarchy.
+            recreateAllWidgets()
+        } else {
+            recreateSelectedPanel()
+        }
         let rows: [RowKey] = row == .backgroundColor
             ? [.primaryTextColor, .secondaryTextColor, .backgroundColor]
             : [row]
@@ -402,6 +408,11 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     private func recreateSelectedPanel() {
         OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             .recreateWidgetsPanel(selectedPanel)
+    }
+
+    private func recreateAllWidgets() {
+        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            .recreateControls()
     }
 
     private func reloadScreenData() {

@@ -1067,7 +1067,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     }
 }
 
-- (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
+- (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode targetSegmentIndex:(NSInteger)targetSegmentIndex
 {
 	if (gpxApproximation == nil || gpxApproximation.finalPoints.count == 0 || gpxApproximation.fullRoute.count == 0)
 		return nil;
@@ -1129,7 +1129,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 	if (lastOriginalPoint.isGap)
 		[lastRoutePoint setGap];
 	
-	[self replacePoints:originalPoints points:routePoints];
+	[self replacePoints:targetSegmentIndex originalPoints:originalPoints points:routePoints];
 	return routePoints;
 }
 
@@ -1143,14 +1143,36 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 		&& [[routeToTarget.lastObject getEndPoint] isEqual:[nextRouteToTarget.firstObject getStartPoint]];
 }
 
-- (void) replacePoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
+// the first (or last) index of the target segment in points, segments ending at their gap point
+- (NSInteger) getPointIndexToReplace:(NSArray<OASWptPt *> *)points targetSegmentIndex:(NSInteger)targetSegmentIndex findStartNotEnd:(BOOL)findStartNotEnd
+{
+	NSInteger startIndex = -1;
+	NSInteger endIndex = -1;
+	NSInteger currentSegmentIndex = 0;
+	for (NSInteger i = 0; i < points.count; i++)
+	{
+		if (currentSegmentIndex == targetSegmentIndex)
+		{
+			if (startIndex == -1)
+				startIndex = i;
+			endIndex = i;
+		}
+		if (points[i].isGap)
+			currentSegmentIndex++;
+	}
+	return findStartNotEnd ? startIndex : endIndex;
+}
+
+- (void) replacePoints:(NSInteger)targetSegmentIndex originalPoints:(NSArray<OASWptPt *> *)originalPoints points:(NSArray<OASWptPt *> *)points
 {
 	if (originalPoints.count > 1)
 	{
-		NSInteger firstPointIndex = [_before.points indexOfObject:originalPoints.firstObject];
-		NSInteger lastPointIndex = [_before.points indexOfObject:originalPoints.lastObject];
+		// by segment index rather than by the first and last point: isEqual: is by coordinates, and a
+		// track can hold the same point in two segments, or a loop segment that ends where it starts
+		NSInteger firstPointIndex = [self getPointIndexToReplace:_before.points targetSegmentIndex:targetSegmentIndex findStartNotEnd:YES];
+		NSInteger lastPointIndex = [self getPointIndexToReplace:_before.points targetSegmentIndex:targetSegmentIndex findStartNotEnd:NO];
 		NSMutableArray<OASWptPt *> *newPoints = [NSMutableArray array];
-		if (firstPointIndex != NSNotFound && lastPointIndex != NSNotFound)
+		if (firstPointIndex != -1 && lastPointIndex != -1)
 		{
 			[newPoints addObjectsFromArray:[_before.points subarrayWithRange:NSMakeRange(0, firstPointIndex)]];
 			[newPoints addObjectsFromArray:points];

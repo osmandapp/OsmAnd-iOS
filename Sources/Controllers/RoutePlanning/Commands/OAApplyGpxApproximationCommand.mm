@@ -102,7 +102,7 @@
     {
         OAGpxRouteApproximation *approximation = _approximations[i];
         NSArray<OASWptPt *> *segmentPoints = _originalSegmentPointsList[i];
-        NSArray<OASWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
+        NSArray<OASWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode targetSegmentIndex:i];
 
         if (newSegmentPoints != nil && newSegmentPoints.count > 0)
         {

@@ -68,6 +68,7 @@ static NSString *roadSpeedsKey = @"roadSpeeds";
 static NSString *angleStraightKey = @"angleStraight";
 static NSString *routingAlgorithmKey = @"routing_algorithm";
 static NSString *autoZoomKey = @"auto_zoom";
+static NSString *sharedRoutingKey = @"shared_routing";
 static NSString *paramsIdsKey = @"paramsIds";
 static NSString *paramsNamesKey = @"paramsNames";
 static NSString *reverseDirKey = @"reverseDir";
@@ -524,6 +525,13 @@ static NSString *foregroundImageKey = @"foregroundImage";
             iconKey : [UIImage templateImageNamed:@"ic_custom_zoom_level"],
             valueKey : OALocalizedString([_settings.useV1AutoZoom get] ? @"auto_zoom_discrete" : @"auto_zoom_smooth")
         }];
+        [tableSection addObject:@{
+            typeKey : [OASwitchTableViewCell getCellIdentifier],
+            keyKey : sharedRoutingKey,
+            titleKey : OALocalizedString(@"routing_engine_shared"),
+            iconKey : @"ic_custom_route_points",
+            valueKey : @([_settings.useSharedRouting get])
+        }];
     }
 }
 
@@ -776,6 +784,10 @@ static NSString *foregroundImageKey = @"foregroundImage";
         else if ([item[keyKey] isEqualToString:tempLimitationKey])
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
+        }
+        else if ([item[keyKey] isEqualToString:sharedRoutingKey])
+        {
+            [_settings.useSharedRouting set:isChecked];
         }
         if (self.delegate)
             [self.delegate onSettingsChanged];

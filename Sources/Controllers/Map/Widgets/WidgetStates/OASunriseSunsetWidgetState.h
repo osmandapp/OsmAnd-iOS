@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
                           customId:(nullable NSString *)customId
                       widgetParams:(nullable NSDictionary *)widgetParams;
 
-- (OAWidgetType *)getWidgetType;
+- (OAWidgetType *)widgetType;
 - (NSString *)getWidgetIconName;
 - (OACommonInteger *)getPreference;
 - (OACommonSunPositionMode *)getSunPositionPreference;

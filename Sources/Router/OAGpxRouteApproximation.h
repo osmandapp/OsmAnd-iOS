@@ -8,18 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
-struct GpxRouteApproximation;
+@class OASGpxPoint, OASGpxRouteApproximation, OASRouteSegmentResult;
 
+/** A track attached to the roads underneath it, as the rest of the app reads the result. */
 @interface OAGpxRouteApproximation : NSObject
 
-@property (nonatomic) std::shared_ptr<GpxRouteApproximation> gpxApproximation;
+/** The track points the approximation kept, each with the roads that lead to the next one. */
+@property (nonatomic, readonly) NSArray<OASGpxPoint *> *finalPoints;
 
-- (instancetype) initWithApproximation:(std::shared_ptr<GpxRouteApproximation> &)gpxApproximation;
+/** The roads of the whole approximated track, in order. */
+@property (nonatomic, readonly) NSArray<OASRouteSegmentResult *> *fullRoute;
+
+- (nullable instancetype) initWithApproximation:(nullable OASGpxRouteApproximation *)approximation;
+- (instancetype) initWithFinalPoints:(NSArray<OASGpxPoint *> *)finalPoints
+                          fullRoute:(NSArray<OASRouteSegmentResult *> *)fullRoute;
 
 @end
 

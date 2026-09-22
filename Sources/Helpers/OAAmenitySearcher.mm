@@ -1658,7 +1658,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
-            search->performTravelGuidesSearch(repository->filePath, *searchCriteria,
+            search->performSearchInFile(repository, *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto am = OAGetAmenityFromSearchResult(resultEntry);

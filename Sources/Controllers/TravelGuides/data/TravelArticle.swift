@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import OsmAndShared
 
 @objc(OATravelArticle)
 @objcMembers
@@ -40,6 +41,15 @@ class TravelArticle: NSObject {
     
     var routeRadius = -1
     var bbox31: KQuadRect?
+
+    /// The tiles [bbox31] was decoded from, kept so that the box can be handed to OsmAndShared,
+    /// which builds its own from the same string and has no setter for the box itself.
+    private(set) var shortLinkTiles: String?
+
+    /// The article this one was copied from, kept so that the work that stays in OsmAndShared - the
+    /// gpx build - runs against the object the shared helper filled in, bounding box and all. Nil on
+    /// an article that came from the saved-articles database and has not been matched to a file yet.
+    var sharedArticle: OsmAndShared.TravelArticle?
     
     func hasOsmRouteId() -> Bool {
         if let routeId {
@@ -66,6 +76,7 @@ class TravelArticle: NSObject {
     }
     
     func initShortLinkTiles(shortLinkTiles: String) {
+        self.shortLinkTiles = shortLinkTiles
         bbox31 = KQuadRect()
         let mapUtils = KMapUtils.shared
         let compoinents = shortLinkTiles.components(separatedBy: ",")

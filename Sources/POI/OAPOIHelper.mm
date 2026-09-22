@@ -534,18 +534,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (OAPOIType *) getPoiAdditionalByKey:(OAPOIBaseType *)p name:(NSString *)name
 {
-    NSArray<OAPOIType *> *pp = p.poiAdditionals;
-    if (pp)
-    {
-        for (OAPOIType *pt in pp)
-        {
-            if ([pt.name isEqualToString:name])
-            {
-                return pt;
-            }
-        }
-    }
-    return nil;
+    return [p getPoiAdditionalByKeyName:name];
 }
 
 - (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name
@@ -658,6 +647,9 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getShortFormattedOpeningHours:(OAPOI *)poi
 {
+    if (poi.openingHours.length == 0)
+        return @"";
+
     auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
     if (!parser)
         return @"";

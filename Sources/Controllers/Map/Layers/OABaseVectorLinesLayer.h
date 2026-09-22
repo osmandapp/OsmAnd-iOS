@@ -27,7 +27,7 @@
 
 @class OASTrkSegment, TrackChartPoints;
 
-struct RouteSegmentResult;
+@class OASRouteSegmentResult;
 
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
 
@@ -39,7 +39,7 @@ struct RouteSegmentResult;
 
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName
-                 segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                 segmentResult:(NSArray<OASRouteSegmentResult *> *)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
 - (void) showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints;

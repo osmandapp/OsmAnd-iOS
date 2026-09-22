@@ -734,7 +734,7 @@
     else if([paramName isEqualToString:kDetailsCategory])
         return @"ic_custom_overlay_map";
     else if([paramName isEqualToString:kHideCategory])
-        return @"ic_custom_hide";
+        return ACImageNameIcCustomHide;
     else if([paramName isEqualToString:TRANSPORT_CATEGORY])
         return @"ic_custom_transport_bus";
     else if([paramName isEqualToString:DIRTBIKE_ROUTES_ATTR])

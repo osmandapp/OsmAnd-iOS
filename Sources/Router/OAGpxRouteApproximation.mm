@@ -7,20 +7,28 @@
 //
 
 #import "OAGpxRouteApproximation.h"
-
-#include <routePlannerFrontEnd.h>
+#import "OsmAndSharedWrapper.h"
 
 @implementation OAGpxRouteApproximation
 
-- (instancetype) initWithApproximation:(std::shared_ptr<GpxRouteApproximation> &)gpxApproximation
+- (instancetype) initWithApproximation:(OASGpxRouteApproximation *)approximation
 {
-	self = [super init];
-	if (self) {
-		if (!gpxApproximation)
-			return nil;
-		_gpxApproximation = gpxApproximation;
-	}
-	return self;
+    if (!approximation)
+        return nil;
+
+    return [self initWithFinalPoints:approximation.finalPoints fullRoute:approximation.fullRoute];
+}
+
+- (instancetype) initWithFinalPoints:(NSArray<OASGpxPoint *> *)finalPoints
+                          fullRoute:(NSArray<OASRouteSegmentResult *> *)fullRoute
+{
+    self = [super init];
+    if (self)
+    {
+        _finalPoints = finalPoints;
+        _fullRoute = fullRoute;
+    }
+    return self;
 }
 
 @end

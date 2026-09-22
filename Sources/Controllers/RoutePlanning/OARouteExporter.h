@@ -9,20 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
 
-@class OASWptPt, OASTrkSegment, OASGpxFile;
-struct RouteSegmentResult;
+@class OASWptPt, OASTrkSegment, OASGpxFile, OASRouteSegmentResult;
 
 @interface OARouteExporter : NSObject
 
 - (instancetype)initWithName:(NSString *)name
-                       route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route
+                       route:(NSArray<OASRouteSegmentResult *> *)route
                    locations:(NSArray<CLLocation *> *)locations
-           routePointIndexes:(std::vector<int>)routePointIndexes
+           routePointIndexes:(NSArray<NSNumber *> *)routePointIndexes
                       points:(NSArray<OASWptPt *> *)points
           preserveTimestamps:(BOOL)preserveTimestamps;
 - (OASGpxFile *)exportRoute;

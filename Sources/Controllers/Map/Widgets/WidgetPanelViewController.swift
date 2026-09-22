@@ -57,6 +57,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
+    @nonobjc private var appearanceModeContext: (panel: WidgetsPanel,
+                                                   appMode: OAApplicationMode,
+                                                   layoutMode: ScreenLayoutMode?)?
     
     // swiftlint:enable all
     
@@ -156,6 +159,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageViewController.dataSource = nil
         pageViewController.delegate = nil
         self.widgetPages = widgetPages
+        if let context = appearanceModeContext {
+            applyAppearanceModeOverrides(to: widgetPages,
+                                         panel: context.panel,
+                                         appMode: context.appMode,
+                                         layoutMode: context.layoutMode)
+        }
         widgetPages.forEach { $0.forEach { $0.delegate = self } }
         if isHorizontal {
             let vc = WidgetPageViewController()
@@ -224,8 +233,69 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             widget.updatesSeparatorsColor(appearance.dividerColor)
         }
     }
+
+    @objc(applyAppearanceModesForPanel:appMode:)
+    func applyAppearanceModes(for panel: WidgetsPanel, appMode: OAApplicationMode) {
+        specialPanelController?.applyAppearanceModes(for: panel, appMode: appMode)
+        prepareAppearanceModes(for: panel, appMode: appMode)
+
+        for case let widget as OATextInfoWidget in widgetPages.flatMap({ $0 }) where widget.isSimpleLayout {
+            widget.configureSimpleLayout()
+            widget.updateHeightConstraint(
+                with: .equal,
+                constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: widget.widgetSizeStyle),
+                priority: .defaultHigh
+            )
+        }
+        for case let page as WidgetPageViewController in pages where page.isViewLoaded {
+            _ = page.layoutWidgets()
+        }
+    }
+
+    @objc(prepareAppearanceModesForPanel:appMode:)
+    func prepareAppearanceModes(for panel: WidgetsPanel, appMode: OAApplicationMode) {
+        let layoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? .default(forAppMode: appMode)
+            : nil
+        prepareAppearanceModes(for: panel, appMode: appMode, layoutMode: layoutMode)
+    }
+
+    @nonobjc
+    func prepareAppearanceModes(for panel: WidgetsPanel,
+                                appMode: OAApplicationMode,
+                                layoutMode: ScreenLayoutMode?) {
+        specialPanelController?.prepareAppearanceModes(for: panel,
+                                                       appMode: appMode,
+                                                       layoutMode: layoutMode)
+        appearanceModeContext = (panel, appMode, layoutMode)
+        applyAppearanceModeOverrides(to: widgetPages,
+                                     panel: panel,
+                                     appMode: appMode,
+                                     layoutMode: layoutMode)
+    }
     
     // MARK: - Private Functions
+
+    private func applyAppearanceModeOverrides(to widgetPages: [[OABaseWidgetView]],
+                                              panel: WidgetsPanel,
+                                              appMode: OAApplicationMode,
+                                              layoutMode: ScreenLayoutMode?) {
+        let settings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
+        let sizeOverride = settings.sizeMode(for: panel).widgetSizeStyle.map {
+            NSNumber(value: $0.rawValue)
+        }
+        let iconOverride: NSNumber?
+        switch settings.iconMode(for: panel) {
+        case .original: iconOverride = nil
+        case .off: iconOverride = NSNumber(value: false)
+        case .on: iconOverride = NSNumber(value: true)
+        }
+
+        for case let widget as OATextInfoWidget in widgetPages.flatMap({ $0 }) {
+            widget.panelSizeStyleOverride = sizeOverride
+            widget.panelIconVisibilityOverride = iconOverride
+        }
+    }
     
     private func setupViews() {
         view.layer.masksToBounds = true

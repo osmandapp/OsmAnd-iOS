@@ -849,7 +849,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     if (container)
     {
         [container clearWidgets];
+        // Set panel overrides before updateWidgetPages builds each widget's layout.
+        [container prepareAppearanceModesForPanel:panel appMode:appMode];
         [_mapWidgetRegistry populateControlsContainer:container mode:appMode widgetPanel:panel];
+        [container applyAppearanceModesForPanel:panel appMode:appMode];
         [container updateWidgetSizes];
     }
 }

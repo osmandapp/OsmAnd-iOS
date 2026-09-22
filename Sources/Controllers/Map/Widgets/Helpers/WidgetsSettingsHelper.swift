@@ -137,23 +137,6 @@ class WidgetsSettingsHelper: NSObject {
         }
     }
 
-    func applyWidgetsSize(_ size: EOAWidgetSizeStyle, panel: WidgetsPanel) {
-        for widgetInfo in getEnabledWidgetsForPanel(panel) {
-            guard let widget = widgetInfo.widget as? OATextInfoWidget,
-                  let sizePreference = widget.widgetSizePref else {
-                continue
-            }
-            sizePreference.set(size, mode: appMode)
-        }
-    }
-
-    func applyWidgetsIconVisibility(_ visible: Bool, panel: WidgetsPanel) {
-        for widgetInfo in getEnabledWidgetsForPanel(panel) {
-            guard let widget = widgetInfo.widget as? OATextInfoWidget else { continue }
-            widget.setShowIconVisible(visible, appMode: appMode)
-        }
-    }
-    
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode,
                              fromLayoutMode: ScreenLayoutMode? = nil,
                              panel: WidgetsPanel,
@@ -168,21 +151,6 @@ class WidgetsSettingsHelper: NSObject {
                                 panel: panel,
                                 widgetParams: widgetParams)
         }
-    }
-
-    private func getEnabledWidgetsForPanel(_ panel: WidgetsPanel) -> [MapWidgetInfo] {
-        let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
-        guard let widgetInfos = widgetRegistry.widgets(forPanel: appMode,
-                                                        filterModes: Int(filter),
-                                                        panels: [panel],
-                                                        layoutMode: preferenceLayoutMode) else {
-            return []
-        }
-        var result = [MapWidgetInfo]()
-        for case let widgetInfo as MapWidgetInfo in widgetInfos {
-            result.append(widgetInfo)
-        }
-        return result
     }
 
     private func copyWidgetsForPanel(fromAppMode: OAApplicationMode,

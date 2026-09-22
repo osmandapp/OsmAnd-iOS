@@ -45,8 +45,10 @@ extern NSString * const kSizeStylePref;
 @property (nonatomic, strong, nullable) OutlineLabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
 @property (nonatomic, nullable) OACommonWidgetSizeStyle *widgetSizePref;
-/// Temporary size used while the widget is hosted by the appearance preview.
-@property (nonatomic, nullable) NSNumber *previewSizeStyleOverride;
+/// Panel-level size override. Nil preserves the widget's individual preference.
+@property (nonatomic, nullable) NSNumber *panelSizeStyleOverride;
+/// Panel-level icon override. Nil preserves the widget's individual preference.
+@property (nonatomic, nullable) NSNumber *panelIconVisibilityOverride;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
@@ -77,7 +79,6 @@ extern NSString * const kSizeStylePref;
 - (BOOL)isMetricSystemDepended;
 - (BOOL)isAltitudeMetricDepended;
 - (BOOL)isAngularUnitsDepended;
-- (void)setShowIconVisible:(BOOL)visible appMode:(OAApplicationMode *)appMode;
 - (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;

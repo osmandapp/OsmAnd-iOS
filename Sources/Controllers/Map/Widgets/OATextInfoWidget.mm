@@ -634,7 +634,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     BOOL isVisibleIcon = false;
     if (_appMode && _showIconPref)
     {
-        isVisibleIcon = [_showIconPref get:_appMode];
+        isVisibleIcon = _panelIconVisibilityOverride
+            ? _panelIconVisibilityOverride.boolValue
+            : [_showIconPref get:_appMode];
         _imageView.hidden = !isVisibleIcon;
 
         if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
@@ -1073,11 +1075,6 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
-}
-
-- (void)setShowIconVisible:(BOOL)visible appMode:(OAApplicationMode *)appMode
-{
-    [_showIconPref set:visible mode:appMode];
 }
 
 - (OAApplicationMode *)getAppMode

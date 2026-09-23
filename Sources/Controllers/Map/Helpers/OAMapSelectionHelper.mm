@@ -703,7 +703,14 @@ static int TILE_SIZE = 256;
 {
     if ([poi isRouteTrack] && ![poi isSuperRoute])
     {
-        OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
+        // an article built from the poi carries no region name, and a gpx collection is read only
+        // out of the file that name picks
+        OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLocation:[poi getLocation] routeId:[poi getRouteId]];
+        if (!travelGpx)
+        {
+            NSLog(@"showContextMenuForSearchResult() searchTravelGpx() travelGpx is null");
+            return NO;
+        }
         [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx
                                                gpxFileName:[poi getGpxFileName:nil]
                                                     latLon:[poi getLocation]

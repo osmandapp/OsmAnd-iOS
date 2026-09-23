@@ -248,7 +248,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             )
         }
         for case let page as WidgetPageViewController in pages where page.isViewLoaded {
-            _ = page.layoutWidgets()
+            page.layoutWidgets()
         }
     }
 

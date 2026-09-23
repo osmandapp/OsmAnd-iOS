@@ -58,8 +58,9 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         super.init()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -517,8 +518,9 @@ private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNa
         super.init()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func getTitle() -> String {
@@ -708,8 +710,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         ])
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func layoutSubviews() {
@@ -1364,7 +1367,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         // map, otherwise an off-screen page can keep the preview's typography.
         for case let page as WidgetPageViewController in controller.pages where page.isViewLoaded {
             preparePreviewStackHeight(in: page)
-            _ = page.layoutWidgets()
+            page.layoutWidgets()
         }
     }
 
@@ -1546,8 +1549,9 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         setupViews()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func prepareForReuse() {

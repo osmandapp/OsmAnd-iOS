@@ -6,8 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 protocol WidgetPanelColorViewControllerDelegate: AnyObject {
     func widgetPanelColorViewControllerDidFinish(pageIndex: Int)
 }
@@ -144,8 +142,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         prepareColors()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -803,11 +802,11 @@ extension WidgetPanelColorViewController: ColorCollectionViewControllerDelegate 
 extension WidgetPanelColorViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewController(_: UIColorPickerViewController, didSelect color: UIColor, continuously _: Bool) {
         guard OAUtilities.isiOSAppOnMac() else { return }
-        _ = addAndGetNewColorItem(color)
+        addAndGetNewColorItem(color)
     }
 
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        _ = addAndGetNewColorItem(viewController.selectedColor)
+        addAndGetNewColorItem(viewController.selectedColor)
     }
 }
 
@@ -836,8 +835,9 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
         configureViews()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        nil
+        fatalError("init(coder:) has not been implemented")
     }
 
     func configure(action: @escaping () -> Void) {

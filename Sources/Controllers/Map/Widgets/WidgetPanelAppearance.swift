@@ -157,7 +157,8 @@ final class WidgetPanelAppearanceSettings {
         let style: UIUserInterfaceStyle = nightMode ? .dark : .light
         return color.resolvedColor(with: UITraitCollection(userInterfaceStyle: style))
     }
-
+    
+    @discardableResult
     private static func allPreferences(panel: WidgetsPanel,
                                        layoutMode: ScreenLayoutMode?,
                                        settings: OAAppSettings) -> [OACommonPreference] {
@@ -258,7 +259,7 @@ final class WidgetPanelAppearanceSettings {
     fileprivate static func registerPreferences(for panel: WidgetsPanel,
                                                 layoutMode: ScreenLayoutMode?,
                                                 settings: OAAppSettings) {
-        _ = allPreferences(panel: panel, layoutMode: layoutMode, settings: settings)
+        allPreferences(panel: panel, layoutMode: layoutMode, settings: settings)
     }
 
     func sizeMode(for panel: WidgetsPanel) -> WidgetPanelSizeMode {

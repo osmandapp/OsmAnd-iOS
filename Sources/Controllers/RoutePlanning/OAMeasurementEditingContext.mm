@@ -310,6 +310,36 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return _gpxData != nil && _gpxData.gpxFile != nil && _gpxData.gpxFile.hasRtePt;
 }
 
+- (BOOL)isInMultiProfileMode
+{
+    NSMutableSet *profiles = [NSMutableSet new];
+    NSMutableArray<OASTrkSegment *> *allSegments = [NSMutableArray new];
+    [allSegments addObjectsFromArray:_beforeSegments];
+    [allSegments addObjectsFromArray:_afterSegments];
+    for (OASTrkSegment *segment in allSegments)
+    {
+        NSArray<OASWptPt *> *points = segment.points;
+        NSInteger pointsCount = (NSInteger) points.count;
+        if (pointsCount == 0)
+            continue;
+
+        for (NSInteger i = 0; i < pointsCount / 2 + 1; i++)
+        {
+            OASWptPt *left = points[i];
+            NSInteger rightIdx = pointsCount - 1 - i;
+            OASWptPt *right = points[rightIdx];
+            if (!left.isGap && i + 1 < pointsCount)
+                [profiles addObject:left.getProfileType ?: NSNull.null];
+            if (!right.isGap && rightIdx + 1 < pointsCount)
+                [profiles addObject:right.getProfileType ?: NSNull.null];
+            if (profiles.count >= 2)
+                return YES;
+        }
+    }
+
+    return NO;
+}
+
 - (BOOL) hasSavedRoute
 {
     return _gpxData != nil && _gpxData.gpxFile != nil && _gpxData.gpxFile.tracks.count > 0;

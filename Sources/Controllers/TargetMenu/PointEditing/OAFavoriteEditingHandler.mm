@@ -40,7 +40,7 @@
     return self;
 }
 
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi targetObject:(id)targetObject
 {
     self = [super init];
     if (self)
@@ -58,7 +58,7 @@
         [_favorite setIcon:_iconName];
         [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
-        [self setOsmUrl:poi];
+        [self setOsmUrl:poi targetObject:targetObject];
         
         NSString *originName = poi.toStringEn;
         if (originName.length > 0)
@@ -67,12 +67,12 @@
     return self;
 }
 
-- (void)setOsmUrl:(OAPOI *)poi
+- (void)setOsmUrl:(OAPOI *)poi targetObject:(id)targetObject
 {
     if (![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
         return;
-    
-    id object = poi ?: [OARootViewController.instance.mapPanel getCurrentTargetPoint].targetObj;
+
+    id object = poi ?: targetObject;
     if ([object isKindOfClass:BaseDetailsObject.class])
     {
         object = ((BaseDetailsObject *) object).syntheticAmenity;

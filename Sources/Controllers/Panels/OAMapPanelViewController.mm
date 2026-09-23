@@ -2236,13 +2236,14 @@ typedef enum
     
     OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller =
-            [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
-                                                          title:self.targetMenuView.targetPoint.title
-                                                        address:self.targetMenuView.targetPoint.titleAddress
-                                                    customParam:nil
-                                                      pointType:EOAEditPointTypeFavorite
-                                                targetMenuState:nil
-                                                            poi:poi];
+    [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
+                                                  title:self.targetMenuView.targetPoint.title
+                                                address:self.targetMenuView.targetPoint.titleAddress
+                                            customParam:nil
+                                              pointType:EOAEditPointTypeFavorite
+                                        targetMenuState:nil
+                                                    poi:poi
+                                           targetObject:self.targetMenuView.targetPoint.targetObj];
     NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAFavoriteAction getQuickActionType].stringId];
     if (quickActionParams)
     {
@@ -2438,7 +2439,8 @@ typedef enum
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
-                                                                            poi:poi];
+                                                                                            poi:poi
+                                                                                   targetObject:nil];
     NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId];
     if (quickActionParams)
     {

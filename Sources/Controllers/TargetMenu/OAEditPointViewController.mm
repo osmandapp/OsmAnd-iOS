@@ -176,8 +176,9 @@
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
+                    targetObject:(id)targetObject
 {
-    return [self initWithLocation:location title:formattedTitle address:address customParam:customParam pointType:pointType targetMenuState:targetMenuState poi:poi gpxFile:nil];
+    return [self initWithLocation:location title:formattedTitle address:address customParam:customParam pointType:pointType targetMenuState:targetMenuState poi:poi gpxFile:nil targetObject:targetObject];
 }
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location
@@ -187,7 +188,8 @@
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
-                     gpxFile:(OASGpxFile *)gpxFile
+                         gpxFile:(OASGpxFile *)gpxFile
+                    targetObject:(id)targetObject
 {
     self = [super init];
     if (self)
@@ -200,7 +202,7 @@
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
-            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:address poi:poi];
+            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:address poi:poi targetObject:targetObject];
             self.address = address ? address : @"";
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)

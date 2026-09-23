@@ -49,7 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(nullable OAFavoriteGroup *)group;
 - (BOOL)allowsValidationForGroupName;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;

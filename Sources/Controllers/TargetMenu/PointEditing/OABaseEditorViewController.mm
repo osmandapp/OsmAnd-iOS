@@ -562,11 +562,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return [OAFavoritesHelper groupByName:name];
 }
 
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(nullable OAFavoriteGroup *)group
-{
-    return NO;
-}
-
 - (BOOL)allowsValidationForGroupName
 {
     return YES;
@@ -693,11 +688,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         BOOL hasText = [textView.text trim].length > 0;
         OAFavoriteGroup *groupExist = [self existingGroupFor:textView.text];
         BOOL isGroupNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text];
-        _isTextViewNameValid = hasText && isGroupNameValid && (!groupExist || [self allowsExistingGroupFor:textView.text group:groupExist]);
+        _isTextViewNameValid = hasText && isGroupNameValid && !groupExist;
         if (!_isTextViewNameValid && groupExist && [self allowsValidationForGroupName])
         {
             _isTextViewNameValid = hasText
-                && (![groupExist.iconName isEqualToString:self.editIconName]
+                && (![(groupExist.iconName ?: @"") isEqualToString:(self.editIconName ?: @"")]
                 || ![groupExist.backgroundType isEqualToString:self.editBackgroundIconName]
                 || ![groupExist.color isEqual:self.editColor]);
         }

@@ -28,7 +28,6 @@
     
     if (self.isNewItem)
     {
-        self.validatesGroupUniqueness = YES;
         _favoriteGroup = [[OAFavoriteGroup alloc] init];
         _favoriteGroup.name = self.editName;
         _favoriteGroup.color = self.editColor;
@@ -66,26 +65,9 @@
     return nil;
 }
 
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
-{
-    if (self.validatesGroupUniqueness)
-        return NO;
-
-    return self.isNewItem && [self isParentOnlyGroup:group groupName:[self targetGroupNameForName:name]];
-}
-
 - (BOOL)allowsValidationForGroupName
 {
-    return !self.validatesGroupUniqueness;
-}
-
-- (BOOL)isAppearanceChanged
-{
-    OAFavoriteGroup *existingGroup = [self existingGroupFor:self.editName];
-    if ([self allowsExistingGroupFor:self.editName group:existingGroup])
-        return YES;
-
-    return [super isAppearanceChanged];
+    return !self.isNewItem;
 }
 
 #pragma mark - Selectors
@@ -182,22 +164,6 @@
         return trimmedName;
     else
         return parentGroupName;
-}
-
-- (BOOL)isParentOnlyGroup:(OAFavoriteGroup *)group groupName:(NSString *)groupName
-{
-    if (!group || group.points.count > 0 || groupName.length == 0)
-        return NO;
-
-    NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
-    {
-        NSString *favoriteGroupName = favoriteGroup.name;
-        if ([favoriteGroupName hasPrefix:nestedPrefix])
-            return YES;
-    }
-
-    return NO;
 }
 
 - (void)addPointsGroup

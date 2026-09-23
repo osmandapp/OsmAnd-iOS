@@ -54,7 +54,8 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
                      customParam:(NSString *)customParam
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-                             poi:(OAPOI *)poi;
+                             poi:(OAPOI *)poi
+                    targetObject:(id)targetObject;
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location
                            title:(NSString *)formattedTitle
                          address:(NSString *)address
@@ -62,7 +63,8 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
-                     gpxFile:(OASGpxFile *)gpxFile;
+                         gpxFile:(OASGpxFile *)gpxFile
+                    targetObject:(id)targetObject;
 
 - (void)applyQuickActionParams:(NSDictionary *)params;
 

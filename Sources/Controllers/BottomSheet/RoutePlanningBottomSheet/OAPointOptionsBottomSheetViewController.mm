@@ -286,7 +286,7 @@
 - (double) getTrimmedDistance:(OAMeasurementEditingContext *)editingCtx before:(BOOL)before
 {
     NSArray<OASWptPt *> *points = [editingCtx getPoints];
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
     NSInteger pointIndex = editingCtx.selectedPointPosition;
     double dist = 0;
     NSInteger startIdx;
@@ -305,8 +305,7 @@
     {
         OASWptPt *first = points[i - 1];
         OASWptPt *second = points[i];
-        NSArray<OASWptPt *> *pair = @[first, second];
-        OARoadSegmentData *segment = roadSegmentData[pair];
+        OARoadSegmentData *segment = roadSegmentData[[OAWptPtPair pairWithFirst:first second:second]];
         BOOL routeSegmentBuilt = segment && segment.distance > 0;
        
         dist += routeSegmentBuilt ? segment.distance : [OAMapUtils getDistance:CLLocationCoordinate2DMake(first.lat, first.lon) second: CLLocationCoordinate2DMake(second.lat, second.lon)];

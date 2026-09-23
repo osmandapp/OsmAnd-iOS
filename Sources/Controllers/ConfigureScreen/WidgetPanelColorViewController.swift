@@ -90,6 +90,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private var isApplied = false
     private var didRestoreNavigation = false
     private var hiddenMapControlStates: [(view: UIView, wasHidden: Bool)] = []
+    private var widgetPanelVisibilityStates: [(view: UIView, wasHidden: Bool)] = []
 
     private var isColorSelectionAvailable: Bool {
         target != .background || OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
@@ -444,10 +445,16 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     private func applyPreviewPanelVisibility() {
         guard let mapInfoController = mapPanel.hudViewController?.mapInfoController else { return }
-        mapInfoController.leftPanelController.view.isHidden = panel != .leftPanel
-        mapInfoController.rightPanelController.view.isHidden = panel != .rightPanel
-        mapInfoController.topPanelController.view.isHidden = panel != .topPanel
-        mapInfoController.bottomPanelController.view.isHidden = panel != .bottomPanel
+        let panels: [(panel: WidgetsPanel, view: UIView)] = [
+            (.leftPanel, mapInfoController.leftPanelController.view),
+            (.rightPanel, mapInfoController.rightPanelController.view),
+            (.topPanel, mapInfoController.topPanelController.view),
+            (.bottomPanel, mapInfoController.bottomPanelController.view)
+        ]
+        if widgetPanelVisibilityStates.isEmpty {
+            widgetPanelVisibilityStates = panels.map { (view: $0.view, wasHidden: $0.view.isHidden) }
+        }
+        panels.forEach { $0.view.isHidden = $0.panel != panel }
     }
 
     private func hideMapControls() {
@@ -474,6 +481,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func restoreMapControls() {
+        widgetPanelVisibilityStates.forEach { $0.view.isHidden = $0.wasHidden }
+        widgetPanelVisibilityStates.removeAll()
         guard !hiddenMapControlStates.isEmpty else { return }
         hiddenMapControlStates.forEach { $0.view.isHidden = $0.wasHidden }
         hiddenMapControlStates.removeAll()

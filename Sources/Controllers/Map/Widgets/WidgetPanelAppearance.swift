@@ -364,22 +364,27 @@ final class WidgetPanelAppearanceSettings {
     private func copy(from sourceAppMode: OAApplicationMode,
                       sourcePanel: WidgetsPanel,
                       to targetPanel: WidgetsPanel) {
-        setSizeMode(sizeMode(for: sourcePanel, appMode: sourceAppMode), for: targetPanel)
-        setIconMode(iconMode(for: sourcePanel, appMode: sourceAppMode), for: targetPanel)
-        setTextColorMode(textColorMode(.primary, panel: sourcePanel, appMode: sourceAppMode),
+        let sourceLayoutMode: ScreenLayoutMode? = settings.useSeparateLayouts.get(sourceAppMode)
+            ? layoutMode ?? .default(forAppMode: sourceAppMode)
+            : nil
+        let sourceSettings = WidgetPanelAppearanceSettings(appMode: sourceAppMode,
+                                                            layoutMode: sourceLayoutMode)
+
+        setSizeMode(sourceSettings.sizeMode(for: sourcePanel), for: targetPanel)
+        setIconMode(sourceSettings.iconMode(for: sourcePanel), for: targetPanel)
+        setTextColorMode(sourceSettings.primaryTextColorMode(for: sourcePanel),
                          kind: .primary,
                          for: targetPanel)
-        setTextColorMode(textColorMode(.secondary, panel: sourcePanel, appMode: sourceAppMode),
+        setTextColorMode(sourceSettings.secondaryTextColorMode(for: sourcePanel),
                          kind: .secondary,
                          for: targetPanel)
-        setBackgroundMode(backgroundMode(for: sourcePanel, appMode: sourceAppMode), for: targetPanel)
+        setBackgroundMode(sourceSettings.backgroundMode(for: sourcePanel), for: targetPanel)
 
         for target in [WidgetPanelColorTarget.primaryText, .secondaryText, .background] {
             for nightMode in [false, true] {
-                let color = color(for: target,
-                                  panel: sourcePanel,
-                                  appMode: sourceAppMode,
-                                  nightMode: nightMode)
+                let color = sourceSettings.color(for: target,
+                                                 panel: sourcePanel,
+                                                 nightMode: nightMode)
                 colorPreference(target, panel: targetPanel, nightMode: nightMode)
                     .set(Int32(truncatingIfNeeded: color.toARGBNumber()), mode: appMode)
             }

@@ -21,6 +21,7 @@ final class WidgetPageViewController: UIViewController {
     private var bottomStackViewConstraint: NSLayoutConstraint!
     // swiftlint:enable all
     private var heightStackViewConstraint: NSLayoutConstraint?
+    private var appearanceDividerColor: UIColor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,6 +159,7 @@ final class WidgetPageViewController: UIViewController {
     }
 
     func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        appearanceDividerColor = appearance.dividerColor
         view.backgroundColor = appearance.backgroundColor
         for arrangedSubview in stackView.arrangedSubviews {
             if let widget = arrangedSubview as? OABaseWidgetView {
@@ -242,8 +244,8 @@ extension WidgetPageViewController {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
             if !horizontalSeparatorView.isHidden {
-                // update color for horizontal separator
-                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light
+                horizontalSeparatorView.backgroundColor = appearanceDividerColor
+                    ?? (OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light)
             }
         }
     }

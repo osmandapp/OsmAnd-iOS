@@ -1219,8 +1219,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
 	if (originalPoints.count > 1)
 	{
-		NSInteger firstPointIndex = [_before.points indexOfObject:originalPoints.firstObject];
-		NSInteger lastPointIndex = [_before.points indexOfObject:originalPoints.lastObject];
+		// by identity: isEqual: is by coordinates, and a track can hold the same point in two segments,
+		// or a loop segment that ends where it starts. The original points are this context's own
+		// objects, and neither a segment that failed to approximate nor a routed one shifts them
+		NSInteger firstPointIndex = [_before.points indexOfObjectIdenticalTo:originalPoints.firstObject];
+		NSInteger lastPointIndex = [_before.points indexOfObjectIdenticalTo:originalPoints.lastObject];
 		NSMutableArray<OASWptPt *> *newPoints = [NSMutableArray array];
 		if (firstPointIndex != NSNotFound && lastPointIndex != NSNotFound)
 		{

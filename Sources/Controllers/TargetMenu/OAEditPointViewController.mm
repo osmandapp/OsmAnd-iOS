@@ -1358,7 +1358,9 @@
                         }
                         completion:^(BOOL finished)
          {
-            NSInteger selectedIndex = [_groupNames indexOfObject:editedGroupName];
+            NSInteger selectedIndex = _editPointType == EOAEditPointTypeWaypoint
+                ? [_waypointGroupKeys indexOfObject:_selectedWaypointGroupKey]
+                : [_groupNames indexOfObject:editedGroupName];
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             if (selectedIndexPath.row != NSNotFound
                 && ![groupCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath]

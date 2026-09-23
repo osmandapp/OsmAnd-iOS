@@ -1108,18 +1108,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func crosshairCenterY(sheetHeight: CGFloat, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
         guard !usesSidePanelLayout else { return targetScreenHeight / 2 }
-        if sheetHeight <= height(for: .initial, screenHeight: targetScreenHeight) {
-            return targetScreenHeight / 2.0
-        }
         let coveredHeight: CGFloat
         if pointEditingView == nil {
             coveredHeight = min(sheetHeight, height(for: .expanded, screenHeight: targetScreenHeight))
         } else {
             coveredHeight = sheetHeight
         }
-        let visibleTop = getNavbarHeight()
-        let visibleBottom = targetScreenHeight - coveredHeight
-        return visibleTop + (visibleBottom - visibleTop) / 2
+        return max(0, targetScreenHeight - coveredHeight) / 2
     }
 
     private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {

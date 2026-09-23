@@ -520,7 +520,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
-    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[[OAWptPtPair pairWithFirst:from second:to]];
     return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
 }
 

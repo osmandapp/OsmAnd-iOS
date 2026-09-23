@@ -170,19 +170,18 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         hideMapControls()
+        applyMapTheme()
         super.viewWillAppear(animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        applyMapTheme()
         DispatchQueue.main.async { [weak self] in
             guard let self, self.view.window != nil else { return }
             // The scrollable HUD performs its first manual layout from
             // viewWillAppear, before this view is necessarily attached to a window.
             // Recalculate the navigation inset once the status bar is available.
             self.doAdditionalLayout()
-            self.reloadPreview()
         }
     }
 
@@ -417,6 +416,9 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private func applyDraftAndRefreshWidgets() {
         previewView.releaseHostedWidgets()
         applyPreviewPanelVisibility()
+        // configure() keeps this request pending until the preview receives
+        // non-zero bounds, so the panel can be prepared before the HUD appears.
+        defer { reloadPreview() }
         guard isColorSelectionAvailable,
               let dayColor = currentDayColorItem.map({ UIColor(argb: Int($0.colorInt)) }),
               let nightColor = currentNightColorItem.map({ UIColor(argb: Int($0.colorInt)) }) else {
@@ -425,9 +427,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         appearanceSettings.setColor(dayColor, for: target, panel: panel, nightMode: false)
         appearanceSettings.setColor(nightColor, for: target, panel: panel, nightMode: true)
         setCustomMode()
-        mapPanel.recreateControls()
+        recreatePanelWidgets()
         applyPreviewPanelVisibility()
-        reloadPreviewIfVisible()
     }
 
     private func reloadPreview() {
@@ -438,9 +439,8 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                               parentViewController: self)
     }
 
-    private func reloadPreviewIfVisible() {
-        guard viewIfLoaded?.window != nil else { return }
-        reloadPreview()
+    private func recreatePanelWidgets() {
+        mapPanel.hudViewController?.mapInfoController?.recreateWidgetsPanel(panel)
     }
 
     private func applyPreviewPanelVisibility() {
@@ -508,7 +508,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         if let initialBackgroundMode {
             appearanceSettings.setBackgroundMode(initialBackgroundMode, for: panel)
         }
-        mapPanel.recreateControls()
+        recreatePanelWidgets()
     }
 
     private func closeScreen(keepingChanges: Bool) {
@@ -522,17 +522,19 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         if !keepingChanges {
             restoreDraftIfNeeded()
         } else {
-            mapPanel.recreateControls()
+            recreatePanelWidgets()
+        }
+        delegate?.widgetPanelColorViewControllerDidFinish(pageIndex: selectedPageIndex)
+        if let navigationController = OARootViewController.instance().navigationController,
+           !navControllerHistory.isEmpty {
+            // The navigation stack is rearranged while a scrollable HUD is open,
+            // leaving the map directly underneath it. Restore the previous screen
+            // before hiding the HUD to avoid exposing the map and then pushing back.
+            navigationController.setViewControllers(navControllerHistory, animated: false)
         }
         hide(true, duration: 0.2) { [weak self] in
             guard let self else { return }
-            self.mapPanel.hideScrollableHudViewController()
             self.restoreMapControls()
-            if let navigationController = OARootViewController.instance().navigationController,
-               !self.navControllerHistory.isEmpty {
-                navigationController.setViewControllers(self.navControllerHistory, animated: true)
-            }
-            self.delegate?.widgetPanelColorViewControllerDidFinish(pageIndex: selectedPageIndex)
         }
     }
 
@@ -640,7 +642,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 self.isNightColorMode = index == 1
                 self.applyMapTheme()
                 self.previewView.releaseHostedWidgets()
-                self.mapPanel.recreateControls()
+                self.recreatePanelWidgets()
                 self.reloadPreview()
                 self.tableView.reloadRows(at: [IndexPath(row: Row.palette.rawValue, section: 0)], with: .none)
             }

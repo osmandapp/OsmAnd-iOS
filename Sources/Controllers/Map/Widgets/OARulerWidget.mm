@@ -24,6 +24,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -43,8 +44,7 @@
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
 
-#define GLOBE_EARTH_RADIUS_METERS 6378137.0
-#define MAX_GLOBE_DISTANCE (M_PI * 6372800.0)
+#define MAX_GLOBE_DISTANCE (M_PI * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS)
 #define MAX_VISIBLE_GLOBE_DISTANCE (MAX_GLOBE_DISTANCE / 2)
 #define PROJECTED_STEP_SLACK 4
 #define MIN_PROJECTED_STEP 24
@@ -864,7 +864,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_sphericalMap)
         return OsmAnd::Utilities::rhumbDestinationPoint(center, distance, bearing);
 
-    double angularDistance = distance / GLOBE_EARTH_RADIUS_METERS;
+    double angularDistance = distance / OASKMapUtils.shared.EARTH_RADIUS_A;
     double latRad = [self toRadians:center.latitude];
     double lonRad = [self toRadians:center.longitude];
     double bearingRad = [self toRadians:bearing];

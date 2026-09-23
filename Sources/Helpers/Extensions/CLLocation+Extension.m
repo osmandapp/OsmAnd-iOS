@@ -8,6 +8,7 @@
 
 #import "CLLocation+Extension.h"
 #import "OALocationServices.h"
+#import "OsmAndSharedWrapper.h"
 
 @implementation CLLocation (util)
 
@@ -45,7 +46,6 @@
     double lat2 = location.coordinate.latitude;
     double lon2 = location.coordinate.longitude;
 
-    double R = 6372.8;
     double dLat = (lat2 - lat1) * M_PI / 180.0;
     double dLon = (lon2 - lon1) * M_PI / 180.0;
 
@@ -56,7 +56,7 @@
              + cos(lat1 * M_PI / 180.0) * cos(lat2 * M_PI / 180.0)
              * sinHalfLon * sinHalfLon;
 
-    return 2.0 * R * 1000.0 * asin(sqrt(a));
+    return 2.0 * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS * asin(sqrt(a));
 }
 
 - (CLLocation *) locationWithCoordinate:(CLLocationCoordinate2D)coordinate

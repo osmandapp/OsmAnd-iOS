@@ -1103,14 +1103,14 @@ static OASubscriptionState *EXPIRED;
             }
         
         for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-            if (holder.linkedSubscription && holder.linkedSubscription.isMaps && holder.state == OASubscriptionState.ACTIVE)
+            if (holder.linkedSubscription && holder.linkedSubscription.isMaps && holder.state.isActive)
             {
                 maps = YES;
                 break;
             }
         
         for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-            if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state == OASubscriptionState.ACTIVE)
+            if (holder.linkedSubscription && holder.linkedSubscription.isOsmAndPro && holder.state.isActive)
             {
                 pro = YES;
                 break;
@@ -1125,7 +1125,7 @@ static OASubscriptionState *EXPIRED;
         NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
         NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
         for (OASubscriptionStateHolder *holder in _subscriptionStateMap.allValues)
-            if (holder.linkedSubscription && holder.origin == EOAPurchaseOriginIOS && holder.state == OASubscriptionState.ACTIVE)
+            if (holder.linkedSubscription && holder.origin == EOAPurchaseOriginIOS && holder.state.isActive)
             {
                 OAProduct *product = [_products getProduct:holder.linkedSubscription.productIdentifier];
                 if (product)

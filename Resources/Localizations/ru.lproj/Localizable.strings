@@ -691,7 +691,7 @@
 "int_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "info_button" = "Информация";
-"day_off_label" = "вых.";
+"day_off_label" = "выходной";
 "search_radius" = "Радиус поиска";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
 "shared_string_enabled" = "Включено";

@@ -91,7 +91,7 @@
 "search_more" = "Search more…";
 "search_favorites" = "Search in Favorites";
 
-"day_off_label" = "off";
+"day_off_label" = "closed";
 "open_from_short" = "From";
 "open_from" = "Open from";
 "open_till" = "Open until";

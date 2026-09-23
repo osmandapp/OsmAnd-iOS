@@ -4100,3 +4100,6 @@
 "astro_search_info_nebulas" = "Туманность — это гигантское облако пыли и газа в космосе, часто в той области, где рождаются звёзды.";
 "plugin_ais_tracker_name" = "AIS-трекер судов";
 "shared_string_length" = "Длина";
+"opening_hours_public_holiday" = "Праздники";
+"opening_hours_school_holiday" = "Каникулы";
+"opening_hours_easter" = "Пасха";

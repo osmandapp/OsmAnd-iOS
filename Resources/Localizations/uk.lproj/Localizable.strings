@@ -4180,3 +4180,6 @@
 "ais_type_sar_vessel" = "Пошуково-рятувальне судно";
 "ais_type_base_station" = "Базова станція";
 "ais_type_sar_aircraft" = "Літак SAR";
+"opening_hours_public_holiday" = "Свята";
+"opening_hours_school_holiday" = "Канікули";
+"opening_hours_easter" = "Великдень";

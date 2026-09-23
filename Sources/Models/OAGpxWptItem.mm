@@ -27,6 +27,19 @@
     return gpxWptItem;
 }
 
+- (void)applyPendingGroupsToFile:(OASGpxFile *)file
+{
+    for (OASGpxUtilitiesPointsGroup *group in self.pendingGroups)
+    {
+        if (!file.pointsGroups[group.name])
+            file.pointsGroups[group.name] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:group.name
+                                                                                 iconName:group.iconName
+                                                                           backgroundType:group.backgroundType
+                                                                                    color:group.color
+                                                                                   hidden:group.hidden];
+    }
+}
+
 - (void)setPoint:(OASWptPt *)point
 {
     _point = point;

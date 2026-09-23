@@ -53,8 +53,8 @@
 - (void)testPendingGroupColorIsAvailableByName
 {
     OAGpxWptEditingHandler *handler = [self handlerWithFile:[[OASGpxFile alloc] initWithAuthor:@"test"]];
-    [handler setValue:@"New group" forKey:@"newGroupTitle"];
-    [handler setValue:UIColor.blueColor forKey:@"newGroupColor"];
+    OASGpxUtilitiesPointsGroup *group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"New group" iconName:nil backgroundType:nil color:UIColor.blueColor.toARGBNumber hidden:NO];
+    [handler setValue:[NSMutableArray arrayWithObject:group] forKey:@"pendingGroups"];
     [self assertGroup:@"New group" color:UIColor.blueColor handler:handler];
     XCTAssertNil([handler getGroupsWithColors][@"title"]);
     XCTAssertNil([handler getGroupsWithColors][@"color"]);
@@ -130,8 +130,8 @@
 - (void)testReturnedCollectionsAndGroupRecordsAreImmutable
 {
     OAGpxWptEditingHandler *handler = [self handlerWithFile:[[OASGpxFile alloc] initWithAuthor:@"test"]];
-    [handler setValue:@"New group" forKey:@"newGroupTitle"];
-    [handler setValue:UIColor.blueColor forKey:@"newGroupColor"];
+    OASGpxUtilitiesPointsGroup *group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"New group" iconName:nil backgroundType:nil color:UIColor.blueColor.toARGBNumber hidden:NO];
+    [handler setValue:[NSMutableArray arrayWithObject:group] forKey:@"pendingGroups"];
     NSArray *groups = [handler getGroups];
     XCTAssertFalse([groups isKindOfClass:NSMutableArray.class]);
     for (NSDictionary *group in groups)

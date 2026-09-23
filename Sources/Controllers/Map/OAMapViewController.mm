@@ -3823,11 +3823,22 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
-- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
+{
+    return [self addNewWpt:wpt gpxFileName:gpxFileName groupsFromItem:nil];
+}
+
+- (BOOL)addNewWptItem:(OAGpxWptItem *)item gpxFileName:(NSString *)gpxFileName
+{
+    return [self addNewWpt:item.point gpxFileName:gpxFileName groupsFromItem:item];
+}
+
+- (BOOL)addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName groupsFromItem:(OAGpxWptItem *)item
 {
     if (!gpxFileName)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        [item applyPendingGroupsToFile:helper.currentTrack];
         [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
@@ -3865,6 +3876,7 @@ static char kMapSourceUpdateQueueKey;
                 OASGpxFile *gpxFile = value;
                 
                 OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
+                [item applyPendingGroupsToFile:gpxFile];
                 [gpxFile addPointPoint:w];
                 
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
@@ -3902,6 +3914,7 @@ static char kMapSourceUpdateQueueKey;
             OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
             
             OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
+            [item applyPendingGroupsToFile:gpxFile];
             [gpxFile addPointPoint:w];
 
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
@@ -3996,6 +4009,7 @@ static char kMapSourceUpdateQueueKey;
                     if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                     {
+                        [item applyPendingGroupsToFile:gpxFile];
                         [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
@@ -4035,6 +4049,7 @@ static char kMapSourceUpdateQueueKey;
                 if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
                 {
+                    [item applyPendingGroupsToFile:gpxFile];
                     [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];

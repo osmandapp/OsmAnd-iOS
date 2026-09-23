@@ -725,6 +725,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (gpxFile == nil)
             return NO;
         
+        [gpxWpt applyPendingGroupsToFile:gpxFile];
         [self ensurePoiGroupForPoint:gpxWpt.point inGpx:gpxFile];
         [gpxFile addPointPoint:[[OASWptPt alloc] initWithWptPt:gpxWpt.point]];
         [self syncActiveGpxPoiStateFromGpxFile:gpxFile];
@@ -735,6 +736,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (gpxFile == nil)
         return NO;
     
+    [gpxWpt applyPendingGroupsToFile:gpxFile];
     [self ensurePoiGroupForPoint:gpxWpt.point inGpx:gpxFile];
     [gpxFile addPointPoint:[[OASWptPt alloc] initWithWptPt:gpxWpt.point]];
     [self refreshDraftGpx];
@@ -1671,6 +1673,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot ?: [self makePoiStateSnapshot];
+    OASGpxFile *gpxFile = [self isDraftGpxPath:docPath] ? [self gpxFileForWaypoints] : [self editingContext].gpxData.gpxFile;
+    [gpxWptItem applyPendingGroupsToFile:gpxFile];
     PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];

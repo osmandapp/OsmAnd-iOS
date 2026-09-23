@@ -1332,7 +1332,7 @@
     {
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-        [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
+        [((OAGpxWptEditingHandler *) _pointHandler) addGroupWithName:editedGroupName color:color iconName:iconName backgroundIconName:backgroundIconName];
         _selectedWaypointGroupKey = editedGroupName;
     }
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];

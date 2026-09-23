@@ -1094,6 +1094,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *settingUseAnalytics;
 @property (nonatomic) OACommonString *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 @property (nonatomic) OACommonString *settingCustomExternalInputDevice;
+// Per-profile list used before custom devices became global, still read from old exports and old clients
+@property (nonatomic) OACommonString *settingLegacyCustomExternalInputDevice;
 
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchased;
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;

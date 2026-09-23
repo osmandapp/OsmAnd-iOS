@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void) initialize;
 + (OALocationIcon *) locationIconWithName:(NSString *)name;
++ (OALocationIcon *) locationIconWithName:(NSString *)name forNavigation:(BOOL)forNavigation;
 
 + (OALocationIcon *) DEFAULT;
 + (OALocationIcon *) CAR;

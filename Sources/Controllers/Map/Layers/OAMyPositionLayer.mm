@@ -491,7 +491,7 @@ typedef enum {
     std::shared_ptr<const OsmAnd::Model3D> navigationModelCpp;
     std::shared_ptr<const OsmAnd::Model3D> locationModelCpp;
 
-    OALocationIcon *navIcon = [OALocationIcon locationIconWithName:navigationIconName];
+    OALocationIcon *navIcon = [OALocationIcon locationIconWithName:navigationIconName forNavigation:YES];
     navigationIconName = [navIcon iconName];
     if ([navIcon shouldDisplayModel])
     {
@@ -503,7 +503,7 @@ typedef enum {
         }
     }
     
-    OALocationIcon *locIcon = [OALocationIcon locationIconWithName:locationIconName];
+    OALocationIcon *locIcon = [OALocationIcon locationIconWithName:locationIconName forNavigation:NO];
     locationIconName = [locIcon iconName];
     if ([locIcon shouldDisplayModel])
     {

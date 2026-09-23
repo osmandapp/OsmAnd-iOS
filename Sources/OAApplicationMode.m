@@ -506,7 +506,7 @@ static int PROFILE_TRUCK = 1000;
 - (OALocationIcon *) getNavigationIcon
 {
     NSString *savedName = [OAAppSettings.sharedManager.navigationIcon get:self];
-    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName forNavigation:YES];
     return icon ? icon : [OALocationIcon MOVEMENT_DEFAULT];
 }
 
@@ -518,7 +518,7 @@ static int PROFILE_TRUCK = 1000;
 - (OALocationIcon *) getLocationIcon
 {
     NSString *savedName = [OAAppSettings.sharedManager.locationIcon get:self];
-    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName forNavigation:NO];
     return icon ? icon : [OALocationIcon DEFAULT];
 }
 
@@ -979,8 +979,8 @@ static int PROFILE_TRUCK = 1000;
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
     res.customIconColor = [self parseCustomColor:jsonData[@"customIconColor"]];
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
-    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
-    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
+    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"] forNavigation:NO] name];
+    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"] forNavigation:YES] name];
     double locIconSize = [jsonData[@"locIconSize"] doubleValue];
     double navIconSize = [jsonData[@"navIconSize"] doubleValue];
     res.locIconSize = locIconSize == 0 ? [OAAppSettings sharedManager].locationIconSize.defValue : locIconSize;

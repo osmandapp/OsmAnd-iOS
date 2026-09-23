@@ -74,12 +74,45 @@ static OALocationIcon *_MOVEMENT_CAR;
     _MOVEMENT_CAR = [OALocationIcon withName:@"MOVEMENT_CAR" iconName:@"map_navigation_car" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_navigation_car"];
 }
 
++ (NSString *) stripKnownIconPrefix:(NSString *)name
+{
+    if ([name hasPrefix:@"STATIC_"])
+        return [name substringFromIndex:7];
+    if ([name hasPrefix:@"MOVEMENT_"])
+        return [name substringFromIndex:9];
+    return name;
+}
+
 + (OALocationIcon *) locationIconWithName:(NSString *)name
+{
+    return [self locationIconWithName:name forNavigation:NO];
+}
+
++ (OALocationIcon *) locationIconWithName:(NSString *)name forNavigation:(BOOL)forNavigation
 {
     // Temporary fix to prevent possible crash due to old numeric setting
     if ([name isKindOfClass:NSNumber.class]) {
-        return _DEFAULT;
+        return forNavigation ? _MOVEMENT_DEFAULT : _DEFAULT;
     }
+
+    // Android stores this value as either a bare name ("CAR", "DEFAULT", ...) or a fully
+    // qualified one ("STATIC_CAR" / "MOVEMENT_CAR"), and which family it belongs to depends on
+    // which field it came from (locIcon vs navIcon), not on the string itself - "DEFAULT" is a
+    // valid bare name for both the resting AND the moving icon. Strip any known prefix and
+    // re-apply the one that matches our caller's context before matching, mirroring Android's
+    // own context-aware LocationIcon.fromName(name, staticLocation).
+    NSString *bareName = [self stripKnownIconPrefix:name];
+    NSString *contextualName = forNavigation ? [@"MOVEMENT_" stringByAppendingString:bareName] : bareName;
+    for (OALocationIcon *icon in [self defaultIcons])
+    {
+        if ([contextualName isEqualToString:icon.name])
+        {
+            return icon;
+        }
+    }
+
+    // Fall back to a direct match against the original string (icon/model resource names,
+    // custom 3D models, etc.) - same behavior as before this method took a context flag.
     for (OALocationIcon *icon in [self defaultIcons])
     {
         if ([name isEqualToString:icon.name] ||
@@ -89,7 +122,7 @@ static OALocationIcon *_MOVEMENT_CAR;
             return icon;
         }
     }
-    return _DEFAULT;
+    return forNavigation ? _MOVEMENT_DEFAULT : _DEFAULT;
 }
 
 + (OALocationIcon *) DEFAULT

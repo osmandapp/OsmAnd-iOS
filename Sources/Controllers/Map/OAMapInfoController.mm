@@ -91,6 +91,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
+    BOOL _updateInfoPending;
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
@@ -297,9 +298,24 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (void) updateInfo
 {
-    __weak OAMapInfoController *weakSelf = self;
+    @synchronized (self)
+    {
+        if (_updateInfoPending)
+            return;
+        _updateInfoPending = YES;
+    }
+
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf onDraw];
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        @synchronized (strongSelf)
+        {
+            strongSelf->_updateInfoPending = NO;
+        }
+        [strongSelf onDraw];
     });
 }
 

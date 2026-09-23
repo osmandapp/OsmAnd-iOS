@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (void) addPoint:(OASWptPt *)pt mode:(EOAAddPointMode)mode;
 - (void) addPoint:(NSInteger)position point:(OASWptPt *)pt mode:(EOAAddPointMode)mode;
 
-- (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode targetSegmentIndex:(NSInteger)targetSegmentIndex;
+- (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode;
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;

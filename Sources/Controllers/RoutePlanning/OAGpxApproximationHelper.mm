@@ -201,7 +201,7 @@ static BOOL OAShouldUseExternalTimestamps(OALocationsHolder *locationsHolder)
     {
         OAGpxRouteApproximation *approximation = [approximations objectAtIndex:i];
         NSArray<OASWptPt *> *segment = [points objectAtIndex:i];
-        [context setPoints:approximation originalPoints:segment mode:_appMode targetSegmentIndex:(NSInteger) i];
+        [context setPoints:approximation originalPoints:segment mode:_appMode];
     }
     
     return [context exportGpx:context.gpxData.gpxFile.path.lastPathComponent.stringByDeletingPathExtension];

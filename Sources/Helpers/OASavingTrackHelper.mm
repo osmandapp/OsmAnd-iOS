@@ -423,6 +423,7 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     
     [self prepareCurrentTrackForRecording];
+    [LiveActivityManager.shared refresh];
 }
 
 - (void) saveDataToGpx

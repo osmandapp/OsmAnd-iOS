@@ -231,6 +231,10 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
 
 - (BOOL)openURL:(NSURL *)url
 {
+    // A Live Activity can open the app without a webpage URL.
+    if (!url)
+        return NO;
+
     if (_rootViewController)
     {
         return [[DeepLinkManager shared] handleDeepLinkWithUrl:url rootViewController:_rootViewController];

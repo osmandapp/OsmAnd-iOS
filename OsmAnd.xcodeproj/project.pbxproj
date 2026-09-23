@@ -6208,13 +6208,6 @@
 			path = settings;
 			sourceTree = "<group>";
 		};
-		3AFEEE231A0E343600900A47 /* Icons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Icons;
-			sourceTree = "<group>";
-		};
 		46624E6F2993B20100F425AE /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -6811,7 +6804,6 @@
 			children = (
 				843394751FF4FA37006205A5 /* sounds */,
 				8463101B1A8E8951005B39F2 /* Images.xcassets */,
-				3AFEEE231A0E343600900A47 /* Icons */,
 				BB451D8A18D70B4B005FBE09 /* Shipped */,
 				BB451D8918D70AE4005FBE09 /* Embedded */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,

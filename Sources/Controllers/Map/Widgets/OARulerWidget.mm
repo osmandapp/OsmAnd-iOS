@@ -46,9 +46,6 @@
 #define GLOBE_EARTH_RADIUS_METERS 6378137.0
 #define MAX_GLOBE_DISTANCE (M_PI * 6372800.0)
 #define MAX_VISIBLE_GLOBE_DISTANCE (MAX_GLOBE_DISTANCE / 2)
-#define MAX_MERCATOR_LATITUDE 85.0511
-#define MAX_GLOBE_MERCATOR_ANGLE (2 * M_PI - 1e-7)
-#define POINT31_FULL_RANGE (1LL << 31)
 #define PROJECTED_STEP_SLACK 4
 #define MIN_PROJECTED_STEP 24
 
@@ -842,11 +839,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 {
     // Flat maps have no drawable surface beyond the Web Mercator latitude boundary.
     double absoluteLatitude = ABS(latLon.latitude);
-    if (absoluteLatitude > (_sphericalMap ? 90 : MAX_MERCATOR_LATITUDE))
+    if (absoluteLatitude > (_sphericalMap ? 90 : MAX_LATITUDE_KEY))
         return NO;
 
     OAMapRendererView *mapView = _mapViewController.mapView;
-    if (_sphericalMap && absoluteLatitude > MAX_MERCATOR_LATITUDE)
+    if (_sphericalMap && absoluteLatitude > MAX_LATITUDE_KEY)
     {
         auto pos31 = [self.class calculateGlobePoint31:latLon];
         return [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
@@ -880,14 +877,10 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 + (OsmAnd::PointI) calculateGlobePoint31:(OsmAnd::LatLon)latLon
 {
-    // The globe renderer accepts signed Point31 y values beyond the Web Mercator tile range.
-    // Keep polar-cap samples in that extended range instead of clamping them to +/-85.0511 degrees.
-    double latitude = latLon.latitude * M_PI / 180;
-    double mercatorAngle = log(tan(latitude / 2 + M_PI / 4));
-    mercatorAngle = MAX(-MAX_GLOBE_MERCATOR_ANGLE, MIN(MAX_GLOBE_MERCATOR_ANGLE, mercatorAngle));
-    int64_t y31 = (int64_t) ((1 - mercatorAngle / M_PI) / 2 * POINT31_FULL_RANGE);
-    // Southern polar values intentionally wrap to the signed Point31 representation used by the renderer.
-    return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(latLon.longitude), (int32_t) (uint32_t) y31);
+    // The globe renderer accepts Point31 y values beyond the Web Mercator tile range;
+    // like the renderer, truncate the extended 64-bit value to the signed Point31 representation.
+    auto location64 = OsmAnd::Utilities::get64FromAngles(OsmAnd::PointD(qDegreesToRadians(latLon.longitude), qDegreesToRadians(latLon.latitude)));
+    return OsmAnd::PointI(static_cast<int32_t>(location64.x), static_cast<int32_t>(location64.y));
 }
 
 + (BOOL) isValidGlobeDistance:(double)distance

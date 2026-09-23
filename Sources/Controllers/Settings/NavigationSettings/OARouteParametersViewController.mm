@@ -174,8 +174,8 @@ static NSString *foregroundImageKey = @"foregroundImage";
     NSMutableArray<NSDictionary *> *headerImageSection = [NSMutableArray array];
     [headerImageSection addObject:@{
         typeKey : [OADeviceScreenTableViewCell getCellIdentifier],
-        foregroundImageKey : @"img_settings_sreen_route_parameters@3x.png",
-        backgroundImageKey : @"img_settings_device_bottom_light@3x.png",
+        foregroundImageKey : ACImageNameImgSettingsSreenRouteParameters,
+        backgroundImageKey : ACImageNameImgSettingsDeviceBottomLight,
     }];
     [tableData addObject:headerImageSection];
     

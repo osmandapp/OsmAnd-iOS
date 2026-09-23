@@ -54,8 +54,8 @@
     
     [otherArr addObject:@{
         @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
-        @"foregroundImage" : @"img_settings_sreen_route_alerts@3x.png",
-        @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
+        @"foregroundImage" : ACImageNameImgSettingsSreenRouteAlerts,
+        @"backgroundImage" : ACImageNameImgSettingsDeviceBottomLight,
     }];
     [otherArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],

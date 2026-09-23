@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : osmEdit.getName,
-            @"img" : @"ic_custom_osm_edits",
+            @"img" : ACImageNameIcCustomOsmEdits,
             @"key" : kOsmEditsSettings
         }];
     }
@@ -274,7 +274,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : developmentPlugin.getName,
-            @"img" : @"ic_custom_laptop",
+            @"img" : ACImageNameIcCustomLaptop,
             @"key" : kOsmandDevelopmentSettings
         }];
     }
@@ -285,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : weather.getName,
-            @"img" : @"ic_custom_umbrella",
+            @"img" : ACImageNameIcCustomUmbrella,
             @"key" : kWeatherSettings
         }];
     }
@@ -296,7 +296,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : wikipedia.getName,
-            @"img" : @"ic_custom_wikipedia",
+            @"img" : ACImageNameIcCustomWikipedia,
             @"key" : kWikipediaSettings
         }];
     }
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : externalSensors.getName,
-            @"img" : @"ic_custom_sensor",
+            @"img" : ACImageNameIcCustomSensor,
             @"key" : kExternalSensors
         }];
     }
@@ -317,7 +317,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"obd_plugin_name"),
-            @"img" : @"ic_custom_car_info",
+            @"img" : ACImageNameIcCustomCarInfo,
             @"key" : kVehicleMetrics
         }];
     }
@@ -328,7 +328,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : aisTracker.getName,
-            @"img" : @"ic_plugin_nautical",
+            @"img" : ACImageNameIcPluginNautical,
             @"key" : kAisTrackerSettings
         }];
     }
@@ -345,7 +345,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [settingsActions addObject:@{
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"export_profile"),
-        @"img" : @"ic_custom_export",
+        @"img" : ACImageNameIcCustomExport,
         @"key" : @"export_profile"
     }];
     [settingsActions addObject:@{
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [settingsActions addObject:@{
            @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
-            @"img" : @"ic_custom_remove_outlined",
+            @"img" : ACImageNameIcCustomRemoveOutlined,
             @"key" : @"delete_profile"
         }];
     }

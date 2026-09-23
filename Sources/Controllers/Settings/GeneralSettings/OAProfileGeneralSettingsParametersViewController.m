@@ -267,21 +267,21 @@
                 @"name" : @"light",
                 @"title" : OALocalizedString(@"shared_string_light"),
                 @"selected" : @(appTheme == ThemeLight),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"dark",
                 @"title" : OALocalizedString(@"shared_string_dark"),
                 @"selected" : @(appTheme == ThemeDark),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"system",
                 @"title" : OALocalizedString(@"shared_string_system_default"),
                 @"selected" : @(appTheme == ThemeSystem),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -291,28 +291,28 @@
                 @"name" : @"manually",
                 @"title" : OALocalizedString(@"rotate_map_manual_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
-                @"icon" : @"ic_custom_direction_manual_day",
+                @"icon" : ACImageNameIcCustomDirectionManualDay,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
                 @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
-                @"icon" : @"ic_custom_direction_bearing_day",
+                @"icon" : ACImageNameIcCustomDirectionBearingDay,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"compass",
                 @"title" : OALocalizedString(@"rotate_map_compass_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
-                @"icon" : @"ic_custom_direction_compass_day",
+                @"icon" : ACImageNameIcCustomDirectionCompassDay,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"none",
                 @"title" : OALocalizedString(@"rotate_map_north_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
-                @"icon" : @"ic_custom_direction_north_day",
+                @"icon" : ACImageNameIcCustomDirectionNorthDay,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -322,21 +322,21 @@
                 @"name" : @"mapOrientationDefault",
                 @"title" : OALocalizedString(@"map_orientation_default"),
                 @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationSystem],
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"mapOrientationPortrait",
                 @"title" : OALocalizedString(@"map_orientation_portrait"),
                 @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationPortrait],
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"mapOrientationLandscape",
                 @"title" : OALocalizedString(@"map_orientation_landscape"),
                 @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationLandscape],
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -346,21 +346,21 @@
                 @"name" : @"auto",
                 @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"selected" : @(positionMap == EOAPositionPlacementAuto),
-                @"icon" : @"ic_custom_display_position_automatic",
+                @"icon" : ACImageNameIcCustomDisplayPositionAutomatic,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"center",
                 @"title" : OALocalizedString(@"position_on_map_center"),
                 @"selected" : @(positionMap == EOAPositionPlacementCenter),
-                @"icon" : @"ic_custom_display_position_center",
+                @"icon" : ACImageNameIcCustomDisplayPositionCenter,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"bottom",
                 @"title" : OALocalizedString(@"position_on_map_bottom"),
                 @"selected" : @(positionMap == EOAPositionPlacementBottom),
-                @"icon" : @"ic_custom_display_position_bottom",
+                @"icon" : ACImageNameIcCustomDisplayPositionBottom,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -471,14 +471,14 @@
             [dataArr addObject:@{
                 @"name" : @"METERS",
                 @"title" : [OALocalizedString(@"shared_string_meters") capitalizedString],
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"selected" : @(altitudeUnitSystem == METERS),
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"FEET",
                 @"title" : [OALocalizedString(@"shared_string_feet") capitalizedString],
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"selected" : @(altitudeUnitSystem == FEET),
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
@@ -528,21 +528,21 @@
                 @"name" : @"litres",
                 @"title" : OALocalizedString(@"litres"),
                 @"selected" : @(volumeSystem == LITRES),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"imperial_gallons",
                 @"title" : OALocalizedString(@"imperial_gallons"),
                 @"selected" : @(volumeSystem == IMPERIAL_GALLONS),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"us_gallons",
                 @"title" : OALocalizedString(@"us_gallons"),
                 @"selected" : @(volumeSystem == US_GALLONS),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -552,21 +552,21 @@
                 @"name" : @"deviceSettings",
                 @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"device_settings"), [[NSUnitTemperature current] displaySymbol]],
                 @"selected" : @(tempSystem == SYSTEM_DEFAULT),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"celsius",
                 @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_celsius"), @"°C"],
                 @"selected" : @(tempSystem == CELSIUS),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"fahrenheit",
                 @"title" : [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"weather_temperature_fahrenheit"), @"°F"],
                 @"selected" : @(tempSystem == FAHRENHEIT),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;
@@ -602,7 +602,7 @@
                     @"name" : [device id],
                     @"title" : [device toHumanString],
                     @"selected" : @([externamlInputDevices isEqualToString:[device id]]),
-                    @"icon" : @"ic_checkmark_default",
+                    @"icon" : ACImageNameIcCheckmarkDefault,
                     @"type" : OASimpleTableViewCell.reuseIdentifier
                 }];
             }
@@ -613,14 +613,14 @@
                 @"name" : @"preciseDistance",
                 @"title" : OALocalizedString(@"shared_string_precise"),
                 @"selected" : @(isPreciseDistanceNumbers),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             [dataArr addObject:@{
                 @"name" : @"roundUpDistance",
                 @"title" : OALocalizedString(@"shared_string_round_up"),
                 @"selected" : @(!isPreciseDistanceNumbers),
-                @"icon" : @"ic_checkmark_default",
+                @"icon" : ACImageNameIcCheckmarkDefault,
                 @"type" : OASimpleTableViewCell.reuseIdentifier
             }];
             break;

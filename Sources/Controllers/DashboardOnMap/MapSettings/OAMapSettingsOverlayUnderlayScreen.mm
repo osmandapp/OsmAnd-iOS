@@ -358,7 +358,7 @@ static NSInteger kButtonsSection;
                 itemMapSource = onlineSource.mapSource;
                 caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
-                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map_online"];
+                cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomMapOnline];
                 cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
         }
@@ -370,7 +370,7 @@ static NSInteger kButtonsSection;
             caption = sqlite.mapSource.name;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
-            cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map"];
+            cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomMap];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         }
         
@@ -387,7 +387,7 @@ static NSInteger kButtonsSection;
             mapSource = _app.data.underlayMapSource;
 
         if ([mapSource isEqual:itemMapSource])
-            [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected"] forState:UIControlStateNormal];
+            [cell.checkButton setImage:[UIImage imageNamed:ACImageNameMenuCellSelected] forState:UIControlStateNormal];
         else
             [cell.checkButton setImage:nil forState:UIControlStateNormal];
         cell.delegate = self;

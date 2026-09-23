@@ -95,7 +95,7 @@
     }
     else if (_type == EOAFeatureCardRowSubscription || _type == EOAFeatureCardRowSimple)
     {
-        self.imageViewSecondRightIcon.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+        self.imageViewSecondRightIcon.image = [UIImage imageNamed:ACImageNameIcCheckmarkDefault];
         self.imageViewSecondRightIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     }
     else if (_type == EOAFeatureCardRowInclude)

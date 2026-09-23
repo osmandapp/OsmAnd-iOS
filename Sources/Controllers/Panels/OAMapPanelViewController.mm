@@ -3792,7 +3792,7 @@ typedef enum
     else
     {
         targetPoint.type = OATargetRouteIntermediate;
-        [UIImage imageNamed:@"list_intermediate"];
+        [UIImage imageNamed:ACImageNameListIntermediate];
     }
     
     _targetMenuView.isAddressFound = YES;

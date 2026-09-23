@@ -27,6 +27,7 @@
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 static const NSInteger kOrderInternalRow = 0;
 
@@ -191,7 +192,7 @@ static const NSInteger kOrderInternalRow = 0;
         
         if (!skip)
         {
-            [descriptions addObject:[[OAAmenityInfoRow alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
+            [descriptions addObject:[[OAAmenityInfoRow alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:ACImageNameIcDescription] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
 
         }
     }];

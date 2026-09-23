@@ -8,12 +8,13 @@
 
 #import "OAPOIHistoryType.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPOIHistoryType
 
 - (UIImage *)icon
 {
-    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
+    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:ACImageNameIcParkingPinSmall] : [UIImage imageNamed:ACImageNameIcMapPinSmall]);
 }
 
 @end

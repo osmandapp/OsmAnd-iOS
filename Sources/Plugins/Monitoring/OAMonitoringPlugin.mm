@@ -27,6 +27,7 @@
 #import "OALiveMonitoringHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -162,7 +163,7 @@
     if (recOn)
     {
         [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
-                                                   titleIcon:@"ic_custom_route"
+                                                   titleIcon:ACImageNameIcCustomRoute
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
                                        selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"gpx_start_new_segment"), OALocalizedString(@"save_current_track") ]
                                        selectableItemsImages:@[@"track_recording_stop", @"icon_info", @"track_new_segement" , @"track_save"]
@@ -190,7 +191,7 @@
                         if ([_savingTrackHelper hasDataToSave] && _savingTrackHelper.distance < 10.0)
                         {
                             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                                                       titleIcon:@"ic_custom_route"
+                                                                       titleIcon:ACImageNameIcCustomRoute
                                                                          message:nil
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
                                                                        doneTitle:OALocalizedString(@"shared_string_yes")
@@ -219,7 +220,7 @@
         if ([_savingTrackHelper hasData])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
-                                                       titleIcon:@"ic_custom_route"
+                                                       titleIcon:ACImageNameIcCustomRoute
                                                      cancelTitle:nil
                                            selectableItemsTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"save_current_track")]
                                            selectableItemsImages:@[@"ic_action_rec_start", @"icon_info", @"track_clear_data", @"track_save"]
@@ -330,7 +331,7 @@
     if (askForRec)
     {
         [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                                   titleIcon:@"ic_custom_route"
+                                                   titleIcon:ACImageNameIcCustomRoute
                                                      message:nil
                                                  cancelTitle:OALocalizedString(@"shared_string_no")
                                                    doneTitle:OALocalizedString(@"shared_string_yes")

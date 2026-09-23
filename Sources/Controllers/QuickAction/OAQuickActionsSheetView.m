@@ -119,8 +119,8 @@
     _closeBtn.layer.cornerRadius = 9.;
     _controlBtnPrev.layer.cornerRadius = 9.;
     _controlBtnNext.layer.cornerRadius = 9.;
-    [_controlBtnPrev setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
-    [_controlBtnNext addRightImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"] offset:0.0 withRTL:NO];
+    [_controlBtnPrev setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowBack] forState:UIControlStateNormal];
+    [_controlBtnNext addRightImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowForward] offset:0.0 withRTL:NO];
 
     [self setupPageControls];
     
@@ -577,7 +577,7 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionBackground];
+            UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
@@ -589,12 +589,12 @@
         if ([action isActionWithSlash])
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
-            UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom];
+            UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionHideBottom];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             background.frame = frame;
             [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
-            UIImage *img = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop];
+            UIImage *img = [UIImage imageNamed:ACImageNameIcCustomCompoundActionHideTop];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
             view.frame = frame;
             [resultCell.imageView addSubview:view];

@@ -35,7 +35,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                  name:OALocalizedString(@"osn_bug_name")]
                 nameAction:OALocalizedString(@"shared_string_add")]
-               iconName:@"ic_action_osm_note"]
+               iconName:ACImageNameIcActionOsmNote]
               secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];

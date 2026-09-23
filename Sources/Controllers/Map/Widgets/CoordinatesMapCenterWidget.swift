@@ -34,6 +34,6 @@ final class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        UIImage.widgetCoordinatesMapCenter
+        .widgetCoordinatesMapCenter
     }
 }

@@ -58,7 +58,7 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) MAP_DATA
 {
     if (!MAP_DATA)
-        MAP_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"standard_maps") iconName:@"ic_custom_map"];
+        MAP_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"standard_maps") iconName:ACImageNameIcCustomMap];
     return MAP_DATA;
 }
 
@@ -70,21 +70,21 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) LIVE_UPDATES
 {
     if (!LIVE_UPDATES)
-        LIVE_UPDATES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"download_live_updates") iconName:@"ic_custom_map"];
+        LIVE_UPDATES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"download_live_updates") iconName:ACImageNameIcCustomMap];
     return LIVE_UPDATES;
 }
 
 + (OALocalItemType *) TTS_VOICE_DATA
 {
     if (!TTS_VOICE_DATA)
-        TTS_VOICE_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"local_indexes_cat_tts") iconName:@"ic_custom_sound"];
+        TTS_VOICE_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"local_indexes_cat_tts") iconName:ACImageNameIcCustomSound];
     return TTS_VOICE_DATA;
 }
 
 + (OALocalItemType *) VOICE_DATA
 {
     if (!VOICE_DATA)
-        VOICE_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"local_indexes_cat_voice") iconName:@"ic_custom_sound"];
+        VOICE_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"local_indexes_cat_voice") iconName:ACImageNameIcCustomSound];
     return VOICE_DATA;
 }
 
@@ -103,14 +103,14 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) DEPTH_DATA
 {
     if (!DEPTH_DATA)
-        DEPTH_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"nautical_maps") iconName:@"ic_live_nautical_depth"];
+        DEPTH_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"nautical_maps") iconName:ACImageNameIcLiveNauticalDepth];
     return DEPTH_DATA;
 }
 
 + (OALocalItemType *) WIKI_AND_TRAVEL_MAPS
 {
     if (!DEPTH_DATA)
-        DEPTH_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"wikipedia_and_travel_maps") iconName:@"ic_custom_wikipedia"];
+        DEPTH_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"wikipedia_and_travel_maps") iconName:ACImageNameIcCustomWikipedia];
     return DEPTH_DATA;
 }
 
@@ -124,21 +124,21 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) WEATHER_DATA
 {
     if (!WEATHER_DATA)
-        WEATHER_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_weather") iconName:@"ic_custom_umbrella"];
+        WEATHER_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_weather") iconName:ACImageNameIcCustomUmbrella];
     return WEATHER_DATA;
 }
 
 + (OALocalItemType *) RENDERING_STYLES
 {
     if (!RENDERING_STYLES)
-        RENDERING_STYLES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"rendering_styles") iconName:@"ic_custom_map_outline"];
+        RENDERING_STYLES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"rendering_styles") iconName:ACImageNameIcCustomMapOutline];
     return RENDERING_STYLES;
 }
 
 + (OALocalItemType *) ROUTING
 {
     if (!ROUTING)
-        ROUTING = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") iconName:@"ic_custom_file_routing"];
+        ROUTING = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") iconName:ACImageNameIcCustomFileRouting];
     return ROUTING;
 }
 
@@ -150,7 +150,7 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) FAVORITES
 {
     if (!FAVORITES)
-        FAVORITES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"favorites_item") iconName:@"ic_custom_my_places"];
+        FAVORITES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"favorites_item") iconName:ACImageNameIcCustomMyPlaces];
     return FAVORITES;
 }
 
@@ -164,14 +164,14 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) OSM_NOTES
 {
     if (!OSM_NOTES)
-        OSM_NOTES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"osm_notes") iconName:@"ic_action_osm_note"];
+        OSM_NOTES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"osm_notes") iconName:ACImageNameIcActionOsmNote];
     return OSM_NOTES;
 }
 
 + (OALocalItemType *) OSM_EDITS
 {
     if (!OSM_EDITS)
-        OSM_EDITS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") iconName:@"ic_custom_osm_edits"];
+        OSM_EDITS = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") iconName:ACImageNameIcCustomOsmEdits];
     return OSM_EDITS;
 }
 
@@ -197,21 +197,21 @@ static NSArray<OALocalItemType *> *allValues;
 + (OALocalItemType *) COLOR_DATA
 {
     if (!COLOR_DATA)
-        COLOR_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") iconName:@"ic_custom_appearance"];
+        COLOR_DATA = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") iconName:ACImageNameIcCustomAppearance];
     return COLOR_DATA;
 }
 
 + (OALocalItemType *) PROFILES
 {
     if (!PROFILES)
-        PROFILES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") iconName:@"ic_custom_manage_profiles"];
+        PROFILES = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") iconName:ACImageNameIcCustomManageProfiles];
     return PROFILES;
 }
 
 + (OALocalItemType *) OTHER
 {
     if (!OTHER)
-        OTHER = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_other") iconName:@"ic_custom_settings_outlined"];
+        OTHER = [[OALocalItemType alloc] initWithTitle:OALocalizedString(@"shared_string_other") iconName:ACImageNameIcCustomSettingsOutlined];
     return OTHER;
 }
 

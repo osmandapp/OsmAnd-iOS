@@ -174,19 +174,19 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     switch (_feature)
     {
         case EOAFeatureCloud:
-            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCloudUploadColored];
         case EOAFeatureAdvancedWidgets:
             return [UIImage imageNamed:ACImageNameIcCustomProFeaturesColored];
         case EOAFeatureSensors:
-            return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomExternalSensorColored];
         case EOAFeatureVehicleMetrics:
-            return [UIImage imageNamed:@"ic_custom_vehicle_metrics_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomVehicleMetricsColored];
         case EOAFeatureHourlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomMapUpdatesColored];
         case EOAFeatureCrossBuy:
-            return [UIImage imageNamed:@"ic_custom_cross_buy_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCrossBuyColored];
         case EOAFeatureMonthlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomMonthlyMapUpdatesColored];
         case EOAFeatureUnlimitedMapDownloads:
         case EOAFeatureRegionAfrica:
         case EOAFeatureRegionRussia:
@@ -196,7 +196,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionCentralAmerica:
         case EOAFeatureRegionNorthAmerica:
         case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomUnlimitedDownloadsColored];
         case EOAFeatureCarPlay:
             return [UIImage imageNamed:ACImageNameIcCustomCarplayColored];
         case EOAFeatureCombinedWiki:
@@ -204,13 +204,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureWikipedia:
             return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikivoyage:
-            return [UIImage imageNamed:@"ic_custom_backpack_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomBackpackColored];
         case EOAFeatureRelief3D:
-            return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustom3DReliefColored];
         case EOAFeatureTerrain:
             return [UIImage imageNamed:ACImageNameIcCustomContourLinesColored];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomNauticalDepthColored];
         case EOAFeatureWeather:
             return [UIImage imageNamed:ACImageNameIcCustomUmbrellaColored];
         case EOAFeatureAstronomy:
@@ -225,19 +225,19 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     switch (_feature)
     {
         case EOAFeatureCloud:
-            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCloudUploadColored];
         case EOAFeatureAdvancedWidgets:
-            return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
+            return [UIImage imageNamed:ACImageNameIcCustomProFeaturesColoredBig];
         case EOAFeatureSensors:
-            return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomExternalSensorColored];
         case EOAFeatureVehicleMetrics:
-            return [UIImage imageNamed:@"ic_custom_vehicle_metrics_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomVehicleMetricsColored];
         case EOAFeatureHourlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomMapUpdatesColored];
         case EOAFeatureCrossBuy:
-            return [UIImage imageNamed:@"ic_custom_cross_buy_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomCrossBuyColored];
         case EOAFeatureMonthlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomMonthlyMapUpdatesColored];
         case EOAFeatureUnlimitedMapDownloads:
         case EOAFeatureRegionAfrica:
         case EOAFeatureRegionRussia:
@@ -247,7 +247,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionCentralAmerica:
         case EOAFeatureRegionNorthAmerica:
         case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomUnlimitedDownloadsColored];
         case EOAFeatureCarPlay:
             return [UIImage imageNamed:ACImageNameIcCustomCarplayColored];
         case EOAFeatureCombinedWiki:
@@ -255,13 +255,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureWikipedia:
             return [UIImage imageNamed:ACImageNameIcCustomWikipediaDownloadColored];
         case EOAFeatureWikivoyage:
-            return [UIImage imageNamed:@"ic_custom_backpack_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomBackpackColored];
         case EOAFeatureRelief3D:
-            return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustom3DReliefColored];
         case EOAFeatureTerrain:
             return [UIImage imageNamed:ACImageNameIcCustomContourLinesColored];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
+            return [UIImage imageNamed:ACImageNameIcCustomNauticalDepthColored];
         case EOAFeatureWeather:
             return [UIImage imageNamed:ACImageNameIcCustomUmbrellaColored];
         case EOAFeatureAstronomy:

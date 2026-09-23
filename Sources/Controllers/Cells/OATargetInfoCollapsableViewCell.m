@@ -8,6 +8,7 @@
 
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OACollapsableView.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATargetInfoCollapsableViewCell
 {
@@ -66,8 +67,8 @@
     {
         if (!_collapseIcon || !_expandIcon)
         {
-            _collapseIcon = [UIImage templateImageNamed:@"ic_arrow_close"];
-            _expandIcon = [UIImage templateImageNamed:@"ic_arrow_open"];
+            _collapseIcon = [UIImage imageNamed:ACImageNameIcArrowClose];
+            _expandIcon = [UIImage imageNamed:ACImageNameIcArrowOpen];
         }
         _rightIconView.hidden = NO;
         _textView.frame = CGRectMake(tf.origin.x, 0, _rightIconView.frame.origin.x - tf.origin.x, rawHeight);

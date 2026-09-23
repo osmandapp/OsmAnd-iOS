@@ -374,7 +374,7 @@
         if (cell)
         {
             [cell.titleLabel setText:OALocalizedString(@"add_waypoint")];
-            [cell.leftIconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
+            [cell.leftIconView setImage: [UIImage imageNamed:ACImageNameAddWaypointToTrack]];
         }
         return cell;
     }
@@ -399,7 +399,7 @@
             
             if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_elevation_chart)])
             {
-                cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+                cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             }
         }

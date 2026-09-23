@@ -101,7 +101,7 @@
     // Directions from here
     [arr addObject:@{ @"title" : OALocalizedString(@"context_menu_item_directions_from"),
                       @"key" : @"directions_more_options",
-                      @"img" : @"ic_action_directions_from",
+                      @"img" : ACImageNameIcActionDirectionsFrom,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     // Search nearby
     [arr addObject:@{ @"title" : OALocalizedString(@"search_nearby"),
@@ -176,7 +176,7 @@
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"context_menu_item_open_note"),
                                       @"key" : @"addon_edit_poi_create_note",
-                                      @"img" : editOsmNote ? ACImageNameIcCustomEdit : @"ic_action_add_osm_note",
+                                      @"img" : editOsmNote ? ACImageNameIcCustomEdit : ACImageNameIcActionAddOsmNote,
                                       @"type" : [OASimpleTableViewCell getCellIdentifier]}];
                 }
                 
@@ -186,12 +186,12 @@
     // Plan route
     [arr addObject:@{ @"title" : OALocalizedString(@"plan_route"),
             @"key" : @"plan_route",
-            @"img" : @"ic_custom_route",
+            @"img" : ACImageNameIcCustomRoute,
             @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     // Avoid road
     [arr addObject:@{ @"title" : OALocalizedString(@"avoid_road"),
             @"key" : @"avoid_road",
-            @"img" : @"ic_custom_road_works",
+            @"img" : ACImageNameIcCustomRoadWorks,
             @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     if (arr.count > 2)
         [arr insertObject:@{ @"type" : [OADividerCell getCellIdentifier] } atIndex:2];

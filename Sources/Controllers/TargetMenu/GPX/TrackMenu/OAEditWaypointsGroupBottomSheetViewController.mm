@@ -150,7 +150,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"change_color",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_appearance",
+                kCellRightIconName: ACImageNameIcCustomAppearance,
                 kCellTitle: OALocalizedString(@"change_color")
         }];
         [changeSectionData.subjects addObject:changeColorCellData];
@@ -175,14 +175,14 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kTableKey: @"analyze_on_map",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"analyze_on_map"),
-                kCellRightIconName: @"ic_custom_graph"
+                kCellRightIconName: ACImageNameIcCustomGraph
         }];
         [editSectionData.subjects addObject:analyzeOnMapCellData];
 
         OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"edit",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_trip_edit",
+                kCellRightIconName: ACImageNameIcCustomTripEdit,
                 kCellTitle: OALocalizedString(@"shared_string_edit")
         }];
         [editSectionData.subjects addObject:editCellData];
@@ -196,7 +196,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
-            kCellRightIconName: @"ic_custom_remove_outlined",
+            kCellRightIconName: ACImageNameIcCustomRemoveOutlined,
             kCellTintColor: [UIColor colorNamed:ACColorNameButtonBgColorDisruptive]
     }];
     [deleteSectionData.subjects addObject:deleteCellData];
@@ -206,7 +206,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 {
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
-        UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? ACImageNameIcCustomFolder : @"ic_custom_folder_hidden"];
+        UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? ACImageNameIcCustomFolder : ACImageNameIcCustomFolderHidden];
         UIColor *tintColor = _isShown ? _groupColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
         self.leftIconView.image = leftIcon;
         self.leftIconView.tintColor = tintColor;

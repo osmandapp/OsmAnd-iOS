@@ -46,7 +46,7 @@ static QuickActionType *ACTION_TYPE;
                                                         cl:self.class]
                      name:OALocalizedString(@"poi")]
                      nameAction:OALocalizedString(@"shared_string_add")]
-                    iconName:@"ic_action_create_poi"]
+                    iconName:ACImageNameIcActionCreatePoi]
                    secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
                    category:QuickActionTypeCategoryMyPlaces];
 }

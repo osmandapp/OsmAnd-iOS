@@ -78,12 +78,12 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
 {
     __weak __typeof(self) weakSelf = self;
     BOOL hasCrashReports = OACrashDiagnosticsManager.shared.hasCrashReports;
-    UIAction *sendCrashLogs = [UIAction actionWithTitle:OALocalizedString(@"send_crash_log") image:[UIImage imageNamed:@"ic_custom_file_crashlog_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *sendCrashLogs = [UIAction actionWithTitle:OALocalizedString(@"send_crash_log") image:[UIImage imageNamed:ACImageNameIcCustomFileCrashlogSendOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf sendCrashLogs];
     }];
     sendCrashLogs.attributes = hasCrashReports ? 0 : UIMenuElementAttributesDisabled;
 
-    UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_current_app_log") image:[UIImage imageNamed:@"ic_custom_file_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_current_app_log") image:[UIImage imageNamed:ACImageNameIcCustomFileSendOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf sendLogFile];
     }];
     
@@ -97,7 +97,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     
     UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[sendLogMenu, copyBuildVersionMenu]];
     
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_overflow_menu_stroke" action:@selector(onRightNavbarButtonPressed) menu:menu];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarOverflowMenuStroke action:@selector(onRightNavbarButtonPressed) menu:menu];
     
     rightButton.accessibilityLabel = OALocalizedString(@"shared_string_options");
     
@@ -121,7 +121,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         [articleRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [articleRow setKey:@"popularArticles"];
         [articleRow setTitle:title];
-        [articleRow setIconName:@"ic_custom_file_info"];
+        [articleRow setIconName:ACImageNameIcCustomFileInfo];
         [articleRow setObj:kLinkInternalType forKey:@"linkType"];
         [articleRow setObj:url forKey:@"url"];
     }
@@ -141,7 +141,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [row setKey:@"userGuide"];
         [row setTitle:title];
-        [row setIconName:@"ic_custom_book_info"];
+        [row setIconName:ACImageNameIcCustomBookInfo];
         [row setObj:articleNode forKey:@"articleNode"];
     }
     
@@ -175,8 +175,8 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     contactUsSection.headerText = OALocalizedString(@"help_contact_us");
     
     NSArray *initialContactUsItems = @[
-        @{@"title": OALocalizedString(@"contact_support"), @"descr": kSupportEmail, @"icon": @"ic_custom_at_mail", @"url": [self createMailToUrl]},
-        @{@"title": OALocalizedString(@"gitHub_discussion"), @"descr": OALocalizedString(@"ask_question_propose_features"), @"icon": @"ic_custom_logo_github", @"url": kGitHubDiscussion}
+        @{@"title": OALocalizedString(@"contact_support"), @"descr": kSupportEmail, @"icon": ACImageNameIcCustomAtMail, @"url": [self createMailToUrl]},
+        @{@"title": OALocalizedString(@"gitHub_discussion"), @"descr": OALocalizedString(@"ask_question_propose_features"), @"icon": ACImageNameIcCustomLogoGithub, @"url": kGitHubDiscussion}
     ];
     
     for (NSDictionary *item in initialContactUsItems)
@@ -196,12 +196,12 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     [telegramChatsRow setKey:@"contactSupportTelegram"];
     [telegramChatsRow setTitle:OALocalizedString(@"telegram_chats")];
     [telegramChatsRow setDescr:[NSString stringWithFormat:@"%ld", _helpDataManager.telegramChats.count]];
-    [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
+    [telegramChatsRow setIconName:ACImageNameIcCustomLogoTelegram];
     
     NSArray *additionalContactUsItems = @[
-        @{@"title": OALocalizedString(@"x"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_x", @"url": kCommunityTwitter},
-        @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": @"ic_custom_logo_reddit", @"url": kCommunityReddit},
-        @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": @"ic_custom_logo_facebook", @"url": kCommunityFacebook}
+        @{@"title": OALocalizedString(@"x"), @"descr": kCommunityTwitter, @"icon": ACImageNameIcCustomLogoX, @"url": kCommunityTwitter},
+        @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": ACImageNameIcCustomLogoReddit, @"url": kCommunityReddit},
+        @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": ACImageNameIcCustomLogoFacebook, @"url": kCommunityFacebook}
     ];
     
     for (NSDictionary *item in additionalContactUsItems)
@@ -224,7 +224,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     [openIssueOnGitHubRow setKey:@"reportAnIssues"];
     [openIssueOnGitHubRow setTitle:OALocalizedString(@"open_issue_on_gitHub")];
     [openIssueOnGitHubRow setDescr:OALocalizedString(@"ask_question_propose_features")];
-    [openIssueOnGitHubRow setIconName:@"ic_custom_logo_github"];
+    [openIssueOnGitHubRow setIconName:ACImageNameIcCustomLogoGithub];
     [openIssueOnGitHubRow setObj:kLinkExternalType forKey:@"linkType"];
     [openIssueOnGitHubRow setObj:kOpenIssueOnGitHub forKey:@"url"];
 
@@ -234,7 +234,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     [sendCrashLogsRow setKey:@"sendCrashLogs"];
     [sendCrashLogsRow setTitle:OALocalizedString(@"send_crash_log")];
     [sendCrashLogsRow setDescr:OALocalizedString(hasCrashReports ? @"send_crash_log_descr" : @"no_crashes_recorded")];
-    [sendCrashLogsRow setIconName:@"ic_custom_file_crashlog_send_outlined"];
+    [sendCrashLogsRow setIconName:ACImageNameIcCustomFileCrashlogSendOutlined];
     [sendCrashLogsRow setObj:@(hasCrashReports) forKey:kCrashReportsAvailableKey];
     
     OATableRowData *sendLogRow = [reportAnIssuesSection createNewRow];
@@ -242,7 +242,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     [sendLogRow setKey:@"sendLog"];
     [sendLogRow setTitle:OALocalizedString(@"send_current_app_log")];
     [sendLogRow setDescr:OALocalizedString(@"send_current_app_log_descr")];
-    [sendLogRow setIconName:@"ic_custom_file_send_outlined"];
+    [sendLogRow setIconName:ACImageNameIcCustomFileSendOutlined];
     
     OATableSectionData *aboutOsmAndSection = [_data createNewSection];
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
@@ -250,7 +250,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
     NSArray *aboutOsmAndItems = @[
         @{@"title": OALocalizedString(@"osmAnd_team"),
           @"descr": @"",
-          @"icon": @"ic_custom_logo_osmand",
+          @"icon": ACImageNameIcCustomLogoOsmand,
           @"url": kOsmAndTeam},
         @{@"title": OALocalizedString(@"help_what_is_new"),
           @"descr": [self whatIsNewDescription],

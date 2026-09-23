@@ -579,7 +579,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     __weak __typeof(self) weakSelf = self;
     
-    CPListItem *parkLocation = [[CPListItem alloc] initWithText:OALocalizedString(@"context_menu_item_add_parking_point") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking_location"]];
+    CPListItem *parkLocation = [[CPListItem alloc] initWithText:OALocalizedString(@"context_menu_item_add_parking_point") detailText:nil image:[UIImage imageNamed:ACImageNameIcCustomParkingLocation]];
     parkLocation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -592,7 +592,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }];
     };
     
-    CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:ACImageNameIcCustomParking]];
+    CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage imageNamed:ACImageNameIcCustomParking]];
     findParking.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -605,7 +605,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }];
     };
     
-    CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:ACImageNameIcCustomNavigation]];
+    CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage imageNamed:ACImageNameIcCustomNavigation]];
     recalcRoute.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -620,7 +620,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }];
     };
     
-    CPListItem *finishNavigation = [[CPListItem alloc] initWithText:OALocalizedString(@"finish_navigation") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_finish_flag"]];
+    CPListItem *finishNavigation = [[CPListItem alloc] initWithText:OALocalizedString(@"finish_navigation") detailText:nil image:[UIImage imageNamed:ACImageNameIcCustomFinishFlag]];
     finishNavigation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
         [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
             if (!completed || error)
@@ -775,7 +775,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     else if (type == EOACarPlayButtonTypeCancelRoute)
         title = OALocalizedString(@"shared_string_cancel");
     else if (type == EOACarPlayButtonTypeSettings)
-        icon = [UIImage templateImageNamed:ACImageNameIcCustomSettingsOutlined];
+        icon = [UIImage imageNamed:ACImageNameIcCustomSettingsOutlined];
 
     return icon ? [[CPBarButton alloc] initWithImage:icon handler:handler] : [[CPBarButton alloc] initWithTitle:title handler:handler];
 }

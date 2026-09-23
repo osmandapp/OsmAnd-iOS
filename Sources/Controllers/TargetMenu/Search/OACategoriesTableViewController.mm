@@ -83,7 +83,7 @@
         NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
         if (customFilters.count > 0)
         {
-            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") actionButton:YES onClickFunction:^(id sender) {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomRemove] text:OALocalizedString(@"delete_custom_categories") actionButton:YES onClickFunction:^(id sender) {
                 if (self.delegate)
                     [self.delegate showDeleteFiltersScreen:customFilters];
             }]];

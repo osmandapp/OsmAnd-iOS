@@ -128,7 +128,7 @@
     NSString *detailText = historyItem && historyItem.distance ? historyItem.distance : @"";
     UIImage *icon;
     if (historyItem.hType == OAHistoryTypeParking)
-        icon = [UIImage imageNamed:@"ic_parking_pin_small"];
+        icon = [UIImage imageNamed:ACImageNameIcParkingPinSmall];
     else if (historyItem.hType == OAHistoryTypeDirection)
         icon = [UIImage imageNamed:ACImageNameIcCustomMarker];
     else if (historyItem.iconName && historyItem.iconName.length > 0)

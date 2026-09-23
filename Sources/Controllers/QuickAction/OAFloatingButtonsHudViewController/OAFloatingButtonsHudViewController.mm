@@ -431,7 +431,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
 
         if (_isActionsViewVisible && _actionsView && [_actionsView.buttonState.id isEqualToString:quickActionButtonState.id])
         {
-            [quickActionButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner"] forState:UIControlStateNormal];
+            [quickActionButton setImage:[UIImage templateImageNamed:ACImageNameIcActionCloseBanner] forState:UIControlStateNormal];
         }
         else
         {
@@ -449,13 +449,13 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
                 else
                 {
                     CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
-                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideBottom]];
+                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage imageNamed:ACImageNameIcCustomCompoundActionHideBottom]];
                     background.tag = kQuickActionSlashBackgroundTag;
                     background.frame = frame;
                     [background setTintColor:!_settings.isAppMapNightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
                     [quickActionButton.imageView addSubview:background];
 
-                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcCustomCompoundActionHideTop]];
+                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage imageNamed:ACImageNameIcCustomCompoundActionHideTop]];
                     slash.tag = kQuickActionSlashTag;
                     slash.frame = frame;
                     [quickActionButton.imageView addSubview:slash];

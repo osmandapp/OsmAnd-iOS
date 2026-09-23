@@ -9,6 +9,7 @@
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAPointDescription.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATargetInfoCollapsableCoordinatesViewCell
 
@@ -17,7 +18,7 @@
     self.textView.text = [OAPointDescription getLocationName:lat lon:lon sh:YES];
     self.textView.numberOfLines = 1;
     self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-    [self setImage:[UIImage imageNamed:@"ic_coordinates_location"]];
+    [self setImage:[UIImage imageNamed:ACImageNameIcCoordinatesLocation]];
 }
 
 @end

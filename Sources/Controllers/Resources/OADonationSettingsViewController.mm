@@ -22,6 +22,7 @@
 #import <MBProgressHUD.h>
 
 #include <OsmAndCore/WorldRegions.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -181,7 +182,7 @@
                      @"name" : @"support_region",
                      @"title" : OALocalizedString(@"osm_live_support_region"),
                      @"value" : countryName,
-                     @"img" : @"menu_cell_pointer",
+                     @"img" : ACImageNameMenuCellPointer,
                      @"type" : kCellTypeSingleSelectionList }]
             ];
             

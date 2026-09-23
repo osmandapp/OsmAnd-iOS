@@ -26,7 +26,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomAttachTrack]];
+    [self.leftIconView setImage:[UIImage imageNamed:ACImageNameIcCustomAttachTrack]];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];

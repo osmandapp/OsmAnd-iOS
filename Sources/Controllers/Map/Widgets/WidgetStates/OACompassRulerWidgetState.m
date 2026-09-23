@@ -10,6 +10,7 @@
 #import "OACompassRulerWidgetState.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define COMPASS_CONTROL_WIDGET_STATE_SHOW @"compass_ruler_control_widget_state_show"
 #define COMPASS_CONTROL_WIDGET_STATE_HIDE @"compass_ruler_control_widget_state_hide"
@@ -36,7 +37,7 @@
 
 - (NSString *) getMenuIconId
 {
-    return @"ic_action_ruler_circle";
+    return ACImageNameIcActionRulerCircle;
 }
 
 - (NSString *) getMenuItemId
@@ -51,7 +52,7 @@
 
 - (NSArray<NSString *> *) getMenuIconIds
 {
-    return @[ @"ic_custom_compass_widget", @"ic_custom_compass_widget_hide" ];
+    return @[ ACImageNameIcCustomCompassWidget, ACImageNameIcCustomCompassWidgetHide ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

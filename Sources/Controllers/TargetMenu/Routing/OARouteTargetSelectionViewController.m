@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OARouteTargetSelectionViewController ()
 
@@ -75,7 +76,7 @@
 - (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.buttonCancel setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
+    [self.buttonCancel setImage:[UIImage imageNamed:ACImageNameIcClose] forState:UIControlStateNormal];
     [self.buttonCancel setTintColor:[UIColor whiteColor]];
     self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
     self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);

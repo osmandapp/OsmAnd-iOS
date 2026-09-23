@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OARouteCalculationResult.h"
 #import "CLLocation+Extension.h"
+#import "GeneratedAssetSymbols.h"
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
@@ -63,7 +64,7 @@ static const float LOCATION_TIMEOUT = 1.5;
         if ([[[OARoutingHelper sharedInstance] getRoute] isEmpty])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"route_simulation")
-                                                       titleIcon:@"ic_custom_alert"
+                                                       titleIcon:ACImageNameIcCustomAlert
                                                          message:OALocalizedString(@"animate_routing_route_not_calculated")
                                                      cancelTitle:OALocalizedString(@"shared_string_cancel")];
         }

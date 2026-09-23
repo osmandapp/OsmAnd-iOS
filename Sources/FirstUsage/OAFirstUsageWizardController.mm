@@ -355,7 +355,7 @@ typedef enum
         }];
     }];
     UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_file")
-                                                      image:[UIImage imageNamed:@"ic_custom_import_outlined"]
+                                                      image:[UIImage imageNamed:ACImageNameIcCustomImportOutlined]
                                                  identifier:nil
                                                     handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onRestoreFromFilePressed];

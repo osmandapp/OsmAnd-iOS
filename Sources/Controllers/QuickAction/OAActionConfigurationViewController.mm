@@ -247,8 +247,8 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     
     return resultCell;
 }
@@ -590,8 +590,8 @@
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-            [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+            [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
+            [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
         }
         return cell;
     }
@@ -1221,7 +1221,7 @@
                 @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                 @"title" : item.lastObject,
                 @"value" : item.firstObject,
-                @"img" : @"ic_custom_map_style"
+                @"img" : ACImageNameIcCustomMapStyle
             }];
             [titles addObject:item.lastObject];
         }

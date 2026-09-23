@@ -110,48 +110,48 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     switch (type)
     {
         case OsmAndResourceType::VoicePack:
-            imageNamed = @"ic_custom_sound";
+            imageNamed = ACImageNameIcCustomSound;
             break;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            imageNamed = @"ic_custom_contour_lines";
+            imageNamed = ACImageNameIcCustomContourLines;
             break;
         case OsmAndResourceType::WikiMapRegion:
-            imageNamed = @"ic_custom_wikipedia";
+            imageNamed = ACImageNameIcCustomWikipedia;
             break;
         case OsmAndResourceType::LiveUpdateRegion:
-            imageNamed = @"ic_custom_upload"; //ic_custom_online
+            imageNamed = ACImageNameIcCustomUpload; //ic_custom_online
             break;
         case OsmAndResourceType::GpxFile:
-            imageNamed = @"ic_custom_route";
+            imageNamed = ACImageNameIcCustomRoute;
             break;
         case OsmAndResourceType::SqliteFile:
             imageNamed = ACImageNameIcCustomOverlayMap;
             break;
         case OsmAndResourceType::MapStyle:
-            imageNamed = @"ic_custom_map_style";
+            imageNamed = ACImageNameIcCustomMapStyle;
             break;
         case OsmAndResourceType::MapStylesPresets:
-            imageNamed = @"ic_custom_options";
+            imageNamed = ACImageNameIcCustomOptions;
             break;
         case OsmAndResourceType::OnlineTileSources:
-            imageNamed = @"ic_custom_map_online";
+            imageNamed = ACImageNameIcCustomMapOnline;
             break;
         case OsmAndResourceType::WeatherForecast:
-            imageNamed = @"ic_custom_umbrella";
+            imageNamed = ACImageNameIcCustomUmbrella;
             break;
         case OsmAndResourceType::Travel:
-            imageNamed = @"ic_custom_wikipedia";
+            imageNamed = ACImageNameIcCustomWikipedia;
             break;
         case OsmAndResourceType::StarMap:
-            imageNamed = @"ic_custom_star_shine";
+            imageNamed = ACImageNameIcCustomStarShine;
             break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
             imageNamed = ACImageNameIcCustomTerrain;
             break;
         default:
-            imageNamed = @"ic_custom_map";
+            imageNamed = ACImageNameIcCustomMap;
             break;
     }
     return imageNamed;

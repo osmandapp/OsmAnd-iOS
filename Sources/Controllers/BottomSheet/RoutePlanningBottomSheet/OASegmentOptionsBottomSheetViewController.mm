@@ -91,7 +91,7 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_profile_straightline"),
-            @"img" : @"ic_custom_straight_line",
+            @"img" : ACImageNameIcCustomStraightLine,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"straight_line_mode"
         }

@@ -181,7 +181,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
         [backButton setTintColor:[UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
     }
-    [backButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [backButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [backButton addTarget:self action:@selector(onBackPressed) forControlEvents:UIControlEventTouchUpInside];
     _backButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];

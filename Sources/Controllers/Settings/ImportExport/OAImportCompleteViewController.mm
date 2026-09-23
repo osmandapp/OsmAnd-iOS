@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
-            @"iconName": @"ic_custom_map_style",
+            @"iconName": ACImageNameIcCustomMapStyle,
             @"count": [NSString stringWithFormat:@"%ld",renderFilesCount],
             @"category" : @(EOAImportDataTypeRenderSettings)
             }
@@ -253,7 +253,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
-            @"iconName": @"ic_custom_route",
+            @"iconName": ACImageNameIcCustomRoute,
             @"count": [NSString stringWithFormat:@"%ld",routingFilesCount],
             @"category" : @(EOAImportDataTypeRoutingSettings)
             }
@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
-            @"iconName": @"ic_custom_alert",
+            @"iconName": ACImageNameIcCustomAlert,
             @"count": [NSString stringWithFormat:@"%ld", avoidRoadsCount],
             @"category" : @(EOAImportDataTypeAvoidRoads)
             }
@@ -283,7 +283,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_maps"),
-            @"iconName": @"ic_custom_map",
+            @"iconName": ACImageNameIcCustomMap,
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)
             }
@@ -293,7 +293,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"favorites_item"),
-            @"iconName": @"ic_custom_favorites",
+            @"iconName": ACImageNameIcCustomFavorites,
             @"count": [NSString stringWithFormat:@"%ld", favoritesCount],
             @"category" : @(EOAImportDataTypeFavorites)
             }
@@ -303,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"osm_notes"),
-            @"iconName": @"ic_action_add_osm_note",
+            @"iconName": ACImageNameIcActionAddOsmNote,
             @"count": [NSString stringWithFormat:@"%ld", osmNotesCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }
@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"osm_edits_title"),
-            @"iconName": @"ic_custom_poi",
+            @"iconName": ACImageNameIcCustomPoi,
             @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }
@@ -333,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"markers_history"),
-            @"iconName": @"ic_custom_history",
+            @"iconName": ACImageNameIcCustomHistory,
             @"count": [NSString stringWithFormat:@"%ld", historyMarkersCount],
             @"category" : @(EOAImportDataTypeHistoryMarkers)
             }
@@ -343,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_search_history"),
-            @"iconName": @"ic_custom_history",
+            @"iconName": ACImageNameIcCustomHistory,
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)
             }
@@ -374,7 +374,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_colors"),
-            @"iconName": @"ic_custom_file_color_palette",
+            @"iconName": ACImageNameIcCustomFileColorPalette,
             @"count": [NSString stringWithFormat:@"%ld", colorPaletteCount],
             @"category" : @(EOAImportDataTypeColorPalette)
         }];

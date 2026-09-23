@@ -38,7 +38,7 @@ static QuickActionType *TYPE;
                name:OALocalizedString(@"map_mode")]
               nameAction:OALocalizedString(@"shared_string_change")]
               iconName:ACImageNameIcCustomSun]
-             secondaryIconName:@"ic_custom_compound_action_change"]
+             secondaryIconName:ACImageNameIcCustomCompoundActionChange]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }

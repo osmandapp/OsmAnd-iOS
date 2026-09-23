@@ -7,12 +7,13 @@
 //
 
 #import "OAPOILocationType.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPOILocationType
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_coordinates"];
+    return [UIImage imageNamed:ACImageNameIcCoordinates];
 }
 
 @end

@@ -76,7 +76,7 @@
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"gpx_start_new_segment"),
-                @"img" : @"ic_custom_new_segment",
+                @"img" : ACImageNameIcCustomNewSegment,
                 @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
                 @"key" : @"start_new_segment"
             }
@@ -90,7 +90,7 @@
         if (_routeAppMode == nil || _routeAppMode == OAApplicationMode.DEFAULT)
         {
             descr = OALocalizedString(@"routing_profile_straightline");
-            icon = @"ic_custom_straight_line";
+            icon = ACImageNameIcCustomStraightLine;
         } else
         {
             descr = [_routeAppMode toHumanString];
@@ -100,7 +100,7 @@
     else
     {
         descr = OALocalizedString(@"rendering_attr_undefined_name");
-        icon = @"left_menu_icon_help";
+        icon = ACImageNameLeftMenuIconHelp;
     }
     
     [data addObject:@[
@@ -116,21 +116,21 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_need_save_title"),
-            @"img" : @"ic_custom_save_to_file",
+            @"img" : ACImageNameIcCustomSaveToFile,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"save_changes"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_as_new_track"),
-            @"img" : @"ic_custom_save_as_new_file",
+            @"img" : ACImageNameIcCustomSaveAsNewFile,
             @"tintColor" :  [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"save_new_track"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_to_a_track"),
-            @"img" : @"ic_custom_add_to_track",
+            @"img" : ACImageNameIcCustomAddToTrack,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"add_to_track"
         }
@@ -157,7 +157,7 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_clear_all"),
-            @"img" : @"ic_custom_remove",
+            @"img" : ACImageNameIcCustomRemove,
             @"tintColor" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"key" : @"clear_all"
         }

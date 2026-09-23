@@ -190,7 +190,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)PROFILE
 {
     if (!PROFILE)
-        PROFILE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") name:@"PROFILE" itemName:@"PROFILE" iconName:@"ic_custom_manage_profiles" isAvailableInFreeVersion:YES];
+        PROFILE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") name:@"PROFILE" itemName:@"PROFILE" iconName:ACImageNameIcCustomManageProfiles isAvailableInFreeVersion:YES];
     return PROFILE;
 }
 
@@ -211,21 +211,21 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)POI_TYPES
 {
     if (!POI_TYPES)
-        POI_TYPES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types") name:@"POI_TYPES" itemName:@"POI_UI_FILTERS" iconName:@"ic_custom_search_categories" isAvailableInFreeVersion:NO];
+        POI_TYPES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types") name:@"POI_TYPES" itemName:@"POI_UI_FILTERS" iconName:ACImageNameIcCustomSearchCategories isAvailableInFreeVersion:NO];
     return POI_TYPES;
 }
 
 + (OAExportSettingsType *)AVOID_ROADS
 {
     if (!AVOID_ROADS)
-        AVOID_ROADS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"avoid_road") name:@"AVOID_ROADS" itemName:@"AVOID_ROADS" iconName:@"ic_custom_alert" isAvailableInFreeVersion:NO];
+        AVOID_ROADS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"avoid_road") name:@"AVOID_ROADS" itemName:@"AVOID_ROADS" iconName:ACImageNameIcCustomAlert isAvailableInFreeVersion:NO];
     return AVOID_ROADS;
 }
 
 + (OAExportSettingsType *)FAVORITES
 {
     if (!FAVORITES)
-        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites_item") name:@"FAVORITES" itemName:@"FAVOURITES" iconName:@"ic_custom_my_places" isAvailableInFreeVersion:YES];
+        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites_item") name:@"FAVORITES" itemName:@"FAVOURITES" iconName:ACImageNameIcCustomMyPlaces isAvailableInFreeVersion:YES];
     return FAVORITES;
 }
 
@@ -239,14 +239,14 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)OSM_NOTES
 {
     if (!OSM_NOTES)
-        OSM_NOTES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_notes") name:@"OSM_NOTES" itemName:@"OSM_NOTES" iconName:@"ic_action_osm_note" isAvailableInFreeVersion:YES];
+        OSM_NOTES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_notes") name:@"OSM_NOTES" itemName:@"OSM_NOTES" iconName:ACImageNameIcActionOsmNote isAvailableInFreeVersion:YES];
     return OSM_NOTES;
 }
 
 + (OAExportSettingsType *)OSM_EDITS
 {
     if (!OSM_EDITS)
-        OSM_EDITS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") name:@"OSM_EDITS" itemName:@"OSM_EDITS" iconName:@"ic_custom_osm_edits" isAvailableInFreeVersion:YES];
+        OSM_EDITS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") name:@"OSM_EDITS" itemName:@"OSM_EDITS" iconName:ACImageNameIcCustomOsmEdits isAvailableInFreeVersion:YES];
     return OSM_EDITS;
 }
 
@@ -291,14 +291,14 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)CUSTOM_RENDER_STYLE
 {
     if (!CUSTOM_RENDER_STYLE)
-        CUSTOM_RENDER_STYLE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style") name:@"CUSTOM_RENDER_STYLE" itemName:@"FILE" iconName:@"ic_custom_map_style" isAvailableInFreeVersion:NO];
+        CUSTOM_RENDER_STYLE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style") name:@"CUSTOM_RENDER_STYLE" itemName:@"FILE" iconName:ACImageNameIcCustomMapStyle isAvailableInFreeVersion:NO];
     return CUSTOM_RENDER_STYLE;
 }
 
 + (OAExportSettingsType *)CUSTOM_ROUTING
 {
     if (!CUSTOM_ROUTING)
-        CUSTOM_ROUTING = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") name:@"CUSTOM_ROUTING" itemName:@"FILE" iconName:@"ic_custom_file_routing" isAvailableInFreeVersion:NO];
+        CUSTOM_ROUTING = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") name:@"CUSTOM_ROUTING" itemName:@"FILE" iconName:ACImageNameIcCustomFileRouting isAvailableInFreeVersion:NO];
     return CUSTOM_ROUTING;
 }
 
@@ -317,21 +317,21 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)STANDARD_MAPS
 {
     if (!STANDARD_MAPS)
-        STANDARD_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"standard_maps") name:@"STANDARD_MAPS" itemName:@"FILE" iconName:@"ic_custom_map" isAvailableInFreeVersion:NO];
+        STANDARD_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"standard_maps") name:@"STANDARD_MAPS" itemName:@"FILE" iconName:ACImageNameIcCustomMap isAvailableInFreeVersion:NO];
     return STANDARD_MAPS;
 }
 
 + (OAExportSettingsType *)WIKI_AND_TRAVEL
 {
     if (!WIKI_AND_TRAVEL)
-        WIKI_AND_TRAVEL = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"wikipedia_and_travel_maps") name:@"WIKI_AND_TRAVEL" itemName:@"FILE" iconName:@"ic_custom_wikipedia" isAvailableInFreeVersion:NO];
+        WIKI_AND_TRAVEL = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"wikipedia_and_travel_maps") name:@"WIKI_AND_TRAVEL" itemName:@"FILE" iconName:ACImageNameIcCustomWikipedia isAvailableInFreeVersion:NO];
     return WIKI_AND_TRAVEL;
 }
 
 + (OAExportSettingsType *)DEPTH_DATA
 {
     if (!DEPTH_DATA)
-        DEPTH_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"nautical_maps") name:@"DEPTH_DATA" itemName:@"FILE" iconName:@"ic_live_nautical_depth" isAvailableInFreeVersion:NO];
+        DEPTH_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"nautical_maps") name:@"DEPTH_DATA" itemName:@"FILE" iconName:ACImageNameIcLiveNauticalDepth isAvailableInFreeVersion:NO];
     return DEPTH_DATA;
 }
 
@@ -365,7 +365,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)COLOR_PALETTE
 {
     if (!COLOR_PALETTE)
-        COLOR_PALETTE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_PALETTE" itemName:@"FILE" iconName:@"ic_custom_appearance" isAvailableInFreeVersion:NO];
+        COLOR_PALETTE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_PALETTE" itemName:@"FILE" iconName:ACImageNameIcCustomAppearance isAvailableInFreeVersion:NO];
     return COLOR_PALETTE;
 }
 

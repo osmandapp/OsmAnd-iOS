@@ -51,7 +51,7 @@
 
 - (UIImage *)getTabIcon
 {
-    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_folder_points"];
+    return [OABaseTrackMenuTabItem getUnselectedIcon:ACImageNameIcCustomFolderPoints];
 }
 
 - (EOATrackMenuHudTab)getTabMode
@@ -171,7 +171,7 @@
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"delete_waypoints"),
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
-            kCellRightIconName: @"ic_custom_remove_outlined",
+            kCellRightIconName: ACImageNameIcCustomRemoveOutlined,
             kCellToggle: @(hasWaypoints),
             kCellTintColor: hasWaypoints ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
     }];
@@ -182,7 +182,7 @@
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_waypoint"),
-            kCellRightIconName: @"ic_custom_add_gpx_waypoint",
+            kCellRightIconName: ACImageNameIcCustomAddGpxWaypoint,
             kCellToggle: @YES,
             kCellTintColor:[UIColor colorNamed:ACColorNameIconColorActive]
     }];

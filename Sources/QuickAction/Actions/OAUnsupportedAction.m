@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -33,7 +34,7 @@ static QuickActionType *TYPE;
                                             stringId:@"unsupported.action"
                                                   cl:self.class]
                name:OALocalizedString(@"unsupported_action")]
-              iconName:@"ic_custom_alert"]
+              iconName:ACImageNameIcCustomAlert]
              category:QuickActionTypeCategoryUnsupported]
             nonEditable];
 }
@@ -45,7 +46,7 @@ static QuickActionType *TYPE;
 
 - (NSString *) getIconResName
 {
-    return @"ic_custom_alert";
+    return ACImageNameIcCustomAlert;
 }
 
 - (NSString *) getDefaultName

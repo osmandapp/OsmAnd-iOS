@@ -296,7 +296,7 @@
         kCellKeyKey: @"manage_subscription",
         kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
         kCellTitleKey : OALocalizedString([self isOriginFastSpring] && ![self isSubscription] ? @"manage_purchases" : @"manage_subscription"),
-        kCellIconKey : [UIImage templateImageNamed:@"ic_custom_shop_bag"]
+        kCellIconKey : [UIImage imageNamed:ACImageNameIcCustomShopBag]
     }];
 }
 

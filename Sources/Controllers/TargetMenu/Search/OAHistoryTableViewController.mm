@@ -194,7 +194,7 @@
             kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
             kCellTitleKey: OALocalizedString(@"search_history_disabled"),
             kCellDescrKey: OALocalizedString(@"enable_search_history"),
-            kCellIconNameKey: @"ic_custom_history_disabled_48"
+            kCellIconNameKey: ACImageNameIcCustomHistoryDisabled48
         }];
         [existingBackupSection addRowFromDictionary:@{
             kCellTypeKey: OAFilledButtonCell.getCellIdentifier,

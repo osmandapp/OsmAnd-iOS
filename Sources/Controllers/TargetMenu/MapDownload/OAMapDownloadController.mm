@@ -22,6 +22,7 @@
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 static const NSInteger kOrderRegionSizeRow = 1;
 static const NSInteger kOrderRegionUrlRow = 2;
@@ -214,7 +215,7 @@ static const NSInteger kOrderRegionPopulationRow = 3;
     OAWorldRegion *region = _mapObject.worldRegion;
     OAResourceItem *item = _mapObject.indexItem;
     NSString *resTypeLocalized = [OAResourceType resourceTypeLocalized:item.resourceType];
-    NSString *iconInfo = @"ic_description";
+    NSString *iconInfo = ACImageNameIcDescription;
     
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {

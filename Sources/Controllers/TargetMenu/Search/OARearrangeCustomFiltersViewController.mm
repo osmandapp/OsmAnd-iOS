@@ -288,7 +288,7 @@
                 icon = [OAPOIHelper getCustomFilterIcon:filter];
             [cell.leftIconView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 
-            NSString *imageName = isAllFilters ? ACImageNameIcCustomDelete : @"ic_custom_plus";
+            NSString *imageName = isAllFilters ? ACImageNameIcCustomDelete : ACImageNameIcCustomPlus;
             [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

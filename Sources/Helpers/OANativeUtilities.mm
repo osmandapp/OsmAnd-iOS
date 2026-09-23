@@ -21,6 +21,7 @@
 #include <SkCanvas.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <openingHoursParser.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation UIColor (nsColorNative)
 
@@ -296,7 +297,7 @@
             NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", time]];
             NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
             BOOL opened = info->fallback && i > 0 ? openingHoursInfo[i - 1]->opened : info->opened;
-            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"]
+            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcTravelTime]
                                                                              color:opened ? colorOpen : colorClosed];
             
             NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];

@@ -336,7 +336,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         NSString *title = [self.delegate getTargetTitle];
         if (title.length > kTitleLimit)
         {
-            OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:@"title" icon:[UIImage templateImageNamed:@"ic_description"] textPrefix:nil text:title textColor:nil isText:YES needLinks:NO order:kOrderTitleRow typeName:@"title" isPhoneNumber:NO isUrl:NO];
+            OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:@"title" icon:[UIImage templateImageNamed:ACImageNameIcDescription] textPrefix:nil text:title textColor:nil isText:YES needLinks:NO order:kOrderTitleRow typeName:@"title" isPhoneNumber:NO isUrl:NO];
             [rows addObject:row];
         }
     }
@@ -376,7 +376,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
         
         OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
-                                        icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
+                                        icon:[UIImage imageNamed:ACImageNameIcCustomPinLocation]
                                   textPrefix:title
                                         text:rowSummary
                                    textColor:nil
@@ -453,7 +453,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
         NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
-        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:ACImageNameIcCustomDate] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:dateRowCell];
     }
 }
@@ -462,7 +462,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if (comment.length > 0)
     {
-        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcDescription] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
     }
 }
@@ -1410,7 +1410,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if ([plugin isEnabled])
     {
         OAAmenityInfoRow *mapillaryCardsRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil
-                                                                     icon:[UIImage imageNamed:@"ic_custom_photo_street"]
+                                                                     icon:[UIImage imageNamed:ACImageNameIcCustomPhotoStreet]
                                                                textPrefix:nil
                                                                      text:OALocalizedString(@"street_level_imagery")
                                                                 textColor:nil
@@ -1448,7 +1448,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             NSString *osmUrl = [ObfConstants getOsmUrlForId:targetObj];
             if (!NSStringIsEmpty(osmUrl))
             {
-                [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits"] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
+                [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomOsmEdits] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
             }
         }
     }

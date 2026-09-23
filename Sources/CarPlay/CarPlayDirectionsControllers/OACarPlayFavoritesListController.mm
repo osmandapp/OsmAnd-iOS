@@ -66,7 +66,7 @@
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
                                                              detailText:@(lastModifiedList.count).stringValue
-                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]
+                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomHistory]
                                                                                                   color:UIColorFromRGB(color_primary_purple)]
                                                          accessoryImage:nil
                                                           accessoryType:CPListItemAccessoryTypeDisclosureIndicator];

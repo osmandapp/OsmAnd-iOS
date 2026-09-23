@@ -158,7 +158,7 @@
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
-    _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
+    _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarSettings] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
 }
 
@@ -217,7 +217,7 @@
                 kCellKeyKey: @"existingOnlineBackup",
                 kCellTitleKey: OALocalizedString(@"backup_welcome_back"),
                 kCellDescrKey: OALocalizedString(@"osmand_cloud_authorize_descr"),
-                kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
+                kCellIconNameKey: ACImageNameIcActionCloudSmileFaceColored
             }];
            
             if ([self shouldShowSyncButton])
@@ -240,7 +240,7 @@
                 kCellKeyKey: @"noOnlineBackup",
                 kCellTitleKey: OALocalizedString(@"cloud_no_online_backup"),
                 kCellDescrKey: OALocalizedString(@"cloud_no_online_backup_descr"),
-                kCellIconNameKey: @"ic_custom_cloud_neutral_face_colored"
+                kCellIconNameKey: ACImageNameIcCustomCloudNeutralFaceColored
             }];
             
             if ([self shouldShowSyncButton])
@@ -266,7 +266,7 @@
             NSDictionary *backupProgressCell = @{
                 kCellTypeKey: [OATitleIconProgressbarCell getCellIdentifier],
                 kCellKeyKey: @"backupProgress",
-                kCellIconNameKey: @"ic_custom_cloud_upload",
+                kCellIconNameKey: ACImageNameIcCustomCloudUpload,
                 kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
             };
             [backupRows addRowFromDictionary:backupProgressCell];
@@ -296,7 +296,7 @@
                 kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"remote_updates",
                 kCellTitleKey: OALocalizedString(@"download_tab_updates"),
-                kCellIconNameKey: @"ic_custom_cloud",
+                kCellIconNameKey: ACImageNameIcCustomCloud,
                 @"value": @([BackupUtils getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count + _info.filteredLocalFilesToDelete.count)
             }];
             [collapsableRow addDependentRow:updatesRow];
@@ -304,7 +304,7 @@
                 kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"conflicts",
                 kCellTitleKey: OALocalizedString(@"cloud_conflicts"),
-                kCellIconNameKey: @"ic_custom_alert",
+                kCellIconNameKey: ACImageNameIcCustomAlert,
                 @"value": @(_backup.backupInfo.filteredFilesToMerge.count)
             }];
             [collapsableRow addDependentRow:conflictsRow];
@@ -376,7 +376,7 @@
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSupportPressed",
                 kCellTitleKey: _status.actionTitle,
-                kCellIconNameKey: @"ic_custom_letter_outlined"
+                kCellIconNameKey: ACImageNameIcCustomLetterOutlined
             };
             [backupRows addRowFromDictionary:retryCell];
         }
@@ -386,7 +386,7 @@
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSubscriptionExpired",
                 kCellTitleKey: _status.actionTitle,
-                kCellIconNameKey: @"ic_custom_cloud_upload"
+                kCellIconNameKey: ACImageNameIcCustomCloudUpload
             };
             [backupRows addRowFromDictionary:purchaseCell];
         }
@@ -399,7 +399,7 @@
             kCellTypeKey: [OAButtonTableViewCell getCellIdentifier],
             kCellKeyKey: @"onTrashPressed",
             kCellTitleKey: OALocalizedString(@"shared_string_trash"),
-            kCellIconNameKey: @"ic_custom_remove",
+            kCellIconNameKey: ACImageNameIcCustomRemove,
             kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorSecondary]
         };
         [storageRows addRowFromDictionary:purchaseCell];
@@ -621,7 +621,7 @@
                 else
                 {
                     cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:@"ic_payment_label_pro"];
+                    cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:ACImageNameIcPaymentLabelPro];
                     [cell.button addTarget:self action:@selector(onSubscriptionExpired) forControlEvents:UIControlEventTouchUpInside];
                 }
             }

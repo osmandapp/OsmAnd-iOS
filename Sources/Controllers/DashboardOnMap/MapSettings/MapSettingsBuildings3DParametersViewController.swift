@@ -282,7 +282,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
                 purchaseBannerRow.cellType = OATitleDescriptionBigIconCell.reuseIdentifier
                 purchaseBannerRow.title = localizedString("custom_color")
                 purchaseBannerRow.descr = localizedString("free_custom_color_description")
-                purchaseBannerRow.icon = UIImage.templateImageNamed("ic_custom_3d_building_colored")
+                purchaseBannerRow.icon = .icCustom3DBuildingColored
                 let chooseColorRow = topSection.createNewRow()
                 chooseColorRow.key = RowKey.buildings3DColorChooseColor.rawValue
                 chooseColorRow.cellType = OAButtonTableViewCell.reuseIdentifier
@@ -634,7 +634,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
         }
         if item.cellType == OACollectionSingleLineTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
             cell.rightActionButtonVisibility(true)
-            cell.rightActionButton.setImage(UIImage.templateImageNamed("ic_custom_add"), for: .normal)
+            cell.rightActionButton.setImage(.icCustomAdd, for: .normal)
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row
             cell.rightActionButton.accessibilityLabel = localizedString("shared_string_add_color")
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)

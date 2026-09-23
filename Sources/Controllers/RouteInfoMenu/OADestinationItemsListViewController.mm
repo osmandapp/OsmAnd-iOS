@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 cell.titleIcon.image = [UIImage imageNamed:imageName];
                 
                 [cell.distanceView setText:item.distanceStr];
-                cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+                cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
                 cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             }
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
             cell.titleIcon.image = item.getCompositeIcon;
             
             [cell.distanceView setText:item.distance];
-            cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+            cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -320,7 +320,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         cell.titleIcon.image = item.getCompositeIcon;
         
         [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+        cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
     }

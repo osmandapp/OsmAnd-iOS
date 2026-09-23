@@ -183,11 +183,11 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
         _buttonTermsOfUse = [self addSimpleRow:OALocalizedString(@"terms_of_use")
                                    showDivider:YES
-                                          icon:@"ic_custom_online"
+                                          icon:ACImageNameIcCustomOnline
                                   aboveSubview:self.buttonRestore];
         _buttonPrivacyPolicy = [self addSimpleRow:OALocalizedString(@"privacy_policy")
                                       showDivider:NO
-                                             icon:@"ic_custom_online"
+                                             icon:ACImageNameIcCustomOnline
                                      aboveSubview:self.buttonRestore];
 
         _viewIncludesSeparator = [[SeparatorView alloc] init];
@@ -259,9 +259,9 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     _buttonPrivacyPolicy.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     [self.buttonNavigationBack setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    [self.buttonNavigationBack setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [self.buttonNavigationBack setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [self.buttonNavigationRestore setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    UIImage *image = [UIImage templateImageNamed:_type == EOAChoosePlan ? ACImageNameIcCustomReset : @"ic_navbar_help"];
+    UIImage *image = [UIImage templateImageNamed:_type == EOAChoosePlan ? ACImageNameIcCustomReset : ACImageNameIcNavbarHelp];
     [self.buttonNavigationRestore setImage:image
                                   forState:UIControlStateNormal];
 }
@@ -498,7 +498,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
     leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
     [leftButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    [leftButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [leftButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     

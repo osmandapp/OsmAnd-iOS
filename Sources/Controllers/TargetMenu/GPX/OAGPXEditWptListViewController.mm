@@ -289,7 +289,7 @@
         if (cell)
         {
             [cell.titleLabel setText:OALocalizedString(@"add_waypoint")];
-            [cell.leftIconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
+            [cell.leftIconView setImage: [UIImage imageNamed:ACImageNameAddWaypointToTrack]];
         }
         return cell;
     }
@@ -320,7 +320,7 @@
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];
-            cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+            cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 
@@ -328,9 +328,9 @@
             {
                 cell.rightArrow.hidden = YES;
                 if (!item.selected)
-                    [cell.titleIcon setImage:[UIImage imageNamed:@"selection_unchecked"]];
+                    [cell.titleIcon setImage:[UIImage imageNamed:ACImageNameSelectionUnchecked]];
                 else
-                    [cell.titleIcon setImage:[UIImage imageNamed:@"selection_checked"]];
+                    [cell.titleIcon setImage:[UIImage imageNamed:ACImageNameSelectionChecked]];
                 
                 cell.titleIcon.hidden = NO;
             }

@@ -135,7 +135,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"titleColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary],
         @"descText" : [OASimulateNavigationSpeed toTitle:_selectedSpeedMode],
         @"descColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
-        @"icon" : @"ic_action_max_speed",
+        @"icon" : ACImageNameIcActionMaxSpeed,
         @"iconColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
         @"actionBlock" : (^void(){ [self openMovementSpeedSelector]; }),
         @"isActionEnabled" : @(isMovementSpeedButtonActive),

@@ -215,19 +215,19 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             OATableRowData *interfaceRow = [section createNewRow];
             interfaceRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             interfaceRow.title = OALocalizedString(@"shared_string_interface");
-            interfaceRow.iconName = @"ic_custom_ui_customization";
+            interfaceRow.iconName = ACImageNameIcCustomUiCustomization;
             interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
             
             OATableRowData *mapInteractionsRow = [section createNewRow];
             mapInteractionsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
-            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
+            mapInteractionsRow.iconName = ACImageNameIcCustomShowOnMap;
             mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
             
             OATableRowData *myPlacesRow = [section createNewRow];
             myPlacesRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             myPlacesRow.title = OALocalizedString(@"shared_string_my_places");
-            myPlacesRow.iconName = @"ic_custom_favorites";
+            myPlacesRow.iconName = ACImageNameIcCustomFavorites;
             myPlacesRow.key = [OAMapButtonsHelper TYPE_MY_PLACES].name;
             
             OATableRowData *navigationRow = [section createNewRow];
@@ -239,7 +239,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             OATableRowData *settingsRow = [section createNewRow];
             settingsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             settingsRow.title = OALocalizedString(@"shared_string_settings");
-            settingsRow.iconName = @"ic_custom_settings";
+            settingsRow.iconName = ACImageNameIcCustomSettings;
             settingsRow.key = [OAMapButtonsHelper TYPE_SETTINGS].name;
         }
         else
@@ -351,7 +351,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             if (item.secondaryIconName != nil)
             {
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
-                UIImage *imgBackground = [UIImage templateImageNamed:ACImageNameIcCustomCompoundActionBackground];
+                UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
                 [cell.leftIconView addSubview:background];

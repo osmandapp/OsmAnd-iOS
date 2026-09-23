@@ -2791,7 +2791,7 @@ static BOOL _repositoryUpdated = NO;
                 cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 66., 0., 0.);
                 cell.titleLabel.text = OALocalizedString(@"free_downloads");
                 cell.descriptionLabel.text = [self getFreeMapsMessage];
-                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored"];
+                cell.leftIconView.image = [UIImage rtlImageNamed:ACImageNameIcCustomMapUpdatesColored];
             }
             return cell;
         }
@@ -2809,7 +2809,7 @@ static BOOL _repositoryUpdated = NO;
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
-            UIImage *iconImage = [UIImage templateImageNamed:ACImageNameIcCustomDownload];
+            UIImage *iconImage = [UIImage imageNamed:ACImageNameIcCustomDownload];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];

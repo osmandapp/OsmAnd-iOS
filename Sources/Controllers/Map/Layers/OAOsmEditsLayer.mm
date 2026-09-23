@@ -46,6 +46,7 @@
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <QReadWriteLock>
+#import "GeneratedAssetSymbols.h"
 
 static const int START_ZOOM = 10;
 
@@ -201,9 +202,9 @@ static const int START_ZOOM = 10;
         {
             bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) 
                                                              shapeName:DEFAULT_ICON_SHAPE_KEY
-                                                              iconName:@"ic_custom_poi"
+                                                              iconName:ACImageNameIcCustomPoi
                                                             isFullSize:YES
-                                                                  icon:[UIImage imageNamed:@"ic_custom_poi"]
+                                                                  icon:[UIImage imageNamed:ACImageNameIcCustomPoi]
                                                                  scale:_textSize];
         }
     }

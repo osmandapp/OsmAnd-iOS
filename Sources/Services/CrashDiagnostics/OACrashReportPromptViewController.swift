@@ -27,7 +27,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     }()
 
     private let iconView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "ic_custom_crash_colored"))
+        let imageView = UIImageView(image: .icCustomCrashColored)
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
         imageView.translatesAutoresizingMaskIntoConstraints = false

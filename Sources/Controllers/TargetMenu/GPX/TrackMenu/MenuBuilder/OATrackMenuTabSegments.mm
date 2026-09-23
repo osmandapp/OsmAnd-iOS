@@ -201,7 +201,7 @@
             kTableValues: @{
                     @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
                     @"right_title_string_value": OALocalizedString(@"shared_string_options"),
-                    @"right_icon_string_value": @"ic_custom_overflow_menu"
+                    @"right_icon_string_value": ACImageNameIcCustomOverflowMenu
             },
             kCellToggle: @(!segment.generalSegment)
     }];

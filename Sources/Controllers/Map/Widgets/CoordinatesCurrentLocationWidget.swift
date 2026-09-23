@@ -36,6 +36,6 @@ final class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        UIImage.widgetCoordinatesLocation
+        .widgetCoordinatesLocation
     }
 }

@@ -976,7 +976,7 @@
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.textStackView.alignment = UIStackViewAlignmentLeading;
 
-                NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? ACImageNameIcCustomDelete : @"ic_custom_plus";
+                NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? ACImageNameIcCustomDelete : ACImageNameIcCustomPlus;
                 [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
                 cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.leftEditButton addTarget:self action:@selector(rearrangeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];

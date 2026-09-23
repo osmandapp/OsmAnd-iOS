@@ -36,7 +36,7 @@
 
 - (NSString *) getMenuIconId
 {
-    return [_showArrival get] ? ACImageNameIcActionTime : @"ic_action_time_to_distance";
+    return [_showArrival get] ? ACImageNameIcActionTime : ACImageNameIcActionTimeToDistance;
 }
 
 - (NSString *) getMenuItemId
@@ -51,7 +51,7 @@
 
 - (NSArray<NSString *> *) getMenuIconIds
 {
-    return @[ ACImageNameIcActionTime, @"ic_action_time_to_distance" ];
+    return @[ ACImageNameIcActionTime, ACImageNameIcActionTimeToDistance ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

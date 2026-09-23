@@ -129,13 +129,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellKeyKey : @"disabledImage",
             kCellTypeKey : [OAImageDescTableViewCell getCellIdentifier],
             kCellDescrKey : OALocalizedString(@"enable_hillshade"),
-            kCellIconNameKey : @"img_empty_state_terrain"
+            kCellIconNameKey : ACImageNameImgEmptyStateTerrain
         }];
         [disabledSection addRowFromDictionary:@{
             kCellKeyKey : @"readMore",
             kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_read_more"),
-            kCellIconNameKey : @"ic_custom_safari",
+            kCellIconNameKey : ACImageNameIcCustomSafari,
             @"link" : [kOsmAndFeaturesContourLinesPlugin localizedURLIfAvailable]
         }];
     }
@@ -175,7 +175,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellKeyKey : @"modifyPalette",
                 kCellTypeKey : isRelief3D ? [OAValueTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 kCellTitleKey : OALocalizedString(@"shared_string_modify"),
-                kCellSecondaryIconName : @"ic_payment_label_pro",
+                kCellSecondaryIconName : ACImageNameIcPaymentLabelPro,
                 @"purchased" : @(isRelief3D)
             }];
         }
@@ -187,7 +187,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellKeyKey : @"visibility",
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility"),
-            kCellIconNameKey : @"ic_custom_visibility",
+            kCellIconNameKey : ACImageNameIcCustomVisibility,
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
             @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
         }];
@@ -215,9 +215,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellKeyKey : @"relief3D",
             kCellTypeKey : typeKey,
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
-            kCellIconNameKey : @"ic_custom_3d_relief",
+            kCellIconNameKey : ACImageNameIcCustom3DRelief,
             kCellIconTintColor : !isTerrainShadows && (![_plugin.enable3dMapsPref get] || !isRelief3D) ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
-            kCellSecondaryIconName : @"ic_payment_label_pro",
+            kCellSecondaryIconName : ACImageNameIcPaymentLabelPro,
             @"value" : isTerrainShadows ? OALocalizedString(@"shared_string_on") : @([_plugin.enable3dMapsPref get]),
             @"purchased" : @(isTerrainShadows || isRelief3D)
         }];
@@ -233,9 +233,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellKeyKey : @"vertical_exaggeration",
                 kCellTypeKey : isTerrainShadows && !isRelief3D ? [OAButtonTableViewCell reuseIdentifier] : [OAValueTableViewCell reuseIdentifier],
                 kCellTitleKey : OALocalizedString(@"vertical_exaggeration"),
-                kCellIconNameKey : @"ic_custom_terrain_scale",
+                kCellIconNameKey : ACImageNameIcCustomTerrainScale,
                 kCellIconTintColor : [UIColor colorNamed:scaleValue > 1 && isRelief3D ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
-                kCellSecondaryIconName : @"ic_payment_label_pro",
+                kCellSecondaryIconName : ACImageNameIcPaymentLabelPro,
                 @"value" : alphaValueString,
                 @"purchased" : @(isRelief3D)
             }];

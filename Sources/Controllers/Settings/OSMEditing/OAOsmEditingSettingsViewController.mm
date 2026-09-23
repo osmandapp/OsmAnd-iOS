@@ -67,7 +67,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarReset action:@selector(onRightNavbarButtonPressed) menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
     return @[rightButton];
 }
@@ -127,7 +127,7 @@
             kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_update_required"),
             kCellDescrKey : OALocalizedString(@"osm_login_needs_ios_16_4"),
-            kCellIconNameKey : @"ic_custom_alert",
+            kCellIconNameKey : ACImageNameIcCustomAlert,
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellAccessoryType : @(UITableViewCellAccessoryNone),
             @"titleColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],

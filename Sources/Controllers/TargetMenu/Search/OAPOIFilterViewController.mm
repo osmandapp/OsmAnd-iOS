@@ -615,7 +615,7 @@ typedef enum
 
         NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
         
-        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:@"ic_working_time"] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
+        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:ACImageNameIcWorkingTime] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
         NSString *keyNameOpen24 = [[OALocalizedString(@"shared_string_is_open_24_7") stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowerCase];
         
         [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:OALocalizedString(@"shared_string_is_open_24_7") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen24] category:nil keyName:keyNameOpen24]];
@@ -651,7 +651,7 @@ typedef enum
                     categoryIcon = [OAUtilities getMxIcon:category];
                 
                 if (!categoryIcon) {
-                    categoryIcon = [UIImage imageNamed:@"ic_search_filter"];
+                    categoryIcon = [UIImage imageNamed:ACImageNameIcSearchFilter];
                 }
 
                 categoryIcon = [OAUtilities getTintableImage:categoryIcon];
@@ -852,7 +852,7 @@ typedef enum
             [cell clearButtonVisibility:NO];
             cell.inputField.textAlignment = NSTextAlignmentNatural;
             cell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
-            cell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
+            cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameSearchIcon];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
@@ -898,7 +898,7 @@ typedef enum
                 [cell.titleLabel setText:item.text];
                 if (item.expandable)
                 {
-                    cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open"] : [UIImage templateImageNamed:@"ic_arrow_close"];
+                    cell.rightIconView.image = !item.expanded ? [UIImage imageNamed:ACImageNameIcArrowOpen] : [UIImage imageNamed:ACImageNameIcArrowClose];
                     cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
                     [cell rightIconVisibility:YES];
                 }

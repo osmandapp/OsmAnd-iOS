@@ -270,7 +270,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [cell topButtonVisibility:!_isNewItem];
             cell.descriptionLabel.text = OALocalizedString(@"original_color_description");
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage imageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             
@@ -558,8 +558,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray array];

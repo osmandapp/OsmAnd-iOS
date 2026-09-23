@@ -126,7 +126,7 @@
         case EOAObjectTypeLocation:
         case EOAObjectTypePartialLocation:
         {
-            return @"ic_action_world_globe";
+            return ACImageNameIcActionWorldGlobe;
         }
         case EOAObjectTypeCity:
         case EOAObjectTypeVillage:
@@ -139,7 +139,7 @@
         }
         case EOAObjectTypeStreetIntersection:
         {
-            return @"ic_custom_intersection";
+            return ACImageNameIcCustomIntersection;
         }
         case EOAObjectTypePoiType:
         {
@@ -187,17 +187,17 @@
         }
         case EOAObjectTypeFavoriteGroup:
         {
-            return @"ic_custom_favorites";
+            return ACImageNameIcCustomFavorites;
         }
         case EOAObjectTypeRegion:
         {
-            return @"ic_world_globe_dark";
+            return ACImageNameIcWorldGlobeDark;
         }
         case EOAObjectTypeRecentObj:
         {
             OAHistoryItem *entry = (OAHistoryItem *) searchResult.object;
             if (entry.iconName && entry.iconName.length > 0)
-                return entry.hType == OAHistoryTypeParking ? @"ic_parking_pin_small" : entry.iconName;
+                return entry.hType == OAHistoryTypeParking ? ACImageNameIcParkingPinSmall : entry.iconName;
 
             OAPointDescription *name = [[OAPointDescription alloc] initWithType:[entry getPointDescriptionType]
                                                                        typeName:entry.typeName
@@ -221,7 +221,7 @@
         }
         case EOAObjectTypeIndexItem:
         {
-            return @"ic_custom_map";
+            return ACImageNameIcCustomMap;
         }
         default:
             return nil;
@@ -231,11 +231,11 @@
 + (NSString *)getItemIcon:(OAPointDescription *)pd
 {
     if ([pd isFavorite])
-        return @"ic_custom_favorites";
+        return ACImageNameIcCustomFavorites;
     else if ([pd isLocation])
         return ACImageNameIcCustomLocationMarker;
     else if ([pd isPoi])
-        return @"ic_custom_info";
+        return ACImageNameIcCustomInfo;
     else if ([pd isGpxFile] || [pd isGpxPoint])
         return ACImageNameIcCustomTrip;
     else if ([pd isWpt])
@@ -247,7 +247,7 @@
 //    else if (pd.isPhotoNote())
 //        iconId = R.drawable.ic_type_img;
     else
-        return @"ic_action_street_name";
+        return ACImageNameIcActionStreetName;
 }
 
 + (NSString *) getTypeName:(OASearchResult *)searchResult

@@ -263,7 +263,7 @@
             BOOL selected = [_selectedItems containsObject:poiType];
             
             UIColor *selectedColor = selected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-            cell.leftIconView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.leftIconView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage imageNamed:ACImageNameIcCustomSearchCategories];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)
                 cell.leftIconView.contentMode = UIViewContentModeCenter;

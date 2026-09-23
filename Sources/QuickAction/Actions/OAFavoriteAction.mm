@@ -44,7 +44,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                  name:OALocalizedString(@"shared_string_favorite")]
                 nameAction:OALocalizedString(@"shared_string_add")]
-               iconName:@"ic_custom_favorites"]
+               iconName:ACImageNameIcCustomFavorites]
               secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
@@ -165,7 +165,7 @@ static QuickActionType *TYPE;
                           @"key" : kName,
                           @"title" : self.getParams[kName] ? self.getParams[kName] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
-                          @"img" : @"ic_custom_text_field_name"
+                          @"img" : ACImageNameIcCustomTextFieldName
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_fav_name_descr")

@@ -23,6 +23,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAOnlineOsmNoteWrapper.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 static const NSInteger kOrderInternalRow = 0;
 
@@ -135,7 +136,7 @@ static const NSInteger kOrderInternalRow = 0;
     
     for (OACommentWrapper *cw in _point.comments)
     {
-        [descriptions addObject:[[OAAmenityInfoRow alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description"] textPrefix:nil text:[NSString stringWithFormat:@"%@ %@: %@", cw.date, cw.user, cw.text] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [descriptions addObject:[[OAAmenityInfoRow alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:ACImageNameIcDescription] textPrefix:nil text:[NSString stringWithFormat:@"%@ %@: %@", cw.date, cw.user, cw.text] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     int i = 10000;

@@ -79,7 +79,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"]];
+    [self.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowBack]];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];

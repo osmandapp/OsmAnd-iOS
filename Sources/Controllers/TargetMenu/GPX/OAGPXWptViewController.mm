@@ -149,7 +149,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     NSString *name = OALocalizedString(@"context_menu_points_of_group");
     NSString *gpxName = self.wpt.docPath.length == 0 ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
     UIColor *color = [self getItemColor];
-    UIImage *icon = [UIImage templateImageNamed:ACImageNameIcCustomFolder];
+    UIImage *icon = [UIImage imageNamed:ACImageNameIcCustomFolder];
     
     OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:name text:gpxName textColor:color isText:NO needLinks:NO order:kOrderWptPointRow typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
     rowInfo.collapsed = YES;

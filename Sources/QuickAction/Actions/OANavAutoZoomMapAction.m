@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -30,7 +31,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_auto_zoom")]
               nameAction:OALocalizedString(@"quick_action_verb_turn_on_off")]
-              iconName:@"ic_navbar_search"]
+              iconName:ACImageNameIcNavbarSearch]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }

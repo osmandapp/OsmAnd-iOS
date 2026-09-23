@@ -28,6 +28,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kMapillaryOpacity 1.0f
 #define kSearchRadius 100
@@ -223,7 +224,7 @@ static int MIN_POINTS_ZOOM = 17;
         targetPoint.location = CLLocationCoordinate2DMake(item.latitude, item.longitude);
         targetPoint.targetObj = item;
         targetPoint.title = OALocalizedString(@"mapillary_image");
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_mapillary_symbol"];
+        targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomMapillarySymbol];
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

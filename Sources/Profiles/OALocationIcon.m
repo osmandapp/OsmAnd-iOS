@@ -12,6 +12,7 @@
 #import "OAIndexConstants.h"
 
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OALocationIcon()
 
@@ -183,9 +184,9 @@ static OALocationIcon *_MOVEMENT_CAR;
     }
     else
     {
-        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_default_center"];
-        topImage = [UIImage imageNamed:@"map_location_default_top"];
+        bottomImage = [UIImage imageNamed:ACImageNameMapLocationDefaultBottom];
+        centerImage = [UIImage imageNamed:ACImageNameMapLocationDefaultCenter];
+        topImage = [UIImage imageNamed:ACImageNameMapLocationDefaultTop];
     }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }

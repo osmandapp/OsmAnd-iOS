@@ -14,6 +14,7 @@
 #import "OALinks.h"
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
@@ -33,7 +34,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.sectionHeaderHeight = kVerticalMargin;
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi"]];
+    [self.leftIconView setImage:[UIImage imageNamed:ACImageNameIcCustomPoi]];
 }
 
 - (void) adjustFrame

@@ -87,7 +87,7 @@
         availableDescription = [NSString stringWithFormat:OALocalizedString(@"not_enough_contributions_descr"),
                 @(CHANGES_FOR_MAPPER_PROMO).stringValue,
                 [[@"(" stringByAppendingString:[self getMonthPeriod]] stringByAppendingString:@")"]];
-        rightIcon = @"ic_custom_download_map_unavailable";
+        rightIcon = ACImageNameIcCustomDownloadMapUnavailable;
     }
 
     [data addObject:@[
@@ -187,7 +187,7 @@
                                                                          NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                          NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                              }],
-            @"right_icon" : @"ic_action_openstreetmap_logo",
+            @"right_icon" : ACImageNameIcActionOpenstreetmapLogo,
             @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"url" : [NSURL URLWithString:url]
     }];

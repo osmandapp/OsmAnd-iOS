@@ -274,14 +274,14 @@
             [actionsSection addRowFromDictionary:@{
                 kCellKeyKey : @"export_history",
                 kCellTitleKey : OALocalizedString(@"shared_string_export"),
-                kCellIconNameKey : @"ic_custom_export",
+                kCellIconNameKey : ACImageNameIcCustomExport,
                 kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
                 @"value" : @(_settings.sendAnonymousAppUsageData.get),
             }];
             [actionsSection addRowFromDictionary:@{
                 kCellKeyKey : @"clear_history",
                 kCellTitleKey : OALocalizedString(@"history_clear_alert_title"),
-                kCellIconNameKey : @"ic_custom_remove_outlined",
+                kCellIconNameKey : ACImageNameIcCustomRemoveOutlined,
                 kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
                 @"value" : [self getDialogsAndNotificationsValue],
             }];

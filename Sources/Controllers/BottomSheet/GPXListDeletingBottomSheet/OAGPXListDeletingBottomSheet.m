@@ -60,7 +60,7 @@
     [self hideSliderView];
     
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
-    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined"]];
+    [self.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomRemoveOutlined]];
     
     self.exitButton.layer.cornerRadius = 9.;
     self.deleteButton.layer.cornerRadius = 9.;

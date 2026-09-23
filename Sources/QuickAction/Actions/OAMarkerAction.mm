@@ -30,7 +30,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                  name:OALocalizedString(@"map_marker")]
                 nameAction:OALocalizedString(@"shared_string_add")]
-               iconName:@"ic_custom_favorites"]
+               iconName:ACImageNameIcCustomFavorites]
               secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];

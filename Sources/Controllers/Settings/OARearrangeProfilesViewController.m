@@ -151,7 +151,7 @@
         cell.leftIconView.image = [[mode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = [mode getProfileColor];
 
-        NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? ACImageNameIcCustomDelete : @"ic_custom_delete_disable";
+        NSString *imageName = !isAllProfiles ? ACImageNameIcCustomUndoButton : [mode isCustomProfile] ? ACImageNameIcCustomDelete : ACImageNameIcCustomDeleteDisable;
         [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         cell.leftEditButton.enabled = mode.isCustomProfile;
         cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;

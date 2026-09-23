@@ -16,6 +16,7 @@
 
 #import "Localization.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAScreenAlertsViewController
 {
@@ -59,7 +60,7 @@
     [otherArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
-        @"icon" : @"ic_custom_alert",
+        @"icon" : ACImageNameIcCustomAlert,
         @"value" : _settings.showScreenAlerts,
         @"key" : @"screenAlerts",
     }];
@@ -72,13 +73,13 @@
     [parametersArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
-        @"icon" : @"list_warnings_traffic_calming",
+        @"icon" : ACImageNameListWarningsTrafficCalming,
         @"value" : _settings.showTrafficWarnings,
     }];
     [parametersArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
-        @"icon" : @"list_warnings_pedestrian",
+        @"icon" : ACImageNameListWarningsPedestrian,
         @"value" : _settings.showPedestrian,
     }];
 
@@ -87,7 +88,7 @@
         [parametersArr addObject:@{
             @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"show_cameras"),
-            @"icon" : @"list_warnings_speed_camera",
+            @"icon" : ACImageNameListWarningsSpeedCamera,
             @"value" : _settings.showCameras,
         }];
     }
@@ -95,7 +96,7 @@
     [parametersArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_tunnels"),
-        @"icon" : @"list_warnings_tunnel",
+        @"icon" : ACImageNameListWarningsTunnel,
         @"value" : _settings.showTunnels,
     }];
     [tableData addObject:otherArr];
@@ -227,10 +228,10 @@
     EOADrivingRegion drivingRegion = [_settings.drivingRegion get:[_settings.applicationMode get]];
     
     if (drivingRegion == DR_US)
-        return @"list_warnings_speed_limit_us";
+        return ACImageNameListWarningsSpeedLimitUs;
     else if (drivingRegion == DR_CANADA)
-        return @"list_warnings_speed_limit_ca";
-    return @"list_warnings_limit";
+        return ACImageNameListWarningsSpeedLimitCa;
+    return ACImageNameListWarningsLimit;
 }
 
 @end

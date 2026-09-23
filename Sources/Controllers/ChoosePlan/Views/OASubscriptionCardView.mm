@@ -147,7 +147,7 @@
         }
         OAFeatureCardRow *learnMoreButton = [self addSimpleRow:OALocalizedString(@"shared_string_learn_more")
                                                    showDivider:YES
-                                                          icon:@"ic_custom_arrow_down_short"];
+                                                          icon:ACImageNameIcCustomArrowDownShort];
         learnMoreButton.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         learnMoreButton.delegate = self;
         learnMoreButton.tag = [self.viewFeatureRowsContainer.subviews indexOfObject:learnMoreButton];

@@ -133,7 +133,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             cell.titleView.frame = titleFrame;
 
             cell.distanceView.text = @(wptPt.distance).stringValue;
-            cell.directionImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallDirection];
+            cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
 //            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             

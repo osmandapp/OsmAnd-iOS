@@ -8,6 +8,7 @@
 
 #import "OACity.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACity ()
 
@@ -42,7 +43,7 @@
 
 -(NSString *)iconName
 {
-    return @"ic_action_building_number";
+    return ACImageNameIcActionBuildingNumber;
 }
 
 + (NSString *)getLocalizedTypeStr:(EOACityType)type

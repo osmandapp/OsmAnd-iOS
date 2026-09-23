@@ -1177,7 +1177,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_action_osmand_logo_banner";
+    return ACImageNameIcActionOsmandLogoBanner;
 }
 
 - (NSString *) localizedTitle
@@ -1259,7 +1259,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_action_osmand_logo_banner";
+    return ACImageNameIcActionOsmandLogoBanner;
 }
 
 - (NSString *) localizedTitle
@@ -1330,7 +1330,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_action_osmand_logo_banner";
+    return ACImageNameIcActionOsmandLogoBanner;
 }
 
 - (NSString *) localizedTitle
@@ -1670,7 +1670,7 @@
     if (_featurePro)
         return ACImageNameIcCustomOsmandProLogoColored;
     else if (_featureLive)
-        return @"ic_action_osmand_logo_banner";
+        return ACImageNameIcActionOsmandLogoBanner;
     else if (_featureMaps)
         return ACImageNameIcCustomOsmandMapsPlus;
     
@@ -1891,9 +1891,9 @@
     else if (_featurePro)
         return ACImageNameIcCustomOsmandProLogoColored;
     else if (_featureContours)
-        return @"ic_plugin_contourlines";
+        return ACImageNameIcPluginContourlines;
     else if (_featureNautical)
-        return @"ic_plugin_nautical";
+        return ACImageNameIcPluginNautical;
     else
         return ACImageNameIcCustomOsmandMapsPlus;
 }
@@ -2055,12 +2055,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_skimap";
+    return ACImageNameIcPluginSkimap;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_skimap";
+    return ACImageNameImgPluginSkimap;
 }
 
 - (NSString *) localizedTitle
@@ -2110,12 +2110,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_nautical";
+    return ACImageNameIcPluginNautical;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_nautical";
+    return ACImageNameImgPluginNautical;
 }
 
 - (NSString *) localizedTitle
@@ -2155,12 +2155,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_tracrecording";
+    return ACImageNameIcPluginTracrecording;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_trip_recording";
+    return ACImageNameImgPluginTripRecording;
 }
 
 - (NSString *) localizedTitle
@@ -2200,12 +2200,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_parking";
+    return ACImageNameIcPluginParking;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_parking";
+    return ACImageNameImgPluginParking;
 }
 
 - (NSString *) localizedTitle
@@ -2245,12 +2245,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_wikipedia";
+    return ACImageNameIcPluginWikipedia;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_wikipedia";
+    return ACImageNameImgPluginWikipedia;
 }
 
 - (NSString *) localizedTitle
@@ -2295,12 +2295,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_contourlines";
+    return ACImageNameIcPluginContourlines;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_contourlines";
+    return ACImageNameImgPluginContourlines;
 }
 
 - (NSString *) localizedTitle
@@ -2340,12 +2340,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_osm_edit";
+    return ACImageNameIcPluginOsmEdit;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_osm_edits";
+    return ACImageNameImgPluginOsmEdits;
 }
 
 - (NSString *) localizedTitle
@@ -2385,12 +2385,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_mapillary_symbol";
+    return ACImageNameIcCustomMapillarySymbol;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_mapillary";
+    return ACImageNameImgPluginMapillary;
 }
 
 - (NSString *) localizedTitle
@@ -2426,12 +2426,12 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_umbrella";
+    return ACImageNameIcCustomUmbrella;
 }
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_weather";
+    return ACImageNameImgPluginWeather;
 }
 
 - (NSString *) localizedTitle
@@ -2466,12 +2466,12 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_help_sensors_day";
+    return ACImageNameImgHelpSensorsDay;
 }
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_sensor";
+    return ACImageNameIcCustomSensor;
 }
 
 - (NSString *) localizedTitle
@@ -2507,12 +2507,12 @@
 
 - (NSString *)productScreenshotName
 {
-    return @"img_help_vehicle_metrics";
+    return ACImageNameImgHelpVehicleMetrics;
 }
 
 - (NSString *)productIconName
 {
-    return @"ic_custom_car_info";
+    return ACImageNameIcCustomCarInfo;
 }
 
 - (NSString *)localizedTitle
@@ -2547,7 +2547,7 @@
 
 - (NSString *)productIconName
 {
-    return @"ic_custom_telescope";
+    return ACImageNameIcCustomTelescope;
 }
 
 - (NSString *)localizedTitle
@@ -2610,12 +2610,12 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_osmand_development";
+    return ACImageNameImgPluginOsmandDevelopment;
 }
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_laptop";
+    return ACImageNameIcCustomLaptop;
 }
 
 - (NSString *) localizedTitle
@@ -3176,39 +3176,39 @@
     
     if ([self.parking isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:ACImageNameParkingPosition];
         addon.sortIndex = 0;
         [arr addObject:addon];
     }
     
     if ([self.trackRecording isPurchased])
     {
-        OAFunctionalAddon *addonEdit = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Edit_Waypoint titleShort:OALocalizedString(@"edit_waypoint_short") titleWide:OALocalizedString(@"context_menu_item_edit_waypoint") imageName:@"icon_edit"];
+        OAFunctionalAddon *addonEdit = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Edit_Waypoint titleShort:OALocalizedString(@"edit_waypoint_short") titleWide:OALocalizedString(@"context_menu_item_edit_waypoint") imageName:ACImageNameIconEdit];
         addonEdit.sortIndex = 1;
         [arr addObject:addonEdit];
 
-        OAFunctionalAddon *addonAdd = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track"];
+        OAFunctionalAddon *addonAdd = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:ACImageNameAddWaypointToTrack];
         addonAdd.sortIndex = 1;
         [arr addObject:addonAdd];
     }
     
     if ([self.osmEditing isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"poi_context_menu_modify") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"poi_context_menu_modify") titleWide:OALocalizedString(@"modify_poi") imageName:ACImageNameIcPluginOsmEdit];
         addon.sortIndex = 2;
         [arr addObject:addon];
     }
     
     if ([self.mapillary isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:ACImageNameIcCustomMapillarySymbol];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
     
     if ([self.osmandDevelopment isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:@"ic_custom_laptop"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:ACImageNameIcCustomLaptop];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

@@ -31,6 +31,7 @@
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OARoutePointsLayer () <OAStateChangedListener>
 
@@ -151,7 +152,7 @@
 
 - (UIImage *) getIntermediateUIImage:(int)index
 {
-    UIImage *flagImage = [UIImage imageNamed:@"map_intermediate_point"];
+    UIImage *flagImage = [UIImage imageNamed:ACImageNameMapIntermediatePoint];
     if (flagImage)
     {
         UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, [UIScreen mainScreen].scale);
@@ -260,7 +261,7 @@
                 if ([OAUtilities isCoordEqual:startPoint.point.coordinate.latitude srcLon:startPoint.point.coordinate.longitude destLat:lat destLon:lon])
                 {
                     targetPoint.title = [startPoint getPointDescription].name;
-                    targetPoint.icon = [UIImage imageNamed:@"ic_list_startpoint"];
+                    targetPoint.icon = [UIImage imageNamed:ACImageNameIcListStartpoint];
                     targetPoint.type = OATargetRouteStart;
                     targetPoint.targetObj = startPoint;
                 }
@@ -270,7 +271,7 @@
                 if ([OAUtilities isCoordEqual:finishPoint.point.coordinate.latitude srcLon:finishPoint.point.coordinate.longitude destLat:lat destLon:lon])
                 {
                     targetPoint.title = [finishPoint getPointDescription].name;
-                    targetPoint.icon = [UIImage imageNamed:@"ic_list_destination"];
+                    targetPoint.icon = [UIImage imageNamed:ACImageNameIcListDestination];
                     targetPoint.type = OATargetRouteFinish;
                     targetPoint.targetObj = finishPoint;
                 }
@@ -282,7 +283,7 @@
                     if ([OAUtilities isCoordEqual:p.point.coordinate.latitude srcLon:p.point.coordinate.longitude destLat:lat destLon:lon])
                     {
                         targetPoint.title = [p getPointDescription].name;
-                        targetPoint.icon = [UIImage imageNamed:@"list_intermediate"];
+                        targetPoint.icon = [UIImage imageNamed:ACImageNameListIntermediate];
                         targetPoint.type = OATargetRouteIntermediate;
                         targetPoint.targetObj = p;
                     }

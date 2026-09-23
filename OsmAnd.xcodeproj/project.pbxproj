@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
@@ -26,6 +27,9 @@
 		05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */; };
 		05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */; };
 		05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */; };
+		F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 731A97689A654400B3FE08E0 /* OAObfFileList.mm */; };
+		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
+		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
 		05DCD5412D50C7EC00C32EBB /* he_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = 05DCD5402D50C7EC00C32EBB /* he_tts.js */; };
 		05DCE548304D88EC005DA649 /* libEGL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE542304D48B5005DA649 /* libEGL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -835,6 +839,7 @@
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
 		4695B25F2CF0A5D3003FB38A /* TrackChartHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */; };
+		A5C7E00133F0000100C0DE01 /* RouteChartSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */; };
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
 		469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */; };
 		469F0C242C627F9000874CC6 /* PaletteCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */; };
@@ -959,8 +964,6 @@
 		46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */; };
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
-		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
-		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
@@ -1389,7 +1392,6 @@
 		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
 		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
-		A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -1437,7 +1439,6 @@
 		A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */; };
 		A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */; };
 		A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503062F51000200000306 /* StarMapSearchViewController.swift */; };
-		A5C7E00133F0000100C0DE01 /* RouteChartSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -1516,13 +1517,6 @@
 		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
 		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
 		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
-		C1A55E0B77300000000000A1 /* OASharedRoutingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */; };
-		C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */; };
-		C1A55E0B77300000000000C3 /* OAMissingMapsResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */; };
-		C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */; };
-		C1A55E0B77300000000000E1 /* OACppRouteCalculationProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */; };
-		C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */; };
-		C2E8E311482906B2954F30E1 /* OACppRouteConverterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
@@ -3040,6 +3034,8 @@
 		DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810E26C563A600F274C7 /* OATransportRoutingHelper.mm */; };
 		DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A810F26C563A600F274C7 /* OARouteProvider.mm */; };
 		DA5A856B26C563A900F274C7 /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811326C563A600F274C7 /* OATspAnt.m */; };
+		E15829768D8BA09FF2202074 /* OACppRouteConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */; };
+		C1A55E0B77300000000000E1 /* OACppRouteCalculationProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */; };
 		DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811526C563A600F274C7 /* OARouteImporter.mm */; };
 		DA5A856D26C563A900F274C7 /* OATargetPointsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811B26C563A600F274C7 /* OATargetPointsHelper.mm */; };
 		DA5A856E26C563A900F274C7 /* OAVoiceRouter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811D26C563A600F274C7 /* OAVoiceRouter.mm */; };
@@ -3144,6 +3140,12 @@
 		DA80D9A52716CC1800445DAF /* map_track_point_start_finish@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D99F2716CC1700445DAF /* map_track_point_start_finish@3x.png */; };
 		DA80D9A62716CC1800445DAF /* map_track_point_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */; };
 		DA80D9A72716CC1800445DAF /* map_track_point_start@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */; };
+		C2E8E311482906B2954F30E1 /* OACppRouteConverterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */; };
+		A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */; };
+		C1A55E0B77300000000000A1 /* OASharedRoutingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */; };
+		C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */; };
+		C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */; };
+		C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
@@ -3391,8 +3393,6 @@
 		DAFE4D3722169B4D009731CA /* map_osm_note_resolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2C22169B4B009731CA /* map_osm_note_resolved@2x.png */; };
 		DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */; };
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
-		E15829768D8BA09FF2202074 /* OACppRouteConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */; };
-		F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 731A97689A654400B3FE08E0 /* OAObfFileList.mm */; };
 		FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */; };
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
 		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */; };
@@ -3425,6 +3425,7 @@
 		FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */; };
 		FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */; };
 		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
+		C1A55E0B77300000000000C3 /* OAMissingMapsResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
 		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
@@ -3667,6 +3668,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		0309480ECBC201C5E8317E6D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ko; path = ko.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -3699,6 +3701,10 @@
 		05DACD802C1EC4340023FAD9 /* OAXmlFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAXmlFactory.h; sourceTree = "<group>"; };
 		05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAXmlFactory.m; sourceTree = "<group>"; };
 		05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUtil.swift; sourceTree = "<group>"; };
+		9C102C0285A946359E1BE6A4 /* OAObfFileList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAObfFileList.h; sourceTree = "<group>"; };
+		731A97689A654400B3FE08E0 /* OAObfFileList.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileList.mm; sourceTree = "<group>"; };
+		17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfReaders.swift; sourceTree = "<group>"; };
+		9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTravelContext.swift; sourceTree = "<group>"; };
 		05DCD5402D50C7EC00C32EBB /* he_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = he_tts.js; path = ../resources/voice/he/he_tts.js; sourceTree = "<group>"; };
 		05DCE542304D48B5005DA649 /* libEGL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libEGL.xcframework; sourceTree = "<group>"; };
 		05DCE544304D48BC005DA649 /* libGLESv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libGLESv2.xcframework; sourceTree = "<group>"; };
@@ -3821,7 +3827,6 @@
 		0CF5857F2440745D0081238D /* ic_custom_direction_topbar_two@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_topbar_two@2x.png"; path = "Resources/Icons/ic_custom_direction_topbar_two@2x.png"; sourceTree = SOURCE_ROOT; };
 		0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_widget_two@3x.png"; path = "Resources/Icons/ic_custom_direction_widget_two@3x.png"; sourceTree = SOURCE_ROOT; };
 		0E4DA44079A941CF8E86B30B /* HashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashHelper.swift; sourceTree = "<group>"; };
-		148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverter.mm; sourceTree = "<group>"; };
 		151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_device_bottom_light@3x.png"; path = "Resources/Icons/img_settings_device_bottom_light@3x.png"; sourceTree = "<group>"; };
 		151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_sreen_route_parameters@3x.png"; path = "Resources/Icons/img_settings_sreen_route_parameters@3x.png"; sourceTree = "<group>"; };
 		1535D8E3243DDA370061220F /* ic_custom_map_online@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@3x.png"; path = "Resources/Icons/ic_custom_map_online@3x.png"; sourceTree = "<group>"; };
@@ -3910,7 +3915,6 @@
 		15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time_start@2x.png"; path = "Resources/Icons/ic_small_time_start@2x.png"; sourceTree = "<group>"; };
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
-		17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfReaders.swift; sourceTree = "<group>"; };
 		180F303DB967BA6C58C6A762 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = is; path = is.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		18D8B041AE3F505150D22288 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		21D6D5267C249A7783FE069E /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tt; path = tt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -4716,6 +4720,7 @@
 		46903D6C29B6649A004459F1 /* OAWikiLanguagesWebViewContoller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikiLanguagesWebViewContoller.h; sourceTree = "<group>"; };
 		46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikiLanguagesWebViewContoller.m; sourceTree = "<group>"; };
 		4695B25E2CF0A5CB003FB38A /* TrackChartHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackChartHelper.swift; sourceTree = "<group>"; };
+		A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteChartSynchronizer.swift; sourceTree = "<group>"; };
 		46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_announcement_time_day@3x.png"; path = "Resources/Icons/img_help_announcement_time_day@3x.png"; sourceTree = "<group>"; };
 		469F0C212C627E2A00874CC6 /* PaletteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteCollectionViewCell.swift; sourceTree = "<group>"; };
 		469F0C232C627F9000874CC6 /* PaletteCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaletteCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -4878,18 +4883,15 @@
 		5D6F1BE77A7230834CE6799E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = oc; path = oc.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		5F144201EE72EAFA4C8F8ED4 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sk; path = sk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		63A3CE4608C61BF21E2E0CC3 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = lt; path = lt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		63C0B145D69BB4337FC346D8 /* OACppRouteConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACppRouteConverter.h; sourceTree = "<group>"; };
 		64397F8BA6C8BDC70B5573DA /* tzm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tzm; path = tzm.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6441D137201AC8ECE6F53215 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ar; path = ar.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		646882CB0339B1A7DF05FF76 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ca; path = ca.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		661C1AE4BA42FE0D238CC2E3 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = et; path = et.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultTest.mm; sourceTree = "<group>"; };
 		6965E6758C40DC31F74EA9B9 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sl; path = sl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6A95B0B2F6F783059E18100C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = an; path = an.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6D8EAECD4057EDB5E827CB61 /* sc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sc; path = sc.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		714EA706A5C69DE963B4727D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7291F98BFA40BEC8CB471FCC /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-AR"; path = "es-AR.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
-		731A97689A654400B3FE08E0 /* OAObfFileList.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileList.mm; sourceTree = "<group>"; };
 		767A4E80BA269E1BDF870978 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hsb; path = hsb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
@@ -5355,8 +5357,6 @@
 		97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
 		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
-		9C102C0285A946359E1BE6A4 /* OAObfFileList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAObfFileList.h; sourceTree = "<group>"; };
-		9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTravelContext.swift; sourceTree = "<group>"; };
 		9F2C3104BFAB2F84CCCDBC0B /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sq; path = sq.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerPlugin.swift; sourceTree = "<group>"; };
 		9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerSettingsViewController.swift; sourceTree = "<group>"; };
@@ -5424,7 +5424,6 @@
 		A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchResultsAdapter.swift; sourceTree = "<group>"; };
 		A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapCatalogsAdapter.swift; sourceTree = "<group>"; };
 		A5A503062F51000200000306 /* StarMapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchViewController.swift; sourceTree = "<group>"; };
-		A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteChartSynchronizer.swift; sourceTree = "<group>"; };
 		AB59547725897ACC78F7575F /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "pt-BR"; path = "pt-BR.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		AE60E08CA3262CDD0EE185B7 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ast; path = ast.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
@@ -5565,14 +5564,6 @@
 		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
 		C1687F4567959C306956D92A /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kab; path = kab.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C173345D7277A340D99DE996 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRoutingTest.mm; sourceTree = "<group>"; };
-		C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedGpxApproximationTest.mm; sourceTree = "<group>"; };
-		C1A55E0B77300000000000C1 /* OAMissingMapsResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMissingMapsResult.h; sourceTree = "<group>"; };
-		C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMissingMapsResult.mm; sourceTree = "<group>"; };
-		C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedMissingMapsTest.mm; sourceTree = "<group>"; };
-		C1A55E0B77300000000000E2 /* OACppRouteCalculationProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACppRouteCalculationProgress.h; sourceTree = "<group>"; };
-		C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteCalculationProgress.mm; sourceTree = "<group>"; };
-		C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteProgressTest.mm; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
@@ -7980,6 +7971,10 @@
 		DA5A80F826C563A600F274C7 /* OAExitInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
 		DA5A80F926C563A600F274C7 /* OAWaypointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointHelper.h; sourceTree = "<group>"; };
 		DA5A80FA26C563A600F274C7 /* OATransportRouteCalculationParams.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportRouteCalculationParams.mm; sourceTree = "<group>"; };
+		63C0B145D69BB4337FC346D8 /* OACppRouteConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACppRouteConverter.h; sourceTree = "<group>"; };
+		148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverter.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000E2 /* OACppRouteCalculationProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACppRouteCalculationProgress.h; sourceTree = "<group>"; };
+		C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteCalculationProgress.mm; sourceTree = "<group>"; };
 		DA5A80FB26C563A600F274C7 /* OARouteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteImporter.h; sourceTree = "<group>"; };
 		DA5A80FC26C563A600F274C7 /* OALocationPointWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALocationPointWrapper.mm; sourceTree = "<group>"; };
 		DA5A80FD26C563A600F274C7 /* OALocationPointWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationPointWrapper.h; sourceTree = "<group>"; };
@@ -8134,6 +8129,12 @@
 		DA80D99F2716CC1700445DAF /* map_track_point_start_finish@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start_finish@3x.png"; path = "Resources/Icons/map_track_point_start_finish@3x.png"; sourceTree = "<group>"; };
 		DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@2x.png"; path = "Resources/Icons/map_track_point_start@2x.png"; sourceTree = "<group>"; };
 		DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@3x.png"; path = "Resources/Icons/map_track_point_start@3x.png"; sourceTree = "<group>"; };
+		E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverterTest.mm; sourceTree = "<group>"; };
+		693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultTest.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRoutingTest.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedGpxApproximationTest.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedMissingMapsTest.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteProgressTest.mm; sourceTree = "<group>"; };
 		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
@@ -8420,7 +8421,6 @@
 		DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_resolved@3x.png"; path = "Resources/Icons/map_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
 		DB870AB9B77E62AC5C88F332 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = el; path = el.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		DEBFFB06486D4FFCC20ED564 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverterTest.mm; sourceTree = "<group>"; };
 		E4B9BFA0723413BD0A7B76AC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EA0BF41256DE1E07C28D7155 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "ro-RO"; path = "ro-RO.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		EAC8A43D12C579F29C4E47B5 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hu; path = hu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -8463,6 +8463,8 @@
 		FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIMenu+Extension.swift"; sourceTree = "<group>"; };
 		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
 		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
+		C1A55E0B77300000000000C1 /* OAMissingMapsResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMissingMapsResult.h; sourceTree = "<group>"; };
+		C1A55E0B77300000000000C2 /* OAMissingMapsResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMissingMapsResult.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
 		FA359EE42ADF026D0001C11D /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
@@ -11234,6 +11236,16 @@
 				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
 			);
 			path = Panels;
+			sourceTree = "<group>";
+		};
+		D1C573500000000000000003 /* PlanRoute */ = {
+			isa = PBXGroup;
+			children = (
+				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
+				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
+				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
+			);
+			path = PlanRoute;
 			sourceTree = "<group>";
 		};
 		D1C571210000000000000005 /* OsmAnd MapsUITests */ = {
@@ -19715,6 +19727,7 @@
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
+				D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */,
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,
 				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,
 				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,

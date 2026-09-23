@@ -4552,3 +4552,17 @@
 "carplay_trip_via_point" = "Via %@";
 "tracks_stats_are_being_calculated" = "Les statistiques des itinéraires sont en cours de calcul...";
 "tracks_stats_are_being_calculated_left" = "%1$@ %2$@ restants";
+"routing_engine_shared" = "Itinéraire avec OsmAndShared";
+"screen_elements" = "Éléments d'écran";
+"screen_elements_descr" = "Le mode Paysage utilise les mêmes éléments d'écran que le mode Portrait. Les modifications apportées dans l'un des deux modes s'appliquent aux deux.";
+"switch_to_independent" = "Passer au statut d'indépendant";
+"screen_elements_mode_descr" = "Choisissez si les modes Portrait et Paysage partagent les mêmes éléments d'écran ou s'ils disposent d'ensembles indépendants.";
+"screen_elements_shared" = "Partagé";
+"screen_elements_independent" = "Indépendant";
+"copy_from_portrait_layout" = "Copier à partir de la mise en page « Portrait »";
+"copy_from_landscape_layout" = "Copier à partir de la mise en page « Paysage »";
+"panels_layout" = "Disposition des panneaux";
+"panels_layout_wide" = "Large";
+"panels_layout_compact" = "Compact";
+"panels_layout_wide_descr" = "Les panneaux supérieur et inférieur s'étendent sur toute la largeur de l'écran.";
+"panels_layout_compact_descr" = "Les panneaux supérieur et inférieur s'emboîtent entre les panneaux latéraux et les boutons.";

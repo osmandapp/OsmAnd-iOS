@@ -8,14 +8,21 @@
 
 import Foundation
 
-@objc(OAWidgetsPanel)
 @objcMembers
 class WidgetsPanel: NSObject, NSCopying {
     
-    static let leftPanel = WidgetsPanel("ic_custom_screen_side_left", title: localizedString("map_widget_left"))
-    static let rightPanel = WidgetsPanel("ic_custom_screen_side_right", title: localizedString("map_widget_right"))
-    static let topPanel = WidgetsPanel("ic_custom_screen_side_top", title: localizedString("top_widgets_panel"))
-    static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom", title: localizedString("bottom_widgets_panel"))
+    static let leftPanel = WidgetsPanel(.icCustomScreenSideLeft,
+                                       landscapeIcon: .icCustomScreenSideLeftLandscape,
+                                       title: localizedString("map_widget_left"))
+    static let rightPanel = WidgetsPanel(.icCustomScreenSideRight,
+                                        landscapeIcon: .icCustomScreenSideRightLandscape,
+                                        title: localizedString("map_widget_right"))
+    static let topPanel = WidgetsPanel(.icCustomScreenSideTop,
+                                      landscapeIcon: .icCustomScreenSideTopLandscape,
+                                      title: localizedString("top_widgets_panel"))
+    static let bottomPanel = WidgetsPanel(.icCustomScreenSideBottom,
+                                         landscapeIcon: .icCustomScreenSideBottomLandscape,
+                                         title: localizedString("bottom_widgets_panel"))
     
     static let values: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
     
@@ -36,29 +43,25 @@ class WidgetsPanel: NSObject, NSCopying {
     private static var ORIGINAL_BOTTOM_ORDER = getOrderIds(.bottomPanel)
     
     let title: String
-    let iconName: String
-
+    
     var isPanelVertical: Bool {
         self == .topPanel || self == .bottomPanel
     }
+    
+    private let portraitIcon: UIImage
+    private let landscapeIcon: UIImage
 
-    internal required init(_ iconName: String, title: String) {
+    internal required init(_ portraitIcon: UIImage, landscapeIcon: UIImage, title: String) {
         self.title = title
-        self.iconName = iconName
+        self.portraitIcon = portraitIcon
+        self.landscapeIcon = landscapeIcon
     }
 
-    private func getRtlPanel(rtl: Bool) -> WidgetsPanel {
-        if !rtl || self == .topPanel || self == .bottomPanel {
-            return self
-        } else if self == .leftPanel {
-            return .rightPanel
-        } else if self == .rightPanel {
-            return .leftPanel
-        }
-        fatalError("Unsupported panel")
+    func icon(for screenLayoutMode: ScreenLayoutMode) -> UIImage {
+        screenLayoutMode.isPortrait ? portraitIcon : landscapeIcon
     }
 
-    func getOriginalOrder() -> [String] {
+    func originalOrder() -> [String] {
         if self == .leftPanel {
             return WidgetsPanel.ORIGINAL_LEFT_ORDER
         } else if self == .rightPanel {
@@ -71,37 +74,34 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func getOriginalWidgetOrder(widgetId: String) -> Int {
-        let order = getOriginalOrder().firstIndex(of: widgetId)
+        let order = originalOrder().firstIndex(of: widgetId)
         return order ?? WidgetsPanel.DEFAULT_ORDER
     }
     
-    func getWidgetPage(_ widgetId: String) -> Int {
-        getWidgetPage(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
-    }
-
-    func getWidgetPage(_ widgetId: String, appMode: OAApplicationMode) -> Int {
-        getPagedOrder(widgetId, appMode: appMode).0
+    func widgetPage(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
+        pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).0
     }
     
-    func getWidgetOrder(_ widgetId: String) -> Int {
-        return getWidgetOrder(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get())
+    func widgetOrder(_ widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Int {
+        pagedOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode).1
     }
 
-    func getWidgetOrder(_ widgetId: String, appMode: OAApplicationMode) -> Int {
-        return getPagedOrder(widgetId, appMode: appMode).1
-    }
-
-    private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {
-        let pref: OACommonListOfStringList = getOrderPreference()
+    private func reorderedPages(_ appMode: OAApplicationMode,
+                                screenLayoutMode: NSNumber?) -> [[String]]? {
+        let pref = orderPreference(screenLayoutMode: screenLayoutMode)
         let pages: [[String]]? = pref.get(appMode)
-        guard let pages, !pages.isEmpty, (pref.key == OAAppSettings.sharedManager().topWidgetPanelOrder.key || pref.key == OAAppSettings.sharedManager().bottomWidgetPanelOrder.key) else {
+        guard let pages, !pages.isEmpty, isPanelVertical else {
             return pages
         }
         return WidgetsPanel.getPagedWidgetIdsWithPages(pages)
     }
 
-    private func getPagedOrder(_ widgetId: String, appMode: OAApplicationMode) -> (Int, Int) {
-        guard let pages = getReorderedPages(appMode), !pages.isEmpty else {
+    private func pagedOrder(_ widgetId: String,
+                            appMode: OAApplicationMode,
+                            screenLayoutMode: NSNumber?) -> (Int, Int) {
+        guard let pages = reorderedPages(appMode,
+                                         screenLayoutMode: screenLayoutMode),
+              !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
 
@@ -115,27 +115,18 @@ class WidgetsPanel: NSObject, NSCopying {
         return (0, WidgetsPanel.DEFAULT_ORDER)
     }
 
-    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode) {
-        let orderPreference = getOrderPreference()
-        orderPreference.set(pagedOrder, mode: appMode)
+    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode, screenLayoutMode: NSNumber?) {
+        let preference = orderPreference(screenLayoutMode: screenLayoutMode)
+        preference.set(pagedOrder, mode: appMode)
     }
 
-    func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()) -> Bool {
-         getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
+    func contains(widgetId: String, appMode: OAApplicationMode, screenLayoutMode: NSNumber?) -> Bool {
+        widgetOrder(widgetId, appMode: appMode, screenLayoutMode: screenLayoutMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func getOrderPreference() -> OACommonListOfStringList {
-        let settings = OAAppSettings.sharedManager()
-        if self == .leftPanel {
-            return settings.leftWidgetPanelOrder
-        } else if self == .rightPanel {
-            return settings.rightWidgetPanelOrder
-        } else if self == .topPanel {
-            return settings.topWidgetPanelOrder
-        } else if self == .bottomPanel {
-            return settings.bottomWidgetPanelOrder
-        }
-        fatalError("Unsupported panel")
+    func orderPreference(screenLayoutMode: NSNumber?) -> OACommonListOfStringList {
+        OAAppSettings.sharedManager().widgetPanelOrder(self,
+                                                       screenLayoutMode: screenLayoutMode)
     }
 
     static func getPagedWidgetIdsWithPages(_ pages: [[String]]) -> [[String]] {

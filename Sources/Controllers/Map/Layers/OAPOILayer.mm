@@ -25,9 +25,6 @@
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
-#import "OARouteKey.h"
-#import "OARouteKey+cpp.h"
-#import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
@@ -48,8 +45,6 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
-#include <OsmAndCore/NetworkRouteContext.h>
-#include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
 #include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
@@ -64,7 +59,6 @@
 
 static const NSInteger kPoiSearchRadius = 50; // AMENITY_SEARCH_RADIUS
 static const NSInteger kPoiSearchRadiusForRelation = 500; // AMENITY_SEARCH_RADIUS_FOR_RELATION
-static const NSInteger kTrackSearchDelta = 40;
 static const NSInteger START_ZOOM = 5;
 static const NSTimeInterval kWikiSymbolsCacheWaitInterval = 0.05;
 static const unsigned long kWikiOnlineAmenitiesWaitIntervalMs = 50;
@@ -1434,70 +1428,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
-- (void) addRoute:(NSMutableArray<OATargetPoint *> *)points touchPoint:(CGPoint)touchPoint mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj
-{
-    CGPoint topLeft;
-    topLeft.x = touchPoint.x - kTrackSearchDelta;
-    topLeft.y = touchPoint.y - kTrackSearchDelta;
-    CGPoint bottomRight;
-    bottomRight.x = touchPoint.x + kTrackSearchDelta;
-    bottomRight.y = touchPoint.y + kTrackSearchDelta;
-    OsmAnd::PointI topLeft31;
-    OsmAnd::PointI bottomRight31;
-    [self.mapView convert:topLeft toLocation:&topLeft31];
-    [self.mapView convert:bottomRight toLocation:&bottomRight31];
-    
-    OsmAnd::AreaI area31(topLeft31, bottomRight31);
-    const auto center31 = area31.center();
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center31);
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>(self.app.resourcesManager->obfsCollection);
-    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
-    NSMutableSet<OARouteKey *> *routeKeys = [NSMutableSet set];
-    for (auto it = routes.begin(); it != routes.end(); ++it)
-    {
-        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
-        if (![routeKeys containsObject:routeKey] && [self isRouteEnabledForKey:routeKey])
-        {
-            [routeKeys addObject:routeKey];
-            [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
-        }
-    }
-}
-
-- (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
-{
-    QString renderingPropertyAttr = routeKey.routeKey.type->renderingPropertyAttr;
-    if (!renderingPropertyAttr.isEmpty())
-    {
-        OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-        OAMapStyleParameter *routesParameter = [styleSettings getParameter:renderingPropertyAttr.toNSString()];
-        return routesParameter
-            && routesParameter.storedValue.length > 0
-            && ![routesParameter.storedValue isEqualToString:@"false"]
-            && ![routesParameter.storedValue isEqualToString:@"disabled"];
-    }
-    return NO;
-}
-
-- (void) putRouteToSelected:(OARouteKey *)key location:(CLLocationCoordinate2D)location mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj points:(NSMutableArray<OATargetPoint *> *)points area:(OsmAnd::AreaI)area
-{
-    OATargetPoint *point = [[OATargetPoint alloc] init];
-    point.location = location;
-    point.type = OATargetNetworkGPX;
-    point.targetObj = key;
-    OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:key];
-    point.icon = drawable.getIcon;
-    point.title = [key getRouteName];
-    NSArray *areaPoints = @[@(area.topLeft.x), @(area.topLeft.y), @(area.bottomRight.x), @(area.bottomRight.y)];
-    point.values = @{ @"area": areaPoints };
-
-    point.sortIndex = (NSInteger)point.type;
-
-    if (![points containsObject:point])
-        [points addObject:point];
-}
-
 - (OAPOI *) getAmenity:(id)object
 {
     if ([object isKindOfClass:SelectedMapObject.class])
@@ -1643,7 +1573,14 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         }
         else if ([amenity isRouteTrack])
         {
-            OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+            // an article built from the poi carries no region name, and a gpx collection is read
+            // only out of the file that name picks
+            OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLocation:[amenity getLocation] routeId:[amenity getRouteId]];
+            if (!travelGpx)
+            {
+                NSLog(@"showMenuAction() searchTravelGpx() travelGpx is null");
+                return NO;
+            }
             [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[amenity getGpxFileName:nil] latLon:[amenity getLocation] adjustMapPosition:NO];
             return YES;
         }

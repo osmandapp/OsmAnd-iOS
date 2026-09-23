@@ -347,7 +347,7 @@ static const NSInteger panoImageFilterSection = 2;
             if ([key isEqualToString:@"mapillary_enabled"])
             {
                 cell.titleLabel.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-                NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+                NSString *imgName = _mapillaryEnabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
                 cell.leftIconView.image = [UIImage templateImageNamed:imgName];
                 cell.leftIconView.tintColor = _mapillaryEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
                 [cell.switchView setOn:_mapillaryEnabled];

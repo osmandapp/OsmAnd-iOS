@@ -84,6 +84,7 @@
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
 #include <OpenGLES/ES2/gl.h>
+#include <atomic>
 #include <QtMath>
 #include <QStandardPaths>
 #include <OsmAndCore.h>
@@ -184,6 +185,7 @@ static char kMapSourceUpdateQueueKey;
     
     dispatch_queue_t _mapSourceUpdateQueue;
     BOOL _mapSourceInvalidated;
+    std::atomic_bool _gpxTracksRefreshScheduled;
     NSInteger _lastMapLocaleLanguageZoom;
     CGFloat _contentScaleFactor;
     
@@ -285,6 +287,7 @@ static char kMapSourceUpdateQueueKey;
     _webClient = std::make_shared<OAWebClient>();
     _mapSourceUpdateQueue = dispatch_queue_create("net.osmand.maps.map-source-update", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_mapSourceUpdateQueue, &kMapSourceUpdateQueueKey, &kMapSourceUpdateQueueKey, NULL);
+    _gpxTracksRefreshScheduled = false;
     _lastMapLocaleLanguageZoom = NSNotFound;
 
     _moveTouchLocations = [NSMutableArray array];
@@ -499,6 +502,11 @@ static char kMapSourceUpdateQueueKey;
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
 
+    // Apply screen-dependent limits here so OAAppData initialization does not wait for the main queue.
+    int minValidZoom = [OAZoom getMinValidZoom];
+    if (_app.data.mapLastViewedState.zoom < minValidZoom)
+        _app.data.mapLastViewedState.zoom = minValidZoom;
+
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     if (_app.initialURLMapState)
     {
@@ -514,7 +522,7 @@ static char kMapSourceUpdateQueueKey;
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
 
-        float zoom = MAX([OAZoom getMinValidZoom], _app.data.mapLastViewedState.zoom);
+        float zoom = _app.data.mapLastViewedState.zoom;
         _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
@@ -2315,7 +2323,13 @@ static char kMapSourceUpdateQueueKey;
 
 - (void) onUpdateGpxTracks
 {
+    // Every finished track load fires this, so a burst of N tracks used to queue N full rebuilds
+    if (_gpxTracksRefreshScheduled.exchange(true))
+        return;
+
     dispatch_async(dispatch_get_main_queue(), ^{
+        // Cleared before the rebuild, so an update arriving during it still schedules the next one
+        _gpxTracksRefreshScheduled.store(false);
         if (!self.mapViewLoaded)
         {
             _mapSourceInvalidated = YES;
@@ -4534,24 +4548,35 @@ static char kMapSourceUpdateQueueKey;
                                             endPos:endPos
                                           analysis:analysis
                                            segment:segment];
-    if (rect.left != 0 && rect.right != 0)
-    {
-        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        CGPoint mapPoint;
-        [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+    [self fitTrackOnMapWithRect:rect
+                       location:location
+                       forceFit:forceFit
+               trackChartHelper:trackChartHelper];
+}
 
-        if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
-        {
-            [trackChartHelper.delegate centerMapOnBBox:rect];
-        }
-        else if (CLLocationCoordinate2DIsValid(location)
-                 && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
-        {
-            if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
-                [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
-            [self goToPosition:[OANativeUtilities convertFromPointI:point]
-                      animated:YES];
-        }
+- (void)fitTrackOnMapWithRect:(OASKQuadRect *)rect
+                     location:(CLLocationCoordinate2D)location
+                     forceFit:(BOOL)forceFit
+             trackChartHelper:(TrackChartHelper *)trackChartHelper
+{
+    if (rect.left == 0 || rect.right == 0)
+        return;
+
+    auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+    CGPoint mapPoint;
+    [self.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+    if (forceFit && [trackChartHelper.delegate respondsToSelector:@selector(centerMapOnBBox:)])
+    {
+        [trackChartHelper.delegate centerMapOnBBox:rect];
+    }
+    else if (CLLocationCoordinate2DIsValid(location)
+             && !CGRectContainsPoint(trackChartHelper.screenBBox, mapPoint))
+    {
+        if (!trackChartHelper.isLandscape && [trackChartHelper.delegate respondsToSelector:@selector(adjustViewPort:)])
+            [trackChartHelper.delegate adjustViewPort:trackChartHelper.isLandscape];
+        [self goToPosition:[OANativeUtilities convertFromPointI:point]
+                  animated:YES];
     }
 }
 

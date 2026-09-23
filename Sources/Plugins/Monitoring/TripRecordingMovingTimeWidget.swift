@@ -36,6 +36,10 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func storedWidgetState() -> OAWidgetState? {
+        widgetState
+    }
     
     @discardableResult override func updateInfo() -> Bool {
         super.updateInfo()
@@ -46,7 +50,7 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
             let formatted = OAOsmAndFormatter.getFormattedDurationShort(Double(timeMoving) / 1000, fullForm: false)
             let isHourOrMore = timeMoving >= Self.oneHourMillis
             let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
-            let isSmallSidePanel = widgetSizeStyle == .small && getPanel()?.isPanelVertical == false
+            let isSmallSidePanel = widgetSizeStyle == .small && widgetPanel()?.isPanelVertical == false
             setText(formatted, subtext: isSmallSidePanel ? nil : localizedString(unitKey))
         }
         

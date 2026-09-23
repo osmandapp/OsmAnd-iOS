@@ -42,7 +42,7 @@ extension OABaseWidgetView {
         }
         
         func configureMenu() -> UIMenu? {
-            guard let widgetInfo = getWidgetInfo() else {
+            guard let widgetInfo = widgetInfo() else {
                 return nil
             }
             let isPanelVertical = widgetInfo.widgetPanel.isPanelVertical
@@ -78,9 +78,9 @@ extension OABaseWidgetView {
     }
     
     private func showAddWidgetController(addToNext: Bool, selectedWidget: String) {
-        guard let widgetInfo = getWidgetInfo() else { return }
+        guard let widgetInfo = widgetInfo() else { return }
         
-        let vc = WidgetGroupListViewController()
+        let vc = WidgetGroupListViewController(screenLayoutMode: widgetInfo.screenLayoutMode)
         vc.widgetPanel = widgetInfo.widgetPanel
         vc.addToNext = addToNext
         vc.selectedWidget = selectedWidget
@@ -88,7 +88,7 @@ extension OABaseWidgetView {
     }
     
     private func showWidgetConfiguration() {
-        guard let widgetInfo = getWidgetInfo(),
+        guard let widgetInfo = widgetInfo(),
         let vc = WidgetConfigurationViewController() else { return }
         
         vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
@@ -101,7 +101,7 @@ extension OABaseWidgetView {
     }
 
     private func showDeleteWidgetAlert() {
-        guard let widgetInfo = getWidgetInfo() else { return }
+        guard let widgetInfo = widgetInfo() else { return }
         let alert = WidgetUtils.deleteWidgetAlert(with: OAAppSettings.sharedManager().applicationMode.get(), widgetInfo: widgetInfo)
         OARootViewController.instance().navigationController?.present(alert, animated: true)
     }

@@ -172,9 +172,9 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 
 - (BOOL)shouldLoadFileAtPath:(NSString *)filePath
 {
-    return [[NSFileManager defaultManager] fileExistsAtPath:filePath]
-           && ![self containsGpxFileWith:filePath]
-           && ![_loadingGPXPaths containsObject:filePath];
+    return ![self containsGpxFileWith:filePath]
+           && ![_loadingGPXPaths containsObject:filePath]
+           && [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
 - (void)removeFilePathFromLoadingQueue:(NSString *)filePath

@@ -11,16 +11,28 @@ import Foundation
 @objc(OAMapWidgetsFactory)
 final class MapWidgetsFactory: NSObject {
     
-    func createMapWidget(widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
-        createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
+    func createMapWidget(widgetType: WidgetType, appMode: OAApplicationMode? = nil, panel: WidgetsPanel? = nil, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
+        createMapWidget(customId: nil, widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
     }
     
-    func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
-        createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
+    func createMapWidget(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode? = nil, panel: WidgetsPanel? = nil, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
+        var params = widgetParams
+        if let panel {
+            var panelParams = params ?? [:]
+            panelParams[kWidgetPanelKey] = panel
+            params = panelParams
+        }
+        let widget = createMapWidgetImpl(customId: customId,
+                                         widgetType: widgetType,
+                                         appMode: appMode ?? OAAppSettings.sharedManager().applicationMode.get(),
+                                         widgetParams: params)
+        if let panel {
+            widget?.panel = panel
+        }
+        return widget
     }
     
-    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
-        let appMode = OAAppSettings.sharedManager().applicationMode.get()
+    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
         switch widgetType {
         case .nextTurn:
             return OANextTurnWidget(horisontalMini: false, nextNext: false, customId: customId, appMode: appMode, widgetParams: widgetParams)

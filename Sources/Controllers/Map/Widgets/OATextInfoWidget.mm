@@ -184,8 +184,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     ]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_imageView.heightAnchor constraintEqualToConstant:imageSide],
-        [_imageView.widthAnchor constraintEqualToConstant:imageSide],
+        [_imageView.heightAnchor constraintEqualToConstant:imageSide]
     ]];
 }
 
@@ -697,7 +696,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
     
-    if (![[self getWidgetPanel] isPanelVertical])
+    if (![[self widgetPanel] isPanelVertical])
     {
         self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
         [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
@@ -980,7 +979,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     label.outlineWidth = 0.0;
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+- (OATableDataModel *_Nullable)settingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     OATableDataModel *data = [[OATableDataModel alloc] init];
     OATableSectionData *section = [data createNewSection];
@@ -1008,7 +1007,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     return data;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
+- (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams
 {
     if ([widgetsPanel isPanelVertical])
         return YES;
@@ -1022,6 +1021,16 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 {
     _appMode = appMode;
     _customId = id;
+    self.panel = widgetParams[kWidgetPanelKey];
+    if (!self.panel)
+    {
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
+        self.panel = [self.widgetType panel:id.length > 0 ? id : self.widgetType.id
+                                   appMode:appMode
+                          screenLayoutMode:screenLayoutMode];
+    }
     _showIconPref = [self registerShowIconPref:id];
     self.widgetSizePref = [self registerWidgetSizePref:id];
     
@@ -1043,13 +1052,12 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
 }
 
-- (OAWidgetsPanel *)getWidgetPanel
+- (WidgetsPanel *)widgetPanel
 {
-    OAMapWidgetInfo *widgetInfo = [self getWidgetInfo];
-    return widgetInfo.widgetPanel;
+    return self.panel;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -1060,7 +1068,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:[[self getWidgetPanel] isPanelVertical] || self.widgetType.getPanel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
+
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId
+                                                                   defValue:self.panel.isPanelVertical ? EOAWidgetSizeStyleMedium : EOAWidgetSizeStyleSmall];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId
@@ -1074,6 +1084,26 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 - (OAApplicationMode *)getAppMode
 {
     return _appMode;
+}
+
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    [super copySettingsFromMode:fromAppMode appMode:appMode customId:customId];
+    if (!self.widgetType)
+        return;
+
+    if (self.widgetSizePref)
+    {
+        OACommonWidgetSizeStyle *sizePreference = [self registerWidgetSizePref:customId];
+        [sizePreference set:[self.widgetSizePref get:fromAppMode] mode:appMode];
+    }
+    if (_showIconPref)
+    {
+        OACommonBoolean *showIconPreference = [self registerShowIconPref:customId];
+        [showIconPreference set:[_showIconPref get:fromAppMode] mode:appMode];
+    }
 }
 
 @end

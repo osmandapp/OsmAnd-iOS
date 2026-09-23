@@ -17,6 +17,14 @@ import DGCharts
     func showCurrentStatisticsLocation(_ trackChartPoints: TrackChartPoints)
 }
 
+struct TrackChartState {
+    let selectedX: Double
+    let visibleXRange: ClosedRange<Double>
+    let axisType: GPXDataSetAxisType
+    let axisDivisor: Double
+    let includesSegmentGaps: Bool
+}
+
 @objcMembers
 final class TrackChartPoints: NSObject {
     var xAxisPoints = [CLLocation]()
@@ -40,6 +48,13 @@ final class TrackChartHelper: NSObject {
     private var trackChartPoints: TrackChartPoints?
     private var chartHighlightPos: Double = -1
     private var xAxisPoints = [CLLocation]()
+    private var cachedDistanceLayoutAnalysis: GpxTrackAnalysis?
+    private var cachedDistanceLayoutPointCount = 0
+    private var cachedDistanceLayoutTotalDistance: Double = -1
+    @nonobjc private var cachedDistanceLayout: GpxUIHelper.RouteChartDistanceLayout?
+    private var cachedPointsSegment: TrkSegment?
+    private var cachedSourcePointCount = 0
+    private var cachedRoutePoints: [WptPt]?
 
     init(gpxDoc: GpxFile) {
         self.gpxDoc = gpxDoc
@@ -79,12 +94,23 @@ final class TrackChartHelper: NSObject {
         return analysis
     }
 
+    func invalidateRouteChartData() {
+        cachedDistanceLayoutAnalysis = nil
+        cachedDistanceLayoutPointCount = 0
+        cachedDistanceLayoutTotalDistance = -1
+        cachedDistanceLayout = nil
+        cachedPointsSegment = nil
+        cachedSourcePointCount = 0
+        cachedRoutePoints = nil
+    }
+
     func changeChartTypes(_ types: [Int],
                           selectedXAxisMode: GPXDataSetAxisType,
                           chart: ElevationChart,
                           analysis: GpxTrackAnalysis,
                           statsModeCell: OARouteStatisticsModeCell?,
-                          overrideIsGeneralTrack: Bool) {
+                          overrideIsGeneralTrack: Bool,
+                          useRouteDistanceLayout: Bool) {
         var secondType: GPXDataSetType = .none
         if types.count == 2 {
             if types.last == GPXDataSetType.speed.rawValue && !analysis.isSpeedSpecified() {
@@ -93,7 +119,8 @@ final class TrackChartHelper: NSObject {
                                  chart: chart,
                                  analysis: analysis,
                                  statsModeCell: statsModeCell,
-                                 overrideIsGeneralTrack: overrideIsGeneralTrack)
+                                 overrideIsGeneralTrack: overrideIsGeneralTrack,
+                                 useRouteDistanceLayout: useRouteDistanceLayout)
             } else {
                 if let statsModeCell {
                     statsModeCell.modeButton.setTitle(
@@ -108,17 +135,27 @@ final class TrackChartHelper: NSObject {
             statsModeCell?.modeButton.setTitle(OAGPXDataSetType.getTitle(types.first ?? GPXDataSetType.none.rawValue),
                                                for: .normal)
         }
-        
+
         statsModeCell?.rightModeButton.setTitle(selectedXAxisMode.getName(), for: .normal)
-        let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
-        GpxUIHelper.refreshLineChart(
-            chartView: chart,
-            analysis: analysis,
-            firstType: GPXDataSetType(rawValue: types.first!)!,
-            secondType: secondType,
-            axisType: selectedXAxisMode,
-            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx, overrideIsGeneralTrack: overrideIsGeneralTrack)
-        )
+        if useRouteDistanceLayout {
+            GpxUIHelper.refreshRouteLineChart(chartView: chart,
+                                              analysis: analysis,
+                                              firstType: GPXDataSetType(rawValue: types.first!)!,
+                                              secondType: secondType,
+                                              axisType: selectedXAxisMode)
+        } else {
+            let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
+            GpxUIHelper.refreshLineChart(
+                chartView: chart,
+                analysis: analysis,
+                firstType: GPXDataSetType(rawValue: types.first!)!,
+                secondType: secondType,
+                axisType: selectedXAxisMode,
+                calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc,
+                                                         gpxDataItem: gpx,
+                                                         overrideIsGeneralTrack: overrideIsGeneralTrack)
+            )
+        }
     }
 
     func refreshChart(_ chart: LineChartView,
@@ -166,6 +203,8 @@ final class TrackChartHelper: NSObject {
                                         segment: segment)
             if let location {
                 trackChartPoints?.highlightedPoint = location.coordinate
+            } else if (chart.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet)?.includesSegmentGaps == true {
+                trackChartPoints?.highlightedPoint = kCLLocationCoordinate2DInvalid
             }
             if let trackChartPoints {
                 delegate?.showCurrentHighlitedLocation(trackChartPoints)
@@ -209,6 +248,42 @@ final class TrackChartHelper: NSObject {
         }
     }
 
+    @nonobjc func refreshChart(_ state: TrackChartState,
+                               fitTrack: Bool,
+                               forceFit: Bool,
+                               analysis: GpxTrackAnalysis,
+                               segment: TrkSegment) {
+        guard let gpxDoc else { return }
+        prepareTrackChartPoints(analysis: analysis, segment: segment, gpxDoc: gpxDoc)
+        chartHighlightPos = adjustedHighlightPosition(state.selectedX, visibleRange: state.visibleXRange)
+        let location = location(at: chartHighlightPos,
+                                axisType: state.axisType,
+                                axisDivisor: state.axisDivisor,
+                                analysis: analysis,
+                                segment: segment,
+                                joinSegments: state.includesSegmentGaps,
+                                useAccumulatedDistanceForGeneralSegment: state.includesSegmentGaps)
+        trackChartPoints?.highlightedPoint = location?.coordinate ?? kCLLocationCoordinate2DInvalid
+        if let trackChartPoints {
+            delegate?.showCurrentHighlitedLocation(trackChartPoints)
+        }
+
+        if let location, fitTrack {
+            let rect = rect(startPos: state.visibleXRange.lowerBound,
+                            endPos: state.visibleXRange.upperBound,
+                            axisType: state.axisType,
+                            axisDivisor: state.axisDivisor,
+                            analysis: analysis,
+                            segment: segment,
+                            useAccumulatedDistanceForGeneralSegment: state.includesSegmentGaps)
+            let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+            mapViewController.fitTrack(rect: rect,
+                                       location: location.coordinate,
+                                       forceFit: forceFit,
+                                       trackChartHelper: self)
+        }
+    }
+
     func getXAxisPoints(_ chart: LineChartView,
                         analysis: GpxTrackAnalysis,
                         segment: TrkSegment?) -> [CLLocation] {
@@ -240,20 +315,41 @@ final class TrackChartHelper: NSObject {
                  endPos: Float,
                  analysis: GpxTrackAnalysis,
                  segment: TrkSegment?) -> KQuadRect {
-        var left: Double = 0, right: Double = 0
-        var top: Double = 0, bottom: Double = 0
-
         guard let segment,
               let lineData = chart.lineData,
               !lineData.dataSets.isEmpty,
               let dataSet = lineData.dataSets.first else {
-            return KQuadRect(left: left, top: top, right: right, bottom: bottom)
+            return KQuadRect(left: 0, top: 0, right: 0, bottom: 0)
+        }
+        return rect(startPos: Double(startPos),
+                    endPos: Double(endPos),
+                    axisType: GpxUIHelper.getDataSetAxisType(dataSet: dataSet),
+                    axisDivisor: dataSet.getDivX(),
+                    analysis: analysis,
+                    segment: segment,
+                    useAccumulatedDistanceForGeneralSegment: (dataSet as? GpxUIHelper.OrderedLineDataSet)?.includesSegmentGaps == true)
+    }
+
+    func updateTrackChartPoints(invalidate: Bool) {
+        if trackChartPoints == nil {
+            trackChartPoints = TrackChartPoints()
         }
 
-        let axisType = GpxUIHelper.getDataSetAxisType(dataSet: dataSet)
+        trackChartPoints?.axisPointsInvalidated = invalidate
+    }
+
+    private func rect(startPos: Double,
+                      endPos: Double,
+                      axisType: GPXDataSetAxisType,
+                      axisDivisor: Double,
+                      analysis: GpxTrackAnalysis,
+                      segment: TrkSegment,
+                      useAccumulatedDistanceForGeneralSegment: Bool) -> KQuadRect {
+        var left: Double = 0, right: Double = 0
+        var top: Double = 0, bottom: Double = 0
         if axisType == .time || axisType == .timeOfDay {
-            let startTime = startPos * 1000
-            let endTime = endPos * 1000
+            let startTime = Float(startPos * 1000)
+            let endTime = Float(endPos * 1000)
             for point in segment.points {
                 if let p = point as? WptPt {
                     if Float(p.time - analysis.startTime) >= startTime,
@@ -273,8 +369,44 @@ final class TrackChartHelper: NSObject {
                 }
             }
         } else {
-            let startDistance = Double(startPos) * dataSet.getDivX()
-            let endDistance = Double(endPos) * dataSet.getDivX()
+            let startDistance = startPos * axisDivisor
+            let endDistance = endPos * axisDivisor
+            if useAccumulatedDistanceForGeneralSegment, segment.isGeneralSegment() {
+                let points = routePoints(for: segment)
+                let distanceLayout = routeDistanceLayout(for: analysis)
+                guard let pointDistances = GpxUtils.routePointDistances(points,
+                                                                       analysisDistances: distanceLayout?.pointDistances) else {
+                    return KQuadRect(left: 0, top: 0, right: 0, bottom: 0)
+                }
+                var hasBounds = false
+                let includePoint: (WptPt) -> Void = { point in
+                    if hasBounds {
+                        left = min(left, point.getLongitude())
+                        right = max(right, point.getLongitude())
+                        top = max(top, point.getLatitude())
+                        bottom = min(bottom, point.getLatitude())
+                    } else {
+                        left = point.getLongitude()
+                        right = point.getLongitude()
+                        top = point.getLatitude()
+                        bottom = point.getLatitude()
+                        hasBounds = true
+                    }
+                }
+                for index in points.indices {
+                    let distance = pointDistances[index]
+                    if distance >= startDistance, distance <= endDistance {
+                        includePoint(points[index])
+                    }
+                    if index > 0,
+                       pointDistances[index - 1] <= endDistance,
+                       distance >= startDistance {
+                        includePoint(points[index - 1])
+                        includePoint(points[index])
+                    }
+                }
+                return KQuadRect(left: left, top: top, right: right, bottom: bottom)
+            }
             var previousSplitDistance: Double = 0
             for i in 0..<segment.points.count {
                 if let currentPoint = segment.points[i] as? WptPt {
@@ -303,13 +435,34 @@ final class TrackChartHelper: NSObject {
         }
         return KQuadRect(left: left, top: top, right: right, bottom: bottom)
     }
-    
-    func updateTrackChartPoints(invalidate: Bool) {
-        if trackChartPoints == nil {
-            trackChartPoints = TrackChartPoints()
-        }
 
-        trackChartPoints?.axisPointsInvalidated = invalidate
+    private func routePoints(for segment: TrkSegment) -> [WptPt] {
+        let pointCount = segment.points.count
+        if cachedPointsSegment === segment,
+           cachedSourcePointCount == pointCount,
+           let cachedRoutePoints {
+            return cachedRoutePoints
+        }
+        let points = segment.points.compactMap { $0 as? WptPt }
+        cachedPointsSegment = segment
+        cachedSourcePointCount = pointCount
+        cachedRoutePoints = points
+        return points
+    }
+
+    @nonobjc private func routeDistanceLayout(for analysis: GpxTrackAnalysis) -> GpxUIHelper.RouteChartDistanceLayout? {
+        let pointCount = analysis.pointAttributes.count
+        let totalDistance = Double(analysis.totalDistance)
+        if cachedDistanceLayoutAnalysis === analysis,
+           cachedDistanceLayoutPointCount == pointCount,
+           cachedDistanceLayoutTotalDistance == totalDistance {
+            return cachedDistanceLayout
+        }
+        cachedDistanceLayoutAnalysis = analysis
+        cachedDistanceLayoutPointCount = pointCount
+        cachedDistanceLayoutTotalDistance = totalDistance
+        cachedDistanceLayout = GpxUIHelper.routeChartDistanceLayout(analysis: analysis)
+        return cachedDistanceLayout
     }
 
     private func getLocationAtPos(_ chart: LineChartView,
@@ -320,8 +473,57 @@ final class TrackChartHelper: NSObject {
         let gpx = OAGPXDatabase.sharedDb().getGPXItem(gpxDoc.path)
         return GpxUtils.getLocationAtPos(chart,
                                          gpxFile: gpxDoc,
+                                         analysis: analysis,
                                          segment: segment,
                                          pos: Float(pos),
                                          joinSegments: gpx?.joinSegments ?? false)
+    }
+
+    private func location(at position: Double,
+                          axisType: GPXDataSetAxisType,
+                          axisDivisor: Double,
+                          analysis: GpxTrackAnalysis,
+                          segment: TrkSegment,
+                          joinSegments: Bool,
+                          useAccumulatedDistanceForGeneralSegment: Bool) -> CLLocation? {
+        guard let gpxDoc else { return nil }
+        let distanceLayout = useAccumulatedDistanceForGeneralSegment && segment.isGeneralSegment() && axisType == .distance
+            ? routeDistanceLayout(for: analysis)
+            : nil
+        return GpxUtils.location(at: Float(position),
+                                 axisType: axisType,
+                                 axisDivisor: axisDivisor,
+                                 gpxFile: gpxDoc,
+                                 analysis: analysis,
+                                 segment: segment,
+                                 joinSegments: joinSegments,
+                                 useAccumulatedDistanceForGeneralSegment: useAccumulatedDistanceForGeneralSegment,
+                                 distanceLayout: distanceLayout,
+                                 routePoints: distanceLayout != nil ? routePoints(for: segment) : nil)
+    }
+
+    private func prepareTrackChartPoints(analysis: GpxTrackAnalysis,
+                                         segment: TrkSegment,
+                                         gpxDoc: GpxFile) {
+        guard trackChartPoints == nil else { return }
+        let points = TrackChartPoints()
+        points.segmentColor = segment.getColor(defColor: 0)?.intValue ?? 0
+        points.gpx = gpxDoc
+        points.start = analysis.locationStart?.position ?? kCLLocationCoordinate2DInvalid
+        points.end = analysis.locationEnd?.position ?? kCLLocationCoordinate2DInvalid
+        trackChartPoints = points
+    }
+
+    private func adjustedHighlightPosition(_ position: Double,
+                                           visibleRange: ClosedRange<Double>) -> Double {
+        guard visibleRange.lowerBound != 0, visibleRange.upperBound != 0 else { return position }
+        let inset = (visibleRange.upperBound - visibleRange.lowerBound) * 0.1
+        if position < visibleRange.lowerBound {
+            return visibleRange.lowerBound + inset
+        }
+        if position > visibleRange.upperBound {
+            return visibleRange.upperBound - inset
+        }
+        return position
     }
 }

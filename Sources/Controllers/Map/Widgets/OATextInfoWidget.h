@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState, OAMapWidgetInfo;
+@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, WidgetsPanel, OATextState, OAMapWidgetInfo;
 
 extern NSString * const kSizeStylePref;
 
@@ -75,7 +75,7 @@ extern NSString * const kSizeStylePref;
 - (BOOL)isMetricSystemDepended;
 - (BOOL)isAltitudeMetricDepended;
 - (BOOL)isAngularUnitsDepended;
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams;
+- (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> * _Nullable)widgetConfigurationParams;
 - (BOOL)isEnabledTextInfoComponents;
 - (void)setMetricSystemDepended:(BOOL)newValue;
 - (void)setAltitudeMetricDepended:(BOOL)newValue;
@@ -96,7 +96,7 @@ extern NSString * const kSizeStylePref;
 - (void)refreshLayout;
 - (void)configureShadowButtonMenu;
 - (nullable OAApplicationMode *)getAppMode;
-- (nullable OAWidgetsPanel *)getWidgetPanel;
+- (nullable WidgetsPanel *)widgetPanel;
 
 @end
 

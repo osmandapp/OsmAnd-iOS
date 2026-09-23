@@ -148,10 +148,52 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 @property (nonatomic, assign) BOOL checkApproximation;
-- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
+- (NSArray<OAWptPtPair *> *)getOrderedRoadSegmentDataKeys;
 - (void)removeUnusedRoadSegmentData;
 - (void)updateSegmentsForSnap:(BOOL)both;
 - (BOOL)needDuplicatePoint:(NSArray<OASGpxPoint *> *)gpxPoints index:(NSInteger)index;
+@end
+
+@implementation OAWptPtPair
+{
+    NSUInteger _hash;
+}
+
++ (instancetype)pairWithFirst:(nullable OASWptPt *)first second:(nullable OASWptPt *)second
+{
+    OAWptPtPair *pair = [[OAWptPtPair alloc] init];
+    pair->_first = first;
+    pair->_second = second;
+    // taken once: WptPt is mutable, and a key whose hash moves after it was stored can no longer be
+    // found in the bucket it went into, so the dictionary could neither reach nor remove it
+    pair->_hash = (first ? first.hash : 0) ^ (second ? second.hash : 0);
+    return pair;
+}
+
+// android.util.Pair: equal when both members are equal, hashed by their hashes xored
+- (BOOL)isEqual:(id)object
+{
+    if (self == object)
+        return YES;
+    if (![object isKindOfClass:OAWptPtPair.class])
+        return NO;
+
+    OAWptPtPair *other = (OAWptPtPair *)object;
+    return (_first == other.first || [_first isEqual:other.first])
+        && (_second == other.second || [_second isEqual:other.second]);
+}
+
+- (NSUInteger)hash
+{
+    return _hash;
+}
+
+// a dictionary copies its keys; there is nothing to copy in an immutable pair
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
 @end
 
 @implementation OAMeasurementEditingContext
@@ -167,7 +209,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     NSInteger _pointsToCalculateSize;
     
     OARouteCalculationParams *_params;
-    NSArray<OASWptPt *> *_currentPair;
+    OAWptPtPair *_currentPair;
     
     BOOL _insertIntermediates;
     BOOL _batchPointUpdates;
@@ -268,6 +310,36 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return _gpxData != nil && _gpxData.gpxFile != nil && _gpxData.gpxFile.hasRtePt;
 }
 
+- (BOOL)isInMultiProfileMode
+{
+    NSMutableSet *profiles = [NSMutableSet new];
+    NSMutableArray<OASTrkSegment *> *allSegments = [NSMutableArray new];
+    [allSegments addObjectsFromArray:_beforeSegments];
+    [allSegments addObjectsFromArray:_afterSegments];
+    for (OASTrkSegment *segment in allSegments)
+    {
+        NSArray<OASWptPt *> *points = segment.points;
+        NSInteger pointsCount = (NSInteger) points.count;
+        if (pointsCount == 0)
+            continue;
+
+        for (NSInteger i = 0; i < pointsCount / 2 + 1; i++)
+        {
+            OASWptPt *left = points[i];
+            NSInteger rightIdx = pointsCount - 1 - i;
+            OASWptPt *right = points[rightIdx];
+            if (!left.isGap && i + 1 < pointsCount)
+                [profiles addObject:left.getProfileType ?: NSNull.null];
+            if (!right.isGap && rightIdx + 1 < pointsCount)
+                [profiles addObject:right.getProfileType ?: NSNull.null];
+            if (profiles.count >= 2)
+                return YES;
+        }
+    }
+
+    return NO;
+}
+
 - (BOOL) hasSavedRoute
 {
     return _gpxData != nil && _gpxData.gpxFile != nil && _gpxData.gpxFile.tracks.count > 0;
@@ -290,7 +362,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         {
             OASWptPt *first = points[i];
             OASWptPt *second = points[i + 1];
-            OARoadSegmentData *data = _roadSegmentData[@[first, second]];
+            OARoadSegmentData *data = _roadSegmentData[[OAWptPtPair pairWithFirst:first second:second]];
             
             if (data == nil)
             {
@@ -324,7 +396,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData
 {
     NSMutableArray<OARoadSegmentData *> *data = [NSMutableArray array];
-    for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
+    for (OAWptPtPair *pair in [self getOrderedRoadSegmentDataKeys])
     {
         OARoadSegmentData *segmentData = _roadSegmentData[pair];
         if (segmentData != nil)
@@ -610,7 +682,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         _before.points = points;
         
         if (point)
-            [_roadSegmentData removeObjectForKey:[NSArray arrayWithObjects:point, nextPoint, nil]];
+            [_roadSegmentData removeObjectForKey:[OAWptPtPair pairWithFirst:point second:nextPoint]];
         [self updateSegmentsForSnap:NO];
     }
 }
@@ -716,7 +788,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     for (OASTrkSegment *segment in segments)
     {
         NSInteger i = [segment.points indexOfObject:selectedPoint];
-        if (i != -1)
+        if (i != NSNotFound)
         {
             NSInteger segmentPosition = selectedPointPosition - count;
             return first ? segmentPosition == 0 : segmentPosition == (NSInteger) segment.points.count - 1;
@@ -750,16 +822,16 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return [OAApplicationMode valueOfStringKey:profileType def:OAApplicationMode.DEFAULT];
 }
 
-- (NSArray<NSArray<OASWptPt *> *> *) getPointsToCalculate
+- (NSArray<OAWptPtPair *> *) getPointsToCalculate
 {
-    NSMutableArray<NSArray<OASWptPt *> *> *res = [NSMutableArray new];
+    NSMutableArray<OAWptPtPair *> *res = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
         for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
         {
             OASWptPt *startPoint = points[i];
             OASWptPt *endPoint = points[i + 1];
-            NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
+            OAWptPtPair *pair = [OAWptPtPair pairWithFirst:startPoint second:endPoint];
             
             if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
                 [res addObject:pair];
@@ -768,14 +840,14 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return res;
 }
 
-- (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys
+- (NSArray<OAWptPtPair *> *)getOrderedRoadSegmentDataKeys
 {
-    NSMutableArray<NSArray<OASWptPt *> *> *keys = [NSMutableArray new];
+    NSMutableArray<OAWptPtPair *> *keys = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
         for (NSInteger i = 0; i < ((NSInteger)points.count) - 1; i++)
         {
-            [keys addObject:@[points[i], points[i + 1]]];
+            [keys addObject:[OAWptPtPair pairWithFirst:points[i] second:points[i + 1]]];
         }
     }
     return keys;
@@ -783,9 +855,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (void)removeUnusedRoadSegmentData
 {
-    NSSet<NSArray<OASWptPt *> *> *usedPairs = [NSSet setWithArray:[self getOrderedRoadSegmentDataKeys]];
-    NSMutableArray<NSArray<OASWptPt *> *> *unusedPairs = [NSMutableArray array];
-    for (NSArray<OASWptPt *> *pair in _roadSegmentData.allKeys)
+    NSSet<OAWptPtPair *> *usedPairs = [NSSet setWithArray:[self getOrderedRoadSegmentDataKeys]];
+    NSMutableArray<OAWptPtPair *> *unusedPairs = [NSMutableArray array];
+    for (OAWptPtPair *pair in _roadSegmentData.allKeys)
     {
         if (![usedPairs containsObject:pair])
             [unusedPairs addObject:pair];
@@ -871,7 +943,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             {
                 OASWptPt *point = segmentPoints[i];
                 OASWptPt *nextpPoint = segmentPoints[i + 1];
-                NSArray<OASWptPt *> *pair = @[point, nextpPoint];
+                OAWptPtPair *pair = [OAWptPtPair pairWithFirst:point second:nextpPoint];
                 
                 OARoadSegmentData *data = _roadSegmentData[pair];
                 NSArray<OASWptPt *> *pts = data != nil ? data.gpxPoints : nil;
@@ -932,10 +1004,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         NSString *modeKey = mode.stringKey;
         BOOL isDefaultMode = [modeKey isEqualToString:DEFAULT_APP_MODE.stringKey];
 
-        for (NSArray<OASWptPt *> *pair in [self getOrderedRoadSegmentDataKeys])
+        for (OAWptPtPair *pair in [self getOrderedRoadSegmentDataKeys])
         {
-            OASWptPt *first = pair[0];
-            OASWptPt *second = pair[1];
+            OASWptPt *first = pair.first;
+            OASWptPt *second = pair.second;
             NSString *pointModeKey = [first getProfileType];
 
             BOOL recalculateStraightSegment = isDefaultMode &&
@@ -979,13 +1051,13 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     
     for (NSInteger i = 0; i < (NSInteger) routePoints.count - 1; i++)
     {
-        NSArray<OASWptPt *> *pair = @[routePoints[i], routePoints[i + 1]];
-        NSInteger startIndex = pair.firstObject.getTrkPtIndex;
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:routePoints[i] second:routePoints[i + 1]];
+        NSInteger startIndex = pair.first.getTrkPtIndex;
         if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.count)
-            startIndex = [self findPointIndex:pair.firstObject points:points firstIndex:prevPointIndex];
-        NSInteger endIndex = pair.lastObject.getTrkPtIndex;
+            startIndex = [self findPointIndex:pair.first points:points firstIndex:prevPointIndex];
+        NSInteger endIndex = pair.second.getTrkPtIndex;
         if (endIndex < 0 || endIndex < startIndex || endIndex >= points.count)
-            endIndex = [self findPointIndex:pair.lastObject points:points firstIndex:startIndex];
+            endIndex = [self findPointIndex:pair.second points:points firstIndex:startIndex];
         if (startIndex >= 0 && endIndex >= 0)
         {
             NSMutableArray<OASWptPt *> *pairPoints = [NSMutableArray new];
@@ -1014,8 +1086,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                     k -= abs([seg getEndPointIndex] - [seg getStartPointIndex]);
                 }
             }
-            OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:pair.firstObject.getProfileType def:OAApplicationMode.DEFAULT];
-            _roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:appMode start:pair.firstObject end:pair.lastObject points:pairPoints segments:pairSegments];
+            OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:pair.first.getProfileType def:OAApplicationMode.DEFAULT];
+            _roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:appMode start:pair.first end:pair.second points:pairPoints segments:pairSegments];
         }
     }
     return routePoints;
@@ -1117,9 +1189,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 				wp2.lon = gp2.loc.longitude;
 			}
 			[wp2 setProfileTypeProfileType:mode.stringKey];
-			NSArray<OASWptPt *> *pair = @[wp1, wp2];
+			OAWptPtPair *pair = [OAWptPtPair pairWithFirst:wp1 second:wp2];
 			if (_roadSegmentData[pair] == nil)
-				_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.firstObject end:pair.lastObject points:points segments:segments];
+				_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:_appMode start:pair.first end:pair.second points:points segments:segments];
 		}
 		if (lastGpxPoint)
 			break;
@@ -1147,8 +1219,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
 	if (originalPoints.count > 1)
 	{
-		NSInteger firstPointIndex = [_before.points indexOfObject:originalPoints.firstObject];
-		NSInteger lastPointIndex = [_before.points indexOfObject:originalPoints.lastObject];
+		// by identity: isEqual: is by coordinates, and a track can hold the same point in two segments,
+		// or a loop segment that ends where it starts. The original points are this context's own
+		// objects, and neither a segment that failed to approximate nor a routed one shifts them
+		NSInteger firstPointIndex = [_before.points indexOfObjectIdenticalTo:originalPoints.firstObject];
+		NSInteger lastPointIndex = [_before.points indexOfObjectIdenticalTo:originalPoints.lastObject];
 		NSMutableArray<OASWptPt *> *newPoints = [NSMutableArray array];
 		if (firstPointIndex != NSNotFound && lastPointIndex != NSNotFound)
 		{
@@ -1279,7 +1354,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
 {
-    NSArray<NSArray<OASWptPt *> *> *pointsToCalculate = [self getPointsToCalculate];
+    NSArray<OAWptPtPair *> *pointsToCalculate = [self getPointsToCalculate];
     if (pointsToCalculate.count == 0)
         return nil;
     if (resetCounter)
@@ -1287,10 +1362,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         _calculatedPairs = 0;
         _pointsToCalculateSize = pointsToCalculate.count;
     }
-    NSArray<OASWptPt *> *currentPair = pointsToCalculate.firstObject;
-    CLLocation *start = [[CLLocation alloc] initWithLatitude:currentPair.firstObject.getLatitude longitude:currentPair.firstObject.getLongitude];
+    OAWptPtPair *currentPair = pointsToCalculate.firstObject;
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:currentPair.first.getLatitude longitude:currentPair.first.getLongitude];
     
-    CLLocation *end = [[CLLocation alloc] initWithLatitude:currentPair.lastObject.getLatitude longitude:currentPair.lastObject.getLongitude];
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:currentPair.second.getLatitude longitude:currentPair.second.getLongitude];
     
 //    RouteRegion reg = new RouteRegion();
 //    reg.initRouteEncodingRule(0, "highway", RouteResultPreparation.UNMATCHED_HIGHWAY_TYPE);
@@ -1299,7 +1374,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     params.inSnapToRoadMode = YES;
     params.start = start;
     
-    OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:currentPair.firstObject.getProfileType def:OAApplicationMode.DEFAULT];
+    OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:currentPair.first.getProfileType def:OAApplicationMode.DEFAULT];
     params.end = end;
     [OARoutingHelper applyApplicationSettings:params appMode:appMode];
     params.mode = appMode;
@@ -1427,7 +1502,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     NSMutableArray<NSNumber *> *routePointIndexes = [NSMutableArray arrayWithObject:@(0)];
     for (NSInteger i = startPointIndex; i < endPointIndex; i++)
     {
-        NSArray<OASWptPt *> *pair = @[_before.points[i], _before.points[i + 1]];
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:_before.points[i] second:_before.points[i + 1]];
         OARoadSegmentData *data = _roadSegmentData[pair];
         NSArray<OASWptPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
         NSArray<OASRouteSegmentResult *> *dataSegments = data != nil ? data.segments : @[];
@@ -1445,7 +1520,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                                                                     timestamp:timestamp];
                 [locations addObject:location];
             }
-            [pair.lastObject setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
+            [pair.second setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
             [route addObjectsFromArray:dataSegments];
             [routePointIndexes addObject:@((int) (i + 1 == endPointIndex ? locations.count - 1 : locations.count))];
         }
@@ -1476,7 +1551,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
     _calculatedPairs = 0;
     _pointsToCalculateSize = 0;
-    NSArray<OASWptPt *> *pair = _currentPair;
+    OAWptPtPair *pair = _currentPair;
     __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1509,23 +1584,23 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 #pragma mark - OARouteCalculationResultListener
 
-- (BOOL)isRoadSegmentPairUsed:(NSArray<OASWptPt *> *)pair
+- (BOOL)isRoadSegmentPairUsed:(OAWptPtPair *)pair
 {
-    if (pair.count != 2)
+    if (pair == nil)
         return NO;
 
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
         for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
         {
-            if (points[i] == pair.firstObject && points[i + 1] == pair.lastObject)
+            if (points[i] == pair.first && points[i + 1] == pair.second)
                 return YES;
         }
     }
     return NO;
 }
 
-- (BOOL)isCurrentRouteCalculationForPair:(NSArray<OASWptPt *> *)pair
+- (BOOL)isCurrentRouteCalculationForPair:(OAWptPtPair *)pair
                                     route:(OARouteCalculationResult *)route
                                     start:(CLLocation *)start
                                       end:(CLLocation *)end
@@ -1533,8 +1608,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     if (_batchPointUpdates || pair == nil || _currentPair != pair || ![self isRoadSegmentPairUsed:pair])
         return NO;
 
-    OASWptPt *startPoint = pair.firstObject;
-    OASWptPt *endPoint = pair.lastObject;
+    OASWptPt *startPoint = pair.first;
+    OASWptPt *endPoint = pair.second;
     BOOL matchesCoordinates = getDistance(startPoint.lat, startPoint.lon, start.coordinate.latitude, start.coordinate.longitude) < 1
         && getDistance(endPoint.lat, endPoint.lon, end.coordinate.latitude, end.coordinate.longitude) < 1;
     if (!matchesCoordinates)
@@ -1549,7 +1624,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                     start:(CLLocation *)start
                       end:(CLLocation *)end
 {
-    NSArray<OASWptPt *> *pair = _currentPair;
+    OAWptPtPair *pair = _currentPair;
     if (![self isCurrentRouteCalculationForPair:pair route:route start:start end:end])
     {
         __weak __typeof(self) weakSelf = self;
@@ -1597,7 +1672,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
         strongSelf->_calculatedPairs++;
         [strongSelf updateProgress:0];
-        strongSelf->_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:pair.firstObject end:pair.lastObject points:pts segments:originalRoute];
+        strongSelf->_roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:pair.first end:pair.second points:pts segments:originalRoute];
         [strongSelf updateSegmentsForSnap:YES calculateIfNeeded:NO];
         if (strongSelf.progressDelegate)
             [strongSelf.progressDelegate refresh];

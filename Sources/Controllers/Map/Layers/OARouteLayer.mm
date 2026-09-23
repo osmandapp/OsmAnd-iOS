@@ -13,6 +13,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OANativeUtilities.h"
+#import "OAUtilities.h"
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
@@ -300,7 +301,8 @@ struct DrawPathData
     auto marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
     marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(startLatLon));
     
-    OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+    NSString *routeType = OAStringFromUTF8Nullable(routeSegment->route->type.c_str());
+    OATransportStopType *type = routeType ? [OATransportStopType findType:routeType] : nil;
     NSString *resId = type != nil ? type.resId : [OATransportStopType getResId:TST_BUS];
     UIImage *origIcon = [UIImage mapSvgImageNamed:resId];
     sk_sp<SkImage> stopImg = nullptr;
@@ -335,7 +337,8 @@ struct DrawPathData
     void (^drawTransportSegmentBlock)(void) = ^{
         [self drawRouteMarkers:routeSegment];
             
-        OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+        NSString *routeType = OAStringFromUTF8Nullable(routeSegment->route->type.c_str());
+        OATransportStopType *type = routeType ? [OATransportStopType findType:routeType] : nil;
         NSString *str = [NSString stringWithUTF8String:routeSegment->route->color.c_str()];
         str = str.length == 0 ? type.renderAttr : str;
         OsmAnd::ColorARGB colorARGB;

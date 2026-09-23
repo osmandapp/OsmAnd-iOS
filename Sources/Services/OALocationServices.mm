@@ -967,7 +967,7 @@
     lon1 *= M_PI / 180.0;
     lon2 *= M_PI / 180.0;
     
-    static const double a = OASKMapUtils.shared.EARTH_RADIUS_A; // WGS84 major axis
+    static const double a = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI); // WGS84 major axis
     double b = 6356752.3142; // WGS84 semi-major axis
     double f = (a - b) / a;
     double aSqMinusBSqOverBSq = (a * a - b * b) / (b * b);

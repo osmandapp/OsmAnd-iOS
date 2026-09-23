@@ -864,7 +864,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_sphericalMap)
         return OsmAnd::Utilities::rhumbDestinationPoint(center, distance, bearing);
 
-    double angularDistance = distance / OASKMapUtils.shared.EARTH_RADIUS_A;
+    double angularDistance = distance * 2 * M_PI / OASKMapUtils.shared.EARTH_CIRCUMFERENCE;
     double latRad = [self toRadians:center.latitude];
     double lonRad = [self toRadians:center.longitude];
     double bearingRad = [self toRadians:bearing];

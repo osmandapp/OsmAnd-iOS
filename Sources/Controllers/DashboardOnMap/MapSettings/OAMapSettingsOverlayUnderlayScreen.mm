@@ -147,7 +147,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
-                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"shared_string_transparency") : OALocalizedString(@"map_transparency"),
+                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"shared_string_opacity") : OALocalizedString(@"map_opacity"),
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,

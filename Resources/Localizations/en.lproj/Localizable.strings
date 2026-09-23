@@ -1226,8 +1226,10 @@
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
 "shared_string_online_maps" = "Online maps";
-"shared_string_transparency" = "Opacity";
-"map_transparency" = "Base map opacity";
+"shared_string_transparency" = "Transparency";
+"map_transparency" = "Base map transparency";
+"shared_string_opacity" = "Opacity";
+"map_opacity" = "Base map opacity";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";

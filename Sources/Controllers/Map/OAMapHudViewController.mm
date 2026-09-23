@@ -997,6 +997,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
+    BOOL widgetPanelAppearanceChanged = NO;
+    for (NSString *key in preferenceKeys)
+    {
+        if ([key containsString:@"widget_panel_"])
+        {
+            widgetPanelAppearanceChanged = YES;
+            break;
+        }
+    }
     BOOL panelsLayoutModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
         [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]]
     ]]];
@@ -1014,7 +1023,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
     BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
-    if (!compassChanged && !colorsChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
+    if (!compassChanged && !colorsChanged && !widgetPanelAppearanceChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
         && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
         return;
@@ -1027,7 +1036,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         }
         if (colorsChanged)
             [self updateColors];
-        if (panelsLayoutModeChanged)
+        if (panelsLayoutModeChanged || widgetPanelAppearanceChanged)
             [_mapInfoController recreateControls];
         else if (screenElementsModeChanged)
             [_mapInfoController updateLayout];

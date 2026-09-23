@@ -103,7 +103,8 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
                    containerView:(ShadowPathView *)containerView
                              top:(BOOL)top
 {
-    if (_settings.isTransparentWidgets)
+    WidgetsPanel *panel = top ? WidgetsPanel.topPanel : WidgetsPanel.bottomPanel;
+    if ([self isPanelBackgroundTransparent:panel])
         containerView.direction = ShadowPathDirectionClear;
     else
         containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
@@ -431,8 +432,16 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
+                   panel:(WidgetsPanel *)panel
 {
-    view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
+    view.direction = [self isPanelBackgroundTransparent:panel] ? ShadowPathDirectionClear : direction;
+}
+
+- (BOOL)isPanelBackgroundTransparent:(WidgetsPanel *)panel
+{
+    return [WidgetPanelAppearanceResolver resolveForPanel:panel
+                                                  appMode:_settings.applicationMode.get
+                                                nightMode:_settings.isAppMapNightMode].transparent;
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -570,7 +579,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = topSize.height;
         _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
         
-        [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
+        [self updateShadowView:_topShadowContainerView
+                     direction:ShadowPathDirectionBottom
+                         panel:WidgetsPanel.topPanel];
     }
     else
     {
@@ -607,7 +618,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = bottomSize.height;
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
         
-        [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
+        [self updateShadowView:_bottomShadowContainerView
+                     direction:ShadowPathDirectionTop
+                         panel:WidgetsPanel.bottomPanel];
     }
     else
     {

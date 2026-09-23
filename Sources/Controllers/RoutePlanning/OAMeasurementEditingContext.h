@@ -35,6 +35,20 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 @end
 
+/// The two points a road segment runs between, as the key of [roadSegmentData]. The counterpart of
+/// `Pair<WptPt, WptPt>` in android's `MeasurementEditingContext`: `-[NSArray hash]` is the number of
+/// elements, so a dictionary keyed by two-point arrays gives every entry the same hash and every
+/// lookup walks all of them.
+@interface OAWptPtPair : NSObject <NSCopying>
+
+@property (nonatomic, readonly, nullable) OASWptPt *first;
+@property (nonatomic, readonly, nullable) OASWptPt *second;
+
+/// Either point may be missing, as in android's `Pair`; such a pair matches no key of the map.
++ (instancetype)pairWithFirst:(nullable OASWptPt *)first second:(nullable OASWptPt *)second;
+
+@end
+
 @interface OAMeasurementEditingContext : NSObject
 
 @property (nonatomic, weak) id<OASnapToRoadProgressDelegate> progressDelegate;
@@ -56,7 +70,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 @property (nonatomic) EOAAddPointMode addPointMode;
 @property (nonatomic, assign) BOOL approximationMode;
 
-@property (nonatomic) NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData;
+@property (nonatomic) NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *roadSegmentData;
 
 - (NSArray<OARoadSegmentData *> *)orderedRoadSegmentData;
 - (void)beginBatchPointUpdates;

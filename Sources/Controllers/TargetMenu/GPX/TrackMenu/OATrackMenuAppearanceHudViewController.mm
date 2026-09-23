@@ -1428,7 +1428,14 @@ static const NSInteger kColorsSection = 1;
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData[indexPath.section].subjects[indexPath.row];
+    if (indexPath.section >= _tableData.count)
+        return nil;
+
+    OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
+    if (indexPath.row >= sectionData.subjects.count)
+        return nil;
+
+    return sectionData.subjects[indexPath.row];
 }
 
 - (void)doAdditionalLayout
@@ -2168,6 +2175,8 @@ static const NSInteger kColorsSection = 1;
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if (!cellData)
+        return;
 
     [self onSwitch:switchView.isOn tableData:cellData];
 
@@ -2183,6 +2192,8 @@ static const NSInteger kColorsSection = 1;
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
+        if (!cellData)
+            return;
 
         [self updateProperty:@(segment.selectedSegmentIndex) tableData:cellData];
 
@@ -2200,14 +2211,19 @@ static const NSInteger kColorsSection = 1;
 
 - (void)sliderChanged:(id)sender
 {
-    UISlider *slider = (UISlider *) sender;
+    OASegmentedSlider *slider = (OASegmentedSlider *) sender;
     if (sender)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:slider.tag & 0x3FF inSection:slider.tag >> 10];
-        OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
+        if (!cellData)
+            return;
 
-        [self updateProperty:@(cell.sliderView.selectedMark) tableData:cellData];
+        OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (![cell isKindOfClass:OASegmentSliderTableViewCell.class] || cell.sliderView != slider)
+            return;
+
+        [self updateProperty:@(slider.selectedMark) tableData:cellData];
 
         [self updateData:cellData];
 
@@ -2782,8 +2798,12 @@ static const NSInteger kColorsSection = 1;
         [indexPaths addObject:_colorsCollectionIndexPath];
     if (_paletteNameIndexPath)
     {
-        [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
-        [indexPaths addObject:_paletteNameIndexPath];
+        OAGPXTableCellData *paletteNameData = [self getCellData:_paletteNameIndexPath];
+        if (paletteNameData)
+        {
+            [self updateData:paletteNameData];
+            [indexPaths addObject:_paletteNameIndexPath];
+        }
     }
     if (indexPaths.count > 0)
         [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
@@ -2919,8 +2939,12 @@ static const NSInteger kColorsSection = 1;
             NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
             if (_paletteNameIndexPath)
             {
-                [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
-                [indexPaths addObject:_paletteNameIndexPath];
+                OAGPXTableCellData *paletteNameData = [self getCellData:_paletteNameIndexPath];
+                if (paletteNameData)
+                {
+                    [self updateData:paletteNameData];
+                    [indexPaths addObject:_paletteNameIndexPath];
+                }
             }
             if (_paletteLegendIndexPath)
                 [indexPaths addObject:_paletteLegendIndexPath];

@@ -103,7 +103,7 @@
     </objects>
     <resources>
         <image name="ic_custom_map_pin.png" width="30" height="30"/>
-        <image name="icon_favorite_direction" width="8" height="9"/>
+        <image name="icon_favorite_direction" width="10" height="10"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

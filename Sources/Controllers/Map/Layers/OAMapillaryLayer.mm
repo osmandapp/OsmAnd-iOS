@@ -66,10 +66,10 @@ static int MIN_POINTS_ZOOM = 17;
     
     _imageMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageMainIconKey,
-                                                       OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_mapillary_location"]));
+                                                       OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameMapMapillaryLocation]));
     _imageHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageHeadingIconKey,
-                                                    OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_mapillary_location_view_angle"]));
+                                                    OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameMapMapillaryLocationViewAngle]));
     _imageMarker = imageAndCourseMarkerBuilder.buildAndAddToCollection(_currentImagePosition);
     
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self

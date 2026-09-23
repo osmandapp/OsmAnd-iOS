@@ -71,48 +71,13 @@
 
 @implementation OANativeUtilities
 
-+ (NSString *)getScaledResourceName:(NSString *)resourceName
++ (sk_sp<SkImage>)skImageFromAssetNamed:(NSString *)assetName
 {
-    NSString *resourcePath = nil;
-    CGFloat scale = [UIScreen mainScreen].scale;
-    if (scale > 2.0f)
-        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
-    else if (scale > 1.0f)
-        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
-    else
-        resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
-
-    if (resourcePath == nil)
-        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
-    if (resourcePath == nil)
-        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
-
-    return resourcePath;
-}
-
-+ (sk_sp<SkImage>)skImageFromPngResource:(NSString *)resourceName
-{
-    NSString *resourcePath = [self getScaledResourceName:resourceName];
-    if (resourcePath == nil)
+    UIImage *image = [UIImage imageNamed:assetName];
+    if (!image || !image.CGImage)
         return nullptr;
 
-    sk_sp<SkImage> img = [self.class skImageFromResourcePath:resourcePath];
-    if (img && UIScreen.mainScreen.scale == 1.0)
-        img = [self getScaledSkImage:img scaleFactor:0.5f];
-    
-    return img;
-}
-
-+ (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath
-{
-    if (resourcePath == nil)
-        return nullptr;
-    
-    NSData* resourceData = [NSData dataWithContentsOfFile:resourcePath];
-    if (!resourceData)
-        return nullptr;
-    
-    return [self.class skImageFromNSData:resourceData];
+    return [self.class skImageFromCGImage:image.CGImage];
 }
 
 + (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data

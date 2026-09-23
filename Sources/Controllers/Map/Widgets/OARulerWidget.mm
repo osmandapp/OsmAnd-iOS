@@ -43,6 +43,15 @@
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
 
+#define GLOBE_EARTH_RADIUS_METERS 6378137.0
+#define MAX_GLOBE_DISTANCE (M_PI * 6372800.0)
+#define MAX_VISIBLE_GLOBE_DISTANCE (MAX_GLOBE_DISTANCE / 2)
+#define MAX_MERCATOR_LATITUDE 85.0511
+#define MAX_GLOBE_MERCATOR_ANGLE (2 * M_PI - 1e-7)
+#define POINT31_FULL_RANGE (1LL << 31)
+#define PROJECTED_STEP_SLACK 4
+#define MIN_PROJECTED_STEP 24
+
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
     EOATextSideHorizontal
@@ -83,6 +92,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     EOAMetricsConstant _cacheMetricSystem;
     EOARulerWidgetMode _cachedRulerMode;
     BOOL _cachedMapMode;
+    BOOL _sphericalMap;
+    BOOL _cachedSphericalMap;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -246,6 +257,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     CGPoint circleCenterPoint = [self getCenterPoint];
     _imageView.center = circleCenterPoint;
+    _sphericalMap = [_settings.sphericalMap get];
     if ([self rulerModeOn])
     {
         [self updateStyles];
@@ -368,9 +380,63 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cachedMapDensity = _mapViewController.mapView.currentPixelsToMetersScaleFactor;
     double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
     _mapScaleUnrounded = fullMapScale;
-    _roundedDist = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
-    _radius = _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
+    double referenceDistance = fullMapScale;
+    if (_sphericalMap)
+    {
+        double globeDistance = [self getGlobeDistanceForPixelRadius:kMapRulerMaxWidth];
+        if ([self.class isValidGlobeDistance:globeDistance])
+            referenceDistance = globeDistance;
+        if (!isfinite(referenceDistance) || referenceDistance <= 0)
+            referenceDistance = MAX_GLOBE_DISTANCE;
+        else
+            referenceDistance = MIN(referenceDistance, MAX_GLOBE_DISTANCE);
+    }
+    _roundedDist = [OAOsmAndFormatter calculateRoundedDist:referenceDistance];
+    _radius = _sphericalMap
+        ? MAX(1, kMapRulerMaxWidth * _roundedDist / referenceDistance)
+        : _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
     [self updateText];
+}
+
+- (double) getGlobeDistanceForPixelRadius:(double)pixelRadius
+{
+    // currentPixelsToMetersScaleFactor follows Web Mercator, so calibrate it against the active globe projection.
+    double distance = pixelRadius * _cachedMapDensity * [[UIScreen mainScreen] scale];
+    if (![self.class isValidGlobeDistance:distance])
+        return NAN;
+
+    CGPoint center = [self getCenterPoint];
+    for (int i = 0; i < 2; i++)
+    {
+        double projectedRadius = [self getGlobePixelRadius:center distance:distance];
+        if (!isfinite(projectedRadius) || projectedRadius < 1)
+            return NAN;
+        double correctedDistance = distance * pixelRadius / projectedRadius;
+        if (![self.class isValidGlobeDistance:correctedDistance])
+            return NAN;
+        distance = correctedDistance;
+    }
+    return distance;
+}
+
+- (double) getGlobePixelRadius:(CGPoint)center distance:(double)distance
+{
+    if (![self.class isVisibleGlobeDistance:distance])
+        return NAN;
+
+    double radiusSum = 0;
+    int samplesCount = 0;
+    for (int bearing = -90; bearing <= 90; bearing += 180)
+    {
+        auto latLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:bearing];
+        CGPoint screenPoint;
+        if ([self getRulerScreenPoint:latLon screenPoint:&screenPoint])
+        {
+            radiusSum += hypot(screenPoint.x - center.x, screenPoint.y - center.y);
+            samplesCount++;
+        }
+    }
+    return samplesCount > 0 ? radiusSum / samplesCount : NAN;
 }
 
 - (void) updateText
@@ -379,7 +445,12 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
-        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) withParams:[OsmAndFormatterParams noTrailingZeros]]];
+    {
+        double circleDistance = _roundedDist * i++;
+        if (_sphericalMap && ![self.class isVisibleGlobeDistance:circleDistance])
+            break;
+        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:circleDistance withParams:[OsmAndFormatterParams noTrailingZeros]]];
+    }
 }
 
 - (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
@@ -397,26 +468,27 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
+        double distance = [self getDistanceForPixelRadius:circleRadius];
+        if (_sphericalMap && ![self.class isVisibleGlobeDistance:distance])
+            return;
+
         NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
         NSMutableArray<NSValue *> *points = [NSMutableArray array];
         auto centerLatLon = [self getCenterLatLon];
         
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-            auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
-            if (ABS(latLon.latitude) > 90)
+            auto latLon = [self calculateDestinationPoint:centerLatLon distance:distance bearing:a];
+            CGPoint screenPoint;
+            BOOL projected = [self getRulerScreenPoint:latLon screenPoint:&screenPoint];
+            // Do not connect points across a gap or a globe projection discontinuity.
+            if (points.count > 0 && (!projected || [self isProjectionDiscontinuity:points.lastObject.CGPointValue currentPoint:screenPoint pixelRadius:circleRadius]))
             {
-                if (points.count > 0)
-                {
-                    [arrays addObject:points];
-                    points = [NSMutableArray array];
-                }
-                continue;
+                [arrays addObject:points];
+                points = [NSMutableArray array];
             }
-            
-            CGPoint screenPoint = [self latLonToScreenPoint:latLon];
-            [points addObject:[NSValue valueWithCGPoint:screenPoint]];
+            if (projected)
+                [points addObject:[NSValue valueWithCGPoint:screenPoint]];
         }
         if (points.count > 0)
             [arrays addObject:points];
@@ -752,17 +824,80 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (CGPoint) getPointFromCenterByRadius:(double)radius angle:(double)angle
 {
-    double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-    auto pointLatLon = OsmAnd::Utilities::rhumbDestinationPoint(_cachedCenterLatLon, radius * pixelDensity, angle);
-    return [self latLonToScreenPoint:pointLatLon];
+    double distance = [self getDistanceForPixelRadius:radius];
+    auto pointLatLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:angle];
+    CGPoint screenPoint = CGPointZero;
+    [self getRulerScreenPoint:pointLatLon screenPoint:&screenPoint];
+    return screenPoint;
 }
 
-- (CGPoint) latLonToScreenPoint:(OsmAnd::LatLon)latLon
+- (double) getDistanceForPixelRadius:(double)pixelRadius
 {
+    return _sphericalMap && _radius > 0
+        ? _roundedDist * pixelRadius / _radius
+        : pixelRadius * _cachedMapDensity * [[UIScreen mainScreen] scale];
+}
+
+- (BOOL) getRulerScreenPoint:(OsmAnd::LatLon)latLon screenPoint:(CGPoint *)screenPoint
+{
+    // Flat maps have no drawable surface beyond the Web Mercator latitude boundary.
+    double absoluteLatitude = ABS(latLon.latitude);
+    if (absoluteLatitude > (_sphericalMap ? 90 : MAX_MERCATOR_LATITUDE))
+        return NO;
+
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    if (_sphericalMap && absoluteLatitude > MAX_MERCATOR_LATITUDE)
+    {
+        auto pos31 = [self.class calculateGlobePoint31:latLon];
+        return [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    }
     auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    CGPoint screenPoint;
-    [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
-    return screenPoint;
+    return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+}
+
+- (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius
+{
+    double expectedStep = 2 * ABS(pixelRadius) * sin([self toRadians:CIRCLE_ANGLE_STEP] / 2);
+    double maxProjectedStep = MAX(MIN_PROJECTED_STEP, expectedStep * PROJECTED_STEP_SLACK);
+    return hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y) > maxProjectedStep;
+}
+
+- (OsmAnd::LatLon) calculateDestinationPoint:(OsmAnd::LatLon)center distance:(double)distance bearing:(double)bearing
+{
+    if (!_sphericalMap)
+        return OsmAnd::Utilities::rhumbDestinationPoint(center, distance, bearing);
+
+    double angularDistance = distance / GLOBE_EARTH_RADIUS_METERS;
+    double latRad = [self toRadians:center.latitude];
+    double lonRad = [self toRadians:center.longitude];
+    double bearingRad = [self toRadians:bearing];
+    double destLatRad = asin(sin(latRad) * cos(angularDistance) + cos(latRad) * sin(angularDistance) * cos(bearingRad));
+    double y = sin(bearingRad) * sin(angularDistance) * cos(latRad);
+    double x = cos(angularDistance) - sin(latRad) * sin(destLatRad);
+    double destLon = fmod([self toDegrees:lonRad + atan2(y, x)] + 540, 360) - 180;
+    return OsmAnd::LatLon([self toDegrees:destLatRad], destLon);
+}
+
++ (OsmAnd::PointI) calculateGlobePoint31:(OsmAnd::LatLon)latLon
+{
+    // The globe renderer accepts signed Point31 y values beyond the Web Mercator tile range.
+    // Keep polar-cap samples in that extended range instead of clamping them to +/-85.0511 degrees.
+    double latitude = latLon.latitude * M_PI / 180;
+    double mercatorAngle = log(tan(latitude / 2 + M_PI / 4));
+    mercatorAngle = MAX(-MAX_GLOBE_MERCATOR_ANGLE, MIN(MAX_GLOBE_MERCATOR_ANGLE, mercatorAngle));
+    int64_t y31 = (int64_t) ((1 - mercatorAngle / M_PI) / 2 * POINT31_FULL_RANGE);
+    // Southern polar values intentionally wrap to the signed Point31 representation used by the renderer.
+    return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(latLon.longitude), (int32_t) (uint32_t) y31);
+}
+
++ (BOOL) isValidGlobeDistance:(double)distance
+{
+    return isfinite(distance) && distance > 0 && distance <= MAX_GLOBE_DISTANCE;
+}
+
++ (BOOL) isVisibleGlobeDistance:(double)distance
+{
+    return [self isValidGlobeDistance:distance] && distance <= MAX_VISIBLE_GLOBE_DISTANCE;
 }
 
 - (double) toRadians:(double)degrees
@@ -807,6 +942,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             [self updateCenterImage];
 
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
+        BOOL sphericalMapChanged = _cachedSphericalMap != [_settings.sphericalMap get];
         if (_firstUpdate || (visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || centerChanged || viewportChanged || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
@@ -838,7 +974,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                              || wasElevated
                              || wasRotated
                              || _cachedMapZoom != mapZoom
-                             || modeChanged);
+                             || modeChanged
+                             || sphericalMapChanged);
             
             BOOL compassVisible = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
             double heading = _app.locationServices.lastKnownHeading;
@@ -846,6 +983,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             BOOL shouldUpdateCompass = compassVisible && headingChanged;
             
             _cachedCenter2 = centerPoint;
+            _cachedSphericalMap = [_settings.sphericalMap get];
             _cachedWidth = viewSize.width;
             _cachedHeight = viewSize.height;
             _cachedHeading = heading;

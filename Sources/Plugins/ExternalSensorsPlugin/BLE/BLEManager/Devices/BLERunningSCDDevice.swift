@@ -26,44 +26,12 @@ final class BLERunningSCDDevice: Device {
     override var getServiceDisconnectedImage: UIImage? {
         UIImage(named: "ic_custom_sensor_speed_outlined")
     }
-    
-    override var getDataFields: [[String: String]]? {
-        if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
-            var result = [[String: String]]()
-            if let lastRunningCadenceData = sensor.lastRunningCadenceData {
-                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
-            }
-            if let lastRunningSpeedData = sensor.lastRunningSpeedData {
-                if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {
-                    result.append([localizedString("external_device_characteristic_speed"): String(speed)])
-                }
-            }
-            if let lastRunningDistanceData = sensor.lastRunningDistanceData {
-                let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
-                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), with: OsmAndFormatterParams.noTrailingZeros) {
-                    result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
-                }
-            }
-            if let lastRunningStrideLengthData = sensor.lastRunningStrideLengthData {
-                let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
-                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), with: OsmAndFormatterParams.noTrailingZeros) {
-                    result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
-                }
-            }
-            return result.isEmpty ? nil : result
-        }
-        return nil
-    }
 
     init() {
         super.init(deviceType: .BLE_RUNNING_SCDS)
         sensors.append(BLERunningSensor(device: self, sensorId: "running"))
     }
-    
-    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
-    }
-    
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }

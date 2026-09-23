@@ -98,6 +98,7 @@ final class DeviceHelper: NSObject {
         return peripherals.compactMap { peripheral in
             if let savedDevice = pairedDevices.first(where: { $0.deviceId == peripheral.identifier.uuidString }) {
                 let device = getDeviceFor(type: savedDevice.deviceType)
+                device.addSensors(forServices: savedDevice.serviceUUIDs ?? [])
                 device.deviceName = savedDevice.deviceName
                 device.deviceType = savedDevice.deviceType
                 device.setPeripheral(peripheral: peripheral)
@@ -339,6 +340,11 @@ extension DeviceHelper {
             guard let self else { return }
             switch result {
             case .success(let services):
+                if device.deviceType != .OBD_VEHICLE_METRICS,
+                   device.addSensors(forServices: services.map { $0.uuid.uuidString }) {
+                    NSLog("[DeviceHelper] -> added sensors for services: \(device.getSensorServiceUUIDs()) | \(device.deviceName)")
+                    devicesSettingsCollection.changeServiceUUIDs(with: device.id, serviceUUIDs: device.getSensorServiceUUIDs())
+                }
                 discoverCharacteristics(device: device, services: services)
             case .failure(let error):
                 NSLog("[DeviceHelper] -> discoverServices failure: \(error.localizedDescription)")

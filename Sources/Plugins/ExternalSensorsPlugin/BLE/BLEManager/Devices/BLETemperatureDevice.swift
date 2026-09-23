@@ -25,30 +25,12 @@ final class BLETemperatureDevice: Device {
     override var getServiceDisconnectedImage: UIImage? {
         UIImage(named: "ic_custom_sensor_thermometer")
     }
-    
-    override var getDataFields: [[String: String]]? {
-        if let sensor = sensors.first(where: { $0 is BLETemperatureSensor }) as? BLETemperatureSensor {
-            if let lastTemperatureData = sensor.lastTemperatureData {
-                return [[localizedString("shared_string_temperature"):
-                            lastTemperatureData.temperature == 0.0
-                        ? "-"
-                        : String(lastTemperatureData.temperature) + " " + localizedString("degree_celsius")]]
-            } else {
-                return [[localizedString("shared_string_temperature"): "-"]]
-            }
-        }
-        return nil
-    }
-    
+
     init() {
         super.init(deviceType: .BLE_TEMPERATURE)
         sensors.append(BLETemperatureSensor(device: self, sensorId: "temperature"))
     }
-    
-    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        [.temperature]
-    }
-    
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }

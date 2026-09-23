@@ -17,7 +17,8 @@
 #import "OAFavoritesBackupMerger.h"
 #import "OAOperationLog.h"
 #import "OAFileSettingsItem.h"
-#import "OsmAnd_Maps-Swift.h"
+
+static const NSInteger kMaxDeflateRatio = 1032;
 
 @implementation OAGenerateBackupInfoTask
 {
@@ -224,7 +225,10 @@
 {
     if (remoteFile.isDeleted || ![localFile.item isKindOfClass:OAFileSettingsItem.class])
         return NO;
-    return [BackupUtils isDefaultObfMap:(OAFileSettingsItem *) localFile.item fileName:remoteFile.name];
+    if (![OAFileSettingsItemFileSubtype isMap:((OAFileSettingsItem *) localFile.item).subtype])
+        return NO;
+    // A reference stores an empty archive, too small to hold the file even at max deflate ratio
+    return remoteFile.zipSize > 0 && remoteFile.zipSize * kMaxDeflateRatio < remoteFile.filesize;
 }
 
 - (void) onPostExecute:(OABackupInfo *)backupInfo

@@ -152,13 +152,13 @@ static const NSInteger panoImageFilterSection = 2;
                              @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_start_date"),
                              @"key" : @"start_date_filter",
-                             @"img" : @"ic_custom_date.png"
+                             @"img" : @"ic_custom_date"
                              },
                          @{
                              @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_end_date"),
                              @"key" : @"end_date_filter",
-                             @"img" : @"ic_custom_date.png"
+                             @"img" : @"ic_custom_date"
                              },
                          @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
@@ -170,7 +170,7 @@ static const NSInteger panoImageFilterSection = 2;
                              @"type" : [OASwitchTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
-                             @"img" : @"ic_custom_coordinates.png",
+                             @"img" : @"ic_custom_coordinates",
                              @"key" : @"pano_only"
                              },
                          @{ @"type" : [OADividerCell getCellIdentifier]}

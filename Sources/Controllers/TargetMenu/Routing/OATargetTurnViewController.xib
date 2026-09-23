@@ -29,7 +29,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="-3" minY="-1" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" image="menu_icon_back.png"/>
+                    <state key="normal" image="menu_icon_back"/>
                     <connections>
                         <action selector="buttonBackPressed:" destination="-1" eventType="touchUpInside" id="7XN-SC-9vG"/>
                     </connections>
@@ -84,6 +84,6 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron" width="28" height="28"/>
-        <image name="menu_icon_back.png" width="10.666666984558105" height="20.666666030883789"/>
+        <image name="menu_icon_back" width="10.666666984558105" height="20.666666030883789"/>
     </resources>
 </document>

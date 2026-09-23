@@ -31,7 +31,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="-3" minY="-1" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" image="menu_icon_back.png"/>
+                    <state key="normal" image="menu_icon_back"/>
                     <connections>
                         <action selector="buttonBackPressed:" destination="-1" eventType="touchUpInside" id="mWm-dt-3sC"/>
                     </connections>
@@ -65,7 +65,7 @@
                             <rect key="frame" x="276" y="20" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <color key="tintColor" name="navBarTextColorPrimary"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <state key="normal" image="ic_close"/>
                             <connections>
                                 <action selector="buttonClosePressed:" destination="-1" eventType="touchUpInside" id="gxj-ut-huS"/>
                             </connections>
@@ -96,9 +96,9 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_close" width="10" height="10"/>
         <image name="ic_navbar_chevron" width="28" height="28"/>
-        <image name="menu_icon_back.png" width="10.5" height="20.5"/>
+        <image name="menu_icon_back" width="10.5" height="20.5"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

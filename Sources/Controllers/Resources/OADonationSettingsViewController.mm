@@ -212,7 +212,7 @@
                 [countryArr addObject:
                      @{
                     @"title" : item.localName,
-                    @"img" : [_parentController.selectedCountryItem.downloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
+                    @"img" : [_parentController.selectedCountryItem.downloadName isEqualToString:item.downloadName] ? @"menu_cell_selected" : @"",
                     @"type" : kCellTypeCheck }
                 ];
             }

@@ -26,7 +26,7 @@
                                 <color key="textColor" name="textColorSecondary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_distance.png" translatesAutoresizingMaskIntoConstraints="NO" id="3iX-sO-mMG">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_distance" translatesAutoresizingMaskIntoConstraints="NO" id="3iX-sO-mMG">
                                 <rect key="frame" x="16" y="36" width="20" height="20"/>
                                 <color key="tintColor" name="textColorSecondary"/>
                                 <constraints>
@@ -48,7 +48,7 @@
                                 <color key="textColor" name="textColorSecondary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_waypoints.png" translatesAutoresizingMaskIntoConstraints="NO" id="4if-Cu-dlA">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_waypoints" translatesAutoresizingMaskIntoConstraints="NO" id="4if-Cu-dlA">
                                 <rect key="frame" x="175.5" y="36" width="20" height="20"/>
                                 <color key="tintColor" name="textColorSecondary"/>
                                 <constraints>
@@ -65,7 +65,7 @@
                                     <constraint firstAttribute="height" constant="30" id="MTd-k5-EcT"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time_start.png" translatesAutoresizingMaskIntoConstraints="NO" id="2dZ-ec-SQ0">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time_start" translatesAutoresizingMaskIntoConstraints="NO" id="2dZ-ec-SQ0">
                                 <rect key="frame" x="94" y="36" width="20" height="20"/>
                                 <color key="tintColor" name="textColorSecondary"/>
                                 <constraints>
@@ -143,9 +143,9 @@
     </objects>
     <resources>
         <image name="ic_custom_trip" width="30" height="30"/>
-        <image name="ic_small_distance.png" width="20" height="20"/>
-        <image name="ic_small_time_start.png" width="20" height="20"/>
-        <image name="ic_small_waypoints.png" width="20" height="20"/>
+        <image name="ic_small_distance" width="20" height="20"/>
+        <image name="ic_small_time_start" width="20" height="20"/>
+        <image name="ic_small_waypoints" width="20" height="20"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

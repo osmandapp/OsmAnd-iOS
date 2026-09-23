@@ -35,7 +35,7 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_home.png" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_home" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe">
                         <rect key="frame" x="16" y="15" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="fF2-v5-yUT"/>
@@ -71,7 +71,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_home.png" width="30" height="30"/>
+        <image name="ic_custom_home" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -75,7 +75,7 @@
 - (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.buttonCancel setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
+    [self.buttonCancel setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
     [self.buttonCancel setTintColor:[UIColor whiteColor]];
     self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
     self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);

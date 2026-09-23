@@ -26,7 +26,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg_title.png" translatesAutoresizingMaskIntoConstraints="NO" id="a6h-0F-e9G">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg_title" translatesAutoresizingMaskIntoConstraints="NO" id="a6h-0F-e9G">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
@@ -108,7 +108,7 @@
         </tableView>
     </objects>
     <resources>
-        <image name="bg_title.png" width="320" height="64"/>
+        <image name="bg_title" width="320" height="64"/>
         <image name="ic_navbar_chevron" width="28" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

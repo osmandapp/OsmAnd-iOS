@@ -27,7 +27,7 @@ static const NSInteger kOrderContentRow = 1;
     if (self)
     {
         _content = content;
-        OAAmenityInfoRow* contentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:kOrderContentRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow* contentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_description"] textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:kOrderContentRow typeName:@"" isPhoneNumber:NO isUrl:NO];
         contentRow.isHtml = YES;
         contentRow.delegate = self;
         if (contentRow.isText && !NSStringIsEmpty(contentRow.text))

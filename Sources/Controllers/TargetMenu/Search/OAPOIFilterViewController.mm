@@ -615,7 +615,7 @@ typedef enum
 
         NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
         
-        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:@"ic_working_time.png"] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
+        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:@"ic_working_time"] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
         NSString *keyNameOpen24 = [[OALocalizedString(@"shared_string_is_open_24_7") stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowerCase];
         
         [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:OALocalizedString(@"shared_string_is_open_24_7") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen24] category:nil keyName:keyNameOpen24]];
@@ -898,7 +898,7 @@ typedef enum
                 [cell.titleLabel setText:item.text];
                 if (item.expandable)
                 {
-                    cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open.png"] : [UIImage templateImageNamed:@"ic_arrow_close.png"];
+                    cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open"] : [UIImage templateImageNamed:@"ic_arrow_close"];
                     cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
                     [cell rightIconVisibility:YES];
                 }

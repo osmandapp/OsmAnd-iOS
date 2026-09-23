@@ -38,7 +38,7 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="36" id="Q4j-Ab-iDt"/>
                         </constraints>
-                        <state key="normal" title="Button" image="ic_custom_arrow_forward.png"/>
+                        <state key="normal" title="Button" image="ic_custom_arrow_forward"/>
                         <buttonConfiguration key="configuration" style="plain" title="Get">
                             <color key="baseForegroundColor" name="textColorActive"/>
                         </buttonConfiguration>
@@ -96,7 +96,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_arrow_forward.png" width="30" height="30"/>
+        <image name="ic_custom_arrow_forward" width="30" height="30"/>
         <image name="ic_custom_osmand_pro_logo_colored" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

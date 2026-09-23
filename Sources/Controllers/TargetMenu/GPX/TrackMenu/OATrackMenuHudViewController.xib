@@ -112,7 +112,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="62" height="48"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358490566042" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <state key="normal" image="ic_custom_arrow_back.png">
+                            <state key="normal" image="ic_custom_arrow_back">
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
@@ -139,7 +139,7 @@
                             <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="-4" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="10" maxY="0.0"/>
-                            <state key="normal" title="3/4" image="ic_custom_folder_hidden.png">
+                            <state key="normal" title="3/4" image="ic_custom_folder_hidden">
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
@@ -170,8 +170,8 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_arrow_back.png" width="30" height="30"/>
-        <image name="ic_custom_folder_hidden.png" width="30" height="30"/>
+        <image name="ic_custom_arrow_back" width="30" height="30"/>
+        <image name="ic_custom_folder_hidden" width="30" height="30"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

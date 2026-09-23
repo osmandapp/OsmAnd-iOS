@@ -12,7 +12,7 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_action_location_color.png"];
+    return [UIImage imageNamed:@"ic_action_location_color"];
 }
 
 @end

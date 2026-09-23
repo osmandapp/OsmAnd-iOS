@@ -12,7 +12,7 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_coordinates.png"];
+    return [UIImage imageNamed:@"ic_coordinates"];
 }
 
 @end

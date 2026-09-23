@@ -651,8 +651,8 @@
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
 
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];

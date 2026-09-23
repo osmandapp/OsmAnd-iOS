@@ -214,7 +214,7 @@ static const NSInteger kOrderRegionPopulationRow = 3;
     OAWorldRegion *region = _mapObject.worldRegion;
     OAResourceItem *item = _mapObject.indexItem;
     NSString *resTypeLocalized = [OAResourceType resourceTypeLocalized:item.resourceType];
-    NSString *iconInfo = @"ic_description.png";
+    NSString *iconInfo = @"ic_description";
     
     if (resTypeLocalized && resTypeLocalized.length > 0)
     {

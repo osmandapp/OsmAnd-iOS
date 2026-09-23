@@ -387,7 +387,7 @@ static NSInteger kButtonsSection;
             mapSource = _app.data.underlayMapSource;
 
         if ([mapSource isEqual:itemMapSource])
-            [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected.png"] forState:UIControlStateNormal];
+            [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected"] forState:UIControlStateNormal];
         else
             [cell.checkButton setImage:nil forState:UIControlStateNormal];
         cell.delegate = self;

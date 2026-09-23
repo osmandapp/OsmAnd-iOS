@@ -232,7 +232,7 @@
 
             cell.imgIcon.contentMode = UIViewContentModeCenter;
             if (!imgTitle)
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+                imgTitle = [UIImage imageNamed:@"img_app_purchase_2"];
             else if (indexPath.section == _customPluginsSection || indexPath.section == _onlinePluginsSection)
                 cell.imgIcon.contentMode = UIViewContentModeScaleAspectFit;
             

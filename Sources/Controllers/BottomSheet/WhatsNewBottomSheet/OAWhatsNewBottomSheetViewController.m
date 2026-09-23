@@ -33,7 +33,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.sectionHeaderHeight = kVerticalMargin;
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi.png"]];
+    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi"]];
 }
 
 - (void) adjustFrame

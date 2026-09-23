@@ -165,7 +165,7 @@
                                                    titleIcon:@"ic_custom_route"
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
                                        selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"gpx_start_new_segment"), OALocalizedString(@"save_current_track") ]
-                                       selectableItemsImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
+                                       selectableItemsImages:@[@"track_recording_stop", @"icon_info", @"track_new_segement" , @"track_save"]
                                           selectColpletition:^(NSInteger selectedIndex) {
             
                 switch (selectedIndex)
@@ -222,7 +222,7 @@
                                                        titleIcon:@"ic_custom_route"
                                                      cancelTitle:nil
                                            selectableItemsTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"save_current_track")]
-                                           selectableItemsImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
+                                           selectableItemsImages:@[@"ic_action_rec_start", @"icon_info", @"track_clear_data", @"track_save"]
                                               selectColpletition:^(NSInteger selectedIndex) {
                 
                 switch (selectedIndex) {

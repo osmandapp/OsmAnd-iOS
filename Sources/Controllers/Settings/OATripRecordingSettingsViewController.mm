@@ -369,7 +369,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
             [dataArr addObject:@{
                 @"title" : OALocalizedString(@"confirm_every_run"),
                 @"value" : @"always_ask",
-                @"img" : alwaysAsk ? @"menu_cell_selected.png" : @"",
+                @"img" : alwaysAsk ? @"menu_cell_selected" : @"",
                 @"type" : kCellTypeCheck
             }];
             for (NSNumber *num in settings.trackIntervalArray)
@@ -378,7 +378,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : [settings getFormattedTrackInterval:[num intValue]],
                     @"value" : @"",
                     @"img" : ([settings.mapSettingSaveTrackIntervalGlobal get:self.appMode] == [num intValue] && !alwaysAsk)
-                    ? @"menu_cell_selected.png" : @"",
+                    ? @"menu_cell_selected" : @"",
                     @"type" : kCellTypeCheck }];
             }
             break;
@@ -391,7 +391,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : [settings getFormattedTrackInterval:[num intValue]],
                     @"value" : @"",
                     @"img" : ([settings.mapSettingSaveTrackInterval get:self.appMode] == [num intValue])
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         }
@@ -402,7 +402,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _trackPrecisionNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
@@ -412,7 +412,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _minTrackSpeedNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
@@ -422,7 +422,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _minTrackDistanceNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         default:

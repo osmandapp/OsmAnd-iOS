@@ -997,7 +997,7 @@ typedef enum {
         targetPoint.type = OATargetMyLocation;
         targetPoint.location = myLocation.coordinate;
         targetPoint.title = OALocalizedString(@"my_location");
-        targetPoint.icon = [UIImage imageNamed:@"ic_action_location_color.png"];
+        targetPoint.icon = [UIImage imageNamed:@"ic_action_location_color"];
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

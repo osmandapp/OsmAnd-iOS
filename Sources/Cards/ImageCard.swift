@@ -53,7 +53,7 @@ class ImageCard: AbstractCard {
         } else if type == "wikimedia-photo" {
             return "ic_custom_logo_wikimedia"
         } else if type == "wikidata-photo" {
-            return "ic_custom_logo_wikidata.png"
+            return "ic_custom_logo_wikidata"
         } else {
             return serverIconName
         }

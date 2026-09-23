@@ -431,7 +431,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             _barActionTextButton.userInteractionEnabled = YES;
 
 
-            [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
+            [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter"] forState:UIControlStateNormal];
             BOOL filterButtonVisible = word && word.getType == EOAObjectTypePoiType;
             _barActionImageButton.hidden = !filterButtonVisible;
 
@@ -441,7 +441,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionEditHistory:
         {
             _barActionImageView.hidden = YES;
-            [_barActionLeftImageButton setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
+            [_barActionLeftImageButton setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
             _barActionLeftImageButton.hidden = NO;
 
             [UIView performWithoutAnimation:^{
@@ -451,7 +451,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = NO;
 
-            [_barActionImageButton setImage:[UIImage imageNamed:@"icon_remove.png"] forState:UIControlStateNormal];
+            [_barActionImageButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
             _barActionImageButton.hidden = NO;
 
             break;

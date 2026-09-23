@@ -2060,7 +2060,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_skimap.jpg";
+    return @"img_plugin_skimap";
 }
 
 - (NSString *) localizedTitle
@@ -2115,7 +2115,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_nautical.jpg";
+    return @"img_plugin_nautical";
 }
 
 - (NSString *) localizedTitle
@@ -2160,7 +2160,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_trip_recording.jpg";
+    return @"img_plugin_trip_recording";
 }
 
 - (NSString *) localizedTitle
@@ -2205,7 +2205,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_parking.jpg";
+    return @"img_plugin_parking";
 }
 
 - (NSString *) localizedTitle
@@ -2250,7 +2250,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_wikipedia.jpg";
+    return @"img_plugin_wikipedia";
 }
 
 - (NSString *) localizedTitle
@@ -2300,7 +2300,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_contourlines.jpg";
+    return @"img_plugin_contourlines";
 }
 
 - (NSString *) localizedTitle
@@ -2345,7 +2345,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_osm_edits.jpg";
+    return @"img_plugin_osm_edits";
 }
 
 - (NSString *) localizedTitle
@@ -2390,7 +2390,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_mapillary.jpg";
+    return @"img_plugin_mapillary";
 }
 
 - (NSString *) localizedTitle
@@ -2431,7 +2431,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_weather.jpg";
+    return @"img_plugin_weather";
 }
 
 - (NSString *) localizedTitle
@@ -2610,7 +2610,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_osmand_development.png";
+    return @"img_plugin_osmand_development";
 }
 
 - (NSString *) productIconName
@@ -3176,7 +3176,7 @@
     
     if ([self.parking isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position.png"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position"];
         addon.sortIndex = 0;
         [arr addObject:addon];
     }

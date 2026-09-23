@@ -17,7 +17,7 @@
     self.textView.text = [OAPointDescription getLocationName:lat lon:lon sh:YES];
     self.textView.numberOfLines = 1;
     self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-    [self setImage:[UIImage imageNamed:@"ic_coordinates_location.png"]];
+    [self setImage:[UIImage imageNamed:@"ic_coordinates_location"]];
 }
 
 @end

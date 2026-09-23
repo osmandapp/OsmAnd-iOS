@@ -332,7 +332,9 @@ final class WidgetPanelAppearanceSettings {
     }
 
     func reset(panel: WidgetsPanel) {
-        allPreferences(panel: panel).forEach { $0.resetMode(toDefault: appMode) }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            allPreferences(panel: panel).forEach { $0.resetMode(toDefault: appMode) }
+        }
     }
 
     func copy(from sourcePanel: WidgetsPanel, to targetPanel: WidgetsPanel) {

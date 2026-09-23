@@ -249,8 +249,14 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     private func resetSelectedPanel() {
+        let previousSizeMode = appearanceSettings.sizeMode(for: selectedPanel)
         appearanceSettings.reset(panel: selectedPanel)
-        recreateWidgetsAndReload()
+        // Medium and Large replace the widget's classic view hierarchy with the
+        // simple one, so returning from them to Original requires fresh widgets.
+        // In every other case rebuilding all controls only blocks the UI while
+        // recreating unrelated panels and map controls.
+        let requiresFreshWidgets = previousSizeMode == .medium || previousSizeMode == .large
+        recreateWidgetsAndReload(recreateAll: requiresFreshWidgets)
     }
 
     private func showResetConfirmation() {
@@ -381,9 +387,13 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         OARootViewController.instance().mapPanel.showScrollableHudViewController(controller)
     }
 
-    private func recreateWidgetsAndReload() {
+    private func recreateWidgetsAndReload(recreateAll: Bool = true) {
         previewView.preserveCurrentPage()
-        recreateAllWidgets()
+        if recreateAll {
+            recreateAllWidgets()
+        } else {
+            recreateSelectedPanel()
+        }
         reloadScreenData()
     }
 

@@ -179,7 +179,7 @@
                scale:(float)scale
 {
     UIImage *iconImage = [UIImage imageNamed:iconName];
-    if (!iconImage && defaultIconName && [iconName isEqualToString:defaultIconName])
+    if (!iconImage && defaultIconName && ![iconName isEqualToString:defaultIconName])
         iconImage = [UIImage imageNamed:defaultIconName];
     if (!iconImage)
         return nil;

@@ -27,6 +27,7 @@ final class MigrationManager: NSObject {
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
         case migrateTracksSortModeKeysAndFormat
+        case migrateCoordinateGridFormatIds
     }
     
     private struct HudMigrationScenario {
@@ -128,6 +129,25 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue) {
+                migrateCoordinateGridFormatIds()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue)
+            }
+        }
+    }
+
+    private func migrateCoordinateGridFormatIds() {
+        let pref = settings.coordinateGridFormat
+        for mode in OAApplicationMode.allPossibleValues() {
+            if pref.isSet(for: mode) {
+                pref.set(pref.get(mode), mode: mode)
+            } else {
+                let legacyFormat = Int(settings.settingGeoFormat.get(mode))
+                pref.set(
+                    CoordinateFormatIds.fromOldFormat(legacyFormat) ?? GridFormatWrapper.defaultFormatId,
+                    mode: mode
+                )
             }
         }
     }

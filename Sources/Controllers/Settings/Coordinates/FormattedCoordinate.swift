@@ -13,7 +13,7 @@ struct FormattedCoordinate {
     let text: String
 
     var displayPrefix: String? {
-        if let code = format.epsgCode {
+        if let code = format.epsgCodeValue {
             return "EPSG:\(code)"
         }
         if format.type == .unknown || format.id.isEmpty {

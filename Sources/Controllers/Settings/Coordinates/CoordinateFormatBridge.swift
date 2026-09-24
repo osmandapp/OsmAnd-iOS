@@ -112,8 +112,8 @@ final class CoordinateFormatBridge: NSObject {
         let normalized = CoordinateFormatIds.normalize(formatId) ?? CoordinateFormatIds.builtinDdd
         let format = CoordinateFormatHelper.resolve([normalized]).first
         ?? BuiltInCoordinateFormat.ddd.toCoordinateFormat()
-        let legacy = format.legacyFormat ?? -1
-        let epsg = format.epsgCode ?? 0
+        let legacy = format.legacyFormatValue ?? -1
+        let epsg = format.epsgCodeValue ?? 0
         let mode: CoordinateSearchInputMode
         switch normalized {
         case CoordinateFormatIds.builtinUtm:

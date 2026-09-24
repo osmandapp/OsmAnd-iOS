@@ -6476,7 +6476,6 @@
 			isa = PBXGroup;
 			children = (
 				DAEA9DB82840F48700362C4D /* libskia_static.a */,
-				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -6902,6 +6901,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
+				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
 			);
 			path = PlanRoute;

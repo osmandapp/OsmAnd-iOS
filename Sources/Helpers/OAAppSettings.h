@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, EOAScreenOrientation)
     EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 };
 
-typedef NS_ENUM(NSInteger, EOAKeepScreenOnMode)
+typedef NS_ENUM(int, EOAKeepScreenOnMode)
 {
     EOAKeepScreenOnModeSystemDefault = 0,
     EOAKeepScreenOnModeDuringNavigation,

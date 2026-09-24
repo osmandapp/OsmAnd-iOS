@@ -37,6 +37,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSThread *_routeAnimation;
+    BOOL _isSimulatingRoute;
     double _lastCourse;
 }
 
@@ -55,6 +56,11 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (BOOL) isRouteAnimating
 {
     return _routeAnimation != nil; 
+}
+
+- (BOOL)isSimulatingRoute
+{
+    return [self isRouteAnimating] && _isSimulatingRoute;
 }
 
 - (void) startStopRouteAnimation
@@ -81,6 +87,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 
 - (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff
 {
+    _isSimulatingRoute = directionsArray == nil;
     float simSpeed = _settings.simulateNavigationSpeed;
     EOASimulationMode simulationMode = [OASimulationMode getMode:_settings.simulateNavigationMode];
     BOOL realistic = simulationMode == EOASimulationModeRealistic;

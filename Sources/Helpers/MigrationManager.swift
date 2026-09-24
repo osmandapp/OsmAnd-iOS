@@ -139,8 +139,16 @@ final class MigrationManager: NSObject {
 
     private func migrateCoordinateGridFormatIds() {
         let pref = settings.coordinateGridFormat
-        for mode in OAApplicationMode.allPossibleValues() where pref.isSet(for: mode) {
-            pref.set(pref.get(mode), mode: mode)
+        for mode in OAApplicationMode.allPossibleValues() {
+            if pref.isSet(for: mode) {
+                pref.set(pref.get(mode), mode: mode)
+            } else {
+                let legacyFormat = Int(settings.settingGeoFormat.get(mode))
+                pref.set(
+                    CoordinateFormatIds.fromOldFormat(legacyFormat) ?? GridFormatWrapper.defaultFormatId,
+                    mode: mode
+                )
+            }
         }
     }
 

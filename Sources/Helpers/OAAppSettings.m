@@ -5669,11 +5669,6 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     [self set:defaultValue];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
-{
-    return [[OAAppSettings sharedManager].coordinateFormatSettingsStorage getPrimaryId:mode];
-}
-
 @end
 
 @implementation OACommonGridLabelsPosition

@@ -696,7 +696,7 @@ static const NSInteger kDBVersion = 1;
                             NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
                             if (extensions.count > 0)
                             {
-                                [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions regularExtensionsKey:@"plugins"];
+                                [OASGpxUtilities.shared assignExtensionWriterWptPt:pt extensions:extensions regularExtensionsKey:@"plugins" keepDeferred:YES];
                             }
                         }
                     }
@@ -915,7 +915,7 @@ static const NSInteger kDBVersion = 1;
     OASWptPt *ptNew = [[OASWptPt alloc] initWithLat:lat lon:lon time:time * 1000.0 ele:alt speed:speed hdop:hdop heading:heading];
     if (extensions.count > 0)
     {
-        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions regularExtensionsKey:@"plugins"];
+        [OASGpxUtilities.shared assignExtensionWriterWptPt:ptNew extensions:extensions regularExtensionsKey:@"plugins" keepDeferred:YES];
     }
     [self addTrackPointNew:ptNew newSegment:newSegment time:time];
 }

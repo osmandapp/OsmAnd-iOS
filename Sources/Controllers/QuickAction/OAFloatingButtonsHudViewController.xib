@@ -23,7 +23,7 @@
                 <userLayoutGuide location="391" affinity="minY"/>
             </userGuides>
             <subviews>
-                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_map_pin.png" translatesAutoresizingMaskIntoConstraints="NO" id="k0s-pG-86G">
+                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_map_pin" translatesAutoresizingMaskIntoConstraints="NO" id="k0s-pG-86G">
                     <rect key="frame" x="185" y="371" width="44" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -47,6 +47,6 @@
     </objects>
     <resources>
         <image name="ic_custom_3d" width="30" height="30"/>
-        <image name="ic_map_pin.png" width="44" height="44"/>
+        <image name="ic_map_pin" width="44" height="44"/>
     </resources>
 </document>

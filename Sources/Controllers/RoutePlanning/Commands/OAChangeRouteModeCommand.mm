@@ -197,7 +197,10 @@
     {
         OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
         if (lastPoint.isGap)
-            editingCtx.appMode = _newMode;
+        {
+            BOOL changesLastPoint = _pointIndexes == nil || [_pointIndexes containsObject:@(_newPoints.count - 1)];
+            editingCtx.appMode = changesLastPoint ? _newMode : _oldMode;
+        }
         else
             editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }

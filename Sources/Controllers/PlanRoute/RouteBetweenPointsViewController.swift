@@ -12,7 +12,7 @@ final class RouteBetweenPointsViewController: UIViewController {
 
     private enum Row {
         case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
-        case changeWholeSegment(PlanRouteSegment)
+        case continueRoute
         case startNewSegment
         case changeWholeTrack
     }
@@ -20,16 +20,19 @@ final class RouteBetweenPointsViewController: UIViewController {
     private struct SectionModel {
         let headerTitle: String?
         let rows: [Row]
+        var footerTitle: String?
     }
 
     private static let rowHeight: CGFloat = 50
     private static let sectionHeaderHeight: CGFloat = 44
 
+    var onContinueEditing: (() -> Void)?
+
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    private var sections: [SectionModel] = []
-    private weak var dataSource: PlanRoutePointsDataSource?
     private let fromPointIndex: Int?
     private let scopedSegment: PlanRouteSegment?
+    private var sections: [SectionModel] = []
+    private weak var dataSource: PlanRoutePointsDataSource?
 
     init(dataSource: PlanRoutePointsDataSource?, fromPointIndex: Int? = nil, scopedSegment: PlanRouteSegment? = nil) {
         self.dataSource = dataSource
@@ -63,6 +66,14 @@ final class RouteBetweenPointsViewController: UIViewController {
             header.frame.size.height = size.height
             tableView.tableHeaderView = header
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard isViewLoaded,
+              previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        tableView.reloadData()
+        view.setNeedsLayout()
     }
 
     private func setupNavigationBar() {
@@ -129,12 +140,15 @@ final class RouteBetweenPointsViewController: UIViewController {
                 segments.append(pendingEmptySegment)
             }
         }
-        var result: [SectionModel] = segments.map { makeSegmentSection($0) }
-
-        if scopedSegment == nil, dataSource?.canStartNewSegment ?? false {
-            result.append(SectionModel(headerTitle: nil, rows: [.startNewSegment]))
+        var result: [SectionModel] = segments.enumerated().map { index, segment in
+            makeSegmentSection(segment, isLast: index == segments.count - 1)
         }
-        result.append(SectionModel(headerTitle: nil, rows: [.changeWholeTrack]))
+        var actions: [Row] = []
+        if scopedSegment == nil, dataSource?.canStartNewSegment ?? false {
+            actions.append(.startNewSegment)
+        }
+        actions.append(.changeWholeTrack)
+        result.append(SectionModel(headerTitle: nil, rows: actions, footerTitle: localizedString("plan_route_new_segment_separate_hint")))
         return result
     }
 
@@ -156,11 +170,11 @@ final class RouteBetweenPointsViewController: UIViewController {
                                 gapAfter: nil)
     }
 
-    private func makeSegmentSection(_ segment: PlanRouteSegment) -> SectionModel {
+    private func makeSegmentSection(_ segment: PlanRouteSegment, isLast: Bool) -> SectionModel {
         let effective = mergedGroups(from: segment.groups)
         var rows: [Row] = effective.map { .profileGroup($0, segment: segment) }
-        if effective.count > 1 {
-            rows.append(.changeWholeSegment(segment))
+        if isLast && scopedSegment == nil {
+            rows.append(.continueRoute)
         }
         let title = String(format: localizedString("segments_count"), segment.index + 1)
         return SectionModel(headerTitle: title, rows: rows)
@@ -185,7 +199,14 @@ final class RouteBetweenPointsViewController: UIViewController {
 
     private func openSettings(context: SegmentRouteContext, applyFromPointIndex: Int? = nil) {
         let detailVC = SegmentRouteSettingsViewController(context: context, dataSource: dataSource, applyFromPointIndex: applyFromPointIndex)
+        detailVC.onContinueEditing = onContinueEditing
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    private func openFutureRouteSelection(_ action: SegmentRouteSettingsViewController.FutureRouteAction) {
+        let controller = SegmentRouteSettingsViewController(context: .wholeTrack, dataSource: dataSource, futureRouteAction: action)
+        controller.onContinueEditing = onContinueEditing
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     @objc private func onCloseTapped() {
@@ -212,23 +233,23 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
             }
             cell.configure(group: group)
             return cell
-        case let .changeWholeSegment(segment):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteGroupCell.reuseIdentifier, for: indexPath) as? RouteGroupCell else {
+        case .continueRoute:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configureWholeSegment(segment: segment)
+            cell.configure(title: localizedString("plan_route_continue_with_different_type"), isDestructive: false, showsDisclosure: true)
             return cell
         case .startNewSegment:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false)
+            cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false, showsDisclosure: true)
             return cell
         case .changeWholeTrack:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configure(title: localizedString("plan_route_change_for_whole_track"), isDestructive: false)
+            cell.configure(title: localizedString("plan_route_change_for_whole_track"), isDestructive: false, showsDisclosure: true)
             return cell
         }
     }
@@ -237,7 +258,14 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension RouteBetweenPointsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        Self.rowHeight
+        if case .profileGroup = sections[indexPath.section].rows[indexPath.row] {
+            return Self.rowHeight
+        }
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        sections[section].footerTitle
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -261,11 +289,10 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         switch row {
         case let .profileGroup(group, segment):
             openSettings(context: .profileGroup(group, segment: segment), applyFromPointIndex: fromPointIndex)
-        case let .changeWholeSegment(segment):
-            openSettings(context: .wholeSegment(segment))
+        case .continueRoute:
+            openFutureRouteSelection(.continueRoute)
         case .startNewSegment:
-            dataSource?.startNewSegment()
-            dismiss(animated: true)
+            openFutureRouteSelection(.startNewSegment)
         case .changeWholeTrack:
             openSettings(context: .wholeTrack)
         }

@@ -887,6 +887,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func presentRouteBetweenPoints(_ listVC: RouteBetweenPointsViewController) {
+        listVC.onContinueEditing = { [weak self] in
+            self?.setState(.initial, animated: true)
+        }
         showMediumSheetViewController(viewController: listVC, isLargeAvailable: true)
         }
 
@@ -981,6 +984,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
         guard !presentApproximationWarningIfNeeded() else { return }
         let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex)
+        settingsVC.onContinueEditing = { [weak self] in
+            self?.setState(.initial, animated: true)
+        }
         let nav = UINavigationController(rootViewController: settingsVC)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
@@ -1264,6 +1270,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             }
             routeVC.onSaveSegment = { [weak self] pointIndexes in
                 self?.presentSegmentSaveDialog(pointIndexes: pointIndexes)
+            }
+            routeVC.onContinueRoute = { [weak self] in
+                guard let self else { return }
+                let controller = SegmentRouteSettingsViewController(context: .wholeTrack, dataSource: dataProvider, futureRouteAction: .continueRoute)
+                controller.onContinueEditing = { [weak self] in
+                    self?.setState(.initial, animated: true)
+                }
+                showMediumSheetViewController(viewController: controller, isLargeAvailable: true)
             }
             return routeVC
         }

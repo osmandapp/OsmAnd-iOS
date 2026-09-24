@@ -13,6 +13,7 @@ final class RouteTypeViewController: UIViewController {
         case straightLine
         case mode(OAApplicationMode)
         case startNewSegment
+        case continueRoute
     }
 
     private struct SectionModel {
@@ -22,24 +23,30 @@ final class RouteTypeViewController: UIViewController {
 
     private let context: SegmentRouteContext
     private let availableModes: [OAApplicationMode]
-    private var selectedMode: OAApplicationMode?
     private let canStartNewSegment: Bool
     private let onModeSelected: (OAApplicationMode?) -> Void
     private let onStartNewSegment: () -> Void
+    private let onContinueRoute: (() -> Void)?
+    private let showsRecalculationHint: Bool
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private var selectedMode: OAApplicationMode?
     private var sections: [SectionModel] = []
 
     init(context: SegmentRouteContext,
          availableModes: [OAApplicationMode],
          selectedMode: OAApplicationMode?,
          canStartNewSegment: Bool,
+         showsRecalculationHint: Bool = true,
+         onContinueRoute: (() -> Void)? = nil,
          onModeSelected: @escaping (OAApplicationMode?) -> Void,
          onStartNewSegment: @escaping () -> Void) {
         self.context = context
         self.availableModes = availableModes
         self.selectedMode = selectedMode
         self.canStartNewSegment = canStartNewSegment
+        self.showsRecalculationHint = showsRecalculationHint
+        self.onContinueRoute = onContinueRoute
         self.onModeSelected = onModeSelected
         self.onStartNewSegment = onStartNewSegment
         super.init(nibName: nil, bundle: nil)
@@ -53,6 +60,13 @@ final class RouteTypeViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         rebuildSections()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard isViewLoaded,
+              previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        tableView.reloadData()
     }
 
     private func setupTableView() {
@@ -81,9 +95,16 @@ final class RouteTypeViewController: UIViewController {
         let modeRows: [Row] = availableModes.map { .mode($0) }
         result.append(SectionModel(rows: modeRows, footerTitle: nil))
 
+        var actions: [Row] = []
+        if onContinueRoute != nil {
+            actions.append(.continueRoute)
+        }
         if canStartNewSegment {
-            result.append(SectionModel(rows: [.startNewSegment],
-                                       footerTitle: localizedString("plan_route_start_new_segment_hint")))
+            actions.append(.startNewSegment)
+        }
+        if !actions.isEmpty {
+            result.append(SectionModel(rows: actions,
+                                       footerTitle: localizedString("plan_route_continue_or_start_segment_hint")))
         }
 
         sections = result
@@ -123,11 +144,17 @@ extension RouteTypeViewController: UITableViewDataSource {
                            tintColor: .iconColorActive,
                            isSelected: isSelected(mode))
             return cell
-        case .startNewSegment:
+        case .startNewSegment, .continueRoute:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false)
+            let title: String
+            if case .continueRoute = row {
+                title = localizedString("plan_route_continue_with_different_route_type")
+            } else {
+                title = localizedString("gpx_start_new_segment")
+            }
+            cell.configure(title: title, isDestructive: false, showsDisclosure: true)
             return cell
         }
     }
@@ -135,7 +162,7 @@ extension RouteTypeViewController: UITableViewDataSource {
 
 extension RouteTypeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == 0 else { return nil }
+        guard section == 0, showsRecalculationHint else { return nil }
         let header = UITableViewHeaderFooterView()
         var config = header.defaultContentConfiguration()
         config.text = context.recalculateSubtitle
@@ -147,7 +174,7 @@ extension RouteTypeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 0 ? UITableView.automaticDimension : 0
+        section == 0 && showsRecalculationHint ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
@@ -168,6 +195,8 @@ extension RouteTypeViewController: UITableViewDelegate {
             tableView.reloadData()
         case .startNewSegment:
             onStartNewSegment()
+        case .continueRoute:
+            onContinueRoute?()
         }
     }
 }

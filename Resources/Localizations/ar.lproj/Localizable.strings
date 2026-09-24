@@ -28,7 +28,7 @@
 "shared_string_target_points" = "الوجهات";
 "search_radius_proximity" = "ضمن";
 "poi" = "نقاط";
-"day_off_label" = "معطّل";
+"day_off_label" = "مغلق";
 "open_from" = "افتح من";
 "open_till" = "مفتوح حتى";
 "will_close_at" = "يغلق على";

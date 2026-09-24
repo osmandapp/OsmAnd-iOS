@@ -39,6 +39,9 @@ static OALocationIcon *_MOVEMENT_DEFAULT;
 static OALocationIcon *_MOVEMENT_NAUTICAL;
 static OALocationIcon *_MOVEMENT_CAR;
 
+static NSString * const kStaticIconPrefix = @"STATIC_";
+static NSString * const kMovementIconPrefix = @"MOVEMENT_";
+
 + (instancetype) withName:(NSString *)name iconName:(NSString *)iconName headingIconName:(NSString *)headingIconName modelName:(NSString *)modelName
 {
     OALocationIcon *obj = [[OALocationIcon alloc] init];
@@ -75,22 +78,36 @@ static OALocationIcon *_MOVEMENT_CAR;
     _MOVEMENT_CAR = [OALocationIcon withName:@"MOVEMENT_CAR" iconName:@"map_navigation_car" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_navigation_car"];
 }
 
-+ (OALocationIcon *) locationIconWithName:(NSString *)name
++ (OALocationIcon *)locationIconWithName:(NSString *)name
 {
-    // Temporary fix to prevent possible crash due to old numeric setting
-    if ([name isKindOfClass:NSNumber.class]) {
-        return _DEFAULT;
+    return [self locationIconWithName:name forNavigation:NO];
+}
+
++ (OALocationIcon *)locationIconWithName:(NSString *)name forNavigation:(BOOL)forNavigation
+{
+    OALocationIcon *defaultIcon = forNavigation ? _MOVEMENT_DEFAULT : _DEFAULT;
+    if (![name isKindOfClass:NSString.class])
+        return defaultIcon;
+
+    NSString *prefix = forNavigation ? kMovementIconPrefix : kStaticIconPrefix;
+    NSString *qualifiedName = [prefix stringByAppendingString:name];
+    for (OALocationIcon *icon in [self defaultIcons])
+    {
+        if ([qualifiedName caseInsensitiveCompare:icon.exportName] == NSOrderedSame)
+            return icon;
     }
+
     for (OALocationIcon *icon in [self defaultIcons])
     {
         if ([name isEqualToString:icon.name] ||
+            [name isEqualToString:icon.exportName] ||
             [name isEqualToString:icon.iconName] ||
             [name isEqualToString:icon.modelName])
         {
             return icon;
         }
     }
-    return _DEFAULT;
+    return defaultIcon;
 }
 
 + (OALocationIcon *) DEFAULT
@@ -148,6 +165,13 @@ static OALocationIcon *_MOVEMENT_CAR;
 
 - (NSString *) name
 {
+    return _name;
+}
+
+- (NSString *)exportName
+{
+    if (self == _DEFAULT || self == _CAR || self == _BICYCLE)
+        return [kStaticIconPrefix stringByAppendingString:_name];
     return _name;
 }
 

@@ -191,7 +191,7 @@
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "search_more" = "Search more…";
-"day_off_label" = "off";
+"day_off_label" = "closed";
 "open_from" = "Open from";
 "open_till" = "Open until";
 "will_close_at" = "Closes at";

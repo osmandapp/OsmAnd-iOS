@@ -259,9 +259,12 @@ static const OsmAnd::TextRasterizer::Style::TextAlignment kNoTextAlignment = sta
     _gridConfiguration->setSecondaryProjection(secondaryProjection);
     _gridConfiguration->setSecondaryFormat(format);
 
+    _gridConfiguration->setProjectionParameters();
+    _gridConfiguration->setSecondaryEllipsoidParameters(
+        OsmAnd::PointD(0.0, 0.0), OsmAnd::PointD(0.0, 0.0), OsmAnd::PointD(0.0, 0.0), OsmAnd::PointD(0.0, 1.0));
+
     if (info.hasProjectionParameters)
     {
-        _gridConfiguration->setProjectionParameters();
         OsmAnd::PointD lonBounds(info.lonMin, info.lonMax);
         OsmAnd::PointD latBounds(info.latMin, info.latMax);
         OsmAnd::PointD semiMajor(info.semiMajor, info.invFlattening);

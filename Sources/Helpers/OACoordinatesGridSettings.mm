@@ -18,7 +18,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSInteger _supportedMaxZoom;
-    NSMutableDictionary<NSString *, NSValue *> *_supportedZoomByFormatId;
+    NSMutableDictionary<NSString *, NSValue *> *_zoomRangeByFormatId;
 }
 
 - (instancetype)init
@@ -29,7 +29,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _supportedMaxZoom = 22;
-        _supportedZoomByFormatId = [NSMutableDictionary new];
+        _zoomRangeByFormatId = [NSMutableDictionary new];
     }
     return self;
 }
@@ -149,7 +149,7 @@
 - (ZoomRange)supportedZoomLevelsForFormatId:(NSString *)formatId
 {
     NSString *key = formatId ?: GridFormatWrapper.defaultFormatId;
-    NSValue *cached = _supportedZoomByFormatId[key];
+    NSValue *cached = _zoomRangeByFormatId[key];
     if (cached)
     {
         ZoomRange r;
@@ -158,7 +158,7 @@
     }
     ZoomRange calculated = [self calculateSupportedZoomLevelsForFormatId:key];
     NSValue *value = [NSValue valueWithBytes:&calculated objCType:@encode(ZoomRange)];
-    _supportedZoomByFormatId[key] = value;
+    _zoomRangeByFormatId[key] = value;
     return calculated;
 }
 

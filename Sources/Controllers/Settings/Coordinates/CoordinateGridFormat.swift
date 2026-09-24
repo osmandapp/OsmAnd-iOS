@@ -9,23 +9,24 @@
 import Foundation
 
 struct CoordinateGridPoint {
+    static let zero = CoordinateGridPoint(x: 0, y: 0)
+
     let x: Double
     let y: Double
-    static let zero = CoordinateGridPoint(x: 0, y: 0)
 }
 
 struct CoordinateGridEllipsoidParameters {
-    let translationsXY: CoordinateGridPoint
-    let translationsZW: CoordinateGridPoint
-    let rotationsXY: CoordinateGridPoint
-    let rotationsZScale: CoordinateGridPoint
-
     static let identity = CoordinateGridEllipsoidParameters(
         translationsXY: .zero,
         translationsZW: .zero,
         rotationsXY: .zero,
         rotationsZScale: CoordinateGridPoint(x: 0, y: 1)
     )
+
+    let translationsXY: CoordinateGridPoint
+    let translationsZW: CoordinateGridPoint
+    let rotationsXY: CoordinateGridPoint
+    let rotationsZScale: CoordinateGridPoint
 }
 
 struct CoordinateGridProjectionParameters {

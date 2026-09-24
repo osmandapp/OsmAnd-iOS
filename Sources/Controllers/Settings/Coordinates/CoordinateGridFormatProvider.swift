@@ -54,21 +54,18 @@ final class CoordinateGridFormatProvider {
     }
 
     func isSupported(_ formatId: String?) -> Bool {
-        guard let normalizedId = normalizeId(formatId) else { return false }
-        let builtIn = GridFormat.from(formatId: normalizedId)
-        guard let code = builtIn?.epsgCode?.intValue ?? CoordinateFormatIds.epsgCode(normalizedId) else {
-            return builtIn != nil
-        }
-        return repository.getGridDefinition(code: Int32(code)) != nil
+        resolve(formatId) != nil
     }
 
     func filterSupportedIds(_ formatIds: [String]) -> [String] {
         var result = [String]()
         var seen = Set<String>()
         for id in formatIds {
-            guard let n = normalizeId(id), isSupported(n), !seen.contains(n) else { continue }
-            seen.insert(n)
-            result.append(n)
+            guard let normalizedId = normalizeId(id),
+                  isSupported(normalizedId),
+                  !seen.contains(normalizedId) else { continue }
+            seen.insert(normalizedId)
+            result.append(normalizedId)
         }
         return result
     }
@@ -76,7 +73,7 @@ final class CoordinateGridFormatProvider {
     // MARK: - Private
 
     private func normalizeId(_ formatId: String?) -> String? {
-        if let n = CoordinateFormatIds.normalize(formatId) { return n }
+        if let normalized = CoordinateFormatIds.normalize(formatId) { return normalized }
         // legacy enum names: "DMS", "UTM", …
         guard let value = formatId?.trimmingCharacters(in: .whitespacesAndNewlines),
               !value.isEmpty else { return nil }
@@ -125,17 +122,23 @@ final class CoordinateGridFormatProvider {
         _ epsgCode: Int,
         projectionRaw: Int32
     ) -> CoordinateGridProjectionConstants? {
-        guard let c = OAEpsgCoordinateTransformer.sharedInstance()
+        guard let constants = OAEpsgCoordinateTransformer.sharedInstance()
             .constants(forCode: epsgCode, projectionRaw: Int(projectionRaw)) else {
             return nil
         }
         return CoordinateGridProjectionConstants(
-            lonBounds: CoordinateGridPoint(x: c.lonMin, y: c.lonMax),
-            latBounds: CoordinateGridPoint(x: c.latMin, y: c.latMax),
-            semiMajorAxisAndInverseFlattening: CoordinateGridPoint(x: c.semiMajor, y: c.invFlattening),
-            refLonLat: CoordinateGridPoint(x: c.refLon, y: c.refLat),
-            falseEastingAndNorthing: CoordinateGridPoint(x: c.falseEasting, y: c.falseNorthing),
-            scaleFactor: CoordinateGridPoint(x: c.scaleFactor, y: c.scaleFactorY)
+            lonBounds: CoordinateGridPoint(x: constants.lonMin, y: constants.lonMax),
+            latBounds: CoordinateGridPoint(x: constants.latMin, y: constants.latMax),
+            semiMajorAxisAndInverseFlattening: CoordinateGridPoint(
+                x: constants.semiMajor,
+                y: constants.invFlattening
+            ),
+            refLonLat: CoordinateGridPoint(x: constants.refLon, y: constants.refLat),
+            falseEastingAndNorthing: CoordinateGridPoint(
+                x: constants.falseEasting,
+                y: constants.falseNorthing
+            ),
+            scaleFactor: CoordinateGridPoint(x: constants.scaleFactor, y: constants.scaleFactorY)
         )
     }
 
@@ -143,15 +146,15 @@ final class CoordinateGridFormatProvider {
         _ epsgCode: Int,
         operationCode: Int
     ) -> CoordinateGridEllipsoidParameters? {
-        guard let p = OAEpsgCoordinateTransformer.sharedInstance()
+        guard let parameters = OAEpsgCoordinateTransformer.sharedInstance()
             .ellipsoidParameters(forCode: epsgCode, operationCode: operationCode) else {
             return nil
         }
         return CoordinateGridEllipsoidParameters(
-            translationsXY: CoordinateGridPoint(x: p.translationsX, y: p.translationsY),
-            translationsZW: CoordinateGridPoint(x: p.translationsZ, y: p.translationsW),
-            rotationsXY: CoordinateGridPoint(x: p.rotationsX, y: p.rotationsY),
-            rotationsZScale: CoordinateGridPoint(x: p.rotationsZ, y: p.scale)
+            translationsXY: CoordinateGridPoint(x: parameters.translationsX, y: parameters.translationsY),
+            translationsZW: CoordinateGridPoint(x: parameters.translationsZ, y: parameters.translationsW),
+            rotationsXY: CoordinateGridPoint(x: parameters.rotationsX, y: parameters.rotationsY),
+            rotationsZScale: CoordinateGridPoint(x: parameters.rotationsZ, y: parameters.scale)
         )
     }
 

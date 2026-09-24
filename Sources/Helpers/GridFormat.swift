@@ -120,6 +120,44 @@ enum GridLabelsPosition: Int32, CaseIterable {
     }
 }
 
+private enum LegacyGridFormatName: String {
+    case dms = "DD_MM_SS"
+    case dm = "DD_MM_MMM"
+    case digital = "DD_DDDDD"
+    case utm = "UTM"
+    case mgrs = "MGRS"
+    case olc = "OLC"
+
+    var formatId: String {
+        switch self {
+        case .dms: return CoordinateFormatIds.builtinDms
+        case .dm: return CoordinateFormatIds.builtinDdm
+        case .digital: return CoordinateFormatIds.builtinDdd
+        case .utm: return CoordinateFormatIds.builtinUtm
+        case .mgrs: return CoordinateFormatIds.builtinMgrs
+        case .olc: return CoordinateFormatIds.builtinOlc
+        }
+    }
+}
+
+private enum LegacyStoredGridFormat: Int {
+    case dms = 0
+    case dm = 1
+    case digital = 2
+    case utm = 3
+    case mgrs = 4
+
+    var formatId: String {
+        switch self {
+        case .dms: return CoordinateFormatIds.builtinDms
+        case .dm: return CoordinateFormatIds.builtinDdm
+        case .digital: return CoordinateFormatIds.builtinDdd
+        case .utm: return CoordinateFormatIds.builtinUtm
+        case .mgrs: return CoordinateFormatIds.builtinMgrs
+        }
+    }
+}
+
 @objcMembers
 final class GridFormatWrapper: NSObject {
     static var defaultFormatId: String {
@@ -131,45 +169,14 @@ final class GridFormatWrapper: NSObject {
             if let normalized = CoordinateFormatIds.normalize(stringValue) {
                 return normalized
             }
-
-            switch stringValue {
-            case "DD_MM_SS":
-                return CoordinateFormatIds.builtinDms
-            case "DD_MM_MMM":
-                return CoordinateFormatIds.builtinDdm
-            case "DD_DDDDD":
-                return CoordinateFormatIds.builtinDdd
-            case "UTM":
-                return CoordinateFormatIds.builtinUtm
-            case "MGRS":
-                return CoordinateFormatIds.builtinMgrs
-            case "OLC":
-                return CoordinateFormatIds.builtinOlc
-            default:
-                break
+            if let legacyName = LegacyGridFormatName(rawValue: stringValue) {
+                return legacyName.formatId
             }
         }
         if let numberValue = value as? NSNumber,
-           let legacyId = legacyStoredGridFormatId(numberValue.intValue) {
-            return legacyId
+           let legacyStored = LegacyStoredGridFormat(rawValue: numberValue.intValue) {
+            return legacyStored.formatId
         }
-        return CoordinateFormatIds.builtinDdd
-    }
-
-    private static func legacyStoredGridFormatId(_ storedRawValue: Int) -> String? {
-        switch storedRawValue {
-        case 0:
-            return CoordinateFormatIds.builtinDms
-        case 1:
-            return CoordinateFormatIds.builtinDdm
-        case 2:
-            return CoordinateFormatIds.builtinDdd
-        case 3:
-            return CoordinateFormatIds.builtinUtm
-        case 4:
-            return CoordinateFormatIds.builtinMgrs
-        default:
-            return nil
-        }
+        return defaultFormatId
     }
 }

@@ -11,6 +11,7 @@
 class CoordinatesBaseWidget: OABaseWidgetView {
     private static let widgetHeight: CGFloat = 44
     private static let formatPrefId = "coordinates_widget_format"
+    private static let formatRowKey = "coordinate_format"
     private static let selectedAppModeParamId = "selectedAppMode"
 
     @IBOutlet private var divider: UIView!
@@ -99,7 +100,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
         let row = section.createNewRow()
         row.cellType = OAValueTableViewCell.getIdentifier()
-        row.key = "coordinate_format"
+        row.key = Self.formatRowKey
         row.title = localizedString("coords_format")
         row.setObj(format.title, forKey: "value")
 
@@ -107,7 +108,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     override func handleRowSelected(_ item: OATableRowData, viewController: WidgetConfigurationViewController) -> Bool {
-        guard item.key == "coordinate_format" else { return false }
+        guard item.key == Self.formatRowKey else { return false }
 
         configViewController = viewController
 
@@ -234,17 +235,17 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     private func applySelectedFormat(_ formatId: String) {
-        guard let vc = configViewController else { return }
+        guard let configViewController else { return }
 
-        if vc.createNew {
-            vc.widgetConfigurationParams?[Self.formatPrefId] = formatId
-            vc.widgetConfigurationParams?[Self.selectedAppModeParamId] = vc.selectedAppMode
+        if configViewController.createNew {
+            configViewController.widgetConfigurationParams?[Self.formatPrefId] = formatId
+            configViewController.widgetConfigurationParams?[Self.selectedAppModeParamId] = configViewController.selectedAppMode
         } else {
-            coordinateFormatPref.set(formatId, mode: vc.selectedAppMode)
+            coordinateFormatPref.set(formatId, mode: configViewController.selectedAppMode)
             _ = updateInfo()
             OARootViewController.instance().mapPanel.recreateControls()
         }
-        vc.onWidgetStateChanged()
+        configViewController.onWidgetStateChanged()
     }
 
     private func resolveFormat(_ id: String, appMode: OAApplicationMode) -> CoordinateFormat {
@@ -357,12 +358,17 @@ extension CoordinatesBaseWidget: CoordinateFormatSelectorDelegate {
     }
 
     func coordinateFormatSelectorDidRequestOtherFormat(_ selector: CoordinateFormatSelectorViewController) {
-        guard let vc = configViewController else { return }
+        guard let configViewController else { return }
 
-        let excluded = OAAppSettings.sharedManager().coordinateFormatSettingsStorage.preferredIds(vc.selectedAppMode)
+        let appMode = configViewController.selectedAppMode
+        let excluded = OAAppSettings.sharedManager().coordinateFormatSettingsStorage.preferredIds(appMode)
 
-        CoordinateFormatSelectorRouter.presentAdd(from: vc, appMode: vc.selectedAppMode, excludedIds: excluded) { [weak self] id in
-            self?.applySelectedFormat(id)
+        CoordinateFormatSelectorRouter.presentAdd(
+            from: configViewController,
+            appMode: appMode,
+            excludedIds: excluded
+        ) { [weak self] formatId in
+            self?.applySelectedFormat(formatId)
         }
     }
 }

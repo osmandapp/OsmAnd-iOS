@@ -318,12 +318,16 @@ final class CoordinateFormatSelectorRouter: NSObject {
             addMode: addMode,
             focusSearch: focusSearch
         )
-        addVC.onFormatAdded = { id in
+        addVC.onFormatAdded = { [weak presenter] formatId in
             OAAppSettings.sharedManager()
                 .coordinateFormatSettingsStorage
-                .addRecentId(id)
+                .addRecentId(formatId)
+            guard let presenter else {
+                onSelected(formatId)
+                return
+            }
             presenter.dismiss(animated: true) {
-                onSelected(id)
+                onSelected(formatId)
             }
         }
 

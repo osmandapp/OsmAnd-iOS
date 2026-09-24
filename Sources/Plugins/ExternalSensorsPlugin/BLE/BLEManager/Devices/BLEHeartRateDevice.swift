@@ -25,30 +25,12 @@ final class BLEHeartRateDevice: Device {
     override var getServiceDisconnectedImage: UIImage? {
         UIImage(named: "ic_custom_sensor_heart_rate_outlined")
     }
-    
-    override var getDataFields: [[String: String]]? {
-        if let sensor = sensors.compactMap({ $0 as? BLEHeartRateSensor }).first {
-            if let lastHeartRateData = sensor.lastHeartRateData {
-                return [[localizedString("map_widget_ant_heart_rate"):
-                            lastHeartRateData.heartRate == 0
-                        ? "-"
-                        : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]]
-            } else {
-                return [[localizedString("map_widget_ant_heart_rate"): "-"]]
-            }
-        }
-        return nil
-    }
-    
+
     init() {
         super.init(deviceType: .BLE_HEART_RATE)
         sensors.append(BLEHeartRateSensor(device: self, sensorId: "heart_rate"))
     }
-    
-    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        [.heartRate]
-    }
-    
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }

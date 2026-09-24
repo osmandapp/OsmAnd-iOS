@@ -40,6 +40,17 @@ final class BLETemperatureSensor: Sensor {
         return [lastTemperatureData].compactMap { $0 }
     }
 
+    override var dataFields: [[String: String]]? {
+        if let lastTemperatureData {
+            return [[localizedString("shared_string_temperature"):
+                        lastTemperatureData.temperature == 0.0
+                    ? "-"
+                    : String(lastTemperatureData.temperature) + " " + localizedString("degree_celsius")]]
+        } else {
+            return [[localizedString("shared_string_temperature"): "-"]]
+        }
+    }
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return

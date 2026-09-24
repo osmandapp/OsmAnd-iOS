@@ -250,7 +250,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         }
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
         children.append(UIAction(title: localizedString("plan_route_save_as"),
-                                 image: .icCustomSaveToFile) { [weak self] _ in
+                                 image: .icCustomSaveToFileOutlined) { [weak self] _ in
             self?.onSaveSegment?(segment.pointIndexes)
         })
         children.append(UIAction(title: localizedString("delete_segment"),

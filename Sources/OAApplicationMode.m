@@ -306,7 +306,7 @@ static int PROFILE_TRUCK = 1000;
         @"routeService" : self.getRouterServiceName,
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
-        @"locIcon" : [self.getLocationIcon exportName],
+        @"locIcon" : [self.getLocationIcon name],
         @"locIconSize" : @([self getLocationIconSize]),
         @"navIconSize" : @([self getCourseIconSize]),
         @"navIcon" : [self.getNavigationIcon exportName],

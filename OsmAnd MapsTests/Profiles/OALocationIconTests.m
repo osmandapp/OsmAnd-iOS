@@ -2,6 +2,32 @@
 #import "OALocationIcon.h"
 #import "OAApplicationMode.h"
 
+@interface OALocationIconExportMode : OAApplicationMode
+
+@property (nonatomic) OALocationIcon *restingIcon;
+@property (nonatomic) OALocationIcon *movingIcon;
+
+@end
+
+@implementation OALocationIconExportMode
+
+- (NSString *)stringKey { return @"icon_export_test"; }
+- (NSString *)getUserProfileName { return @"Icon export test"; }
+- (NSString *)getIconColorName { return @"BLUE"; }
+- (int)getColorToExport { return -1; }
+- (NSString *)getIconName { return @"ic_action_car_dark"; }
+- (OAApplicationMode *)parent { return nil; }
+- (NSString *)getRouterServiceName { return @"OSMAND"; }
+- (NSString *)getDerivedProfile { return @"car"; }
+- (NSString *)getRoutingProfile { return @"car"; }
+- (OALocationIcon *)getLocationIcon { return self.restingIcon; }
+- (OALocationIcon *)getNavigationIcon { return self.movingIcon; }
+- (double)getLocationIconSize { return 1; }
+- (double)getCourseIconSize { return 1; }
+- (int)getOrder { return 0; }
+
+@end
+
 @interface OALocationIconTests : XCTestCase
 @end
 
@@ -71,12 +97,31 @@
     {
         for (OALocationIcon *navigation in OALocationIcon.defaultIcons)
         {
-            NSDictionary *exported = @{@"locIcon": location.exportName, @"navIcon": navigation.exportName};
+            OALocationIconExportMode *mode = [[OALocationIconExportMode alloc] init];
+            mode.restingIcon = location;
+            mode.movingIcon = navigation;
+            NSDictionary *exported = mode.toJson;
             NSData *data = [NSJSONSerialization dataWithJSONObject:exported options:0 error:nil];
             NSDictionary *imported = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            XCTAssertEqual([OALocationIcon locationIconWithName:imported[@"locIcon"] forNavigation:NO], location);
-            XCTAssertEqual([OALocationIcon locationIconWithName:imported[@"navIcon"] forNavigation:YES], navigation);
+            OAApplicationModeBean *bean = [OAApplicationModeBean fromJson:imported];
+            XCTAssertEqualObjects(bean.locIcon, location.name);
+            XCTAssertEqualObjects(bean.navIcon, navigation.name);
         }
+    }
+}
+
+- (void)testRestingExportPreservesLegacyNames
+{
+    OALocationIconExportMode *mode = [[OALocationIconExportMode alloc] init];
+    mode.movingIcon = OALocationIcon.MOVEMENT_DEFAULT;
+    NSArray<NSString *> *legacyNames = @[@"DEFAULT", @"CAR", @"BICYCLE", @"MOVEMENT_DEFAULT", @"MOVEMENT_NAUTICAL", @"MOVEMENT_CAR"];
+    NSArray<OALocationIcon *> *icons = OALocationIcon.defaultIcons;
+    for (NSUInteger index = 0; index < icons.count; index++)
+    {
+        mode.restingIcon = icons[index];
+        NSDictionary *exported = mode.toJson;
+        XCTAssertEqualObjects(exported[@"locIcon"], legacyNames[index]);
+        XCTAssertEqualObjects(exported[@"navIcon"], @"MOVEMENT_DEFAULT");
     }
 }
 

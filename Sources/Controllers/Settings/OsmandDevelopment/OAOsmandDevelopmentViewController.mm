@@ -289,7 +289,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     {
         [[OAAppSettings sharedManager].use3dIconsByDefault set:sender.isOn];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-    }  
+    }
     else if ([item.key isEqualToString:kBatterySavingModeKey])
     {
         [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];

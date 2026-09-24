@@ -17,7 +17,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private static let controlHeight: CGFloat = 16
     private static let contentHeight: CGFloat = 34
     private static let borderWidth: CGFloat = 2
-    
+
     // swiftlint:disable all
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
@@ -41,7 +41,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     var currentActiveController: UIViewController?
     @nonobjc var onCurrentPageChanged: (() -> Void)?
     @nonobjc var onWidgetPagesChanged: (() -> Void)?
-    
+
     weak var delegate: WidgetPanelDelegate?
     
     var pageViewController: UIPageViewController! {

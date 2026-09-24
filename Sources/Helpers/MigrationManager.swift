@@ -150,18 +150,22 @@ final class MigrationManager: NSObject {
     }
 
     private func migrateTransparentWidgetsToPanelAppearance() {
-        let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
-        for appMode in OAApplicationMode.allPossibleValues() {
-            for layoutMode in layoutModes {
-                let preference = settings.transparentWidgets(
-                    layoutMode.map { NSNumber(value: $0.rawValue) }
-                )
-                guard preference.isSet(for: appMode), preference.get(appMode) else { continue }
-
-                let appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
-                                                                        layoutMode: layoutMode)
-                for panel in WidgetsPanel.values {
-                    appearanceSettings.setBackgroundMode(.transparent, for: panel)
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+            for appMode in OAApplicationMode.allPossibleValues() {
+                for layoutMode in layoutModes {
+                    let preference = settings.transparentWidgets(
+                        layoutMode.map { NSNumber(value: $0.rawValue) }
+                    )
+                    guard preference.isSet(for: appMode) else { continue }
+                    if preference.get(appMode) {
+                        let appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                                                layoutMode: layoutMode)
+                        for panel in WidgetsPanel.values {
+                            appearanceSettings.setBackgroundMode(.transparent, for: panel)
+                        }
+                    }
+                    preference.resetMode(toDefault: appMode)
                 }
             }
         }

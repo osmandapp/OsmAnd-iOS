@@ -993,19 +993,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     BOOL compassChanged = [preferenceKeys intersectsSet:[self compassPropertyKeysForButtonState:compassButtonState]];
     BOOL colorsChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
-        [_settings transparentWidgetsForAppMode:[_settings.applicationMode get]],
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
-    BOOL widgetPanelAppearanceChanged = NO;
-    for (NSString *key in preferenceKeys)
-    {
-        if ([key containsString:@"widget_panel_"])
-        {
-            widgetPanelAppearanceChanged = YES;
-            break;
-        }
-    }
+    BOOL widgetPanelAppearanceChanged = [preferenceKeys intersectsSet:
+        [WidgetPanelAppearancePreferencesRegistrar preferenceKeysWithSettings:_settings]];
     BOOL panelsLayoutModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
         [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]]
     ]]];
@@ -1489,9 +1481,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
         _bottomBarView.backgroundColor =
-            [WidgetPanelAppearanceResolver resolveForPanel:WidgetsPanel.bottomPanel
-                                                   appMode:_settings.applicationMode.get
-                                                 nightMode:_settings.isAppMapNightMode].backgroundColor;
+            [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.bottomPanel
+                                                           appMode:_settings.applicationMode.get
+                                                         nightMode:_settings.isAppMapNightMode];
 }
 
 - (void)updateWidgetPanelAppearanceColors
@@ -1697,7 +1689,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (UIColor *) getStatusBarBackgroundColor
 {
     BOOL isNight = _settings.isAppMapNightMode;
-    BOOL transparent = _settings.isTransparentWidgets;
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])
         statusBarColor = UIColor.clearColor;
@@ -1708,11 +1699,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = [WidgetPanelAppearanceResolver resolveForPanel:WidgetsPanel.topPanel
-                                                                appMode:_settings.applicationMode.get
-                                                              nightMode:isNight].backgroundColor;
+        statusBarColor = [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.topPanel
+                                                                        appMode:_settings.applicationMode.get
+                                                                      nightMode:isNight];
     if (!statusBarColor)
-        statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
+        statusBarColor = isNight ? UIColor.blackColor : UIColor.whiteColor;
     return statusBarColor;
 }
 

@@ -77,23 +77,17 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private let titleLabel = UILabel()
     private let applyButton = UIButton(type: .system)
 
-    private let initialDayColor: UIColor
-    private let initialNightColor: UIColor
-    private let initialTextMode: WidgetPanelTextColorMode?
-    private let initialBackgroundMode: WidgetPanelBackgroundMode?
-
     private var sortedColorItems: [PaletteItemSolid] = []
     private var currentDayColorItem: PaletteItemSolid?
     private var currentNightColorItem: PaletteItemSolid?
 
     private var isNightColorMode: Bool
-    private var isApplied = false
     private var didRestoreNavigation = false
     private var hiddenMapControlStates: [(view: UIView, wasHidden: Bool)] = []
     private var widgetPanelVisibilityStates: [(view: UIView, wasHidden: Bool)] = []
 
     private var isColorSelectionAvailable: Bool {
-        target != .background || OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
+        target != .background || WidgetPanelAppearanceResolver.isCustomBackgroundAvailable
     }
 
     private var currentColorItem: PaletteItemSolid? {
@@ -122,21 +116,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         self.layoutMode = layoutMode
         self.target = target
         appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
-        initialDayColor = appearanceSettings.color(for: target, panel: panel, nightMode: false)
-        initialNightColor = appearanceSettings.color(for: target, panel: panel, nightMode: true)
         isNightColorMode = OAAppSettings.sharedManager().isAppMapNightMode
-
-        switch target {
-        case .primaryText:
-            initialTextMode = appearanceSettings.primaryTextColorMode(for: panel)
-            initialBackgroundMode = nil
-        case .secondaryText:
-            initialTextMode = appearanceSettings.secondaryTextColorMode(for: panel)
-            initialBackgroundMode = nil
-        case .background:
-            initialTextMode = nil
-            initialBackgroundMode = appearanceSettings.backgroundMode(for: panel)
-        }
 
         super.init(nibName: "OABaseScrollableHudViewController", bundle: nil)
         previewView.setCurrentPageIndex(initialPageIndex, for: panel)
@@ -156,7 +136,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         configurePreview()
         configureFloatingButtons()
         configureApplyButton()
-        applyDraftAndRefreshWidgets()
+        updatePreview()
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onPurchaseStateChanged),
@@ -187,11 +167,11 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        previewView.setColorPreview(nil)
         previewView.releaseHostedWidgets()
         guard !didRestoreNavigation, isMovingFromParent || isBeingDismissed else { return }
         restoreMapControls()
         OADayNightHelper.instance().resetTempMode()
-        restoreDraftIfNeeded()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -229,8 +209,12 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func prepareColors() {
-        currentDayColorItem = colorItem(for: initialDayColor)
-        currentNightColorItem = colorItem(for: initialNightColor)
+        currentDayColorItem = colorItem(for: appearanceSettings.color(for: target,
+                                                                      panel: panel,
+                                                                      nightMode: false))
+        currentNightColorItem = colorItem(for: appearanceSettings.color(for: target,
+                                                                        panel: panel,
+                                                                        nightMode: true))
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
     }
 
@@ -413,22 +397,21 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         OADayNightHelper.instance().setTempMode(Int((isNightColorMode ? DayNightMode.night : .day).rawValue))
     }
 
-    private func applyDraftAndRefreshWidgets() {
-        previewView.releaseHostedWidgets()
+    private func updatePreview() {
         applyPreviewPanelVisibility()
-        // configure() keeps this request pending until the preview receives
-        // non-zero bounds, so the panel can be prepared before the HUD appears.
-        defer { reloadPreview() }
         guard isColorSelectionAvailable,
               let dayColor = currentDayColorItem.map({ UIColor(argb: Int($0.colorInt)) }),
               let nightColor = currentNightColorItem.map({ UIColor(argb: Int($0.colorInt)) }) else {
+            previewView.setColorPreview(nil)
+            reloadPreview()
             return
         }
-        appearanceSettings.setColor(dayColor, for: target, panel: panel, nightMode: false)
-        appearanceSettings.setColor(nightColor, for: target, panel: panel, nightMode: true)
-        setCustomMode()
-        recreatePanelWidgets()
-        applyPreviewPanelVisibility()
+        previewView.setColorPreview(WidgetPanelColorPreview(target: target,
+                                                            dayColor: dayColor,
+                                                            nightColor: nightColor))
+        // configure() keeps this request pending until the preview receives
+        // non-zero bounds, so the panel can be prepared before the HUD appears.
+        reloadPreview()
     }
 
     private func reloadPreview() {
@@ -437,10 +420,6 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                               appMode: appMode,
                               layoutMode: layoutMode,
                               parentViewController: self)
-    }
-
-    private func recreatePanelWidgets() {
-        mapPanel.hudViewController?.mapInfoController?.recreateWidgetsPanel(panel)
     }
 
     private func applyPreviewPanelVisibility() {
@@ -504,34 +483,27 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         }
     }
 
-    private func restoreDraftIfNeeded() {
-        guard !isApplied else { return }
-        previewView.releaseHostedWidgets()
-        appearanceSettings.setColor(initialDayColor, for: target, panel: panel, nightMode: false)
-        appearanceSettings.setColor(initialNightColor, for: target, panel: panel, nightMode: true)
-        if let initialTextMode {
-            let kind: WidgetPanelTextColorKind = target == .primaryText ? .primary : .secondary
-            appearanceSettings.setTextColorMode(initialTextMode, kind: kind, for: panel)
+    private func commitDraft() {
+        guard let dayColor = currentDayColorItem.map({ UIColor(argb: Int($0.colorInt)) }),
+              let nightColor = currentNightColorItem.map({ UIColor(argb: Int($0.colorInt)) }) else { return }
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            appearanceSettings.setColor(dayColor, for: target, panel: panel, nightMode: false)
+            appearanceSettings.setColor(nightColor, for: target, panel: panel, nightMode: true)
+            setCustomMode()
         }
-        if let initialBackgroundMode {
-            appearanceSettings.setBackgroundMode(initialBackgroundMode, for: panel)
-        }
-        recreatePanelWidgets()
     }
 
     private func closeScreen(keepingChanges: Bool) {
         guard !didRestoreNavigation else { return }
         didRestoreNavigation = true
-        isApplied = keepingChanges
         previewView.preserveCurrentPage()
         let selectedPageIndex = previewView.currentPageIndex(for: panel)
+        previewView.setColorPreview(nil)
         previewView.releaseHostedWidgets()
-        OADayNightHelper.instance().resetTempMode()
-        if !keepingChanges {
-            restoreDraftIfNeeded()
-        } else {
-            recreatePanelWidgets()
+        if keepingChanges {
+            commitDraft()
         }
+        OADayNightHelper.instance().resetTempMode()
         delegate?.widgetPanelColorViewControllerDidFinish(pageIndex: selectedPageIndex)
         if let navigationController = OARootViewController.instance().navigationController,
            !navControllerHistory.isEmpty {
@@ -564,7 +536,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         } else {
             currentDayColorItem = colorItem
         }
-        applyDraftAndRefreshWidgets()
+        updatePreview()
         refreshSelectedPalette()
     }
 
@@ -574,7 +546,6 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
 
     @objc private func onApplyButtonPressed() {
         guard isColorSelectionAvailable else { return }
-        applyDraftAndRefreshWidgets()
         closeScreen(keepingChanges: true)
     }
 
@@ -592,7 +563,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.updateApplyButtonAvailability()
-            self.applyDraftAndRefreshWidgets()
+            self.updatePreview()
             self.tableView.reloadData()
         }
     }
@@ -625,7 +596,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                                                      for: indexPath) as? WidgetPanelColorUnavailableCell
             cell?.configure(action: { [weak self] in
                 guard let navigationController = OARootViewController.instance().navigationController else { return }
-                OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.unlimited_MAP_DOWNLOADS(),
+                OAChoosePlanHelper.showChoosePlanScreen(with: nil as OAFeature?,
                                                         navController: navigationController)
                 self?.view.accessibilityViewIsModal = false
             })
@@ -649,9 +620,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 guard let self else { return }
                 self.isNightColorMode = index == 1
                 self.applyMapTheme()
-                self.previewView.releaseHostedWidgets()
-                self.recreatePanelWidgets()
-                self.reloadPreview()
+                self.updatePreview()
                 self.tableView.reloadRows(at: [IndexPath(row: Row.palette.rawValue, section: 0)], with: .none)
             }
             return cell

@@ -324,11 +324,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
-    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     
-    int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
+    int calcThemeId = (nightMode ? 2 : 0) | (following ? 1 : 0);
     if (_themeId != calcThemeId) {
         _themeId = calcThemeId;
         OATextState *state = [self calculateTextState];
@@ -439,9 +438,8 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (BOOL)isPanelBackgroundTransparent:(WidgetsPanel *)panel
 {
-    return [WidgetPanelAppearanceResolver resolveForPanel:panel
-                                                  appMode:_settings.applicationMode.get
-                                                nightMode:_settings.isAppMapNightMode].transparent;
+    return [WidgetPanelAppearanceResolver isBackgroundTransparentForPanel:panel
+                                                                   appMode:_settings.applicationMode.get];
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -895,7 +893,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -917,14 +914,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
     ts.textOutlineColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
-    if (!transparent)
-        ts.textOutlineWidth = 0;
-    else
-        ts.textOutlineWidth = 4.0;
+    ts.textOutlineWidth = 0;
     
-    ts.leftColor = transparent
-    ? [UIColor clearColor]
-    : [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
+    ts.leftColor = [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
     
     return ts;
 }

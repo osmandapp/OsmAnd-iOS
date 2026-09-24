@@ -676,6 +676,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     private var isPopulatingPreviewWidgets = false
     private var lastLayoutSize: CGSize = .zero
     private var selectedPageIndexes: [ObjectIdentifier: Int] = [:]
+    private var colorPreview: WidgetPanelColorPreview?
 
     private weak var pendingParentViewController: UIViewController?
 
@@ -769,12 +770,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             state.disabledLongPressRecognizers.append(contentsOf: disableLongPressRecognizers(in: state.view))
             state.removedContextMenuInteractions.append(contentsOf: removeContextMenuInteractions(in: state.view))
             hostedState = state
-            let appearance = WidgetPanelAppearanceResolver.resolve(
-                panel: panel,
-                appMode: appMode,
-                layoutMode: layoutMode,
-                nightMode: OAAppSettings.sharedManager().isAppMapNightMode
-            )
+            let appearance = resolvePreviewAppearance(panel: panel,
+                                                      appMode: appMode,
+                                                      layoutMode: layoutMode)
             applyAppearance(appearance, to: state.controller, using: state.mapInfoController)
             updateHostedPanelSize()
             return
@@ -791,6 +789,16 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
     func preserveCurrentPage() {
         guard let state = hostedState else { return }
         selectedPageIndexes[ObjectIdentifier(panel)] = state.controller.currentIndex
+    }
+
+    func setColorPreview(_ colorPreview: WidgetPanelColorPreview?) {
+        self.colorPreview = colorPreview
+        guard let state = hostedState else { return }
+        let appearance = resolvePreviewAppearance(panel: state.panel,
+                                                  appMode: state.appMode,
+                                                  layoutMode: state.previewLayoutMode)
+        applyAppearance(appearance, to: state.controller, using: state.mapInfoController)
+        schedulePanelSizeUpdate()
     }
 
     func currentPageIndex(for panel: WidgetsPanel) -> Int {
@@ -898,7 +906,7 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             hudViewController.updateDependentButtonsVisibility()
         }
     }
-    
+
     func onPanelSizeChanged() {
         guard !isMeasuringPanelSize, !isPageTransitionInProgress else { return }
         schedulePanelSizeUpdate()
@@ -931,12 +939,10 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         let originalLayoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
             ? .default(forAppMode: appMode)
             : nil
-        let previewAppearance = WidgetPanelAppearanceResolver.resolve(
-            panel: panel,
-            appMode: appMode,
-            layoutMode: layoutMode,
-            nightMode: nightMode
-        )
+        let previewAppearance = resolvePreviewAppearance(panel: panel,
+                                                         appMode: appMode,
+                                                         layoutMode: layoutMode,
+                                                         nightMode: nightMode)
         applyAppearance(previewAppearance,
                         to: controller,
                         using: mapInfoController)
@@ -1259,12 +1265,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         panelSizeUpdateGeneration += 1
         isMeasuringPanelSize = true
         defer { isMeasuringPanelSize = false }
-        let previewAppearance = WidgetPanelAppearanceResolver.resolve(
-            panel: state.panel,
-            appMode: state.appMode,
-            layoutMode: state.previewLayoutMode,
-            nightMode: OAAppSettings.sharedManager().isAppMapNightMode
-        )
+        let previewAppearance = resolvePreviewAppearance(panel: state.panel,
+                                                         appMode: state.appMode,
+                                                         layoutMode: state.previewLayoutMode)
         // Map recreation and rotation apply the appearance for the physical
         // orientation. A preview must remain bound to the layout mode it edits.
         applyAppearance(previewAppearance,
@@ -1285,6 +1288,18 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             // Complete layout while delegate-driven measurements are suppressed.
             state.view.layoutIfNeeded()
         }
+    }
+
+    private func resolvePreviewAppearance(panel: WidgetsPanel,
+                                          appMode: OAApplicationMode,
+                                          layoutMode: ScreenLayoutMode?,
+                                          nightMode: Bool = OAAppSettings.sharedManager().isAppMapNightMode)
+        -> ResolvedWidgetPanelAppearance {
+        WidgetPanelAppearanceResolver.resolve(panel: panel,
+                                              appMode: appMode,
+                                              layoutMode: layoutMode,
+                                              nightMode: nightMode,
+                                              colorPreview: colorPreview)
     }
 
     private func applyPreviewSizeMode(to state: inout HostedPanelState) {

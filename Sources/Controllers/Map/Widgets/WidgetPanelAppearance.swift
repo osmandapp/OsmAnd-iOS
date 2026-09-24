@@ -115,6 +115,16 @@ enum WidgetPanelColorTarget {
     case background
 }
 
+struct WidgetPanelColorPreview {
+    let target: WidgetPanelColorTarget
+    let dayColor: UIColor
+    let nightColor: UIColor
+
+    func color(nightMode: Bool) -> UIColor {
+        nightMode ? nightColor : dayColor
+    }
+}
+
 final class WidgetPanelAppearanceSettings {
     // Identifiers and enum raw values are part of the cross-platform profile export format.
     private enum ModePreference: String {
@@ -157,11 +167,11 @@ final class WidgetPanelAppearanceSettings {
         let style: UIUserInterfaceStyle = nightMode ? .dark : .light
         return color.resolvedColor(with: UITraitCollection(userInterfaceStyle: style))
     }
-    
+
     @discardableResult
-    private static func allPreferences(panel: WidgetsPanel,
-                                       layoutMode: ScreenLayoutMode?,
-                                       settings: OAAppSettings) -> [OACommonPreference] {
+    fileprivate static func allPreferences(panel: WidgetsPanel,
+                                           layoutMode: ScreenLayoutMode?,
+                                           settings: OAAppSettings) -> [OACommonPreference] {
         [
             modePreference(.size,
                            panel: panel,
@@ -254,12 +264,6 @@ final class WidgetPanelAppearanceSettings {
         return settings.layoutPreference(basePreference,
                                          preferenceKey: preferenceKey,
                                          screenLayoutMode: layoutMode.map { NSNumber(value: $0.rawValue) }) as! OACommonInteger
-    }
-
-    fileprivate static func registerPreferences(for panel: WidgetsPanel,
-                                                layoutMode: ScreenLayoutMode?,
-                                                settings: OAAppSettings) {
-        allPreferences(panel: panel, layoutMode: layoutMode, settings: settings)
     }
 
     func sizeMode(for panel: WidgetsPanel) -> WidgetPanelSizeMode {
@@ -447,15 +451,39 @@ final class WidgetPanelAppearanceSettings {
 
 @objcMembers
 final class WidgetPanelAppearancePreferencesRegistrar: NSObject {
+    private static var cachedPreferenceKeys: NSSet?
+
     static func registerAllPreferences(with settings: OAAppSettings) {
         let layoutModes: [ScreenLayoutMode?] = [nil, .portrait, .landscape]
+        var keys: [String] = []
         for layoutMode in layoutModes {
             WidgetsPanel.values.forEach {
-                WidgetPanelAppearanceSettings.registerPreferences(for: $0,
-                                                                  layoutMode: layoutMode,
-                                                                  settings: settings)
+                let preferences = WidgetPanelAppearanceSettings.allPreferences(panel: $0,
+                                                                                layoutMode: layoutMode,
+                                                                                settings: settings)
+                keys.append(contentsOf: preferences.map(\.key))
             }
         }
+        cachedPreferenceKeys = NSSet(array: keys)
+    }
+
+    @objc(preferenceKeysWithSettings:)
+    static func preferenceKeys(with settings: OAAppSettings) -> NSSet {
+        if let cachedPreferenceKeys {
+            return cachedPreferenceKeys
+        }
+        let layoutModes: [ScreenLayoutMode?] = [nil, .portrait, .landscape]
+        let keys = layoutModes.flatMap { layoutMode in
+            WidgetsPanel.values.flatMap {
+                WidgetPanelAppearanceSettings.allPreferences(panel: $0,
+                                                             layoutMode: layoutMode,
+                                                             settings: settings)
+                    .map(\.key)
+            }
+        }
+        let result = NSSet(array: keys)
+        cachedPreferenceKeys = result
+        return result
     }
 }
 
@@ -486,6 +514,10 @@ final class ResolvedWidgetPanelAppearance: NSObject {
 }
 
 final class WidgetPanelAppearanceResolver: NSObject {
+    static var isCustomBackgroundAvailable: Bool {
+        OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
+    }
+
     @objc(resolveForPanel:appMode:nightMode:) static func resolve(
         panel: WidgetsPanel,
         appMode: OAApplicationMode,
@@ -502,9 +534,15 @@ final class WidgetPanelAppearanceResolver: NSObject {
     static func resolve(panel: WidgetsPanel,
                         appMode: OAApplicationMode,
                         layoutMode: ScreenLayoutMode?,
-                        nightMode: Bool) -> ResolvedWidgetPanelAppearance {
+                        nightMode: Bool,
+                        colorPreview: WidgetPanelColorPreview? = nil) -> ResolvedWidgetPanelAppearance {
         let settings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
-        let backgroundMode = settings.backgroundMode(for: panel)
+        let requestedBackgroundMode: WidgetPanelBackgroundMode = colorPreview?.target == .background
+            ? .custom
+            : settings.backgroundMode(for: panel)
+        let backgroundMode = requestedBackgroundMode == .custom && !isCustomBackgroundAvailable
+            ? .default
+            : requestedBackgroundMode
         let transparent = backgroundMode == .transparent
         var backgroundColor = WidgetPanelAppearanceSettings.defaultColor(for: .background,
                                                                          panel: panel,
@@ -512,7 +550,10 @@ final class WidgetPanelAppearanceResolver: NSObject {
         if transparent {
             backgroundColor = .clear
         } else if backgroundMode == .custom {
-            backgroundColor = settings.color(for: .background, panel: panel, nightMode: nightMode)
+            backgroundColor = previewColor(for: .background,
+                                           from: colorPreview,
+                                           nightMode: nightMode)
+                ?? settings.color(for: .background, panel: panel, nightMode: nightMode)
         }
 
         let style: UIUserInterfaceStyle = nightMode ? .dark : .light
@@ -530,23 +571,35 @@ final class WidgetPanelAppearanceResolver: NSObject {
         let defaultDividerColor = UIColor.widgetSeparator.resolvedColor(with: traitCollection)
         let accents = transparent ? nil : dynamicAccents(for: backgroundColor)
         let primaryTextColor: UIColor
-        switch settings.primaryTextColorMode(for: panel) {
+        let primaryTextMode: WidgetPanelTextColorMode = colorPreview?.target == .primaryText
+            ? .custom
+            : settings.primaryTextColorMode(for: panel)
+        switch primaryTextMode {
         case .default:
             primaryTextColor = defaultPrimaryTextColor
         case .automatic:
             primaryTextColor = accents?.primary ?? defaultPrimaryTextColor
         case .custom:
-            primaryTextColor = settings.color(for: .primaryText, panel: panel, nightMode: nightMode)
+            primaryTextColor = previewColor(for: .primaryText,
+                                            from: colorPreview,
+                                            nightMode: nightMode)
+                ?? settings.color(for: .primaryText, panel: panel, nightMode: nightMode)
         }
 
         let secondaryTextColor: UIColor
-        switch settings.secondaryTextColorMode(for: panel) {
+        let secondaryTextMode: WidgetPanelTextColorMode = colorPreview?.target == .secondaryText
+            ? .custom
+            : settings.secondaryTextColorMode(for: panel)
+        switch secondaryTextMode {
         case .default:
             secondaryTextColor = defaultSecondaryTextColor
         case .automatic:
             secondaryTextColor = accents?.secondary ?? defaultSecondaryTextColor
         case .custom:
-            secondaryTextColor = settings.color(for: .secondaryText, panel: panel, nightMode: nightMode)
+            secondaryTextColor = previewColor(for: .secondaryText,
+                                              from: colorPreview,
+                                              nightMode: nightMode)
+                ?? settings.color(for: .secondaryText, panel: panel, nightMode: nightMode)
         }
 
         let dividerColor = accents?.divider ?? defaultDividerColor
@@ -559,6 +612,45 @@ final class WidgetPanelAppearanceResolver: NSObject {
                                              textOutlineColor: textOutlineColor,
                                              textOutlineWidth: opaqueBackground ? 0 : 4,
                                              transparent: transparent)
+    }
+
+    private static func previewColor(for target: WidgetPanelColorTarget,
+                                     from preview: WidgetPanelColorPreview?,
+                                     nightMode: Bool) -> UIColor? {
+        guard preview?.target == target else { return nil }
+        return preview?.color(nightMode: nightMode)
+    }
+
+    @objc(isBackgroundTransparentForPanel:appMode:)
+    static func isBackgroundTransparent(panel: WidgetsPanel,
+                                        appMode: OAApplicationMode) -> Bool {
+        let layoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? .default(forAppMode: appMode)
+            : nil
+        return WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
+            .backgroundMode(for: panel) == .transparent
+    }
+
+    @objc(backgroundColorForPanel:appMode:nightMode:)
+    static func backgroundColor(panel: WidgetsPanel,
+                                appMode: OAApplicationMode,
+                                nightMode: Bool) -> UIColor {
+        let layoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? .default(forAppMode: appMode)
+            : nil
+        let settings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
+        let requestedMode = settings.backgroundMode(for: panel)
+        let mode = requestedMode == .custom && !isCustomBackgroundAvailable ? .default : requestedMode
+        switch mode {
+        case .default:
+            return WidgetPanelAppearanceSettings.defaultColor(for: .background,
+                                                              panel: panel,
+                                                              nightMode: nightMode)
+        case .transparent:
+            return .clear
+        case .custom:
+            return settings.color(for: .background, panel: panel, nightMode: nightMode)
+        }
     }
 
     private static func dynamicAccents(for backgroundColor: UIColor) -> (primary: UIColor,

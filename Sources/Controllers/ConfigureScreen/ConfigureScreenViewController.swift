@@ -196,7 +196,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         if !isSharedLandscapeLayout {
             panelsLayoutRow.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
         }
-        
+
         let appearanceRow = widgetsSection.createNewRow()
         appearanceRow.key = RawKey.appearance.rawValue
         appearanceRow.title = localizedString("shared_string_appearance")

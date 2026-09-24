@@ -10,7 +10,7 @@
 enum ScreenLayoutMode: Int32, CaseIterable {
     case portrait
     case landscape
-
+    
     var title: String {
         switch self {
         case .portrait:
@@ -36,7 +36,6 @@ enum ScreenLayoutMode: Int32, CaseIterable {
             ? .landscape
             : .portrait
     }
-    
 }
 
 @objcMembers

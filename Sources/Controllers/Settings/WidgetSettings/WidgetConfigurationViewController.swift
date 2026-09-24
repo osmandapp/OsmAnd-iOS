@@ -33,7 +33,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         ? widgetInfo.screenLayoutMode
         : nil
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
@@ -272,7 +272,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         return UIMenu(options: .singleSelection, children: actions)
     }
-    
+
     private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
         let actions = options.compactMap { row -> UIAction? in
             guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
@@ -292,7 +292,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         return UIMenu(options: .singleSelection, children: actions)
     }
-    
+
     private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
         let actions = options.compactMap { row -> UIAction? in
             guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
@@ -444,7 +444,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 .updateWith(style: rowStyle, appMode: selectedAppMode)
             return
         }
-        
+
         pagedWidgets
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?
@@ -481,7 +481,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         if let textInfoWidget = widgetInfo.widget as? OATextInfoWidget {
             textInfoWidget.configureSimpleLayout()
         }
-        
+
         if let cell = tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
@@ -520,12 +520,12 @@ extension WidgetConfigurationViewController {
         // Set font attribute
         let font = UIFont.systemFont(ofSize: 17)
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
-        
+
         // Set color attribute
         attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
+
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .vertical
     }
@@ -557,7 +557,7 @@ extension WidgetConfigurationViewController {
             navigationController.dismiss(animated: true)
         }
     }
-    
+
     override func getBottomButtonTitleAttr() -> NSAttributedString? {
         guard createNew else { return nil }
         // Create the attributed string with the desired text and attributes
@@ -567,13 +567,13 @@ extension WidgetConfigurationViewController {
             .foregroundColor: UIColor.buttonTextColorPrimary
         ]
         let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
-        
+
         // Create the attachment with the "plus.circle.fill" system icon
         let configuration = UIImage.SymbolConfiguration(pointSize: 24)
         let plusCircleFillImage = UIImage(systemName: "plus.circle.fill", withConfiguration: configuration)
         let attachment = NSTextAttachment()
         attachment.image = plusCircleFillImage?.withTintColor(.buttonTextColorPrimary, renderingMode: .alwaysOriginal)
-        
+
         // Set the bounds of the attachment to match the font size of the attributed string
         if let font = attributes[.font] as? UIFont {
             let fontHeight = font.lineHeight
@@ -582,10 +582,10 @@ extension WidgetConfigurationViewController {
             attachment.bounds = CGRect(x: 0, y: yOffset, width: attachment.image!.size.width, height: attachmentHeight)
             attachment.bounds.origin.y += font.descender // Adjust the baseline offset of the attachment
         }
-        
+
         // Create an attributed string from the attachment
         let attachmentString = NSAttributedString(attachment: attachment)
-        
+
         // Append the attachment string to the original attributed string
         attributedString.insert(attachmentString, at: 0)
         

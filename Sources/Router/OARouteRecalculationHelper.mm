@@ -27,6 +27,7 @@
 
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
 #define RECALCULATE_THRESHOLD_CAUSING_FULL_RECALCULATE_INTERVAL 2 * 60
+#define MAX_SUPPRESSED_RECALCULATION_PROMPT_TIME 15
 
 @interface OARouteRecalculationTask : NSOperation
 
@@ -59,6 +60,10 @@
     OARouteRecalculationTask *_lastTask;
 
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_calculationProgressCallbacks;
+
+    NSTimeInterval _firstSuppressedRecalculationPromptTime;
+    NSTimeInterval _lastSuppressedRecalculationPromptTime;
+    BOOL _suppressedRecalculationPromptAnnounced;
 }
 
 - (instancetype) initWithRoutingHelper:(OARoutingHelper *)helper
@@ -149,11 +154,38 @@
         // trigger voice prompt only if new route is in forward direction
         // If route is in wrong direction after one more setLocation it will be recalculated
         if (!wrongMovementDirection || newRoute)
+        {
+            _firstSuppressedRecalculationPromptTime = 0;
             [_routingHelper.voiceRouter newRouteIsCalculated:newRoute];
+        }
+        else if ([self shouldAnnounceSuppressedRecalculation])
+        {
+            [_routingHelper.voiceRouter newRouteIsCalculated:NO];
+        }
     }
 
     [[OAWaypointHelper sharedInstance] setNewRoute:res];
     [_routingHelper newRouteCalculated:newRoute];
+}
+
+// engines unaware of the movement direction may keep returning routes that start backwards,
+// announce such a recalculation once per deviation instead of never (OsmAnd#25544)
+- (BOOL) shouldAnnounceSuppressedRecalculation
+{
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    if (_firstSuppressedRecalculationPromptTime == 0
+        || now - _lastSuppressedRecalculationPromptTime > 4 * MAX_SUPPRESSED_RECALCULATION_PROMPT_TIME)
+    {
+        _firstSuppressedRecalculationPromptTime = now;
+        _suppressedRecalculationPromptAnnounced = NO;
+    }
+    _lastSuppressedRecalculationPromptTime = now;
+    if (!_suppressedRecalculationPromptAnnounced && now - _firstSuppressedRecalculationPromptTime > MAX_SUPPRESSED_RECALCULATION_PROMPT_TIME)
+    {
+        _suppressedRecalculationPromptAnnounced = YES;
+        return YES;
+    }
+    return NO;
 }
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress

@@ -1319,7 +1319,7 @@
                              backgroundIconName:backgroundIconName];
             group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
-        resolvedIconName = [self iconNameForGroup:group];
+        resolvedIconName = iconName.length > 0 ? iconName : [self iconNameForGroup:group];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {

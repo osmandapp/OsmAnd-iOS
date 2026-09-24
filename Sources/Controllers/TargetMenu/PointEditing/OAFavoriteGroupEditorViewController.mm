@@ -7,6 +7,7 @@
 //
 
 #import "OAFavoriteGroupEditorViewController.h"
+#import "MBProgressHUD.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
@@ -17,7 +18,12 @@
 @implementation OAFavoriteGroupEditorViewController
 {
     OAFavoriteGroup *_favoriteGroup;
-    BOOL _isSaving;
+    MBProgressHUD *_progressHUD;
+    UIGestureRecognizer *_popGesture;
+    UIGestureRecognizer *_contentPopGesture;
+    BOOL _wasModalInPresentation;
+    BOOL _wasPopGestureEnabled;
+    BOOL _wasContentPopGestureEnabled;
 }
 
 #pragma mark - Initialization
@@ -74,9 +80,6 @@
 
 - (void)onRightNavbarButtonPressed
 {
-    if (_isSaving)
-        return;
-
     if (self.isNewItem)
     {
         [self addPointsGroup];
@@ -122,9 +125,6 @@
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (_isSaving)
-        return;
-
     if (self.isNewItem || ![self isAppearanceChanged])
     {
         [super onLeftNavbarButtonPressed];
@@ -139,17 +139,6 @@
         
         [self presentViewController:alert animated:YES completion:nil];
     }
-}
-
-- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    return !_isSaving && [super onGestureRecognizerShouldBegin:gestureRecognizer];
-}
-
-- (void)dismissViewController
-{
-    if (!_isSaving)
-        [super dismissViewController];
 }
 
 #pragma mark - Additions
@@ -180,10 +169,24 @@
 
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
-    if (_isSaving)
-        return;
+    [self.view endEditing:YES];
+    _wasModalInPresentation = self.modalInPresentation;
+    self.modalInPresentation = YES;
 
-    [self beginSaving];
+    // A HUD blocks touches, but navigation gestures on its parent can still recognize them.
+    _popGesture = self.navigationController.interactivePopGestureRecognizer;
+    _wasPopGestureEnabled = _popGesture.enabled;
+    _popGesture.enabled = NO;
+    _contentPopGesture = nil;
+    if (@available(iOS 26.0, *))
+        _contentPopGesture = self.navigationController.interactiveContentPopGestureRecognizer;
+    _wasContentPopGestureEnabled = _contentPopGesture.enabled;
+    _contentPopGesture.enabled = NO;
+
+    _progressHUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view ?: self.view animated:NO];
+    _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _progressHUD.accessibilityViewIsModal = YES;
+
     if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
     {
         [OAFavoritesHelper updateGroup:_favoriteGroup
@@ -192,21 +195,29 @@
                        updateGroupIcon:updateGroupValues
                        saveImmediately:NO
                             completion:^{
-            [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+            [self finishSavingGroup:updatePoints updateGroupValues:updateGroupValues];
         }];
     }
     else
     {
-        [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+        [self finishSavingGroup:updatePoints updateGroupValues:updateGroupValues];
     }
 }
 
-- (void)beginSaving
+- (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
-    _isSaving = YES;
-    [self.view endEditing:YES];
-    self.modalInPresentation = YES;
-    self.view.userInteractionEnabled = NO;
+    [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+    [_progressHUD hide:NO];
+    self.modalInPresentation = _wasModalInPresentation;
+    _popGesture.enabled = _wasPopGestureEnabled;
+    _contentPopGesture.enabled = _wasContentPopGestureEnabled;
+    _progressHUD = nil;
+    _popGesture = nil;
+    _contentPopGesture = nil;
+
+    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
+        [self.delegate onEditorUpdated];
+    [self dismissViewController];
 }
 
 - (void)finishEditingPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
@@ -233,14 +244,6 @@
 
     [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-
-    self.view.userInteractionEnabled = YES;
-    self.modalInPresentation = NO;
-    _isSaving = NO;
-
-    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
-        [self.delegate onEditorUpdated];
-    [self dismissViewController];
 }
 
 @end

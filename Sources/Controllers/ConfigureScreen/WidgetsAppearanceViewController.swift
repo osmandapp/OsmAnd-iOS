@@ -43,6 +43,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     private lazy var previewHeaderView = UIView()
     private var selectedPanel: WidgetsPanel
+    private var subviewHorizontalSafeInset: CGFloat = -1
 
     init(appMode: OAApplicationMode,
          layoutMode: ScreenLayoutMode,
@@ -77,6 +78,19 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         if !previewView.isHostingWidgets {
             reloadPreview()
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateSubview(true)
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        let horizontalSafeInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right)
+        guard horizontalSafeInset != subviewHorizontalSafeInset else { return }
+        subviewHorizontalSafeInset = horizontalSafeInset
+        updateSubview(true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -144,6 +158,14 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
 
     override func hideFirstHeader() -> Bool {
         true
+    }
+
+    override func subviewMargin() -> UIEdgeInsets {
+        let horizontalInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right) + 20
+        return UIEdgeInsets(top: 8,
+                            left: horizontalInset,
+                            bottom: -8,
+                            right: -horizontalInset)
     }
 
     override func registerCells() {
@@ -617,6 +639,9 @@ extension WidgetsAppearanceViewController: WidgetPanelColorViewControllerDelegat
     func widgetPanelColorViewControllerDidFinish(pageIndex: Int) {
         previewView.setCurrentPageIndex(pageIndex, for: selectedPanel)
         reloadScreenData()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateSubview(true)
+        }
     }
 }
 
@@ -744,6 +769,12 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                         parentViewController: pendingParentViewController)
         }
         layoutHostedPanel()
+    }
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        setNeedsLayout()
+        schedulePanelSizeUpdate()
     }
 
     func configure(panel: WidgetsPanel,
@@ -1489,18 +1520,23 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             hostedViewSize.height = max(hostedViewSize.height, contentSize.height)
         }
         state.controller.pageControl.transform = .identity
-        let scale = min(1, bounds.width / contentSize.width)
+        let safeBounds = bounds.inset(by: safeAreaInsets)
+        let availableWidth = max(0, safeBounds.width)
+        let availableHeight = max(0, safeBounds.height)
+        let scale = min(1, availableWidth / contentSize.width)
         guard scale > 0, scale.isFinite else { return }
         let size = CGSize(width: contentSize.width * scale, height: contentSize.height * scale)
         let x: CGFloat
         if panel == .rightPanel {
-            x = bounds.width - size.width
+            x = safeBounds.maxX - size.width
         } else if panel == .topPanel || panel == .bottomPanel {
-            x = max(0, (bounds.width - size.width) / 2)
+            x = safeBounds.minX + max(0, (availableWidth - size.width) / 2)
         } else {
-            x = 0
+            x = safeBounds.minX
         }
-        let y = panel == .bottomPanel ? max(0, bounds.height - size.height) : 0
+        let y = panel == .bottomPanel
+            ? safeBounds.minY + max(0, availableHeight - size.height)
+            : safeBounds.minY
         contentView.transform = .identity
         contentView.bounds = CGRect(origin: .zero, size: contentSize)
         contentView.transform = CGAffineTransform(scaleX: scale, y: scale)
@@ -1509,8 +1545,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         if state.view.frame != hostedFrame {
             state.view.frame = hostedFrame
         }
-        scrollView.contentSize = CGSize(width: bounds.width, height: max(bounds.height, size.height))
-        scrollView.isScrollEnabled = size.height > bounds.height
+        scrollView.contentSize = CGSize(width: bounds.width,
+                                        height: max(bounds.height, safeBounds.minY + size.height))
+        scrollView.isScrollEnabled = size.height > availableHeight
     }
 
     deinit {

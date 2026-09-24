@@ -257,8 +257,10 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         titleLabel.accessibilityTraits = .header
         topHeaderContainerView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: topHeaderContainerView.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: topHeaderContainerView.trailingAnchor, constant: -32),
+            titleLabel.leadingAnchor.constraint(equalTo: topHeaderContainerView.safeAreaLayoutGuide.leadingAnchor,
+                                                constant: 32),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: topHeaderContainerView.safeAreaLayoutGuide.trailingAnchor,
+                                                 constant: -32),
             titleLabel.centerYAnchor.constraint(equalTo: topHeaderContainerView.centerYAnchor)
         ])
     }
@@ -320,8 +322,10 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         applyButton.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
         toolBarView.addSubview(applyButton)
         NSLayoutConstraint.activate([
-            applyButton.leadingAnchor.constraint(equalTo: toolBarView.leadingAnchor, constant: 16),
-            applyButton.trailingAnchor.constraint(equalTo: toolBarView.trailingAnchor, constant: -16),
+            applyButton.leadingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: 16),
+            applyButton.trailingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -16),
             applyButton.topAnchor.constraint(equalTo: toolBarView.topAnchor),
             applyButton.heightAnchor.constraint(greaterThanOrEqualToConstant: Constants.applyButtonHeight)
         ])

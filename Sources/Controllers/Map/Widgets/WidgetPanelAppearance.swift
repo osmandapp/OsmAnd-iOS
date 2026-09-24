@@ -110,9 +110,7 @@ enum WidgetPanelBackgroundMode: String, CaseIterable {
 }
 
 enum WidgetPanelColorTarget {
-    case primaryText
-    case secondaryText
-    case background
+    case primaryText, secondaryText, background
 }
 
 struct WidgetPanelColorPreview {

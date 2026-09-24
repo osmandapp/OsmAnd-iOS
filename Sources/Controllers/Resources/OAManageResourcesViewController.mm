@@ -2857,7 +2857,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : ACImageNameIcCustomDownload;
+                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? ACImageNameIcCustomMultiDownload : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -2889,7 +2889,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : ACImageNameIcCustomDownload;
+                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? ACImageNameIcCustomMultiDownload : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];

@@ -10,22 +10,30 @@ import UIKit
 
 final class SegmentRouteSettingsViewController: UIViewController {
 
+    enum FutureRouteAction {
+        case continueRoute
+        case startNewSegment
+    }
+
     private enum ActiveTab {
         case routeType
         case settings
     }
 
+    var onContinueEditing: (() -> Void)?
+
     private let context: SegmentRouteContext
     private let applyFromPointIndex: Int?
     private let applyUpToPointIndex: Int?
-    private var activeTab: ActiveTab = .routeType
-    private var selectedMode: OAApplicationMode?
+    private let futureRouteAction: FutureRouteAction?
 
     private let segmentControl = UISegmentedControl(items: [
         localizedString("layer_route"),
         localizedString("shared_string_settings")
     ])
     private let tabContainerView = UIView()
+    private var activeTab: ActiveTab = .routeType
+    private var selectedMode: OAApplicationMode?
     private var routeTypeVC: RouteTypeViewController?
     private var settingsVC: RouteSettingsViewController?
     private var activeTabViewController: UIViewController?
@@ -35,11 +43,12 @@ final class SegmentRouteSettingsViewController: UIViewController {
         selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
     }
 
-    init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
+    init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil, futureRouteAction: FutureRouteAction? = nil) {
         self.context = context
         self.applyFromPointIndex = applyFromPointIndex
         self.applyUpToPointIndex = applyUpToPointIndex
         self.dataSource = dataSource
+        self.futureRouteAction = futureRouteAction
         if case .wholeTrack = context {
             self.selectedMode = dataSource?.defaultMode
         } else {
@@ -56,7 +65,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
         setupNavigationBar()
-        setupSegmentControl()
+        if futureRouteAction == nil {
+            setupSegmentControl()
+        }
         setupTabContainer()
         switchTab(to: .routeType, animated: false)
     }
@@ -72,7 +83,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navigationItem.titleView = titleView
         }
 
-        if context.usesCloseButton {
+        if context.usesCloseButton && navigationController?.viewControllers.first === self {
             let closeButton = UIBarButtonItem(image: UIImage(systemName: "xmark"),
                                               style: .plain,
                                               target: self,
@@ -81,6 +92,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             navigationItem.leftBarButtonItem = closeButton
         }
 
+        guard futureRouteAction == nil else { return }
         let checkmarkColor: UIColor
         if #available(iOS 26.0, *) {
             checkmarkColor = .white
@@ -112,7 +124,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
         tabContainerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tabContainerView)
         NSLayoutConstraint.activate([
-            tabContainerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12),
+            tabContainerView.topAnchor.constraint(equalTo: futureRouteAction == nil ? segmentControl.bottomAnchor : view.safeAreaLayoutGuide.topAnchor, constant: 12),
             tabContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tabContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -151,17 +163,34 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func makeRouteTypeVC() -> RouteTypeViewController {
-        RouteTypeViewController(
+        let showsContinuationActions = futureRouteAction == nil
+            && context.usesCloseButton
+            && navigationController?.viewControllers.first === self
+        return RouteTypeViewController(
             context: context,
             availableModes: dataSource?.availableModes ?? [],
             selectedMode: selectedMode,
-            canStartNewSegment: context.usesCloseButton,
+            canStartNewSegment: showsContinuationActions && (dataSource?.canStartNewSegment ?? false),
+            showsRecalculationHint: futureRouteAction == nil,
+            onContinueRoute: showsContinuationActions && !(dataSource?.routeSegments.isEmpty ?? true) ? { [weak self] in
+                self?.openFutureRouteSelection(.continueRoute)
+            } : nil,
             onModeSelected: { [weak self] mode in
-                self?.selectedMode = mode
+                guard let self else { return }
+                selectedMode = mode
+                if let futureRouteAction {
+                    switch futureRouteAction {
+                    case .continueRoute:
+                        dataSource?.continueRoute(mode: mode)
+                    case .startNewSegment:
+                        dataSource?.startNewSegment(mode: mode)
+                    }
+                    let completion = onContinueEditing
+                    navigationController?.dismiss(animated: true, completion: completion)
+                }
             },
             onStartNewSegment: { [weak self] in
-                self?.dataSource?.startNewSegment()
-                self?.navigationController?.dismiss(animated: true)
+                self?.openFutureRouteSelection(.startNewSegment)
             }
         )
     }
@@ -188,6 +217,12 @@ final class SegmentRouteSettingsViewController: UIViewController {
             self?.dataSource?.refreshRoute(for: settingsMode)
         }
         return vc
+    }
+
+    private func openFutureRouteSelection(_ action: FutureRouteAction) {
+        let controller = SegmentRouteSettingsViewController(context: .wholeTrack, dataSource: dataSource, futureRouteAction: action)
+        controller.onContinueEditing = onContinueEditing
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func refreshSettingsState() {

@@ -1647,9 +1647,8 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
 #pragma mark - OsmAndShared gpx approximation
 
 // The twin of calculateRoutingEnvironment: - the same configuration and the same files, read by
-// OsmAndShared. Its callers - the track approximation and the gpx route time/speed recalculation -
-// search from no start to no target, so there is neither a complex context nor a precalculated
-// direction to build.
+// OsmAndShared. The track approximation is its only caller and it searches from no start to no
+// target, so there is neither a complex context nor a precalculated direction to build.
 - (OARoutingEnvironment *) calculateSharedRoutingEnvironment:(OARouteCalculationParams *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -2190,12 +2189,18 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
 
 - (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(NSArray<OASRouteSegmentResult *> *)gpxRouteResult
 {
-    if (gpxRouteResult.count == 0)
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
+    OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
+    if (!generalRouter)
+    {
+        NSLog(@"Failed to recalculate gpx route time and speed: no router for %@", params.mode.stringKey);
         return;
+    }
 
-    OARoutingEnvironment *env = [self calculateSharedRoutingEnvironment:params];
-    if (env.sharedCtx)
-        [OASTurnPreparation.shared calculateTimeSpeedRequest:env.sharedCtx result:gpxRouteResult];
+    OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
+    OASRoutingRequest *request = [[OASRoutingRequest alloc] initWithConfig:cf calculationMode:OASRouteCalculationMode.normal];
+    [OASTurnPreparation.shared calculateTimeSpeedRequest:request result:gpxRouteResult];
 }
 
 - (NSArray<OASRouteSegmentResult *> *) findRouteWithIntermediateSegments:(OARouteCalculationParams *)routeParams result:(OARouteCalculationResult *)result gpxRouteLocations:(NSArray<CLLocation *> *)gpxRouteLocations segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints nearestGpxPointInd:(NSInteger)nearestGpxPointInd

@@ -1081,11 +1081,10 @@ static double const TILT_ANIMATION_TIME = 0.4;
             [self animatedAlignAzimuthToNorth];
         else if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
             [self animatedAlignAzimuth:[[OAAppSettings sharedManager].mapManuallyRotatingAngle get]];
-
-        OABaseScrollableHudViewController *scrollableHud = OARootViewController.instance.mapPanel.scrollableHudViewController;
-        if ([scrollableHud shouldIgnoreTopBottomOffsets])
-            return;
         
+        if (OARootViewController.instance.mapPanel.scrollableHudViewController.overridesMapPosition)
+            return;
+
         EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
         if (placement == EOAPositionPlacementAuto)
             _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING ? BOTTOM_CONSTANT : CENTER_CONSTANT);

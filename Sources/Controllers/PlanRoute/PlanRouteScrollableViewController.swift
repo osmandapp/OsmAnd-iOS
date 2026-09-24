@@ -128,6 +128,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var hasPresentedInitialSnapWarning = false
     private var shouldEnterNavigationAfterApproximation = false
     
+    override var overridesMapPosition: Bool {
+        cachedMapViewportYScale != nil
+    }
+
     private var suggestedFileName: String {
         switch dataProvider.mode {
         case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())

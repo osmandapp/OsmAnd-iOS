@@ -1442,12 +1442,6 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 
 - (void)render:(CADisplayLink*)displayLink
 {
-    if (_limitFrameRate && _nextFrameDeadline > 0
-        && CACurrentMediaTime() + kFrameIntervalTolerance < _nextFrameDeadline)
-    {
-        return;
-    }
-
     if (![self makeRenderContextCurrent])
     {
         [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
@@ -1516,6 +1510,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
+    shouldRenderFrame = shouldRenderFrame && [self isFrameDueAtTime:currentTime];
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
 #if OSMAND_SERIALIZE_WORKER_WITH_FRAME
@@ -1612,10 +1607,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 #endif
 
         _frameId++;
-        const NSTimeInterval scheduledTime = _nextFrameDeadline + kLimitedFrameInterval;
-        _nextFrameDeadline = (scheduledTime > currentTime && scheduledTime - currentTime <= kLimitedFrameInterval)
-            ? scheduledTime
-            : currentTime + kLimitedFrameInterval;
+        [self scheduleNextFrameAtTime:currentTime];
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
@@ -1764,9 +1756,40 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 - (void)updateFrameRefreshRate
 {
     if (_limitFrameRate)
-        _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(kLimitedFrameRate, kLimitedFrameRate, kLimitedFrameRate);
+    {
+        const float limitedRate = [self limitedFrameRate];
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(limitedRate, limitedRate, limitedRate);
+    }
     else
+    {
         _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
+    }
+}
+
+- (BOOL)isFrameDueAtTime:(NSTimeInterval)currentTime
+{
+    if (!_limitFrameRate || _nextFrameDeadline <= 0)
+        return YES;
+
+    return currentTime + kFrameIntervalTolerance >= _nextFrameDeadline;
+}
+
+- (void)scheduleNextFrameAtTime:(NSTimeInterval)currentTime
+{
+    const NSTimeInterval scheduledTime = _nextFrameDeadline + kLimitedFrameInterval;
+    _nextFrameDeadline = (scheduledTime > currentTime && scheduledTime - currentTime <= kLimitedFrameInterval)
+        ? scheduledTime
+        : currentTime + kLimitedFrameInterval;
+}
+
+- (float)limitedFrameRate
+{
+    const NSInteger screenRate = self.window.screen.maximumFramesPerSecond;
+    if (screenRate <= kLimitedFrameRate)
+        return kLimitedFrameRate;
+
+    const NSInteger divisor = (NSInteger) ceil(screenRate / kLimitedFrameRate);
+    return (float) screenRate / (float) divisor;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

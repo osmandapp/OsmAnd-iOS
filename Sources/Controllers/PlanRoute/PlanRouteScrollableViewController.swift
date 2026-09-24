@@ -629,11 +629,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
         mapToolbar.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(mapToolbar, belowSubview: sheetView)
+        let leftConstraint = mapToolbar.leftAnchor.constraint(equalTo: sheetView.rightAnchor)
+        leftConstraint.priority = UILayoutPriority(999)
         let rightConstraint = mapToolbar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor)
         let bottomConstraint = mapToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         mapToolbarBottomConstraint = bottomConstraint
         mapToolbarConstraints = [
-            mapToolbar.leftAnchor.constraint(equalTo: sheetView.rightAnchor),
+            leftConstraint,
             rightConstraint,
             bottomConstraint,
             mapToolbar.heightAnchor.constraint(equalToConstant: PlanRouteButtonFactory.toolbarButtonSize)
@@ -673,6 +675,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.addSubview(topToolbar)
         let bottomSheetLeftConstraint = topToolbar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
         let sidePanelLeftConstraint = topToolbar.leftAnchor.constraint(equalTo: sheetView.rightAnchor)
+        sidePanelLeftConstraint.priority = UILayoutPriority(999)
         topToolbarBottomSheetLeftConstraint = bottomSheetLeftConstraint
         topToolbarSidePanelLeftConstraint = sidePanelLeftConstraint
         NSLayoutConstraint.activate([

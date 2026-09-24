@@ -105,11 +105,15 @@ final class RouteBetweenPointsViewController: UIViewController {
 
         let container = UIView()
         container.addSubview(label)
+        let labelTrailingConstraint = label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -32)
+        labelTrailingConstraint.priority = UILayoutPriority(999)
+        let labelBottomConstraint = label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
+        labelBottomConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 32),
-            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -32),
+            labelTrailingConstraint,
             label.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
-            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
+            labelBottomConstraint
         ])
         return container
     }

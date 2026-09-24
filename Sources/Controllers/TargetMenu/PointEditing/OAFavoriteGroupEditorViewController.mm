@@ -19,11 +19,6 @@
 {
     OAFavoriteGroup *_favoriteGroup;
     MBProgressHUD *_progressHUD;
-    UIGestureRecognizer *_popGesture;
-    UIGestureRecognizer *_contentPopGesture;
-    BOOL _wasModalInPresentation;
-    BOOL _wasPopGestureEnabled;
-    BOOL _wasContentPopGestureEnabled;
 }
 
 #pragma mark - Initialization
@@ -170,20 +165,12 @@
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self.view endEditing:YES];
-    _wasModalInPresentation = self.modalInPresentation;
     self.modalInPresentation = YES;
 
-    // A HUD blocks touches, but navigation gestures on its parent can still recognize them.
-    _popGesture = self.navigationController.interactivePopGestureRecognizer;
-    _wasPopGestureEnabled = _popGesture.enabled;
-    _popGesture.enabled = NO;
-    _contentPopGesture = nil;
-    if (@available(iOS 26.0, *))
-        _contentPopGesture = self.navigationController.interactiveContentPopGestureRecognizer;
-    _wasContentPopGestureEnabled = _contentPopGesture.enabled;
-    _contentPopGesture.enabled = NO;
-
-    _progressHUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view ?: self.view animated:NO];
+    // Disable the container so its navigation gestures cannot receive touches through the HUD.
+    UIView *containerView = self.navigationController.view ?: self.view;
+    containerView.userInteractionEnabled = NO;
+    _progressHUD = [MBProgressHUD showHUDAddedTo:containerView animated:NO];
     _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _progressHUD.accessibilityViewIsModal = YES;
 
@@ -207,13 +194,10 @@
 - (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+    _progressHUD.superview.userInteractionEnabled = YES;
     [_progressHUD hide:NO];
-    self.modalInPresentation = _wasModalInPresentation;
-    _popGesture.enabled = _wasPopGestureEnabled;
-    _contentPopGesture.enabled = _wasContentPopGestureEnabled;
     _progressHUD = nil;
-    _popGesture = nil;
-    _contentPopGesture = nil;
+    self.modalInPresentation = NO;
 
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];

@@ -306,10 +306,10 @@ static int PROFILE_TRUCK = 1000;
         @"routeService" : self.getRouterServiceName,
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
-        @"locIcon" : [self.getLocationIcon name],
+        @"locIcon" : [self.getLocationIcon exportName],
         @"locIconSize" : @([self getLocationIconSize]),
         @"navIconSize" : @([self getCourseIconSize]),
-        @"navIcon" : [self.getNavigationIcon name],
+        @"navIcon" : [self.getNavigationIcon exportName],
         @"order" : @(self.getOrder)
     };
 }
@@ -979,8 +979,8 @@ static int PROFILE_TRUCK = 1000;
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
     res.customIconColor = [self parseCustomColor:jsonData[@"customIconColor"]];
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
-    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
-    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
+    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"] forNavigation:NO] name];
+    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"] forNavigation:YES] name];
     double locIconSize = [jsonData[@"locIconSize"] doubleValue];
     double navIconSize = [jsonData[@"navIconSize"] doubleValue];
     res.locIconSize = locIconSize == 0 ? [OAAppSettings sharedManager].locationIconSize.defValue : locIconSize;

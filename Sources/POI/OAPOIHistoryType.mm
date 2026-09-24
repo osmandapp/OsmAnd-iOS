@@ -14,7 +14,7 @@
 
 - (UIImage *)icon
 {
-    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:ACImageNameIcParkingPinSmall] : [UIImage imageNamed:ACImageNameIcMapPinSmall]);
+    return [UIImage imageNamed:self.hType == OAHistoryTypeParking ? ACImageNameIcParkingPinSmall : ACImageNameIcMapPinSmall];
 }
 
 @end

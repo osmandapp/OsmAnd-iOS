@@ -143,7 +143,7 @@
     {
         self.layer.borderWidth = selected ? 2. : 0.;
         self.layer.borderColor = selected ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary].CGColor : UIColor.clearColor.CGColor;
-        self.imageViewRightIcon.image = selected ? [UIImage imageNamed:ACImageNameIcSystemCheckboxSelected] : [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
+        self.imageViewRightIcon.image = [UIImage imageNamed:selected ? ACImageNameIcSystemCheckboxSelected : ACImageNameIcCustomCheckboxUnselected];
         self.imageViewRightIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         self.backgroundColor = selected ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : UIColor.clearColor;
         self.labelTitle.textColor = selected ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];

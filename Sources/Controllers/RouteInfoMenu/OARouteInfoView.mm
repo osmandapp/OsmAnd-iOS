@@ -1481,7 +1481,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [cell setDividerVisibility:YES];
                 cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
                 cell.routingCellButton.userInteractionEnabled = !cell.routingCellButton.isHidden;
-                UIImage *image = self.isGpxTrackFollowingMode ? [UIImage imageNamed:ACImageNameIcNavbarClose] : [UIImage imageNamed:ACImageNameIcCustomAdd];
+                UIImage *image = [UIImage imageNamed:self.isGpxTrackFollowingMode ? ACImageNameIcNavbarClose : ACImageNameIcCustomAdd];
                 [cell.routingCellButton setImage:image forState:UIControlStateNormal];
                 [self setupButtonLayout:cell.routingCellButton];
                 [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

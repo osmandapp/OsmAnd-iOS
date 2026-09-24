@@ -50,9 +50,12 @@
     return @[ OALocalizedString(@"show_compass_ruler"), OALocalizedString(@"hide_compass_ruler") ];
 }
 
-- (NSArray<NSString *> *) getMenuIconIds
+- (NSArray<NSString *> *)getMenuIconIds
 {
-    return @[ ACImageNameIcCustomCompassWidget, ACImageNameIcCustomCompassWidgetHide ];
+    return @[
+        ACImageNameIcCustomCompassWidget,
+        ACImageNameIcCustomCompassWidgetHide
+    ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

@@ -987,7 +987,7 @@
 
 - (UIImage *)getIcon
 {
-    return [self isSelected] ? [UIImage imageNamed:ACImageNameIcCustomHazmatLimitColored] : [UIImage imageNamed:ACImageNameIcCustomHazmatLimit];
+    return [UIImage imageNamed:[self isSelected] ? ACImageNameIcCustomHazmatLimitColored : ACImageNameIcCustomHazmatLimit];
 }
 
 - (NSString *) getDescription

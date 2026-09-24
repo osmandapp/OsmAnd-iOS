@@ -67,7 +67,6 @@
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _selectedMarkerIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPlanRoutePointMovable];
-    _pointMarkerIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPlanRoutePointNormal];
     
     _initDone = YES;
     
@@ -185,7 +184,17 @@
 
 - (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    return [self drawMarker:position collection:collection bitmap:_pointMarkerIcon];
+    return [self drawMarker:position collection:collection bitmap:[self pointMarkerIcon]];
+}
+
+- (sk_sp<SkImage>) pointMarkerIcon
+{
+    @synchronized (self)
+    {
+        if (!_pointMarkerIcon)
+            _pointMarkerIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPlanRoutePointNormal];
+        return _pointMarkerIcon;
+    }
 }
 
 - (void) updateLastPointToCenter
@@ -394,7 +403,7 @@
 - (void) drawPointMarkers:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
     collection->removeAllMarkers();
-    sk_sp<SkImage> pointMarkerIcon = _pointMarkerIcon;
+    sk_sp<SkImage> pointMarkerIcon = [self pointMarkerIcon];
     
     if (_editingCtx.getPointsCount > 500)
     {

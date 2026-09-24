@@ -61,8 +61,6 @@
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
 
     _xAxisLocationIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapMapillaryLocation];
-    _directionArrowIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrow];
-    _directionArrowSmallIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrowSmall];
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -146,6 +144,26 @@
     return [OANativeUtilities skImageFromCGImage:image.CGImage];
 }
 
+- (sk_sp<SkImage>) directionArrowIcon
+{
+    @synchronized (self)
+    {
+        if (!_directionArrowIcon)
+            _directionArrowIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrow];
+        return _directionArrowIcon;
+    }
+}
+
+- (sk_sp<SkImage>) directionArrowSmallIcon
+{
+    @synchronized (self)
+    {
+        if (!_directionArrowSmallIcon)
+            _directionArrowSmallIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrowSmall];
+        return _directionArrowSmallIcon;
+    }
+}
+
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color
 {
     SkBitmap bitmap;
@@ -174,7 +192,7 @@
     paint.setColor(SkColorSetARGB(color.a, color.r, color.g, color.b));
     canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
 
-    const auto arrowImage = _directionArrowSmallIcon;
+    const auto arrowImage = [self directionArrowSmallIcon];
     if (arrowImage)
         canvas.drawImage(arrowImage,
                         (bitmapSize - arrowImage->width()) / 2.0f,
@@ -222,7 +240,7 @@
     paint.setStrokeWidth(strokeWidth);
     canvas.drawRRect(rrect, paint);
 
-    const auto arrowImage = _directionArrowIcon;
+    const auto arrowImage = [self directionArrowIcon];
     if (arrowImage)
     {
         SkScalar imageHeight = arrowImage->height();

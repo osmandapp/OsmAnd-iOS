@@ -74,10 +74,11 @@
 + (sk_sp<SkImage>)skImageFromAssetNamed:(NSString *)assetName
 {
     UIImage *image = [UIImage imageNamed:assetName];
-    if (!image || !image.CGImage)
+    CGImageRef cgImage = image.CGImage;
+    if (!cgImage)
         return nullptr;
 
-    return [self.class skImageFromCGImage:image.CGImage];
+    return [self.class skImageFromCGImage:cgImage];
 }
 
 + (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data

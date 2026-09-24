@@ -898,7 +898,7 @@ typedef enum
                 [cell.titleLabel setText:item.text];
                 if (item.expandable)
                 {
-                    cell.rightIconView.image = !item.expanded ? [UIImage imageNamed:ACImageNameIcArrowOpen] : [UIImage imageNamed:ACImageNameIcArrowClose];
+                    cell.rightIconView.image = [UIImage imageNamed:!item.expanded ? ACImageNameIcArrowOpen : ACImageNameIcArrowClose];
                     cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
                     [cell rightIconVisibility:YES];
                 }

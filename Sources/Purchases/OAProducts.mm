@@ -3201,14 +3201,16 @@
     
     if ([self.mapillary isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:ACImageNameIcCustomMapillarySymbol];
+        NSString *title = OALocalizedString(@"mapillary");
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:title titleWide:title imageName:ACImageNameIcCustomMapillarySymbol];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
     
     if ([self.osmandDevelopment isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:ACImageNameIcCustomLaptop];
+        NSString *title = OALocalizedString(@"debugging_and_development");
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:title titleWide:title imageName:ACImageNameIcCustomLaptop];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

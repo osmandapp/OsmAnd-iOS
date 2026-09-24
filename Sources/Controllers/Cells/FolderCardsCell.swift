@@ -219,7 +219,7 @@ import UIKit
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentView.heightAnchor.constraint(equalToConstant: Layout.rowHeight)
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.rowHeight)
         ])
     }
 

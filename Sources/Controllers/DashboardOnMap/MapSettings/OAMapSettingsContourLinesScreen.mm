@@ -271,6 +271,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 @"name" : OALocalizedString(@"map_settings_line_density")
             }];
         }
+        param = [_styleSettings getParameter:CONTOUR_LABELS_UPHILL_ATTR];
+        if (param)
+        {
+            [linesArr addObject:@{
+                @"type" : kCellTypeSwitch,
+                @"parameter" : param
+            }];
+        }
         
         NSMutableArray *availableMapsArr = [NSMutableArray array];
         for (OAMultipleResourceItem* item in _mapMultipleItems)
@@ -462,8 +470,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
         }
-        if (cell)
+        OAMapStyleParameter *p = item[@"parameter"];
+        if (cell && p)
         {
+            cell.titleLabel.text = p.title;
+            [cell leftIconVisibility:NO];
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView setOn:[p.value isEqualToString:@"true"]];
+            [cell.switchView addTarget:self action:@selector(labelsUphillChanged:) forControlEvents:UIControlEventValueChanged];
+        }
+        else if (cell)
+        {
+            [cell leftIconVisibility:YES];
             cell.titleLabel.text = [self isContourLinesOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
             NSString *imgName = [self isContourLinesOn] ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
@@ -760,6 +778,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [_downloadingCellResourceHelper cleanCellCache];
        [tblView reloadData];
     }
+}
+
+- (void) labelsUphillChanged:(UISwitch *)switchView
+{
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:CONTOUR_LABELS_UPHILL_ATTR];
+    parameter.value = switchView.isOn ? @"true" : @"false";
+    [_styleSettings save:parameter];
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate

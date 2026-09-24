@@ -1018,7 +1018,7 @@
 "app_mode_monowheel" = "独轮";
 "routing_attr_freeride_policy_name" = "野雪滑行";
 "routing_attr_piste_type_sled_name" = "雪橇";
-"day_off_label" = "关闭";
+"day_off_label" = "休息";
 "routing_attr_length_name" = "长度";
 "rendering_value_thick_name" = "粗";
 "profile_type_base_string" = "基本配置文件";

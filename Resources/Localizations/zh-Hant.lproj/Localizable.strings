@@ -692,7 +692,7 @@
 "shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
 "shared_string_road" = "道路";
 "avoid_roads_msg" = "經由選擇要避開的道路，來觸發一條替代線路";
-"day_off_label" = "關閉";
+"day_off_label" = "休息";
 "open_from" = "開業時間：由";
 "open_till" = "營業至";
 "will_open_at" = "開始營業時間";

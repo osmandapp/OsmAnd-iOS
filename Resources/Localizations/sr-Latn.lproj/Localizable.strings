@@ -66,7 +66,7 @@
 "search_radius_proximity" = "U radijusu";
 "poi" = "TOI";
 "search_more" = "Pretraži više…";
-"day_off_label" = "Isključeno";
+"day_off_label" = "neradni";
 "open_from" = "Otvoreno od";
 "open_till" = "Otvoreno do";
 "will_close_at" = "Zatvara se u";

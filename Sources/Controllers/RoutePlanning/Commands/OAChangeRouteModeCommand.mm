@@ -34,9 +34,14 @@
     EOAChangeRouteType _changeRouteType;
     NSInteger _pointIndex;
     NSArray<NSNumber *> *_pointIndexes;
+    BOOL _updatesPendingSegmentMode;
 }
 
-- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer appMode:(OAApplicationMode *)appMode changeRouteType:(EOAChangeRouteType)changeRouteType pointIndex:(NSInteger)pointIndex
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
+                      appMode:(OAApplicationMode *)appMode
+              changeRouteType:(EOAChangeRouteType)changeRouteType
+                   pointIndex:(NSInteger)pointIndex
+    updatesPendingSegmentMode:(BOOL)updatesPendingSegmentMode
 {
     self = [super initWithLayer:measurementLayer];
     if (self)
@@ -44,6 +49,7 @@
         _newMode = appMode;
         _changeRouteType = changeRouteType;
         _pointIndex = pointIndex;
+        _updatesPendingSegmentMode = updatesPendingSegmentMode;
         _oldMode = self.getEditingCtx.appMode;
     }
     return self;
@@ -198,8 +204,7 @@
         OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
         if (lastPoint.isGap)
         {
-            BOOL changesLastPoint = _pointIndexes == nil || [_pointIndexes containsObject:@(_newPoints.count - 1)];
-            editingCtx.appMode = changesLastPoint ? _newMode : _oldMode;
+            editingCtx.appMode = _updatesPendingSegmentMode ? _newMode : _oldMode;
         }
         else
             editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];

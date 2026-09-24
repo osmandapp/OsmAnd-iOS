@@ -1193,10 +1193,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                        pointIndex:pointIndex
                                        wholeRoute:wholeRoute];
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
+    BOOL updatesPendingSegmentMode = wholeRoute || (pointIndex >= 0 && pointIndex == ctx.getPointsCount - 1);
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
                                                                           appMode:mode
                                                                    changeRouteType:type
-                                                                        pointIndex:pointIndex]];
+                                                                        pointIndex:pointIndex
+                                                         updatesPendingSegmentMode:updatesPendingSegmentMode]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();

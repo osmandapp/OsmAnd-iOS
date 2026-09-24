@@ -224,6 +224,90 @@
     XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
 }
 
+- (void)verifyEditingBeforePendingSegmentWithPointIndexes:(NSArray<NSNumber *> *)pointIndexes
+{
+    for (NSInteger index = 4; index < self.original.count; index++)
+        [self.original[index] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context updateSegmentsForSnap];
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndexes:pointIndexes];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    for (NSNumber *indexNumber in pointIndexes)
+    {
+        NSInteger index = indexNumber.integerValue;
+        if (index < 7)
+            XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.CAR.stringKey);
+    }
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        [self.bridge undo];
+        XCTAssertTrue(self.original.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+        for (NSInteger index = 0; index < 4; index++)
+            XCTAssertFalse(self.original[index].hasProfile);
+        for (NSInteger index = 4; index < 7; index++)
+            XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+        [self.bridge redo];
+        XCTAssertTrue(self.original.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+        XCTAssertEqualObjects(self.original[6].getProfileType, OAApplicationMode.CAR.stringKey);
+    }
+    [self addPointNumber:0];
+    [self addPointNumber:1];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints[8].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqualObjects(self.context.getPoints[9].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testChangingLastSectionPreservesPendingSegmentProfile
+{
+    [self verifyEditingBeforePendingSegmentWithPointIndexes:@[@4, @5, @6, @7]];
+    for (NSInteger index = 0; index < 4; index++)
+        XCTAssertFalse(self.original[index].hasProfile);
+}
+
+- (void)testChangingLastWholeSegmentPreservesPendingSegmentProfile
+{
+    [self verifyEditingBeforePendingSegmentWithPointIndexes:@[@0, @1, @2, @3, @4, @5, @6, @7]];
+}
+
+- (void)testChangingExistingLegPreservesPendingSegmentProfile
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndex:5 wholeRoute:NO];
+    XCTAssertEqualObjects(self.original[5].getProfileType, OAApplicationMode.CAR.stringKey);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge undo];
+    XCTAssertFalse(self.original[5].hasProfile);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge redo];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self addPointNumber:0];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testChangingWholeRouteUpdatesPendingSegmentProfile
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndex:0 wholeRoute:YES];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    for (NSInteger index = 0; index < 7; index++)
+        XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.CAR.stringKey);
+    [self.bridge undo];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    for (NSInteger index = 0; index < 7; index++)
+        XCTAssertFalse(self.original[index].hasProfile);
+    [self.bridge redo];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self addPointNumber:0];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.CAR.stringKey);
+}
+
 - (void)testTrimBeforeRedoMatchesInitialExecution
 {
     [self.bridge trimBeforeIndex:4];

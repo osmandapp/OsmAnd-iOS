@@ -81,6 +81,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var shouldEnterNavigationAfterApproximation = false
     private weak var currentTabViewController: UIViewController?
 
+    override var overridesMapPosition: Bool {
+        cachedMapViewportYScale != nil
+    }
+
     private var suggestedFileName: String {
         switch dataProvider.mode {
         case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())

@@ -1147,6 +1147,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func restoreMapViewport() {
+        let shouldRestoreMapPosition = cachedMapViewportYScale != nil
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
         let mapViewSize = mapViewController.view.bounds.size
         hasAppliedSidePanelViewportXScale = false
@@ -1166,6 +1167,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
                                                y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
             mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if shouldRestoreMapPosition {
+            OAMapViewTrackingUtilities.instance().updateMapPosition()
         }
     }
 

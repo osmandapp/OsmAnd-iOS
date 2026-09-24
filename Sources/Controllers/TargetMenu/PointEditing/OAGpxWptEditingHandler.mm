@@ -27,7 +27,8 @@
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
     OASGpxFile *_gpxDocument;
-    NSMutableArray<OASGpxUtilitiesPointsGroup *> *_pendingGroups;
+    NSString *_newGroupTitle;
+    UIColor *_newGroupColor;
     NSString *_iconName;
 }
 
@@ -197,25 +198,18 @@
 {
     NSArray<NSDictionary<NSString *, NSString *> *> *groups = [self getWaypointCategoriesWithAllData:YES];
 
-    NSMutableArray *combinedGroups = [groups mutableCopy];
-    for (OASGpxUtilitiesPointsGroup *pendingGroup in _pendingGroups)
+    if (_newGroupTitle)
     {
-        if (_gpxDocument.pointsGroups[pendingGroup.name])
-            continue;
-        NSUInteger index = [combinedGroups indexOfObjectPassingTest:^BOOL(NSDictionary *group, NSUInteger index, BOOL *stop) {
-            return [group[@"category"] isEqualToString:pendingGroup.name];
-        }];
-        NSString *count = index == NSNotFound ? @"0" : combinedGroups[index][@"count"];
-        NSDictionary *group = @{@"title": pendingGroup.name,
-                               @"category": pendingGroup.name,
-                               @"color": UIColorFromARGB(pendingGroup.color).toHexARGBString,
-                               @"count": count};
-        if (index == NSNotFound)
-            [combinedGroups addObject:group];
-        else
-            combinedGroups[index] = group;
+        NSMutableDictionary<NSString *, NSString *> *newGroup = [NSMutableDictionary new];
+        newGroup[@"title"] = _newGroupTitle;
+        newGroup[@"category"] = _newGroupTitle;
+        newGroup[@"color"] = _newGroupColor.toHexARGBString;
+        newGroup[@"count"] = @"0";
+
+        NSMutableArray *newGroups = [NSMutableArray arrayWithArray:groups];
+        [newGroups addObject:newGroup];
+        groups = newGroups;
     }
-    groups = combinedGroups;
 
     BOOL hasDefaultGroup = NO;
     for (NSDictionary<NSString *, NSString *> *group in groups)
@@ -278,9 +272,8 @@
     return [_gpxWpt.point getAddress];
 }
 
-- (void)setGroup:(NSString *)groupName color:(UIColor *)color
+- (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
-    BOOL hasGroup = [self getGroupsWithColors][groupName ?: @""] != nil;
     _gpxWpt.point.category = groupName.length > 0 ? groupName : nil;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
     [_gpxWpt.point setColorColor:colorToSave];
@@ -289,30 +282,20 @@
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[color toARGBNumber]]];
 
-    if (groupName.length > 0 && !hasGroup)
+    if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)
     {
-        if (!_pendingGroups)
-            _pendingGroups = [NSMutableArray new];
-        [_pendingGroups addObject:[[OASGpxUtilitiesPointsGroup alloc] initWithName:groupName
-                                                                       iconName:nil
-                                                                 backgroundType:nil
-                                                                          color:color.toARGBNumber
-                                                                         hidden:NO]];
+        _gpxWpt.groups = [_gpxWpt.groups arrayByAddingObject:groupName];
+        _newGroupTitle = groupName;
+        _newGroupColor = color;
     }
-}
+    else
+    {
+        _newGroupTitle = nil;
+        _newGroupColor = nil;
+    }
 
-- (void)addGroupWithName:(NSString *)name color:(UIColor *)color iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName
-{
-    [self setGroup:name color:color];
-    for (OASGpxUtilitiesPointsGroup *group in _pendingGroups)
-    {
-        if ([group.name isEqualToString:name])
-        {
-            group.iconName = iconName;
-            group.backgroundType = backgroundIconName;
-            break;
-        }
-    }
+    if (save && self.gpxWptDelegate)
+        [self.gpxWptDelegate saveItemToStorage:_gpxWpt];
 }
 
 - (void)deleteItem
@@ -330,7 +313,7 @@
 {
     [_gpxWpt.point setName:data.name.length > 0 ? data.name : nil];
     [_gpxWpt.point setDesc:data.descr.length > 0 ? data.descr : nil];
-    [self setGroup:data.category color:data.color];
+    [self setGroup:data.category color:data.color save:NO];
     [_gpxWpt.point setIconNameIconName:data.icon];
     [_gpxWpt.point setBackgroundTypeBackType:data.backgroundIcon];
     
@@ -339,7 +322,6 @@
     _gpxWpt.point.extensions = extension;
     
     _gpxWpt.docPath = _gpxFileName;
-    _gpxWpt.pendingGroups = [_pendingGroups copy];
 
     if (newPoint)
     {

@@ -17,30 +17,6 @@
 - (void)setupGroups;
 @end
 
-@interface OAWaypointGroupSaveDelegate : NSObject <OAGpxWptEditingHandlerDelegate>
-@property (nonatomic) OASGpxFile *file;
-@property (nonatomic) NSUInteger prematureSaves;
-@end
-
-@implementation OAWaypointGroupSaveDelegate
-- (void)saveGpxWpt:(OAGpxWptItem *)item gpxFileName:(NSString *)name
-{
-    [item applyPendingGroupsToFile:self.file];
-    [self.file addPointPoint:item.point];
-}
-- (void)updateGpxWpt:(OAGpxWptItem *)item docPath:(NSString *)path updateMap:(BOOL)updateMap
-{
-    [item applyPendingGroupsToFile:self.file];
-}
-- (void)deleteGpxWpt:(OAGpxWptItem *)item docPath:(NSString *)path
-{
-}
-- (void)saveItemToStorage:(OAGpxWptItem *)item
-{
-    self.prematureSaves++;
-}
-@end
-
 @interface OAWaypointGroupSelectionTest : XCTestCase
 @end
 
@@ -173,7 +149,7 @@
     OAEditPointViewController *editor = [self editorWithFile:[[OASGpxFile alloc] initWithAuthor:@"test"]];
     OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
     UIColor *color = [self unusedColor];
-    [handler setGroup:@"New group" color:color];
+    [handler setGroup:@"New group" color:color save:NO];
     [editor setupGroups];
     [editor setValue:[NSMutableArray new] forKey:@"sortedColorItems"];
     [editor onGroupSelected:@"New group"];
@@ -233,107 +209,5 @@
         [self assertColor:key.length > 0 ? UIColor.greenColor : [OADefaultFavorite getDefaultColor] editor:editor];
         XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], key);
     }
-}
-- (void)testMultipleNewGroupsSurviveSelectionAndGpxRoundTrip
-{
-    OASGpxFile *source = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    OAEditPointViewController *editor = [self editorWithFile:source];
-    OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
-    OAWaypointGroupSaveDelegate *delegate = [OAWaypointGroupSaveDelegate new];
-    delegate.file = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    handler.gpxWptDelegate = delegate;
-    [handler addGroupWithName:@"Test4" color:UIColor.blueColor iconName:@"special_star" backgroundIconName:@"circle"];
-    [handler addGroupWithName:@"Test5" color:UIColor.greenColor iconName:@"special_star" backgroundIconName:@"square"];
-    [editor setupGroups];
-    [editor onGroupSelected:@"Test4"];
-    [self assertColor:UIColor.blueColor editor:editor];
-    [editor onGroupSelected:@"Test5"];
-    [self assertColor:UIColor.greenColor editor:editor];
-    XCTAssertEqual([handler getGroups].count, 3);
-    XCTAssertEqual(source.pointsGroups.count, 0);
-    XCTAssertEqual(delegate.prematureSaves, 0);
-
-    OAPointEditingData *data = [OAPointEditingData new];
-    data.name = @"Waypoint";
-    data.category = @"Test5";
-    data.color = UIColor.redColor;
-    data.icon = @"special_star";
-    data.backgroundIcon = @"circle";
-    [handler savePoint:data newPoint:YES];
-    XCTAssertEqual(delegate.file.pointsGroups.count, 2);
-    XCTAssertEqual(delegate.file.pointsGroups[@"Test5"].color, UIColor.greenColor.toARGBNumber);
-    XCTAssertEqual(delegate.file.getPointsList.firstObject.getColor, UIColor.redColor.toARGBNumber);
-    XCTAssertEqual(delegate.file.pointsGroups[@"Test4"].points.count, 0);
-    XCTAssertEqualObjects(delegate.file.pointsGroups[@"Test5"].backgroundType, @"square");
-
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"gpx"]];
-    [self addTeardownBlock:^{ [[NSFileManager defaultManager] removeItemAtPath:path error:nil]; }];
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-    XCTAssertNil([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:delegate.file]);
-    OASGpxFile *loaded = [OASGpxUtilities.shared loadGpxFileFile:file];
-    XCTAssertEqual(loaded.pointsGroups.count, 2);
-    XCTAssertEqual(loaded.pointsGroups[@"Test4"].color, UIColor.blueColor.toARGBNumber);
-    XCTAssertEqual(loaded.pointsGroups[@"Test5"].color, UIColor.greenColor.toARGBNumber);
-    XCTAssertEqualObjects(loaded.pointsGroups[@"Test5"].backgroundType, @"square");
-    XCTAssertEqual(loaded.getPointsList.count, 1);
-}
-
-- (void)testDiscardingPendingGroupsLeavesDocumentUnchanged
-{
-    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    @autoreleasepool
-    {
-        OAEditPointViewController *editor = [self editorWithFile:file];
-        OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
-        [handler addGroupWithName:@"First" color:UIColor.blueColor iconName:@"special_star" backgroundIconName:@"circle"];
-        [handler addGroupWithName:@"Second" color:UIColor.greenColor iconName:@"special_star" backgroundIconName:@"circle"];
-        XCTAssertEqual([handler getGroups].count, 3);
-    }
-    XCTAssertEqual(file.pointsGroups.count, 0);
-    XCTAssertEqual(file.getPointsList.count, 0);
-    OAGpxWptEditingHandler *reopened = [[self editorWithFile:file] valueForKey:@"pointHandler"];
-    XCTAssertEqual([reopened getGroups].count, 1);
-}
-
-- (void)testPendingGroupsDoNotOverwriteExistingMetadataOrDuplicateOnReselection
-{
-    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    OAGpxWptEditingHandler *handler = [[self editorWithFile:file] valueForKey:@"pointHandler"];
-    NSString *name = OALocalizedString(@"shared_string_waypoints");
-    [handler addGroupWithName:name color:UIColor.blueColor iconName:@"special_star" backgroundIconName:@"circle"];
-    [handler setGroup:name color:UIColor.redColor];
-    XCTAssertEqual([handler getGroups].count, 2);
-    XCTAssertEqualObjects([handler getGroupsWithColors][name], UIColor.blueColor.toHexARGBString);
-    OAPointEditingData *data = [OAPointEditingData new];
-    data.name = @"Waypoint";
-    data.category = name;
-    data.color = UIColor.redColor;
-    [handler savePoint:data newPoint:YES];
-    OAGpxWptItem *item = [handler valueForKey:@"gpxWpt"];
-    OASGpxUtilitiesPointsGroup *existing = [[OASGpxUtilitiesPointsGroup alloc] initWithName:name iconName:nil backgroundType:nil color:UIColor.greenColor.toARGBNumber hidden:YES];
-    file.pointsGroups[name] = existing;
-    [item applyPendingGroupsToFile:file];
-    [item applyPendingGroupsToFile:file];
-    XCTAssertEqual(file.pointsGroups.count, 1);
-    XCTAssertEqual(file.pointsGroups[name], existing);
-    XCTAssertEqual(file.pointsGroups[name].color, UIColor.greenColor.toARGBNumber);
-    XCTAssertTrue(file.pointsGroups[name].hidden);
-}
-- (void)testEditingExistingPointKeepsPendingGroupsDistinct
-{
-    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
-    OASWptPt *point = [[OASWptPt alloc] init];
-    point.category = @"Existing";
-    [file addPointPoint:point];
-    OAGpxWptEditingHandler *handler = [[self editorWithFile:file] valueForKey:@"pointHandler"];
-    [handler setValue:[OAGpxWptItem withGpxWpt:point] forKey:@"gpxWpt"];
-    [handler addGroupWithName:@"First" color:UIColor.blueColor iconName:@"special_star" backgroundIconName:@"circle"];
-    [handler addGroupWithName:@"Second" color:UIColor.greenColor iconName:@"special_star" backgroundIconName:@"circle"];
-    NSArray *categories = [[handler getGroups] valueForKey:@"category"];
-    XCTAssertEqual(categories.count, [NSSet setWithArray:categories].count);
-    XCTAssertEqualObjects([handler getGroupsWithColors][@"First"], UIColor.blueColor.toHexARGBString);
-    XCTAssertEqualObjects([handler getGroupsWithColors][@"Second"], UIColor.greenColor.toHexARGBString);
-    XCTAssertNil(file.pointsGroups[@"First"]);
-    XCTAssertNil(file.pointsGroups[@"Second"]);
 }
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OASWptPt, OAPOI, OASGpxFile, OASGpxUtilitiesPointsGroup;
+@class OASWptPt, OAPOI;
 
 @interface OAGpxWptItem : NSObject
 
@@ -17,9 +17,6 @@
 @property (nonatomic) OASWptPt *point;
 @property (nonatomic) UIColor *color;
 @property (nonatomic) NSArray *groups;
-@property (nonatomic, copy) NSArray<OASGpxUtilitiesPointsGroup *> *pendingGroups;
-
-- (void)applyPendingGroupsToFile:(OASGpxFile *)file;
 
 @property (nonatomic, assign) CGFloat direction;
 @property (nonatomic) NSString* distance;

@@ -3314,7 +3314,11 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Text";
 "rendering_attr_contourDensity_name" = "Contour line density";
-"rendering_attr_contourLabelsUphill_name" = "Contour labels uphill";
+"rendering_attr_contourLabelDirection_name" = "Label direction";
+"rendering_value_upright_name" = "Upright";
+"rendering_value_uphill_name" = "Uphill";
+"contour_labels" = "Labels";
+"contour_label_direction_descr" = "Uphill: the top of each height number faces higher ground, as on paper topographic maps. The short ticks on the lines point downhill.";
 "rendering_attr_showRunningRoutes_name" = "Running routes";
 "rendering_attr_showRunningRoutes_description" = "Show running routes";
 "rendering_attr_showFitnessTrails_name" = "Fitness trails";

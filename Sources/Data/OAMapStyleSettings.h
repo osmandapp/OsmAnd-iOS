@@ -48,7 +48,7 @@ static NSString * const CONTOUR_LINES = @"contourLines";
 static NSString * const CONTOUR_DENSITY_ATTR = @"contourDensity";
 static NSString * const CONTOUR_WIDTH_ATTR = @"contourWidth";
 static NSString * const CONTOUR_COLOR_SCHEME_ATTR = @"contourColorScheme";
-static NSString * const CONTOUR_LABELS_UPHILL_ATTR = @"contourLabelsUphill";
+static NSString * const CONTOUR_LABEL_DIRECTION_ATTR = @"contourLabelDirection";
 
 static NSString * const ELEVATION_UNITS_ATTR = @"eleUnits";
 static NSString * const ELEVATION_UNITS_FEET_VALUE = @"feet";

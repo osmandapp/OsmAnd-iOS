@@ -449,7 +449,7 @@
             }
         }
 
-        _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)", CONTOUR_DENSITY_ATTR, CONTOUR_WIDTH_ATTR, CONTOUR_COLOR_SCHEME_ATTR, CONTOUR_LABELS_UPHILL_ATTR, NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR, NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR]];
+        _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)", CONTOUR_DENSITY_ATTR, CONTOUR_WIDTH_ATTR, CONTOUR_COLOR_SCHEME_ATTR, CONTOUR_LABEL_DIRECTION_ATTR, NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR, NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR]];
         for (OAMapStyleParameter *parameter in _filteredTopLevelParams)
         {
             if (parameter.title)

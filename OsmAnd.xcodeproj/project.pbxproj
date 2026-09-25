@@ -2996,7 +2996,6 @@
 		DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80BE26C563A600F274C7 /* OADayNightHelper.m */; };
 		DA5A853F26C563A900F274C7 /* OASuggestedDownloadsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C026C563A600F274C7 /* OASuggestedDownloadsItem.m */; };
 		DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C326C563A600F274C7 /* SunriseSunset.m */; };
-		DA5A854126C563A900F274C7 /* OAWikiImageHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C426C563A600F274C7 /* OAWikiImageHelper.mm */; };
 		DA5A854226C563A900F274C7 /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */; };
 		DA5A854326C563A900F274C7 /* OANativeUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C626C563A600F274C7 /* OANativeUtilities.mm */; };
 		DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80C726C563A600F274C7 /* OADownloadsItem.mm */; };
@@ -3451,6 +3450,7 @@
 		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */; };
+		FA4713E42E0E937500DC518F /* WikiImagesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 		FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */; };
@@ -7897,7 +7897,6 @@
 		DA5A80A426C563A500F274C7 /* OANetworkUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANetworkUtilities.h; sourceTree = "<group>"; };
 		DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsImporter.mm; sourceTree = "<group>"; };
 		DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUIHelper.mm; sourceTree = "<group>"; };
-		DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiImageHelper.h; sourceTree = "<group>"; };
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
@@ -7926,7 +7925,6 @@
 		DA5A80C126C563A600F274C7 /* OAAvoidRoadInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAvoidRoadInfo.h; sourceTree = "<group>"; };
 		DA5A80C226C563A600F274C7 /* OAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUtilities.h; sourceTree = "<group>"; };
 		DA5A80C326C563A600F274C7 /* SunriseSunset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunriseSunset.m; sourceTree = "<group>"; };
-		DA5A80C426C563A600F274C7 /* OAWikiImageHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiImageHelper.mm; sourceTree = "<group>"; };
 		DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGB.swift"; sourceTree = "<group>"; };
 		DA5A80C626C563A600F274C7 /* OANativeUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OANativeUtilities.mm; sourceTree = "<group>"; };
 		DA5A80C726C563A600F274C7 /* OADownloadsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadsItem.mm; sourceTree = "<group>"; };
@@ -8492,6 +8490,7 @@
 		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionConfigProvider.swift; sourceTree = "<group>"; };
+		FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImagesLoader.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 		FA4C56FE2D48E84200438A5C /* NoInternetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoInternetCard.swift; sourceTree = "<group>"; };
@@ -14565,6 +14564,7 @@
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
 				FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */,
+				FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
 				4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */,
@@ -14698,8 +14698,6 @@
 				DA5A809F26C563A500F274C7 /* OAWikiArticleHelper.h */,
 				DA5A80D626C563A600F274C7 /* OAWikiArticleHelper.mm */,
 				326B1B5F2AA5E7DF007954BB /* OAWikiArticleHelper+cpp.h */,
-				DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */,
-				DA5A80C426C563A600F274C7 /* OAWikiImageHelper.mm */,
 				DA5A80DF26C563A600F274C7 /* OAXmlImportHandler.h */,
 				DA5A80C826C563A600F274C7 /* OAXmlImportHandler.mm */,
 				32725F3C2B7E7B0300995806 /* OAZoom.h */,
@@ -18777,6 +18775,7 @@
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
 				CEDB71E52FD993C3009DAA0D /* TrackStatsTableCell.swift in Sources */,
 				FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */,
+				FA4713E42E0E937500DC518F /* WikiImagesLoader.swift in Sources */,
 				FAC166262B21BEF900D63755 /* SBError.swift in Sources */,
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
@@ -19476,7 +19475,6 @@
 				324F6C652ED5E90F00C76A85 /* PlaceDetailsViewController.swift in Sources */,
 				323F04C62C6575070058DD78 /* ShowHideHorseRoutesAction.swift in Sources */,
 				328EE34A2E169049003CDB48 /* ClickableWay.swift in Sources */,
-				DA5A854126C563A900F274C7 /* OAWikiImageHelper.mm in Sources */,
 				DA5A82EE26C563A800F274C7 /* OACustomPickerTableViewCell.m in Sources */,
 				DA5A855326C563A900F274C7 /* OAKml2Gpx.m in Sources */,
 				DA5A846B26C563A900F274C7 /* OAToolbarViewController.mm in Sources */,

@@ -3343,7 +3343,7 @@
 "route_your_destination_is_on_left" = "Destinația dumneavoastră este la stânga";
 "route_your_destination_is_on_ahead" = "Destinația ta este drept înainte";
 "route_your_destination_is_on_right" = "Destinația dumneavoastră este pe dreapta";
-"shared_string_show" = "Spectacol";
+"shared_string_show" = "Afișaj";
 "weather_wind_animation_enable_descr" = "Activați pentru a vizualiza stratul de animație a vântului pe hartă.";
 "osmand_cloud_delete_account_descr_with_email" = "Sunteți sigur că doriți să ștergeți contul OsmAnd Cloud: %@?";
 "quick_action_toggle_preference" = "Un comutator pentru a schimba preferința.";
@@ -3788,3 +3788,4 @@
 "open_from_short" = "De la";
 "open_till_short" = "Până la";
 "shared_string_unlock" = "Deblocare";
+"ais_connection_failed" = "Conexiune nereușită";

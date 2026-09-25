@@ -2905,7 +2905,7 @@
 "quick_action_toggle_preference" = "設定を変更するためのボタンです。";
 "show_along_the_route" = "ルート案内中に表示する項目の選択";
 "shared_string_local" = "保存済み";
-"day_off_label" = "OFF";
+"day_off_label" = "休み";
 "navigate_point_mgrs" = "MGRS(Military Grid Reference System)";
 "shared_string_off" = "OFF";
 "of" = "全%d中%d";

@@ -91,7 +91,7 @@
 "search_more" = "Search more…";
 "search_favorites" = "Search in Favorites";
 
-"day_off_label" = "off";
+"day_off_label" = "closed";
 "open_from_short" = "From";
 "open_from" = "Open from";
 "open_till" = "Open until";
@@ -5053,3 +5053,6 @@
 
 "carplay_trip_via_point" = "Via %@";
 "route_calculation" = "Route calculation";
+"opening_hours_public_holiday" = "Public holidays";
+"opening_hours_school_holiday" = "School holidays";
+"opening_hours_easter" = "Easter";

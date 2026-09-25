@@ -949,7 +949,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             [self updateCenterImage];
 
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
-        BOOL sphericalMapChanged = _cachedSphericalMap != [_settings.sphericalMap get];
+        BOOL sphericalMap = [_settings.sphericalMap get];
+        BOOL sphericalMapChanged = _cachedSphericalMap != sphericalMap;
         if (_firstUpdate || (visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || centerChanged || viewportChanged || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
@@ -990,7 +991,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             BOOL shouldUpdateCompass = compassVisible && headingChanged;
             
             _cachedCenter2 = centerPoint;
-            _cachedSphericalMap = [_settings.sphericalMap get];
+            _cachedSphericalMap = sphericalMap;
             _cachedWidth = viewSize.width;
             _cachedHeight = viewSize.height;
             _cachedHeading = heading;

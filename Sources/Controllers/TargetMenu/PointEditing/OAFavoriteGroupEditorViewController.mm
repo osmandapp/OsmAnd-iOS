@@ -23,6 +23,23 @@
 
 #pragma mark - Initialization
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_progressHUD)
+    {
+        UIWindow *window = self.navigationController.view.window ?: self.view.window;
+        _progressHUD.frame = window.bounds;
+        [window addSubview:_progressHUD];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_progressHUD removeFromSuperview];
+}
+
 - (void)postInit
 {
     [super postInit];
@@ -165,11 +182,9 @@
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self.view endEditing:YES];
-    self.modalInPresentation = YES;
 
-    // Disable the container so its navigation gestures cannot receive touches through the HUD.
-    UIView *containerView = self.navigationController.view ?: self.view;
-    containerView.userInteractionEnabled = NO;
+    // Cover the navbar without changing the shared navigation controller's interaction state.
+    UIView *containerView = self.view.window ?: self.view;
     _progressHUD = [MBProgressHUD showHUDAddedTo:containerView animated:NO];
     _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _progressHUD.accessibilityViewIsModal = YES;
@@ -194,14 +209,13 @@
 - (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
-    _progressHUD.superview.userInteractionEnabled = YES;
     [_progressHUD hide:NO];
     _progressHUD = nil;
-    self.modalInPresentation = NO;
 
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];
-    [self dismissViewController];
+    if (self.navigationController.topViewController == self)
+        [self dismissViewController];
 }
 
 - (void)finishEditingPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues

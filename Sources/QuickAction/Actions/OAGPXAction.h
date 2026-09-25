@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSString * const OAGPXActionCategoryKey;
+
 @interface OAGPXAction : OAQuickAction
+
++ (NSString *)categoryFromParams:(NSDictionary *)params;
 
 @end
 

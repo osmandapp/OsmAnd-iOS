@@ -1,5 +1,7 @@
 #import <XCTest/XCTest.h>
 #import "OAEditPointViewController.h"
+#import "OAGPXAction.h"
+#import "OrderedDictionary.h"
 #import "OAGpxWptEditingHandler.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OADefaultFavorite.h"
@@ -15,6 +17,7 @@
 - (void)onGroupSelected:(NSString *)name;
 - (void)onGroupChanged:(NSString *)name;
 - (void)setupGroups;
+- (void)applyQuickActionParams:(NSDictionary *)params;
 @end
 
 @interface OAWaypointGroupSelectionTest : XCTestCase
@@ -210,4 +213,58 @@
         XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], key);
     }
 }
+
+- (void)testQuickActionRawCategorySurvivesConfigurationAndSerialization
+{
+    NSString *title = OALocalizedString(@"shared_string_waypoints");
+    for (NSString *category in @[@"", title, @"Waypoints", @"  Named group  "])
+    {
+        OAGPXAction *action = [[OAGPXAction alloc] init];
+        action.params = @{OAGPXActionCategoryKey: category, @"category_name": title};
+        OrderedDictionary *model = [action getUIModel];
+        XCTAssertTrue([action fillParams:model]);
+        NSData *json = [NSJSONSerialization dataWithJSONObject:action.getParams options:0 error:nil];
+        NSDictionary *restored = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
+        XCTAssertEqualObjects(restored[OAGPXActionCategoryKey], category);
+        XCTAssertEqualObjects([OAGPXAction categoryFromParams:restored], category);
+    }
+}
+
+- (void)testLegacyQuickActionCategoryKeepsPreviousInterpretation
+{
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{}], @"");
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": OALocalizedString(@"shared_string_waypoints")}], @"");
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": @"  Named group  "}], @"Named group");
+    OAGPXAction *action = [[OAGPXAction alloc] init];
+    action.params = @{@"category_name": OALocalizedString(@"shared_string_waypoints")};
+    XCTAssertTrue([action fillParams:[action getUIModel]]);
+    XCTAssertEqualObjects(action.getParams[OAGPXActionCategoryKey], @"");
+}
+
+- (void)testQuickActionEditorDistinguishesDefaultAndNamedWaypoints
+{
+    NSString *name = OALocalizedString(@"shared_string_waypoints");
+    OASGpxFile *file = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    file.pointsGroups[@""] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:@"" backgroundType:@"" color:UIColor.blueColor.toARGBNumber hidden:NO];
+    file.pointsGroups[name] = [[OASGpxUtilitiesPointsGroup alloc] initWithName:name iconName:@"" backgroundType:@"" color:UIColor.greenColor.toARGBNumber hidden:NO];
+    for (NSString *category in @[@"", name])
+    {
+        OAEditPointViewController *editor = [self editorWithFile:file];
+        [editor applyQuickActionParams:@{OAGPXActionCategoryKey: category, @"category_name": name}];
+        XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], category);
+        [self assertColor:category.length > 0 ? UIColor.greenColor : UIColor.blueColor editor:editor];
+        [editor setValue:nil forKey:@"poiIconCollectionHandler"];
+        [editor onRightNavbarButtonPressed];
+        OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
+        OAGpxWptItem *item = [handler valueForKey:@"gpxWpt"];
+        XCTAssertEqualObjects(item.point.category ?: @"", category);
+    }
+}
+
+- (void)testQuickActionRawDefaultIgnoresDisplayTitleFromAnotherLanguage
+{
+    XCTAssertEqualObjects(([OAGPXAction categoryFromParams:@{OAGPXActionCategoryKey: @"", @"category_name": @"Путевые точки"}]), @"");
+    XCTAssertEqualObjects(([OAGPXAction categoryFromParams:@{OAGPXActionCategoryKey: @"Waypoints", @"category_name": @"Путевые точки"}]), @"Waypoints");
+}
+
 @end

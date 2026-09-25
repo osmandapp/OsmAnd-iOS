@@ -25,6 +25,8 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
+NSString * const OAGPXActionCategoryKey = @"category_key";
+
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor =  @"category_color";
@@ -49,6 +51,16 @@ static QuickActionType *TYPE;
               secondaryIconName:@"ic_custom_compound_action_add"]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
+}
+
++ (NSString *)categoryFromParams:(NSDictionary *)params
+{
+    NSString *category = params[OAGPXActionCategoryKey];
+    if (category != nil)
+        return category;
+
+    NSString *legacyName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[kCategoryName] ?: @""] trim];
+    return [legacyName isEqualToString:OALocalizedString(@"shared_string_waypoints")] ? @"" : legacyName;
 }
 
 - (void)execute
@@ -96,9 +108,7 @@ static QuickActionType *TYPE;
 
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.getParams[kCategoryName] ?: @""] trim];
-    if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
-        groupName = @"";
+    NSString *groupName = [OAGPXAction categoryFromParams:self.getParams];
 
     UIColor* color;
     if (self.getParams[kCategoryColor])
@@ -162,6 +172,7 @@ static QuickActionType *TYPE;
 - (OrderedDictionary *)getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    NSString *category = [OAGPXAction categoryFromParams:self.getParams];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : kDialog,
@@ -190,7 +201,8 @@ static QuickActionType *TYPE;
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
-                          @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
+                          @"value" : category.length > 0 ? category : OALocalizedString(@"shared_string_waypoints"),
+                          OAGPXActionCategoryKey : category,
                           @"color" : @(defaultColor),
                           @"img" : @"ic_custom_folder"
                           },
@@ -223,6 +235,7 @@ static QuickActionType *TYPE;
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
+                params[OAGPXActionCategoryKey] = item[OAGPXActionCategoryKey] ?: [OAGPXAction categoryFromParams:@{kCategoryName: item[@"value"] ?: @""}];
                 [params setValue:item[@"color"] forKey:kCategoryColor];
             }
         }

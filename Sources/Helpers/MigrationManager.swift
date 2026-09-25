@@ -23,6 +23,7 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
+        case migrateCoordinateFormatPreferredIds
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
         case migrateTracksSortModeKeysAndFormat
@@ -119,6 +120,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgets.rawValue) {
                 migrateTransparentWidgets()
                 defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue) {
+                settings.coordinateFormatSettingsStorage.migrateFromLegacyIfNeeded()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue)
             }
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()

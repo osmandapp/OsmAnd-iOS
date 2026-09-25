@@ -53,7 +53,8 @@ static NSString * const liveUpdatesPurchasedKey = @"liveUpdatesPurchasedKey";
 static NSString * const settingOsmAndLiveEnabledKey = @"settingOsmAndLiveEnabledKey";
 static NSString * const liveUpdatesRetriesKey = @"liveUpdatesRetriesKey";
 static NSString * const settingExternalInputDeviceKey = @"settingExternalInputDeviceKey";
-static NSString * const settingCustomExternalInputDeviceKey = @"settingCustomExternalInputDeviceKey";
+static NSString * const settingCustomExternalInputDeviceKey = @"settingGlobalCustomExternalInputDeviceKey";
+static NSString * const settingLegacyCustomExternalInputDeviceKey = @"settingCustomExternalInputDeviceKey";
 
 static NSString * const mapSettingShowFavoritesKey = @"mapSettingShowFavoritesKey";
 static NSString * const mapSettingShowPoiLabelKey = @"mapSettingShowPoiLabelKey";
@@ -6586,7 +6587,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonString withKey:settingExternalInputDeviceKey defValue:KeyboardDeviceProfile.deviceId];
-        _settingCustomExternalInputDevice = [OACommonString withKey:settingCustomExternalInputDeviceKey defValue:@""];
+        _settingCustomExternalInputDevice = [[[OACommonString withKey:settingCustomExternalInputDeviceKey defValue:@""] makeGlobal] makeShared];
+        _settingLegacyCustomExternalInputDevice = [OACommonString withKey:settingLegacyCustomExternalInputDeviceKey defValue:@""];
         
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
@@ -6595,7 +6597,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_profilePreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_profilePreferences setObject:_settingExternalInputDevice forKey:@"selected_external_input_device"];
-        [_profilePreferences setObject:_settingCustomExternalInputDevice forKey:@"custom_external_input_devices"];
+        [_globalPreferences setObject:_settingCustomExternalInputDevice forKey:@"custom_external_input_devices_global"];
+        [_profilePreferences setObject:_settingLegacyCustomExternalInputDevice forKey:@"custom_external_input_devices"];
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _volumeUnits = [OACommonVolumeConstant withKey:volumeSystemKey defValue:LITRES];
         _temperatureUnits = [OACommonTemperatureConstant withKey:temperatureSystemKey defValue:SYSTEM_DEFAULT];

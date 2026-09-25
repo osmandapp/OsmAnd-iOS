@@ -36,8 +36,6 @@
 		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
-		0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */; };
-		0A0EABFE26E618FB0044E82C /* ic_custom_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */; };
 		0A0EAC0126E619210044E82C /* ic_custom_magnifier@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFF26E619210044E82C /* ic_custom_magnifier@2x.png */; };
 		0A0EAC0226E619210044E82C /* ic_custom_magnifier@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0026E619210044E82C /* ic_custom_magnifier@3x.png */; };
 		0A0EAC0526E619420044E82C /* ic_custom_point_labels@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0326E619420044E82C /* ic_custom_point_labels@2x.png */; };
@@ -965,6 +963,9 @@
 		46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */; };
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
+		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
+		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
+		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
@@ -3712,8 +3713,6 @@
 		05DCE544304D48BC005DA649 /* libGLESv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libGLESv2.xcframework; sourceTree = "<group>"; };
 		06D17C78B408CD77F33D4466 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
-		0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@2x.png"; path = "Resources/Icons/ic_custom_info@2x.png"; sourceTree = "<group>"; };
-		0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@3x.png"; path = "Resources/Icons/ic_custom_info@3x.png"; sourceTree = "<group>"; };
 		0A0EABFF26E619210044E82C /* ic_custom_magnifier@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_magnifier@2x.png"; path = "Resources/Icons/ic_custom_magnifier@2x.png"; sourceTree = "<group>"; };
 		0A0EAC0026E619210044E82C /* ic_custom_magnifier@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_magnifier@3x.png"; path = "Resources/Icons/ic_custom_magnifier@3x.png"; sourceTree = "<group>"; };
 		0A0EAC0326E619420044E82C /* ic_custom_point_labels@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_point_labels@2x.png"; path = "Resources/Icons/ic_custom_point_labels@2x.png"; sourceTree = "<group>"; };
@@ -4879,6 +4878,9 @@
 		4E099E8A5743C59D1488372B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ia; path = ia.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavoriteGroupViewController.swift; sourceTree = "<group>"; };
 		51DEDD0911429C69632A4E57 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsAppearanceViewController.swift; sourceTree = "<group>"; };
+		54A955032F4E950100549501 /* WidgetPanelAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelAppearance.swift; sourceTree = "<group>"; };
+		54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelColorViewController.swift; sourceTree = "<group>"; };
 		581529BA816B777BDDE596DF /* sat */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sat; path = sat.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		58806C4CDEB8F77A22ADEC62 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fi; path = fi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		5A7EE1C71CD0E3F432652780 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = gl; path = gl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -9440,8 +9442,6 @@
 				0A0EAC0426E619420044E82C /* ic_custom_point_labels@3x.png */,
 				0A0EABFF26E619210044E82C /* ic_custom_magnifier@2x.png */,
 				0A0EAC0026E619210044E82C /* ic_custom_magnifier@3x.png */,
-				0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */,
-				0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */,
 				84E4418A1AF8A07500F87542 /* add_waypoint_to_track@2x.png */,
 				84E4418B1AF8A07500F87542 /* add_waypoint_to_track@3x.png */,
 				32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */,
@@ -14014,6 +14014,7 @@
 				DA842ECC2A0B998E0030866E /* WidgetInfoCreator.swift */,
 				DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */,
 				DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */,
+				54A955032F4E950100549501 /* WidgetPanelAppearance.swift */,
 				DA2F790B2A273D39002B9B83 /* WidgetsInitializer.swift */,
 				FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */,
 				DA2EC7B429FBCD1700ECEB37 /* WidgetsPanel.swift */,
@@ -14975,6 +14976,8 @@
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
 				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
+				54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */,
+				54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";
@@ -16057,7 +16060,6 @@
 				32119B4528477C94005E1E0C /* img_plugin_openplacereviews.jpg in Resources */,
 				32309A4326989180005751F5 /* ic_custom_map_zoom_in@2x.png in Resources */,
 				0AC13D252715C44B00142BFD /* ic_custom_add_gpx_waypoint@3x.png in Resources */,
-				0A0EABFE26E618FB0044E82C /* ic_custom_info@3x.png in Resources */,
 				8441CB641B1370580033AC95 /* selection_unchecked@2x.png in Resources */,
 				DAA4EDE9240E85B800F16073 /* ic_custom_download@3x.png in Resources */,
 				46B9E79A29B23B8200FA802D /* ic_custom_export_outlined@2x.png in Resources */,
@@ -17329,7 +17331,6 @@
 				DA1BC11E233F9B01004DAF78 /* ic_custom_reverse@2x.png in Resources */,
 				DA5A851C26C563A900F274C7 /* OptionsPanel.xib in Resources */,
 				84F3A8C51B4DA93100D16EBC /* ic_group@3x.png in Resources */,
-				0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */,
 				32E2D30229B9DB5700A17D0B /* ic_custom_coordinates_location@3x.png in Resources */,
 				844499A51AAA1FFA00ACA20D /* img_app_purchase_2@2x.png in Resources */,
 				46453B2228352449001F9A3A /* ic_custom_osmand_pro_logo_colored@3x.png in Resources */,
@@ -18329,6 +18330,9 @@
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
 				277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
+				54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */,
+				54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */,
+				54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,

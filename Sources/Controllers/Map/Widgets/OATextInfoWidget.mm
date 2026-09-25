@@ -503,7 +503,21 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (void)setImageHidden:(BOOL)hidden
 {
-    _imageView.hidden = hidden;
+    _imageView.hidden = _panelIconVisibilityOverride
+        ? !_panelIconVisibilityOverride.boolValue
+        : hidden;
+}
+
+- (void)setPanelIconVisibilityOverride:(NSNumber *)panelIconVisibilityOverride
+{
+    _panelIconVisibilityOverride = panelIconVisibilityOverride;
+    if (!_imageView)
+        return;
+
+    if (panelIconVisibilityOverride)
+        _imageView.hidden = !panelIconVisibilityOverride.boolValue;
+    else if (_appMode && _showIconPref)
+        _imageView.hidden = ![_showIconPref get:_appMode];
 }
 
 - (BOOL)setIconForWidgetType:(OAWidgetType *)widgetType
@@ -634,14 +648,16 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     BOOL isVisibleIcon = false;
     if (_appMode && _showIconPref)
     {
-        isVisibleIcon = [_showIconPref get:_appMode];
+        isVisibleIcon = _panelIconVisibilityOverride
+            ? _panelIconVisibilityOverride.boolValue
+            : [_showIconPref get:_appMode];
         _imageView.hidden = !isVisibleIcon;
-        
+
         if (self.isFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
             self.iconWidgetView.hidden = NO;
         else
             self.iconWidgetView.hidden = !isVisibleIcon;
-        
+
         _contentStackViewSimpleWidget.spacing = 0;
     }
     _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
@@ -694,12 +710,6 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     {
         _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
-    }
-    
-    if (![[self widgetPanel] isPanelVertical])
-    {
-        self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
-        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
     }
 }
 
@@ -955,7 +965,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
     
     _primaryColor = state.textColor;
-    _unitsColor = self.isSimpleLayout ? state.unitColor : state.textColor;
+    _unitsColor = state.unitColor;
     _primaryOutlineColor = state.textOutlineColor;
     _unitsShadowColor = state.textOutlineColor;
     _textOutlineWidth = state.textOutlineWidth;

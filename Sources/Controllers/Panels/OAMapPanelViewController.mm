@@ -432,8 +432,12 @@ typedef enum
         _activeTargetType = OATargetMapModeParametersSettings;
     else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
         _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
+    else if ([controller isKindOfClass:WidgetPanelColorViewController.class])
+        _activeTargetType = OATargetWidgetPanelAppearanceSettings;
 
     [self setupScrollableHud:controller];
+    if (_activeTargetType == OATargetWidgetPanelAppearanceSettings)
+        [_hudViewController updateControlsLayout:NO];
 }
 
 - (void) hideScrollableHudViewController

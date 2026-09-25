@@ -144,11 +144,13 @@ final class RouteBetweenPointsViewController: UIViewController {
             makeSegmentSection(segment, isLast: index == segments.count - 1)
         }
         var actions: [Row] = []
+        var footerTitle: String?
         if scopedSegment == nil, dataSource?.canStartNewSegment ?? false {
             actions.append(.startNewSegment)
+            footerTitle = localizedString("plan_route_new_segment_separate_hint")
         }
         actions.append(.changeWholeTrack)
-        result.append(SectionModel(headerTitle: nil, rows: actions, footerTitle: localizedString("plan_route_new_segment_separate_hint")))
+        result.append(SectionModel(headerTitle: nil, rows: actions, footerTitle: footerTitle))
         return result
     }
 

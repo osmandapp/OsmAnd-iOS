@@ -692,7 +692,7 @@
 "shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
 "shared_string_road" = "道路";
 "avoid_roads_msg" = "經由選擇要避開的道路，來觸發一條替代線路";
-"day_off_label" = "關閉";
+"day_off_label" = "休息";
 "open_from" = "開業時間：由";
 "open_till" = "營業至";
 "will_open_at" = "開始營業時間";
@@ -4198,3 +4198,18 @@
 "ais_object_lost_timeouts" = "AIS 訊號接收的時間終止設定";
 "ais_object_lost_timeouts_description" = "設定時間終止值來識別失去 AIS 物件時，如果沒訊號斷訊時的特定時間。";
 "ais_object_lost_timeout" = "當船舶失去蹤影時顯示與否的時間終止";
+"plugin_ais_tracker_disclaimer" = "聲明\n\n這個套件屬於業餘專案，並非設定在關鍵應用上，我們不保證可靠性或是準確性。不要僅倚賴這套件用在導航，生命安全或是其他基本操作。";
+"ais_add_test_objects" = "新增測試的 AIS 物件";
+"ais_clear_simulation" = "清除 AIS 模擬";
+"ais_reconnect" = "重新連線";
+"ais_nautical_mile" = "海浬";
+"ais_nautical_miles" = "海浬";
+"plan_route_section_recalculate_format" = "%2$@ 的 %1$@ 片段已經以選取的設定檔重新計算導航路徑。";
+"plan_route_segment_recalculate_format" = "已經以選取的設定檔重新計算 %@ 的導航路線。";
+"osm_edits_empty_state_description" = "在上傳變動到開放街圖前，你在 OsmAnd 做出的變動會出現在這邊";
+"ais_load_data" = "從檔案載入 AIS 資料";
+"ais_address_settings" = "IP 位址設定";
+"ais_address_settings_description" = "選取 NMEA 協定 (UDP/TCP)，以及指定對應的位址與端點";
+"ais_nmea_protocol" = "NMEA 資料接收的協定";
+"ais_nmea_protocol_description" = "選取 NMEA 資料接收的協定";
+"ais_address_nmea_server" = "NMEA 資料來源的 IP 位址";

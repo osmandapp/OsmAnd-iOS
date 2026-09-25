@@ -425,7 +425,6 @@ extension FavoriteListViewController {
     private func openNewFavoriteGroupEditor() {
         guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
         viewController.parentGroupName = parentGroupName
-        viewController.validatesGroupUniqueness = true
         viewController.delegate = self
         let modalNavigationController = UINavigationController(rootViewController: viewController)
         navigationController.present(modalNavigationController, animated: true)

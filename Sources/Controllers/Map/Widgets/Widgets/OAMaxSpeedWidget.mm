@@ -11,6 +11,7 @@
 #import "OARoutingHelper.h"
 #import "OALocationServices.h"
 #import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 #import "OACurrentPositionHelper.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -54,7 +55,7 @@
         {
             road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
             if (road)
-                mx = road->getMaximumSpeed(road->bearingVsRouteDirection(lastKnownLocation.course));
+                mx = road->getMaximumSpeed(road->bearingVsRouteDirection(lastKnownLocation.course), [[OAAppSettings sharedManager].applicationMode.get getRouteTypeProfile]);
         }
     }
     else if (_routingHelper)

@@ -4270,7 +4270,7 @@
 "ais_cpa_settings_description" = "Ezek az értékek határozzák meg, hogyan jelenjenek meg az AIS-objektumok, amikor megközelítik a saját hajó pozícióját.";
 "ais_cpa_warning_time" = "Figyelmeztetési idő a legkisebb megközelítési pont (CPA) előtt";
 "ais_cpa_warning_time_description" = "Ha egy másik hajóval való TCPA (legkisebb megközelítési pontig hátralévő idő) a meghatározott küszöbérték alá esik, a hajó piros színnel lesz kiemelve.";
-"plugin_ais_tracker_name" = "AIS hajókövető";
+"plugin_ais_tracker_name" = "Hajókövető (AIS)";
 "plugin_ais_tracker_description" = "Megjeleníti a közelben lévő hajók AIS-pozícióit és információit. Az AIS-adatok a hálózaton keresztül érkeznek egy külső AIS-vevőtől.";
 "plugin_ais_tracker_disclaimer" = "NYILATKOZAT\n\nEz a bővítmény egy hobbiprojekt, és nem kritikus alkalmazásokban való használatra készült. Nem garantálja a megbízhatóságot vagy a pontosságot. Ne hagyatkozzon erre a szoftverre navigáció, életbiztonság vagy bármilyen más alapvető művelet során.";
 "shared_string_disabled" = "Letiltva";
@@ -4290,7 +4290,7 @@
 "ais_error_port_only" = "Csak a 0..65535 tartományba eső számértékek fogadhatók el.";
 "ais_connection_connected" = "Kapcsolódva";
 "ais_connection_connecting" = "Kapcsolódás";
-"ais_connection_failed" = "Nem sikerült kapcsolódni";
+"ais_connection_failed" = "Nem sikerült létrehozni a kapcsolatot";
 "ais_connection_disconnected" = "Leválasztva";
 "ais_call_sign" = "Hívójel";
 "ais_mmsi" = "MMSI";

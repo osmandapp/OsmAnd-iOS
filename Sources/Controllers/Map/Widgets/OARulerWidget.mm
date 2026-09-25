@@ -563,10 +563,13 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     }
     else if (_textSide == EOATextSideHorizontal)
     {
-        topOrLeftCoordinate.x = center.x - drawingTextRadius - boundsHeading.width;
-        topOrLeftCoordinate.y = center.y - boundsHeading.height / 2;
-        rightOrBottomCoordinate.x = center.x + drawingTextRadius;
-        rightOrBottomCoordinate.y = center.y - boundsDistance.height / 2;
+        CGPoint leftScreenPoint = CGPointZero, rightScreenPoint = CGPointZero;
+        BOOL hasLeft = [self convertPoint:CGPointMake(center.x - drawingTextRadius, center.y) compensateMapRotation:YES toScreenPoint:&leftScreenPoint];
+        BOOL hasRight = [self convertPoint:CGPointMake(center.x + drawingTextRadius, center.y) compensateMapRotation:YES toScreenPoint:&rightScreenPoint];
+        CGPoint leftTextPoint = CGPointMake(leftScreenPoint.x - boundsHeading.width, leftScreenPoint.y - boundsHeading.height / 2);
+        CGPoint rightTextPoint = CGPointMake(rightScreenPoint.x, rightScreenPoint.y - boundsDistance.height / 2);
+        return @[hasLeft ? [NSValue valueWithCGPoint:leftTextPoint] : NSNull.null,
+                 hasRight ? [NSValue valueWithCGPoint:rightTextPoint] : NSNull.null];
     }
     return @[[NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
 }

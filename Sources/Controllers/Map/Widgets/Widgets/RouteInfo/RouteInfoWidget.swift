@@ -20,6 +20,7 @@ final class RouteInfoWidget: OASimpleWidget {
     @IBOutlet private var leftViewButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet private var leftViewButtonTopConstraint: NSLayoutConstraint!
     @IBOutlet private var leftViewButtonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet private var firstLineLeftLabelMinWidthConstraint: NSLayoutConstraint!
     @IBOutlet private var secondLineBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var widgetHeightConstraint: NSLayoutConstraint!
     @IBOutlet private var trailingConstraint: NSLayoutConstraint!
@@ -105,7 +106,6 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     override func layoutSubviews() {
-        super.layoutSubviews()
         let leftViewButtonVerticalSpace = leftViewButtonVerticalSpace
         leftViewButtonWidthConstraint.constant = leftViewButtonWidth
         leftViewButtonTopConstraint.constant = leftViewButtonVerticalSpace
@@ -113,6 +113,7 @@ final class RouteInfoWidget: OASimpleWidget {
         trailingConstraint.constant = trailingSpace
         secondLineBottomConstraint.constant = secondLineBottomSpace
         secondaryBlockStackView.isHidden = !hasEnoughWidth || cachedRouteInfo.count < 2
+        super.layoutSubviews()
         forceUpdateView()
     }
     
@@ -328,6 +329,8 @@ final class RouteInfoWidget: OASimpleWidget {
         }
         
         firstLineLeftLabel.attributedText = firstLineLeftString
+        // Shrink other padding first, then the primary value, preserving the button width and its insets when possible.
+        firstLineLeftLabelMinWidthConstraint.constant = max(0, ceil(firstLineLeftLabel.intrinsicContentSize.width * firstLineLeftLabel.minimumScaleFactor))
         if !secondLineLeftLabel.isHidden {
             secondLineLeftLabel.attributedText = secondLineLeftString
         }

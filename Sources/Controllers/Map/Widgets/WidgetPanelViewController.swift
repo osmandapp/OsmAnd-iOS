@@ -179,7 +179,25 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         if pages.isEmpty {
             pages.append(UIViewController())
         }
-        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false) { [weak self] _ in
+
+        let selectedIndex = currentIndex
+
+        // Set up the page control before calculating the selected page size.
+        pageControl.numberOfPages = pages.count
+        pageControl.currentPage = selectedIndex
+        pageControl.isHidden = pages.count <= 1 || isHorizontal
+        pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
+        pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
+
+        // A side panel can still have zero width after previously displaying no widgets
+        // (for example, when leaving the Weather screen). Size it before UIPageViewController
+        // installs the widget page to avoid laying out its required content at width zero.
+        if !isHorizontal, let selectedPage = pages[selectedIndex] as? WidgetPageViewController {
+            selectedPage.loadViewIfNeeded()
+            updateContainerSize()
+        }
+
+        pageViewController.setViewControllers([pages[selectedIndex]], direction: .forward, animated: false) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.updateWidgetSizes()
             }
@@ -188,16 +206,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pageViewController.dataSource = self
         }
         pageViewController.delegate = self
-        
-        // Set up the page control
-        pageControl.numberOfPages = pages.count
-        pageControl.currentPage = currentIndex
-        pageControl.isHidden = pages.count <= 1 || isHorizontal
-        pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
-        
+
         currentActiveController = currentVisibleViewController(in: pageViewController)
-        
-        pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
     
     func hasWidgets() -> Bool {

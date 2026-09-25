@@ -124,7 +124,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="A8L-0E-OUk" secondAttribute="trailing" id="Cah-QC-6Bh"/>
                     <constraint firstItem="A8L-0E-OUk" firstAttribute="top" secondItem="1Mu-Vo-bMK" secondAttribute="top" id="HFx-d4-o1X"/>
                     <constraint firstItem="A8L-0E-OUk" firstAttribute="leading" secondItem="1Mu-Vo-bMK" secondAttribute="leadingMargin" id="Vxe-kz-cQ5"/>
-                    <constraint firstAttribute="bottom" secondItem="A8L-0E-OUk" secondAttribute="bottom" id="efH-Us-Iah"/>
+                    <constraint firstAttribute="bottom" secondItem="A8L-0E-OUk" secondAttribute="bottom" priority="999" id="efH-Us-Iah"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>

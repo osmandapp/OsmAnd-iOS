@@ -15,6 +15,7 @@
 #import "OAAppSettings.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAColorsTableViewCell.h"
@@ -46,6 +47,7 @@
 #define kCellTypeMap @"MapCell"
 #define kCellTypeInfo @"imageDescCell"
 #define kCellTypeButton @"buttonIconCell"
+#define kCellTypeMenu @"menuCell"
 
 #define kDefaultDensity @"high"
 #define kDefaultWidth @"thin"
@@ -272,6 +274,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }];
         }
         
+        NSMutableArray *labelsArr = [NSMutableArray array];
+        param = [_styleSettings getParameter:CONTOUR_LABEL_DIRECTION_ATTR];
+        if (param)
+        {
+            [labelsArr addObject:@{
+                @"type" : kCellTypeMenu,
+                @"parameter" : param
+            }];
+        }
+
         NSMutableArray *availableMapsArr = [NSMutableArray array];
         for (OAMultipleResourceItem* item in _mapMultipleItems)
         {
@@ -285,6 +297,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [result addObject: switchArr];
         [result addObject: zoomArr];
         [result addObject: linesArr];
+        if (labelsArr.count > 0)
+            [result addObject: labelsArr];
         if (availableMapsArr.count > 0)
             [result addObject: availableMapsArr];
     }
@@ -322,6 +336,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"header" : OALocalizedString(@"shared_string_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
+        if ([_styleSettings getParameter:CONTOUR_LABEL_DIRECTION_ATTR])
+        {
+            [sectionArr addObject:@{
+                            @"header" : OALocalizedString(@"contour_labels"),
+                            @"footer" : OALocalizedString(@"contour_label_direction_descr")
+                            }];
+        }
         if (_mapMultipleItems.count > 0)
         {
             [sectionArr addObject:@{
@@ -428,6 +449,38 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
     return [parameter.value isEqual:@"disabled"] ? false : true;
+}
+
+- (UIMenu *) createMenuForParameter:(OAMapStyleParameter *)parameter button:(UIButton *)button
+{
+    NSMutableArray<UIMenuElement *> *actions = [NSMutableArray array];
+    __weak __typeof(self) weakSelf = self;
+    NSString *current = parameter.value ?: @"";
+    for (OAMapStyleParameterValue *value in parameter.possibleValuesUnsorted)
+    {
+        UIAction *action = [UIAction actionWithTitle:value.title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf onParameter:parameter selected:value.name];
+        }];
+        if ([current isEqualToString:value.name])
+        {
+            action.state = UIMenuElementStateOn;
+            NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:[value.title stringByAppendingString:@" "]];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+            attachment.image = [[UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [title appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
+            [button setAttributedTitle:title forState:UIControlStateNormal];
+        }
+        [actions addObject:action];
+    }
+    return [UIMenu menuWithChildren:actions];
+}
+
+- (void) onParameter:(OAMapStyleParameter *)parameter selected:(NSString *)value
+{
+    parameter.value = value;
+    [_styleSettings save:parameter];
+    [self.tblView reloadData];
 }
 
 - (NSString *) getLocalizedParamValue:(NSString *)value
@@ -571,6 +624,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeMenu])
+    {
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        }
+        if (cell)
+        {
+            OAMapStyleParameter *p = item[@"parameter"];
+            cell.titleLabel.text = p.title;
+            cell.button.configuration = nil;
+            cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.button.menu = [self createMenuForParameter:p button:cell.button];
+            cell.button.showsMenuAsPrimaryAction = YES;
+            cell.button.changesSelectionAsPrimaryAction = YES;
         }
         return cell;
     }

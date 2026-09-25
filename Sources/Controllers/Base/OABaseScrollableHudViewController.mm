@@ -128,6 +128,11 @@
     return NO;
 }
 
+- (BOOL)overridesMapPosition
+{
+    return NO;
+}
+
 - (void)applyCornerRadius:(BOOL)enable
 {
     CGFloat value = enable ? 9. : 0.;

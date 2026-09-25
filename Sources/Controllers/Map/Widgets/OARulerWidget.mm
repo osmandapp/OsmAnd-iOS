@@ -50,6 +50,7 @@
 #define MIN_PROJECTED_STEP 24
 #define GLOBE_VISIBILITY_TOLERANCE 0.1
 #define GLOBE_VISIBILITY_MIN_TOLERANCE 4
+#define GLOBE_VISIBLE_RADIUS_MARGIN 0.9
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
@@ -93,6 +94,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     BOOL _cachedMapMode;
     BOOL _sphericalMap;
     BOOL _cachedSphericalMap;
+    double _globeVisibleRadius;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -257,6 +259,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGPoint circleCenterPoint = [self getCenterPoint];
     _imageView.center = circleCenterPoint;
     _sphericalMap = [_settings.sphericalMap get];
+    _globeVisibleRadius = _sphericalMap ? [self calculateGlobeVisibleRadius] : 0;
     if ([self rulerModeOn])
     {
         [self updateStyles];
@@ -882,8 +885,30 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return projected && [self isVisibleOnGlobe:latLon screenPoint:*screenPoint];
 }
 
+- (double)calculateGlobeVisibleRadius
+{
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    double cameraHeight = [mapView getCameraHeightInMeters];
+    double targetDistance = [mapView getTargetDistanceInMeters];
+    if (cameraHeight <= 0 || targetDistance <= 0)
+        return 0;
+
+    double earthRadius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
+    double cameraRadius = earthRadius + cameraHeight;
+    double horizonAngle = acos(earthRadius / cameraRadius);
+    double targetAngleCos = (cameraRadius * cameraRadius + earthRadius * earthRadius - targetDistance * targetDistance) / (2 * earthRadius * cameraRadius);
+    double targetAngle = acos(qBound(-1.0, targetAngleCos, 1.0));
+    double centerOffset = OsmAnd::Utilities::distance(OsmAnd::Utilities::convert31ToLatLon(mapView.target31), [self getCenterLatLon]);
+    double visibleRadius = earthRadius * (horizonAngle - targetAngle) - centerOffset;
+    return MAX(0, visibleRadius * GLOBE_VISIBLE_RADIUS_MARGIN);
+}
+
 - (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon screenPoint:(CGPoint)screenPoint
 {
+    double distanceFromCenter = OsmAnd::Utilities::distance(_cachedCenterLatLon, latLon);
+    if (distanceFromCenter < _globeVisibleRadius)
+        return YES;
+
     CGFloat scale = [[UIScreen mainScreen] scale];
     OsmAnd::PointI frontPos31;
     if (![_mapViewController.mapView convert:CGPointMake(round(screenPoint.x * scale), round(screenPoint.y * scale)) toLocation:&frontPos31])
@@ -891,7 +916,6 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     OsmAnd::LatLon boundedLatLon(qBound(-MAX_LATITUDE_KEY, latLon.latitude, MAX_LATITUDE_KEY), latLon.longitude);
     auto frontLatLon = OsmAnd::Utilities::convert31ToLatLon(frontPos31);
-    double distanceFromCenter = OsmAnd::Utilities::distance(_cachedCenterLatLon, boundedLatLon);
     double minTolerance = GLOBE_VISIBILITY_MIN_TOLERANCE * _cachedMapDensity * scale;
     double tolerance = MAX(distanceFromCenter * GLOBE_VISIBILITY_TOLERANCE, minTolerance);
     return OsmAnd::Utilities::distance(frontLatLon, boundedLatLon) <= tolerance;

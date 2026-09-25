@@ -19,6 +19,7 @@
 #import "OAPluginsViewController.h"
 #import "OAColors.h"
 #import "OAChoosePlanHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSMutableArray *activePopups;
 
@@ -219,7 +220,7 @@ static NSMutableArray *activePopups;
     
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomMap] color:UIColorFromRGB(0x4caf50)];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -259,7 +260,7 @@ static NSMutableArray *activePopups;
     
     UIViewController *top = [OARootViewController instance].navigationController.topViewController;
     
-    popup.icon.image = [UIImage imageNamed:@"ic_popup_no_internet"];
+    popup.icon.image = [UIImage imageNamed:ACImageNameIcPopupNoInternet];
     popup.titleLabel.text = title;
     
     NSString *styledText = [self.class styledHTMLwithHTML:descText];
@@ -353,7 +354,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_nautical_depth_colored";
+        iconName = ACImageNameIcCustomNauticalDepthColored;
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -365,7 +366,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"option_available_only_by_subscription");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_nautical_depth_colored";
+        iconName = ACImageNameIcCustomNauticalDepthColored;
         popup.okButton.tag = EOAFeatureNautical;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -378,7 +379,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"option_available_only_by_subscription");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_carplay_colored";
+        iconName = ACImageNameIcCustomCarplayColored;
         popup.okButton.tag = EOAFeatureCarPlay;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -391,7 +392,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_pro_widgets");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_advanced_widgets_colored";
+        iconName = ACImageNameIcCustomAdvancedWidgetsColored;
         popup.okButton.tag = EOAFeatureAdvancedWidgets;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -403,7 +404,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_external_sensors");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_sensor";
+        iconName = ACImageNameIcCustomSensor;
         popup.okButton.tag = EOAFeatureSensors;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -415,7 +416,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchase_feature_desc_vehicle_metrics_obd_ii");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_vehicle_metrics_colored";
+        iconName = ACImageNameIcCustomVehicleMetricsColored;
         popup.okButton.tag = EOAFeatureVehicleMetrics;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -427,7 +428,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_astronomy");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_telescope";
+        iconName = ACImageNameIcCustomTelescope;
         popup.okButton.tag = EOAFeatureAstronomy;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];

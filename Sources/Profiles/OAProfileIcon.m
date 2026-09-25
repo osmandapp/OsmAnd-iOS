@@ -8,6 +8,7 @@
 
 #import "OAProfileIcon.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAProfileIcon()
 
@@ -131,59 +132,59 @@
     switch (profileIcon)
     {
         case PROFILE_ICON_DEFAULT:
-            return @"ic_world_globe_dark";
+            return ACImageNameIcWorldGlobeDark;
         case PROFILE_ICON_CAR:
-            return @"ic_action_car_dark";
+            return ACImageNameIcActionCarDark;
         case PROFILE_ICON_TAXI:
-            return @"ic_action_taxi";
+            return ACImageNameIcActionTaxi;
         case PROFILE_ICON_TRUCK:
-            return @"ic_action_truck_dark";
+            return ACImageNameIcActionTruckDark;
         case PROFILE_ICON_SHUTTLE_BUS:
-            return @"ic_action_shuttle_bus";
+            return ACImageNameIcActionShuttleBus;
         case PROFILE_ICON_BUS:
-            return @"ic_action_bus_dark";
+            return ACImageNameIcActionBusDark;
         case PROFILE_ICON_SUBWAY:
-            return @"ic_action_subway";
+            return ACImageNameIcActionSubway;
         case PROFILE_ICON_MOTORCYCLE:
-            return @"ic_action_motorcycle_dark";
+            return ACImageNameIcActionMotorcycleDark;
         case PROFILE_ICON_BICYCLE:
-            return @"ic_action_bicycle_dark";
+            return ACImageNameIcActionBicycleDark;
         case PROFILE_ICON_HORSE:
-            return @"ic_action_horse";
+            return ACImageNameIcActionHorse;
         case PROFILE_ICON_PEDESTRIAN:
-            return @"ic_action_pedestrian_dark";
+            return ACImageNameIcActionPedestrianDark;
         case PROFILE_ICON_TREKKING:
-            return @"ic_action_trekking_dark";
+            return ACImageNameIcActionTrekkingDark;
         case PROFILE_ICON_SKIING:
-            return @"ic_action_skiing";
+            return ACImageNameIcActionSkiing;
         case PROFILE_ICON_SAIL_BOAT:
-            return @"ic_action_sail_boat_dark";
+            return ACImageNameIcActionSailBoatDark;
         case PROFILE_ICON_AIRCRAFT:
-            return @"ic_action_aircraft";
+            return ACImageNameIcActionAircraft;
         case PROFILE_ICON_HELICOPTER:
-            return @"ic_action_helicopter";
+            return ACImageNameIcActionHelicopter;
         case PROFILE_ICON_TRANSPORTER:
-            return @"ic_action_personal_transporter";
+            return ACImageNameIcActionPersonalTransporter;
         case PROFILE_ICON_MONOWHEEL:
-            return @"ic_action_monowheel";
+            return ACImageNameIcActionMonowheel;
         case PROFILE_ICON_SCOOTER:
-            return @"ic_action_scooter";
+            return ACImageNameIcActionScooter;
         case PROFILE_ICON_UFO:
-            return @"ic_action_ufo";
+            return ACImageNameIcActionUfo;
         case PROFILE_ICON_OFFROAD:
-            return @"ic_action_offroad";
+            return ACImageNameIcActionOffroad;
         case PROFILE_ICON_CAMPERVAN:
-            return @"ic_action_campervan";
+            return ACImageNameIcActionCampervan;
         case PROFILE_ICON_CAMPER:
-            return @"ic_action_camper";
+            return ACImageNameIcActionCamper;
         case PROFILE_ICON_PICKUP_TRUCK:
-            return @"ic_action_pickup_truck";
+            return ACImageNameIcActionPickupTruck;
         case PROFILE_ICON_WAGON:
-            return @"ic_action_wagon";
+            return ACImageNameIcActionWagon;
         case PROFILE_ICON_UTV:
-            return @"ic_action_utv";
+            return ACImageNameIcActionUtv;
         case PROFILE_ICON_OSM:
-            return @"ic_action_openstreetmap_logo";
+            return ACImageNameIcActionOpenstreetmapLogo;
         default:
             return @"";
     }

@@ -17,6 +17,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "MaterialTextFields.h"
+#import "GeneratedAssetSymbols.h"
 
 #define DOWNLOAD_URL @"https://a.mapillary.com/v3/users?usernames=%@&client_id=%s"
 #define CLIENT_ID "LXJVNHlDOGdMSVgxZG5mVzlHQ3ZqQTo0NjE5OWRiN2EzNTFkNDg4"
@@ -112,7 +113,7 @@
     _searchField.delegate = self;
     [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
     
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:ACImageNameSearchIcon]];
     leftImageView.contentMode = UIViewContentModeCenter;
     leftImageView.frame = _searchField.leftView.frame;
     leftImageView.tintColor = [UIColor whiteColor];

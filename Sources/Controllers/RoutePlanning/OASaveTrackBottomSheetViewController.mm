@@ -58,7 +58,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self.iconImageView setImage:[UIImage templateImageNamed:@"ic_custom_save_complete.png"]];
+    [self.iconImageView setImage:[UIImage templateImageNamed:ACImageNameIcCustomSaveComplete]];
     self.iconImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.openSavedTrackButton.layer.cornerRadius = 9.;
     self.createNewRouteButton.layer.cornerRadius = 9.;

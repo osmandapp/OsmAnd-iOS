@@ -86,7 +86,7 @@
     
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
-        @"img" : @"ic_profile_pedestrian",
+        @"img" : ACImageNameIcProfilePedestrian,
         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
@@ -109,7 +109,7 @@
     
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
-        @"img" : @"ic_profile_pedestrian",
+        @"img" : ACImageNameIcProfilePedestrian,
         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
@@ -131,7 +131,7 @@
     
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
-        @"img" : @"ic_custom_destination",
+        @"img" : ACImageNameIcCustomDestination,
         @"title" : title,
         @"descr" : OALocalizedString(@"route_descr_destination"),
         @"top_route_line" : @(NO),
@@ -330,7 +330,7 @@
                     OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nextSegment]];
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
-                        @"img" : @"ic_profile_pedestrian",
+                        @"img" : ACImageNameIcProfilePedestrian,
                         @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
@@ -591,7 +591,7 @@
         if (cell)
         {
             [cell.iconView setImage:
-             [UIImage templateImageNamed:([item[@"collapsed"] boolValue] ? ACImageNameIcCustomArrowDown : @"ic_custom_arrow_up")]];
+             [UIImage templateImageNamed:([item[@"collapsed"] boolValue] ? ACImageNameIcCustomArrowDown : ACImageNameIcCustomArrowUp)]];
             cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             
             cell.descView.text = item[@"descr"];

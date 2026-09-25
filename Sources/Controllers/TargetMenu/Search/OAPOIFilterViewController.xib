@@ -35,7 +35,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                             <color key="tintColor" name="navBarTextColorPrimary"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <state key="normal" image="ic_close"/>
                             <connections>
                                 <action selector="closePress:" destination="-1" eventType="touchUpInside" id="jrT-P0-8sh"/>
                             </connections>
@@ -105,7 +105,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_close" width="10" height="10"/>
         <image name="ic_navbar_overflow_menu_outlined" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

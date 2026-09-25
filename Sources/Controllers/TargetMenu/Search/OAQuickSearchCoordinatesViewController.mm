@@ -1002,7 +1002,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuickSearchResultTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAQuickSearchResultTableViewCell *)[nib objectAtIndex:0];
-            cell.directionIcon.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionIcon.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
             cell.distanceLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -1016,7 +1016,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.distanceLabel.text = @"";
                 cell.coordinateLabel.text = @"";
                 [cell setDesriptionLablesVisible:NO];
-                cell.icon.image = [UIImage templateImageNamed:@"ic_custom_alert"];
+                cell.icon.image = [UIImage templateImageNamed:ACImageNameIcCustomAlert];
                 cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
             else
@@ -1025,7 +1025,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.distanceLabel.text = item[@"distance"];
                 cell.coordinateLabel.text = [NSString stringWithFormat:@"  •  %@", item[@"coordinates"]];
                 [cell setDesriptionLablesVisible:YES];
-                cell.icon.image = [UIImage templateImageNamed:@"ic_custom_map_pin"];
+                cell.icon.image = [UIImage imageNamed:ACImageNameIcCustomMapPin];
                 cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 cell.directionIcon.transform = CGAffineTransformMakeRotation([item[@"direction"] doubleValue]);
             }

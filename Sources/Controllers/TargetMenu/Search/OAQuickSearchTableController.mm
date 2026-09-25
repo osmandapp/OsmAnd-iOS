@@ -675,7 +675,7 @@
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
                         [cell.titleLabel setText:[item getName]];
-                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomTrip];
                         
                     }
                     cell.descriptionLabel.text = nil;
@@ -690,7 +690,7 @@
                     if (cell)
                     {
                         [cell.titleView setText:[item getName]];
-                        cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                        cell.titleIcon.image = [UIImage imageNamed:ACImageNameIcActionWorldGlobe];
                         [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                         cell.openingHoursView.hidden = YES;
                         cell.timeIcon.hidden = YES;
@@ -714,7 +714,7 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                    cell.titleIcon.image = [UIImage imageNamed:ACImageNameIcActionWorldGlobe];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;

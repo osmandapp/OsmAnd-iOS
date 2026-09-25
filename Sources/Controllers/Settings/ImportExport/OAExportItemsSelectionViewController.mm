@@ -213,7 +213,7 @@
     {
         OATileSource *tileSource = object;
         item[@"title"] = tileSource.name;
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomMap];
     }
     else if ([object isKindOfClass:NSString.class])
     {
@@ -233,25 +233,25 @@
     {
         OAAvoidRoadInfo *avoidRoadInfo = object;
         item[@"title"] = avoidRoadInfo.name ? avoidRoadInfo.name : @"";
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_alert"];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomAlert];
     }
     else if ([object isKindOfClass:OAOsmNotePoint.class])
     {
         OAOsmNotePoint *osmNotePoint = object;
         item[@"title"] = osmNotePoint.getText;
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_action_add_osm_note"];
+        item[@"icon"] = [UIImage imageNamed:ACImageNameIcActionAddOsmNote];
     }
     else if ([object isKindOfClass:OAOpenStreetMapPoint.class])
     {
         OAOpenStreetMapPoint *openstreetmapPoint = object;
         item[@"title"] = [OAOsmEditingPlugin getTitle:openstreetmapPoint];
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_action_create_poi"];
+        item[@"icon"] = [UIImage imageNamed:ACImageNameIcActionCreatePoi];
     }
     else if ([object isKindOfClass:OAFavoriteGroup.class])
     {
         OAFavoriteGroup *group = object;
         item[@"title"] = [OAFavoriteGroup getDisplayName:group.name];
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_folder"];
+        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomFolder];
         NSInteger points = group.points.count;
         NSString *itemsDescr = [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"points_count"), points];
         item[@"descr"] = itemsDescr;
@@ -260,13 +260,13 @@
     {
         OAGlobalSettingsItem *globalSettingsItem = object;
         item[@"title"] = globalSettingsItem.getPublicName;
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_settings"];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomSettings];
     }
     else if ([object isKindOfClass:OADestination.class])
     {
         OADestination *marker = object;
         item[@"title"] = marker.desc ? marker.desc : @"";
-        item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
+        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMarker];
         item[@"color"] = marker.color;
     }
     else if ([object isKindOfClass:QuickActionButtonState.class])
@@ -360,7 +360,7 @@
 {
     item[@"title"] = [filePath.lastPathComponent.stringByDeletingPathExtension stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     item[@"descr"] = [self getTrackDescr:filePath appearanceInfo:appearanceInfo];
-    item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_trip"];
+    item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomTrip];
 }
 
 - (NSString *) getTrackDescr:(NSString *)filePath appearanceInfo:(GpxAppearanceInfo *)appearanceInfo
@@ -539,7 +539,7 @@
             if (selectedAmount > 0)
                 selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
             else
-                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                selectionImage = [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
             [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

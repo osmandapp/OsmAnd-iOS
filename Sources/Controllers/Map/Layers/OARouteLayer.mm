@@ -42,6 +42,7 @@
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <SkCGUtils.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
@@ -142,8 +143,8 @@ struct DrawPathData
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers->setPriority(_linesPriority);
 
-    _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
-    _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
+    _transportTransferIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPublicTransportTransfer];
+    _transportShieldIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPublicTransportStopShield];
     
     _routeAttributes = nil;
     _walkAttributes = nil;
@@ -529,7 +530,7 @@ struct DrawPathData
     builder.setBaseOrder(self.pointsOrder - 2110);
     builder.setIsAccuracyCircleSupported(NO);
     builder.setIsHidden(YES);
-    builder.setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]));
+    builder.setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameMapPedestrianLocation]));
     _projectedPointMarker = builder.buildAndAddToCollection(_projectionPointCollection);
     [self.mapView addKeyedSymbolsProvider:_projectionPointCollection];
 }

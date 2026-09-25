@@ -17,6 +17,7 @@
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAMultiDestinationCell
 {
@@ -397,7 +398,7 @@
         _btnClose.opaque = YES;
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
-        [_btnClose setImage:[UIImage imageNamed:@"ic_navbar_list"] forState:UIControlStateNormal];
+        [_btnClose setImage:[UIImage imageNamed:ACImageNameIcNavbarList] forState:UIControlStateNormal];
         [_btnClose addTarget:self action:@selector(openDestinationViewController:) forControlEvents:UIControlEventTouchUpInside];
         
         [_contentView addSubview:self.btnClose];
@@ -419,7 +420,7 @@
         _btnOK.opaque = YES;
         _btnOK.tintColor = UIColorFromRGB(0xffffff);
         [_btnOK setTitle:@"" forState:UIControlStateNormal];
-        [_btnOK setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+        [_btnOK setImage:[UIImage imageNamed:ACImageNameIcTripVisitedpoint] forState:UIControlStateNormal];
         [_btnOK addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
         _btnOK.tag = 0;
         _btnOK.hidden = YES;
@@ -494,7 +495,7 @@
             _btnOK2.opaque = YES;
             _btnOK2.tintColor = UIColorFromRGB(0xffffff);
             [_btnOK2 setTitle:@"" forState:UIControlStateNormal];
-            [_btnOK2 setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [_btnOK2 setImage:[UIImage imageNamed:ACImageNameIcTripVisitedpoint] forState:UIControlStateNormal];
             [_btnOK2 addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
             _btnOK2.tag = 1;
             _btnOK2.hidden = YES;
@@ -560,7 +561,7 @@
             _btnOK3.opaque = YES;
             _btnOK3.tintColor = UIColorFromRGB(0xffffff);
             [_btnOK3 setTitle:@"" forState:UIControlStateNormal];
-            [_btnOK3 setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [_btnOK3 setImage:[UIImage imageNamed:ACImageNameIcTripVisitedpoint] forState:UIControlStateNormal];
             [_btnOK3 addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
             _btnOK3.tag = 2;
             _btnOK3.hidden = YES;
@@ -635,7 +636,7 @@
             case 0:
                 if (arrow)
                 {
-                    [self.markerImage setImage:[UIImage imageNamed:@"destination_map_center"]];
+                    [self.markerImage setImage:[UIImage imageNamed:ACImageNameDestinationMapCenter]];
                     if (!self.markerView.superview)
                         [self.directionsView addSubview:self.markerView];
                 }
@@ -647,7 +648,7 @@
             case 1:
                 if (arrow)
                 {
-                    [self.markerImage2 setImage:[UIImage imageNamed:@"destination_map_center"]];
+                    [self.markerImage2 setImage:[UIImage imageNamed:ACImageNameDestinationMapCenter]];
                     if (!self.markerView2.superview)
                         [self.directionsView addSubview:self.markerView2];
                 }
@@ -659,7 +660,7 @@
             case 2:
                 if (arrow)
                 {
-                    [self.markerImage3 setImage:[UIImage imageNamed:@"destination_map_center"]];
+                    [self.markerImage3 setImage:[UIImage imageNamed:ACImageNameDestinationMapCenter]];
                     if (!self.markerView3.superview)
                         [self.directionsView addSubview:self.markerView3];
                 }
@@ -708,7 +709,7 @@
         switch (i)
         {
             case 0:
-                self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
+                self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcDestinationArrow] color:destination.color];
                 _compassImage.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage];
                 
@@ -722,7 +723,7 @@
                 break;
                 
             case 1:
-                self.compassImage2.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
+                self.compassImage2.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcDestinationArrow] color:destination.color];
 
                 _compassImage2.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage2];
@@ -735,7 +736,7 @@
                 break;
                 
             case 2:
-                self.compassImage3.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
+                self.compassImage3.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcDestinationArrow] color:destination.color];
 
                 _compassImage3.alpha = 1.0;
                 [self updateDirection:destination imageView:self.compassImage3];

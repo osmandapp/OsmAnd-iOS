@@ -94,42 +94,42 @@
             @"name"  : kWeatherTemp,
             @"title" : OALocalizedString(@"map_settings_weather_temp"),
             @"value" : @(_app.data.weatherTemp),
-            @"image" : @"ic_custom_thermometer"
+            @"image" : ACImageNameIcCustomThermometer
         },
         @{
             @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherPressure,
             @"title" : OALocalizedString(@"map_settings_weather_pressure"),
             @"value" : @(_app.data.weatherPressure),
-            @"image" : @"ic_custom_air_pressure"
+            @"image" : ACImageNameIcCustomAirPressure
         },
         @{
             @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherWind,
             @"title" : OALocalizedString(@"map_settings_weather_wind"),
             @"value" : @(_app.data.weatherWind),
-            @"image" : @"ic_custom_wind"
+            @"image" : ACImageNameIcCustomWind
         },
         @{
             @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherCloud,
             @"title" : OALocalizedString(@"map_settings_weather_cloud"),
             @"value" : @(_app.data.weatherCloud),
-            @"image" : @"ic_custom_clouds"
+            @"image" : ACImageNameIcCustomClouds
         },
         @{
             @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherPrecip,
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
             @"value" : @(_app.data.weatherPrecip),
-            @"image" : @"ic_custom_precipitation"
+            @"image" : ACImageNameIcCustomPrecipitation
         },
         @{
             @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherWindAnimation,
             @"title" : OALocalizedString(@"map_settings_weather_wind_animation"),
             @"value" : @(_app.data.weatherWindAnimation),
-            @"image" : @"ic_custom_wind"
+            @"image" : ACImageNameIcCustomWind
         }];
 
     NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
@@ -155,7 +155,7 @@
             @"name"  : kWeatherContourLines,
             @"title" : OALocalizedString(@"shared_string_contours"),
             @"value" : selectedContourLinesName,
-            @"image" : @"ic_custom_contour_lines"
+            @"image" : ACImageNameIcCustomContourLines
         }];
     
     NSMutableArray *data = [NSMutableArray array];
@@ -238,7 +238,7 @@
             BOOL enabled = [item[@"value"] boolValue];
             cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
-            NSString *imgName = enabled ? @"ic_custom_umbrella.png" : ACImageNameIcCustomHide;
+            NSString *imgName = enabled ? @"ic_custom_umbrella" : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
             cell.leftIconView.tintColor = enabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 

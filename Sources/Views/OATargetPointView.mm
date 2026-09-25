@@ -682,14 +682,14 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController.contentView)
         [self insertSubview:self.customController.contentView atIndex:0];
     
-    _buttonShareIcon.image = [UIImage templateImageNamed:@"ic_custom_export"];
-    _buttonMoreIcon.image = [UIImage templateImageNamed:@"ic_custom_overflow_menu"];
+    _buttonShareIcon.image = [UIImage imageNamed:ACImageNameIcCustomExport];
+    _buttonMoreIcon.image = [UIImage templateImageNamed:ACImageNameIcCustomOverflowMenu];
     _buttonMoreLabel.text = OALocalizedString(@"shared_string_actions");
     _buttonMore.accessibilityLabel = OALocalizedString(@"shared_string_actions");
     
     if (self.customController.hasDismissButton)
     {
-        _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_marker_remove"];
+        _buttonDirectionIcon.image = [UIImage imageNamed:ACImageNameIcCustomMarkerRemove];
         _buttonDirectionIcon.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         _buttonDirectionLabel.text = OALocalizedString(@"shared_string_dismiss");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"shared_string_dismiss");
@@ -698,7 +698,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
+        _buttonDirectionIcon.image = [UIImage imageNamed:ACImageNameIcCustomArrowDirection];
         _buttonDirectionIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
@@ -711,13 +711,13 @@ static const NSInteger _buttonsCount = 4;
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"edit_waypoint_short");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"edit_waypoint_short");
-            [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+            [_buttonFavorite setImage:[UIImage imageNamed:ACImageNameIconEdit] forState:UIControlStateNormal];
         }
         else
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"add_waypoint_short");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"add_waypoint_short");
-            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"add_waypoint_to_track"];
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:ACImageNameAddWaypointToTrack];
         }
     }
     else
@@ -726,13 +726,13 @@ static const NSInteger _buttonsCount = 4;
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_edit_fav");
-            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_edit"];
+            _buttonFavoriteIcon.image = [UIImage imageNamed:ACImageNameIcCustomEdit];
         }
         else
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_add_fav");
             _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_add_fav");
-            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_favorites"];
+            _buttonFavoriteIcon.image = [UIImage imageNamed:ACImageNameIcCustomFavorites];
         }
     }
     
@@ -1425,7 +1425,7 @@ static const NSInteger _buttonsCount = 4;
     if ([_backViewRoute isDirectionRTL])
     {
         _buttonRoute.frame = CGRectMake(leftSafe + kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
-        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
+        [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
@@ -1433,7 +1433,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _buttonShowInfo.frame = CGRectMake(leftSafe + kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
-        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+        [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);

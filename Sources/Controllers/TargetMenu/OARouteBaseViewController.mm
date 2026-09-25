@@ -113,21 +113,21 @@
         NSMutableAttributedString *res = [NSMutableAttributedString new];
 
         NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_uphill"];
+        arrowUpAttachment.image = [UIImage imageNamed:ACImageNameIcSmallUphill];
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                  [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
         [uphillIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_downhill"];
+        arrowDownAttachment.image = [UIImage imageNamed:ACImageNameIcSmallDownhill];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
         [downhilIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:downhilIcon.string];
 
         NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
-        rangeAttachment.image = [UIImage templateImageNamed:@"ic_small_altitude_range"];
+        rangeAttachment.image = [UIImage imageNamed:ACImageNameIcSmallAltitudeRange];
         rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:rangeAttachment]];

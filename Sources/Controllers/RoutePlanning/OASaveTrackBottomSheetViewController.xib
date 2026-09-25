@@ -76,7 +76,7 @@
                                     <color key="textColor" name="textColorPrimary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_save_complete.png" translatesAutoresizingMaskIntoConstraints="NO" id="ron-Uj-aI4">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_save_complete" translatesAutoresizingMaskIntoConstraints="NO" id="ron-Uj-aI4">
                                     <rect key="frame" x="177" y="24" width="60" height="60"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                     <constraints>
@@ -163,7 +163,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_save_complete.png" width="30" height="30"/>
+        <image name="ic_custom_save_complete" width="30" height="30"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

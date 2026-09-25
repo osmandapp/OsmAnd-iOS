@@ -257,7 +257,7 @@
             
             if (cell)
             {
-                cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
+                cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomAlertColor];
                 [cell descriptionVisibility:value || value.length != 0];
                 cell.descriptionLabel.text = value;
                 [cell.titleLabel setText:text];

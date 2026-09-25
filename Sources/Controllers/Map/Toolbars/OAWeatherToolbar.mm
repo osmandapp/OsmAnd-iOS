@@ -29,6 +29,7 @@
 #import "OAObservable.h"
 #import "OAWeatherWebClient.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static int kDefaultZoom = 10;
 
@@ -416,7 +417,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 
 - (void) updatePlayForecastButton
 {
-    NSString *iconName = _animationState == EOAWeatherToolbarAnimationStateIdle ? @"ic_custom_play" : @"ic_custom_pause";
+    NSString *iconName = _animationState == EOAWeatherToolbarAnimationStateIdle ? ACImageNameIcCustomPlay : ACImageNameIcCustomPause;
     [_playButton setImage:[[UIImage templateImageNamed:iconName] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
 }
 

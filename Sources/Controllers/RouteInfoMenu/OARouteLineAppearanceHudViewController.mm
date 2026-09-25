@@ -141,7 +141,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!THIN)
     {
         THIN = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_thin_name"
-                                                  icon:@"ic_custom_track_line_thin"
+                                                  icon:ACImageNameIcCustomTrackLineThin
                                               widthKey:@"thin"];
     }
     return THIN;
@@ -152,7 +152,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!MEDIUM)
     {
         MEDIUM = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_medium_name"
-                                                    icon:@"ic_custom_track_line_medium"
+                                                    icon:ACImageNameIcCustomTrackLineMedium
                                                 widthKey:@"medium"];
     }
     return MEDIUM;
@@ -163,7 +163,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!THICK)
     {
         THICK = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_bold_name"
-                                                   icon:@"ic_custom_track_line_bold"
+                                                   icon:ACImageNameIcCustomTrackLineBold
                                                widthKey:@"bold"];
     }
     return THICK;
@@ -174,7 +174,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!CUSTOM)
     {
         CUSTOM = [[OARouteWidthMode alloc] initWithTitle:@"shared_string_custom"
-                                                    icon:@"ic_custom_slider"
+                                                    icon:ACImageNameIcCustomSlider
                                                 widthKey:nil];
     }
     return CUSTOM;
@@ -544,13 +544,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [self.descriptionNavBarView setText:_appMode.name];
 
     BOOL isRTL = [self.statusBarBackgroundView isDirectionRTL];
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    UIImage *backImage = [UIImage templateImageNamed:ACImageNameIcCustomArrowBack];
     [self.backButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
-    backImage = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+    backImage = [UIImage imageNamed:ACImageNameIcNavbarChevron];
 
     [self.backNavBarButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                            forState:UIControlStateNormal];
@@ -693,7 +693,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 kTableKey: @"reset",
                 kCellType: OARightIconTableViewCell.reuseIdentifier,
                 kCellTitle: OALocalizedString(@"reset_to_original"),
-                kCellRightIconName: @"ic_custom_reset"
+                kCellRightIconName: ACImageNameIcCustomReset
         }];
         [resetSectionData.subjects addObject:resetCellData];
     }
@@ -1610,7 +1610,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         BOOL isGradientColorSelected = [_selectedType.coloringType isGradient];
         BOOL isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected;
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage imageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
         cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
         cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isSolidColorSelected ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];

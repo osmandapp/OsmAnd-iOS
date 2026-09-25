@@ -23,7 +23,7 @@
                 <userLayoutGuide location="391" affinity="minY"/>
             </userGuides>
             <subviews>
-                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_map_pin.png" translatesAutoresizingMaskIntoConstraints="NO" id="k0s-pG-86G">
+                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_map_pin" translatesAutoresizingMaskIntoConstraints="NO" id="k0s-pG-86G">
                     <rect key="frame" x="185" y="371" width="44" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -32,7 +32,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_3d.png">
+                    <state key="normal" image="ic_custom_3d">
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
@@ -46,7 +46,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_3d.png" width="30" height="30"/>
-        <image name="ic_map_pin.png" width="44" height="44"/>
+        <image name="ic_custom_3d" width="30" height="30"/>
+        <image name="ic_map_pin" width="44" height="44"/>
     </resources>
 </document>

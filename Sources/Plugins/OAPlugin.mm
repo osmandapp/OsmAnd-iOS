@@ -35,6 +35,7 @@
 #import "OAExternalSensorsPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPlugin
 {
@@ -134,7 +135,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (product)
         return [product productIconName];
     else
-        return @"ic_custom_puzzle_piece";
+        return ACImageNameIcCustomPuzzlePiece;
 }
 
 - (UIImage *) getAssetResourceImage

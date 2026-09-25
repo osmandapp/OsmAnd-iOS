@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OABackupStatus
 
@@ -51,7 +52,7 @@ static OABackupStatus *ERROR;
     if (!BACKUP_COMPLETE)
     {
         BACKUP_COMPLETE = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                                       statusIconName:@"ic_custom_cloud_done"
+                                                       statusIconName:ACImageNameIcCustomCloudDone
                                                       warningIconName:nil warningTitle:nil
                                                    warningDescription:nil
                                                           actionTitle:OALocalizedString(@"sync_now")
@@ -65,7 +66,7 @@ static OABackupStatus *ERROR;
     if (!MAKE_BACKUP)
     {
         MAKE_BACKUP = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                                   statusIconName:@"ic_custom_cloud_info"
+                                                   statusIconName:ACImageNameIcCustomCloudInfo
                                                   warningIconName:nil
                                                      warningTitle:nil
                                                warningDescription:nil
@@ -80,8 +81,8 @@ static OABackupStatus *ERROR;
     if (!CONFLICTS)
     {
         CONFLICTS = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                                 statusIconName:@"ic_custom_cloud_info"
-                                                warningIconName:@"ic_custom_alert"
+                                                 statusIconName:ACImageNameIcCustomCloudInfo
+                                                warningIconName:ACImageNameIcCustomAlert
                                                    warningTitle:nil
                                              warningDescription:nil
                                                     actionTitle:OALocalizedString(@"backup_view_conflicts")
@@ -95,8 +96,8 @@ static OABackupStatus *ERROR;
     if (!NO_INTERNET_CONNECTION)
     {
         NO_INTERNET_CONNECTION = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                                              statusIconName:@"ic_custom_cloud_done"
-                                                             warningIconName:@"ic_custom_wifi_off"
+                                                              statusIconName:ACImageNameIcCustomCloudDone
+                                                             warningIconName:ACImageNameIcCustomWifiOff
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
                                                           warningDescription:OALocalizedString(@"osm_upload_no_internet")
                                                                  actionTitle:OALocalizedString(@"retry")
@@ -110,8 +111,8 @@ static OABackupStatus *ERROR;
     if (!SUBSCRIPTION_EXPIRED)
     {
         SUBSCRIPTION_EXPIRED = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                                            statusIconName:@"ic_custom_cloud_done"
-                                                           warningIconName:@"ic_custom_osmand_pro_logo_colored"
+                                                            statusIconName:ACImageNameIcCustomCloudDone
+                                                           warningIconName:ACImageNameIcCustomOsmandProLogoColored
                                                               warningTitle:OALocalizedString(@"backup_error_subscription_was_expired")
                                                         warningDescription:OALocalizedString(@"backup_error_subscription_was_expired_descr")
                                                                actionTitle:OALocalizedString(@"renew_subscription")
@@ -124,8 +125,8 @@ static OABackupStatus *ERROR;
     if (!ERROR)
     {
         ERROR = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
-                                             statusIconName:@"ic_custom_cloud_alert"
-                                            warningIconName:@"ic_custom_alert"
+                                             statusIconName:ACImageNameIcCustomCloudAlert
+                                            warningIconName:ACImageNameIcCustomAlert
                                                warningTitle:nil
                                          warningDescription:nil
                                                 actionTitle:OALocalizedString(@"contact_support")

@@ -54,7 +54,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" image="ic_custom_reset.png"/>
+                            <state key="normal" image="ic_custom_reset"/>
                             <connections>
                                 <action selector="helpButtonClicked:" destination="-1" eventType="touchUpInside" id="bVp-dD-mi9"/>
                             </connections>
@@ -120,7 +120,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_reset.png" width="30" height="30"/>
+        <image name="ic_custom_reset" width="30" height="30"/>
         <image name="ic_navbar_chevron" width="28" height="28"/>
         <namedColor name="buttonBgColorSecondary">
             <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

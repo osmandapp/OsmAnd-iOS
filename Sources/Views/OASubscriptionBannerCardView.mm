@@ -11,6 +11,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonIconSideSize 30.
 #define kIconSideSize 48.
@@ -77,7 +78,7 @@
             self.descriptionLabel.hidden = NO;
             self.descriptionLabel.attributedText = [self getAttributedDescriptionText];
 
-            self.iconView.image = [UIImage templateImageNamed:@"ic_custom_five_downloads_big"];
+            self.iconView.image = [UIImage templateImageNamed:ACImageNameIcCustomFiveDownloadsBig];
             self.iconView.tintColor = UIColor.whiteColor;
 
             self.buttonView.backgroundColor = UIColor.clearColor;
@@ -92,13 +93,13 @@
             self.descriptionLabel.hidden = NO;
             self.descriptionLabel.attributedText = [self getAttributedDescriptionText];
 
-            self.iconView.image = [UIImage templateImageNamed:@"ic_custom_zero_downloads_big"];
+            self.iconView.image = [UIImage imageNamed:ACImageNameIcCustomZeroDownloadsBig];
             self.iconView.tintColor = UIColor.whiteColor;
 
             self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
             self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
             [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"].imageFlippedForRightToLeftLayoutDirection
+            [self.buttonView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowForward].imageFlippedForRightToLeftLayoutDirection
                              forState:UIControlStateNormal];
             break;
         }
@@ -107,13 +108,13 @@
             self.separatorView.hidden = YES;
             self.descriptionLabel.hidden = YES;
 
-            self.iconView.image = [UIImage templateImageNamed:@"ic_custom_osmand_pro_logo_monotone_big"];
+            self.iconView.image = [UIImage imageNamed:ACImageNameIcCustomOsmandProLogoMonotoneBig];
             self.iconView.tintColor = UIColorFromRGB(color_banner_button);
 
             self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
             self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
             [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"].imageFlippedForRightToLeftLayoutDirection
+            [self.buttonView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowForward].imageFlippedForRightToLeftLayoutDirection
                              forState:UIControlStateNormal];
             break;
         }

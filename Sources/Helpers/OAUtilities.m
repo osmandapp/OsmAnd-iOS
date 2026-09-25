@@ -26,7 +26,6 @@
 #import <mach/mach_host.h>
 #import <sys/utsname.h>
 #import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
 #import "OAEmissionHelper.h"
 
 static NSInteger const kBlurViewTag = -999;

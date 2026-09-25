@@ -162,9 +162,8 @@
                           color:(UIColor *)color
 {
     sk_sp<SkImage> result;
-    NSString *iconName = [OANativeUtilities getScaledResourceName:resourceName];
-    UIImage *img = [self getIcon:iconName
-                 defaultIconName:defaultResourceName ? [OANativeUtilities getScaledResourceName:defaultResourceName] : nil
+    UIImage *img = [self getIcon:resourceName
+                 defaultIconName:defaultResourceName
                            scale:scale];
     if (img)
     {
@@ -180,7 +179,7 @@
                scale:(float)scale
 {
     UIImage *iconImage = [UIImage imageNamed:iconName];
-    if (!iconImage && defaultIconName && [iconName isEqualToString:defaultIconName])
+    if (!iconImage && defaultIconName && ![iconName isEqualToString:defaultIconName])
         iconImage = [UIImage imageNamed:defaultIconName];
     if (!iconImage)
         return nil;

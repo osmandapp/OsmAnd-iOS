@@ -163,7 +163,7 @@
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                             <color key="tintColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <state key="normal" image="ic_close"/>
                             <connections>
                                 <action selector="onRemoveButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="rF9-vl-C8X"/>
                             </connections>
@@ -228,7 +228,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_close" width="10" height="10"/>
         <image name="three_dots" width="22" height="22"/>
     </resources>
 </document>

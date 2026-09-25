@@ -40,6 +40,7 @@
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAQuickSearchListItem
 {
@@ -125,7 +126,7 @@
         case EOAObjectTypeLocation:
         case EOAObjectTypePartialLocation:
         {
-            return @"ic_action_world_globe";
+            return ACImageNameIcActionWorldGlobe;
         }
         case EOAObjectTypeCity:
         case EOAObjectTypeVillage:
@@ -138,7 +139,7 @@
         }
         case EOAObjectTypeStreetIntersection:
         {
-            return @"ic_custom_intersection";
+            return ACImageNameIcCustomIntersection;
         }
         case EOAObjectTypePoiType:
         {
@@ -158,13 +159,13 @@
                 NSString *iconName;
                 if (filter)
                     iconName = [OAPOIUIFilter getCustomFilterIconName:filter];
-                return iconName && iconName.length > 0 ? iconName : @"ic_custom_search";
+                return iconName && iconName.length > 0 ? iconName : ACImageNameIcCustomSearch;
             }
             else if ([searchResult.object isKindOfClass:OATopIndexFilter.class])
             {
                 return [((OATopIndexFilter *)searchResult.object) getIconResource];
             }
-            return @"ic_custom_search";
+            return ACImageNameIcCustomSearch;
         }
         case EOAObjectTypePoi:
         {
@@ -176,7 +177,7 @@
         }
         case EOAObjectTypeGpxTrack:
         {
-            return @"ic_custom_trip";
+            return ACImageNameIcCustomTrip;
         }
         case EOAObjectTypeFavorite:
         {
@@ -186,17 +187,17 @@
         }
         case EOAObjectTypeFavoriteGroup:
         {
-            return @"ic_custom_favorites";
+            return ACImageNameIcCustomFavorites;
         }
         case EOAObjectTypeRegion:
         {
-            return @"ic_world_globe_dark";
+            return ACImageNameIcWorldGlobeDark;
         }
         case EOAObjectTypeRecentObj:
         {
             OAHistoryItem *entry = (OAHistoryItem *) searchResult.object;
             if (entry.iconName && entry.iconName.length > 0)
-                return entry.hType == OAHistoryTypeParking ? @"ic_parking_pin_small" : entry.iconName;
+                return entry.hType == OAHistoryTypeParking ? ACImageNameIcParkingPinSmall : entry.iconName;
 
             OAPointDescription *name = [[OAPointDescription alloc] initWithType:[entry getPointDescriptionType]
                                                                        typeName:entry.typeName
@@ -210,7 +211,7 @@
             }
             else
             {
-                return @"ic_custom_marker";
+                return ACImageNameIcCustomMarker;
             }
         }
         case EOAObjectTypeWpt:
@@ -220,7 +221,7 @@
         }
         case EOAObjectTypeIndexItem:
         {
-            return @"ic_custom_map";
+            return ACImageNameIcCustomMap;
         }
         default:
             return nil;
@@ -230,15 +231,15 @@
 + (NSString *)getItemIcon:(OAPointDescription *)pd
 {
     if ([pd isFavorite])
-        return @"ic_custom_favorites";
+        return ACImageNameIcCustomFavorites;
     else if ([pd isLocation])
-        return @"ic_custom_location_marker";
+        return ACImageNameIcCustomLocationMarker;
     else if ([pd isPoi])
-        return @"ic_custom_info";
+        return ACImageNameIcCustomInfo;
     else if ([pd isGpxFile] || [pd isGpxPoint])
-        return @"ic_custom_trip";
+        return ACImageNameIcCustomTrip;
     else if ([pd isWpt])
-        return @"ic_custom_marker";
+        return ACImageNameIcCustomMarker;
 //    else if ([pd isAudioNote])
 //        iconId = R.drawable.ic_type_audio;
 //    else if (pd.isVideoNote())
@@ -246,7 +247,7 @@
 //    else if (pd.isPhotoNote())
 //        iconId = R.drawable.ic_type_img;
     else
-        return @"ic_action_street_name";
+        return ACImageNameIcActionStreetName;
 }
 
 + (NSString *) getTypeName:(OASearchResult *)searchResult

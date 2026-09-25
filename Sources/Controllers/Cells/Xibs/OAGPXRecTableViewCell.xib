@@ -29,7 +29,7 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_distance.png" translatesAutoresizingMaskIntoConstraints="NO" id="iVs-u6-J98">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_distance" translatesAutoresizingMaskIntoConstraints="NO" id="iVs-u6-J98">
                         <rect key="frame" x="16" y="33" width="10" height="10"/>
                         <color key="tintColor" name="textColorSecondary"/>
                         <constraints>
@@ -43,7 +43,7 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points.png" translatesAutoresizingMaskIntoConstraints="NO" id="ooY-br-udb">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points" translatesAutoresizingMaskIntoConstraints="NO" id="ooY-br-udb">
                         <rect key="frame" x="78" y="33" width="10" height="10"/>
                         <color key="tintColor" name="textColorSecondary"/>
                         <constraints>
@@ -58,7 +58,7 @@
                             <constraint firstAttribute="width" constant="38" id="bIb-4X-4E7"/>
                         </constraints>
                         <color key="tintColor" name="buttonBgColorDisruptive"/>
-                        <state key="normal" image="ic_action_rec_start.png"/>
+                        <state key="normal" image="ic_action_rec_start"/>
                         <connections>
                             <action selector="startStopRecPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="p9B-tE-9pU"/>
                         </connections>
@@ -70,7 +70,7 @@
                             <constraint firstAttribute="width" constant="38" id="SEk-7J-cEp"/>
                         </constraints>
                         <color key="tintColor" name="textColorPrimary"/>
-                        <state key="normal" image="ic_action_save.png"/>
+                        <state key="normal" image="ic_action_save"/>
                         <connections>
                             <action selector="saveGpxPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="cFr-kJ-RgL"/>
                         </connections>
@@ -112,10 +112,10 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_action_rec_start.png" width="20" height="20"/>
-        <image name="ic_action_save.png" width="20" height="20"/>
-        <image name="ic_gpx_distance.png" width="13" height="13"/>
-        <image name="ic_gpx_points.png" width="13" height="13"/>
+        <image name="ic_action_rec_start" width="20" height="20"/>
+        <image name="ic_action_save" width="20" height="20"/>
+        <image name="ic_gpx_distance" width="13" height="13"/>
+        <image name="ic_gpx_points" width="13" height="13"/>
         <namedColor name="buttonBgColorDisruptive">
             <color red="0.90588235294117647" green="0.11372549019607843" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

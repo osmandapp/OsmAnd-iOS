@@ -16,6 +16,7 @@
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAAddWaypointBottomSheetScreen
 {
@@ -70,13 +71,13 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"replace_destination_point"),
                       @"key" : @"replace_destination_point",
                       @"description" : [self getCurrentPointName:[_targetPointsHelper getPointToNavigate] start:NO],
-                      @"img" : @"ic_list_destination",
+                      @"img" : ACImageNameIcListDestination,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"title" : OALocalizedString(@"make_as_start_point"),
                       @"key" : @"make_as_start_point",
                       @"description" : [self getCurrentPointName:[_targetPointsHelper getPointToStart] start:YES],
-                      @"img" : @"ic_list_startpoint",
+                      @"img" : ACImageNameIcListStartpoint,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
@@ -84,19 +85,19 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"keep_and_add_destination_point"),
                       @"key" : @"keep_and_add_destination_point",
                       @"description" : OALocalizedString(@"subsequent_dest_description"),
-                      @"img" : @"ic_action_route_subsequent_destination",
+                      @"img" : ACImageNameIcActionRouteSubsequentDestination,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"title" : OALocalizedString(@"add_as_first_destination_point"),
                       @"key" : @"add_as_first_destination_point",
                       @"description" : OALocalizedString(@"first_intermediate_dest_description"),
-                      @"img" : @"ic_action_route_first_intermediate",
+                      @"img" : ACImageNameIcActionRouteFirstIntermediate,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"title" : OALocalizedString(@"add_as_last_destination_point"),
                       @"key" : @"add_as_last_destination_point",
                       @"description" : OALocalizedString(@"last_intermediate_dest_description"),
-                      @"img" : @"ic_action_route_last_intermediate",
+                      @"img" : ACImageNameIcActionRouteLastIntermediate,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     _data = [NSArray arrayWithArray:arr];

@@ -20,7 +20,7 @@
     [super awakeFromNib];
     // Initialization code
     _showLegend = NO;
-    [_expandImageView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowDown]];
+    [_expandImageView setImage:[UIImage imageNamed:ACImageNameIcCustomArrowDown]];
     [_expandImageView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
 }
 
@@ -34,7 +34,7 @@
 {
     _showLegend = !_showLegend;
     
-    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? @"ic_custom_arrow_up.png" : ACImageNameIcCustomArrowDown)]];
+    [_expandImageView setImage:[UIImage templateImageNamed:(_showLegend ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowDown)]];
 }
 
 

@@ -426,7 +426,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 
     UIColor *color = UIColorFromARGB(colorValue);
     cell.colorView.backgroundColor = color;
-    cell.backgroundImageView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+    cell.backgroundImageView.image = [UIImage templateImageNamed:ACImageNameBgColorChessboardPattern];
     cell.backgroundImageView.tintColor = UIColorFromRGB(colorValue);
 
     if ([self isColorItemSelected:_data[indexPath.section][indexPath.row]])

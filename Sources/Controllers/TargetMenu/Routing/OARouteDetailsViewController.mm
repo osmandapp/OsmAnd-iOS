@@ -556,7 +556,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     }
     
     _cancelButton.layer.cornerRadius = 9.;
-    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
+    [self setupButtonAppearance:_startButton iconName:ACImageNameIcCustomNavigationArrow color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
@@ -570,13 +570,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     __weak __typeof(self) weakSelf = self;
     UIAction *shareFileAction = [UIAction actionWithTitle:OALocalizedString(@"share_as_file")
-                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomFileRouting]
+                                                    image:[UIImage imageNamed:ACImageNameIcCustomFileRouting]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onShareAsFilePressed];
     }];
     UIAction *shareLinkAction = [UIAction actionWithTitle:OALocalizedString(@"share_link")
-                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomLink]
+                                                    image:[UIImage imageNamed:ACImageNameIcCustomLink]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onShareAsLinkPressed];
@@ -686,7 +686,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     self.titleView.text = OALocalizedString(@"layer_route");
     [self.doneButton setTitle:nil forState:UIControlStateNormal];
-    [self.doneButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomExportOutlined] forState:UIControlStateNormal];
+    [self.doneButton setImage:[UIImage imageNamed:ACImageNameIcCustomExportOutlined] forState:UIControlStateNormal];
     self.doneButton.accessibilityLabel = OALocalizedString(@"shared_string_share");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];

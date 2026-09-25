@@ -229,7 +229,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.secondaryImageView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+            cell.secondaryImageView.image = [UIImage imageNamed:ACImageNameIcCheckmarkDefault];
             cell.secondaryImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

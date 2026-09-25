@@ -536,7 +536,7 @@
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
-    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:iconColor];
+    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameMapSmallGroup] color:iconColor];
     
     NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
     [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];

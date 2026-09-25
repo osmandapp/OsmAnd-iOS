@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OASimpleTableViewCell.h"
 #import "OAMapillaryPlugin.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonsDividerTag 150
 
@@ -65,7 +66,7 @@
                      @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
                      @"title" : OALocalizedString(@"improve_coverage_mapillary"),
                      @"description" : @"",
-                     @"img" : @"ic_custom_mapillary_color_logo.png"
+                     @"img" : ACImageNameIcCustomMapillaryColorLogo
                      }];
     
     [arr addObject:@{

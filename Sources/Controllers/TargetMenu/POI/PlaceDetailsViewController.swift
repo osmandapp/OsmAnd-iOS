@@ -155,7 +155,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         
         searchTravelArticles(routeIds: routeIds) { articles in
             if !articles.isEmpty {
-                let icon = UIImage.templateImageNamed("ic_custom_backpack")
+                let icon = UIImage.icCustomBackpack
                 let title = localizedString("travel_guides")
                 let collapsableView = self.getGuidesCollapsableView(articles: articles)
                 

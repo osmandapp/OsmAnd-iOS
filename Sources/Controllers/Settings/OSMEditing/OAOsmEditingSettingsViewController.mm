@@ -67,7 +67,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarReset action:@selector(onRightNavbarButtonPressed) menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
     return @[rightButton];
 }
@@ -114,7 +114,7 @@
             kCellKeyKey : @"edit_credentials",
             kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
             kCellTitleKey : _isAuthorised ? [_settings.osmUserDisplayName get] : OALocalizedString(@"login_open_street_map_org"),
-            kCellIconNameKey : @"ic_custom_user_profile",
+            kCellIconNameKey : ACImageNameIcCustomUserProfile,
             kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
             @"titleColor" : _isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive],
             @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]
@@ -127,7 +127,7 @@
             kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_update_required"),
             kCellDescrKey : OALocalizedString(@"osm_login_needs_ios_16_4"),
-            kCellIconNameKey : @"ic_custom_alert",
+            kCellIconNameKey : ACImageNameIcCustomAlert,
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellAccessoryType : @(UITableViewCellAccessoryNone),
             @"titleColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
@@ -190,7 +190,7 @@
         kCellKeyKey : @"open_edits",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"osm_edits_title"),
-        kCellSecondaryIconName : @"ic_custom_folder",
+        kCellSecondaryIconName : ACImageNameIcCustomFolder,
         kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive],
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium]
     }];

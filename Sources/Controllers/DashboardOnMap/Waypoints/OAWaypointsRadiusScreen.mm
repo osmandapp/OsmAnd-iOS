@@ -56,7 +56,7 @@
             @{
               @"name" : [OAOsmAndFormatter getFormattedDistance:i.intValue],
               @"value" : i,
-              @"img" : i.intValue == selectedRadius ? @"menu_cell_selected.png" : @"" }];
+              @"img" : i.intValue == selectedRadius ? @"menu_cell_selected" : @"" }];
     }
     
     _data = [NSArray arrayWithArray:arr];

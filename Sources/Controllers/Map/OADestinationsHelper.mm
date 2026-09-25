@@ -24,6 +24,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -381,7 +382,7 @@
         h.latitude = destination.latitude;
         h.longitude = destination.longitude;
         h.date = [NSDate date];
-        h.iconName = @"ic_custom_marker";
+        h.iconName = ACImageNameIcCustomMarker;
         h.hType = OAHistoryTypeDirection;
         
         [[OAHistoryHelper sharedInstance] addPoint:h];

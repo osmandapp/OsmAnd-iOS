@@ -116,7 +116,7 @@
     [self applyLocalization];
     [self generateData];
     
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    UIImage *backImage = [UIImage templateImageNamed:ACImageNameIcCustomArrowBack];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
@@ -200,7 +200,7 @@
         @"cellId" : OASwitchTableViewCell.getCellIdentifier,
         @"type" : kSwitchCell,
         @"title" : layerTitle,
-        @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
+        @"image" : _weatherBand ? _weatherBand.getIcon : ACImageNameIcCustomContourLines
     }];
     CGFloat switchCellLabelWidth = width - kSwitchCellLabelHorizontalOffset;
     CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;

@@ -33,6 +33,7 @@
 #import "OAPOICategory.h"
 #import "OASearchResult.h"
 #import "OsmAndApp.h"
+#import "GeneratedAssetSymbols.h"
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 
@@ -449,7 +450,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
     
     UIImage *icon = _icon ? [OAUtilities getTintableImageNamed:_icon] : nil;
     if (!icon)
-        icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
+        icon = [OAUtilities getTintableImageNamed:ACImageNameIcActionGift];
     
     [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors:_colors];
     

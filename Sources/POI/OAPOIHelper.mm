@@ -48,6 +48,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
+#import "GeneratedAssetSymbols.h"
 
 NSString * const OSM_WIKI_CATEGORY = @"osmwiki";
 NSString * const SPEED_CAMERA = @"speed_camera";
@@ -819,7 +820,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         }
         else
         {
-            customFilterIcon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            customFilterIcon = [UIImage imageNamed:ACImageNameIcCustomSearchCategories];
         }
     }
     return customFilterIcon;

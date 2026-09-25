@@ -217,7 +217,7 @@
     if (img)
         return [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     else
-        return [UIImage templateImageNamed:@"ic_custom_search_categories"];
+        return [UIImage imageNamed:ACImageNameIcCustomSearchCategories];
 }
 
 - (NSInteger)sectionsCount

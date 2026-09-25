@@ -19,6 +19,7 @@
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include "OAWebClient.h"
+#import "GeneratedAssetSymbols.h"
 
 OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider(const float symbolsScaleFactor_)
 : webClient(std::make_shared<OAWebClient>())
@@ -214,9 +215,9 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buil
     const OsmAnd::AreaI &bbox31,
     const QList<std::shared_ptr<const OAOnlineOsmNote>>& notesCache)
 {
-    const auto iconOpen = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_osm_note_unresolved"]
+    const auto iconOpen = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromAssetNamed:ACImageNameMapOsmNoteUnresolved]
                                                   scaleFactor:_symbolsScaleFactor];
-    const auto iconClosed = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_osm_note_resolved"]
+    const auto iconClosed = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromAssetNamed:ACImageNameMapOsmNoteResolved]
                                                     scaleFactor:_symbolsScaleFactor];
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
 	if (!iconOpen || !iconClosed)

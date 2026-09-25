@@ -382,7 +382,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double referenceDistance = fullMapScale;
     if (_sphericalMap)
     {
-        double globeDistance = [self getGlobeDistanceForPixelRadius:kMapRulerMaxWidth];
+        double globeDistance = [self globeDistanceForPixelRadius:kMapRulerMaxWidth];
         if ([self.class isValidGlobeDistance:globeDistance])
             referenceDistance = globeDistance;
         if (!isfinite(referenceDistance) || referenceDistance <= 0)
@@ -397,7 +397,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     [self updateText];
 }
 
-- (double) getGlobeDistanceForPixelRadius:(double)pixelRadius
+- (double)globeDistanceForPixelRadius:(double)pixelRadius
 {
     // currentPixelsToMetersScaleFactor follows Web Mercator, so calibrate it against the active globe projection.
     double distance = pixelRadius * _cachedMapDensity * [[UIScreen mainScreen] scale];
@@ -407,7 +407,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGPoint center = [self getCenterPoint];
     for (int i = 0; i < 2; i++)
     {
-        double projectedRadius = [self getGlobePixelRadius:center distance:distance];
+        double projectedRadius = [self globePixelRadiusForDistance:distance center:center];
         if (!isfinite(projectedRadius) || projectedRadius < 1)
             return NAN;
         double correctedDistance = distance * pixelRadius / projectedRadius;
@@ -418,7 +418,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return distance;
 }
 
-- (double) getGlobePixelRadius:(CGPoint)center distance:(double)distance
+- (double)globePixelRadiusForDistance:(double)distance center:(CGPoint)center
 {
     if (![self.class isVisibleGlobeDistance:distance])
         return NAN;
@@ -467,7 +467,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
-        double distance = [self getDistanceForPixelRadius:circleRadius];
+        double distance = [self distanceForPixelRadius:circleRadius];
         if (_sphericalMap && ![self.class isVisibleGlobeDistance:distance])
             return;
 
@@ -839,12 +839,12 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL)convertRadius:(double)radius angle:(double)angle toScreenPoint:(CGPoint *)screenPoint
 {
-    double distance = [self getDistanceForPixelRadius:radius];
+    double distance = [self distanceForPixelRadius:radius];
     auto pointLatLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:angle];
     return [self convertLatLon:pointLatLon toScreenPoint:screenPoint];
 }
 
-- (double) getDistanceForPixelRadius:(double)pixelRadius
+- (double)distanceForPixelRadius:(double)pixelRadius
 {
     return _sphericalMap && _radius > 0
         ? _roundedDist * pixelRadius / _radius

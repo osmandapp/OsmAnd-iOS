@@ -1,6 +1,6 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
-/// A dismissed activity stays dismissed until its navigation/recording session ends.
+/// Remember dismissal until the session ends or system authorization is restored.
 struct LiveActivitySessionState {
     private(set) var isActive = false
     private(set) var isDismissed = false
@@ -11,12 +11,14 @@ struct LiveActivitySessionState {
 
     mutating func dismiss() { isDismissed = true }
 
+    mutating func resetDismissal() { isDismissed = false }
+
     mutating func end() {
         isActive = false
         isDismissed = false
     }
 
-    func canRequestActivity(isForeground: Bool, isAuthorized: Bool, isRunning: Bool) -> Bool {
-        isActive && !isDismissed && isForeground && isAuthorized && isRunning
+    func canRequestActivity(isForeground: Bool, isAuthorized: Bool) -> Bool {
+        isActive && !isDismissed && isForeground && isAuthorized
     }
 }

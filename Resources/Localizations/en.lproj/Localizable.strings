@@ -5053,3 +5053,9 @@
 
 "carplay_trip_via_point" = "Via %@";
 "route_calculation" = "Route calculation";
+
+// Live Activity settings. Reuse Apple's system terminology when localizing the label.
+"live_activity" = "Live Activity";
+"recording_live_activity_description" = "Shows the recording status on the Lock Screen and in the Dynamic Island.";
+"navigation_live_activity_description" = "Shows the next turn, distance and arrival time on the Lock Screen and in the Dynamic Island.";
+"live_activity_system_disabled" = "Live Activities are turned off for OsmAnd in iOS Settings.";

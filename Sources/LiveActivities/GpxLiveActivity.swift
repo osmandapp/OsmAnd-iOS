@@ -20,6 +20,10 @@ final class GpxLiveActivity: BaseLiveActivity {
         OASavingTrackHelper.sharedInstance()?.getIsRecording() == true
     }
 
+    override func isEnabled() -> Bool {
+        OAAppSettings.sharedManager().recordingLiveActivityEnabled.get()
+    }
+
     override func refreshActivity() {
         if let trackHelper = OASavingTrackHelper.sharedInstance() {
             let currentTrackIndex = trackHelper.currentTrackIndex

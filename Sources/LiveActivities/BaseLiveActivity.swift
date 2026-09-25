@@ -10,6 +10,8 @@ class BaseLiveActivity {
         static let minimumUpdateInterval: TimeInterval = 1
     }
 
+    var hasActiveSession: Bool { session.isActive }
+
     private let kind: LiveActivityKind
     private let relevanceScore: Double
     private var activity: Activity<LiveActivityAttributes>?
@@ -22,8 +24,6 @@ class BaseLiveActivity {
     private var nextRequestAllowedAt = Date.distantPast
     private var scheduledRefreshTask: Task<Void, Never>?
     private var activitiesToEnd: [Activity<LiveActivityAttributes>] = []
-
-    var hasActiveSession: Bool { session.isActive }
 
     init(kind: LiveActivityKind, relevanceScore: Double) {
         self.kind = kind
@@ -39,6 +39,8 @@ class BaseLiveActivity {
 
     func isActive() -> Bool { false }
 
+    func isEnabled() -> Bool { false }
+
     func isRunning() -> Bool { false }
 
     func buildContent() -> LiveActivityContent? { nil }
@@ -49,14 +51,17 @@ class BaseLiveActivity {
             removeActivity()
             return
         }
-        let isSessionRunning = isRunning()
-        session.activate(canStart: isSessionRunning)
-        syncActivityState()
+        session.activate(canStart: isRunning())
         let isAuthorized = ActivityAuthorizationInfo().areActivitiesEnabled
+        guard isEnabled(), isAuthorized else {
+            // A profile or system setting can hide the card without ending the ongoing session.
+            removeActivity(endSession: false)
+            return
+        }
+        syncActivityState()
         let canRequestActivity = session.canRequestActivity(isForeground: UIApplication.shared.applicationState == .active,
-                                                            isAuthorized: isAuthorized,
-                                                            isRunning: isSessionRunning)
-        guard !session.isDismissed, isAuthorized,
+                                                            isAuthorized: isAuthorized)
+        guard !session.isDismissed,
               activity != nil || (canRequestActivity && Date() >= nextRequestAllowedAt) else {
             latestContent = nil
             if canRequestActivity, Date() < nextRequestAllowedAt {
@@ -69,14 +74,19 @@ class BaseLiveActivity {
         queueContentUpdate(buildContent())
     }
 
-    func removeActivity() {
+    func onAuthorizationChanged(isEnabled: Bool) {
+        if isEnabled { session.resetDismissal() }
+        removeActivity(endSession: false)
+    }
+
+    func removeActivity(endSession: Bool = true) {
         cancelScheduledRefresh()
         if let activity { activitiesToEnd.append(activity) }
         activity = nil
         latestContent = nil
         lastSentContent = nil
         lastSentAt = .distantPast
-        session.end()
+        if endSession { session.end() }
         nextRequestAllowedAt = .distantPast
         hasPendingChanges = true
         processPendingActivityChanges()
@@ -154,8 +164,9 @@ class BaseLiveActivity {
     }
 
     private func createOrUpdateActivity() async {
+        guard isEnabled(), ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         syncActivityState()
-        guard activitiesToEnd.isEmpty, session.isActive, !session.isDismissed, ActivityAuthorizationInfo().areActivitiesEnabled,
+        guard activitiesToEnd.isEmpty, session.isActive, !session.isDismissed,
               let content = latestContent else { return }
         if let activity {
             guard content != lastSentContent else { return }
@@ -168,8 +179,7 @@ class BaseLiveActivity {
             lastSentAt = Date()
             await activity.update(makeActivityContent(content))
         } else if session.canRequestActivity(isForeground: UIApplication.shared.applicationState == .active,
-                                             isAuthorized: ActivityAuthorizationInfo().areActivitiesEnabled,
-                                             isRunning: isRunning()),
+                                             isAuthorized: ActivityAuthorizationInfo().areActivitiesEnabled),
                   Date() >= nextRequestAllowedAt {
             do {
                 let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String

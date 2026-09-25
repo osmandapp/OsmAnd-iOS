@@ -8,6 +8,7 @@ struct ActivityView: View {
         static let contentSpacing: CGFloat = 6
         static let contentPadding: CGFloat = 10
         static let dynamicIslandPadding: CGFloat = 0
+        static let dynamicIslandMetricsHorizontalPadding: CGFloat = 16
         static let detailsItemSpacing: CGFloat = 12
         static let detailsSpacerMinLength: CGFloat = 0
         static let descriptionTextSpacing: CGFloat = 2
@@ -35,6 +36,7 @@ struct ActivityView: View {
                 routeProgressView(progress)
             }
             tripMetricsView
+                .padding(.horizontal, isDynamicIsland ? Constants.dynamicIslandMetricsHorizontalPadding : Constants.dynamicIslandPadding)
         }
         .padding(isDynamicIsland ? Constants.dynamicIslandPadding : Constants.contentPadding)
         .foregroundStyle(.primary)
@@ -162,8 +164,10 @@ struct ActivityView: View {
 
     private func arrivalTimeView(_ arrivalTime: Date) -> some View {
         VStack(alignment: .leading, spacing: Constants.metricLabelSpacing) {
-            Text(arrivalTime, style: .time).font(.subheadline.bold()).monospacedDigit()
-            Text(localizedString("access_arrival_time")).font(.caption2).foregroundStyle(.secondary)
+            Text(arrivalTime, style: .time)
+                .font(.subheadline.bold()).monospacedDigit()
+                .lineLimit(Constants.singleLineLimit).minimumScaleFactor(Constants.metricValueMinimumScaleFactor)
+            Text(localizedString("access_arrival_time")).font(.caption2).foregroundStyle(.secondary).lineLimit(Constants.singleLineLimit)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(localizedString("access_arrival_time"))

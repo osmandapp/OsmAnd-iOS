@@ -1063,6 +1063,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic, assign) BOOL requireUploadPurchases;
 
 // Track recording settings
+@property (nonatomic) OACommonBoolean *recordingLiveActivityEnabled;
 @property (nonatomic) OACommonBoolean *saveTrackToGPX;
 @property (nonatomic) OACommonInteger *mapSettingSaveTrackInterval;
 @property (nonatomic) OACommonDouble *saveTrackMinDistance;
@@ -1166,6 +1167,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (assign, nonatomic) BOOL useFastRecalculation;
 @property (nonatomic) OACommonBoolean *forcePrivateAccessRoutingAsked;
 @property (nonatomic) OACommonBoolean *fastRouteMode;
+@property (nonatomic) OACommonBoolean *navigationLiveActivityEnabled;
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (nonatomic) OACommonBoolean *followTheRoute;
 @property (nonatomic) OACommonString *followTheGpxRoute;

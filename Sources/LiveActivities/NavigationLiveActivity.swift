@@ -17,6 +17,10 @@ final class NavigationLiveActivity: BaseLiveActivity {
         OARoutingHelper.sharedInstance().isFollowingMode()
     }
 
+    override func isEnabled() -> Bool {
+        OAAppSettings.sharedManager().navigationLiveActivityEnabled.get(OARoutingHelper.sharedInstance().getAppMode())
+    }
+
     override func buildContent() -> LiveActivityContent? {
         let routingHelper = OARoutingHelper.sharedInstance()
         var content = LiveActivityContent()

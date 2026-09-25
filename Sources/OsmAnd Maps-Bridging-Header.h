@@ -298,6 +298,7 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
+#import "OATurnPathHelper.h"
 #import "OAHudButton.h"
 #import "OACollapsableView.h"
 #import "OAMapRulerView.h"

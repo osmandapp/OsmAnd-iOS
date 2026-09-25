@@ -6506,6 +6506,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
         // trip recording settings
+        _recordingLiveActivityEnabled = [[OACommonBoolean withKey:@"recording_live_activity_enabled" defValue:YES] makeProfile];
+        [_profilePreferences setObject:_recordingLiveActivityEnabled forKey:@"recording_live_activity_enabled"];
+
         _saveTrackToGPX = [OACommonBoolean withKey:saveTrackToGPXKey defValue:NO];
         [_profilePreferences setObject:_saveTrackToGPX forKey:@"save_track_to_gpx"];
 
@@ -6526,6 +6529,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_autoSplitRecording forKey:@"auto_split_recording"];
 
         // navigation settings
+        _navigationLiveActivityEnabled = [[OACommonBoolean withKey:@"navigation_live_activity_enabled" defValue:YES] makeProfile];
+        [_profilePreferences setObject:_navigationLiveActivityEnabled forKey:@"navigation_live_activity_enabled"];
+
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _forcePrivateAccessRoutingAsked = [OACommonBoolean withKey:forcePrivateAccessRoutingAskedKey defValue:NO];
         [_profilePreferences setObject:_forcePrivateAccessRoutingAsked forKey:@"force_private_access_routing"];

@@ -131,6 +131,7 @@ static BOOL _isDeviatedFromRoute = false;
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
     [_routingModeChangedObservable notifyEventWithKey:mode];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (OAApplicationMode *) getAppMode
@@ -172,6 +173,7 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isPauseNavigation
@@ -240,6 +242,7 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isRoutePlanningMode

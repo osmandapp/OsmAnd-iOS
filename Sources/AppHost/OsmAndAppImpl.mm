@@ -845,9 +845,6 @@
         LogStartup(@"location services initialized and started");
     }
 
-    [self allowScreenTurnOff:NO];
-    LogStartup(@"screen turn off disallowed");
-
     _appearance = [[OADaytimeAppearance alloc] init];
     LogStartup(@"OADaytimeAppearance initialized");
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -913,6 +910,8 @@
 
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     LogStartup(@"migration manager migration checked/done");
+
+    [[ScreenAwakeService shared] start];
 
     [OAPOIHelper sharedInstance];
     LogStartup(@"POI helper initialized");
@@ -1538,18 +1537,6 @@
     return deviceMemoryAvailable;
 }
 
-- (void) allowScreenTurnOff:(BOOL)allow
-{
-    if (allow)
-        OALog(@"Going to enable screen turn-off");
-    else
-        OALog(@"Going to disable screen turn-off");
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allow;
-    });
-}
-
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
@@ -1564,9 +1551,6 @@
 
     [self saveDataToPermamentStorage];
 
-    // In background allow to turn off screen
-    [self allowScreenTurnOff:YES];
-
     NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
     if (backgroundTimeRemaining == DBL_MAX) {
         OALog(@"Background time remaining: unlimited");
@@ -1577,7 +1561,6 @@
 
 - (void) onApplicationWillEnterForeground
 {
-    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

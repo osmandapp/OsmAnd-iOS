@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OARouteCalculationResult.h"
 #import "CLLocation+Extension.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
@@ -36,6 +37,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSThread *_routeAnimation;
+    BOOL _isSimulatingRoute;
     double _lastCourse;
 }
 
@@ -54,6 +56,11 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (BOOL) isRouteAnimating
 {
     return _routeAnimation != nil; 
+}
+
+- (BOOL)isSimulatingRoute
+{
+    return [self isRouteAnimating] && _isSimulatingRoute;
 }
 
 - (void) startStopRouteAnimation
@@ -80,6 +87,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 
 - (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff
 {
+    _isSimulatingRoute = directionsArray == nil;
     float simSpeed = _settings.simulateNavigationSpeed;
     EOASimulationMode simulationMode = [OASimulationMode getMode:_settings.simulateNavigationMode];
     BOOL realistic = simulationMode == EOASimulationModeRealistic;
@@ -185,6 +193,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     }];
     
     [_routeAnimation start];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (NSArray<NSNumber *> *)getSimulationParams:(NSMutableArray<OASimulatedLocation *> *)directions useLocationTime:(BOOL)useLocationTime
@@ -368,6 +377,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (void) stop
 {
     _routeAnimation = nil;
+    [[ScreenAwakeService shared] updateIdleTimer];
     [_app.simulateRoutingObservable notifyEvent];
 }
 

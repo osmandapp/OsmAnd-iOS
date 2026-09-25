@@ -4571,3 +4571,16 @@
 "opening_hours_public_holiday" = "Helligdage";
 "opening_hours_school_holiday" = "Skoleferier";
 "opening_hours_easter" = "Påske";
+"reset_all_appearance_settings_for_panel" = "Nulstil alle udseendeindstillinger for %@?";
+"text_color" = "Tekstfarve";
+"secondary_text_color" = "Sekundær tekstfarve";
+"background_color" = "Baggrundsfarve";
+"widget_height" = "Modulhøjde";
+"row_height" = "Rækkehøjde";
+"shared_string_transparent" = "Gennemsigtig";
+"panel_appearance_original_description" = "\"%1$s\" bevarer det enkelte moduls størrelse og ikon.";
+"copy_from" = "Kopiér fra";
+"another_profile" = "En anden profil";
+"custom_widget_colors" = "Brugerdefinerede farver til moduler";
+"custom_widget_colors_description" = "Forbedr læsbarheden, når du er på farten. Få adgang til fuld farvetilpasning, så du sikrer perfekt synlighed af modulet på enhver kortbaggrund, både dag og nat.";
+"unlock_custom_colors" = "Få adgang til brugerdefinerede farver";

@@ -306,7 +306,9 @@ static BOOL _repositoryUpdated = NO;
     [self registerCells];
     [self setupDownloadingCellHelper];
 
+    // Only the e-mail subscription still uses it; touches pass through so it never blocks the list
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    _refreshRepositoryProgressHUD.userInteractionEnabled = NO;
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
     _displayBanner = ![self shouldHideBanner];
@@ -370,6 +372,8 @@ static BOOL _repositoryUpdated = NO;
     _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
     if (!hideUpdateButton)
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateButton animated:YES];
+    if (_repositoryUpdating)
+        [self setRepositoryUpdateIndicatorVisible:YES];
     [self setupSearchControllerWithFilter:NO];
 
     [self updateContentIfNeeded];
@@ -425,10 +429,8 @@ static BOOL _repositoryUpdated = NO;
         }
         else if (_app.isRepositoryUpdating)
         {
-            NSLog(@"OAManageResourcesViewController viewDidAppear isRepositoryUpdating show:YES");
             _repositoryUpdating = YES;
-            _updateButton.enabled = NO;
-            [_refreshRepositoryProgressHUD show:YES];
+            [self setRepositoryUpdateIndicatorVisible:YES];
         }
     }
     _viewAppeared = YES;
@@ -593,8 +595,8 @@ static BOOL _repositoryUpdated = NO;
 {
     if (value == self.region)
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (_weatherForecastRow != -1)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_weatherForecastRow != -1 && _weatherForecastRow < _regionMapItems.count)
             {
                 OAResourceItem *item = _regionMapItems[_weatherForecastRow];
                 [self updateDisplayItem:item];
@@ -688,9 +690,7 @@ static BOOL _repositoryUpdated = NO;
     if (_repositoryUpdating)
     {
         _repositoryUpdating = NO;
-        _updateButton.enabled = YES;
-        NSLog(@"OAManageResourcesViewController updateContent _refreshRepositoryProgressHUD hide:YES");
-        [_refreshRepositoryProgressHUD hide:YES];
+        [self setRepositoryUpdateIndicatorVisible:NO];
     }
 }
 
@@ -1965,15 +1965,31 @@ static BOOL _repositoryUpdated = NO;
     [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"res_catalog_upd")];
 }
 
+// The catalog refresh runs in the background behind the cached list: a spinner replaces the refresh button
+// instead of a modal HUD, so the screen stays usable while indexes.xml is downloaded
+- (void) setRepositoryUpdateIndicatorVisible:(BOOL)visible
+{
+    _updateButton.enabled = !visible;
+    if (hideUpdateButton)
+        return;
+
+    UIBarButtonItem *item = _updateButton;
+    if (visible)
+    {
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+        spinner.color = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
+        [spinner startAnimating];
+        item = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+    }
+    [self.navigationItem setRightBarButtonItem:item animated:NO];
+}
+
 - (void) updateRepository
 {
     _doDataUpdateReload = YES;
-    _updateButton.enabled = NO;
-    NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD show:YES");
-    [_refreshRepositoryProgressHUD show:YES];
-    NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated start");
+    _repositoryUpdating = YES;
+    [self setRepositoryUpdateIndicatorVisible:YES];
     [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
-        NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated end");
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
             // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed.
             // The tree is read here but published on the main thread: self.region, the region-keyed resource cache and
@@ -1981,16 +1997,14 @@ static BOOL _repositoryUpdated = NO;
             OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
             [_app startRepositoryUpdateAsync:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD hide:YES");
                 if (reloadedWorldRegion)
                 {
                     [_app applyWorldRegions:reloadedWorldRegion];
                     self.region = _app.worldRegion;
                 }
-                [_refreshRepositoryProgressHUD hide:YES];
                 [self updateContent];
                 [_app.worldRegion buildResourceGroupItem];
-                _updateButton.enabled = YES;
+                [self setRepositoryUpdateIndicatorVisible:NO];
             });
         });
     }];
@@ -2174,7 +2188,7 @@ static BOOL _repositoryUpdated = NO;
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
-    if (_freeMapsBannerSection)
+    if (_freeMapsBannerSection >= 0)
         sectionsCount++;
     if (_extraMapsSection >= 0)
         sectionsCount++;

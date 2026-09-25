@@ -13,7 +13,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAObservable.h"
-#import <MBProgressHUD.h>
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
@@ -40,8 +39,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy *_backgroundStateObserver;
 
-    MBProgressHUD* _progressHUD;
-    
     NSObject *_sync;
     
     OAWorldRegion *_lastDownloadedRegionInBackground;
@@ -280,28 +277,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         const auto resourceId = QString::fromNSString(nsResourceId);
         const auto filePath = QString::fromNSString(localPath);
         bool success = false;
-        bool showProgressHud = !resourceId.endsWith(QStringLiteral(".live.obf"));
 
         OALog(@"Going to install/update of %@", nsResourceId);
         // Try to install only in case of successful download
         if (task.error == nil)
         {
-            if (showProgressHud)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-
-                    if (!_progressHUD)
-                    {
-                        UIView *topView = [UIApplication sharedApplication].mainWindow;
-                        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-                        _progressHUD.removeFromSuperViewOnHide = YES;
-                        _progressHUD.labelText = OALocalizedString(@"res_installing");
-                        [topView addSubview:_progressHUD];
-
-                        [_progressHUD show:YES];
-                    }
-                });
-            }
+            // No modal "Installing..." HUD over the whole window: the downloading cell keeps
+            // spinning in its finished state until the local resources change, which is enough feedback
 
             // Install or update given resource
             success = _app.resourcesManager->updateFromFile(resourceId, filePath);
@@ -426,18 +408,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                                                       thatContainsResource:QString([nsResourceId UTF8String])];
                     [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
                 }
-            }
-
-            if (showProgressHud)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-
-                    if (_progressHUD)
-                    {
-                        [_progressHUD hide:YES];
-                        _progressHUD = nil;
-                    }
-                });
             }
 
             if (success && resourceId == QStringLiteral("stars-articles.stardb"))

@@ -1013,7 +1013,7 @@
 "routing_attr_freeride_policy_description" = "Le hors-piste (ou « freeride ») emprunte des itinéraires non-officiels. Ces itinéraires ne sont généralement ni balisés ni damés et ne font l’objet d\'aucune surveillance. Vous pratiquez cette activité à vos risques et périls.";
 "rendering_value_bold_name" = "Épais";
 "rendering_attr_undefined_name" = "Non défini";
-"rendering_attr_tracktype_grade2_name" = "Compact (non-recouvert)";
+"rendering_attr_tracktype_grade2_name" = "Dur (non pavé)";
 "rendering_attr_highway_class_motorway_name" = "Autoroute";
 "rendering_value_thin_name" = "Fin";
 "rendering_value_light_brown_name" = "Marron clair";
@@ -1181,7 +1181,7 @@
 "routeInfo_steepness_name" = "Pente";
 "routing_attr_driving_style_name" = "Style de conduite";
 "routing_attr_avoid_sett_name" = "Sans pavés";
-"rendering_attr_tracktype_grade1_name" = "Compact (recouverte)";
+"rendering_attr_tracktype_grade1_name" = "Dur (pavé)";
 "rendering_attr_piste_type_skitour_name" = "Ski de randonnée";
 "rendering_value_germanRoadAtlas_name" = "Atlas des routes allemandes";
 "rendering_attr_highway_class_state_road_name" = "Route nationale";
@@ -1229,7 +1229,7 @@
 "rendering_attr_contourDensity_description" = "Densité des courbes de niveau";
 "routing_attr_avoid_toll_description" = "Éviter les péages";
 "routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes de skating";
-"rendering_attr_tracktype_grade3_name" = "Principalement compact";
+"rendering_attr_tracktype_grade3_name" = "Principalement dur";
 "routing_attr_piste_type_sled_description" = "Pistes pour chiens de traîneau.";
 "rendering_attr_hideWoodScrubs_name" = "Végétation";
 "routing_attr_driving_style_prefer_unpaved_description" = "Privilégier les routes non pavées pour l\'itinéraire.";
@@ -1969,7 +1969,7 @@
 // Shared Strings
 "shared_string_custom" = "Personnalisé";
 "coords_format_descr_quick_search" = "Vous pouvez modifier le format des coordonnées du profil dans les paramètres généraux";
-"track_coloring_solid" = "Opaque";
+"track_coloring_solid" = "Continu";
 "shared_string_width" = "Largeur";
 "invalid_format" = "Format non valide";
 "shared_string_interval" = "Intervalle";
@@ -3902,12 +3902,12 @@
 "miles" = "Milles";
 "mpg" = "MPG";
 "obd_alt_battery_voltage" = "Tension de l'adaptateur";
-"rendering_attr_depthContoursDashed_description" = "Courbes de profondeur en pointillés";
+"rendering_attr_depthContoursDashed_description" = "Courbes de profondeur en tirets";
 "rendering_attr_hideLightSectorSources_name" = "Sources des secteurs lumineux";
 "rendering_attr_shellsStyle_name" = "Style de coquillages";
 "rendering_attr_fairwayStyle_description" = "Couleur des fairways";
 "rendering_attr_depthColorScheme_description" = "Schéma de couleurs de profondeur";
-"rendering_attr_depthContoursDashed_name" = "Courbes de profondeur en pointillés";
+"rendering_attr_depthContoursDashed_name" = "Courbes de profondeur en tirets";
 "rendering_attr_fairwayStyle_name" = "Couleur du fairway";
 "rendering_attr_tidalFlatStyle_description" = "Style des vasières";
 "rendering_attr_spotSize_name" = "Taille du sondage ponctuel";
@@ -4239,7 +4239,7 @@
 "ais_error_port_only" = "Seules les valeurs numériques comprises entre 0 et 65535 sont acceptées.";
 "ais_connection_connected" = "Connecté";
 "ais_connection_connecting" = "En cours de connexion";
-"ais_connection_failed" = "Échec de la connexion";
+"ais_connection_failed" = "Connexion impossible";
 "ais_connection_disconnected" = "Déconnecté";
 "ais_call_sign" = "Indicatif d'appel";
 "ais_heading" = "Titre";

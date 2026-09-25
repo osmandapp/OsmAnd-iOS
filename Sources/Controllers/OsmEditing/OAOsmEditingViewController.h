@@ -48,11 +48,11 @@
 + (void) savePoi:(NSString *)comment
          poiData:(OAEditPOIData *)poiData
      editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
-  closeChangeSet:(BOOL)closeChangeset;
+  closeChangeSet:(BOOL)closeChangeset
+showContextMenuAfterSave:(BOOL)showContextMenuAfterSave;
 
 -(id) initWithLat:(double)latitude lon:(double)longitude;
 -(id) initWithEntity:(OAEntity *)entity;
 - (instancetype)initWithPoint:(OAOpenStreetMapPoint *)point;
 
 @end
-

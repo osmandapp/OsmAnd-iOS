@@ -69,7 +69,7 @@ static QuickActionType *ACTION_TYPE;
         }
         else
         {
-            [OAOsmEditingViewController savePoi:@"" poiData:data editingUtil:plugin.getPoiModificationLocalUtil closeChangeSet:NO];
+            [OAOsmEditingViewController savePoi:@"" poiData:data editingUtil:plugin.getPoiModificationLocalUtil closeChangeSet:NO showContextMenuAfterSave:NO];
         }
     }
 }

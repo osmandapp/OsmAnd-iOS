@@ -4204,3 +4204,12 @@
 "ais_reconnect" = "重新連線";
 "ais_nautical_mile" = "海浬";
 "ais_nautical_miles" = "海浬";
+"plan_route_section_recalculate_format" = "%2$@ 的 %1$@ 片段已經以選取的設定檔重新計算導航路徑。";
+"plan_route_segment_recalculate_format" = "已經以選取的設定檔重新計算 %@ 的導航路線。";
+"osm_edits_empty_state_description" = "在上傳變動到開放街圖前，你在 OsmAnd 做出的變動會出現在這邊";
+"ais_load_data" = "從檔案載入 AIS 資料";
+"ais_address_settings" = "IP 位址設定";
+"ais_address_settings_description" = "選取 NMEA 協定 (UDP/TCP)，以及指定對應的位址與端點";
+"ais_nmea_protocol" = "NMEA 資料接收的協定";
+"ais_nmea_protocol_description" = "選取 NMEA 資料接收的協定";
+"ais_address_nmea_server" = "NMEA 資料來源的 IP 位址";

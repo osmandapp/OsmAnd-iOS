@@ -48,6 +48,8 @@
 #define MAX_VISIBLE_GLOBE_DISTANCE (MAX_GLOBE_DISTANCE / 2)
 #define PROJECTED_STEP_SLACK 4
 #define MIN_PROJECTED_STEP 24
+#define GLOBE_VISIBILITY_TOLERANCE 0.1
+#define GLOBE_VISIBILITY_MIN_TOLERANCE 4
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
@@ -857,13 +859,39 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         return NO;
 
     OAMapRendererView *mapView = _mapViewController.mapView;
-    if (_sphericalMap && absoluteLatitude > MAX_LATITUDE_KEY)
+    if (!_sphericalMap)
+    {
+        auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    }
+
+    BOOL projected;
+    if (absoluteLatitude > MAX_LATITUDE_KEY)
     {
         auto pos31 = [self.class calculateGlobePoint31:latLon];
-        return [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
+        projected = [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
     }
-    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    else
+    {
+        auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        projected = [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    }
+    return projected && [self isVisibleOnGlobe:latLon screenPoint:*screenPoint];
+}
+
+- (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon screenPoint:(CGPoint)screenPoint
+{
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    OsmAnd::PointI frontPos31;
+    if (![_mapViewController.mapView convert:CGPointMake(round(screenPoint.x * scale), round(screenPoint.y * scale)) toLocation:&frontPos31])
+        return NO;
+
+    OsmAnd::LatLon boundedLatLon(qBound(-MAX_LATITUDE_KEY, latLon.latitude, MAX_LATITUDE_KEY), latLon.longitude);
+    auto frontLatLon = OsmAnd::Utilities::convert31ToLatLon(frontPos31);
+    double distanceFromCenter = OsmAnd::Utilities::distance(_cachedCenterLatLon, boundedLatLon);
+    double minTolerance = GLOBE_VISIBILITY_MIN_TOLERANCE * _cachedMapDensity * scale;
+    double tolerance = MAX(distanceFromCenter * GLOBE_VISIBILITY_TOLERANCE, minTolerance);
+    return OsmAnd::Utilities::distance(frontLatLon, boundedLatLon) <= tolerance;
 }
 
 - (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius

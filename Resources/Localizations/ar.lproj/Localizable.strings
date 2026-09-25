@@ -28,7 +28,7 @@
 "shared_string_target_points" = "الوجهات";
 "search_radius_proximity" = "ضمن";
 "poi" = "نقاط";
-"day_off_label" = "معطّل";
+"day_off_label" = "مغلق";
 "open_from" = "افتح من";
 "open_till" = "مفتوح حتى";
 "will_close_at" = "يغلق على";
@@ -4550,3 +4550,17 @@
 "carplay_trip_via_point" = "عبر%@";
 "tracks_stats_are_being_calculated" = "يتم حالياً حساب إحصائيات المسارات...";
 "tracks_stats_are_being_calculated_left" = "%1$@ %2$@ متبقي";
+"screen_elements" = "عناصر الشاشة";
+"screen_elements_descr" = "يستخدم وضع العرض الأفقي نفس عناصر الشاشة الموجودة في وضع العرض العمودي؛ لذا فإن التغييرات التي تُجرى في أحد الوضعين تنطبق على كليهما.";
+"switch_to_independent" = "التحول إلى مستقل";
+"screen_elements_mode_descr" = "اختر ما إذا كان الوضعان العمودي والأفقي يتشاركان عناصر الشاشة نفسها أم يستخدمان مجموعات مستقلة.";
+"screen_elements_shared" = "مُشارَك";
+"screen_elements_independent" = "مستقل";
+"copy_from_portrait_layout" = "نسخ من تخطيط عمودي";
+"copy_from_landscape_layout" = "نسخ من تخطيط أفقي";
+"panels_layout" = "تخطيط الألواح";
+"panels_layout_wide" = "واسع";
+"panels_layout_compact" = "مُدمَج";
+"panels_layout_wide_descr" = "تمتد اللوحتان العلوية والسفلية بعرض الشاشة بالكامل.";
+"panels_layout_compact_descr" = "تُركَّب اللوحتان العلوية والسفلية بين الألواح الجانبية والأزرار.";
+"routing_engine_shared" = "المسار باستخدام OsmAndShared";

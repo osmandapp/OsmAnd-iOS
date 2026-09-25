@@ -7,8 +7,10 @@
 //
 
 #import "OAFavoriteGroupEditorViewController.h"
+#import "MBProgressHUD.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #import "Localization.h"
@@ -16,9 +18,27 @@
 @implementation OAFavoriteGroupEditorViewController
 {
     OAFavoriteGroup *_favoriteGroup;
+    MBProgressHUD *_progressHUD;
 }
 
 #pragma mark - Initialization
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_progressHUD)
+    {
+        UIWindow *window = self.navigationController.view.window ?: self.view.window;
+        _progressHUD.frame = window.bounds;
+        [window addSubview:_progressHUD];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_progressHUD removeFromSuperview];
+}
 
 - (void)postInit
 {
@@ -46,29 +66,26 @@
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
 {
-    return [OAFavoritesHelper groupByTrimmedName:[self targetGroupNameForName:name]];
-}
+    NSString *groupName = [self targetGroupNameForName:name];
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (group || !self.isNewItem)
+        return group;
 
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
-{
-    if (self.validatesGroupUniqueness)
-        return NO;
-
-    return self.isNewItem && [self isParentOnlyGroup:group groupName:[self targetGroupNameForName:name]];
+    NSString *languageCode = [OAUtilities currentLang];
+    NSLocale *locale = languageCode.length > 0 ? [NSLocale localeWithLocaleIdentifier:languageCode] : NSLocale.currentLocale;
+    NSString *lowercaseGroupName = [groupName lowercaseStringWithLocale:locale];
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
+    {
+        if ([[[favoriteGroup.name trim] lowercaseStringWithLocale:locale] isEqualToString:lowercaseGroupName]
+            || [[OAFavoriteGroup getDisplayName:favoriteGroup.name] isEqualToString:groupName])
+            return favoriteGroup;
+    }
+    return nil;
 }
 
 - (BOOL)allowsValidationForGroupName
 {
-    return !self.validatesGroupUniqueness;
-}
-
-- (BOOL)isAppearanceChanged
-{
-    OAFavoriteGroup *existingGroup = [self existingGroupFor:self.editName];
-    if ([self allowsExistingGroupFor:self.editName group:existingGroup])
-        return YES;
-
-    return [super isAppearanceChanged];
+    return !self.isNewItem;
 }
 
 #pragma mark - Selectors
@@ -150,25 +167,8 @@
         return parentGroupName;
 }
 
-- (BOOL)isParentOnlyGroup:(OAFavoriteGroup *)group groupName:(NSString *)groupName
-{
-    if (!group || group.points.count > 0 || groupName.length == 0)
-        return NO;
-
-    NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper favoriteGroups])
-    {
-        NSString *favoriteGroupName = favoriteGroup.name;
-        if ([favoriteGroupName hasPrefix:nestedPrefix])
-            return YES;
-    }
-
-    return NO;
-}
-
 - (void)addPointsGroup
 {
-    [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
     [self dismissViewController];
     if (self.delegate)
     {
@@ -181,13 +181,45 @@
 
 - (void)editPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
-    if (![self.editIconName isEqual:_favoriteGroup.iconName])
+    [self.view endEditing:YES];
+
+    // Cover the navbar without changing the shared navigation controller's interaction state.
+    UIView *containerView = self.view.window ?: self.view;
+    _progressHUD = [MBProgressHUD showHUDAddedTo:containerView animated:NO];
+    _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _progressHUD.accessibilityViewIsModal = YES;
+
+    if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
+    {
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
                           updatePoints:updatePoints
                        updateGroupIcon:updateGroupValues
-                       saveImmediately:NO];
-    
+                       saveImmediately:NO
+                            completion:^{
+            [self finishSavingGroup:updatePoints updateGroupValues:updateGroupValues];
+        }];
+    }
+    else
+    {
+        [self finishSavingGroup:updatePoints updateGroupValues:updateGroupValues];
+    }
+}
+
+- (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
+{
+    [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+    [_progressHUD hide:NO];
+    _progressHUD = nil;
+
+    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
+        [self.delegate onEditorUpdated];
+    if (self.navigationController.topViewController == self)
+        [self dismissViewController];
+}
+
+- (void)finishEditingPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
+{
     [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
 
     if (![self.editColor isEqual:_favoriteGroup.color])
@@ -210,9 +242,6 @@
 
     [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
-    if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
-        [self.delegate onEditorUpdated];
-    [self dismissViewController];
 }
 
 @end

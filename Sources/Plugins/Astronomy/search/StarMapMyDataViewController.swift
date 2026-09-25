@@ -185,6 +185,13 @@ final class StarMapMyDataViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTableHeader()
+        if !emptyView.isHidden {
+            let headerHeight = searchRecycler.tableHeaderView?.frame.height ?? 0
+            let emptyTop = headerHeight == 0 ? Layout.smallPadding : headerHeight + Layout.contentPadding
+            if emptyTopConstraint?.constant != emptyTop {
+                emptyTopConstraint?.constant = emptyTop
+            }
+        }
         
         guard !isSearchBarAnimating else { return }
         mainTopConstraint?.constant = view.safeAreaInsets.top
@@ -349,8 +356,9 @@ final class StarMapMyDataViewController: UIViewController {
             searchRecycler.tableHeaderView = nil
             return
         }
+
+        guard searchRecycler.bounds.width > 0 else { return }
         let width = searchRecycler.bounds.width
-        
         var height = sortFilterContainer.systemLayoutSizeFitting(
             CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,

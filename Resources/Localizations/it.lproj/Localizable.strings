@@ -4372,3 +4372,6 @@
 "share_link" = "Condividi il link";
 "share_as_file" = "Condividi come file";
 "carplay_map_mode_vehicle_appearance" = "Apetto del veicolo";
+"opening_hours_public_holiday" = "Giorni festivi";
+"opening_hours_school_holiday" = "Vacanze scolastiche";
+"opening_hours_easter" = "Pasqua";

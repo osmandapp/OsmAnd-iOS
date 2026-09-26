@@ -18,6 +18,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     private var downloadTaskProgressObserver: OAAutoObserverProxy?
     private var downloadTaskCompletedObserver: OAAutoObserverProxy?
     private var localResourcesChangedObserver: OAAutoObserverProxy?
+    private var tasksCollectionChangedObserver: OAAutoObserverProxy?
     private var downloadTaskCount = 0
     
     override init() {
@@ -26,6 +27,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         downloadTaskProgressObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskProgressChanged), andObserve: OsmAndApp.swiftInstance().downloadsManager.progressCompletedObservable)
         downloadTaskCompletedObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskFinished), andObserve: OsmAndApp.swiftInstance().downloadsManager.completedObservable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(onLocalResourcesChanged), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
+        tasksCollectionChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadTasksChanged), andObserve: downloadsManager.tasksCollectionChangedObservable)
     }
     
     func hasDownloads() -> Bool {
@@ -97,6 +99,18 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
     
     @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
         updateProgreesBar(animated: false)
+    }
+
+    // A finished task is removed after its completion is reported, so the host drops the empty section here; a hidden host reloads on appear
+    @objc private func onDownloadTasksChanged() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.allDownloadingsCell != nil, !self.hasDownloads() else { return }
+            self.allDownloadingsCell = nil
+            if let hostViewController = self.hostDelegate as? UIViewController, !hostViewController.isViewLoaded || hostViewController.view.window == nil {
+                return
+            }
+            self.hostDelegate?.onDownloadingCellResourceNeedUpdate(nil)
+        }
     }
     
     private func updateProgreesBar(animated: Bool) {

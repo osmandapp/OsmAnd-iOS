@@ -337,11 +337,12 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
-    // Core reports the new local resource before the installer is done, so the row is redrawn once more here
+    // Core reports the new local resource before the installer is done; only the icons are refreshed, the texts belong to the host
     @objc private func onResourceInstallingFinished(notification: Notification) {
         guard let resourceId = notification.object as? String, helperHasItemFor(resourceId) else { return }
-        if cells[resourceId] != nil {
-            setupCell(resourceId)
+        if let cell = cells[resourceId] {
+            setupLeftIcon(cell: cell, leftIconName: getLeftIconName(resourceId), resourceId: resourceId)
+            setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(resourceId), resourceId: resourceId)
         }
         if isInstalled(resourceId) {
             delegate?.onDownloadTaskFinished?(resourceId: resourceId)

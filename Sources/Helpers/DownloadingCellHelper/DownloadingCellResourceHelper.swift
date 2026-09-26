@@ -31,6 +31,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         downloadTaskProgressObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskProgressChanged), andObserve: OsmAndApp.swiftInstance().downloadsManager.progressCompletedObservable)
         downloadTaskCompletedObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskFinished), andObserve: OsmAndApp.swiftInstance().downloadsManager.completedObservable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(onLocalResourcesChanged), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
+        NotificationCenter.default.addObserver(self, selector: #selector(onResourceInstallingFinished), name: .OAResourceInstallingFinished, object: nil)
     }
     
     deinit {
@@ -93,8 +94,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
 
     func isInstalling(_ resourceId: String) -> Bool {
-        guard let resourceItem = getResource(resourceId) else { return false }
-        return !resourceItem.isInstalled() && OAResourcesInstaller.isInstalling(resourceId)
+        helperHasItemFor(resourceId) && OAResourcesInstaller.isInstalling(resourceId)
     }
     
     override func isDownloading(_ resourceId: String) -> Bool {
@@ -323,7 +323,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 guard let self else { return }
 
                 self.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
-                if self.isInstalled(resourceId) {
+                if self.isInstalled(resourceId) && !self.isInstalling(resourceId) {
                     self.delegate?.onDownloadTaskFinished?(resourceId: resourceId)
                 }
               
@@ -337,6 +337,17 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
+    // Core reports the new local resource before the installer is done, so the row is redrawn once more here
+    @objc private func onResourceInstallingFinished(notification: Notification) {
+        guard let resourceId = notification.object as? String, helperHasItemFor(resourceId) else { return }
+        if cells[resourceId] != nil {
+            setupCell(resourceId)
+        }
+        if isInstalled(resourceId) {
+            delegate?.onDownloadTaskFinished?(resourceId: resourceId)
+        }
+    }
+
     @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
         guard let hostViewController else { return }
         DispatchQueue.main.async { [weak self] in

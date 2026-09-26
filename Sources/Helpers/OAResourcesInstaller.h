@@ -10,6 +10,8 @@
 
 UIKIT_EXTERN NSString *const OAResourceInstalledNotification;
 UIKIT_EXTERN NSString *const OAResourceInstallationFailedNotification;
+// Posted on the main thread with the resource id when a downloaded resource is no longer being installed
+UIKIT_EXTERN NSString *const OAResourceInstallingFinishedNotification;
 
 @interface OAResourcesInstaller : NSObject
 

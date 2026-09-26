@@ -946,6 +946,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name
 {
+    if ([OAResourcesInstaller isInstalling:resourceId])
+        return;
+
     // Create download tasks
     NSString* ver = OAAppVersion.getVersion;
     NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -1402,6 +1405,9 @@ includeHidden:(BOOL)includeHidden
         }
         else
         {
+            if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+                return;
+
             // Create download task
             NSURL *url = [NSURL URLWithString:item.downloadUrl];
             NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -1590,7 +1596,8 @@ includeHidden:(BOOL)includeHidden
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)
     {
-        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion])
+            || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
     if (items.count == 0)
@@ -1667,6 +1674,9 @@ includeHidden:(BOOL)includeHidden
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
+    if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+        return;
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
     if (!resourceInRepository)
@@ -1778,6 +1788,9 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
+        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()])
+            return;
+
         // Create download tasks
         NSString *ver = OAAppVersion.getVersion;
         NSURL *pureUrl = item.resource->url.toNSURL();
@@ -1845,6 +1858,9 @@ includeHidden:(BOOL)includeHidden
            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
+    if ([OAResourcesInstaller isInstalling:resource->id.toNSString()])
+        return;
+
     // Create download tasks
     NSString *ver = OAAppVersion.getVersion;
     NSURL *pureUrl = resource->url.toNSURL();

@@ -206,12 +206,17 @@
 
 - (void) drawRect:(CGRect)rect
 {
+    double treshold = 2.0;
+    UIEdgeInsets insets = [self contentInsets];
+    CGRect frame = CGRectMake(insets.left, 35, self.bounds.size.width - insets.left - insets.right, 20);
+    // The shrink loop below never takes a segment under treshold + 0.1, so it would not end on a narrower bar
+    if (frame.size.width < 3 * (treshold + 0.1))
+        return;
+
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
     
     double radius = 3.0f;
-    UIEdgeInsets insets = [self contentInsets];
-    CGRect frame = CGRectMake(insets.left, 35, self.bounds.size.width - insets.left - insets.right, 20);
     
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };
@@ -243,7 +248,6 @@
     size_t num_locations = 2;
     CGFloat locations[2] = { 0.0, 1.0 };
     
-    double treshold = 2.0;
     double values[3] = { _sysVal, _appVal, _freeVal };
     double total = 0;
     for (int i = 0; i < 3; i++)

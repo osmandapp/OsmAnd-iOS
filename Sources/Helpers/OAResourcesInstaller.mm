@@ -30,6 +30,7 @@
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
+NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallingFinishedNotification";
 
 
 @implementation OAResourcesInstaller
@@ -458,6 +459,9 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
                                                    error:nil];
         [self.class setInstalling:NO resourceId:nsResourceId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstallingFinishedNotification object:nsResourceId];
+        });
 
         OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
 

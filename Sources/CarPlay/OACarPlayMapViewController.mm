@@ -273,7 +273,7 @@
         
         [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
-        [_mapVc.mapView limitFrameRefreshRate];
+        [_mapVc setCarPlayFrameRateLimited:YES];
     }
 }
 
@@ -294,9 +294,7 @@
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapVc.mapView resumeRendering];
         [mapPanel.hudViewController.mapInfoController updateLayout];
-        OAAppSettings * settings = [OAAppSettings sharedManager];
-        if (![settings.batterySavingMode get])
-            [_mapVc.mapView restoreFrameRefreshRate];
+        [_mapVc setCarPlayFrameRateLimited:NO];
 
         [_mapVc setViewportScaleX:kViewportScale];
         [_mapVc.mapView setMSAAEnabled:NO];

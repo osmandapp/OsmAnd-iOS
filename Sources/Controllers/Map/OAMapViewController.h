@@ -211,6 +211,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 // Synchronously commits a short renderer/view mutation on the main thread.
 // Do not perform file I/O, DB/cache/network work, dispatch_sync, or notifications here.
 - (void) runWithRenderSync:(nullable void (^)(void))runnable;
+- (void) applyFrameRefreshRateLimit;
+- (void) setCarPlayFrameRateLimited:(BOOL)limited;
 - (void) updateLayer:(NSString *)layerId;
 
 - (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;

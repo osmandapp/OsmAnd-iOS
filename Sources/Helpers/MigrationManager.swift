@@ -24,6 +24,7 @@ final class MigrationManager: NSObject {
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
+        case migrateLegacyRouteWidgets
     }
     
     private struct HudMigrationScenario {
@@ -114,9 +115,44 @@ final class MigrationManager: NSObject {
                 migrateCarPlayMapAppearanceMode()
                 defaults.set(true, forKey: MigrationKey.migrateCarPlayMapAppearanceMode.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue) {
+                keepLegacyRouteWidgetsForCustomizedProfiles()
+                defaults.set(true, forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue)
+            }
         }
     }
     
+    // Sync with android: profiles with customized widgets keep the old route widgets, others get the route info widget
+    private func keepLegacyRouteWidgetsForCustomizedProfiles() {
+        guard WidgetsAvailabilityHelper.hadLegacyRouteWidgets() else { return }
+        let legacyWidgetIds = [WidgetType.intermediateDestination.id, WidgetType.distanceToDestination.id,
+                               WidgetType.timeToIntermediate.id, WidgetType.timeToDestination.id]
+        for appMode in OAApplicationMode.allPossibleValues() where isWidgetsCustomized(appMode) {
+            var visibility = settings.mapInfoControls.get(appMode)
+                .components(separatedBy: SETTINGS_SEPARATOR)
+                .filter { !$0.isEmpty }
+            for widgetId in legacyWidgetIds where !isVisibilityDefined(visibility, widgetId: widgetId) {
+                visibility.append(widgetId)
+            }
+            if !isVisibilityDefined(visibility, widgetId: WidgetType.routeInfo.id) {
+                visibility.append(HIDE_PREFIX + WidgetType.routeInfo.id)
+            }
+            settings.mapInfoControls.set(visibility.map { $0 + SETTINGS_SEPARATOR }.joined(), mode: appMode)
+        }
+    }
+
+    private func isWidgetsCustomized(_ appMode: OAApplicationMode) -> Bool {
+        settings.mapInfoControls.isSet(for: appMode)
+            || settings.customWidgetKeys.isSet(for: appMode)
+            || WidgetsPanel.values.contains { $0.getOrderPreference().isSet(for: appMode) }
+    }
+
+    private func isVisibilityDefined(_ visibility: [String], widgetId: String) -> Bool {
+        visibility.contains(widgetId)
+            || visibility.contains(COLLAPSED_PREFIX + widgetId)
+            || visibility.contains(HIDE_PREFIX + widgetId)
+    }
+
     private func changeWidgetIdsMigration1() {
         let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()

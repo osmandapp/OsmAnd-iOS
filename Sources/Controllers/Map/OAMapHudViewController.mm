@@ -53,6 +53,7 @@ static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 static const float kGridCellWidthPt = 8.0;
 static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
+static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
@@ -103,6 +104,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     CLLocation *_previousLocation;
     
     NSTimeInterval _lastWidgetsUpdateTime;
+    NSTimeInterval _lastMapTouchTime;
+    BOOL _routeFollowingMode;
     
     BOOL _cachedLocationAvailableState;
     
@@ -191,6 +194,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                                                                          andObserve:_app.locationServices.statusObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     
     _cachedLocationAvailableState = NO;
 }
@@ -567,12 +571,41 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (BOOL)shouldShowMenu
 {
-    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get];
+    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get] && ![self shouldAutoHideBottomButtons];
 }
 
 - (BOOL)shouldShowNavigation
 {
-    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get];
+    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get] && ![self shouldAutoHideBottomButtons];
+}
+
+// Same as Android: while following a route, Menu and Navigation hide until the map is touched
+- (BOOL)shouldAutoHideBottomButtons
+{
+    return _routeFollowingMode
+        && !UIAccessibilityIsVoiceOverRunning()
+        && !UIApplication.sharedApplication.isCarPlayConnected
+        && CACurrentMediaTime() - _lastMapTouchTime >= kTimeoutToShowButtons;
+}
+
+- (void)onMapGestureAction:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->_lastMapTouchTime = CACurrentMediaTime();
+        [self updateAutoHiddenBottomButtons];
+    });
+}
+
+- (void)updateAutoHiddenBottomButtons
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateAutoHiddenBottomButtons) object:nil];
+    [self updateMapButtonVisibility:_optionsMenuButton showButton:[self shouldShowMenu] completionHandler:nil];
+    [self updateMapButtonVisibility:_driveModeButton showButton:[self shouldShowNavigation] completionHandler:nil];
+    if (_routeFollowingMode && ![self shouldAutoHideBottomButtons])
+    {
+        NSTimeInterval delay = kTimeoutToShowButtons - (CACurrentMediaTime() - _lastMapTouchTime);
+        [self performSelector:@selector(updateAutoHiddenBottomButtons) withObject:nil afterDelay:MAX(delay, 0.) + 0.1];
+    }
 }
 
 - (BOOL)shouldShowMyLocation
@@ -2116,6 +2149,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
 
     [_driveModeButton updateColorsForPressedState:NO];
+
+    BOOL routeFollowingMode = followingMode && !routePlanningMode;
+    if (routeFollowingMode != _routeFollowingMode)
+    {
+        if (routeFollowingMode)
+            _lastMapTouchTime = 0;
+        _routeFollowingMode = routeFollowingMode;
+        [self updateAutoHiddenBottomButtons];
+    }
 }
 
 - (void) recreateAllControls

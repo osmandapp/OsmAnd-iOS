@@ -11259,15 +11259,6 @@
 			path = "OsmAnd MapsUITests";
 			sourceTree = "<group>";
 		};
-		D1C573500000000000000003 /* PlanRoute */ = {
-			isa = PBXGroup;
-			children = (
-				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
-				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
-			);
-			path = PlanRoute;
-			sourceTree = "<group>";
-		};
 		D7210150301B768C003CECB8 /* Cells */ = {
 			isa = PBXGroup;
 			children = (

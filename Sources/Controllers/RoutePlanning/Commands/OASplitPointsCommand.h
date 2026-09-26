@@ -11,9 +11,11 @@
 #import "OAMeasurementModeCommand.h"
 
 @class OAMeasurementToolLayer;
+@class OAApplicationMode;
 
 @interface OASplitPointsCommand : OAMeasurementModeCommand
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after;
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after appMode:(OAApplicationMode *)appMode;
 
 @end

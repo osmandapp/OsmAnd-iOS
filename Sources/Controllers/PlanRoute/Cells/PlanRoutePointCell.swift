@@ -9,6 +9,12 @@ import UIKit
 
 final class PlanRoutePointCell: UITableViewCell {
 
+    enum SeparatorStyle {
+        case textAligned
+        case fullWidth
+        case inset
+    }
+
     private static let horizontalInset: CGFloat = 16
     private static let minimumHeight: CGFloat = 68
     private static let verticalInset: CGFloat = 12
@@ -35,13 +41,17 @@ final class PlanRoutePointCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with point: PlanRoutePoint, tintColor: UIColor, showsFullWidthSeparator: Bool) {
-        separatorInset = showsFullWidthSeparator
-            ? .zero
-            : UIEdgeInsets(top: 0,
-                           left: Self.textLeadingInset,
-                           bottom: 0,
-                           right: Self.horizontalInset)
+    func configure(with point: PlanRoutePoint, tintColor: UIColor, separatorStyle: SeparatorStyle) {
+        let horizontalInset = Self.horizontalInset
+        let textLeadingInset = Self.textLeadingInset
+        switch separatorStyle {
+        case .textAligned:
+            separatorInset = UIEdgeInsets(top: 0, left: textLeadingInset, bottom: 0, right: horizontalInset)
+        case .fullWidth:
+            separatorInset = .zero
+        case .inset:
+            separatorInset = UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+        }
         numberLabel.text = "\(point.indexInSegment + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name

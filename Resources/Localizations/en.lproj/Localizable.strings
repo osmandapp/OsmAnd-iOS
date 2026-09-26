@@ -1745,7 +1745,11 @@
 "add_new_folder" = "Add new folder";
 "plan_route_select_segment_hint" = "Select segment or section to change Route type and Settings.";
 "plan_route_change_for_whole_segment" = "Change for whole segment";
-"plan_route_change_for_whole_track" = "Change for whole track";
+"plan_route_change_for_whole_track" = "Change type for whole track";
+"plan_route_continue_with_different_route_type" = "Continue with a different route type";
+"plan_route_continue_with_different_type" = "Continue with a different type";
+"plan_route_continue_or_start_segment_hint" = "Continue within the current segment, or start a new one that is not connected to the previous part of the track.";
+"plan_route_new_segment_separate_hint" = "A new segment starts a separate part of the track, not connected to the previous one.";
 "plan_route_section_recalculate_format" = "%1$@ section of %2$@ will be recalculated using the selected profile.";
 "plan_route_segment_recalculate_format" = "%@ will be recalculated using the selected profile.";
 "plan_route_start_new_segment_hint" = "New segment continues with the same route type.";

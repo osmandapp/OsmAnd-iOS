@@ -182,7 +182,7 @@ static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
     CALayer *_horizontalLine;
     
     BOOL _viewAppeared;
-    BOOL _repositoryUpdating;
+    BOOL _refreshingRepository;
 
     NSString *_otherRegionId;
     NSString *_nauticalRegionId;
@@ -372,8 +372,7 @@ static BOOL _repositoryUpdated = NO;
     _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
     if (!hideUpdateButton)
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateButton animated:YES];
-    if (_repositoryUpdating)
-        [self setRepositoryUpdateIndicatorVisible:YES];
+    [self updateRepositoryUpdateIndicator];
     [self setupSearchControllerWithFilter:NO];
 
     [self updateContentIfNeeded];
@@ -394,6 +393,7 @@ static BOOL _repositoryUpdated = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRepositoryUpdateFinished:) name:OARepositoryUpdateFinishedNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
@@ -426,11 +426,6 @@ static BOOL _repositoryUpdated = NO;
         {
             // show no internet popup
             [OAPluginPopupViewController showNoInternetConnectionFirst];
-        }
-        else if (_app.isRepositoryUpdating)
-        {
-            _repositoryUpdating = YES;
-            [self setRepositoryUpdateIndicatorVisible:YES];
         }
     }
     _viewAppeared = YES;
@@ -686,12 +681,6 @@ static BOOL _repositoryUpdated = NO;
 
     if ([self shouldDisplayWeatherForecast:self.region])
         [_weatherHelper calculateCacheSize:self.region onComplete:nil];
-
-    if (_repositoryUpdating)
-    {
-        _repositoryUpdating = NO;
-        [self setRepositoryUpdateIndicatorVisible:NO];
-    }
 }
 
 - (void)updateMultipleResources
@@ -1965,10 +1954,10 @@ static BOOL _repositoryUpdated = NO;
     [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"res_catalog_upd")];
 }
 
-// The catalog refresh runs in the background behind the cached list: a spinner replaces the refresh button
-// instead of a modal HUD, so the screen stays usable while indexes.xml is downloaded
-- (void) setRepositoryUpdateIndicatorVisible:(BOOL)visible
+// A spinner replaces the refresh button while this screen or the app updates the repository
+- (void) updateRepositoryUpdateIndicator
 {
+    BOOL visible = _refreshingRepository || _app.isRepositoryUpdating;
     _updateButton.enabled = !visible;
     if (hideUpdateButton)
         return;
@@ -1987,8 +1976,8 @@ static BOOL _repositoryUpdated = NO;
 - (void) updateRepository
 {
     _doDataUpdateReload = YES;
-    _repositoryUpdating = YES;
-    [self setRepositoryUpdateIndicatorVisible:YES];
+    _refreshingRepository = YES;
+    [self updateRepositoryUpdateIndicator];
     [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
             // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed.
@@ -2004,10 +1993,16 @@ static BOOL _repositoryUpdated = NO;
                 }
                 [self updateContent];
                 [_app.worldRegion buildResourceGroupItem];
-                [self setRepositoryUpdateIndicatorVisible:NO];
+                _refreshingRepository = NO;
+                [self updateRepositoryUpdateIndicator];
             });
         });
     }];
+}
+
+- (void) onRepositoryUpdateFinished:(NSNotification *)notification
+{
+    [self updateRepositoryUpdateIndicator];
 }
 
 - (UITableView *) getTableView

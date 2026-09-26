@@ -46,6 +46,7 @@
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OAResourcesInstaller.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
@@ -704,7 +705,8 @@
 
 - (void)createMapDownloadControls
 {
-    if (_localMapIndexItem)
+    // A downloaded map that is still being installed has nothing to download
+    if (_localMapIndexItem && ![OAResourcesInstaller isInstalling:_localMapIndexItem.resourceId.toNSString()])
     {
         self.downloadControlButton = [[OATargetMenuControlButton alloc] init];
         if ([self showRegionNameOnDownloadButton])

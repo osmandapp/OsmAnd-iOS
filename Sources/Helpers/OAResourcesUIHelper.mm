@@ -1502,6 +1502,8 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
+    if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+        return;
 
     BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:isWeatherForecast ? item.sizePkg : item.resource->packageSize
@@ -1879,6 +1881,9 @@ includeHidden:(BOOL)includeHidden
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
 {
+    if ([OAResourcesInstaller isInstalling:item_.resourceId.toNSString()])
+        return;
+
     BOOL isUpdate = NO;
     NSString *resourceName;
 

@@ -87,9 +87,14 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isInstalled(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled() || super.isInstalled(resourceId)
+            return resourceItem.isInstalled() || (super.isInstalled(resourceId) && !OAResourcesInstaller.isInstalling(resourceId))
         }
         return false
+    }
+
+    func isInstalling(_ resourceId: String) -> Bool {
+        guard let resourceItem = getResource(resourceId) else { return false }
+        return !resourceItem.isInstalled() && OAResourcesInstaller.isInstalling(resourceId)
     }
     
     override func isDownloading(_ resourceId: String) -> Bool {
@@ -186,6 +191,24 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         return nil
     }
     
+    override func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
+        guard isInstalling(resourceId) else {
+            super.setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
+            return
+        }
+        let progressView = cell.accessoryView as? FFCircularProgressView ?? FFCircularProgressView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        progressView.iconView = UIView()
+        progressView.tintColor = .iconColorActive
+        progressView.iconPath = UIBezierPath()
+        progressView.progress = 0
+        if !progressView.isSpinning {
+            progressView.startSpinProgressBackgroundLayer()
+        }
+        cell.accessoryView = progressView
+        cell.accessoryType = .none
+        cell.rightIconVisibility(false)
+    }
+
     override func getLeftIconName(_ resourceId: String) -> String? {
         if let resourceItem = getResource(resourceId) {
             return resourceItem.iconName()
@@ -194,6 +217,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     override func onCellClicked(_ resourceId: String) {
+        guard !isInstalling(resourceId) else { return }
         if !isFinished(resourceId) || isAlwaysClickable {
             if !isDownloading(resourceId) {
                 if !isDisabled(resourceId) {

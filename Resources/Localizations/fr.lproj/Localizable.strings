@@ -531,7 +531,7 @@
 "default_speed_system" = "Unité de vitesse";
 "default_speed_system_descr" = "Définir l\'unité de vitesse.";
 "speed_limit_exceed" = "Marge de tolérance aux limitations de vitesse";
-"speed_limit_exceed_message" = "Choisir la marge de tolérance à ajouter à la limitation de vitesse pour recevoir une alerte vocale.";
+"speed_limit_exceed_message" = "Indiquer la marge de tolérance à ajouter à la limitation de vitesse avant de déclencher une alerte vocale.";
 "wake_on_voice" = "Allumage de l\'écran";
 "wake_on_voice_descr" = "Allumer l\'écran (si éteint) à l\'approche d\'une bifurcation.";
 "voice_pref_title" = "Voix";
@@ -1320,7 +1320,7 @@
 "map_settings_install_maps" = "Choisissez des cartes à installer ou mettre à jour";
 "gpx_analyze" = "Analyser";
 "download_pending" = "Téléchargement en attente";
-"osmand_parking_warning" = "Avertissement";
+"osmand_parking_warning" = "Alerte";
 "shared_string_clear_cache" = "Effacer le cache";
 "swap_points" = "Inverser le départ et l'arrivée";
 "by_name" = "Par nom";
@@ -3203,7 +3203,7 @@
 "osmand_depelopment_use_old_routing" = "Utiliser l'ancien algorithme (A*)";
 "missing_or_outdated_maps_description" = "Pour calculer cet itinéraire, certaines cartes hors ligne sont manquantes ou pas à jour. Veuillez télécharger ou mettre à jour ces cartes.";
 "speedometer_description" = "Affiche votre vitesse actuelle calculée par GPS";
-"speed_limit_warning" = "Avertissement de limitation de vitesse";
+"speed_limit_warning" = "Alerte de limitation de vitesse";
 "shared_string_always" = "Toujours";
 "when_exceeded" = "En cas de dépassement";
 "distance_during_navigation_footer" = "Choisissez comment les informations de distance sont affichées dans les widgets de guidage (distance jusqu'à un point, prochaine bifurcation, voies).\n\nChoisissez \"Précis\" pour des valeurs exactes, ou \"Arrondi\" pour une meilleure lisibilité.";
@@ -4566,3 +4566,4 @@
 "panels_layout_compact" = "Compact";
 "panels_layout_wide_descr" = "Les panneaux supérieur et inférieur s'étendent sur toute la largeur de l'écran.";
 "panels_layout_compact_descr" = "Les panneaux supérieur et inférieur s'emboîtent entre les panneaux latéraux et les boutons.";
+"opening_hours_easter" = "Horaires de Pâques";

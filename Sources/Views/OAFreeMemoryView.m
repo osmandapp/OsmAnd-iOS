@@ -21,6 +21,10 @@
     double _freeVal;
 
     unsigned long long _localResourcesSize;
+    unsigned long long _deviceMemoryCapacity;
+    unsigned long long _deviceMemoryAvailable;
+    unsigned long long _documentsSize;
+    NSUInteger _updateGeneration;
 
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _localResourcesChangedObserver;
@@ -37,24 +41,47 @@
     return self;
 }
 
+// Horizontal insets of the content: the 15 pt margin plus the safe area, so the labels and the bar
+// stay clear of the notch / Dynamic Island in landscape (the table view does not inset custom header views)
+- (UIEdgeInsets) contentInsets
+{
+    UIEdgeInsets safeArea = self.safeAreaInsets;
+    return UIEdgeInsetsMake(0.0, 15.0 + safeArea.left, 0.0, 15.0 + safeArea.right);
+}
+
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
+
+    UIEdgeInsets insets = [self contentInsets];
     [_titleLabel sizeToFit];
     [_freeMemLabel sizeToFit];
-    
-    _titleLabel.frame = CGRectMake(15.0, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
-    _freeMemLabel.frame = CGRectMake(self.frame.size.width - _freeMemLabel.bounds.size.width - 15.0, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
+
+    _titleLabel.frame = CGRectMake(insets.left, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
+    _freeMemLabel.frame = CGRectMake(self.bounds.size.width - _freeMemLabel.bounds.size.width - insets.right, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
+    [self setNeedsDisplay];
+}
+
+- (void) safeAreaInsetsDidChange
+{
+    [super safeAreaInsetsDidChange];
+    [self setNeedsLayout];
+    [self setNeedsDisplay];
 }
 
 - (void) commonInit
 {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clipsToBounds = YES;
+    self.contentMode = UIViewContentModeRedraw;
     self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-    
+
     _sysVal = 0;
     _appVal = 0;
     _freeVal = 0;
+    _deviceMemoryCapacity = 1;
+    _deviceMemoryAvailable = 0;
+    _documentsSize = 0;
     
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -127,15 +154,43 @@
         NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
     }
 
-    unsigned long long docSize = [OAUtilities folderSize:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
-    docSize += _localResourcesSize;
-    unsigned long long usedBySystem = deviceMemoryCapacity - (docSize + deviceMemoryAvailable);
-    
-    unsigned long long capValue = deviceMemoryCapacity;
-    unsigned long long systemValue = usedBySystem;
-    unsigned long long availValue = deviceMemoryAvailable;
-    unsigned long long docValue = docSize;
-    
+    _deviceMemoryCapacity = deviceMemoryCapacity;
+    _deviceMemoryAvailable = deviceMemoryAvailable;
+    [self applyValues];
+
+    NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
+    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+    [_freeMemLabel sizeToFit];
+    [self setNeedsLayout];
+
+    // Walking the whole Documents folder (maps, tiles, tracks) takes seconds on a full device,
+    // so it runs off the main thread and the bar is redrawn when the size is known
+    NSUInteger generation = ++_updateGeneration;
+    unsigned long long localResourcesSize = _localResourcesSize;
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + localResourcesSize;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || strongSelf->_updateGeneration != generation)
+                return;
+
+            strongSelf->_documentsSize = docSize;
+            [strongSelf applyValues];
+            [strongSelf setNeedsDisplay];
+        });
+    });
+}
+
+// Until the Documents size is known the app share is 0 and everything used counts as system
+- (void) applyValues
+{
+    unsigned long long capValue = _deviceMemoryCapacity;
+    unsigned long long availValue = _deviceMemoryAvailable;
+    unsigned long long docValue = _documentsSize;
+    unsigned long long systemValue = capValue - (docValue + availValue);
+
     _sysVal = (double) systemValue / capValue;
     _appVal = (double) docValue / capValue;
     _freeVal = (double) availValue / capValue;
@@ -147,18 +202,21 @@
         _appVal = 0;
         _freeVal = 1;
     }
-    NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
-    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
-    [_freeMemLabel sizeToFit];
 }
 
 - (void) drawRect:(CGRect)rect
 {
+    double treshold = 2.0;
+    UIEdgeInsets insets = [self contentInsets];
+    CGRect frame = CGRectMake(insets.left, 35, self.bounds.size.width - insets.left - insets.right, 20);
+    // The shrink loop below never takes a segment under treshold + 0.1, so it would not end on a narrower bar
+    if (frame.size.width < 3 * (treshold + 0.1))
+        return;
+
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
     
     double radius = 3.0f;
-    CGRect frame = CGRectMake(15, 35, DeviceScreenWidth - 30, 20);
     
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };
@@ -190,7 +248,6 @@
     size_t num_locations = 2;
     CGFloat locations[2] = { 0.0, 1.0 };
     
-    double treshold = 2.0;
     double values[3] = { _sysVal, _appVal, _freeVal };
     double total = 0;
     for (int i = 0; i < 3; i++)

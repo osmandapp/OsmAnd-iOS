@@ -89,6 +89,8 @@
 #define kAppData @"app_data"
 #define kBuildVersion @"buildVersion"
 
+NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -1281,6 +1283,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isRepositoryUpdating = NO;
                 NSLog(@"_isRepositoryUpdating = NO");
+                [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
             });
         });
     }
@@ -1289,6 +1292,9 @@
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
         NSLog(@"_isRepositoryUpdating = NO");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
+        });
     }
 }
 

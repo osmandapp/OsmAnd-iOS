@@ -13,7 +13,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAObservable.h"
-#import <MBProgressHUD.h>
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
@@ -31,6 +30,7 @@
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
+NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallingFinishedNotification";
 
 
 @implementation OAResourcesInstaller
@@ -40,8 +40,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy *_backgroundStateObserver;
 
-    MBProgressHUD* _progressHUD;
-    
     NSObject *_sync;
     
     OAWorldRegion *_lastDownloadedRegionInBackground;
@@ -91,6 +89,37 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     }
 }
 
++ (NSMutableSet<NSString *> *) installingResourceIds
+{
+    static NSMutableSet<NSString *> *resourceIds;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        resourceIds = [NSMutableSet set];
+    });
+    return resourceIds;
+}
+
++ (BOOL) isInstalling:(NSString *)resourceId
+{
+    NSMutableSet<NSString *> *resourceIds = [self installingResourceIds];
+    @synchronized (resourceIds)
+    {
+        return [resourceIds containsObject:resourceId];
+    }
+}
+
++ (void) setInstalling:(BOOL)installing resourceId:(NSString *)resourceId
+{
+    NSMutableSet<NSString *> *resourceIds = [self installingResourceIds];
+    @synchronized (resourceIds)
+    {
+        if (installing)
+            [resourceIds addObject:resourceId];
+        else
+            [resourceIds removeObject:resourceId];
+    }
+}
+
 - (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
@@ -106,6 +135,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     task.installResourceRetry = 0;
 
     NSString* resourceId = [task.key substringFromIndex:[@"resource:" length]];
+    [self.class setInstalling:YES resourceId:resourceId];
     [self checkDownload:resourceId downloadTime:task.downloadTime fileSize:task.fileSize];
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
@@ -280,29 +310,11 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         const auto resourceId = QString::fromNSString(nsResourceId);
         const auto filePath = QString::fromNSString(localPath);
         bool success = false;
-        bool showProgressHud = !resourceId.endsWith(QStringLiteral(".live.obf"));
 
         OALog(@"Going to install/update of %@", nsResourceId);
         // Try to install only in case of successful download
         if (task.error == nil)
         {
-            if (showProgressHud)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-
-                    if (!_progressHUD)
-                    {
-                        UIView *topView = [UIApplication sharedApplication].mainWindow;
-                        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-                        _progressHUD.removeFromSuperViewOnHide = YES;
-                        _progressHUD.labelText = OALocalizedString(@"res_installing");
-                        [topView addSubview:_progressHUD];
-
-                        [_progressHUD show:YES];
-                    }
-                });
-            }
-
             // Install or update given resource
             success = _app.resourcesManager->updateFromFile(resourceId, filePath);
             if (!success)
@@ -428,18 +440,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 }
             }
 
-            if (showProgressHud)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-
-                    if (_progressHUD)
-                    {
-                        [_progressHUD hide:YES];
-                        _progressHUD = nil;
-                    }
-                });
-            }
-
             if (success && resourceId == QStringLiteral("stars-articles.stardb"))
             {
                 AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
@@ -458,6 +458,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         // Remove downloaded file anyways
         [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
                                                    error:nil];
+        [self.class setInstalling:NO resourceId:nsResourceId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstallingFinishedNotification object:nsResourceId];
+        });
 
         OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
 

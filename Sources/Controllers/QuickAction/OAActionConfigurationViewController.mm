@@ -7,6 +7,7 @@
 //
 
 #import "OAActionConfigurationViewController.h"
+#import "OAGPXAction.h"
 #import "Localization.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
@@ -603,7 +604,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"category_name"])
     {
-        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
+        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[OAGPXActionCategoryKey] ?: item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
         [self showViewController:_groupController];
         [self.view endEditing:YES];
@@ -1083,7 +1084,16 @@
         if ([item[@"key"] isEqualToString:@"category_name"])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
-            [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];
+            if (item[OAGPXActionCategoryKey] != nil)
+            {
+                NSString *category = _groupController.groupName ?: @"";
+                mutableItem[OAGPXActionCategoryKey] = category;
+                mutableItem[@"value"] = category.length > 0 ? category : OALocalizedString(@"shared_string_waypoints");
+            }
+            else
+            {
+                [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];
+            }
             [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
         }
         else

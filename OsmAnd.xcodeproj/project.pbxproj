@@ -3620,6 +3620,8 @@
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
+		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
+		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8681,6 +8683,8 @@
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		FBE1901A4990A9A6519E879E /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ur; path = ur.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
+		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -14843,6 +14847,7 @@
 				FAB6243D2E0953580048965E /* Managers */,
 				D1C571200000000000000006 /* Panels */,
 				D1C573500000000000000003 /* PlanRoute */,
+				D1C564400000000000000005 /* PointEditing */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
@@ -15799,6 +15804,15 @@
 				FAF6C89E2AD014C800A3ED94 /* Theme.swift */,
 			);
 			path = ThemeManager;
+			sourceTree = "<group>";
+		};
+		D1C564400000000000000005 /* PointEditing */ = {
+			isa = PBXGroup;
+			children = (
+				D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */,
+				D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */,
+			);
+			path = PointEditing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -19735,6 +19749,8 @@
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
+				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,
+				D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */,
 				D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */,
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,
 				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,

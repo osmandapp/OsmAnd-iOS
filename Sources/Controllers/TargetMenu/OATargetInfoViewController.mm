@@ -39,7 +39,6 @@
 #import "OAColors.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapUtils.h"
-#import "OAWikiImageHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OASimpleTableViewCell.h"
@@ -135,6 +134,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     
     OAAmenityInfoRow *_onlinePhotoCardsRowInfo;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
+    WikiImagesLoader *_wikiImagesLoader;
 
     BOOL _otherCardsReady;
     BOOL _isFetchingNearestPoi;
@@ -2089,9 +2089,11 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     };
     
     mapillaryCardsView.isLoading = YES;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
+    if (!_wikiImagesLoader)
+        _wikiImagesLoader = [WikiImagesLoader new];
+    [_wikiImagesLoader loadWithTags:[self additionalCardParams] onComplete:^(NSArray<AbstractCard *> *cards) {
         weakSelf.wikiCardsReady = YES;
-        [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
+        [weakSelf sendNearbyOtherImagesRequest:[cards mutableCopy] onFailureNoCache:onFailureNoCache];
     } onFailureNoCache:onFailureNoCache];
 }
 

@@ -20165,9 +20165,115 @@
 			};
 			name = Release;
 		};
+		A1A1A1A10000000000000001 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COMPRESS_PNG_FILES = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				COPY_PHASE_STRIP = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LM67P5MQ23;
+				ENABLE_BITCODE = NO;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/protobuf/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
+					/usr/include/libxml2,
+					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core-legacy/native/src",
+					"${PROJECT_DIR}/../core-legacy/native/include",
+					"${PROJECT_DIR}/../core-legacy/native/src/proto",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/Release",
+					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "c99 c++17";
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGL_RENDERERS_SUPPORTED OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX";
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
+				PRODUCT_NAME = "";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				STRIP_PNG_TEXT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WARNING_CFLAGS = (
+					"-Wno-conversion",
+					"-Wno-shorten-64-to-32",
+				);
+			};
+			name = Nightly;
+		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_DISPLAY_NAME = "OsmAnd Maps";
+				APP_URL_SCHEME = osmandmaps;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -20235,6 +20341,8 @@
 		BBA3AFED197FC4BB0039D991 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_DISPLAY_NAME = "OsmAnd Maps";
+				APP_URL_SCHEME = osmandmaps;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -20296,6 +20404,103 @@
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
+		};
+		A1A1A1A10000000000000002 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconNightly;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "OsmAnd Nightly.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Release-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Release-iphonesimulator",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
+				);
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps.nightly";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				KOTLIN_FRAMEWORK_BUILD_TYPE = release;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				MARKETING_VERSION = 4.7.4;
+				OBJROOT = $SYMROOT;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-larchive_static",
+					"-licu4c_static",
+					"-lprotobuf_static",
+					"-lgdal_static",
+					"-lskia_static",
+					"-lexpat_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
+				APP_DISPLAY_NAME = "OsmAnd Nightly";
+				APP_URL_SCHEME = "osmandmaps-nightly";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Nightly;
 		};
 		D1C57121000000000000000D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -20547,6 +20752,7 @@
 			buildConfigurations = (
 				BB098D0C1793F7FD00423944 /* Debug */,
 				BB098D0D1793F7FD00423944 /* Release */,
+				A1A1A1A10000000000000001 /* Nightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -20556,6 +20762,7 @@
 			buildConfigurations = (
 				BBA3AFEC197FC4BB0039D991 /* Debug */,
 				BBA3AFED197FC4BB0039D991 /* Release */,
+				A1A1A1A10000000000000002 /* Nightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

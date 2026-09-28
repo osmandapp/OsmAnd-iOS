@@ -87,8 +87,6 @@ FOUNDATION_EXTERN NSString *const OARepositoryUpdateFinishedNotification;
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
 
-- (void)allowScreenTurnOff:(BOOL)allow;
-
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 
 @property(readonly) id<OAAppearanceProtocol> appearance;

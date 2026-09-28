@@ -70,6 +70,14 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         commonInit()
     }
     
+    private func copyFormatPref(from fromAppMode: OAApplicationMode,
+                                to appMode: OAApplicationMode,
+                                customId: String?) {
+        guard let widgetType else { return }
+        Self.registerFormatPref(widgetType: widgetType, customId: customId)
+            .set(coordinateFormatPref.get(fromAppMode), mode: appMode)
+    }
+
     private static func registerFormatPref(widgetType: WidgetType, customId: String?) -> OACommonString {
         var key = "\(formatPrefId)_\(widgetType.id)"
         if let customId, !customId.isEmpty {
@@ -137,9 +145,14 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     override func copySettings(_ appMode: OAApplicationMode, customId: String?) {
-        guard let widgetType else { return }
-        Self.registerFormatPref(widgetType: widgetType, customId: customId)
-            .set(coordinateFormatPref.get(appMode), mode: appMode)
+        copyFormatPref(from: appMode, to: appMode, customId: customId)
+    }
+
+    override func copySettings(from fromAppMode: OAApplicationMode,
+                               appMode: OAApplicationMode,
+                               customId: String?) {
+        super.copySettings(from: fromAppMode, appMode: appMode, customId: customId)
+        copyFormatPref(from: fromAppMode, to: appMode, customId: customId)
     }
 
     override func updateColors(_ textState: OATextState) {
@@ -358,9 +371,9 @@ extension CoordinatesBaseWidget: CoordinateFormatSelectorDelegate {
     }
 
     func coordinateFormatSelectorDidRequestOtherFormat(_ selector: CoordinateFormatSelectorViewController) {
-        guard let configViewController else { return }
+        guard let configViewController,
+              let appMode = configViewController.selectedAppMode else { return }
 
-        let appMode = configViewController.selectedAppMode
         let excluded = OAAppSettings.sharedManager().coordinateFormatSettingsStorage.preferredIds(appMode)
 
         CoordinateFormatSelectorRouter.presentAdd(

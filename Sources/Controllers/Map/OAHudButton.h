@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setUseDefaultAppearance:(BOOL)useDefaultAppearance;
 - (void)savePosition;
 - (void)setCustomAppearanceParams:(nullable ButtonAppearanceParams *)appearanceParams;
+- (BOOL)needsAppearanceUpdate;
 - (nullable OASButtonPositionSize *)getDefaultPositionSize;
 
 @end

@@ -23,8 +23,10 @@ static const CGFloat minWidgetHeight = 34.0;
 static const CGFloat unitOrEmptyLabelSmallModeWidth = 130;
 static const CGFloat simpleLayoutNameUnitHeight = 13;
 static const CGFloat simpleLayoutHorizontalPadding = 16;
+static const CGFloat simpleLayoutValueUnitSpacing = 3;
 static const UILayoutPriority preferredContentWidthPriority = UILayoutPriorityRequired - 1;
 static const UILayoutPriority preferredSpacingPriority = UILayoutPriorityRequired - 2;
+static const UILayoutPriority contentSpacingPriority = UILayoutPriorityDefaultHigh - 1;
 
 static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
 NSString * const kSizeStylePref = @"simple_widget_size";
@@ -325,12 +327,12 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         [self.iconWidgetView.widthAnchor constraintGreaterThanOrEqualToConstant:0]
     ]];
 
-    // UIStackView.spacing is required. Spacer views let these gaps shrink before the icon.
+    // UIStackView.spacing is required. Spacer views let these gaps shrink before the text or icon.
     _iconValueSpacingView = [UIView new];
     _iconValueSpacingView.translatesAutoresizingMaskIntoConstraints = NO;
     [_contentStackViewSimpleWidget addArrangedSubview:_iconValueSpacingView];
     _iconValueSpacingConstraint = [_iconValueSpacingView.widthAnchor constraintEqualToConstant:0];
-    _iconValueSpacingConstraint.priority = preferredSpacingPriority;
+    _iconValueSpacingConstraint.priority = contentSpacingPriority;
     [NSLayoutConstraint activateConstraints:@[
         _iconValueSpacingConstraint,
         [_iconValueSpacingView.widthAnchor constraintGreaterThanOrEqualToConstant:0]
@@ -398,8 +400,8 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:26]
     ]];
 
-    NSLayoutConstraint *preferredUnitSpacingConstraint = [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor constant:3];
-    preferredUnitSpacingConstraint.priority = preferredSpacingPriority;
+    NSLayoutConstraint *preferredUnitSpacingConstraint = [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor constant:simpleLayoutValueUnitSpacing];
+    preferredUnitSpacingConstraint.priority = contentSpacingPriority;
     
     [NSLayoutConstraint activateConstraints:@[
         preferredUnitSpacingConstraint,
@@ -421,7 +423,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     _valuePlaceholderSpacingView.translatesAutoresizingMaskIntoConstraints = NO;
     [_contentStackViewSimpleWidget addArrangedSubview:_valuePlaceholderSpacingView];
     _valuePlaceholderSpacingConstraint = [_valuePlaceholderSpacingView.widthAnchor constraintEqualToConstant:0];
-    _valuePlaceholderSpacingConstraint.priority = preferredSpacingPriority;
+    _valuePlaceholderSpacingConstraint.priority = contentSpacingPriority;
     [NSLayoutConstraint activateConstraints:@[
         _valuePlaceholderSpacingConstraint,
         [_valuePlaceholderSpacingView.widthAnchor constraintGreaterThanOrEqualToConstant:0]
@@ -655,11 +657,35 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     [self updatesSeparatorsColor:[SeparatorAppearance color]];
 }
 
+- (BOOL)usesFullRowContentLayout
+{
+    if (!self.isFullRow || self.widgetSizeStyle != EOAWidgetSizeStyleSmall)
+        return self.isFullRow;
+
+    // Small full rows reserve matching columns on either side of the value, even without an icon.
+    // Use a stable text width so changing numbers cannot switch the layout at the same widget width.
+    CGFloat minimumValueWidth = ceil([[UIFontMetrics defaultMetrics] scaledValueForValue:minTextWidth]);
+    CGFloat minimumFullRowWidth = 2 * (simpleLayoutHorizontalPadding + unitOrEmptyLabelSmallModeWidth)
+        + [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle]
+        + simpleLayoutValueUnitSpacing + minimumValueWidth;
+    return CGRectGetWidth(self.bounds) >= minimumFullRowWidth;
+}
+
+- (void)layoutSubviews
+{
+    // The final width can arrive after configureSimpleLayout, including on rotation/window resizing.
+    if (self.isSimpleLayout && [self isEnabledTextInfoComponents]
+        && self.widgetSizeStyle == EOAWidgetSizeStyleSmall
+        && _unitOrEmptyLabelWidthSmallModeConstraint
+        && _unitOrEmptyLabelWidthSmallModeConstraint.active != [self usesFullRowContentLayout])
+    {
+        [self configureSimpleLayout];
+    }
+    [super layoutSubviews];
+}
+
 - (void)configureSimpleLayout
 {
-    BOOL isSmallCompactLayout = self.widgetSizeStyle == EOAWidgetSizeStyleSmall && [OAAppSettings sharedManager].isCompactPanelsLayout;
-    // Compact rows do not have room for the wide layout's balancing columns.
-    BOOL useFullRowContentLayout = self.isFullRow && !isSmallCompactLayout;
     CGFloat labelFontSize = [OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle];
     CGFloat valueFontSize = [OAWidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
     CGFloat unitsFontSize = [OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle];
@@ -670,10 +696,15 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
     self.valueLabel.font = [UIFont scaledSystemFontOfSize:valueFontSize weight:UIFontWeightSemibold];
     self.valueLabel.textColor = _primaryColor;
-    // In Small Compact widgets, preserve the value before titles and horizontal padding.
-    [self.valueLabel setContentCompressionResistancePriority:isSmallCompactLayout ? UILayoutPriorityDefaultHigh + 1 : UILayoutPriorityDefaultHigh
+    self.valueLabel.text = _text;
+    [self applyOutlineIfNeededToLabel:self.valueLabel];
+
+    BOOL useFullRowContentLayout = [self usesFullRowContentLayout];
+    BOOL isSmallInlineLayout = self.widgetSizeStyle == EOAWidgetSizeStyleSmall && !useFullRowContentLayout;
+    // Without the balancing columns, preserve the value before titles and horizontal padding.
+    [self.valueLabel setContentCompressionResistancePriority:isSmallInlineLayout ? UILayoutPriorityDefaultHigh + 1 : UILayoutPriorityDefaultHigh
                                                     forAxis:UILayoutConstraintAxisHorizontal];
-    _verticalStackViewSimpleWidgetLeadingConstraint.priority = isSmallCompactLayout ? UILayoutPriorityDefaultHigh - 1 : preferredSpacingPriority;
+    _verticalStackViewSimpleWidgetLeadingConstraint.priority = isSmallInlineLayout ? contentSpacingPriority : preferredSpacingPriority;
 
     self.unitLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
     self.unitLabel.textColor = _unitsColor;
@@ -684,9 +715,6 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
-    self.valueLabel.text = _text;
-    [self applyOutlineIfNeededToLabel:self.valueLabel];
- 
     self.nameLabel.text = [_contentTitle upperCase];
     [self applyOutlineIfNeededToLabel:self.nameLabel];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;

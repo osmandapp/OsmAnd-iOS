@@ -14,6 +14,9 @@
 
 @protocol OAAppearanceProtocol;
 
+// Posted on the main thread when a repository update ends, whether it succeeded or not
+FOUNDATION_EXTERN NSString *const OARepositoryUpdateFinishedNotification;
+
 @protocol OsmAndAppProtocol <NSObject>
 @required
 

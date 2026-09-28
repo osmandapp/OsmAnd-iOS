@@ -71,13 +71,10 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
 
-        backgroundColor = isNightMode() ? .widgetBg.dark : .widgetBg.light
-
-        divider.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
-
-        let textColor: UIColor = isNightMode() ? .white : .black
-        firstCoordinate.textColor = textColor
-        secondCoordinate.textColor = textColor
+        backgroundColor = textState.leftColor
+        divider.backgroundColor = textState.dividerColor
+        firstCoordinate.textColor = textState.textColor
+        secondCoordinate.textColor = textState.textColor
 
         let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .semibold
         firstCoordinate.font = UIFont.scaledSystemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)

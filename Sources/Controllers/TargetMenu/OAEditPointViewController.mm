@@ -33,6 +33,7 @@
 #import "OAGPXDatabase.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAAppSettings.h"
+#import "OAAmenitySearcher.h"
 #import "OAPOI.h"
 #import "OrderedDictionary.h"
 #import "OAGPXAppearanceCollection.h"
@@ -468,7 +469,7 @@
 {
     NSString *preselectedIconName = [_pointHandler getIcon];
     if (!preselectedIconName)
-        preselectedIconName = [self getDefaultIconName];
+        preselectedIconName = [self defaultIconName];
     _selectedIconName = preselectedIconName;
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
@@ -1301,13 +1302,14 @@
 {
     _wasChanged = YES;
     NSString *editedGroupName = [name trim];
+    NSString *resolvedIconName = iconName;
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        OAFavoriteGroup *existingGroup = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
-        if (existingGroup)
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
+        if (group)
         {
-            editedGroupName = existingGroup.name;
+            editedGroupName = group.name;
         }
         else
         {
@@ -1315,7 +1317,9 @@
                                           color:color
                                        iconName:iconName
                              backgroundIconName:backgroundIconName];
+            group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
+        resolvedIconName = iconName.length > 0 ? iconName : [self iconNameForGroup:group];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1326,9 +1330,9 @@
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName];
     
-    _selectedIconName = iconName;
-    [_poiIconCollectionHandler setIconName:iconName];
-    [self onPoiSelected:iconName];
+    _selectedIconName = resolvedIconName;
+    [_poiIconCollectionHandler setIconName:resolvedIconName];
+    [self onPoiSelected:resolvedIconName];
 
     self.groupTitle = editedGroupName;
     _needToScrollToSelectedColor = YES;
@@ -1531,7 +1535,7 @@
     return (!_pointHandler || !_isNewItemAdding) ? nil : [_pointHandler getIcon];
 }
 
-- (NSString *)getDefaultIconName
+- (NSString *)defaultIconName
 {
     NSString *preselectedIconName = [self getPreselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
@@ -1539,6 +1543,27 @@
     else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
         return _poiIconCollectionHandler.lastUsedIcons[0];
     return DEFAULT_ICON_NAME_KEY;
+}
+
+- (NSString *)iconNameForGroup:(OAFavoriteGroup *)group
+{
+    if (group.iconName.length > 0)
+        return group.iconName;
+
+    OAFavoriteItem *favorite = [(OAFavoriteEditingHandler *) _pointHandler getFavoriteItem];
+    NSString *originName = [favorite getAmenityOriginName];
+    if (originName.length > 0)
+    {
+        OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
+                                                    lat:[favorite getLatitude]
+                                                    lon:[favorite getLongitude]];
+        NSString *iconName = [OABasePointEditingHandler getPoiIconName:poi];
+        if (iconName.length > 0)
+            return iconName;
+    }
+
+    NSString *iconName = [favorite getIcon];
+    return iconName.length > 0 ? iconName : [self defaultIconName];
 }
 
 - (void)deleteItemWithAlertView
@@ -1568,7 +1593,8 @@
         {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
             _isNewColorSelected = NO;
-            _selectedIconName = group.iconName;
+            _selectedIconName = [self iconNameForGroup:group];
+            [_poiIconCollectionHandler setIconName:_selectedIconName];
             _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
         }
     }

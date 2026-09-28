@@ -1795,7 +1795,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
         return kLimitedFrameRate;
 
     const NSInteger divisor = (NSInteger) ceil(nativeRate / kLimitedFrameRate);
-    return nativeRate / (float) divisor;
+    return roundf(nativeRate / (float) divisor);
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

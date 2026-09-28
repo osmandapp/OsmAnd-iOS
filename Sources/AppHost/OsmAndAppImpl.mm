@@ -1053,8 +1053,9 @@
     return builder;
 }
 
-// The OsmAndShared twin of getRoutingConfigForMode:, reading the same files. Only routing behind the
-// OsmAndShared flag asks for it, so a file is parsed when it is first needed rather than at startup.
+// The OsmAndShared twin of getRoutingConfigForMode:, choosing the same file: a custom one only once the
+// C++ loader has accepted it, as the OsmAndShared parser throws on a file it cannot read. A file is
+// parsed when it is first needed rather than at startup.
 - (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode
 {
     NSString *fileName = nil;
@@ -1065,7 +1066,8 @@
         if (index != -1)
         {
             NSString *key = [routingProfileKey substringToIndex:index + ROUTING_FILE_EXT.length];
-            if ([NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
+            if (_customRoutingConfigs.find(key.UTF8String) != _customRoutingConfigs.end()
+                && [NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
                 fileName = key;
         }
     }

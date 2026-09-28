@@ -7,13 +7,17 @@ on:
         description: 'Nightly TestFlight build number (must be unique for the version)'
         required: true
       releaseversion:
-        description: 'App version'
+        description: 'App version (match the selected iOS branch)'
         required: true
-        default: '5.4.0'
+        default: '5.5.0'
       dependencies_branch:
         description: 'Branch for Android, build, core, core-legacy, and resources'
         required: true
-        default: 'r5.4'
+        type: choice
+        options:
+          - master
+          - r5.4
+        default: master
 
 jobs:
   build:
@@ -80,7 +84,9 @@ jobs:
         run: |
           set -euo pipefail
           profile_found=false
-          for profile in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+          for profile in \
+            "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/"*.mobileprovision \
+            "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
             [[ -f "$profile" ]] || continue
             security cms -D -i "$profile" > "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || continue
             name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || true)
@@ -90,7 +96,11 @@ jobs:
               break
             fi
           done
-          [[ "$profile_found" == true ]] || { echo 'Install OsmAnd Nightly Profile for net.osmand.maps.nightly on this runner' >&2; exit 1; }
+          if [[ "$profile_found" != true ]]; then
+            echo "Install OsmAnd Nightly Profile for net.osmand.maps.nightly for runner user $(whoami)" >&2
+            echo 'Checked Xcode UserData and MobileDevice provisioning profile directories' >&2
+            exit 1
+          fi
 
       - name: Build QtCore and prepare build
         env:

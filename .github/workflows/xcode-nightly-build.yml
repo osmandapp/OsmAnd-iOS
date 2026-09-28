@@ -16,7 +16,6 @@ on:
         type: choice
         options:
           - master
-          - r5.4
           - Same as selected iOS branch
         default: master
 

@@ -3902,7 +3902,7 @@
 "topography_maps" = "Mappe topografiche";
 "wikipedia_and_travel_maps" = "Wikipedia e mappe di viaggio";
 "standard_maps" = "Mappe standard";
-"open_till_short" = "Fino";
+"open_till_short" = "Fino a";
 "open_from_short" = "Da";
 "external_sensor_widgets" = "Sensori esterni";
 "gradient_no_data_point_summary" = "Colore utilizzato quando le informazioni sono mancanti o non definite.";
@@ -4372,3 +4372,7 @@
 "share_link" = "Condividi il link";
 "share_as_file" = "Condividi come file";
 "carplay_map_mode_vehicle_appearance" = "Apetto del veicolo";
+"opening_hours_public_holiday" = "Giorni festivi";
+"opening_hours_school_holiday" = "Vacanze scolastiche";
+"opening_hours_easter" = "Pasqua";
+"ais_connection_failed" = "Connessione fallita";

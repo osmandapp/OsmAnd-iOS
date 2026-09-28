@@ -1625,6 +1625,8 @@ static const NSInteger kColorsSection = 1;
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
+    // Nothing changed: keep the file as it is instead of writing the default appearance into it
+    BOOL hasChanges = [self hasChanges];
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
         if ([weakSelf isSelectedTypeSolid])
@@ -1650,7 +1652,7 @@ static const NSInteger kColorsSection = 1;
             [weakSelf.settings.currentTrackColor set:(int)[weakSelf getGPXColor]];
            
             
-        } else {
+        } else if (hasChanges) {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
             OASGpxDataItem *dataItem = weakSelf.gpx.dataItem;
             OASKFile *file = dataItem.file ?: (weakSelf.gpx.getFile ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path]);

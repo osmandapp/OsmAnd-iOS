@@ -17,6 +17,7 @@
 #import "OAWeatherForecastViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OASimpleTableViewCell.h"
+#import "OAResourcesInstaller.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -383,7 +384,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
             BOOL isFree = repoRes && (repoRes->free || repoRes->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || repoRes->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion);
             BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea] && !isFree);
             
-            if (item.downloadTask != nil || needPurchase)
+            if (item.downloadTask != nil || needPurchase || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
                 continue;
 
             [resourcesToUpdate addObject:item];

@@ -11,6 +11,8 @@
 #import "OsmAndApp.h"
 #import "OALocationPoint.h"
 #import "OAFavoriteItem.h"
+#import "OAAmenitySearcher.h"
+#import "OABasePointEditingHandler.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -770,15 +772,77 @@ static NSOperationQueue *_favQueue;
        updatePoints:(BOOL)updatePoints
     updateGroupIcon:(BOOL)updateGroupIcon
     saveImmediately:(BOOL)saveImmediately
+         completion:(void (^)(void))completion
 {
-    if (updatePoints)
-        for (OAFavoriteItem *point in group.points)
-            [point setIcon:iconName];
+    NSArray<OAFavoriteItem *> *points = [group.points copy];
+    if (!updatePoints || iconName.length > 0 || points.count == 0)
+    {
+        if (updatePoints)
+        {
+            for (OAFavoriteItem *point in points)
+                [point setIcon:iconName];
+        }
+        [self finishUpdateGroup:group
+                       iconName:iconName
+                updateGroupIcon:updateGroupIcon
+                saveImmediately:saveImmediately
+                     completion:completion];
+        return;
+    }
 
+    // Capture lookup inputs before leaving the main thread; do not read mutable favorites in the worker.
+    NSMutableArray<NSString *> *originNames = [NSMutableArray arrayWithCapacity:points.count];
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.count];
+    for (OAFavoriteItem *point in points)
+    {
+        [originNames addObject:[[point getAmenityOriginName] copy] ?: @""];
+        [locations addObject:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]];
+    }
+
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSMutableArray<NSString *> *iconNames = [NSMutableArray arrayWithCapacity:originNames.count];
+        for (NSUInteger i = 0; i < originNames.count; i++)
+        {
+            @autoreleasepool
+            {
+                NSString *pointIconName = nil;
+                NSString *originName = originNames[i];
+                if (originName.length > 0)
+                {
+                    CLLocationCoordinate2D coordinate = locations[i].coordinate;
+                    OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
+                                                                lat:coordinate.latitude
+                                                                lon:coordinate.longitude];
+                    pointIconName = [OABasePointEditingHandler getPoiIconName:poi];
+                }
+                [iconNames addObject:pointIconName ?: @""];
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (NSUInteger i = 0; i < points.count; i++)
+                [points[i] setIcon:iconNames[i].length > 0 ? iconNames[i] : nil];
+            [self finishUpdateGroup:group
+                           iconName:iconName
+                    updateGroupIcon:updateGroupIcon
+                    saveImmediately:saveImmediately
+                         completion:completion];
+        });
+    });
+}
+
++ (void)finishUpdateGroup:(OAFavoriteGroup *)group
+                iconName:(NSString *)iconName
+         updateGroupIcon:(BOOL)updateGroupIcon
+         saveImmediately:(BOOL)saveImmediately
+              completion:(void (^)(void))completion
+{
     if (updateGroupIcon)
         group.iconName = iconName;
     if (saveImmediately)
         [self saveCurrentPointsIntoFile];
+    if (completion)
+        completion();
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group
@@ -1561,10 +1625,6 @@ static NSOperationQueue *_favQueue;
     UIColor *pointColor = [point getInternalColor];
     if ((_color == nil || [_color toRGBNumber] == 0) && pointColor)
         _color = pointColor;
-
-    NSString *pointIcon = [point getInternalIcon];
-    if (_iconName.length == 0 && pointIcon.length > 0)
-        _iconName = pointIcon;
 
     NSString *pointBackground = [point getInternalBackgroundIcon];
     if (_backgroundType.length == 0 && pointBackground.length > 0)

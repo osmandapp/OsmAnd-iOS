@@ -59,6 +59,7 @@
 static const float kLimitedFrameRate = 20.0f;
 static const NSTimeInterval kMinNativeFrameInterval = 1.0 / 240.0;
 static const NSTimeInterval kMaxNativeFrameInterval = 1.0 / 10.0;
+static const int kNativeFrameIntervalSamples = 10;
 
 #define _(name) OAMapRendererView__##name
 #define commonInit _(commonInit)
@@ -105,6 +106,7 @@ static const NSTimeInterval kMaxNativeFrameInterval = 1.0 / 10.0;
     int _frameId;
     NSTimeInterval _lastUpdateTime;
     NSTimeInterval _nativeFrameInterval;
+    int _nativeFrameIntervalSamplesLeft;
     CGPoint _lastImmediateTouchPoint;
 }
 
@@ -166,6 +168,7 @@ static const NSTimeInterval kMaxNativeFrameInterval = 1.0 / 10.0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
     _nativeFrameInterval = 0;
+    _nativeFrameIntervalSamplesLeft = 0;
     _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
@@ -1448,7 +1451,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
         return;
     }
 
-    if (_nativeFrameInterval <= 0)
+    if (_nativeFrameIntervalSamplesLeft > 0)
         [self captureNativeFrameInterval:displayLink];
 
     NSTimeInterval currentTime = CACurrentMediaTime();
@@ -1647,6 +1650,8 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSRunLoopCommonModes];
 
+    _nativeFrameInterval = 0;
+    _nativeFrameIntervalSamplesLeft = kNativeFrameIntervalSamples;
     [self updateFrameRefreshRate];
 
     // Resume GPU worker
@@ -1677,7 +1682,6 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     glFinish();
 
     _displayLink = nil;
-    _nativeFrameInterval = 0;
 
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
@@ -1757,16 +1761,20 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 - (void)captureNativeFrameInterval:(CADisplayLink *)displayLink
 {
     const NSTimeInterval interval = displayLink.targetTimestamp - displayLink.timestamp;
-    if (interval < kMinNativeFrameInterval || interval > kMaxNativeFrameInterval)
-        return;
+    if (interval >= kMinNativeFrameInterval && interval <= kMaxNativeFrameInterval
+        && (_nativeFrameInterval <= 0 || interval < _nativeFrameInterval))
+    {
+        _nativeFrameInterval = interval;
+    }
 
-    _nativeFrameInterval = interval;
-    [self updateFrameRefreshRate];
+    _nativeFrameIntervalSamplesLeft--;
+    if (_nativeFrameIntervalSamplesLeft <= 0)
+        [self updateFrameRefreshRate];
 }
 
 - (void)updateFrameRefreshRate
 {
-    if (_limitFrameRate && _nativeFrameInterval > 0)
+    if (_limitFrameRate && _nativeFrameIntervalSamplesLeft <= 0)
     {
         const float limitedRate = [self limitedFrameRate];
         _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(limitedRate, limitedRate, limitedRate);

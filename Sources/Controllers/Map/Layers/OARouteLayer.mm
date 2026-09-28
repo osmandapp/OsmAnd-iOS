@@ -427,8 +427,7 @@ struct DrawPathData
             || _routeLineColor == kDefaultRouteLineDayColor
             || _routeLineColor == kDefaultRouteLineNightColor;
 
-        iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                  fileName:@"map_direction_arrow"];
+        iconBitmap = [self directionArrowBitmapForColor:hasStyleColor ? UIColor.whiteColor : color];
         specialIconBitmap = [self specialBitmapWithColor:lineColor];
     }
 

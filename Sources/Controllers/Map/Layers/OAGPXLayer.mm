@@ -856,7 +856,7 @@ colorizationScheme:(int)colorizationScheme
         {
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-            auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+            auto iconBitmap = [self directionArrowBitmapForColor:color];
             if (iconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
@@ -950,7 +950,7 @@ colorizationScheme:(int)colorizationScheme
             {
                 // Use black arrows for gradient colorization
                 UIColor *color = gpx.getColoringType.length != 0 && ![gpx.getColoringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB([gpx getColorDefColor:nil].intValue);
-                auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+                auto iconBitmap = [self directionArrowBitmapForColor:color];
                 if (iconBitmap)
                 {
                     builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))

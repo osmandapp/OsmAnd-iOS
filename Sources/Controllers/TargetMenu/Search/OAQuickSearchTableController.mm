@@ -690,7 +690,7 @@
                     if (cell)
                     {
                         [cell.titleView setText:[item getName]];
-                        cell.titleIcon.image = [UIImage imageNamed:ACImageNameIcActionWorldGlobe];
+                        cell.titleIcon.image = [UIImage templateImageNamed:ACImageNameIcActionWorldGlobe];
                         [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                         cell.openingHoursView.hidden = YES;
                         cell.timeIcon.hidden = YES;
@@ -714,7 +714,7 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage imageNamed:ACImageNameIcActionWorldGlobe];
+                    cell.titleIcon.image = [UIImage templateImageNamed:ACImageNameIcActionWorldGlobe];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;

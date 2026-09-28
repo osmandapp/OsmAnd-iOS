@@ -245,7 +245,7 @@
     {
         OAOpenStreetMapPoint *openstreetmapPoint = object;
         item[@"title"] = [OAOsmEditingPlugin getTitle:openstreetmapPoint];
-        item[@"icon"] = [UIImage imageNamed:ACImageNameIcActionCreatePoi];
+        item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcActionCreatePoi];
     }
     else if ([object isKindOfClass:OAFavoriteGroup.class])
     {

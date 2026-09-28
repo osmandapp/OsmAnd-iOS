@@ -187,7 +187,7 @@
     return [self drawMarker:position collection:collection bitmap:[self pointMarkerIcon]];
 }
 
-- (sk_sp<SkImage>) pointMarkerIcon
+- (sk_sp<SkImage>)pointMarkerIcon
 {
     @synchronized (self)
     {

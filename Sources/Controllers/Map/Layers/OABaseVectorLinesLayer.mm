@@ -51,6 +51,7 @@
     sk_sp<SkImage> _xAxisLocationIcon;
     sk_sp<SkImage> _directionArrowIcon;
     sk_sp<SkImage> _directionArrowSmallIcon;
+    sk_sp<SkImage> _directionArrowDarkIcon;
 }
 
 - (void)initLayer
@@ -136,15 +137,23 @@
         [self.mapView addKeyedSymbolsProvider:_vectorLinesArrowsProvider];
 }
 
-- (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName
+- (sk_sp<SkImage>)directionArrowBitmapForColor:(UIColor *)color
 {
-    UIImage *image = [UIImage imageNamed:fileName];
-    if ([OAUtilities isColorBright:color])
-        image = [OAUtilities tintImageWithColor:image color:UIColor.blackColor];
-    return [OANativeUtilities skImageFromCGImage:image.CGImage];
+    if (![OAUtilities isColorBright:color])
+        return [self directionArrowIcon];
+
+    @synchronized (self)
+    {
+        if (!_directionArrowDarkIcon)
+        {
+            UIImage *image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameMapDirectionArrow] color:UIColor.blackColor];
+            _directionArrowDarkIcon = [OANativeUtilities skImageFromCGImage:image.CGImage];
+        }
+        return _directionArrowDarkIcon;
+    }
 }
 
-- (sk_sp<SkImage>) directionArrowIcon
+- (sk_sp<SkImage>)directionArrowIcon
 {
     @synchronized (self)
     {
@@ -154,7 +163,7 @@
     }
 }
 
-- (sk_sp<SkImage>) directionArrowSmallIcon
+- (sk_sp<SkImage>)directionArrowSmallIcon
 {
     @synchronized (self)
     {

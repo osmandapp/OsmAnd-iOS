@@ -170,7 +170,7 @@
                     [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"context_menu_item_create_poi") : _targetPoint.type == OATargetOsmEdit ?
                                       OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",
-                                      @"img" : createNewPoi ? @"ic_action_create_poi" : ACImageNameIcCustomEdit,
+                                      @"img" : createNewPoi ? ACImageNameIcActionCreatePoi : ACImageNameIcCustomEdit,
                                       @"type" : [OASimpleTableViewCell getCellIdentifier] }];
                     
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;

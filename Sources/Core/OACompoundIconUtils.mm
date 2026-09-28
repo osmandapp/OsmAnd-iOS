@@ -77,7 +77,7 @@
 
     // shadow icon
     auto shadowIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom%@", shapeName, sizeName]
-                      defaultResourceName:@"ic_bg_point_circle_bottom"
+                      defaultResourceName:[NSString stringWithFormat:@"ic_bg_point_circle_bottom%@", sizeName]
                                     scale:scale
                                     color:nil];
     if (!shadowIcon)
@@ -85,7 +85,7 @@
 
     // color filled background icon
     auto backgroundIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName]
-                          defaultResourceName:@"ic_bg_point_circle_center"
+                          defaultResourceName:[NSString stringWithFormat:@"ic_bg_point_circle_center%@", sizeName]
                                         scale:scale
                                         color:color];
     if (!backgroundIcon)
@@ -93,7 +93,7 @@
 
     // highlight icon
     auto highlightIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top%@", shapeName, sizeName]
-                         defaultResourceName:@"ic_bg_point_circle_top"
+                         defaultResourceName:[NSString stringWithFormat:@"ic_bg_point_circle_top%@", sizeName]
                                        scale:scale
                                        color:nil];
     if (!highlightIcon)

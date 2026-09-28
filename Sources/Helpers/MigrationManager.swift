@@ -25,6 +25,7 @@ final class MigrationManager: NSObject {
         case migrateAstronomyPreferences
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
+        case migrateTransparentWidgetsToPanelAppearance
         case migrateTracksSortModeKeysAndFormat
     }
     
@@ -120,6 +121,10 @@ final class MigrationManager: NSObject {
                 migrateTransparentWidgets()
                 defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgetsToPanelAppearance.rawValue) {
+                migrateTransparentWidgetsToPanelAppearance()
+                defaults.set(true, forKey: MigrationKey.migrateTransparentWidgetsToPanelAppearance.rawValue)
+            }
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
@@ -129,14 +134,39 @@ final class MigrationManager: NSObject {
 
     private func migrateTransparentWidgets() {
         let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
-        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
+        let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+        for appMode in OAApplicationMode.allPossibleValues() {
+            guard legacyPreference.isSet(for: appMode) else { continue }
             let value = legacyPreference.get(appMode)
-            var preferences = [settings.transparentWidgets(nil)]
-            ScreenLayoutMode.allCases.forEach {
-                preferences.append(settings.transparentWidgets(NSNumber(value: $0.rawValue)))
+            for layoutMode in layoutModes {
+                let preference = settings.transparentWidgets(
+                    layoutMode.map { NSNumber(value: $0.rawValue) }
+                )
+                if !preference.isSet(for: appMode) {
+                    preference.set(value, mode: appMode)
+                }
             }
-            for preference in preferences where !preference.isSet(for: appMode) {
-                preference.set(value, mode: appMode)
+        }
+    }
+
+    private func migrateTransparentWidgetsToPanelAppearance() {
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+            for appMode in OAApplicationMode.allPossibleValues() {
+                for layoutMode in layoutModes {
+                    let preference = settings.transparentWidgets(
+                        layoutMode.map { NSNumber(value: $0.rawValue) }
+                    )
+                    guard preference.isSet(for: appMode) else { continue }
+                    if preference.get(appMode) {
+                        let appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                                                layoutMode: layoutMode)
+                        for panel in WidgetsPanel.values {
+                            appearanceSettings.setBackgroundMode(.transparent, for: panel)
+                        }
+                    }
+                    preference.resetMode(toDefault: appMode)
+                }
             }
         }
     }

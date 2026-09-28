@@ -33,6 +33,14 @@
 		05DCE549304D88EC005DA649 /* libGLESv2.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05DCE544304D48BC005DA649 /* libGLESv2.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		062B2F5F660D48FAB8CF2D75 /* HashHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4DA44079A941CF8E86B30B /* HashHelper.swift */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
+		0A0EAC0126E619210044E82C /* ic_custom_magnifier@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFF26E619210044E82C /* ic_custom_magnifier@2x.png */; };
+		0A0EAC0226E619210044E82C /* ic_custom_magnifier@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0026E619210044E82C /* ic_custom_magnifier@3x.png */; };
+		0A0EAC0526E619420044E82C /* ic_custom_point_labels@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0326E619420044E82C /* ic_custom_point_labels@2x.png */; };
+		0A0EAC0626E619420044E82C /* ic_custom_point_labels@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0426E619420044E82C /* ic_custom_point_labels@3x.png */; };
+		0A0EAC0926E619600044E82C /* ic_custom_road_style@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0726E6195F0044E82C /* ic_custom_road_style@2x.png */; };
+		0A0EAC0A26E619600044E82C /* ic_custom_road_style@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0826E6195F0044E82C /* ic_custom_road_style@3x.png */; };
+		0A0EAC0D26E6197C0044E82C /* ic_custom_text_size@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0B26E6197C0044E82C /* ic_custom_text_size@2x.png */; };
+		0A0EAC0E26E6197C0044E82C /* ic_custom_text_size@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EAC0C26E6197C0044E82C /* ic_custom_text_size@3x.png */; };
 		0A2571A226F253620079774F /* OATrackMenuHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */; };
 		0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */; };
 		0A832603270BE0E3006B8946 /* OATitleSwitchRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */; };
@@ -489,6 +497,14 @@
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
 		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
 		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
+		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
+		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
+		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
+		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
+		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
+		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
+		78AC698C23AB7BE1006C3DDE /* left_menu_configure_screen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698823AB7BDF006C3DDE /* left_menu_configure_screen@3x.png */; };
+		78AC698E23AB7BE1006C3DDE /* left_menu_configure_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */; };
 		818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 818F239A2C04EBF000A488C9 /* marine.render.xml */; };
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
 		81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */ = {isa = PBXBuildFile; fileRef = 81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */; };
@@ -2263,6 +2279,14 @@
 		05DCE544304D48BC005DA649 /* libGLESv2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libGLESv2.xcframework; sourceTree = "<group>"; };
 		06D17C78B408CD77F33D4466 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
+		0A0EABFF26E619210044E82C /* ic_custom_magnifier@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_magnifier@2x.png"; path = "Resources/Icons/ic_custom_magnifier@2x.png"; sourceTree = "<group>"; };
+		0A0EAC0026E619210044E82C /* ic_custom_magnifier@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_magnifier@3x.png"; path = "Resources/Icons/ic_custom_magnifier@3x.png"; sourceTree = "<group>"; };
+		0A0EAC0326E619420044E82C /* ic_custom_point_labels@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_point_labels@2x.png"; path = "Resources/Icons/ic_custom_point_labels@2x.png"; sourceTree = "<group>"; };
+		0A0EAC0426E619420044E82C /* ic_custom_point_labels@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_point_labels@3x.png"; path = "Resources/Icons/ic_custom_point_labels@3x.png"; sourceTree = "<group>"; };
+		0A0EAC0726E6195F0044E82C /* ic_custom_road_style@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_style@2x.png"; path = "Resources/Icons/ic_custom_road_style@2x.png"; sourceTree = "<group>"; };
+		0A0EAC0826E6195F0044E82C /* ic_custom_road_style@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_style@3x.png"; path = "Resources/Icons/ic_custom_road_style@3x.png"; sourceTree = "<group>"; };
+		0A0EAC0B26E6197C0044E82C /* ic_custom_text_size@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_text_size@2x.png"; path = "Resources/Icons/ic_custom_text_size@2x.png"; sourceTree = "<group>"; };
+		0A0EAC0C26E6197C0044E82C /* ic_custom_text_size@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_text_size@3x.png"; path = "Resources/Icons/ic_custom_text_size@3x.png"; sourceTree = "<group>"; };
 		0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuHeaderView.xib; sourceTree = "<group>"; };
 		0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFoldersCollectionView.xib; sourceTree = "<group>"; };
 		0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATitleSwitchRoundCell.xib; sourceTree = "<group>"; };
@@ -2911,6 +2935,9 @@
 		4E099E8A5743C59D1488372B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ia; path = ia.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavoriteGroupViewController.swift; sourceTree = "<group>"; };
 		51DEDD0911429C69632A4E57 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsAppearanceViewController.swift; sourceTree = "<group>"; };
+		54A955032F4E950100549501 /* WidgetPanelAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelAppearance.swift; sourceTree = "<group>"; };
+		54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelColorViewController.swift; sourceTree = "<group>"; };
 		581529BA816B777BDDE596DF /* sat */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sat; path = sat.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		58806C4CDEB8F77A22ADEC62 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fi; path = fi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		5A7EE1C71CD0E3F432652780 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = gl; path = gl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -9409,6 +9436,7 @@
 				DA842ECC2A0B998E0030866E /* WidgetInfoCreator.swift */,
 				DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */,
 				DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */,
+				54A955032F4E950100549501 /* WidgetPanelAppearance.swift */,
 				DA2F790B2A273D39002B9B83 /* WidgetsInitializer.swift */,
 				FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */,
 				DA2EC7B429FBCD1700ECEB37 /* WidgetsPanel.swift */,
@@ -10370,6 +10398,8 @@
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
 				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
+				54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */,
+				54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";
@@ -12278,6 +12308,9 @@
 				FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */,
 				277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */,
 				DAABE4EB2A16483300569F71 /* ConfigureScreenViewController.swift in Sources */,
+				54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */,
+				54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */,
+				54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				27D33B432E743A1A00AD4F70 /* ShowHideDrawerAction.swift in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,

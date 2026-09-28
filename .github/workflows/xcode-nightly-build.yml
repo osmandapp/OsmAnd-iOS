@@ -1,0 +1,250 @@
+name: Build OsmAnd Nightly
+
+on:
+  workflow_dispatch:
+    inputs:
+      buildversion:
+        description: 'Nightly TestFlight build number (must be unique for the version)'
+        required: true
+      releaseversion:
+        description: 'App version'
+        required: true
+        default: '5.4.0'
+      dependencies_branch:
+        description: 'Branch for Android, build, core, core-legacy, and resources'
+        required: true
+        default: 'r5.4'
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Remove OsmAndNightly.xcarchive directory
+        run: rm -rf OsmAndNightly.xcarchive
+      - name: Remove OsmAndNightly.xcarchive.zip file
+        run: rm -f OsmAndNightly.xcarchive.zip
+      - name: Remove OsmAnd Maps.ipa file
+        run: rm -f 'OsmAnd Maps.ipa'
+
+      - name: Checkout ios
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-iOS
+          ref: ${{ github.sha }}
+          path: ios
+          clean: true
+      - name: Checkout android
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd
+          ref: ${{ inputs.dependencies_branch }}
+          path: android
+          clean: false
+      - name: Checkout build
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-build
+          ref: ${{ inputs.dependencies_branch }}
+          path: build
+          clean: false
+      - name: Checkout core legacy
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-core-legacy
+          ref: ${{ inputs.dependencies_branch }}
+          path: core-legacy
+          clean: false
+      - name: Checkout core
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-core
+          ref: ${{ inputs.dependencies_branch }}
+          path: core
+          clean: false
+      - name: Checkout resources
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-resources
+          ref: ${{ inputs.dependencies_branch }}
+          path: resources
+          clean: false
+
+      - name: Unlock keychain
+        shell: bash
+        env:
+          USER_KEY: ${{ secrets.USER_KEY }}
+        run: security unlock-keychain -p "$USER_KEY" "$HOME/Library/Keychains/login.keychain-db"
+
+      - name: Verify runner Nightly provisioning profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          profile_found=false
+          for profile in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+            [[ -f "$profile" ]] || continue
+            security cms -D -i "$profile" > "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || continue
+            name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || true)
+            app_id=$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || true)
+            if [[ "$name" == 'OsmAnd Nightly Profile' && "$app_id" == 'LM67P5MQ23.net.osmand.maps.nightly' ]]; then
+              profile_found=true
+              break
+            fi
+          done
+          [[ "$profile_found" == true ]] || { echo 'Install OsmAnd Nightly Profile for net.osmand.maps.nightly on this runner' >&2; exit 1; }
+
+      - name: Build QtCore and prepare build
+        env:
+          LANG: en_US.UTF-8
+        run: exec ios/prepare.sh --sync_translations
+      - name: Configure iOS OsmAndCore
+        env:
+          LANG: en_US.UTF-8
+        working-directory: baked/fat-ios-clang.xcode
+        run: xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release
+      - name: Build iOS OsmAndCore
+        env:
+          LANG: en_US.UTF-8
+        working-directory: baked/fat-ios-clang.xcode
+        run: xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release
+
+      - name: Build iOS tests
+        env:
+          LANG: en_US.UTF-8
+        run: |
+          set -o pipefail
+
+          SIMULATOR=$(xcrun simctl list devices available | grep iPhone | head -1)
+          SIMULATOR_ID=$(echo "$SIMULATOR" | sed -E 's/.*\(([0-9A-F-]+)\).*/\1/')
+
+          if [ -z "$SIMULATOR_ID" ]; then
+            echo "No available iPhone simulator found"
+            exit 1
+          fi
+
+          echo "Using simulator: $SIMULATOR"
+          echo "Using simulator ID: $SIMULATOR_ID"
+
+          xcodebuild test \
+            -workspace ios/OsmAnd.xcworkspace \
+            -scheme "OsmAnd Maps" \
+            -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
+            -testLanguage en \
+            -testRegion US \
+            | xcpretty
+
+      - name: Run iOS UI tests
+        env:
+          LANG: en_US.UTF-8
+        run: |
+          set -o pipefail
+
+          SIMULATOR=$(xcrun simctl list devices available | grep iPhone | head -1)
+          SIMULATOR_ID=$(echo "$SIMULATOR" | sed -E 's/.*\(([0-9A-F-]+)\).*/\1/')
+
+          if [ -z "$SIMULATOR_ID" ]; then
+            echo "No available iPhone simulator found"
+            exit 1
+          fi
+
+          echo "Using simulator: $SIMULATOR"
+          echo "Using simulator ID: $SIMULATOR_ID"
+
+          xcrun simctl boot "$SIMULATOR_ID" || true
+          xcrun simctl bootstatus "$SIMULATOR_ID" -b
+
+          xcodebuild test \
+            -workspace ios/OsmAnd.xcworkspace \
+            -scheme "OsmAnd Maps" \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            "-only-testing:OsmAnd MapsUITests" \
+            -testLanguage en \
+            -testRegion US \
+            | xcpretty
+
+      - name: Verify Xcode app variants
+        shell: bash
+        env:
+          RELEASE_IOS_VERSION: ${{ inputs.releaseversion }}
+          BUILD_IOS_VERSION: ${{ inputs.buildversion }}
+          DEPENDENCIES_BRANCH: ${{ inputs.dependencies_branch }}
+        run: |
+          set -euo pipefail
+          check_setting() {
+            local config="$1" expected="$2" key="$3" value
+            value=$(xcodebuild -project ios/OsmAnd.xcodeproj -target 'OsmAnd Maps' -configuration "$config" -sdk iphoneos -showBuildSettings 2>/dev/null | awk -v key="$key" '$1 == key && $2 == "=" {print $3; exit}')
+            [[ "$value" == "$expected" ]] || { echo "$config $key is '$value', expected '$expected'" >&2; exit 1; }
+          }
+          check_setting Release net.osmand.maps PRODUCT_BUNDLE_IDENTIFIER
+          check_setting Release AppIcon ASSETCATALOG_COMPILER_APPICON_NAME
+          check_setting Nightly net.osmand.maps.nightly PRODUCT_BUNDLE_IDENTIFIER
+          check_setting Nightly AppIconNightly ASSETCATALOG_COMPILER_APPICON_NAME
+          {
+            echo '| Field | Value |'
+            echo '| --- | --- |'
+            echo "| iOS branch | $GITHUB_REF_NAME |"
+            echo "| iOS commit | $GITHUB_SHA |"
+            echo "| Dependency branch | $DEPENDENCIES_BRANCH |"
+            echo '| App variant | OsmAnd Nightly |'
+            echo '| Bundle ID | net.osmand.maps.nightly |'
+            echo "| Version | $RELEASE_IOS_VERSION |"
+            echo "| Build number | $BUILD_IOS_VERSION |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create Nightly archive
+        shell: bash
+        env:
+          LANG: en_US.UTF-8
+          RELEASE_IOS_VERSION: ${{ inputs.releaseversion }}
+          BUILD_IOS_VERSION: ${{ inputs.buildversion }}
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -workspace ios/OsmAnd.xcworkspace \
+            -scheme 'OsmAnd Nightly' \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -configuration Nightly \
+            -archivePath OsmAndNightly.xcarchive \
+            CURRENT_PROJECT_VERSION="$BUILD_IOS_VERSION" \
+            MARKETING_VERSION="$RELEASE_IOS_VERSION" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="OsmAnd Nightly Profile" \
+            archive | xcpretty
+
+      - name: Verify archived Nightly app
+        shell: bash
+        run: |
+          set -euo pipefail
+          info='OsmAndNightly.xcarchive/Products/Applications/OsmAnd Maps.app/Info.plist'
+          bundle=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$info")
+          display=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$info")
+          [[ "$bundle" == 'net.osmand.maps.nightly' ]]
+          [[ "$display" == 'OsmAnd Nightly' ]]
+
+      - name: Zip Nightly archive
+        run: zip -r OsmAndNightly.xcarchive.zip OsmAndNightly.xcarchive
+      - name: Upload Nightly archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: OsmAndNightly-${{ inputs.releaseversion }}.${{ inputs.buildversion }}.xcarchive.zip
+          path: OsmAndNightly.xcarchive.zip
+      - name: Export Nightly IPA
+        env:
+          LANG: en_US.UTF-8
+        run: xcodebuild -archivePath OsmAndNightly.xcarchive -exportOptionsPlist ios/exportOptions-nightly.plist -exportPath . -allowProvisioningUpdates -exportArchive
+      - name: Verify exported Nightly IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          info=$(unzip -Z1 'OsmAnd Maps.ipa' | grep '^Payload/[^/]*/Info.plist$' | head -1)
+          [[ -n "$info" ]]
+          unzip -p 'OsmAnd Maps.ipa' "$info" > "$RUNNER_TEMP/nightly-ipa-info.plist"
+          bundle=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$RUNNER_TEMP/nightly-ipa-info.plist")
+          [[ "$bundle" == 'net.osmand.maps.nightly' ]]
+      - name: Publish Nightly TestFlight
+        env:
+          LANG: en_US.UTF-8
+          APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
+          APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+        run: xcrun altool --upload-app -t ios -f 'OsmAnd Maps.ipa' -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose

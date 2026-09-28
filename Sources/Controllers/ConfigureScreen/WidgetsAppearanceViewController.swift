@@ -891,7 +891,6 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         updatePageContainerSize(restoredContentSize, for: state.controller)
         var restoredFrame = state.frame
         if state.controller.isHorizontal {
-            restoredFrame.size.width = max(restoredFrame.width, restoredContentSize.width)
             restoredFrame.size.width = restoredContentSize.width
             restoredFrame.size.height = restoredContentSize.height
         } else {

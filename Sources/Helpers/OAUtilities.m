@@ -2410,16 +2410,27 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (unsigned long long) folderSize:(NSString *)folderPath
 {
-    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
-    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
-    NSString *fileName;
+    // A single enumeration with prefetched attributes: attributesOfItemAtPath: per file
+    // costs a separate stat and dictionary for each of the thousands of tiles and maps
+    NSArray<NSURLResourceKey> *keys = @[NSURLIsRegularFileKey, NSURLFileSizeKey];
+    NSDirectoryEnumerator<NSURL *> *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:folderPath isDirectory:YES]
+                                                                          includingPropertiesForKeys:keys
+                                                                                             options:0
+                                                                                        errorHandler:^BOOL(NSURL *url, NSError *error) {
+        return YES;
+    }];
     unsigned long long fileSize = 0;
-    while (fileName = [filesEnumerator nextObject])
+    for (NSURL *url in enumerator)
     {
-        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
-        fileSize += [fileDictionary fileSize];
+        NSNumber *isRegularFile = nil;
+        if (![url getResourceValue:&isRegularFile forKey:NSURLIsRegularFileKey error:nil] || !isRegularFile.boolValue)
+            continue;
+
+        NSNumber *size = nil;
+        if ([url getResourceValue:&size forKey:NSURLFileSizeKey error:nil])
+            fileSize += size.unsignedLongLongValue;
     }
-    
+
     return fileSize;
 }
 

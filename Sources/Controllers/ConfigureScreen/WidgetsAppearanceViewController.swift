@@ -1,0 +1,1803 @@
+//
+//  WidgetsAppearanceViewController.swift
+//  OsmAnd Maps
+//
+//  Created by Oleksandr Panchenko on 27.08.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
+final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
+
+    private enum RowKey: String {
+        case size
+        case icon
+        case primaryTextColor
+        case secondaryTextColor
+        case backgroundColor
+        case reset
+    }
+
+    fileprivate enum Constants {
+        static let previewHeight: CGFloat = 250
+        static let previewVerticalPadding: CGFloat = 16
+        static let rowHeight: CGFloat = 52
+        static func panelIcons(for layoutMode: ScreenLayoutMode) -> [UIImage] {
+            layoutMode == .landscape
+                ? [UIImage(resource: .icCustom20ScreenSideLandscapeLeft),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeRight),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeTop),
+                   UIImage(resource: .icCustom20ScreenSideLandscapeBottom)]
+                : [.icCustom20ScreenSideLeft,
+                   .icCustom20ScreenSideRight,
+                   .icCustom20ScreenSideTop,
+                   .icCustom20ScreenSideBottom]
+        }
+    }
+
+    private let appMode: OAApplicationMode
+    private let layoutMode: ScreenLayoutMode
+    private let appearanceLayoutMode: ScreenLayoutMode?
+    private let panels = WidgetsPanel.values
+    private let appearanceSettings: WidgetPanelAppearanceSettings
+    private let previewView = WidgetPanelPreviewView()
+
+    private lazy var previewHeaderView = UIView()
+    private var selectedPanel: WidgetsPanel
+    private var subviewHorizontalSafeInset: CGFloat = -1
+
+    init(appMode: OAApplicationMode,
+         layoutMode: ScreenLayoutMode,
+         initialPanel: WidgetsPanel = .leftPanel) {
+        self.appMode = appMode
+        self.layoutMode = layoutMode
+        appearanceLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? layoutMode
+            : nil
+        selectedPanel = initialPanel
+        appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                           layoutMode: appearanceLayoutMode)
+        super.init()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configurePreviewHeader()
+        tableView.backgroundColor = .viewBg
+        tableView.separatorColor = SeparatorAppearance.color
+        tableView.sectionHeaderTopPadding = 8
+        tableView.estimatedRowHeight = Constants.rowHeight
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !previewView.isHostingWidgets {
+            reloadPreview()
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateSubview(true)
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        let horizontalSafeInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right)
+        guard horizontalSafeInset != subviewHorizontalSafeInset else { return }
+        subviewHorizontalSafeInset = horizontalSafeInset
+        updateSubview(true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        previewView.releaseHostedWidgets()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let size = CGSize(width: tableView.bounds.width,
+                          height: Constants.previewHeight + Constants.previewVerticalPadding * 2)
+        if previewHeaderView.frame.size != size || tableView.tableHeaderView !== previewHeaderView {
+            previewHeaderView.frame.size = size
+            tableView.tableHeaderView = previewHeaderView
+        }
+    }
+
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
+        previewView.preserveCurrentPage()
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+
+    override func getTitle() -> String {
+        selectedPanel.title
+    }
+
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        let button = UIBarButtonItem(
+            image: UIImage(resource: .icCustomOverflowMenuStroke),
+            style: .plain,
+            target: self,
+            action: #selector(showCopyFrom)
+        )
+
+        button.tintColor = navbarButtonsTintColor()
+        button.accessibilityLabel = localizedString("shared_string_options")
+
+        return [button]
+    }
+
+    override func createSubview() -> UIView? {
+        let panelIcons = Constants.panelIcons(for: layoutMode)
+        let icons = zip(panelIcons, panels).map { image, panel -> UIImage in
+            image.accessibilityLabel = panel.title
+            return image
+        }
+        let segmentedControl = UISegmentedControl(items: icons)
+        segmentedControl.selectedSegmentIndex = panels.firstIndex(of: selectedPanel) ?? 0
+        segmentedControl.addTarget(self, action: #selector(onPanelChanged(_:)), for: .valueChanged)
+        return segmentedControl
+    }
+
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
+    }
+
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+
+    override func useCustomTableViewHeader() -> Bool {
+        true
+    }
+
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+
+    override func subviewMargin() -> UIEdgeInsets {
+        let horizontalInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right) + 20
+        return UIEdgeInsets(top: 8,
+                            left: horizontalInset,
+                            bottom: -8,
+                            right: -horizontalInset)
+    }
+
+    override func registerCells() {
+        tableView.register(WidgetsAppearanceOptionCell.self,
+                           forCellReuseIdentifier: WidgetsAppearanceOptionCell.reuseIdentifier)
+    }
+
+    override func generateData() {
+        tableData.clearAllData()
+
+        let parametersSection = tableData.createNewSection()
+        parametersSection.footerText = String(format: localizedString("panel_appearance_original_description"),
+                                              localizedString("shared_string_original"))
+        addRow(to: parametersSection,
+               key: .size,
+               title: localizedString(selectedPanel.isPanelVertical ? "row_height" : "widget_height"))
+        addRow(to: parametersSection,
+               key: .icon,
+               title: localizedString("shared_string_icon"))
+
+        let appearanceSection = tableData.createNewSection()
+        appearanceSection.headerText = localizedString("shared_string_appearance")
+        addRow(to: appearanceSection,
+               key: .primaryTextColor,
+               title: localizedString("text_color"))
+        addRow(to: appearanceSection,
+               key: .secondaryTextColor,
+               title: localizedString("secondary_text_color"))
+        addRow(to: appearanceSection,
+               key: .backgroundColor,
+               title: localizedString("background_color"))
+
+        let resetSection = tableData.createNewSection()
+        addRow(to: resetSection,
+               key: .reset,
+               title: localizedString("reset_to_default"))
+    }
+
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        let item = tableData.item(for: indexPath)
+        guard let keyValue = item.key,
+              let key = RowKey(rawValue: keyValue),
+              let cell = tableView.dequeueReusableCell(withIdentifier: WidgetsAppearanceOptionCell.reuseIdentifier,
+                                                       for: indexPath) as? WidgetsAppearanceOptionCell else {
+            return nil
+        }
+        let title = item.title ?? ""
+        let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
+        let resolvedAppearance = WidgetPanelAppearanceResolver.resolve(panel: selectedPanel,
+                                                                       appMode: appMode,
+                                                                       layoutMode: appearanceLayoutMode,
+                                                                       nightMode: nightMode)
+
+        switch key {
+        case .size:
+            let mode = appearanceSettings.sizeMode(for: selectedPanel)
+            cell.configure(title: title,
+                           preview: .image(mode.rowIcon, .iconColorActive),
+                           value: mode.title,
+                           menu: createSizeMenu())
+        case .icon:
+            let mode = appearanceSettings.iconMode(for: selectedPanel)
+            cell.configure(title: title,
+                           preview: .image(mode.rowIcon, mode.iconTintColor),
+                           value: mode.title,
+                           menu: createIconMenu())
+        case .primaryTextColor:
+            let mode = appearanceSettings.primaryTextColorMode(for: selectedPanel)
+            cell.configure(title: title,
+                           preview: .text(resolvedAppearance.primaryTextColor,
+                                          resolvedAppearance.backgroundColor),
+                           value: mode.title,
+                           menu: createTextColorMenu(kind: .primary))
+        case .secondaryTextColor:
+            let mode = appearanceSettings.secondaryTextColorMode(for: selectedPanel)
+            cell.configure(title: title,
+                           preview: .text(resolvedAppearance.secondaryTextColor,
+                                          resolvedAppearance.backgroundColor),
+                           value: mode.title,
+                           menu: createTextColorMenu(kind: .secondary))
+        case .backgroundColor:
+            let mode = appearanceSettings.backgroundMode(for: selectedPanel)
+            cell.configure(title: title,
+                           preview: .color(resolvedAppearance.backgroundColor),
+                           value: mode.title,
+                           menu: createBackgroundMenu())
+        case .reset:
+            cell.configureReset(title: title)
+        }
+        return cell
+    }
+
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        guard item.key == RowKey.reset.rawValue else { return }
+        tableView.deselectRow(at: indexPath, animated: true)
+        showResetConfirmation()
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+            ? UITableView.automaticDimension
+            : Constants.rowHeight
+    }
+
+    private func resetSelectedPanel() {
+        let previousSizeMode = appearanceSettings.sizeMode(for: selectedPanel)
+        appearanceSettings.reset(panel: selectedPanel)
+        // Medium and Large replace the widget's classic view hierarchy with the
+        // simple one, so returning from them to Original requires fresh widgets.
+        // In every other case rebuilding all controls only blocks the UI while
+        // recreating unrelated panels and map controls.
+        let requiresFreshWidgets = previousSizeMode == .medium || previousSizeMode == .large
+        recreateWidgetsAndReload(recreateAll: requiresFreshWidgets)
+    }
+
+    private func showResetConfirmation() {
+        let message = String(format: localizedString("reset_all_appearance_settings_for_panel"),
+                             selectedPanel.title)
+        let alert = UIAlertController(title: localizedString("reset_to_default"),
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_reset"),
+                                      style: .destructive) { _ in
+            self.resetSelectedPanel()
+        })
+        present(alert, animated: true)
+    }
+
+    private func addRow(to section: OATableSectionData, key: RowKey, title: String) {
+        let row = section.createNewRow()
+        row.cellType = WidgetsAppearanceOptionCell.reuseIdentifier
+        row.key = key.rawValue
+        row.title = title
+        row.accessibilityLabel = title
+    }
+
+    private func configurePreviewHeader() {
+        previewHeaderView.frame = CGRect(x: 0,
+                                         y: 0,
+                                         width: tableView.bounds.width,
+                                         height: Constants.previewHeight + Constants.previewVerticalPadding * 2)
+        previewHeaderView.backgroundColor = .clear
+        previewHeaderView.accessibilityElementsHidden = true
+        previewView.translatesAutoresizingMaskIntoConstraints = false
+        previewHeaderView.addSubview(previewView)
+        NSLayoutConstraint.activate([
+            previewView.leadingAnchor.constraint(equalTo: previewHeaderView.leadingAnchor),
+            previewView.trailingAnchor.constraint(equalTo: previewHeaderView.trailingAnchor),
+            previewView.topAnchor.constraint(equalTo: previewHeaderView.topAnchor,
+                                             constant: Constants.previewVerticalPadding),
+            previewView.heightAnchor.constraint(equalToConstant: Constants.previewHeight)
+        ])
+        tableView.tableHeaderView = previewHeaderView
+        reloadPreview()
+    }
+
+    private func createSizeMenu() -> UIMenu {
+        let selectedMode = appearanceSettings.sizeMode(for: selectedPanel)
+        let actions = WidgetPanelSizeMode.allCases.map { mode in
+            UIAction(title: mode.title,
+                     image: mode.icon?.resizedMenuImage(),
+                     state: mode == selectedMode ? .on : .off) { [weak self] _ in
+                guard let self, mode != appearanceSettings.sizeMode(for: selectedPanel) else { return }
+                appearanceSettings.setSizeMode(mode, for: selectedPanel)
+                recreateWidgetsAndRefresh(row: .size)
+            }
+        }
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
+    }
+
+    private func createIconMenu() -> UIMenu {
+        let selectedMode = appearanceSettings.iconMode(for: selectedPanel)
+        let actions = WidgetPanelIconMode.allCases.map { mode in
+            UIAction(title: mode.title,
+                     image: mode.icon?.resizedMenuImage(),
+                     state: mode == selectedMode ? .on : .off) { [weak self] _ in
+                guard let self, mode != appearanceSettings.iconMode(for: selectedPanel) else { return }
+                appearanceSettings.setIconMode(mode, for: selectedPanel)
+                recreateWidgetsAndRefresh(row: .icon)
+            }
+        }
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
+    }
+
+    private func createTextColorMenu(kind: WidgetPanelTextColorKind) -> UIMenu {
+        let selectedMode = kind == .primary
+            ? appearanceSettings.primaryTextColorMode(for: selectedPanel)
+            : appearanceSettings.secondaryTextColorMode(for: selectedPanel)
+        let actions = WidgetPanelTextColorMode.allCases.map { mode in
+            UIAction(title: mode.title,
+                     state: mode == selectedMode ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                if mode == .custom {
+                    showColorScreen(target: kind == .primary ? .primaryText : .secondaryText)
+                } else {
+                    appearanceSettings.setTextColorMode(mode, kind: kind, for: selectedPanel)
+                    recreateWidgetsAndRefresh(row: kind == .primary ? .primaryTextColor : .secondaryTextColor)
+                }
+            }
+        }
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
+    }
+
+    private func createBackgroundMenu() -> UIMenu {
+        let selectedMode = appearanceSettings.backgroundMode(for: selectedPanel)
+        let actions = WidgetPanelBackgroundMode.allCases.map { mode in
+            UIAction(title: mode.title,
+                     state: mode == selectedMode ? .on : .off) { [weak self] _ in
+                guard let self else { return }
+                if mode == .custom {
+                    showColorScreen(target: .background)
+                } else {
+                    appearanceSettings.setBackgroundMode(mode, for: selectedPanel)
+                    recreateWidgetsAndRefresh(row: .backgroundColor)
+                }
+            }
+        }
+        return createSingleSelectionMenu(actions: actions, dividerBefore: 1)
+    }
+
+    private func createSingleSelectionMenu(actions: [UIAction], dividerBefore index: Int) -> UIMenu {
+        guard index > 0, index < actions.count else {
+            return UIMenu(options: .singleSelection, children: actions)
+        }
+        let firstSection = UIMenu(options: .displayInline, children: Array(actions[..<index]))
+        let secondSection = UIMenu(options: .displayInline, children: Array(actions[index...]))
+        return UIMenu(options: .singleSelection, children: [firstSection, secondSection])
+    }
+
+    private func showColorScreen(target: WidgetPanelColorTarget) {
+        guard let navigationController = OARootViewController.instance().navigationController else { return }
+        previewView.preserveCurrentPage()
+        let controller = WidgetPanelColorViewController(appMode: appMode,
+                                                        panel: selectedPanel,
+                                                        layoutMode: appearanceLayoutMode,
+                                                        target: target,
+                                                        initialPageIndex: previewView.currentPageIndex(for: selectedPanel))
+        controller.delegate = self
+        controller.navControllerHistory = navigationController.saveCurrentStateForScrollableHud()
+        OARootViewController.instance().mapPanel.showScrollableHudViewController(controller)
+    }
+
+    private func recreateWidgetsAndReload(recreateAll: Bool = true) {
+        previewView.preserveCurrentPage()
+        if recreateAll {
+            recreateAllWidgets()
+        } else {
+            recreateSelectedPanel()
+        }
+        reloadScreenData()
+    }
+
+    private func recreateWidgetsAndRefresh(row: RowKey) {
+        previewView.preserveCurrentPage()
+        if row == .size {
+            // Moving between Small/Original and Medium/Large changes the widget's
+            // view hierarchy. A panel-only recreation reuses the old hierarchy.
+            recreateAllWidgets()
+        } else {
+            recreateSelectedPanel()
+        }
+        let rows: [RowKey] = row == .backgroundColor
+            ? [.primaryTextColor, .secondaryTextColor, .backgroundColor]
+            : [row]
+        refreshRows(rows)
+        DispatchQueue.main.async { [weak self] in
+            self?.reloadPreview()
+        }
+    }
+
+    private func recreateSelectedPanel() {
+        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            .recreateWidgetsPanel(selectedPanel)
+    }
+
+    private func recreateAllWidgets() {
+        OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
+            .recreateControls()
+    }
+
+    private func reloadScreenData() {
+        generateData()
+        UIView.performWithoutAnimation {
+            tableView.reloadData()
+            tableView.layoutIfNeeded()
+        }
+        reloadPreview()
+    }
+
+    private func refreshRows(_ keys: [RowKey]) {
+        let visibleRows = tableView.indexPathsForVisibleRows ?? []
+        let indexPaths = keys.compactMap(indexPath(for:)).filter(visibleRows.contains)
+        guard !indexPaths.isEmpty else { return }
+        UIView.performWithoutAnimation {
+            tableView.reloadRows(at: indexPaths, with: .none)
+            tableView.layoutIfNeeded()
+        }
+    }
+
+    private func indexPath(for key: RowKey) -> IndexPath? {
+        for sectionIndex in 0..<tableData.sectionCount() {
+            let section = tableData.sectionData(for: sectionIndex)
+            for rowIndex in 0..<section.rowCount() where section.getRow(rowIndex).key == key.rawValue {
+                return IndexPath(row: Int(rowIndex), section: Int(sectionIndex))
+            }
+        }
+        return nil
+    }
+
+    private func reloadPreview() {
+        previewView.configure(panel: selectedPanel,
+                              appMode: appMode,
+                              layoutMode: appearanceLayoutMode,
+                              parentViewController: self)
+    }
+
+    private func applyCopiedParameters() {
+        recreateWidgetsAndReload()
+    }
+
+    private func showCopyFromProfile() {
+        guard let bottomSheet = OACopyProfileBottomSheetViewControler(mode: appMode) else { return }
+        bottomSheet.delegate = self
+        bottomSheet.present(in: self)
+    }
+
+    @objc private func onPanelChanged(_ segmentedControl: UISegmentedControl) {
+        guard panels.indices.contains(segmentedControl.selectedSegmentIndex) else { return }
+        selectedPanel = panels[segmentedControl.selectedSegmentIndex]
+        navigationItem.title = getTitle()
+        navigationItem.rightBarButtonItems = getRightNavbarButtons()
+        reloadScreenData()
+    }
+
+    @objc private func showCopyFrom() {
+        let controller = WidgetsAppearanceCopyFromBottomSheetViewController(panels: panels,
+                                                                            selectedPanel: selectedPanel,
+                                                                            layoutMode: layoutMode)
+        controller.onSelectProfile = { [weak self] in
+            self?.showCopyFromProfile()
+        }
+        controller.onSelectPanel = { [weak self] sourcePanel in
+            guard let self else { return }
+            appearanceSettings.copy(from: sourcePanel, to: selectedPanel)
+            applyCopiedParameters()
+        }
+        showMediumSheetViewController(viewController: controller, isLargeAvailable: false)
+    }
+}
+
+private final class WidgetsAppearanceCopyFromBottomSheetViewController: OABaseNavbarSubviewViewController {
+    private enum RowKey: String {
+        case profile
+        case panel
+    }
+
+    var onSelectProfile: (() -> Void)?
+    var onSelectPanel: ((WidgetsPanel) -> Void)?
+
+    private let panels: [WidgetsPanel]
+    private let selectedPanel: WidgetsPanel
+    private let layoutMode: ScreenLayoutMode
+
+    init(panels: [WidgetsPanel],
+         selectedPanel: WidgetsPanel,
+         layoutMode: ScreenLayoutMode) {
+        self.panels = panels
+        self.selectedPanel = selectedPanel
+        self.layoutMode = layoutMode
+        super.init()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func getTitle() -> String {
+        localizedString("shared_string_copy_from")
+    }
+
+    override func systemLeftBarButtonItem() -> UIBarButtonItem? {
+        let button = UIBarButtonItem(barButtonSystemItem: .close,
+                                     target: self,
+                                     action: #selector(onClosePressed))
+        button.accessibilityLabel = localizedString("shared_string_close")
+        return button
+    }
+
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+
+    override func generateData() {
+        tableData.clearAllData()
+
+        let profileSection = tableData.createNewSection()
+        let profileRow = profileSection.createNewRow()
+        profileRow.key = RowKey.profile.rawValue
+        profileRow.title = localizedString("another_profile")
+        profileRow.icon = .icCustomCopy
+        profileRow.accessibilityLabel = profileRow.title
+
+        let panelsSection = tableData.createNewSection()
+        let panelIcons = WidgetsAppearanceViewController.Constants.panelIcons(for: layoutMode)
+        for (index, panel) in panels.enumerated() where panel != selectedPanel {
+            let row = panelsSection.createNewRow()
+            row.key = RowKey.panel.rawValue
+            row.title = panel.title
+            row.icon = panelIcons[index]
+            row.setObj(panel, forKey: RowKey.panel.rawValue)
+            row.accessibilityLabel = row.title
+        }
+    }
+
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier,
+                                                       for: indexPath) as? OASimpleTableViewCell else {
+            return nil
+        }
+        let item = tableData.item(for: indexPath)
+        cell.descriptionVisibility(false)
+        cell.titleLabel.text = item.title
+        cell.leftIconView.image = item.icon ?? UIImage.templateImageNamed(item.iconName)
+        cell.leftIconView.tintColor = .iconColorActive
+        cell.accessibilityLabel = item.accessibilityLabel
+        cell.accessibilityTraits = .button
+        return cell
+    }
+
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        let action: (() -> Void)?
+        if item.key == RowKey.profile.rawValue {
+            action = onSelectProfile
+        } else if let panel = item.obj(forKey: RowKey.panel.rawValue) as? WidgetsPanel,
+                  let onSelectPanel {
+            action = { onSelectPanel(panel) }
+        } else {
+            action = nil
+        }
+        dismiss(animated: true, completion: action)
+    }
+
+    @objc private func onClosePressed() {
+        dismiss(animated: true)
+    }
+}
+
+extension WidgetsAppearanceViewController: OACopyProfileBottomSheetDelegate {
+    func onCopyProfileCompleted() {
+    }
+
+    func onCopyProfile(_ fromAppMode: OAApplicationMode) {
+        appearanceSettings.copy(from: fromAppMode, panel: selectedPanel)
+        applyCopiedParameters()
+    }
+}
+
+extension WidgetsAppearanceViewController: WidgetPanelColorViewControllerDelegate {
+    func widgetPanelColorViewControllerDidFinish(pageIndex: Int) {
+        previewView.setCurrentPageIndex(pageIndex, for: selectedPanel)
+        reloadScreenData()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateSubview(true)
+        }
+    }
+}
+
+final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
+    private struct HostedPanelState {
+        let panel: WidgetsPanel
+        let appMode: OAApplicationMode
+        let previewLayoutMode: ScreenLayoutMode?
+        let originalLayoutMode: ScreenLayoutMode?
+        let mapInfoController: OAMapInfoController
+        let controller: WidgetPanelViewController
+        let originalParent: UIViewController?
+        let originalDelegate: WidgetPanelDelegate?
+        let originalCurrentPageChangedHandler: (() -> Void)?
+        let originalWidgetPagesChangedHandler: (() -> Void)?
+        let view: UIView
+        let originalSuperview: UIView?
+        let originalContainerSize: CGSize
+        let originalSuperviewConstraints: [NSLayoutConstraint]
+        let originalIndex: Int?
+        let frame: CGRect
+        let bounds: CGRect
+        let transform: CGAffineTransform
+        let isHidden: Bool
+        let alpha: CGFloat
+        let isUserInteractionEnabled: Bool
+        let translatesAutoresizingMaskIntoConstraints: Bool
+        let autoresizingMask: UIView.AutoresizingMask
+        let pageControlHidden: Bool
+        let pageControlHeight: CGFloat
+        let pageControlTransform: CGAffineTransform
+        let pageContainerCornerRadius: CGFloat
+        let pageContainerMaskedCorners: CACornerMask
+        var excludedWidgets: [(widget: OABaseWidgetView, isHidden: Bool)]
+        var disabledLongPressRecognizers: [UILongPressGestureRecognizer]
+        var removedContextMenuInteractions: [(view: UIView, interaction: UIContextMenuInteraction)]
+        var sizeStyleOverrides: [(widget: OATextInfoWidget, style: NSNumber?)]
+        var iconVisibilityOverrides: [(widget: OATextInfoWidget, visible: NSNumber?)]
+
+        var previewContentSize: CGSize
+    }
+
+    var isHostingWidgets: Bool {
+        hostedState != nil
+    }
+
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+
+    private var panel: WidgetsPanel = .leftPanel
+    private var hostedState: HostedPanelState?
+    private var pendingPanel: WidgetsPanel?
+    private var pendingAppMode: OAApplicationMode?
+    private var pendingLayoutMode: ScreenLayoutMode?
+    private var panelSizeUpdateGeneration = 0
+    private var isMeasuringPanelSize = false
+    private var isPopulatingPreviewWidgets = false
+    private var lastLayoutSize: CGSize = .zero
+    private var selectedPageIndexes: [ObjectIdentifier: Int] = [:]
+    private var colorPreview: WidgetPanelColorPreview?
+
+    private weak var pendingParentViewController: UIViewController?
+
+    private var isPageTransitionInProgress: Bool {
+        guard let pageScrollView = hostedState?.controller.pageViewController?.scrollView else {
+            return false
+        }
+        return pageScrollView.isTracking
+            || pageScrollView.isDragging
+            || pageScrollView.isDecelerating
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .mapStyleWater
+        clipsToBounds = true
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.alwaysBounceVertical = false
+        scrollView.delaysContentTouches = false
+        contentView.clipsToBounds = true
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let layoutSizeChanged = bounds.size != lastLayoutSize
+        lastLayoutSize = bounds.size
+        if let state = hostedState {
+            selectedPageIndexes[ObjectIdentifier(state.panel)] = state.controller.currentIndex
+            if layoutSizeChanged {
+                schedulePanelSizeUpdate()
+            }
+        }
+        if hostedState == nil,
+           let pendingPanel,
+           let pendingAppMode,
+           let pendingParentViewController,
+           bounds.width > 0,
+           bounds.height > 0 {
+            self.pendingPanel = nil
+            self.pendingAppMode = nil
+            let pendingLayoutMode = self.pendingLayoutMode
+            self.pendingLayoutMode = nil
+            self.pendingParentViewController = nil
+            panel = pendingPanel
+            hostWidgets(for: pendingPanel,
+                        appMode: pendingAppMode,
+                        layoutMode: pendingLayoutMode,
+                        parentViewController: pendingParentViewController)
+        }
+        layoutHostedPanel()
+    }
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        setNeedsLayout()
+        schedulePanelSizeUpdate()
+    }
+
+    func configure(panel: WidgetsPanel,
+                   appMode: OAApplicationMode,
+                   layoutMode: ScreenLayoutMode?,
+                   parentViewController: UIViewController) {
+        guard bounds.width > 0, bounds.height > 0 else {
+            pendingPanel = panel
+            pendingAppMode = appMode
+            pendingLayoutMode = layoutMode
+            pendingParentViewController = parentViewController
+            return
+        }
+        pendingPanel = nil
+        pendingAppMode = nil
+        pendingLayoutMode = nil
+        pendingParentViewController = nil
+        if var state = hostedState,
+           state.panel == panel,
+           state.appMode == appMode,
+           state.previewLayoutMode == layoutMode,
+           state.controller.parent === parentViewController {
+            restoreCurrentPage(in: state.controller, for: panel)
+            state.disabledLongPressRecognizers.append(contentsOf: disableLongPressRecognizers(in: state.view))
+            state.removedContextMenuInteractions.append(contentsOf: removeContextMenuInteractions(in: state.view))
+            hostedState = state
+            let appearance = resolvePreviewAppearance(panel: panel,
+                                                      appMode: appMode,
+                                                      layoutMode: layoutMode)
+            applyAppearance(appearance, to: state.controller, using: state.mapInfoController)
+            updateHostedPanelSize()
+            return
+        }
+        releaseHostedWidgets()
+        self.panel = panel
+        hostWidgets(for: panel,
+                    appMode: appMode,
+                    layoutMode: layoutMode,
+                    parentViewController: parentViewController)
+        setNeedsLayout()
+    }
+
+    func preserveCurrentPage() {
+        guard let state = hostedState else { return }
+        selectedPageIndexes[ObjectIdentifier(panel)] = state.controller.currentIndex
+    }
+
+    func setColorPreview(_ colorPreview: WidgetPanelColorPreview?) {
+        self.colorPreview = colorPreview
+        guard let state = hostedState else { return }
+        let appearance = resolvePreviewAppearance(panel: state.panel,
+                                                  appMode: state.appMode,
+                                                  layoutMode: state.previewLayoutMode)
+        applyAppearance(appearance, to: state.controller, using: state.mapInfoController)
+        schedulePanelSizeUpdate()
+    }
+
+    func currentPageIndex(for panel: WidgetsPanel) -> Int {
+        if let state = hostedState, state.panel == panel {
+            return state.controller.currentIndex
+        }
+        return selectedPageIndexes[ObjectIdentifier(panel)] ?? 0
+    }
+
+    func setCurrentPageIndex(_ index: Int, for panel: WidgetsPanel) {
+        selectedPageIndexes[ObjectIdentifier(panel)] = max(0, index)
+        guard let state = hostedState, state.panel == panel else { return }
+        restoreCurrentPage(in: state.controller, for: panel)
+        schedulePanelSizeUpdate()
+    }
+
+    func releaseHostedWidgets() {
+        pendingPanel = nil
+        pendingAppMode = nil
+        pendingLayoutMode = nil
+        pendingParentViewController = nil
+        guard let state = hostedState else { return }
+        selectedPageIndexes[ObjectIdentifier(state.panel)] = state.controller.currentIndex
+        panelSizeUpdateGeneration += 1
+        state.controller.delegate = nil
+        state.controller.onCurrentPageChanged = state.originalCurrentPageChangedHandler
+        state.controller.onWidgetPagesChanged = state.originalWidgetPagesChangedHandler
+        state.disabledLongPressRecognizers.forEach { $0.isEnabled = true }
+        state.removedContextMenuInteractions.forEach { $0.view.addInteraction($0.interaction) }
+        state.controller.view.isHidden = state.isHidden
+        state.controller.view.alpha = state.alpha
+        state.controller.view.isUserInteractionEnabled = state.isUserInteractionEnabled
+        state.controller.view.translatesAutoresizingMaskIntoConstraints = state.translatesAutoresizingMaskIntoConstraints
+        state.controller.pageControl.isHidden = state.pageControlHidden
+        state.controller.pageControlHeightConstraint.constant = state.pageControlHeight
+        state.controller.pageControl.transform = state.pageControlTransform
+        state.controller.pageContainerView.layer.cornerRadius = state.pageContainerCornerRadius
+        state.controller.pageContainerView.layer.maskedCorners = state.pageContainerMaskedCorners
+        state.excludedWidgets.forEach { $0.widget.isHidden = $0.isHidden }
+        applyIconVisibilityOverrides(state.iconVisibilityOverrides)
+        applySizeStyleOverrides(state.sizeStyleOverrides, in: state.controller)
+        let originalAppearance = WidgetPanelAppearanceResolver.resolve(
+            panel: state.panel,
+            appMode: state.appMode,
+            layoutMode: state.originalLayoutMode,
+            nightMode: OAAppSettings.sharedManager().isAppMapNightMode
+        )
+        applyAppearance(originalAppearance,
+                        to: state.controller,
+                        using: state.mapInfoController)
+        // Size preferences may have changed while hosted; the saved geometry is stale.
+        var restoredContentSize = previewPanelContentSize(for: state.controller)
+        if state.controller.isHorizontal {
+            // Restore the map's full row width before laying out the unhidden widgets.
+            // A compressed measurement of the still-hosted page can return a width
+            // smaller than the widgets' required padding and icon widths.
+            restoredContentSize.width = max(restoredContentSize.width,
+                                            max(state.originalContainerSize.width, state.frame.width))
+        }
+        updatePageContainerSize(restoredContentSize, for: state.controller)
+        var restoredFrame = state.frame
+        if state.controller.isHorizontal {
+            restoredFrame.size.width = max(restoredFrame.width, restoredContentSize.width)
+            restoredFrame.size.height = restoredContentSize.height
+        } else {
+            let borderInsets = state.view.layer.borderWidth * 2
+            let pageControlHeight = state.controller.pageControl.isHidden
+                ? 0
+                : state.controller.pageControlHeightConstraint.constant
+            restoredFrame.size = CGSize(width: restoredContentSize.width + borderInsets,
+                                        height: restoredContentSize.height + pageControlHeight + borderInsets)
+        }
+        state.view.transform = .identity
+        state.view.bounds = CGRect(origin: state.bounds.origin, size: restoredFrame.size)
+        state.view.frame = restoredFrame
+        state.view.transform = state.transform
+
+        state.controller.willMove(toParent: nil)
+        state.controller.view.removeFromSuperview()
+        state.controller.removeFromParent()
+        if let originalParent = state.originalParent {
+            originalParent.addChild(state.controller)
+        }
+        if let originalSuperview = state.originalSuperview {
+            if let originalIndex = state.originalIndex, originalIndex <= originalSuperview.subviews.count {
+                originalSuperview.insertSubview(state.view, at: originalIndex)
+            } else {
+                originalSuperview.addSubview(state.view)
+            }
+            NSLayoutConstraint.activate(state.originalSuperviewConstraints)
+            originalSuperview.setNeedsLayout()
+        }
+        state.view.autoresizingMask = state.autoresizingMask
+        if let originalParent = state.originalParent {
+            state.controller.didMove(toParent: originalParent)
+        }
+        state.controller.delegate = state.originalDelegate
+        hostedState = nil
+        // The preview temporarily overrides the live widgets. Recreate the returned
+        // panel even when it used the current layout so newly saved size/icon modes
+        // replace the pre-preview overrides on the map immediately.
+        state.mapInfoController.recreateWidgetsPanel(state.panel)
+        if let hudViewController = state.originalParent as? OAMapHudViewController {
+            hudViewController.updateControlsLayout(false)
+            hudViewController.updateDependentButtonsVisibility()
+        }
+    }
+
+    func onPanelSizeChanged() {
+        guard !isMeasuringPanelSize, !isPageTransitionInProgress else { return }
+        schedulePanelSizeUpdate()
+    }
+
+    private func hostWidgets(for panel: WidgetsPanel,
+                             appMode: OAApplicationMode,
+                             layoutMode: ScreenLayoutMode?,
+                             parentViewController: UIViewController) {
+        guard let mapInfoController = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController else {
+            return
+        }
+        let controller: WidgetPanelViewController
+        if panel == .leftPanel {
+            controller = mapInfoController.leftPanelController
+        } else if panel == .rightPanel {
+            controller = mapInfoController.rightPanelController
+        } else if panel == .topPanel {
+            controller = mapInfoController.topPanelController
+        } else {
+            controller = mapInfoController.bottomPanelController
+        }
+        controller.loadViewIfNeeded()
+        populatePreviewWidgetsIfNeeded(in: controller,
+                                       panel: panel,
+                                       appMode: appMode,
+                                       layoutMode: layoutMode)
+        restoreCurrentPage(in: controller, for: panel)
+        let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
+        let originalLayoutMode: ScreenLayoutMode? = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
+            ? .default(forAppMode: appMode)
+            : nil
+        let previewAppearance = resolvePreviewAppearance(panel: panel,
+                                                         appMode: appMode,
+                                                         layoutMode: layoutMode,
+                                                         nightMode: nightMode)
+        applyAppearance(previewAppearance,
+                        to: controller,
+                        using: mapInfoController)
+        controller.view.layer.removeAllAnimations()
+        controller.pageContainerView.layer.removeAllAnimations()
+        let excludedWidgets = controller.widgetPages
+            .flatMap { $0 }
+            .filter { $0 is CoordinatesBaseWidget }
+            .map { (widget: $0, isHidden: $0.isHidden) }
+        let disabledLongPressRecognizers = disableLongPressRecognizers(in: controller.view)
+        let removedContextMenuInteractions = removeContextMenuInteractions(in: controller.view)
+        let originalSuperview = controller.view.superview
+        let originalSuperviewConstraints = originalSuperview?.constraints.filter {
+            $0.firstItem === controller.view || $0.secondItem === controller.view
+        } ?? []
+        let originalIndex = originalSuperview?.subviews.firstIndex(of: controller.view)
+        let originalParent = controller.parent
+        let originalDelegate = controller.delegate
+        let originalCurrentPageChangedHandler = controller.onCurrentPageChanged
+        let originalWidgetPagesChangedHandler = controller.onWidgetPagesChanged
+        var originalContainerSize = originalSuperview?.bounds.size ?? controller.view.bounds.size
+        if originalContainerSize.width <= 0 {
+            originalContainerSize.width = controller.view.bounds.width
+        }
+        if originalContainerSize.height <= 0 {
+            originalContainerSize.height = controller.view.bounds.height
+        }
+        let originalFrame = controller.view.frame
+        let originalBounds = controller.view.bounds
+        let originalTransform = controller.view.transform
+        let originalIsHidden = controller.view.isHidden
+        let originalAlpha = controller.view.alpha
+        let originalIsUserInteractionEnabled = controller.view.isUserInteractionEnabled
+        let originalTranslatesAutoresizingMaskIntoConstraints = controller.view.translatesAutoresizingMaskIntoConstraints
+        let originalAutoresizingMask = controller.view.autoresizingMask
+        let originalPageControlHidden = controller.pageControl.isHidden
+        let originalPageControlHeight = controller.pageControlHeightConstraint.constant
+        let originalPageControlTransform = controller.pageControl.transform
+        let originalPageContainerCornerRadius = controller.pageContainerView.layer.cornerRadius
+        let originalPageContainerMaskedCorners = controller.pageContainerView.layer.maskedCorners
+        controller.delegate = nil
+        excludedWidgets.forEach { $0.widget.isHidden = true }
+        let previewSizeStyle = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
+            .sizeMode(for: panel)
+            .widgetSizeStyle
+            .map { NSNumber(value: $0.rawValue) }
+        let textWidgets = controller.widgetPages
+            .flatMap { $0 }
+            .compactMap { $0 as? OATextInfoWidget }
+        let sizeStyleOverrides = textWidgets.map {
+            (widget: $0, style: $0.panelSizeStyleOverride)
+        }
+        let iconVisibilityOverrides = textWidgets.map {
+            (widget: $0, visible: $0.panelIconVisibilityOverride)
+        }
+        let previewIconVisibility = previewIconVisibility(appMode: appMode,
+                                                          panel: panel,
+                                                          layoutMode: layoutMode)
+        applyIconVisibilityOverrides(textWidgets.map {
+            (widget: $0, visible: previewIconVisibility)
+        })
+        applySizeStyleOverrides(textWidgets.map { (widget: $0, style: previewSizeStyle) },
+                                in: controller)
+        let panelContentSize = previewPanelContentSize(for: controller)
+        let previewContentSize = previewSize(for: panelContentSize,
+                                             controller: controller,
+                                             originalContainerSize: originalContainerSize)
+        let state = HostedPanelState(panel: panel,
+                                     appMode: appMode,
+                                     previewLayoutMode: layoutMode,
+                                     originalLayoutMode: originalLayoutMode,
+                                     mapInfoController: mapInfoController,
+                                     controller: controller,
+                                     originalParent: originalParent,
+                                     originalDelegate: originalDelegate,
+                                     originalCurrentPageChangedHandler: originalCurrentPageChangedHandler,
+                                     originalWidgetPagesChangedHandler: originalWidgetPagesChangedHandler,
+                                     view: controller.view,
+                                     originalSuperview: originalSuperview,
+                                     originalContainerSize: originalContainerSize,
+                                     originalSuperviewConstraints: originalSuperviewConstraints,
+                                     originalIndex: originalIndex,
+                                     frame: originalFrame,
+                                     bounds: originalBounds,
+                                     transform: originalTransform,
+                                     isHidden: originalIsHidden,
+                                     alpha: originalAlpha,
+                                     isUserInteractionEnabled: originalIsUserInteractionEnabled,
+                                     translatesAutoresizingMaskIntoConstraints: originalTranslatesAutoresizingMaskIntoConstraints,
+                                     autoresizingMask: originalAutoresizingMask,
+                                     pageControlHidden: originalPageControlHidden,
+                                     pageControlHeight: originalPageControlHeight,
+                                     pageControlTransform: originalPageControlTransform,
+                                     pageContainerCornerRadius: originalPageContainerCornerRadius,
+                                     pageContainerMaskedCorners: originalPageContainerMaskedCorners,
+                                     excludedWidgets: excludedWidgets,
+                                     disabledLongPressRecognizers: disabledLongPressRecognizers,
+                                     removedContextMenuInteractions: removedContextMenuInteractions,
+                                     sizeStyleOverrides: sizeStyleOverrides,
+                                     iconVisibilityOverrides: iconVisibilityOverrides,
+                                     previewContentSize: previewContentSize)
+        hostedState = state
+        controller.willMove(toParent: nil)
+        NSLayoutConstraint.deactivate(originalSuperviewConstraints)
+        controller.view.removeFromSuperview()
+        controller.removeFromParent()
+        // The preview owns the frame; its container must not autoresize the panel again.
+        controller.view.autoresizingMask = []
+        controller.view.translatesAutoresizingMaskIntoConstraints = true
+        parentViewController.addChild(controller)
+        contentView.addSubview(controller.view)
+        controller.didMove(toParent: parentViewController)
+        controller.onCurrentPageChanged = { [weak self, weak controller] in
+            guard let self, let controller else { return }
+            self.selectedPageIndexes[ObjectIdentifier(panel)] = controller.currentIndex
+            self.schedulePanelSizeUpdate()
+        }
+        controller.onWidgetPagesChanged = { [weak self, weak controller] in
+            originalWidgetPagesChangedHandler?()
+            guard let self, let controller else { return }
+            if !self.isPopulatingPreviewWidgets {
+                // Map rotation repopulates this live controller for the physical
+                // orientation. Replace it synchronously with the layout being
+                // edited, before UIKit can render the intermediate empty panel.
+                self.populatePreviewWidgetsIfNeeded(in: controller,
+                                                     panel: panel,
+                                                     appMode: appMode,
+                                                     layoutMode: layoutMode)
+            }
+            self.restoreCurrentPage(in: controller, for: panel)
+            self.refreshExcludedWidgets()
+        }
+        controller.view.isHidden = false
+        controller.view.alpha = 1
+        controller.view.isUserInteractionEnabled = true
+        updatePageContainerSize(panelContentSize, for: controller)
+        layoutHostedPanel()
+        controller.delegate = self
+        schedulePanelSizeUpdate()
+    }
+
+    private func populatePreviewWidgetsIfNeeded(in controller: WidgetPanelViewController,
+                                                panel: WidgetsPanel,
+                                                appMode: OAApplicationMode,
+                                                layoutMode: ScreenLayoutMode?) {
+        guard !isPopulatingPreviewWidgets,
+              let layoutMode,
+              layoutMode != ScreenLayoutMode.default(forAppMode: appMode) else {
+            return
+        }
+        isPopulatingPreviewWidgets = true
+        defer { isPopulatingPreviewWidgets = false }
+        controller.clearWidgets()
+        controller.prepareAppearanceModes(for: panel,
+                                          appMode: appMode,
+                                          layoutMode: layoutMode)
+        OAMapWidgetRegistry.sharedInstance().populateControlsContainer(
+            controller,
+            mode: appMode,
+            widgetPanel: panel,
+            screenLayoutMode: Int(layoutMode.rawValue)
+        )
+        let widgets = controller.widgetPages.flatMap { $0 }
+        let delegates = widgets.map { (widget: $0, delegate: $0.delegate) }
+        widgets.forEach { $0.delegate = nil }
+        widgets.forEach { $0.updateInfo() }
+        delegates.forEach { $0.widget.delegate = $0.delegate }
+    }
+
+    private func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance,
+                                 to controller: WidgetPanelViewController,
+                                 using mapInfoController: OAMapInfoController) {
+        let widgets = controller.widgetPages.flatMap { $0 }
+        let widgetDelegates = widgets.map { (widget: $0, delegate: $0.delegate) }
+        // Text refreshes notify the panel synchronously. Finish applying all colors
+        // before the preview measures and restores the panel's geometry.
+        widgets.forEach { $0.delegate = nil }
+        defer {
+            widgetDelegates.forEach { $0.widget.delegate = $0.delegate }
+        }
+        controller.applyAppearance(appearance)
+
+        let textState = OATextState()
+        textState.textBold = OARoutingHelper.sharedInstance().isFollowingMode()
+        textState.night = OAAppSettings.sharedManager().isAppMapNightMode
+        textState.textColor = appearance.primaryTextColor
+        textState.unitColor = appearance.secondaryTextColor
+        textState.titleColor = appearance.secondaryTextColor
+        textState.dividerColor = appearance.dividerColor
+        textState.textOutlineColor = appearance.textOutlineColor
+        textState.textOutlineWidth = Float(appearance.textOutlineWidth)
+        textState.leftColor = appearance.backgroundColor
+
+        mapInfoController.apply(textState,
+                                toWidgets: widgets)
+    }
+
+    private func restoreCurrentPage(in controller: WidgetPanelViewController, for panel: WidgetsPanel) {
+        let key = ObjectIdentifier(panel)
+        guard let savedIndex = selectedPageIndexes[key] else {
+            selectedPageIndexes[key] = controller.currentIndex
+            return
+        }
+        guard !controller.pages.isEmpty else { return }
+        let index = min(max(savedIndex, 0), controller.pages.count - 1)
+        let page = controller.pages[index]
+        controller.pageControl.currentPage = index
+        if controller.pageViewController.viewControllers?.first !== page {
+            controller.pageViewController.setViewControllers([page], direction: .forward, animated: false)
+        }
+        controller.currentActiveController = page
+        selectedPageIndexes[key] = index
+    }
+
+    private func hostedPanelContentSize() -> CGSize {
+        guard let state = hostedState else { return .zero }
+        return state.previewContentSize
+    }
+
+    private func previewPanelContentSize(for controller: WidgetPanelViewController) -> CGSize {
+        guard controller.isHorizontal,
+              controller.pageControl.currentPage >= 0,
+              controller.pageControl.currentPage < controller.pages.count,
+              let page = controller.pages[controller.pageControl.currentPage] as? WidgetPageViewController else {
+            return controller.calculateContentSize()
+        }
+
+        var size = CGSize.zero
+        var visibleRowCount = 0
+        for row in page.simpleWidgetViews {
+            let visibleWidgets = row.filter { !$0.isHidden }
+            guard !visibleWidgets.isEmpty else { continue }
+            visibleRowCount += 1
+            let widgetSizes = visibleWidgets.map {
+                $0.systemLayoutSizeFitting(
+                    UIView.layoutFittingCompressedSize,
+                    // Match WidgetPageViewController: preserve required content
+                    // padding and icon widths instead of forcing a transient
+                    // compressed width (12 pt for some widget hierarchies).
+                    withHorizontalFittingPriority: UILayoutPriority(999),
+                    verticalFittingPriority: .fittingSizeLevel
+                )
+            }
+            let itemWidth = max(32, widgetSizes.map(\.width).max() ?? 0)
+            size.width = max(size.width, itemWidth * CGFloat(visibleWidgets.count))
+            size.height += widgetSizes.map(\.height).max() ?? 0
+        }
+        if visibleRowCount > 1 {
+            size.height += CGFloat(visibleRowCount - 1)
+        }
+        size.height = max(size.height, 34)
+        return size
+    }
+
+    private func updatePageContainerSize(_ size: CGSize, for controller: WidgetPanelViewController) {
+        for constraint in controller.pageContainerView.constraints where constraint.firstItem === controller.pageContainerView {
+            switch constraint.firstAttribute {
+            case .height:
+                constraint.constant = size.height
+            case .width:
+                constraint.constant = size.width
+            default:
+                break
+            }
+        }
+        controller.view.setNeedsLayout()
+    }
+
+    private func previewSize(for panelContentSize: CGSize,
+                             controller: WidgetPanelViewController,
+                             originalContainerSize: CGSize) -> CGSize {
+        guard controller.hasWidgets() else { return .zero }
+
+        var result = panelContentSize
+        if panel == .leftPanel || panel == .rightPanel {
+            let borderInsets = controller.view.layer.borderWidth * 2
+            let pageControlHeight = controller.pageControl.isHidden
+                ? 0
+                : controller.pageControlHeightConstraint.constant
+            result.width += borderInsets
+            result.height += pageControlHeight + borderInsets
+        } else {
+            let containerWidth = originalContainerSize.width > 0
+                ? originalContainerSize.width
+                : bounds.width
+            // Top and bottom panels always occupy the map container width. Their
+            // rows compress widget contents horizontally; the panel itself is not
+            // scaled down when intrinsic widget widths exceed that width.
+            result.width = containerWidth
+        }
+        return result
+    }
+
+    private func schedulePanelSizeUpdate() {
+        guard hostedState != nil else { return }
+        panelSizeUpdateGeneration += 1
+        let generation = panelSizeUpdateGeneration
+        DispatchQueue.main.async { [weak self] in
+            self?.performPanelSizeUpdate(generation: generation)
+        }
+    }
+
+    private func performPanelSizeUpdate(generation: Int) {
+        guard generation == panelSizeUpdateGeneration,
+              hostedState != nil else { return }
+        guard !isPageTransitionInProgress else {
+            // Rotation and setViewControllers(animated: false) can temporarily
+            // leave UIPageViewController in a transition state. Do not lose the
+            // final measurement; retry only while this request is still current.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.performPanelSizeUpdate(generation: generation)
+            }
+            return
+        }
+        updateHostedPanelSize()
+    }
+
+    private func updateHostedPanelSize() {
+        guard !isMeasuringPanelSize, var state = hostedState else { return }
+        panelSizeUpdateGeneration += 1
+        isMeasuringPanelSize = true
+        defer { isMeasuringPanelSize = false }
+        let previewAppearance = resolvePreviewAppearance(panel: state.panel,
+                                                         appMode: state.appMode,
+                                                         layoutMode: state.previewLayoutMode)
+        // Map recreation and rotation apply the appearance for the physical
+        // orientation. A preview must remain bound to the layout mode it edits.
+        applyAppearance(previewAppearance,
+                        to: state.controller,
+                        using: state.mapInfoController)
+        applyPreviewIconMode(to: &state)
+        applyPreviewSizeMode(to: &state)
+        excludePreviewOnlyWidgets(in: &state)
+        let panelContentSize = previewPanelContentSize(for: state.controller)
+        updatePageContainerSize(panelContentSize, for: state.controller)
+        let newSize = previewSize(for: panelContentSize,
+                                  controller: state.controller,
+                                  originalContainerSize: state.originalContainerSize)
+        state.previewContentSize = newSize
+        hostedState = state
+        UIView.performWithoutAnimation {
+            layoutHostedPanel()
+            // Complete layout while delegate-driven measurements are suppressed.
+            state.view.layoutIfNeeded()
+        }
+    }
+
+    private func resolvePreviewAppearance(panel: WidgetsPanel,
+                                          appMode: OAApplicationMode,
+                                          layoutMode: ScreenLayoutMode?,
+                                          nightMode: Bool = OAAppSettings.sharedManager().isAppMapNightMode)
+        -> ResolvedWidgetPanelAppearance {
+        WidgetPanelAppearanceResolver.resolve(panel: panel,
+                                              appMode: appMode,
+                                              layoutMode: layoutMode,
+                                              nightMode: nightMode,
+                                              colorPreview: colorPreview)
+    }
+
+    private func applyPreviewSizeMode(to state: inout HostedPanelState) {
+        let previewSizeStyle = WidgetPanelAppearanceSettings(appMode: state.appMode,
+                                                             layoutMode: state.previewLayoutMode)
+            .sizeMode(for: state.panel)
+            .widgetSizeStyle
+            .map { NSNumber(value: $0.rawValue) }
+        var trackedWidgets = Set(state.sizeStyleOverrides.map { ObjectIdentifier($0.widget) })
+        var updates: [(widget: OATextInfoWidget, style: NSNumber?)] = []
+        for case let widget as OATextInfoWidget in state.controller.widgetPages.flatMap({ $0 }) {
+            if trackedWidgets.insert(ObjectIdentifier(widget)).inserted {
+                state.sizeStyleOverrides.append((widget: widget,
+                                                 style: widget.panelSizeStyleOverride))
+            }
+            guard widget.panelSizeStyleOverride != previewSizeStyle else { continue }
+            updates.append((widget: widget, style: previewSizeStyle))
+        }
+        applySizeStyleOverrides(updates, in: state.controller)
+    }
+
+    private func applyPreviewIconMode(to state: inout HostedPanelState) {
+        let previewVisibility = previewIconVisibility(appMode: state.appMode,
+                                                      panel: state.panel,
+                                                      layoutMode: state.previewLayoutMode)
+        var trackedWidgets = Set(state.iconVisibilityOverrides.map { ObjectIdentifier($0.widget) })
+        var updates: [(widget: OATextInfoWidget, visible: NSNumber?)] = []
+        for case let widget as OATextInfoWidget in state.controller.widgetPages.flatMap({ $0 }) {
+            if trackedWidgets.insert(ObjectIdentifier(widget)).inserted {
+                state.iconVisibilityOverrides.append((widget: widget,
+                                                      visible: widget.panelIconVisibilityOverride))
+            }
+            guard widget.panelIconVisibilityOverride != previewVisibility else { continue }
+            updates.append((widget: widget, visible: previewVisibility))
+        }
+        applyIconVisibilityOverrides(updates)
+    }
+
+    private func previewIconVisibility(appMode: OAApplicationMode,
+                                       panel: WidgetsPanel,
+                                       layoutMode: ScreenLayoutMode?) -> NSNumber? {
+        switch WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode).iconMode(for: panel) {
+        case .original: nil
+        case .off: NSNumber(value: false)
+        case .on: NSNumber(value: true)
+        }
+    }
+
+    private func applyIconVisibilityOverrides(
+        _ updates: [(widget: OATextInfoWidget, visible: NSNumber?)]
+    ) {
+        updates.forEach {
+            $0.widget.panelIconVisibilityOverride = $0.visible
+            if $0.widget.isSimpleLayout {
+                $0.widget.configureSimpleLayout()
+            }
+        }
+    }
+
+    private func applySizeStyleOverrides(_ updates: [(widget: OATextInfoWidget, style: NSNumber?)],
+                                         in controller: WidgetPanelViewController) {
+        let widgetDelegates = updates.map { (widget: $0.widget, delegate: $0.widget.delegate) }
+        updates.forEach { $0.widget.delegate = nil }
+        defer {
+            widgetDelegates.forEach { $0.widget.delegate = $0.delegate }
+        }
+        updates.forEach {
+            $0.widget.panelSizeStyleOverride = $0.style
+            guard $0.widget.isSimpleLayout else { return }
+            $0.widget.updateHeightConstraint(
+                with: .equal,
+                constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: $0.widget.widgetSizeStyle),
+                priority: .defaultHigh
+            )
+        }
+        // Configure loaded pages only after every row has its new height.
+        // layoutWidgets() updates each page stack height in the same pass, avoiding
+        // a transient mix of (for example) 72 pt rows and the old 144 pt container.
+        // Updating all previously visited pages is also required when restoring the
+        // map, otherwise an off-screen page can keep the preview's typography.
+        for case let page as WidgetPageViewController in controller.pages where page.isViewLoaded {
+            preparePreviewStackHeight(in: page)
+            page.layoutWidgets()
+        }
+    }
+
+    private func preparePreviewStackHeight(in page: WidgetPageViewController) {
+        guard !page.isMultipleWidgetsInRow,
+              let stackView = page.view.subviews.first(where: { $0 is UIStackView }) as? UIStackView,
+              let stackHeightConstraint = stackView.constraints.first(where: {
+                  $0.isActive
+                      && $0.firstItem === stackView
+                      && $0.firstAttribute == .height
+                      && $0.relation == .equal
+              }) else {
+            return
+        }
+        let height = page.widgetViews.reduce(CGFloat.zero) { result, widget in
+            guard !widget.isHidden else { return result }
+            if let constraint = widget.heightEqualConstraint, constraint.isActive {
+                return result + constraint.constant
+            }
+            if let constraint = widget.heightGreaterThanOrEqualConstraint, constraint.isActive {
+                return result + max(widget.frame.height, constraint.constant)
+            }
+            return result + widget.frame.height
+        }
+        guard height > 0 else { return }
+        stackHeightConstraint.constant = height
+    }
+
+    private func excludePreviewOnlyWidgets(in state: inout HostedPanelState) {
+        var trackedWidgets = Set(state.excludedWidgets.map { ObjectIdentifier($0.widget) })
+        for widget in state.controller.widgetPages.flatMap({ $0 }) where widget is CoordinatesBaseWidget {
+            if trackedWidgets.insert(ObjectIdentifier(widget)).inserted {
+                state.excludedWidgets.append((widget: widget, isHidden: widget.isHidden))
+            }
+            widget.isHidden = true
+        }
+    }
+
+    private func refreshExcludedWidgets() {
+        guard var state = hostedState else { return }
+        excludePreviewOnlyWidgets(in: &state)
+        hostedState = state
+        schedulePanelSizeUpdate()
+    }
+
+    private func disableLongPressRecognizers(in rootView: UIView) -> [UILongPressGestureRecognizer] {
+        var result: [UILongPressGestureRecognizer] = []
+        func collect(from view: UIView) {
+            for case let recognizer as UILongPressGestureRecognizer in view.gestureRecognizers ?? [] where recognizer.isEnabled {
+                recognizer.isEnabled = false
+                result.append(recognizer)
+            }
+            view.subviews.forEach { collect(from: $0) }
+        }
+        collect(from: rootView)
+        return result
+    }
+
+    private func removeContextMenuInteractions(in rootView: UIView) -> [(view: UIView, interaction: UIContextMenuInteraction)] {
+        var result: [(view: UIView, interaction: UIContextMenuInteraction)] = []
+        func collect(from view: UIView) {
+            for case let interaction as UIContextMenuInteraction in view.interactions {
+                result.append((view, interaction))
+                view.removeInteraction(interaction)
+            }
+            view.subviews.forEach { collect(from: $0) }
+        }
+        collect(from: rootView)
+        return result
+    }
+
+    private func layoutHostedPanel() {
+        guard bounds.width > 0, bounds.height > 0 else {
+            contentView.transform = .identity
+            contentView.frame = .zero
+            scrollView.contentSize = .zero
+            scrollView.isScrollEnabled = false
+            return
+        }
+        guard let state = hostedState else {
+            contentView.frame = .zero
+            scrollView.contentSize = bounds.size
+            return
+        }
+        let contentSize = hostedPanelContentSize()
+        guard contentSize.width > 0, contentSize.height > 0 else {
+            state.view.isHidden = true
+            contentView.frame = .zero
+            scrollView.contentSize = bounds.size
+            scrollView.isScrollEnabled = false
+            return
+        }
+        state.view.isHidden = false
+        state.view.transform = .identity
+        var hostedViewSize = state.bounds.size
+        if hostedViewSize.width <= 0 || hostedViewSize.height <= 0 {
+            hostedViewSize = state.originalContainerSize
+        }
+        if panel == .leftPanel || panel == .rightPanel {
+            // The border and page control are anchored to the panel's actual bounds.
+            hostedViewSize = contentSize
+        } else {
+            hostedViewSize.width = max(hostedViewSize.width, contentSize.width)
+            hostedViewSize.height = max(hostedViewSize.height, contentSize.height)
+        }
+        state.controller.pageControl.transform = .identity
+        let safeBounds = bounds.inset(by: safeAreaInsets)
+        let availableWidth = max(0, safeBounds.width)
+        let availableHeight = max(0, safeBounds.height)
+        let scale = min(1, availableWidth / contentSize.width)
+        guard scale > 0, scale.isFinite else { return }
+        let size = CGSize(width: contentSize.width * scale, height: contentSize.height * scale)
+        let x: CGFloat
+        if panel == .rightPanel {
+            x = safeBounds.maxX - size.width
+        } else if panel == .topPanel || panel == .bottomPanel {
+            x = safeBounds.minX + max(0, (availableWidth - size.width) / 2)
+        } else {
+            x = safeBounds.minX
+        }
+        let y = panel == .bottomPanel
+            ? safeBounds.minY + max(0, availableHeight - size.height)
+            : safeBounds.minY
+        contentView.transform = .identity
+        contentView.bounds = CGRect(origin: .zero, size: contentSize)
+        contentView.transform = CGAffineTransform(scaleX: scale, y: scale)
+        contentView.frame.origin = CGPoint(x: x, y: y)
+        let hostedFrame = CGRect(origin: .zero, size: hostedViewSize)
+        if state.view.frame != hostedFrame {
+            state.view.frame = hostedFrame
+        }
+        scrollView.contentSize = CGSize(width: bounds.width,
+                                        height: max(bounds.height, safeBounds.minY + size.height))
+        scrollView.isScrollEnabled = size.height > availableHeight
+    }
+
+    deinit {
+        releaseHostedWidgets()
+    }
+}
+
+private final class WidgetsAppearanceOptionCell: UITableViewCell {
+    enum Preview {
+        case image(UIImage?, UIColor)
+        case text(UIColor, UIColor)
+        case color(UIColor)
+    }
+
+    private let previewContainer = UIView()
+    private let previewCheckerboardImageView = UIImageView()
+    private let previewColorView = UIView()
+    private let previewImageView = UIImageView()
+    private let previewLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let valueButton = UIButton(type: .system)
+    private var usesAccessibilityLayout = false
+    private var isLayoutConfigured = false
+    private lazy var titleLeadingToPreviewConstraint = titleLabel.leadingAnchor.constraint(
+        equalTo: previewContainer.trailingAnchor,
+        constant: 13
+    )
+    private lazy var titleLeadingToContentConstraint = titleLabel.leadingAnchor.constraint(
+        equalTo: contentView.leadingAnchor,
+        constant: 16
+    )
+    private lazy var regularLayoutConstraints = [
+        previewContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: valueButton.leadingAnchor, constant: -8),
+        valueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+        valueButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+    ]
+    private lazy var accessibilityLayoutConstraints = [
+        previewContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+        valueButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+        valueButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+        valueButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
+        valueButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+    ]
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupViews()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isAccessibilityElement = false
+        previewContainer.isHidden = false
+        valueButton.isHidden = false
+        titleLabel.textColor = .textColorPrimary
+        selectionStyle = .none
+        accessibilityLabel = nil
+        accessibilityValue = nil
+        accessibilityTraits = []
+        valueButton.accessibilityLabel = nil
+        valueButton.accessibilityValue = nil
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !valueButton.isHidden {
+            valueButton.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(bounds, in: self)
+        }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateLayoutForContentSizeCategory()
+    }
+
+    func configure(title: String, preview: Preview, value: String, menu: UIMenu) {
+        selectionStyle = .none
+        titleLabel.text = title
+        titleLabel.textColor = .textColorPrimary
+        titleLeadingToContentConstraint.isActive = false
+        titleLeadingToPreviewConstraint.isActive = true
+        configurePreview(preview)
+
+        var configuration = UIButton.Configuration.plain()
+        configuration.title = value
+        configuration.image = UIImage(systemName: "chevron.up.chevron.down",
+                                      withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .semibold))
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 5
+        configuration.contentInsets = .zero
+        configuration.baseForegroundColor = .textColorActive
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attributes in
+            var attributes = attributes
+            attributes.font = .preferredFont(forTextStyle: .body)
+            return attributes
+        }
+        valueButton.configuration = configuration
+        valueButton.menu = menu
+        valueButton.showsMenuAsPrimaryAction = true
+        valueButton.changesSelectionAsPrimaryAction = false
+        isAccessibilityElement = false
+        valueButton.accessibilityLabel = title
+        valueButton.accessibilityValue = value
+        valueButton.accessibilityTraits = .button
+    }
+
+    func configureReset(title: String) {
+        previewContainer.isHidden = true
+        valueButton.isHidden = true
+        valueButton.configuration = nil
+        valueButton.menu = nil
+        valueButton.accessibilityLabel = nil
+        valueButton.accessibilityValue = nil
+        titleLeadingToPreviewConstraint.isActive = false
+        titleLeadingToContentConstraint.isActive = true
+        titleLabel.text = title
+        titleLabel.textColor = .textColorActive
+        selectionStyle = .default
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        accessibilityValue = nil
+        accessibilityTraits = .button
+    }
+
+    private func setupViews() {
+        backgroundColor = .groupBg
+        preservesSuperviewLayoutMargins = false
+        separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
+
+        previewContainer.translatesAutoresizingMaskIntoConstraints = false
+        previewCheckerboardImageView.translatesAutoresizingMaskIntoConstraints = false
+        previewCheckerboardImageView.contentMode = .scaleAspectFit
+        previewCheckerboardImageView.image = UIImage(named: "bg_color_chessboard_pattern")
+        previewColorView.translatesAutoresizingMaskIntoConstraints = false
+        previewImageView.translatesAutoresizingMaskIntoConstraints = false
+        previewImageView.contentMode = .scaleAspectFit
+        previewLabel.translatesAutoresizingMaskIntoConstraints = false
+        previewLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        previewLabel.textAlignment = .center
+        previewLabel.text = "A"
+        previewContainer.accessibilityElementsHidden = true
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.numberOfLines = 0
+        titleLabel.textColor = .textColorPrimary
+        titleLabel.isAccessibilityElement = false
+
+        valueButton.translatesAutoresizingMaskIntoConstraints = false
+        valueButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        valueButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        valueButton.setContentHuggingPriority(.required, for: .horizontal)
+        valueButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        contentView.addSubview(previewContainer)
+        previewContainer.addSubview(previewCheckerboardImageView)
+        previewContainer.addSubview(previewColorView)
+        previewContainer.addSubview(previewImageView)
+        previewContainer.addSubview(previewLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(valueButton)
+
+        titleLeadingToPreviewConstraint.isActive = true
+        updateLayoutForContentSizeCategory()
+
+        NSLayoutConstraint.activate([
+            previewContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 13),
+            previewContainer.widthAnchor.constraint(equalToConstant: 36),
+            previewContainer.heightAnchor.constraint(equalToConstant: 36),
+
+            previewCheckerboardImageView.leadingAnchor.constraint(equalTo: previewContainer.leadingAnchor),
+            previewCheckerboardImageView.trailingAnchor.constraint(equalTo: previewContainer.trailingAnchor),
+            previewCheckerboardImageView.topAnchor.constraint(equalTo: previewContainer.topAnchor),
+            previewCheckerboardImageView.bottomAnchor.constraint(equalTo: previewContainer.bottomAnchor),
+
+            previewColorView.leadingAnchor.constraint(equalTo: previewContainer.leadingAnchor),
+            previewColorView.trailingAnchor.constraint(equalTo: previewContainer.trailingAnchor),
+            previewColorView.topAnchor.constraint(equalTo: previewContainer.topAnchor),
+            previewColorView.bottomAnchor.constraint(equalTo: previewContainer.bottomAnchor),
+
+            previewImageView.centerXAnchor.constraint(equalTo: previewContainer.centerXAnchor),
+            previewImageView.centerYAnchor.constraint(equalTo: previewContainer.centerYAnchor),
+            previewImageView.widthAnchor.constraint(equalToConstant: 30),
+            previewImageView.heightAnchor.constraint(equalToConstant: 30),
+
+            previewLabel.leadingAnchor.constraint(equalTo: previewContainer.leadingAnchor),
+            previewLabel.trailingAnchor.constraint(equalTo: previewContainer.trailingAnchor),
+            previewLabel.topAnchor.constraint(equalTo: previewContainer.topAnchor),
+            previewLabel.bottomAnchor.constraint(equalTo: previewContainer.bottomAnchor)
+        ])
+    }
+
+    private func updateLayoutForContentSizeCategory() {
+        let useAccessibilityLayout = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+        guard !isLayoutConfigured || usesAccessibilityLayout != useAccessibilityLayout else { return }
+        isLayoutConfigured = true
+        usesAccessibilityLayout = useAccessibilityLayout
+        if useAccessibilityLayout {
+            NSLayoutConstraint.deactivate(regularLayoutConstraints)
+            NSLayoutConstraint.activate(accessibilityLayoutConstraints)
+            valueButton.contentHorizontalAlignment = .leading
+        } else {
+            NSLayoutConstraint.deactivate(accessibilityLayoutConstraints)
+            NSLayoutConstraint.activate(regularLayoutConstraints)
+            valueButton.contentHorizontalAlignment = .trailing
+        }
+    }
+
+    private func configurePreview(_ preview: Preview) {
+        previewCheckerboardImageView.isHidden = true
+        previewColorView.isHidden = true
+        previewImageView.isHidden = true
+        previewLabel.isHidden = true
+        previewContainer.layer.cornerRadius = 18
+        previewContainer.clipsToBounds = true
+        previewContainer.layer.borderWidth = 0
+        switch preview {
+        case let .image(image, tintColor):
+            previewContainer.backgroundColor = .clear
+            previewImageView.isHidden = false
+            previewImageView.image = image
+            previewImageView.tintColor = tintColor
+        case let .text(textColor, backgroundColor):
+            configureColorPreview(backgroundColor)
+            previewContainer.layer.borderWidth = 1
+            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+            previewImageView.isHidden = false
+            previewImageView.image = .icCustomTextPreview
+            previewImageView.tintColor = textColor
+        case let .color(color):
+            configureColorPreview(color)
+            previewContainer.layer.borderWidth = 1
+            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+        }
+    }
+
+    private func configureColorPreview(_ color: UIColor) {
+        previewContainer.backgroundColor = .clear
+        previewCheckerboardImageView.isHidden = color.cgColor.alpha >= 0.999
+        previewColorView.isHidden = false
+        previewColorView.backgroundColor = color
+    }
+}

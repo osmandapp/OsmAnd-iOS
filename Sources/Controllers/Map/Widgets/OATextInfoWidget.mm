@@ -561,7 +561,21 @@ NSString * const kSizeStylePref = @"simple_widget_size";
 
 - (void)setImageHidden:(BOOL)hidden
 {
-    _imageView.hidden = hidden;
+    _imageView.hidden = _panelIconVisibilityOverride
+        ? !_panelIconVisibilityOverride.boolValue
+        : hidden;
+}
+
+- (void)setPanelIconVisibilityOverride:(NSNumber *)panelIconVisibilityOverride
+{
+    _panelIconVisibilityOverride = panelIconVisibilityOverride;
+    if (!_imageView)
+        return;
+
+    if (panelIconVisibilityOverride)
+        _imageView.hidden = !panelIconVisibilityOverride.boolValue;
+    else if (_appMode && _showIconPref)
+        _imageView.hidden = ![_showIconPref get:_appMode];
 }
 
 - (BOOL)setIconForWidgetType:(OAWidgetType *)widgetType
@@ -725,7 +739,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     BOOL isVisibleIcon = false;
     if (_appMode && _showIconPref)
     {
-        isVisibleIcon = [_showIconPref get:_appMode];
+        isVisibleIcon = _panelIconVisibilityOverride
+            ? _panelIconVisibilityOverride.boolValue
+            : [_showIconPref get:_appMode];
         _imageView.hidden = !isVisibleIcon;
         
         if (useFullRowContentLayout && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
@@ -791,12 +807,6 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     _placeholderWidthConstraint.active = !self.emptyViewRightPlaceholderFullRow.hidden;
     _iconValueSpacingConstraint.constant = contentSpacing;
     _valuePlaceholderSpacingConstraint.constant = contentSpacing;
-    
-    if (![[self widgetPanel] isPanelVertical])
-    {
-        self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
-        [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameWidgetSeparatorColor].appMapThemeColor];
-    }
 }
 
 - (BOOL)isEnabledTextInfoComponents
@@ -1051,7 +1061,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
     
     _primaryColor = state.textColor;
-    _unitsColor = self.isSimpleLayout ? state.unitColor : state.textColor;
+    _unitsColor = state.unitColor;
     _primaryOutlineColor = state.textOutlineColor;
     _unitsShadowColor = state.textOutlineColor;
     _textOutlineWidth = state.textOutlineWidth;

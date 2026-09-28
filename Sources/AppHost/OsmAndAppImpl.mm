@@ -847,9 +847,6 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
         LogStartup(@"location services initialized and started");
     }
 
-    [self allowScreenTurnOff:NO];
-    LogStartup(@"screen turn off disallowed");
-
     _appearance = [[OADaytimeAppearance alloc] init];
     LogStartup(@"OADaytimeAppearance initialized");
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -915,6 +912,8 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     LogStartup(@"migration manager migration checked/done");
+
+    [[ScreenAwakeService shared] start];
 
     [OAPOIHelper sharedInstance];
     LogStartup(@"POI helper initialized");
@@ -1546,18 +1545,6 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     return deviceMemoryAvailable;
 }
 
-- (void) allowScreenTurnOff:(BOOL)allow
-{
-    if (allow)
-        OALog(@"Going to enable screen turn-off");
-    else
-        OALog(@"Going to disable screen turn-off");
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allow;
-    });
-}
-
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
@@ -1572,9 +1559,6 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
     [self saveDataToPermamentStorage];
 
-    // In background allow to turn off screen
-    [self allowScreenTurnOff:YES];
-
     NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
     if (backgroundTimeRemaining == DBL_MAX) {
         OALog(@"Background time remaining: unlimited");
@@ -1585,7 +1569,6 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
 - (void) onApplicationWillEnterForeground
 {
-    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

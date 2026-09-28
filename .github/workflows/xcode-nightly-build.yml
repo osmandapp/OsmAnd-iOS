@@ -108,6 +108,18 @@ jobs:
         env:
           LANG: en_US.UTF-8
         run: exec ios/prepare.sh --sync_translations
+      - name: Validate synced iOS translations
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            if ! plutil -lint -s "$file"; then
+              relative_file="${file#ios/}"
+              echo "::warning file=$file::Invalid generated strings; restoring the checked-in translation"
+              git -C ios show "HEAD:$relative_file" > "$file"
+              plutil -lint -s "$file"
+            fi
+          done < <(find ios/Resources/Localizations -name Localizable.strings -print0)
       - name: Configure iOS OsmAndCore
         env:
           LANG: en_US.UTF-8

@@ -57,8 +57,8 @@
 #endif
 
 static const float kLimitedFrameRate = 20.0f;
-static const NSTimeInterval kLimitedFrameInterval = 1.0 / kLimitedFrameRate;
-static const NSTimeInterval kFrameIntervalTolerance = 0.001;
+static const NSTimeInterval kMinNativeFrameInterval = 1.0 / 240.0;
+static const NSTimeInterval kMaxNativeFrameInterval = 1.0 / 10.0;
 
 #define _(name) OAMapRendererView__##name
 #define commonInit _(commonInit)
@@ -104,7 +104,7 @@ static const NSTimeInterval kFrameIntervalTolerance = 0.001;
     CGRect prevBounds;
     int _frameId;
     NSTimeInterval _lastUpdateTime;
-    NSTimeInterval _nextFrameDeadline;
+    NSTimeInterval _nativeFrameInterval;
     CGPoint _lastImmediateTouchPoint;
 }
 
@@ -165,7 +165,7 @@ static const NSTimeInterval kFrameIntervalTolerance = 0.001;
 #endif
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
-    _nextFrameDeadline = 0;
+    _nativeFrameInterval = 0;
     _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
@@ -1448,6 +1448,9 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
         return;
     }
 
+    if (_nativeFrameInterval <= 0)
+        [self captureNativeFrameInterval:displayLink];
+
     NSTimeInterval currentTime = CACurrentMediaTime();
     if (_lastUpdateTime == 0) {
         _lastUpdateTime = currentTime;
@@ -1510,7 +1513,6 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
-    shouldRenderFrame = shouldRenderFrame && [self isFrameDueAtTime:currentTime];
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
 #if OSMAND_SERIALIZE_WORKER_WITH_FRAME
@@ -1607,7 +1609,6 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 #endif
 
         _frameId++;
-        [self scheduleNextFrameAtTime:currentTime];
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
@@ -1676,7 +1677,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     glFinish();
 
     _displayLink = nil;
-    _nextFrameDeadline = 0;
+    _nativeFrameInterval = 0;
 
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
@@ -1753,9 +1754,19 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     [self updateFrameRefreshRate];
 }
 
+- (void)captureNativeFrameInterval:(CADisplayLink *)displayLink
+{
+    const NSTimeInterval interval = displayLink.targetTimestamp - displayLink.timestamp;
+    if (interval < kMinNativeFrameInterval || interval > kMaxNativeFrameInterval)
+        return;
+
+    _nativeFrameInterval = interval;
+    [self updateFrameRefreshRate];
+}
+
 - (void)updateFrameRefreshRate
 {
-    if (_limitFrameRate)
+    if (_limitFrameRate && _nativeFrameInterval > 0)
     {
         const float limitedRate = [self limitedFrameRate];
         _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(limitedRate, limitedRate, limitedRate);
@@ -1766,30 +1777,17 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     }
 }
 
-- (BOOL)isFrameDueAtTime:(NSTimeInterval)currentTime
-{
-    if (!_limitFrameRate || _nextFrameDeadline <= 0)
-        return YES;
-
-    return currentTime + kFrameIntervalTolerance >= _nextFrameDeadline;
-}
-
-- (void)scheduleNextFrameAtTime:(NSTimeInterval)currentTime
-{
-    const NSTimeInterval scheduledTime = _nextFrameDeadline + kLimitedFrameInterval;
-    _nextFrameDeadline = (scheduledTime > currentTime && scheduledTime - currentTime <= kLimitedFrameInterval)
-        ? scheduledTime
-        : currentTime + kLimitedFrameInterval;
-}
-
 - (float)limitedFrameRate
 {
-    const NSInteger screenRate = self.window.screen.maximumFramesPerSecond;
-    if (screenRate <= kLimitedFrameRate)
+    const float nativeRate = _nativeFrameInterval > 0
+        ? roundf(1.0f / _nativeFrameInterval)
+        : (float) self.window.screen.maximumFramesPerSecond;
+
+    if (nativeRate <= kLimitedFrameRate)
         return kLimitedFrameRate;
 
-    const NSInteger divisor = (NSInteger) ceil(screenRate / kLimitedFrameRate);
-    return (float) screenRate / (float) divisor;
+    const NSInteger divisor = (NSInteger) ceil(nativeRate / kLimitedFrameRate);
+    return nativeRate / (float) divisor;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

@@ -298,11 +298,16 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
 
 - (NSString *)whatIsNewDescription
 {
-    return [NSString stringWithFormat:@"%@ %@, %@ %@",
+    NSString *description = [NSString stringWithFormat:@"%@ %@, %@ %@",
             OALocalizedString(@"OsmAnd Maps"),
             [OAAppVersion getBuildVersion],
             OALocalizedString(@"shared_string_release").lowercaseString,
             [self releaseDateString]];
+
+    if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"net.osmand.maps.nightly"])
+        return [description stringByAppendingString:@" Nightly"];
+
+    return description;
 }
 
 - (void)loadAndParseJson

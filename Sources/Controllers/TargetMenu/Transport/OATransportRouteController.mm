@@ -26,6 +26,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStop.h>
+#import "GeneratedAssetSymbols.h"
 
 static const NSInteger kOrderPreviousStopsCountRow = -1;
 
@@ -238,7 +239,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         if (name.length == 0)
             name = [self.class getStopType:_transportRoute];
         
-        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:ACImageNameIcCustomLocationMarker] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
         rowInfo.delegate = self;
         [rows addObject:rowInfo];
     }

@@ -514,8 +514,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             cell.delegate = self;
-            [cell.minLevelZoomButton setImage:(_minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage) forState:UIControlStateNormal];
-            [cell.maxLevelZoomButton setImage:(_maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage) forState:UIControlStateNormal];
+            [cell.minLevelZoomButton setImage:(_minZoomTileImage == nil ? [UIImage imageNamed:ACImageNameImgPlaceholderOnlineSource] : _minZoomTileImage) forState:UIControlStateNormal];
+            [cell.maxLevelZoomButton setImage:(_maxZoomTileImage == nil ? [UIImage imageNamed:ACImageNameImgPlaceholderOnlineSource] : _maxZoomTileImage) forState:UIControlStateNormal];
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_minZoom];
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_maxZoom];
             cell.descriptionLabel.text = item[@"value"];

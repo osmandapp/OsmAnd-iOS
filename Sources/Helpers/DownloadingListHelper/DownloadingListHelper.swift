@@ -57,7 +57,7 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         guard let cell else { return nil }
         
         cell.accessoryType = .disclosureIndicator
-        cell.imgView.image = UIImage.templateImageNamed("ic_custom_multi_download")
+        cell.imgView.image = .icCustomMultiDownload
         cell.imgView.tintColor = .iconColorActive
         
         var title = localizedString("downloading") + ": "

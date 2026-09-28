@@ -43,6 +43,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 
 static const CGFloat kSpeedToHeightScale = 10.0;
@@ -855,7 +856,7 @@ colorizationScheme:(int)colorizationScheme
         {
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-            auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+            auto iconBitmap = [self directionArrowBitmapForColor:color];
             if (iconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
@@ -949,7 +950,7 @@ colorizationScheme:(int)colorizationScheme
             {
                 // Use black arrows for gradient colorization
                 UIColor *color = gpx.getColoringType.length != 0 && ![gpx.getColoringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB([gpx getColorDefColor:nil].intValue);
-                auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+                auto iconBitmap = [self directionArrowBitmapForColor:color];
                 if (iconBitmap)
                 {
                     builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
@@ -2052,7 +2053,7 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.type = OATargetGPX;
         targetPoint.targetObj = [obj isKindOfClass:[OASGpxDataItem class]] ? (OASGpxDataItem *)obj : (OASGpxFile *) obj;
 
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
         targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? item.gpxFileNameWithoutExtension :  OALocalizedString(@"shared_string_currently_recording_track");
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;

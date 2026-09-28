@@ -10,6 +10,7 @@
 #import "OAMapillaryTilesProvider.h"
 #import "OAMapillaryImageViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define GRAPH_URL_ENDPOINT @"https://graph.mapillary.com/"
 #define PARAM_ACCESS_TOKEN [NSString stringWithFormat:@"access_token=%@", MAPILLARY_ACCESS_TOKEN]
@@ -80,7 +81,7 @@
                 result[@"imageHiresUrl"] = dicData[THUMB_1024_URL];
 
             result[@"externalLink"] = @(NO);
-            result[@"topIcon"] = @"ic_custom_mapillary_color_logo";
+            result[@"topIcon"] = ACImageNameIcCustomMapillaryColorLogo;
 
             if (onDataDownloaded)
                 onDataDownloaded(result);

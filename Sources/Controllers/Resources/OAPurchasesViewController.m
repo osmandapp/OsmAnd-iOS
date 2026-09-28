@@ -85,7 +85,7 @@ static BOOL _purchasesUpdated;
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
-                                                        iconName:@"ic_navbar_reset"
+                                                        iconName:ACImageNameIcNavbarReset
                                                           action:@selector(onRightNavbarButtonPressed)
                                                             menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"shared_string_restore");
@@ -111,7 +111,7 @@ static BOOL _purchasesUpdated;
     [activeSection addRowFromDictionary:@{
         kCellKeyKey : @"product_osmand_start",
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-        kCellIconNameKey : @"ic_custom_osmand_start",
+        kCellIconNameKey : ACImageNameIcCustomOsmandStart,
         kCellTitleKey : OSMAND_START,
         kCellDescrKey : descriptionString
     }];
@@ -179,7 +179,7 @@ static BOOL _purchasesUpdated;
                 OATableSectionData *noPurchasesSection = [_data createNewSection];
                 [noPurchasesSection addRowFromDictionary:@{
                     kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
-                    kCellIconNameKey : @"ic_custom_shop_bag_48",
+                    kCellIconNameKey : ACImageNameIcCustomShopBag48,
                     kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
@@ -189,11 +189,11 @@ static BOOL _purchasesUpdated;
                 [osmAndProSection addRowFromDictionary:@{
                     kCellKeyKey : @"get_osmand_pro",
                     kCellTypeKey : [OACardButtonCell getCellIdentifier],
-                    kCellIconNameKey : @"ic_custom_osmand_pro_logo_colored",
+                    kCellIconNameKey : ACImageNameIcCustomOsmandProLogoColored,
                     kCellTitleKey : OALocalizedString(@"product_title_pro"),
                     kCellDescrKey : OALocalizedString(@"osm_live_banner_desc"),
                     @"button_title": OALocalizedString(@"shared_string_get"),
-                    @"button_icon_name": @"ic_custom_arrow_forward",
+                    @"button_icon_name": ACImageNameIcCustomArrowForward,
                     @"button_icon_color": [UIColor colorNamed:ACColorNameIconColorActive]
                 }];
             }
@@ -226,7 +226,7 @@ static BOOL _purchasesUpdated;
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : @"product_pro_crossplatform",
                         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        kCellIconNameKey : @"ic_custom_osmand_pro_logo_colored",
+                        kCellIconNameKey : ACImageNameIcCustomOsmandProLogoColored,
                         kCellTitleKey : isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
                         kCellDescrKey : dateString
                     }];
@@ -307,7 +307,7 @@ static BOOL _purchasesUpdated;
                 kCellTypeKey : [OACardButtonCell getCellIdentifier],
                 kCellTitleKey : OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
                 @"button_title": OALocalizedString(@"shared_string_learn_more"),
-                @"button_icon_name": @"ic_custom_arrow_forward",
+                @"button_icon_name": ACImageNameIcCustomArrowForward,
                 @"button_icon_color": [UIColor colorNamed:ACColorNameIconColorActive]
             }];
         }
@@ -320,7 +320,7 @@ static BOOL _purchasesUpdated;
         kCellKeyKey : @"restore_purchases",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"restore_purchases"),
-        kCellIconNameKey : @"ic_custom_reset",
+        kCellIconNameKey : ACImageNameIcCustomReset,
         kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 
@@ -328,7 +328,7 @@ static BOOL _purchasesUpdated;
         kCellKeyKey : @"redeem_promo_code",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"redeem_promo_code"),
-        kCellIconNameKey : @"ic_custom_label_sale",
+        kCellIconNameKey : ACImageNameIcCustomLabelSale,
         kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 
@@ -336,7 +336,7 @@ static BOOL _purchasesUpdated;
         kCellKeyKey : @"new_device_account",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"new_device_account"),
-        kCellIconNameKey : @"ic_navbar_help",
+        kCellIconNameKey : ACImageNameIcNavbarHelp,
         kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 

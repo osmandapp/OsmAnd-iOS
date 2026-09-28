@@ -15,6 +15,7 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACameraDistanceWidget
 {
@@ -35,7 +36,7 @@
         _settings = [OAAppSettings sharedManager];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcon:@"widget_developer_camera_distance"];
+        [self setIcon:ACImageNameWidgetDeveloperCameraDistance];
         
         __weak OACameraDistanceWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
@@ -54,7 +55,7 @@
         _cachedCameraDistance = cameraDistance;
         NSString *text = _cachedCameraDistance > 0 ? [self formatDistance:_cachedCameraDistance] : @"-";
         [self setText:text subtext:@""];
-        [self setIcon:@"widget_developer_camera_distance"];
+        [self setIcon:ACImageNameWidgetDeveloperCameraDistance];
     }
     return YES;
 }

@@ -8,6 +8,7 @@
 
 #import "OALaunchScreenViewController.h"
 #import "OAIAPHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OALaunchScreenViewController ()
 
@@ -41,17 +42,17 @@
     
     if ([OAIAPHelper isOsmAndProAvailable])
     {
-        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_pro"];
+        self.appNameImageView.image = [UIImage imageNamed:ACImageNameImgTextOsmandMapsPro];
         [self animateImageView];
     }
     else if ([OAIAPHelper isMapsPlusAvailable])
     {
-        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_plus"];
+        self.appNameImageView.image = [UIImage imageNamed:ACImageNameImgTextOsmandMapsPlus];
         [self animateImageView];
     }
     else
     {
-        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps"];
+        self.appNameImageView.image = [UIImage imageNamed:ACImageNameImgTextOsmandMaps];
     }
 }
 

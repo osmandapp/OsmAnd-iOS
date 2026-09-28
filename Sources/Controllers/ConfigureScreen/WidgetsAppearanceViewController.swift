@@ -883,16 +883,16 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
         // Size preferences may have changed while hosted; the saved geometry is stale.
         var restoredContentSize = previewPanelContentSize(for: state.controller)
         if state.controller.isHorizontal {
-            // Restore the map's full row width before laying out the unhidden widgets.
-            // A compressed measurement of the still-hosted page can return a width
-            // smaller than the widgets' required padding and icon widths.
-            restoredContentSize.width = max(restoredContentSize.width,
-                                            max(state.originalContainerSize.width, state.frame.width))
+            // Restore the map container width, including Compact, independently of widget count.
+            restoredContentSize.width = state.originalContainerSize.width > 0
+                ? state.originalContainerSize.width
+                : state.frame.width
         }
         updatePageContainerSize(restoredContentSize, for: state.controller)
         var restoredFrame = state.frame
         if state.controller.isHorizontal {
             restoredFrame.size.width = max(restoredFrame.width, restoredContentSize.width)
+            restoredFrame.size.width = restoredContentSize.width
             restoredFrame.size.height = restoredContentSize.height
         } else {
             let borderInsets = state.view.layer.borderWidth * 2
@@ -1516,7 +1516,8 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             // The border and page control are anchored to the panel's actual bounds.
             hostedViewSize = contentSize
         } else {
-            hostedViewSize.width = max(hostedViewSize.width, contentSize.width)
+            // The preview uses the map container width, not the widgets' measured width.
+            hostedViewSize.width = contentSize.width
             hostedViewSize.height = max(hostedViewSize.height, contentSize.height)
         }
         state.controller.pageControl.transform = .identity

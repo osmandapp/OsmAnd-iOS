@@ -671,7 +671,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     [self updatesSeparatorsColor:[SeparatorAppearance color]];
 }
 
-- (BOOL)usesFullRowContentLayout
+- (BOOL)shouldCenterValueInFullRow
 {
     if (!self.isFullRow || self.widgetSizeStyle != EOAWidgetSizeStyleSmall)
         return self.isFullRow;
@@ -679,10 +679,10 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     // Small full rows reserve matching columns on either side of the value, even without an icon.
     // Use a stable text width so changing numbers cannot switch the layout at the same widget width.
     CGFloat minimumValueWidth = ceil([[UIFontMetrics defaultMetrics] scaledValueForValue:minTextWidth]);
-    CGFloat minimumFullRowWidth = 2 * (simpleLayoutHorizontalPadding + unitOrEmptyLabelSmallModeWidth)
+    CGFloat minimumCenteredValueLayoutWidth = 2 * (simpleLayoutHorizontalPadding + unitOrEmptyLabelSmallModeWidth)
         + [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle]
         + simpleLayoutValueUnitSpacing + minimumValueWidth;
-    return CGRectGetWidth(self.bounds) >= minimumFullRowWidth;
+    return CGRectGetWidth(self.bounds) >= minimumCenteredValueLayoutWidth;
 }
 
 - (void)layoutSubviews
@@ -691,7 +691,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     if (self.isSimpleLayout && [self isEnabledTextInfoComponents]
         && self.widgetSizeStyle == EOAWidgetSizeStyleSmall
         && _unitOrEmptyLabelWidthSmallModeConstraint
-        && _unitOrEmptyLabelWidthSmallModeConstraint.active != [self usesFullRowContentLayout])
+        && _unitOrEmptyLabelWidthSmallModeConstraint.active != [self shouldCenterValueInFullRow])
     {
         [self configureSimpleLayout];
     }
@@ -713,8 +713,8 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     self.valueLabel.text = _text;
     [self applyOutlineIfNeededToLabel:self.valueLabel];
 
-    BOOL useFullRowContentLayout = [self usesFullRowContentLayout];
-    BOOL isSmallInlineLayout = self.widgetSizeStyle == EOAWidgetSizeStyleSmall && !useFullRowContentLayout;
+    BOOL centerValueInFullRow = [self shouldCenterValueInFullRow];
+    BOOL isSmallInlineLayout = self.widgetSizeStyle == EOAWidgetSizeStyleSmall && !centerValueInFullRow;
     // Without the balancing columns, preserve the value before titles and horizontal padding.
     [self.valueLabel setContentCompressionResistancePriority:isSmallInlineLayout ? UILayoutPriorityDefaultHigh + 1 : UILayoutPriorityDefaultHigh
                                                     forAxis:UILayoutConstraintAxisHorizontal];
@@ -744,7 +744,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
             : [_showIconPref get:_appMode];
         _imageView.hidden = !isVisibleIcon;
         
-        if (useFullRowContentLayout && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
+        if (centerValueInFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
             self.iconWidgetView.hidden = NO;
         else
             self.iconWidgetView.hidden = !isVisibleIcon;
@@ -761,7 +761,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     }
     else
     {
-        _unitOrEmptyLabelWidthConstraint.constant = (useFullRowContentLayout || self.widgetSizeStyle != EOAWidgetSizeStyleSmall) ? 0 : 20;
+        _unitOrEmptyLabelWidthConstraint.constant = (centerValueInFullRow || self.widgetSizeStyle != EOAWidgetSizeStyleSmall) ? 0 : 20;
         if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
@@ -783,7 +783,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     [self applyOutlineIfNeededToLabel:self.titleOrEmptyLabel];
     CGFloat contentSpacing = paddingBetweenIconAndValue;
     self.emptyViewRightPlaceholderFullRow.hidden = YES;
-    if (useFullRowContentLayout)
+    if (centerValueInFullRow)
     {
         contentSpacing = 0;
         self.valueLabel.textAlignment = NSTextAlignmentCenter;
@@ -799,9 +799,9 @@ NSString * const kSizeStylePref = @"simple_widget_size";
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
 
-    BOOL isSmallFullRowContentLayout = useFullRowContentLayout && self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
-    _unitOrEmptyLabelWidthSmallModeConstraint.active = isSmallFullRowContentLayout;
-    _unitOrEmptyLabelWidthConstraint.active = !isSmallFullRowContentLayout;
+    BOOL isSmallCenteredValueLayout = centerValueInFullRow && self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
+    _unitOrEmptyLabelWidthSmallModeConstraint.active = isSmallCenteredValueLayout;
+    _unitOrEmptyLabelWidthConstraint.active = !isSmallCenteredValueLayout;
     _iconValueSpacingView.hidden = self.iconWidgetView.hidden;
     _valuePlaceholderSpacingView.hidden = self.emptyViewRightPlaceholderFullRow.hidden;
     _placeholderWidthConstraint.active = !self.emptyViewRightPlaceholderFullRow.hidden;

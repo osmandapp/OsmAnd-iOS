@@ -67,6 +67,7 @@
     [super viewDidLoad];
     
     _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate getWaypointsData] : [NSMutableDictionary dictionary];
+    self.tableView.estimatedRowHeight = 66.;
     self.tableView.editing = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
 

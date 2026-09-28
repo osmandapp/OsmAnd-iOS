@@ -47,8 +47,8 @@ final class ScreenAwakeService: NSObject {
     }
 
     func updateIdleTimer() {
-        executeOnMainThread {
-            // Routing can request an update while its singleton is still initializing.
+        // Always defer to avoid re-entering routing helper initialization.
+        DispatchQueue.main.async {
             guard self.isStarted else { return }
 
             let settings = OAAppSettings.sharedManager()

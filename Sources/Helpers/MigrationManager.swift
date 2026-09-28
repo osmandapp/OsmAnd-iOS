@@ -729,7 +729,10 @@ final class MigrationManager: NSObject {
 
     private func migrateKeepScreenOnMode() {
         for appMode in OAApplicationMode.allPossibleValues() {
+            // This migration alone must not mark the profile as changed for Cloud sync.
+            let lastModifiedTime = settings.getLastProfileSettingsModifiedTime(appMode)
             settings.keepScreenOn.set(.always, mode: appMode)
+            settings.setLastProfileModifiedTime(lastModifiedTime, mode: appMode)
         }
     }
 

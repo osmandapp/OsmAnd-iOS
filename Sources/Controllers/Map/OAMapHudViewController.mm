@@ -105,6 +105,7 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
     
     NSTimeInterval _lastWidgetsUpdateTime;
     NSTimeInterval _lastMapTouchTime;
+    BOOL _bottomButtonsAutoHidden;
     BOOL _routeFollowingMode;
     
     BOOL _cachedLocationAvailableState;
@@ -195,6 +196,9 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UIAccessibilityVoiceOverStatusDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneWillConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneDidDisconnectNotification object:nil];
     
     _cachedLocationAvailableState = NO;
 }
@@ -580,17 +584,31 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 }
 
 // Same as Android: while following a route, Menu and Navigation hide until the map is touched
-- (BOOL)shouldAutoHideBottomButtons
+- (BOOL)canAutoHideBottomButtons
 {
     return _routeFollowingMode
         && !UIAccessibilityIsVoiceOverRunning()
-        && !UIApplication.sharedApplication.isCarPlayConnected
+        && !UIApplication.sharedApplication.isCarPlayConnected;
+}
+
+- (BOOL)shouldAutoHideBottomButtons
+{
+    return [self canAutoHideBottomButtons]
         && CACurrentMediaTime() - _lastMapTouchTime >= kTimeoutToShowButtons;
+}
+
+- (void)onBottomButtonsAutoHideStateChanged:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateAutoHiddenBottomButtons];
+    });
 }
 
 - (void)onMapGestureAction:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self->_routeFollowingMode)
+            return;
         self->_lastMapTouchTime = CACurrentMediaTime();
         [self updateAutoHiddenBottomButtons];
     });
@@ -599,12 +617,16 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 - (void)updateAutoHiddenBottomButtons
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateAutoHiddenBottomButtons) object:nil];
-    [self updateMapButtonVisibility:_optionsMenuButton showButton:[self shouldShowMenu] completionHandler:nil];
-    [self updateMapButtonVisibility:_driveModeButton showButton:[self shouldShowNavigation] completionHandler:nil];
-    if (_routeFollowingMode && ![self shouldAutoHideBottomButtons])
+    BOOL autoHidden = [self shouldAutoHideBottomButtons];
+    if (_bottomButtonsAutoHidden != autoHidden)
     {
-        NSTimeInterval delay = kTimeoutToShowButtons - (CACurrentMediaTime() - _lastMapTouchTime);
-        [self performSelector:@selector(updateAutoHiddenBottomButtons) withObject:nil afterDelay:MAX(delay, 0.) + 0.1];
+        _bottomButtonsAutoHidden = autoHidden;
+        [self updateBottomControlsVisibility:YES];
+    }
+    NSTimeInterval delay = kTimeoutToShowButtons - (CACurrentMediaTime() - _lastMapTouchTime);
+    if ([self canAutoHideBottomButtons] && delay > 0.)
+    {
+        [self performSelector:@selector(updateAutoHiddenBottomButtons) withObject:nil afterDelay:delay + 0.1];
     }
 }
 
@@ -1140,19 +1162,15 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
 - (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton completionHandler:(void (^)(void))completionHandler
 {
-    BOOL needShow = button.alpha == 0.0 && showButton;
-    BOOL needHide = button.alpha == 1.0 && !showButton;
-    if (needShow)
+    CGFloat targetAlpha = showButton ? 1.0 : 0.0;
+    if (showButton)
         button.hidden = NO;
-    if (needHide)
-        button.userInteractionEnabled = NO;
-    [UIView animateWithDuration:.25 animations:^{
-        button.alpha = needShow ? 1.0 : 0.0;
+    button.userInteractionEnabled = showButton;
+    [UIView animateWithDuration:.25 delay:0. options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
+        button.alpha = targetAlpha;
     } completion:^(BOOL finished) {
-        if (needShow)
-            button.userInteractionEnabled = button.alpha > 0.0;
-        if (needHide)
-            button.hidden = YES;
+        button.hidden = button.alpha == 0.0;
+        button.userInteractionEnabled = button.alpha > 0.0;
         if (completionHandler)
             completionHandler();
     }];
@@ -1258,9 +1276,15 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
             button.alpha = 0.0;
     } completion:^(BOOL finished) {
         for (OAHudButton *button in needShowButtons)
+        {
+            button.hidden = button.alpha == 0.0;
             button.userInteractionEnabled = button.alpha > 0.0;
+        }
         for (OAHudButton *button in needHideButtons)
-            button.hidden = YES;
+        {
+            button.hidden = button.alpha == 0.0;
+            button.userInteractionEnabled = button.alpha > 0.0;
+        }
         
         if (completionHandler)
             completionHandler();
@@ -1915,19 +1939,23 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
     BOOL visible = isToolbarVisible ? isAllowToolbarsVisible
         : !self.contextMenuMode && !isWeatherToolbarVisible && !isScrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
     BOOL isZoomMapModeVisible = (!isDashboardVisible || isScrollableHudAllowed) && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
+    BOOL menuButtonVisible = [self shouldShowMenu] && visible;
+    BOOL navigationButtonVisible = [self shouldShowNavigation] && visible;
+    if (menuButtonVisible)
+        _optionsMenuButton.hidden = NO;
+    if (navigationButtonVisible)
+        _driveModeButton.hidden = NO;
 
     void (^mainBlock)(void) = ^{
 
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
-        BOOL optionsMenuButtonVisible = visible;
-        _optionsMenuButton.alpha = [self shouldShowMenu] && optionsMenuButtonVisible ? 1. : 0.;
+        _optionsMenuButton.alpha = menuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
         _zoomInButton.alpha = [self shouldShowZoomIn] && zoomButtonsVisible ? 1. : 0.;
         _zoomOutButton.alpha = [self shouldShowZoomOut] && zoomButtonsVisible ? 1. : 0.;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
         _mapModeButton.alpha = [self shouldShowMyLocation] && mapModeButtonVisible ? 1. : 0.;
-        BOOL driveModeButtonVisible = visible;
-        _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
+        _driveModeButton.alpha = navigationButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)

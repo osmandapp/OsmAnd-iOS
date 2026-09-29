@@ -27,6 +27,19 @@ final class MigrationManager: NSObject {
         case migrateLegacyRouteWidgets
     }
     
+    private enum LegacyWidgetPanelOrder {
+        static let top = [
+            [WidgetType.coordinatesMapCenter.id, WidgetType.coordinatesCurrentLocation.id, WidgetType.streetName.id,
+             WidgetType.markersTopBar.id, WidgetType.lanes.id],
+            [WidgetType.nextTurn.id, WidgetType.coordinatesMapCenter.id, WidgetType.coordinatesCurrentLocation.id,
+             WidgetType.streetName.id, WidgetType.markersTopBar.id, WidgetType.lanes.id]
+        ]
+        static let bottom = [
+            [WidgetType.elevationProfile.id],
+            [WidgetType.routeInfo.id, WidgetType.elevationProfile.id]
+        ]
+    }
+
     private struct HudMigrationScenario {
         let need: Bool
         let x: CGFloat
@@ -144,7 +157,24 @@ final class MigrationManager: NSObject {
     private func isWidgetsCustomized(_ appMode: OAApplicationMode) -> Bool {
         settings.mapInfoControls.isSet(for: appMode)
             || settings.customWidgetKeys.isSet(for: appMode)
-            || WidgetsPanel.values.contains { $0.getOrderPreference().isSet(for: appMode) }
+            || WidgetsPanel.values.contains { isWidgetPanelCustomized($0, appMode: appMode) }
+    }
+
+    private func isWidgetPanelCustomized(_ panel: WidgetsPanel, appMode: OAApplicationMode) -> Bool {
+        let preference = panel.getOrderPreference()
+        guard preference.isSet(for: appMode) else { return false }
+        let pages = preference.get(appMode)
+        if pages == [panel.getOriginalOrder()] {
+            return false
+        }
+        guard pages.count == 1, let order = pages.first else { return true }
+        if panel == .topPanel {
+            return !LegacyWidgetPanelOrder.top.contains(order)
+        }
+        if panel == .bottomPanel {
+            return !LegacyWidgetPanelOrder.bottom.contains(order)
+        }
+        return true
     }
 
     private func isVisibilityDefined(_ visibility: [String], widgetId: String) -> Bool {

@@ -32,6 +32,9 @@
 #import "OAEmissionHelper.h"
 #import "OASegmentTableViewCell.h"
 #import "OARouteDirectionInfo.h"
+#import "OATargetPointsHelper.h"
+#import "OARTargetPoint.h"
+#import "OAPointDescription.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+TurnType.h"
@@ -74,6 +77,78 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     long timeInSeconds = [model getExpectedTime];
     return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
+}
+
+@end
+
+@implementation OARouteDirectionItem
+
+- (instancetype) initWithDirection:(OARouteDirectionInfo *)direction
+                    directionIndex:(NSInteger)directionIndex
+             intermediatePointInfo:(OAIntermediatePointInfo *)intermediatePointInfo
+                       targetPoint:(OARTargetPoint *)targetPoint
+                 intermediateIndex:(NSInteger)intermediateIndex
+{
+    self = [super init];
+    if (self)
+    {
+        _direction = direction;
+        _directionIndex = directionIndex;
+        _intermediatePointInfo = intermediatePointInfo;
+        _targetPoint = targetPoint;
+        _intermediateIndex = intermediateIndex;
+    }
+    return self;
+}
+
+- (BOOL) isIntermediate
+{
+    return _intermediatePointInfo != nil;
+}
+
++ (OARouteDirectionItem *) intermediateItem:(OAIntermediatePointInfo *)info
+                         intermediateIndex:(NSInteger)intermediateIndex
+                        intermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints
+{
+    OARTargetPoint *point = intermediateIndex < intermediatePoints.count ? intermediatePoints[intermediateIndex] : nil;
+    return [[OARouteDirectionItem alloc] initWithDirection:nil
+                                            directionIndex:-1
+                                     intermediatePointInfo:info
+                                               targetPoint:point
+                                         intermediateIndex:intermediateIndex];
+}
+
++ (NSArray<OARouteDirectionItem *> *) buildRouteDirectionItems:(NSArray<OARouteDirectionInfo *> *)routeDirections
+                                        intermediatePointInfos:(NSArray<OAIntermediatePointInfo *> *)intermediatePointInfos
+                                            intermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints
+{
+    NSMutableArray<OARouteDirectionItem *> *items = [NSMutableArray array];
+    NSInteger intermediateIndex = 0;
+    for (NSInteger directionIndex = 0; directionIndex < routeDirections.count; directionIndex++)
+    {
+        OARouteDirectionInfo *direction = routeDirections[directionIndex];
+        while (intermediateIndex < intermediatePointInfos.count
+               && intermediatePointInfos[intermediateIndex].routePointOffset <= direction.routePointOffset)
+        {
+            [items addObject:[self intermediateItem:intermediatePointInfos[intermediateIndex]
+                                  intermediateIndex:intermediateIndex
+                                 intermediatePoints:intermediatePoints]];
+            intermediateIndex++;
+        }
+        [items addObject:[[OARouteDirectionItem alloc] initWithDirection:direction
+                                                          directionIndex:directionIndex
+                                                   intermediatePointInfo:nil
+                                                             targetPoint:nil
+                                                       intermediateIndex:-1]];
+    }
+    while (intermediateIndex < intermediatePointInfos.count)
+    {
+        [items addObject:[self intermediateItem:intermediatePointInfos[intermediateIndex]
+                              intermediateIndex:intermediateIndex
+                             intermediatePoints:intermediatePoints]];
+        intermediateIndex++;
+    }
+    return items;
 }
 
 @end
@@ -144,15 +219,44 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     _instructionsTabData = [NSMutableDictionary dictionary];
     NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
     
-    NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
-    for (NSInteger i = 0; i < routeDirections.count; i++)
+    OARouteCalculationResult *route = [self.routingHelper getRoute];
+    NSArray<OARouteDirectionInfo *> *routeDirections = [route getRouteDirections];
+    NSArray<OARouteDirectionItem *> *items = [OARouteDirectionItem buildRouteDirectionItems:routeDirections
+                                                                      intermediatePointInfos:[route getIntermediatePointInfos]
+                                                                          intermediatePoints:[[OATargetPointsHelper sharedInstance] getIntermediatePointsNavigation]];
+    for (OARouteDirectionItem *item in items)
     {
-        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        UITableViewCell *cell = item.isIntermediate
+            ? [self getIntermediatePointCell:item]
+            : [self getRouteDirectionCell:item.directionIndex model:item.direction directionsInfo:routeDirections];
         [cells addObject:cell];
     }
 
     [_instructionsTabData setObject:cells forKey:@(section++)];
+}
+
+- (UITableViewCell *) getIntermediatePointCell:(OARouteDirectionItem *)item
+{
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setLeftTurnIconDrawable:nil];
+    [cell setLeftImageViewWithImage:[UIImage imageNamed:ACImageNameListIntermediate]];
+    [cell setBottomLanesImageWithImage:nil];
+
+    [cell setTopLeftLabelWithText:[NSString stringWithFormat:OALocalizedString(@"intermediate_point"), @(item.intermediateIndex + 1).stringValue]];
+    [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+
+    OARTargetPoint *point = item.targetPoint;
+    NSString *pointName = @"";
+    if (point)
+        pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [OAPointDescription getLocationNamePlain:[point getLatitude] lon:[point getLongitude]];
+    [cell setBottomLabelWithText:pointName];
+
+    OAIntermediatePointInfo *info = item.intermediatePointInfo;
+    NSString *distance = [OAOsmAndFormatter getFormattedDistance:info.distance withParams:[OsmAndFormatterParams useLowerBounds]];
+    NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:info.time shortFormat:YES];
+    [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
+    return cell;
 }
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo

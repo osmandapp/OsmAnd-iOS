@@ -556,6 +556,7 @@
 		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
 		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
 		A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */; };
+		2A8BC60B3F570E7A29CE9C16 /* OARouteIntermediatePointsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -2929,6 +2930,7 @@
 		646882CB0339B1A7DF05FF76 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ca; path = ca.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		661C1AE4BA42FE0D238CC2E3 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = et; path = et.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultTest.mm; sourceTree = "<group>"; };
+		2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteIntermediatePointsTest.mm; sourceTree = "<group>"; };
 		6965E6758C40DC31F74EA9B9 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sl; path = sl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6A95B0B2F6F783059E18100C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = an; path = an.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6D8EAECD4057EDB5E827CB61 /* sc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sc; path = sc.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -10276,6 +10278,7 @@
 			children = (
 				E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */,
 				693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */,
+				2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */,
 				C1A55E0B77300000000000A2 /* OASharedRoutingTest.mm */,
 				C1A55E0B77300000000000B2 /* OASharedGpxApproximationTest.mm */,
 				C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */,
@@ -13683,6 +13686,7 @@
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,
 				C2E8E311482906B2954F30E1 /* OACppRouteConverterTest.mm in Sources */,
 				A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */,
+				2A8BC60B3F570E7A29CE9C16 /* OARouteIntermediatePointsTest.mm in Sources */,
 				C1A55E0B77300000000000A1 /* OASharedRoutingTest.mm in Sources */,
 				C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */,
 				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,

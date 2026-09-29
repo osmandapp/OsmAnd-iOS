@@ -8,7 +8,7 @@
 
 #import "OARouteBaseViewController.h"
 
-@class OARouteDirectionInfo;
+@class OARouteDirectionInfo, OAIntermediatePointInfo, OARTargetPoint;
 
 @interface OACumulativeInfo : NSObject
 
@@ -17,6 +17,22 @@
 
 + (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections;
 + (NSString *) getTimeDescription:(OARouteDirectionInfo *)model;
+
+@end
+
+@interface OARouteDirectionItem : NSObject
+
+@property (nonatomic, readonly) OARouteDirectionInfo *direction;
+@property (nonatomic, readonly) NSInteger directionIndex;
+@property (nonatomic, readonly) OAIntermediatePointInfo *intermediatePointInfo;
+@property (nonatomic, readonly) OARTargetPoint *targetPoint;
+@property (nonatomic, readonly) NSInteger intermediateIndex;
+
+- (BOOL) isIntermediate;
+
++ (NSArray<OARouteDirectionItem *> *) buildRouteDirectionItems:(NSArray<OARouteDirectionInfo *> *)routeDirections
+                                        intermediatePointInfos:(NSArray<OAIntermediatePointInfo *> *)intermediatePointInfos
+                                            intermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints;
 
 @end
 

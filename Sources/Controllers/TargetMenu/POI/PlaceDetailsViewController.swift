@@ -73,6 +73,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func getTypeStr() -> String? {
+        guard detailsObject == nil else { return super.getTypeStr() }
         let typeString = provider.typeString { super.getTypeStr() }
         return typeString ?? super.getTypeStr()
     }

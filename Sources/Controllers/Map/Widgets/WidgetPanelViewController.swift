@@ -185,12 +185,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pages.append(UIViewController())
         }
 
-        // Rebuilding the panel starts from the first page.
-        let selectedIndex = 0
-
         // Set up the page control before calculating the selected page size.
         pageControl.numberOfPages = pages.count
-        pageControl.currentPage = selectedIndex
+        pageControl.currentPage = currentIndex
         pageControl.isHidden = pages.count <= 1 || isHorizontal
         pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
@@ -198,12 +195,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         // A side panel can still have zero width after previously displaying no widgets
         // (for example, when leaving the Weather screen). Size it before UIPageViewController
         // installs the widget page to avoid laying out its required content at width zero.
-        if !isHorizontal, let selectedPage = pages[selectedIndex] as? WidgetPageViewController {
+        if !isHorizontal, let selectedPage = pages[currentIndex] as? WidgetPageViewController {
             selectedPage.loadViewIfNeeded()
             updateContainerSize()
         }
 
-        pageViewController.setViewControllers([pages[selectedIndex]], direction: .forward, animated: false) { [weak self] _ in
+        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.updateWidgetSizes()
             }

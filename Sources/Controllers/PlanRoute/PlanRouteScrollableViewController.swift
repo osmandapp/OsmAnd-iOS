@@ -695,9 +695,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 
-    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
+    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil, futureRouteAction: SegmentRouteSettingsViewController.FutureRouteAction? = nil) {
         guard !presentApproximationWarningIfNeeded() else { return }
-        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex)
+        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex, futureRouteAction: futureRouteAction)
         settingsVC.onContinueEditing = { [weak self] in
             self?.setState(.initial, animated: true)
         }
@@ -961,12 +961,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
                 self?.presentSegmentSaveDialog(pointIndexes: pointIndexes)
             }
             routeVC.onContinueRoute = { [weak self] in
-                guard let self else { return }
-                let controller = SegmentRouteSettingsViewController(context: .wholeTrack, dataSource: dataProvider, futureRouteAction: .continueRoute)
-                controller.onContinueEditing = { [weak self] in
-                    self?.setState(.initial, animated: true)
-                }
-                showMediumSheetViewController(viewController: controller, isLargeAvailable: true)
+                self?.presentSettingsForContext(.wholeTrack, futureRouteAction: .continueRoute)
             }
             return routeVC
         }

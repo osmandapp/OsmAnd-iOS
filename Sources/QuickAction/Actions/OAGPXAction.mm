@@ -26,7 +26,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-NSString * const OAGPXActionCategoryKey = @"category_key";
+static NSString * const kLegacyCategoryKey = @"category_key";
 
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
@@ -56,12 +56,7 @@ static QuickActionType *TYPE;
 
 + (NSString *)categoryFromParams:(NSDictionary *)params
 {
-    NSString *category = params[OAGPXActionCategoryKey];
-    if (category != nil)
-        return category;
-
-    NSString *legacyName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[kCategoryName] ?: @""] trim];
-    return [legacyName isEqualToString:OALocalizedString(@"shared_string_waypoints")] ? @"" : legacyName;
+    return params[kCategoryName] ?: @"";
 }
 
 - (void)execute
@@ -203,7 +198,7 @@ static QuickActionType *TYPE;
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : category.length > 0 ? category : OALocalizedString(@"shared_string_waypoints"),
-                          OAGPXActionCategoryKey : category,
+                          @"category" : category,
                           @"color" : @(defaultColor),
                           @"img" : ACImageNameIcCustomFolder
                           },
@@ -225,6 +220,7 @@ static QuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    [params removeObjectForKey:kLegacyCategoryKey];
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
@@ -235,8 +231,7 @@ static QuickActionType *TYPE;
                 [params setValue:item[@"title"] forKey:kName];
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
-                [params setValue:item[@"value"] forKey:kCategoryName];
-                params[OAGPXActionCategoryKey] = item[OAGPXActionCategoryKey] ?: [OAGPXAction categoryFromParams:@{kCategoryName: item[@"value"] ?: @""}];
+                params[kCategoryName] = item[@"category"] ?: @"";
                 [params setValue:item[@"color"] forKey:kCategoryColor];
             }
         }

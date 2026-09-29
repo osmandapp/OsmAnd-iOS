@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString *groupName;
 @property (nonatomic, readonly) BOOL saveChanges;
+@property (nonatomic, readonly) BOOL groupNameWasEdited;
 
 @property (nonatomic, weak, nullable) id<OAEditGroupViewControllerDelegate> delegate;
 

@@ -1,6 +1,9 @@
 #import <XCTest/XCTest.h>
 #import "OAEditPointViewController.h"
 #import "OAGPXAction.h"
+#import "OAFavoriteAction.h"
+#import "OAActionConfigurationViewController.h"
+#import "OAEditGroupViewController.h"
 #import "OrderedDictionary.h"
 #import "OAGpxWptEditingHandler.h"
 #import "OAGPXAppearanceCollection.h"
@@ -18,6 +21,11 @@
 - (void)onGroupChanged:(NSString *)name;
 - (void)setupGroups;
 - (void)applyQuickActionParams:(NSDictionary *)params;
+@end
+
+@interface OAEditGroupViewController (WaypointGroupSelectionTesting)
+- (void)editGroupName:(id)sender;
+- (void)onRowSelected:(NSIndexPath *)indexPath;
 @end
 
 @interface OAWaypointGroupSelectionTest : XCTestCase
@@ -94,7 +102,8 @@
                                                                                pointType:EOAEditPointTypeWaypoint
                                                                          targetMenuState:nil
                                                                                      poi:nil
-                                                                                 gpxFile:file];
+                                                                                 gpxFile:file
+                                                                            targetObject:nil];
     [editor loadViewIfNeeded];
     return editor;
 }
@@ -220,25 +229,26 @@
     for (NSString *category in @[@"", title, @"Waypoints", @"  Named group  "])
     {
         OAGPXAction *action = [[OAGPXAction alloc] init];
-        action.params = @{OAGPXActionCategoryKey: category, @"category_name": title};
+        action.params = @{@"category_name": category};
         OrderedDictionary *model = [action getUIModel];
         XCTAssertTrue([action fillParams:model]);
         NSData *json = [NSJSONSerialization dataWithJSONObject:action.getParams options:0 error:nil];
         NSDictionary *restored = [NSJSONSerialization JSONObjectWithData:json options:0 error:nil];
-        XCTAssertEqualObjects(restored[OAGPXActionCategoryKey], category);
+        XCTAssertEqualObjects(restored[@"category_name"], category);
         XCTAssertEqualObjects([OAGPXAction categoryFromParams:restored], category);
     }
 }
 
-- (void)testLegacyQuickActionCategoryKeepsPreviousInterpretation
+- (void)testQuickActionUsesAndroidCategoryAndRemovesStaleKey
 {
-    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{}], @"");
-    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": OALocalizedString(@"shared_string_waypoints")}], @"");
-    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": @"  Named group  "}], @"Named group");
     OAGPXAction *action = [[OAGPXAction alloc] init];
-    action.params = @{@"category_name": OALocalizedString(@"shared_string_waypoints")};
+    action.params = @{@"category_name": @"Bar", @"category_key": @"Foo", @"name": @"Test point"};
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:action.getParams], @"Bar");
     XCTAssertTrue([action fillParams:[action getUIModel]]);
-    XCTAssertEqualObjects(action.getParams[OAGPXActionCategoryKey], @"");
+    XCTAssertEqualObjects(action.getParams[@"category_name"], @"Bar");
+    XCTAssertNil(action.getParams[@"category_key"]);
+    XCTAssertEqualObjects(action.getParams[@"name"], @"Test point");
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{}], @"");
 }
 
 - (void)testQuickActionEditorDistinguishesDefaultAndNamedWaypoints
@@ -250,7 +260,7 @@
     for (NSString *category in @[@"", name])
     {
         OAEditPointViewController *editor = [self editorWithFile:file];
-        [editor applyQuickActionParams:@{OAGPXActionCategoryKey: category, @"category_name": name}];
+        [editor applyQuickActionParams:@{@"category_name": category}];
         XCTAssertEqualObjects([editor valueForKey:@"selectedWaypointGroupKey"], category);
         [self assertColor:category.length > 0 ? UIColor.greenColor : UIColor.blueColor editor:editor];
         [editor setValue:nil forKey:@"poiIconCollectionHandler"];
@@ -261,10 +271,74 @@
     }
 }
 
-- (void)testQuickActionRawDefaultIgnoresDisplayTitleFromAnotherLanguage
+- (void)testQuickActionCategoryDoesNotInterpretLocalizedTitles
 {
-    XCTAssertEqualObjects(([OAGPXAction categoryFromParams:@{OAGPXActionCategoryKey: @"", @"category_name": @"Путевые точки"}]), @"");
-    XCTAssertEqualObjects(([OAGPXAction categoryFromParams:@{OAGPXActionCategoryKey: @"Waypoints", @"category_name": @"Путевые точки"}]), @"Waypoints");
+    for (NSString *category in @[@"", @"Waypoints", @"Путевые точки", @"  Named group  "])
+        XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": category}], category);
+}
+
+- (void)assertPicker:(OAEditGroupViewController *)picker savesCategory:(NSString *)category
+{
+    OAGPXAction *action = [[OAGPXAction alloc] init];
+    action.params = @{@"category_name": @"Original"};
+    OAActionConfigurationViewController *controller = [[OAActionConfigurationViewController alloc] initWithAction:action isNew:NO];
+    [controller setValue:[[action getUIModel] mutableCopy] forKey:@"data"];
+    [controller setValue:picker forKey:@"groupController"];
+    picker.delegate = (id)controller;
+    [picker onRightNavbarButtonPressed];
+    XCTAssertTrue([action fillParams:[controller valueForKey:@"data"]]);
+    XCTAssertEqualObjects(action.getParams[@"category_name"], category);
+    XCTAssertNil(action.getParams[@"category_key"]);
+}
+
+- (void)testQuickActionTrimsTypedCategoryOnConfirmation
+{
+    for (NSArray<NSString *> *example in @[@[@"  Hiking ", @"Hiking"], @[@"   ", @""], @[@" Waypoints ", @"Waypoints"]])
+    {
+        OAEditGroupViewController *picker = [[OAEditGroupViewController alloc] initWithGroupName:@"Original" groups:@[]];
+        UITextField *field = [[UITextField alloc] init];
+        field.text = example[0];
+        [picker editGroupName:field];
+        XCTAssertTrue(picker.groupNameWasEdited);
+        [self assertPicker:picker savesCategory:example[1]];
+    }
+}
+
+- (void)testQuickActionPreservesSelectedCategoryAfterTyping
+{
+    NSString *category = @"  Hiking  ";
+    OAEditGroupViewController *picker = [[OAEditGroupViewController alloc] initWithGroupName:@"Original" groups:@[category]];
+    UITextField *field = [[UITextField alloc] init];
+    field.text = @" Another group ";
+    [picker editGroupName:field];
+    [picker onRowSelected:[NSIndexPath indexPathForRow:0 inSection:0]];
+    XCTAssertFalse(picker.groupNameWasEdited);
+    [self assertPicker:picker savesCategory:category];
+}
+
+- (void)testQuickActionPreservesUneditedCategory
+{
+    NSString *category = @"  Hiking  ";
+    OAEditGroupViewController *picker = [[OAEditGroupViewController alloc] initWithGroupName:category groups:@[category]];
+    XCTAssertFalse(picker.groupNameWasEdited);
+    [self assertPicker:picker savesCategory:category];
+}
+
+- (void)testFavoriteQuickActionKeepsExistingGroupHandling
+{
+    OAFavoriteAction *action = [[OAFavoriteAction alloc] init];
+    action.params = @{@"category_name": @"Original"};
+    OAActionConfigurationViewController *controller = [[OAActionConfigurationViewController alloc] initWithAction:action isNew:NO];
+    [controller setValue:[[action getUIModel] mutableCopy] forKey:@"data"];
+    OAEditGroupViewController *picker = [[OAEditGroupViewController alloc] initWithGroupName:@"Original" groups:@[]];
+    [controller setValue:picker forKey:@"groupController"];
+    picker.delegate = (id)controller;
+    UITextField *field = [[UITextField alloc] init];
+    field.text = @"  Hiking  ";
+    [picker editGroupName:field];
+    [picker onRightNavbarButtonPressed];
+    XCTAssertTrue([action fillParams:[controller valueForKey:@"data"]]);
+    XCTAssertEqualObjects(action.getParams[@"category_name"], @"  Hiking  ");
 }
 
 @end

@@ -603,7 +603,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"category_name"])
     {
-        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"category"] ?: item[@"value"] groups:[self getItemGroups]];
+        _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
         [self showViewController:_groupController];
         [self.view endEditing:YES];
@@ -1083,18 +1083,7 @@
         if ([item[@"key"] isEqualToString:@"category_name"])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
-            if (item[@"category"] != nil)
-            {
-                NSString *category = _groupController.groupName ?: @"";
-                if (_groupController.groupNameWasEdited)
-                    category = [category trim];
-                mutableItem[@"category"] = category;
-                mutableItem[@"value"] = category.length > 0 ? category : OALocalizedString(@"shared_string_waypoints");
-            }
-            else
-            {
-                [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];
-            }
+            [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];
             [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
         }
         else

@@ -26,10 +26,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-static NSString * const kLegacyCategoryKey = @"category_key";
-static NSString * const kCategoryFormat = @"category_name_format";
-static NSString * const kRawCategoryFormat = @"raw";
-
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor =  @"category_color";
@@ -54,28 +50,6 @@ static QuickActionType *TYPE;
               secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
-}
-
-+ (NSString *)categoryFromParams:(NSDictionary *)params
-{
-    return params[kCategoryName] ?: @"";
-}
-
-+ (NSDictionary *)migrateLegacyCategoryInParams:(NSDictionary *)params
-{
-    if ([params[kCategoryFormat] isEqual:kRawCategoryFormat])
-        return params;
-
-    id categoryValue = params[kCategoryName];
-    if (categoryValue && ![categoryValue isKindOfClass:NSString.class])
-        return params;
-
-    NSMutableDictionary *migrated = [params mutableCopy];
-    NSString *category = [[OAFavoriteGroup convertDisplayNameToGroupIdName:categoryValue ?: @""] trim];
-    migrated[kCategoryName] = [category isEqualToString:OALocalizedString(@"shared_string_waypoints")] ? @"" : category;
-    migrated[kCategoryFormat] = kRawCategoryFormat;
-    [migrated removeObjectForKey:kLegacyCategoryKey];
-    return migrated;
 }
 
 - (void)execute
@@ -123,7 +97,9 @@ static QuickActionType *TYPE;
 
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    NSString *groupName = [OAGPXAction categoryFromParams:self.getParams];
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:self.getParams[kCategoryName] ?: @""] trim];
+    if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
+        groupName = @"";
 
     UIColor* color;
     if (self.getParams[kCategoryColor])
@@ -187,7 +163,6 @@ static QuickActionType *TYPE;
 - (OrderedDictionary *)getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
-    NSString *category = [OAGPXAction categoryFromParams:self.getParams];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : kDialog,
@@ -216,8 +191,7 @@ static QuickActionType *TYPE;
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
-                          @"value" : category.length > 0 ? category : OALocalizedString(@"shared_string_waypoints"),
-                          @"category" : category,
+                          @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
                           @"img" : ACImageNameIcCustomFolder
                           },
@@ -239,8 +213,6 @@ static QuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    [params removeObjectForKey:kLegacyCategoryKey];
-    params[kCategoryFormat] = kRawCategoryFormat;
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
@@ -251,7 +223,7 @@ static QuickActionType *TYPE;
                 [params setValue:item[@"title"] forKey:kName];
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
-                params[kCategoryName] = item[@"category"] ?: @"";
+                [params setValue:item[@"value"] forKey:kCategoryName];
                 [params setValue:item[@"color"] forKey:kCategoryColor];
             }
         }

@@ -124,7 +124,6 @@
 {
     if (indexPath.section == 0)
     {
-        _groupNameWasEdited = NO;
         NSString *groupName = [_groups objectAtIndex:indexPath.row];
         if ([groupName isEqualToString:OALocalizedString(kDefaultCategoryKey)])
             self.groupName = @"";
@@ -143,7 +142,6 @@
 
 - (void)editGroupName:(id)sender
 {
-    _groupNameWasEdited = YES;
     self.groupName = [((UITextField*)sender) text];
 }
 

@@ -14,46 +14,6 @@ final class QuickActionSerializer: NSObject {
     private var quickActionTypesStr: [String: QuickActionType] = [:]
     private var quickActionTypesInt: [Int: QuickActionType] = [:]
 
-    static func migrateLegacyWaypointCategories(_ data: Data) throws -> Data {
-        guard var actions = try JSONSerialization.jsonObject(with: data) as? [Any] else {
-            throw CocoaError(.coderReadCorrupt)
-        }
-        var changed = false
-        for index in actions.indices {
-            guard var action = actions[index] as? [String: Any] else { continue }
-            let isWaypoint: Bool
-            if let actionType = action["actionType"] as? String {
-                isWaypoint = actionType == "gpx.add"
-            } else {
-                isWaypoint = (action["type"] as? NSNumber)?.intValue == QuickActionIds.gpxActionId.rawValue
-            }
-            guard isWaypoint else { continue }
-            if let paramsString = action["params"] as? String {
-                guard let paramsData = paramsString.data(using: .utf8),
-                      let params = (try? JSONSerialization.jsonObject(with: paramsData)) as? [AnyHashable: Any] else {
-                    continue
-                }
-                let migrated = OAGPXAction.migrateLegacyCategory(in: params)
-                if NSDictionary(dictionary: migrated).isEqual(to: params) {
-                    continue
-                }
-                let migratedData = try JSONSerialization.data(withJSONObject: migrated)
-                action["params"] = String(data: migratedData, encoding: .utf8)
-            } else if let params = action["params"] as? [AnyHashable: Any] {
-                let migrated = OAGPXAction.migrateLegacyCategory(in: params)
-                if NSDictionary(dictionary: migrated).isEqual(to: params) {
-                    continue
-                }
-                action["params"] = migrated
-            } else {
-                continue
-            }
-            changed = true
-            actions[index] = action
-        }
-        return changed ? try JSONSerialization.data(withJSONObject: actions) : data
-    }
-
     func setQuickActionTypesStr(_ quickActionTypesStr: [String: QuickActionType]) {
         self.quickActionTypesStr = quickActionTypesStr
     }

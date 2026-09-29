@@ -7,7 +7,6 @@
 //
 
 #import "OAEditPointViewController.h"
-#import "OAGPXAction.h"
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
@@ -275,7 +274,8 @@
     }
     else
     {
-        groupName = [OAGPXAction categoryFromParams:params];
+        if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
+            groupName = @"";
 
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
         if (group.color != 0)

@@ -193,14 +193,22 @@ jobs:
         run: |
           set -euo pipefail
           check_setting() {
-            local config="$1" expected="$2" key="$3" value
-            value=$(xcodebuild -project ios/OsmAnd.xcodeproj -target 'OsmAnd Maps' -configuration "$config" -sdk iphoneos -showBuildSettings 2>/dev/null | awk -v key="$key" '$1 == key && $2 == "=" {print $3; exit}')
+            local config="$1" expected="$2" key="$3" settings="$4" value
+            value=$(awk -v key="$key" '
+              /^Build settings for action .* and target OsmAnd Maps:$/ { in_app_target = 1; next }
+              /^Build settings for action .* and target / { in_app_target = 0 }
+              in_app_target && $1 == key && $2 == "=" { print $3; exit }
+            ' <<< "$settings")
             [[ "$value" == "$expected" ]] || { echo "$config $key is '$value', expected '$expected'" >&2; exit 1; }
           }
-          check_setting Release net.osmand.maps PRODUCT_BUNDLE_IDENTIFIER
-          check_setting Release AppIcon ASSETCATALOG_COMPILER_APPICON_NAME
-          check_setting Nightly net.osmand.maps.nightly PRODUCT_BUNDLE_IDENTIFIER
-          check_setting Nightly AppIconNightly ASSETCATALOG_COMPILER_APPICON_NAME
+          check_variant() {
+            local config="$1" bundle="$2" icon="$3" settings
+            settings=$(xcodebuild -workspace ios/OsmAnd.xcworkspace -scheme 'OsmAnd Maps' -configuration "$config" -sdk iphoneos -showBuildSettings)
+            check_setting "$config" "$bundle" PRODUCT_BUNDLE_IDENTIFIER "$settings"
+            check_setting "$config" "$icon" ASSETCATALOG_COMPILER_APPICON_NAME "$settings"
+          }
+          check_variant Release net.osmand.maps AppIcon
+          check_variant Nightly net.osmand.maps.nightly AppIconNightly
           {
             echo '| Field | Value |'
             echo '| --- | --- |'

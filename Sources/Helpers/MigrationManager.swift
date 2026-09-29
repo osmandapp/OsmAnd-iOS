@@ -28,6 +28,7 @@ final class MigrationManager: NSObject {
         case migrateTransparentWidgetsToPanelAppearance
         case migrateTracksSortModeKeysAndFormat
         case migrateKeepScreenOnMode
+        case migrateWaypointQuickActionCategories
     }
     
     private struct HudMigrationScenario {
@@ -129,6 +130,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateWaypointQuickActionCategories.rawValue) {
+                migrateWaypointQuickActionCategories()
+                defaults.set(true, forKey: MigrationKey.migrateWaypointQuickActionCategories.rawValue)
             }
             if !defaults.bool(forKey: MigrationKey.migrateKeepScreenOnMode.rawValue) {
                 migrateKeepScreenOnMode()
@@ -483,6 +488,27 @@ final class MigrationManager: NSObject {
             default:
                 settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
             }
+        }
+    }
+
+    private func migrateWaypointQuickActionCategories() {
+        var changed = false
+        for buttonId in settings.quickActionButtons.get() {
+            let preference = QuickActionButtonState(withId: buttonId).quickActionsPref
+            let value = preference.get()
+            guard !value.isEmpty, let data = value.data(using: .utf8) else { continue }
+            do {
+                let migrated = try QuickActionSerializer.migrateLegacyWaypointCategories(data)
+                if migrated != data, let json = String(data: migrated, encoding: .utf8) {
+                    preference.set(json)
+                    changed = true
+                }
+            } catch {
+                NSLog("Failed to migrate waypoint quick actions for %@: %@", buttonId, error.localizedDescription)
+            }
+        }
+        if changed {
+            OAMapButtonsHelper.sharedInstance().updateActiveActions()
         }
     }
 

@@ -28,6 +28,10 @@
 - (void)onRowSelected:(NSIndexPath *)indexPath;
 @end
 
+@interface QuickActionSerializer (WaypointMigrationTesting)
++ (NSData *)migrateLegacyWaypointCategories:(NSData *)data error:(NSError **)error;
+@end
+
 @interface OAWaypointGroupSelectionTest : XCTestCase
 @end
 
@@ -268,6 +272,150 @@
         OAGpxWptEditingHandler *handler = [editor valueForKey:@"pointHandler"];
         OAGpxWptItem *item = [handler valueForKey:@"gpxWpt"];
         XCTAssertEqualObjects(item.point.category ?: @"", category);
+    }
+}
+
+- (void)testLegacyQuickActionMigrationPreservesDefaultAndPersonalGroups
+{
+    NSArray<NSArray<NSString *> *> *examples = @[
+        @[OALocalizedString(@"favorites_item"), @""],
+        @[OALocalizedString(@"personal_category_name"), @"personal"],
+        @[@"  Hiking  ", @"Hiking"],
+        @[OALocalizedString(@"shared_string_waypoints"), @""]
+    ];
+    for (NSArray<NSString *> *example in examples)
+    {
+        NSDictionary *original = @{@"category_name": example[0], @"name": @"Test", @"category_color": @123};
+        NSDictionary *migrated = [OAGPXAction migrateLegacyCategoryInParams:original];
+        XCTAssertEqualObjects([OAGPXAction categoryFromParams:migrated], example[1]);
+        XCTAssertEqualObjects(migrated[@"name"], @"Test");
+        XCTAssertEqualObjects(migrated[@"category_color"], @123);
+        XCTAssertEqualObjects([OAGPXAction migrateLegacyCategoryInParams:migrated], migrated);
+        XCTAssertEqualObjects(original[@"category_name"], example[0]);
+    }
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:[OAGPXAction migrateLegacyCategoryInParams:@{}]], @"");
+}
+
+- (void)testLegacyMigrationPreservesNewRawCategories
+{
+    for (NSString *category in @[OALocalizedString(@"favorites_item"), OALocalizedString(@"personal_category_name"), OALocalizedString(@"shared_string_waypoints"), @"  Hiking  ", @""])
+    {
+        OAGPXAction *action = [[OAGPXAction alloc] init];
+        action.params = @{@"category_name": category};
+        XCTAssertTrue([action fillParams:[action getUIModel]]);
+        NSDictionary *migrated = [OAGPXAction migrateLegacyCategoryInParams:action.getParams];
+        XCTAssertEqualObjects([OAGPXAction categoryFromParams:migrated], category);
+    }
+}
+
+- (void)testAndroidCategoryRemainsAuthoritativeAfterEditingMigratedAction
+{
+    NSMutableDictionary *params = [[OAGPXAction migrateLegacyCategoryInParams:@{@"category_name": OALocalizedString(@"favorites_item")}] mutableCopy];
+    params[@"category_name"] = @"Favorites";
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:params], @"Favorites");
+    XCTAssertEqualObjects([OAGPXAction migrateLegacyCategoryInParams:params], params);
+    XCTAssertEqualObjects([OAGPXAction categoryFromParams:@{@"category_name": @"Favorites"}], @"Favorites");
+}
+
+- (void)testLegacyActionJSONMigrationPreservesIdentifiersAndOtherActions
+{
+    NSDictionary *params = @{@"category_name": OALocalizedString(@"favorites_item"), @"name": @"Test"};
+    NSData *paramsData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
+    NSString *paramsString = [[NSString alloc] initWithData:paramsData encoding:NSUTF8StringEncoding];
+    NSDictionary *favorite = @{@"actionType": @"fav.add", @"id": @987, @"params": paramsString};
+    NSArray *actions = @[
+        @{@"actionType": @"gpx.add", @"id": @"1234567890123", @"name": @"Custom action", @"params": paramsString},
+        @{@"type": @6, @"id": @456, @"params": params},
+        favorite
+    ];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
+    NSError *error = nil;
+    NSData *migrated = [QuickActionSerializer migrateLegacyWaypointCategories:data error:&error];
+    XCTAssertNil(error);
+    XCTAssertNotNil(migrated);
+    NSArray *restored = [NSJSONSerialization JSONObjectWithData:migrated options:0 error:nil];
+    XCTAssertEqualObjects(restored[0][@"id"], @"1234567890123");
+    XCTAssertEqualObjects(restored[0][@"name"], @"Custom action");
+    NSData *restoredParamsData = [restored[0][@"params"] dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *restoredParams = [NSJSONSerialization JSONObjectWithData:restoredParamsData options:0 error:nil];
+    XCTAssertEqualObjects(restoredParams[@"category_name"], @"");
+    XCTAssertEqualObjects(restored[1][@"params"][@"category_name"], @"");
+    XCTAssertEqualObjects(restored[1][@"id"], @456);
+    XCTAssertEqualObjects(restored[2], favorite);
+    NSData *repeated = [QuickActionSerializer migrateLegacyWaypointCategories:migrated error:&error];
+    XCTAssertNil(error);
+    XCTAssertEqualObjects([NSJSONSerialization JSONObjectWithData:repeated options:0 error:nil], restored);
+    XCTAssertEqualObjects(repeated, migrated);
+}
+
+- (void)testLegacyActionJSONMigrationIsolatesInvalidRecords
+{
+    NSDictionary *valid = @{@"actionType": @"gpx.add", @"params": @{@"category_name": OALocalizedString(@"favorites_item")}};
+    NSArray *invalidRecords = @[
+        @{@"actionType": @"gpx.add", @"params": @"invalid JSON"},
+        @{@"actionType": @"gpx.add", @"params": @"null"},
+        @{@"actionType": @"gpx.add", @"params": @"[]"},
+        @{@"actionType": @"gpx.add", @"params": NSNull.null},
+        @{@"actionType": @"gpx.add", @"params": @42},
+        @{@"actionType": @"gpx.add", @"params": @{@"category_name": NSNull.null}},
+        @{@"actionType": @"gpx.add", @"params": @{@"category_name": @42}},
+        @{@"actionType": @"gpx.add", @"params": @"{\"category_name\":null}"},
+        @{@"actionType": @"gpx.add", @"params": @"{\"category_name\":42}"},
+        NSNull.null,
+        @42
+    ];
+    for (id invalid in invalidRecords)
+    {
+        NSArray *actions = @[valid, invalid, valid];
+        NSData *data = [NSJSONSerialization dataWithJSONObject:actions options:0 error:nil];
+        NSError *error = nil;
+        NSData *migrated = [QuickActionSerializer migrateLegacyWaypointCategories:data error:&error];
+        XCTAssertNil(error);
+        XCTAssertNotNil(migrated);
+        NSArray *restored = [NSJSONSerialization JSONObjectWithData:migrated options:0 error:nil];
+        XCTAssertEqual(restored.count, 3);
+        XCTAssertEqualObjects(restored[0][@"params"][@"category_name"], @"");
+        XCTAssertEqualObjects(restored[1], invalid);
+        XCTAssertEqualObjects(restored[2][@"params"][@"category_name"], @"");
+    }
+}
+
+- (void)testLegacyCategoryMigrationPreservesInvalidCategoryTypes
+{
+    for (id category in @[NSNull.null, @42, @[], @{}])
+    {
+        NSDictionary *params = @{@"category_name": category, @"name": @"Unchanged"};
+        XCTAssertEqualObjects([OAGPXAction migrateLegacyCategoryInParams:params], params);
+    }
+}
+
+- (void)testLegacyActionJSONMigrationPreservesUnchangedBytes
+{
+    NSArray<NSString *> *examples = @[
+        @"[ { \"actionType\": \"fav.add\", \"params\": { \"category_name\": \"Favorites\" } } ]",
+        @"[ { \"actionType\": \"gpx.add\", \"id\": 123 } ]",
+        @"[ { \"actionType\": \"gpx.add\", \"params\": { \"category_name\": \"Favorites\", \"category_name_format\": \"raw\" } } ]",
+        @"[ { \"actionType\": \"gpx.add\", \"params\": \"invalid JSON\" } ]",
+        @"[ ]"
+    ];
+    for (NSString *json in examples)
+    {
+        NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error = nil;
+        NSData *migrated = [QuickActionSerializer migrateLegacyWaypointCategories:data error:&error];
+        XCTAssertNil(error);
+        XCTAssertEqualObjects(migrated, data);
+    }
+}
+
+- (void)testLegacyActionJSONMigrationRejectsInvalidList
+{
+    for (NSString *json in @[@"invalid JSON", @"{}", @"null"])
+    {
+        NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error = nil;
+        XCTAssertNil([QuickActionSerializer migrateLegacyWaypointCategories:data error:&error]);
+        XCTAssertNotNil(error);
     }
 }
 

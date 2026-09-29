@@ -27,6 +27,8 @@
 #import "GeneratedAssetSymbols.h"
 
 static NSString * const kLegacyCategoryKey = @"category_key";
+static NSString * const kCategoryFormat = @"category_name_format";
+static NSString * const kRawCategoryFormat = @"raw";
 
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
@@ -57,6 +59,23 @@ static QuickActionType *TYPE;
 + (NSString *)categoryFromParams:(NSDictionary *)params
 {
     return params[kCategoryName] ?: @"";
+}
+
++ (NSDictionary *)migrateLegacyCategoryInParams:(NSDictionary *)params
+{
+    if ([params[kCategoryFormat] isEqual:kRawCategoryFormat])
+        return params;
+
+    id categoryValue = params[kCategoryName];
+    if (categoryValue && ![categoryValue isKindOfClass:NSString.class])
+        return params;
+
+    NSMutableDictionary *migrated = [params mutableCopy];
+    NSString *category = [[OAFavoriteGroup convertDisplayNameToGroupIdName:categoryValue ?: @""] trim];
+    migrated[kCategoryName] = [category isEqualToString:OALocalizedString(@"shared_string_waypoints")] ? @"" : category;
+    migrated[kCategoryFormat] = kRawCategoryFormat;
+    [migrated removeObjectForKey:kLegacyCategoryKey];
+    return migrated;
 }
 
 - (void)execute
@@ -221,6 +240,7 @@ static QuickActionType *TYPE;
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
     [params removeObjectForKey:kLegacyCategoryKey];
+    params[kCategoryFormat] = kRawCategoryFormat;
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)

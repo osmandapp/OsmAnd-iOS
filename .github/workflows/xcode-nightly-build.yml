@@ -185,22 +185,15 @@ jobs:
             -testRegion US \
             | xcpretty
 
-      - name: Verify Xcode app variants
+      - name: Verify Nightly app settings
         shell: bash
         env:
           RELEASE_IOS_VERSION: ${{ inputs.releaseversion }}
           BUILD_IOS_VERSION: ${{ inputs.buildversion }}
         run: |
           set -euo pipefail
-          check_setting() {
-            local config="$1" expected="$2" key="$3" value
-            value=$(xcodebuild -project ios/OsmAnd.xcodeproj -target 'OsmAnd Maps' -configuration "$config" -sdk iphoneos -showBuildSettings 2>/dev/null | awk -v key="$key" '$1 == key && $2 == "=" {print $3; exit}')
-            [[ "$value" == "$expected" ]] || { echo "$config $key is '$value', expected '$expected'" >&2; exit 1; }
-          }
-          check_setting Release net.osmand.maps PRODUCT_BUNDLE_IDENTIFIER
-          check_setting Release AppIcon ASSETCATALOG_COMPILER_APPICON_NAME
-          check_setting Nightly net.osmand.maps.nightly PRODUCT_BUNDLE_IDENTIFIER
-          check_setting Nightly AppIconNightly ASSETCATALOG_COMPILER_APPICON_NAME
+          settings=$(xcodebuild -workspace ios/OsmAnd.xcworkspace -scheme 'OsmAnd Nightly' -configuration Nightly -sdk iphoneos -destination 'generic/platform=iOS' -showBuildSettings -json)
+          python3 ios/.github/scripts/verify-nightly-settings.py Nightly net.osmand.maps.nightly AppIconNightly <<< "$settings"
           {
             echo '| Field | Value |'
             echo '| --- | --- |'

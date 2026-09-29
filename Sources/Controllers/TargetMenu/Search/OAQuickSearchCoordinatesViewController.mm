@@ -221,7 +221,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) generateData
 {
     [self updateControllsSectionCells];
-    [self parseLocation];
+    if (_searchLocation)
+        [self updateDistanceAndDirection:YES];
+    else
+        [self parseLocation];
 }
 
 - (void) updateControllsSectionCells
@@ -398,7 +401,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         || _inputMode == CoordinateSearchInputModeLatLon)
     {
         NSInteger legacy = _currentFormat >= 0 ? _currentFormat : MAP_GEO_FORMAT_DEGREES;
-        return [self applyLegacyFormat:legacy forceApply:YES];
+        if (![self applyLegacyFormat:legacy forceApply:YES] || _currentFormat == MAP_GEO_UTM_FORMAT)
+            return NO;
+
+        [self keepSearchLocation:latLon];
+        return YES;
     }
 
     if (!latLon)
@@ -419,7 +426,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     _lonStr = fields.lon;
 
     [self updateControllsSectionCells];
+    [self keepSearchLocation:latLon];
     return YES;
+}
+
+- (void) keepSearchLocation:(CLLocation *)location
+{
+    _searchLocation = location;
+    _additionalUtmLatLon = nil;
+    [self updateDistanceAndDirection:YES];
 }
 
 - (BOOL) applyLegacyFormat:(NSInteger)format forceApply:(BOOL)forceApply
@@ -1390,8 +1405,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void)coordinateFormatSelector:(CoordinateFormatSelectorViewController *)selector
             didSelectFormatId:(NSString *)formatId
 {
-    [self applyFormatId:formatId forceApply:NO];
-    [self parseLocation];
+    if (![self applyFormatId:formatId forceApply:NO])
+        [self parseLocation];
     [self updateControllsSectionCells];
 }
 
@@ -1405,8 +1420,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) return;
         
-        [strongSelf applyFormatId:formatId forceApply:YES];
-        [strongSelf parseLocation];
+        if (![strongSelf applyFormatId:formatId forceApply:YES])
+            [strongSelf parseLocation];
         [strongSelf updateControllsSectionCells];
     }];
 }

@@ -17,6 +17,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OADestinationsHelper.h"
 #import "OADownloadsManager.h"
+#import "SceneDelegate.h"
 #import <UIKit/UIKit.h>
 #import <mach/mach.h>
 #import <malloc/malloc.h>
@@ -108,6 +109,12 @@ static NSString *appVersion()
     std::atomic<int> _pressureCount;
     std::atomic<double> _pongTime;
     std::atomic<bool> _inBackground;
+    // with scenes the application state reads "background" in didFinishLaunching even for a launch
+    // onto the screen, so a process is only known to be on screen once it became active
+    std::atomic<bool> _becameActive;
+    // the helpers below are singletons created on first use, and creating the routing helper
+    // before the resources manager exists crashes, so they are read only once the map UI is up
+    std::atomic<bool> _appReady;
 
     // the renderer is released by the main thread; the sampler keeps only a weak reference
     std::mutex _rendererLock;
@@ -161,7 +168,6 @@ static NSString *appVersion()
     dispatch_once(&onceToken, ^{
         [self prepareDirectory];
         [self recordPreviousExit];
-        _inBackground = UIApplication.sharedApplication.applicationState == UIApplicationStateBackground;
         [self writeProcessState];
         [self observeLifecycle];
         [self observeMemoryPressure];
@@ -190,11 +196,19 @@ static NSString *appVersion()
     [center addObserver:self selector:@selector(onDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [center addObserver:self selector:@selector(onWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
     [center addObserver:self selector:@selector(onMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    [center addObserver:self selector:@selector(onMainApplicationUIReady) name:OAMainApplicationUIReadyNotification object:nil];
+}
+
+- (void)onMainApplicationUIReady
+{
+    _appReady = true;
+    [self captureRenderer];
 }
 
 - (void)onDidBecomeActive
 {
     _inBackground = false;
+    _becameActive = true;
     [self captureRenderer];
     [self writeProcessState];
 }
@@ -203,6 +217,7 @@ static NSString *appVersion()
 - (void)onDidEnterBackground
 {
     _inBackground = true;
+    _becameActive = true;
     [self writeProcessState];
 }
 
@@ -330,7 +345,7 @@ static NSString *appVersion()
     NSProcessInfoThermalState thermal = NSProcessInfo.processInfo.thermalState;
     if (thermal != NSProcessInfoThermalStateNominal)
         [sb appendFormat:@" therm=%@", thermal == NSProcessInfoThermalStateFair ? @"fair" : thermal == NSProcessInfoThermalStateSerious ? @"serious" : @"critical"];
-    if (_inBackground)
+    if (_inBackground || !_becameActive)
         [sb appendString:@" bg=1"];
     NSString *busy = [self busyWith];
     if (busy.length > 0)
@@ -421,6 +436,8 @@ static NSString *appVersion()
 // not up yet must not cost the whole sample
 - (NSString *)buildHeld
 {
+    if (!_appReady)
+        return nil;
     NSMutableArray<NSString *> *held = [NSMutableArray array];
     void (^add)(NSString *, NSUInteger) = ^(NSString *name, NSUInteger value) {
         if (value > 0)
@@ -438,6 +455,8 @@ static NSString *appVersion()
 // allocates a lot on purpose
 - (NSString *)busyWith
 {
+    if (!_appReady)
+        return nil;
     NSMutableArray<NSString *> *busy = [NSMutableArray array];
     @try
     {
@@ -506,7 +525,7 @@ static NSString *appVersion()
     os_unfair_lock_lock(&_stateLock);
     NSString *state = [NSString stringWithFormat:@"pid=%d\nboot=%ld\nversion=%@\nstarted=%.0f\nupdated=%.0f\nstate=%@\nclean=%d\nlast=%@\n",
         getpid(), bootTimeSeconds(), appVersion(), _startedAt, NSDate.date.timeIntervalSince1970,
-        _inBackground ? @"bg" : @"fg", _cleanExit ? 1 : 0, _lastSample ?: @""];
+        !_becameActive ? @"launch" : _inBackground ? @"bg" : @"fg", _cleanExit ? 1 : 0, _lastSample ?: @""];
     os_unfair_lock_unlock(&_stateLock);
     [[state dataUsingEncoding:NSUTF8StringEncoding] writeToURL:_processStateURL
         options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication error:nil];
@@ -543,7 +562,9 @@ static NSString *appVersion()
     if (previous[@"boot"].longLongValue != bootTimeSeconds() || ![previous[@"version"] isEqualToString:appVersion()])
         return;
 
-    BOOL foreground = [previous[@"state"] isEqualToString:@"fg"];
+    NSString *state = previous[@"state"];
+    BOOL foreground = [state isEqualToString:@"fg"];
+    NSString *ended = foreground ? @"foreground-unclean" : [state isEqualToString:@"launch"] ? @"during-launch" : @"background";
     NSTimeInterval updated = previous[@"updated"].doubleValue;
     NSTimeInterval started = previous[@"started"].doubleValue;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -552,7 +573,7 @@ static NSString *appVersion()
     formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
     NSString *record = [NSString stringWithFormat:@"%@ ended=%@ version=%@ ran=%.0fs last: %@",
         [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:updated]],
-        foreground ? @"foreground-unclean" : @"background", previous[@"version"],
+        ended, previous[@"version"],
         MAX(updated - started, 0), previous[@"last"] ?: @""];
 
     NSString *existing = [NSString stringWithContentsOfURL:_exitInfoURL encoding:NSUTF8StringEncoding error:nil] ?: @"";

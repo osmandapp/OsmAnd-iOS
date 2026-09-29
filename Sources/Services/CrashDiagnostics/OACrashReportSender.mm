@@ -19,6 +19,7 @@
 #import <malloc/malloc.h>
 #import <os/proc.h>
 #import <sys/utsname.h>
+#import <sys/sysctl.h>
 
 #include <OsmAndCore/ArchiveWriter.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -147,9 +148,21 @@ static NSString *mbString(uint64_t bytes)
 + (void)appendApp:(NSMutableString *)sb
 {
     NSDictionary *info = NSBundle.mainBundle.infoDictionary;
-    NSTimeInterval uptime = NSProcessInfo.processInfo.systemUptime;
+    NSTimeInterval uptime = [self processUptime];
     [sb appendFormat:@"app: %@ (%@) bundle=%@ uptime=%.0fs\n", info[@"CFBundleShortVersionString"], info[@"CFBundleVersion"],
         NSBundle.mainBundle.bundleIdentifier, uptime];
+}
+
+// seconds since this process started, not since the device booted
++ (NSTimeInterval)processUptime
+{
+    struct kinfo_proc info;
+    size_t size = sizeof(info);
+    int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()};
+    if (sysctl(mib, 4, &info, &size, NULL, 0) != 0 || size == 0)
+        return 0;
+    struct timeval start = info.kp_proc.p_starttime;
+    return NSDate.date.timeIntervalSince1970 - (start.tv_sec + start.tv_usec / 1e6);
 }
 
 + (void)appendDevice:(NSMutableString *)sb

@@ -105,6 +105,7 @@ static NSString *appVersion()
 
     // written from other threads, the sample only reads and resets them
     std::atomic<int> _routeCalculations;
+    std::atomic<int> _searches;
     std::atomic<int> _memoryWarnings;
     std::atomic<int> _pressureCount;
     std::atomic<double> _pongTime;
@@ -185,6 +186,11 @@ static NSString *appVersion()
 - (void)onRouteCalculated
 {
     _routeCalculations++;
+}
+
+- (void)onSearchRun
+{
+    _searches++;
 }
 
 #pragma mark - Lifecycle
@@ -353,6 +359,10 @@ static NSString *appVersion()
     int calculations = _routeCalculations.exchange(0);
     if (calculations > 0)
         [sb appendFormat:@" rcalc=%d", calculations];
+    // route calculations and searches both load map data in bursts
+    int searches = _searches.exchange(0);
+    if (searches > 0)
+        [sb appendFormat:@" srch=%d", searches];
     return sb;
 }
 

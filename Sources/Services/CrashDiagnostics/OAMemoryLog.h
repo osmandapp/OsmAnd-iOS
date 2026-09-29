@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Called when a route calculation ends, cancelled or not.
 - (void)onRouteCalculated;
 
+/// Called when a search starts running after the typing pause.
+- (void)onSearchRun;
+
 /// The previous process was killed or crashed while the app was on screen: set by -start.
 @property (nonatomic, readonly, nullable) NSString *uncleanExitIdentifier;
 

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Uploads one zip to https://osmand.net/api/crash-report, as Android does: state.txt built now,
  * memory_log.txt and exit_info.txt written by OAMemoryLog before the death, the MetricKit exit
- * counts and the newest MetricKit crash diagnostics.
+ * counts, the tail of the newest launch logs (256 KB in total) and the newest MetricKit crash diagnostics.
  */
 @interface OACrashReportSender : NSObject
 

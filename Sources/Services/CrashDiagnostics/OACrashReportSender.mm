@@ -30,6 +30,9 @@ static const NSUInteger kMaxCrashDiagnosticsInReport = 3;
 // the memory log is kept at this size on disk too, so the whole ring travels
 static const unsigned long long kMaxMemoryLogInReport = 4 * 1024 * 1024;
 static const NSInteger kMaxTracksDepth = 8;
+// release builds redirect stdout/stderr to Documents/Logs/<yyyy-MM-dd_HH-mm-ss>.log, one file per
+// launch: the newest is this process, the one before it is usually the process that died
+static const unsigned long long kMaxAppLogsInReport = 256 * 1024;
 
 static NSString *mbString(uint64_t bytes)
 {
@@ -89,6 +92,7 @@ static NSString *mbString(uint64_t bytes)
     [self copyTail:memoryLog.memoryLogURL to:folder maxLength:kMaxMemoryLogInReport names:names];
     [self copyTail:memoryLog.exitInfoURL to:folder maxLength:ULLONG_MAX names:names];
     [self copyTail:memoryLog.exitMetricsURL to:folder maxLength:ULLONG_MAX names:names];
+    [self copyRecentAppLogs:folder names:names];
     NSUInteger count = MIN(crashDiagnosticURLs.count, kMaxCrashDiagnosticsInReport);
     for (NSURL *url in [crashDiagnosticURLs subarrayWithRange:NSMakeRange(0, count)])
         [self copyTail:url to:folder maxLength:ULLONG_MAX names:names];
@@ -101,6 +105,33 @@ static NSString *mbString(uint64_t bytes)
     QByteArray archive = archiveWriter.createArchive(&ok, files, QString::fromNSString(folder.path), false);
     [fileManager removeItemAtURL:folder error:nil];
     return ok && !archive.isEmpty() ? [NSData dataWithBytes:archive.constData() length:archive.size()] : nil;
+}
+
+// the newest launch logs, newest first, each cut to its tail, kMaxAppLogsInReport in total
++ (void)copyRecentAppLogs:(NSURL *)folder names:(NSMutableArray<NSString *> *)names
+{
+    NSURL *documents = [NSFileManager.defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].firstObject;
+    NSURL *logs = [documents URLByAppendingPathComponent:@"Logs" isDirectory:YES];
+    NSArray<NSURL *> *files = [NSFileManager.defaultManager contentsOfDirectoryAtURL:logs
+        includingPropertiesForKeys:@[NSURLFileSizeKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    // the names are timestamps, so the name order is the launch order
+    NSArray<NSURL *> *sorted = [[files filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension == 'log'"]]
+        sortedArrayUsingComparator:^NSComparisonResult(NSURL *a, NSURL *b) {
+            return [b.lastPathComponent compare:a.lastPathComponent];
+        }];
+    unsigned long long budget = kMaxAppLogsInReport;
+    for (NSURL *url in sorted)
+    {
+        if (budget == 0)
+            break;
+        NSNumber *size = nil;
+        [url getResourceValue:&size forKey:NSURLFileSizeKey error:nil];
+        if (size.unsignedLongLongValue == 0)
+            continue;
+        unsigned long long length = MIN(size.unsignedLongLongValue, budget);
+        [self copyTail:url to:folder maxLength:length names:names];
+        budget -= length;
+    }
 }
 
 // copies at most the last maxLength bytes of the file

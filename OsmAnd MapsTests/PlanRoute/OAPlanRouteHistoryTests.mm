@@ -98,9 +98,9 @@
 
 - (void)testContinueWithDifferentProfilePreservesExistingLegs
 {
-    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[1]];
+    NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];
     OARoadSegmentData *geometry = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                                   start:pair.first end:pair.second points:@[pair.first, pair.second] segments:@[]];
+                                                                   start:pair[0] end:pair[1] points:pair segments:{}];
     self.context.roadSegmentData[pair] = geometry;
     [self.bridge applyMode:OAApplicationMode.BICYCLE pointIndex:7 wholeRoute:NO];
     for (NSInteger index = 0; index < 7; index++)
@@ -386,25 +386,25 @@
 
 - (void)testRoadGeometrySurvivesTrimUndoAndRepeatedCycles
 {
-    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[1]];
+    NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];
     OARoadSegmentData *data = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                               start:pair.first end:pair.second points:@[pair.first, pair.second] segments:@[]];
+                                                               start:pair[0] end:pair[1] points:pair segments:{}];
     self.context.roadSegmentData[pair] = data;
     [self.bridge trimBeforeIndex:4];
     for (NSInteger i = 0; i < 3; i++)
     {
         [self.bridge undo];
         XCTAssertEqual(self.context.roadSegmentData.count, 1);
-        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], ([self latitudes:@[pair.first, pair.second]]));
+        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:pair]);
         [self.bridge redo];
     }
 }
 
 - (void)testClearAllUndoRestoresRoadGeometry
 {
-    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[1]];
+    NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];
     self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                                          start:pair.first end:pair.second points:@[pair.first, pair.second] segments:@[]];
+                                                                          start:pair[0] end:pair[1] points:pair segments:{}];
     [self.bridge clearAllPoints];
     [self.bridge undo];
     XCTAssertNotNil(self.context.roadSegmentData[pair]);
@@ -581,9 +581,9 @@
 
 - (void)verifyRoadGeometryHistoryForCommand:(OAMeasurementModeCommand *)command
 {
-    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[1]];
+    NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];
     OARoadSegmentData *data = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                               start:pair.first end:pair.second points:@[pair.first, pair.second] segments:@[]];
+                                                               start:pair[0] end:pair[1] points:pair segments:{}];
     self.context.roadSegmentData[pair] = data;
     BOOL hadGap = self.original[3].isGap;
     XCTAssertTrue([self.context.commandManager execute:command]);
@@ -592,7 +592,7 @@
         [self.bridge undo];
         XCTAssertEqual(self.context.roadSegmentData.count, 1);
         XCTAssertEqual(self.context.roadSegmentData[pair], data);
-        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], ([self latitudes:@[pair.first, pair.second]]));
+        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:pair]);
         [self assertFinishedPoints:[self latitudes:self.original]];
         XCTAssertEqual(self.context.getPoints[3].isGap, hadGap);
         [self.bridge redo];

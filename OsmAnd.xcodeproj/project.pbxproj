@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05DA372E54E643D5AF16D717 /* OpeningHoursCheckDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3AAA61984F4B7C9FA437CD /* OpeningHoursCheckDateFormatter.swift */; };
+		71F505F37FC24CB6A9E23D81 /* OpeningHoursCheckDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3AAA61984F4B7C9FA437CD /* OpeningHoursCheckDateFormatter.swift */; };
+		96982DAE4DE440408D3F6F61 /* OpeningHoursCheckDateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA9FC8E5C74960A711E46D /* OpeningHoursCheckDateFormatterTests.swift */; };
+		ABE5E9FF0B1C4626A4B780BE /* OAOpeningHoursCheckDateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */; };
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
@@ -897,6 +901,7 @@
 		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
 		D1C573520000000000000001 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
+		D5785208C3E344EE8C53E308 /* OpeningHoursCollapsableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -2227,6 +2232,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpeningHoursCheckDateTest.mm; sourceTree = "<group>"; };
+		9CAA9FC8E5C74960A711E46D /* OpeningHoursCheckDateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursCheckDateFormatterTests.swift; sourceTree = "<group>"; };
+		AB3AAA61984F4B7C9FA437CD /* OpeningHoursCheckDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursCheckDateFormatter.swift; sourceTree = "<group>"; };
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -5453,6 +5461,7 @@
 		DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = routes.addon.render.xml; path = ../resources/rendering_styles/routes.addon.render.xml; sourceTree = "<group>"; };
 		DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = osmassistant.addon.render.xml; path = ../resources/rendering_styles/osmassistant.addon.render.xml; sourceTree = "<group>"; };
 		DB870AB9B77E62AC5C88F332 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = el; path = el.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursCollapsableView.swift; sourceTree = "<group>"; };
 		DEBFFB06486D4FFCC20ED564 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverterTest.mm; sourceTree = "<group>"; };
 		E4B9BFA0723413BD0A7B76AC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -6428,6 +6437,8 @@
 			isa = PBXGroup;
 			children = (
 				D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */,
+				9CAA9FC8E5C74960A711E46D /* OpeningHoursCheckDateFormatterTests.swift */,
+				64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */,
 				D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */,
 				D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */,
 			);
@@ -9050,6 +9061,8 @@
 				3260870A2F324DA00038A34B /* behaviour */,
 				325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */,
 				325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */,
+				AB3AAA61984F4B7C9FA437CD /* OpeningHoursCheckDateFormatter.swift */,
+				DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */,
 				329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */,
 				DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */,
 				DA5A7E5226C563A400F274C7 /* OAPOIViewController.h */,
@@ -13370,6 +13383,8 @@
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
+				71F505F37FC24CB6A9E23D81 /* OpeningHoursCheckDateFormatter.swift in Sources */,
+				D5785208C3E344EE8C53E308 /* OpeningHoursCollapsableView.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
@@ -13678,6 +13693,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */,
+				05DA372E54E643D5AF16D717 /* OpeningHoursCheckDateFormatter.swift in Sources */,
+				96982DAE4DE440408D3F6F61 /* OpeningHoursCheckDateFormatterTests.swift in Sources */,
+				ABE5E9FF0B1C4626A4B780BE /* OAOpeningHoursCheckDateTest.mm in Sources */,
 				D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */,
 				D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */,
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,

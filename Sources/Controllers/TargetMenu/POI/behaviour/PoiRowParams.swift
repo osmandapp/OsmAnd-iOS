@@ -14,13 +14,15 @@ final class PoiRowParams: NSObject {
     var key: String
     var value: String
     var subtype: String?
+    var openingHoursCheckDate: String?
     
-    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?) {
+    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?, openingHoursCheckDate: String? = nil) {
         self.builder = builder
         self.poiType = poiType
         self.rule = rule
         self.key = key
         self.value = value
         self.subtype = subtype
+        self.openingHoursCheckDate = openingHoursCheckDate
     }
 }

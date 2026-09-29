@@ -233,6 +233,7 @@
 #import "OABottomSheetViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OALabel.h"
 #import "OACollapsableLabelView.h"
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAWhatsNewBottomSheetViewController.h"

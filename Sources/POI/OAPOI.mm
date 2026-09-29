@@ -32,6 +32,7 @@ NSString * const OPERATOR_TAG = @"operator";
 NSString * const DESCRIPTION_TAG = @"description";
 NSString * const ROUTE_TAG = @"route";
 NSString * const OPENING_HOURS_TAG = @"opening_hours";
+NSString * const CHECK_DATE_OPENING_HOURS_TAG = @"check_date_opening_hours";
 NSString * const POPULATION_TAG = @"population";
 NSString * const WIDTH_TAG = @"width";
 NSString * const HEIGHT_TAG = @"height";
@@ -786,7 +787,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             }
             
             //save all other values to separate lines
-            if ([key hasSuffix:OPENING_HOURS_TAG])
+            if ([key hasSuffix:OPENING_HOURS_TAG] && ![key isEqualToString:CHECK_DATE_OPENING_HOURS_TAG])
                 return;
             
 //            if (!HIDING_EXTENSIONS_AMENITY_TAGS.contains(key)) {
@@ -990,7 +991,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         }
         
         //save all other values to separate lines
-        if ([key hasSuffix:OPENING_HOURS_TAG])
+        if ([key hasSuffix:OPENING_HOURS_TAG] && ![key isEqualToString:CHECK_DATE_OPENING_HOURS_TAG])
             continue;
         
         if (![HIDING_EXTENSIONS_AMENITY_TAGS containsObject:key] && addPrefixes)

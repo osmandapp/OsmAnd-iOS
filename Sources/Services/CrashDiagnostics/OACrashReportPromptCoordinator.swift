@@ -7,14 +7,16 @@
 
 import UIKit
 
-/// Presents the crash-report opt-in prompt once for each newest diagnostic.
-/// Reports are never uploaded automatically; the user must explicitly tap Send
-/// and choose a destination in the system share sheet.
+/// Presents the crash-report opt-in prompt once for each newest diagnostic, and once
+/// after the previous process died on screen without a diagnostic (a memory or
+/// watchdog kill). Reports are never uploaded automatically; the user must
+/// explicitly tap Send.
 @objcMembers
 final class OACrashReportPromptCoordinator: NSObject {
     static let shared = OACrashReportPromptCoordinator()
 
     private static let lastPromptedReportKey = "lastPromptedCrashDiagnostic"
+    private static let lastPromptedExitKey = "lastPromptedUncleanExit"
     private static let presentationRetryDelay: TimeInterval = 1
     private static let preferredSheetSafeAreaHeight: CGFloat = 400
 
@@ -22,6 +24,10 @@ final class OACrashReportPromptCoordinator: NSObject {
     private let readyMainApplicationScenes = NSHashTable<UIScene>.weakObjects()
 
     private var isStarted = false
+    // MetricKit delivers the diagnostic of a crash a few seconds after the launch that already
+    // prompted for the same death, so one prompt per process is enough; a diagnostic that came
+    // later is offered on the next launch
+    private var didPromptInThisProcess = false
     private var presentationRetryWorkItem: DispatchWorkItem?
 
     private weak var mainApplicationScene: UIScene?
@@ -73,18 +79,20 @@ final class OACrashReportPromptCoordinator: NSObject {
         guard let scene = activeMainApplicationScene(),
               let window = mainApplicationWindow(for: scene),
               isMainApplicationRootInstalled(in: window),
-              presentedPrompt == nil else {
+              presentedPrompt == nil,
+              !didPromptInThisProcess else {
             return
         }
         mainApplicationScene = scene
 
-        let reportURLs = OACrashDiagnosticsManager.shared.latestCrashReportURLs
-        guard let newestReportURL = reportURLs.first else { return }
-
-        let reportIdentifier = newestReportURL.lastPathComponent
-        guard userDefaults.string(forKey: Self.lastPromptedReportKey) != reportIdentifier else {
-            return
+        let reportIdentifier = OACrashDiagnosticsManager.shared.latestCrashReportURLs.first?.lastPathComponent
+        let pendingReport = reportIdentifier.flatMap {
+            userDefaults.string(forKey: Self.lastPromptedReportKey) != $0 ? $0 : nil
         }
+        let pendingExit = OAMemoryLog.sharedInstance().uncleanExitIdentifier.flatMap {
+            userDefaults.string(forKey: Self.lastPromptedExitKey) != $0 ? $0 : nil
+        }
+        guard pendingReport != nil || pendingExit != nil else { return }
 
         guard let presenter = topViewController(from: window.rootViewController) else {
             schedulePresentationRetry()
@@ -146,8 +154,14 @@ final class OACrashReportPromptCoordinator: NSObject {
         }
 
         presentedPrompt = prompt
+        didPromptInThisProcess = true
         presenter.present(navigationController, animated: true) { [weak self] in
-            self?.userDefaults.set(reportIdentifier, forKey: Self.lastPromptedReportKey)
+            if let pendingReport {
+                self?.userDefaults.set(pendingReport, forKey: Self.lastPromptedReportKey)
+            }
+            if let pendingExit {
+                self?.userDefaults.set(pendingExit, forKey: Self.lastPromptedExitKey)
+            }
         }
     }
 

@@ -1546,13 +1546,11 @@
 		DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E6526C563A400F274C7 /* OABasePointEditingHandler.m */; };
 		DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E6826C563A400F274C7 /* OATargetAddressViewController.mm */; };
 		DA5A841126C563A800F274C7 /* OATargetAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E6926C563A400F274C7 /* OATargetAddressViewController.xib */; };
-		DA5A841226C563A800F274C7 /* OAGPXWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E6C26C563A400F274C7 /* OAGPXWptListViewController.xib */; };
 		DA5A841326C563A800F274C7 /* OAGPXEditWptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E6D26C563A400F274C7 /* OAGPXEditWptViewController.xib */; };
 		DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7026C563A400F274C7 /* OAGPXWptViewController.mm */; };
 		DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7226C563A400F274C7 /* OAGPXEditWptListViewController.mm */; };
 		DA5A841926C563A800F274C7 /* OAGPXEditWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E7326C563A400F274C7 /* OAGPXEditWptListViewController.xib */; };
 		DA5A841F26C563A800F274C7 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E7D26C563A400F274C7 /* OAGPXEditWptViewController.mm */; };
-		DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */; };
 		DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E8B26C563A400F274C7 /* OATargetHistoryItemViewController.m */; };
 		DA5A842626C563A800F274C7 /* OATargetHistoryItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E8C26C563A400F274C7 /* OATargetHistoryItemViewController.xib */; };
 		DA5A842726C563A800F274C7 /* OAImpassableRoadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E8F26C563A400F274C7 /* OAImpassableRoadViewController.xib */; };
@@ -4741,17 +4739,14 @@
 		DA5A7E6826C563A400F274C7 /* OATargetAddressViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetAddressViewController.mm; sourceTree = "<group>"; };
 		DA5A7E6926C563A400F274C7 /* OATargetAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetAddressViewController.xib; sourceTree = "<group>"; };
 		DA5A7E6A26C563A400F274C7 /* OATargetAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetAddressViewController.h; sourceTree = "<group>"; };
-		DA5A7E6C26C563A400F274C7 /* OAGPXWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXWptListViewController.xib; sourceTree = "<group>"; };
 		DA5A7E6D26C563A400F274C7 /* OAGPXEditWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXEditWptViewController.xib; sourceTree = "<group>"; };
 		DA5A7E7026C563A400F274C7 /* OAGPXWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXWptViewController.mm; sourceTree = "<group>"; };
 		DA5A7E7226C563A400F274C7 /* OAGPXEditWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXEditWptListViewController.mm; sourceTree = "<group>"; };
 		DA5A7E7326C563A400F274C7 /* OAGPXEditWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXEditWptListViewController.xib; sourceTree = "<group>"; };
-		DA5A7E7626C563A400F274C7 /* OAGPXWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXWptListViewController.h; sourceTree = "<group>"; };
 		DA5A7E7926C563A400F274C7 /* OAGPXWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXWptViewController.h; sourceTree = "<group>"; };
 		DA5A7E7B26C563A400F274C7 /* OAGPXEditWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXEditWptListViewController.h; sourceTree = "<group>"; };
 		DA5A7E7D26C563A400F274C7 /* OAGPXEditWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXEditWptViewController.mm; sourceTree = "<group>"; };
 		DA5A7E8426C563A400F274C7 /* OAGPXEditWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXEditWptViewController.h; sourceTree = "<group>"; };
-		DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXWptListViewController.mm; sourceTree = "<group>"; };
 		DA5A7E8A26C563A400F274C7 /* OATargetHistoryItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetHistoryItemViewController.h; sourceTree = "<group>"; };
 		DA5A7E8B26C563A400F274C7 /* OATargetHistoryItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATargetHistoryItemViewController.m; sourceTree = "<group>"; };
 		DA5A7E8C26C563A400F274C7 /* OATargetHistoryItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetHistoryItemViewController.xib; sourceTree = "<group>"; };
@@ -9119,9 +9114,6 @@
 				DA5A7E8426C563A400F274C7 /* OAGPXEditWptViewController.h */,
 				DA5A7E7D26C563A400F274C7 /* OAGPXEditWptViewController.mm */,
 				DA5A7E6D26C563A400F274C7 /* OAGPXEditWptViewController.xib */,
-				DA5A7E7626C563A400F274C7 /* OAGPXWptListViewController.h */,
-				DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */,
-				DA5A7E6C26C563A400F274C7 /* OAGPXWptListViewController.xib */,
 				DA5A7E7926C563A400F274C7 /* OAGPXWptViewController.h */,
 				DA5A7E7026C563A400F274C7 /* OAGPXWptViewController.mm */,
 				327B4AB72891208500AF71AF /* OAGPXWptViewController.xib */,
@@ -11758,7 +11750,6 @@
 				27584BF7302DE44B009AC53F /* DoubleImageHeaderCell.xib in Resources */,
 				C5A466BE2D2E6B41008E0C87 /* ImageHeaderCell.xib in Resources */,
 				32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */,
-				DA5A841226C563A800F274C7 /* OAGPXWptListViewController.xib in Resources */,
 				272AFBAD2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib in Resources */,
 				DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */,
 				27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */,
@@ -12967,7 +12958,6 @@
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
 				C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */,
 				32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */,
-				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,

@@ -21,6 +21,7 @@
 #import "OAGpxRouteApproximation.h"
 #import "OALocationsHolder.h"
 #import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 #import "OAResultMatcher.h"
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
@@ -62,6 +63,8 @@ static const float kPointApproximation = 50;
     int _tracks;
     int _points;
     int _segments;
+    NSString *_storedCarRoutingProfile;
+    BOOL _didOverrideCarRoutingProfile;
 }
 
 - (void)setUp
@@ -73,12 +76,32 @@ static const float kPointApproximation = 50;
         [NSRunLoop.currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     XCTAssertTrue([OsmAndApp instance].initialized, @"the app did not finish starting");
 
+    if ([[OAApplicationMode CAR] getRoutingProfile].length == 0)
+    {
+        _didOverrideCarRoutingProfile = YES;
+        _storedCarRoutingProfile = [[NSUserDefaults standardUserDefaults] stringForKey:@"routingProfile_car"];
+        [OAAppSettings.sharedManager.routingProfile set:@"car" mode:OAApplicationMode.CAR];
+    }
+
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
-    initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
+    XCTAssertNotNil(obfFilePath, @"Turn_lanes_test.obf is missing from %@", bundle.bundlePath);
+    if (!obfFilePath)
+        return;
+    auto mapFile = initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
+    XCTAssertTrue(mapFile != nullptr, @"Could not open routing fixture at %@", obfFilePath);
+    if (!mapFile)
+        return;
 
     _provider = [[OARouteProvider alloc] init];
-    _readers = @[[[OASBinaryMapIndexReader alloc] initWithFilePath:obfFilePath]];
+    NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray arrayWithObject:[[OASBinaryMapIndexReader alloc] initWithFilePath:obfFilePath]];
+    for (NSString *path in [bundle pathsForResourcesOfType:@"obf" inDirectory:@"test-resources/turn_lanes"])
+    {
+        XCTAssertTrue(initBinaryMapFile(string(path.UTF8String), true, true) != nullptr,
+                      @"Could not open routing fixture at %@", path);
+        [readers addObject:[[OASBinaryMapIndexReader alloc] initWithFilePath:path]];
+    }
+    _readers = readers;
     _tracks = 0;
     _points = 0;
     _segments = 0;
@@ -88,10 +111,18 @@ static const float kPointApproximation = 50;
 {
     for (OASBinaryMapIndexReader *reader in _readers)
         [reader close];
+    if (_didOverrideCarRoutingProfile)
+    {
+        [OAAppSettings.sharedManager.routingProfile set:_storedCarRoutingProfile ?: @"" mode:OAApplicationMode.CAR];
+        if (!_storedCarRoutingProfile)
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"routingProfile_car"];
+    }
 }
 
 - (void)testSharedApproximationAttachesTheSameRoads
 {
+    if (!_provider)
+        return; // setUp has already reported the missing fixture
     NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json" inDirectory:@"test-resources"];
     NSString *sourceJsonText = [NSString stringWithContentsOfFile:jsonFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *sourceJson = [NSJSONSerialization JSONObjectWithData:[sourceJsonText dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
@@ -189,7 +220,14 @@ static const float kPointApproximation = 50;
 {
     auto builder = [OsmAndApp.instance getRoutingConfigForMode:params.mode];
     auto generalRouter = [OsmAndApp.instance getRouter:builder mode:params.mode];
-    XCTAssertTrue(generalRouter != nullptr);
+    if (!builder || !generalRouter)
+    {
+        NSString *routingPath = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
+        XCTFail(@"Routing setup failed: appInitialized=%d, routing.xml=%@, profile=%@, builder=%d, router=%d",
+                OsmAndApp.instance.initialized, routingPath, [params.mode getRoutingProfile],
+                builder != nullptr, generalRouter != nullptr);
+        return @[];
+    }
     auto cf = [_provider initOsmAndRoutingConfig:builder params:params generalRouter:generalRouter];
 
     auto router = std::make_shared<RoutePlannerFrontEnd>();

@@ -248,7 +248,7 @@
     [super viewDidLoad];
 
     if ([self openedFromMap])
-        [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageNamed:ACImageNameIcCustomCancel] forState:UIControlStateNormal];
     
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
@@ -265,7 +265,7 @@
             [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
 
-    UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
+    UIImage *groupsImage = [UIImage imageNamed:ACImageNameIcCustomFolderVisible];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
     self.groupsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.groupsButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
@@ -553,7 +553,7 @@
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
-            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
+            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage imageNamed:ACImageNameIcCustomTrip]
                         title:localizedTitle.length > 0 ? localizedTitle : self.gpx.gpxFileNameWithoutExtension
                   nearestCity:self.gpx.nearestCity];
 
@@ -2054,30 +2054,30 @@
     UIColor *groupColor = UIColorFromARGB([self getWaypointsGroupColor:displayName]);
     BOOL isVisible = [self isWaypointsGroupVisible:displayName];
     
-    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_map_pin_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : ACImageNameIcCustomMapPinOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         BOOL currentVisible = [weakSelf isWaypointsGroupVisible:displayName];
         [weakSelf setWaypointsGroupVisible:displayName show:!currentVisible];
     }];
     
-    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:@"ic_custom_edit"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:ACImageNameIcCustomEdit] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
-    UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:@"ic_custom_appearance_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:ACImageNameIcCustomAppearanceOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf showAppearanceWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
-    UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:@"ic_custom_folder_add_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:ACImageNameIcCustomFolderAddOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf copyWaypointsGroupAsNewFolderWithName:displayName groupColor:groupColor];
     }];
     
-    UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:@"ic_custom_folder_open"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:ACImageNameIcCustomFolderOpen] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
     }];
     
-    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
+    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:ACImageNameIcCustomCopy] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
     
-    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:@"ic_custom_trash_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:ACImageNameIcCustomTrashOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf openConfirmDeleteWaypointsScreen:displayName];
     }];
     deleteAction.attributes = UIMenuElementAttributesDestructive;
@@ -2553,7 +2553,7 @@
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
-            cell.showWaypointImageView.image = [UIImage templateImageNamed:ACImageNameIcCustomLocationMarkerOutlined];
+            cell.showWaypointImageView.image = [UIImage imageNamed:ACImageNameIcCustomLocationMarkerOutlined];
             cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
             [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -2565,7 +2565,7 @@
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
             if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
             cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
@@ -2596,7 +2596,7 @@
             [cell.leftIconView setImage:cellData.leftIcon];
             cell.leftIconView.tintColor = [cellData.tintColor toARGBNumber] == 0 ? [OADefaultFavorite getDefaultColor] : cellData.tintColor;
 
-            [cell.optionsButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
+            [cell.optionsButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomOverflowMenu]
                                 forState:UIControlStateNormal];
             cell.optionsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
@@ -2995,7 +2995,7 @@
             kCellToggle: @(!cellData.toggle)
     }];
     [cellData setData:@{
-            kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+            kCellRightIconName: cellData.toggle ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowRight
     }];
 
     [self.tableView beginUpdates];

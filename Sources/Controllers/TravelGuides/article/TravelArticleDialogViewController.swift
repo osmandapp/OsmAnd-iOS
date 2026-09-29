@@ -195,7 +195,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         contentButton = UIButton()
         guard let contentButton else { return }
-        contentButton.setImage(UIImage(named: "ic_custom_list"), for: .normal)
+        contentButton.setImage(.icCustomList, for: .normal)
         contentButton.tintColor = UIColor.iconColorActive
         contentButton.contentHorizontalAlignment = .left
         contentButton.addTarget(self, action: #selector(self.onContentsButtonClicked), for: .touchUpInside)
@@ -215,7 +215,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         bookmarkButton = UIButton()
         guard let bookmarkButton else { return }
-        bookmarkButton.setImage(UIImage(named: "ic_navbar_bookmark_outlined"), for: .normal)
+        bookmarkButton.setImage(.icNavbarBookmarkOutlined, for: .normal)
         bookmarkButton.tintColor = UIColor.iconColorActive
         contentButton.contentHorizontalAlignment = .right
         bookmarkButton.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)

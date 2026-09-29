@@ -28,12 +28,12 @@
                     <rect key="frame" x="280" y="0.0" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.5170014500617981" green="0.51698595285415649" blue="0.51699477434158325" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="ic_close.png"/>
+                    <state key="normal" image="ic_close"/>
                     <connections>
                         <action selector="closePressed:" destination="-1" eventType="touchUpInside" id="nyb-bI-zkR"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_plugin_skimap.png" translatesAutoresizingMaskIntoConstraints="NO" id="tbw-bb-Nao">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_plugin_skimap" translatesAutoresizingMaskIntoConstraints="NO" id="tbw-bb-Nao">
                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -91,8 +91,8 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
-        <image name="ic_plugin_skimap.png" width="25" height="25"/>
+        <image name="ic_close" width="10" height="10"/>
+        <image name="ic_plugin_skimap" width="25" height="25"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

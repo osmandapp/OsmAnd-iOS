@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) withName:(NSString *)name iconName:(NSString *)iconName headingIconName:(NSString *)headingIconName modelName:(NSString *)modelName;
 
 + (void) initialize;
-+ (OALocationIcon *) locationIconWithName:(NSString *)name;
++ (OALocationIcon *)locationIconWithName:(nullable NSString *)name;
++ (OALocationIcon *)locationIconWithName:(nullable NSString *)name forNavigation:(BOOL)forNavigation;
 
 + (OALocationIcon *) DEFAULT;
 + (OALocationIcon *) CAR;
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *> *) defaultIconModels;
 
 - (NSString *) name;
+- (NSString *)exportName;
 - (NSString *) iconName;
 - (NSString *) headingIconName;
 - (NSString *) modelName;

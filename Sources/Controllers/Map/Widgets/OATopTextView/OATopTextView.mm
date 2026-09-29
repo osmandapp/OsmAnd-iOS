@@ -169,7 +169,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     _turnDrawable.frame = _turnView.bounds;
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;
-    _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
+    _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcActionStartNavigation] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
     
     _exitRefTextContainer.layer.cornerRadius = 6.;
@@ -263,7 +263,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     settingRow.cellType = [OASwitchTableViewCell reuseIdentifier];
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"next_turn_information");
-    settingRow.iconName = @"ic_custom_next_turn";
+    settingRow.iconName = ACImageNameIcCustomNextTurn;
     [settingRow setObj:_widgetState.showNextTurnPref forKey:@"pref"];
     [settingRow setObj:@"ic_custom_next_turn" forKey:@"hide_icon"];
 
@@ -448,9 +448,9 @@ static int stackViewLeadingToRefViewPadding = 16;
             deviationStr = [OAOsmAndFormatter getFormattedDistance:pnt.deviationDistance];
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             if (pnt.deviationDirectionRight)
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnRight] color:color];
             else
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnLeft] color:color];
         }
         
         NSMutableAttributedString *distAttrStr = nil;

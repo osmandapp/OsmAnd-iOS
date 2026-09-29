@@ -485,7 +485,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 let nib = Bundle.main.loadNibNamed("GpxTravelCell", owner: self, options: nil)
                 cell = nib?.first as? GpxTravelCell
                 cell?.usernameIcon.contentMode = .scaleAspectFit
-                cell?.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
+                cell?.usernameIcon.image = .icCustomUserProfile
                 cell?.usernameIcon.tintColor = UIColor.iconColorActive
                 cell?.usernameLabel.textColor = UIColor.textColorActive
             }
@@ -610,13 +610,13 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(named: "ic_custom_file_read")) { [weak self] _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: .icCustomFileRead) { [weak self] _ in
                         guard let self else { return }
                         self.openArticle(article: article, lang: lang)
                     }
                     
                     let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
-                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: UIImage(named: "ic_custom_bookmark_outlined")) { [weak self] _ in
+                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: .icCustomBookmarkOutlined) { [weak self] _ in
                         guard let self else { return }
                         if isSaved {
                             TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
@@ -626,7 +626,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         self.generateData()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: .icCustomPointMarkersOutlined) { [weak self] _ in
                         guard let self else { return }
                         self.isPointsReadingMode = true
                         self.view.addSpinner(inCenterOfCurrentView: true)

@@ -691,7 +691,7 @@
 "int_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "info_button" = "Информация";
-"day_off_label" = "вых.";
+"day_off_label" = "выходной";
 "search_radius" = "Радиус поиска";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
 "shared_string_enabled" = "Включено";
@@ -4100,3 +4100,6 @@
 "astro_search_info_nebulas" = "Туманность — это гигантское облако пыли и газа в космосе, часто в той области, где рождаются звёзды.";
 "plugin_ais_tracker_name" = "AIS-трекер судов";
 "shared_string_length" = "Длина";
+"opening_hours_public_holiday" = "Праздники";
+"opening_hours_school_holiday" = "Каникулы";
+"opening_hours_easter" = "Пасха";

@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_map_pin.png" translatesAutoresizingMaskIntoConstraints="NO" id="o8m-bF-R4a" userLabel="Left Icon">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_map_pin" translatesAutoresizingMaskIntoConstraints="NO" id="o8m-bF-R4a" userLabel="Left Icon">
                         <rect key="frame" x="274" y="18" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="H3X-E9-wsX"/>
@@ -102,7 +102,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_map_pin.png" width="30" height="30"/>
+        <image name="ic_custom_map_pin" width="30" height="30"/>
         <image name="icon_favorite_direction" width="8" height="9"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -685,7 +685,7 @@
 "shared_string_road" = "Vegur";
 "avoid_roads_msg" = "Settu í gang varaleið með því að velja vegi sem á að forðast";
 "save_global_track_interval_descr" = "Veldu millibil skráninga í almenna leiðarskráningu (virkjað með viðmótshlutanum \'Skráning ferðar\' á kortinu).";
-"day_off_label" = "slökkt";
+"day_off_label" = "lokað";
 "open_from" = "Opið frá";
 "open_till" = "Opið til";
 "will_open_at" = "Opnar klukkan";

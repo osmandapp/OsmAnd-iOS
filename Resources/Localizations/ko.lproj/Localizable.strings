@@ -84,7 +84,7 @@
 "keep_and_add_destination_point" = "도착지로 추가";
 "subsequent_dest_description" = "대상을 위로 이동하고 생성";
 "show_poi_over_map" = "POI 표시";
-"day_off_label" = "끔";
+"day_off_label" = "휴무";
 "open_from" = "열기 위치";
 "avoid_roads_msg" = "원하는 도로를 선택하여 대체 경로를 실행할 수 있습니다";
 "shared_string_go" = "실행";

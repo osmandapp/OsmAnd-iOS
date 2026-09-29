@@ -164,7 +164,7 @@
     NSMutableArray *showSectionData = [NSMutableArray array];
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"favorites_item"),
-            @"image": @"ic_custom_favorites",
+            @"image": ACImageNameIcCustomFavorites,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"favorites"
     }];
@@ -172,14 +172,14 @@
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"poi_overlay"),
             @"value": [self getPOIDescription],
-            @"image": @"ic_custom_info",
+            @"image": ACImageNameIcCustomInfo,
             @"type": OAValueTableViewCell.reuseIdentifier,
             @"key": @"poi_layer"
     }];
 
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"layer_amenity_label"),
-            @"image": @"ic_custom_point_labels",
+            @"image": ACImageNameIcCustomPointLabels,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"layer_amenity_label"
     }];
@@ -188,7 +188,7 @@
     {
         [showSectionData addObject:@{
                 @"name": [(OAWikipediaPlugin *)[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] popularPlacesTitle],
-                @"image": @"ic_custom_popular_places",
+                @"image": ACImageNameIcCustomPopularPlaces,
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
                 @"type": hasWiki ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"wikipedia_layer"
@@ -199,7 +199,7 @@
     {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"street_level_imagery"),
-                @"image": @"ic_custom_mapillary_symbol",
+                @"image": ACImageNameIcCustomMapillarySymbol,
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"mapillary_layer"
@@ -208,7 +208,7 @@
     
     [showSectionData addObject:@{
         @"name": OALocalizedString(@"shared_string_gpx_tracks"),
-        @"image": @"ic_custom_trip",
+        @"image": ACImageNameIcCustomTrip,
         @"value": [NSString stringWithFormat:@"%d", (int)_settings.mapSettingVisibleGpx.get.count],
         @"type": OAValueTableViewCell.reuseIdentifier,
         @"key": @"tracks"
@@ -216,7 +216,7 @@
     
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
-            @"image": @"ic_custom_download_map",
+            @"image": ACImageNameIcCustomDownloadMap,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"show_borders_of_downloaded_maps"
     }];
@@ -246,13 +246,13 @@
 
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_edits_offline_layer"),
-                @"image": @"ic_action_openstreetmap_logo",
+                @"image": ACImageNameIcActionOpenstreetmapLogo,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"osm_edits_offline_layer"
         }];
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_notes_online_layer"),
-                @"image": @"ic_action_osm_note",
+                @"image": ACImageNameIcActionOsmNote,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"osm_notes_online_layer"
         }];
@@ -388,7 +388,7 @@
             @"cells": @[@{
                     @"name": OALocalizedString(@"map_settings_type"),
                     @"value": mapStyleName,
-                    @"image": @"ic_custom_map_style",
+                    @"image": ACImageNameIcCustomMapStyle,
                     @"type": OAValueTableViewCell.reuseIdentifier,
                     @"key": @"map_type"
             }]
@@ -401,21 +401,21 @@
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": [DayNightModeWrapper getTitleForType:dayNightMode],
-                @"image": @"ic_custom_sun",
+                @"image": ACImageNameIcCustomSun,
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"mapMode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_magnifier"),
                 @"value": [NSNumberFormatter.percentFormatter stringFromNumber:@([_settings.mapDensity get])],
-                @"image": @"ic_custom_magnifier",
+                @"image": ACImageNameIcCustomMagnifier,
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"text_size"),
                 @"value": [NSNumberFormatter.percentFormatter stringFromNumber:@([_settings.textSize get:_settings.applicationMode.get])],
-                @"image": @"ic_custom_text_size",
+                @"image": ACImageNameIcCustomTextSize,
                 @"type": OAValueTableViewCell.reuseIdentifier,
                 @"key": @"text_size"
         }];
@@ -483,14 +483,14 @@
     {
         [topographySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_topography"),
-            @"image": @"ic_custom_contour_lines",
+            @"image": ACImageNameIcCustomContourLines,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"contour_lines_layer"
         }];
         [topographySectionData addObject:@{
             @"name": OALocalizedString(@"shared_string_terrain"),
-            @"image": @"ic_custom_terrain",
+            @"image": ACImageNameIcCustomTerrain,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"terrain_layer"
@@ -498,14 +498,14 @@
     }
     [topographySectionData addObject:@{
         @"name": OALocalizedString(@"enable_3d_objects"),
-        @"image": @"ic_custom_3d_buildings",
+        @"image": ACImageNameIcCustom3DBuildings,
         @"has_options": @YES,
         @"type": OASwitchTableViewCell.reuseIdentifier,
         @"key": @"3d_buildings"
     }];
     [topographySectionData addObject:@{
         @"name": OALocalizedString(@"show_spherical_map"),
-        @"image": @"ic_custom_globe_view",
+        @"image": ACImageNameIcCustomGlobeView,
         @"has_options": @YES,
         @"type": OASwitchTableViewCell.reuseIdentifier,
         @"key": @"spherical_map"
@@ -518,7 +518,7 @@
         {
             [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"nautical_depth"),
-                @"image": @"ic_custom_nautical_depth",
+                @"image": ACImageNameIcCustomNauticalDepth,
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"nautical_depth"
@@ -538,14 +538,14 @@
     
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
-            @"image": @"ic_custom_overlay_map",
+            @"image": ACImageNameIcCustomOverlayMap,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
-            @"image": @"ic_custom_underlay_map",
+            @"image": ACImageNameIcCustomUnderlayMap,
             @"has_options": @YES,
             @"type": OASwitchTableViewCell.reuseIdentifier,
             @"key": @"underlay_layer"
@@ -555,7 +555,7 @@
     {
         [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_weather"),
-                @"image": @"ic_custom_umbrella",
+                @"image": ACImageNameIcCustomUmbrella,
                 hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"offline_weather_forecast"),
                 @"type": hasWeather ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"weather_layer"
@@ -572,7 +572,7 @@
             @"cells": @[@{
                     @"name": OALocalizedString(@"map_locale"),
                     @"value": [self getMapLangValueStr],
-                    @"image": @"ic_custom_map_languge",
+                    @"image": ACImageNameIcCustomMapLanguge,
                     @"type": OAValueTableViewCell.reuseIdentifier,
                     @"key": @"map_language"
             }]
@@ -714,15 +714,15 @@
 - (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
     if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES] || [paramName isEqualToString:SHOW_MTB_SCALE_IMBA_TRAILS])
-        return @"ic_action_bicycle_dark";
+        return ACImageNameIcActionBicycleDark;
     else if([paramName isEqualToString:WHITE_WATER_SPORTS_ATTR])
-        return @"ic_action_kayak";
+        return ACImageNameIcActionKayak;
     else if([paramName isEqualToString:HORSE_ROUTES_ATTR])
-        return @"ic_action_horse";
+        return ACImageNameIcActionHorse;
     else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR] || [paramName isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
-        return @"ic_action_trekking_dark";
+        return ACImageNameIcActionTrekkingDark;
     else if([paramName isEqualToString:PISTE_ROUTES_ATTR] || [paramName isEqualToString:SKI_SLOPES_ATTR])
-        return @"ic_action_skiing";
+        return ACImageNameIcActionSkiing;
     else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";
     else if([paramName isEqualToString:SHOW_FITNESS_TRAILS_ATTR])
@@ -730,17 +730,17 @@
     else if([paramName isEqualToString:SHOW_RUNNING_ROUTES_ATTR])
         return @"mx_running";
     else if([paramName isEqualToString:kRoadStyleCategory])
-        return @"ic_custom_road_style";
+        return ACImageNameIcCustomRoadStyle;
     else if([paramName isEqualToString:kDetailsCategory])
-        return @"ic_custom_overlay_map";
+        return ACImageNameIcCustomOverlayMap;
     else if([paramName isEqualToString:kHideCategory])
         return ACImageNameIcCustomHide;
     else if([paramName isEqualToString:TRANSPORT_CATEGORY])
-        return @"ic_custom_transport_bus";
+        return ACImageNameIcCustomTransportBus;
     else if([paramName isEqualToString:DIRTBIKE_ROUTES_ATTR])
-        return @"ic_action_dirt_motorcycle";
+        return ACImageNameIcActionDirtMotorcycle;
     else if([paramName isEqualToString:CLIMBING_ROUTES])
-        return @"ic_action_hill_climbing";
+        return ACImageNameIcActionHillClimbing;
 
     return @"";
 }
@@ -1126,7 +1126,7 @@
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         
         cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : ACImageNameIcCustomArrowDown];
+        cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowDown];
         if (!group.isOpen && [cell isDirectionRTL])
             cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;
         

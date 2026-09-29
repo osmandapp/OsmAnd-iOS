@@ -118,6 +118,7 @@
 - (void) recreateAllControls;
 - (void) recreateControls;
 - (void) updateInfo;
+- (void) updateWidgetPanelAppearanceColors;
 
 - (void) updateCurrentLocationAddress;
 

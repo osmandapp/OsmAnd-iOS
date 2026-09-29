@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
-            @"iconName": @"left_menu_icon_settings",
+            @"iconName": ACImageNameLeftMenuIconSettings,
             @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeProfiles)
             }
@@ -213,7 +213,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
-            @"iconName": @"ic_custom_quick_action",
+            @"iconName": ACImageNameIcCustomQuickAction,
             @"count": [NSString stringWithFormat:@"%ld", actionsCount],
             @"category" : @(EOAImportDataTypeQuickActions)
             }
@@ -223,7 +223,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
-            @"iconName": @"ic_custom_search",
+            @"iconName": ACImageNameIcCustomSearch,
             @"count": [NSString stringWithFormat:@"%ld", filtersCount],
             @"category" : @(EOAImportDataTypePoiFilters)
             }
@@ -233,7 +233,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
-            @"iconName": @"ic_custom_overlay_map",
+            @"iconName": ACImageNameIcCustomOverlayMap,
             @"count": [NSString stringWithFormat:@"%ld", tileSourcesCount],
             @"category" : @(EOAImportDataTypeTileSources)
             }
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
-            @"iconName": @"ic_custom_map_style",
+            @"iconName": ACImageNameIcCustomMapStyle,
             @"count": [NSString stringWithFormat:@"%ld",renderFilesCount],
             @"category" : @(EOAImportDataTypeRenderSettings)
             }
@@ -253,7 +253,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
-            @"iconName": @"ic_custom_route",
+            @"iconName": ACImageNameIcCustomRoute,
             @"count": [NSString stringWithFormat:@"%ld",routingFilesCount],
             @"category" : @(EOAImportDataTypeRoutingSettings)
             }
@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_gpx_tracks"),
-            @"iconName": @"ic_custom_trip",
+            @"iconName": ACImageNameIcCustomTrip,
             @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
             @"category" : @(EOAImportDataTypeGpxTrips)
             }
@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
-            @"iconName": @"ic_custom_alert",
+            @"iconName": ACImageNameIcCustomAlert,
             @"count": [NSString stringWithFormat:@"%ld", avoidRoadsCount],
             @"category" : @(EOAImportDataTypeAvoidRoads)
             }
@@ -283,7 +283,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_maps"),
-            @"iconName": @"ic_custom_map",
+            @"iconName": ACImageNameIcCustomMap,
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)
             }
@@ -293,7 +293,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"favorites_item"),
-            @"iconName": @"ic_custom_favorites",
+            @"iconName": ACImageNameIcCustomFavorites,
             @"count": [NSString stringWithFormat:@"%ld", favoritesCount],
             @"category" : @(EOAImportDataTypeFavorites)
             }
@@ -303,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"osm_notes"),
-            @"iconName": @"ic_action_add_osm_note",
+            @"iconName": ACImageNameIcActionAddOsmNote,
             @"count": [NSString stringWithFormat:@"%ld", osmNotesCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }
@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"osm_edits_title"),
-            @"iconName": @"ic_custom_poi",
+            @"iconName": ACImageNameIcCustomPoi,
             @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }
@@ -323,7 +323,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"map_markers"),
-            @"iconName": @"ic_custom_marker",
+            @"iconName": ACImageNameIcCustomMarker,
             @"count": [NSString stringWithFormat:@"%ld", markersCount],
             @"category" : @(EOAImportDataTypeActiveMarkers)
             }
@@ -333,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"markers_history"),
-            @"iconName": @"ic_custom_history",
+            @"iconName": ACImageNameIcCustomHistory,
             @"count": [NSString stringWithFormat:@"%ld", historyMarkersCount],
             @"category" : @(EOAImportDataTypeHistoryMarkers)
             }
@@ -343,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_search_history"),
-            @"iconName": @"ic_custom_history",
+            @"iconName": ACImageNameIcCustomHistory,
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)
             }
@@ -353,7 +353,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"navigation_history"),
-            @"iconName": @"ic_custom_navigation",
+            @"iconName": ACImageNameIcCustomNavigation,
             @"count": [NSString stringWithFormat:@"%ld", navigationHistoryCount],
             @"category" : @(EOAImportDataTypeNavigationHistory)
         }
@@ -364,7 +364,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         _needRestart = YES;
         [_data addObject: @{
             @"label": OALocalizedString(@"general_settings_2"),
-            @"iconName": @"left_menu_icon_settings",
+            @"iconName": ACImageNameLeftMenuIconSettings,
             @"count": [NSString stringWithFormat:@"%ld", globalCount],
             @"category" : @(EOAImportDataTypeGlobal)
             }
@@ -374,7 +374,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_colors"),
-            @"iconName": @"ic_custom_file_color_palette",
+            @"iconName": ACImageNameIcCustomFileColorPalette,
             @"count": [NSString stringWithFormat:@"%ld", colorPaletteCount],
             @"category" : @(EOAImportDataTypeColorPalette)
         }];

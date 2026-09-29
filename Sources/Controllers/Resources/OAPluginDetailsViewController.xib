@@ -29,7 +29,7 @@
                     <rect key="frame" x="0.0" y="387" width="320" height="371"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_plugin_nautical.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZuG-LX-LBf">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_plugin_nautical" translatesAutoresizingMaskIntoConstraints="NO" id="ZuG-LX-LBf">
                             <rect key="frame" x="12" y="12" width="45" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -66,7 +66,7 @@
                         <button hidden="YES" opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QfZ-Sq-Iv9">
                             <rect key="frame" x="179" y="19" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="ic_custom_remove_outlined.png"/>
+                            <state key="normal" image="ic_custom_remove_outlined"/>
                             <connections>
                                 <action selector="deleteButtonClicked:" destination="-1" eventType="touchUpInside" id="lfc-8z-pND"/>
                             </connections>
@@ -84,8 +84,8 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_remove_outlined.png" width="30" height="30"/>
-        <image name="ic_plugin_nautical.png" width="25" height="25"/>
+        <image name="ic_custom_remove_outlined" width="30" height="30"/>
+        <image name="ic_plugin_nautical" width="25" height="25"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

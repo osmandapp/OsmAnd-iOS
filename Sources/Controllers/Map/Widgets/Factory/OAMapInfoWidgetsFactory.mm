@@ -24,6 +24,7 @@
 #import "OAAppData.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
+#import "GeneratedAssetSymbols.h"
 
 
 @implementation OAMapInfoWidgetsFactory
@@ -78,9 +79,9 @@
             [settings.rulerMode set:RULER_MODE_DARK];
         
         if (settings.rulerMode.get == RULER_MODE_NO_CIRCLES) {
-            [rulerControlWeak setIcon:@"widget_hidden"];
+            [rulerControlWeak setIcon:ACImageNameWidgetHidden];
         } else {
-            [rulerControlWeak setIcon:@"widget_ruler_circle"];
+            [rulerControlWeak setIcon:ACImageNameWidgetRulerCircle];
         }
         [[OARootViewController instance].mapPanel.hudViewController.mapInfoController updateRuler];
     };
@@ -178,23 +179,23 @@
     NSString *iconName;
     if (band == WEATHER_BAND_TEMPERATURE)
     {
-        iconName = @"widget_weather_temperature";
+        iconName = ACImageNameWidgetWeatherTemperature;
     }
     else if (band == WEATHER_BAND_PRESSURE)
     {
-        iconName = @"widget_weather_air_pressure";
+        iconName = ACImageNameWidgetWeatherAirPressure;
     }
     else if (band == WEATHER_BAND_WIND_SPEED)
     {
-        iconName = @"widget_weather_wind";
+        iconName = ACImageNameWidgetWeatherWind;
     }
     else if (band == WEATHER_BAND_CLOUD)
     {
-        iconName = @"widget_weather_clouds";
+        iconName = ACImageNameWidgetWeatherClouds;
     }
     else if (band == WEATHER_BAND_PRECIPITATION)
     {
-        iconName = @"widget_weather_precipitation";
+        iconName = ACImageNameWidgetWeatherPrecipitation;
     }
 
     [weatherControl setIcon:iconName];

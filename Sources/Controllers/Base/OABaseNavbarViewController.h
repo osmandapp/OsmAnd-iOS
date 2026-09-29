@@ -116,5 +116,6 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 
 - (UIColor *)blurBackgroundAppearanceColor;
 - (BOOL)shouldBlurAppearanceNavBar;
+- (UIColor *)navbarButtonsTintColor;
 
 @end

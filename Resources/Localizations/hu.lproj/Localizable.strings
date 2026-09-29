@@ -4270,7 +4270,7 @@
 "ais_cpa_settings_description" = "Ezek az értékek határozzák meg, hogyan jelenjenek meg az AIS-objektumok, amikor megközelítik a saját hajó pozícióját.";
 "ais_cpa_warning_time" = "Figyelmeztetési idő a legkisebb megközelítési pont (CPA) előtt";
 "ais_cpa_warning_time_description" = "Ha egy másik hajóval való TCPA (legkisebb megközelítési pontig hátralévő idő) a meghatározott küszöbérték alá esik, a hajó piros színnel lesz kiemelve.";
-"plugin_ais_tracker_name" = "AIS hajókövető";
+"plugin_ais_tracker_name" = "Hajókövető (AIS)";
 "plugin_ais_tracker_description" = "Megjeleníti a közelben lévő hajók AIS-pozícióit és információit. Az AIS-adatok a hálózaton keresztül érkeznek egy külső AIS-vevőtől.";
 "plugin_ais_tracker_disclaimer" = "NYILATKOZAT\n\nEz a bővítmény egy hobbiprojekt, és nem kritikus alkalmazásokban való használatra készült. Nem garantálja a megbízhatóságot vagy a pontosságot. Ne hagyatkozzon erre a szoftverre navigáció, életbiztonság vagy bármilyen más alapvető művelet során.";
 "shared_string_disabled" = "Letiltva";
@@ -4290,7 +4290,7 @@
 "ais_error_port_only" = "Csak a 0..65535 tartományba eső számértékek fogadhatók el.";
 "ais_connection_connected" = "Kapcsolódva";
 "ais_connection_connecting" = "Kapcsolódás";
-"ais_connection_failed" = "Nem sikerült kapcsolódni";
+"ais_connection_failed" = "Nem sikerült létrehozni a kapcsolatot";
 "ais_connection_disconnected" = "Leválasztva";
 "ais_call_sign" = "Hívójel";
 "ais_mmsi" = "MMSI";
@@ -4531,3 +4531,19 @@
 "panels_layout_compact_descr" = "A felső és az alsó panel az oldalsó panelek és a gombok közé illeszkedik.";
 "screen_elements_independent" = "Független";
 "switch_to_independent" = "Váltás függetlenre";
+"reset_all_appearance_settings_for_panel" = "Visszaállítja a(z) %@ összes megjelenési beállítását?";
+"text_color" = "Szövegszín";
+"secondary_text_color" = "Másodlagos szövegszín";
+"background_color" = "Háttérszín";
+"widget_height" = "Modulmagasság";
+"row_height" = "Sormagasság";
+"shared_string_transparent" = "Átlátszó";
+"panel_appearance_original_description" = "A(z) „%1$s” megőrzi az egyes modulok méretét és ikonját.";
+"copy_from" = "Másolás innen";
+"another_profile" = "Másik profil";
+"custom_widget_colors" = "Egyéni modulszínek";
+"custom_widget_colors_description" = "Javítsa az olvashatóságot útközben. Oldja fel a teljes testreszabási lehetőségeket, hogy a modul bármilyen térképháttér előtt (legyen szó nappalról vagy éjszakáról) tökéletesen látható maradjon.";
+"unlock_custom_colors" = "Egyéni színek feloldása";
+"opening_hours_public_holiday" = "Munkaszüneti napok";
+"opening_hours_school_holiday" = "Iskolai szünetek";
+"opening_hours_easter" = "Húsvét";

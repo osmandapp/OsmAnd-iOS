@@ -3245,3 +3245,4 @@
 "routing_attr_motor_type_ethanol_name" = "Etanol";
 "astro_designations" = "Označenia";
 "preparing_file" = "Pripravuje sa súbor";
+"astro_type_satellite" = "Satelit";

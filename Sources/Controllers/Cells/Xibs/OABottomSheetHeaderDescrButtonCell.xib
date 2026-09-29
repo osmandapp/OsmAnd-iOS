@@ -58,7 +58,7 @@
                             <constraint firstAttribute="width" constant="30" id="hhq-ik-be0"/>
                         </constraints>
                         <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                        <state key="normal" image="ic_custom_close.png"/>
+                        <state key="normal" image="ic_custom_close"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -92,6 +92,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_close.png" width="30" height="30"/>
+        <image name="ic_custom_close" width="30" height="30"/>
     </resources>
 </document>

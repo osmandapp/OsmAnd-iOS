@@ -17,7 +17,7 @@
 {
     NSArray<OASWptPt *> *_oldPoints;
     NSArray<OASWptPt *> *_newPoints;
-    NSDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *_oldRoadSegmentData;
     OAApplicationMode *_oldMode;
 }
 

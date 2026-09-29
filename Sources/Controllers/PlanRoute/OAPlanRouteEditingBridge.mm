@@ -520,7 +520,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
-    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[[OAWptPtPair pairWithFirst:from second:to]];
     return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
 }
 
@@ -1457,7 +1457,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
 
     OASGpxFile *gpxFile = filePath.length == 0 ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile targetObject:nil];
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [presentingViewController presentViewController:navigationController animated:YES completion:nil];
@@ -1739,6 +1739,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSString *gpxRootPath = OsmAndApp.instance.gpxPath;
     NSString *folderPath = (folder.length > 0) ? [gpxRootPath stringByAppendingPathComponent:folder] : gpxRootPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
+    if (!asCopy && [originalGpxPath.decomposedStringWithCanonicalMapping isEqualToString:outFile.decomposedStringWithCanonicalMapping])
+        gpx.metadata = [[OASMetadata alloc] initWithSource:ctx.gpxData.gpxFile.metadata];
+    
+    [OAPlanRouteEditingBridge savePreselectedRouteActivity:gpx syncWithEditedProfile:[OAPlanRouteEditingBridge shouldSyncRouteActivityWithEditedProfile:ctx] appMode:ctx.appMode];
     BOOL restoreOriginalActiveGpx = originalGpxPath.length > 0 && originalPoiStateSnapshot != nil && ![originalGpxPath isEqualToString:outFile];
     __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
@@ -1836,6 +1840,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     }
 
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    OAApplicationMode *appMode = OAApplicationMode.DEFAULT;
+    for (NSInteger i = endPointIndex - 1; i >= startPointIndex; i--)
+    {
+        if (!points[i].isGap)
+        {
+            appMode = [OAApplicationMode valueOfStringKey:points[i].getProfileType def:OAApplicationMode.DEFAULT];
+            break;
+        }
+    }
+    
+    [OAPlanRouteEditingBridge savePreselectedRouteActivity:gpx syncWithEditedProfile:NO appMode:appMode];
     NSString *folderPath = OsmAndApp.instance.gpxPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
 
@@ -1885,6 +1901,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self addDraftWaypointsToGpx:currentGpx];
 
     NSString *absPath = [OAUtilities absoluteGpxPathForPath:filePath].stringByStandardizingPath;
+    BOOL syncWithEditedProfile = [OAPlanRouteEditingBridge shouldSyncRouteActivityWithEditedProfile:ctx];
+    OAApplicationMode *appMode = ctx.appMode;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:absPath];
         OASGpxFile *existingGpx = [OASGpxUtilities.shared loadGpxFileFile:file];
@@ -1909,6 +1927,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             if (existingPoints.count > 0)
                 [currentGpx addPointsCollection:existingPoints];
 
+            currentGpx.metadata = [[OASMetadata alloc] initWithSource:existingGpx.metadata];
+            [OAPlanRouteEditingBridge savePreselectedRouteActivity:currentGpx syncWithEditedProfile:syncWithEditedProfile appMode:appMode];
             OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:currentGpx];
             success = exception == nil;
             if (success)
@@ -2072,6 +2092,29 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (![OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:hasRoute changes:hasChanges])
         return EOAPlanRouteNavigationResultMissingApproximationResult;
     return EOAPlanRouteNavigationResultSuccess;
+}
+
++ (BOOL)shouldSyncRouteActivityWithEditedProfile:(OAMeasurementEditingContext *)editingCtx
+{
+    return !editingCtx.isNewData && editingCtx.hasRoutePoints && !editingCtx.isInMultiProfileMode;
+}
+
++ (void)savePreselectedRouteActivity:(OASGpxFile *)gpxFile syncWithEditedProfile:(BOOL)syncWithEditedProfile appMode:(OAApplicationMode *)appMode
+{
+    OASRouteActivityHelper *helper = OASRouteActivityHelper.shared;
+    OASMetadata *metadata = gpxFile.metadata;
+    if (!syncWithEditedProfile && [metadata getRouteActivityActivities:helper.getActivities] != nil)
+        return;
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if (appMode == OAApplicationMode.DEFAULT)
+        appMode = settings.applicationMode.get;
+    
+    NSString *activityId = [settings.currentTrackRouteActivity get:appMode];
+    if (syncWithEditedProfile)
+        [metadata setRouteActivityActivity:[helper findRouteActivityId:activityId]];
+    else if (activityId.length > 0)
+        [metadata setRouteActivityActivity:[helper findRouteActivityId:activityId]];
 }
 
 - (OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)ctx

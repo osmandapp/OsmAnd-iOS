@@ -119,6 +119,7 @@
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
+#import "GeneratedAssetSymbols.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -432,8 +433,12 @@ typedef enum
         _activeTargetType = OATargetMapModeParametersSettings;
     else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
         _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
+    else if ([controller isKindOfClass:WidgetPanelColorViewController.class])
+        _activeTargetType = OATargetWidgetPanelAppearanceSettings;
 
     [self setupScrollableHud:controller];
+    if (_activeTargetType == OATargetWidgetPanelAppearanceSettings)
+        [_hudViewController updateControlsLayout:NO];
 }
 
 - (void) hideScrollableHudViewController
@@ -2220,13 +2225,14 @@ typedef enum
     
     OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller =
-            [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
-                                                          title:self.targetMenuView.targetPoint.title
-                                                        address:self.targetMenuView.targetPoint.titleAddress
-                                                    customParam:nil
-                                                      pointType:EOAEditPointTypeFavorite
-                                                targetMenuState:nil
-                                                            poi:poi];
+    [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
+                                                  title:self.targetMenuView.targetPoint.title
+                                                address:self.targetMenuView.targetPoint.titleAddress
+                                            customParam:nil
+                                              pointType:EOAEditPointTypeFavorite
+                                        targetMenuState:nil
+                                                    poi:poi
+                                           targetObject:self.targetMenuView.targetPoint.targetObj];
     NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAFavoriteAction getQuickActionType].stringId];
     if (quickActionParams)
     {
@@ -2422,7 +2428,8 @@ typedef enum
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
-                                                                            poi:poi];
+                                                                                            poi:poi
+                                                                                   targetObject:nil];
     NSDictionary *quickActionParams = self.targetMenuView.targetPoint.values[[OAGPXAction getQuickActionType].stringId];
     if (quickActionParams)
     {
@@ -3791,7 +3798,7 @@ typedef enum
     else
     {
         targetPoint.type = OATargetRouteIntermediate;
-        [UIImage imageNamed:@"list_intermediate"];
+        [UIImage imageNamed:ACImageNameListIntermediate];
     }
     
     _targetMenuView.isAddressFound = YES;
@@ -3831,7 +3838,7 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"ic_custom_location_marker"];
+    targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomLocationMarker];
     targetPoint.toolbarNeeded = NO;
     
     _activeTargetType = targetPoint.type;

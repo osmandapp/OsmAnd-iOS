@@ -13,6 +13,7 @@
 #import "OAProfilesGroup.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOsmAndNavigation @"osmand_navigation"
 #define kDerivedProfiles "derivedProfiles"
@@ -117,7 +118,7 @@
             const auto router = it->second;
             if (router != nullptr && ![routerKey isEqualToString:kGeocoding] && ![disabledRouterNames containsObject:routerKey])
             {
-                NSString *iconName = @"ic_custom_navigation";
+                NSString *iconName = ACImageNameIcCustomNavigation;
                 NSString *name = [NSString stringWithCString:router->profileName.c_str() encoding:NSUTF8StringEncoding];
                 NSString *fileName = [NSString stringWithCString:router->fileName.c_str() encoding:NSUTF8StringEncoding];
                 fileName = [fileName containsString:@"OsmAnd Maps.app"] ? @"" : fileName;
@@ -188,7 +189,7 @@
         if (testImg)
             return imgKey;
     }
-    return @"ic_custom_navigation";
+    return ACImageNameIcCustomNavigation;
 }
 
 + (NSArray<OARoutingDataObject *> *)getExternalRoutingProfiles

@@ -351,7 +351,7 @@
     [self applyLocalization];
     _cachedYViewPort = _mapViewController.mapView.viewportYScale;
 
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    UIImage *backImage = [UIImage templateImageNamed:ACImageNameIcCustomArrowBack];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];

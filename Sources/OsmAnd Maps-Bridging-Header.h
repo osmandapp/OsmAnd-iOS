@@ -59,6 +59,7 @@
 #import "OAWeatherBand.h"
 #import "OADayNightHelper.h"
 #import "OALocationServices.h"
+#import "OALocationSimulation.h"
 #import "OAAppData.h"
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"

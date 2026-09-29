@@ -22,7 +22,7 @@
 @implementation OAApplyGpxApproximationCommand
 {
     NSArray<OASWptPt *> *_points;
-    NSDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OASWptPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode

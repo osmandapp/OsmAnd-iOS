@@ -1573,7 +1573,14 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         }
         else if ([amenity isRouteTrack])
         {
-            OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:amenity];
+            // an article built from the poi carries no region name, and a gpx collection is read
+            // only out of the file that name picks
+            OATravelGpx *travelGpx = [OATravelObfHelper.shared searchTravelGpxWithLocation:[amenity getLocation] routeId:[amenity getRouteId]];
+            if (!travelGpx)
+            {
+                NSLog(@"showMenuAction() searchTravelGpx() travelGpx is null");
+                return NO;
+            }
             [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[amenity getGpxFileName:nil] latLon:[amenity getLocation] adjustMapPosition:NO];
             return YES;
         }

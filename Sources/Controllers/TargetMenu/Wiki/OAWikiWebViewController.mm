@@ -384,13 +384,13 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     
     __weak OAWikiWebViewController *weakSelf = self;
     UIMenu *languageMenu = [OAWikiArticleHelper createLanguagesMenu:locales selectedLocale:[weakSelf getContentLocale] delegate:weakSelf];
-    _languageBarButtonItem = [self createRightNavbarButton:nil iconName:@"ic_navbar_languge" action:@selector(onLanguageNavbarButtonPressed) menu:languageMenu];
+    _languageBarButtonItem = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarLanguge action:@selector(onLanguageNavbarButtonPressed) menu:languageMenu];
 }  
 
 - (void)createImagesNavbarButton
 {
     NSMutableArray<UIMenuElement *> *downloadModeOptions = [NSMutableArray array];
-    NSString *selectedIconName = @"ic_navbar_image_disabled_outlined";
+    NSString *selectedIconName = ACImageNameIcNavbarImageDisabledOutlined;
     NSArray<OADownloadMode *> *downloadModes = [OADownloadMode getDownloadModes];
     for (OADownloadMode *downloadMode in downloadModes)
     {
@@ -485,12 +485,12 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
 
 - (NSString *)getTopButtonIconName
 {
-    return @"ic_custom_export_outlined";
+    return ACImageNameIcCustomExportOutlined;
 }
 
 - (NSString *)getBottomButtonIconName
 {
-    return @"ic_custom_safari";
+    return ACImageNameIcCustomSafari;
 }
 
 - (UIColor *)getButtonTintColor:(EOABaseButtonColorScheme)scheme

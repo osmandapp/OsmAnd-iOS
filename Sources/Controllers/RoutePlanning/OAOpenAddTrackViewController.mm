@@ -213,7 +213,7 @@ static const NSInteger kSegmentRow = 0;
     {
         [folderButtonsData addObject:@{
             @"title" : folderNames[i],
-            @"img" : @"ic_custom_folder"
+            @"img" : ACImageNameIcCustomFolder
         }];
     }
     return folderButtonsData;

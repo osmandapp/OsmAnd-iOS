@@ -14,6 +14,7 @@
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATargetDistanceWidget
 {
@@ -32,7 +33,7 @@
         _cachedTargetDistance = -1;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcon:@"widget_developer_target_distance"];
+        [self setIcon:ACImageNameWidgetDeveloperTargetDistance];
         
         __weak OATargetDistanceWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
@@ -51,7 +52,7 @@
         _cachedTargetDistance = targetDistance;
         NSString *text = _cachedTargetDistance > 0 ? [self formatDistance:_cachedTargetDistance] : @"-";
         [self setText:text subtext:@""];
-        [self setIcon:@"widget_developer_target_distance"];
+        [self setIcon:ACImageNameWidgetDeveloperTargetDistance];
     }
     return YES;
 }

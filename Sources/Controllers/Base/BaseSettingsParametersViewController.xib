@@ -103,7 +103,7 @@
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <state key="normal" image="ic_navbar_reset.png">
+                            <state key="normal" image="ic_navbar_reset">
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
@@ -140,7 +140,7 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
     </objects>
     <resources>
-        <image name="ic_navbar_reset.png" width="28" height="28"/>
+        <image name="ic_navbar_reset" width="28" height="28"/>
         <namedColor name="buttonBgColorTertiary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

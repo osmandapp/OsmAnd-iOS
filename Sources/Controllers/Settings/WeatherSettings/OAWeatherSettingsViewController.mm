@@ -67,7 +67,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarReset action:@selector(onRightNavbarButtonPressed) menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
     return @[rightButton];
 }

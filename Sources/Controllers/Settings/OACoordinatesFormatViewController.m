@@ -20,6 +20,7 @@
 #import "OAObservable.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACoordinatesFormatViewController
 {
@@ -101,7 +102,7 @@
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_OLC_FORMAT),
        @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC], OALocalizedString(@"shared_string_read_more")],
        @"url" : kUrlWikipediaOpenLocationCode,
-       @"icon" : @"ic_custom_direction_compass",
+       @"icon" : ACImageNameIcCustomDirectionCompass,
        @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{

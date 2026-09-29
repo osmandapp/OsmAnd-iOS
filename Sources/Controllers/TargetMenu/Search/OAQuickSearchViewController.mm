@@ -265,7 +265,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.leftView.frame];
     _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
 
-    _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_icon"]];
+    _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:ACImageNameSearchIcon]];
     _leftImgView.contentMode = UIViewContentModeCenter;
     _leftImgView.frame = _textField.leftView.frame;
 
@@ -370,7 +370,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionSelectTarget:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"ic_custom_location_marker"];
+            UIImage *mapImage = [UIImage imageNamed:ACImageNameIcCustomLocationMarker];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 
@@ -403,7 +403,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
-            UIImage *mapImage = [UIImage templateImageNamed:@"ic_custom_map"];
+            UIImage *mapImage = [UIImage templateImageNamed:ACImageNameIcCustomMap];
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
 
@@ -431,7 +431,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             _barActionTextButton.userInteractionEnabled = YES;
 
 
-            [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
+            [_barActionImageButton setImage:[UIImage imageNamed:ACImageNameIcSearchFilter] forState:UIControlStateNormal];
             BOOL filterButtonVisible = word && word.getType == EOAObjectTypePoiType;
             _barActionImageButton.hidden = !filterButtonVisible;
 
@@ -441,7 +441,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         case BarActionEditHistory:
         {
             _barActionImageView.hidden = YES;
-            [_barActionLeftImageButton setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
+            [_barActionLeftImageButton setImage:[UIImage imageNamed:ACImageNameIcClose] forState:UIControlStateNormal];
             _barActionLeftImageButton.hidden = NO;
 
             [UIView performWithoutAnimation:^{
@@ -451,7 +451,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = NO;
 
-            [_barActionImageButton setImage:[UIImage imageNamed:@"icon_remove.png"] forState:UIControlStateNormal];
+            [_barActionImageButton setImage:[UIImage imageNamed:ACImageNameIconRemove] forState:UIControlStateNormal];
             _barActionImageButton.hidden = NO;
 
             break;
@@ -1214,7 +1214,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:NSMakeRange(0, selectStreets.length)];
             [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
 
-            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_street_name"] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcActionStreetName] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
                 if (!lastCity)
                 {
                     unsigned long long lastCityId = settings.lastSearchedCity;
@@ -1258,7 +1258,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }]];
         }
 
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_building_number"] text:OALocalizedString(@"select_city") onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcActionBuildingNumber] text:OALocalizedString(@"select_city") onClickFunction:^(id sender) {
             selfWeak.textField.placeholder = OALocalizedString(@"type_city_town");
             [selfWeak startCitySearch];
             [selfWeak updateTabsVisibility:NO];
@@ -1266,7 +1266,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [selfWeak.textField becomeFirstResponder];
         }]];
 
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_postcode"] text:OALocalizedString(@"select_postcode") onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcActionPostcode] text:OALocalizedString(@"select_postcode") onClickFunction:^(id sender) {
             selfWeak.textField.placeholder = OALocalizedString(@"type_postcode");
             [selfWeak startPostcodeSearch];
             [selfWeak updateData:[NSMutableArray<OAQuickSearchListItem *> array] append:NO];
@@ -1274,7 +1274,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [selfWeak.textField becomeFirstResponder];
         }]];
         
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_location_marker"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomLocationMarker] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
             CLLocation *latLon = [[selfWeak.searchUICore getSearchSettings] getOriginalLocation];
             OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];

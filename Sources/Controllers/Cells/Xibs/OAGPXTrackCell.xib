@@ -36,7 +36,7 @@
                             <outlet property="thicknessConstraint" destination="n6J-rw-bZg" id="s01-TC-001"/>
                         </connections>
                     </view>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip.png" translatesAutoresizingMaskIntoConstraints="NO" id="64D-zO-yLt">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip" translatesAutoresizingMaskIntoConstraints="NO" id="64D-zO-yLt">
                         <rect key="frame" x="20" y="20" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="AMb-s2-8ED"/>
@@ -49,7 +49,7 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_waypoints.png" translatesAutoresizingMaskIntoConstraints="NO" id="Kdo-Ps-g2V">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_waypoints" translatesAutoresizingMaskIntoConstraints="NO" id="Kdo-Ps-g2V">
                         <rect key="frame" x="240" y="38" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="Ebt-tY-BRd"/>
@@ -68,14 +68,14 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time_start.png" translatesAutoresizingMaskIntoConstraints="NO" id="jmc-x6-8Tp">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time_start" translatesAutoresizingMaskIntoConstraints="NO" id="jmc-x6-8Tp">
                         <rect key="frame" x="151" y="38" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="cOS-Q7-UPZ"/>
                             <constraint firstAttribute="width" constant="20" id="xiI-Q5-0Fd"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_distance.png" translatesAutoresizingMaskIntoConstraints="NO" id="4UK-Ow-keo">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_distance" translatesAutoresizingMaskIntoConstraints="NO" id="4UK-Ow-keo">
                         <rect key="frame" x="66" y="38" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="VXq-Re-Nar"/>
@@ -90,7 +90,7 @@
                             <constraint firstAttribute="width" constant="30" id="WST-mI-edE"/>
                         </constraints>
                         <color key="tintColor" name="iconColorActive"/>
-                        <state key="normal" image="ic_custom_edit.png">
+                        <state key="normal" image="ic_custom_edit">
                             <color key="titleColor" name="textColorActive"/>
                         </state>
                     </button>
@@ -149,11 +149,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_edit.png" width="30" height="30"/>
-        <image name="ic_custom_trip.png" width="30" height="30"/>
-        <image name="ic_small_distance.png" width="20" height="20"/>
-        <image name="ic_small_time_start.png" width="20" height="20"/>
-        <image name="ic_small_waypoints.png" width="20" height="20"/>
+        <image name="ic_custom_edit" width="30" height="30"/>
+        <image name="ic_custom_trip" width="30" height="30"/>
+        <image name="ic_small_distance" width="20" height="20"/>
+        <image name="ic_small_time_start" width="20" height="20"/>
+        <image name="ic_small_waypoints" width="20" height="20"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

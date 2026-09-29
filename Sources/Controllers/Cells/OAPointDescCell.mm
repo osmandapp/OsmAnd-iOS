@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OANativeUtilities.h"
 #import "OAPOIHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAPointDescCell
 
@@ -53,7 +54,7 @@
         else
             color = UIColorFromRGB(0xDA3A3A);
         
-        _timeIcon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_time"] color:color];
+        _timeIcon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTime] color:color];
         
         _openingHoursView.textColor = color;
         _openingHoursView.text = [[OAPOIHelper sharedInstance] getShortFormattedOpeningHours:poi];

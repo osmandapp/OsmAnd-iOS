@@ -626,7 +626,7 @@
         @"header" : OALocalizedString(@"shared_string_actions").upperCase,
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"update_existing"),
-        @"img" : @"ic_custom_replace",
+        @"img" : ACImageNameIcCustomReplace,
         @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"key" : kReplaceKey
     }];
@@ -636,7 +636,7 @@
         [section addObject:@{
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_delete"),
-            @"img" : @"ic_custom_remove_outlined",
+            @"img" : ACImageNameIcCustomRemoveOutlined,
             @"color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"key" : kDeleteKey
         }];
@@ -665,8 +665,8 @@
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
@@ -866,7 +866,7 @@
         {
             cell.topLabel.text = item[@"title"];
             [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage imageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];

@@ -45,7 +45,7 @@
                                 <color key="textColor" name="textColorTertiary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_user_profile.png" translatesAutoresizingMaskIntoConstraints="NO" id="f7q-0f-do3">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_user_profile" translatesAutoresizingMaskIntoConstraints="NO" id="f7q-0f-do3">
                                 <rect key="frame" x="2" y="2" width="20" height="20"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <constraints>
@@ -110,7 +110,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_user_profile.png" width="30" height="30"/>
+        <image name="ic_custom_user_profile" width="30" height="30"/>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -164,17 +164,16 @@ final class MigrationManager: NSObject {
         let preference = panel.getOrderPreference()
         guard preference.isSet(for: appMode) else { return false }
         let pages = preference.get(appMode)
-        if pages == [panel.getOriginalOrder()] {
-            return false
-        }
-        guard pages.count == 1, let order = pages.first else { return true }
+        var defaultOrders = [panel.getOriginalOrder()]
         if panel == .topPanel {
-            return !LegacyWidgetPanelOrder.top.contains(order)
+            defaultOrders.append(contentsOf: LegacyWidgetPanelOrder.top)
+        } else if panel == .bottomPanel {
+            defaultOrders.append(contentsOf: LegacyWidgetPanelOrder.bottom)
         }
-        if panel == .bottomPanel {
-            return !LegacyWidgetPanelOrder.bottom.contains(order)
+        return !defaultOrders.contains { order in
+            pages == [order]
+                || (panel.isPanelVertical && pages == WidgetsPanel.getPagedWidgetIdsWithPages([order]))
         }
-        return true
     }
 
     private func isVisibilityDefined(_ visibility: [String], widgetId: String) -> Bool {

@@ -1744,6 +1744,10 @@ static char kMapSourceUpdateQueueKey;
         return NO;
 
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+    if (longPress && (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateEnded))
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapLongPressAction object:self userInfo:nil];
+    }
 
     // Get location of the gesture
     CGPoint touchPoint;

@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
 static NSString * const kNotificationMapGestureAction = @"kNotificationMapGestureAction";
+static NSString * const kNotificationMapLongPressAction = @"kNotificationMapLongPressAction";
 static NSString * const kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
 
 static const float kCorrectionMinLeftSpace = 40.0;

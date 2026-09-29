@@ -196,6 +196,7 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapLongPressAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UIAccessibilityVoiceOverStatusDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneWillConnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneDidDisconnectNotification object:nil];

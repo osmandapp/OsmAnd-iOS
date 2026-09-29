@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAMapRendererView.h"
 #import "OALocationServices.h"
+#import "OABaseScrollableHudViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
@@ -1072,7 +1073,7 @@ static double const TILT_ANIMATION_TIME = 0.4;
     }
 }
 
-- (void) updateSettings
+- (void)updateSettings
 {
     if (_mapViewController)
     {
@@ -1081,12 +1082,20 @@ static double const TILT_ANIMATION_TIME = 0.4;
         else if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
             [self animatedAlignAzimuth:[[OAAppSettings sharedManager].mapManuallyRotatingAngle get]];
         
-        EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
-        if (placement == EOAPositionPlacementAuto)
-            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING ? BOTTOM_CONSTANT : CENTER_CONSTANT);
-        else
-            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter ? CENTER_CONSTANT : BOTTOM_CONSTANT);
+        [self updateMapPosition];
     }
+}
+
+- (void)updateMapPosition
+{
+    if (!_mapViewController || OARootViewController.instance.mapPanel.scrollableHudViewController.overridesMapPosition)
+        return;
+
+    EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
+    if (placement == EOAPositionPlacementAuto)
+        _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING ? BOTTOM_CONSTANT : CENTER_CONSTANT);
+    else
+        _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter ? CENTER_CONSTANT : BOTTOM_CONSTANT);
 }
 
 - (void) animatedAlignAzimuthToNorth

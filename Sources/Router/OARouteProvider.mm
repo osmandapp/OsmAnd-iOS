@@ -2068,6 +2068,9 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     
     if (gpxRouteResult.count > 0)
     {
+        if (!gpxParams.calculatedRouteTimeSpeed)
+            [self calculateGpxRouteTimeSpeed:routeParams gpxRouteResult:gpxRouteResult];
+
         if (calcWholeRoute && !calculateOsmAndRouteParts)
         {
             return [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
@@ -2182,6 +2185,22 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     }
     
     return [[OARouteCalculationResult alloc] initWithLocations:gpxRoute directions:gpxDirections params:routeParams waypoints:gpxParams.wpt addMissingTurns:routeParams.gpxRoute.addMissingTurns];
+}
+
+- (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(NSArray<OASRouteSegmentResult *> *)gpxRouteResult
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OASRoutingConfigurationBuilder *builder = [app getSharedRoutingConfigForMode:params.mode];
+    OASGeneralRouter *generalRouter = [app getSharedRouter:builder mode:params.mode];
+    if (!generalRouter)
+    {
+        NSLog(@"Failed to recalculate gpx route time and speed: no router for %@", params.mode.stringKey);
+        return;
+    }
+
+    OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
+    OASRoutingRequest *request = [[OASRoutingRequest alloc] initWithConfig:cf calculationMode:OASRouteCalculationMode.normal];
+    [OASTurnPreparation.shared calculateTimeSpeedRequest:request result:gpxRouteResult];
 }
 
 - (NSArray<OASRouteSegmentResult *> *) findRouteWithIntermediateSegments:(OARouteCalculationParams *)routeParams result:(OARouteCalculationResult *)result gpxRouteLocations:(NSArray<CLLocation *> *)gpxRouteLocations segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints nearestGpxPointInd:(NSInteger)nearestGpxPointInd

@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "ic_custom_screen_side_top@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "ic_custom_screen_side_top@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "ic_custom_screen_side_top.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

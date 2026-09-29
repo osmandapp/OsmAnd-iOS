@@ -1457,7 +1457,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
 
     OASGpxFile *gpxFile = filePath.length == 0 ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile targetObject:nil];
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [presentingViewController presentViewController:navigationController animated:YES completion:nil];

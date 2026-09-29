@@ -1,0 +1,22 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="panel" x1="15" y1="7" x2="15" y2="23" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#25282D"/>
+      <stop offset="1" stop-color="#15141F"/>
+    </linearGradient>
+    <linearGradient id="marker" x1="12" y1="18" x2="6" y2="12.1667" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4D81FF"/>
+      <stop offset="1" stop-color="#0049F9"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(3 3)">
+    <path d="M22.359 4H1.641C.735 4 0 4.674 0 5.506v12.988C0 19.326.735 20 1.641 20h20.718C23.265 20 24 19.326 24 18.494V5.506C24 4.674 23.265 4 22.359 4Z" fill="url(#panel)"/>
+    <path d="M22.359 19v1H1.641v-1h20.718ZM23 18.494V5.506C23 5.306 22.796 5 22.359 5H1.641C1.204 5 1 5.306 1 5.506v12.988c0 .2.204.506.641.506v1C.791 20 .093 19.408.009 18.648L0 18.494V5.506C0 4.674.735 4 1.641 4h20.718C23.265 4 24 4.674 24 5.506v12.988l-.009.154C23.907 19.408 23.209 20 22.359 20v-1c.437 0 .641-.306.641-.506Z" fill="#fff" fill-opacity=".2"/>
+    <path d="M17 10h-5V8h5v2ZM21 10h-2V8h2v2Z" fill="#fff" fill-opacity=".5"/>
+    <path d="M12 12h9v4h-9v-4Z" fill="#BCEE1A"/>
+    <circle cx="6" cy="12" r="4" fill="url(#marker)"/>
+    <path d="m8 14-1-3-2 2 3 1Z" fill="#fff"/>
+    <path d="m7 11-3-1 1 3 2-2Z" fill="#FD5F3D"/>
+    <circle cx="6" cy="12" r=".4" fill="#25282D"/>
+  </g>
+</svg>

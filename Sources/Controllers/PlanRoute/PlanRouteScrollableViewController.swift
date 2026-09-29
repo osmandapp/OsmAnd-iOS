@@ -128,6 +128,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var hasPresentedInitialSnapWarning = false
     private var shouldEnterNavigationAfterApproximation = false
     
+    override var overridesMapPosition: Bool {
+        cachedMapViewportYScale != nil
+    }
+
     private var suggestedFileName: String {
         switch dataProvider.mode {
         case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())
@@ -1108,18 +1112,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func crosshairCenterY(sheetHeight: CGFloat, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
         guard !usesSidePanelLayout else { return targetScreenHeight / 2 }
-        if sheetHeight <= height(for: .initial, screenHeight: targetScreenHeight) {
-            return targetScreenHeight / 2.0
-        }
         let coveredHeight: CGFloat
         if pointEditingView == nil {
             coveredHeight = min(sheetHeight, height(for: .expanded, screenHeight: targetScreenHeight))
         } else {
             coveredHeight = sheetHeight
         }
-        let visibleTop = getNavbarHeight()
-        let visibleBottom = targetScreenHeight - coveredHeight
-        return visibleTop + (visibleBottom - visibleTop) / 2
+        return max(0, targetScreenHeight - coveredHeight) / 2
     }
 
     private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
@@ -1148,6 +1147,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func restoreMapViewport() {
+        let shouldRestoreMapPosition = cachedMapViewportYScale != nil
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
         let mapViewSize = mapViewController.view.bounds.size
         hasAppliedSidePanelViewportXScale = false
@@ -1167,6 +1167,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
                                                y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
             mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if shouldRestoreMapPosition {
+            OAMapViewTrackingUtilities.instance().updateMapPosition()
         }
     }
 

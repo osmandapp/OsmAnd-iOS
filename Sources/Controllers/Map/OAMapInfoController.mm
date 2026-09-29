@@ -103,7 +103,8 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
                    containerView:(ShadowPathView *)containerView
                              top:(BOOL)top
 {
-    if (_settings.isTransparentWidgets)
+    WidgetsPanel *panel = top ? WidgetsPanel.topPanel : WidgetsPanel.bottomPanel;
+    if ([self isPanelBackgroundTransparent:panel])
         containerView.direction = ShadowPathDirectionClear;
     else
         containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
@@ -323,11 +324,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
-    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     
-    int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
+    int calcThemeId = (nightMode ? 2 : 0) | (following ? 1 : 0);
     if (_themeId != calcThemeId) {
         _themeId = calcThemeId;
         OATextState *state = [self calculateTextState];
@@ -335,13 +335,21 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         {
             [widgetInfo.widget updateColors:state];
         }
+        OAApplicationMode *appMode = _settings.applicationMode.get;
         for (WidgetsPanel *panel in WidgetsPanel.values)
         {
+            ResolvedWidgetPanelAppearance *appearance =
+                [WidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:nightMode];
+            OATextState *panelState = [self calculateTextStateForAppearance:appearance baseState:state];
             for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry widgetsForPanel:panel])
             {
-                [self updateColors:state sideWidget:widgetInfo.widget];
+                [widgetInfo.widget updateColors:panelState];
+                [widgetInfo.widget updatesSeparatorsColor:appearance.dividerColor];
+                [self updateColors:panelState sideWidget:widgetInfo.widget];
             }
+            [[self controllerForPanel:panel] applyAppearance:appearance];
         }
+        [_mapHudViewController updateWidgetPanelAppearanceColors];
     }
 }
 
@@ -423,8 +431,15 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
 - (void)updateShadowView:(ShadowPathView *)view
                direction:(ShadowPathDirection)direction
+                   panel:(WidgetsPanel *)panel
 {
-    view.direction = _settings.isTransparentWidgets ? ShadowPathDirectionClear : direction;
+    view.direction = [self isPanelBackgroundTransparent:panel] ? ShadowPathDirectionClear : direction;
+}
+
+- (BOOL)isPanelBackgroundTransparent:(WidgetsPanel *)panel
+{
+    return [WidgetPanelAppearanceResolver isBackgroundTransparentForPanel:panel
+                                                                   appMode:_settings.applicationMode.get];
 }
 
 - (void)viewWillTransition:(CGSize)size
@@ -502,6 +517,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         rightPanelWidth = rightSize.width + (_rightPanelController.view.layer.borderWidth * 2);
     }
 
+    CGSize topSize = hasTopWidgets ? [_topPanelController calculateContentSize] : CGSizeZero;
+    CGSize bottomSize = hasBottomWidgets ? [_bottomPanelController calculateContentSize] : CGSizeZero;
+    BOOL topPanelAboveSidePanels = NO;
+
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
     // Device orientation does not describe the window layout of an iPad app running on Mac.
     BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape] && ![OAUtilities isiOSAppOnMac];
@@ -532,6 +551,14 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         topPanelWidth = MAX(0, availableWidth - topLeftMargin - topRightMargin);
         topPanelCenterX = (topLeftMargin - topRightMargin) / 2;
         bottomPanelWidth = MAX(0, availableWidth - bottomHorizontalMargin * 2);
+        if (hasTopWidgets && topPanelWidth < topSize.width)
+        {
+            topPanelWidth = availableWidth;
+            topPanelCenterX = 0;
+            topPanelAboveSidePanels = YES;
+        }
+        if (hasBottomWidgets && bottomPanelWidth < bottomSize.width)
+            bottomPanelWidth = availableWidth;
     }
     else
     {
@@ -547,10 +574,12 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     if (hasTopWidgets)
     {
-        _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
+        _mapHudViewController.topWidgetsViewHeightConstraint.constant = topSize.height;
         _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
         
-        [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
+        [self updateShadowView:_topShadowContainerView
+                     direction:ShadowPathDirectionBottom
+                         panel:WidgetsPanel.topPanel];
     }
     else
     {
@@ -584,10 +613,12 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = bottomPanelWidth;
     if (hasBottomWidgets)
     {
-        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = bottomSize.height;
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
         
-        [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
+        [self updateShadowView:_bottomShadowContainerView
+                     direction:ShadowPathDirectionTop
+                         panel:WidgetsPanel.bottomPanel];
     }
     else
     {
@@ -624,7 +655,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
     if (isCompactPortrait)
     {
-        leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
+        leftRightWidgetsViewTopConstraintConstant = !topPanelAboveSidePanels && _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
             ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant + kWidgetsTopPadding
             : kWidgetsTopPadding;
     }
@@ -834,11 +865,19 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     [self recreateWidgetsPanel:_topPanelController panel:WidgetsPanel.topPanel appMode:appMode];
 }
 
+- (void)recreateWidgetsPanel:(WidgetsPanel *)panel
+{
+    OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
+    [self recreateWidgetsPanel:[self controllerForPanel:panel] panel:panel appMode:appMode];
+}
+
 - (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(WidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
 {
     if (container)
     {
         [container clearWidgets];
+        // Set panel overrides before updateWidgetPages builds each widget's layout.
+        [container prepareAppearanceModesForPanel:panel appMode:appMode];
         [_mapWidgetRegistry populateControlsContainer:container mode:appMode widgetPanel:panel];
         [container updateWidgetSizes];
     }
@@ -854,7 +893,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    BOOL transparent = _settings.isTransparentWidgets;
     BOOL nightMode = _settings.isAppMapNightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -876,16 +914,49 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
     ts.textOutlineColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
-    if (!transparent)
-        ts.textOutlineWidth = 0;
-    else
-        ts.textOutlineWidth = 4.0;
+    ts.textOutlineWidth = 0;
     
-    ts.leftColor = transparent
-    ? [UIColor clearColor]
-    : [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
+    ts.leftColor = [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
     
     return ts;
+}
+
+- (OATextState *)calculateTextStateForAppearance:(ResolvedWidgetPanelAppearance *)appearance
+                                       baseState:(OATextState *)baseState
+{
+    OATextState *state = [[OATextState alloc] init];
+    state.textBold = baseState.textBold;
+    state.night = baseState.night;
+    state.textColor = appearance.primaryTextColor;
+    state.unitColor = appearance.secondaryTextColor;
+    state.titleColor = appearance.secondaryTextColor;
+    state.dividerColor = appearance.dividerColor;
+    state.textOutlineColor = appearance.textOutlineColor;
+    state.textOutlineWidth = appearance.textOutlineWidth;
+    state.leftColor = appearance.backgroundColor;
+    return state;
+}
+
+- (void)applyTextState:(OATextState *)textState
+             toWidgets:(NSArray<OABaseWidgetView *> *)widgets
+{
+    for (OABaseWidgetView *widget in widgets)
+    {
+        [widget updateColors:textState];
+        [widget updatesSeparatorsColor:textState.dividerColor];
+        [self updateColors:textState sideWidget:widget];
+    }
+}
+
+- (OAWidgetPanelViewController *)controllerForPanel:(WidgetsPanel *)panel
+{
+    if (panel == WidgetsPanel.leftPanel)
+        return _leftPanelController;
+    if (panel == WidgetsPanel.rightPanel)
+        return _rightPanelController;
+    if (panel == WidgetsPanel.topPanel)
+        return _topPanelController;
+    return _bottomPanelController;
 }
 
 - (void) updateColors:(OATextState *)state sideWidget:(OABaseWidgetView *)sideWidget
@@ -1022,6 +1093,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 {
     // Finish the current UIKit layout pass before recalculating widget constraints.
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(layoutWidgets) object:nil];
+
     [self performSelector:@selector(layoutWidgets)
                withObject:nil
                afterDelay:0

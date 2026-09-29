@@ -64,11 +64,14 @@
             newName:(NSString *)newName
     saveImmediately:(BOOL)saveImmediately;
 
+// Call on the main thread. Original icon lookup runs in the background;
+// point/group updates and completion run on the main thread.
 + (void)updateGroup:(OAFavoriteGroup *)group
            iconName:(NSString *)iconName
        updatePoints:(BOOL)updatePoints
     updateGroupIcon:(BOOL)updateGroupIcon
-    saveImmediately:(BOOL)saveImmediately;
+    saveImmediately:(BOOL)saveImmediately
+         completion:(void (^)(void))completion;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
               color:(UIColor *)color

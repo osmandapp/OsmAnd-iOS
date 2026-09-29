@@ -21,6 +21,7 @@
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OATargetOptionsBottomSheetScreen () <OAWaypointSelectionDelegate>
 
@@ -82,24 +83,24 @@
     
     [arr addObject:@{ @"title" : OALocalizedString(@"intermediate_items_sort_by_distance"),
                       @"key" : @"intermediate_items_sort_by_distance",
-                      @"img" : @"ic_action_sort_door_to_door",
+                      @"img" : ACImageNameIcActionSortDoorToDoor,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"switch_start_finish"),
                       @"key" : @"switch_start_finish",
-                      @"img" : @"ic_action_sort_reverse_order",
+                      @"img" : ACImageNameIcActionSortReverseOrder,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"add_waypoint_short"),
                       @"key" : @"add_waypoint",
-                      @"img" : @"ic_action_plus",
+                      @"img" : ACImageNameIcActionPlus,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"clear_all_intermediates"),
                       @"key" : @"clear_all_intermediates",
-                      @"img" : @"ic_action_clear_all",
+                      @"img" : ACImageNameIcActionClearAll,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     _data = [NSArray arrayWithArray:arr];

@@ -199,7 +199,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self registerCells];
     [self generateData];
 
-    [self.resetButton setImage:[UIImage templateImageNamed:@"ic_navbar_reset"] forState:UIControlStateNormal];
+    [self.resetButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarReset] forState:UIControlStateNormal];
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     [self.resetButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
@@ -1028,7 +1028,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         BOOL isPaletteGrid = [item.key isEqualToString:@"colorGrid"];
         BOOL isRightActionButtonVisible = isCoordinatesGridColors || (isPaletteGrid && ![_terrainMode isHillshade]);
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage imageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
         cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
         cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isCoordinatesGridColors ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];

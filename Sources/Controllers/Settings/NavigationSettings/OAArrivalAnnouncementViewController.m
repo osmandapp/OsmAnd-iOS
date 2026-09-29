@@ -61,7 +61,7 @@
     UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
     topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
 
-    UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
+    UIImage *image = [UIImage imageNamed:ACImageNameImgHelpAnnouncementTimeDay];
     CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, image.size.height * aspectRatio)];
     imageView.image = image;

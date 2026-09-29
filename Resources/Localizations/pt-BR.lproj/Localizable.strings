@@ -835,7 +835,7 @@
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
-"res_installing" = "A instalar…";
+"res_installing" = "Instalando…";
 "shared_string_hillshade" = "Sombras de relevo";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";
@@ -4501,3 +4501,15 @@
 "plan_route_section_recalculate_format" = "A seção %1$@ de %2$@ será recalculada usando o perfil selecionado.";
 "plan_route_segment_recalculate_format" = "%@ será recalculado com base no perfil selecionado.";
 "ais_use_nmea_location" = "Usar NMEA como fonte de localização";
+"screen_elements" = "Elementos da tela";
+"screen_elements_descr" = "O modo paisagem utiliza os mesmos elementos de tela que o modo retrato. As alterações feitas em uma das orientações se aplicam a ambas.";
+"switch_to_independent" = "Mudar para Independente";
+"screen_elements_mode_descr" = "Escolha se os modos Retrato e Paisagem compartilham os mesmos elementos da tela ou se possuem conjuntos independentes.";
+"copy_from_portrait_layout" = "Copiar do layout Retrato";
+"copy_from_landscape_layout" = "Copiar do layout paisagem";
+"panels_layout" = "Layout dos painéis";
+"panels_layout_wide" = "Amplo";
+"panels_layout_compact" = "Compacto";
+"panels_layout_wide_descr" = "Os painéis superior e inferior ocupam toda a largura da tela.";
+"panels_layout_compact_descr" = "Os painéis superior e inferior se encaixam entre os painéis laterais e os botões.";
+"routing_engine_shared" = "Rota com o OsmAndShared";

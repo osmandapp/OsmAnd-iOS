@@ -16,6 +16,7 @@
 #import "Localization.h"
 
 #import <CarPlay/CarPlay.h>
+#import "GeneratedAssetSymbols.h"
 
 
 @interface OADirectionsGridController()
@@ -48,41 +49,41 @@
 - (NSArray<CPGridButton *> *) generateGridButtons
 {
     CPGridButton *btnFav = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"favorites_item")]
-                                                                 image:[UIImage imageNamed:@"ic_carplay_favorites"]
+                                                                 image:[UIImage imageNamed:ACImageNameIcCarplayFavorites]
                                                                handler:^(CPGridButton * _Nonnull barButton) {
         _favoritesListController = [[OACarPlayFavoritesListController alloc] initWithInterfaceController:self.interfaceController];
         [_favoritesListController present];
     }];
 
     CPGridButton *btnCategories = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"poi_categories")]
-                                                                        image:[UIImage imageNamed:@"ic_carplay_poi"]
+                                                                        image:[UIImage imageNamed:ACImageNameIcCarplayPoi]
                                                                       handler:^(CPGridButton * _Nonnull barButton) {
         _categoriesListController = [[OASearchCategoriesListController alloc] initWithInterfaceController:self.interfaceController];
         [_categoriesListController present];
     }];
 
     CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"address_search_desc")]
-                                                                    image:[UIImage imageNamed:@"ic_carplay_search"]
+                                                                    image:[UIImage imageNamed:ACImageNameIcCarplaySearch]
                                                                   handler:^(CPGridButton * _Nonnull barButton) {
         [self openSearch];
     }];
 
     CPGridButton *btnMarkers = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"map_markers")]
-                                                                     image:[UIImage imageNamed:@"ic_carplay_map_markers"]
+                                                                     image:[UIImage imageNamed:ACImageNameIcCarplayMapMarkers]
                                                                    handler:^(CPGridButton * _Nonnull barButton) {
         _markersListController = [[OACarPlayMarkersListController alloc] initWithInterfaceController:self.interfaceController];
         [_markersListController present];
     }];
 
     CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_gpx_tracks")]
-                                                                    image:[UIImage imageNamed:@"ic_carplay_tracks"]
+                                                                    image:[UIImage imageNamed:ACImageNameIcCarplayTracks]
                                                                   handler:^(CPGridButton * _Nonnull barButton) {
         _tracksListController = [[OACarPlayTracksListController alloc] initWithInterfaceController:self.interfaceController];
         [_tracksListController present];
     }];
 
     CPGridButton *btnHistory = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_history")]
-                                                                     image:[UIImage imageNamed:@"ic_carplay_history"]
+                                                                     image:[UIImage imageNamed:ACImageNameIcCarplayHistory]
                                                                    handler:^(CPGridButton * _Nonnull barButton) {
         _historyListController = [[OACarPlayHistoryListController alloc] initWithInterfaceController:self.interfaceController];
         [_historyListController present];

@@ -15,6 +15,7 @@
 #import "OALocationIcon.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kBackgroundDistanceSlow 5
 #define kBackgroundDistanceFast 10
@@ -964,7 +965,7 @@ static int PROFILE_TRUCK = 1000;
 {
     self = [super init];
     if (self) {
-        _iconName = @"map_world_globe_dark";
+        _iconName = ACImageNameMapWorldGlobeDark;
         _iconColor = profile_icon_color_blue_light_default;
         _routeService = 0;
         _order = -1;

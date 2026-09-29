@@ -77,26 +77,26 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
-        @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
+        @"icon" : routingData ? routingData.iconName : ACImageNameIcCustomNavigation,
         @"tintColor" : [UIColor colorNamed:ACColorNameIconColorDefault],
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"route_parameters"),
-        @"icon" : @"ic_custom_route",
+        @"icon" : ACImageNameIcCustomRoute,
         @"key" : @"routeParams",
     }];
     [navigationArr addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_announces"),
-        @"icon" : @"ic_custom_sound",
+        @"icon" : ACImageNameIcCustomSound,
         @"key" : @"voicePrompts",
     }];
     [navigationArr addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
-        @"icon" : @"ic_custom_alert",
+        @"icon" : ACImageNameIcCustomAlert,
         @"key" : @"screenAlerts",
     }];
     [navigationArr addObject:@{
@@ -108,7 +108,7 @@
     [navigationArr addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"customize_route_line"),
-        @"icon" : @"ic_custom_appearance",
+        @"icon" : ACImageNameIcCustomAppearance,
         @"key" : @"routeLineAppearance",
     }];
     [otherArr addObject:@{
@@ -120,7 +120,7 @@
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"detailed_track_guidance"),
         @"value" : OALocalizedString(trackGuidanceValue == EOATrackApproximationManual ? @"ask_every_time" : @"shared_string_always"),
-        @"icon" : @"ic_custom_attach_track",
+        @"icon" : ACImageNameIcCustomAttachTrack,
         @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"key" : @"detailedTrackGuidance",
     }];

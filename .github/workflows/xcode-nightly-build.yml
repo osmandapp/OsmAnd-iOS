@@ -7,17 +7,23 @@ on:
         description: 'Nightly TestFlight build number (must be unique for the version)'
         required: true
       releaseversion:
-        description: 'App version'
+        description: 'App version (match the selected iOS branch)'
         required: true
-        default: '5.4.0'
+        default: '5.5.0'
       dependencies_branch:
         description: 'Branch for Android, build, core, core-legacy, and resources'
         required: true
-        default: 'r5.4'
+        type: choice
+        options:
+          - master
+          - Same as selected iOS branch
+        default: master
 
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      DEPENDENCIES_BRANCH: ${{ inputs.dependencies_branch == 'Same as selected iOS branch' && github.ref_name || inputs.dependencies_branch }}
     steps:
       - name: Remove OsmAndNightly.xcarchive directory
         run: rm -rf OsmAndNightly.xcarchive
@@ -37,35 +43,35 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: osmandapp/OsmAnd
-          ref: ${{ inputs.dependencies_branch }}
+          ref: ${{ env.DEPENDENCIES_BRANCH }}
           path: android
           clean: false
       - name: Checkout build
         uses: actions/checkout@v4
         with:
           repository: osmandapp/OsmAnd-build
-          ref: ${{ inputs.dependencies_branch }}
+          ref: ${{ env.DEPENDENCIES_BRANCH }}
           path: build
           clean: false
       - name: Checkout core legacy
         uses: actions/checkout@v4
         with:
           repository: osmandapp/OsmAnd-core-legacy
-          ref: ${{ inputs.dependencies_branch }}
+          ref: ${{ env.DEPENDENCIES_BRANCH }}
           path: core-legacy
           clean: false
       - name: Checkout core
         uses: actions/checkout@v4
         with:
           repository: osmandapp/OsmAnd-core
-          ref: ${{ inputs.dependencies_branch }}
+          ref: ${{ env.DEPENDENCIES_BRANCH }}
           path: core
           clean: false
       - name: Checkout resources
         uses: actions/checkout@v4
         with:
           repository: osmandapp/OsmAnd-resources
-          ref: ${{ inputs.dependencies_branch }}
+          ref: ${{ env.DEPENDENCIES_BRANCH }}
           path: resources
           clean: false
 
@@ -80,7 +86,9 @@ jobs:
         run: |
           set -euo pipefail
           profile_found=false
-          for profile in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+          for profile in \
+            "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/"*.mobileprovision \
+            "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
             [[ -f "$profile" ]] || continue
             security cms -D -i "$profile" > "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || continue
             name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/nightly-profile.plist" 2>/dev/null || true)
@@ -90,12 +98,28 @@ jobs:
               break
             fi
           done
-          [[ "$profile_found" == true ]] || { echo 'Install OsmAnd Nightly Profile for net.osmand.maps.nightly on this runner' >&2; exit 1; }
+          if [[ "$profile_found" != true ]]; then
+            echo "Install OsmAnd Nightly Profile for net.osmand.maps.nightly for runner user $(whoami)" >&2
+            echo 'Checked Xcode UserData and MobileDevice provisioning profile directories' >&2
+            exit 1
+          fi
 
       - name: Build QtCore and prepare build
         env:
           LANG: en_US.UTF-8
         run: exec ios/prepare.sh --sync_translations
+      - name: Validate synced iOS translations
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            if ! plutil -lint -s "$file"; then
+              relative_file="${file#ios/}"
+              echo "::warning file=$file::Invalid generated strings; restoring the checked-in translation"
+              git -C ios show "HEAD:$relative_file" > "$file"
+              plutil -lint -s "$file"
+            fi
+          done < <(find ios/Resources/Localizations -name Localizable.strings -print0)
       - name: Configure iOS OsmAndCore
         env:
           LANG: en_US.UTF-8
@@ -166,7 +190,6 @@ jobs:
         env:
           RELEASE_IOS_VERSION: ${{ inputs.releaseversion }}
           BUILD_IOS_VERSION: ${{ inputs.buildversion }}
-          DEPENDENCIES_BRANCH: ${{ inputs.dependencies_branch }}
         run: |
           set -euo pipefail
           check_setting() {

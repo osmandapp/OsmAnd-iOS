@@ -22,6 +22,7 @@
 
 #include <transportRouteResultSegment.h>
 #include <transportRoutingObjects.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kRowHeight 44
 #define kShieldHeight 32
@@ -55,7 +56,7 @@ static UIFont *_shieldFont;
 -(void) setData:(SHARED_PTR<TransportRouteResult>)data
 {
     _transportHelper = OATransportRoutingHelper.sharedInstance;
-    _arrowIcon = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
+    _arrowIcon = [UIImage imageNamed:ACImageNameIcSmallArrowForward];
     _route = data;
     [self buildViews];
 }
@@ -127,7 +128,7 @@ static UIFont *_shieldFont;
             if (walkTime > MIN_WALK_TIME)
             {
                 NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
-                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:ACImageNameIcSmallPedestrian type:EOATransportShiledPedestrian];
                 shield.delegate = self;
                 shield.tag  = segIndex++;
                 [locations addObject:walkingSegment.getImmutableAllLocations];
@@ -149,7 +150,7 @@ static UIFont *_shieldFont;
                     start = _transportHelper.startLocation;
 
                 NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
-                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:ACImageNameIcSmallPedestrian type:EOATransportShiledPedestrian];
                 shield.delegate = self;
                 shield.tag  = segIndex++;
                 [locations addObject:@[start, end]];
@@ -186,7 +187,7 @@ static UIFont *_shieldFont;
                 {
                     [self drawArrowView:arr];
                     NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
-                    OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                    OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:ACImageNameIcSmallPedestrian type:EOATransportShiledPedestrian];
                     shield.delegate = self;
                     shield.tag  = segIndex++;
                     [locations addObject:walkingSegment.getImmutableAllLocations];
@@ -204,7 +205,7 @@ static UIFont *_shieldFont;
                         CLLocation *end = _transportHelper.endLocation;
                         [self drawArrowView:arr];
                         NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
-                        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:ACImageNameIcSmallPedestrian type:EOATransportShiledPedestrian];
                         shield.tag  = segIndex++;
                         shield.delegate = self;
                         [locations addObject:@[start, end]];

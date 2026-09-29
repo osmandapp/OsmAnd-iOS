@@ -31,6 +31,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 #define PLUGIN_ID kInAppId_Addon_Parking
 
@@ -294,7 +295,7 @@
     };
     
     [_parkingPlaceControl setText:nil subtext:nil];
-    [_parkingPlaceControl setIcon:@"widget_parking"];
+    [_parkingPlaceControl setIcon:ACImageNameWidgetParking];
     return _parkingPlaceControl;
 }
 

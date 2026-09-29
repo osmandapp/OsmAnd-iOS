@@ -21,6 +21,7 @@
 #import "OAPOIType.h"
 #import "OAUtilities.h"
 #import "OATransportStopType.h"
+#import "GeneratedAssetSymbols.h"
 
 OACoreResourcesTransportRouteIconProvider::OACoreResourcesTransportRouteIconProvider(
     const std::shared_ptr<const OsmAnd::ICoreResourcesProvider>& coreResourcesProvider_ /*= getCoreResourcesProvider()*/,
@@ -46,7 +47,7 @@ sk_sp<const SkImage> OACoreResourcesTransportRouteIconProvider::getIcon(
     {
         if (transportRoute)
         {
-            UIImage *backgroundImg = [UIImage imageNamed:@"map_transport_stop_bg"];
+            UIImage *backgroundImg = [UIImage imageNamed:ACImageNameMapTransportStopBg];
             auto backgroundBmp = SkMakeImageFromCGImage(backgroundImg.CGImage);
             if (backgroundBmp)
             {
@@ -70,7 +71,7 @@ sk_sp<const SkImage> OACoreResourcesTransportRouteIconProvider::getIcon(
         }
         else
         {
-            UIImage *busImage = [UIImage imageNamed:@"map_transport_stop_bus"];
+            UIImage *busImage = [UIImage imageNamed:ACImageNameMapTransportStopBus];
             auto icon = SkMakeImageFromCGImage(busImage.CGImage);
             if (icon)
                 return icon;

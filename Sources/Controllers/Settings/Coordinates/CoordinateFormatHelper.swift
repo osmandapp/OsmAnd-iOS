@@ -6,6 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
 import UIKit
 
 enum CoordinateFormatHelper {
@@ -18,8 +19,16 @@ enum CoordinateFormatHelper {
     private static let exampleLon = 30.50124
     private static let unavailablePlaceholder = "—"
     
-    private static let searchDebounce: TimeInterval = 0.25
-    private static var searchWorkItem: DispatchWorkItem?
+    static let epsgCatalog = EpsgCatalogRepository(
+        projDbFile: KFile(
+            filePath: OAEpsgCoordinateTransformer.projResourcesPath()
+                .appendingPathComponent(projDbName)
+        )
+    )
+
+    static let gridFormatProvider = CoordinateGridFormatProvider()
+
+    private static let projDbName = "proj.db"
     
     private static let epsgNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -35,7 +44,7 @@ enum CoordinateFormatHelper {
 
     static func resolve(_ ids: [String]) -> [CoordinateFormat] {
         ids.map { id in
-            BuiltInCoordinateFormat.resolve(id) ?? EpsgCatalogRepository.shared.resolveFormat(id)
+            BuiltInCoordinateFormat.resolve(id) ?? epsgCatalog.resolveFormat(id: id)
         }
     }
     
@@ -44,7 +53,7 @@ enum CoordinateFormatHelper {
         if primary {
             parts.append(localizedString("coordinate_format_primary"))
         }
-        if let epsgCode = format.epsgCode {
+        if let epsgCode = format.epsgCodeValue {
             parts.append("EPSG:\(epsgCode)")
         } else {
             if format.id == CoordinateFormatIds.builtinUtm {
@@ -65,11 +74,11 @@ enum CoordinateFormatHelper {
     }
 
     static func format(_ format: CoordinateFormat, lat: Double, lon: Double) -> String {
-        if format.type == .builtIn, let legacy = format.legacyFormat {
+        if format.type == .builtIn, let legacy = format.legacyFormatValue {
             return OAOsmAndFormatter.getFormattedCoordinates(withLat: lat, lon: lon, outputFormat: legacy)
                 ?? unavailablePlaceholder
         }
-        if let code = format.epsgCode,
+        if let code = format.epsgCodeValue,
            let point = OAEpsgCoordinateTransformer.sharedInstance().fromLonLat(withCode: code, lon: lon, lat: lat) {
             return formatEpsgPoint(easting: point.easting, northing: point.northing)
         }
@@ -89,6 +98,12 @@ enum CoordinateFormatHelper {
         return resolve(storage.preferredIds())
     }
 
+    static func primaryFormat() -> CoordinateFormat? {
+        let storage = OAAppSettings.sharedManager().coordinateFormatSettingsStorage
+        guard let primaryId = storage.preferredIds().first else { return nil }
+        return resolve([primaryId]).first
+    }
+
     static func formatPreferred(lat: Double, lon: Double) -> [FormattedCoordinate] {
         preferredFormats().map { format in
             FormattedCoordinate(
@@ -99,8 +114,8 @@ enum CoordinateFormatHelper {
     }
 
     static func formatPrimary(lat: Double, lon: Double) -> String {
-        if let primary = formatPreferred(lat: lat, lon: lon).first {
-            return primary.text
+        if let primary = primaryFormat() {
+            return format(primary, lat: lat, lon: lon)
         }
         return OAOsmAndFormatter.getFormattedCoordinates(
             withLat: lat, lon: lon, outputFormat: Int(FORMAT_DEGREES)
@@ -108,7 +123,7 @@ enum CoordinateFormatHelper {
     }
 
     static func primaryRowPrefix(lat: Double, lon: Double) -> String {
-        if let code = preferredFormats().first?.epsgCode {
+        if let code = primaryFormat()?.epsgCodeValue {
             return "EPSG:\(code)"
         }
         return localizedString("coordinates")

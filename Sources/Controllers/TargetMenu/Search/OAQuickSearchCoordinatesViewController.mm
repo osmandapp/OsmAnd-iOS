@@ -1188,7 +1188,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             [CoordinateFormatSelectorViewController presentFrom:self
                                                selectedFormatId:_currentFormatId
-                                                       delegate:self];
+                                                        appMode:OAAppSettings.sharedManager.applicationMode.get
+                                                       delegate:self
+                                                showSelectOther:YES
+                                                gridFormatsOnly:NO];
         }
         else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
         {
@@ -1398,7 +1401,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSArray<NSString *> *excluded = [OAAppSettings.sharedManager.coordinateFormatSettingsStorage preferredIds:mode];
     
     __weak __typeof(self) weakSelf = self;
-    [CoordinateFormatSelectorRouter presentAddFrom:self excludedIds:excluded onSelected:^(NSString *formatId) {
+    [CoordinateFormatSelectorRouter presentAddFrom:self appMode:mode excludedIds:excluded onSelected:^(NSString *formatId) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) return;
         

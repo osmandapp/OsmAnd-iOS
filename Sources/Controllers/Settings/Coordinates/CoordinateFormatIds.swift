@@ -6,54 +6,36 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import Foundation
+import OsmAndShared
 
 enum CoordinateFormatIds {
-    static let builtinDdd = "builtin:ddd"
-    static let builtinDdm = "builtin:ddm"
-    static let builtinDms = "builtin:dms"
-    static let builtinUtm = "builtin:utm"
-    static let builtinOlc = "builtin:olc"
-    static let builtinMgrs = "builtin:mgrs"
-    static let builtinSwissGrid = "builtin:swiss_grid"
-    static let builtinSwissGridPlus = "builtin:swiss_grid_plus"
-    static let builtinMaidenhead = "builtin:maidenhead"
+    private static let shared = OsmAndShared.CoordinateFormatIds.shared
 
-    static let epsgPrefix = "epsg:"
+    static let builtinDdd = shared.BUILTIN_DDD
+    static let builtinDdm = shared.BUILTIN_DDM
+    static let builtinDms = shared.BUILTIN_DMS
+    static let builtinUtm = shared.BUILTIN_UTM
+    static let builtinOlc = shared.BUILTIN_OLC
+    static let builtinMgrs = shared.BUILTIN_MGRS
+    static let builtinSwissGrid = shared.BUILTIN_SWISS_GRID
+    static let builtinSwissGridPlus = shared.BUILTIN_SWISS_GRID_PLUS
+    static let builtinMaidenhead = shared.BUILTIN_MAIDENHEAD
 
-    static let defaultFormatIds: [String] = [
-        builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc
-    ]
+    static let epsgPrefix = shared.EPSG_PREFIX
 
-    static let allBuiltInFormatIds: [String] = [
-        builtinDdd, builtinDdm, builtinDms, builtinUtm, builtinOlc, builtinMgrs,
-        builtinSwissGrid, builtinSwissGridPlus, builtinMaidenhead
-    ]
-
-    private static let builtInIdSet = Set(allBuiltInFormatIds)
+    static let defaultFormatIds = shared.DEFAULT_FORMAT_IDS
+    static let allBuiltInFormatIds = shared.ALL_BUILT_IN_FORMAT_IDS
 
     static func epsg(_ code: Int) -> String {
-        "\(epsgPrefix)\(code)"
+        shared.epsg(code: Int32(code))
     }
 
     static func normalize(_ id: String?) -> String? {
-        guard let trimmed = id?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
-              !trimmed.isEmpty else { return nil }
-        if builtInIdSet.contains(trimmed) {
-            return trimmed
-        }
-        if let code = epsgCode(trimmed) {
-            return epsg(code)
-        }
-        return nil
+        shared.normalize(id: id)
     }
 
     static func epsgCode(_ id: String?) -> Int? {
-        guard let trimmed = id?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
-              trimmed.hasPrefix(epsgPrefix),
-              let code = Int(trimmed.dropFirst(epsgPrefix.count)),
-              code > 0 else { return nil }
-        return code
+        shared.getEpsgCode(id: id)?.intValue
     }
 
     static func fromOldFormat(_ format: Int) -> String? {

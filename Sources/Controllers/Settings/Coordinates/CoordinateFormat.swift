@@ -6,79 +6,33 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import Foundation
+import OsmAndShared
 
-enum CoordinateFormatType {
-    case builtIn
-    case epsg
-    case unknown
-}
+typealias CoordinateFormat = OsmAndShared.CoordinateFormat
+typealias CoordinateFormatType = OsmAndShared.CoordinateFormatType
 
-struct CoordinateFormat {
-    let id: String
-    let type: CoordinateFormatType
-    let title: String
-    let subtitle: String?
-    let epsgCode: Int?
-    let legacyFormat: Int?
-    let isDeprecated: Bool
-    let isResolved: Bool
-
+extension CoordinateFormat {
     static func builtIn(id: String, title: String, legacyFormat: Int) -> CoordinateFormat {
-        CoordinateFormat(
-            id: id,
-            type: .builtIn,
-            title: title,
-            subtitle: nil,
-            epsgCode: nil,
-            legacyFormat: legacyFormat,
-            isDeprecated: false,
-            isResolved: true
-        )
+        companion.builtIn(id: id, title: title, legacyFormat: Int32(legacyFormat))
     }
-    
+
     static func epsg(code: Int, title: String?, subtitle: String?, isDeprecated: Bool) -> CoordinateFormat {
-        let titleValue: String
-        if let title, title.isEmpty == false {
-            titleValue = title
-        } else {
-            titleValue = "EPSG:\(code)"
-        }
-        return CoordinateFormat(
-            id: CoordinateFormatIds.epsg(code),
-            type: .epsg,
-            title: titleValue,
-            subtitle: subtitle,
-            epsgCode: code,
-            legacyFormat: nil,
-            isDeprecated: isDeprecated,
-            isResolved: true
-        )
+        companion.epsg(code: Int32(code), title: title, subtitle: subtitle, isDeprecated: isDeprecated)
     }
 
     static func unresolvedEpsg(code: Int) -> CoordinateFormat {
-        CoordinateFormat(
-            id: CoordinateFormatIds.epsg(code),
-            type: .epsg,
-            title: "EPSG:\(code)",
-            subtitle: nil,
-            epsgCode: code,
-            legacyFormat: nil,
-            isDeprecated: false,
-            isResolved: false
-        )
+        companion.unresolvedEpsg(code: Int32(code))
     }
 
     static func unknown(id: String) -> CoordinateFormat {
-        CoordinateFormat(
-            id: id,
-            type: .unknown,
-            title: id,
-            subtitle: nil,
-            epsgCode: nil,
-            legacyFormat: nil,
-            isDeprecated: false,
-            isResolved: false
-        )
+        companion.unknown(id: id)
+    }
+
+    var epsgCodeValue: Int? {
+        epsgCode?.intValue
+    }
+
+    var legacyFormatValue: Int? {
+        legacyFormat?.intValue
     }
 }

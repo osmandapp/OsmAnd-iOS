@@ -23,10 +23,12 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
+        case migrateCoordinateFormatPreferredIds
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
         case migrateTransparentWidgetsToPanelAppearance
         case migrateTracksSortModeKeysAndFormat
+        case migrateCoordinateGridFormatIds
         case migrateKeepScreenOnMode
     }
     
@@ -126,6 +128,10 @@ final class MigrationManager: NSObject {
                 migrateTransparentWidgetsToPanelAppearance()
                 defaults.set(true, forKey: MigrationKey.migrateTransparentWidgetsToPanelAppearance.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue) {
+                settings.coordinateFormatSettingsStorage.migrateFromLegacyIfNeeded()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue)
+            }
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
@@ -133,6 +139,25 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateKeepScreenOnMode.rawValue) {
                 migrateKeepScreenOnMode()
                 defaults.set(true, forKey: MigrationKey.migrateKeepScreenOnMode.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue) {
+                migrateCoordinateGridFormatIds()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue)
+            }
+        }
+    }
+
+    private func migrateCoordinateGridFormatIds() {
+        let pref = settings.coordinateGridFormat
+        for mode in OAApplicationMode.allPossibleValues() {
+            if pref.isSet(for: mode) {
+                pref.set(pref.get(mode), mode: mode)
+            } else {
+                let legacyFormat = Int(settings.settingGeoFormat.get(mode))
+                pref.set(
+                    CoordinateFormatIds.fromOldFormat(legacyFormat) ?? GridFormatWrapper.defaultFormatId,
+                    mode: mode
+                )
             }
         }
     }

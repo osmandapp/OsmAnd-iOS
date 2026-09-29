@@ -415,7 +415,7 @@ final class StarMapSearchViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         

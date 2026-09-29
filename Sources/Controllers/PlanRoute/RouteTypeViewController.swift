@@ -31,11 +31,13 @@ final class RouteTypeViewController: UIViewController {
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var selectedMode: OAApplicationMode?
+    private var hasSelectedMode: Bool
     private var sections: [SectionModel] = []
 
     init(context: SegmentRouteContext,
          availableModes: [OAApplicationMode],
          selectedMode: OAApplicationMode?,
+         hasSelectedMode: Bool = true,
          canStartNewSegment: Bool,
          showsRecalculationHint: Bool = true,
          onContinueRoute: (() -> Void)? = nil,
@@ -44,6 +46,7 @@ final class RouteTypeViewController: UIViewController {
         self.context = context
         self.availableModes = availableModes
         self.selectedMode = selectedMode
+        self.hasSelectedMode = hasSelectedMode
         self.canStartNewSegment = canStartNewSegment
         self.showsRecalculationHint = showsRecalculationHint
         self.onContinueRoute = onContinueRoute
@@ -112,7 +115,7 @@ final class RouteTypeViewController: UIViewController {
     }
 
     private func isSelected(_ mode: OAApplicationMode?) -> Bool {
-        selectedMode?.stringKey == mode?.stringKey
+        hasSelectedMode && selectedMode?.stringKey == mode?.stringKey
     }
 }
 
@@ -133,7 +136,7 @@ extension RouteTypeViewController: UITableViewDataSource {
             cell.configure(title: localizedString("plan_route_straight_line"),
                            icon: .icCustomStraightLine,
                            tintColor: .iconColorActive,
-                           isSelected: selectedMode == nil)
+                           isSelected: isSelected(nil))
             return cell
         case let .mode(mode):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteTypeModeCell.reuseIdentifier, for: indexPath) as? RouteTypeModeCell else {
@@ -187,10 +190,12 @@ extension RouteTypeViewController: UITableViewDelegate {
         switch row {
         case .straightLine:
             selectedMode = nil
+            hasSelectedMode = true
             onModeSelected(nil)
             tableView.reloadData()
         case let .mode(mode):
             selectedMode = mode
+            hasSelectedMode = true
             onModeSelected(mode)
             tableView.reloadData()
         case .startNewSegment:

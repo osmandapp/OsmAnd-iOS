@@ -34,6 +34,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private let tabContainerView = UIView()
     private var activeTab: ActiveTab = .routeType
     private var selectedMode: OAApplicationMode?
+    private var hasSelectedMode = true
     private var routeTypeVC: RouteTypeViewController?
     private var settingsVC: RouteSettingsViewController?
     private var activeTabViewController: UIViewController?
@@ -53,6 +54,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
             self.selectedMode = dataSource?.defaultMode
         } else {
             self.selectedMode = context.currentMode
+        }
+        if case let .wholeSegment(segment) = context, segment.multiMode {
+            hasSelectedMode = false
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -104,10 +108,12 @@ final class SegmentRouteSettingsViewController: UIViewController {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(onConfirmTapped))
+        navigationItem.rightBarButtonItem?.isEnabled = hasSelectedMode
     }
 
     private func setupSegmentControl() {
         segmentControl.selectedSegmentIndex = 0
+        segmentControl.setEnabled(hasSelectedMode, forSegmentAt: 1)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
 
         segmentControl.translatesAutoresizingMaskIntoConstraints = false
@@ -170,6 +176,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             context: context,
             availableModes: dataSource?.availableModes ?? [],
             selectedMode: selectedMode,
+            hasSelectedMode: hasSelectedMode,
             canStartNewSegment: showsContinuationActions && (dataSource?.canStartNewSegment ?? false),
             showsRecalculationHint: futureRouteAction == nil,
             onContinueRoute: showsContinuationActions && !(dataSource?.routeSegments.isEmpty ?? true) ? { [weak self] in
@@ -178,6 +185,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
             onModeSelected: { [weak self] mode in
                 guard let self else { return }
                 selectedMode = mode
+                hasSelectedMode = true
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                segmentControl.setEnabled(true, forSegmentAt: 1)
                 if let futureRouteAction {
                     switch futureRouteAction {
                     case .continueRoute:
@@ -235,6 +245,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     @objc private func onConfirmTapped() {
+        guard hasSelectedMode else { return }
         if let fromIndex = applyFromPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
             let pointIndexes = group.points.filter { $0.index >= fromIndex }.map(\.index)

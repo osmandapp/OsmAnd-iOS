@@ -273,7 +273,7 @@
         
         [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
-        [_mapVc setCarPlayFrameRateLimited:YES];
+        [_mapVc setAttachedToCarPlayWindow:YES];
     }
 }
 
@@ -294,7 +294,7 @@
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapVc.mapView resumeRendering];
         [mapPanel.hudViewController.mapInfoController updateLayout];
-        [_mapVc setCarPlayFrameRateLimited:NO];
+        [_mapVc setAttachedToCarPlayWindow:NO];
 
         [_mapVc setViewportScaleX:kViewportScale];
         [_mapVc.mapView setMSAAEnabled:NO];

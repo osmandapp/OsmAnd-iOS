@@ -164,7 +164,7 @@ static char kMapSourceUpdateQueueKey;
 {
     // -------------------------------------------------------------------------------------------
 
-    BOOL _carPlayFrameRateLimited;
+    BOOL _attachedToCarPlayWindow;
 
     OAAutoObserverProxy* _updateGpxTracksObserver;
     OAAutoObserverProxy* _updateRecTrackObserver;
@@ -3101,15 +3101,15 @@ static char kMapSourceUpdateQueueKey;
     if (!self.mapViewLoaded)
         return;
 
-    if ([[OAAppSettings sharedManager].batterySavingMode get] || _carPlayFrameRateLimited)
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
         [_mapView limitFrameRefreshRate];
     else
         [_mapView restoreFrameRefreshRate];
 }
 
-- (void) setCarPlayFrameRateLimited:(BOOL)limited
+- (void) setAttachedToCarPlayWindow:(BOOL)attached
 {
-    _carPlayFrameRateLimited = limited;
+    _attachedToCarPlayWindow = attached;
     [self applyFrameRefreshRateLimit];
 }
 

@@ -185,7 +185,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pages.append(UIViewController())
         }
 
-        let selectedIndex = currentIndex
+        // Rebuilding the panel starts from the first page.
+        let selectedIndex = 0
 
         // Set up the page control before calculating the selected page size.
         pageControl.numberOfPages = pages.count

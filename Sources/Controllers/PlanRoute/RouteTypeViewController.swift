@@ -99,15 +99,18 @@ final class RouteTypeViewController: UIViewController {
         result.append(SectionModel(rows: modeRows, footerTitle: nil))
 
         var actions: [Row] = []
+        var footerTitle: String?
         if onContinueRoute != nil {
             actions.append(.continueRoute)
         }
         if canStartNewSegment {
             actions.append(.startNewSegment)
+            footerTitle = localizedString(onContinueRoute != nil
+                                          ? "plan_route_continue_or_start_segment_hint"
+                                          : "plan_route_new_segment_separate_hint")
         }
         if !actions.isEmpty {
-            result.append(SectionModel(rows: actions,
-                                       footerTitle: localizedString("plan_route_continue_or_start_segment_hint")))
+            result.append(SectionModel(rows: actions, footerTitle: footerTitle))
         }
 
         sections = result

@@ -73,6 +73,58 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         XCTAssertNil(selections[1])
     }
 
+    func testContinueOnlyHasNoNewSegmentFooter() throws {
+        try verifyActions(canContinue: true, canStartNewSegment: false,
+                          expectedActions: ["continue"], expectedFooter: nil)
+    }
+
+    func testBothActionsHaveCombinedFooter() throws {
+        try verifyActions(canContinue: true, canStartNewSegment: true,
+                          expectedActions: ["continue", "start"],
+                          expectedFooter: localizedString("plan_route_continue_or_start_segment_hint"))
+    }
+
+    func testStartOnlyHasNewSegmentFooter() throws {
+        try verifyActions(canContinue: false, canStartNewSegment: true,
+                          expectedActions: ["start"],
+                          expectedFooter: localizedString("plan_route_new_segment_separate_hint"))
+    }
+
+    func testUnavailableActionsHaveNoSectionOrFooter() throws {
+        try verifyActions(canContinue: false, canStartNewSegment: false,
+                          expectedActions: [], expectedFooter: nil)
+    }
+
+    private func verifyActions(canContinue: Bool,
+                               canStartNewSegment: Bool,
+                               expectedActions: [String],
+                               expectedFooter: String?) throws {
+        var selectedActions: [String] = []
+        let onContinue: (() -> Void)? = canContinue ? { selectedActions.append("continue") } : nil
+        let picker = RouteTypeViewController(context: .wholeTrack,
+                                             availableModes: [],
+                                             selectedMode: nil,
+                                             canStartNewSegment: canStartNewSegment,
+                                             onContinueRoute: onContinue,
+                                             onModeSelected: { _ in },
+                                             onStartNewSegment: { selectedActions.append("start") })
+        picker.loadViewIfNeeded()
+        let table = try XCTUnwrap(picker.view.subviews.first as? UITableView)
+        XCTAssertNil(picker.tableView(table, titleForFooterInSection: 0))
+        XCTAssertNil(picker.tableView(table, titleForFooterInSection: 1))
+        guard !expectedActions.isEmpty else {
+            XCTAssertEqual(picker.numberOfSections(in: table), 2)
+            return
+        }
+        XCTAssertEqual(picker.numberOfSections(in: table), 3)
+        XCTAssertEqual(picker.tableView(table, numberOfRowsInSection: 2), expectedActions.count)
+        XCTAssertEqual(picker.tableView(table, titleForFooterInSection: 2), expectedFooter)
+        for row in expectedActions.indices {
+            picker.tableView(table, didSelectRowAt: IndexPath(row: row, section: 2))
+        }
+        XCTAssertEqual(selectedActions, expectedActions)
+    }
+
     private func makeController(mixed: Bool) -> SegmentRouteSettingsViewController {
         let segment = PlanRouteSegment(index: 0,
                                        groups: [],

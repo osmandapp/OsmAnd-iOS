@@ -3,6 +3,8 @@
 "send_crash_log_descr" = "From previous crashes";
 "no_crashes_recorded" = "No crashes recorded";
 "share_crash_log" = "Share crash log";
+"crash_report_sent" = "Report sent. Thank you!";
+"crash_report_send_failed" = "Could not send the report. Try again later.";
 "crash_report_prompt_title" = "OsmAnd has encountered an unexpected error.";
 "crash_report_prompt_description" = "Please help us improve the app by sending the crash report. Your crash report will help us identify and fix the issue.";
 "shared_string_send" = "Send";

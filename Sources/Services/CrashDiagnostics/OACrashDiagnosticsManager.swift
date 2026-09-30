@@ -357,6 +357,33 @@ final class OACrashDiagnosticsManager: NSObject {
         }
     }
 
+    /// Keeps the exit counts of the newest daily MetricKit payload for the crash report: iOS
+    /// reports memory and watchdog kills only as these counters, never as a crash diagnostic.
+    @nonobjc
+    fileprivate func storeExitMetrics(from payloads: [MXMetricPayload]) {
+        guard let payload = payloads.max(by: { $0.timeStampEnd < $1.timeStampEnd }),
+              let exitMetrics = payload.applicationExitMetrics,
+              let exitJSON = try? JSONSerialization.jsonObject(with: exitMetrics.jsonRepresentation()) else {
+            return
+        }
+        let formatter = ISO8601DateFormatter()
+        let report: [String: Any] = [
+            "timeStampBegin": formatter.string(from: payload.timeStampBegin),
+            "timeStampEnd": formatter.string(from: payload.timeStampEnd),
+            "latestApplicationVersion": payload.latestApplicationVersion,
+            "applicationExitMetrics": exitJSON
+        ]
+        let url = OAMemoryLog.sharedInstance().exitMetricsURL
+        storageQueue.async {
+            do {
+                let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+                try data.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+            } catch {
+                Self.logStorageFailure("store MetricKit exit metrics", error: error)
+            }
+        }
+    }
+
     private static func logStorageFailure(_ operation: String, error: Error) {
         NSLog("[CrashDiagnostics] Failed to %@: %@", operation, error.localizedDescription)
     }
@@ -372,5 +399,9 @@ private final class OACrashMetricManagerSubscriber: NSObject, MXMetricManagerSub
 
     func didReceive(_ payloads: [MXDiagnosticPayload]) {
         manager?.storeCrashDiagnostics(from: payloads)
+    }
+
+    func didReceive(_ payloads: [MXMetricPayload]) {
+        manager?.storeExitMetrics(from: payloads)
     }
 }

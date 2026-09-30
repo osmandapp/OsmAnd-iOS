@@ -1209,9 +1209,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
             let widgetSizes = visibleWidgets.map {
                 $0.systemLayoutSizeFitting(
                     UIView.layoutFittingCompressedSize,
-                    // Match WidgetPageViewController: preserve required content
-                    // padding and icon widths instead of forcing a transient
-                    // compressed width (12 pt for some widget hierarchies).
+                    // Match WidgetPageViewController's compressed measurement;
+                    // optional padding and icon widths may shrink. The horizontal
+                    // preview width comes from the map container in previewSize.
                     withHorizontalFittingPriority: UILayoutPriority(999),
                     verticalFittingPriority: .fittingSizeLevel
                 )

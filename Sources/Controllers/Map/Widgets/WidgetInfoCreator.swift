@@ -45,7 +45,7 @@ class WidgetInfoCreator: NSObject {
     func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let panel = widgetType.panel(key, appMode: appMode, screenLayoutMode: preferenceLayoutMode)
         let widget = factory.createMapWidget(customId: key, widgetType: widgetType, appMode: appMode, panel: panel, widgetParams: widgetParams)
-        if let widget = widget {
+        if let widget {
             return createCustomWidgetInfo(widgetId: key, widget: widget, widgetType: widgetType, panel: panel)
         }
         return nil

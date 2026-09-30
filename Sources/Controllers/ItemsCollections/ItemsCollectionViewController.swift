@@ -323,9 +323,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     cell.descriptionLabel.numberOfLines = 1
                     PaletteCollectionHandler.applyGradient(to: cell.secondLeftIconView, with: palette.getColorPalette())
                     cell.secondLeftIconView.layer.cornerRadius = 3
-                    cell.leftIconView.image = palette.id == selectedPaletteItem?.id ? UIImage(named: "ic_checkmark_default") : nil
+                    cell.leftIconView.image = palette.id == selectedPaletteItem?.id ? .icCheckmarkDefault : nil
                     cell.button.setTitle(nil, for: .normal)
-                    cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    cell.button.setImage(.icNavbarOverflowMenuOutlined.withRenderingMode(.alwaysTemplate), for: .normal)
                     cell.button.menu = createPaletteMenu(for: indexPath)
                     cell.button.showsMenuAsPrimaryAction = true
                     return cell

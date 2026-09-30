@@ -131,6 +131,7 @@ static BOOL _isDeviatedFromRoute = false;
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
     [_routingModeChangedObservable notifyEventWithKey:mode];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (OAApplicationMode *) getAppMode
@@ -167,6 +168,7 @@ static BOOL _isDeviatedFromRoute = false;
 {
     _isPauseNavigation = b;
     [LiveActivityManager.shared refresh];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isPauseNavigation
@@ -247,6 +249,7 @@ static BOOL _isDeviatedFromRoute = false;
                                                     streetName:routeDirection.streetName.length > 0 ? routeDirection.streetName : (routeDirection.ref ?: @"")
                                                  totalDistance:[_route getWholeDistance]];
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isRoutePlanningMode

@@ -72,7 +72,7 @@
                                 <color key="textColor" red="0.18963843584060669" green="0.84406125545501709" blue="0.17482368648052216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time.png" translatesAutoresizingMaskIntoConstraints="NO" id="1Cf-n5-MS3">
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_time" translatesAutoresizingMaskIntoConstraints="NO" id="1Cf-n5-MS3">
                                 <rect key="frame" x="136" y="47.5" width="12" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="DSN-GK-WSC"/>
@@ -128,7 +128,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_small_time.png" width="12" height="12"/>
+        <image name="ic_small_time" width="12" height="12"/>
         <image name="icon_favorite_direction" width="8" height="9"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

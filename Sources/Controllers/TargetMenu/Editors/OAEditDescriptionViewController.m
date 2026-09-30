@@ -135,7 +135,7 @@
     
     if (_isEditing)
     {
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_close"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:ACImageNameIcNavbarClose] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
         [self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
         
         UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_save") style:UIBarButtonItemStylePlain target:self action:@selector(saveClicked)];
@@ -145,7 +145,7 @@
     {
         if (!_readOnly)
         {
-            UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editClicked)];
+            UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:ACImageNameIcNavbarPencil] style:UIBarButtonItemStylePlain target:self action:@selector(editClicked)];
             [self.navigationController.navigationBar.topItem setRightBarButtonItem:editButton animated:YES];
         }
         [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil animated:YES];

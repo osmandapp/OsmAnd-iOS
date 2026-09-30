@@ -56,9 +56,18 @@
 #   define validateGL()
 #endif
 
+static const float kLimitedFrameRate = 20.0f;
+static const float kFrameRateTolerance = 0.01f;
+
 #define _(name) OAMapRendererView__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+@interface OAMapRendererView ()
+
+@property (nonatomic, readwrite) float displayLinkFrameRate;
+
+@end
 
 @implementation OAMapRendererView
 {
@@ -138,6 +147,7 @@
     _settingsObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _targetChangedObservable = [[OAObservable alloc] init];
+    _displayLinkFrameRateObservable = [[OAObservable alloc] init];
 
     // Set default values
 #if OSMAND_USE_ANGLE
@@ -1436,6 +1446,8 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 
 - (void)render:(CADisplayLink*)displayLink
 {
+    [self measureDisplayLinkFrameRate:displayLink];
+
     if (![self makeRenderContextCurrent])
     {
         [NSException raise:NSGenericException format:@"Failed to set current rendering context"];
@@ -1668,6 +1680,7 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
     glFinish();
 
     _displayLink = nil;
+    self.displayLinkFrameRate = 0;
 
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
@@ -1747,9 +1760,41 @@ static void OAMapRendererView_installGLDebugCallback(const char* which)
 - (void)updateFrameRefreshRate
 {
     if (_limitFrameRate)
-    	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
+    {
+        const float frameRate = [self limitedFrameRate];
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(frameRate, frameRate, frameRate);
+    }
     else
+    {
         _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
+    }
+}
+
+// Falls back to the largest divisor of the measured rate within the limit when the display link runs faster than requested.
+- (float)limitedFrameRate
+{
+    const float requestedFrameRate = _displayLink.preferredFrameRateRange.preferred;
+    const float frameRate = requestedFrameRate > 0 && requestedFrameRate <= kLimitedFrameRate ? requestedFrameRate : kLimitedFrameRate;
+    if (_displayLinkFrameRate <= frameRate * (1.0f + kFrameRateTolerance))
+        return frameRate;
+
+    return _displayLinkFrameRate / ceilf(_displayLinkFrameRate / kLimitedFrameRate * (1.0f - kFrameRateTolerance));
+}
+
+- (void)measureDisplayLinkFrameRate:(CADisplayLink *)displayLink
+{
+    const CFTimeInterval frameDuration = displayLink.targetTimestamp - displayLink.timestamp;
+    if (frameDuration > 0)
+        self.displayLinkFrameRate = (float) (1.0 / frameDuration);
+}
+
+- (void)setDisplayLinkFrameRate:(float)displayLinkFrameRate
+{
+    if (fabsf(displayLinkFrameRate - _displayLinkFrameRate) <= _displayLinkFrameRate * kFrameRateTolerance)
+        return;
+
+    _displayLinkFrameRate = displayLinkFrameRate;
+    [_displayLinkFrameRateObservable notifyEvent];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

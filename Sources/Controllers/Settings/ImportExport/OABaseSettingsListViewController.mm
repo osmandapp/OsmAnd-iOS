@@ -217,7 +217,7 @@
                 if (itemSelectionCount > 0)
                     selectionImage = [UIImage imageNamed:partiallySelected ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
                 else
-                    selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                    selectionImage = [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
                 [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
                 cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
                 [cell.leftEditButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
@@ -225,11 +225,11 @@
 
                 if (groupData.isOpen)
                 {
-                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
+                    cell.rightIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowUp];
                 }
                 else
                 {
-                    cell.rightIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomArrowDown].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage imageNamed:ACImageNameIcCustomArrowDown].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
                         [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }

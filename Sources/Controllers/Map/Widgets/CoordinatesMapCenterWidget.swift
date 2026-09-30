@@ -10,8 +10,11 @@
 @objcMembers
 final class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
 
-    init() {
-        super.init(type: .coordinatesMapCenter)
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
+        super.init(type: .coordinatesMapCenter,
+                   customId: customId,
+                   appMode: appMode,
+                   widgetParams: widgetParams)
     }
 
     override init(frame: CGRect) {
@@ -34,6 +37,6 @@ final class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        UIImage.widgetCoordinatesMapCenter
+        .widgetCoordinatesMapCenter
     }
 }

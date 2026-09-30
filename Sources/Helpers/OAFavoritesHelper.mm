@@ -35,6 +35,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/ArchiveWriter.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 #define BACKUP_MAX_COUNT 10
 #define BACKUP_MAX_PER_DAY 3
@@ -1370,7 +1371,7 @@ static NSOperationQueue *_favQueue;
 + (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList
 {
     if (!_flatBackgroundContourIcons)
-        _flatBackgroundContourIcons = @[@"bg_point_circle_contour", @"bg_point_octagon_contour", @"bg_point_square_contour"];
+        _flatBackgroundContourIcons = @[ACImageNameBgPointCircleContour, ACImageNameBgPointOctagonContour, ACImageNameBgPointSquareContour];
     return _flatBackgroundContourIcons;
 }
 

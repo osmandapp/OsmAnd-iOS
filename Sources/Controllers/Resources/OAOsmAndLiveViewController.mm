@@ -263,7 +263,7 @@ static const NSInteger sectionCount = 2;
     
     if ([_iapHelper.monthlyLiveUpdates isAnyPurchased] || [_iapHelper.proMonthly isAnyPurchased])
     {
-        _donationSettings = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(donationSettingsClicked:)];
+        _donationSettings = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarSettings] style:UIBarButtonItemStylePlain target:self action:@selector(donationSettingsClicked:)];
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_donationSettings animated:YES];
     }
 }

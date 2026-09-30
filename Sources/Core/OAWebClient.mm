@@ -9,7 +9,9 @@
 #import "OAWebClient.h"
 #import "OAAppVersion.h"
 
-#define kTimeout 60.0 * 5.0 // 5 minutes
+// Idle timeout between packets (NSURLRequest semantics), not a total limit: 5 minutes kept
+// callers such as the repository update waiting on a dead connection for far too long
+#define kTimeout 60.0
 #define kDefaultUserAgent @"OsmAndiOS"
 
 OARequestResult::OARequestResult(const bool successful) : successful(successful)

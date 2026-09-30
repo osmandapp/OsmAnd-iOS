@@ -6,9 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import UIKit
-import Foundation
-
 @objc(OAWidgetStateDelegate)
 protocol WidgetStateDelegate: AnyObject {
     func onWidgetStateChanged()
@@ -24,6 +21,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     private enum RawKey: String {
         case screenElements
         case panelsLayout
+        case appearance
         case transparentWidgets
         case customButtons
         case defaultButtons
@@ -183,6 +181,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
             }
         }
+
         let panelsLayoutPreference = settings.panelsLayoutMode(screenLayoutMode.rawValue, screenElementsMode: screenElementsMode.rawValue)
         let panelsLayoutMode = PanelsLayoutMode(rawValue: panelsLayoutPreference.get(appMode)) ?? .defaultMode
         let panelsLayoutRow = widgetsSection.createNewRow()
@@ -198,13 +197,13 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
             panelsLayoutRow.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
         }
 
-        let transparencyRow = widgetsSection.createNewRow()
-        transparencyRow.title = localizedString("map_widget_transparent")
-        transparencyRow.key = RawKey.transparentWidgets.rawValue
-        transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
-        let transparentWidgets = settings.transparentWidgets(preferenceLayoutMode)
-        transparencyRow.setObj(NSNumber(value: transparentWidgets.get(appMode)), forKey: selectedKey)
-        transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        let appearanceRow = widgetsSection.createNewRow()
+        appearanceRow.key = RawKey.appearance.rawValue
+        appearanceRow.title = localizedString("shared_string_appearance")
+        appearanceRow.icon = UIImage.templateImageNamed("ic_custom_appearance")
+        appearanceRow.iconTintColor = appMode.getProfileColor()
+        appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
+        appearanceRow.accessibilityLabel = appearanceRow.title
 
         if isSharedLandscapeLayout {
             return
@@ -220,7 +219,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         customButtonsRow.title = localizedString("custom_buttons")
         customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
         customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .iconColorDefault
-        customButtonsRow.iconName = "ic_custom_quick_action"
+        customButtonsRow.icon = .icCustomQuickAction
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
         customButtonsRow.accessibilityValue = customButtonsRow.descr
@@ -232,7 +231,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         defaultButtonsRow.title = localizedString("default_buttons")
         defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
         defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
-        defaultButtonsRow.iconName = "ic_custom_button_default"
+        defaultButtonsRow.icon = .icCustomButtonDefault
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
         defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
@@ -241,7 +240,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         otherSection.headerText = localizedString("other_location")
         let positionMapRow = otherSection.createNewRow()
         positionMapRow.title = localizedString("position_on_map")
-        positionMapRow.iconName = getLocationPositionIcon()
+        positionMapRow.icon = getLocationPositionIcon()
         positionMapRow.iconTintColor = appMode.getProfileColor()
         positionMapRow.key = RawKey.positionOnMap.rawValue
         positionMapRow.descr = getLocationPositionValue()
@@ -251,7 +250,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
-        distByTapRow.iconName = "ic_action_ruler_line"
+        distByTapRow.icon = .icActionRulerLine
         distByTapRow.iconTintColor = appMode.getProfileColor()
         distByTapRow.key = RawKey.distanceByTap.rawValue
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: selectedKey)
@@ -268,10 +267,10 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         speedomenterRow.accessibilityLabel = speedomenterRow.title
         speedomenterRow.accessibilityValue = speedomenterRow.descr
         if settings.showSpeedometer.get() {
-            speedomenterRow.iconName = "widget_speed"
+            speedomenterRow.icon = .widgetSpeed
             speedomenterRow.iconTintColor = nil
         } else {
-            speedomenterRow.iconName = "ic_custom_speedometer_outlined"
+            speedomenterRow.icon = .icCustomSpeedometerOutlined
             speedomenterRow.iconTintColor = .iconColorDefault
         }
     }
@@ -300,18 +299,18 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func getLocationPositionIcon() -> String {
-        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return "" }
+    private func getLocationPositionIcon() -> UIImage? {
+        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return nil }
         switch placement {
         case .auto:
-            return "ic_custom_display_position_automatic"
+            return .icCustomDisplayPositionAutomatic
         case .center:
-            return "ic_custom_display_position_center"
+            return .icCustomDisplayPositionCenter
         case .bottom:
-            return "ic_custom_display_position_bottom"
+            return .icCustomDisplayPositionBottom
         @unknown default:
             debugPrint("Unknown EOAPositionPlacement value: \(placement). Using default icon.")
-            return ""
+            return nil
         }
     }
     
@@ -470,13 +469,6 @@ extension ConfigureScreenViewController {
         }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData.item(for: indexPath)
-        
-        if data.key == RawKey.transparentWidgets.rawValue {
-            let preference = settings.transparentWidgets(preferenceLayoutMode)
-            preference.set(sw.isOn, mode: appMode)
-            OARootViewController.instance().mapPanel.hudViewController?.mapInfoController.updateLayout()
-        }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
@@ -510,6 +502,9 @@ extension ConfigureScreenViewController {
             let vc = DistanceByTapViewController()
             vc.delegate = self
             show(vc)
+        } else if data.key == RawKey.appearance.rawValue {
+            show(WidgetsAppearanceViewController(appMode: appMode,
+                                                 layoutMode: screenLayoutMode))
         } else if data.key == RawKey.panelsLayout.rawValue {
             let vc = PanelsLayoutViewController(screenLayoutMode: screenLayoutMode,
                                                 screenElementsMode: screenElementsMode,

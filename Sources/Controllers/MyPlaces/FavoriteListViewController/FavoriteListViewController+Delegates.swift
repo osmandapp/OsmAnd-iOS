@@ -163,24 +163,6 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
     }
 }
 
-extension FavoriteListViewController: OAEditColorViewControllerDelegate {
-    func colorChanged() {
-        guard let colorController else { return }
-        defer {
-            self.colorController = nil
-        }
-
-        let selectedItems = bridgeItems(for: selectionManager.selectedItems)
-        guard !selectedItems.isEmpty else { return }
-        if colorController.saveChanges {
-            OAFavoritesHelperBridge.shared().changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
-        }
-
-        setEditing(false)
-        applySnapshot(animatingDifferences: true)
-    }
-}
-
 extension FavoriteListViewController: SelectFavoriteGroupDelegate {
     func onGroupSelected(_ selectedGroupName: String) {
         moveFavoriteItems(toGroupName: selectedGroupName)

@@ -167,6 +167,11 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     return group.color ?: [OADefaultFavorite getDefaultColor];
 }
 
+- (NSArray<NSString *> *)backgroundIconNames
+{
+    return [OAFavoritesHelper getFlatBackgroundIconNamesList];
+}
+
 - (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName
 {
     NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:[self favoriteGroupWithName:groupName]];
@@ -463,55 +468,44 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
     return [groupNames copy];
 }
 
-- (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex
+- (void)changeFavoritePoints:(NSArray<OAFavoritePointBridgeItem *> *)favoritePoints color:(UIColor *)color iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName
 {
-    if (favoriteItems.count == 0)
+    if (favoritePoints.count == 0 || (!color && !iconName && !backgroundIconName))
         return;
-
-    NSArray<OAFavoriteColor *> *builtinColors = [OADefaultFavorite builtinColors];
-    if (colorIndex < 0 || colorIndex >= builtinColors.count)
-        return;
-
-    UIColor *color = builtinColors[colorIndex].color;
+    
     BOOL changed = NO;
-    NSMutableSet<NSString *> *changedPointKeys = [NSMutableSet set];
-
-    for (id item in favoriteItems)
+    NSMutableDictionary<NSString *, OAFavoriteItem *> *favoritesByKey = [NSMutableDictionary dictionary];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper favoriteGroups])
     {
-        if (![item isKindOfClass:[NSString class]])
-            continue;
-
-        NSString *folderPath = (NSString *)item;
-        OAFavoriteGroup *group = [self favoriteGroupWithName:folderPath];
-        if (!group)
-            continue;
-
-        group.color = color;
-        changed = YES;
+        for (OAFavoriteItem *favorite in group.points)
+        {
+            NSString *key = [favorite getKey];
+            if (key.length > 0 && !favoritesByKey[key])
+                favoritesByKey[key] = favorite;
+        }
     }
-
-    for (id item in favoriteItems)
+    
+    for (OAFavoritePointBridgeItem *pointItem in favoritePoints)
     {
-        if (![item isKindOfClass:[OAFavoritePointBridgeItem class]])
-            continue;
-
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *)item;
-        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        OAFavoriteItem *favorite = favoritesByKey[pointItem.identifier];
         if (!favorite)
             continue;
-
-        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
-        if ([changedPointKeys containsObject:pointKey])
-            continue;
-
-        [favorite setColor:color];
-        [changedPointKeys addObject:pointKey];
-        changed = YES;
-
-        OAFavoriteGroup *group = [self favoriteGroupWithName:[favorite getCategory]];
-        OAFavoriteItem *firstPoint = group.points.firstObject;
-        if (firstPoint && ([[firstPoint getKey] isEqualToString:pointKey]))
-            group.color = color;
+        
+        if (color && [color toARGBNumber] != [[favorite getColor] toARGBNumber])
+        {
+            [favorite setColor:color];
+            changed = YES;
+        }
+        if (iconName.length > 0 && ![iconName isEqualToString:[favorite getIcon]])
+        {
+            [favorite setIcon:iconName];
+            changed = YES;
+        }
+        if (backgroundIconName.length > 0 && ![backgroundIconName isEqualToString:[favorite getBackgroundIcon]])
+        {
+            [favorite setBackgroundIcon:backgroundIconName];
+            changed = YES;
+        }
     }
 
     if (changed)

@@ -16,6 +16,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     }
 
     var onApply: ((UIColor?, String?, String?) -> Void)?
+    var onClose: (() -> Void)?
 
     private let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
     private let iconHandler = PoiIconCollectionHandler(isFavoriteList: true)
@@ -52,7 +53,8 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.presentationController?.delegate = self
+        iconHandler.setIconName(appearance.iconName ?? "")
+        refreshAppearance()
     }
 
     override func registerCells() {
@@ -143,7 +145,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         if hasChanges {
             showUnsavedChangesSheet()
         } else {
-            dismiss()
+            close()
         }
     }
 
@@ -160,7 +162,12 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         }
 
         onApply?(color.map { UIColor(argb: Int($0)) }, iconName, backgroundIconName)
-        dismiss()
+        close()
+    }
+
+    private func close() {
+        onClose?()
+        dismiss(animated: true)
     }
 
     private func setupHandlers() {
@@ -306,7 +313,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     private func showUnsavedChangesSheet() {
         let alert = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_discard_changes"), style: .destructive) { [weak self] _ in
-            self?.dismiss()
+            self?.close()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
@@ -335,15 +342,5 @@ extension FavoritesChangeAppearanceViewController: OAShapesTableViewCellDelegate
         guard backgroundIconNames.indices.contains(tag) else { return }
         appearance.backgroundIconName = backgroundIconNames[tag]
         refreshAppearance()
-    }
-}
-
-extension FavoritesChangeAppearanceViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        !hasChanges
-    }
-
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        onLeftNavbarButtonPressed()
     }
 }

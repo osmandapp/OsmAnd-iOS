@@ -41,6 +41,21 @@
     return [_favorite getCompositeIcon];
 }
 
+- (UIColor *)color
+{
+    return [_favorite getColor];
+}
+
+- (NSString *)iconName
+{
+    return [_favorite getIcon];
+}
+
+- (NSString *)backgroundIconName
+{
+    return [_favorite getBackgroundIcon];
+}
+
 - (NSString *)displayGroupName
 {
     return [_favorite getCategoryDisplayName] ?: @"";

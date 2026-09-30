@@ -23,9 +23,8 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     let screenMode: ScreenMode
     let settings = OAAppSettings.sharedManager()
-    var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var colorController: OAEditColorViewController?
+    var layoutSections: [FavoriteListSection] = []
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
     var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
@@ -44,6 +43,32 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
+    weak var myPlacesDelegate: MyPlacesDelegate?
+
+    lazy var collapsedRootSections = Self.loadCollapsedSections()
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.tintColor = .iconColorActive
+        collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.allowsMultipleSelectionDuringEditing = true
+        return collectionView
+    }()
+    lazy var subfolderSearchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
+        return searchController
+    }()
+    lazy var dataSource: DataSource = makeDataSource()
+
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -78,32 +103,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var currentSortEntryId: String {
         parentGroupName ?? ""
     }
-
-    lazy var collapsedRootSections = Self.loadCollapsedSections()
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundColor = .clear
-        collectionView.tintColor = .iconColorActive
-        collectionView.delegate = self
-        collectionView.keyboardDismissMode = .onDrag
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.allowsMultipleSelectionDuringEditing = true
-        return collectionView
-    }()
-    lazy var subfolderSearchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
-        return searchController
-    }()
-    lazy var dataSource: DataSource = makeDataSource()
-    
-    weak var myPlacesDelegate: MyPlacesDelegate?
     
     private var normalSubtitle: String {
         switch screenMode {

@@ -18,6 +18,7 @@
 #import "OADestinationsHelper.h"
 #import "OADownloadsManager.h"
 #import "SceneDelegate.h"
+#import "OAUtilities.h"
 #import <UIKit/UIKit.h>
 #import <mach/mach.h>
 #import <malloc/malloc.h>
@@ -25,7 +26,6 @@
 #import <os/lock.h>
 #import <sys/resource.h>
 #import <sys/sysctl.h>
-#import <sys/utsname.h>
 #import <atomic>
 #import <mutex>
 
@@ -70,13 +70,6 @@ static long bootTimeSeconds()
     if (sysctl(mib, 2, &boot, &size, NULL, 0) != 0)
         return 0;
     return boot.tv_sec;
-}
-
-static NSString *deviceModel()
-{
-    struct utsname info;
-    uname(&info);
-    return [NSString stringWithUTF8String:info.machine] ?: @"?";
 }
 
 static NSString *appVersion()
@@ -295,7 +288,7 @@ static NSString *appVersion()
             {
                 _sessionStarted = YES;
                 [text appendFormat:@"--- start %@ ios=%@ device=%@ ram=%llu\n", appVersion(),
-                    UIDevice.currentDevice.systemVersion, deviceModel(), mb(NSProcessInfo.processInfo.physicalMemory)];
+                    UIDevice.currentDevice.systemVersion, [UIDevice machine] ?: @"?", mb(NSProcessInfo.processInfo.physicalMemory)];
             }
             NSString *sample = [self buildSample:time vm:vm vmCount:vmCount limit:limit];
             [text appendString:sample];

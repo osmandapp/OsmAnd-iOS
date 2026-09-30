@@ -14,11 +14,11 @@
 #import "OAPlugin.h"
 #import "OARoutingHelper.h"
 #import "OASelectedGPXHelper.h"
+#import "OAUtilities.h"
 #import <UIKit/UIKit.h>
 #import <mach/mach.h>
 #import <malloc/malloc.h>
 #import <os/proc.h>
-#import <sys/utsname.h>
 #import <sys/sysctl.h>
 
 #include <OsmAndCore/ArchiveWriter.h>
@@ -198,10 +198,8 @@ static NSString *mbString(uint64_t bytes)
 
 + (void)appendDevice:(NSMutableString *)sb
 {
-    struct utsname system;
-    uname(&system);
     NSProcessInfo *process = NSProcessInfo.processInfo;
-    [sb appendFormat:@"device: %s ios=%@ ram=%@ cpus=%lu lowPower=%d thermal=%ld\n", system.machine,
+    [sb appendFormat:@"device: %@ ios=%@ ram=%@ cpus=%lu lowPower=%d thermal=%ld\n", [UIDevice machine] ?: @"?",
         UIDevice.currentDevice.systemVersion, mbString(process.physicalMemory), (unsigned long) process.activeProcessorCount,
         process.isLowPowerModeEnabled, (long) process.thermalState];
 }

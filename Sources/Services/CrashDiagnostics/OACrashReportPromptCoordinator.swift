@@ -39,6 +39,10 @@ final class OACrashReportPromptCoordinator: NSObject {
     }
 
     func start() {
+        // UI tests terminate and relaunch the app between scenarios, which can
+        // leave an unclean-exit marker and trigger a sheet over the test UI.
+        guard !AppEnvironment.isUITesting else { return }
+
         DispatchQueue.main.async { [weak self] in
             guard let self, !self.isStarted else { return }
             self.isStarted = true

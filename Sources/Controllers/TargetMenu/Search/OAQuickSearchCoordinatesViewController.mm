@@ -844,7 +844,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     OAMapPanelViewController* mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController* mapVC = mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
     targetPoint.centerMap = YES;
     [mapPanel showContextMenu:targetPoint];
     [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];

@@ -109,7 +109,7 @@
     return YES;
 }
 
-- (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
+- (CLLocationCoordinate2D)touchPointCoord:(CGPoint)touchPoint
 {
     OsmAnd::PointI touchLocation;
     [self.mapView convert:touchPoint toLocation:&touchLocation];

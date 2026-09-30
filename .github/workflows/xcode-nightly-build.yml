@@ -223,6 +223,7 @@ jobs:
             -destination 'generic/platform=iOS' \
             -configuration Nightly \
             -archivePath OsmAndNightly.xcarchive \
+            -allowProvisioningUpdates \
             CURRENT_PROJECT_VERSION="$BUILD_IOS_VERSION" \
             MARKETING_VERSION="$RELEASE_IOS_VERSION" \
             archive 2>&1 | tee "$archive_log" | xcpretty

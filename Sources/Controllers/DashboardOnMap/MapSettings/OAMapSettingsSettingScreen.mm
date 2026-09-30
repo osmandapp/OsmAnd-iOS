@@ -74,43 +74,43 @@
                  @{
                      @"name" : @"25 %",
                      @"val" : @(0.25),
-                     @"img" : value == 0.25 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 0.25 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"33 %",
                      @"val" : @(0.33),
-                     @"img" : value == 0.33 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 0.33 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"50 %",
                      @"val" : @(0.5),
-                     @"img" : value == 0.5 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 0.5 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"75 %",
                      @"val" : @(0.75),
-                     @"img" : value == 0.75 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 0.75 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"100 %",
                      @"val" : @(1.0),
-                     @"img" : value == 1.0 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.0 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"125 %",
                      @"val" : @(1.25),
-                     @"img" : value == 1.25 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.25 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"150 %",
                      @"val" : @(1.5),
-                     @"img" : value == 1.5 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.5 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"200 %",
                      @"val" : @(2.0),
-                     @"img" : value == 2.0 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 2.0 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"300 %",
                      @"val" : @(3.0),
-                     @"img" : value == 3.0 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 3.0 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"400 %",
                      @"val" : @(4.0),
-                     @"img" : value == 4.0 ? @"menu_cell_selected.png" : @"" }
+                     @"img" : value == 4.0 ? @"menu_cell_selected" : @"" }
                  ];
     }
     else if ([settingKeyName isEqualToString:textSizeKey])
@@ -122,27 +122,27 @@
                  @{
                      @"name" : @"75 %",
                      @"val" : @(0.75),
-                     @"img" : value == 0.75 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 0.75 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"100 %",
                      @"val" : @(1.0),
-                     @"img" : value == 1.0 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.0 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"125 %",
                      @"val" : @(1.25),
-                     @"img" : value == 1.25 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.25 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"150 %",
                      @"val" : @(1.5),
-                     @"img" : value == 1.5 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 1.5 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"200 %",
                      @"val" : @(2.0),
-                     @"img" : value == 2.0 ? @"menu_cell_selected.png" : @"" },
+                     @"img" : value == 2.0 ? @"menu_cell_selected" : @"" },
                  @{
                      @"name" : @"300 %",
                      @"val" : @(3.0),
-                     @"img" : value == 3.0 ? @"menu_cell_selected.png" : @"" }
+                     @"img" : value == 3.0 ? @"menu_cell_selected" : @"" }
                  ];
     }
     

@@ -22,6 +22,7 @@
 #import "OADefaultFavorite.h"
 #import "OAAlarmInfo.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OALocationPointWrapper
 
@@ -67,17 +68,17 @@
         if (((OARTargetPoint *) _point).start)
         {
             if (![[OATargetPointsHelper sharedInstance] getPointToStart])
-                return [UIImage imageNamed:@"ic_action_location_color"];
+                return [UIImage imageNamed:ACImageNameIcActionLocationColor];
             else
-                return [UIImage imageNamed:@"ic_list_startpoint"];
+                return [UIImage imageNamed:ACImageNameIcListStartpoint];
         }
         else if (((OARTargetPoint *) _point).intermediate)
         {
-            return [UIImage imageNamed:@"list_intermediate"]; 
+            return [UIImage imageNamed:ACImageNameListIntermediate]; 
         }
         else
         {
-            return [UIImage imageNamed:@"ic_list_destination"];
+            return [UIImage imageNamed:ACImageNameIcListDestination];
         }
         
     }
@@ -111,16 +112,16 @@
         else if (type == AIT_RAILWAY)
         {
             if (americanSigns)
-                return [UIImage imageNamed:@"list_warnings_railways_us"];
+                return [UIImage imageNamed:ACImageNameListWarningsRailwaysUs];
             else
-                return [UIImage imageNamed:@"list_warnings_railways"];
+                return [UIImage imageNamed:ACImageNameListWarningsRailways];
         }
         else if (type == AIT_TRAFFIC_CALMING)
         {
             if (americanSigns)
-                return [UIImage imageNamed:@"list_warnings_traffic_calming_us"];
+                return [UIImage imageNamed:ACImageNameListWarningsTrafficCalmingUs];
             else
-                return [UIImage imageNamed:@"list_warnings_traffic_calming"];
+                return [UIImage imageNamed:ACImageNameListWarningsTrafficCalming];
         }
         else if (type == AIT_TOLL_BOOTH)
         {
@@ -128,21 +129,21 @@
         }
         else if (type == AIT_STOP)
         {
-            return [UIImage imageNamed:@"list_stop"];
+            return [UIImage imageNamed:ACImageNameListStop];
         }
         else if (type == AIT_PEDESTRIAN)
         {
             if (americanSigns)
-                return [UIImage imageNamed:@"list_warnings_pedestrian_us"];
+                return [UIImage imageNamed:ACImageNameListWarningsPedestrianUs];
             else
-                return [UIImage imageNamed:@"list_warnings_pedestrian"];
+                return [UIImage imageNamed:ACImageNameListWarningsPedestrian];
         }
         else if (type == AIT_TUNNEL)
         {
             if (americanSigns)
-                return [UIImage imageNamed:@"list_warnings_tunnel_us"];
+                return [UIImage imageNamed:ACImageNameListWarningsTunnelUs];
             else
-                return [UIImage imageNamed:@"list_warnings_tunnel"];
+                return [UIImage imageNamed:ACImageNameListWarningsTunnel];
         }
         else
         {

@@ -42,7 +42,7 @@
                             <constraint firstAttribute="height" constant="45" id="vVX-jF-N4b"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="center" image="img_app_purchase_2.png" translatesAutoresizingMaskIntoConstraints="NO" id="mSp-hr-KOI">
+                    <imageView userInteractionEnabled="NO" contentMode="center" image="img_app_purchase_2" translatesAutoresizingMaskIntoConstraints="NO" id="mSp-hr-KOI">
                         <rect key="frame" x="13.5" y="12.5" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="07p-Wz-Tpm"/>
@@ -90,7 +90,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="img_app_purchase_2.png" width="45" height="45"/>
+        <image name="img_app_purchase_2" width="45" height="45"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

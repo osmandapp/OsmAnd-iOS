@@ -51,6 +51,7 @@
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -94,7 +95,7 @@
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(true)
-    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"ic_map_pin"]))
+    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameIcMapPin]))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);

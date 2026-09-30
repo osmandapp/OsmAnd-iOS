@@ -32,7 +32,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <inset key="imageEdgeInsets" minX="-3" minY="-1" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" image="menu_icon_back.png"/>
+                    <state key="normal" image="menu_icon_back"/>
                     <connections>
                         <action selector="buttonBackPressed:" destination="-1" eventType="touchUpInside" id="wtu-UX-3II"/>
                     </connections>
@@ -46,7 +46,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" name="navBarBgColorPrimary"/>
                         </view>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg_title.png" translatesAutoresizingMaskIntoConstraints="NO" id="tSY-V6-9N3">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg_title" translatesAutoresizingMaskIntoConstraints="NO" id="tSY-V6-9N3">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -105,8 +105,8 @@
         </view>
     </objects>
     <resources>
-        <image name="bg_title.png" width="320" height="64"/>
-        <image name="menu_icon_back.png" width="10.5" height="20.5"/>
+        <image name="bg_title" width="320" height="64"/>
+        <image name="menu_icon_back" width="10.5" height="20.5"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -142,7 +142,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" red="0.24618944525718689" green="0.24618205428123474" blue="0.24618625640869141" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="ic_action_enduro_motorcycle.png"/>
+                    <state key="normal" image="ic_action_enduro_motorcycle"/>
                     <connections>
                         <action selector="onMapSettingsButtonClick:" destination="-1" eventType="touchUpInside" id="0fq-p8-YC7"/>
                     </connections>
@@ -152,7 +152,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_direction_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_direction_compass" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
                     <rect key="frame" x="26" y="112" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <accessibility key="accessibilityConfiguration">
@@ -163,7 +163,7 @@
                     <rect key="frame" x="82" y="833" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_navigation.png">
+                    <state key="normal" image="ic_custom_navigation">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
@@ -174,7 +174,7 @@
                     <rect key="frame" x="348" y="767" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_map_zoom_in.png">
+                    <state key="normal" image="ic_custom_map_zoom_in">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
@@ -185,7 +185,7 @@
                     <rect key="frame" x="348" y="833" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_map_zoom_out.png">
+                    <state key="normal" image="ic_custom_map_zoom_out">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
@@ -196,7 +196,7 @@
                     <rect key="frame" x="16" y="833" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_drawer.png">
+                    <state key="normal" image="ic_custom_drawer">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
@@ -231,7 +231,7 @@
                     <rect key="frame" x="282" y="833" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_custom_map_location_position.png">
+                    <state key="normal" image="ic_custom_map_location_position">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
@@ -243,7 +243,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="ic_custom_search.png"/>
+                    <state key="normal" image="ic_custom_search"/>
                     <connections>
                         <action selector="onSearchButtonClick:" destination="-1" eventType="touchUpInside" id="cYt-nS-ixL"/>
                     </connections>
@@ -266,16 +266,16 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_action_enduro_motorcycle.png" width="30" height="30"/>
+        <image name="ic_action_enduro_motorcycle" width="30" height="30"/>
         <image name="ic_custom_contour_lines_disabled" width="30" height="30"/>
-        <image name="ic_custom_direction_compass.png" width="30" height="30"/>
-        <image name="ic_custom_drawer.png" width="30" height="30"/>
-        <image name="ic_custom_map_location_position.png" width="30" height="30"/>
-        <image name="ic_custom_map_zoom_in.png" width="30" height="30"/>
-        <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
-        <image name="ic_custom_navigation.png" width="30" height="30"/>
+        <image name="ic_custom_direction_compass" width="30" height="30"/>
+        <image name="ic_custom_drawer" width="30" height="30"/>
+        <image name="ic_custom_map_location_position" width="30" height="30"/>
+        <image name="ic_custom_map_zoom_in" width="30" height="30"/>
+        <image name="ic_custom_map_zoom_out" width="30" height="30"/>
+        <image name="ic_custom_navigation" width="30" height="30"/>
         <image name="ic_custom_overlay_map_disabled" width="30" height="30"/>
-        <image name="ic_custom_search.png" width="30" height="30"/>
+        <image name="ic_custom_search" width="30" height="30"/>
         <namedColor name="mapButtonIconColorDefault">
             <color red="0.32941176470588235" green="0.32941176470588235" blue="0.32941176470588235" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

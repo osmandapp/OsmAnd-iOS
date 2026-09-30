@@ -21,6 +21,7 @@
 #import <DGCharts/DGCharts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OATrackMenuTabSegments () <UIGestureRecognizerDelegate, ChartViewDelegate>
 
@@ -52,7 +53,7 @@
 
 - (UIImage *)getTabIcon
 {
-    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_trip"];
+    return [OABaseTrackMenuTabItem getUnselectedIcon:ACImageNameIcCustomTrip];
 }
 
 - (EOATrackMenuHudTab)getTabMode
@@ -200,7 +201,7 @@
             kTableValues: @{
                     @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
                     @"right_title_string_value": OALocalizedString(@"shared_string_options"),
-                    @"right_icon_string_value": @"ic_custom_overflow_menu"
+                    @"right_icon_string_value": ACImageNameIcCustomOverflowMenu
             },
             kCellToggle: @(!segment.generalSegment)
     }];
@@ -301,7 +302,7 @@
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"altitude_descent");
             
             icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
-            icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
+            icons[@"top_right_icon_name_string_value"] = ACImageNameIcSmallAltitudeRange;
             icons[@"bottom_left_icon_name_string_value"] = @"ic_custom_uphill";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_custom_downhill";
             

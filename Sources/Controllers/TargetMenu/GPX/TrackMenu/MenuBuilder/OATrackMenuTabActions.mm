@@ -42,7 +42,7 @@
 
 - (UIImage *)getTabIcon
 {
-    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_overflow_menu"];
+    return [OABaseTrackMenuTabItem getUnselectedIcon:ACImageNameIcCustomOverflowMenu];
 }
 
 - (EOATrackMenuHudTab)getTabMode
@@ -67,7 +67,7 @@
     OAGPXTableCellData *appearanceCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_appearance",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_appearance",
+            kCellRightIconName: ACImageNameIcCustomAppearance,
             kCellTitle: OALocalizedString(@"shared_string_appearance")
     }];
     [controlSectionData.subjects addObject:appearanceCellData];
@@ -75,7 +75,7 @@
     OAGPXTableCellData *navigationCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_navigation",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_navigation",
+            kCellRightIconName: ACImageNameIcCustomNavigation,
             kCellTitle: OALocalizedString(@"routing_settings")
     }];
     [controlSectionData.subjects addObject:navigationCellData];
@@ -86,7 +86,7 @@
     OAGPXTableCellData *analyzeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"analyze",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_graph",
+            kCellRightIconName: ACImageNameIcCustomGraph,
             kCellTitle: OALocalizedString(@"analyze_on_map")
     }];
     [analyzeSectionData.subjects addObject:analyzeCellData];
@@ -97,7 +97,7 @@
     OAGPXTableCellData *shareCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"share",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_export",
+            kCellRightIconName: ACImageNameIcCustomExport,
             kCellTitle: OALocalizedString(@"shared_string_share")
     }];
     [shareSectionData.subjects addObject:shareCellData];
@@ -105,7 +105,7 @@
     OAGPXTableCellData *uploadToOSMCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"upload_to_openstreetmap",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_upload_to_openstreetmap",
+            kCellRightIconName: ACImageNameIcCustomUploadToOpenstreetmap,
             kCellTitle: OALocalizedString(@"upload_to_openstreetmap")
     }];
     [shareSectionData.subjects addObject:uploadToOSMCellData];
@@ -116,7 +116,7 @@
     OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"edit",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_trip_edit",
+            kCellRightIconName: ACImageNameIcCustomTripEdit,
             kCellTitle: OALocalizedString(@"edit_track"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];
@@ -125,7 +125,7 @@
     OAGPXTableCellData *duplicateCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"edit_create_duplicate",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_copy",
+            kCellRightIconName: ACImageNameIcCustomCopy,
             kCellTitle: OALocalizedString(@"duplicate_track"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];
@@ -140,7 +140,7 @@
     OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_edit",
+            kCellRightIconName: ACImageNameIcCustomEdit,
             kCellTitle: OALocalizedString(@"rename_track"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];
@@ -150,7 +150,7 @@
             kTableKey: @"change_move",
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: [self generateDirName],
-            kCellRightIconName: @"ic_custom_folder_move",
+            kCellRightIconName: ACImageNameIcCustomFolderMove,
             kCellTitle: OALocalizedString(@"change_folder"),
             kCellIsDisabled : @(_isCurrentTrack)
     }];
@@ -163,7 +163,7 @@
             kTableKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledBoldSystemFontOfSize:17] },
-            kCellRightIconName: @"ic_custom_remove_outlined",
+            kCellRightIconName: ACImageNameIcCustomRemoveOutlined,
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kCellTintColor: [UIColor colorNamed:ACColorNameButtonBgColorDisruptive]
     }];

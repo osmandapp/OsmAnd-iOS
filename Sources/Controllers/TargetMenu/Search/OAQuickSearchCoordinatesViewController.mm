@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
-#import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
 #import "OAObservable.h"
 #import "OsmAndApp.h"
@@ -55,7 +54,7 @@
 #define kMaxNorthingValue 9300000
 #define kUtmZoneMaxNumber 60
 #define kMaxTexFieldSymbolsCount 30
-#define kEstimatedCellHeight 48.0
+#define kEstimatedCellHeight 52.0
 
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesSection)
@@ -72,11 +71,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     EOAQuickSearchCoordinatesTextFieldEasting,
     EOAQuickSearchCoordinatesTextFieldZone,
     EOAQuickSearchCoordinatesTextFieldOlc,
-    EOAQuickSearchCoordinatesTextFieldMgrs
+    EOAQuickSearchCoordinatesTextFieldMgrs,
+    EOAQuickSearchCoordinatesTextFieldMaidenhead
 };
 
 
-@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate, OAPOISearchDelegate>
+@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAPOISearchDelegate, CoordinateFormatSelectorDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -103,6 +103,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSString *_olcStr;
     NSString *_mgrsStr;
     NSString *_formatStr;
+    
+    NSString *_currentFormatId;
+    CoordinateSearchInputMode _inputMode;
+    NSInteger _epsgCode;
+    NSString *_maidenheadStr;
     
     CLLocation *_searchLocation;
     NSString *_region;
@@ -166,17 +171,24 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionHeaderTopPadding = 0;
     self.tableView.separatorColor = [SeparatorAppearance color];
 
     self.navigationItem.title = OALocalizedString(@"coords_search");
     
     _toolbarView.frame = CGRectMake(0, DeviceScreenHeight, self.view.frame.size.width, kHintBarHeight);
     
-    _currentFormat = [OAAppSettings.sharedManager.settingGeoFormat get];
+    _currentFormatId = [CoordinateFormatBridge primaryFormatId];
+    CoordinateSearchFormatInfo *info = [CoordinateFormatBridge resolveSearchFormat:_currentFormatId];
+    _currentFormat = info.legacyFormat >= 0 ? info.legacyFormat : -1;
+    _inputMode = info.inputMode;
+    _epsgCode = info.epsgCode;
+    _formatStr = info.title ?: @"";
+    
     if (!isnan(_quickSearchCoordsLattitude) && !isnan(_quickSearchCoordsLongitude))
     {
         _currentLatLon = [[CLLocation alloc] initWithLatitude:_quickSearchCoordsLattitude longitude:_quickSearchCoordsLongitude];
-        [self applyFormat:_currentFormat forceApply:YES];
+        [self applyFormatId:_currentFormatId forceApply:YES];
     }
     
     [self generateData];
@@ -188,26 +200,31 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = [SeparatorAppearance color];
+    appearance.shadowColor = nil;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.shadowColor = nil;
     
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(onLeftNavbarButtonPressed)];
+    backButton.tintColor = [UIColor labelColor];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
 
 - (void) generateData
 {
     [self updateControllsSectionCells];
-    [self parseLocation];
+    if (_searchLocation)
+        [self updateDistanceAndDirection:YES];
+    else
+        [self parseLocation];
 }
 
 - (void) updateControllsSectionCells
@@ -217,46 +234,70 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [result addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
-        @"value" : _formatStr,
+        @"value" : _formatStr ?: @"",
     }];
     
-    if (_currentFormat == MAP_GEO_OLC_FORMAT)
+    if (_inputMode == CoordinateSearchInputModeOlc)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_olc_short"),
-            @"value" : _olcStr,
+            @"value" : _olcStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldOlc),
         }];
     }
-    else if (_currentFormat == MAP_GEO_UTM_FORMAT)
+    else if (_inputMode == CoordinateSearchInputModeUtm)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_zone"),
-            @"value" : _zoneStr,
+            @"value" : _zoneStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
         }];
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
-            @"value" : _eastingStr,
+            @"value" : _eastingStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_northing"),
-            @"value" : _northingStr,
+            @"value" : _northingStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
     }
-    else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
+    else if (_inputMode == CoordinateSearchInputModeMgrs)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_mgrs"),
-            @"value" : _mgrsStr,
+            @"value" : _mgrsStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldMgrs),
+        }];
+    }
+    else if (_inputMode == CoordinateSearchInputModeMaidenhead)
+    {
+        [result addObject:@{
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"navigate_point_format_maidenhead"),
+            @"value" : _maidenheadStr ?: @"",
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldMaidenhead),
+        }];
+    }
+    else if (_inputMode == CoordinateSearchInputModeEastingNorthing)
+    {
+        [result addObject:@{
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : [NSString stringWithFormat:@"%@ / X", OALocalizedString(@"navigate_point_easting")],
+            @"value" : _eastingStr ?: @"",
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
+        }];
+        [result addObject:@{
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : [NSString stringWithFormat:@"%@ / Y", OALocalizedString(@"navigate_point_northing")],
+            @"value" : _northingStr ?: @"",
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
     }
     else
@@ -264,20 +305,18 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_latitude"),
-            @"value" : _latStr,
+            @"value" : _latStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
-        
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_longitude"),
-            @"value" : _lonStr,
+            @"value" : _lonStr ?: @"",
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];
     }
     
     _controlsSectionData = [NSArray arrayWithArray:result];
-    
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:EOAQuickSearchCoordinatesSectionControls] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -309,7 +348,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (NSDictionary *) getLocationData:(CLLocation *)location
 {
-    NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
+    NSString *title = [CoordinateFormatBridge formatCoordinatesWithLat:location.coordinate.latitude
+                                                                   lon:location.coordinate.longitude
+                                                              formatId:_currentFormatId];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *subTitle = countryName ?: OALocalizedString(@"shared_string_location");
     
@@ -340,7 +381,63 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return _searchLocation ? _searchLocation : [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
 }
 
-- (BOOL) applyFormat:(NSInteger)format forceApply:(BOOL)forceApply
+- (BOOL) applyFormatId:(NSString *)formatId forceApply:(BOOL)forceApply
+{
+    CoordinateSearchFormatInfo *info = [CoordinateFormatBridge resolveSearchFormat:formatId];
+    if (!forceApply && [info.formatId isEqualToString:_currentFormatId])
+        return NO;
+
+    _currentFormatId = info.formatId;
+    _formatStr = info.title ?: @"";
+    _inputMode = info.inputMode;
+    _epsgCode = info.epsgCode;
+    _currentFormat = info.legacyFormat;
+
+    CLLocation *latLon = [self getDisplayingCoordinate];
+
+    if (_inputMode == CoordinateSearchInputModeUtm
+        || _inputMode == CoordinateSearchInputModeOlc
+        || _inputMode == CoordinateSearchInputModeMgrs
+        || _inputMode == CoordinateSearchInputModeLatLon)
+    {
+        NSInteger legacy = _currentFormat >= 0 ? _currentFormat : MAP_GEO_FORMAT_DEGREES;
+        if (![self applyLegacyFormat:legacy forceApply:YES] || _currentFormat == MAP_GEO_UTM_FORMAT)
+            return NO;
+
+        [self keepSearchLocation:latLon];
+        return YES;
+    }
+
+    if (!latLon)
+    {
+        [self updateControllsSectionCells];
+        return NO;
+    }
+
+    CoordinateInputFields *fields = [CoordinateFormatBridge prefillFieldsWithLat:latLon.coordinate.latitude
+                                                                             lon:latLon.coordinate.longitude
+                                                                        formatId:_currentFormatId];
+    _eastingStr = fields.easting;
+    _northingStr = fields.northing;
+    _maidenheadStr = fields.maidenhead;
+    _olcStr = fields.olc;
+    _mgrsStr = fields.mgrs;
+    _latStr = fields.lat;
+    _lonStr = fields.lon;
+
+    [self updateControllsSectionCells];
+    [self keepSearchLocation:latLon];
+    return YES;
+}
+
+- (void) keepSearchLocation:(CLLocation *)location
+{
+    _searchLocation = location;
+    _additionalUtmLatLon = nil;
+    [self updateDistanceAndDirection:YES];
+}
+
+- (BOOL) applyLegacyFormat:(NSInteger)format forceApply:(BOOL)forceApply
 {
    if (_currentFormat != format || forceApply)
    {
@@ -457,6 +554,22 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) parseLocation
 {
+    if (_inputMode == CoordinateSearchInputModeEastingNorthing
+        || _inputMode == CoordinateSearchInputModeMaidenhead)
+    {
+        CLLocation *loc = [CoordinateFormatBridge parseLocationWithFormatId:_currentFormatId
+                                                                        lat:_latStr
+                                                                        lon:_lonStr
+                                                                    easting:_eastingStr
+                                                                   northing:_northingStr
+                                                                       zone:_zoneStr
+                                                                        olc:_olcStr
+                                                                       mgrs:_mgrsStr
+                                                                maidenhead:_maidenheadStr];
+        [self updateResults:nil loc:loc];
+        return;
+    }
+    
     if (_isOlcCitySearchRunning)
     {
         _isOlcCitySearchRunning = NO;
@@ -923,6 +1036,34 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return nil;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == EOAQuickSearchCoordinatesSectionControls)
+        return 16;
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    if (section == EOAQuickSearchCoordinatesSectionControls)
+        return 16;
+    return UITableViewAutomaticDimension;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == EOAQuickSearchCoordinatesSectionControls)
+        return [[UIView alloc] init];
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == EOAQuickSearchCoordinatesSectionControls)
+        return 52.0;
+    return UITableViewAutomaticDimension;
+}
+
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
@@ -959,7 +1100,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         if (cell)
         {
             NSInteger tag = [item[@"tag"] integerValue];
-            if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs)
+            if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs || tag == EOAQuickSearchCoordinatesTextFieldMaidenhead)
                 cell.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             else
                 cell.inputField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
@@ -971,11 +1112,13 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.returnKeyType = UIReturnKeyDone;
             cell.inputField.enablesReturnKeyAutomatically = YES;
+            cell.inputField.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
 
             cell.titleLabel.text = item[@"title"];
-
+            [cell.clearButton setImage:[UIImage systemImageNamed:@"xmark.circle.fill"] forState:UIControlStateNormal];
+            cell.clearButton.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             cell.clearButton.tag = tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -986,7 +1129,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             UITextInputAssistantItem *inputAssistantItem = cell.inputField.inputAssistantItem;
             inputAssistantItem.leadingBarButtonGroups = @[];
             inputAssistantItem.trailingBarButtonGroups = @[];
-            if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+            
+            BOOL isProjectedMetric = (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+                                        && _inputMode == CoordinateSearchInputModeEastingNorthing;
+            
+            if ((tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing) && !isProjectedMetric)
                 cell.inputField.inputAccessoryView = nil;
             else
                 cell.inputField.inputAccessoryView = self.toolbarView;
@@ -1002,7 +1149,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAQuickSearchResultTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAQuickSearchResultTableViewCell *)[nib objectAtIndex:0];
-            cell.directionIcon.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionIcon.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
             cell.distanceLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -1016,7 +1163,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.distanceLabel.text = @"";
                 cell.coordinateLabel.text = @"";
                 [cell setDesriptionLablesVisible:NO];
-                cell.icon.image = [UIImage templateImageNamed:@"ic_custom_alert"];
+                cell.icon.image = [UIImage templateImageNamed:ACImageNameIcCustomAlert];
                 cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
             else
@@ -1025,8 +1172,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.distanceLabel.text = item[@"distance"];
                 cell.coordinateLabel.text = [NSString stringWithFormat:@"  •  %@", item[@"coordinates"]];
                 [cell setDesriptionLablesVisible:YES];
-                cell.icon.image = [UIImage templateImageNamed:@"ic_custom_map_pin"];
-                cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+                cell.icon.image = [UIImage imageNamed:ACImageNameIcCustomMapPin];
+                cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
                 cell.directionIcon.transform = CGAffineTransformMakeRotation([item[@"direction"] doubleValue]);
             }
         }
@@ -1054,10 +1201,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
         if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
         {
-            OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
-            vc.delegate = self;
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self presentViewController:navigationController animated:YES completion:nil];
+            [CoordinateFormatSelectorViewController presentFrom:self
+                                               selectedFormatId:_currentFormatId
+                                                        appMode:OAAppSettings.sharedManager.applicationMode.get
+                                                       delegate:self
+                                                showSelectOther:YES
+                                                gridFormatsOnly:NO];
         }
         else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
         {
@@ -1119,6 +1268,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         _eastingStr = text;
     else if (tag == EOAQuickSearchCoordinatesTextFieldZone)
         _zoneStr = text;
+    else if (tag == EOAQuickSearchCoordinatesTextFieldMaidenhead)
+        _maidenheadStr = text;
 }
 
 - (IBAction) onClearButtonClick:(UIButton *)sender
@@ -1192,12 +1343,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             hintList = @[@"+", @"C", @"F", @"G", @"H", @"J", @"M", @"P", @"Q", @"R", @"V", @"W", @"X"];
         else if (tag == EOAQuickSearchCoordinatesTextFieldMgrs)
             hintList = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"J", @"K", @"L", @"M", @"N", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
-        else if (tag == EOAQuickSearchCoordinatesTextFieldNorthing)
-            hintList = @[];
-        else if (tag == EOAQuickSearchCoordinatesTextFieldEasting)
-            hintList = @[];
+        else if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
+            hintList = (_inputMode == CoordinateSearchInputModeEastingNorthing) ? @[@"-", @"."] : @[];
         else if (tag == EOAQuickSearchCoordinatesTextFieldZone)
             hintList = @[@"N", @"S", @"C", @"D", @"E", @"F", @"G", @"H", @"J", @"K", @"L", @"M", @"P", @"Q", @"R", @"T", @"U", @"V", @"W", @"X"];
+        else if (tag == EOAQuickSearchCoordinatesTextFieldMaidenhead)
+            hintList = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X"];
     }
     _shouldHideHintBar = hintList.count == 0;
     [self updateHints:hintList];
@@ -1249,13 +1400,30 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         [_currentEditingTextField insertText:buttonText];
 }
 
-#pragma mark - OAQuickSearchCoordinateFormatsDelegate
+#pragma mark - CoordinateFormatSelectorDelegate
 
-- (void)onCoordinateFormatChanged:(NSInteger)currentFormat
+- (void)coordinateFormatSelector:(CoordinateFormatSelectorViewController *)selector
+            didSelectFormatId:(NSString *)formatId
 {
-    [self applyFormat:currentFormat forceApply:NO];
-    [self parseLocation];
+    if (![self applyFormatId:formatId forceApply:NO])
+        [self parseLocation];
     [self updateControllsSectionCells];
+}
+
+- (void)coordinateFormatSelectorDidRequestOtherFormat:(CoordinateFormatSelectorViewController *)selector
+{
+    OAApplicationMode *mode = OAAppSettings.sharedManager.applicationMode.get;
+    NSArray<NSString *> *excluded = [OAAppSettings.sharedManager.coordinateFormatSettingsStorage preferredIds:mode];
+    
+    __weak __typeof(self) weakSelf = self;
+    [CoordinateFormatSelectorRouter presentAddFrom:self appMode:mode excludedIds:excluded onSelected:^(NSString *formatId) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) return;
+        
+        if (![strongSelf applyFormatId:formatId forceApply:YES])
+            [strongSelf parseLocation];
+        [strongSelf updateControllsSectionCells];
+    }];
 }
 
 @end

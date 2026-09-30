@@ -156,7 +156,7 @@ final class AmenityUIHelper: NSObject {
                         icon = getRowIcon(typeIconKeyName)
                     }
                     if icon == nil {
-                        icon = UIImage(named: "ic_description")
+                        icon = .icDescription
                     }
                     
                     let cuisineOrDish = key == CUISINE_TAG || key == DISH_TAG

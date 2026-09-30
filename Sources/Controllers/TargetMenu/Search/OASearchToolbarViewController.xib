@@ -55,7 +55,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" name="buttonBgColorSecondary"/>
                             <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" image="ic_close.png">
+                            <state key="normal" image="ic_close">
                                 <color key="titleColor" systemColor="labelColor"/>
                             </state>
                             <connections>
@@ -71,7 +71,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_close" width="10" height="10"/>
         <image name="ic_navbar_chevron" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

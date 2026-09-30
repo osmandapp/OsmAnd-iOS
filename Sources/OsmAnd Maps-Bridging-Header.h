@@ -59,6 +59,7 @@
 #import "OAWeatherBand.h"
 #import "OADayNightHelper.h"
 #import "OALocationServices.h"
+#import "OALocationSimulation.h"
 #import "OAAppData.h"
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
@@ -124,6 +125,7 @@
 #import "OAFavoritePointBridgeItem.h"
 #import "OATrackPreviewMapRenderer.h"
 #import "OARoutingParamsDeepLinkBridge.h"
+#import "OAEpsgCoordinateTransformer.h"
 #import "OAReverseGeocoder.h"
 
 // Widgets
@@ -227,6 +229,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
 #import "OACoordinatesGridSettings.h"
+#import "OAGridFormatMappingBridge.h"
 #import "OAAddQuickActionViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OABottomSheetViewController.h"

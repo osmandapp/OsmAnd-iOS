@@ -11,7 +11,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -158,10 +158,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>net.osmand.maps</string>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>osmandmaps</string>
+				<string>$(APP_URL_SCHEME)</string>
 				<string>geo-navigation</string>
 			</array>
 		</dict>

@@ -140,7 +140,7 @@ static const NSInteger panoImageFilterSection = 2;
                              @"title" : OALocalizedString(@"mapillary_menu_title_tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
-                             @"img" : @"ic_custom_overlay_map.png"
+                             @"img" : ACImageNameIcCustomOverlayMap
                              },
                          @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
@@ -152,13 +152,13 @@ static const NSInteger panoImageFilterSection = 2;
                              @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_start_date"),
                              @"key" : @"start_date_filter",
-                             @"img" : @"ic_custom_date.png"
+                             @"img" : ACImageNameIcCustomDate
                              },
                          @{
                              @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_end_date"),
                              @"key" : @"end_date_filter",
-                             @"img" : @"ic_custom_date.png"
+                             @"img" : ACImageNameIcCustomDate
                              },
                          @{ @"type" : [OADividerCell getCellIdentifier]}
                          ]];
@@ -170,7 +170,7 @@ static const NSInteger panoImageFilterSection = 2;
                              @"type" : [OASwitchTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
-                             @"img" : @"ic_custom_coordinates.png",
+                             @"img" : ACImageNameIcCustomCoordinates,
                              @"key" : @"pano_only"
                              },
                          @{ @"type" : [OADividerCell getCellIdentifier]}

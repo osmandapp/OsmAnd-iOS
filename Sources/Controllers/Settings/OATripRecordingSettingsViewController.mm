@@ -124,7 +124,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarReset action:@selector(onRightNavbarButtonPressed) menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
     return @[rightButton];
 }
@@ -248,13 +248,13 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                  @"title" : OALocalizedString(@"save_track_to_gpx"),
                  @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
                  @"value" : _settings.saveTrackToGPX,
-                 @"img" : @"ic_custom_navigation",
+                 @"img" : ACImageNameIcCustomNavigation,
                  @"type" : OASwitchTableViewCell.reuseIdentifier },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
-                   @"img" : @"ic_custom_timer",
+                   @"img" : ACImageNameIcCustomTimer,
                    @"type" : OAValueTableViewCell.reuseIdentifier,
                    @"key" : @"nav_interval"
                }
@@ -376,20 +376,20 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                 @{
                     @"type" : OARightIconTableViewCell.reuseIdentifier,
                     @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
-                    @"img" : @"ic_custom_folder",
+                    @"img" : ACImageNameIcCustomFolder,
                     @"name" : @"open_trips"
                 },
                 @{
                     @"type" : OARightIconTableViewCell.reuseIdentifier,
                     @"title" : OALocalizedString(@"reset_plugin_to_default"),
-                    @"img" : @"ic_custom_reset",
+                    @"img" : ACImageNameIcCustomReset,
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
 //                    @"type" : [OARightIconTableViewCell getCellIdentifier],
 //                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
-//                    @"img" : @"ic_custom_folder",
+//                    @"img" : ACImageNameIcCustomFolder,
 //                    @"key" : @"open_trips"
 //                }
             ]];
@@ -402,7 +402,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
             [dataArr addObject:@{
                 @"title" : OALocalizedString(@"confirm_every_run"),
                 @"value" : @"always_ask",
-                @"img" : alwaysAsk ? @"menu_cell_selected.png" : @"",
+                @"img" : alwaysAsk ? @"menu_cell_selected" : @"",
                 @"type" : kCellTypeCheck
             }];
             for (NSNumber *num in settings.trackIntervalArray)
@@ -411,7 +411,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : [settings getFormattedTrackInterval:[num intValue]],
                     @"value" : @"",
                     @"img" : ([settings.mapSettingSaveTrackIntervalGlobal get:self.appMode] == [num intValue] && !alwaysAsk)
-                    ? @"menu_cell_selected.png" : @"",
+                    ? @"menu_cell_selected" : @"",
                     @"type" : kCellTypeCheck }];
             }
             break;
@@ -424,7 +424,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : [settings getFormattedTrackInterval:[num intValue]],
                     @"value" : @"",
                     @"img" : ([settings.mapSettingSaveTrackInterval get:self.appMode] == [num intValue])
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         }
@@ -435,7 +435,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _trackPrecisionNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
@@ -445,7 +445,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _minTrackSpeedNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
@@ -455,7 +455,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                     @"title" : _minTrackDistanceNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
-                    ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+                    ? @"menu_cell_selected" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         default:

@@ -4273,6 +4273,7 @@
 "map_widget_altitude_map_center_desc" = "Shows the elevation above sea level of the current map center.";
 
 "reset_all_settings_desc" = "Reset all settings to default?";
+"reset_all_appearance_settings_for_panel" = "Reset all appearance settings for %@?";
 "no_widgets_here_yet" = "No widgets here yet";
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
 "click_on_widget" = "Click on widget";
@@ -4360,6 +4361,9 @@
 "map_orientation_portrait" = "Portrait";
 "map_orientation_landscape" = "Landscape";
 "map_screen_orientation" = "Screen orientation";
+
+"keep_screen_on" = "Keep screen on";
+"during_navigation" = "During navigation";
 
 "change_appearance" = "Change appearance";
 "default_appearance" = "Default appearance";
@@ -5050,6 +5054,34 @@
 "calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
+
+"coordinate_format_description" = "Preferred formats for quick access from context menu and search.";
+"coordinate_format_primary" = "Primary";
+"coordinate_format_cancel_changes_title" = "Discard changes?";
+"coordinate_format_cancel_changes_message" = "Your changes to preferred formats will not be saved.";
+"coordinate_format_last_item_warning" = "At least one coordinate format is required.";
+"coordinate_format_add_title" = "Add format";
+"coordinate_format_add_search_hint" = "Search EPSG code or format name";
+"coordinate_format_add_empty_title" = "Looking for a specific format?";
+"coordinate_format_add_empty_body" = "Search a database of over 5,000 local and national EPSG codes by country, name, or ID.";
+"navigate_point_format_swiss_grid" = "Swiss Grid (CH1903)";
+"navigate_point_format_swiss_grid_plus" = "Swiss Grid (CH1903+)";
+"navigate_point_format_maidenhead" = "Maidenhead";
+"shared_string_recent" = "Recent";
+"coordinate_format_select_other" = "Select other format";
+
+"text_color" = "Text color";
+"secondary_text_color" = "Secondary text color";
+"background_color" = "Background color";
+"widget_height" = "Widget height";
+"row_height" = "Row height";
+"shared_string_transparent" = "Transparent";
+"panel_appearance_original_description" = "\"%1$s\" preserves the individual size and icon for each widget.";
+"copy_from" = "Copy from";
+"another_profile" = "Another profile";
+"custom_widget_colors" = "Custom widget colors";
+"custom_widget_colors_description" = "Improve readability on the go. Unlock full color customization to ensure perfect widget visibility against any map background, day or night.";
+"unlock_custom_colors" = "Unlock Custom Colors";
 
 "carplay_trip_via_point" = "Via %@";
 "route_calculation" = "Route calculation";

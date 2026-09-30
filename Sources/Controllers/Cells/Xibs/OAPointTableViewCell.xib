@@ -45,7 +45,7 @@
                                     <constraint firstAttribute="height" constant="30" id="mY5-so-hJK"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction.png" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-ig-6T6">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-ig-6T6">
                                 <rect key="frame" x="46" y="33" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="ceU-TM-H0U"/>
@@ -94,7 +94,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_small_direction.png" width="20" height="20"/>
+        <image name="ic_small_direction" width="20" height="20"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

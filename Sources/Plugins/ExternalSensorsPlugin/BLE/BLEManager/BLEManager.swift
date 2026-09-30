@@ -133,6 +133,7 @@ final class BLEManager {
                         var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? peripheral.name ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
+                            device.addSensors(forServices: savedDevice.serviceUUIDs ?? [])
                         }
                         NSLog("BLEManager -> Device Name: \(deviceName)")
                         device.setPeripheral(peripheral: peripheral)

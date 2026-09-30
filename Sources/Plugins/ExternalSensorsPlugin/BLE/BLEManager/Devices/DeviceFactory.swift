@@ -9,26 +9,29 @@ import Foundation
 
 final class DeviceFactory {
     static func createDevice(with uuids: [String]) -> Device? {
-        for uuid in uuids {
-            if BLEHeartRateDevice.getServiceUUID.contains(uuid) {
-                return BLEHeartRateDevice()
-            }
-            if BLETemperatureDevice.getServiceUUID.contains(uuid) {
-                return BLETemperatureDevice()
-            }
-            if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
-                return BLEBikeSCDDevice()
-            }
-            if BLERunningSCDDevice.getServiceUUID.contains(uuid) {
-                return BLERunningSCDDevice()
-            }
-            if OBDVehicleMetricsDevice.getServicesUUID.contains(where: { $0.lowercased() == uuid.lowercased() }) {
-                return OBDVehicleMetricsDevice()
-            }
+        // A sensor can advertise several services (Garmin HRM 600: running speed and cadence + heart rate).
+        // The device type is taken from the service with the highest priority, the other services add their sensors.
+        if let serviceUUID = Device.sensorServiceUUIDs.first(where: { serviceUUID in uuids.contains { Device.isService(serviceUUID, matching: $0) } }),
+           let device = makeDevice(forService: serviceUUID) {
+            device.addSensors(forServices: uuids)
+            return device
+        }
+        for uuid in uuids where OBDVehicleMetricsDevice.getServicesUUID.contains(where: { $0.lowercased() == uuid.lowercased() }) {
+            return OBDVehicleMetricsDevice()
         }
         return nil
     }
-    
+
+    private static func makeDevice(forService serviceUUID: String) -> Device? {
+        switch serviceUUID {
+        case BLEHeartRateDevice.getServiceUUID: return BLEHeartRateDevice()
+        case BLETemperatureDevice.getServiceUUID: return BLETemperatureDevice()
+        case BLEBikeSCDDevice.getServiceUUID: return BLEBikeSCDDevice()
+        case BLERunningSCDDevice.getServiceUUID: return BLERunningSCDDevice()
+        default: return nil
+        }
+    }
+
     static func makeOBDSimulatorDevice() -> OBDSimulatorVehicleMetricsDevice {
         OBDSimulatorVehicleMetricsDevice()
     }

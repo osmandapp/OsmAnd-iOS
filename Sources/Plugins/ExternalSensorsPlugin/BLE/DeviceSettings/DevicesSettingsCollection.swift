@@ -46,7 +46,14 @@ final class DevicesSettingsCollection {
         default:
             deviceSettings = DeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
         }
+        deviceSettings.serviceUUIDs = device.getSensorServiceUUIDs()
         addDeviceSettings(item: deviceSettings)
+    }
+
+    func changeServiceUUIDs(with id: String, serviceUUIDs: [String]) {
+        guard let deviceSettings = getDeviceSettings(deviceId: id) else { return }
+        deviceSettings.serviceUUIDs = serviceUUIDs
+        updateDeviceSettings(item: deviceSettings)
     }
     
     func changeDeviceName(with id: String, name: String) {

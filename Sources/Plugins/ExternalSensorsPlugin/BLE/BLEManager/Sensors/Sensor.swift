@@ -29,6 +29,11 @@ class Sensor {
         nil
     }
 
+    // Values shown on the device screen, [name: formatted value]
+    var dataFields: [[String: String]]? {
+        nil
+    }
+
     func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         nil
     }

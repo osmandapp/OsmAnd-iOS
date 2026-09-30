@@ -42,6 +42,23 @@ final class BLEBikeSensor: Sensor {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
 
+    override var dataFields: [[String: String]]? {
+        var result = [[String: String]]()
+        if let lastBikeSpeedDistanceData {
+            let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))
+            let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), with: OsmAndFormatterParams.noTrailingZeros)
+            debugPrint("speed: \(speed ?? "")")
+            debugPrint("distance: \(distance ?? "")")
+
+            result.append([localizedString("external_device_characteristic_speed"): String(speed!)])
+            result.append([localizedString("external_device_characteristic_total_distance"): String(distance!)])
+        }
+        if let lastBikeCadenceData {
+            result.append([localizedString("external_device_characteristic_cadence"): String(lastBikeCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
+        }
+        return result.isEmpty ? nil : result
+    }
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return

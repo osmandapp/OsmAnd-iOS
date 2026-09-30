@@ -15,7 +15,7 @@ final class OpeningHoursRowBehavior: DefaultPoiAdditionalRowBehaviour {
         let formattedValue = value.replacingOccurrences(of: "; ", with: "\n").replacingOccurrences(of: ",", with: ", ")
 
         if let checkDate = OpeningHoursCheckDateFormatter.format(params.openingHoursCheckDate) {
-            let caption = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("opening_hours_check_date"), checkDate)
+            let caption = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("check_date"), checkDate)
             params.builder.collapsableView = OpeningHoursCollapsableView(checkDate: caption, collapsed: true)
         } else {
             params.builder.collapsableView = OACollapsableLabelView(text: formattedValue, collapsed: true)

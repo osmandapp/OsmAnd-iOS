@@ -1090,6 +1090,15 @@ static const NSInteger _buttonsCount = 4;
     [self doLayoutSubviews:YES];
 }
 
+- (BOOL)shouldUseSingleLineAddress
+{
+    // Parking uses this label for the remaining time and parking date on separate lines.
+    if (_sliderView.hidden || _showFull || _showFullScreen || _targetPoint.type == OATargetParking)
+        return NO;
+
+    return ![self.customController getAttributedTypeStr];
+}
+
 - (CGPoint) doLayoutSubviews:(BOOL)adjustOffset
 {
     [self doUpdateUI];
@@ -1141,8 +1150,18 @@ static const NSInteger _buttonsCount = 4;
     if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
+    // Reserve one line in the collapsed menu so an asynchronously loaded address cannot
+    // change the menu height. Allow wrapping after expansion to show the full address.
+    BOOL singleLineAddress = [self shouldUseSingleLineAddress];
+    _coordinateLabel.numberOfLines = singleLineAddress ? 1 : 0;
     CGFloat coordinateHeight;
-    if (_coordinateLabel.attributedText)
+    if (singleLineAddress)
+    {
+        UIFont *typeFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        UIFont *addressFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        coordinateHeight = ceil(MAX(typeFont.lineHeight, addressFont.lineHeight));
+    }
+    else if (_coordinateLabel.attributedText)
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.attributedText width:labelPreferredWidth].height;
     else
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
@@ -1754,6 +1773,8 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         self.addressStr = _targetPoint.titleAddress;
+        // Restore the default font when reusing an attributed subtitle for plain text.
+        _coordinateLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     }
         
     [_coordinateLabel setText:self.addressStr];

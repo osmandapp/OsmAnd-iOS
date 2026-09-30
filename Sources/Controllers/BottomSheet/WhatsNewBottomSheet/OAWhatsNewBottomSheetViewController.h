@@ -11,4 +11,6 @@
 
 @interface OAWhatsNewBottomSheetViewController : OABaseBottomSheetViewController
 
++ (BOOL) hasReleaseNotes;
+
 @end

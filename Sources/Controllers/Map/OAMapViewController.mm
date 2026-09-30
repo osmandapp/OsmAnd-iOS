@@ -624,8 +624,11 @@ static char kMapSourceUpdateQueueKey;
 
     if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
     {
-        OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
-        [bottomSheet presentInViewController:self];
+        if ([OAWhatsNewBottomSheetViewController hasReleaseNotes])
+        {
+            OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
+            [bottomSheet presentInViewController:self];
+        }
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = NO;
     }
 }

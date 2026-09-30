@@ -5084,6 +5084,7 @@
 "unlock_custom_colors" = "Unlock Custom Colors";
 
 "carplay_trip_via_point" = "Via %@";
+"route_calculation" = "Route calculation";
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";
 "opening_hours_easter" = "Easter";

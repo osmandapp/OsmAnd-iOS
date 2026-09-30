@@ -167,12 +167,7 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) setPauseNavigation:(BOOL) b
 {
     _isPauseNavigation = b;
-    if (b)
-    {
-        // TODO notifications
-        //app.getNotificationHelper().updateTopNotification();
-        //app.getNotificationHelper().refreshNotifications();
-    }
+    [LiveActivityManager.shared refresh];
     [[ScreenAwakeService shared] updateIdleTimer];
 }
 
@@ -236,11 +231,23 @@ static BOOL _isDeviatedFromRoute = false;
     _isPausedDueToCarPlayDisconnect = NO;
     _isFollowingMode = follow;
     _isPauseNavigation = false;
-    if (!follow)
+    [LiveActivityManager.shared refresh];
+}
+
+// Pass a snapshot of route data to Swift.
+- (LiveActivityRouteInfo *)liveActivityRouteInfo
+{
+    @synchronized (self)
     {
-        // TODO notifications
-        //app.getNotificationHelper().updateTopNotification();
-        //app.getNotificationHelper().refreshNotifications();
+        OANextDirectionInfo *nextDirectionInfo = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+        OARouteDirectionInfo *routeDirection = nextDirectionInfo.directionInfo;
+        OASTurnType *turnType = routeDirection.turnType;
+        return [[LiveActivityRouteInfo alloc] initWithTurnType:turnType ?: [OASTurnType.companion straight]
+                                                        turnID:nextDirectionInfo ? nextDirectionInfo.directionInfoInd : -1
+                                                  turnDistance:nextDirectionInfo ? nextDirectionInfo.distanceTo : -1
+                                                   instruction:turnType ? [OARouteCalculationResult toString:turnType shortName:YES] : OALocalizedString(@"shared_string_navigation")
+                                                    streetName:routeDirection.streetName.length > 0 ? routeDirection.streetName : (routeDirection.ref ?: @"")
+                                                 totalDistance:[_route getWholeDistance]];
     }
     [[ScreenAwakeService shared] updateIdleTimer];
 }
@@ -373,6 +380,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) newRouteCalculated:(BOOL)newRoute
 {
+    [LiveActivityManager.shared refresh];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized (_listeners)
         {

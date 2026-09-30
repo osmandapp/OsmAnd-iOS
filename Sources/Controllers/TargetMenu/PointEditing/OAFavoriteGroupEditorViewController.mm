@@ -59,9 +59,9 @@
     }
 }
 
-- (EOABaseNavbarColorScheme)getNavbarColorScheme
+- (BOOL)shouldBlurAppearanceNavBar
 {
-    return self.isNewItem ? [super getNavbarColorScheme] : EOABaseNavbarColorSchemeOrange;
+    return NO;
 }
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name

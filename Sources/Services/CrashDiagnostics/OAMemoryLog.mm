@@ -536,9 +536,9 @@ static NSString *appVersion()
     NSString *state = [NSString stringWithFormat:@"pid=%d\nboot=%ld\nversion=%@\nstarted=%.0f\nupdated=%.0f\nstate=%@\nclean=%d\nlast=%@\n",
         getpid(), bootTimeSeconds(), appVersion(), _startedAt, NSDate.date.timeIntervalSince1970,
         !_becameActive ? @"launch" : _inBackground ? @"bg" : @"fg", _cleanExit ? 1 : 0, _lastSample ?: @""];
-    os_unfair_lock_unlock(&_stateLock);
     [[state dataUsingEncoding:NSUTF8StringEncoding] writeToURL:_processStateURL
         options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication error:nil];
+    os_unfair_lock_unlock(&_stateLock);
 }
 
 - (NSDictionary<NSString *, NSString *> *)readProcessState

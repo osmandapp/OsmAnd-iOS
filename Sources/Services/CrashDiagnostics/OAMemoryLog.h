@@ -19,6 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface OAMemoryLog : NSObject
 
+/// The previous process was killed or crashed while the app was on screen: set by -start.
+@property (nonatomic, readonly, nullable) NSString *uncleanExitIdentifier;
+
+@property (nonatomic, readonly) NSURL *memoryLogURL;
+@property (nonatomic, readonly) NSURL *exitInfoURL;
+@property (nonatomic, readonly) NSURL *exitMetricsURL;
+
 + (OAMemoryLog *)sharedInstance;
 
 /// Starts sampling and records how the previous process ended. Call once from the main thread.
@@ -29,13 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Called when a search starts running after the typing pause.
 - (void)onSearchRun;
-
-/// The previous process was killed or crashed while the app was on screen: set by -start.
-@property (nonatomic, readonly, nullable) NSString *uncleanExitIdentifier;
-
-@property (nonatomic, readonly) NSURL *memoryLogURL;
-@property (nonatomic, readonly) NSURL *exitInfoURL;
-@property (nonatomic, readonly) NSURL *exitMetricsURL;
 
 @end
 

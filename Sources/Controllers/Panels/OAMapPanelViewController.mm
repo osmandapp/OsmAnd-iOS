@@ -4543,7 +4543,7 @@ typedef enum
     }
 }
 
-- (void) updateRouteButton
+- (void)updateRouteButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         bool routePlanningMode = false;

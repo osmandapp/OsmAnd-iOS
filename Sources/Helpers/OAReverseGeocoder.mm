@@ -22,6 +22,7 @@
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
+#include <OsmAndCore/FunctorQueryController.h>
 
 #include <atomic>
 
@@ -219,8 +220,21 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
     
     const auto geoCriteria = std::make_shared<OsmAnd::ReverseGeocoder::Criteria>();
     geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    const auto object = geocoder->performSearch(*geoCriteria);
-    
+    const auto queryController = std::make_shared<OsmAnd::FunctorQueryController>(
+        [self]
+        (const OsmAnd::FunctorQueryController* const) -> bool
+        {
+            return self->_terminating;
+        });
+    std::shared_ptr<const OsmAnd::ReverseGeocoder::ResultEntry> object;
+    geocoder->performSearch(*geoCriteria,
+        [&object]
+        (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::BaseSearch::IResultEntry& resultEntry)
+        {
+            object = std::make_shared<const OsmAnd::ReverseGeocoder::ResultEntry>(static_cast<const OsmAnd::ReverseGeocoder::ResultEntry&>(resultEntry));
+        },
+        queryController);
+
     NSMutableString *geocodingResult = [NSMutableString string];
     if (object)
     {

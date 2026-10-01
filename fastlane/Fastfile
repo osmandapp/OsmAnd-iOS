@@ -132,6 +132,9 @@ platform :ios do
         name = nightly ? primary_info.name : validated.fetch(locale).fetch('Title')
         infos[locale] = info.create_app_info_localization(attributes: { locale: locale, name: name })
         UI.message("Enabled App Info locale #{locale}")
+        # App Store Connect may create the matching version locale automatically.
+        # Refresh before deciding whether a second create request is needed.
+        versions = version.get_app_store_version_localizations.to_h { |item| [item.locale, item] }
       end
       unless versions.key?(locale)
         versions[locale] = version.create_app_store_version_localization(attributes: { locale: locale })

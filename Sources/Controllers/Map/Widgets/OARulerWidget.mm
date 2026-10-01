@@ -44,13 +44,17 @@
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
 
-#define MAX_GLOBE_DISTANCE (M_PI * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS)
-#define MAX_VISIBLE_GLOBE_DISTANCE (MAX_GLOBE_DISTANCE / 2)
-#define PROJECTED_STEP_SLACK 4
-#define MIN_PROJECTED_STEP 24
-#define GLOBE_VISIBILITY_TOLERANCE 0.1
-#define GLOBE_VISIBILITY_MIN_TOLERANCE 4
-#define GLOBE_VISIBLE_RADIUS_MARGIN 0.9
+static const double kProjectedStepSlack = 4.0;
+static const double kMinProjectedStep = 24.0;
+static const double kGlobeVisibilityTolerance = 0.1;
+static const double kGlobeVisibilityMinTolerance = 4.0;
+static const double kGlobeVisibleRadiusMargin = 0.9;
+
+static double maxGlobeDistance()
+{
+    static const double distance = M_PI * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS;
+    return distance;
+}
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
@@ -389,9 +393,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         if ([self.class isValidGlobeDistance:globeDistance])
             referenceDistance = globeDistance;
         if (!isfinite(referenceDistance) || referenceDistance <= 0)
-            referenceDistance = MAX_GLOBE_DISTANCE;
+            referenceDistance = maxGlobeDistance();
         else
-            referenceDistance = MIN(referenceDistance, MAX_GLOBE_DISTANCE);
+            referenceDistance = MIN(referenceDistance, maxGlobeDistance());
     }
     _roundedDist = [OAOsmAndFormatter calculateRoundedDist:referenceDistance];
     _radius = _sphericalMap
@@ -461,7 +465,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     
     NSString *text = _cacheDistances[circleNumber - 1];
     double circleRadius = _radius * circleNumber;
-    NSArray *textCoords = [self calculateTextCoords:text rightOrBottomText:text drawingTextRadius:circleRadius center:center];
+    NSArray<id> *textCoords = [self calculateTextCoords:text rightOrBottomText:text drawingTextRadius:circleRadius center:center];
     [self drawTextCoords: text textCoords:textCoords font:_font];
 }
 
@@ -503,7 +507,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     }
 }
 
-- (void)drawTextCoords:(NSString *)text textCoords:(NSArray *)textCoords font:(UIFont *)font
+- (void)drawTextCoords:(NSString *)text textCoords:(NSArray<id> *)textCoords font:(UIFont *)font
 {
     NSAttributedString *distString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
     NSAttributedString *distShadowString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText alignment:NSTextAlignmentCenter];
@@ -538,7 +542,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return @[ [NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
 }
 
-- (NSArray *)calculateTextCoords:(NSString *)topOrLeftText rightOrBottomText:(NSString *)rightOrBottomText drawingTextRadius:(double)drawingTextRadius center:(CGPoint)center
+- (NSArray<id> *)calculateTextCoords:(NSString *)topOrLeftText rightOrBottomText:(NSString *)rightOrBottomText drawingTextRadius:(double)drawingTextRadius center:(CGPoint)center
 {
     CGSize boundsDistance;
     CGSize boundsHeading;
@@ -601,7 +605,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
     double drawingTextRadius = radiusLength + offset;
     
-    NSArray *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
+    NSArray<id> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
     [self drawTextCoords: heading textCoords:@[textCoords[0]] font:_boldFont];
     [self drawTextCoords: distance textCoords:@[textCoords[1]] font:_font];
 }
@@ -900,7 +904,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double targetAngle = acos(qBound(-1.0, targetAngleCos, 1.0));
     double centerOffset = OsmAnd::Utilities::distance(OsmAnd::Utilities::convert31ToLatLon(mapView.target31), [self getCenterLatLon]);
     double visibleRadius = earthRadius * (horizonAngle - targetAngle) - centerOffset;
-    return MAX(0, visibleRadius * GLOBE_VISIBLE_RADIUS_MARGIN);
+    return MAX(0, visibleRadius * kGlobeVisibleRadiusMargin);
 }
 
 - (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon screenPoint:(CGPoint)screenPoint
@@ -916,15 +920,15 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     OsmAnd::LatLon boundedLatLon(qBound(-MAX_LATITUDE_KEY, latLon.latitude, MAX_LATITUDE_KEY), latLon.longitude);
     auto frontLatLon = OsmAnd::Utilities::convert31ToLatLon(frontPos31);
-    double minTolerance = GLOBE_VISIBILITY_MIN_TOLERANCE * _cachedMapDensity * scale;
-    double tolerance = MAX(distanceFromCenter * GLOBE_VISIBILITY_TOLERANCE, minTolerance);
+    double minTolerance = kGlobeVisibilityMinTolerance * _cachedMapDensity * scale;
+    double tolerance = MAX(distanceFromCenter * kGlobeVisibilityTolerance, minTolerance);
     return OsmAnd::Utilities::distance(frontLatLon, boundedLatLon) <= tolerance;
 }
 
 - (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius
 {
     double expectedStep = 2 * ABS(pixelRadius) * sin([self toRadians:CIRCLE_ANGLE_STEP] / 2);
-    double maxProjectedStep = MAX(MIN_PROJECTED_STEP, expectedStep * PROJECTED_STEP_SLACK);
+    double maxProjectedStep = MAX(kMinProjectedStep, expectedStep * kProjectedStepSlack);
     return hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y) > maxProjectedStep;
 }
 
@@ -954,12 +958,12 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 + (BOOL) isValidGlobeDistance:(double)distance
 {
-    return isfinite(distance) && distance > 0 && distance <= MAX_GLOBE_DISTANCE;
+    return isfinite(distance) && distance > 0 && distance <= maxGlobeDistance();
 }
 
 + (BOOL) isVisibleGlobeDistance:(double)distance
 {
-    return [self isValidGlobeDistance:distance] && distance <= MAX_VISIBLE_GLOBE_DISTANCE;
+    return [self isValidGlobeDistance:distance] && distance <= maxGlobeDistance() / 2;
 }
 
 - (double) toRadians:(double)degrees

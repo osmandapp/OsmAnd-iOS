@@ -133,6 +133,7 @@ namespace
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
     NSArray<OASWptPt *> *_displayedWaypoints;
+    NSDictionary<NSString *, NSNumber *> *_displayedPointsModifiedTimes;
     BOOL _waypointsNightMode;
     std::shared_ptr<OsmAnd::GpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
@@ -199,6 +200,7 @@ namespace
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
     _waypointsMapProvider = nullptr;
     _displayedWaypoints = nil;
+    _displayedPointsModifiedTimes = nil;
     [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
@@ -1651,13 +1653,16 @@ colorizationScheme:(int)colorizationScheme
 - (void)refreshGpxWaypointsIfChanged
 {
     NSArray<OASWptPt *> *points = [self collectVisibleWaypoints];
-    if (_waypointsMapProvider && _waypointsNightMode == self.nightMode && [self isEqualToDisplayedWaypoints:points])
+    if (_waypointsMapProvider
+        && _waypointsNightMode == self.nightMode
+        && [_displayedPointsModifiedTimes isEqualToDictionary:[self collectPointsModifiedTimes]]
+        && [self isDisplayingSameWaypoints:points])
         return;
 
     [self refreshGpxWaypoints:points];
 }
 
-- (BOOL)isEqualToDisplayedWaypoints:(NSArray<OASWptPt *> *)points
+- (BOOL)isDisplayingSameWaypoints:(NSArray<OASWptPt *> *)points
 {
     if (points.count != _displayedWaypoints.count)
         return NO;
@@ -1673,30 +1678,30 @@ colorizationScheme:(int)colorizationScheme
 - (NSArray<OASWptPt *> *)collectVisibleWaypoints
 {
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-    for (NSString *key in _gpxFiles.allKeys)
+    for (NSString *key in _gpxFiles)
     {
-        OASGpxFile *value = [_gpxFiles objectForKey:key];
-        if (!value)
+        OASGpxFile *value = _gpxFiles[key];
+        NSArray<OASWptPt *> *waypoints = value.getPointsList;
+        if (waypoints.count == 0)
             continue;
 
-        if (value.getPointsList.count > 0)
+        OASGpxFile *gpx = _cachedTracks[key][@"gpxFile"] ?: value;
+        for (OASWptPt *waypoint in waypoints)
         {
-            NSString *filePath = key;
-            OASGpxFile *gpx = [_cachedTracks.allKeys containsObject:filePath]
-                    ? _cachedTracks[filePath][@"gpxFile"]
-                    : key == nil
-                        ? OASavingTrackHelper.sharedInstance.currentTrack
-                        : [self getGpxItem:QString::fromNSString(key)];
-
-            for (OASWptPt *waypoint in value.getPointsList)
-            {
-                OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
-                if (!group || !group.hidden)
-                    [points addObject:waypoint];
-            }
+            OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
+            if (!group || !group.hidden)
+                [points addObject:waypoint];
         }
     }
     return points;
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)collectPointsModifiedTimes
+{
+    NSMutableDictionary<NSString *, NSNumber *> *times = [NSMutableDictionary dictionary];
+    for (NSString *key in _gpxFiles)
+        times[key] = @(_gpxFiles[key].pointsModifiedTime);
+    return times;
 }
 
 - (void)refreshGpxWaypoints:(NSArray<OASWptPt *> *)points
@@ -1707,6 +1712,7 @@ colorizationScheme:(int)colorizationScheme
         _waypointsMapProvider = nullptr;
     }
     _displayedWaypoints = nil;
+    _displayedPointsModifiedTimes = nil;
 
     if (_gpxFiles.allKeys.count > 0)
     {
@@ -1719,6 +1725,7 @@ colorizationScheme:(int)colorizationScheme
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
         _displayedWaypoints = [points copy];
+        _displayedPointsModifiedTimes = [self collectPointsModifiedTimes];
         _waypointsNightMode = self.nightMode;
     }
 }

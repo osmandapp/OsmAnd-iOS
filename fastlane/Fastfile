@@ -40,7 +40,7 @@ def asc_app
   app
 end
 
-def metadata_context(app, allow_live: false)
+def metadata_context(app, allow_live: false, require_matching_locales: true)
   platform = Spaceship::ConnectAPI::Platform::IOS
   info = app.fetch_edit_app_info
   version = app.get_edit_app_store_version(platform: platform)
@@ -51,17 +51,17 @@ def metadata_context(app, allow_live: false)
   UI.user_error!('No matching editable App Info and iOS version') unless info && version
   info_by_locale = info.get_app_info_localizations.to_h { |item| [item.locale, item] }
   version_by_locale = version.get_app_store_version_localizations.to_h { |item| [item.locale, item] }
-  unless info_by_locale.keys.sort == version_by_locale.keys.sort
+  if require_matching_locales && info_by_locale.keys.sort != version_by_locale.keys.sort
     UI.user_error!('App Info and App Store version locale lists differ; reconcile them before publishing')
   end
-  [version, info_by_locale, version_by_locale]
+  [info, version, info_by_locale, version_by_locale]
 end
 
 platform :ios do
   desc 'Import current App Store Connect metadata into app-store/metadata.md (one time only)'
   lane :metadata_bootstrap do
     app = asc_app
-    _version, infos, versions = metadata_context(app, allow_live: true)
+    _info, _version, infos, versions = metadata_context(app, allow_live: true)
     path = File.join(AppStoreMetadata::ROOT, 'app-store', 'metadata.md')
     if File.exist?(path) && !File.read(path, encoding: 'UTF-8').include?(AppStoreMetadata::TEST_MARKER)
       UI.user_error!("#{path} already exists; refusing to overwrite Marketing edits")
@@ -98,12 +98,12 @@ platform :ios do
     source = File.read(path, encoding: 'UTF-8')
     UI.user_error!('Test metadata cannot be published; replace it with reviewed App Store copy') if source.include?(AppStoreMetadata::TEST_MARKER)
     app = asc_app
-    version, infos, versions = metadata_context(app)
+    info, version, infos, versions = metadata_context(app, require_matching_locales: false)
     records = AppStoreMetadata.parse(source)
-    # Nightly can have fewer enabled locales than the production storefront.
-    records = records.slice(*versions.keys) if METADATA_APP_ID == 'net.osmand.maps.nightly'
+    extra_locales = (infos.keys | versions.keys) - records.keys
+    UI.user_error!("App Store Connect has locales absent from metadata.md: #{extra_locales.sort.join(', ')}") unless extra_locales.empty?
     whats_new_version = METADATA_APP_ID == 'net.osmand.maps.nightly' ? NIGHTLY_WHATS_NEW_SOURCE_VERSION : version.version_string
-    resolved = AppStoreMetadata.validate(records, expected_locales: versions.keys,
+    resolved = AppStoreMetadata.validate(records, expected_locales: records.keys,
                                                   version: whats_new_version,
                                                   selected_fields: selected_fields)
     output = File.join(AppStoreMetadata::ROOT, '.generated', 'app-store-metadata')
@@ -117,6 +117,14 @@ platform :ios do
     # screenshot upload, IPA upload, version update, or App Review submission.
     completed = []
     generated.sort.each do |locale, fields|
+      unless infos.key?(locale)
+        infos[locale] = info.create_app_info_localization(attributes: { locale: locale })
+        UI.message("Enabled App Info locale #{locale}")
+      end
+      unless versions.key?(locale)
+        versions[locale] = version.create_app_store_version_localization(attributes: { locale: locale })
+        UI.message("Enabled App Store version locale #{locale}")
+      end
       version_attributes = AppStoreMetadata.version_attributes(fields)
       info_attributes = AppStoreMetadata.info_attributes(fields)
       versions.fetch(locale).update(attributes: version_attributes) unless version_attributes.empty?

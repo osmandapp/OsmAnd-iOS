@@ -4,12 +4,15 @@
 Review any edits before publishing them.
 
 The publishing workflow currently targets **OsmAnd Nightly**
-(`net.osmand.maps.nightly`) for testing. It sends data only for locales enabled
-for Nightly in App Store Connect. The checked **What's New** field uses the iOS
+(`net.osmand.maps.nightly`) for testing. It publishes selected fields for **all
+21 locales** in `metadata.md`, creating missing App Info and App Store version
+localizations in Nightly first. The checked **What's New** field uses the iOS
 localization text for version 5.4, because Nightly's editable version is 1.0.
-If any enabled Nightly locale lacks `ios_release_5_4`, validation stops before
-uploading any field. Change the target app and release-note source in the
-Fastlane configuration when moving this workflow to production.
+Some of the 21 locales do not yet have `ios_release_5_4`; selecting **What's New**
+will fail validation before any localization is created or text uploaded until
+those translations are present. For Description-only publishing, uncheck
+**What's New**. Change the target app and release-note source in the Fastlane
+configuration when moving this workflow to production.
 
 Before running the workflow, configure the `app-store-metadata` GitHub
 Environment with a required reviewer and protect the allowed branches. The workflow

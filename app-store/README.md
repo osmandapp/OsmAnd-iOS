@@ -1,26 +1,27 @@
 # App Store metadata
 
-The current `metadata.md` is a public-storefront draft for 21 locales. The
-publishing lane rejects its draft marker. Before publishing, compare it with
-App Store Connect, especially the Indonesian and Norwegian text and the blank
-Promotional Text fields.
+`metadata.md` was imported from the production App Store Connect app for 21 locales.
+Review any edits before publishing them.
 
-For a one-time App Store Connect import, run **GitHub → Actions → Import App
-Store Metadata → Run workflow** once from `master`. Download the
-`app-store-metadata-for-review` artifact, review its `metadata.md`, and add the
-reviewed file to this repository. This workflow only reads App Store Connect;
-it does not publish or commit metadata.
+The publishing workflow currently targets **OsmAnd Nightly**
+(`net.osmand.maps.nightly`) for testing. It sends data only for locales enabled
+for Nightly in App Store Connect. The checked **What's New** field uses the iOS
+localization text for version 5.4, because Nightly's editable version is 1.0.
+If any enabled Nightly locale lacks `ios_release_5_4`, validation stops before
+uploading any field. Change the target app and release-note source in the
+Fastlane configuration when moving this workflow to production.
 
-Before running either workflow, configure the `app-store-metadata` GitHub
-Environment with a required reviewer and protect release branches. The workflows
-use the existing `PUBLISH_BUILD_SECRET`, `PUBLISH_BUILD_KEY_ID`, and
+Before running the workflow, configure the `app-store-metadata` GitHub
+Environment with a required reviewer and protect the allowed branches. The workflow
+uses the existing `PUBLISH_BUILD_SECRET`, `PUBLISH_BUILD_KEY_ID`, and
 `PUBLISH_BUILD_ASC_ISSUER_ID` secrets.
 
 1. Edit `app-store/metadata.md` and commit or merge the change.
 2. Keep `@localization(help_what_is_new)` unchanged in every language.
 3. Open **GitHub → Actions → App Store Metadata → Run workflow** and select
-   the current release branch (for example, `r5.4` or `r5.5`).
+   `master` for the Nightly trial or a release branch (for example, `r5.4`).
 4. **What's New** is checked by default. Check any other fields you want to publish.
 5. If validation fails, correct the locale and field named in the error, then run it again.
 
-When validation succeeds, the workflow publishes only the checked fields. Keywords are not managed here.
+When validation succeeds, the workflow publishes only the checked fields.
+Keywords are not managed here.

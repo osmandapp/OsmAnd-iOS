@@ -14,6 +14,8 @@ DerivedData/*
 
 *.xcscmblueprint
 /build
+.generated/app-store-metadata/
+/.env.appstore
 qt-ios-prebuilt.zip*
 
 # Prebuilt ANGLE frameworks and the upstream Khronos/ANGLE headers they go with -

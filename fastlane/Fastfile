@@ -94,6 +94,9 @@ platform :ios do
   lane :metadata_publish do
     selected_fields = selected_metadata_fields
     UI.user_error!('Select at least one metadata field') if selected_fields.empty?
+    if METADATA_APP_ID == 'net.osmand.maps.nightly' && selected_fields.include?('Title')
+      UI.user_error!('Nightly cannot reuse production app names; use Nightly-specific Titles before selecting Title')
+    end
     path = File.join(AppStoreMetadata::ROOT, 'app-store', 'metadata.md')
     source = File.read(path, encoding: 'UTF-8')
     UI.user_error!('Test metadata cannot be published; replace it with reviewed App Store copy') if source.include?(AppStoreMetadata::TEST_MARKER)
@@ -103,12 +106,17 @@ platform :ios do
     extra_locales = (infos.keys | versions.keys) - records.keys
     UI.user_error!("App Store Connect has locales absent from metadata.md: #{extra_locales.sort.join(', ')}") unless extra_locales.empty?
     whats_new_version = METADATA_APP_ID == 'net.osmand.maps.nightly' ? NIGHTLY_WHATS_NEW_SOURCE_VERSION : version.version_string
-    # Apple requires a name when creating an App Info localization, even when
-    # the Title checkbox is off. Validate it before making any API changes.
+    # Creating a locale requires a name, so validate Title even when its
+    # checkbox is off. Only selected fields are sent to existing locales.
     validated = AppStoreMetadata.validate(records, expected_locales: records.keys,
                                                    version: whats_new_version,
                                                    selected_fields: selected_fields | ['Title'])
     resolved = validated.transform_values { |fields| fields.slice(*selected_fields) }
+    nightly = METADATA_APP_ID == 'net.osmand.maps.nightly'
+    primary_info = infos[app.primary_locale] if nightly
+    if nightly && (records.keys - infos.keys).any? && primary_info&.name.to_s.strip.empty?
+      UI.user_error!('Nightly primary App Info name is missing; cannot create new locales')
+    end
     output = File.join(AppStoreMetadata::ROOT, '.generated', 'app-store-metadata')
     AppStoreMetadata.generate(resolved, output)
     generated = AppStoreMetadata.read_generated(output, expected_locales: resolved.keys,
@@ -121,9 +129,8 @@ platform :ios do
     completed = []
     generated.sort.each do |locale, fields|
       unless infos.key?(locale)
-        infos[locale] = info.create_app_info_localization(attributes: {
-          locale: locale, name: validated.fetch(locale).fetch('Title')
-        })
+        name = nightly ? primary_info.name : validated.fetch(locale).fetch('Title')
+        infos[locale] = info.create_app_info_localization(attributes: { locale: locale, name: name })
         UI.message("Enabled App Info locale #{locale}")
       end
       unless versions.key?(locale)

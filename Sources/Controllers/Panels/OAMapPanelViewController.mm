@@ -4752,6 +4752,8 @@ typedef enum
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    if (updateMap && docPath.length == 0)
+        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     [self.targetMenuView applyTargetObjectChanges];
 }
 

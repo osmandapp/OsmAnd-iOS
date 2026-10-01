@@ -1854,13 +1854,19 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
-        _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        BOOL showConfigureMapButton = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible;
+        _mapSettingsButton.alpha = showConfigureMapButton ? 1. : 0.;
+        if (showConfigureMapButton)
+            _mapSettingsButton.hidden = NO;
         BOOL showCompassButton = [self shouldShowCompass] && isButtonsVisible;
         _compassButton.alpha = showCompassButton ? 1. : 0.;
         if (showCompassButton)
             _compassButton.hidden = NO;
 
-        _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        BOOL showSearchButton = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible;
+        _searchButton.alpha = showSearchButton ? 1. : 0.;
+        if (showSearchButton)
+            _searchButton.hidden = NO;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
@@ -1952,10 +1958,19 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
         _optionsMenuButton.alpha = menuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _zoomInButton.alpha = [self shouldShowZoomIn] && zoomButtonsVisible ? 1. : 0.;
-        _zoomOutButton.alpha = [self shouldShowZoomOut] && zoomButtonsVisible ? 1. : 0.;
+        BOOL showZoomInButton = [self shouldShowZoomIn] && zoomButtonsVisible;
+        _zoomInButton.alpha = showZoomInButton ? 1. : 0.;
+        if (showZoomInButton)
+            _zoomInButton.hidden = NO;
+        BOOL showZoomOutButton = [self shouldShowZoomOut] && zoomButtonsVisible;
+        _zoomOutButton.alpha = showZoomOutButton ? 1. : 0.;
+        if (showZoomOutButton)
+            _zoomOutButton.hidden = NO;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _mapModeButton.alpha = [self shouldShowMyLocation] && mapModeButtonVisible ? 1. : 0.;
+        BOOL showMyLocationButton = [self shouldShowMyLocation] && mapModeButtonVisible;
+        _mapModeButton.alpha = showMyLocationButton ? 1. : 0.;
+        if (showMyLocationButton)
+            _mapModeButton.hidden = NO;
         _driveModeButton.alpha = navigationButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 

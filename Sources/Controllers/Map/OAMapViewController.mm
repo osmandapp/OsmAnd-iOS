@@ -3465,6 +3465,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
         }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
+        }
     }];
 }
 

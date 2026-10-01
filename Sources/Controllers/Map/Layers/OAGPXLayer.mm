@@ -1730,7 +1730,7 @@ colorizationScheme:(int)colorizationScheme
     int r = [self getDefaultRadiusPoi] * textSize;
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (currentTrackGpxFile && self.mapViewController.recTrackShowing)
+    if (currentTrackGpxFile)
         activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
     for (NSString *key in activeGpx.allKeys) {
@@ -2083,7 +2083,7 @@ colorizationScheme:(int)colorizationScheme
         OASWptPt *item = (OASWptPt *)obj;
         OASGpxFile *gpxFile = nil;
         NSString *docPath = nil;
-        if (![self findGpxFile:&gpxFile docPath:&docPath containingWaypoint:item])
+        if (![[OASelectedGPXHelper instance] findGpxFile:&gpxFile path:&docPath containingWaypoint:item])
             return nil;
 
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
@@ -2093,30 +2093,6 @@ colorizationScheme:(int)colorizationScheme
         return [self getTargetPoint:wptItem touchLocation:nil];
     }
     return nil;
-}
-
-- (BOOL)findGpxFile:(OASGpxFile **)gpxFile docPath:(NSString **)docPath containingWaypoint:(OASWptPt *)waypoint
-{
-    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (currentTrack && [currentTrack.getPointsList indexOfObjectIdenticalTo:waypoint] != NSNotFound)
-    {
-        *gpxFile = currentTrack;
-        *docPath = nil;
-        return YES;
-    }
-
-    NSDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper instance].activeGpx;
-    for (NSString *path in activeGpx)
-    {
-        OASGpxFile *file = activeGpx[path];
-        if ([file.getPointsList indexOfObjectIdenticalTo:waypoint] != NSNotFound)
-        {
-            *gpxFile = file;
-            *docPath = path;
-            return YES;
-        }
-    }
-    return NO;
 }
 
 - (NSArray<NSString *> *)visibleWaypointGroupNames:(OASGpxFile *)gpxFile

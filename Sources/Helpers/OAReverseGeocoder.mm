@@ -23,6 +23,10 @@
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
 
+#include <atomic>
+
+static const NSTimeInterval kShutdownTimeout = 2.0;
+
 @interface OAReverseGeocoder ()
 
 @property (nonatomic, strong) NSCache<NSString *, NSString *> *addressCache;
@@ -32,6 +36,10 @@
 @end
 
 @implementation OAReverseGeocoder
+{
+    std::atomic<bool> _terminating;
+    dispatch_group_t _activeLookups;
+}
 
 + (OAReverseGeocoder *)instance
 {
@@ -51,6 +59,8 @@
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
         _pendingLookups = [NSMutableDictionary dictionary];
+        _terminating = false;
+        _activeLookups = dispatch_group_create();
 
         _lookupQueue = [[NSOperationQueue alloc] init];
         _lookupQueue.name = @"net.osmand.reverse-geocoder";
@@ -170,17 +180,35 @@
     }];
 }
 
+- (void)shutdown
+{
+    _terminating = true;
+    [_lookupQueue cancelAllOperations];
+    dispatch_group_wait(_activeLookups, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kShutdownTimeout * NSEC_PER_SEC)));
+}
+
 - (NSString *)performLookupAddressAtLat:(double)lat
                                     lon:(double)lon
                                objectId:(uint64_t)objectId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
-    
     NSString *cacheKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
     NSString *cachedAddress = [self cachedAddressForKey:cacheKey];
     if (cachedAddress)
         return cachedAddress;
+
+    dispatch_group_enter(_activeLookups);
+    NSString *address = _terminating ? @"" : [self geocodeAddressAtLat:lat lon:lon];
+    dispatch_group_leave(_activeLookups);
+
+    [self cacheAddress:address forKey:cacheKey];
+
+    return address;
+}
+
+- (NSString *)geocodeAddressAtLat:(double)lat lon:(double)lon
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -251,12 +279,8 @@
                 [geocodingResult appendString:sname.toNSString()];
         }
     }
-    
-    NSString *finalAddress = [geocodingResult copy];
-    
-    [self cacheAddress:finalAddress forKey:cacheKey];
-    
-    return finalAddress;
+
+    return [geocodingResult copy];
 }
 
 - (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon

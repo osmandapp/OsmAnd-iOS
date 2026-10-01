@@ -713,6 +713,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
         [buttonStack, chart, recalcSeparator, recalcBtn].forEach { card.addSubview($0) }
 
+        let recalcBtnBottomConstraint = recalcBtn.bottomAnchor.constraint(equalTo: card.bottomAnchor)
+        recalcBtnBottomConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             buttonStack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
             buttonStack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
@@ -731,7 +733,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             recalcBtn.topAnchor.constraint(equalTo: recalcSeparator.bottomAnchor),
             recalcBtn.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
             recalcBtn.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            recalcBtn.bottomAnchor.constraint(equalTo: card.bottomAnchor),
+            recalcBtnBottomConstraint,
             recalcBtn.heightAnchor.constraint(equalToConstant: 50)
         ])
 
@@ -952,12 +954,13 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         legendView.isUserInteractionEnabled = false
         legendView.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(legendView)
-
+        let legendBottomConstraint = legendView.bottomAnchor.constraint(equalTo: card.bottomAnchor)
+        legendBottomConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             legendView.topAnchor.constraint(equalTo: barChart.bottomAnchor),
             legendView.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             legendView.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            legendView.bottomAnchor.constraint(equalTo: card.bottomAnchor)
+            legendBottomConstraint
         ])
     }
 

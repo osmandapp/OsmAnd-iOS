@@ -147,7 +147,10 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
             hideSearchController()
         }
         configureNavigationButtons()
-        configureToolbar()
+        if collectionView.isEditing {
+            configureToolbar()
+        }
+
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
         lastAppliedSearchState = (isActive: false, text: searchBar.searchTextField.text ?? "")

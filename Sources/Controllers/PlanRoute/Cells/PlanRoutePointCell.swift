@@ -98,6 +98,8 @@ final class PlanRoutePointCell: UITableViewCell {
 
         let textTopConstraint = textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.verticalInset)
         let textBottomConstraint = textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.verticalInset)
+        let minimumHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
+        minimumHeightConstraint.priority = UILayoutPriority(999)
 
         NSLayoutConstraint.activate([
             deleteButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.horizontalInset),
@@ -118,7 +120,7 @@ final class PlanRoutePointCell: UITableViewCell {
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.horizontalInset),
             textTopConstraint,
             textBottomConstraint,
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumHeight)
+            minimumHeightConstraint
         ])
     }
 

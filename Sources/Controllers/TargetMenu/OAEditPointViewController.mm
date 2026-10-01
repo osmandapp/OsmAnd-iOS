@@ -781,7 +781,6 @@
         [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
         cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
         [cell.collectionView reloadData];
-        [cell layoutIfNeeded];
         return cell;
     }
     else if ([cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
@@ -870,7 +869,6 @@
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
             
             if (_needToScrollToSelectedColor)
             {

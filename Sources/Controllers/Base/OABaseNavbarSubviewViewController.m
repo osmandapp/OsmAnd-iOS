@@ -154,9 +154,11 @@
 
         subview.translatesAutoresizingMaskIntoConstraints = NO;
         [containerView addSubview:subview];
+        NSLayoutConstraint *subviewBottomConstraint = [subview.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor constant:[self subviewMargin].bottom];
+        subviewBottomConstraint.priority = 999;
         [NSLayoutConstraint activateConstraints:@[
             [subview.topAnchor constraintEqualToAnchor:containerView.topAnchor constant:[self subviewMargin].top],
-            [subview.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor constant:[self subviewMargin].bottom],
+            subviewBottomConstraint,
             [subview.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor constant:[self subviewMargin].left],
             [subview.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor constant:[self subviewMargin].right],
             _subviewHeightConstraint,

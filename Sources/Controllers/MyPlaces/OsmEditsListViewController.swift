@@ -472,11 +472,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
             applySnapshot()
         }
+        configureToolbar()
         navigationController?.setToolbarHidden(!isEdit, animated: true)
         myPlacesDelegate?.updateEditMode(isEdit)
         setupNavbar()
         updateNavigationBarTitle()
-        configureToolbar()
     }
 
     private func createSortMenu() -> UIMenu {

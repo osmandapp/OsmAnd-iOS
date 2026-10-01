@@ -1138,6 +1138,7 @@
 		DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */; };
 		DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */; };
 		DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */; };
+		295600000000000000000003 /* OADownloadMapLayerHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 295600000000000000000002 /* OADownloadMapLayerHelper.mm */; };
 		DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */; };
 		DA5A81A226C563A700F274C7 /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */; };
 		DA5A81A326C563A700F274C7 /* OASelectMapSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */; };
@@ -4043,6 +4044,8 @@
 		DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
 		DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapProgressViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapProgressViewController.xib; sourceTree = "<group>"; };
+		295600000000000000000001 /* OADownloadMapLayerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMapLayerHelper.h; sourceTree = "<group>"; };
+		295600000000000000000002 /* OADownloadMapLayerHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapLayerHelper.mm; sourceTree = "<group>"; };
 		DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapProgressViewController.h; sourceTree = "<group>"; };
 		DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectMapSourceViewController.mm; sourceTree = "<group>"; };
@@ -7794,6 +7797,8 @@
 				DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */,
 				DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */,
 				DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */,
+				295600000000000000000001 /* OADownloadMapLayerHelper.h */,
+				295600000000000000000002 /* OADownloadMapLayerHelper.mm */,
 				DA5A7A2D26C563A000F274C7 /* OADownloadMapViewController.h */,
 				DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */,
 				DA5A7A2C26C563A000F274C7 /* OADownloadMapViewController.xib */,
@@ -12914,6 +12919,7 @@
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
 				27E3429C2FADD420008416B6 /* MyPlacesContainerViewController.swift in Sources */,
 				DA5A834A26C563A800F274C7 /* OAWaypointHeaderCell.m in Sources */,
+				295600000000000000000003 /* OADownloadMapLayerHelper.mm in Sources */,
 				DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */,
 				DA5A846F26C563A900F274C7 /* OABearingWidgetState.m in Sources */,
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "OATargetPoint.h"
+#import "OADownloadMapLayerHelper.h"
 #import "OATargetPointView.h"
 #import "OACommonTypes.h"
 #import "OABaseTrackMenuHudViewController.h"
@@ -190,7 +191,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithNewGpxWptMovableTarget:(OASTrackItem *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen showRouteOnMap:(BOOL)showRouteOnMap;
-- (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
+- (void)openTargetViewWithDownloadMapSource:(BOOL)pushed layer:(EOADownloadMapLayer)layer;
 
 - (BOOL) hasGpxActiveTargetType;
 

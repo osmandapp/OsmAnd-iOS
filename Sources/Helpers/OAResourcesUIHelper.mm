@@ -2178,8 +2178,8 @@ includeHidden:(BOOL)includeHidden
 
         int left = (int) floor(tileArea.left());
         int top = (int) floor(tileArea.top());
-        int width = (int) (ceil(tileArea.right()) - left);
-        int height = (int) (ceil(tileArea.bottom()) - top);
+        int width = (int) (ceil(tileArea.right()) - left) + 1;
+        int height = (int) (ceil(tileArea.bottom()) - top) + 1;
 
         if ([resource isKindOfClass:OASqliteDbResourceItem.class])
         {

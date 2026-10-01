@@ -3888,7 +3888,7 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithDownloadMapSource:(BOOL)pushed
+- (void)openTargetViewWithDownloadMapSource:(BOOL)pushed layer:(EOADownloadMapLayer)layer
 {
     [_mapViewController hideContextPinMarker];
 
@@ -3896,6 +3896,7 @@ typedef enum
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
 
     targetPoint.type = OATargetDownloadMapSource;
+    targetPoint.targetObj = @(layer);
 
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
     targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);

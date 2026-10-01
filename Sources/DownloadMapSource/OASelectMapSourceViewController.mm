@@ -35,7 +35,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @implementation OASelectMapSourceViewController
 {
-    OsmAndAppInstance _app;
     NSArray *_onlineMapSources;
 }
 
@@ -48,7 +47,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _app = [OsmAndApp instance];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
@@ -147,7 +145,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         img = [UIImage imageNamed:ACImageNameIcCustomMapOnline];
         cell.titleLabel.text = caption;
         cell.leftIconView.image = img;
-        if ([_app.data.lastMapSource isEqual:itemMapSource])
+        if ([[OADownloadMapLayerHelper mapSourceForLayer:self.layer] isEqual:itemMapSource])
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -164,7 +162,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
         itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
     
-    _app.data.lastMapSource = itemMapSource;
+    if (!itemMapSource || ![OAResourcesUIHelper getOnlineRasterMapSourcesBySource][itemMapSource])
+        return;
+    [OADownloadMapLayerHelper setMapSource:itemMapSource forLayer:self.layer];
     if (self.delegate)
         [self.delegate onNewSourceSelected];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];

@@ -9,6 +9,7 @@
 #import "OAAlertBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OATitleIconRoundCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "Localization.h"
@@ -40,6 +41,7 @@
     NSString *_cancelTitle;
     NSArray<NSString *> *_selectableItemsTitles;
     NSArray<NSString *> *_selectableItemsImages;
+    NSArray<NSString *> *_selectableItemsDescriptions;
     OAAlertBottomSheetDoneCompletionBlock _doneCompletitionBlock;
     OAAlertBottomSheetSelectCompletionBlock _selectCompletitionBlock;
     
@@ -78,6 +80,14 @@
 {
     OAAlertBottomSheetViewController *bottomSheet = [[OAAlertBottomSheetViewController alloc] initWithTitle:title titleIcon:titleIcon message:message cancelTitle:cancelTitle doneTitle:doneTitle selectableItemsTitles:selectableItemsTitles selectableItemsImages:selectableItemsImages contentView:nil doneColpletition:doneColpletition selectColpletition:selectColpletition];
     
+    [bottomSheet presentInViewController:OARootViewController.instance];
+}
+
++ (void)showAlertWithTitle:(NSString *)title selectableItemsTitles:(NSArray<NSString *> *)titles descriptions:(NSArray<NSString *> *)descriptions images:(NSArray<NSString *> *)images selection:(OAAlertBottomSheetSelectCompletionBlock)selection
+{
+    OAAlertBottomSheetViewController *bottomSheet = [[OAAlertBottomSheetViewController alloc] initWithTitle:title titleIcon:nil message:nil cancelTitle:nil doneTitle:nil selectableItemsTitles:titles selectableItemsImages:images contentView:nil doneColpletition:nil selectColpletition:selection];
+    bottomSheet->_selectableItemsDescriptions = [descriptions copy];
+    [bottomSheet generateData];
     [bottomSheet presentInViewController:OARootViewController.instance];
 }
 
@@ -120,7 +130,9 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = _selectableItemsDescriptions ? UITableViewCellSeparatorStyleSingleLine : UITableViewCellSeparatorStyleNone;
+    if (_selectableItemsDescriptions)
+        self.tableView.estimatedRowHeight = 72.;
     
     self.headerDividerView.hidden = YES;
     self.buttonsSectionDividerView.hidden = YES;
@@ -150,6 +162,16 @@
         [self.rightButton removeFromSuperview];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (_selectableItemsDescriptions && ![self.traitCollection.preferredContentSizeCategory isEqualToString:previousTraitCollection.preferredContentSizeCategory])
+    {
+        [self.tableView reloadData];
+        [self adjustFrame];
+    }
+}
+
 - (void) applyLocalization
 {
     self.titleView.text = _title ? _title : @"";
@@ -174,7 +196,19 @@
     if (_message)
         contentHeight += [OAUtilities calculateTextBounds:_message width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height + kLabelVerticalMargin * 3;
     
-    if (_selectableItemsTitles && _selectableItemsTitles.count > 0)
+    if (_selectableItemsDescriptions)
+    {
+        CGFloat textWidth = MAX(1., width - 64.);
+        for (NSUInteger i = 0; i < _selectableItemsTitles.count; i++)
+        {
+            contentHeight += [OAUtilities calculateTextBounds:_selectableItemsTitles[i] width:textWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
+            if (i < _selectableItemsDescriptions.count)
+                contentHeight += [OAUtilities calculateTextBounds:_selectableItemsDescriptions[i] width:textWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+            contentHeight += 32.;
+        }
+        contentHeight += 2 * kVerticalMargin;
+    }
+    else if (_selectableItemsTitles && _selectableItemsTitles.count > 0)
         contentHeight += _selectableItemsTitles.count * kApproximateCellHeight + 2 * kVerticalMargin;
     
     CGFloat height = headerHeight + contentHeight + [self buttonsViewHeight];
@@ -209,7 +243,8 @@
                 image = _selectableItemsImages[i];
             
             [actionSection addObject: @{
-                @"type" : [OATitleIconRoundCell getCellIdentifier],
+                @"type" : _selectableItemsDescriptions ? [OASimpleTableViewCell getCellIdentifier] : [OATitleIconRoundCell getCellIdentifier],
+                @"description" : i < _selectableItemsDescriptions.count ? _selectableItemsDescriptions[i] : @"",
                 @"title" : title,
                 @"img" : image,
                 @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
@@ -235,7 +270,30 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+            cell = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil].firstObject;
+        [cell leftEditButtonVisibility:NO];
+        [cell leftIconVisibility:YES];
+        [cell descriptionVisibility:YES];
+        cell.titleLabel.text = item[@"title"];
+        cell.descriptionLabel.text = item[@"description"];
+        cell.titleLabel.numberOfLines = 0;
+        cell.descriptionLabel.numberOfLines = 0;
+        cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        cell.titleLabel.adjustsFontForContentSizeCategory = YES;
+        cell.descriptionLabel.adjustsFontForContentSizeCategory = YES;
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+        cell.backgroundColor = UIColor.clearColor;
+        return cell;
+    }
+    else if ([type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         OATitleIconRoundCell* cell = nil;
         cell = [tableView dequeueReusableCellWithIdentifier:[OATitleIconRoundCell getCellIdentifier]];
@@ -325,6 +383,8 @@
     
     if (key)
     {
+        if (_selectableItemsDescriptions)
+            self.view.userInteractionEnabled = NO;
         [self hide:YES completion:^{
             if (_selectCompletitionBlock)
                 _selectCompletitionBlock([key intValue]);

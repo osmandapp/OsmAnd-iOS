@@ -395,8 +395,20 @@
     [self dismiss:sender animated:YES];
 }
 
-- (void) dismiss:(nullable id)sender animated:(BOOL)animated
+- (void)dismissWithCompletion:(nullable dispatch_block_t)completion
 {
+    [self dismiss:nil animated:YES completion:completion];
+}
+
+- (void)dismiss:(nullable id)sender animated:(BOOL)animated
+{
+    [self dismiss:sender animated:animated completion:nil];
+}
+
+- (void)dismiss:(nullable id)sender animated:(BOOL)animated completion:(nullable dispatch_block_t)completion
+{
+    if (_hiding)
+        return;
     _hiding = YES;
     self.visible = NO;
     
@@ -421,6 +433,8 @@
         _hiding = NO;
 
         [[OABottomSheetViewStack sharedInstance] pop:self];
+        if (completion)
+            completion();
     }];
 }
 

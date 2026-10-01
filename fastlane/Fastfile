@@ -106,15 +106,16 @@ platform :ios do
     extra_locales = (infos.keys | versions.keys) - records.keys
     UI.user_error!("App Store Connect has locales absent from metadata.md: #{extra_locales.sort.join(', ')}") unless extra_locales.empty?
     whats_new_version = METADATA_APP_ID == 'net.osmand.maps.nightly' ? NIGHTLY_WHATS_NEW_SOURCE_VERSION : version.version_string
-    resolved = AppStoreMetadata.validate(records, expected_locales: records.keys,
-                                                  version: whats_new_version,
-                                                  selected_fields: selected_fields)
-    # Apple requires a name for each new App Info locale. Use this app's own
-    # primary name when Title is unchecked; production titles belong to a
-    # different app and cannot be reused by Nightly.
-    primary_info = infos[app.primary_locale]
-    if (records.keys - infos.keys).any? && !selected_fields.include?('Title') && primary_info&.name.to_s.strip.empty?
-      UI.user_error!('Primary App Info name is missing; cannot create new locales')
+    # Creating a locale requires a name, so validate Title even when its
+    # checkbox is off. Only selected fields are sent to existing locales.
+    validated = AppStoreMetadata.validate(records, expected_locales: records.keys,
+                                                   version: whats_new_version,
+                                                   selected_fields: selected_fields | ['Title'])
+    resolved = validated.transform_values { |fields| fields.slice(*selected_fields) }
+    nightly = METADATA_APP_ID == 'net.osmand.maps.nightly'
+    primary_info = infos[app.primary_locale] if nightly
+    if nightly && (records.keys - infos.keys).any? && primary_info&.name.to_s.strip.empty?
+      UI.user_error!('Nightly primary App Info name is missing; cannot create new locales')
     end
     output = File.join(AppStoreMetadata::ROOT, '.generated', 'app-store-metadata')
     AppStoreMetadata.generate(resolved, output)
@@ -128,7 +129,7 @@ platform :ios do
     completed = []
     generated.sort.each do |locale, fields|
       unless infos.key?(locale)
-        name = selected_fields.include?('Title') ? resolved.fetch(locale).fetch('Title') : primary_info.name
+        name = nightly ? primary_info.name : validated.fetch(locale).fetch('Title')
         infos[locale] = info.create_app_info_localization(attributes: { locale: locale, name: name })
         UI.message("Enabled App Info locale #{locale}")
       end

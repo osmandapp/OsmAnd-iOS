@@ -12,7 +12,8 @@ Apple requires an app name when a new App Info localization is created. When
 Title is unchecked, the workflow uses Nightly's existing primary app name for
 new locales. Production Titles in `metadata.md` already belong to the main app,
 so the Title checkbox is blocked for Nightly until Nightly-specific names are
-provided. Existing app names are not changed when Title is unchecked.
+provided. Once the target changes to the main app, new locales use their Title
+from `metadata.md`; existing app names are changed only when Title is checked.
 Some of the 21 locales do not yet have `ios_release_5_4`; selecting **What's New**
 will fail validation before any localization is created or text uploaded until
 those translations are present. For Description-only publishing, uncheck

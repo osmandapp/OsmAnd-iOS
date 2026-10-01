@@ -1,5 +1,3 @@
-<!-- LOCAL TEST ONLY - DO NOT PUBLISH -->
-
 ## ar-SA
 
 Title:
@@ -34,7 +32,6 @@ OsmAnd هو تطبيق للخرائط والملاحة دون اتصال بال�
 
 شروط الاستخدام: https://osmand.net/docs/legal/terms-of-use
 سياسة الخصوصية: https://osmand.net/docs/legal/privacy-policy
-
 
 ## cs
 
@@ -71,7 +68,6 @@ OsmAnd je postaven na OpenStreetMap a vyvíjen jako open-source projekt. Je šet
 Podmínky použití: https://osmand.net/docs/legal/terms-of-use
 Zásady ochrany osobních údajů: https://osmand.net/docs/legal/privacy-policy
 
-
 ## da
 
 Title:
@@ -106,7 +102,6 @@ OsmAnd er bygget på OpenStreetMap og udviklet som et open source-projekt. Appen
 
 Vilkår for brug: https://osmand.net/docs/legal/terms-of-use
 Privatlivspolitik: https://osmand.net/docs/legal/privacy-policy
-
 
 ## de-DE
 
@@ -143,7 +138,6 @@ OsmAnd basiert auf OpenStreetMap und wird als Open-Source-Projekt entwickelt. Di
 Nutzungsbedingungen: https://osmand.net/docs/legal/terms-of-use
 Datenschutzerklärung: https://osmand.net/docs/legal/privacy-policy
 
-
 ## el
 
 Title:
@@ -178,7 +172,6 @@ Description:
 
 Όροι Χρήσης: https://osmand.net/docs/legal/terms-of-use
 Πολιτική Απορρήτου: https://osmand.net/docs/legal/privacy-policy
-
 
 ## en-US
 
@@ -215,7 +208,6 @@ Built on OpenStreetMap and developed as an open-source project, OsmAnd is privac
 Terms of Use: https://osmand.net/docs/legal/terms-of-use
 Privacy Policy: https://osmand.net/docs/legal/privacy-policy
 
-
 ## es-ES
 
 Title:
@@ -250,7 +242,6 @@ Basada en OpenStreetMap y desarrollada como un proyecto de código abierto, OsmA
 
 Términos de uso: https://osmand.net/docs/legal/terms-of-use
 Política de privacidad: https://osmand.net/docs/legal/privacy-policy
-
 
 ## fr-FR
 
@@ -287,7 +278,6 @@ Basé sur OpenStreetMap et développé comme un projet open source, OsmAnd respe
 Conditions d'utilisation : https://osmand.net/docs/legal/terms-of-use
 Politique de confidentialité : https://osmand.net/docs/legal/privacy-policy
 
-
 ## hu
 
 Title:
@@ -323,14 +313,13 @@ Az OsmAnd az OpenStreetMapre épül, és nyílt forráskódú projektként fejle
 Felhasználási feltételek: https://osmand.net/docs/legal/terms-of-use
 Adatvédelmi irányelvek: https://osmand.net/docs/legal/privacy-policy
 
-
 ## id
 
 Title:
-OsmAnd Maps Travel & Navigate
+OsmAnd Peta & Navigasi Offline
 
 Subtitle:
-Top-rated mobile trip planner
+Perencana perjalanan terbaik
 
 Promotional Text:
 
@@ -339,26 +328,25 @@ What's New:
 @localization(help_what_is_new)
 
 Description:
-OsmAnd is an offline maps and navigation app for people who want reliable guidance, detailed maps, and full control over their routes. Download complete maps by country or region, search by address, place, or coordinates, and navigate with turn-by-turn voice guidance — even without internet access.
+OsmAnd adalah aplikasi peta offline dan navigasi untuk orang-orang yang menginginkan panduan yang andal, peta yang detail, dan kendali penuh atas rute mereka. Unduh peta lengkap berdasarkan negara atau wilayah, cari berdasarkan alamat, tempat, atau koordinat, lalu bernavigasi dengan panduan suara belokan demi belokan — bahkan tanpa akses internet.
 
-With OsmAnd, you can:
+Dengan OsmAnd, Anda dapat:
 
-· Navigate offline for driving, cycling, walking, hiking, and more
-· Plan routes with intermediate stops and automatic rerouting
-· Use detailed OpenStreetMap-based maps with POIs, Favorites, and customizable overlays
-· Display, record, import, and navigate GPX tracks
-· Explore foot, hiking, and bike paths included in offline maps
-· Add contour lines and hillshading for better terrain awareness
-· Get lane guidance, street names, ETA, and optional screen alerts
-· Keep maps on your device for dependable use at home, abroad, and in remote areas
+· Bernavigasi secara offline untuk berkendara, bersepeda, berjalan kaki, mendaki, dan lainnya
+· Merencanakan rute dengan pemberhentian antara dan pengalihan rute otomatis
+· Menggunakan peta detail berbasis OpenStreetMap dengan POI, Favorit, dan overlay yang dapat disesuaikan
+· Menampilkan, merekam, mengimpor, dan menavigasi trek GPX
+· Menjelajahi jalur jalan kaki, pendakian, dan sepeda yang termasuk dalam peta offline
+· Menambahkan garis kontur dan bayangan relief untuk pemahaman medan yang lebih baik
+· Mendapatkan panduan lajur, nama jalan, ETA, dan peringatan layar opsional
+· Menyimpan peta di perangkat Anda untuk penggunaan yang andal di rumah, di luar negeri, dan di area terpencil
 
-OsmAnd is built for everyday navigation, travel, and outdoor exploration. It combines offline reliability with powerful route planning, detailed map data, and advanced tools for users who want more than a basic navigation app.
+OsmAnd dibuat untuk navigasi sehari-hari, perjalanan, dan penjelajahan luar ruangan. Aplikasi ini menggabungkan keandalan offline dengan perencanaan rute yang kuat, data peta yang detail, dan alat lanjutan bagi pengguna yang menginginkan lebih dari sekadar aplikasi navigasi dasar.
 
-Built on OpenStreetMap and developed as an open-source project, OsmAnd is privacy-friendly and gives you control over your data and app access. Maps are available worldwide and updated regularly, with optional hourly updates through Live Updates feature.
+Dibangun di atas OpenStreetMap dan dikembangkan sebagai proyek open-source, OsmAnd ramah terhadap privasi dan memberi Anda kendali atas data serta akses aplikasi Anda. Peta tersedia di seluruh dunia dan diperbarui secara berkala, dengan pembaruan opsional setiap jam melalui fitur Live Updates.
 
-Terms of Use: https://osmand.net/docs/legal/terms-of-use
-Privacy Policy: https://osmand.net/docs/legal/privacy-policy
-
+Ketentuan Penggunaan: https://osmand.net/docs/legal/terms-of-use
+Kebijakan Privasi: https://osmand.net/docs/legal/privacy-policy
 
 ## it
 
@@ -395,7 +383,6 @@ Basata su OpenStreetMap e sviluppata come progetto open source, OsmAnd è attent
 Termini di utilizzo: https://osmand.net/docs/legal/terms-of-use
 Informativa sulla privacy: https://osmand.net/docs/legal/privacy-policy
 
-
 ## ja
 
 Title:
@@ -430,7 +417,6 @@ OsmAndはOpenStreetMapを基盤とし、オープンソースプロジェクト�
 
 利用規約: https://osmand.net/docs/legal/terms-of-use
 プライバシーポリシー: https://osmand.net/docs/legal/privacy-policy
-
 
 ## ko
 
@@ -467,7 +453,6 @@ OsmAnd는 OpenStreetMap을 기반으로 하며 오픈소스 프로젝트로 개�
 이용 약관: https://osmand.net/docs/legal/terms-of-use
 개인정보 처리방침: https://osmand.net/docs/legal/privacy-policy
 
-
 ## nl-NL
 
 Title:
@@ -503,14 +488,13 @@ OsmAnd is gebaseerd op OpenStreetMap en wordt ontwikkeld als een open-sourceproj
 Gebruiksvoorwaarden: https://osmand.net/docs/legal/terms-of-use
 Privacybeleid: https://osmand.net/docs/legal/privacy-policy
 
-
 ## no
 
 Title:
-OsmAnd Maps Travel & Navigate
+OsmAnd — Kart & GPS offline
 
 Subtitle:
-Top-rated mobile trip planner
+Best vurdert reiseplanlegger
 
 Promotional Text:
 
@@ -519,26 +503,25 @@ What's New:
 @localization(help_what_is_new)
 
 Description:
-OsmAnd is an offline maps and navigation app for people who want reliable guidance, detailed maps, and full control over their routes. Download complete maps by country or region, search by address, place, or coordinates, and navigate with turn-by-turn voice guidance — even without internet access.
+OsmAnd er en app for offlinekart og navigasjon for personer som ønsker pålitelig veiledning, detaljerte kart og full kontroll over rutene sine. Last ned komplette kart etter land eller region, søk etter adresse, sted eller koordinater, og naviger med sving-for-sving stemmeveiledning — selv uten internettilgang.
 
-With OsmAnd, you can:
+Med OsmAnd kan du:
 
-· Navigate offline for driving, cycling, walking, hiking, and more
-· Plan routes with intermediate stops and automatic rerouting
-· Use detailed OpenStreetMap-based maps with POIs, Favorites, and customizable overlays
-· Display, record, import, and navigate GPX tracks
-· Explore foot, hiking, and bike paths included in offline maps
-· Add contour lines and hillshading for better terrain awareness
-· Get lane guidance, street names, ETA, and optional screen alerts
-· Keep maps on your device for dependable use at home, abroad, and in remote areas
+· Navigere offline for bilkjøring, sykling, gange, fotturer og mer
+· Planlegge ruter med mellomstopp og automatisk omruting
+· Bruke detaljerte OpenStreetMap-baserte kart med interessepunkter, Favoritter og tilpassbare overlegg
+· Vise, registrere, importere og navigere GPX-spor
+· Utforske gangstier, turstier og sykkelruter som er inkludert i offlinekartene
+· Legge til høydekurver og terrengskyggelegging for bedre forståelse av terrenget
+· Få kjørefeltveiledning, gatenavn, beregnet ankomsttid og valgfrie skjermvarsler
+· Beholde kart på enheten din for pålitelig bruk hjemme, i utlandet og i avsidesliggende områder
 
-OsmAnd is built for everyday navigation, travel, and outdoor exploration. It combines offline reliability with powerful route planning, detailed map data, and advanced tools for users who want more than a basic navigation app.
+OsmAnd er utviklet for daglig navigasjon, reiser og utforsking utendørs. Det kombinerer pålitelighet uten nett med kraftig ruteplanlegging, detaljerte kartdata og avanserte verktøy for brukere som ønsker mer enn en grunnleggende navigasjonsapp.
 
-Built on OpenStreetMap and developed as an open-source project, OsmAnd is privacy-friendly and gives you control over your data and app access. Maps are available worldwide and updated regularly, with optional hourly updates through Live Updates feature.
+OsmAnd er bygget på OpenStreetMap og utviklet som et åpen kildekode-prosjekt. Appen er personvernvennlig og gir deg kontroll over dataene dine og appens tilgang. Kart er tilgjengelige over hele verden og oppdateres regelmessig, med valgfrie timevise oppdateringer gjennom funksjonen Live Updates.
 
-Terms of Use: https://osmand.net/docs/legal/terms-of-use
-Privacy Policy: https://osmand.net/docs/legal/privacy-policy
-
+Vilkår for bruk: https://osmand.net/docs/legal/terms-of-use
+Personvernerklæring: https://osmand.net/docs/legal/privacy-policy
 
 ## pl
 
@@ -575,7 +558,6 @@ OsmAnd bazuje na OpenStreetMap i jest rozwijany jako projekt open source. Szanuj
 Warunki użytkowania: https://osmand.net/docs/legal/terms-of-use
 Polityka prywatności: https://osmand.net/docs/legal/privacy-policy
 
-
 ## pt-PT
 
 Title:
@@ -610,7 +592,6 @@ Baseado no OpenStreetMap e desenvolvido como um projeto de código aberto, o Osm
 
 Termos de Utilização: https://osmand.net/docs/legal/terms-of-use
 Política de Privacidade: https://osmand.net/docs/legal/privacy-policy
-
 
 ## ro
 
@@ -647,7 +628,6 @@ Bazat pe OpenStreetMap și dezvoltat ca proiect open-source, OsmAnd respectă co
 Termeni de utilizare: https://osmand.net/docs/legal/terms-of-use
 Politica de confidențialitate: https://osmand.net/docs/legal/privacy-policy
 
-
 ## ru
 
 Title:
@@ -683,7 +663,6 @@ OsmAnd основан на OpenStreetMap и разрабатывается ка�
 Условия использования: https://osmand.net/docs/legal/terms-of-use
 Политика конфиденциальности: https://osmand.net/docs/legal/privacy-policy
 
-
 ## sv
 
 Title:
@@ -718,7 +697,6 @@ OsmAnd bygger på OpenStreetMap och utvecklas som ett projekt med öppen källko
 
 Användarvillkor: https://osmand.net/docs/legal/terms-of-use
 Integritetspolicy: https://osmand.net/docs/legal/privacy-policy
-
 
 ## tr
 

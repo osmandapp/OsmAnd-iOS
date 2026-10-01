@@ -5,6 +5,9 @@ require_relative '../Scripts/app_store_metadata/auth'
 
 default_platform(:ios)
 
+METADATA_APP_ID = 'net.osmand.maps.nightly'
+NIGHTLY_WHATS_NEW_SOURCE_VERSION = '5.4.0'
+
 UPLOAD_FLAGS = {
   'Title' => 'UPLOAD_TITLE',
   'Subtitle' => 'UPLOAD_SUBTITLE',
@@ -32,8 +35,8 @@ def asc_app
     is_key_content_base64: false,
     in_house: false
   )
-  app = Spaceship::ConnectAPI::App.find('net.osmand.maps')
-  UI.user_error!('OsmAnd was not found in App Store Connect') unless app
+  app = Spaceship::ConnectAPI::App.find(METADATA_APP_ID)
+  UI.user_error!("#{METADATA_APP_ID} was not found in App Store Connect") unless app
   app
 end
 
@@ -97,15 +100,18 @@ platform :ios do
     app = asc_app
     version, infos, versions = metadata_context(app)
     records = AppStoreMetadata.parse(source)
+    # Nightly can have fewer enabled locales than the production storefront.
+    records = records.slice(*versions.keys) if METADATA_APP_ID == 'net.osmand.maps.nightly'
+    whats_new_version = METADATA_APP_ID == 'net.osmand.maps.nightly' ? NIGHTLY_WHATS_NEW_SOURCE_VERSION : version.version_string
     resolved = AppStoreMetadata.validate(records, expected_locales: versions.keys,
-                                                  version: version.version_string,
+                                                  version: whats_new_version,
                                                   selected_fields: selected_fields)
     output = File.join(AppStoreMetadata::ROOT, '.generated', 'app-store-metadata')
     AppStoreMetadata.generate(resolved, output)
     generated = AppStoreMetadata.read_generated(output, expected_locales: resolved.keys,
                                                        selected_fields: selected_fields)
     UI.user_error!('Generated metadata differs from validated values; nothing was uploaded') unless generated == resolved
-    UI.message("Validated #{selected_fields.join(', ')} for #{resolved.length} locales; beginning upload")
+    UI.message("Validated #{selected_fields.join(', ')} for #{METADATA_APP_ID} version #{version.version_string} (#{resolved.length} locales); beginning upload")
 
     # Every write has an explicit allowlist. In particular there is no keywords key,
     # screenshot upload, IPA upload, version update, or App Review submission.
@@ -120,7 +126,7 @@ platform :ios do
     end
     if ENV['GITHUB_STEP_SUMMARY']
       File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'a') do |summary|
-        summary.puts "## App Store Metadata\n\nPublished version #{version.version_string} for #{resolved.length} locales.\n\nFields: #{selected_fields.join(', ')}.\n\nLocales: #{completed.join(', ')}."
+        summary.puts "## App Store Metadata\n\nPublished #{METADATA_APP_ID} version #{version.version_string} for #{resolved.length} locales.\n\nFields: #{selected_fields.join(', ')}.\n\nLocales: #{completed.join(', ')}."
       end
     end
   rescue AppStoreMetadata::Error, Errno::ENOENT => e

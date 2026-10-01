@@ -1,0 +1,40 @@
+name: Import App Store Metadata
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    if: github.ref == 'refs/heads/master'
+    runs-on: macos-15
+    environment: app-store-metadata
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Import from App Store Connect (no publication)
+        env:
+          ASC_KEY_ID: ${{ secrets.PUBLISH_BUILD_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.PUBLISH_BUILD_ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.PUBLISH_BUILD_SECRET }}
+        run: bundle exec fastlane ios metadata_bootstrap
+      - name: Check imported file
+        run: |
+          test -s app-store/metadata.md
+          if grep -Fq 'LOCAL TEST ONLY - DO NOT PUBLISH' app-store/metadata.md; then
+            echo 'Import did not replace the public draft' >&2
+            exit 1
+          fi
+      - name: Save metadata for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-store-metadata-for-review
+          path: app-store/metadata.md
+          if-no-files-found: error
+          retention-days: 7

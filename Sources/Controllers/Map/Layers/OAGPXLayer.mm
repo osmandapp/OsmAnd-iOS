@@ -1730,7 +1730,7 @@ colorizationScheme:(int)colorizationScheme
     int r = [self getDefaultRadiusPoi] * textSize;
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (currentTrackGpxFile)
+    if (currentTrackGpxFile && self.mapViewController.recTrackShowing)
         activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
     for (NSString *key in activeGpx.allKeys) {
@@ -1805,7 +1805,7 @@ colorizationScheme:(int)colorizationScheme
 
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (currentTrackGpxFile)
+    if (currentTrackGpxFile && self.mapViewController.recTrackShowing)
         activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
     for (NSString *key in activeGpx.allKeys)

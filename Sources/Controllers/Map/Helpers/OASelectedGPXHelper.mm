@@ -199,16 +199,31 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 
 - (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt
 {
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if ([self gpxFile:currentTrack containsIdenticalWaypoint:gpxWpt])
+        return currentTrack;
+
+    for (OASGpxFile *gpxFile in _activeGpx.allValues)
+    {
+        if ([self gpxFile:gpxFile containsIdenticalWaypoint:gpxWpt])
+            return gpxFile;
+    }
+
     for (OASGpxFile *gpxFile in _activeGpx.allValues) {
         if ([[gpxFile getPointsList] containsObject:gpxWpt] || [[gpxFile getRoutePoints] containsObject:gpxWpt])
             return gpxFile;
     }
     
-    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
     if ([[currentTrack getPointsList] containsObject:gpxWpt] || [[currentTrack getRoutePoints] containsObject:gpxWpt])
         return currentTrack;
     
     return nil;
+}
+
+- (BOOL)gpxFile:(OASGpxFile *)gpxFile containsIdenticalWaypoint:(OASWptPt *)gpxWpt
+{
+    return gpxFile && ([[gpxFile getPointsList] indexOfObjectIdenticalTo:gpxWpt] != NSNotFound
+                       || [[gpxFile getRoutePoints] indexOfObjectIdenticalTo:gpxWpt] != NSNotFound);
 }
 
 - (BOOL)isShowingAnyGpxFiles

@@ -2081,6 +2081,7 @@ colorizationScheme:(int)colorizationScheme
     else if ([obj isKindOfClass:[OASWptPt class]])
     {
         OASWptPt *item = (OASWptPt *)obj;
+        [self.mapViewController findWpt:item.position];
         NSArray *foundWptGroups = self.mapViewController.foundWptGroups;
         NSString *foundWptDocPath = self.mapViewController.foundWptDocPath;
         
@@ -2122,7 +2123,11 @@ colorizationScheme:(int)colorizationScheme
     if (touchPolygon31.isEmpty())
         return;
     
-    NSArray<OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
+    NSMutableArray<OASGpxFile *> *visibleGpxFiles = [[[OASelectedGPXHelper instance] getSelectedGPXFiles] mutableCopy];
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if (currentTrack && [[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
+        [visibleGpxFiles addObject:currentTrack];
+
     for (OASGpxFile *g in visibleGpxFiles)
     {
         NSArray<OASWptPt *> *pts = [self getSelectedFilePoints:g];

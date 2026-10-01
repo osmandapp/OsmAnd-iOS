@@ -181,11 +181,11 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
     }];
 }
 
-- (void)shutdown
+- (BOOL)shutdown
 {
     _terminating = true;
     [_lookupQueue cancelAllOperations];
-    dispatch_group_wait(_activeLookups, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kShutdownTimeout * NSEC_PER_SEC)));
+    return dispatch_group_wait(_activeLookups, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kShutdownTimeout * NSEC_PER_SEC))) == 0;
 }
 
 - (NSString *)performLookupAddressAtLat:(double)lat

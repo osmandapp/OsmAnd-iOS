@@ -425,12 +425,15 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"OAAppDelegate applicationWillTerminate");
-    [[OAReverseGeocoder instance] shutdown];
+    BOOL geocoderStopped = [[OAReverseGeocoder instance] shutdown];
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
     // Release OsmAnd core
-    OsmAnd::ReleaseCore();
+    if (geocoderStopped)
+        OsmAnd::ReleaseCore();
+    else
+        NSLog(@"OAAppDelegate applicationWillTerminate: reverse geocoder lookups still running, skip ReleaseCore");
 
     // Deconfigure device
     UIDevice* device = [UIDevice currentDevice];

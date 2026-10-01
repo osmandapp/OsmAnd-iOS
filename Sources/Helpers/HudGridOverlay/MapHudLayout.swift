@@ -261,7 +261,9 @@ final class MapHudLayout: NSObject {
             return !v.isHidden && v.alpha > 0.01 && v.bounds.width > 0 && v.bounds.height > 0
         }
         
-        if filtered.contains(where: { $0.0 is OADownloadMapWidget }), let topBarPanelContainer {
+        // A centered landscape banner leaves the Wide top panel visible on both sides.
+        if OAUtilities.isPortrait() || isCompactPanelsLayout,
+           filtered.contains(where: { $0.0 is OADownloadMapWidget }), let topBarPanelContainer {
             filtered.removeAll { (v, _) in v === topBarPanelContainer }
         }
         
@@ -367,7 +369,7 @@ final class MapHudLayout: NSObject {
             }
         }
         
-        if hasBanner && isCompactPanelsLayout {
+        if hasBanner && (isCompactPanelsLayout || !OAUtilities.isPortrait()) {
             result.append(contentsOf: pendingSidePanels)
         }
         
@@ -406,7 +408,8 @@ final class MapHudLayout: NSObject {
             let hostW = containerView.bounds.width
             let available = max(0, getAdjustedWidth())
             let heightPx: CGFloat = view.bounds.height > 0 ? view.bounds.height : 155.0
-            let desiredWidth = isCompactPanelsLayout ? min(available, hostW * 0.5) : available
+            // The download prompt follows the orientation, not the widget panels layout.
+            let desiredWidth = OAUtilities.isPortrait() ? available : min(available, hostW * 0.5)
             let width8 = Int32(max(1, floor(desiredWidth / dpToPx / cell)))
             let height8 = Int32(max(1, ceil(heightPx / dpToPx / cell)))
             position.setSize(width8dp: width8, height8dp: height8)
@@ -414,7 +417,7 @@ final class MapHudLayout: NSObject {
             position.marginY = 0
             let parentW = Int(available)
             let parentH = Int(getAdjustedHeight())
-            let xPixels = Int(round(max(0, isCompactPanelsLayout ? (available - desiredWidth) / 2.0 : 0)))
+            let xPixels = Int(round(max(0, (available - desiredWidth) / 2.0)))
             let yPixels = 0
             position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: true, x: Int32(xPixels), gravTop: true, y: Int32(yPixels))
             return position
@@ -460,7 +463,7 @@ final class MapHudLayout: NSObject {
     @discardableResult private func updateButtonParams(for view: UIView, with position: ButtonPositionSize) -> Bool {
         if view is OADownloadMapWidget {
             let available = max(0, getAdjustedWidth())
-            let desiredWidth = isCompactPanelsLayout ? min(available, containerView.bounds.width * 0.5) : available
+            let desiredWidth = OAUtilities.isPortrait() ? available : min(available, containerView.bounds.width * 0.5)
             let x = leftInset + externalLeftOverlayPx + (available - desiredWidth) / 2.0
             let y = topInset
             let height = view.bounds.height > 0 ? view.bounds.height : 155.0

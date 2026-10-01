@@ -8,6 +8,9 @@ The publishing workflow currently targets **OsmAnd Nightly**
 21 locales** in `metadata.md`, creating missing App Info and App Store version
 localizations in Nightly first. The checked **What's New** field uses the iOS
 localization text for version 5.4, because Nightly's editable version is 1.0.
+Apple requires a localized app name when a new App Info localization is created,
+so the workflow uses its Title from `metadata.md` even if Title is unchecked;
+existing Title values are updated only when Title is checked.
 Some of the 21 locales do not yet have `ios_release_5_4`; selecting **What's New**
 will fail validation before any localization is created or text uploaded until
 those translations are present. For Description-only publishing, uncheck

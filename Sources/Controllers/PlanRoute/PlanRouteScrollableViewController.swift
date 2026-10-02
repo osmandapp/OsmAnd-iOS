@@ -606,7 +606,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             segmentControl.insertSegment(withTitle: tab.title, at: index, animated: false)
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
-        segmentControl.backgroundColor = .groupBgColorSecondary
+        segmentControl.backgroundColor = .tertiarySystemGroupedBackground
         segmentControl.selectedSegmentTintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: 0x636366) : .white }
         let segmentFont = UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
         let segmentTextAttributes: [NSAttributedString.Key: Any] = [

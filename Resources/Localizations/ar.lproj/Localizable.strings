@@ -4595,3 +4595,4 @@
 "opening_hours_public_holiday" = "العطلات الرسمية";
 "opening_hours_school_holiday" = "العطلات المدرسية";
 "opening_hours_easter" = "عيد الفصح";
+"coordinate_format_cancel_changes_title" = "هل تريد تجاهل التغييرات؟";

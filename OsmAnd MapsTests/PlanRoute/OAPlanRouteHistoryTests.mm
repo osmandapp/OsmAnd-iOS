@@ -13,13 +13,19 @@
 #import "OASplitPointsCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAJoinPointsCommand.h"
+#import "OAPlanningPopupBaseViewController.h"
 
 @interface OAMeasurementToolLayer (HistoryTesting)
 - (void)drawRouteSegments;
+- (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center;
 @end
 
 @interface OAPlanRouteEditingBridge (HistoryTouchTesting)
 - (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
+- (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController;
+- (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted;
+- (void)onApplyGpxApproximation;
+- (void)onPopupDismissed;
 @end
 
 @interface OAPlanRouteHistoryLayer : OAMeasurementToolLayer
@@ -360,6 +366,144 @@
     XCTAssertTrue(self.context.commandManager.canUndo);
     [self.bridge undo];
     [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)assertApproximationBlocksPointInput
+{
+    NSArray *expected = [self latitudes:self.context.getAllPoints];
+    BOOL canUndo = self.context.commandManager.canUndo;
+    BOOL canRedo = self.context.commandManager.canRedo;
+    BOOL hasChanges = self.context.hasChanges;
+    NSInteger selectedPoint = self.context.selectedPointPosition;
+    EOAAddPointMode addPointMode = self.context.addPointMode;
+    NSInteger beforeCount = self.context.getBeforePoints.count;
+    NSInteger afterCount = self.context.getAfterPoints.count;
+    self.bridge.onChange = ^{ XCTFail(@"Blocked input must not publish a change"); };
+    for (NSInteger i = 0; i < 3; i++)
+    {
+        [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+        [self.bridge onTouch:CLLocationCoordinate2DMake(50, 20) longPress:NO];
+        [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:YES];
+        [self.bridge addCenterPoint];
+        [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(51, 21)];
+        [self.bridge addPointBeforeIndex:2];
+        [self.bridge addPointAfterIndex:2];
+        [self.bridge addAnotherPoint];
+        [self.bridge applyPointEdit];
+    }
+    self.bridge.onChange = nil;
+    XCTAssertEqualObjects([self latitudes:self.context.getAllPoints], expected);
+    XCTAssertEqual(self.context.commandManager.canUndo, canUndo);
+    XCTAssertEqual(self.context.commandManager.canRedo, canRedo);
+    XCTAssertEqual(self.context.hasChanges, hasChanges);
+    XCTAssertEqual(self.context.selectedPointPosition, selectedPoint);
+    XCTAssertEqual(self.context.addPointMode, addPointMode);
+    XCTAssertEqual(self.context.getBeforePoints.count, beforeCount);
+    XCTAssertEqual(self.context.getAfterPoints.count, afterCount);
+    XCTAssertNil(self.layer.pressPointLocation);
+}
+
+- (void)testApproximationWarningBlocksPointInputAndPreservesRedo
+{
+    [self addPointNumber:0];
+    [self.bridge undo];
+    XCTAssertTrue(self.context.commandManager.canRedo);
+    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    [self assertApproximationBlocksPointInput];
+    [self.bridge onCancelSnapApproximation:NO];
+    [self.bridge onPopupDismissed];
+    [self.bridge redo];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+}
+
+- (void)testApproximationCalculationAndPreviewBlockPointInput
+{
+    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+    [self assertApproximationBlocksPointInput];
+    self.context.approximationMode = YES;
+    [self assertApproximationBlocksPointInput];
+    [self.bridge onApplyGpxApproximation];
+    [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+    XCTAssertTrue(self.context.commandManager.canUndo);
+    [self.bridge undo];
+    [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testApproximationCancelBeforePreviewPreservesPreviousEditAndAllowsAdding
+{
+    [self addPointNumber:0];
+    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+    [self.bridge onCancelSnapApproximation:NO];
+    [self.bridge onPopupDismissed];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+    [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(52, 22)];
+    XCTAssertEqual(self.context.getPointsCount, 10);
+    [self.bridge undo];
+    [self.bridge undo];
+    [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testApproximationBlocksPendingInsertion
+{
+    [self.bridge addPointAfterIndex:2];
+    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    [self assertApproximationBlocksPointInput];
+    [self.bridge onCancelSnapApproximation:NO];
+    [self.bridge onPopupDismissed];
+    [self.bridge cancelPointEdit];
+    [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testDismissClearsApproximationInputBlockForNextRoute
+{
+    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    [self.bridge dismiss];
+    XCTAssertFalse(self.context.inApproximationMode);
+    self.layer.editingCtx = self.context;
+    [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(51, 21)];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+}
+
+- (void)testApproximationHidesCenterLineAndRestoresItWithoutMapMovement
+{
+    OAMeasurementToolLayer *renderLayer = [[OAMeasurementToolLayer alloc] init];
+    renderLayer.editingCtx = self.context;
+    [renderLayer prepareRouteLinesForTesting];
+    [renderLayer drawRouteSegments];
+    NSUInteger routeLineCount = renderLayer.routeLineCountForTesting;
+    XCTAssertGreaterThan(routeLineCount, 0);
+    OsmAnd::PointI center(1000000, 1000000);
+    [renderLayer drawBeforeAfterPath:center];
+    XCTAssertEqual(renderLayer.centerLineCountForTesting, 1);
+
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        XCTAssertNotNil(self.bridge.approximationWarningViewController);
+        XCTAssertTrue(self.context.inApproximationMode);
+        [renderLayer drawBeforeAfterPath:center];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 0);
+        [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+        [renderLayer drawBeforeAfterPath:OsmAnd::PointI(2000000, 2000000)];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 0);
+        XCTAssertEqual(renderLayer.routeLineCountForTesting, routeLineCount);
+
+        if (cycle == 0)
+            [self.bridge onApplyGpxApproximation];
+        else if (cycle == 1)
+        {
+            [self.bridge onCancelSnapApproximation:NO];
+            [self.bridge onPopupDismissed];
+        }
+        else
+            [self.bridge onPopupDismissed];
+        XCTAssertFalse(self.context.inApproximationMode);
+        [renderLayer drawBeforeAfterPath:center];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 1);
+        XCTAssertEqual(renderLayer.routeLineCountForTesting, routeLineCount);
+    }
 }
 
 - (void)verifyRoadGeometryHistoryForCommand:(OAMeasurementModeCommand *)command

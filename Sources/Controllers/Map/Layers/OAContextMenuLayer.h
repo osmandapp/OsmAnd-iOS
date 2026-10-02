@@ -33,7 +33,7 @@
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
 - (void) showContextMenu:(SelectedMapObject *)selectedObject touchPointLatLon:(CLLocation *)touchPointLatLon;
 
-- (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
+- (OATargetPoint *)unknownTargetPoint:(double)latitude longitude:(double)longitude;
 
 - (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;

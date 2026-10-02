@@ -166,7 +166,7 @@
 + (void) goToPoint:(double)latitude longitude:(double)longitude preferredZoom:(float)preferredZoom
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
 }

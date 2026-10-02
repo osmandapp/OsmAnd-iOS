@@ -170,7 +170,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-        updateVisibleHiddenFavoriteCellsIcons()
+        reconfigureHiddenFavoriteCells()
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {

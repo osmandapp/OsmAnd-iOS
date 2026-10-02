@@ -7,6 +7,7 @@
 //
 
 #import "OAAltitudeWidget.h"
+#import "CLLocation+Extension.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -85,7 +86,7 @@
         case EOAAltitudeWidgetTypeMyLocation:
         {
             CLLocation *loc = _app.locationServices.lastKnownLocation;
-            if (loc && loc.verticalAccuracy >= 0)
+            if (loc.hasAltitude)
             {
                 [self updateAltitude:loc.altitude];
                 return;

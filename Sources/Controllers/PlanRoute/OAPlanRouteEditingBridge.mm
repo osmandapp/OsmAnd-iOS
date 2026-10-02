@@ -228,7 +228,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (BOOL)isAddNewSegmentAllowed
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    return ctx != nil && [ctx isAddNewSegmentAllowed];
+    return ctx != nil && [ctx isAddNewSegmentAllowed] && !ctx.getPoints.lastObject.isGap;
 }
 
 - (nullable OAApplicationMode *)defaultAppMode
@@ -1135,13 +1135,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)startNewSegment
 {
+    [self startNewSegmentWithMode:[self editingContext].appMode];
+}
+
+- (void)startNewSegmentWithMode:(OAApplicationMode *)mode
+{
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || ctx.getPointsCount == 0)
+    if (ctx == nil || !self.isAddNewSegmentAllowed || mode == nil)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = ctx.getPointsCount - 1;
-    BOOL started = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
+    BOOL started = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES appMode:mode]];
     ctx.selectedPointPosition = -1;
     [layer updateLayer];
     if (started && self.onNewSegmentStarted)
@@ -1188,10 +1193,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                        pointIndex:pointIndex
                                        wholeRoute:wholeRoute];
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
+    BOOL updatesPendingSegmentMode = wholeRoute || (pointIndex >= 0 && pointIndex == ctx.getPointsCount - 1);
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
                                                                           appMode:mode
                                                                    changeRouteType:type
-                                                                        pointIndex:pointIndex]];
+                                                                        pointIndex:pointIndex
+                                                         updatesPendingSegmentMode:updatesPendingSegmentMode]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();

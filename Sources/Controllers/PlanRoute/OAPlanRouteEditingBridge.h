@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 - (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to;
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
+- (void)startNewSegmentWithMode:(OAApplicationMode *)mode;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes;
 - (void)refreshRouteForMode:(OAApplicationMode *)mode;

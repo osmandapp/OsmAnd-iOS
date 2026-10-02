@@ -81,7 +81,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     }()
 
     private var didFinish = false
-    private var isPreparingShare = false
+    private var isSending = false
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -187,63 +187,25 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
         }
     }
 
+    // uploads to osmand.net like Android does instead of asking where to share the files:
+    // the share sheet made the user pick a mail app and most reports never left the device
     @objc private func onSendTapped() {
-        guard !isPreparingShare else { return }
-        isPreparingShare = true
+        guard !isSending else { return }
+        isSending = true
         sendButton.isEnabled = false
 
-        let manager = OACrashDiagnosticsManager.shared
-        manager.prepareCrashReportsForSharing { [weak self] reportURLs in
-            guard let self else {
-                manager.cleanUpCrashReportsShareSnapshot(reportURLs)
-                return
-            }
-            self.isPreparingShare = false
-            self.sendButton.isEnabled = true
-
-            guard !reportURLs.isEmpty,
-                  self.viewIfLoaded?.window?.windowScene?.activationState == .foregroundActive else {
-                manager.cleanUpCrashReportsShareSnapshot(reportURLs)
-                return
-            }
-
-            let items = reportURLs.map { $0 as Any }
-            let sharePresenter = self.navigationController?.presentingViewController
-            self.dismiss(animated: true) { [weak self] in
-                guard let self else {
-                    manager.cleanUpCrashReportsShareSnapshot(reportURLs)
-                    return
-                }
-
-                guard let presenter = sharePresenter,
-                      presenter.viewIfLoaded?.window?.windowScene?.activationState == .foregroundActive,
-                      presenter.presentedViewController == nil,
-                      presenter.transitionCoordinator == nil else {
-                    manager.cleanUpCrashReportsShareSnapshot(reportURLs)
-                    self.finish()
-                    return
-                }
-
-                let sourceRect = CGRect(
-                    x: presenter.view.bounds.midX,
-                    y: presenter.view.bounds.maxY,
-                    width: 0,
-                    height: 0
-                )
-                presenter.showActivity(
-                    items,
-                    applicationActivities: nil,
-                    excludedActivityTypes: nil,
-                    sourceView: presenter.view,
-                    sourceRect: sourceRect,
-                    barButtonItem: nil,
-                    permittedArrowDirections: .down,
-                    completionWithItemsHandler: {
-                        manager.cleanUpCrashReportsShareSnapshot(reportURLs)
-                    }
-                )
-                self.finish()
-            }
+        let reportURLs = OACrashDiagnosticsManager.shared.latestCrashReportURLs
+        dismiss(animated: true) { [weak self] in
+            self?.finish()
+        }
+        OACrashReportSender.sendCrashReport(reportURLs) { sent in
+            guard let view = OARootViewController.instance().view else { return }
+            OAUtilities.showToast(
+                localizedString(sent ? "crash_report_sent" : "crash_report_send_failed"),
+                details: nil,
+                duration: 4,
+                in: view
+            )
         }
     }
 

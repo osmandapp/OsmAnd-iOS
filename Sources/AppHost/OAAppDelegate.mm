@@ -40,6 +40,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "StartupLogging.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMemoryLog.h"
 
 #include <QDir>
 #include <QFile>
@@ -303,6 +304,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     LogStartup(@"didFinishLaunchingWithOptions");
     [OACrashReportPromptCoordinator.shared start];
     [OACrashDiagnosticsManager.shared start];
+    [OAMemoryLog.sharedInstance start];
     _didFinishLaunching = YES;
    
     if (!_dataFetchQueue)

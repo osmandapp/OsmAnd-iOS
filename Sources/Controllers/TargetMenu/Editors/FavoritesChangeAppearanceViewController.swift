@@ -15,17 +15,18 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         var backgroundIconName: String?
     }
 
-    var onApply: ((UIColor?, String?, String?) -> Void)?
+    @objc var onApply: ((UIColor?, String?, String?) -> Void)?
     var onClose: (() -> Void)?
 
     private let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    private let iconHandler = PoiIconCollectionHandler(isFavoriteList: true)
     private let backgroundIconNames = OAFavoritesHelperBridge.shared().backgroundIconNames()
     private let initialAppearance: Appearance
+    private let isPreset: Bool
 
     private var appearance: Appearance
 
     private lazy var colorHandler: OAColorCollectionHandler = .init(data: [appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []], isFavoriteList: false)
+    private lazy var iconHandler = PoiIconCollectionHandler(isFavoriteList: !isPreset)
     private lazy var shapeHandler = ShapesCollectionHandler(backgroundIconNames: backgroundIconNames, isFavoriteList: true)
 
     private var hasChanges: Bool {
@@ -36,12 +37,21 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         appearance.color.map { UIColor(argb: Int($0)) } ?? OADefaultFavorite.getDefaultColor()
     }
 
-    init(points: [OAFavoritePointBridgeItem]) {
+    convenience init(points: [OAFavoritePointBridgeItem]) {
         let colors = Set(points.map { Int32(truncatingIfNeeded: $0.color.toARGBNumber()) })
         let icons = Set(points.map(\.iconName))
         let shapes = Set(points.map(\.backgroundIconName))
-        initialAppearance = Appearance(color: colors.count == 1 ? colors.first : nil, iconName: icons.count == 1 ? icons.first : nil, backgroundIconName: shapes.count == 1 ? shapes.first : nil)
-        appearance = initialAppearance
+        self.init(appearance: Appearance(color: colors.count == 1 ? colors.first : nil, iconName: icons.count == 1 ? icons.first : nil, backgroundIconName: shapes.count == 1 ? shapes.first : nil), isPreset: false)
+    }
+
+    @objc convenience init(color: UIColor, iconName: String, backgroundIconName: String) {
+        self.init(appearance: Appearance(color: Int32(truncatingIfNeeded: color.toARGBNumber()), iconName: iconName, backgroundIconName: backgroundIconName), isPreset: true)
+    }
+
+    private init(appearance: Appearance, isPreset: Bool) {
+        initialAppearance = appearance
+        self.appearance = appearance
+        self.isPreset = isPreset
         super.init(nibName: "OABaseNavbarViewController", bundle: nil)
         initTableData()
         setupHandlers()
@@ -64,7 +74,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     }
 
     override func getTitle() -> String {
-        localizedString("change_appearance")
+        localizedString(isPreset ? "shared_string_appearance" : "change_appearance")
     }
 
     override func systemLeftBarButtonItem() -> UIBarButtonItem? {
@@ -150,9 +160,9 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     }
 
     override func onRightNavbarButtonPressed() {
-        let color = appearance.color != initialAppearance.color ? appearance.color : nil
-        let iconName = appearance.iconName != initialAppearance.iconName ? appearance.iconName : nil
-        let backgroundIconName = appearance.backgroundIconName != initialAppearance.backgroundIconName ? appearance.backgroundIconName : nil
+        let color = isPreset || appearance.color != initialAppearance.color ? appearance.color : nil
+        let iconName = isPreset || appearance.iconName != initialAppearance.iconName ? appearance.iconName : nil
+        let backgroundIconName = isPreset || appearance.backgroundIconName != initialAppearance.backgroundIconName ? appearance.backgroundIconName : nil
         if color != nil, let colorItem = colorHandler.getSelectedItem() {
             appearanceCollection.selectColor(colorItem)
         }
@@ -189,7 +199,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
 
     private func configureColorCell(_ cell: OAColorsPaletteCell) {
         let isUnchanged = appearance.color == nil
-        cell.topButtonVisibility(true)
+        cell.topButtonVisibility(!isPreset)
         cell.collectionStackViewVisibility(!isUnchanged)
         cell.descriptionLabelStackView.isHidden = !isUnchanged
         cell.bottomButtonStackView.isHidden = isUnchanged
@@ -259,7 +269,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
             refreshAppearance()
         }
 
-        var topActions: [UIMenuElement] = [unchanged]
+        var topActions: [UIMenuElement] = isPreset ? [] : [unchanged]
         var categoryActions: [UIMenuElement] = []
         for category in iconHandler.categories where category.key != iconHandler.ORIGINAL_KEY {
             let action = UIAction(title: category.translatedName, state: appearance.iconName != nil && iconHandler.selectedCatagoryKey == category.key ? .on : .off) { [weak self] _ in
@@ -273,7 +283,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
             }
         }
 
-        return UIMenu.composedMenu(from: [topActions, categoryActions])
+        return UIMenu.composedMenu(from: [topActions, categoryActions].filter { !$0.isEmpty })
     }
 
     private func shapeMenu() -> UIMenu {
@@ -289,7 +299,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
             }
         }
 
-        return UIMenu.composedMenu(from: [[unchanged], shapes])
+        return UIMenu.composedMenu(from: isPreset ? [shapes] : [[unchanged], shapes])
     }
 
     private func refreshAppearance() {

@@ -112,8 +112,21 @@ extension FavoriteListViewController {
         }
     }
 
+    func updateVisibleHiddenFavoriteCellsIcons() {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard case .favorite(let favorite) = dataSource.itemIdentifier(for: indexPath),
+                  !favorite.isVisible,
+                  let cell = collectionView.cellForItem(at: indexPath) as? UICollectionViewListCell else {
+                continue
+            }
+
+            cell.contentConfiguration = favoriteContentConfiguration(for: favorite)
+        }
+    }
+
     private func favoriteContentConfiguration(for favorite: FavoritePointRow) -> PointContentConfiguration {
-        PointContentConfiguration(icon: favorite.bridgeItem.icon(), title: favorite.title, isVisible: favorite.bridgeItem.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
+        let icon = favorite.isVisible ? favorite.bridgeItem.icon() : favorite.bridgeItem.icon(with: .iconColorSecondary)
+        return PointContentConfiguration(icon: icon, title: favorite.title, isVisible: favorite.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
     }
 
     private func favoriteSecondaryContent(for favorite: FavoritePointRow) -> PointSecondaryContent {

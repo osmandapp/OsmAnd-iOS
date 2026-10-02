@@ -330,7 +330,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : UIColor.tertiaryLabelColor;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;

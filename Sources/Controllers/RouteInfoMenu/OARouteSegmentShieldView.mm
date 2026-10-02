@@ -121,8 +121,8 @@ static UIFont *_shieldFont;
         }
         else
         {
-            [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
-            _shieldLabel.textColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            [_shieldImage setTintColor:UIColor.secondaryLabelColor];
+            _shieldLabel.textColor = UIColor.secondaryLabelColor;
         }
     } completion:^(BOOL finished) {
         if (!longPress)

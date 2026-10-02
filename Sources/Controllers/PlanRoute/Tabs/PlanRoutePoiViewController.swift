@@ -213,7 +213,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
         cell.configure(title: localizedString("add_points"),
                        description: localizedString("add_points_description"),
                        icon: .icCustomFolderOpen,
-                       iconTint: .iconColorSecondary)
+                       iconTint: .secondaryLabel)
     }
 
     private func configureEmptyAddGroupCell(_ cell: OASimpleTableViewCell) {

@@ -48,7 +48,7 @@ final class OptionDeviceTableViewCell: UITableViewCell {
             accessoryView = accessoryImageView
             deviceImageView.tintColor = UIColor.iconColorActive
         } else {
-            deviceImageView.tintColor = UIColor.iconColorDefault
+            deviceImageView.tintColor = UIColor.secondaryLabel
             accessoryView = nil
             accessoryType = .none
         }

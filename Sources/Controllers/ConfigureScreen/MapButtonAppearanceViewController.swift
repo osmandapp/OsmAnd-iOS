@@ -307,7 +307,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
         iconCollectionHandler?.delegate = self
         iconCollectionHandler?.handlerDelegate = self
         iconCollectionHandler?.hostVC = self
-        iconCollectionHandler?.regularIconColor = .iconColorSecondary
+        iconCollectionHandler?.regularIconColor = .secondaryLabel
         iconCollectionHandler?.selectedIconColor = UIColor(rgb: OAAppSettings.sharedManager().profileIconColor.get())
         iconCollectionHandler?.setItemSize(size: 48)
         iconCollectionHandler?.setIconBackgroundSize(size: 36)

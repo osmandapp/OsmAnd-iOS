@@ -93,7 +93,7 @@
                             <constraint firstAttribute="width" constant="24" id="sOx-Mg-D5V"/>
                         </constraints>
                         <state key="normal">
-                            <color key="titleColor" name="iconColorDisabled"/>
+                            <color key="titleColor" systemColor="tertiaryLabelColor"/>
                         </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atX-fb-f5r" userLabel="Selection Group Button">
@@ -172,9 +172,6 @@
     <resources>
         <image name="ic_custom_arrow_up" width="30" height="30"/>
         <image name="ic_custom_folder" width="30" height="30"/>
-        <namedColor name="iconColorDisabled">
-            <color red="0.84705882352941175" green="0.83529411764705885" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -183,6 +180,9 @@
         </systemColor>
         <systemColor name="separatorColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

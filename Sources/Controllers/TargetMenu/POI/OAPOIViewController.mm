@@ -455,7 +455,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     
     if (!NSStringIsEmpty(description))
     {
-        UIImage *icon = [[UIImage templateImageNamed:ACImageNameIcCustomWikipedia] imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+        UIImage *icon = [[UIImage templateImageNamed:ACImageNameIcCustomWikipedia] imageWithTintColor:UIColor.secondaryLabelColor];
         
         NSString *buttonText;
         

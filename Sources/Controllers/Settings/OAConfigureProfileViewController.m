@@ -433,7 +433,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            [cell.leftIconView setTintColor:UIColor.secondaryLabelColor];
         }
         if (cell)
         {

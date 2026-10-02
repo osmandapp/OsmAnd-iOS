@@ -168,7 +168,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
         } else {
             tableView.deselectRow(at: indexPath, animated: false)
-            cell.leftIconView.tintColor = .iconColorDisabled
+            cell.leftIconView.tintColor = .tertiaryLabel
         }
         
         return cell

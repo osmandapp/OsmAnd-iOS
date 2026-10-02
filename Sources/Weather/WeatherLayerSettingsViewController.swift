@@ -66,7 +66,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             let isDisabled = item.bool(forKey: "disabled")
             
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = isDisabled ? .iconColorDisabled : (selected ? .iconColorActive : .iconColorDefault)
+            cell.leftIconView.tintColor = isDisabled ? .tertiaryLabel : (selected ? .iconColorActive : .secondaryLabel)
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = isDisabled ? .secondaryLabel : .label
             cell.accessibilityLabel = item.accessibilityLabel

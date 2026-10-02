@@ -356,7 +356,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         NSMutableArray<NSString *> *enabledParamsIds = fetchedParams[2];
         BOOL enabled = enabledParamsIds.count > 0;
         UIImage *icon = [UIImage templateImageNamed: enabled ? @"ic_custom_placard_hazard" :@"ic_custom_placard_hazard_off"];
-        UIColor *tint = [UIColor colorNamed:enabled ? ACColorNameIconColorDisruptive : ACColorNameIconColorDisabled];
+        UIColor *tint = enabled ? [UIColor colorNamed:ACColorNameIconColorDisruptive] : UIColor.tertiaryLabelColor;
         
         [tableSection addObject:
          @{
@@ -490,7 +490,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         keyKey : recalculateRouteKey,
         titleKey : OALocalizedString(@"route_recalculation_dist_title"),
         iconKey : [UIImage imageNamed:ACImageNameIcCustomMinimalDistance],
-        iconTintKey: [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : _iconColor,
+        iconTintKey: [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColor.tertiaryLabelColor : _iconColor,
         valueKey : descr
     }];
 }
@@ -646,7 +646,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
             if (item[iconTintKey])
                 cell.leftIconView.tintColor = item[iconTintKey];
             else if (param && ![param isSelected] && ![item.allKeys containsObject:iconKey])
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             else
                 cell.leftIconView.tintColor = _iconColor;
             
@@ -672,7 +672,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         {
             cell.titleLabel.text = item[titleKey];
             cell.leftIconView.image = [UIImage templateImageNamed:item[iconKey]];
-            cell.leftIconView.tintColor = [item[valueKey] boolValue] ? _iconColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = [item[valueKey] boolValue] ? _iconColor : UIColor.tertiaryLabelColor;
         }
         return cell;
     }
@@ -705,7 +705,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 cell.switchView.on = [v boolValue];
                 [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             }
-            cell.leftIconView.tintColor = cell.switchView.on ? _iconColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = cell.switchView.on ? _iconColor : UIColor.tertiaryLabelColor;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
         }
         return cell;

@@ -48,7 +48,7 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         } else if model.isEnabled {
             iconColor = .iconColorActive
         } else {
-            iconColor = .iconColorTertiary
+            iconColor = .secondaryLabel
         }
         iconView.tintColor = iconColor
         isUserInteractionEnabled = model.isEnabled || model.isDestructive

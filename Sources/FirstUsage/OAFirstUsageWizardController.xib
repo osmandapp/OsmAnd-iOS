@@ -275,7 +275,7 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_wifi_off" translatesAutoresizingMaskIntoConstraints="NO" id="09t-4B-Jkp">
                     <rect key="frame" x="20" y="21" width="30" height="30"/>
-                    <color key="tintColor" name="iconColorSecondary"/>
+                    <color key="tintColor" systemColor="secondaryLabelColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="0to-B9-bxK"/>
                         <constraint firstAttribute="width" constant="30" id="uTH-wK-fyj"/>
@@ -694,9 +694,6 @@
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="iconColorSecondary">
-            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

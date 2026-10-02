@@ -145,7 +145,7 @@
         }
         else
         {
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }

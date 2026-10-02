@@ -272,7 +272,7 @@
     }
     
     for (UIButton *button in _menuButtonsArray) {
-        [button setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+        [button setTintColor:UIColor.secondaryLabelColor];
     }
 }
 
@@ -454,7 +454,7 @@
             else
             {
                 backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : UIColor.secondarySystemGroupedBackgroundColor;
-                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                updatedConfig.baseForegroundColor = UIColor.secondaryLabelColor;
             }
             updatedConfig.background = backgroundConfig;
             button.configuration = updatedConfig;

@@ -64,7 +64,7 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         updateBorderColor()
 
         iconView.image = .icCustomSegmentsGap
-        iconView.tintColor = .iconColorDefault
+        iconView.tintColor = .secondaryLabel
         iconView.contentMode = .scaleAspectFit
         iconView.isAccessibilityElement = false
 

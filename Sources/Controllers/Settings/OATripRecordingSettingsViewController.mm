@@ -525,7 +525,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
         cell.titleLabel.text = item[@"title"];
         NSString *iconName = item[@"img"];
         [cell leftIconVisibility:iconName && iconName.length > 0];
-        cell.leftIconView.tintColor = cell.switchView.isOn ? self.appMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = cell.switchView.isOn ? self.appMode.getProfileColor : UIColor.tertiaryLabelColor;
         cell.leftIconView.image = [UIImage templateImageNamed:iconName];
         cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
         cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -543,7 +543,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
             for (UIView *vw in cell.subviews)
                 vw.alpha = 0.4;
             cell.userInteractionEnabled = NO;
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
         }
         else
         {

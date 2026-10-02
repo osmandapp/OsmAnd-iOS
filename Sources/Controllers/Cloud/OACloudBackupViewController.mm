@@ -400,7 +400,7 @@
             kCellKeyKey: @"onTrashPressed",
             kCellTitleKey: OALocalizedString(@"shared_string_trash"),
             kCellIconNameKey: ACImageNameIcCustomRemove,
-            kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorSecondary]
+            kCellIconTintColor: UIColor.secondaryLabelColor
         };
         [storageRows addRowFromDictionary:purchaseCell];
     }
@@ -542,7 +542,7 @@
         cell.titleLabel.text = item.title;
         cell.valueLabel.text = [item stringForKey:@"value"];
         cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-        cell.leftIconView.tintColor = [item integerForKey:@"value"] > 0 ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = [item integerForKey:@"value"] > 0 ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
         cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"conflicts"] ? 0. : 65.), 0., 0.);
         return cell;
     }
@@ -673,7 +673,7 @@
             {
                 BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
                 cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.rightIconView.tintColor = actionButtonDisabled ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorActive];
+                cell.rightIconView.tintColor = actionButtonDisabled ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive];
                 cell.titleLabel.textColor = actionButtonDisabled ? UIColor.secondaryLabelColor : [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }

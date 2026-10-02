@@ -144,7 +144,7 @@
         [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
         self.titleView.accessibilityIdentifier = UITestAccessibilityIdentifier.gpxTrackMenuTitle;
         self.titleIconView.image = icon;
-        self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        self.titleIconView.tintColor = UIColor.secondaryLabelColor;
     }
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
@@ -177,7 +177,7 @@
         if (nearestCity.length > 0)
         {
             self.regionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallMapPoint];
-            self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            self.regionIconView.tintColor = UIColor.secondaryLabelColor;
             [self.regionTextView setText:nearestCity];
             self.regionTextView.textColor = UIColor.secondaryLabelColor;
         }
@@ -268,7 +268,7 @@
     if (!self.gpxActivityContainerView.hidden)
     {
         self.gpxActivityIconView.image = [UIImage routeActivityIcon:activity.iconName fallback:[UIImage imageNamed:ACImageNameIcCustomInfoOutlined]];
-        self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        self.gpxActivityIconView.tintColor = UIColor.secondaryLabelColor;
         self.gpxActivityTextView.textColor = UIColor.secondaryLabelColor;
     }
     
@@ -632,7 +632,7 @@
     {
         [cell.valueView setText:cellData.values[@"string_value"]];
         cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-        cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+        cell.iconView.tintColor = UIColor.secondaryLabelColor;
         [cell.titleView setText:cellData.title];
 
         cell.separatorView.hidden = [cell isDirectionRTL]

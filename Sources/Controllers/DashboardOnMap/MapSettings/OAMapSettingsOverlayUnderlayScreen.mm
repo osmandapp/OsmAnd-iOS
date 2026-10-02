@@ -323,7 +323,7 @@ static NSInteger kButtonsSection;
 
             NSString *imgName = _isEnabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: UIColor.tertiaryLabelColor;
             [cell leftIconVisibility:YES];
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

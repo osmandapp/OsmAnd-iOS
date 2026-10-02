@@ -106,7 +106,7 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
                 if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
                     iconColor = profileItem.appMode.getProfileColor()
                 } else {
-                    iconColor = UIColor.iconColorDefault
+                    iconColor = UIColor.secondaryLabel
                 }
                 cell.leftIconView.tintColor = iconColor
             }

@@ -89,7 +89,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     if (!_floatingTextFieldControllers)

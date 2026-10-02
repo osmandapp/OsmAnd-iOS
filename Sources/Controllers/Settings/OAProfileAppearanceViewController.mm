@@ -420,7 +420,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"view_angle"),
         kCellDescrKey : OALocalizedString(viewAngleVisibilityName),
         kCellIconNameKey : ACImageNameIcCustomLocationViewAngle,
-        kCellIconTintColor : viewAngleVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
+        kCellIconTintColor : viewAngleVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : UIColor.tertiaryLabelColor,
         kCellKeyKey : kViewAngleCellKey,
     }];
     [optionsSection addRowFromDictionary:@{
@@ -428,7 +428,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"location_radius"),
         kCellDescrKey : OALocalizedString(locationRadiusVisibilityName),
         kCellIconNameKey : ACImageNameIcCustomLocationRadius,
-        kCellIconTintColor : locationRadiusVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
+        kCellIconTintColor : locationRadiusVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : UIColor.tertiaryLabelColor,
         kCellKeyKey : kLocationRadiusCellKey,
     }];
 }
@@ -451,7 +451,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profileIconCollectionHandler.delegate = self;
     _profileIconCollectionHandler.hostVC = self;
     _profileIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _profileIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _profileIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _profileIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
     [_profileIconCollectionHandler setItemSizeWithSize:48];
     [_profileIconCollectionHandler setIconBackgroundSizeWithSize:36];
@@ -470,7 +470,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _positionIconCollectionHandler.delegate = self;
     _positionIconCollectionHandler.hostVC = self;
     _positionIconCollectionHandler.customTitle = OALocalizedString(@"resting_position_icon");
-    _positionIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _positionIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _positionIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
     [_positionIconCollectionHandler setItemSizeWithSize:156];
     [_positionIconCollectionHandler setIconBackgroundSizeWithSize:146];
@@ -489,7 +489,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _locationIconCollectionHandler.delegate = self;
     _locationIconCollectionHandler.hostVC = self;
     _locationIconCollectionHandler.customTitle = OALocalizedString(@"navigation_position_icon");
-    _locationIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _locationIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _locationIconCollectionHandler.selectedIconColor = UIColorFromRGB(_changedProfile.profileColor);
     [_locationIconCollectionHandler setItemSizeWithSize:156];
     [_locationIconCollectionHandler setIconBackgroundSizeWithSize:146];

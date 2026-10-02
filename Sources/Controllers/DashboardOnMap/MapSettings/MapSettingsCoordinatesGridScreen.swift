@@ -69,7 +69,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
         showHideCoordinatesGridRow.key = RowKey.showHideCoordinatesGridRowKey.rawValue
         showHideCoordinatesGridRow.title = localizedString(isCoordinatesGridEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
         showHideCoordinatesGridRow.icon = isCoordinatesGridEnabled ? .icCustomShow : .icCustomHide
-        showHideCoordinatesGridRow.iconTintColor = isCoordinatesGridEnabled ? .iconColorSelected : .iconColorDisabled
+        showHideCoordinatesGridRow.iconTintColor = isCoordinatesGridEnabled ? .iconColorSelected : .tertiaryLabel
         showHideCoordinatesGridRow.setObj(isCoordinatesGridEnabled, forKey: "isEnabled")
         if isCoordinatesGridEnabled {
             let formatZoomSection = data.createNewSection()
@@ -79,14 +79,14 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             formatRow.title = localizedString("shared_string_format")
             formatRow.descr = currentGridFormatTitle()
             formatRow.icon = .icCustomLongitude
-            formatRow.iconTintColor = .iconColorDefault
+            formatRow.iconTintColor = .secondaryLabel
             let zoomRow = formatZoomSection.createNewRow()
             zoomRow.cellType = OAValueTableViewCell.reuseIdentifier
             zoomRow.key = RowKey.zoomRowKey.rawValue
             zoomRow.title = localizedString("shared_string_zoom_levels")
             zoomRow.descr = "\(coordinatesGridSettings.zoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).min) – \(coordinatesGridSettings.zoomLevelsWithRestrictions(forAppMode: settings.applicationMode.get()).max)"
             zoomRow.icon = .icCustomOverlayMap
-            zoomRow.iconTintColor = .iconColorDefault
+            zoomRow.iconTintColor = .secondaryLabel
             
             let positionColorSection = data.createNewSection()
             let labelsPositionRow = positionColorSection.createNewRow()
@@ -95,14 +95,14 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             labelsPositionRow.title = localizedString("labels_position")
             let pos = GridLabelsPosition(rawValue: coordinatesGridSettings.gridLabelsPosition(forAppMode: settings.applicationMode.get())) ?? .edges
             labelsPositionRow.icon = pos.icon
-            labelsPositionRow.iconTintColor = .iconColorDefault
+            labelsPositionRow.iconTintColor = .secondaryLabel
             let colorRow = positionColorSection.createNewRow()
             colorRow.cellType = isMapsPlusProAvailable() ? OARightIconTableViewCell.reuseIdentifier : OATwoButtonsTableViewCell.reuseIdentifier
             colorRow.key = isMapsPlusProAvailable() ? RowKey.colorRowKey.rawValue : RowKey.getColorRowKey.rawValue
             colorRow.title = localizedString("grid_color")
             colorRow.descr = localizedString("customize_grid_color")
             colorRow.icon = isMapsPlusProAvailable() ? UIImage.templateImageNamed("ic_custom_appearance") : .icCustomGridColored
-            colorRow.iconTintColor = .iconColorDefault
+            colorRow.iconTintColor = .secondaryLabel
             colorRow.secondaryIconTintColor = UIColor(argb: Int(Int32(settings.isAppMapNightMode ? coordinatesGridSettings.nightGridColor() : coordinatesGridSettings.dayGridColor())))
             colorRow.setObj(localizedString("shared_string_get"), forKey: Constants.buttonTitleKey)
             colorRow.setObj("ic_custom_arrow_forward", forKey: Constants.buttonIconKey)

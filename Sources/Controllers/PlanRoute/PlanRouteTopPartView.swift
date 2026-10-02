@@ -77,7 +77,7 @@ final class PlanRouteTopPartView: UIView {
         statusIconView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(statusIconView)
 
-        progressIndicator.color = .iconColorSecondary
+        progressIndicator.color = .secondaryLabel
         progressIndicator.hidesWhenStopped = true
         progressIndicator.translatesAutoresizingMaskIntoConstraints = false
         addSubview(progressIndicator)

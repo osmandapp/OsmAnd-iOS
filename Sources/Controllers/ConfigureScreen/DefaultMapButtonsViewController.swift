@@ -91,7 +91,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
             row.descr = getDescription(buttonState)
             row.accessibilityLabel = row.title
             row.accessibilityValue = row.descr
-            row.iconTintColor = buttonState.isEnabled() ? iconTintColor : .iconColorDefault
+            row.iconTintColor = buttonState.isEnabled() ? iconTintColor : .secondaryLabel
             row.icon = buttonState.getIcon()
         }
     }

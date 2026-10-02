@@ -1537,7 +1537,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:self.isFinishPointFromTrack];
                 [cell.imgView setImage:[UIImage imageNamed:ACImageNameIcCustomTrip]];
-                cell.imgView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.imgView.tintColor = UIColor.tertiaryLabelColor;
                 cell.titleLabel.text = OALocalizedString(@"follow_track");
                 cell.addressLabel.text = fileName;
                 if (self.isGpxTrackFollowingMode && !self.isFinishPointFromTrack)
@@ -1575,7 +1575,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 if ([key isEqualToString:@"pedestrian_short"])
                 {
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+                    cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
                     cell.descriptionLabel.text = nil;
                     cell.descriptionLabel.font = nil;
                     cell.descriptionLabel.textColor = nil;
@@ -2101,7 +2101,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                                            description:OALocalizedString(@"missing_or_outdated_maps_description")
                                            buttonTitle:OALocalizedString(@"shared_string_details")
                                              leftImage:[UIImage imageNamed:ACImageNameIcCustomDownloadMap]
-                                    leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+                                    leftImageTintColor:UIColor.secondaryLabelColor];
     }
     return _missingOrOutdatedMapsView;
 }

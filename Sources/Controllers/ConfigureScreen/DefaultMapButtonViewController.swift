@@ -118,7 +118,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         appearanceRow.key = Self.appearanceRowKey
         appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
         appearanceRow.iconName = "ic_custom_appearance"
-        appearanceRow.iconTintColor = .iconColorDefault
+        appearanceRow.iconTintColor = .secondaryLabel
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -150,7 +150,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             let selected = item.bool(forKey: Self.selectedKey)
             cell.descriptionVisibility(false)
             cell.leftIconView.image = selected ? .icCustomShow : .icCustomHide
-            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            cell.leftIconView.tintColor = selected ? item.iconTintColor : .secondaryLabel
             cell.titleLabel.text = item.title
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
@@ -170,7 +170,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.accessoryType = .disclosureIndicator
             if item.key == Self.visibilityRowKey {
                 let selected = item.bool(forKey: Self.selectedKey)
-                cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+                cell.leftIconView.tintColor = selected ? item.iconTintColor : .secondaryLabel
             } else {
                 cell.leftIconView.tintColor = item.iconTintColor
             }

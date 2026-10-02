@@ -82,7 +82,7 @@ extension TrackStatsTableCell: UICollectionViewDataSource, UICollectionViewDeleg
 
         cell.valueView.text = cellData.values[Self.stringValueKey] as? String
         cell.iconView.image = .templateImageNamed(cellData.rightIconName)
-        cell.iconView.tintColor = .iconColorDefault
+        cell.iconView.tintColor = .secondaryLabel
         cell.titleView.text = cellData.title
         cell.separatorView.isHidden = cell.isDirectionRTL() ? indexPath.row == 0 : indexPath.row == statisticsData.count - 1
         if cell.needsUpdateConstraints() {

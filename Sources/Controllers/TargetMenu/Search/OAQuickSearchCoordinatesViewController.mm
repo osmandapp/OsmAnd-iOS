@@ -1118,7 +1118,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
             cell.titleLabel.text = item[@"title"];
             [cell.clearButton setImage:[UIImage systemImageNamed:@"xmark.circle.fill"] forState:UIControlStateNormal];
-            cell.clearButton.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            cell.clearButton.tintColor = UIColor.secondaryLabelColor;
             cell.clearButton.tag = tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];

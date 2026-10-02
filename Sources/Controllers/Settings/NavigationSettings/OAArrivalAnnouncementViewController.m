@@ -59,7 +59,7 @@
     CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
 
     UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
-    topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    topImageDivider.backgroundColor = UIColor.secondaryLabelColor;
 
     UIImage *image = [UIImage imageNamed:ACImageNameImgHelpAnnouncementTimeDay];
     CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;

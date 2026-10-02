@@ -85,7 +85,7 @@ final class FolderTrackFilterConfigurator: TrackFilterConfigurable {
         
         func createFolderItem(key: String, path: String, displayName: String, isRoot: Bool) -> DisplayFolderItem {
             let icon: UIImage = isRoot ? .icCustomFolderOpen : .icCustomFolder
-            let tintColor: UIColor = isRoot ? .iconColorSelected : .iconColorDefault
+            let tintColor: UIColor = isRoot ? .iconColorSelected : .secondaryLabel
             return DisplayFolderItem(key: key, path: path, displayName: displayName, icon: icon, iconTintColor: tintColor)
         }
         
@@ -561,7 +561,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             let activity = RouteActivityHelper.shared.findRouteActivity(id: itemName)
             row.title = activity?.label ?? localizedString("shared_string_none")
             row.icon = activity.map { UIImage.routeActivityIcon($0.iconName, fallback: .icCustomInfoOutlined) } ?? .icCustomActivityOutlined
-            row.iconTintColor = selectedItems.contains(itemName) ? .iconColorActive : .iconColorDefault
+            row.iconTintColor = selectedItems.contains(itemName) ? .iconColorActive : .secondaryLabel
             if let groupLabel = activity?.group.label {
                 row.setObj(groupLabel, forKey: Self.descriptionKey)
             }
@@ -569,7 +569,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             row.title = itemName.isEmpty ? listFilterType?.collectionFilterParams.getItemText(itemName: itemName) : listFilterType?.collectionFilterParams.getItemText(itemName: itemName).capitalized
             if itemName.isEmpty {
                 row.icon = .icCustomAppearanceDisabledOutlined
-                row.iconTintColor = .iconColorDisabled
+                row.iconTintColor = .tertiaryLabel
             } else {
                 row.icon =
                 switch itemName {
@@ -586,7 +586,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
                 row.iconTintColor = colorFromRGB(rgb)
             } else {
                 row.icon = .icCustomAppearanceDisabledOutlined
-                row.iconTintColor = .iconColorDisabled
+                row.iconTintColor = .tertiaryLabel
             }
         case .city:
             row.title = listFilterType?.collectionFilterParams.getItemText(itemName: itemName)

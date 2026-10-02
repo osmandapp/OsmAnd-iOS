@@ -16,7 +16,7 @@ final class FolderCardCollectionViewCell: UICollectionViewCell {
     
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? .iconColorDefault : .secondarySystemGroupedBackground
+            backgroundColor = isHighlighted ? .secondaryLabel : .secondarySystemGroupedBackground
         }
     }
 

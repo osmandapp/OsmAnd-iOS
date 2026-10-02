@@ -128,7 +128,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     }
 
     var iconColor: UIColor {
-        isVisible ? (group?.color ?? .iconColorSelected) : .iconColorSecondary
+        isVisible ? (group?.color ?? .iconColorSelected) : .secondaryLabel
     }
 
     var titleColor: UIColor {

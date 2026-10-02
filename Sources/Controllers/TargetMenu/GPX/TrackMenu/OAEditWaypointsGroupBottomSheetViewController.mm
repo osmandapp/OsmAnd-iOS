@@ -207,7 +207,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
         UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? ACImageNameIcCustomFolder : ACImageNameIcCustomFolderHidden];
-        UIColor *tintColor = _isShown ? _groupColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        UIColor *tintColor = _isShown ? _groupColor : UIColor.tertiaryLabelColor;
         self.leftIconView.image = leftIcon;
         self.leftIconView.tintColor = tintColor;
     }

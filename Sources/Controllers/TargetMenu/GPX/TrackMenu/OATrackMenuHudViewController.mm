@@ -2473,7 +2473,7 @@
             
             cell.userInteractionEnabled = !cellData.isDisabled;
             cell.textColorNormal = cellData.isDisabled ? UIColor.secondaryLabelColor : UIColor.labelColor;
-            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
+            cell.iconColorNormal = cellData.isDisabled ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2504,7 +2504,7 @@
             
             cell.userInteractionEnabled = !cellData.isDisabled;
             cell.textColorNormal = cellData.isDisabled ? UIColor.secondaryLabelColor : UIColor.labelColor;
-            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
+            cell.iconColorNormal = cellData.isDisabled ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2554,7 +2554,7 @@
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
             cell.showWaypointImageView.image = [UIImage imageNamed:ACImageNameIcCustomLocationMarkerOutlined];
-            cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.showWaypointImageView.tintColor = UIColor.secondaryLabelColor;
             cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
             [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
             cell.showWaypointButton.tag = indexPath.section << 10 | indexPath.row;
@@ -2782,7 +2782,7 @@
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            UIColor *tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            UIColor *tintColor = UIColor.secondaryLabelColor;
             cell.topLeftIcon.tintColor = tintColor;
             cell.topRightIcon.tintColor = tintColor;
             cell.bottomLeftIcon.tintColor = tintColor;

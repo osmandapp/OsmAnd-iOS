@@ -29,7 +29,7 @@ final class SearchOBDDeviceTableViewCell: UITableViewCell {
             deviceImageView.image = item.getServiceConnectedImage
         } else {
             deviceImageView.image = item.getServiceDisconnectedImage
-            deviceImageView.tintColor = .iconColorDefault
+            deviceImageView.tintColor = .secondaryLabel
         }
     }
 }

@@ -331,7 +331,7 @@
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
         [cell.overflowButton setImage:[UIImage templateImageNamed:ACImageNameMenuCellPointer] forState:UIControlStateNormal];
-        [cell.overflowButton setTintColor:[UIColor colorNamed:ACColorNameIconColorSecondary]];
+        [cell.overflowButton setTintColor:UIColor.secondaryLabelColor];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
         cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];

@@ -349,13 +349,13 @@ static const NSInteger panoImageFilterSection = 2;
                 cell.titleLabel.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
                 cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-                cell.leftIconView.tintColor = _mapillaryEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = _mapillaryEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.leftIconView.tintColor = _panoOnly ? [UIColor colorNamed:ACColorNameIconColorSelected]  : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = _panoOnly ? [UIColor colorNamed:ACColorNameIconColorSelected]  : UIColor.tertiaryLabelColor;
                 [cell.switchView setOn:_panoOnly];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -377,7 +377,7 @@ static const NSInteger panoImageFilterSection = 2;
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             [cell.button setTitle:item[@"btnTitle"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.button addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
@@ -413,7 +413,7 @@ static const NSInteger panoImageFilterSection = 2;
             BOOL isNotSet = dateVal == 0;
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = isNotSet ? [UIColor colorNamed:ACColorNameIconColorDefault] : [UIColor colorNamed:ACColorNameIconColorSelected];
+            cell.leftIconView.tintColor = isNotSet ? UIColor.secondaryLabelColor : [UIColor colorNamed:ACColorNameIconColorSelected];
 
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];

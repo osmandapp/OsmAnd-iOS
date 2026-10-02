@@ -511,7 +511,7 @@
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _poiIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
@@ -664,7 +664,7 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 

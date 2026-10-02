@@ -82,7 +82,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
 
         var configuration = UIButton.Configuration.plain()
         configuration.image = .icCustomOverflowMenuStroke
-        configuration.baseForegroundColor = .iconColorDefault
+        configuration.baseForegroundColor = .secondaryLabel
         configuration.background.backgroundColor = .clear
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration

@@ -683,7 +683,7 @@ extension WidgetsListViewController {
             row.title = localizedString("no_widgets_here_yet")
             row.descr = localizedString("no_widgets_descr")
             row.iconName = iconName
-            row.iconTintColor = .iconColorDefault
+            row.iconTintColor = .secondaryLabel
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
             let pagedWidgets = widgetRegistry.pagedWidgets(forPanel: selectedAppMode,

@@ -525,7 +525,7 @@
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.secondaryLabelColor.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -566,7 +566,7 @@
             BOOL selected = [_selectedItems containsObject:item[@"object"]];
             UIColor *selectedColor = item[@"color"];
             selectedColor = selectedColor ? selectedColor : [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.leftIconView.tintColor = selected ? selectedColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? selectedColor : UIColor.tertiaryLabelColor;
             NSString *descr = item[@"descr"];
             [cell descriptionVisibility:descr.length > 0];
             cell.descriptionLabel.text = descr;

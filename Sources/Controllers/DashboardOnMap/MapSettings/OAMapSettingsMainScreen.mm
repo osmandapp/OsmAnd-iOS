@@ -1012,7 +1012,7 @@
 
         BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
         cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]] : nil;
-        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:OAValueTableViewCell.reuseIdentifier])
@@ -1027,7 +1027,7 @@
         BOOL hasLeftIcon = iconName && iconName.length > 0;
         [cell leftIconVisibility:hasLeftIcon];
         cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
-        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:OASwitchTableViewCell.reuseIdentifier])
@@ -1042,7 +1042,7 @@
         if (item[@"has_empty_icon"])
         {
             cell.leftIconView.image = nil;
-            cell.leftIconView.backgroundColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.backgroundColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
             cell.leftIconView.layer.cornerRadius = cell.leftIconView.layer.frame.size.width / 2;
             cell.leftIconView.clipsToBounds = YES;
         }
@@ -1057,7 +1057,7 @@
                 icon = iconName && iconName.length > 0 ? [UIImage templateImageNamed:iconName] : nil;
 
             cell.leftIconView.image = icon;
-            cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
         }
 
         cell.switchView.on = isOn;

@@ -205,7 +205,7 @@
                     kCellType: [OASwitchTableViewCell getCellIdentifier],
                     kCellTitle: groupName,
                     kCellLeftIcon: [UIImage templateImageNamed:visible ? ACImageNameIcCustomFolder : ACImageNameIcCustomFolderHidden],
-                    kCellTintColor: visible ? UIColorFromARGB(color) : [UIColor colorNamed:ACColorNameIconColorDisabled],
+                    kCellTintColor: visible ? UIColorFromARGB(color) : UIColor.tertiaryLabelColor,
                     kTableValues: @{
                         @"visible": @(visible),
                         @"color": UIColorFromARGB(color)
@@ -238,7 +238,7 @@
         [self changeButtonAvailability:_doneBarButton isEnabled:YES];
         [tableData setData:@{
             kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? ACImageNameIcCustomFolder : ACImageNameIcCustomFolderHidden],
-            kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+            kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : UIColor.tertiaryLabelColor
         }];
     }
     else if ([tableData.key isEqualToString:@"hide_show_all"])

@@ -120,7 +120,7 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named:iconName)
                 }
-                cell.leftIconView.tintColor = UIColor.iconColorDefault
+                cell.leftIconView.tintColor = UIColor.secondaryLabel
                 
                 cell.button.setTitle(nil, for: .normal)
                 cell.button.tag = indexPath.row
@@ -130,7 +130,7 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
                     cell.button.setImage(.icCustomArrowRight, for: .normal)
-                    cell.button.tintColor = UIColor.iconColorDefault
+                    cell.button.tintColor = UIColor.secondaryLabel
                 }
             }
             outCell = cell

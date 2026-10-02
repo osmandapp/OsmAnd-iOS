@@ -86,7 +86,7 @@
     [_tableView setScrollEnabled:NO];
     [_tableView setAllowsSelectionDuringEditing:YES];
     
-    UIColor *eleTint = [UIColor colorNamed:ACColorNameIconColorDefault];
+    UIColor *eleTint = UIColor.secondaryLabelColor;
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleDownImageView.image = [_eleDownImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleUpImageView.tintColor = eleTint;

@@ -137,7 +137,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
             cell.descriptionLabel.numberOfLines = 0
             cell.descriptionLabel.text = item.descr
             cell.rightIconView.image = item.icon
-            cell.rightIconView.tintColor = .iconColorDefault
+            cell.rightIconView.tintColor = .secondaryLabel
             cell.anchorContent(.topStyle)
             cell.textIndentsStyle(.increasedTopCenterIndentStyle)
             cell.isAccessibilityElement = true

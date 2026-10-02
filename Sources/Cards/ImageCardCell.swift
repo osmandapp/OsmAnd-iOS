@@ -97,7 +97,7 @@ final class ImageCardPlaceholder: Placeholder {
         let imageViewPlaceholder = UIImageView()
         imageViewPlaceholder.image = placeholderImage ?? .icCustomLink
         imageViewPlaceholder.contentMode = .scaleAspectFill
-        imageViewPlaceholder.tintColor = .iconColorDefault
+        imageViewPlaceholder.tintColor = .secondaryLabel
         imageViewPlaceholder.translatesAutoresizingMaskIntoConstraints = false
         imageView.addSubview(imageViewPlaceholder)
         NSLayoutConstraint.activate([

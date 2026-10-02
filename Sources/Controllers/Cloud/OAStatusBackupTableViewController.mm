@@ -352,8 +352,8 @@
             EOABackupSyncOperationType operation = it.deleted ? EOABackupSyncOperationDelete
             : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
             OATableRowData *rowData = [self rowFromKey:it.key
-                                              mainTint:it.deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
-                                    secondaryColorName:it.deleted ? ACColorNameIconColorDisruptive : ACColorNameIconColorActive
+                                              mainTint:it.deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor
+                                    secondaryColor:it.deleted ? [UIColor colorNamed:ACColorNameIconColorDisruptive] : [UIColor colorNamed:ACColorNameIconColorActive]
                                              operation:operation
                                              localFile:it.localFile
                                             remoteFile:it.remoteFile];
@@ -437,8 +437,8 @@
                               remoteFile:(OARemoteFile *)remoteFile
 {
     OATableRowData *rowData = [self rowFromKey:key
-                                      mainTint:[UIColor colorNamed:ACColorNameIconColorDisabled]
-                            secondaryColorName:ACColorNameIconColorDefault
+                                      mainTint:UIColor.tertiaryLabelColor
+                            secondaryColor:UIColor.secondaryLabelColor
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
                                     remoteFile:remoteFile];
@@ -455,14 +455,14 @@
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
     [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
-    [rowData setObj:ACColorNameIconColorDisruptive forKey:@"secondaryIconColorName"];
+    [rowData setObj:[UIColor colorNamed:ACColorNameIconColorDisruptive] forKey:@"secondaryIconColor"];
     [rowData setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     return rowData;
 }
 
 - (OATableRowData *)rowFromKey:(NSString *)key
                       mainTint:(UIColor *)mainTint
-                 secondaryColorName:(NSString *)secondaryColorName
+                 secondaryColor:(UIColor *)secondaryColor
                      operation:(EOABackupSyncOperationType)operation
                      localFile:(OALocalFile *)localFile
                     remoteFile:(OARemoteFile *)remoteFile
@@ -540,7 +540,7 @@
         kCellTitleKey: name,
         kCellDescrKey: description,
         kCellIconTintColor: mainTint,
-        @"secondaryIconColorName": secondaryColorName,
+        @"secondaryIconColor": secondaryColor,
         @"operation": @(operation),
         @"fileName": fileName,
         @"settingsItem": settingsItem
@@ -714,7 +714,7 @@
             if (secondaryIconName.length > 0)
             {
                 cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName];
-                cell.rightIconView.tintColor = [UIColor colorNamed:[item stringForKey:@"secondaryIconColorName"]];
+                cell.rightIconView.tintColor = [item objForKey:@"secondaryIconColor"];
                 [cell rightIconVisibility:YES];
             }
             else

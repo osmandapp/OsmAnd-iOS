@@ -314,7 +314,7 @@
             emptyData[@"title"] = OALocalizedString(@"weather_miss_forecasts");
             emptyData[@"description"] = OALocalizedString(@"weather_miss_forecasts_description");
             emptyData[@"icon"] = @"ic_custom_umbrella";
-            emptyData[@"icon_color"] = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            emptyData[@"icon_color"] = UIColor.tertiaryLabelColor;
             emptyData[@"button_title"] = OALocalizedString(@"shared_string_select");
             [emptyCells addObject:emptyData];
 

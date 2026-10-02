@@ -84,7 +84,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .iconColorDefault
+            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .secondaryLabel
             cell.titleLabel.text = item.title
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue

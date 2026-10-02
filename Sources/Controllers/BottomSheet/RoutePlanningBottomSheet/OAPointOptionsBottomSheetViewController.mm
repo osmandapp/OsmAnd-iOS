@@ -344,7 +344,7 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
                 cell.textColorNormal = isActiveCell ? UIColor.labelColor : UIColor.secondaryLabelColor;
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
@@ -378,7 +378,7 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
                 cell.textColorNormal = isActiveCell ? UIColor.labelColor : UIColor.secondaryLabelColor;
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;

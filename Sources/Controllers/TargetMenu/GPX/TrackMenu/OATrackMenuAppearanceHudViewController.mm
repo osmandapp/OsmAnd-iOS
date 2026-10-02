@@ -612,7 +612,7 @@ static const NSInteger kColorsSection = 1;
 - (void)setupView
 {
     self.titleIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomAppearance];
-    self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    self.titleIconView.tintColor = UIColor.secondaryLabelColor;
 
     [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
@@ -1240,7 +1240,7 @@ static const NSInteger kColorsSection = 1;
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"vertical_exaggeration"),
                         kCellIconNameKey:ACImageNameIcCustomTerrainScale,
-                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kCellIconTintColor:scaleValue > 1 ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.secondaryLabelColor,
                         kTableValues:@{
                             @"string_value":alphaValueString,
                             @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
@@ -1257,7 +1257,7 @@ static const NSInteger kColorsSection = 1;
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"wall_height"),
                         kCellIconNameKey:ACImageNameIcCustomTerrainScale,
-                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kCellIconTintColor:scaleValue > 1 ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.secondaryLabelColor,
                         kTableValues:@{
                             @"string_value":elevationMetersValueString,
                             @"accessibility_label":OALocalizedString(@"wall_height"),
@@ -1542,7 +1542,7 @@ static const NSInteger kColorsSection = 1;
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.doneButton.userInteractionEnabled = isAvailable;
-    [self.doneButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+    [self.doneButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor
                            forState:UIControlStateNormal];
 }
 
@@ -2057,7 +2057,7 @@ static const NSInteger kColorsSection = 1;
                                               description:OALocalizedString(@"track_3d_empty_view_description")
                                               buttonTitle:OALocalizedString(@"shared_string_get")
                                                 leftImage:[UIImage imageNamed:ACImageNameIcCustom3DtrackColored]
-                                       leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+                                       leftImageTintColor:UIColor.secondaryLabelColor];
             }
             
             [cell.contentView addSubview:_trackView3DEmptyView];

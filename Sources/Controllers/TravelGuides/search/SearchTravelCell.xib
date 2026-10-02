@@ -33,7 +33,7 @@
                     </imageView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="4QY-5K-Kgq">
                         <rect key="frame" x="316" y="21" width="30" height="30"/>
-                        <color key="tintColor" name="iconColorSecondary"/>
+                        <color key="tintColor" systemColor="secondaryLabelColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="IEn-j8-uZJ"/>
                             <constraint firstAttribute="width" constant="30" id="Iv9-Dm-rnS"/>
@@ -73,9 +73,6 @@
     </objects>
     <resources>
         <image name="ic_custom_photo" width="30" height="30"/>
-        <namedColor name="iconColorSecondary">
-            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

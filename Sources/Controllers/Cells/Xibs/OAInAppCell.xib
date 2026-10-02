@@ -36,7 +36,7 @@
                     </stackView>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pxS-n0-KIc">
                         <rect key="frame" x="16" y="15" width="45" height="45"/>
-                        <color key="backgroundColor" name="iconColorDisabled"/>
+                        <color key="backgroundColor" systemColor="tertiaryLabelColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="45" id="1v8-jw-CQI"/>
                             <constraint firstAttribute="height" constant="45" id="vVX-jF-N4b"/>
@@ -91,9 +91,6 @@
     </objects>
     <resources>
         <image name="img_app_purchase_2" width="45" height="45"/>
-        <namedColor name="iconColorDisabled">
-            <color red="0.84705882352941175" green="0.83529411764705885" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -102,6 +99,9 @@
         </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

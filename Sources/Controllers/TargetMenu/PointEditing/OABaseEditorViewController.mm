@@ -414,7 +414,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _poiIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _poiIconCollectionHandler.selectedIconColor = self.editColor;
     
     // A new folder has no points; its empty name can match the default favorites group.
@@ -533,7 +533,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 

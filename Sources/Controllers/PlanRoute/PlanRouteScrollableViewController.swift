@@ -540,7 +540,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetBottomConstraint = bottomConstraint
         sidePanelConstraints = [leftConstraint, topConstraint, bottomConstraint, widthConstraint]
 
-        grabberView.backgroundColor = .iconColorTertiary
+        grabberView.backgroundColor = .secondaryLabel
         grabberView.layer.cornerRadius = 2.5
         grabberView.translatesAutoresizingMaskIntoConstraints = false
         sheetView.addSubview(grabberView)

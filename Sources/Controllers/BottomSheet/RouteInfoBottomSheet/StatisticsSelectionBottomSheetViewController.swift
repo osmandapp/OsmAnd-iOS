@@ -197,7 +197,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.leftIconView.image = isSelected ? .icCheckmarkDefault : nil
             cell.leftIconView.tintColor = .iconColorActive
             cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
+            cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .tertiaryLabel
             cell.updateSecondLeftIconSize(30)
             return cell
         }
@@ -306,7 +306,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     private func yAxisColors(isSelected: Bool, canSelect: Bool) -> (UIColor, UIColor) {
         guard !isSelected else { return (.iconColorActive, .label) }
-        return canSelect ? (.iconColorDefault, .label) : (.iconColorDisabled, .tertiaryLabel)
+        return canSelect ? (.secondaryLabel, .label) : (.tertiaryLabel, .tertiaryLabel)
     }
     
     private func applyYAxisColors(to cell: OASimpleTableViewCell, item: OATableRowData) {

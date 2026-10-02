@@ -135,7 +135,7 @@ import UIKit
             let visible = !isHidden
             let imageName = visible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
             if !visible {
-                color = .iconColorSecondary
+                color = .secondaryLabel
             }
             
             return Item(title: title,

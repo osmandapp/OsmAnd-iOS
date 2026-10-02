@@ -63,7 +63,7 @@
         if (imgIndex != -1)
         {
             UIColor *titleColor = UIColor.secondaryLabelColor;
-            UIColor *imgColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            UIColor *imgColor = UIColor.secondaryLabelColor;
             UIColor *descrColor = UIColor.labelColor;
             [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
             [title addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, imgIndex - 1)];

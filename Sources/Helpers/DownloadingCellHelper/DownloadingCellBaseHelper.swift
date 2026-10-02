@@ -136,7 +136,7 @@ class DownloadingCellBaseHelper: NSObject {
         guard let cell else { return nil }
         
         cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        cell.leftIconView.tintColor = .iconColorDefault
+        cell.leftIconView.tintColor = .secondaryLabel
         cell.rightIconView.tintColor = getRightIconColor()
         cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
         
@@ -177,7 +177,7 @@ class DownloadingCellBaseHelper: NSObject {
             if isFinished(resourceId) && isDownloadedLeftIconRecolored {
                 cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
             } else {
-                cell.leftIconView.tintColor = .iconColorDefault
+                cell.leftIconView.tintColor = .secondaryLabel
             }
         } else {
             cell.leftIconVisibility(false)

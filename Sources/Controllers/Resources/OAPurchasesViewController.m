@@ -180,7 +180,7 @@ static BOOL _purchasesUpdated;
                 [noPurchasesSection addRowFromDictionary:@{
                     kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
                     kCellIconNameKey : ACImageNameIcCustomShopBag48,
-                    kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
+                    kCellIconTintColor : UIColor.secondaryLabelColor,
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];

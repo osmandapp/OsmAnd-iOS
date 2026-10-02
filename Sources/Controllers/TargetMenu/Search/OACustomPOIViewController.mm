@@ -260,7 +260,7 @@
             
             UIImage *categoryIcon = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.image = categoryIcon;
-            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             
             NSString *descText;
@@ -280,7 +280,7 @@
             
             cell.titleLabel.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             
-            UIColor *selectedColor = accepted ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            UIColor *selectedColor = accepted ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
             cell.leftIconView.image = [self getPoiIcon:poiType];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)

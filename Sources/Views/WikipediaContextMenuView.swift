@@ -57,7 +57,7 @@ final class WikipediaContextMenuView: UIView {
             outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
             return outgoing
         }
-        config.imageColorTransformer = .init { _ in .iconColorDefault }
+        config.imageColorTransformer = .init { _ in .secondaryLabel }
         
         button.configuration = config
 

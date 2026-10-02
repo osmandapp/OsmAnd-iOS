@@ -101,7 +101,7 @@ final class SensorTextWidget: OASimpleWidget {
         let settingRow = section.createNewRow()
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.iconName = "ic_custom_sensor"
-        settingRow.iconTintColor = .iconColorDefault
+        settingRow.iconTintColor = .secondaryLabel
         settingRow.key = "external_sensor_key"
         settingRow.title = localizedString("external_sensors_source_of_data")
 
@@ -120,7 +120,7 @@ final class SensorTextWidget: OASimpleWidget {
 
         let visualizationModeRow = section.createNewRow()
         visualizationModeRow.cellType = OAValueTableViewCell.getIdentifier()
-        visualizationModeRow.iconTintColor = .iconColorDefault
+        visualizationModeRow.iconTintColor = .secondaryLabel
         visualizationModeRow.title = localizedString("shared_string_show")
         visualizationModeRow.key = "value_pref"
 
@@ -240,7 +240,7 @@ final class SensorTextWidget: OASimpleWidget {
                 ? widgetType.disabledIconName
                 : plugin.batteryOutlinedIconName(for: widgetType)
 
-            row.iconTintColor = index == mode.rawValue ? .iconColorActive : .iconColorDisabled
+            row.iconTintColor = index == mode.rawValue ? .iconColorActive : .tertiaryLabel
             rows.append(row)
         }
 

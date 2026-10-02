@@ -50,7 +50,7 @@
                     </stackView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="LK7-5G-l79">
                         <rect key="frame" x="294" y="47" width="30" height="30"/>
-                        <color key="tintColor" name="iconColorDefault"/>
+                        <color key="tintColor" systemColor="secondaryLabelColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="aaX-jZ-dBs"/>
                             <constraint firstAttribute="height" constant="30" id="n0B-ZD-5H9"/>
@@ -105,9 +105,6 @@
         <image name="ic_custom_photo" width="30" height="30"/>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="iconColorDefault">
-            <color red="0.74509803921568629" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

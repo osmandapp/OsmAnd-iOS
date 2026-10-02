@@ -498,7 +498,7 @@
         case UIGestureRecognizerStateBegan:
         {
             [UIView animateWithDuration:.1 animations:^{
-                self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+                self.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             }];
             break;
         }

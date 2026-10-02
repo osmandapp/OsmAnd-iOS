@@ -221,7 +221,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             if let iconTintColor = item.iconTintColor {
                 cell.leftIconView.tintColor = iconTintColor
             } else {
-                cell.leftIconView.tintColor = .iconColorDefault
+                cell.leftIconView.tintColor = .secondaryLabel
             }
             return cell
         } else if item.cellType == OADividerCell.reuseIdentifier {

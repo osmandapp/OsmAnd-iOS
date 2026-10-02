@@ -246,7 +246,7 @@
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     
@@ -376,7 +376,7 @@
             if (!cell.leftIconView.hidden)
             {
                 [cell.leftIconView setImage:[UIImage templateImageNamed:imgName]];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             }
 
             if ([item.allKeys containsObject:@"hint"] && [item[@"hint"] isEqualToString:OALocalizedString(@"quick_action_template_name")])
@@ -482,7 +482,7 @@
             NSString *desc = item[@"descr"];
             cell.descriptionLabel.text = desc;
             [cell descriptionVisibility:desc.length != 0];
-            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            [cell.leftIconView setTintColor:UIColor.secondaryLabelColor];
             cell.leftIconView.image = img;
             [cell setCustomLeftSeparatorInset:YES];
             cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
@@ -589,7 +589,7 @@
             [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
             [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
             [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
         }

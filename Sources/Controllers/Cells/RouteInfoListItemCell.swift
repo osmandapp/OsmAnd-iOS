@@ -109,7 +109,7 @@ final class RouteInfoListItemCell: UITableViewCell {
         if let image {
             bottomImageStackView.isHidden = false
             bottomImageView.image = image
-            bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
+            bottomImageBorderView.layer.borderColor = UIColor.secondaryLabel.cgColor
             bottomImageBorderViewWidthConstraint.constant = (image.size.width / (image.size.height / bottomImageViewInnerHeight)) + 16
         } else {
             bottomImageStackView.isHidden = true
@@ -125,7 +125,7 @@ final class RouteInfoListItemCell: UITableViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             refreshLeftIcon()
-            bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
+            bottomImageBorderView.layer.borderColor = UIColor.secondaryLabel.cgColor
         }
     }
     

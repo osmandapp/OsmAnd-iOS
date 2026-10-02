@@ -109,7 +109,7 @@ final class RouteSettingsViewController: UIViewController {
                 return UITableViewCell()
             }
             let isOn = parameter.isChecked()
-            let tintColor = isOn ? profileColor : .iconColorDisabled
+            let tintColor = isOn ? profileColor : .tertiaryLabel
             cell.configure(title: title, icon: icon, tintColor: tintColor, isOn: isOn) { [weak self, weak parameter] isOn in
                 parameter?.applyNewParameterValue(isOn)
                 self?.settingsChangedHandler?()

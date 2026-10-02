@@ -86,7 +86,7 @@ final class OrganizeByTypeCell: UITableViewCell {
         titleLabel.textColor = .label
 
         iconView.image = icon
-        iconView.tintColor = isSelected ? .iconColorActive : .iconColorDefault
+        iconView.tintColor = isSelected ? .iconColorActive : .secondaryLabel
 
         checkmarkView.image = isSelected ? .templateImageNamed("ic_checkmark_default") : nil
         checkmarkView.tintColor = .iconColorActive

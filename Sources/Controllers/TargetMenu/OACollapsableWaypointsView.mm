@@ -130,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {
-            btn.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            btn.tintColor = UIColor.secondaryLabelColor;
             btn.userInteractionEnabled = NO;
         }
         [self addSubview:btn];
@@ -257,7 +257,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
+                button.layer.borderColor = UIColor.secondaryLabelColor.CGColor;
                 button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 if (_data.count > tag)
                 {

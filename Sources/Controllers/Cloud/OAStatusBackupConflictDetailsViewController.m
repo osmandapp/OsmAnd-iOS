@@ -149,7 +149,7 @@
         kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
         kCellKeyKey: @"itemInfo",
         kCellTitleKey: name,
-        kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorDefault]
+        kCellIconTintColor: UIColor.secondaryLabelColor
     }];
     [itemInfoSection addRow:itemInfoRow];
 

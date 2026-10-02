@@ -378,7 +378,7 @@ private extension ImportTracksViewController {
             cell.configureAccessibility(withTitle: label, selected: isSelected)
             cell.leftIconView.isAccessibilityElement = false
             cell.leftIconView.image = isSelected ? .icCustomDone : .icCustomCheckboxUnselected
-            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorSecondary
+            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .secondaryLabel
             cell.leftIconVisibility(true)
             cell.titleVisibility(true)
             cell.descriptionVisibility(true)

@@ -117,21 +117,21 @@
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                  [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [uphillIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:uphillIcon.string];
+        [uphillIcon setColor:UIColor.secondaryLabelColor forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
         arrowDownAttachment.image = [UIImage imageNamed:ACImageNameIcSmallDownhill];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [downhilIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:downhilIcon.string];
+        [downhilIcon setColor:UIColor.secondaryLabelColor forString:downhilIcon.string];
 
         NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
         rangeAttachment.image = [UIImage imageNamed:ACImageNameIcSmallAltitudeRange];
         rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:rangeAttachment]];
-        [elevationIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:elevationIcon.string];
+        [elevationIcon setColor:UIColor.secondaryLabelColor forString:elevationIcon.string];
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:

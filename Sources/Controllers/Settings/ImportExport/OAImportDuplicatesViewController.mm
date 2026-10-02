@@ -268,7 +268,7 @@
                     item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomMap];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
-                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
+                    item[@"iconColor"] = UIColor.secondaryLabelColor;
                 }
                 else if ([currentItem isKindOfClass:NSString.class])
                 {
@@ -305,7 +305,7 @@
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                         item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMap];
                     }
-                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
+                    item[@"iconColor"] = UIColor.secondaryLabelColor;
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }

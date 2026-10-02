@@ -182,7 +182,7 @@
             [param setControlAction:cell.switchView];
             cell.titleLabel.text = text;
             cell.leftIconView.image = [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = [param isChecked] ? [appMode getProfileColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = [param isChecked] ? [appMode getProfileColor] : UIColor.tertiaryLabelColor;
             BOOL showDivider = [param hasOptions];
             [cell dividerVisibility:showDivider];
             cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;

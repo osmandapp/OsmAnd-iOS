@@ -97,7 +97,7 @@
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(_screenType == EOACloudAccountDeletionScreenType ? @"verify_account_deletion_descr" : @"osmand_cloud_login_descr"),
-        @"color" : [UIColor colorNamed:ACColorNameIconColorSecondary],
+        @"color" : UIColor.secondaryLabelColor,
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },

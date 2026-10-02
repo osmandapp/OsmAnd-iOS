@@ -1074,7 +1074,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
             icon: .icCustomDesert,
-            iconTint: .iconColorDefault,
+            iconTint: .secondaryLabel,
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
             containerStyle: .card,

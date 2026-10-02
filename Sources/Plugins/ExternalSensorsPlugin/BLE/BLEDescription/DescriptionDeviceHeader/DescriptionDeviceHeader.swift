@@ -52,7 +52,7 @@ final class DescriptionDeviceHeader: UIView {
     private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
         deviceImageView.image = device.getServiceDisconnectedImage
-        deviceImageView.tintColor = .iconColorDefault
+        deviceImageView.tintColor = .secondaryLabel
         connectActivityView.stopAnimating()
         configureStartStateActivityView(with: device.state)
     }
@@ -81,10 +81,10 @@ final class DescriptionDeviceHeader: UIView {
             imageContainerView.backgroundColor = .buttonBgColorTertiary
         } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
-            signalIndicatorImageView.tintColor = .iconColorSecondary
+            signalIndicatorImageView.tintColor = .secondaryLabel
             signalIndicatorImageView.image = .icSmallSignalNotFound
             deviceImageView.image = device.getServiceDisconnectedImage
-            deviceImageView.tintColor = .iconColorDefault
+            deviceImageView.tintColor = .secondaryLabel
             configureConnectButtonTitle(with: .connected)
             imageContainerView.backgroundColor = .systemGroupedBackground
         }
@@ -207,7 +207,7 @@ final class DescriptionDeviceHeader: UIView {
                 DeviceHelper.shared.removeDisconnected(device: device)
                 configureConnectButtonTitle(with: .connected)
                 deviceImageView.image = device.getServiceDisconnectedImage
-                deviceImageView.tintColor = .iconColorDefault
+                deviceImageView.tintColor = .secondaryLabel
             case .failure(let error):
                 if let error = error as? SBError {
                     switch error {

@@ -638,7 +638,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = _layerEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = _layerEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_layerEnabled];
@@ -691,9 +691,9 @@
                 else
                     cell.accessoryType = UITableViewCellAccessoryNone;
             }
-            cell.accessoryView.tintColor = isUnitsCell ? [UIColor colorNamed:ACColorNameIconColorDefault]: [UIColor colorNamed:ACColorNameIconColorActive];
+            cell.accessoryView.tintColor = isUnitsCell ? UIColor.secondaryLabelColor: [UIColor colorNamed:ACColorNameIconColorActive];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
             [cell leftIconVisibility:!isUnitsCell];
         }
         return cell;

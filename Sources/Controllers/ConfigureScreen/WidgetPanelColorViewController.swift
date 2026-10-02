@@ -303,7 +303,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                                          action: Selector) {
         button.frame.size = CGSize(width: Constants.floatingButtonSize, height: Constants.floatingButtonSize)
         button.setImage(image, for: .normal)
-        button.tintColor = .iconColorBlack
+        button.tintColor = .label
         button.accessibilityLabel = accessibilityLabel
         button.accessibilityTraits = .button
         button.addTarget(self, action: action, for: .touchUpInside)

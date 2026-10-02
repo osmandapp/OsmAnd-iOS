@@ -84,7 +84,7 @@
             cell.titleLabel.textColor = isLogoutCell ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : UIColor.labelColor;
             cell.titleLabel.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
         }
         outCell = cell;
     }

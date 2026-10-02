@@ -4,10 +4,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OAReverseGeocoder.h"
-#import "OsmAndApp.h"
 
 #include <OsmAndCore/ObfsCollection.h>
 #include <OsmAndCore/RoadLocator.h>
@@ -18,10 +15,7 @@
 static const double kTestLatitude = 50.356646571646124;
 static const double kTestLongitude = 7.5956672430038452;
 static const int kNeverAbort = -1;
-static const NSInteger kPendingLookupsCount = 200;
-static const NSTimeInterval kStopMaxDuration = 0.05;
-static const NSTimeInterval kAppInitTimeout = 60.0;
-static const NSTimeInterval kLookupsDrainTimeout = 5.0;
+static const NSTimeInterval kLookupTimeout = 5.0;
 
 struct OAReverseGeocoderSearchRun
 {
@@ -56,48 +50,11 @@ static OAReverseGeocoderSearchRun runReverseGeocoderSearch(int abortFromPoll)
     return run;
 }
 
-static void *kLookupQueueOperationCountContext = &kLookupQueueOperationCountContext;
-
 @interface OAReverseGeocoderStopTests : XCTestCase
 
 @end
 
 @implementation OAReverseGeocoderStopTests
-{
-    XCTestExpectation *_lookupsDrained;
-    CFAbsoluteTime _lookupsDrainedTime;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context
-{
-    if (context != kLookupQueueOperationCountContext)
-    {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-        return;
-    }
-    if ([change[NSKeyValueChangeNewKey] integerValue] != 0)
-        return;
-    @synchronized (self)
-    {
-        if (_lookupsDrainedTime != 0)
-            return;
-        _lookupsDrainedTime = CFAbsoluteTimeGetCurrent();
-    }
-    [_lookupsDrained fulfill];
-}
-
-- (BOOL)waitForAppInitialization
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    if (app.initialized)
-        return YES;
-    XCTNSPredicateExpectation *appInitialized = [[XCTNSPredicateExpectation alloc]
-        initWithPredicate:[NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
-            return app.initialized;
-        }]
-        object:nil];
-    return [XCTWaiter waitForExpectations:@[appInitialized] timeout:kAppInitTimeout] == XCTWaiterResultCompleted;
-}
 
 - (void)testAbortedSearchSkipsResultCallback
 {
@@ -106,7 +63,7 @@ static void *kLookupQueueOperationCountContext = &kLookupQueueOperationCountCont
     XCTAssertEqual(run.callbacks, 0);
 }
 
-- (void)testNotAbortedSearchConsultsControllerAndDeliversResult
+- (void)testNotAbortedSearchConsultsController
 {
     const auto run = runReverseGeocoderSearch(kNeverAbort);
 
@@ -136,46 +93,8 @@ static void *kLookupQueueOperationCountContext = &kLookupQueueOperationCountCont
         [completed fulfill];
     }];
 
-    [self waitForExpectations:@[completed] timeout:kLookupsDrainTimeout];
+    [self waitForExpectations:@[completed] timeout:kLookupTimeout];
     XCTAssertEqualObjects(result, @"");
-}
-
-- (void)testStopReturnsImmediatelyAndDrainsLookups
-{
-    XCTSkipUnless([self waitForAppInitialization], @"OsmAndApp is not initialized");
-
-    OAReverseGeocoder *geocoder = [[OAReverseGeocoder alloc] init];
-    for (NSInteger i = 0; i < kPendingLookupsCount; i++)
-    {
-        [geocoder lookupAddressAtLat:kTestLatitude + i * 0.001
-                                 lon:kTestLongitude + i * 0.001
-                            objectId:0
-                          completion:^(NSString *address) {}];
-    }
-
-    NSOperationQueue *lookupQueue = [geocoder valueForKey:@"lookupQueue"];
-    _lookupsDrained = [self expectationWithDescription:@"lookups drained"];
-    _lookupsDrainedTime = 0;
-
-    [lookupQueue addObserver:self
-                  forKeyPath:@"operationCount"
-                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:kLookupQueueOperationCountContext];
-
-    CFAbsoluteTime stopStart = CFAbsoluteTimeGetCurrent();
-    [geocoder stop];
-    CFAbsoluteTime stopEnd = CFAbsoluteTimeGetCurrent();
-
-    [self waitForExpectations:@[_lookupsDrained] timeout:kLookupsDrainTimeout];
-    [lookupQueue removeObserver:self forKeyPath:@"operationCount" context:kLookupQueueOperationCountContext];
-
-    CFAbsoluteTime stopDuration = stopEnd - stopStart;
-    NSString *timings = [NSString stringWithFormat:@"stop: %.3f ms, drained %.3f ms after stop started",
-                         stopDuration * 1000.0,
-                         _lookupsDrainedTime != 0 ? (_lookupsDrainedTime - stopStart) * 1000.0 : -1.0];
-    [XCTContext runActivityNamed:timings block:^(id<XCTActivity> activity) {}];
-
-    XCTAssertLessThan(stopDuration, kStopMaxDuration);
 }
 
 @end

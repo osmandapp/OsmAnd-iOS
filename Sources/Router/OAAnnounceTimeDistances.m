@@ -61,12 +61,12 @@ const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
         if ([appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
         {
             // keep it as minimum 30 km/h for voice announcement
-            _defaultSpeed = (float) MAX(8, [appMode getDefaultSpeed]);
+            _defaultSpeed = (float) MAX(8, [appMode defaultSpeed]);
         }
         else
         {
             // minimal is 1 meter for turn now
-            _defaultSpeed = (float) MAX(.3, [appMode getDefaultSpeed]);
+            _defaultSpeed = (float) MAX(.3, [appMode defaultSpeed]);
         }
 
         // 300 s: car 3750 m (113 s @ 120 km/h)

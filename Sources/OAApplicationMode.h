@@ -88,7 +88,10 @@
 
 - (NSInteger) getOffRouteDistance;
 - (NSInteger) getMinDistanceForTurn;
-- (double) getDefaultSpeed;
+- (double)defaultSpeed;
+- (float)minSpeedToleranceLimit;
+- (float)maxSpeedToleranceLimit;
+- (BOOL)isSpeedToleranceBigRange;
 
 - (NSString *) toHumanString;
 

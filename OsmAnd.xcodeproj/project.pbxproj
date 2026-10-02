@@ -1253,7 +1253,7 @@
 		DA5A825426C563A700F274C7 /* OAAutoZoomMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9526C563A100F274C7 /* OAAutoZoomMapViewController.m */; };
 		DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9626C563A100F274C7 /* OAArrivalAnnouncementViewController.m */; };
 		DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */; };
-		DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */; };
+		DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */; };
 		DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */; };
 		DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA226C563A100F274C7 /* OABaseSettingsViewController.m */; };
 		DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA326C563A100F274C7 /* OAOsmEditingSettingsViewController.mm */; };
@@ -4255,7 +4255,6 @@
 		DA5A7B8226C563A100F274C7 /* OAAutoCenterMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoCenterMapViewController.m; sourceTree = "<group>"; };
 		DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
-		DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA5A7B8626C563A100F274C7 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationLanguageViewController.m; sourceTree = "<group>"; };
 		DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScreenAlertsViewController.m; sourceTree = "<group>"; };
@@ -4274,7 +4273,7 @@
 		DA5A7B9926C563A100F274C7 /* OARecalculateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARecalculateRouteViewController.h; sourceTree = "<group>"; };
 		DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteParameterValuesViewController.h; sourceTree = "<group>"; };
 		DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidPreferParametersViewController.mm; sourceTree = "<group>"; };
-		DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASpeedLimitToleranceViewController.m; sourceTree = "<group>"; };
+		DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedLimitToleranceViewController.swift; sourceTree = "<group>"; };
 		DA5A7B9D26C563A100F274C7 /* OADefaultSpeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADefaultSpeedViewController.h; sourceTree = "<group>"; };
 		DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACreateProfileViewController.mm; sourceTree = "<group>"; };
 		DA5A7BA026C563A100F274C7 /* OACreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACreateProfileViewController.h; sourceTree = "<group>"; };
@@ -8277,8 +8276,7 @@
 				DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */,
 				321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */,
 				321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */,
-				DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */,
-				DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */,
+				DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */,
 				DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */,
 				DA5A7B7726C563A100F274C7 /* OAVehicleParametersSettingsViewController.mm */,
 				DA5A7B7326C563A100F274C7 /* OAVehicleParametersViewController.h */,
@@ -12218,7 +12216,7 @@
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */,
-				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
+				DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */,

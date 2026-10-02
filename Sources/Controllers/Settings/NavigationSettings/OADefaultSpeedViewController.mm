@@ -73,7 +73,7 @@
             break;
     }
 
-    CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
+    CGFloat settingsDefaultSpeed = [self.appMode defaultSpeed];
 
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (!router || self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
@@ -86,7 +86,7 @@
         _minValue = round(router->getMinSpeed() * _ratio / 2.);
         _maxValue = round(router->getMaxSpeed() * _ratio * 1.5);
     }
-    _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
+    _defaultValue = round([self.appMode defaultSpeed] * _ratio);
 }
 
 #pragma mark - Base UI

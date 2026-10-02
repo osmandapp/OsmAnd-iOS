@@ -43,8 +43,8 @@ final class TrackStatsTableCell: UITableViewCell {
     
     private func setup() {
         selectionStyle = .none
-        backgroundColor = .groupBg
-        contentView.backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
+        contentView.backgroundColor = .secondarySystemGroupedBackground
 
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false

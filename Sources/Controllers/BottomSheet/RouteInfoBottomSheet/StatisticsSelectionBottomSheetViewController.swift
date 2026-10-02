@@ -175,7 +175,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         if item.cellType == OASimpleTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
             cell.descriptionVisibility(false)
             cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.selectedBackgroundView?.backgroundColor = UIColor.secondarySystemGroupedBackground
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             applyYAxisColors(to: cell, item: item)

@@ -89,7 +89,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
                                                                         isBigTitle:NO
                                                                    parentViewWidth:self.view.frame.size.width];
         
-        self.tableView.tableFooterView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        self.tableView.tableFooterView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     }
 
     [self updateNavbar];
@@ -755,7 +755,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
         case EOABaseNavbarColorSchemeOrange:
             return [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
         case EOABaseNavbarColorSchemeWhite:
-            return [UIColor colorNamed:ACColorNameGroupBg];
+            return UIColor.secondarySystemGroupedBackgroundColor;
         default:
             return self.tableView.backgroundColor;
     }
@@ -897,7 +897,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     if (![self useCustomTableViewHeader])
     {
         self.tableView.tableHeaderView = tableHeaderView;
-        self.tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        self.tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     }
 }
 

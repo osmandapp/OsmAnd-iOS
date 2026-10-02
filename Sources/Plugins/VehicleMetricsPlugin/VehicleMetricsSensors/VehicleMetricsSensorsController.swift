@@ -48,7 +48,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         tableView.dataSource = self
         tableView.register(OATableViewCustomHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: OATableViewCustomHeaderView.reuseIdentifier)
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         tableView.contentInset.bottom = 64
     }
     
@@ -187,7 +187,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
             withIdentifier: OATableViewCustomHeaderView.reuseIdentifier
         ) as? OATableViewCustomHeaderView
         headerView?.label.attributedText = nil
-        headerView?.contentView.backgroundColor = .viewBg
+        headerView?.contentView.backgroundColor = .systemGroupedBackground
         headerView?.label.text = title
         headerView?.label.font = headerFont
         headerView?.label.textColor = .textColorSecondary
@@ -296,7 +296,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
-        headerEmptyView.backgroundColor = .groupBg
+        headerEmptyView.backgroundColor = .secondarySystemGroupedBackground
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

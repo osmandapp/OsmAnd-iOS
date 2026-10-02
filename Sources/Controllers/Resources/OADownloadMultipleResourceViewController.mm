@@ -201,7 +201,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerHight = SeparatorAppearance.thickness;
         }

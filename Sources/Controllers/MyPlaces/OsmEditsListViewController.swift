@@ -93,7 +93,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         content.text = item.title
         content.secondaryText = item.descr
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
-        backgroundConfig.backgroundColor = .groupBg
+        backgroundConfig.backgroundColor = .secondarySystemGroupedBackground
         cell.backgroundConfiguration = backgroundConfig
         cell.contentConfiguration = content
         cell.accessories = [.multiselect()]
@@ -191,7 +191,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     // MARK: - Generate Data
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundColor = .viewBg
+        collectionView.backgroundColor = .systemGroupedBackground
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false

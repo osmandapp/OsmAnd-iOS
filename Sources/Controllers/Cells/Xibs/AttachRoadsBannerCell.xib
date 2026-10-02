@@ -51,7 +51,7 @@
                                 </buttonConfiguration>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" name="groupBg"/>
+                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="fIu-LW-wzj" firstAttribute="top" secondItem="FnC-WM-WP2" secondAttribute="bottom" id="Ax3-d5-R52"/>
                             <constraint firstItem="FnC-WM-WP2" firstAttribute="top" secondItem="Hdr-qR-uSf" secondAttribute="bottom" id="CoG-vx-sqT"/>
@@ -66,7 +66,7 @@
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" name="groupBg"/>
+                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 <constraints>
                     <constraint firstItem="nJE-Cm-rxU" firstAttribute="leading" secondItem="YfM-iR-X4y" secondAttribute="leading" constant="14" id="4Xb-Rf-6V5"/>
                     <constraint firstAttribute="trailing" secondItem="nJE-Cm-rxU" secondAttribute="trailing" constant="14" id="KqP-YM-vc1"/>
@@ -74,7 +74,7 @@
                     <constraint firstItem="nJE-Cm-rxU" firstAttribute="top" secondItem="YfM-iR-X4y" secondAttribute="top" constant="4" id="e0Q-cH-vpt"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="button" destination="fIu-LW-wzj" id="h6w-id-hxN"/>
                 <outlet property="contentContainer" destination="nJE-Cm-rxU" id="lJ6-JX-Vqf"/>
@@ -87,14 +87,14 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

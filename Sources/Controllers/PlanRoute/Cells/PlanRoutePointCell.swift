@@ -63,7 +63,7 @@ final class PlanRoutePointCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         showsReorderControl = true
 

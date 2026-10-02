@@ -119,7 +119,7 @@
 
 - (void)updateInfo:(OAFeature *)feature showDivider:(BOOL)showDivider selected:(BOOL)selected
 {
-    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : [UIColor colorNamed:ACColorNameGroupBg];
+    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : UIColor.secondarySystemGroupedBackgroundColor;
     self.labelTitle.text = [feature getTitle];
     self.imageViewLeftIcon.image = [feature getIcon];
     if (_type == EOAFeatureCardRowPlan)
@@ -137,7 +137,7 @@
 {
     _dividerLeftMargin = dividerLeftMargin;
 
-    self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.labelTitle.text = title;
     self.labelTitle.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
     self.imageViewLeftIcon.hidden = YES;

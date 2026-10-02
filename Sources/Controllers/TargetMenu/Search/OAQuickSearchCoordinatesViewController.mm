@@ -1361,7 +1361,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
-    self.scrollView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.scrollView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     _toolbarView.backgroundColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     
     if (!_shouldHideHintBar)

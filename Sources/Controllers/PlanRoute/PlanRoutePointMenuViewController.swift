@@ -75,8 +75,8 @@ final class PlanRoutePointMenuViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
@@ -96,7 +96,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
         cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
         cancelButton.setTitleColor(.iconColorActive, for: .normal)
         cancelButton.titleLabel?.font = .scaledSystemFont(ofSize: 17, weight: .medium)
-        cancelButton.backgroundColor = .groupBg
+        cancelButton.backgroundColor = .secondarySystemGroupedBackground
         cancelButton.layer.cornerRadius = 16
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(onCloseTapped), for: .touchUpInside)

@@ -38,7 +38,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bmx-km-0th">
                     <rect key="frame" x="0.0" y="81" width="414" height="200"/>
@@ -48,7 +48,7 @@
                 <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YeY-jO-Etx" userLabel="View Choose Subscription Buttons Border">
                     <rect key="frame" x="0.0" y="281" width="414" height="165"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" id="vag-0U-zs5" userLabel="Bottom Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="480.5" width="414" height="0.5"/>
@@ -86,12 +86,12 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

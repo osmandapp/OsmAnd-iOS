@@ -52,7 +52,7 @@ final class RouteGroupCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         accessoryType = .disclosureIndicator
         selectionStyle = .default
 

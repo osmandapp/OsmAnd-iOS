@@ -54,7 +54,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="myJ-te-VaF" firstAttribute="centerY" secondItem="Ozp-l2-heC" secondAttribute="centerY" id="2CQ-wA-OeT"/>
                         <constraint firstAttribute="trailing" secondItem="3kl-lL-bKO" secondAttribute="trailing" constant="20" symbolic="YES" id="5Tp-DS-HqZ"/>
@@ -67,7 +67,7 @@
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oBU-WU-gcY">
                     <rect key="frame" x="0.0" y="60" width="320" height="286"/>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <color key="tintColor" name="iconColorActive"/>
                     <color key="separatorColor" name="widgetSeparatorColor"/>
                     <connections>
@@ -100,9 +100,6 @@
     </objects>
     <resources>
         <image name="ic_custom_close" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -115,5 +112,8 @@
         <namedColor name="widgetSeparatorColor">
             <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

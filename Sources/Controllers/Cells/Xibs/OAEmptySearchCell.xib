@@ -50,7 +50,7 @@
                     <constraint firstItem="6qo-te-7UF" firstAttribute="leading" secondItem="NZr-WT-iah" secondAttribute="trailing" constant="11" id="zrV-GU-71T"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="iconView" destination="NZr-WT-iah" id="nXn-LZ-x9I"/>
                 <outlet property="messageView" destination="sXF-ce-i45" id="czp-oZ-3rD"/>
@@ -61,14 +61,14 @@
     </objects>
     <resources>
         <image name="ic_search_empty_state" width="56" height="56"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorSelected">
             <color red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

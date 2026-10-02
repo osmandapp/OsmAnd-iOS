@@ -859,11 +859,11 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        self.topView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     }
     else
     {
-        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        self.topView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
@@ -1916,7 +1916,7 @@ static const NSInteger _buttonsCount = 4;
     _customController = customController;
     self.customController.delegate = self;
     self.customController.navController = self.navController;
-    [self.customController setContentBackgroundColor:[UIColor colorNamed:ACColorNameGroupBg]];
+    [self.customController setContentBackgroundColor:UIColor.secondarySystemGroupedBackgroundColor];
     self.customController.location = self.targetPoint.location;
     
     self.customController.view.frame = self.frame;

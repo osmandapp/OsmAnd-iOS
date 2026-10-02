@@ -72,7 +72,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="Jpo-fz-3wH" secondAttribute="trailing" priority="999" id="z9g-Oq-Xsj"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="descriptionNoLeftIconConstraint" destination="ULJ-WT-USM" id="w7h-iF-rlQ"/>
                 <outlet property="descriptionNoRightIconConstraint" destination="z9g-Oq-Xsj" id="3ol-XQ-h0W"/>
@@ -94,14 +94,14 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

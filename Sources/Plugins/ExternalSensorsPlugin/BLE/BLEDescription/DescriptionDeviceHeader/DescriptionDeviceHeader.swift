@@ -86,7 +86,7 @@ final class DescriptionDeviceHeader: UIView {
             deviceImageView.image = device.getServiceDisconnectedImage
             deviceImageView.tintColor = .iconColorDefault
             configureConnectButtonTitle(with: .connected)
-            imageContainerView.backgroundColor = .viewBg
+            imageContainerView.backgroundColor = .systemGroupedBackground
         }
     }
     

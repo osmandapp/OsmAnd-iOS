@@ -245,8 +245,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
@@ -1044,7 +1044,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         dot.backgroundColor = color
         dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
         dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
-        let contrastRatio = contrastRatio(foreground: color, background: .groupBg)
+        let contrastRatio = contrastRatio(foreground: color, background: .secondarySystemGroupedBackground)
         dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
             ? Self.compactLegendBorderWidth
             : 0

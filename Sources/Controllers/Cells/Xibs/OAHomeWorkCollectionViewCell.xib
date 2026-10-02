@@ -44,7 +44,7 @@
                     </imageView>
                 </subviews>
             </view>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="uq0-fh-3wu" secondAttribute="trailing" constant="11" id="4ya-FC-K2g"/>
                 <constraint firstItem="OKS-FL-Rwe" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="16" id="Geq-7X-KwR"/>
@@ -72,14 +72,14 @@
     </objects>
     <resources>
         <image name="ic_custom_home" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

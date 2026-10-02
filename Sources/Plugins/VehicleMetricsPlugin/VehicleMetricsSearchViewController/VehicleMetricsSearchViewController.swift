@@ -98,7 +98,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         tableView.register(OATableViewCustomHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: OATableViewCustomHeaderView.reuseIdentifier)
         tableView.backgroundColor = .clear
-        view.backgroundColor = UIColor.viewBg
+        view.backgroundColor = UIColor.systemGroupedBackground
         tableView.sectionHeaderTopPadding = 26
         startScan()
     }
@@ -147,7 +147,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
             withIdentifier: OATableViewCustomHeaderView.reuseIdentifier
         ) as? OATableViewCustomHeaderView
         headerView?.label.attributedText = nil
-        headerView?.contentView.backgroundColor = .viewBg
+        headerView?.contentView.backgroundColor = .systemGroupedBackground
         headerView?.label.text = title
         headerView?.label.font = headerFont
         headerView?.label.textColor = .textColorSecondary

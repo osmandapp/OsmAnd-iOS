@@ -145,7 +145,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     private func setupTableView() {
         let horizontalInset = Self.sectionHorizontalInset
         view.backgroundColor = .clear
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.alwaysBounceVertical = true
@@ -217,7 +217,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     }
 
     private func configureEmptyAddGroupCell(_ cell: OASimpleTableViewCell) {
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.selectionStyle = .default
         cell.titleLabel.text = localizedString("fav_add_new_group")
         cell.titleLabel.textColor = .textColorActive

@@ -34,7 +34,7 @@ final class OptionDeviceTableViewCell: UITableViewCell {
     }()
     
     func configure(optionDevice: OptionDevice, widgetType: WidgetType, title: String) {
-        backgroundColor = UIColor.groupBg
+        backgroundColor = UIColor.secondarySystemGroupedBackground
         if optionDevice.option == .anyConnected {
             if let iconName = widgetType.disabledIconName {
                 deviceImageView.image = UIImage(named: iconName)

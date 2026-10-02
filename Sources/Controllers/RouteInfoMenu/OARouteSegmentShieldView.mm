@@ -62,7 +62,7 @@ static UIFont *_shieldFont;
         _contentView.layer.borderColor = primaryColor.CGColor;
         _contentView.layer.borderWidth = 2.0;
         _shieldLabel.textColor = primaryColor;
-        _contentView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _contentView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         _shieldImage.image = [UIImage templateImageNamed:_iconName];
         _shieldImage.tintColor = primaryColor;
     }
@@ -97,7 +97,7 @@ static UIFont *_shieldFont;
         {
             [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
             _shieldLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            _contentView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _contentView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         else
         {
@@ -115,8 +115,8 @@ static UIFont *_shieldFont;
     [UIView animateWithDuration:.2 animations:^{
         if (_type == EOATransportShiledPedestrian)
         {
-            [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
-            _shieldLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
+            [_shieldImage setTintColor:UIColor.secondarySystemGroupedBackgroundColor];
+            _shieldLabel.textColor = UIColor.secondarySystemGroupedBackgroundColor;
             _contentView.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         else

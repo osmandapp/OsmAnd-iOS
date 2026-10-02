@@ -225,7 +225,7 @@
         if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             
             [cell leftEditButtonVisibility:NO];
             [cell leftIconVisibility:YES];
@@ -251,7 +251,7 @@
             cell.titleLabel.text = title;
             
             UIView *bgColorView = [UIView new];
-            bgColorView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            bgColorView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell setSelectedBackgroundView:bgColorView];
             
             NSString *size;
@@ -308,7 +308,7 @@
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell leftEditButtonVisibility:NO];
             [cell leftIconVisibility:NO];
             [cell titleVisibility:YES];
@@ -320,7 +320,7 @@
             [cell.titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
             
             UIView *bgColorView = [UIView new];
-            bgColorView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            bgColorView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell setSelectedBackgroundView:bgColorView];
             
             return cell;

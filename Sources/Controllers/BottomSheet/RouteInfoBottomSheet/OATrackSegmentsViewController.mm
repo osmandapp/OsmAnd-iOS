@@ -82,7 +82,7 @@
     
     _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getLocalizedDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorPrimary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView = _tableHeaderView;
-    self.tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
 }
 
 - (void) applyLocalization

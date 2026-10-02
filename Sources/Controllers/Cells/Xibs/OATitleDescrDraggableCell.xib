@@ -70,7 +70,7 @@
                     <constraint firstItem="kvn-zS-5Ae" firstAttribute="leading" secondItem="6QZ-eh-lvr" secondAttribute="trailing" constant="10" id="prc-Xj-Pmf"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="descView" destination="XXz-m7-fDz" id="Rv7-wg-Nky"/>
                 <outlet property="descrBottomConstraint" destination="Mwi-FF-U2m" id="pGX-xW-Keg"/>
@@ -93,14 +93,14 @@
     </objects>
     <resources>
         <image name="ic_custom_overflow_menu" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

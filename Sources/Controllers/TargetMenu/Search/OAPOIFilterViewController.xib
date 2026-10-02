@@ -71,7 +71,7 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="naV-Mx-mPs">
                     <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <color key="tintColor" name="iconColorActive"/>
                     <color key="separatorColor" name="customSeparator"/>
                     <inset key="separatorInset" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -99,7 +99,7 @@
                     <color key="backgroundColor" name="buttonBgColorPrimary"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="viewBg"/>
+            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <point key="canvasLocation" x="52" y="63.546798029556655"/>
         </view>
@@ -125,8 +125,8 @@
         <namedColor name="navBarTextColorPrimary">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

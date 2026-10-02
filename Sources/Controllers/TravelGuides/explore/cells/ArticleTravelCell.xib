@@ -88,7 +88,7 @@
                     <constraint firstAttribute="trailing" secondItem="mHV-wI-dNE" secondAttribute="trailing" constant="20" id="txv-QX-rKR"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="arcticleDescription" destination="1cQ-8B-7Pv" id="ucf-9U-EeK"/>
                 <outlet property="arcticleTitle" destination="UQn-I8-jyJ" id="X6T-Z0-9zf"/>
@@ -103,9 +103,6 @@
     <resources>
         <image name="ic_custom20_bookmark" width="20" height="20"/>
         <image name="ic_custom_photo" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -124,5 +121,8 @@
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

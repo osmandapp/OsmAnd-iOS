@@ -174,7 +174,7 @@ final class ExpandableTextViewTableCell: UITableViewCell {
                            reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
-        contentView.backgroundColor = .groupBg
+        contentView.backgroundColor = .secondarySystemGroupedBackground
     }
 
     required init?(coder aDecoder: NSCoder) {

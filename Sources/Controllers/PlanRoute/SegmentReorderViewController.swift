@@ -45,8 +45,8 @@ final class SegmentReorderViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isEditing = true

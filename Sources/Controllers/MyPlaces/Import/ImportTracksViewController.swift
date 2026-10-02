@@ -434,7 +434,7 @@ private extension ImportTracksViewController {
     func configuredStatsCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TrackStatsTableCell.reuseIdentifier, for: indexPath) as! TrackStatsTableCell
         cell.selectionStyle = .none
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.isAccessibilityElement = false
         cell.accessibilityElementsHidden = true
         if let statisticsCells = item.obj(forKey: RowObjKey.statisticsCells.rawValue) as? [OAGPXTableCellData] {
@@ -447,7 +447,7 @@ private extension ImportTracksViewController {
     func configuredPreviewCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: OAImageDescTableViewCell.reuseIdentifier, for: indexPath) as! OAImageDescTableViewCell
         cell.selectionStyle = .none
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.descView.isHidden = true
         cell.imageBottomToLabelConstraint.priority = .defaultLow
         cell.imageBottomConstraint.priority = .required

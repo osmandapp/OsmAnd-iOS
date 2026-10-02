@@ -49,7 +49,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         separatorInset = UIEdgeInsets(top: 0,
                                       left: Self.titleLeadingInset,

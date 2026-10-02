@@ -119,7 +119,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return [UIColor colorNamed:ACColorNameViewBg];
+    return UIColor.systemGroupedBackgroundColor;
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

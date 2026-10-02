@@ -647,7 +647,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
         }
         if item.cellType == SegmentTextTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextTableViewCell.reuseIdentifier, for: indexPath) as? SegmentTextTableViewCell {
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             cell.separatorInset = UIEdgeInsets(top: 0.0, left: .greatestFiniteMagnitude, bottom: 0.0, right: 0.0)
             cell.setSegmentedControlBottomSpacing(8.0)
             cell.configureSegmentedControl(titles: [localizedString("day"), localizedString("daynight_mode_night")], selectedSegmentIndex: isNightColorMode ? 1 : 0)

@@ -57,14 +57,14 @@
 - (void) commonInit
 {
     self.containerView = [[UIView alloc] init];
-    self.containerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.containerView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.imageView = [[UIImageView alloc] init];
     self.imageView.image = [UIImage imageNamed:ACImageNameIcActionMessage];
     self.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.imageView sizeToFit];
     
     self.lbTitle = [[OACustomTextView alloc] init];
-    self.lbTitle.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.lbTitle.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.lbTitle.userInteractionEnabled = YES;
     self.lbTitle.editable = NO;
     self.lbTitle.textContainerInset = UIEdgeInsetsZero;

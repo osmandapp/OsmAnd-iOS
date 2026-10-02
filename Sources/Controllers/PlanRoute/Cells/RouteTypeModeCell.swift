@@ -43,7 +43,7 @@ final class RouteTypeModeCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         checkmarkView.contentMode = .scaleAspectFit

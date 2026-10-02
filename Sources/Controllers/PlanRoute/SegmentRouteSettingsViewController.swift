@@ -67,7 +67,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         setupNavigationBar()
         if futureRouteAction == nil {
             setupSegmentControl()

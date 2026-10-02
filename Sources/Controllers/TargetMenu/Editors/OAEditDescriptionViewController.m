@@ -74,7 +74,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.tableView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     
     [self setupView];
 }

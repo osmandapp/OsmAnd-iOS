@@ -27,7 +27,7 @@
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="gMU-eo-CWF">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <color key="separatorColor" name="customSeparator"/>
                             <connections>
@@ -36,10 +36,10 @@
                             </connections>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <point key="canvasLocation" x="308.69565217391306" y="225.66964285714283"/>
         </view>
     </objects>
@@ -47,11 +47,11 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

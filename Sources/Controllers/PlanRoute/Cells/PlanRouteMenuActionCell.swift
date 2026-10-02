@@ -59,7 +59,7 @@ final class PlanRouteMenuActionCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)

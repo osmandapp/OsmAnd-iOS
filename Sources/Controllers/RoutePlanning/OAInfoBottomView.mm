@@ -106,7 +106,7 @@
     _headerViewText = headerViewText;
     _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorPrimary] isBigTitle:NO parentViewWidth:self.frame.size.width];
     _tableView.tableHeaderView = _tableHeaderView;
-    _tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    _tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
 }
 
 - (CGFloat) getViewHeight

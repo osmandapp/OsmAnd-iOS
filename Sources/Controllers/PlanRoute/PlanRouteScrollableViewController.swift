@@ -514,7 +514,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
-        sheetView.backgroundColor = .viewBg
+        sheetView.backgroundColor = .systemGroupedBackground
         sheetView.layer.cornerRadius = Self.sheetCornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.clipsToBounds = true

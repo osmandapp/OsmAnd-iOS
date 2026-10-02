@@ -183,8 +183,8 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         } else if item.cellType == OAFoldersCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAFoldersCell.reuseIdentifier, for: indexPath) as! OAFoldersCell
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
-            cell.collectionView.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
+            cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
             cell.collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 77)
             cell.collectionView.foldersDelegate = self
             cell.collectionView.setValues(stepValues(), withSelectedIndex: dataState.selectedIndex)

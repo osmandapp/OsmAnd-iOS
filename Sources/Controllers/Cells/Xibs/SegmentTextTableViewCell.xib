@@ -29,7 +29,7 @@
                 </segmentedControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="m5a-3X-juW"/>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="KKu-fq-O5h" secondAttribute="bottom" constant="20" id="CZu-T3-d0n"/>
                 <constraint firstItem="m5a-3X-juW" firstAttribute="trailing" secondItem="KKu-fq-O5h" secondAttribute="trailing" constant="20" id="OJH-k5-Hpw"/>
@@ -45,11 +45,11 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

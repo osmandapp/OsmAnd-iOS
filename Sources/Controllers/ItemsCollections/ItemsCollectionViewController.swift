@@ -135,7 +135,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
+        tableView.backgroundColor = collectionType == .colorItems ? .secondarySystemGroupedBackground : .systemGroupedBackground
         tableView.keyboardDismissMode = .onDrag
         if collectionType != .colorizationPaletteItems && collectionType != .terrainPaletteItems {
             tableView.separatorStyle = .none
@@ -306,7 +306,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     }
                 }
                 
-                cell.contentView.backgroundColor = .groupBg
+                cell.contentView.backgroundColor = .secondarySystemGroupedBackground
                 cell.contentView.layer.cornerRadius = 32
                 cell.contentView.layer.masksToBounds = true
                 cell.backgroundColor = .clear

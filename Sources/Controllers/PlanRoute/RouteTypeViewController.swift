@@ -73,8 +73,8 @@ final class RouteTypeViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0

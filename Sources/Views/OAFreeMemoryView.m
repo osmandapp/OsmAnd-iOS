@@ -74,7 +74,7 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clipsToBounds = YES;
     self.contentMode = UIViewContentModeRedraw;
-    self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
 
     _sysVal = 0;
     _appVal = 0;

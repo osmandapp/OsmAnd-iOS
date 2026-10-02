@@ -60,7 +60,7 @@ import UIKit
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .groupBg
+        collectionView.backgroundColor = .secondarySystemGroupedBackground
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
@@ -206,8 +206,8 @@ import UIKit
     
     private func setupUI() {
         selectionStyle = .none
-        backgroundColor = .groupBg
-        contentView.backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
+        contentView.backgroundColor = .secondarySystemGroupedBackground
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -304,7 +304,7 @@ import UIKit
         cell.descLabel.text = item.size
         cell.imageView.tintColor = item.color
         cell.imageView.image = .templateImageNamed(item.imageName)
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.titleLabel.textColor = titleColor
         cell.titleLabel.font = item.hidden ? italicGroupFont : originalGroupFont
 

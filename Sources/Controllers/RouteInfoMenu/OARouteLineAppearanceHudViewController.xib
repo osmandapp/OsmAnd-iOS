@@ -125,7 +125,7 @@
                                             </connections>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="Q2K-uE-JRg" firstAttribute="leading" secondItem="hZH-Ok-pp1" secondAttribute="leading" constant="20" id="2kx-1o-5IE"/>
                                         <constraint firstAttribute="bottom" secondItem="IjP-Ok-skA" secondAttribute="bottom" id="adI-sO-Su8"/>
@@ -137,7 +137,7 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="36" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="q0C-gd-VKg">
                                     <rect key="frame" x="0.0" y="56" width="414" height="350"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                     <color key="separatorColor" name="customSeparator"/>
                                 </tableView>
                                 <view hidden="YES" contentMode="scaleToFill" id="jRx-Ug-Yby" userLabel="Toolbar">
@@ -146,7 +146,7 @@
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="0y8-Bd-jz2" firstAttribute="centerX" secondItem="QyC-iu-oJ2" secondAttribute="centerX" id="1Yd-D1-aBJ"/>
                                 <constraint firstItem="0y8-Bd-jz2" firstAttribute="top" secondItem="QyC-iu-oJ2" secondAttribute="top" constant="6" id="AvZ-Ch-eAu"/>
@@ -154,7 +154,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="xei-Wo-Q9q"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Y3O-U6-e8m" userLabel="Navigation View">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
@@ -234,7 +234,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="wYg-bp-8sh" firstAttribute="leading" secondItem="Drh-T0-05Q" secondAttribute="trailing" constant="16" id="4fd-IJ-rLH"/>
                         <constraint firstAttribute="bottom" secondItem="Drh-T0-05Q" secondAttribute="bottom" id="T5h-2q-dzZ"/>
@@ -277,8 +277,8 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

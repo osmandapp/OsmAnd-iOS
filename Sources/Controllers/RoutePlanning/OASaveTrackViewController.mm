@@ -391,7 +391,7 @@
             cell.delegate = self;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         if (cell)
         {

@@ -43,7 +43,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.dataSource = self
         tableView.register(OATableViewCustomHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: OATableViewCustomHeaderView.reuseIdentifier)
-        view.backgroundColor = UIColor.viewBg
+        view.backgroundColor = UIColor.systemGroupedBackground
         tableView.contentInset.bottom = 64
     }
     
@@ -177,7 +177,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             withIdentifier: OATableViewCustomHeaderView.reuseIdentifier
         ) as? OATableViewCustomHeaderView
         headerView?.label.attributedText = nil
-        headerView?.contentView.backgroundColor = .viewBg
+        headerView?.contentView.backgroundColor = .systemGroupedBackground
         headerView?.label.text = title
         headerView?.label.font = headerFont
         headerView?.label.textColor = .textColorSecondary
@@ -280,7 +280,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
-        headerEmptyView.backgroundColor = UIColor.groupBg
+        headerEmptyView.backgroundColor = UIColor.secondarySystemGroupedBackground
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

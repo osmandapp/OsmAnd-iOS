@@ -42,7 +42,7 @@ final class PlanRouteActionCell: UITableViewCell {
     private func setupCell() {
         let contentInsets = Self.contentInsets
         let minimumHeight = Self.minimumHeight
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)

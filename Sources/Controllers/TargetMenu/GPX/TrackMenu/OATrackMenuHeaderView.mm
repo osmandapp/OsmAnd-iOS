@@ -135,7 +135,7 @@
          nearestCity:(NSString *)nearestCity
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
-    ? [UIColor colorNamed:ACColorNameGroupBg] : [UIColor colorNamed:ACColorNameViewBg];
+    ? UIColor.secondarySystemGroupedBackgroundColor : UIColor.systemGroupedBackgroundColor;
 
     self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 

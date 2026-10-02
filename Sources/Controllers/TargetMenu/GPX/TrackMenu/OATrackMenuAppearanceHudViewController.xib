@@ -44,7 +44,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wCQ-jO-kha" userLabel="Status Bar Background">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="Z2i-nm-ocC" userLabel="Content Container">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
@@ -87,7 +87,7 @@
                                             </connections>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="GHB-SE-z0U" firstAttribute="top" secondItem="yzx-9N-ib1" secondAttribute="top" constant="3" id="10m-bT-mDk"/>
                                         <constraint firstItem="WZz-Dd-qQQ" firstAttribute="leading" secondItem="yzx-9N-ib1" secondAttribute="leading" id="8EC-e6-h1O"/>
@@ -103,17 +103,17 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="CTy-7m-ux9">
                                     <rect key="frame" x="0.0" y="56" width="414" height="350"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                     <color key="separatorColor" name="customSeparator"/>
                                 </tableView>
                                 <view hidden="YES" contentMode="scaleToFill" id="FVp-0e-c7g" userLabel="Toolbar">
                                     <rect key="frame" x="0.0" y="406" width="414" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="Yei-Pg-q9A" firstAttribute="top" secondItem="Z2i-nm-ocC" secondAttribute="top" constant="6" id="4mt-s4-X7J"/>
                                 <constraint firstItem="Yei-Pg-q9A" firstAttribute="centerX" secondItem="Z2i-nm-ocC" secondAttribute="centerX" id="ZlC-WC-cbl"/>
@@ -121,7 +121,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="34I-jS-UdM"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ItH-eF-cbG" userLabel="Back Button Container">
                     <rect key="frame" x="10" y="58" width="62" height="48"/>
@@ -195,8 +195,8 @@
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

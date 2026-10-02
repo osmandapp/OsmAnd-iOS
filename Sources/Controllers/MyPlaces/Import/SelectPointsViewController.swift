@@ -357,10 +357,10 @@ private extension SelectPointsViewController {
         cell.setShowWaypointButtonVisiblity(false)
         updatePointDistanceAndDirectionCell(cell, wptItem: wptItem, animated: false)
 
-        cell.contentView.backgroundColor = .groupBg
-        if cell.selectedBackgroundView?.backgroundColor != .groupBg {
+        cell.contentView.backgroundColor = .secondarySystemGroupedBackground
+        if cell.selectedBackgroundView?.backgroundColor != .secondarySystemGroupedBackground {
             let backgroundView = UIView()
-            backgroundView.backgroundColor = .groupBg
+            backgroundView.backgroundColor = .secondarySystemGroupedBackground
             cell.selectedBackgroundView = backgroundView
         }
         

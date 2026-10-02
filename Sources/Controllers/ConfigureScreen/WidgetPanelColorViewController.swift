@@ -227,7 +227,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorColor = SeparatorAppearance.color
         tableView.sectionHeaderHeight = .leastNormalMagnitude
         tableView.sectionHeaderTopPadding = 0
@@ -247,7 +247,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func configureSheetHeader() {
-        topHeaderContainerView.backgroundColor = .viewBg
+        topHeaderContainerView.backgroundColor = .systemGroupedBackground
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
@@ -615,7 +615,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             cell.configureSegmentedControl(titles: [localizedString("day"),
                                                      localizedString("daynight_mode_night")],
                                            selectedSegmentIndex: isNightColorMode ? 1 : 0)
@@ -633,7 +633,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                                                            for: indexPath) as? OACollectionSingleLineTableViewCell else {
                 return UITableViewCell()
             }
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             // Keep the 48 pt selection ring inside the 60 pt row. The shared
             // cell uses a 9 pt bottom spacer by default, which leaves only
             // 45 pt for the collection view and clips the ring vertically.
@@ -828,7 +828,7 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
 
     private func configureViews() {
         selectionStyle = .none
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
 
         topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
         topSeparatorView.backgroundColor = SeparatorAppearance.color

@@ -48,7 +48,7 @@ final class RouteSettingToggleCell: UITableViewCell {
         let iconSize = Self.iconSize
         let minimumHeight = Self.minimumHeight
         let verticalPadding = Self.verticalPadding
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
 

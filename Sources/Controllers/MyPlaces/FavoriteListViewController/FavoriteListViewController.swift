@@ -134,7 +134,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         configureCollectionView()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
@@ -207,7 +207,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     
     func listCellBackgroundConfiguration() -> UIBackgroundConfiguration {
         var configuration = UIBackgroundConfiguration.listGroupedCell()
-        configuration.backgroundColor = .groupBg
+        configuration.backgroundColor = .secondarySystemGroupedBackground
         return configuration
     }
 

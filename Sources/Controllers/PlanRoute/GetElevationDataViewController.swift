@@ -47,7 +47,7 @@ final class GetElevationDataViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
 
         let closeButton = PlanRouteButtonFactory.iconButton(image: .icNavbarClose, size: 44)
         closeButton.layer.shadowOpacity = 0
@@ -70,7 +70,7 @@ final class GetElevationDataViewController: UIViewController {
         view.addSubview(descriptionLabel)
 
         let optionsCard = UIView()
-        optionsCard.backgroundColor = .groupBg
+        optionsCard.backgroundColor = .secondarySystemGroupedBackground
         optionsCard.layer.cornerRadius = 24
         optionsCard.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(optionsCard)

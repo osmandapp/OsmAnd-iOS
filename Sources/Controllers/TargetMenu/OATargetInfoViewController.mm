@@ -881,7 +881,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     self.tableView.separatorColor = [SeparatorAppearance color];
     
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    view.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     
@@ -1575,7 +1575,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            cell.backgroundColor = UIColor.systemGroupedBackgroundColor;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];

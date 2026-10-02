@@ -45,7 +45,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b6c-LM-fjU">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="EWQ-rI-8ij">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
@@ -54,7 +54,7 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="18" sectionFooterHeight="-1" estimatedSectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ism-tw-8Ez">
                                     <rect key="frame" x="0.0" y="6" width="414" height="400"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                     <color key="separatorColor" name="customSeparator"/>
                                 </tableView>
@@ -63,7 +63,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="22D-eG-AnG"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                 </view>
                 <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKw-4z-Ryw" userLabel="Back Button Container">
                     <rect key="frame" x="10" y="128" width="74" height="50"/>
@@ -150,8 +150,8 @@
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

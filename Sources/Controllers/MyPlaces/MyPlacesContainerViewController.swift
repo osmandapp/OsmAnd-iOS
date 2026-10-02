@@ -116,7 +116,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .label
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         openTracksFolderIfNeeded()
     }
     
@@ -454,7 +454,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
                 segmentContainerView.addInteraction(interaction)
             }
         } else {
-            segmentContainerView.backgroundColor = .viewBg
+            segmentContainerView.backgroundColor = .systemGroupedBackground
             navigationItem.standardAppearance = navigationController?.navigationBar.scrollEdgeAppearance
         }
     }

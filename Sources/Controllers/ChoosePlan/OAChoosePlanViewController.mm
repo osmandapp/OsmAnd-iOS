@@ -248,7 +248,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     }
 
     _backgroundAboveScrollViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0., -self.scrollView.contentInset.top, DeviceScreenWidth, self.scrollView.contentInset.top)];
-    _backgroundAboveScrollViewContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    _backgroundAboveScrollViewContainer.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     [self.scrollView insertSubview:_backgroundAboveScrollViewContainer aboveSubview:self.scrollViewContainerView];
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
@@ -525,7 +525,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         {
             UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
             [appearance configureWithOpaqueBackground];
-            appearance.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            appearance.backgroundColor = UIColor.systemGroupedBackgroundColor;
             appearance.titleTextAttributes = @{
                 NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
@@ -672,7 +672,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     else if (_isHeaderBlurred && y <= 0.)
     {
         [self.viewNavigationBar removeBlurEffect];
-        self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        self.viewNavigationBar.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         if (@available(iOS 26.0, *))
         {
             [self.navigationItem.titleView setHidden:YES];

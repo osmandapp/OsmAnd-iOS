@@ -55,7 +55,7 @@ static UIFont *_descrFont;
     }
     else
     {
-        _contentContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _contentContainer.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         _titleView.textColor = _textColorNormal ? _textColorNormal : [UIColor colorNamed:ACColorNameTextColorPrimary];
         [_iconView setTintColor:_iconColorNormal ? _iconColorNormal : [UIColor colorNamed:ACColorNameIconColorActive]];
     }

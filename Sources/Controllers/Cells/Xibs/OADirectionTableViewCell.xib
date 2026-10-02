@@ -66,7 +66,7 @@
                     <constraint firstItem="Jxt-0O-BUk" firstAttribute="top" secondItem="WjJ-oA-z8c" secondAttribute="bottom" constant="1" id="hMZ-7a-nbv"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="descIcon" destination="m5D-FP-MKL" id="fKy-TE-yCo"/>
                 <outlet property="descLabel" destination="Jxt-0O-BUk" id="CcK-bz-eNa"/>
@@ -80,11 +80,11 @@
     <resources>
         <image name="ic_trip_directions" width="20" height="20"/>
         <image name="icon_favorite_direction" width="8" height="9"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

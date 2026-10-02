@@ -43,7 +43,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" name="groupBg"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="4Jq-jC-i9a" firstAttribute="centerX" secondItem="buh-fe-XP7" secondAttribute="centerX" id="An4-gS-Lwi"/>
                                     <constraint firstItem="4Jq-jC-i9a" firstAttribute="centerY" secondItem="buh-fe-XP7" secondAttribute="centerY" id="cjj-bm-eRA"/>
@@ -60,7 +60,7 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" name="groupBg"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="7cs-BR-adU" firstAttribute="centerX" secondItem="hW9-Rv-BDm" secondAttribute="centerX" id="d4X-LC-o9H"/>
                                     <constraint firstItem="7cs-BR-adU" firstAttribute="centerY" secondItem="hW9-Rv-BDm" secondAttribute="centerY" id="sIn-28-8x6"/>
@@ -87,8 +87,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

@@ -1447,7 +1447,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if ([cellData.type isEqualToString:OADividerCell.reuseIdentifier])
     {
         OADividerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OADividerCell.reuseIdentifier];
-        cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         cell.dividerInsets = UIEdgeInsetsZero;
         cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
@@ -1475,8 +1475,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
             _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
             _colorValuesCell.collectionView.contentInset = UIEdgeInsetsMake(0., 8. , 0., 20.);
-            _colorValuesCell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            _colorValuesCell.collectionView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _colorValuesCell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
+            _colorValuesCell.collectionView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             _colorValuesCell.collectionView.cellIndex = indexPath;
             _colorValuesCell.collectionView.state = _scrollCellsState;
             _colorValuesCell.collectionView.foldersDelegate = self;
@@ -1510,7 +1510,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = [self.tableView dequeueReusableCellWithIdentifier:OASegmentedControlCell.reuseIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.segmentedControl.backgroundColor = [[UIColor colorNamed:ACColorNameIconColorActive] colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];

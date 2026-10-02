@@ -147,7 +147,7 @@
                     <constraint firstItem="7no-qe-0n9" firstAttribute="leading" secondItem="IkR-JM-C0Q" secondAttribute="leadingMargin" id="wd2-mw-qmZ"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="bottomContentSpaceView" destination="hIt-4Q-RS6" id="og0-hT-30o"/>
                 <outlet property="button" destination="jqF-jw-1um" id="GCb-TG-uFb"/>
@@ -170,9 +170,6 @@
     </objects>
     <resources>
         <image name="ic_custom_delete" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -182,6 +179,9 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

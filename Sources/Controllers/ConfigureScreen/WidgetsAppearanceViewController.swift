@@ -67,7 +67,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurePreviewHeader()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorColor = SeparatorAppearance.color
         tableView.sectionHeaderTopPadding = 8
         tableView.estimatedRowHeight = Constants.rowHeight
@@ -1682,7 +1682,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     }
 
     private func setupViews() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         preservesSuperviewLayoutMargins = false
         separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
 

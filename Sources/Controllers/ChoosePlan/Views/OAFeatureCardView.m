@@ -294,7 +294,7 @@
             _stateCanceled = YES;
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[tag];
-                row.backgroundColor = tag == _selectedFeatureIndex ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : [UIColor colorNamed:ACColorNameGroupBg];
+                row.backgroundColor = tag == _selectedFeatureIndex ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : UIColor.secondarySystemGroupedBackgroundColor;
             }                completion:nil];
         }
         else if (state == UIGestureRecognizerStateEnded)
@@ -307,7 +307,7 @@
 
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                row.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+                row.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
                 _selectedFeatureIndex = tag;
                 row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
                 row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];

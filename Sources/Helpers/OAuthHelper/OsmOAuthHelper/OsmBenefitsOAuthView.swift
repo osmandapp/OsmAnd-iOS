@@ -67,7 +67,7 @@ struct OsmBenefitsOAuthView: View {
 private struct OsmBenefitsOAuthBackgroundView: View {
     var body: some View {
         ZStack {
-            Color.viewBg.ignoresSafeArea()
+            Color(.systemGroupedBackground).ignoresSafeArea()
         }
     }
 }

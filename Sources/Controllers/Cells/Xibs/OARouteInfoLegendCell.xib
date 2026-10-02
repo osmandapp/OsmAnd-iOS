@@ -28,7 +28,7 @@
                     <constraint firstItem="fi2-lk-gQM" firstAttribute="leading" secondItem="Tjp-Ic-c7l" secondAttribute="leading" id="agI-5u-Rx4"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="legendStackView" destination="fi2-lk-gQM" id="2z9-h0-3OX"/>
             </connections>
@@ -36,8 +36,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

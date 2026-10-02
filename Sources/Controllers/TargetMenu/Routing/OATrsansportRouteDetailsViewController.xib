@@ -48,7 +48,7 @@
                             <color key="currentPageIndicatorTintColor" name="iconColorActive"/>
                         </pageControl>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" id="hlW-SJ-zKe">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
@@ -57,7 +57,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="llv-si-v4e">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Route" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehS-id-DV6">
                             <rect key="frame" x="51" y="29.666666666666671" width="312" height="24.333333333333329"/>
@@ -80,7 +80,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="ehS-id-DV6" firstAttribute="centerX" secondItem="hlW-SJ-zKe" secondAttribute="centerX" id="I8K-Ri-gsR"/>
                         <constraint firstItem="uVh-5a-3eA" firstAttribute="leading" secondItem="hlW-SJ-zKe" secondAttribute="leadingMargin" constant="8" id="OdP-kj-RSD"/>
@@ -92,23 +92,23 @@
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="nJ9-RW-X94">
                     <rect key="frame" x="0.0" y="310" width="414" height="586"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <point key="canvasLocation" x="-59.420289855072468" y="80.357142857142847"/>
         </view>
     </objects>
     <resources>
         <image name="ic_navbar_chevron" width="28" height="28"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

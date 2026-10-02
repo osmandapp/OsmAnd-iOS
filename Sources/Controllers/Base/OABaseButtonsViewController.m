@@ -218,11 +218,11 @@
     switch ([self getBottomColorScheme])
     {
         case EOABaseBottomColorSchemeBlank:
-            return [UIColor colorNamed:ACColorNameViewBg];
+            return UIColor.systemGroupedBackgroundColor;
         case EOABaseBottomColorSchemeGray:
-            return [UIColor colorNamed:ACColorNameGroupBg];
+            return UIColor.secondarySystemGroupedBackgroundColor;
         case EOABaseBottomColorSchemeWhite:
-            return [UIColor colorNamed:ACColorNameGroupBg];
+            return UIColor.secondarySystemGroupedBackgroundColor;
         default:
             return nil;
     }

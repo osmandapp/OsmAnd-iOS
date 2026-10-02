@@ -434,7 +434,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(item.obj(forKey: Self.descriptionKey) != nil)
             cell.leftIconVisibility(item.icon != nil || filterType == .color)
             cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.selectedBackgroundView?.backgroundColor = UIColor.secondarySystemGroupedBackground
             cell.accessoryType = .none
             cell.titleLabel.text = item.title
             cell.descriptionLabel.text = item.obj(forKey: Self.descriptionKey) as? String

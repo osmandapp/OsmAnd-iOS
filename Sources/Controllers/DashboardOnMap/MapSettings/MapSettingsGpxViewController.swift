@@ -248,7 +248,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
             cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.selectedBackgroundView?.backgroundColor = UIColor.secondarySystemGroupedBackground
             cell.titleLabel.text = item.title
             if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
                 cell.descriptionLabel.attributedText = TracksSortModeHelper.getTrackDescription(track: gpx, sortMode: currentSortMode, includeFolderInfo: true)

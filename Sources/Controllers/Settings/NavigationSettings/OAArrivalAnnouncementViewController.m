@@ -68,7 +68,7 @@
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
     UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
-    imageBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    imageBackgroundView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
 
     UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
     bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);

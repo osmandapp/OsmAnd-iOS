@@ -77,7 +77,7 @@
                     <constraint firstItem="t5H-N6-sqU" firstAttribute="top" secondItem="niV-p8-gYX" secondAttribute="top" constant="16" id="tTB-Ta-28x"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="buttonLeftMargin" destination="F0Z-qi-ggD" id="tWZ-bd-Tcd"/>
                 <outlet property="buttonNoIconLeftMargin" destination="kYi-nM-EER" id="qSh-xq-9nM"/>
@@ -98,9 +98,6 @@
     <resources>
         <image name="ic_custom_arrow_forward" width="30" height="30"/>
         <image name="ic_custom_osmand_pro_logo_colored" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -110,5 +107,8 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

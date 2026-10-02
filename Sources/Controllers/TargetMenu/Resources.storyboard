@@ -19,7 +19,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1LP-5L-xCP" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" name="viewBg"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
                                 <prototypes>
@@ -46,7 +46,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="Lhe-yk-sVD" kind="show" identifier="openInstalledResourcesSegue" id="dMO-Tr-KOi"/>
@@ -75,7 +75,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="w8S-Nb-zGN" kind="show" identifier="openOutdatedResourcesSegue" id="uGo-KX-98T"/>
@@ -104,7 +104,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="Lhe-yk-sVD" kind="show" identifier="openSubregionSegue" id="f3E-yf-8Vo"/>
@@ -133,7 +133,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="huq-qE-lWI" kind="show" identifier="openDetailsSegue" id="u69-45-Dwv"/>
@@ -147,7 +147,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8Qu-hJ-JfY"/>
-                        <color key="backgroundColor" name="viewBg"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="6H3-qT-xDt"/>
                             <constraint firstAttribute="trailing" secondItem="1LP-5L-xCP" secondAttribute="trailing" id="VfI-UB-pdz"/>
@@ -174,7 +174,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="10" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
-                                <color key="backgroundColor" name="viewBg"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
                                 <prototypes>
@@ -201,7 +201,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <connections>
                                             <segue destination="ywk-bf-9Aq" kind="show" identifier="openLiveUpdatesSegue" id="nug-7T-dYU"/>
                                         </connections>
@@ -214,7 +214,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gzt-J4-M2N"/>
-                        <color key="backgroundColor" name="viewBg"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="vN3-1c-cfU" firstAttribute="top" secondItem="CML-Vt-67j" secondAttribute="top" id="Fsg-2P-659"/>
                             <constraint firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="GWg-B8-LLx"/>
@@ -241,7 +241,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" estimatedRowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-LD-cxr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
-                                <color key="backgroundColor" name="viewBg"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
                                 <prototypes>
@@ -280,7 +280,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="VFQ-UG-w9b" secondAttribute="trailing" constant="16" id="y0G-C7-Hhf"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <connections>
                                             <outlet property="leftLabelView" destination="adt-2f-sfa" id="A99-rn-8R1"/>
                                             <outlet property="rightLabelView" destination="VFQ-UG-w9b" id="UWD-Ts-Tsa"/>
@@ -294,7 +294,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Q8Y-qg-2ES"/>
-                        <color key="backgroundColor" name="viewBg"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="top" secondItem="eW4-T7-AN9" secondAttribute="top" id="O9g-fn-d14"/>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="leading" secondItem="eW4-T7-AN9" secondAttribute="leading" id="WLQ-ch-Eo9"/>
@@ -321,7 +321,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Q2Z-Wq-dKI">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                                <color key="backgroundColor" name="viewBg"/>
+                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
                                 <connections>
@@ -331,7 +331,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qRt-IW-shI"/>
-                        <color key="backgroundColor" name="viewBg"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Q2Z-Wq-dKI" firstAttribute="top" secondItem="6Lc-hr-a7q" secondAttribute="top" id="0vR-L9-LuB"/>
                             <constraint firstAttribute="bottom" secondItem="Q2Z-Wq-dKI" secondAttribute="bottom" id="QPX-oE-ESu"/>
@@ -353,9 +353,6 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -365,8 +362,11 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

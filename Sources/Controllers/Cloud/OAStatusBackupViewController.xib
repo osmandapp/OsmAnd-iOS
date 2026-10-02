@@ -88,7 +88,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="W8p-yd-t9f" firstAttribute="leading" secondItem="Zcf-ec-NaU" secondAttribute="leading" id="36p-nl-9dG"/>
                         <constraint firstItem="OtT-YD-HbK" firstAttribute="leading" secondItem="9q6-TF-xEY" secondAttribute="trailing" id="7kB-8V-763"/>
@@ -103,7 +103,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="nrX-dw-Kr3"/>
-            <color key="backgroundColor" name="viewBg"/>
+            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="n0A-4x-QAp" firstAttribute="top" secondItem="Fr8-HI-iBu" secondAttribute="bottom" id="0Zn-7A-nqq"/>
                 <constraint firstAttribute="trailing" secondItem="Fr8-HI-iBu" secondAttribute="trailing" id="Jxj-Fp-v7T"/>
@@ -127,9 +127,6 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="navBarBgColorPrimary">
             <color red="1" green="0.53333333333333333" blue="0.0" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -139,8 +136,11 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

@@ -128,7 +128,7 @@ final class TrackStubPreviewRenderer: NSObject {
         format.opaque = true
 
         return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-            UIColor.groupBg.setFill()
+            UIColor.secondarySystemGroupedBackground.setFill()
             UIRectFill(CGRect(origin: .zero, size: size))
 
             for segment in segments {

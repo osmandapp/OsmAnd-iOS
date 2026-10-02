@@ -260,7 +260,7 @@
         if (cell == nil)
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         if ([item[@"selected"] boolValue])
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -319,7 +319,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerHight = SeparatorAppearance.thickness;
         }

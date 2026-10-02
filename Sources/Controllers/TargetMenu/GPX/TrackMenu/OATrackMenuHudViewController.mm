@@ -3103,7 +3103,7 @@
         else if (_isHeaderBlurred && scrollView.contentOffset.y <= 0)
         {
             [_headerView removeBlurEffect];
-            _headerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _headerView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             _isHeaderBlurred = NO;
         }
         if (_selectedTab == EOATrackMenuHudPointsTab && _waypointSortedGroupNames.count > 0)

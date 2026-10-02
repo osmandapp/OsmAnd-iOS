@@ -102,7 +102,7 @@ struct PointContentConfiguration: UIContentConfiguration {
 
     static func backgroundConfiguration() -> UIBackgroundConfiguration {
         var configuration = UIBackgroundConfiguration.listGroupedCell()
-        configuration.backgroundColor = .groupBg
+        configuration.backgroundColor = .secondarySystemGroupedBackground
         return configuration
     }
 

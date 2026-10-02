@@ -114,7 +114,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .viewBg
+        appearance.backgroundColor = .systemGroupedBackground
         appearance.shadowColor = nil
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor.textColorPrimary,
@@ -127,7 +127,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     }
 
     private func configureContent() {
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         view.addSubview(scrollView)
         scrollView.addSubview(iconView)
         scrollView.addSubview(messageTitleLabel)

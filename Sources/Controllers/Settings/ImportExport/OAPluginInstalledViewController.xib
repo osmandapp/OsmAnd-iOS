@@ -24,7 +24,7 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="insetGrouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="18" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="047-sX-bmi">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="799"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <color key="separatorColor" name="customSeparator"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yZg-za-Wl8">
@@ -74,7 +74,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="ym8-7j-OuC"/>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="vtM-K4-Xk2" firstAttribute="leading" secondItem="yZg-za-Wl8" secondAttribute="leading" id="3SI-Sq-gqj"/>
                         <constraint firstItem="ym8-7j-OuC" firstAttribute="bottom" secondItem="WqB-Ea-YDl" secondAttribute="bottom" constant="2" id="3ns-rs-lc5"/>
@@ -87,7 +87,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="3w3-gS-5vz"/>
-            <color key="backgroundColor" name="viewBg"/>
+            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="0c7-hT-Wm1"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" id="BO2-uT-t3P"/>
@@ -117,8 +117,8 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

@@ -453,7 +453,7 @@
             }
             else
             {
-                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : [UIColor colorNamed:ACColorNameGroupBg];
+                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : UIColor.secondarySystemGroupedBackgroundColor;
                 updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             }
             updatedConfig.background = backgroundConfig;

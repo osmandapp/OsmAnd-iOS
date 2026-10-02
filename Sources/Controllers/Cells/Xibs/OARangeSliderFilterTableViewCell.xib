@@ -96,7 +96,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="feN-Gu-6uj" customClass="OARangeSlider">
                         <rect key="frame" x="20" y="59" width="335" height="28"/>
-                        <color key="backgroundColor" name="groupBg"/>
+                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                         <color key="tintColor" name="iconColorDefault"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="3Ly-Dy-Vc5"/>
@@ -115,7 +115,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
-                <color key="backgroundColor" name="groupBg"/>
+                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="d1b-20-NsX" secondAttribute="trailing" id="2uA-SN-ijK"/>
                     <constraint firstItem="J9T-2f-rtP" firstAttribute="top" secondItem="rfB-Ck-Xav" secondAttribute="top" constant="10" id="4kC-ri-0ct"/>
@@ -147,7 +147,7 @@
                     <constraint firstItem="d1b-20-NsX" firstAttribute="top" secondItem="LNq-ji-71i" secondAttribute="bottom" constant="10" id="zlY-xm-e1q"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="98o-LP-9NV" firstAttribute="centerX" secondItem="0vC-Lq-4zt" secondAttribute="centerX" id="vX8-SC-eNq"/>
             </constraints>
@@ -167,9 +167,6 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -182,6 +179,9 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

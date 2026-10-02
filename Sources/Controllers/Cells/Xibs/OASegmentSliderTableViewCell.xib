@@ -60,7 +60,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <color key="backgroundColor" name="groupBg"/>
+                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 <constraints>
                     <constraint firstItem="bSK-ib-t38" firstAttribute="width" secondItem="8rT-A7-QvG" secondAttribute="width" id="AyS-yO-zpj"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="BYi-Lp-KqD"/>
@@ -97,9 +97,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -109,5 +106,8 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

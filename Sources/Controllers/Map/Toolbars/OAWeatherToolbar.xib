@@ -87,7 +87,7 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="aBx-xP-AGq"/>
-            <color key="backgroundColor" name="viewBg"/>
+            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="IOB-SJ-nfi" secondAttribute="trailing" id="15M-gt-URh"/>
                 <constraint firstItem="H2C-uP-knh" firstAttribute="leading" secondItem="TBr-ZQ-5ff" secondAttribute="trailing" constant="10" id="2bR-ZJ-OuT"/>
@@ -132,8 +132,8 @@
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

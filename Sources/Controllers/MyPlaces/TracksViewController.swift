@@ -346,7 +346,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         setupNavbar()
         updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         filterButton.isHidden = true
         if shouldReload {
             updateAllFoldersVCData(forceLoad: true)
@@ -2564,9 +2564,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if let cell {
                 updateEditingAppearance(cell, item: item, isEditing: tableView.isEditing)
                 cell.backgroundView = UIView()
-                cell.backgroundView?.backgroundColor = .groupBg
+                cell.backgroundView?.backgroundColor = .secondarySystemGroupedBackground
                 cell.selectedBackgroundView = UIView()
-                cell.selectedBackgroundView?.backgroundColor = .groupBg
+                cell.selectedBackgroundView?.backgroundColor = .secondarySystemGroupedBackground
                 cell.titleLabel.textColor = .textColorPrimary
                 cell.descriptionLabel.textColor = .textColorSecondary
                 cell.titleLabel.text = item.title

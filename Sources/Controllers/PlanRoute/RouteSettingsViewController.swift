@@ -62,8 +62,8 @@ final class RouteSettingsViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -306,8 +306,8 @@ private final class PlanRouteShowAlongSettingsViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 52
@@ -346,7 +346,7 @@ extension PlanRouteShowAlongSettingsViewController: UITableViewDataSource {
         content.textProperties.font = .scaledSystemFont(ofSize: 17)
         content.textProperties.color = .textColorPrimary
         cell.contentConfiguration = content
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 

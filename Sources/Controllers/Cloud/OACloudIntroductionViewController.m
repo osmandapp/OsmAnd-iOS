@@ -39,7 +39,7 @@
     
     [self setupTableHeaderView];
     self.tableView.tableHeaderView = _headerView;
-    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.tableView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.bottomButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
 }
 

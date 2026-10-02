@@ -1719,7 +1719,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         if (cell)
         {
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
@@ -1798,7 +1798,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         
         if (cell)

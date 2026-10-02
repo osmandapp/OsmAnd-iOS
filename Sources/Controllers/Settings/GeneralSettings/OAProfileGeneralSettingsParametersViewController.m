@@ -170,7 +170,7 @@
 - (UIView *)setupHeaderView
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 90)];
-    headerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    headerView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:[_settings.preciseDistanceNumbers get:self.appMode] ? @"ic_custom_distance_number_precise" : @"ic_custom_distance_number_rounded"]];
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [headerView addSubview:imageView];

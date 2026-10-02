@@ -1884,7 +1884,7 @@ static const NSInteger kColorsSection = 1;
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.segmentedControl.backgroundColor = [[UIColor colorNamed:ACColorNameButtonBgColorPrimary] colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
 
@@ -1944,8 +1944,8 @@ static const NSInteger kColorsSection = 1;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
+            cell.dividerColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
             cell.dividerHight = 0.;

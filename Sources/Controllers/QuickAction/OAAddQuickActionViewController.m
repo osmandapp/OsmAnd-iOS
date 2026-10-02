@@ -353,7 +353,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-                [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
+                [background setTintColor:UIColor.secondarySystemGroupedBackgroundColor];
                 [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:item.secondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];

@@ -54,7 +54,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         setupNavbarButtons()
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         myPlacesDelegate?.updateContentScrollView(tableView)
     }
     

@@ -312,7 +312,7 @@
             if ([item[@"isColored"] boolValue])
                 cell.backgroundColor = [UIColor colorNamed:ACColorNameCellBgColorSelected];
             else
-                cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+                cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         return cell;
     }

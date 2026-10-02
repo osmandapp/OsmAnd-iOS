@@ -50,7 +50,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="U3D-Z8-K0Z" firstAttribute="centerX" secondItem="gmF-QP-DSp" secondAttribute="centerX" id="TBT-iA-1Cr"/>
                             </constraints>
@@ -111,7 +111,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="jQK-A5-mVl" firstAttribute="top" secondItem="ak0-z7-Qn5" secondAttribute="bottom" constant="4" id="0qM-6l-oAE"/>
                         <constraint firstItem="BrT-ls-6dh" firstAttribute="leading" secondItem="TaQ-Oa-CTv" secondAttribute="trailing" constant="35" id="27i-Qt-wS0"/>
@@ -143,12 +143,12 @@
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="38" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="iKQ-Yu-AWs">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="463"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <color key="separatorColor" name="customSeparator"/>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="64O-CB-Fp3">
                     <rect key="frame" x="0.0" y="830" width="414" height="66"/>
@@ -190,11 +190,11 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="sAf-RS-eqf"/>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <point key="canvasLocation" x="-59.420289855072468" y="80.357142857142847"/>
         </view>
     </objects>
@@ -219,9 +219,6 @@
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -234,8 +231,11 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

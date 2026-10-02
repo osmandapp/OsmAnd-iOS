@@ -110,7 +110,7 @@
         }
         case EOAPlanTypeChooseSubscription:
         {
-            self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            self.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = NO;
             self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];

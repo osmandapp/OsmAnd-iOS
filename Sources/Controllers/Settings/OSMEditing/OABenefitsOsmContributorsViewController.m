@@ -211,7 +211,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
         }
         if (cell)
@@ -229,7 +229,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.button.layer.cornerRadius = 9;
             cell.heightConstraint.constant = 42.;
         }

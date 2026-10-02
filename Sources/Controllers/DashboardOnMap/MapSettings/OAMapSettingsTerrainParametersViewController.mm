@@ -1088,7 +1088,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         SegmentTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SegmentTextTableViewCell.reuseIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         [cell setSegmentedControlBottomSpacing:8.0];
         [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.isAppMapNightMode ? 1 : 0 selectedTitles:nil];

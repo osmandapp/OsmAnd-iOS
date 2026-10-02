@@ -273,7 +273,7 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .viewBg
+        imageView.backgroundColor = .systemGroupedBackground
         contentView.addSubview(imageView)
         
         offlineCacheImageView.translatesAutoresizingMaskIntoConstraints = false

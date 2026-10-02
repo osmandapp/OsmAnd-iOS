@@ -203,7 +203,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                         andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.bottomToolBarView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.bottomToolBarView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     [self updateToolBar];
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;

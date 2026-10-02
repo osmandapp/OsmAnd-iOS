@@ -209,6 +209,7 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
         _isCurrentTrack = gpx.isShowCurrentTrack;
+        _isShown = _isCurrentTrack && _mapViewController.recTrackShowing;
         [self updateGpxData:gpx == nil updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];

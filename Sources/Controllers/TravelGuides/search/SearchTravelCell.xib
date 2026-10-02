@@ -58,7 +58,7 @@
                     <constraint firstItem="kxv-s6-1WP" firstAttribute="top" secondItem="WOf-0Z-dPy" secondAttribute="bottom" constant="4" id="hQF-Um-rF9"/>
                     <constraint firstItem="4QY-5K-Kgq" firstAttribute="centerX" secondItem="YIp-rr-3Da" secondAttribute="centerX" id="mzU-bA-ljd"/>
                     <constraint firstItem="YIp-rr-3Da" firstAttribute="leading" secondItem="WOf-0Z-dPy" secondAttribute="trailing" constant="16" id="rOa-M9-lz5"/>
-                    <constraint firstAttribute="bottom" secondItem="YIp-rr-3Da" secondAttribute="bottom" constant="12" id="zN9-cf-Gil"/>
+                    <constraint firstAttribute="bottom" secondItem="YIp-rr-3Da" secondAttribute="bottom" constant="12" priority="999" id="zN9-cf-Gil"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

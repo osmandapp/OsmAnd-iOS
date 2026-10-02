@@ -184,6 +184,7 @@ struct CLLocationCoordinate2D;
 
 @property (readonly) OAObservable* targetChangedObservable;
 @property (readonly) OAObservable* framePreparedObservable;
+@property (readonly) OAObservable* displayLinkFrameRateObservable;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
 @property(nonatomic, readonly, getter=getMapAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& mapAnimator;
@@ -203,6 +204,9 @@ struct CLLocationCoordinate2D;
 
 - (BOOL)getLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
 - (float)getLocationHeightInMeters:(OsmAnd::PointI)location31;
+
+// Rate the display link currently fires at, 0 while rendering is suspended.
+@property (nonatomic, readonly) float displayLinkFrameRate;
 
 - (void)limitFrameRefreshRate;
 - (void)restoreFrameRefreshRate;

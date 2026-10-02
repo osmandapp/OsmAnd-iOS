@@ -318,7 +318,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         [cell topButtonVisibility:YES];
         [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
         [cell.collectionView reloadData];
-        [cell layoutIfNeeded];
         return cell;
     }
     else if ([item.cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
@@ -347,7 +346,6 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             cell.currentColor = _selectedColorItem.colorInt;
             cell.currentIcon = [item integerForKey:@"index"];
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
         }
         return cell;
     }

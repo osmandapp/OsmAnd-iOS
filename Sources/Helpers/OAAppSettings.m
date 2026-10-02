@@ -173,6 +173,9 @@ static NSString * const courseIconSizeKey = @"courseIconSizeKey";
 
 static NSString * const rendererKey = @"renderer";
 
+static NSString * const preferredCoordinateFormatIdsKey = @"preferred_coordinate_format_ids";
+static NSString * const recentlyAddedCoordinateFormatIdsKey = @"recently_added_coordinate_format_ids";
+
 // navigation settings
 static NSString * const useFastRecalculationKey = @"useFastRecalculation";
 static NSString * const forcePrivateAccessRoutingAskedKey = @"forcePrivateAccessRoutingAsked";
@@ -5669,7 +5672,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 @implementation OACommonGridFormat
 
-+ (instancetype)withKey:(NSString *)key defValue:(int)defValue
++ (instancetype)withKey:(NSString *)key defValue:(NSString *)defValue
 {
     OACommonGridFormat *obj = [[OACommonGridFormat alloc] init];
     if (obj)
@@ -5680,82 +5683,48 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     return obj;
 }
 
-- (int)get
+- (NSString *)get
 {
-    return [super get];
+    return [self get:self.appMode];
 }
 
-- (void)set:(int)gridFormat
+- (NSString *)get:(OAApplicationMode *)mode
 {
-    [super set:gridFormat];
+    NSObject *raw = [self getValue:mode];
+    if (!raw)
+        return self.defValue;
+
+    return [GridFormatWrapper migratePreferenceValue:raw];
 }
 
-- (int)get:(OAApplicationMode *)mode
+- (void)set:(NSString *)formatId
 {
-    return [super get:mode];
+    [self set:formatId mode:self.appMode];
 }
 
-- (void)set:(int)gridFormat mode:(OAApplicationMode *)mode
+- (void)set:(NSString *)formatId mode:(OAApplicationMode *)mode
 {
-    [super set:gridFormat mode:mode];
+    NSString *normalized = [GridFormatWrapper migratePreferenceValue:formatId];
+    [super set:normalized mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    NSNumber *value = [self valueFromString:strValue appMode:mode];
-    if (value)
-        [super set:value.integerValue mode:mode];
-}
-
-- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
-{
-    static NSDictionary<NSString *, NSNumber *> *map;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        map = @{
-            @"DD_MM_SS": @(GridFormatDms),
-            @"DD_MM_MMM": @(GridFormatDm),
-            @"DD_DDDDD": @(GridFormatDigital),
-            @"UTM": @(GridFormatUtm),
-            @"MGRS": @(GridFormatMgrs)
-        };
-    });
-    return map[string];
+    [self set:strValue mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
-    {
-        case GridFormatDms:
-            return @"DD_MM_SS";
-        case GridFormatDm:
-            return @"DD_MM_MMM";
-        case GridFormatDigital:
-            return @"DD_DDDDD";
-        case GridFormatUtm:
-            return @"UTM";
-        case GridFormatMgrs:
-            return @"MGRS";
-        default:
-            return @"DD_MM_SS";
-    }
+    return [self get:mode];
 }
 
 - (void)resetToDefault
 {
-    GridFormat defaultValue = self.defValue;
-    NSNumber *pDefault = (NSNumber *)[self profileDefaultValue:self.appMode];
-    if ([pDefault isKindOfClass:[NSNumber class]])
-        defaultValue = (GridFormat)pDefault.intValue;
-    
+    NSString *defaultValue = self.defValue;
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSString class]])
+        defaultValue = (NSString *)pDefault;
     [self set:defaultValue];
-}
-
-- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
-{
-    int geoFormatId = [[OAAppSettings sharedManager].settingGeoFormat get:mode];
-    return [GridFormatWrapper gridFormatRawForGeoFormat:(int32_t)geoFormatId];
 }
 
 @end
@@ -6260,7 +6229,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _mapSettingShowCoordinatesGrid = [[OACommonBoolean withKey:mapSettingShowCoordinatesGridKey defValue:NO] makeProfile];
         _showPolygonsWhenUnderlayIsOn = [[OACommonBoolean withKey:showPolygonsWhenUnderlayIsOnKey defValue:NO] makeProfile];
-        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatDms] makeProfile];
+        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatWrapper.defaultFormatId] makeProfile];
         _coordinateGridMinZoom = [[OACommonInteger withKey:coordinateGridMinZoomKey defValue:0] makeProfile];
         _coordinateGridMaxZoom = [[OACommonInteger withKey:coordinateGridMaxZoomKey defValue:31] makeProfile];
         _coordinatesGridLabelsPosition = [[OACommonGridLabelsPosition withKey:coordinatesGridLabelsPositionKey defValue:GridLabelsPositionEdges] makeProfile];
@@ -6660,6 +6629,24 @@ static NSString *kOfflineKey = @"OFFLINE";
         _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
+        
+        OACommonStringList *preferredCoordinateFormatIds =
+            [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
+                               defValue:@[
+                @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
+            ]] makeProfile];
+        OACommonStringList *recentlyAddedCoordinateFormatIds =
+            [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
+                               defValue:@[]] makeGlobal];
+
+        [_profilePreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
+
+        _coordinateFormatSettingsStorage =
+            [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
+                                                 preferredPreference:preferredCoordinateFormatIds
+                                                    recentPreference:recentlyAddedCoordinateFormatIds];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
